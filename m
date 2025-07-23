@@ -1,103 +1,242 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C4D9F2EA495;
-	Wed, 23 Jul 2025 13:02:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B64C02EA733;
+	Wed, 23 Jul 2025 13:02:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753275739; cv=none; b=CWqJrP0xtMTMz4aBd41d3ScdL1zbhdATwg/z/6lpQQEktJMYjPw1iy9hMX8pU2OBPekoV8RGcUx93Rjysj+x3Hw1h065OFBoPVwVdv/XgH166XgNqu2kO+NeoW92g89AXKzZqX7tQ4NBFThjCyEum7haGI9fS7zZ7BfKAncgq3s=
+	t=1753275740; cv=none; b=co4QcJOdekame6iElGjZjWNZKnnK1CEXesXYasjTurdriZf01hZvgAQuVsDS9v9LcMSxWkBMgurvZZYqZRk7xTVHZxJUcuPfcQraXzr+/z1qkn5Nhxc711dX1gX8yQ09mjfXN3NyeW3idlZDnVNAmUD54ucqNLw2PyFGu4uQfWs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753275739; c=relaxed/simple;
-	bh=d/twC7l7aOu4BG0CVPBHIv9Uh/+V0XmP38tX6W0hJX4=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=GDAAyfqLA/3ICj+oQqNSr1z8X4bx99qWIJxTEL2bR9PvQgnjCweWTPbSzWsAoVOfFyMs4b5meeETdRztHPJqC2h1brSRLx/FoOUklX591usC3iX2qAo+dNry2N4f3ZLte91lYNYcJEJy6rcc+Izh6y3V6PmDPHAk6U3fi57PVAk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=iQC9lW15; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1753275740; c=relaxed/simple;
+	bh=nlUJ1hQe0rB1BLNxXOxhzCPvBdRkQwroi+XicJov0lY=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=FyMF9b1JGCGLwzkpA+BuR8df5ID4qkp5T/z++QQtvO2LNfYiuXkBV9GvkvyRIJNK1x3PT7fEaW+Lv2O1n9q1bhtOshi2mT68T1UGfEqxnrrRpOVpo65VRRaNhOnSjk41pcUhk7X10Ag/SakByeXz9W7v+UhjG7uMzcWV5ehTBuA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lnZbBneV; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="iQC9lW15"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 851BEC4CEE7;
-	Wed, 23 Jul 2025 13:02:17 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lnZbBneV"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CA817C4CEF5;
+	Wed, 23 Jul 2025 13:02:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1753275739;
-	bh=d/twC7l7aOu4BG0CVPBHIv9Uh/+V0XmP38tX6W0hJX4=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=iQC9lW15C8aLnHqd/wbXqoL8q80V41zhfqYcV1wWjMtlbYS47mDaywISLL4sn5WUW
-	 nfdTbLyUoGydEDQv5J9g+iACjjAX3QsWenmViPdT3teCvQxePFLqHUAFdiW/O3MN1F
-	 k6UA9f0XnjMbpPDp4gTs28mvo9PnNMm31P1HS8Nwpt2W6uv8uWBUeyEwkmqinGWlvG
-	 lbKkVjbGAt8FIQqjtKNVozY7XZda+XWe/zB/XDssPkQDm38EWZ+0t94ib7a0V0KJyD
-	 YKpNd06OHZ4LEMZQjuK9RxHNWwb3KVSbRqKXQR/ZxSsC2dqwfSFaZ0YYhhYekqONAP
-	 AnsPaFPCIbvWg==
-Message-ID: <85d9d497-0965-4569-b1af-bd6102c9f68d@kernel.org>
-Date: Wed, 23 Jul 2025 15:02:17 +0200
+	s=k20201202; t=1753275740;
+	bh=nlUJ1hQe0rB1BLNxXOxhzCPvBdRkQwroi+XicJov0lY=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=lnZbBneVQfUXSDdBql+EZe6zUPnDCYl40gxPGQaQTpTisdj7QdzBIfdxeIS9iqGf5
+	 6puO+R1/00D4satUiVhf4j97G1kDFuoNFKSoXuoQqzvIY0CT2wGNSAsqOGN6P9vTrP
+	 zgoCsH624S2mClgyibPDHZkjWn1v/u+99YU31N6M1oUyu6dq/jOIIU7fY+rNI8uNdk
+	 aVeid0uxsaaxYFwZecPCjTct9p66eTfDPOdhPl11oR1Ivj87NdTex/7PH36QXDPkLh
+	 zDxMqqF0YDhJFnjasAZJfayzwGKvYlBvIZpwQ4n6LdpzK1TGYThmZ+NAQDx33bCMpL
+	 RCwOpMO9Ex61w==
+From: Leon Romanovsky <leon@kernel.org>
+To: Alex Williamson <alex.williamson@redhat.com>
+Cc: Leon Romanovsky <leonro@nvidia.com>,
+	Christoph Hellwig <hch@lst.de>,
+	Jason Gunthorpe <jgg@nvidia.com>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Bjorn Helgaas <bhelgaas@google.com>,
+	=?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
+	dri-devel@lists.freedesktop.org,
+	iommu@lists.linux.dev,
+	Jens Axboe <axboe@kernel.dk>,
+	=?UTF-8?q?J=C3=A9r=C3=B4me=20Glisse?= <jglisse@redhat.com>,
+	Joerg Roedel <joro@8bytes.org>,
+	kvm@vger.kernel.org,
+	linaro-mm-sig@lists.linaro.org,
+	linux-block@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-media@vger.kernel.org,
+	linux-mm@kvack.org,
+	linux-pci@vger.kernel.org,
+	Logan Gunthorpe <logang@deltatee.com>,
+	Marek Szyprowski <m.szyprowski@samsung.com>,
+	Robin Murphy <robin.murphy@arm.com>,
+	Sumit Semwal <sumit.semwal@linaro.org>,
+	Vivek Kasireddy <vivek.kasireddy@intel.com>,
+	Will Deacon <will@kernel.org>
+Subject: [PATCH 05/10] PCI/P2PDMA: Export pci_p2pdma_map_type() function
+Date: Wed, 23 Jul 2025 16:00:06 +0300
+Message-ID: <82e62eb59afcd39b68ae143573d5ed113a92344e.1753274085.git.leonro@nvidia.com>
+X-Mailer: git-send-email 2.50.1
+In-Reply-To: <cover.1753274085.git.leonro@nvidia.com>
+References: <cover.1753274085.git.leonro@nvidia.com>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 0/2] parse horizontal/vertical flip properties
-To: Fabian Pfitzner <f.pfitzner@pengutronix.de>,
- Jacopo Mondi <jacopo.mondi@ideasonboard.com>
-Cc: Mauro Carvalho Chehab <mchehab@kernel.org>, Rob Herring
- <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
- Conor Dooley <conor+dt@kernel.org>, Jacopo Mondi <jacopo@jmondi.org>,
- Sakari Ailus <sakari.ailus@linux.intel.com>, linux-media@vger.kernel.org,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
- entwicklung@pengutronix.de
-References: <20250718-fpf-media-dt-flip-v1-0-75b3a938b4be@pengutronix.de>
- <ryuew3kxnocj6uqq4nadp3kyaxg27rxlrgnaieyy2hlpz5jkd3@iyetnsbfanee>
- <35debf21-bca7-480f-a61e-7b0494f10ca5@pengutronix.de>
- <mljx67lkcw4kh3cs344iprik244cm7hqfckmg4bj5j5atuyt62@lh2ht4mrtkjq>
- <3ac271c7-a67a-4f6f-935d-256937516068@pengutronix.de>
-Content-Language: en-US, nl
-From: Hans de Goede <hansg@kernel.org>
-In-Reply-To: <3ac271c7-a67a-4f6f-935d-256937516068@pengutronix.de>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-Hi,
+From: Leon Romanovsky <leonro@nvidia.com>
 
-On 23-Jul-25 12:09 PM, Fabian Pfitzner wrote:
-> On 7/23/25 11:44, Jacopo Mondi wrote:
->> On Wed, Jul 23, 2025 at 11:29:27AM +0200, Fabian Pfitzner wrote:
->>> On 7/23/25 11:17, Jacopo Mondi wrote:
->>>> Hi Fabian
->>>>
->>>> On Wed, Jul 23, 2025 at 10:58:28AM +0200, Fabian Pfitzner wrote:
->>>>> There are cameras containing a mirror on their optical path e. g. when
->>>>> mounted upside down.
->>>> How is this different from 'rotation = 180' ?
->>> If you simply want to flip the output (e. g. horizontally), you cannot do
->>> this with a rotation.
->>> The camera I'm referring to is not only upside down, but also flipped
->>> horizontally.
->> 180 degress rotation = HFLIP + VFLIP
-> I do not want to do both. Only one of them.
->>
->> Yes, you can't express 'mirror' in DTS, because DTS are about the
->> physical mounting rotation of the camera. Sensor drivers shall not
->> apply any flip control automatically, it's userspace that by parsing
->> the rotation property through the associated v4l2 controls should decide
->> if it has to apply flips or not to correct the images.
->>
->> What is the use case you had in mind ? Tell the driver through a DTS
->> property it has to apply flips to auto-compensate ? Because I think we
->> shouldn't and if I'm not mistaken we also document it:
->> https://www.kernel.org/doc/html/latest/userspace-api/media/drivers/camera-sensor.html#rotation-orientation-and-flipping
-> I have a camera that does a horizontal flip in its hardware, so the output is not what I want. My example above was misleading. The rotation fixes the "upside down" problem, but does not fix the flip.
+Export the pci_p2pdma_map_type() function to allow external modules
+and subsystems to determine the appropriate mapping type for P2PDMA
+transfers between a provider and target device.
 
-Hmm, so is there anything in the optical path causing just
-a horizontal flip ? 
+The function determines whether peer-to-peer DMA transfers can be
+done directly through PCI switches (PCI_P2PDMA_MAP_BUS_ADDR) or
+must go through the host bridge (PCI_P2PDMA_MAP_THRU_HOST_BRIDGE),
+or if the transfer is not supported at all.
 
-Because if not it sounds like the driver is simply buggy and
-is applying hflip by default / applying hflip while the hflip
-control is set to 0.
+This export enables subsystems like VFIO to properly handle P2PDMA
+operations by querying the mapping type before attempting transfers,
+ensuring correct DMA address programming and error handling.
 
-We've had this case a couple of times before. So it might just
-be that we need to fix the driver here ...
+Signed-off-by: Leon Romanovsky <leonro@nvidia.com>
+---
+ drivers/pci/p2pdma.c       | 15 ++++++-
+ include/linux/pci-p2pdma.h | 85 +++++++++++++++++++++-----------------
+ 2 files changed, 59 insertions(+), 41 deletions(-)
 
-Regards,
-
-Hans
-
+diff --git a/drivers/pci/p2pdma.c b/drivers/pci/p2pdma.c
+index 8e2525618d922..326c7d88a1690 100644
+--- a/drivers/pci/p2pdma.c
++++ b/drivers/pci/p2pdma.c
+@@ -1014,8 +1014,18 @@ void pci_p2pmem_publish(struct pci_dev *pdev, bool publish)
+ }
+ EXPORT_SYMBOL_GPL(pci_p2pmem_publish);
+ 
+-static enum pci_p2pdma_map_type
+-pci_p2pdma_map_type(struct p2pdma_provider *provider, struct device *dev)
++/**
++ * pci_p2pdma_map_type - Determine the mapping type for P2PDMA transfers
++ * @provider: P2PDMA provider structure
++ * @dev: Target device for the transfer
++ *
++ * Determines how peer-to-peer DMA transfers should be mapped between
++ * the provider and the target device. The mapping type indicates whether
++ * the transfer can be done directly through PCI switches or must go
++ * through the host bridge.
++ */
++enum pci_p2pdma_map_type pci_p2pdma_map_type(struct p2pdma_provider *provider,
++					     struct device *dev)
+ {
+ 	enum pci_p2pdma_map_type type = PCI_P2PDMA_MAP_NOT_SUPPORTED;
+ 	struct pci_dev *pdev = to_pci_dev(provider->owner);
+@@ -1044,6 +1054,7 @@ pci_p2pdma_map_type(struct p2pdma_provider *provider, struct device *dev)
+ 
+ 	return type;
+ }
++EXPORT_SYMBOL_GPL(pci_p2pdma_map_type);
+ 
+ void __pci_p2pdma_update_state(struct pci_p2pdma_map_state *state,
+ 		struct device *dev, struct page *page)
+diff --git a/include/linux/pci-p2pdma.h b/include/linux/pci-p2pdma.h
+index 83f11dc8659a7..dea98baee5ce2 100644
+--- a/include/linux/pci-p2pdma.h
++++ b/include/linux/pci-p2pdma.h
+@@ -26,6 +26,45 @@ struct p2pdma_provider {
+ 	u64 bus_offset;
+ };
+ 
++enum pci_p2pdma_map_type {
++	/*
++	 * PCI_P2PDMA_MAP_UNKNOWN: Used internally as an initial state before
++	 * the mapping type has been calculated. Exported routines for the API
++	 * will never return this value.
++	 */
++	PCI_P2PDMA_MAP_UNKNOWN = 0,
++
++	/*
++	 * Not a PCI P2PDMA transfer.
++	 */
++	PCI_P2PDMA_MAP_NONE,
++
++	/*
++	 * PCI_P2PDMA_MAP_NOT_SUPPORTED: Indicates the transaction will
++	 * traverse the host bridge and the host bridge is not in the
++	 * allowlist. DMA Mapping routines should return an error when
++	 * this is returned.
++	 */
++	PCI_P2PDMA_MAP_NOT_SUPPORTED,
++
++	/*
++	 * PCI_P2PDMA_MAP_BUS_ADDR: Indicates that two devices can talk to
++	 * each other directly through a PCI switch and the transaction will
++	 * not traverse the host bridge. Such a mapping should program
++	 * the DMA engine with PCI bus addresses.
++	 */
++	PCI_P2PDMA_MAP_BUS_ADDR,
++
++	/*
++	 * PCI_P2PDMA_MAP_THRU_HOST_BRIDGE: Indicates two devices can talk
++	 * to each other, but the transaction traverses a host bridge on the
++	 * allowlist. In this case, a normal mapping either with CPU physical
++	 * addresses (in the case of dma-direct) or IOVA addresses (in the
++	 * case of IOMMUs) should be used to program the DMA engine.
++	 */
++	PCI_P2PDMA_MAP_THRU_HOST_BRIDGE,
++};
++
+ #ifdef CONFIG_PCI_P2PDMA
+ struct p2pdma_provider *pci_p2pdma_enable(struct pci_dev *pdev);
+ int pci_p2pdma_add_resource(struct pci_dev *pdev, int bar, size_t size,
+@@ -45,6 +84,8 @@ int pci_p2pdma_enable_store(const char *page, struct pci_dev **p2p_dev,
+ 			    bool *use_p2pdma);
+ ssize_t pci_p2pdma_enable_show(char *page, struct pci_dev *p2p_dev,
+ 			       bool use_p2pdma);
++enum pci_p2pdma_map_type pci_p2pdma_map_type(struct p2pdma_provider *provider,
++					     struct device *dev);
+ #else /* CONFIG_PCI_P2PDMA */
+ static inline struct p2pdma_provider *pci_p2pdma_enable(struct pci_dev *pdev)
+ {
+@@ -105,6 +146,11 @@ static inline ssize_t pci_p2pdma_enable_show(char *page,
+ {
+ 	return sprintf(page, "none\n");
+ }
++static inline enum pci_p2pdma_map_type
++pci_p2pdma_map_type(struct p2pdma_provider *provider, struct device *dev)
++{
++	return PCI_P2PDMA_MAP_NOT_SUPPORTED;
++}
+ #endif /* CONFIG_PCI_P2PDMA */
+ 
+ 
+@@ -119,45 +165,6 @@ static inline struct pci_dev *pci_p2pmem_find(struct device *client)
+ 	return pci_p2pmem_find_many(&client, 1);
+ }
+ 
+-enum pci_p2pdma_map_type {
+-	/*
+-	 * PCI_P2PDMA_MAP_UNKNOWN: Used internally as an initial state before
+-	 * the mapping type has been calculated. Exported routines for the API
+-	 * will never return this value.
+-	 */
+-	PCI_P2PDMA_MAP_UNKNOWN = 0,
+-
+-	/*
+-	 * Not a PCI P2PDMA transfer.
+-	 */
+-	PCI_P2PDMA_MAP_NONE,
+-
+-	/*
+-	 * PCI_P2PDMA_MAP_NOT_SUPPORTED: Indicates the transaction will
+-	 * traverse the host bridge and the host bridge is not in the
+-	 * allowlist. DMA Mapping routines should return an error when
+-	 * this is returned.
+-	 */
+-	PCI_P2PDMA_MAP_NOT_SUPPORTED,
+-
+-	/*
+-	 * PCI_P2PDMA_MAP_BUS_ADDR: Indicates that two devices can talk to
+-	 * each other directly through a PCI switch and the transaction will
+-	 * not traverse the host bridge. Such a mapping should program
+-	 * the DMA engine with PCI bus addresses.
+-	 */
+-	PCI_P2PDMA_MAP_BUS_ADDR,
+-
+-	/*
+-	 * PCI_P2PDMA_MAP_THRU_HOST_BRIDGE: Indicates two devices can talk
+-	 * to each other, but the transaction traverses a host bridge on the
+-	 * allowlist. In this case, a normal mapping either with CPU physical
+-	 * addresses (in the case of dma-direct) or IOVA addresses (in the
+-	 * case of IOMMUs) should be used to program the DMA engine.
+-	 */
+-	PCI_P2PDMA_MAP_THRU_HOST_BRIDGE,
+-};
+-
+ struct pci_p2pdma_map_state {
+ 	struct p2pdma_provider *mem;
+ 	enum pci_p2pdma_map_type map;
+-- 
+2.50.1
 
