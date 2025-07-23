@@ -1,144 +1,154 @@
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 661B48528E
-	for <linux-media@vger.kernel.org>; Wed, 23 Jul 2025 13:01:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4110F2E719E;
+	Wed, 23 Jul 2025 13:01:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753275713; cv=none; b=bZRmHkIVSTA4eQjMVV8CU9BLHLr0TXpp2q2AD04werw/2lLbv6JHMQV6LQMxTU0jCRRRU05siPItf4mqTa8N9FGP+/1h0U8r0P52BVQG00FVXtzEmau1opn8HzgsRtBmgzRtWfY9+wk0QLIbN84o5iS7peJULV240pYvOIoIJLE=
+	t=1753275716; cv=none; b=kP6tU4CUhW75n9iO2pFESSoI4QlDWMdyMi79QjLp/hnR3CoK6IeACqX7VWAjJZ6QXH1H5R5LJDqyv7NJIoFiqBPzxVgbAxHeuBep7vSXiTDqG1n1ZLAvn/8GmDivI7Vost4a7L9ViDZSpA83FFEcDFd2URJTtJjwq5EK/pNfEPw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753275713; c=relaxed/simple;
-	bh=dRAk0o72e+X33KIq1LpoL6MfpiBTQz1RGTe2fzqE5FQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=UB7XWdCE9b1Z2E+pox1noWNHxf8+fRkdd0oxOTaPrXWfeFczlJEh0iWAyQbfVLWrSvwcXKpxEPWecZqM4lIYkWIuLO/e2Mc3fAX6cY6vJ7sI1TdkyKAJbuFKpXgasNosDPxPwB49zAF0PISFzQPgsXRV8pExwu6nYMYt8HF51uo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=Hpa0DRnu; arc=none smtp.client-ip=205.220.180.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
+	s=arc-20240116; t=1753275716; c=relaxed/simple;
+	bh=VeEaP0I6Ju84rRyRYaicpp+t8ePJyjkfRFyzhb+AudA=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=kX3AoCjtEHuP0uCVSLdqLSkdwSTGrvc0f6imQZjxnTEge0rk0deFpS+TUGK5E6k/WT3EuV1o/f+sAILN4ijv52fydnkwTXhwaY9eI+FrwAfmQguaS3EUKsDXgQRj/PCtTZIFdd0rUhiGLrEfMElFRxPZmotDDPyGyeONuY80FQo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PyvJ2iUl; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="Hpa0DRnu"
-Received: from pps.filterd (m0279868.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 56N9CEWo024763
-	for <linux-media@vger.kernel.org>; Wed, 23 Jul 2025 13:01:51 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
-	cc:content-type:date:from:in-reply-to:message-id:mime-version
-	:references:subject:to; s=qcppdkim1; bh=1wPevboyTw5NwvNz5iHDyoVz
-	DX1UybG8R0FxydcjI4w=; b=Hpa0DRnuOU88PnbYNQ38/T3Mu4FVgeRR/v8904uk
-	xJdfCBisz64OSOHu5mc3OGS8mxV8yzgE7wLlz7eMqf1xBbfPIvm1PbpD5jwRtwR+
-	V9qEC7OMlmjIHQRl+8D/m/8VB9KKBoVzLotuCrgfLHQ/59hkyth/ydQJK3jN0GQQ
-	cp6PvlPJP0fBUZmCLy0SuE4ro4ZfQ7yJx29YahA7BUjSrslvMC41BDJ35xp6P2RZ
-	lynwOwepUcEWlseWadWTF3wzU5DESPvNydujJ8TzrqqJmSNY+J3aCocphGqYxIlG
-	1d8TRBQVv3AHNCuqtyDGOcQsVu2UO3Pbkyb1CpLKSH/UXQ==
-Received: from mail-oi1-f200.google.com (mail-oi1-f200.google.com [209.85.167.200])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 48044dn12h-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-	for <linux-media@vger.kernel.org>; Wed, 23 Jul 2025 13:01:51 +0000 (GMT)
-Received: by mail-oi1-f200.google.com with SMTP id 5614622812f47-427850a77a2so161302b6e.3
-        for <linux-media@vger.kernel.org>; Wed, 23 Jul 2025 06:01:51 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1753275710; x=1753880510;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=1wPevboyTw5NwvNz5iHDyoVzDX1UybG8R0FxydcjI4w=;
-        b=PA7zGYIN1e43qS45duKbmQZXbg7MnXP3E8QHDivBqqC1kKFNwGLO/1lNfZWfopHKgN
-         0wnmYlz4MPYlFKEDJWKO24noE/ELJSTIV0AxtDXMXMwtHunT0mSroDMYQY063Nio1Yhn
-         rHIs+TUaT78XJ6uNs1vIserytKslR4xwqsmXwy94C3cMINTsCpa624w9VAnKu4fQoFL4
-         DLUBOIEjPLGpCHJcmjL9FxbABcMwEY9RzF+RcNBK+ZDxaR9Qenj/M/N1A0hvWb5QlI/z
-         Eoedl5YbVC6UFELpm+bQ1ESNVCgd7xtrPen2gO8/r9Gb3cI9iQKj+Fv8a4yuwACZXhBI
-         pkcA==
-X-Forwarded-Encrypted: i=1; AJvYcCWhtvY60FCwdFKwgMwnTceodOBVK7c9/NoV+pUr2n0p/ocqI4g1gMVKuGL6by801SmofbJ90NVg8Ke1Ng==@vger.kernel.org
-X-Gm-Message-State: AOJu0Ywix9iFtyyMEqTjVpVvCNSVEv94+XRr/gaKiLY3DyCMvVql3TZ9
-	HrYmgACBwIT/YxefkoypmbhhWO9Pds427uGMTw9tg8G9l8NcytVUN3OoJFsT+xbnjp31jcgqaLY
-	ji+chtNJ8wf+Rn76NggDioCgZRFTBep2xIIvVXLMuqCd7/tF7qZyL5BMx1WMx9HlYXA==
-X-Gm-Gg: ASbGncu1dyB2MiEbIKpnUtiVAF0SFa2nyoQybm7g1BFufPHaFM5Z2dF0WLoi0Jy2Yoz
-	L/GG0GeE2iW0HX8El5+AK491IpQgIStNjI/flbHJhl1tFBwbEc37fo24bSwwTJ241aaboL5D1r+
-	520DmbEuasdb2mZFmeVNgODJMPPxadh9LekpGSUZt6YfO+GinVBLQjivRnAGOIY/7UcVBOUnsQ2
-	32aq/iHT1z7GGqmcx13eVy49v1iYW/5EE3AvevAjqnnmWdeicCXv1WiqTOjO0eAZqrG73BrTK+Y
-	Q1VTtI06YK+wSe5Q1rRwkMpfG2Q9IVLEfScxLks1b24bQbj70UHAl7EDFaeF/YGNgdPaTK9yB6o
-	dg8W7I4ceWI70jkqidilv3z/zaSJTyWR0GcosvATBaTE9r6MPC8R/
-X-Received: by 2002:a05:6808:2203:b0:406:7cef:46a with SMTP id 5614622812f47-426c642f047mr2288846b6e.19.1753275708741;
-        Wed, 23 Jul 2025 06:01:48 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IGneR6HtJeJALFHOLFmNSXyrHOofiM8HoHdB+oxIXAcXdndJc6GaB0Ve8NkfrbBMs8XEHgUuw==
-X-Received: by 2002:a05:6808:2203:b0:406:7cef:46a with SMTP id 5614622812f47-426c642f047mr2288580b6e.19.1753275706737;
-        Wed, 23 Jul 2025 06:01:46 -0700 (PDT)
-Received: from umbar.lan (2001-14ba-a0c3-3a00-264b-feff-fe8b-be8a.rev.dnainternet.fi. [2001:14ba:a0c3:3a00:264b:feff:fe8b:be8a])
-        by smtp.gmail.com with ESMTPSA id 38308e7fff4ca-330a91f12b0sm21241281fa.98.2025.07.23.06.01.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 23 Jul 2025 06:01:45 -0700 (PDT)
-Date: Wed, 23 Jul 2025 16:01:44 +0300
-From: Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>
-To: Renjiang Han <quic_renjiang@quicinc.com>
-Cc: quic_qiweil@quicinc.com, quic_wangaow@quicinc.com,
-        Vikash Garodia <quic_vgarodia@quicinc.com>,
-        Dikshita Agarwal <quic_dikshita@quicinc.com>,
-        Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-media@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] media: venus: pm_helpers: add fallback for the opp-table
-Message-ID: <k6umaq7xrfma44vm75ea6m7vqd3hn367xdymsjylp3zcqn5vmd@jbvgdknnc7ri>
-References: <20250723-fallback_of_opp_table-v1-1-20a6277fdded@quicinc.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PyvJ2iUl"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CB36AC4CEE7;
+	Wed, 23 Jul 2025 13:01:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1753275715;
+	bh=VeEaP0I6Ju84rRyRYaicpp+t8ePJyjkfRFyzhb+AudA=;
+	h=From:To:Cc:Subject:Date:From;
+	b=PyvJ2iUlLMlbGzX5qzJpPwU19z2ZHVNgRRR6I6pgdUocqIvlwyAEVWlzxFVyH+O5B
+	 rgvRUW0KyWJCaIjAWkNSjYQZTjUA8hXt537lM2z1lqW3QLRM+cccx6Wa7AnC47Kdh5
+	 5vyhtPdVK3eYgRSInD6ot6DkzLAf5sTN26YAlVnpeeskZCszqRTW1E/3s1cIFoXbIv
+	 cwHrWiFoDlhJYh6kh2ZXmBFSyLLP1YH2+JOYj0Akmjoq6YhcbZiRr95b4qm1dHfFnN
+	 OpoAwh1yBhmId5vMmQ85Jwdtkwph/jN1NrrSQ24V5bB3R7cAOPmCfMDkPo1fsYxenn
+	 0kqYO1EMHe0rw==
+From: Leon Romanovsky <leon@kernel.org>
+To: Alex Williamson <alex.williamson@redhat.com>
+Cc: Leon Romanovsky <leonro@nvidia.com>,
+	Christoph Hellwig <hch@lst.de>,
+	Jason Gunthorpe <jgg@nvidia.com>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Bjorn Helgaas <bhelgaas@google.com>,
+	=?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
+	dri-devel@lists.freedesktop.org,
+	iommu@lists.linux.dev,
+	Jens Axboe <axboe@kernel.dk>,
+	=?UTF-8?q?J=C3=A9r=C3=B4me=20Glisse?= <jglisse@redhat.com>,
+	Joerg Roedel <joro@8bytes.org>,
+	kvm@vger.kernel.org,
+	linaro-mm-sig@lists.linaro.org,
+	linux-block@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-media@vger.kernel.org,
+	linux-mm@kvack.org,
+	linux-pci@vger.kernel.org,
+	Logan Gunthorpe <logang@deltatee.com>,
+	Marek Szyprowski <m.szyprowski@samsung.com>,
+	Robin Murphy <robin.murphy@arm.com>,
+	Sumit Semwal <sumit.semwal@linaro.org>,
+	Vivek Kasireddy <vivek.kasireddy@intel.com>,
+	Will Deacon <will@kernel.org>
+Subject: [PATCH 00/10] vfio/pci: Allow MMIO regions to be exported through dma-buf
+Date: Wed, 23 Jul 2025 16:00:01 +0300
+Message-ID: <cover.1753274085.git.leonro@nvidia.com>
+X-Mailer: git-send-email 2.50.1
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250723-fallback_of_opp_table-v1-1-20a6277fdded@quicinc.com>
-X-Authority-Analysis: v=2.4 cv=BJ6zrEQG c=1 sm=1 tr=0 ts=6880dd3f cx=c_pps
- a=AKZTfHrQPB8q3CcvmcIuDA==:117 a=xqWC_Br6kY4A:10 a=kj9zAlcOel0A:10
- a=Wb1JkmetP80A:10 a=COk6AnOGAAAA:8 a=EUspDBNiAAAA:8 a=iWKRvkjQqEvONqlByQsA:9
- a=CjuIK1q_8ugA:10 a=pF_qn-MSjDawc0seGVz6:22 a=TjNXssC_j7lpFel5tvFf:22
-X-Proofpoint-GUID: VeAIyTZ2sS22ykn1KcHAwxxUxWjDtcQC
-X-Proofpoint-ORIG-GUID: VeAIyTZ2sS22ykn1KcHAwxxUxWjDtcQC
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwNzIzMDExMSBTYWx0ZWRfX74t5NBBHcwgc
- N4MVEFEQ/d04a9fBZJ6smS7x6wHJczikvPnYFWH46GSQEyrnGzbQ0Y9Ax/HsQcDtLF73ySe5Q2s
- Q8SmPVVmIs8QLnIa4p4jTbtqzDFpNoebzGxcgL/vZDlScM5GIDLRhsT/12DY6SkJLVe5koyUlrv
- oK/gZeDLOaP/IE4OQRr/eVnbwqJKDGmJFeBUwXXFOpQBcThNdCGpj1xcT5lr8E2uVPTv5bfFxAu
- /rNUfngsD8u4N7cijY2sspFInodgqWaTR0HLNwBHJ3hwj7GlLGs3g+XIYdRBiqVJgxdOPo2OJa6
- jmwosp4K948ESRMhsUCaxxu650sP44cJ8xIxbiFJwL64trT9/dGA2icAgDaBz0/cUjF3uoLFfHi
- Cw7SPiwyxJ3vYZjIy9cgDtIPY9r450gpfnJVAnm3OFeMfZtrPBUhguaOaXHDfJz2ljBWKcgV
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.1.9,FMLib:17.12.80.40
- definitions=2025-07-23_02,2025-07-22_01,2025-03-28_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- priorityscore=1501 lowpriorityscore=0 clxscore=1015 spamscore=0
- mlxlogscore=999 suspectscore=0 impostorscore=0 phishscore=0 adultscore=0
- mlxscore=0 malwarescore=0 bulkscore=0 classifier=spam authscore=0 authtc=n/a
- authcc= route=outbound adjust=0 reason=mlx scancount=1
- engine=8.19.0-2505280000 definitions=main-2507230111
+Content-Transfer-Encoding: 8bit
 
-On Wed, Jul 23, 2025 at 06:26:02PM +0530, Renjiang Han wrote:
-> Since the device trees for both HFI_VERSION_1XX and HFI_VERSION_3XX
-> do not include an opp-table and have not configured opp-pmdomain, they
-> still need to use the frequencies defined in the driver's freq_tbl.
-> 
-> Both core_power_v1 and core_power_v4 functions require core_clks_enable
-> function during POWER_ON. Therefore, in the core_clks_enable function,
-> if calling dev_pm_opp_find_freq_ceil to obtain the frequency fails,
-> it needs to fall back to the freq_tbl to retrieve the frequency.
-> 
-> Signed-off-by: Renjiang Han <quic_renjiang@quicinc.com>
-> ---
-> Since device trees for both HFI_VERSION_1XX and HFI_VERSION_3XX do not
-> contain an opp-table and have not configured opp-pmdomain, they still
-> need to use the frequencies defined in the driver's freq_tbl.
-> 
-> Therefore, if calling dev_pm_opp_find_freq_ceil to obtain the frequency
-> fails in the core_clks_enable, it needs to fall back to the freq_tbl to
-> retrieve the frequency.
-> 
-> Validated this series on QCS615 and msm8916.
-> ---
->  drivers/media/platform/qcom/venus/pm_helpers.c | 11 ++++++++++-
->  1 file changed, 10 insertions(+), 1 deletion(-)
+From: Leon Romanovsky <leonro@nvidia.com>
 
-Fixes: b179234b5e59 ("media: venus: pm_helpers: use opp-table for the frequency")
+---------------------------------------------------------------------------
+Based on blk and DMA patches which will be sent during coming merge window.
+---------------------------------------------------------------------------
 
-Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>
+This series extends the VFIO PCI subsystem to support exporting MMIO regions
+from PCI device BARs as dma-buf objects, enabling safe sharing of non-struct
+page memory with controlled lifetime management. This allows RDMA and other
+subsystems to import dma-buf FDs and build them into memory regions for PCI
+P2P operations.
+
+The series supports a use case for SPDK where a NVMe device will be owned
+by SPDK through VFIO but interacting with a RDMA device. The RDMA device
+may directly access the NVMe CMB or directly manipulate the NVMe device's
+doorbell using PCI P2P.
+
+However, as a general mechanism, it can support many other scenarios with
+VFIO. This dmabuf approach can be usable by iommufd as well for generic
+and safe P2P mappings.
+
+In addition to the SPDK use-case mentioned above, the capability added
+in this patch series can also be useful when a buffer (located in device
+memory such as VRAM) needs to be shared between any two dGPU devices or
+instances (assuming one of them is bound to VFIO PCI) as long as they
+are P2P DMA compatible.
+
+The implementation provides a revocable attachment mechanism using dma-buf
+move operations. MMIO regions are normally pinned as BARs don't change
+physical addresses, but access is revoked when the VFIO device is closed
+or a PCI reset is issued. This ensures kernel self-defense against
+potentially hostile userspace.
+
+The series includes significant refactoring of the PCI P2PDMA subsystem
+to separate core P2P functionality from memory allocation features,
+making it more modular and suitable for VFIO use cases that don't need
+struct page support.
+
+-----------------------------------------------------------------------
+This is based on
+https://lore.kernel.org/all/20250307052248.405803-1-vivek.kasireddy@intel.com/
+but heavily rewritten to be based on DMA physical API.
+-----------------------------------------------------------------------
+The WIP branch can be found here:
+https://git.kernel.org/pub/scm/linux/kernel/git/leon/linux-rdma.git/log/?h=dmabuf-vfio
+
+Thanks
+
+Leon Romanovsky (8):
+  PCI/P2PDMA: Remove redundant bus_offset from map state
+  PCI/P2PDMA: Introduce p2pdma_provider structure for cleaner
+    abstraction
+  PCI/P2PDMA: Simplify bus address mapping API
+  PCI/P2PDMA: Refactor to separate core P2P functionality from memory
+    allocation
+  PCI/P2PDMA: Export pci_p2pdma_map_type() function
+  types: move phys_vec definition to common header
+  vfio/pci: Enable peer-to-peer DMA transactions by default
+  vfio/pci: Add dma-buf export support for MMIO regions
+
+Vivek Kasireddy (2):
+  vfio: Export vfio device get and put registration helpers
+  vfio/pci: Share the core device pointer while invoking feature
+    functions
+
+ block/blk-mq-dma.c                 |   7 +-
+ drivers/iommu/dma-iommu.c          |   4 +-
+ drivers/pci/p2pdma.c               | 144 +++++++++----
+ drivers/vfio/pci/Kconfig           |  20 ++
+ drivers/vfio/pci/Makefile          |   2 +
+ drivers/vfio/pci/vfio_pci_config.c |  22 +-
+ drivers/vfio/pci/vfio_pci_core.c   |  59 ++++--
+ drivers/vfio/pci/vfio_pci_dmabuf.c | 321 +++++++++++++++++++++++++++++
+ drivers/vfio/pci/vfio_pci_priv.h   |  23 +++
+ drivers/vfio/vfio_main.c           |   2 +
+ include/linux/dma-buf.h            |   1 +
+ include/linux/pci-p2pdma.h         | 114 +++++-----
+ include/linux/types.h              |   5 +
+ include/linux/vfio.h               |   2 +
+ include/linux/vfio_pci_core.h      |   4 +
+ include/uapi/linux/vfio.h          |  19 ++
+ kernel/dma/direct.c                |   4 +-
+ mm/hmm.c                           |   2 +-
+ 18 files changed, 631 insertions(+), 124 deletions(-)
+ create mode 100644 drivers/vfio/pci/vfio_pci_dmabuf.c
 
 -- 
-With best wishes
-Dmitry
+2.50.1
+
