@@ -1,123 +1,103 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C99F02E973C;
-	Wed, 23 Jul 2025 13:02:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C4D9F2EA495;
+	Wed, 23 Jul 2025 13:02:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753275736; cv=none; b=tdXQkm6XqAjKRRbuOQkA6YfVfzqGpHK7vPeRuC2LxvkAS7ZGC4CaQxmlUSDRbqxnenMr6z/jnZ5Q0eMa8azt1k3kiOxmjF7Gp22KC+CQg3+hGnbHVWQMB89zUe9598zbhl1iCvHet+/DWxX7GBratFUuPyDRP5B5hq8LXPNU6xo=
+	t=1753275739; cv=none; b=CWqJrP0xtMTMz4aBd41d3ScdL1zbhdATwg/z/6lpQQEktJMYjPw1iy9hMX8pU2OBPekoV8RGcUx93Rjysj+x3Hw1h065OFBoPVwVdv/XgH166XgNqu2kO+NeoW92g89AXKzZqX7tQ4NBFThjCyEum7haGI9fS7zZ7BfKAncgq3s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753275736; c=relaxed/simple;
-	bh=pIL0Fal3Z10DtV64LPo4xcXkDTiYeS1pLWRBh1Fmrp0=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=AzoJIEJigO9o/f0jNQ7zV+iZ4BvwefndBsJIE3zTmhFkxYYIk5j3IUJTLNgG6AaMytahuefUXjq70UV4scfgj7LB+GesaujcwGZhexEKo9OQuMadCrcfEmjRNV0t+Ulnp9vuQ4C42osA1DkU+GfOBUuidFlbt3IyonCbUL9CryM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=P9okemrw; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1753275739; c=relaxed/simple;
+	bh=d/twC7l7aOu4BG0CVPBHIv9Uh/+V0XmP38tX6W0hJX4=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=GDAAyfqLA/3ICj+oQqNSr1z8X4bx99qWIJxTEL2bR9PvQgnjCweWTPbSzWsAoVOfFyMs4b5meeETdRztHPJqC2h1brSRLx/FoOUklX591usC3iX2qAo+dNry2N4f3ZLte91lYNYcJEJy6rcc+Izh6y3V6PmDPHAk6U3fi57PVAk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=iQC9lW15; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="P9okemrw"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9A398C4CEE7;
-	Wed, 23 Jul 2025 13:02:15 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="iQC9lW15"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 851BEC4CEE7;
+	Wed, 23 Jul 2025 13:02:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1753275736;
-	bh=pIL0Fal3Z10DtV64LPo4xcXkDTiYeS1pLWRBh1Fmrp0=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=P9okemrwBrufuczFpKQ4z/nyvZOuAUsniIYG3cqafaRjEVFv93g9VIuiDBgki0mYx
-	 pE5Q7Y4okUQrm4OGrjVPt/WqPmzs8WpxvQy5y4AmoWiW9YvwIevxDj3bqFCe7zJ1OL
-	 jHB5YeZIv6vBqbCXx1aL1GOiXbIKbUIewNTPuHTVWFYub4JPm+R40hj37X7on8IX04
-	 QfALWITdB8aVKkdbV1hXj0S25+yVC4ZcbptopIBhEKrks82E4rExb+hSHqt3Kd7sL6
-	 WlQFvqGfRHlnM8Brd6WJQa5xVhrU1/FK2oXlr249aAs3HbLWwGcfYL8+6dfBu+bdhP
-	 9EC5hFbBQkFOw==
-From: Leon Romanovsky <leon@kernel.org>
-To: Alex Williamson <alex.williamson@redhat.com>
-Cc: Leon Romanovsky <leonro@nvidia.com>,
-	Christoph Hellwig <hch@lst.de>,
-	Jason Gunthorpe <jgg@nvidia.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Bjorn Helgaas <bhelgaas@google.com>,
-	=?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
-	dri-devel@lists.freedesktop.org,
-	iommu@lists.linux.dev,
-	Jens Axboe <axboe@kernel.dk>,
-	=?UTF-8?q?J=C3=A9r=C3=B4me=20Glisse?= <jglisse@redhat.com>,
-	Joerg Roedel <joro@8bytes.org>,
-	kvm@vger.kernel.org,
-	linaro-mm-sig@lists.linaro.org,
-	linux-block@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-media@vger.kernel.org,
-	linux-mm@kvack.org,
-	linux-pci@vger.kernel.org,
-	Logan Gunthorpe <logang@deltatee.com>,
-	Marek Szyprowski <m.szyprowski@samsung.com>,
-	Robin Murphy <robin.murphy@arm.com>,
-	Sumit Semwal <sumit.semwal@linaro.org>,
-	Vivek Kasireddy <vivek.kasireddy@intel.com>,
-	Will Deacon <will@kernel.org>
-Subject: [PATCH 06/10] types: move phys_vec definition to common header
-Date: Wed, 23 Jul 2025 16:00:07 +0300
-Message-ID: <e5bec6fc13ed352e2e00f84adc414e467ea94b08.1753274085.git.leonro@nvidia.com>
-X-Mailer: git-send-email 2.50.1
-In-Reply-To: <cover.1753274085.git.leonro@nvidia.com>
-References: <cover.1753274085.git.leonro@nvidia.com>
+	s=k20201202; t=1753275739;
+	bh=d/twC7l7aOu4BG0CVPBHIv9Uh/+V0XmP38tX6W0hJX4=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=iQC9lW15C8aLnHqd/wbXqoL8q80V41zhfqYcV1wWjMtlbYS47mDaywISLL4sn5WUW
+	 nfdTbLyUoGydEDQv5J9g+iACjjAX3QsWenmViPdT3teCvQxePFLqHUAFdiW/O3MN1F
+	 k6UA9f0XnjMbpPDp4gTs28mvo9PnNMm31P1HS8Nwpt2W6uv8uWBUeyEwkmqinGWlvG
+	 lbKkVjbGAt8FIQqjtKNVozY7XZda+XWe/zB/XDssPkQDm38EWZ+0t94ib7a0V0KJyD
+	 YKpNd06OHZ4LEMZQjuK9RxHNWwb3KVSbRqKXQR/ZxSsC2dqwfSFaZ0YYhhYekqONAP
+	 AnsPaFPCIbvWg==
+Message-ID: <85d9d497-0965-4569-b1af-bd6102c9f68d@kernel.org>
+Date: Wed, 23 Jul 2025 15:02:17 +0200
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 0/2] parse horizontal/vertical flip properties
+To: Fabian Pfitzner <f.pfitzner@pengutronix.de>,
+ Jacopo Mondi <jacopo.mondi@ideasonboard.com>
+Cc: Mauro Carvalho Chehab <mchehab@kernel.org>, Rob Herring
+ <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
+ Conor Dooley <conor+dt@kernel.org>, Jacopo Mondi <jacopo@jmondi.org>,
+ Sakari Ailus <sakari.ailus@linux.intel.com>, linux-media@vger.kernel.org,
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+ entwicklung@pengutronix.de
+References: <20250718-fpf-media-dt-flip-v1-0-75b3a938b4be@pengutronix.de>
+ <ryuew3kxnocj6uqq4nadp3kyaxg27rxlrgnaieyy2hlpz5jkd3@iyetnsbfanee>
+ <35debf21-bca7-480f-a61e-7b0494f10ca5@pengutronix.de>
+ <mljx67lkcw4kh3cs344iprik244cm7hqfckmg4bj5j5atuyt62@lh2ht4mrtkjq>
+ <3ac271c7-a67a-4f6f-935d-256937516068@pengutronix.de>
+Content-Language: en-US, nl
+From: Hans de Goede <hansg@kernel.org>
+In-Reply-To: <3ac271c7-a67a-4f6f-935d-256937516068@pengutronix.de>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-From: Leon Romanovsky <leonro@nvidia.com>
+Hi,
 
-Move the struct phys_vec definition from block/blk-mq-dma.c to
-include/linux/types.h to make it available for use across the kernel.
+On 23-Jul-25 12:09 PM, Fabian Pfitzner wrote:
+> On 7/23/25 11:44, Jacopo Mondi wrote:
+>> On Wed, Jul 23, 2025 at 11:29:27AM +0200, Fabian Pfitzner wrote:
+>>> On 7/23/25 11:17, Jacopo Mondi wrote:
+>>>> Hi Fabian
+>>>>
+>>>> On Wed, Jul 23, 2025 at 10:58:28AM +0200, Fabian Pfitzner wrote:
+>>>>> There are cameras containing a mirror on their optical path e. g. when
+>>>>> mounted upside down.
+>>>> How is this different from 'rotation = 180' ?
+>>> If you simply want to flip the output (e. g. horizontally), you cannot do
+>>> this with a rotation.
+>>> The camera I'm referring to is not only upside down, but also flipped
+>>> horizontally.
+>> 180 degress rotation = HFLIP + VFLIP
+> I do not want to do both. Only one of them.
+>>
+>> Yes, you can't express 'mirror' in DTS, because DTS are about the
+>> physical mounting rotation of the camera. Sensor drivers shall not
+>> apply any flip control automatically, it's userspace that by parsing
+>> the rotation property through the associated v4l2 controls should decide
+>> if it has to apply flips or not to correct the images.
+>>
+>> What is the use case you had in mind ? Tell the driver through a DTS
+>> property it has to apply flips to auto-compensate ? Because I think we
+>> shouldn't and if I'm not mistaken we also document it:
+>> https://www.kernel.org/doc/html/latest/userspace-api/media/drivers/camera-sensor.html#rotation-orientation-and-flipping
+> I have a camera that does a horizontal flip in its hardware, so the output is not what I want. My example above was misleading. The rotation fixes the "upside down" problem, but does not fix the flip.
 
-The phys_vec structure represents a physical address range with a
-length, which is used by the new physical address-based DMA mapping
-API. This structure is already used by the block layer and will be
-needed by upcoming VFIO patches for dma-buf operations.
+Hmm, so is there anything in the optical path causing just
+a horizontal flip ? 
 
-Moving this definition to types.h provides a centralized location
-for this common data structure and eliminates code duplication
-across subsystems that need to work with physical address ranges.
+Because if not it sounds like the driver is simply buggy and
+is applying hflip by default / applying hflip while the hflip
+control is set to 0.
 
-Signed-off-by: Leon Romanovsky <leonro@nvidia.com>
----
- block/blk-mq-dma.c    | 5 -----
- include/linux/types.h | 5 +++++
- 2 files changed, 5 insertions(+), 5 deletions(-)
+We've had this case a couple of times before. So it might just
+be that we need to fix the driver here ...
 
-diff --git a/block/blk-mq-dma.c b/block/blk-mq-dma.c
-index eeac653e3f3bd..b0fa53c353d9d 100644
---- a/block/blk-mq-dma.c
-+++ b/block/blk-mq-dma.c
-@@ -5,11 +5,6 @@
- #include <linux/blk-mq-dma.h>
- #include "blk.h"
- 
--struct phys_vec {
--	phys_addr_t	paddr;
--	u32		len;
--};
--
- static bool blk_map_iter_next(struct request *req, struct req_iterator *iter,
- 			      struct phys_vec *vec)
- {
-diff --git a/include/linux/types.h b/include/linux/types.h
-index 6dfdb8e8e4c35..2bc56681b2e62 100644
---- a/include/linux/types.h
-+++ b/include/linux/types.h
-@@ -170,6 +170,11 @@ typedef u64 phys_addr_t;
- typedef u32 phys_addr_t;
- #endif
- 
-+struct phys_vec {
-+	phys_addr_t	paddr;
-+	u32		len;
-+};
-+
- typedef phys_addr_t resource_size_t;
- 
- /*
--- 
-2.50.1
+Regards,
+
+Hans
+
 
