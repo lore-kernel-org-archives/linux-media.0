@@ -1,160 +1,282 @@
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2604914A4F9;
-	Fri, 25 Jul 2025 10:50:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B3DD61BD4F7;
+	Fri, 25 Jul 2025 11:00:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.167.242.64
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753440641; cv=none; b=nJO622a+Z2Cu0qwkCtEr2XxU2YZFNyGJwZbyNxyh010O65NZxaXa/0ipo0Aqo+t3X8XZmuOsB7aFbzc3mai3ODs8cXXN1D4Gx6+vWCcjfvLM7H2TGeh8KTdHGuXSx0UCiaViWrGw/+dQ/ta3Wikbe3Grmthx5fUdfvb0fQ8d1z4=
+	t=1753441239; cv=none; b=ef6sg/N+HFcLTg4KC0mT//OLHVp4ss5NzB1R0B/xDQo8LoYFVhIesZryenIuP7uUZk/98YCSPT6R7xPhPcfzfwtVerYpOkZo6N0ilDyzQ+xEsK7pm3/prKtaziPk0d9NuYEEgNZHk7uGJ39RGnY/s7xRBDC7FE24mRiJLF1VD/I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753440641; c=relaxed/simple;
-	bh=KHd0GVyxgt29vK8MLf23RF3O3tfRk4C2VjJf/BKNwQ0=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=DoXSJ0NuM9OrE1DJZt6zXpoZxIzpTFz7pHyqlffo8363wvgafEUYoGZq2cGgqU+tF23oL+dmonZe90XDNqLDZLt3/RRl+cY2zuSSAqcrmkZSAMvtZBaUx/jlRKF3ZlpWHWG5I0LpAuglXGOuDkdL0T8tt2CAVcaZk16MZpfaPu0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=UFBbos72; arc=none smtp.client-ip=205.220.180.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+	s=arc-20240116; t=1753441239; c=relaxed/simple;
+	bh=IFbdLct/XlwhI0CCt9Krv57xH4aepmQc/wV8PhqxXlg=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=e5JNo6c4k1tw2MZpHfQg62SrVgW+UoV4HMzPqu2mNJLalwW0jgpIcqzyjOkpZUHMkq7nzguP7dBluova7a1Mx+TgTIx0AKxPcrbQ8RpBIKya+qqoBuxaURGvLCECsJ4E59YkD6FphjxpAVEIEqc2tlujLAour1a/utw6ythdS8k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ideasonboard.com; spf=pass smtp.mailfrom=ideasonboard.com; dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b=Ecf4Nay+; arc=none smtp.client-ip=213.167.242.64
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ideasonboard.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ideasonboard.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="UFBbos72"
-Received: from pps.filterd (m0279873.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 56P9AOTN018948;
-	Fri, 25 Jul 2025 10:50:33 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	5bh0hvMC1PjdJpImLiwjapwCuJypbziWRznl02GU6Ls=; b=UFBbos72VZCd7Rdr
-	8TxZz9VkX3izCSl16/doF7Ve1n6NgEukoJShS5NxDiX4T/K0BEIAanHp4wixFMcJ
-	YrYhLujDhRQw55WTiPLOR+68CQhb4SKmpPj0B7pf9w1wdwqAUQj1Ray+GrfY3kWS
-	FSbuwWWJnw4lqS2Q/1+8w+Mqm6AJPA2N5ADDRBUzvF71n2J33A2lT4wIK01r8df8
-	owdoua3+YCTx23/otjBL8PV+1yTvq42vWPwxVmvV39YSO6BIU0gTBKxzHqGdrj3a
-	AEpUBc04tPp12vildKDGY2M+xV6NnO4NnB4jIlHPZHIMn02GKtrADSro9rcRhjra
-	seYeuA==
-Received: from nasanppmta03.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 483w2s1s5f-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 25 Jul 2025 10:50:32 +0000 (GMT)
-Received: from nasanex01b.na.qualcomm.com (nasanex01b.na.qualcomm.com [10.46.141.250])
-	by NASANPPMTA03.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 56PAoVVF006564
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 25 Jul 2025 10:50:31 GMT
-Received: from [10.216.28.154] (10.80.80.8) by nasanex01b.na.qualcomm.com
- (10.46.141.250) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1748.10; Fri, 25 Jul
- 2025 03:50:26 -0700
-Message-ID: <8a149580-5044-4744-b432-9f0eef0a0d31@quicinc.com>
-Date: Fri, 25 Jul 2025 16:20:23 +0530
+	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="Ecf4Nay+"
+Received: from pendragon.ideasonboard.com (81-175-209-231.bb.dnainternet.fi [81.175.209.231])
+	by perceval.ideasonboard.com (Postfix) with UTF8SMTPSA id 9947BC73;
+	Fri, 25 Jul 2025 12:59:49 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+	s=mail; t=1753441189;
+	bh=IFbdLct/XlwhI0CCt9Krv57xH4aepmQc/wV8PhqxXlg=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=Ecf4Nay+jvm7qaSw1pKsJS+aA6w9KPFinLg45do9/DXKm4NlftA89lY5GzdOMOxeY
+	 GKJzNngxQCLk3Vt1WczN1ITLRq82QCbtwk5YTmmx+gn6uW6cqwScK8KMyOiV9PQHZM
+	 485HO/935In6WJZlFtSUbJxi8HFkvY1CVEgSGGI4=
+Date: Fri, 25 Jul 2025 14:00:24 +0300
+From: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To: Tarang Raval <tarang.raval@siliconsignals.io>
+Cc: "linux-media@vger.kernel.org" <linux-media@vger.kernel.org>,
+	Sakari Ailus <sakari.ailus@linux.intel.com>,
+	Mehdi Djait <mehdi.djait@linux.intel.com>,
+	Alim Akhtar <alim.akhtar@samsung.com>,
+	=?utf-8?B?QW5kcsOp?= Apitzsch <git@apitzsch.eu>,
+	Andrzej Hajda <andrzej.hajda@intel.com>,
+	Arec Kao <arec.kao@intel.com>,
+	Benjamin Mugnier <benjamin.mugnier@foss.st.com>,
+	Bingbu Cao <bingbu.cao@intel.com>,
+	Bjorn Andersson <andersson@kernel.org>,
+	Bryan O'Donoghue <bod@kernel.org>,
+	Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Daniel Scally <djrscally@gmail.com>,
+	Dongcheng Yan <dongcheng.yan@intel.com>,
+	Fabio Estevam <festevam@gmail.com>,
+	Geert Uytterhoeven <geert+renesas@glider.be>,
+	Hans de Goede <hansg@kernel.org>,
+	Hans Verkuil <hverkuil@kernel.org>, Hao Yao <hao.yao@intel.com>,
+	Heimir Thor Sverrisson <heimir.sverrisson@gmail.com>,
+	Jacopo Mondi <jacopo@jmondi.org>, Jimmy Su <jimmy.su@intel.com>,
+	Jingjing Xiong <jingjing.xiong@intel.com>,
+	Jonas Karlman <jonas@kwiboo.se>,
+	Konrad Dybcio <konradybcio@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+	Leon Luo <leonl@leopardimaging.com>,
+	Liam Girdwood <lgirdwood@gmail.com>,
+	Magnus Damm <magnus.damm@gmail.com>,
+	Manivannan Sadhasivam <mani@kernel.org>,
+	Mark Brown <broonie@kernel.org>,
+	Matthew Majewski <mattwmajewski@gmail.com>,
+	Matthias Fend <matthias.fend@emfend.at>,
+	Mikhail Rudenko <mike.rudenko@gmail.com>,
+	Nicolas Dufresne <nicolas.dufresne@collabora.com>,
+	Niklas =?utf-8?Q?S=C3=B6derlund?= <niklas.soderlund+renesas@ragnatech.se>,
+	Pavel Machek <pavel@kernel.org>,
+	Pengutronix Kernel Team <kernel@pengutronix.de>,
+	Ricardo Ribalda <ribalda@chromium.org>,
+	Rob Herring <robh@kernel.org>,
+	Sascha Hauer <s.hauer@pengutronix.de>,
+	Shawn Guo <shawnguo@kernel.org>,
+	Shunqian Zheng <zhengsq@rock-chips.com>,
+	Sylvain Petinot <sylvain.petinot@foss.st.com>,
+	Sylwester Nawrocki <s.nawrocki@samsung.com>,
+	Tianshu Qiu <tian.shu.qiu@intel.com>,
+	Todor Tomov <todor.too@gmail.com>,
+	Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>,
+	Tony Lindgren <tony@atomide.com>, Zhi Mao <zhi.mao@mediatek.com>,
+	"devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+	"imx@lists.linux.dev" <imx@lists.linux.dev>,
+	"linux-arm-kernel@lists.infradead.org" <linux-arm-kernel@lists.infradead.org>,
+	"linux-arm-msm@vger.kernel.org" <linux-arm-msm@vger.kernel.org>,
+	"linux-omap@vger.kernel.org" <linux-omap@vger.kernel.org>,
+	"linux-renesas-soc@vger.kernel.org" <linux-renesas-soc@vger.kernel.org>,
+	"linux-samsung-soc@vger.kernel.org" <linux-samsung-soc@vger.kernel.org>
+Subject: Re: [PATCH 00/72] media: i2c: Reduce cargo-cult
+Message-ID: <20250725110024.GA30386@pendragon.ideasonboard.com>
+References: <20250710174808.5361-1-laurent.pinchart@ideasonboard.com>
+ <PN3P287MB1829DD1254FB74391A750F498B5EA@PN3P287MB1829.INDP287.PROD.OUTLOOK.COM>
+ <20250724115202.GK11202@pendragon.ideasonboard.com>
+ <PN3P287MB1829C9E8C78ADD70259A68F08B5EA@PN3P287MB1829.INDP287.PROD.OUTLOOK.COM>
+ <20250724135259.GR11202@pendragon.ideasonboard.com>
+ <PN3P287MB1829E1FEE7D2468CE9915C778B5EA@PN3P287MB1829.INDP287.PROD.OUTLOOK.COM>
+ <20250724154414.GE22016@pendragon.ideasonboard.com>
+ <PN3P287MB1829FC781EA3A94E0B8F16B98B59A@PN3P287MB1829.INDP287.PROD.OUTLOOK.COM>
+ <20250725093805.GY11202@pendragon.ideasonboard.com>
+ <PN3P287MB1829C2D2D0577D4DA82D6AF58B59A@PN3P287MB1829.INDP287.PROD.OUTLOOK.COM>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v6 2/2] i2c: i2c-qcom-geni: Add Block event interrupt
- support
-To: Vinod Koul <vkoul@kernel.org>,
-        Dmitry Baryshkov
-	<dmitry.baryshkov@oss.qualcomm.com>
-CC: Mukesh Kumar Savaliya <quic_msavaliy@quicinc.com>,
-        Viken Dadhaniya
-	<quic_vdadhani@quicinc.com>,
-        Andi Shyti <andi.shyti@kernel.org>,
-        Sumit Semwal
-	<sumit.semwal@linaro.org>,
-        =?UTF-8?Q?Christian_K=C3=B6nig?=
-	<christian.koenig@amd.com>,
-        <linux-arm-msm@vger.kernel.org>, <dmaengine@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-i2c@vger.kernel.org>,
-        <linux-media@vger.kernel.org>, <dri-devel@lists.freedesktop.org>,
-        <linaro-mm-sig@lists.linaro.org>, <quic_vtanuku@quicinc.com>
-References: <644oygj43z2um42tmmldp3feemgzrdoirzfw7pu27k4zi76bwg@wfxbtgqqgh4p>
- <dc7358a1-ddc5-402e-9024-283f8e46e3b6@quicinc.com>
- <CAO9ioeVuAO6mYpBSpiTW0jhFRPtkubZ5eEskd1yLBHVdR8_YMA@mail.gmail.com>
- <1b55d9d4-f3ff-4cd9-8906-5f370da55732@quicinc.com>
- <28d26c70-178f-413b-b7f8-410c508cfdd7@quicinc.com>
- <CAO9ioeXBwFYL8q7x7_fHvx5YO+qyAXk4wpnfPrku4iY9yBsk0Q@mail.gmail.com>
- <cac5e84b-fbdb-47a9-860d-16a7fa4dc773@quicinc.com>
- <4q3vlydi5xgltd3pcez54alxgrehhfn4pppg47ngwp6y5k7n33@d4d4htntj64k>
- <53dd18ec-9a65-4bf7-8490-ca3eb56ce2a5@quicinc.com>
- <iang2jpe4s6wmbypmtq5uswcm6n6xntqdulyhekcz5k6zxddu3@re3rrr4dso5p>
- <aICMDROkyjzBZFHo@vaman>
-Content-Language: en-US
-From: Jyothi Kumar Seerapu <quic_jseerapu@quicinc.com>
-In-Reply-To: <aICMDROkyjzBZFHo@vaman>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nasanex01b.na.qualcomm.com (10.46.141.250)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: P68p_Z1RsZcKhPtwQSyBMGeyR68FpidV
-X-Authority-Analysis: v=2.4 cv=IZyHWXqa c=1 sm=1 tr=0 ts=68836178 cx=c_pps
- a=JYp8KDb2vCoCEuGobkYCKw==:117 a=JYp8KDb2vCoCEuGobkYCKw==:17
- a=GEpy-HfZoHoA:10 a=IkcTkHD0fZMA:10 a=Wb1JkmetP80A:10
- a=La7-vtGrAMXfD6w410sA:9 a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10
-X-Proofpoint-GUID: P68p_Z1RsZcKhPtwQSyBMGeyR68FpidV
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwNzI1MDA5MSBTYWx0ZWRfX1z/I87JUNVzD
- 5bwPy9cVP7Vgc1KxLEGFWi8y1zBiY12FviruEmjA9SvX5FqXPIZQbNGxr7zGW7RE0+2fYtiJpU1
- s2oQ19fuLNZ9GB/DBeAO9uduvck90Y/j42W89eU/465+CRc1+3ifhactqWo9EFgOFxZ9FCFeL+b
- XzgzRB3lJ1WMXU2yaEX+GCA7tGyV/fEw1LsJlvATUlsfL7b5AzdSfVUGlCKvkgP7C1Y1+MNi61I
- VRbv5c4ZLGCK5TeWOeUrjaUhIxjsP6SvZ5uRo890TECtRHH40E4sqqpAFel5FpN9VkGAO1WYKtF
- 7ilsnUGu6XTdYRd5JEewcrxoLvbi+oc4Jcy65nvwGJhdfVHrT4z28W+/ePTLfALTQjPOmzV38sI
- b/WraTVyl05oDXU4RwpnM/7ECsKS3HQM+Dy4ZvlxJnUlNREB3ywzFkSeytD20lSp5Xrl21XD
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.1.9,FMLib:17.12.80.40
- definitions=2025-07-25_03,2025-07-24_01,2025-03-28_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- suspectscore=0 bulkscore=0 mlxlogscore=999 mlxscore=0 adultscore=0
- phishscore=0 spamscore=0 lowpriorityscore=0 malwarescore=0 impostorscore=0
- clxscore=1015 priorityscore=1501 classifier=spam authscore=0 authtc=n/a
- authcc= route=outbound adjust=0 reason=mlx scancount=1
- engine=8.19.0-2505280000 definitions=main-2507250091
+In-Reply-To: <PN3P287MB1829C2D2D0577D4DA82D6AF58B59A@PN3P287MB1829.INDP287.PROD.OUTLOOK.COM>
 
-
-
-On 7/23/2025 12:45 PM, Vinod Koul wrote:
-> On 22-07-25, 15:46, Dmitry Baryshkov wrote:
->> On Tue, Jul 22, 2025 at 05:50:08PM +0530, Jyothi Kumar Seerapu wrote:
->>> On 7/19/2025 3:27 PM, Dmitry Baryshkov wrote:
->>>> On Mon, Jul 07, 2025 at 09:58:30PM +0530, Jyothi Kumar Seerapu wrote:
->>>>> On 7/4/2025 1:11 AM, Dmitry Baryshkov wrote:
->>>>>> On Thu, 3 Jul 2025 at 15:51, Jyothi Kumar Seerapu
+On Fri, Jul 25, 2025 at 10:35:28AM +0000, Tarang Raval wrote:
+> > On Fri, Jul 25, 2025 at 07:00:40AM +0000, Tarang Raval wrote:
+> > > > On Thu, Jul 24, 2025 at 02:20:10PM +0000, Tarang Raval wrote:
+> > > > > > > > > 2. In the regulator code, you can reduce boilerplate by using
+> > > > > > > > >    devm_regulator_bulk_get_enable().
+> > > > > > > >
+> > > > > > > > devm_regulator_bulk_get_enable() doesn't seem to be a good idea. You
+> > > > > > > > generally don't want to enable power everywhere unconditionally, and
+> > > > > > > > sensors very often need a guaranteed power up sequence.
+> > >
+> > > -----(1)
+> > >
+> > > > > > >
+> > > > > > > The regulators are optional, we supply power to the camera sensor directly
+> > > > > > > through dedicated power rails and there is no strict enable sequence
+> > > > > > > required in this case.
+> > > > > >
+> > > > > > What exactly do you mean by "this case" ? Are you talking about one
+> > > > > > particular sensor ? One particular camera module ?
+> > > > >
+> > > > > Laurent, by “this case” I meant the common scenario where power to the
+> > > > > camera sensor is supplied by a PMIC regulator that is always-on. In such
+> > > > > setups, the regulator is fixed and cannot be enabled or disabled from the
+> > > > > driver, the sensor is always powered.
+> > > > >
+> > > > > This is what I’ve seen in most platforms, where the CSI input connector
+> > > > > provides fixed 3.3V/1.8V power rails directly to the camera module.
+> > > > >
+> > > > > Of course, if the camera supply comes from a dedicated regulator controlled
+> > > > > via a GPIO, then the driver would need to handle enable/disable sequencing
+> > > > > explicitly. But I’m specifically referring to the first case, where the power rails
+> > > > > are always-on.
+> > > >
+> > > > How does the sensor driver know which of those two cases it is dealing
+> > > > with ?
+> > >
+> > > The sensor driver typically determines this via the presence (or absence)
+> > > of regulator supply entries in the Device Tree. If a supply is not defined,
+> > > it's assumed to be always-on (e.g., provided by the board via fixed rails).
+> > 
+> > Do we have sensor drivers that check the presense of supply properties ?
+> > Drivers generally shouldn't.
+> > 
+> > > When defined, the driver retrieves and manages the regulator. This approach
+> > > allows a single driver to support both cases, by treating supplies as optional
+> > > and only enabling them when explicitly defined.
+> > 
+> > I don't see what you're trying to do here. A sensor always needs
+> > supplies, regardless of whether or not they're always on. Drivers should
+> > get the supplies with regulator_get() (or possibly the bulk API), and
+> > then implement the power enable/disable sequences that the sensor
+> > requires. If all suplies are manually controllable, this will produce
+> > the correct sequence. If the supplies are always on, it will be a no-op.
+> > That's a single implementation in the driver, you don't need to care
+> > about the nature of the supplies, or their presence in DT.
+> > 
+> > > At comment (1): you gave two reasons why we cannot use devm_regulator_bulk_get_enable.
+> > >
+> > > What I’m trying to say is:
+> > >
+> > > You mentioned "generally don't want to enable power everywhere unconditionally,"
+> > > but on almost every platform, the power rails are always-on.
+> > 
+> > "almost every platform" doesn't sound right to me. It does happen though.
+> > 
+> > > And regarding the second point — "sensors very often need a guaranteed power-up sequence"
+> > > I don’t understand why this would be an issue. Even if we use devm_regulator_bulk_get_enable,
+> > > the power-up sequence remains the same. So how is it not a good option in this case?
+> > 
+> > Because the bulk API enables all regulators in parallel, it doesn't
+> > guarantee sequencing.
 > 
-> [Folks, would be nice to trim replies]
+> Except for a few drivers, almost all camera drivers use the bulk API, which suggests
+> that a guaranteed power-up sequence may not be strictly required in most cases.
+>  
+> > Don't use devm_regulator_bulk_get_enable() in sensor drivers, implement
+> > power enable/disable functions that do the right thing. That's the code
+> > pattern I want to see.
 > 
->>>>> Could you please confirm if can go with the similar approach of unmap the
->>>>> processed TREs based on a fixed threshold or constant value, instead of
->>>>> unmapping them all at once?
->>>>
->>>> I'd still say, that's a bad idea. Please stay within the boundaries of
->>>> the DMA API.
->>>>
->>> I agree with the approach you suggested—it's the GPI's responsibility to
->>> manage the available TREs.
->>>
->>> However, I'm curious whether can we set a dynamic watermark value perhaps
->>> half the available TREs) to trigger unmapping of processed TREs ? This would
->>> allow the software to prepare the next set of TREs while the hardware
->>> continues processing the remaining ones, enabling better parallelism and
->>> throughput.
->>
->> Let's land the simple implementation first, which can then be improved.
->> However I don't see any way to return 'above the watermark' from the DMA
->> controller. You might need to enhance the API.
+> Perhaps I wasnt clear in my explanation. If you look at the patch below, you'll 
+> see that we are not changing any sequencing behavior.
+
+You end up getting regulators every time power is enabled, and you don't
+turn the supplies off at power off time. How is that even supposed to
+work ? It completely breaks power management.
+
+> I am not suggesting we use this API everywhere, only where it's appropriate and 
+> doesn't compromise sequencing requirements. 
 > 
-> Traditionally, we set the dma transfers for watermark level and we get a
-> interrupt. So you might want to set the callback for watermark level
-> and then do mapping/unmapping etc in the callback. This is typical model
-> for dmaengines, we should follow that well
+> Best Regards,
+> Tarang
 > 
-> BR
+> ------
+> 
+> diff --git a/drivers/media/i2c/imx283.c b/drivers/media/i2c/imx283.c
+> index da618c8cbadc..4dbf7215cef4 100644
+> --- a/drivers/media/i2c/imx283.c
+> +++ b/drivers/media/i2c/imx283.c
+> @@ -1176,8 +1176,8 @@ static int imx283_power_on(struct device *dev)
+>         struct imx283 *imx283 = to_imx283(sd);
+>         int ret;
+>  
+> -       ret = regulator_bulk_enable(ARRAY_SIZE(imx283_supply_name),
+> -                                   imx283->supplies);
+> +       ret = devm_regulator_bulk_get_enable(dev, ARRAY_SIZE(imx283_supply_name),
+> +                                   imx283_supply_name);
+>         if (ret) {
+>                 dev_err(imx283->dev, "failed to enable regulators\n");
+>                 return ret;
+> @@ -1186,7 +1186,7 @@ static int imx283_power_on(struct device *dev)
+>         ret = clk_prepare_enable(imx283->xclk);
+>         if (ret) {
+>                 dev_err(imx283->dev, "failed to enable clock\n");
+> -               goto reg_off;
+> +               return ret;
+>         }
+>  
+>         gpiod_set_value_cansleep(imx283->reset_gpio, 0);
+> @@ -1195,10 +1195,6 @@ static int imx283_power_on(struct device *dev)
+>                      IMX283_XCLR_MIN_DELAY_US + IMX283_XCLR_DELAY_RANGE_US);
+>  
+>         return 0;
+> -
+> -reg_off:
+> -       regulator_bulk_disable(ARRAY_SIZE(imx283_supply_name), imx283->supplies);
+> -       return ret;
+>  }
+>  
+>  static int imx283_power_off(struct device *dev)
+> @@ -1207,24 +1203,11 @@ static int imx283_power_off(struct device *dev)
+>         struct imx283 *imx283 = to_imx283(sd);
+>  
+>         gpiod_set_value_cansleep(imx283->reset_gpio, 1);
+> -       regulator_bulk_disable(ARRAY_SIZE(imx283_supply_name), imx283->supplies);
+>         clk_disable_unprepare(imx283->xclk);
+>  
+>         return 0;
+>  }
+>  
+> -static int imx283_get_regulators(struct imx283 *imx283)
+> -{
+> -       unsigned int i;
+> -
+> -       for (i = 0; i < ARRAY_SIZE(imx283_supply_name); i++)
+> -               imx283->supplies[i].supply = imx283_supply_name[i];
+> -
+> -       return devm_regulator_bulk_get(imx283->dev,
+> -                                      ARRAY_SIZE(imx283_supply_name),
+> -                                      imx283->supplies);
+> -}
+> -
+>  /* Verify chip ID */
+>  static int imx283_identify_module(struct imx283 *imx283)
+>  {
+> @@ -1480,12 +1463,6 @@ static int imx283_probe(struct i2c_client *client)
+>                 return -EINVAL;
+>         }
+>  
+> -       ret = imx283_get_regulators(imx283);
+> -       if (ret) {
+> -               return dev_err_probe(imx283->dev, ret,
+> -                               "failed to get regulators\n");
+> -       }
+> -
+>         ret = imx283_parse_endpoint(imx283);
+>         if (ret) {
+>                 dev_err(imx283->dev, "failed to parse endpoint configuration\n");
 
-Thanks Dmitry and Vinod, I will work on V7 patch for submitting the I2C 
-messages until they fit and and unmap all processed messages together 
-for now.
+-- 
+Regards,
 
-Regarding the watermark mechanism, looks GENI SE DMA supports watermark 
-interrupts but it appears that GPI DMA doesn't have such provision of 
-watermark.
-
-
+Laurent Pinchart
