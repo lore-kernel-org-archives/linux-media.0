@@ -1,83 +1,82 @@
-Received: from mail-ua1-f46.google.com (mail-ua1-f46.google.com [209.85.222.46])
+Received: from mail-qk1-f178.google.com (mail-qk1-f178.google.com [209.85.222.178])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E49DB242925
-	for <linux-media@vger.kernel.org>; Fri, 25 Jul 2025 12:04:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5A4201C6BE
+	for <linux-media@vger.kernel.org>; Fri, 25 Jul 2025 12:15:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753445074; cv=none; b=srMw16ffKCNZxZ+t7Lf922MVyIVdk8QzjmiHsHwertkqKJ4rpwY1+EDmT4k6E7Op2t8K8qqJALmQZudxAV4EPvJTiRXVd4dtH85cYtc1A/wI7AoFddHWflv5gHv0m5t2RG5S6BRrhuUCP+IEXKqih1ay/vT8rsRHNHfPiBuJwbg=
+	t=1753445730; cv=none; b=lBn21mV5LEG5Kf9gQhmjbYPe3isriK6p8wUUFcHMjNVsm6hJsCRDjyvBNTpu5npD0AUEpO+f6FFZMf65K45RkCheTqsDjkFSHWlI7/H+e0/B+cJ/cgD1qEYkcw6+smwGKWPtDrUOGfoccdaPjF4n9FzshLkMBdP3VyS+5xaNlDc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753445074; c=relaxed/simple;
-	bh=V8hirrUVOWBBWHrhJ7nvVXSHaacevucbhSLPMWQvrV0=;
+	s=arc-20240116; t=1753445730; c=relaxed/simple;
+	bh=DZf8o481vjpJ7QSUoolpwJajFBT1Vwo8xHyfUgSq//c=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=sPPkr1mEAO2TqLjuFt7Y0B9k5EbASSg86w5yx56HcgEKyPYzPXyGJFEg7s/BiiyLt4N699sHAcebimlVGjgNrKhOAH6ArxbR5CBfd9jUeI6jLaI/6x+Qe3I+IkhbNwgIyezkH/7JWYmNkJHmR0+sfLRB2xOHb7xTbQrOgTvacZM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=LZFbxSk7; arc=none smtp.client-ip=209.85.222.46
+	 To:Cc:Content-Type; b=AgXJx6/nnt+EJnhhf74VtAid3/UfHhyi1fQ6Ds7hQCO9Pcrwo+FNXNhCKTBc5wDC9xxpkvbke/THVoJEnAIeIxnsZiM5ATI32vz2ZID5XpIYImktBf6fD6kvyJ2n0a+v12zZaZj2qyuPR0vLv6j3BwpkbZFfoOnNcqfMZjUepMg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=bvI2sRWj; arc=none smtp.client-ip=209.85.222.178
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="LZFbxSk7"
-Received: by mail-ua1-f46.google.com with SMTP id a1e0cc1a2514c-87f36c458afso1222409241.1
-        for <linux-media@vger.kernel.org>; Fri, 25 Jul 2025 05:04:32 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="bvI2sRWj"
+Received: by mail-qk1-f178.google.com with SMTP id af79cd13be357-7e33d36491dso280327485a.3
+        for <linux-media@vger.kernel.org>; Fri, 25 Jul 2025 05:15:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1753445072; x=1754049872; darn=vger.kernel.org;
+        d=chromium.org; s=google; t=1753445728; x=1754050528; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=nOvBSwwtmNG8Z+SjWPY5aek+Y4mrxHqGqroX/bR/8SM=;
-        b=LZFbxSk7D7fPQ0Czo0A/Kmud3zDwAZ4nUdfwXd39hlJvQa8IPrLpOSoXugfDH3xhQr
-         bjN9vu6qd11eXY+yKoR68XFrC2Xiz31gc5kWIpcKhgqeXn5soMBgx7OZD5qZao4t5EW9
-         Odd703Wu/2f3tc2DR1F59kbv/ILA3PiY3UeQA=
+        bh=PlkE41QL6s4x1GqYESsGC6jimQ+2xKl71+VqMJsnR/Q=;
+        b=bvI2sRWjDflri1Aw9VXPsQhs3qCIsD/N8yj/EZ3Eqtz2Bo1t8uPMjtj1z8Eu5MVMkI
+         59RMmyjpq/hJ65bXi1U+qReVoo5QWwoogSHoqvGHOadI612v3GD7B7sEJwu8cE7KEbvj
+         ywHTLTmLMff2r2FXilAQ+FMXM3AaagcteDPJU=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1753445072; x=1754049872;
+        d=1e100.net; s=20230601; t=1753445728; x=1754050528;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=nOvBSwwtmNG8Z+SjWPY5aek+Y4mrxHqGqroX/bR/8SM=;
-        b=N4EHwQn2QD6pHeDyejvB5PLfoWJMkOOmM4kKnX2FUq4ww0+oA0g19FjWslpRB8Jn8S
-         aLt/BMW2hm5bbczsP/UkDzpqamvSAcM8ZGrPIk/YdyFTnPr1aj6wdOOVxTFTk9DtNA18
-         MZTx5cDE/HWJQrkBb0w6UsEmTq91kq3THK1lZdn1wZQvdEsEE6w8rx1uI/vYIjCYroZI
-         D1rkjCnAbWTsw36t9KV60vl5PYV9qBQyWtGKDtK2QTMb61Bb+yyUsfHPQ0AtbnCygwq0
-         Sd5yoAGCMPqc3GQd5EA5PO62pAPpIJRignMEILwnnKlwMqO8sx8/l/+OqUuU/Ob8knpJ
-         XNcw==
-X-Forwarded-Encrypted: i=1; AJvYcCU5etHJtzBxLIPAbfSABDzoGcL8TnYOjsa8DqhnYL9/dqfEzafLBzQpuZ5vfS0dJnlS+W3xfdtEE4bZUQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz2xY1SGCPtKVMuXm24D6nr7/mO32Capf7Nj8AE2I+6I//q2Gmj
-	nBKXMEVHi/Njf1dO4gJQ4lO9zUjSXx9GLwSwaQDjZr9hh/IwYDMtXJXUrhV0mtfbZAOtsOobGd+
-	o9tQ=
-X-Gm-Gg: ASbGnctDg9N9vplDZSuKzQKKIKFuB6QejziKLYGprhf8D9wWZ09r1kCVBroye5gCsJs
-	K4u9bTc1dSQFIX69B15D8oEAflAT2G4bPOcdvEomedUC/rFDORGLkZZmz5QXR+Z7l/SgjX8rRNf
-	VVUkdCs7bbG7oxAvKG5y1W/Wl7CBe3ulo2GvnKT/wR+lIclVBMHCdg5mOJcl7tmHi88mNhei/DQ
-	Jr5YQLhnYTb42VxHy+1A6pUJIj8SBgvcqez3bq8g/T/qDBPGaFKyrXWLxz17Yoi2TDWRM9LdXui
-	vcGA7B3LBiLUutSCUheKvXuFeizBsD0cxKvDlnSiqHB6gqMTywNRzeIuNyVbYIeW0vWuzkFT3vA
-	OlV1oJzi+WFZxVuZ4pD/z8lCk9gI9QO+8Vt9IndkyerjRI1xfomN1VLcaZw==
-X-Google-Smtp-Source: AGHT+IEDLDDe0S2BzuUoEnHDAYXxVkZ4o7X9WKa0TJ+SrVjBIlH4kncZTbNqL8Md0eCOXXlUbmZoZw==
-X-Received: by 2002:a05:6122:ca2:b0:537:765c:b31 with SMTP id 71dfb90a1353d-538db4f355cmr441306e0c.3.1753445071356;
-        Fri, 25 Jul 2025 05:04:31 -0700 (PDT)
-Received: from mail-ua1-f41.google.com (mail-ua1-f41.google.com. [209.85.222.41])
-        by smtp.gmail.com with ESMTPSA id 71dfb90a1353d-537bf643a67sm930877e0c.12.2025.07.25.05.04.31
+        bh=PlkE41QL6s4x1GqYESsGC6jimQ+2xKl71+VqMJsnR/Q=;
+        b=B4tlBem3O6YQ3b67IpT3TVFnI/6+YR0VxY2gxR7Px0TdTDD77uoamlQocKk+qWM9Hq
+         24QApnH+u7WDR43B7a4m6pbIV1cvlzYx2UwZMtaXs+LsO/8ml3MuH9IGildIMwnmeLhk
+         uFOTG86WN2OQ5e/3OuvBS08TjRceeQPtooc/tBeyS4B3oR40Ib1OrasTa28XRaMndwf5
+         MzSZXnT0Dm0xXf9GYtv42mk6UDYJkPpqddIvaOJdoGrld99mau7Kwiv8QWh3nzuksPwZ
+         PIwPmQdacLH2zJ0qHV0a4MW+wlFbTXRP0ZfwYOMxj1xSGGML0AH9P7A2wQjKX68g0Zf2
+         F+nQ==
+X-Forwarded-Encrypted: i=1; AJvYcCW8CfG6/eaKWMBelyuETKqonBWbLDhSWl60N8XlmjFUQ3+eVod4skF+kP5SxGfdQaIYiO5xXSXa0XelAg==@vger.kernel.org
+X-Gm-Message-State: AOJu0YxoIvHFLZdKZbWioY++c5H87P2FCa+WcNV4Mr0j1oRAC0E4zeOz
+	a+hwxH6CbPvvZ3L1f+djzkOS2QDzKf6vFZQZcYpxsk7vDdfMOJClQQV0oQ2e58RW/upACsF3den
+	WV6U=
+X-Gm-Gg: ASbGncu4V36hCP0RwHJGBXRfmVVVvUZrpVIAf3AprKIgXog8Caf6vqkZZ4PgwANtn3R
+	y+kze9i+G+lnUkpz3ciiEnljNdHPlKCBaQRwZQVHTCdTyG9Hj+FsJRIJ3ysDa5P3913Ik7eyV2y
+	cSWDenxFmeBiYelYVrV3TnzhG5HfFRdBbIbWyz3dCcOJWN17hr5GouljMfGmKwP5W9gYLPk3xHq
+	cBvJvLvq107nD//n0qcanpr6fIFZQLEm93+UU5n4IIqg5qABH0MScH+ARKH4WAG3OH5IWRZH9Fk
+	IAlZdMVjKGU7ZJG1HBPrJSPrjR53FumG+50HDVSCgSgqCeSg6J4tzxe3GDsG7s6nhgrjuZwXH6+
+	zy4ik5RCCAdTiVAvbZZ/IgVFsXzAXGyZLGvXUJaWXQRg/hx7oD3nkumB9pDJp9g==
+X-Google-Smtp-Source: AGHT+IGZ1UNOojYZ3j4sarrIMlXaJWpMoUlmJ7Y1159r39Gx3CXIWobDBNAezOINZBhvmfD2ihfoBg==
+X-Received: by 2002:a05:620a:a502:b0:7d3:99da:bdbc with SMTP id af79cd13be357-7e63bfb3353mr176648585a.36.1753445727761;
+        Fri, 25 Jul 2025 05:15:27 -0700 (PDT)
+Received: from mail-qt1-f178.google.com (mail-qt1-f178.google.com. [209.85.160.178])
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-7e632e25b29sm237178385a.49.2025.07.25.05.15.27
         for <linux-media@vger.kernel.org>
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 25 Jul 2025 05:04:31 -0700 (PDT)
-Received: by mail-ua1-f41.google.com with SMTP id a1e0cc1a2514c-87f36c458afso1222403241.1
-        for <linux-media@vger.kernel.org>; Fri, 25 Jul 2025 05:04:31 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCXpl53b/gMwpuIANzy0L0Gn9m+PhhMt238w59ygrbgeUGDpxNOzU/VKTBRCeHfkBjV95++2ViB+lcV3LQ==@vger.kernel.org
-X-Received: by 2002:a05:6102:358c:b0:4e4:5df7:a10a with SMTP id
- ada2fe7eead31-4fa3fc6be93mr374132137.16.1753440996607; Fri, 25 Jul 2025
- 03:56:36 -0700 (PDT)
+        Fri, 25 Jul 2025 05:15:27 -0700 (PDT)
+Received: by mail-qt1-f178.google.com with SMTP id d75a77b69052e-4ab58105261so36081471cf.2
+        for <linux-media@vger.kernel.org>; Fri, 25 Jul 2025 05:15:27 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCWSQrYS/slB5gtGWJp4LKWgNi4XLFVuHzXyve+TUMjC6d1rGPP7wlq5ViMIyGrt/awAZVNDAHyJFvpk5Q==@vger.kernel.org
+X-Received: by 2002:a05:6102:4a8f:b0:4e9:a2bd:b456 with SMTP id
+ ada2fe7eead31-4fa3feb1976mr334393137.12.1753439957846; Fri, 25 Jul 2025
+ 03:39:17 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250724083914.61351-1-angelogioacchino.delregno@collabora.com> <20250724083914.61351-17-angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20250724083914.61351-17-angelogioacchino.delregno@collabora.com>
+References: <20250724083914.61351-1-angelogioacchino.delregno@collabora.com> <20250724083914.61351-39-angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20250724083914.61351-39-angelogioacchino.delregno@collabora.com>
 From: Fei Shao <fshao@chromium.org>
-Date: Fri, 25 Jul 2025 18:55:59 +0800
-X-Gmail-Original-Message-ID: <CAC=S1nhwrq60q-=jMZQ2u8TwwG9HHnQFWrFRx58VF2K6Xi16XA@mail.gmail.com>
-X-Gm-Features: Ac12FXy6b-EYxcfTGxWYM-OfSnpWrsOFjS6YFWPk3kTV_ZIdvcSVvNebJ1JSwHk
-Message-ID: <CAC=S1nhwrq60q-=jMZQ2u8TwwG9HHnQFWrFRx58VF2K6Xi16XA@mail.gmail.com>
-Subject: Re: [PATCH 16/38] arm64: dts: mediatek: mt6331: Fix pmic, regulators,
- rtc, keys node names
+Date: Fri, 25 Jul 2025 18:38:40 +0800
+X-Gmail-Original-Message-ID: <CAC=S1njc7_+EhDA_HrVsPfhYsrFEmeb5TQ55X+YOKE=NrpoCaA@mail.gmail.com>
+X-Gm-Features: Ac12FXzORC58mPF_B982fHDjnhtiL_-5O2nAq5PI4bkUJDNwvq8vw0VlaVEnRW8
+Message-ID: <CAC=S1njc7_+EhDA_HrVsPfhYsrFEmeb5TQ55X+YOKE=NrpoCaA@mail.gmail.com>
+Subject: Re: [PATCH 38/38] arm64: dts: mediatek: mt8516-pumpkin: Fix machine compatible
 To: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 Cc: linux-mediatek@lists.infradead.org, robh@kernel.org, 
 	daniel.lezcano@linaro.org, mwalle@kernel.org, devicetree@vger.kernel.org, 
@@ -102,65 +101,37 @@ Cc: linux-mediatek@lists.infradead.org, robh@kernel.org,
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Thu, Jul 24, 2025 at 5:48=E2=80=AFPM AngeloGioacchino Del Regno
+On Thu, Jul 24, 2025 at 5:51=E2=80=AFPM AngeloGioacchino Del Regno
 <angelogioacchino.delregno@collabora.com> wrote:
 >
-> The node names for "pmic", "regulators", "rtc", and "keys" are
-> dictated by the PMIC MFD binding: change those to adhere to it.
+> This devicetree contained only the SoC compatible but lacked the
+> machine specific one: add a "mediatek,mt8516-pumpkin" compatible
+> to the list to fix dtbs_check warnings.
 >
-> Fixes: aef783f3e0ca ("arm64: dts: mediatek: Add MT6331 PMIC devicetree")
+> Fixes: 9983822c8cf9 ("arm64: dts: mediatek: add pumpkin board dts")
 > Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@coll=
 abora.com>
 
 Reviewed-by: Fei Shao <fshao@chromium.org>
 
 > ---
->  arch/arm64/boot/dts/mediatek/mt6331.dtsi | 10 +++++-----
->  1 file changed, 5 insertions(+), 5 deletions(-)
+>  arch/arm64/boot/dts/mediatek/mt8516-pumpkin.dts | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 >
-> diff --git a/arch/arm64/boot/dts/mediatek/mt6331.dtsi b/arch/arm64/boot/d=
-ts/mediatek/mt6331.dtsi
-> index d89858c73ab1..243afbffa21f 100644
-> --- a/arch/arm64/boot/dts/mediatek/mt6331.dtsi
-> +++ b/arch/arm64/boot/dts/mediatek/mt6331.dtsi
-> @@ -6,12 +6,12 @@
->  #include <dt-bindings/input/input.h>
+> diff --git a/arch/arm64/boot/dts/mediatek/mt8516-pumpkin.dts b/arch/arm64=
+/boot/dts/mediatek/mt8516-pumpkin.dts
+> index cce642c53812..3d3db33a64dc 100644
+> --- a/arch/arm64/boot/dts/mediatek/mt8516-pumpkin.dts
+> +++ b/arch/arm64/boot/dts/mediatek/mt8516-pumpkin.dts
+> @@ -11,7 +11,7 @@
 >
->  &pwrap {
-> -       pmic: mt6331 {
-> +       pmic: pmic {
->                 compatible =3D "mediatek,mt6331";
->                 interrupt-controller;
->                 #interrupt-cells =3D <2>;
+>  / {
+>         model =3D "Pumpkin MT8516";
+> -       compatible =3D "mediatek,mt8516";
+> +       compatible =3D "mediatek,mt8516-pumpkin", "mediatek,mt8516";
 >
-> -               mt6331regulator: mt6331regulator {
-> +               mt6331regulator: regulators {
->                         compatible =3D "mediatek,mt6331-regulator";
->
->                         mt6331_vdvfs11_reg: buck-vdvfs11 {
-> @@ -258,7 +258,7 @@ mt6331_vrtc_reg: ldo-vrtc {
->                         };
->
->                         mt6331_vdig18_reg: ldo-vdig18 {
-> -                               regulator-name =3D "dvdd18_dig";
-> +                               regulator-name =3D "vdig18";
->                                 regulator-min-microvolt =3D <1800000>;
->                                 regulator-max-microvolt =3D <1800000>;
->                                 regulator-ramp-delay =3D <0>;
-> @@ -266,11 +266,11 @@ mt6331_vdig18_reg: ldo-vdig18 {
->                         };
->                 };
->
-> -               mt6331rtc: mt6331rtc {
-> +               mt6331rtc: rtc {
->                         compatible =3D "mediatek,mt6331-rtc";
->                 };
->
-> -               mt6331keys: mt6331keys {
-> +               mt6331keys: keys {
->                         compatible =3D "mediatek,mt6331-keys";
->                         power {
->                                 linux,keycodes =3D <KEY_POWER>;
+>         memory@40000000 {
+>                 device_type =3D "memory";
 > --
 > 2.50.1
 >
