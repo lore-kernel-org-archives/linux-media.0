@@ -1,72 +1,198 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.21])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2650025BF13
-	for <linux-media@vger.kernel.org>; Mon, 28 Jul 2025 09:48:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC64C26AF3;
+	Mon, 28 Jul 2025 10:28:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.21
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753696119; cv=none; b=Wl4dXcbBUGlBQuLtM350W0RLoadkh5O9BdXA8oPzxrzRfXWk1qhMf20hWpzR5MuO034Sueod268ujtr32zHeA6DH84cVwXdwIEFzGjXt/PogIVeE6lT2FSDyw1MlAp9AjATf1UmKWj0vkrIxVXeI7o4Y0MgIs5r2irqOBmdBwAw=
+	t=1753698487; cv=none; b=RqjWHfCJ0EMzpmmuJK/t+I5VW+eoMnOf84c0N0efKeDoPZ62ZcAApJ0+o51oCz50gcsxAQ77+RUSKRZ0gnpGQUE//bjhAImYnehLrOA4bEoaU5k8Hkwj+XHdiiNK/5dEwlaKwau3f4DWxifm9EZg++RTsPFIMNnjWMbyFBXcIqA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753696119; c=relaxed/simple;
-	bh=5OxUAZ7Y+sSxxYZPmZEOWfLe9nY/JcJ5UtKgik4FNkU=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=WI3hcRc+Vh5EQG5LwBvUEBOk7LRqZBCC5fbjIHzjBAChenwGOJM+hSXUbZHQ3STQ6mjfG6kd/oakRGWqcTinOzjbGSPMSLP9e4wYefXFSTlYHLFW4GpF42gV8CSuT6ikzBdaEH/ENVyDXDDXWsLvpUA5f5KHZDD3sh1mciDZpoc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fGfWLHTE; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1753698487; c=relaxed/simple;
+	bh=3AnWV7DkyxpUinOHa2NdfWkE9BXbV1glkkPC/peih7Y=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=COVDGHt1xBfI7CmyCtNyJgpzBxhopiM4prFj39prCgZbJZLSY9kcNa8/7zWYL2lcbFEfI6wLKYh4cpgfjJQBMQWM58lhoJVLhh/S/8pfyIx0HWRdRD3zt8VzDvFEJUqqpyeeJ7XutV8uzHyDTZ/FArmw3rQBXX7BT96PutneamA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=VcUNhneK; arc=none smtp.client-ip=198.175.65.21
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fGfWLHTE"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CC5B4C4CEF6;
-	Mon, 28 Jul 2025 09:48:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1753696118;
-	bh=5OxUAZ7Y+sSxxYZPmZEOWfLe9nY/JcJ5UtKgik4FNkU=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=fGfWLHTEyfpcloyCnDfkv/uMKbOvBBTipLkpylujkAxxEPe/cnVB0E20CTTq8LOdT
-	 r3l7Hcld+so+EXuCYnK3XHZPAO0zhrL11YfDcXQxqO70xTkwBBRHvTFNr7ROORjLES
-	 MDPSIVLMlpS8nMxMWwUZe3JQK4mNJNoKSCwDSwPKIt87JBxChbKTCrT9XD8B/JUket
-	 R3R3I1zaZGwYTV8M602W0kfPtVZ5MnYC1vEv6LBBJD8KmyO2rQqgArvkTNGDFOAvfh
-	 pRNDo5gKf5fSUxmXP9hkfKe+u8fBnjK5+BukhyfT3FP6LuO45aADSYIpHUfrSLg9D5
-	 GmlifRu/qCARQ==
-From: Hans Verkuil <hverkuil+cisco@kernel.org>
-To: linux-media@vger.kernel.org
-Cc: Hans Verkuil <hverkuil@kernel.org>,
-	dri-devel@lists.freedesktop.org
-Subject: [PATCHv2 8/8] gpu: drm: display: drm_dp_cec: update Hans' email address
-Date: Mon, 28 Jul 2025 11:47:03 +0200
-Message-ID: <948b67aa923d0887b538912357c218c71417dac6.1753696023.git.hverkuil+cisco@kernel.org>
-X-Mailer: git-send-email 2.47.2
-In-Reply-To: <cover.1753696022.git.hverkuil+cisco@kernel.org>
-References: <cover.1753696022.git.hverkuil+cisco@kernel.org>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="VcUNhneK"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1753698486; x=1785234486;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=3AnWV7DkyxpUinOHa2NdfWkE9BXbV1glkkPC/peih7Y=;
+  b=VcUNhneKxQ4XMyGmBZUe0F+OH/KXgpvFVniXunfInlzikCtXm9cYa/XJ
+   YjKkVa6w/9C8leiNjJ62p06MjvzKA+vurlQEiWlTkgMzDaw1nu9ZCfSOb
+   FH14yV1LqWgnfQAvVnd7utaXQ6febOVda641OQJoCEHjsDboL3GOcQpZE
+   MtC07IHM6A39uLzaMTDanp54b0ect7yHUUE2Wwx44XO3emqOOSm7f8Y0t
+   37w+aduo93GnI7MYSzILnjV3TlPJTGky8Cuk8hOJMD5a+DkYX+o9QaOSY
+   GkU5JtIGkGTAvIgs+2djYGvbenx2dyKLlKNHJ3j7PLFUPh0+4wpqkMoMi
+   A==;
+X-CSE-ConnectionGUID: y/cGMFp0T3KGEU4OBYDCAQ==
+X-CSE-MsgGUID: PeEjrfLGS5O+R4Wm2+htXw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11504"; a="55826513"
+X-IronPort-AV: E=Sophos;i="6.16,339,1744095600"; 
+   d="scan'208";a="55826513"
+Received: from orviesa002.jf.intel.com ([10.64.159.142])
+  by orvoesa113.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jul 2025 03:28:05 -0700
+X-CSE-ConnectionGUID: XsCgo5pRTpKbIkiqcHjbig==
+X-CSE-MsgGUID: mwAAXCYLSiSRImYODtjYeA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.16,339,1744095600"; 
+   d="scan'208";a="193345808"
+Received: from jkrzyszt-mobl2.ger.corp.intel.com (HELO kekkonen.fi.intel.com) ([10.245.245.254])
+  by orviesa002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jul 2025 03:28:02 -0700
+Received: from kekkonen.localdomain (localhost [127.0.0.1])
+	by kekkonen.fi.intel.com (Postfix) with SMTP id 3CE2C120317;
+	Mon, 28 Jul 2025 10:28:24 +0300 (EEST)
+Date: Mon, 28 Jul 2025 07:28:24 +0000
+Organization: Intel Finland Oy - BIC 0357606-4 - c/o Alberga Business Park, 6 krs, Bertel Jungin Aukio 5, 02600 Espoo
+From: Sakari Ailus <sakari.ailus@linux.intel.com>
+To: Bin Du <Bin.Du@amd.com>
+Cc: mchehab@kernel.org, hverkuil@xs4all.nl,
+	laurent.pinchart+renesas@ideasonboard.com,
+	bryan.odonoghue@linaro.org, prabhakar.mahadev-lad.rj@bp.renesas.com,
+	linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+	pratap.nirujogi@amd.com, benjamin.chan@amd.com, king.li@amd.com,
+	gjorgji.rosikopulos@amd.com, Phil.Jawich@amd.com,
+	Dominic.Antony@amd.com, Svetoslav.Stoilov@amd.com
+Subject: Re: [PATCH v2 3/8] media: platform: amd: Add helpers to configure
+ isp4 mipi phy
+Message-ID: <aIcmmLi_pNGAYYtN@kekkonen.localdomain>
+References: <20250618091959.68293-1-Bin.Du@amd.com>
+ <20250618091959.68293-4-Bin.Du@amd.com>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250618091959.68293-4-Bin.Du@amd.com>
 
-From: Hans Verkuil <hverkuil@kernel.org>
+Hi Bin,
 
-Replace hverkuil@xs4all.nl by hverkuil@kernel.org.
+On Wed, Jun 18, 2025 at 05:19:54PM +0800, Bin Du wrote:
+> +struct isp4phy_mipi_reg_seq {
+> +	u16 addr;
+> +	u16 mask;
+> +	u16 data;
+> +};
+> +
+> +union isp4phy_mipi_0 {
+> +	struct {
+> +		u32 shutdownz : 1;
+> +		u32 rstz : 1;
+> +	} bit;
+> +	u32 value;
+> +};
+> +
+> +union isp4phy_mipi_1 {
+> +	struct {
+> +		u32 mode : 1;
+> +	} bit;
+> +	u32 value;
+> +};
+> +
+> +union isp4phy_mipi_2 {
+> +	struct {
+> +		u32 rxdatawidthhs_0 : 2;
+> +		u32 rxdatawidthhs_1 : 2;
+> +		u32 rxdatawidthhs_2 : 2;
+> +		u32 rxdatawidthhs_3 : 2;
+> +	} bit;
+> +	u32 value;
+> +};
+> +
+> +struct isp4phy_mipi_3 {
+> +	u32 reserved;
+> +};
+> +
+> +union isp4phy_mipi_4 {
+> +	struct {
+> +		u32 enableclk : 1;
+> +		u32 enable_0 : 1;
+> +		u32 enable_1 : 1;
+> +		u32 enable_2 : 1;
+> +		u32 enable_3 : 1;
+> +	} bit;
+> +	u32 value;
+> +};
+> +
+> +union isp4phy_mipi_5 {
+> +	struct {
+> +		u32 forcerxmode_0 : 1;
+> +		u32 forcerxmode_1 : 1;
+> +		u32 forcerxmode_2 : 1;
+> +		u32 forcerxmode_3 : 1;
+> +		u32 forcerxmode_clk : 1;
+> +	} bit;
+> +	u32 value;
+> +};
+> +
+> +union isp4phy_mipi_6 {
+> +	struct {
+> +		u32 turndisable_0 : 1;
+> +		u32 turndisable_1 : 1;
+> +		u32 turndisable_2 : 1;
+> +		u32 turndisable_3 : 1;
+> +	} bit;
+> +	u32 value;
+> +};
+> +
+> +union isp4phy_mipi_7 {
+> +	struct {
+> +		u32 ready : 1;
+> +	} bit;
+> +	u32 value;
+> +};
+> +
+> +union isp4phy_mipi_ind_idx {
+> +	struct {
+> +		u32 addr : 16;
+> +	} bit;
+> +	u32 value;
+> +};
+> +
+> +union isp4phy_mipi_ind_data {
+> +	struct {
+> +		u32 data : 16;
+> +	} bit;
+> +	u32 value;
+> +};
+> +
+> +union isp4phy_mipi_ind_wack {
+> +	struct {
+> +		u32 ack : 1;
+> +		u32 pslverr : 1;
+> +	} bit;
+> +	u32 value;
+> +};
+> +
+> +struct isp4phy_mipi_reg {
+> +	union isp4phy_mipi_0 isp_mipi_phy0;
+> +	union isp4phy_mipi_1 isp_mipi_phy1;
+> +	union isp4phy_mipi_2 isp_mipi_phy2;
+> +	struct isp4phy_mipi_3 isp_mipi_phy3;
+> +	union isp4phy_mipi_4 isp_mipi_phy4;
+> +	union isp4phy_mipi_5 isp_mipi_phy5;
+> +	union isp4phy_mipi_6 isp_mipi_phy6;
+> +	union isp4phy_mipi_7 isp_mipi_phy7;
+> +	u32 reserve;
+> +	union isp4phy_mipi_ind_idx isp_mipi_phy_ind_idx;
+> +	union isp4phy_mipi_ind_data isp_mipi_phy_ind_data;
+> +	union isp4phy_mipi_ind_wack isp_mipi_phy_inc_wack;
+> +};
 
-Signed-off-by: Hans Verkuil <hverkuil@kernel.org>
-Cc: dri-devel@lists.freedesktop.org
----
- drivers/gpu/drm/display/drm_dp_cec.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+One more thing. Is there an endianness issue here?
 
-diff --git a/drivers/gpu/drm/display/drm_dp_cec.c b/drivers/gpu/drm/display/drm_dp_cec.c
-index ed31471bd0e2..d0dcc9b4b92d 100644
---- a/drivers/gpu/drm/display/drm_dp_cec.c
-+++ b/drivers/gpu/drm/display/drm_dp_cec.c
-@@ -41,7 +41,7 @@
-  *
-  * https://hverkuil.home.xs4all.nl/cec-status.txt
-  *
-- * Please mail me (hverkuil@xs4all.nl) if you find an adapter that works
-+ * Please mail me (hverkuil@kernel.org) if you find an adapter that works
-  * and is not yet listed there.
-  *
-  * Note that the current implementation does not support CEC over an MST hub.
+Overall the CPU endianness may be big or little while the device endianness
+is little, presumably. You should use __le* types and functions to convert
+the endianness when dealing with the messages to and from the device.
+
 -- 
-2.47.2
+Kind regards,
 
+Sakari Ailus
