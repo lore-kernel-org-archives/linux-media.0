@@ -1,159 +1,179 @@
-Received: from mail-pl1-f179.google.com (mail-pl1-f179.google.com [209.85.214.179])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0B39121A436;
-	Mon, 28 Jul 2025 07:27:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A566123184F;
+	Mon, 28 Jul 2025 08:20:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753687676; cv=none; b=RRo+8hwQh3GEpO67xdt2GuzviWs5cZlkGQxKObOlAX7oOhHS5rRFAJca75r+0oJDtLsSbBlgXPTly9iL7fcDlthP7fA0I11LgUVWT7jPbMvt+RA4XsTzjBFKy7q8ARPQ3AdLjgWB5jDkscTODng2Ojjy0mh1Wr+qhzZt/7QV9wE=
+	t=1753690857; cv=none; b=g76DdFr6y1ZDxFZP/Gn7u5wiOfxGlczNqBzJ1x/HIUngiULaPDW9VRy9l55+Y+6O4vJjwQmkPgbvGxboYh7gfCVeBBD1szO0BgyIaoWEK6ydVBQR2wrPWUFKrBPdmUi+FeEFaNGoG1V+zQIl4VUp1WEPG68Gg65+5WugK/78Ogw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753687676; c=relaxed/simple;
-	bh=s8XctckT3Sdb4YvEEyVaRTMNQimbq2CU+c1oA1oZ7ho=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=A7CghrvgOsGcb2oqMIEsSyS8U5FeDkhPuf4wZ+tbSYpohEGcsmJ/b0LWsau/AZvYryVRT5SsVr7kpxK2H72rR7HNbomem6jrH2E/lM18yX4llx+/Y3dCgbmGbGZQLOtwmcea7ZoUgdturqpILASFR5Zo2fgLtH80zx9PXpVDrLc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=GcaprkMy; arc=none smtp.client-ip=209.85.214.179
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1753690857; c=relaxed/simple;
+	bh=AQ/gJ+i4rwtrIdkTrmIh33ppP9Uq14yzAdB+5MSlawA=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=j0dtwlQZrdlV1YRdUPELlVW3ea4bXLymMgRisvTAI9Uup6RakFVppnxop29Ul/mXmgkFL8qUoiQlHmKY3LUx2L0jqjoal729XWJjqcqhVpf9rAd+UEEE4CFBmvhcx31E3TDiAnLZqXgJqpuAoJkfj9fai8r/ZGaVLRRnaZYsv9A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=szZ04/Ls; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="GcaprkMy"
-Received: by mail-pl1-f179.google.com with SMTP id d9443c01a7336-236470b2dceso35268945ad.0;
-        Mon, 28 Jul 2025 00:27:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1753687674; x=1754292474; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=CIkA7rxj2aeFkUnZL3Z4nhuVfvXyGjEGJhkZwRCP+pk=;
-        b=GcaprkMy50QL3ubiBxUwNf+SWq/uPbT9rYFnA323D/i3aR1n7Fgx2tVneC/52kug4C
-         Dw0mjomIIIFBhIS9/ck4K7Y2SkZ2FXpt69UQ8tSbqj9pbjpQD/XH8qpOKKLvlnbYejyM
-         fCvfTZ9SKCPFxPYCUKo7leA7Q8qAAkn0L1tbvsxBYf8foSPnewdAzx1qkJnlKO13T4/X
-         FDteAlIktWtIS4JEt7gNlrFbwevgzAjNEqzWYBAUoKznMi8BbZa5EiK0dD38z2tf3AGE
-         MacVObY3STzmvcImTjtzEvcBILWpW141pCAqJw3XHm/rOIx1vHuLJ2H7pNYQa8O0Yh5i
-         EHbA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1753687674; x=1754292474;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=CIkA7rxj2aeFkUnZL3Z4nhuVfvXyGjEGJhkZwRCP+pk=;
-        b=eoejNRAc1NLwOiJSNa5ohI1jAubeKNwS6rVQIjU9778hbZUKDKukfZqqN/+ecJ275v
-         75bDRi1LY33QGcVLMzZeipNTrYlKPXa9Ci6aXUg4VCFRDCN1jKYfeiYitTbUYNjkV1qA
-         79ZlaWeaL0jwL91E3+Le7v3+ic0nr2hUklU2w2BpHkNZg6+mJ/XRrkEtOaHkLgL3oJTc
-         o9mo9ul73EMhnpjA6QN1EVYOzuLfQ9+akh4s2TKpUQYzarMkJzC28WLy4W5ZWffldxPR
-         GxNLJqqD/Twun5LTIJqA7UM3KkGoiTgcERJwUrtXt5McVlHggqHP4fCG6iRMgBe7Tm6n
-         BGQg==
-X-Forwarded-Encrypted: i=1; AJvYcCUTCtjRf1RK6bYSwqtHLw2ueKS/nIUbPBb4MieEXOgGzms2tQMrAXWw0x8JtXqj43UBwJ6tP9XqDBNiY9k=@vger.kernel.org, AJvYcCW+H/kBjovRWnac7veni7i+Y7X8MbMMylSqYpSTcpTzy/aQz2C7s1ujfQ3sIlA/wJnY9Cj/kpPBg+hBZO8=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzG664+9NdHqkuHdzc4XLnHVMLMZsPgASePH9QTAg/P5SDFrU+I
-	0Q+5Ith0YUBtc9h2VmWNTileea7SA8N4ziStYXc2nxHw2W+CcSIM7dme
-X-Gm-Gg: ASbGncsR9uNNGYRfXbD4mfPBH6K6e2hTvb3ZUpiPQErfU9ucroWIX40FrKSbc0jIDet
-	ds6m8MYmJ/ReWQIUsgj4MIM6R6vkCWNrLSr2QG2cKcmJEkjvnUw/VyxiSD8DUrDnZnD2GA34Jtb
-	nwVf7Y/xF4ue9WvgRPXZQi+1EicZbwymzT42vKSlBjkFFv8OyCYuWfxoRMDZL4tBOu2fCDu22Ik
-	CcAS4u+8L2Llt28bYi3qGsitV7ItnulNUDjAvy7k+0qUuEl7T+M1Lt3P6DA0AGwFQZeFXSegkL1
-	1lnbhqrp5YOrjg+g2cijJhNehkARONq9AcD/q4VcHUogbU/7dqQaBmNKywOcwKsRayMalmXKQmq
-	fxNUNsJRijcVmC8qDMAAN0eCsuBnORSKDOmMS8ZerQZvOitlANk51rtPprnTJAO9p8L2NTW7uTX
-	p4fw==
-X-Google-Smtp-Source: AGHT+IGxXFmKSvT4xZhknxQ8XN0geHH0nu1k5wB6QGBZYZRXvZJGddPc1NKhIESQxbDZ2gZaSJERlA==
-X-Received: by 2002:a17:903:fa3:b0:235:f298:cbbd with SMTP id d9443c01a7336-23fb30ac008mr182227745ad.21.1753687674219;
-        Mon, 28 Jul 2025 00:27:54 -0700 (PDT)
-Received: from SIQOL-WIN-0002-DARSHAN.localdomain ([49.36.68.217])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2403f4dbd1bsm5783435ad.59.2025.07.28.00.27.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 28 Jul 2025 00:27:53 -0700 (PDT)
-From: "Darshan R." <rathod.darshan.0896@gmail.com>
-To: hansg@kernel.org,
-	mchehab@kernel.org,
-	gregkh@linuxfoundation.org
-Cc: sakari.ailus@linux.intel.com,
-	andy@kernel.org,
-	linux-media@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-staging@lists.linux.dev,
-	jogidishank503@gmail.com,
-	"Darshan R." <rathod.darshan.0896@gmail.com>
-Subject: [PATCH] staging: media: atomisp: Fix indentation and styling in output kernel code
-Date: Mon, 28 Jul 2025 07:28:22 +0000
-Message-ID: <20250728072822.10730-1-rathod.darshan.0896@gmail.com>
-X-Mailer: git-send-email 2.43.0
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="szZ04/Ls"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C07F1C4CEF7;
+	Mon, 28 Jul 2025 08:20:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1753690857;
+	bh=AQ/gJ+i4rwtrIdkTrmIh33ppP9Uq14yzAdB+5MSlawA=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=szZ04/Lsri0o11eVQhg9uaIGFpacB+rTBOpQCv2uVtpkvBEoZg+2YhYOZp79nmcJU
+	 XoxJmMCUZUmmIBLPqQw01Ghgib3qFJF2cqxxKFQnPRHmmSkhZY024yjqGQNr9v9UT9
+	 BGY2LIIwAdi78LeJXBYnQfJa89hv8dz1xKze3e5YhllN40EKJviX8xvuTTIK66D8ZW
+	 P9eyfJefDgkFUs7jPZNyeyhP1XptEdNSZ8/g4eMOrPWMTZOdJKuMxDI5trIQNT+2dz
+	 6cHMaiAGJ9QVecJDBBEx4Z7kgL+BD3Bf75RYbnH94vnIjRILxQ9mk6VDGo2zC7yazh
+	 SqcUZXeTEyFqA==
+Date: Mon, 28 Jul 2025 10:20:54 +0200
+From: Maxime Ripard <mripard@kernel.org>
+To: Andrew Davis <afd@ti.com>
+Cc: Sumit Semwal <sumit.semwal@linaro.org>, 
+	Benjamin Gaignard <benjamin.gaignard@collabora.com>, Brian Starkey <Brian.Starkey@arm.com>, 
+	John Stultz <jstultz@google.com>, "T.J. Mercier" <tjmercier@google.com>, 
+	Jonathan Corbet <corbet@lwn.net>, Jared Kangas <jkangas@redhat.com>, 
+	Mattijs Korpershoek <mkorpershoek@kernel.org>, linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org, 
+	linaro-mm-sig@lists.linaro.org, linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	Bagas Sanjaya <bagasdotme@gmail.com>
+Subject: Re: [PATCH v3] Documentation: dma-buf: heaps: Add naming guidelines
+Message-ID: <20250728-pastoral-brave-guillemot-f1a3b2@houat>
+References: <20250717-dma-buf-heap-names-doc-v3-1-d2dbb4b95ef6@kernel.org>
+ <30d4bf10-274d-485c-84dd-7cbb8157efab@ti.com>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha384;
+	protocol="application/pgp-signature"; boundary="whtoihy75ghtpw24"
+Content-Disposition: inline
+In-Reply-To: <30d4bf10-274d-485c-84dd-7cbb8157efab@ti.com>
 
-Updated the formatting of function definitions and if statements to match
-kernel coding standards. This helps with readability and consistency across
-the codebase.
 
-These are non-functional changes aimed at preparing the driver for eventual
-mainline readiness by addressing common checkpatch warnings.
+--whtoihy75ghtpw24
+Content-Type: text/plain; protected-headers=v1; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+Subject: Re: [PATCH v3] Documentation: dma-buf: heaps: Add naming guidelines
+MIME-Version: 1.0
 
-Signed-off-by: Darshan R. <rathod.darshan.0896@gmail.com>
----
- .../output/output_1.0/ia_css_output.host.c    | 22 ++++++++++---------
- 1 file changed, 12 insertions(+), 10 deletions(-)
+Hi Andrew,
 
-diff --git a/drivers/staging/media/atomisp/pci/isp/kernels/output/output_1.0/ia_css_output.host.c b/drivers/staging/media/atomisp/pci/isp/kernels/output/output_1.0/ia_css_output.host.c
-index d09365e0c471..4f84c6d3622a 100644
---- a/drivers/staging/media/atomisp/pci/isp/kernels/output/output_1.0/ia_css_output.host.c
-+++ b/drivers/staging/media/atomisp/pci/isp/kernels/output/output_1.0/ia_css_output.host.c
-@@ -34,9 +34,9 @@ static const struct ia_css_output1_configuration default_output1_configuration
- 
- void
- ia_css_output_encode(
--    struct sh_css_isp_output_params *to,
--    const struct ia_css_output_config *from,
--    unsigned int size)
-+	struct sh_css_isp_output_params *to,
-+	const struct ia_css_output_config *from,
-+	unsigned int size)
- {
- 	(void)size;
- 	to->enable_hflip = from->enable_hflip;
-@@ -74,7 +74,7 @@ int ia_css_output0_config(struct sh_css_isp_output_isp_config       *to,
- }
- 
- int ia_css_output1_config(struct sh_css_isp_output_isp_config       *to,
--		          const struct ia_css_output1_configuration *from,
-+			  const struct ia_css_output1_configuration *from,
- 			  unsigned int size)
- {
- 	return ia_css_output_config(to, (const struct ia_css_output_configuration *)from, size);
-@@ -95,7 +95,7 @@ int ia_css_output_configure(const struct ia_css_binary     *binary,
- }
- 
- int ia_css_output0_configure(const struct ia_css_binary    *binary,
--			    const struct ia_css_frame_info *info)
-+			     const struct ia_css_frame_info *info)
- {
- 	if (info) {
- 		struct ia_css_output0_configuration config =
-@@ -124,10 +124,12 @@ int ia_css_output1_configure(const struct ia_css_binary     *binary,
- 
- void
- ia_css_output_dump(
--    const struct sh_css_isp_output_params *output,
--    unsigned int level)
-+	const struct sh_css_isp_output_params *output,
-+	unsigned int level)
- {
--	if (!output) return;
-+	if (!output)
-+		return;
-+
- 	ia_css_debug_dtrace(level, "Horizontal Output Flip:\n");
- 	ia_css_debug_dtrace(level, "\t%-32s = %d\n",
- 			    "enable", output->enable_hflip);
-@@ -138,8 +140,8 @@ ia_css_output_dump(
- 
- void
- ia_css_output_debug_dtrace(
--    const struct ia_css_output_config *config,
--    unsigned int level)
-+	const struct ia_css_output_config *config,
-+	unsigned int level)
- {
- 	ia_css_debug_dtrace(level,
- 			    "config.enable_hflip=%d",
--- 
-2.43.0
+Thanks for your review.
 
+On Fri, Jul 25, 2025 at 12:49:37PM -0500, Andrew Davis wrote:
+> On 7/17/25 3:10 AM, Maxime Ripard wrote:
+> > We've discussed a number of times of how some heap names are bad, but
+> > not really what makes a good heap name.
+> >=20
+> > Let's document what we expect the heap names to look like.
+> >=20
+> > Reviewed-by: Bagas Sanjaya <bagasdotme@gmail.com>
+> > Signed-off-by: Maxime Ripard <mripard@kernel.org>
+> > ---
+> > Changes in v3:
+> > - Grammar, spelling fixes
+> > - Remove the cacheable / uncacheable name suggestion
+> > - Link to v2: https://lore.kernel.org/r/20250616-dma-buf-heap-names-doc=
+-v2-1-8ae43174cdbf@kernel.org
+> >=20
+> > Changes in v2:
+> > - Added justifications for each requirement / suggestions
+> > - Added a mention and example of buffer attributes
+> > - Link to v1: https://lore.kernel.org/r/20250520-dma-buf-heap-names-doc=
+-v1-1-ab31f74809ee@kernel.org
+> > ---
+> >   Documentation/userspace-api/dma-buf-heaps.rst | 35 ++++++++++++++++++=
++++++++++
+> >   1 file changed, 35 insertions(+)
+> >=20
+> > diff --git a/Documentation/userspace-api/dma-buf-heaps.rst b/Documentat=
+ion/userspace-api/dma-buf-heaps.rst
+> > index 535f49047ce6450796bf4380c989e109355efc05..3ee4e7961fe390ba356a212=
+5d53b060546c3e4a6 100644
+> > --- a/Documentation/userspace-api/dma-buf-heaps.rst
+> > +++ b/Documentation/userspace-api/dma-buf-heaps.rst
+> > @@ -21,5 +21,40 @@ following heaps:
+> >      usually created either through the kernel commandline through the
+> >      `cma` parameter, a memory region Device-Tree node with the
+> >      `linux,cma-default` property set, or through the `CMA_SIZE_MBYTES`=
+ or
+> >      `CMA_SIZE_PERCENTAGE` Kconfig options. Depending on the platform, =
+it
+> >      might be called ``reserved``, ``linux,cma``, or ``default-pool``.
+> > +
+> > +Naming Convention
+> > +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> > +
+> > +``dma-buf`` heaps name should meet a number of constraints:
+> > +
+> > +- The name must be stable, and must not change from one version to the=
+ other.
+> > +  Userspace identifies heaps by their name, so if the names ever chang=
+e, we
+> > +  would be likely to introduce regressions.
+> > +
+> > +- The name must describe the memory region the heap will allocate from=
+, and
+> > +  must uniquely identify it in a given platform. Since userspace appli=
+cations
+> > +  use the heap name as the discriminant, it must be able to tell which=
+ heap it
+> > +  wants to use reliably if there's multiple heaps.
+> > +
+> > +- The name must not mention implementation details, such as the alloca=
+tor. The
+> > +  heap driver will change over time, and implementation details when i=
+t was
+> > +  introduced might not be relevant in the future.
+> > +
+> > +- The name should describe properties of the buffers that would be all=
+ocated.
+> > +  Doing so will make heap identification easier for userspace. Such pr=
+operties
+> > +  are:
+> > +
+> > +  - ``contiguous`` for physically contiguous buffers;
+> > +
+> > +  - ``protected`` for encrypted buffers not accessible the OS;
+> > +
+> > +- The name may describe intended usage. Doing so will make heap identi=
+fication
+> > +  easier for userspace applications and users.
+> > +
+> > +For example, assuming a platform with a reserved memory region located=
+ at the
+> > +RAM address 0x42000000, intended to allocate video framebuffers, physi=
+cally
+> > +contiguous, and backed by the CMA kernel allocator, good names would be
+> > +``memory@42000000-cacheable-contiguous`` or ``video@42000000``, but
+>=20
+> You dropped "cacheable" but left it here in the suggested names, maybe
+> replace with "protected" here. Otherwise, LGTM,
+
+Replacing it with protected would create an example where we have CMA
+allocating protected buffers, which is pretty weird.
+
+So I've only removed the cacheable mention, and will send a new version
+shortly.
+
+> Reviewed-by: Andrew Davis <afd@ti.com>
+
+Thanks!
+Maxime
+
+--whtoihy75ghtpw24
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iJUEABMJAB0WIQTkHFbLp4ejekA/qfgnX84Zoj2+dgUCaIcy5gAKCRAnX84Zoj2+
+dhYMAX9S94nCvbMrRrWrQiSsbQjN1CtoUA9QMx6gY4Z657x3s2dQS/qENGFSSGyn
+rbLqeckBgO16oHKbdDr7ay/hCSD1vABF/Bud3kyewAIwiH0xa5SP0XSi6R+MYrQw
+3spHFhOTXA==
+=hsS/
+-----END PGP SIGNATURE-----
+
+--whtoihy75ghtpw24--
