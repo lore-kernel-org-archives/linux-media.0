@@ -1,212 +1,159 @@
-Received: from mail-pl1-f173.google.com (mail-pl1-f173.google.com [209.85.214.173])
+Received: from mail-pl1-f179.google.com (mail-pl1-f179.google.com [209.85.214.179])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5E2C5220F5B
-	for <linux-media@vger.kernel.org>; Mon, 28 Jul 2025 07:04:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0B39121A436;
+	Mon, 28 Jul 2025 07:27:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753686284; cv=none; b=FjG0L2wHAjmhe+olLiT6yaRw58L55DXSsaTJyEVGBN1iVCNrpYf+1d4O4SWo5WQZoLwuM61GlsLxomU7p67XVYnWBpG3t3XcVzyRbFTmNAB6lO9kaUBIsTXM/lT2A5f2WKN5VhxCvzIrPXyfe/eCnZmnfmXAfA2PSnzTTyCRS1U=
+	t=1753687676; cv=none; b=RRo+8hwQh3GEpO67xdt2GuzviWs5cZlkGQxKObOlAX7oOhHS5rRFAJca75r+0oJDtLsSbBlgXPTly9iL7fcDlthP7fA0I11LgUVWT7jPbMvt+RA4XsTzjBFKy7q8ARPQ3AdLjgWB5jDkscTODng2Ojjy0mh1Wr+qhzZt/7QV9wE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753686284; c=relaxed/simple;
-	bh=gx2qwJ/1EBl27vpk6NyytTFfopAhDGWK+cGrJfC5nV4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ruLj8RrGHw3i7iXy8bjMEFlfFHB7NuJ8aiWqyG2Wqf568Rb/wGrDeJH6TnfqtrpmA7eM+O+dgBER8sD8PIBn4/xyTOPjhk18FLQejjK1AW7dvsq0LKvaZ6lQWSpmC46Li4iHr1rdrD48ffDOSS4y61lP9oOTQ3nImOtN/csY9N8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=kerneltoast.com; spf=pass smtp.mailfrom=kerneltoast.com; dkim=pass (2048-bit key) header.d=kerneltoast.com header.i=@kerneltoast.com header.b=AWDtd8nq; arc=none smtp.client-ip=209.85.214.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=kerneltoast.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kerneltoast.com
+	s=arc-20240116; t=1753687676; c=relaxed/simple;
+	bh=s8XctckT3Sdb4YvEEyVaRTMNQimbq2CU+c1oA1oZ7ho=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=A7CghrvgOsGcb2oqMIEsSyS8U5FeDkhPuf4wZ+tbSYpohEGcsmJ/b0LWsau/AZvYryVRT5SsVr7kpxK2H72rR7HNbomem6jrH2E/lM18yX4llx+/Y3dCgbmGbGZQLOtwmcea7ZoUgdturqpILASFR5Zo2fgLtH80zx9PXpVDrLc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=GcaprkMy; arc=none smtp.client-ip=209.85.214.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kerneltoast.com header.i=@kerneltoast.com header.b="AWDtd8nq"
-Received: by mail-pl1-f173.google.com with SMTP id d9443c01a7336-2403df11a2aso2570165ad.0
-        for <linux-media@vger.kernel.org>; Mon, 28 Jul 2025 00:04:42 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="GcaprkMy"
+Received: by mail-pl1-f179.google.com with SMTP id d9443c01a7336-236470b2dceso35268945ad.0;
+        Mon, 28 Jul 2025 00:27:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kerneltoast.com; s=google; t=1753686281; x=1754291081; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=EZJyuhDRhONqMzqU5e7bbsSLCsS4zD8CKsQZd+K42t0=;
-        b=AWDtd8nqQ2J/zHIhzbOCknupGQznOSM2NXx9IBW74i1+UAbJSCDGw25vMQ5gik0Tc9
-         S+y4ExPRu6FA2RMURkMZ/kh4ze0eCvh+Y9Eq1uUnZB2C5yEKQn8q+L464Kn1xOmGXY2F
-         wUarqzCc8oZJfqvXkliAv1mD/3xrTcf83HxbdxNrpMAnWY3kUqDVusjH110BPuA2a5Ur
-         n8E8lKdbxtS2wZ1aUabzBECDb6N5A5IxFboIgQOVPNs6UNCnfgTY3hnz78M7YKexRnS6
-         emguXv67hf6ZPY3AEd2S4waEKGhbBgpNyeFA8DMdutQT2Od2bx2Q7qlJBN/GwfBTqGbG
-         2XLA==
+        d=gmail.com; s=20230601; t=1753687674; x=1754292474; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=CIkA7rxj2aeFkUnZL3Z4nhuVfvXyGjEGJhkZwRCP+pk=;
+        b=GcaprkMy50QL3ubiBxUwNf+SWq/uPbT9rYFnA323D/i3aR1n7Fgx2tVneC/52kug4C
+         Dw0mjomIIIFBhIS9/ck4K7Y2SkZ2FXpt69UQ8tSbqj9pbjpQD/XH8qpOKKLvlnbYejyM
+         fCvfTZ9SKCPFxPYCUKo7leA7Q8qAAkn0L1tbvsxBYf8foSPnewdAzx1qkJnlKO13T4/X
+         FDteAlIktWtIS4JEt7gNlrFbwevgzAjNEqzWYBAUoKznMi8BbZa5EiK0dD38z2tf3AGE
+         MacVObY3STzmvcImTjtzEvcBILWpW141pCAqJw3XHm/rOIx1vHuLJ2H7pNYQa8O0Yh5i
+         EHbA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1753686281; x=1754291081;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=EZJyuhDRhONqMzqU5e7bbsSLCsS4zD8CKsQZd+K42t0=;
-        b=Wh/H51lamnUeczZg81/VmvjWCh2u1q82/l3m7kSZI1PHVzJ8sJHD7OcVfnymBDET91
-         utRP2ANbdw5bPRH0/e7EFEFhS4ozFrvg14x+i1CYONtp6zQ9ER1HArC7UBuIJ9EB7Z8Z
-         mcuxr77QvrAXiP4RYKOst4EWHVGAO7FUHY7WYIjfF+OcjsJbbhtmTCTx48zW98tNt9CD
-         mlkukXpH/hzka8KDR54kNhhB5dJbKZ5GXHCTPHdEqM85YQTNS9LX4oR4/fSD+BsIdjCt
-         Fep/ScS6YcPktxj9XC+bfyfBM5d8w2FNO/ifChQJBFDRb6zavh8YxtFJxFLIClEiJzaf
-         sRzQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWAQ6ZSHtNh9z1KtQrc2gcCdbZ51ZQaBKvmkOVcnRacBjYYoqQXy84A8MrFM6EOHKxsJK++Y7M7+nt+EA==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy8Q0iDs1KdqtA9u19ktFZBPda99hKZo4Gb9vuzhkWQXLmbtoJy
-	8N48P3XzCluKqY7VPai3RFYGY4Fka0BrHeTeSgREelW6utOgi4KUJPgrczXxLilpTVAM
-X-Gm-Gg: ASbGncukZcqed8++pvjOD0vdZsiOBBbjzuFNtecQiJdnG9m2XZjIG8ye9xshXG+QPyF
-	OWiG6yYG3HCCRhWycYvNmyjAFWyt7ns0iu0aDlULSI9RqrZVQVUkVC0rFoe/03i6lIWtwxDrC+0
-	ieiDRuJ0d96teBlOjZ9giOqhKCrVx/g5N/kAz+eOfWYhFrWKFSYEg5oBqdMghkyQQa3bsqxx1od
-	+Of4gJo/31Fr09awz0aQSU+3wQ+DmQampHVDzKc5LzjkZiFqWnkL4B4CozYoRWopk0W55O1fP8g
-	MbFF+7luUQKWZ8zKHvH3+zraTcKCC5Psyjc0bPLNlP7Bst0i/hKQvdnRN49QdY6iO0P5IEwnfCY
-	JNArIsnaSV7bmcxcAvjFtvcw=
-X-Google-Smtp-Source: AGHT+IHQTIVfBjDvcZpuhp3bBfDaRic6qCYUSTdt0EhO0u7dMOdVBEKjG/OcI2Il9iQeyZ9vp2PFig==
-X-Received: by 2002:a17:903:4b4e:b0:240:3ca6:184c with SMTP id d9443c01a7336-2403ca63fcamr21931915ad.48.1753686281382;
-        Mon, 28 Jul 2025 00:04:41 -0700 (PDT)
-Received: from sultan-box ([79.127.217.54])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-31e6635efb8sm8734762a91.19.2025.07.28.00.04.39
+        d=1e100.net; s=20230601; t=1753687674; x=1754292474;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=CIkA7rxj2aeFkUnZL3Z4nhuVfvXyGjEGJhkZwRCP+pk=;
+        b=eoejNRAc1NLwOiJSNa5ohI1jAubeKNwS6rVQIjU9778hbZUKDKukfZqqN/+ecJ275v
+         75bDRi1LY33QGcVLMzZeipNTrYlKPXa9Ci6aXUg4VCFRDCN1jKYfeiYitTbUYNjkV1qA
+         79ZlaWeaL0jwL91E3+Le7v3+ic0nr2hUklU2w2BpHkNZg6+mJ/XRrkEtOaHkLgL3oJTc
+         o9mo9ul73EMhnpjA6QN1EVYOzuLfQ9+akh4s2TKpUQYzarMkJzC28WLy4W5ZWffldxPR
+         GxNLJqqD/Twun5LTIJqA7UM3KkGoiTgcERJwUrtXt5McVlHggqHP4fCG6iRMgBe7Tm6n
+         BGQg==
+X-Forwarded-Encrypted: i=1; AJvYcCUTCtjRf1RK6bYSwqtHLw2ueKS/nIUbPBb4MieEXOgGzms2tQMrAXWw0x8JtXqj43UBwJ6tP9XqDBNiY9k=@vger.kernel.org, AJvYcCW+H/kBjovRWnac7veni7i+Y7X8MbMMylSqYpSTcpTzy/aQz2C7s1ujfQ3sIlA/wJnY9Cj/kpPBg+hBZO8=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzG664+9NdHqkuHdzc4XLnHVMLMZsPgASePH9QTAg/P5SDFrU+I
+	0Q+5Ith0YUBtc9h2VmWNTileea7SA8N4ziStYXc2nxHw2W+CcSIM7dme
+X-Gm-Gg: ASbGncsR9uNNGYRfXbD4mfPBH6K6e2hTvb3ZUpiPQErfU9ucroWIX40FrKSbc0jIDet
+	ds6m8MYmJ/ReWQIUsgj4MIM6R6vkCWNrLSr2QG2cKcmJEkjvnUw/VyxiSD8DUrDnZnD2GA34Jtb
+	nwVf7Y/xF4ue9WvgRPXZQi+1EicZbwymzT42vKSlBjkFFv8OyCYuWfxoRMDZL4tBOu2fCDu22Ik
+	CcAS4u+8L2Llt28bYi3qGsitV7ItnulNUDjAvy7k+0qUuEl7T+M1Lt3P6DA0AGwFQZeFXSegkL1
+	1lnbhqrp5YOrjg+g2cijJhNehkARONq9AcD/q4VcHUogbU/7dqQaBmNKywOcwKsRayMalmXKQmq
+	fxNUNsJRijcVmC8qDMAAN0eCsuBnORSKDOmMS8ZerQZvOitlANk51rtPprnTJAO9p8L2NTW7uTX
+	p4fw==
+X-Google-Smtp-Source: AGHT+IGxXFmKSvT4xZhknxQ8XN0geHH0nu1k5wB6QGBZYZRXvZJGddPc1NKhIESQxbDZ2gZaSJERlA==
+X-Received: by 2002:a17:903:fa3:b0:235:f298:cbbd with SMTP id d9443c01a7336-23fb30ac008mr182227745ad.21.1753687674219;
+        Mon, 28 Jul 2025 00:27:54 -0700 (PDT)
+Received: from SIQOL-WIN-0002-DARSHAN.localdomain ([49.36.68.217])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2403f4dbd1bsm5783435ad.59.2025.07.28.00.27.50
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 28 Jul 2025 00:04:40 -0700 (PDT)
-Date: Mon, 28 Jul 2025 00:04:37 -0700
-From: Sultan Alsawaf <sultan@kerneltoast.com>
-To: Bin Du <Bin.Du@amd.com>
-Cc: mchehab@kernel.org, hverkuil@xs4all.nl,
-	laurent.pinchart+renesas@ideasonboard.com,
-	bryan.odonoghue@linaro.org, sakari.ailus@linux.intel.com,
-	prabhakar.mahadev-lad.rj@bp.renesas.com,
-	linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-	pratap.nirujogi@amd.com, benjamin.chan@amd.com, king.li@amd.com,
-	gjorgji.rosikopulos@amd.com, Phil.Jawich@amd.com,
-	Dominic.Antony@amd.com, Svetoslav.Stoilov@amd.com
-Subject: Re: [PATCH v2 6/8] media: platform: amd: isp4 video node and buffers
- handling added
-Message-ID: <aIchBRdmy48BHl2k@sultan-box>
-References: <20250618091959.68293-1-Bin.Du@amd.com>
- <20250618091959.68293-7-Bin.Du@amd.com>
+        Mon, 28 Jul 2025 00:27:53 -0700 (PDT)
+From: "Darshan R." <rathod.darshan.0896@gmail.com>
+To: hansg@kernel.org,
+	mchehab@kernel.org,
+	gregkh@linuxfoundation.org
+Cc: sakari.ailus@linux.intel.com,
+	andy@kernel.org,
+	linux-media@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-staging@lists.linux.dev,
+	jogidishank503@gmail.com,
+	"Darshan R." <rathod.darshan.0896@gmail.com>
+Subject: [PATCH] staging: media: atomisp: Fix indentation and styling in output kernel code
+Date: Mon, 28 Jul 2025 07:28:22 +0000
+Message-ID: <20250728072822.10730-1-rathod.darshan.0896@gmail.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250618091959.68293-7-Bin.Du@amd.com>
+Content-Transfer-Encoding: 8bit
 
-I found more refcounting issues in addition to the ones from my other emails
-while trying to make my webcam work:
+Updated the formatting of function definitions and if statements to match
+kernel coding standards. This helps with readability and consistency across
+the codebase.
 
-On Wed, Jun 18, 2025 at 05:19:57PM +0800, Bin Du wrote:
-> +static int isp4vid_vb2_mmap(void *buf_priv, struct vm_area_struct *vma)
-> +{
-> +	struct isp4vid_vb2_buf *buf = buf_priv;
-> +	int ret;
-> +
-> +	if (!buf) {
-> +		pr_err("fail no memory to map\n");
-> +		return -EINVAL;
-> +	}
-> +
-> +	ret = remap_vmalloc_range(vma, buf->vaddr, 0);
-> +	if (ret) {
-> +		dev_err(buf->dev, "fail remap vmalloc mem, %d\n", ret);
-> +		return ret;
-> +	}
-> +
-> +	/*
-> +	 * Make sure that vm_areas for 2 buffers won't be merged together
-> +	 */
-> +	vm_flags_set(vma, VM_DONTEXPAND);
-> +
-> +	dev_dbg(buf->dev, "mmap isp user bo 0x%llx size %ld refcount %d\n",
-> +		buf->gpu_addr, buf->size, buf->refcount.refs.counter);
+These are non-functional changes aimed at preparing the driver for eventual
+mainline readiness by addressing common checkpatch warnings.
 
-Use refcount_read() instead of reading the refcount's atomic_t counter directly.
-This is done in 3 other places; change those to refcount_read() as well.
+Signed-off-by: Darshan R. <rathod.darshan.0896@gmail.com>
+---
+ .../output/output_1.0/ia_css_output.host.c    | 22 ++++++++++---------
+ 1 file changed, 12 insertions(+), 10 deletions(-)
 
-This didn't cause any functional problems, but it should still be fixed.
+diff --git a/drivers/staging/media/atomisp/pci/isp/kernels/output/output_1.0/ia_css_output.host.c b/drivers/staging/media/atomisp/pci/isp/kernels/output/output_1.0/ia_css_output.host.c
+index d09365e0c471..4f84c6d3622a 100644
+--- a/drivers/staging/media/atomisp/pci/isp/kernels/output/output_1.0/ia_css_output.host.c
++++ b/drivers/staging/media/atomisp/pci/isp/kernels/output/output_1.0/ia_css_output.host.c
+@@ -34,9 +34,9 @@ static const struct ia_css_output1_configuration default_output1_configuration
+ 
+ void
+ ia_css_output_encode(
+-    struct sh_css_isp_output_params *to,
+-    const struct ia_css_output_config *from,
+-    unsigned int size)
++	struct sh_css_isp_output_params *to,
++	const struct ia_css_output_config *from,
++	unsigned int size)
+ {
+ 	(void)size;
+ 	to->enable_hflip = from->enable_hflip;
+@@ -74,7 +74,7 @@ int ia_css_output0_config(struct sh_css_isp_output_isp_config       *to,
+ }
+ 
+ int ia_css_output1_config(struct sh_css_isp_output_isp_config       *to,
+-		          const struct ia_css_output1_configuration *from,
++			  const struct ia_css_output1_configuration *from,
+ 			  unsigned int size)
+ {
+ 	return ia_css_output_config(to, (const struct ia_css_output_configuration *)from, size);
+@@ -95,7 +95,7 @@ int ia_css_output_configure(const struct ia_css_binary     *binary,
+ }
+ 
+ int ia_css_output0_configure(const struct ia_css_binary    *binary,
+-			    const struct ia_css_frame_info *info)
++			     const struct ia_css_frame_info *info)
+ {
+ 	if (info) {
+ 		struct ia_css_output0_configuration config =
+@@ -124,10 +124,12 @@ int ia_css_output1_configure(const struct ia_css_binary     *binary,
+ 
+ void
+ ia_css_output_dump(
+-    const struct sh_css_isp_output_params *output,
+-    unsigned int level)
++	const struct sh_css_isp_output_params *output,
++	unsigned int level)
+ {
+-	if (!output) return;
++	if (!output)
++		return;
++
+ 	ia_css_debug_dtrace(level, "Horizontal Output Flip:\n");
+ 	ia_css_debug_dtrace(level, "\t%-32s = %d\n",
+ 			    "enable", output->enable_hflip);
+@@ -138,8 +140,8 @@ ia_css_output_dump(
+ 
+ void
+ ia_css_output_debug_dtrace(
+-    const struct ia_css_output_config *config,
+-    unsigned int level)
++	const struct ia_css_output_config *config,
++	unsigned int level)
+ {
+ 	ia_css_debug_dtrace(level,
+ 			    "config.enable_hflip=%d",
+-- 
+2.43.0
 
-> +
-> +	return 0;
-> +}
-
-[snip]
-
-> +static void isp4vid_vb2_detach_dmabuf(void *mem_priv)
-> +{
-> +	struct isp4vid_vb2_buf *buf = mem_priv;
-> +
-> +	if (!buf) {
-> +		pr_err("fail invalid buf handle\n");
-> +		return;
-> +	}
-> +
-> +	struct iosys_map map = IOSYS_MAP_INIT_VADDR(buf->vaddr);
-> +
-> +	dev_dbg(buf->dev, "detach dmabuf of isp user bo 0x%llx size %ld",
-> +		buf->gpu_addr, buf->size);
-> +
-> +	if (buf->vaddr)
-> +		dma_buf_vunmap_unlocked(buf->dbuf, &map);
-> +
-> +	// put dmabuf for exported ones
-> +	dma_buf_put(buf->dbuf);
-> +
-> +	kfree(buf);
-> +}
-
-As mentioned in the other email, the dma_buf_put() here needs to be removed. But
-that's not all: the dma_buf_vunmap_unlocked() needs to be removed too because
-vb2 will always unmap the buffer before detaching it. As a result, having the
-dma_buf_vunmap_unlocked() call here results in a use-after-free when vb2 calls
-the unmap_dmabuf memop.
-
-Change this function to the following:
-
-	static void isp4vid_vb2_detach_dmabuf(void *mem_priv)
-	{
-		struct isp4vid_vb2_buf *buf = mem_priv;
-
-		kfree(buf);
-	}
-
-> +static void isp4vid_qops_buffer_cleanup(struct vb2_buffer *vb)
-> +{
-> +	struct isp4vid_dev *isp_vdev = vb2_get_drv_priv(vb->vb2_queue);
-> +	struct isp4vid_vb2_buf *buf = vb->planes[0].mem_priv;
-> +
-> +	dev_dbg(isp_vdev->dev, "%s|index=%u vb->memory %u",
-> +		isp_vdev->vdev.name, vb->index, vb->memory);
-> +
-> +	if (!buf) {
-> +		dev_err(isp_vdev->dev, "Invalid buf handle");
-> +		return;
-> +	}
-> +
-> +	// release implicit dmabuf reference here for vb2 buffer
-> +	// of type MMAP and is exported
-> +	if (vb->memory == VB2_MEMORY_MMAP && buf->is_expbuf) {
-> +		dma_buf_put(buf->dbuf);
-> +		dev_dbg(isp_vdev->dev,
-> +			"put dmabuf for vb->memory %d expbuf %d",
-> +			vb->memory,
-> +			buf->is_expbuf);
-> +	}
-> +}
-> +
-
-Remove the isp4vid_qops_buffer_cleanup() function. It causes a use-after-free by
-doing an extra dma_buf_put(). This function isn't needed now that the refcount
-issues are solved.
-
-[snip]
-
-> +static const struct vb2_ops isp4vid_qops = {
-> +	.queue_setup = isp4vid_qops_queue_setup,
-> +	.buf_cleanup = isp4vid_qops_buffer_cleanup,
-
-Remove the .buf_cleanup hook too.
-
-> +	.buf_queue = isp4vid_qops_buffer_queue,
-> +	.start_streaming = isp4vid_qops_start_streaming,
-> +	.stop_streaming = isp4vid_qops_stop_streaming,
-> +	.wait_prepare = vb2_ops_wait_prepare,
-> +	.wait_finish = vb2_ops_wait_finish,
-> +};
-
-[snip]
-
-Along with the changes from my other emails, I believe this finally fixes all of
-the refcounting issues. No more UaF or leaks here. :-)
-
-Sultan
