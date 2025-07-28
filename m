@@ -1,53 +1,40 @@
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 20D0925BEF1
-	for <linux-media@vger.kernel.org>; Mon, 28 Jul 2025 09:44:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2EBEE25BF14
+	for <linux-media@vger.kernel.org>; Mon, 28 Jul 2025 09:44:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753695862; cv=none; b=Awn02FknU/Tr5n22Ejm+ILy/TnJckgpQryqfJKZJ83eMQoq9EdezwQb5QCvQEYG9YLio9xXK/2b9sy0Y1QoengkgqRCiMi2vDxlPLhBdEf303Y1Wo9T+qTSXrH4o0RpFT80dpQKa492FGEef40ek7wmwfqwdEX6YRALY2EPTS60=
+	t=1753695863; cv=none; b=WKsayJ+rDNGugr+yVJKJZDFZ6pJnMZ3QUJ0AnBNokl0vefC309NVO8r0N0nCPz+7koenSDwhy/GDqkgGedBFrgd40EiThNdBcspm77CSJzgIWdVinfEWmW+Dw1+i1ADdLdB1UvPaixULIOawJgde0vVUlavlPIHz+lku8qtFK0I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753695862; c=relaxed/simple;
-	bh=+caXNXJPvRhmQkPWkMxxzlWxGaTjEAOEzBzAjBfyjKE=;
-	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=Ybngaxedy7EsFDQC6sZWgRuRVqMjtJ6nMsCRVFpxGEjR1BR3VjlP1QwcVInDjpzPb8J2O6C3yHFzSh3PjiBrSrffJatWP+B1cJXhYastZj34KjD5SuOQrdv/kDszHTtXUgddaCbfqO8hmWL3dzrrSUpqQLwapAogrLfTClmsMfU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=Og+5u5Qx; arc=none smtp.client-ip=205.220.168.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+	s=arc-20240116; t=1753695863; c=relaxed/simple;
+	bh=CXrHWj28xjfMjBkIsRYmSMUxk6bHMrJbfR6yBdQFsSw=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=YH6VSQNcKzJ1R8Rin+ULibz5nbPfdnyVkrsY8cANd6MFU+245q7KaYzUJ1YR6etqBVEeH/M/m1RxfXIRnxT6X6ES5SQKlMLbthaOFdzDWZTbatkjBvcVXr9M4jDZ3piuCFbggL5djiJ4xkdiWBGh+obsbZfAcLgu/ts02q1+KVA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=g/XQk4l6; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="Og+5u5Qx"
-Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 56S4rWsK023338
-	for <linux-media@vger.kernel.org>; Mon, 28 Jul 2025 09:44:20 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	cc:content-transfer-encoding:content-type:date:from:message-id
-	:mime-version:subject:to; s=qcppdkim1; bh=cdxIevWgM55CiXrXFTknvC
-	Y7urddp/1OK5J0AVTDMfs=; b=Og+5u5QxfQoS/rcaIaLqg1SEWHTfbjTzT6zoRp
-	6Y/aiGDUls4KGkK2IHd8+G+cNoQ7xPQbsS0HI5TZzCeiS6s8QtAC54LNKLoJqrPJ
-	6lVvp7vGtRsZ1xPInYixV4ibTEPPJY/1x22UMEy+rs8E90J4XSgTaeqBSmA8DUsY
-	qHlbGHIRnns6OSut7hjQa9MMfr/PLvv76i2n8qo9rZhPuUlzXVQdLvFPElTcss5n
-	CvVpx7udMdGgFD6TnnvtcYz57slfekw99eLhxHPuTSAsVTvuNyGfnUCqObxC5zrA
-	aeKVAqt93it/dFBoItin4BP/hm9e8Vz+0aYhx6+vHdYT18jw==
-Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 485v1x9dw2-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT)
-	for <linux-media@vger.kernel.org>; Mon, 28 Jul 2025 09:44:20 +0000 (GMT)
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-	by NALASPPMTA03.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 56S9iJga023715
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT)
-	for <linux-media@vger.kernel.org>; Mon, 28 Jul 2025 09:44:19 GMT
-Received: from hu-dikshita-hyd.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1748.10; Mon, 28 Jul 2025 02:44:17 -0700
-From: Dikshita Agarwal <quic_dikshita@quicinc.com>
-To: <linux-media@vger.kernel.org>
-CC: <dikshita.agarwal@oss.qualcomm.com>,
-        Dikshita Agarwal
-	<quic_dikshita@quicinc.com>
-Subject: [PATCH] .mailmap: update Dikshita Agarwal's email addresses
-Date: Mon, 28 Jul 2025 15:13:44 +0530
-Message-ID: <20250728094344.3691258-1-quic_dikshita@quicinc.com>
-X-Mailer: git-send-email 2.34.1
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="g/XQk4l6"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F391EC4CEF7;
+	Mon, 28 Jul 2025 09:44:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1753695862;
+	bh=CXrHWj28xjfMjBkIsRYmSMUxk6bHMrJbfR6yBdQFsSw=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=g/XQk4l6/MXXSkbJ9k6Hp2pl1iJ7RHuqzpAysHlqwoFJOQtYbkwDnMNbqRkOE7K9P
+	 8/X+5J7Y16JB6Zp5abOOhhfzqMwNt7183eZC8rrmtUigfL68RkfSXFMWI19FVCCLn1
+	 /SXrUEmjHCJlWDOotF0MDkug7hSoW9Npn2WzQnU3ckuTNn0EfKkOBZ8e/kNRzmQiKO
+	 klvxY467k5Gww4whw6PsAi4U9OE9u5CxwxW+aHhPOpfa9b94Udhx5rd9Wo83h2lW0I
+	 ESEy4rbBbYTln3iL7Vsc9MBtwGuOnaroLi09lTslgPxgPrWl51u6//mZ6tAIthILNc
+	 ofP4qwUGpmMtw==
+From: Hans Verkuil <hverkuil+cisco@kernel.org>
+To: linux-media@vger.kernel.org
+Cc: Hans Verkuil <hverkuil@kernel.org>
+Subject: [PATCH 1/8] MAINTAINERS: update Hans Verkuil's email addresses
+Date: Mon, 28 Jul 2025 11:41:50 +0200
+Message-ID: <2b1324fd559d57800d7e5654493a3dc0f21e97c8.1753695717.git.hverkuil+cisco@kernel.org>
+X-Mailer: git-send-email 2.47.2
+In-Reply-To: <cover.1753695717.git.hverkuil+cisco@kernel.org>
+References: <cover.1753695717.git.hverkuil+cisco@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
@@ -55,60 +42,385 @@ List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwNzI4MDA2OSBTYWx0ZWRfX2RJPqkWw9Tb0
- laYxwkEqzhyBkPRi9rr0a0CMkZyectiLpWzs2lVCXDelG9XVx7neB3jQWfcmSSIq6GZJRXS3s1s
- c0t+T79ydnT5oNSjBtolAfoK0iZ0dV2t1EhVQhUb9lZNQlIRtk1mf4WausU/lH7td//Osdx0O+V
- zwvomcLx+vI6hsJpGOkc8yLi4pA1nXP+dI6JIuO8X95UVSrJSvv7qFhvjb/l1t5tHBhmoeXnA3l
- GMXgD0jSf8WA2TY9aLyDPxQW2BS1MRaobKYXBDoyZo7PcNBLYfdFZRWtdI+e4NwsFvjWsglokVX
- Cd3ge4r8erlfbTo23Pm6IYs2Tq+pLuK1Fvx1tZ71akRV1mTuLf4enAsqJmWky990WahQvlz+O2e
- y5/wcow9Bble7VqVRr0XsuFkmbLWlCVWi77CqCnSFJB709ZRIDPGZ12wYVBnW0rNFH8AO4lf
-X-Authority-Analysis: v=2.4 cv=JKw7s9Kb c=1 sm=1 tr=0 ts=68874674 cx=c_pps
- a=ouPCqIW2jiPt+lZRy3xVPw==:117 a=ouPCqIW2jiPt+lZRy3xVPw==:17
- a=GEpy-HfZoHoA:10 a=Wb1JkmetP80A:10 a=EUspDBNiAAAA:8 a=COk6AnOGAAAA:8
- a=FyogFE7hAAAA:8 a=pGLkceISAAAA:8 a=r_1tXGB3AAAA:8 a=gPJu0pBYAAAA:8
- a=LpQP-O61AAAA:8 a=VwQbUJbxAAAA:8 a=9Wbp7B8dAAAA:8 a=40BibAkj_d6-nIhsxdEA:9
- a=TjNXssC_j7lpFel5tvFf:22 a=p2WyBLmlf5vdw_nX_QRo:22 a=t8nPyN_e6usw4ciXM-Pk:22
- a=AlIIF0cMT2hfDT4axODj:22 a=pioyyrs4ZptJ924tMmac:22 a=BESxJfN36ujmTJQqZ0Zq:22
-X-Proofpoint-ORIG-GUID: iF2AP3EhNHzNvL3xphYC5Vg0pCT91OqJ
-X-Proofpoint-GUID: iF2AP3EhNHzNvL3xphYC5Vg0pCT91OqJ
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.1.9,FMLib:17.12.80.40
- definitions=2025-07-28_03,2025-07-24_01,2025-03-28_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- impostorscore=0 mlxscore=0 priorityscore=1501 spamscore=0 suspectscore=0
- phishscore=0 lowpriorityscore=0 bulkscore=0 malwarescore=0 clxscore=1015
- mlxlogscore=525 adultscore=0 classifier=spam authscore=0 authtc=n/a authcc=
- route=outbound adjust=0 reason=mlx scancount=1 engine=8.19.0-2505280000
- definitions=main-2507280069
 
-Add dikshita.agarwal@oss.qualcomm.com as the main address for upstream
-work.
+From: Hans Verkuil <hverkuil@xs4all.nl>
 
-Signed-off-by: Dikshita Agarwal <dikshita.agarwal@oss.qualcomm.com>
-Signed-off-by: Dikshita Agarwal <quic_dikshita@quicinc.com>
+Use hverkuil@kernel.org as the main address for kernel work.
+
+Signed-off-by: Hans Verkuil <hverkuil@xs4all.nl>
 ---
- .mailmap | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ MAINTAINERS | 82 ++++++++++++++++++++++++++---------------------------
+ 1 file changed, 41 insertions(+), 41 deletions(-)
 
-diff --git a/.mailmap b/.mailmap
-index 928fad83a7a4..c0e947ac66f5 100644
---- a/.mailmap
-+++ b/.mailmap
-@@ -211,7 +211,8 @@ Dengcheng Zhu <dzhu@wavecomp.com> <dengcheng.zhu@gmail.com>
- Dengcheng Zhu <dzhu@wavecomp.com> <dengcheng.zhu@imgtec.com>
- Dengcheng Zhu <dzhu@wavecomp.com> <dengcheng.zhu@mips.com>
- <dev.kurt@vandijck-laurijssen.be> <kurt.van.dijck@eia.be>
--Dikshita Agarwal <quic_dikshita@quicinc.com> <dikshita@codeaurora.org>
-+Dikshita Agarwal <dikshita.agarwal@oss.qualcomm.com> <dikshita@codeaurora.org>
-+Dikshita Agarwal <dikshita.agarwal@oss.qualcomm.com> <quic_dikshita@quicinc.com>
- Dmitry Baryshkov <lumag@kernel.org> <dbaryshkov@gmail.com>
- Dmitry Baryshkov <lumag@kernel.org> <[dbaryshkov@gmail.com]>
- Dmitry Baryshkov <lumag@kernel.org> <dmitry_baryshkov@mentor.com>
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 24c557ee091d..17a120c08321 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -714,7 +714,7 @@ S:	Maintained
+ F:	drivers/scsi/aic7xxx/
+ 
+ AIMSLAB FM RADIO RECEIVER DRIVER
+-M:	Hans Verkuil <hverkuil@xs4all.nl>
++M:	Hans Verkuil <hverkuil@kernel.org>
+ L:	linux-media@vger.kernel.org
+ S:	Maintained
+ W:	https://linuxtv.org
+@@ -1662,20 +1662,20 @@ F:	Documentation/devicetree/bindings/media/i2c/adi,adv748x.yaml
+ F:	drivers/media/i2c/adv748x/*
+ 
+ ANALOG DEVICES INC ADV7511 DRIVER
+-M:	Hans Verkuil <hverkuil-cisco@xs4all.nl>
++M:	Hans Verkuil <hverkuil@kernel.org>
+ L:	linux-media@vger.kernel.org
+ S:	Maintained
+ F:	drivers/media/i2c/adv7511*
+ 
+ ANALOG DEVICES INC ADV7604 DRIVER
+-M:	Hans Verkuil <hverkuil-cisco@xs4all.nl>
++M:	Hans Verkuil <hverkuil@kernel.org>
+ L:	linux-media@vger.kernel.org
+ S:	Maintained
+ F:	Documentation/devicetree/bindings/media/i2c/adi,adv7604.yaml
+ F:	drivers/media/i2c/adv7604*
+ 
+ ANALOG DEVICES INC ADV7842 DRIVER
+-M:	Hans Verkuil <hverkuil-cisco@xs4all.nl>
++M:	Hans Verkuil <hverkuil@kernel.org>
+ L:	linux-media@vger.kernel.org
+ S:	Maintained
+ F:	drivers/media/i2c/adv7842*
+@@ -3362,7 +3362,7 @@ F:	arch/arm/mach-berlin/
+ F:	arch/arm64/boot/dts/synaptics/
+ 
+ ARM/TEGRA HDMI CEC SUBSYSTEM SUPPORT
+-M:	Hans Verkuil <hverkuil-cisco@xs4all.nl>
++M:	Hans Verkuil <hverkuil@kernel.org>
+ L:	linux-tegra@vger.kernel.org
+ L:	linux-media@vger.kernel.org
+ S:	Maintained
+@@ -4044,7 +4044,7 @@ T:	git git://linuxtv.org/media.git
+ F:	drivers/media/usb/dvb-usb-v2/az6007.c
+ 
+ AZTECH FM RADIO RECEIVER DRIVER
+-M:	Hans Verkuil <hverkuil@xs4all.nl>
++M:	Hans Verkuil <hverkuil@kernel.org>
+ L:	linux-media@vger.kernel.org
+ S:	Maintained
+ W:	https://linuxtv.org
+@@ -5284,7 +5284,7 @@ F:	drivers/usb/cdns3/
+ X:	drivers/usb/cdns3/cdns3*
+ 
+ CADET FM/AM RADIO RECEIVER DRIVER
+-M:	Hans Verkuil <hverkuil@xs4all.nl>
++M:	Hans Verkuil <hverkuil@kernel.org>
+ L:	linux-media@vger.kernel.org
+ S:	Maintained
+ W:	https://linuxtv.org
+@@ -5477,7 +5477,7 @@ F:	drivers/char/hw_random/cctrng.c
+ F:	drivers/char/hw_random/cctrng.h
+ 
+ CEC FRAMEWORK
+-M:	Hans Verkuil <hverkuil-cisco@xs4all.nl>
++M:	Hans Verkuil <hverkuil@kernel.org>
+ L:	linux-media@vger.kernel.org
+ S:	Supported
+ W:	http://linuxtv.org
+@@ -5494,7 +5494,7 @@ F:	include/uapi/linux/cec-funcs.h
+ F:	include/uapi/linux/cec.h
+ 
+ CEC GPIO DRIVER
+-M:	Hans Verkuil <hverkuil-cisco@xs4all.nl>
++M:	Hans Verkuil <hverkuil@kernel.org>
+ L:	linux-media@vger.kernel.org
+ S:	Supported
+ W:	http://linuxtv.org
+@@ -5908,7 +5908,7 @@ S:	Supported
+ F:	drivers/platform/x86/classmate-laptop.c
+ 
+ COBALT MEDIA DRIVER
+-M:	Hans Verkuil <hverkuil-cisco@xs4all.nl>
++M:	Hans Verkuil <hverkuil@kernel.org>
+ L:	linux-media@vger.kernel.org
+ S:	Supported
+ W:	https://linuxtv.org
+@@ -6427,7 +6427,7 @@ F:	crypto/ansi_cprng.c
+ F:	crypto/rng.c
+ 
+ CS3308 MEDIA DRIVER
+-M:	Hans Verkuil <hverkuil@xs4all.nl>
++M:	Hans Verkuil <hverkuil@kernel.org>
+ L:	linux-media@vger.kernel.org
+ S:	Odd Fixes
+ W:	http://linuxtv.org
+@@ -6468,7 +6468,7 @@ F:	drivers/media/pci/cx18/
+ F:	include/uapi/linux/ivtv*
+ 
+ CX2341X MPEG ENCODER HELPER MODULE
+-M:	Hans Verkuil <hverkuil@xs4all.nl>
++M:	Hans Verkuil <hverkuil@kernel.org>
+ L:	linux-media@vger.kernel.org
+ S:	Maintained
+ W:	https://linuxtv.org
+@@ -8352,7 +8352,7 @@ T:	git git://linuxtv.org/media.git
+ F:	drivers/media/radio/dsbr100.c
+ 
+ DT3155 MEDIA DRIVER
+-M:	Hans Verkuil <hverkuil@xs4all.nl>
++M:	Hans Verkuil <hverkuil@kernel.org>
+ L:	linux-media@vger.kernel.org
+ S:	Odd Fixes
+ W:	https://linuxtv.org
+@@ -9092,7 +9092,7 @@ F:	tools/bootconfig/*
+ F:	tools/bootconfig/scripts/*
+ 
+ EXTRON DA HD 4K PLUS CEC DRIVER
+-M:	Hans Verkuil <hverkuil@xs4all.nl>
++M:	Hans Verkuil <hverkuil@kernel.org>
+ L:	linux-media@vger.kernel.org
+ S:	Maintained
+ T:	git git://linuxtv.org/media.git
+@@ -10022,7 +10022,7 @@ S:	Maintained
+ F:	drivers/crypto/gemini/
+ 
+ GEMTEK FM RADIO RECEIVER DRIVER
+-M:	Hans Verkuil <hverkuil@xs4all.nl>
++M:	Hans Verkuil <hverkuil@kernel.org>
+ L:	linux-media@vger.kernel.org
+ S:	Maintained
+ W:	https://linuxtv.org
+@@ -10210,7 +10210,7 @@ F:	drivers/gnss/
+ F:	include/linux/gnss.h
+ 
+ GO7007 MPEG CODEC
+-M:	Hans Verkuil <hverkuil-cisco@xs4all.nl>
++M:	Hans Verkuil <hverkuil@kernel.org>
+ L:	linux-media@vger.kernel.org
+ S:	Maintained
+ F:	drivers/media/usb/go7007/
+@@ -10462,7 +10462,7 @@ T:	git git://linuxtv.org/media.git
+ F:	drivers/media/usb/gspca/m5602/
+ 
+ GSPCA PAC207 SONIXB SUBDRIVER
+-M:	Hans Verkuil <hverkuil@xs4all.nl>
++M:	Hans Verkuil <hverkuil@kernel.org>
+ L:	linux-media@vger.kernel.org
+ S:	Odd Fixes
+ T:	git git://linuxtv.org/media.git
+@@ -10483,7 +10483,7 @@ T:	git git://linuxtv.org/media.git
+ F:	drivers/media/usb/gspca/t613.c
+ 
+ GSPCA USB WEBCAM DRIVER
+-M:	Hans Verkuil <hverkuil@xs4all.nl>
++M:	Hans Verkuil <hverkuil@kernel.org>
+ L:	linux-media@vger.kernel.org
+ S:	Odd Fixes
+ T:	git git://linuxtv.org/media.git
+@@ -10600,7 +10600,7 @@ S:	Maintained
+ F:	sound/parisc/harmony.*
+ 
+ HDPVR USB VIDEO ENCODER DRIVER
+-M:	Hans Verkuil <hverkuil@xs4all.nl>
++M:	Hans Verkuil <hverkuil@kernel.org>
+ L:	linux-media@vger.kernel.org
+ S:	Odd Fixes
+ W:	https://linuxtv.org
+@@ -12785,7 +12785,7 @@ F:	drivers/base/isa.c
+ F:	include/linux/isa.h
+ 
+ ISA RADIO MODULE
+-M:	Hans Verkuil <hverkuil@xs4all.nl>
++M:	Hans Verkuil <hverkuil@kernel.org>
+ L:	linux-media@vger.kernel.org
+ S:	Maintained
+ W:	https://linuxtv.org
+@@ -13059,7 +13059,7 @@ F:	include/uapi/linux/vmcore.h
+ F:	kernel/crash_*.c
+ 
+ KEENE FM RADIO TRANSMITTER DRIVER
+-M:	Hans Verkuil <hverkuil@xs4all.nl>
++M:	Hans Verkuil <hverkuil@kernel.org>
+ L:	linux-media@vger.kernel.org
+ S:	Maintained
+ W:	https://linuxtv.org
+@@ -14904,7 +14904,7 @@ F:	include/linux/mfd/max77693*.h
+ F:	include/linux/mfd/max77705*.h
+ 
+ MAXIRADIO FM RADIO RECEIVER DRIVER
+-M:	Hans Verkuil <hverkuil@xs4all.nl>
++M:	Hans Verkuil <hverkuil@kernel.org>
+ L:	linux-media@vger.kernel.org
+ S:	Maintained
+ W:	https://linuxtv.org
+@@ -16727,7 +16727,7 @@ F:	drivers/irqchip/irq-loongson*
+ F:	drivers/platform/mips/cpu_hwmon.c
+ 
+ MIROSOUND PCM20 FM RADIO RECEIVER DRIVER
+-M:	Hans Verkuil <hverkuil@xs4all.nl>
++M:	Hans Verkuil <hverkuil@kernel.org>
+ L:	linux-media@vger.kernel.org
+ S:	Odd Fixes
+ W:	https://linuxtv.org
+@@ -20036,7 +20036,7 @@ F:	include/uapi/linux/ptrace.h
+ F:	kernel/ptrace.c
+ 
+ PULSE8-CEC DRIVER
+-M:	Hans Verkuil <hverkuil@xs4all.nl>
++M:	Hans Verkuil <hverkuil@kernel.org>
+ L:	linux-media@vger.kernel.org
+ S:	Maintained
+ T:	git git://linuxtv.org/media.git
+@@ -20059,7 +20059,7 @@ F:	Documentation/driver-api/media/drivers/pvrusb2*
+ F:	drivers/media/usb/pvrusb2/
+ 
+ PWC WEBCAM DRIVER
+-M:	Hans Verkuil <hverkuil@xs4all.nl>
++M:	Hans Verkuil <hverkuil@kernel.org>
+ L:	linux-media@vger.kernel.org
+ S:	Odd Fixes
+ T:	git git://linuxtv.org/media.git
+@@ -20638,14 +20638,14 @@ F:	drivers/video/fbdev/aty/radeon*
+ F:	include/uapi/linux/radeonfb.h
+ 
+ RADIOSHARK RADIO DRIVER
+-M:	Hans Verkuil <hverkuil@xs4all.nl>
++M:	Hans Verkuil <hverkuil@kernel.org>
+ L:	linux-media@vger.kernel.org
+ S:	Maintained
+ T:	git git://linuxtv.org/media.git
+ F:	drivers/media/radio/radio-shark.c
+ 
+ RADIOSHARK2 RADIO DRIVER
+-M:	Hans Verkuil <hverkuil@xs4all.nl>
++M:	Hans Verkuil <hverkuil@kernel.org>
+ L:	linux-media@vger.kernel.org
+ S:	Maintained
+ T:	git git://linuxtv.org/media.git
+@@ -20669,7 +20669,7 @@ S:	Orphan
+ F:	drivers/video/fbdev/aty/aty128fb.c
+ 
+ RAINSHADOW-CEC DRIVER
+-M:	Hans Verkuil <hverkuil@xs4all.nl>
++M:	Hans Verkuil <hverkuil@kernel.org>
+ L:	linux-media@vger.kernel.org
+ S:	Maintained
+ T:	git git://linuxtv.org/media.git
+@@ -21931,7 +21931,7 @@ S:	Supported
+ F:	drivers/s390/scsi/zfcp_*
+ 
+ SAA6588 RDS RECEIVER DRIVER
+-M:	Hans Verkuil <hverkuil@xs4all.nl>
++M:	Hans Verkuil <hverkuil@kernel.org>
+ L:	linux-media@vger.kernel.org
+ S:	Odd Fixes
+ W:	https://linuxtv.org
+@@ -21948,7 +21948,7 @@ F:	Documentation/driver-api/media/drivers/saa7134*
+ F:	drivers/media/pci/saa7134/
+ 
+ SAA7146 VIDEO4LINUX-2 DRIVER
+-M:	Hans Verkuil <hverkuil@xs4all.nl>
++M:	Hans Verkuil <hverkuil@kernel.org>
+ L:	linux-media@vger.kernel.org
+ S:	Maintained
+ T:	git git://linuxtv.org/media.git
+@@ -22647,7 +22647,7 @@ Q:	http://patchwork.linuxtv.org/project/linux-media/list/
+ F:	drivers/media/dvb-frontends/si2168*
+ 
+ SI470X FM RADIO RECEIVER I2C DRIVER
+-M:	Hans Verkuil <hverkuil@xs4all.nl>
++M:	Hans Verkuil <hverkuil@kernel.org>
+ L:	linux-media@vger.kernel.org
+ S:	Odd Fixes
+ W:	https://linuxtv.org
+@@ -22656,7 +22656,7 @@ F:	Documentation/devicetree/bindings/media/silabs,si470x.yaml
+ F:	drivers/media/radio/si470x/radio-si470x-i2c.c
+ 
+ SI470X FM RADIO RECEIVER USB DRIVER
+-M:	Hans Verkuil <hverkuil@xs4all.nl>
++M:	Hans Verkuil <hverkuil@kernel.org>
+ L:	linux-media@vger.kernel.org
+ S:	Maintained
+ W:	https://linuxtv.org
+@@ -22682,7 +22682,7 @@ T:	git git://linuxtv.org/media.git
+ F:	drivers/media/radio/si4713/radio-platform-si4713.c
+ 
+ SI4713 FM RADIO TRANSMITTER USB DRIVER
+-M:	Hans Verkuil <hverkuil@xs4all.nl>
++M:	Hans Verkuil <hverkuil@kernel.org>
+ L:	linux-media@vger.kernel.org
+ S:	Maintained
+ W:	https://linuxtv.org
+@@ -24288,7 +24288,7 @@ T:	git git://linuxtv.org/mkrufky/tuners.git
+ F:	drivers/media/tuners/tda8290.*
+ 
+ TDA9840 MEDIA DRIVER
+-M:	Hans Verkuil <hverkuil@xs4all.nl>
++M:	Hans Verkuil <hverkuil@kernel.org>
+ L:	linux-media@vger.kernel.org
+ S:	Maintained
+ W:	https://linuxtv.org
+@@ -24312,7 +24312,7 @@ T:	git git://linuxtv.org/media.git
+ F:	drivers/media/tuners/tea5767.*
+ 
+ TEA6415C MEDIA DRIVER
+-M:	Hans Verkuil <hverkuil@xs4all.nl>
++M:	Hans Verkuil <hverkuil@kernel.org>
+ L:	linux-media@vger.kernel.org
+ S:	Maintained
+ W:	https://linuxtv.org
+@@ -24320,7 +24320,7 @@ T:	git git://linuxtv.org/media.git
+ F:	drivers/media/i2c/tea6415c*
+ 
+ TEA6420 MEDIA DRIVER
+-M:	Hans Verkuil <hverkuil@xs4all.nl>
++M:	Hans Verkuil <hverkuil@kernel.org>
+ L:	linux-media@vger.kernel.org
+ S:	Maintained
+ W:	https://linuxtv.org
+@@ -24629,7 +24629,7 @@ F:	Documentation/devicetree/bindings/iio/temperature/ti,tmp117.yaml
+ F:	drivers/iio/temperature/tmp117.c
+ 
+ THANKO'S RAREMONO AM/FM/SW RADIO RECEIVER USB DRIVER
+-M:	Hans Verkuil <hverkuil@xs4all.nl>
++M:	Hans Verkuil <hverkuil@kernel.org>
+ L:	linux-media@vger.kernel.org
+ S:	Maintained
+ W:	https://linuxtv.org
+@@ -25123,7 +25123,7 @@ F:	include/linux/toshiba.h
+ F:	include/uapi/linux/toshiba.h
+ 
+ TOSHIBA TC358743 DRIVER
+-M:	Hans Verkuil <hverkuil-cisco@xs4all.nl>
++M:	Hans Verkuil <hverkuil@kernel.org>
+ L:	linux-media@vger.kernel.org
+ S:	Maintained
+ F:	Documentation/devicetree/bindings/media/i2c/toshiba,tc358743.txt
+@@ -25325,7 +25325,7 @@ S:	Supported
+ F:	drivers/media/pci/tw5864/
+ 
+ TW68 VIDEO4LINUX DRIVER
+-M:	Hans Verkuil <hverkuil@xs4all.nl>
++M:	Hans Verkuil <hverkuil@kernel.org>
+ L:	linux-media@vger.kernel.org
+ S:	Odd Fixes
+ W:	https://linuxtv.org
+@@ -26119,7 +26119,7 @@ S:	Maintained
+ F:	drivers/net/ethernet/via/via-velocity.*
+ 
+ VICODEC VIRTUAL CODEC DRIVER
+-M:	Hans Verkuil <hverkuil-cisco@xs4all.nl>
++M:	Hans Verkuil <hverkuil@kernel.org>
+ L:	linux-media@vger.kernel.org
+ S:	Maintained
+ W:	https://linuxtv.org
+@@ -26424,7 +26424,7 @@ S:	Supported
+ F:	drivers/media/test-drivers/visl
+ 
+ VIVID VIRTUAL VIDEO DRIVER
+-M:	Hans Verkuil <hverkuil@xs4all.nl>
++M:	Hans Verkuil <hverkuil@kernel.org>
+ L:	linux-media@vger.kernel.org
+ S:	Maintained
+ W:	https://linuxtv.org
 -- 
-2.34.1
+2.47.2
 
