@@ -1,54 +1,54 @@
 Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E3604218ACA;
-	Thu,  7 Aug 2025 05:54:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 10FEB219A8A;
+	Thu,  7 Aug 2025 05:54:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754546046; cv=none; b=AK6iV0rGyUaILktaugn6u1hAJRu4o/IlgU4Fqvd1gKWrMED1+BlcEiTMVaBvPtHZKiYXatLlUQreaAFvVxqE8oOpiHPvHsJ+tHuz8yVVX7+i83MYzdNOvlSGcatNB6SVYqnQYIbFGMpwzINLbl5+H2Yu9VklBKqxADqWKJ+hJxM=
+	t=1754546046; cv=none; b=hDHxIaEMIxfXc2+U3DIqj3ZzwmG5pui1xz97hnGtQ4gZHKw6MF4G+AsMgbtJ7TY/AQqiYwOVuVZGnMZq7zmX8N9du8fr+cBGMGtZu2qQHkwisQZpjwpp65RNzBbyhit+pogd3Ot3gBxaK5qeDttUhvx+bp7XWK/dYMte1WOaXtg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1754546046; c=relaxed/simple;
-	bh=20r1HH5+BbHJNXfZpWKRdoLlv5HahszQqOdnjhOM0gA=;
+	bh=exb/33Mbt9qBK+9IG0tR8MPqVWhMO97Ft0xBNkFyRlE=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=HBhzXNXEdrIQEeptClUNX3CE1EfHtKZxZyUbNNaHf4QWZM8iz03AUIlKdp6CJzF1riXrTuYte92W4p6Ji0ww+UkkbpBsjYleotDO10NZyj4dECkhP1a3cigN3WbhjWkP+XRfs5e0mp2W4PexE7C2Zk3oE/egyuxEsZQ6oWjWRSc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=XMBMfwjS; arc=none smtp.client-ip=198.175.65.15
+	 MIME-Version; b=E5GAoeeyHlVcwHnZzjuBVWfxkWC4AA9Ij9ECJtHZSazJcoq35eijnXmNmGAs2zrKfVUzI//13++nryV7mzyy6J6IQOzLQUz7ewUc4fj7JVQpoS8cgfvSWzfPmq4isqinVO4u/tzXc62LoVgGWwW7Q/Ig45lFpmqsBLXoAXvANsw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=glBSCHPT; arc=none smtp.client-ip=198.175.65.15
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="XMBMfwjS"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="glBSCHPT"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
   t=1754546045; x=1786082045;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=20r1HH5+BbHJNXfZpWKRdoLlv5HahszQqOdnjhOM0gA=;
-  b=XMBMfwjSm0f2y97gevVwsIjJ3AA7xelh8rgcfu3iDeRqJTUGZX6DibQJ
-   ZNwPlJVkeCzx5D2LwgqK+TMm3Rjq6W/rZrg6aQaWISVkFFz1Z0wFPZhVv
-   lLyqHHGaW7oPKT96ury5zNT1w8K5pHabRVAEtGPnL81W/r0l8OIBCQ9aw
-   v0oTRQp2YnpV+WpLOLU7RasD7c0xIKdqO6Wj/AJo6bfRiBIt7cWVPxD/x
-   znWF/G4Hj4jIx1DSJP298iNgaxGsLDQlFUNOQ5FVfzFOO6RtNgwXh2dRz
-   Ai+UMUH7mogU0wOAw60Pr6NImk07hocfYtXIfjqSRrqKt/HrGkDpaXkjJ
-   Q==;
-X-CSE-ConnectionGUID: y+L9aRbtR9mvOFF+XJDOvA==
-X-CSE-MsgGUID: Kt1UWYeCTJyjgAq4o6IhUg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11514"; a="60501957"
+  bh=exb/33Mbt9qBK+9IG0tR8MPqVWhMO97Ft0xBNkFyRlE=;
+  b=glBSCHPTWwcQBDLbhrE9iw2gMQf6SBSGoiw4oLfYk/wLxvFQGoodK7dH
+   7dW1Dh5O2s7p/zhUSyO6DkdF/ThOcX0ljIg+1CsHYzaZDOAjECADuG6hp
+   OK2QCmaMCZ5m3ZJH9NBIwDDI9m6qHrgBlJnbQj+bXIs2fq9ZoP8x+gFNk
+   8Qd39G6d+zxbfO+JhMggwaVJPA2olOcAC/fgDyhbVpmObbW5JvSFZaO1Q
+   3Fl4Z0HdQdev6fZ+9sxGjgfX9zcGNYoSGB35VH92cHer1z/B+yYrTp4GB
+   08+0Z2CE/Oyp1dW2l7M83IoiBfQiIxm9TG24G9SU6m/xFacqcqZjelgZ/
+   w==;
+X-CSE-ConnectionGUID: vZAxsdzZRr6Ry2bh+euQEQ==
+X-CSE-MsgGUID: ggX25cXgQMS3auJx7zOdiQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11514"; a="60501946"
 X-IronPort-AV: E=Sophos;i="6.17,271,1747724400"; 
-   d="scan'208";a="60501957"
+   d="scan'208";a="60501946"
 Received: from orviesa001.jf.intel.com ([10.64.159.141])
-  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Aug 2025 22:54:01 -0700
-X-CSE-ConnectionGUID: GFDDi/T3S5aMul1l2nxV2w==
-X-CSE-MsgGUID: 5y9N4ROLQn6mS0RE8ALiug==
+  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Aug 2025 22:54:00 -0700
+X-CSE-ConnectionGUID: 1hlyMsAXTaWJ4wj0/dotTA==
+X-CSE-MsgGUID: dlVwWPo8QTeNwDGRAwRu5w==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.17,271,1747724400"; 
-   d="scan'208";a="202144613"
+   d="scan'208";a="202144611"
 Received: from mjarzebo-mobl1.ger.corp.intel.com (HELO kekkonen.fi.intel.com) ([10.245.244.255])
   by smtpauth.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Aug 2025 22:53:58 -0700
 Received: from punajuuri.localdomain (unknown [192.168.240.130])
-	by kekkonen.fi.intel.com (Postfix) with ESMTP id 3A77E1203A5;
+	by kekkonen.fi.intel.com (Postfix) with ESMTP id 351DF11FC49;
 	Thu,  7 Aug 2025 08:53:55 +0300 (EEST)
 Received: from sailus by punajuuri.localdomain with local (Exim 4.96)
 	(envelope-from <sakari.ailus@linux.intel.com>)
-	id 1ujtZc-005H1E-0q;
+	id 1ujtZc-005H12-0d;
 	Thu, 07 Aug 2025 08:53:56 +0300
 Organization: Intel Finland Oy - BIC 0357606-4 - c/o Alberga Business Park, 6 krs, Bertel Jungin Aukio 5, 02600 Espoo
 From: Sakari Ailus <sakari.ailus@linux.intel.com>
@@ -62,9 +62,9 @@ Cc: linux-media@vger.kernel.org,
 	Kannappan R <r.kannappan@intel.com>,
 	Mathias Nyman <mathias.nyman@linux.intel.com>,
 	Alan Stern <stern@rowland.harvard.edu>
-Subject: [PATCH v3 4/4] media: uvcvideo: eUSB2 double isochronous bandwidth support
-Date: Thu,  7 Aug 2025 08:53:55 +0300
-Message-Id: <20250807055355.1257029-5-sakari.ailus@linux.intel.com>
+Subject: [PATCH v3 1/4] xhci: Add host support for eUSB2 double isochronous bandwidth devices
+Date: Thu,  7 Aug 2025 08:53:52 +0300
+Message-Id: <20250807055355.1257029-2-sakari.ailus@linux.intel.com>
 X-Mailer: git-send-email 2.39.5
 In-Reply-To: <20250807055355.1257029-1-sakari.ailus@linux.intel.com>
 References: <20250807055355.1257029-1-sakari.ailus@linux.intel.com>
@@ -74,125 +74,259 @@ List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-From: Tao Q Tao <tao.q.tao@intel.com>
+From: "Rai, Amardeep" <amardeep.rai@intel.com>
 
-Use usb_endpoint_max_isoc_bpi() from the USB framework to find the maximum
-bytes per interval for the endpoint. Consequently this adds eUSB2
-isochronous mode and SuperSpeedPlus Isochronous Endpoint Compaion support
-where larger bpi values are possible.
+Detect eUSB2 double isoc bw capable hosts and devices, and set the proper
+xhci endpoint context values such as 'Mult', 'Max Burst Size', and 'Max
+ESIT Payload' to enable the double isochronous bandwidth endpoints.
 
-Co-developed-by: Amardeep Rai <amardeep.rai@intel.com>
-Signed-off-by: Amardeep Rai <amardeep.rai@intel.com>
-Signed-off-by: Tao Q Tao <tao.q.tao@intel.com>
+Intel xHC uses the endpoint context 'Mult' field for eUSB2 isoc
+endpoints even if hosts supporting Large ESIT Payload Capability should
+normally ignore the mult field.
+
+Signed-off-by: Rai, Amardeep <amardeep.rai@intel.com>
+Co-developed-by: Kannappan R <r.kannappan@intel.com>
+Signed-off-by: Kannappan R <r.kannappan@intel.com>
+Reviewed-by: Sakari Ailus <sakari.ailus@linux.intel.com>
+Co-developed-by: Mathias Nyman <mathias.nyman@linux.intel.com>
 Signed-off-by: Mathias Nyman <mathias.nyman@linux.intel.com>
 Co-developed-by: Sakari Ailus <sakari.ailus@linux.intel.com>
 Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
-Reviewed-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
-Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 ---
- drivers/media/usb/uvc/uvc_driver.c |  4 ++--
- drivers/media/usb/uvc/uvc_video.c  | 24 +++---------------------
- drivers/media/usb/uvc/uvcvideo.h   |  4 +---
- 3 files changed, 6 insertions(+), 26 deletions(-)
+ drivers/usb/host/xhci-caps.h |  2 ++
+ drivers/usb/host/xhci-mem.c  | 60 ++++++++++++++++++++++++++++--------
+ drivers/usb/host/xhci-ring.c |  6 ++--
+ drivers/usb/host/xhci.c      | 16 +++++++++-
+ drivers/usb/host/xhci.h      | 19 ++++++++++++
+ 5 files changed, 87 insertions(+), 16 deletions(-)
 
-diff --git a/drivers/media/usb/uvc/uvc_driver.c b/drivers/media/usb/uvc/uvc_driver.c
-index da24a655ab68..fde0bc95622c 100644
---- a/drivers/media/usb/uvc/uvc_driver.c
-+++ b/drivers/media/usb/uvc/uvc_driver.c
-@@ -536,7 +536,7 @@ static int uvc_parse_streaming(struct uvc_device *dev,
- 	unsigned int nformats = 0, nframes = 0, nintervals = 0;
- 	unsigned int size, i, n, p;
- 	u32 *interval;
--	u16 psize;
-+	u32 psize;
- 	int ret = -EINVAL;
- 
- 	if (intf->cur_altsetting->desc.bInterfaceSubClass
-@@ -772,7 +772,7 @@ static int uvc_parse_streaming(struct uvc_device *dev,
- 				streaming->header.bEndpointAddress);
- 		if (ep == NULL)
- 			continue;
--		psize = uvc_endpoint_max_bpi(dev->udev, ep);
-+		psize = usb_endpoint_max_isoc_bpi(dev->udev, ep);
- 		if (psize > streaming->maxpsize)
- 			streaming->maxpsize = psize;
- 	}
-diff --git a/drivers/media/usb/uvc/uvc_video.c b/drivers/media/usb/uvc/uvc_video.c
-index a75af314e46b..335b1c4eff9b 100644
---- a/drivers/media/usb/uvc/uvc_video.c
-+++ b/drivers/media/usb/uvc/uvc_video.c
-@@ -1860,24 +1860,6 @@ static void uvc_video_stop_transfer(struct uvc_streaming *stream,
- 		uvc_free_urb_buffers(stream);
+diff --git a/drivers/usb/host/xhci-caps.h b/drivers/usb/host/xhci-caps.h
+index 4b8ff4815644..723a56052439 100644
+--- a/drivers/usb/host/xhci-caps.h
++++ b/drivers/usb/host/xhci-caps.h
+@@ -89,3 +89,5 @@
+ #define HCC2_GSC(p)             ((p) & (1 << 8))
+ /* true: HC support Virtualization Based Trusted I/O Capability */
+ #define HCC2_VTC(p)             ((p) & (1 << 9))
++/* true: HC support Double BW on a eUSB2 HS ISOC EP */
++#define HCC2_EUSB2_DIC(p)	((p) & (1 << 11))
+diff --git a/drivers/usb/host/xhci-mem.c b/drivers/usb/host/xhci-mem.c
+index 6680afa4f596..ea51434c80fa 100644
+--- a/drivers/usb/host/xhci-mem.c
++++ b/drivers/usb/host/xhci-mem.c
+@@ -1328,18 +1328,36 @@ static unsigned int xhci_get_endpoint_interval(struct usb_device *udev,
+ 	return interval;
  }
  
--/*
-- * Compute the maximum number of bytes per interval for an endpoint.
-- */
--u16 uvc_endpoint_max_bpi(struct usb_device *dev, struct usb_host_endpoint *ep)
--{
--	u16 psize;
--
--	switch (dev->speed) {
--	case USB_SPEED_SUPER:
--	case USB_SPEED_SUPER_PLUS:
--		return le16_to_cpu(ep->ss_ep_comp.wBytesPerInterval);
--	default:
--		psize = usb_endpoint_maxp(&ep->desc);
--		psize *= usb_endpoint_maxp_mult(&ep->desc);
--		return psize;
--	}
--}
--
- /*
-  * Initialize isochronous URBs and allocate transfer buffers. The packet size
-  * is given by the endpoint.
-@@ -1888,10 +1870,10 @@ static int uvc_init_video_isoc(struct uvc_streaming *stream,
- 	struct urb *urb;
- 	struct uvc_urb *uvc_urb;
- 	unsigned int npackets, i;
--	u16 psize;
-+	u32 psize;
- 	u32 size;
+-/* The "Mult" field in the endpoint context is only set for SuperSpeed isoc eps.
++/*
++ * xHCs without LEC use the "Mult" field in the endpoint context for SuperSpeed
++ * isoc eps, and High speed isoc eps that support bandwidth doubling. Standard
+  * High speed endpoint descriptors can define "the number of additional
+  * transaction opportunities per microframe", but that goes in the Max Burst
+  * endpoint context field.
+  */
+-static u32 xhci_get_endpoint_mult(struct usb_device *udev,
+-		struct usb_host_endpoint *ep)
++static u32 xhci_get_endpoint_mult(struct xhci_hcd *xhci,
++				  struct usb_device *udev,
++				  struct usb_host_endpoint *ep)
+ {
+-	if (udev->speed < USB_SPEED_SUPER ||
+-			!usb_endpoint_xfer_isoc(&ep->desc))
++	bool lec;
++
++	/* xHCI 1.1 with LEC set does not use mult field, except intel eUSB2 */
++	lec = xhci->hci_version > 0x100 && HCC2_LEC(xhci->hcc_params2);
++
++	/* eUSB2 double isoc bw devices are the only USB2 devices using mult */
++	if (xhci_eusb2_is_isoc_bw_double(udev, ep)) {
++		if (!lec || xhci->quirks & XHCI_INTEL_HOST)
++			return 1;
++	}
++
++	/* Oherwise only isoc transfers on hosts without LEC uses mult field */
++	if (!usb_endpoint_xfer_isoc(&ep->desc) || lec)
+ 		return 0;
+-	return ep->ss_ep_comp.bmAttributes;
++
++	if (udev->speed >= USB_SPEED_SUPER)
++		return ep->ss_ep_comp.bmAttributes;
++
++	return 0;
+ }
  
--	psize = uvc_endpoint_max_bpi(stream->dev->udev, ep);
-+	psize = usb_endpoint_max_isoc_bpi(stream->dev->udev, ep);
- 	size = stream->ctrl.dwMaxVideoFrameSize;
+ static u32 xhci_get_endpoint_max_burst(struct usb_device *udev,
+@@ -1351,8 +1369,18 @@ static u32 xhci_get_endpoint_max_burst(struct usb_device *udev,
  
- 	npackets = uvc_alloc_urb_buffers(stream, size, psize, gfp_flags);
-@@ -2034,7 +2016,7 @@ static int uvc_video_start_transfer(struct uvc_streaming *stream,
- 				continue;
+ 	if (udev->speed == USB_SPEED_HIGH &&
+ 	    (usb_endpoint_xfer_isoc(&ep->desc) ||
+-	     usb_endpoint_xfer_int(&ep->desc)))
++	     usb_endpoint_xfer_int(&ep->desc))) {
++		/*
++		 * eUSB2 double isoc bw endpoints max packet field service
++		 * opportunity bits 12:11 are not valid, so set the ctx burst to
++		 * max service opportunity "2" as these eps support transferring
++		 * over 3072 bytes per interval
++		 */
++		if (xhci_eusb2_is_isoc_bw_double(udev, ep))
++			return 2;
++
+ 		return usb_endpoint_maxp_mult(&ep->desc) - 1;
++	}
  
- 			/* Check if the bandwidth is high enough. */
--			psize = uvc_endpoint_max_bpi(stream->dev->udev, ep);
-+			psize = usb_endpoint_max_isoc_bpi(stream->dev->udev, ep);
- 			if (psize >= bandwidth && psize < best_psize) {
- 				altsetting = alts->desc.bAlternateSetting;
- 				best_psize = psize;
-diff --git a/drivers/media/usb/uvc/uvcvideo.h b/drivers/media/usb/uvc/uvcvideo.h
-index b9f8eb62ba1d..a77ba76e033a 100644
---- a/drivers/media/usb/uvc/uvcvideo.h
-+++ b/drivers/media/usb/uvc/uvcvideo.h
-@@ -450,7 +450,7 @@ struct uvc_streaming {
+ 	return 0;
+ }
+@@ -1400,6 +1428,10 @@ static u32 xhci_get_max_esit_payload(struct usb_device *udev,
+ 	if (udev->speed >= USB_SPEED_SUPER)
+ 		return le16_to_cpu(ep->ss_ep_comp.wBytesPerInterval);
  
- 	struct usb_interface *intf;
- 	int intfnum;
--	u16 maxpsize;
-+	u32 maxpsize;
++	/* High speed eUSB2 double isoc bw with over 3072 bytes per esit */
++	if (xhci_eusb2_is_isoc_bw_double(udev, ep))
++		return le32_to_cpu(ep->eusb2_isoc_ep_comp.dwBytesPerInterval);
++
+ 	max_packet = usb_endpoint_maxp(&ep->desc);
+ 	max_burst = usb_endpoint_maxp_mult(&ep->desc);
+ 	/* A 0 in max burst means 1 transfer per ESIT */
+@@ -1437,6 +1469,13 @@ int xhci_endpoint_init(struct xhci_hcd *xhci,
  
- 	struct uvc_streaming_header header;
- 	enum v4l2_buf_type type;
-@@ -818,8 +818,6 @@ void uvc_ctrl_cleanup_fh(struct uvc_fh *handle);
- /* Utility functions */
- struct usb_host_endpoint *uvc_find_endpoint(struct usb_host_interface *alts,
- 					    u8 epaddr);
--u16 uvc_endpoint_max_bpi(struct usb_device *dev, struct usb_host_endpoint *ep);
--
- /* Quirks support */
- void uvc_video_decode_isight(struct uvc_urb *uvc_urb,
- 			     struct uvc_buffer *buf,
+ 	ring_type = usb_endpoint_type(&ep->desc);
+ 
++	/* Ensure host supports double isoc bandwidth for eUSB2 devices */
++	if (xhci_eusb2_is_isoc_bw_double(udev, ep) &&
++	    !HCC2_EUSB2_DIC(xhci->hcc_params2))	{
++		dev_dbg(&udev->dev, "Double Isoc Bandwidth not supported by xhci\n");
++		return -EINVAL;
++	}
++
+ 	/*
+ 	 * Get values to fill the endpoint context, mostly from ep descriptor.
+ 	 * The average TRB buffer lengt for bulk endpoints is unclear as we
+@@ -1460,8 +1499,8 @@ int xhci_endpoint_init(struct xhci_hcd *xhci,
+ 		}
+ 	}
+ 
+-	mult = xhci_get_endpoint_mult(udev, ep);
+-	max_packet = usb_endpoint_maxp(&ep->desc);
++	mult = xhci_get_endpoint_mult(xhci, udev, ep);
++	max_packet = xhci_usb_endpoint_maxp(udev, ep);
+ 	max_burst = xhci_get_endpoint_max_burst(udev, ep);
+ 	avg_trb_len = max_esit_payload;
+ 
+@@ -1482,9 +1521,6 @@ int xhci_endpoint_init(struct xhci_hcd *xhci,
+ 	/* xHCI 1.0 and 1.1 indicates that ctrl ep avg TRB Length should be 8 */
+ 	if (usb_endpoint_xfer_control(&ep->desc) && xhci->hci_version >= 0x100)
+ 		avg_trb_len = 8;
+-	/* xhci 1.1 with LEC support doesn't use mult field, use RsvdZ */
+-	if ((xhci->hci_version > 0x100) && HCC2_LEC(xhci->hcc_params2))
+-		mult = 0;
+ 
+ 	/* Set up the endpoint ring */
+ 	virt_dev->eps[ep_index].new_ring =
+diff --git a/drivers/usb/host/xhci-ring.c b/drivers/usb/host/xhci-ring.c
+index 94c9c9271658..9abc5bc4e1c0 100644
+--- a/drivers/usb/host/xhci-ring.c
++++ b/drivers/usb/host/xhci-ring.c
+@@ -3542,7 +3542,7 @@ static u32 xhci_td_remainder(struct xhci_hcd *xhci, int transferred,
+ 	if ((xhci->quirks & XHCI_MTK_HOST) && (xhci->hci_version < 0x100))
+ 		trb_buff_len = 0;
+ 
+-	maxp = usb_endpoint_maxp(&urb->ep->desc);
++	maxp = xhci_usb_endpoint_maxp(urb->dev, urb->ep);
+ 	total_packet_count = DIV_ROUND_UP(td_total_len, maxp);
+ 
+ 	/* Queueing functions don't count the current TRB into transferred */
+@@ -3559,7 +3559,7 @@ static int xhci_align_td(struct xhci_hcd *xhci, struct urb *urb, u32 enqd_len,
+ 	u32 new_buff_len;
+ 	size_t len;
+ 
+-	max_pkt = usb_endpoint_maxp(&urb->ep->desc);
++	max_pkt = xhci_usb_endpoint_maxp(urb->dev, urb->ep);
+ 	unalign = (enqd_len + *trb_buff_len) % max_pkt;
+ 
+ 	/* we got lucky, last normal TRB data on segment is packet aligned */
+@@ -4130,7 +4130,7 @@ static int xhci_queue_isoc_tx(struct xhci_hcd *xhci, gfp_t mem_flags,
+ 		addr = start_addr + urb->iso_frame_desc[i].offset;
+ 		td_len = urb->iso_frame_desc[i].length;
+ 		td_remain_len = td_len;
+-		max_pkt = usb_endpoint_maxp(&urb->ep->desc);
++		max_pkt = xhci_usb_endpoint_maxp(urb->dev, urb->ep);
+ 		total_pkt_count = DIV_ROUND_UP(td_len, max_pkt);
+ 
+ 		/* A zero-length transfer still involves at least one packet. */
+diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
+index 8a819e853288..1ea7d2fb5876 100644
+--- a/drivers/usb/host/xhci.c
++++ b/drivers/usb/host/xhci.c
+@@ -1332,7 +1332,7 @@ static bool xhci_urb_temp_buffer_required(struct usb_hcd *hcd,
+ 	struct scatterlist *tail_sg;
+ 
+ 	tail_sg = urb->sg;
+-	max_pkt = usb_endpoint_maxp(&urb->ep->desc);
++	max_pkt = xhci_usb_endpoint_maxp(urb->dev, urb->ep);
+ 
+ 	if (!urb->num_sgs)
+ 		return ret;
+@@ -2920,6 +2920,20 @@ int xhci_stop_endpoint_sync(struct xhci_hcd *xhci, struct xhci_virt_ep *ep, int
+ }
+ EXPORT_SYMBOL_GPL(xhci_stop_endpoint_sync);
+ 
++/*
++ * xhci_usb_endpoint_maxp - get endpoint max packet size
++ * @host_ep: USB host endpoint to be checked
++ *
++ * Returns max packet from the correct descriptor
++ */
++int xhci_usb_endpoint_maxp(struct usb_device *udev,
++			   struct usb_host_endpoint *host_ep)
++{
++	if (xhci_eusb2_is_isoc_bw_double(udev, host_ep))
++		return le16_to_cpu(host_ep->eusb2_isoc_ep_comp.wMaxPacketSize);
++	return usb_endpoint_maxp(&host_ep->desc);
++}
++
+ /* Issue a configure endpoint command or evaluate context command
+  * and wait for it to finish.
+  */
+diff --git a/drivers/usb/host/xhci.h b/drivers/usb/host/xhci.h
+index a20f4e7cd43a..9657a4deb87b 100644
+--- a/drivers/usb/host/xhci.h
++++ b/drivers/usb/host/xhci.h
+@@ -1736,6 +1736,23 @@ static inline bool xhci_has_one_roothub(struct xhci_hcd *xhci)
+ 	       (!xhci->usb2_rhub.num_ports || !xhci->usb3_rhub.num_ports);
+ }
+ 
++/*
++ * USB 2.0 specification, chapter 5.6.4 Isochronous Transfer Bus Access
++ * Constraint. A high speed endpoint can move up to 3072 bytes per microframe
++ * (or 192Mb/s).
++ */
++#define MAX_ISOC_XFER_SIZE_HS  3072
++
++static inline bool xhci_eusb2_is_isoc_bw_double(struct usb_device *udev,
++						struct usb_host_endpoint *ep)
++{
++	return udev->speed == USB_SPEED_HIGH &&
++		usb_endpoint_is_isoc_in(&ep->desc) &&
++		le16_to_cpu(ep->desc.wMaxPacketSize) == 0 &&
++		le32_to_cpu(ep->eusb2_isoc_ep_comp.dwBytesPerInterval) >
++		MAX_ISOC_XFER_SIZE_HS;
++}
++
+ #define xhci_dbg(xhci, fmt, args...) \
+ 	dev_dbg(xhci_to_hcd(xhci)->self.controller , fmt , ## args)
+ #define xhci_err(xhci, fmt, args...) \
+@@ -1957,6 +1974,8 @@ void xhci_update_erst_dequeue(struct xhci_hcd *xhci,
+ 			      struct xhci_interrupter *ir,
+ 			      bool clear_ehb);
+ void xhci_add_interrupter(struct xhci_hcd *xhci, unsigned int intr_num);
++int xhci_usb_endpoint_maxp(struct usb_device *udev,
++			   struct usb_host_endpoint *host_ep);
+ 
+ /* xHCI roothub code */
+ void xhci_set_link_state(struct xhci_hcd *xhci, struct xhci_port *port,
 -- 
 2.39.5
 
