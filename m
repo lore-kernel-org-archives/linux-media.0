@@ -1,43 +1,42 @@
 Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3EECF2BF006;
-	Sat,  9 Aug 2025 21:18:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 84BB627AC3A
+	for <linux-media@vger.kernel.org>; Sat,  9 Aug 2025 21:18:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.167.242.64
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754774285; cv=none; b=h9MiS+S7HBZsmgVVscZ3Hf2SHmYNFwU0XA9jjkAg2o412UebDhyIHTMqAmcMezu3Jg/KOidM9QzUx2tXohNIUtpPNTxhH+w9+vyEmmZTEwh+sz5wadXrFAV10jSFU77r0HfLeYTlT77HZwwXgWBLxt87w5frES2xCmb7TJv1b3M=
+	t=1754774286; cv=none; b=W6h+dNTKHqQdNcODlrnCJ1EcSLE0v7CSKLvD3pOQJPNVh3NEku0KnKpxd1PDEn7tZJm0f1ZujJUaGdzoqByXvpXcUeyox3W7My9mnEaX0tjXx36SzQ9redyMv4LV+rEam/8qbdovIRWkG0OGqg4Tt0NxBRqyXw04AMk/L8NLnmI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754774285; c=relaxed/simple;
-	bh=owrvFgZzH8iWicqMisNUA+KQmW6FD9ac8k63HmlGe/o=;
+	s=arc-20240116; t=1754774286; c=relaxed/simple;
+	bh=B1Cs5wX1iLlaiXnp1JWvrri6PENFge+j8X75CSJJ54A=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=euZaa6FLNTk2ZpQTQ4JG0wQniRzRd3noyzuZPXcdfiRydC1AjZUstbOuo0NB15yLyDo16yfZFPSsaYOKBJ+rTgvCao+7gQZgtZJpEbQO6NnMkfRph7i2PyhXcVkY30iNLlFh0nuP1b21xbxNNecerQo8gJrOZY+1L4d+7SgLaXA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ideasonboard.com; spf=pass smtp.mailfrom=ideasonboard.com; dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b=N2klx9A/; arc=none smtp.client-ip=213.167.242.64
+	 MIME-Version; b=LffcSSMG58xqcytuyH/s7DK/0VvIK6DHgvQNwBcjIKHGX8xsU6mKW0Epqxl26awCg0uaYk5/CJxquvy1g4lAZoBUiLX9uvBv0AYWzCwxgHOAbVgSF4XPs+8Gzw4P7U07cbUAwe7aS5EN6MGI/C9nbPUzFBz2thPHVMLiy/n46bM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ideasonboard.com; spf=pass smtp.mailfrom=ideasonboard.com; dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b=bdvGB6i8; arc=none smtp.client-ip=213.167.242.64
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ideasonboard.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ideasonboard.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="N2klx9A/"
+	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="bdvGB6i8"
 Received: from pendragon.ideasonboard.com (81-175-209-231.bb.dnainternet.fi [81.175.209.231])
-	by perceval.ideasonboard.com (Postfix) with UTF8SMTPSA id F19B04346;
-	Sat,  9 Aug 2025 23:16:59 +0200 (CEST)
+	by perceval.ideasonboard.com (Postfix) with UTF8SMTPSA id 1FD332311;
+	Sat,  9 Aug 2025 23:17:07 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-	s=mail; t=1754774220;
-	bh=owrvFgZzH8iWicqMisNUA+KQmW6FD9ac8k63HmlGe/o=;
+	s=mail; t=1754774227;
+	bh=B1Cs5wX1iLlaiXnp1JWvrri6PENFge+j8X75CSJJ54A=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=N2klx9A/kpjYPvqWpBkyVJWNRUVULeeWBFseBstKI+zNruVarKXB53JIfQj3Dfaal
-	 FLuyjwzTSvO5AvMRhrRE6zt4XM2uYlUgKsJwGbDL/0YelwW263xoLImIbEoE29LCVt
-	 zolRwzDd82n3A0EFf8dqU8f7PX1yaNiPBiL2j//Q=
+	b=bdvGB6i8BUNTDGVUiQ6hjaKyDp0pkJgsuLHJ4fjyHYOzcS0ert72q1hS9moRLue2y
+	 NtRUWpU/VNFJyWL9JlRkWwlsDY/1kwY+we7yUFjMtoE5CmwxV24DUEthgAdiA/HLA2
+	 tkhrk4DBhvDMeqRbYUK+kdsiKgB7HAASDMXRHNPk=
 From: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 To: linux-media@vger.kernel.org
 Cc: Hans Verkuil <hans@jjverkuil.nl>,
 	Jacopo Mondi <jacopo.mondi@ideasonboard.com>,
 	Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
-	Vikash Garodia <quic_vgarodia@quicinc.com>,
-	Dikshita Agarwal <quic_dikshita@quicinc.com>,
-	"Bryan O'Donoghue" <bryan.odonoghue@linaro.org>,
-	linux-arm-msm@vger.kernel.org
-Subject: [PATCH v2 25/76] media: qcom: venus: Pass file pointer to venus_close_common()
-Date: Sun, 10 Aug 2025 00:16:02 +0300
-Message-ID: <20250809211654.28887-26-laurent.pinchart@ideasonboard.com>
+	Sakari Ailus <sakari.ailus@linux.intel.com>,
+	Bingbu Cao <bingbu.cao@intel.com>,
+	Tianshu Qiu <tian.shu.qiu@intel.com>
+Subject: [PATCH v2 28/76] media: ipu6: isys: Don't set V4L2_FL_USES_V4L2_FH manually
+Date: Sun, 10 Aug 2025 00:16:05 +0300
+Message-ID: <20250809211654.28887-29-laurent.pinchart@ideasonboard.com>
 X-Mailer: git-send-email 2.49.1
 In-Reply-To: <20250809211654.28887-1-laurent.pinchart@ideasonboard.com>
 References: <20250809211654.28887-1-laurent.pinchart@ideasonboard.com>
@@ -51,68 +50,28 @@ Content-Transfer-Encoding: 8bit
 
 From: Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>
 
-In preparation for a tree-wide rework automated with coccinelle that
-will need to access a struct file pointer in the venus_close_common()
-function, pass it from the callers. There is not functional change yet.
+The V4L2_FL_USES_V4L2_FH flag is set by v4l2_fh_init(). It is not meant
+to be set manually by drivers. Drop it from the ipu6-isys driver.
 
 Signed-off-by: Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>
+Reviewed-by: Bingbu Cao <bingbu.cao@intel.com>
+Reviewed-by: Sakari Ailus <sakari.ailus@linux.intel.com>
 ---
- drivers/media/platform/qcom/venus/core.c | 2 +-
- drivers/media/platform/qcom/venus/core.h | 2 +-
- drivers/media/platform/qcom/venus/vdec.c | 2 +-
- drivers/media/platform/qcom/venus/venc.c | 2 +-
- 4 files changed, 4 insertions(+), 4 deletions(-)
+ drivers/media/pci/intel/ipu6/ipu6-isys-video.c | 1 -
+ 1 file changed, 1 deletion(-)
 
-diff --git a/drivers/media/platform/qcom/venus/core.c b/drivers/media/platform/qcom/venus/core.c
-index 4c049c694d9c..5e1ace16a490 100644
---- a/drivers/media/platform/qcom/venus/core.c
-+++ b/drivers/media/platform/qcom/venus/core.c
-@@ -596,7 +596,7 @@ static __maybe_unused int venus_runtime_suspend(struct device *dev)
- 	return ret;
- }
+diff --git a/drivers/media/pci/intel/ipu6/ipu6-isys-video.c b/drivers/media/pci/intel/ipu6/ipu6-isys-video.c
+index 24a2ef93474c..f3f3bc0615e5 100644
+--- a/drivers/media/pci/intel/ipu6/ipu6-isys-video.c
++++ b/drivers/media/pci/intel/ipu6/ipu6-isys-video.c
+@@ -1306,7 +1306,6 @@ int ipu6_isys_video_init(struct ipu6_isys_video *av)
+ 	__ipu6_isys_vidioc_try_fmt_meta_cap(av, &format_meta);
+ 	av->meta_fmt = format_meta.fmt.meta;
  
--void venus_close_common(struct venus_inst *inst)
-+void venus_close_common(struct venus_inst *inst, struct file *filp)
- {
- 	/*
- 	 * Make sure we don't have IRQ/IRQ-thread currently running
-diff --git a/drivers/media/platform/qcom/venus/core.h b/drivers/media/platform/qcom/venus/core.h
-index 3c0c5f9dbe7b..db7b69b91db5 100644
---- a/drivers/media/platform/qcom/venus/core.h
-+++ b/drivers/media/platform/qcom/venus/core.h
-@@ -573,5 +573,5 @@ is_fw_rev_or_older(struct venus_core *core, u32 vmajor, u32 vminor, u32 vrev)
- 		(core)->venus_ver.rev <= vrev);
- }
+-	set_bit(V4L2_FL_USES_V4L2_FH, &av->vdev.flags);
+ 	video_set_drvdata(&av->vdev, av);
  
--void venus_close_common(struct venus_inst *inst);
-+void venus_close_common(struct venus_inst *inst, struct file *filp);
- #endif
-diff --git a/drivers/media/platform/qcom/venus/vdec.c b/drivers/media/platform/qcom/venus/vdec.c
-index 29b0d6a5303d..d10ca6d89f6d 100644
---- a/drivers/media/platform/qcom/venus/vdec.c
-+++ b/drivers/media/platform/qcom/venus/vdec.c
-@@ -1755,7 +1755,7 @@ static int vdec_close(struct file *file)
- 
- 	vdec_pm_get(inst);
- 	cancel_work_sync(&inst->delayed_process_work);
--	venus_close_common(inst);
-+	venus_close_common(inst, file);
- 	ida_destroy(&inst->dpb_ids);
- 	vdec_pm_put(inst, false);
- 
-diff --git a/drivers/media/platform/qcom/venus/venc.c b/drivers/media/platform/qcom/venus/venc.c
-index c0a0ccdded80..0838d64ce8fe 100644
---- a/drivers/media/platform/qcom/venus/venc.c
-+++ b/drivers/media/platform/qcom/venus/venc.c
-@@ -1537,7 +1537,7 @@ static int venc_close(struct file *file)
- 	struct venus_inst *inst = to_inst(file);
- 
- 	venc_pm_get(inst);
--	venus_close_common(inst);
-+	venus_close_common(inst, file);
- 	inst->enc_state = VENUS_ENC_STATE_DEINIT;
- 	venc_pm_put(inst, false);
- 
+ 	ret = video_register_device(&av->vdev, VFL_TYPE_VIDEO, -1);
 -- 
 Regards,
 
