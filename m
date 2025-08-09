@@ -1,39 +1,41 @@
 Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A36F2254AE7
-	for <linux-media@vger.kernel.org>; Sat,  9 Aug 2025 21:17:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4EB342BE05A
+	for <linux-media@vger.kernel.org>; Sat,  9 Aug 2025 21:17:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.167.242.64
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754774271; cv=none; b=drMXv4qL4SM5B+GSA9qi5Yb9ia6A19+wbfExjzAllrb4LjAJfEV/IGYRR9nAHtQwHtkaSbP/BSSq3orh7MDlQJxDLd2MHE12UUsyimxPica3Uhx9T+SWPTlE42Q8tJIKg0nrwBrF0rckhE3y/K+Yj6CSE0ZLLKI4/tLKzroxbpM=
+	t=1754774272; cv=none; b=BXaj8os2aAmG9CVo0PKX7O798Hv5cNr5BOYvqMQ2/LsE5eRYZWAdApPy0tNypIXBqNX9rBjf0o/302Be/ETdOPXWXKw+2Mbfd9cetcKdzXpGsNhk1JPVVbFxMQ7nTjo6E2ikSGp/pRwGfEWPuQy8RIeqpTyCvR9ojqhl4ygMzLI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754774271; c=relaxed/simple;
-	bh=VhPYj6BnlKp9IWLLuS0d8Nj+tVLqLOK+sL1tYZuPSrs=;
+	s=arc-20240116; t=1754774272; c=relaxed/simple;
+	bh=52V6cQw4cIwuXK3NZiM2vGR+S1i0DfcVfqXUlYQGe8M=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=A370vodzzXhnKxFvH8CYtEATE/HbjK+AVsPlOyKgjFXFuZBw57uK3iji9+PM5WU8aNyVVqmIQeEsY4ijM7CpLRizaihScA4N1OEkCH7N/DSpCvULwf+qYM3Q1VVSMg6+aldq2FiyTViL4gLi6S5Nd2QbSaz/Qc9JHaCsZtgF+/Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ideasonboard.com; spf=pass smtp.mailfrom=ideasonboard.com; dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b=vZRHcdYY; arc=none smtp.client-ip=213.167.242.64
+	 MIME-Version; b=nytXSDyu7KtUVUaRLWwsTDVqf/MtTsUvNIozm8EfGviiZsT1PL0lDIFbOmT6RnLyLuL383hA2R0TdIyMUA1fSnBH1QctTztjWzx/dToT129vrfG+MGXd4IT+qxeRNXwJIw8RS5L7/yPXRhsIITFkYhkf/dBjvIeh4QC/4lLp7FA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ideasonboard.com; spf=pass smtp.mailfrom=ideasonboard.com; dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b=c9XU7DY/; arc=none smtp.client-ip=213.167.242.64
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ideasonboard.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ideasonboard.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="vZRHcdYY"
+	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="c9XU7DY/"
 Received: from pendragon.ideasonboard.com (81-175-209-231.bb.dnainternet.fi [81.175.209.231])
-	by perceval.ideasonboard.com (Postfix) with UTF8SMTPSA id 39A5C15B5;
-	Sat,  9 Aug 2025 23:16:45 +0200 (CEST)
+	by perceval.ideasonboard.com (Postfix) with UTF8SMTPSA id D705789A;
+	Sat,  9 Aug 2025 23:16:41 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-	s=mail; t=1754774205;
-	bh=VhPYj6BnlKp9IWLLuS0d8Nj+tVLqLOK+sL1tYZuPSrs=;
+	s=mail; t=1754774202;
+	bh=52V6cQw4cIwuXK3NZiM2vGR+S1i0DfcVfqXUlYQGe8M=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=vZRHcdYY+q7MYeURCPW8EypIpy6OKCqwqfF/MBjGs6SEFUZ6i/l6nVGPDg6COaDpf
-	 JGMNdZmpxmE9axTL6cv/pz1sdePbkIfYuAVCVQBpyUVvF8taSpsHChjRmASZklUtl/
-	 ocuNsnhDxGinqtGbgE9I3LmpCZH1Nl2wRAF/egUw=
+	b=c9XU7DY/Uz2rkYQx9H/O59z24Z/rLn7qISzD92Z6J/GVnsOtkhClvRZ60O5I+MMre
+	 YML2vmHAJ6ksIzmJ0AwHA3jZI3o+dLJ2zNFsRXchkE2P0UE/ryCGF8VwZCnGNgzkWY
+	 TVO+hj8HIVeSwAn9WKM5M/CHiUvtyB0eIGGu+6RM=
 From: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 To: linux-media@vger.kernel.org
 Cc: Hans Verkuil <hans@jjverkuil.nl>,
 	Jacopo Mondi <jacopo.mondi@ideasonboard.com>,
-	Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>
-Subject: [PATCH v2 16/76] media: v4l2-fh: Move piece of documentation to correct function
-Date: Sun, 10 Aug 2025 00:15:53 +0300
-Message-ID: <20250809211654.28887-17-laurent.pinchart@ideasonboard.com>
+	Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
+	Ming Qian <ming.qian@nxp.com>,
+	Zhou Peng <eagle.zhou@nxp.com>
+Subject: [PATCH v2 14/76] media: amphion: Delete v4l2_fh synchronously in .release()
+Date: Sun, 10 Aug 2025 00:15:51 +0300
+Message-ID: <20250809211654.28887-15-laurent.pinchart@ideasonboard.com>
 X-Mailer: git-send-email 2.49.1
 In-Reply-To: <20250809211654.28887-1-laurent.pinchart@ideasonboard.com>
 References: <20250809211654.28887-1-laurent.pinchart@ideasonboard.com>
@@ -47,39 +49,83 @@ Content-Transfer-Encoding: 8bit
 
 From: Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>
 
-The paragraph in the v4l2_fh_del() documentation that indicates the
-function sets filp->private_data was added in the wrong place. It is
-meant for v4l2_fh_open(). Move it to where it belongs.
+The v4l2_fh initialized and added in vpu_v4l2_open() is delete and
+cleaned up when the last reference to the vpu_inst is released. This may
+happen later than at vpu_v4l2_close() time.
+
+Not deleting and cleaning up the v4l2_fh when closing the file handle to
+the video device is not ideal, as the v4l2_fh will still be present in
+the video device's fh_list, and will store a copy of events queued to
+the video device. There may also be other side effects of keeping alive
+an object that represents an open file handle after the file handle is
+closed.
+
+The v4l2_fh instance is embedded in the vpu_inst structure, and is
+accessed in two different ways:
+
+- in vpu_notify_eos() and vpu_notify_source_change(), to queue V4L2
+  events to the file handle ; and
+
+- through the driver to access the v4l2_fh.m2m_ctx pointer.
+
+The v4l2_fh.m2m_ctx pointer is not touched by v4l2_fh_del() and
+v4l2_fh_exit(). It is set to NULL by the driver when closing the file
+handle, in vpu_v4l2_close().
+
+The vpu_notify_eos() and vpu_notify_source_change() functions are called
+in vpu_set_last_buffer_dequeued() and vdec_handle_resolution_change()
+respectively, only if the v4l2_fh.m2m_ctx pointer is not NULL. There is
+therefore a guarantee that no new event will be queued to the v4l2_fh
+after vpu_v4l2_close() destroys the m2m_ctx.
+
+The vpu_notify_eos() function is also called from vpu_vb2_buf_finish(),
+which is guaranteed to be called for all queued buffers when
+vpu_v4l2_close() calls v4l2_m2m_ctx_release(), and will not be called
+later.
+
+It is therefore safe to assume that the driver will not touch the
+v4l2_fh, except to check the m2m_ctx pointer, after vpu_v4l2_close()
+destroys the m2m_ctx. We can safely delete and cleanup the v4l2_fh
+synchronously in vpu_v4l2_close().
 
 Signed-off-by: Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>
+Reviewed-by: Ming Qian <ming.qian@oss.nxp.com>
 ---
- include/media/v4l2-fh.h | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ drivers/media/platform/amphion/vpu_v4l2.c | 7 +++++--
+ 1 file changed, 5 insertions(+), 2 deletions(-)
 
-diff --git a/include/media/v4l2-fh.h b/include/media/v4l2-fh.h
-index 823fa8ebeb8f..14e7136e693f 100644
---- a/include/media/v4l2-fh.h
-+++ b/include/media/v4l2-fh.h
-@@ -101,6 +101,9 @@ void v4l2_fh_add(struct v4l2_fh *fh);
-  *
-  * It allocates a v4l2_fh and inits and adds it to the &struct video_device
-  * associated with the file pointer.
-+ *
-+ * On error filp->private_data will be %NULL, otherwise it will point to
-+ * the &struct v4l2_fh.
-  */
- int v4l2_fh_open(struct file *filp);
+diff --git a/drivers/media/platform/amphion/vpu_v4l2.c b/drivers/media/platform/amphion/vpu_v4l2.c
+index 306d94e0f8e7..57ca6262bb04 100644
+--- a/drivers/media/platform/amphion/vpu_v4l2.c
++++ b/drivers/media/platform/amphion/vpu_v4l2.c
+@@ -724,8 +724,6 @@ static int vpu_v4l2_release(struct vpu_inst *inst)
  
-@@ -109,9 +112,6 @@ int v4l2_fh_open(struct file *filp);
-  *
-  * @fh: pointer to &struct v4l2_fh
-  *
-- * On error filp->private_data will be %NULL, otherwise it will point to
-- * the &struct v4l2_fh.
-- *
-  * .. note::
-  *    Must be called in v4l2_file_operations->release\(\) handler if the driver
-  *    uses &struct v4l2_fh.
+ 	v4l2_ctrl_handler_free(&inst->ctrl_handler);
+ 	mutex_destroy(&inst->lock);
+-	v4l2_fh_del(&inst->fh);
+-	v4l2_fh_exit(&inst->fh);
+ 
+ 	call_void_vop(inst, cleanup);
+ 
+@@ -794,6 +792,8 @@ int vpu_v4l2_open(struct file *file, struct vpu_inst *inst)
+ 
+ 	return 0;
+ error:
++	v4l2_fh_del(&inst->fh);
++	v4l2_fh_exit(&inst->fh);
+ 	vpu_inst_put(inst);
+ 	return ret;
+ }
+@@ -813,6 +813,9 @@ int vpu_v4l2_close(struct file *file)
+ 	call_void_vop(inst, release);
+ 	vpu_inst_unlock(inst);
+ 
++	v4l2_fh_del(&inst->fh);
++	v4l2_fh_exit(&inst->fh);
++
+ 	vpu_inst_unregister(inst);
+ 	vpu_inst_put(inst);
+ 
 -- 
 Regards,
 
