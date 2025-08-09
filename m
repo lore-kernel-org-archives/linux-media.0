@@ -1,44 +1,41 @@
 Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 058AF2C08BD
-	for <linux-media@vger.kernel.org>; Sat,  9 Aug 2025 21:18:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3995327B4FA
+	for <linux-media@vger.kernel.org>; Sat,  9 Aug 2025 21:18:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.167.242.64
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754774291; cv=none; b=ZinPCdfO3eSbVn0Fz4Mj9wb65A7xN4MCOe49XDbFz2ePOdyuBBiN/Ql3HwBc/yJWoMENQm5bFX/bA8UAS6Ro3ogmUZxJciqaNnAouRC2c2j75DHNJdbj8muh63//Yeal5agEsb2D0v5+NhJwP0EG+ooeUG5KERfCUIz3t/2yVGQ=
+	t=1754774292; cv=none; b=tlwuNlJEheL2zQud/qmOquclsFx4Qcr3HdF0C54zReDr9cvQw+/sests5auMzb046dXw0eb3WtrOHRkRLTj/Joz9gyNTZ0frPowVRUt4kfBKcW6s5uZdq+TJoh2Y8iVxkcO9XdCkeYpOOyF+XWWPuZ13zyQvvFgxm7WSgQ5xiqI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754774291; c=relaxed/simple;
-	bh=30ODzOYSsdYhxtZT3eMpE2XHGFkcYe2Eo0P7wNfTlzA=;
+	s=arc-20240116; t=1754774292; c=relaxed/simple;
+	bh=b/s6aKT9/8bORLj9dutuxHP5fXWPBse8crgXh2bS11w=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=bpQMmAdhtJaGrqhm8EZn7fyT8J8n3/3TcRd++tdyPi82qVGIz7PvL+rQuGMcpQ4cHAVlVJeynVNAdJwqdTObNxAquU891Ox34xwPW7ZRPdx7O7eYot9iWvVbp/CxYJZRai7pWlSEt4416dmVjpha/RJfalQ+O4gLgveEeHxAwi4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ideasonboard.com; spf=pass smtp.mailfrom=ideasonboard.com; dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b=b4NAT/Og; arc=none smtp.client-ip=213.167.242.64
+	 MIME-Version; b=VSSoUXovMa8R96PuYvf72lXwuQO9ZxP3zyGW4BNiBaFmGq63nwyRxzr0cFXGqdFCH7yh7Bob0HQHTNrkpq90xbpPxoVhkCC8DEWn1uwEbXY7xtkzSRVGSTbMvZIt3FYOreVTfuKXaEdTtKqCNJp8b58jJe6BOSfFfCGxAwiStzM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ideasonboard.com; spf=pass smtp.mailfrom=ideasonboard.com; dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b=ka+wZ7Ar; arc=none smtp.client-ip=213.167.242.64
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ideasonboard.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ideasonboard.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="b4NAT/Og"
+	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="ka+wZ7Ar"
 Received: from pendragon.ideasonboard.com (81-175-209-231.bb.dnainternet.fi [81.175.209.231])
-	by perceval.ideasonboard.com (Postfix) with UTF8SMTPSA id 11C9D337C;
-	Sat,  9 Aug 2025 23:17:12 +0200 (CEST)
+	by perceval.ideasonboard.com (Postfix) with UTF8SMTPSA id 708DD3B8B;
+	Sat,  9 Aug 2025 23:17:15 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-	s=mail; t=1754774232;
-	bh=30ODzOYSsdYhxtZT3eMpE2XHGFkcYe2Eo0P7wNfTlzA=;
+	s=mail; t=1754774235;
+	bh=b/s6aKT9/8bORLj9dutuxHP5fXWPBse8crgXh2bS11w=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=b4NAT/Og3JHA4HedY/Vk7EEzcdsxmYcdlwqTrfh6rovGJElOysA2BKObTtkOIq2TB
-	 eqKm03xzAwqq0B8xmuCq+EbMev6ps994IiXcLPArF/EpzcMJBulJxEaBTpRW/A3Vdg
-	 Hiw4ZseJfN2N+qSD69M0S2KNyLQ8dBqWyixaYHNs=
+	b=ka+wZ7Arl4/ZIgvjzg8EfslUibjhpoesS0juDcmp4rTU6vqCL5F8VacQGpuW7QACI
+	 cwI3/qeFtHdTgE6jLwJzSsb1jHuEfr6QWK7JHde9fX4CtbT3N+Fz/QosWfr5ZdEqCz
+	 ztjbCL+EoDknKjJH30B+coe2MHEFXlk08r4BnRlI=
 From: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 To: linux-media@vger.kernel.org
 Cc: Hans Verkuil <hans@jjverkuil.nl>,
 	Jacopo Mondi <jacopo.mondi@ideasonboard.com>,
-	Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
+	Corentin Labbe <clabbe@baylibre.com>,
 	Hans Verkuil <hverkuil@kernel.org>,
-	Ricardo Ribalda <ribalda@chromium.org>,
-	Al Viro <viro@zeniv.linux.org.uk>,
-	Erling Ljunggren <hljunggr@cisco.com>,
-	Ma Ke <make24@iscas.ac.cn>
-Subject: [PATCH v2 31/76] media: v4l2-dev: Make open and release file operations mandatory
-Date: Sun, 10 Aug 2025 00:16:08 +0300
-Message-ID: <20250809211654.28887-32-laurent.pinchart@ideasonboard.com>
+	mjpeg-users@lists.sourceforge.net
+Subject: [PATCH v2 33/76] media: zoran: Remove zoran_fh structure
+Date: Sun, 10 Aug 2025 00:16:10 +0300
+Message-ID: <20250809211654.28887-34-laurent.pinchart@ideasonboard.com>
 X-Mailer: git-send-email 2.49.1
 In-Reply-To: <20250809211654.28887-1-laurent.pinchart@ideasonboard.com>
 References: <20250809211654.28887-1-laurent.pinchart@ideasonboard.com>
@@ -50,89 +47,57 @@ List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-From: Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>
+From: Jacopo Mondi <jacopo.mondi@ideasonboard.com>
 
-All V4L2 drivers implement the open and release file operations. As all
-new drivers will need to use v4l2_fh, this situation won't change. Make
-those two file operation mandatory at registration time. This allows
-simplifying v4l2_open() and v4l2_release().
+The zoran_fh structure is a wrapper around v4l2_fh. Its usage has been
+mostly removed by commit 83f89a8bcbc3 ("media: zoran: convert to vb2"),
+but the structure stayed by mistake. It is now used in a single
+location, assigned from a void pointer and then recast to a void
+pointer, without being every accessed. Drop it.
 
+Fixes: 83f89a8bcbc3 ("media: zoran: convert to vb2")
+Signed-off-by: Jacopo Mondi <jacopo.mondi@ideasonboard.com>
 Signed-off-by: Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>
 ---
- drivers/media/v4l2-core/v4l2-dev.c | 32 +++++++++++++++---------------
- 1 file changed, 16 insertions(+), 16 deletions(-)
+ drivers/media/pci/zoran/zoran.h        | 6 ------
+ drivers/media/pci/zoran/zoran_driver.c | 3 +--
+ 2 files changed, 1 insertion(+), 8 deletions(-)
 
-diff --git a/drivers/media/v4l2-core/v4l2-dev.c b/drivers/media/v4l2-core/v4l2-dev.c
-index c369235113d9..1a4184b94838 100644
---- a/drivers/media/v4l2-core/v4l2-dev.c
-+++ b/drivers/media/v4l2-core/v4l2-dev.c
-@@ -411,7 +411,7 @@ static int v4l2_mmap(struct file *filp, struct vm_area_struct *vm)
- static int v4l2_open(struct inode *inode, struct file *filp)
+diff --git a/drivers/media/pci/zoran/zoran.h b/drivers/media/pci/zoran/zoran.h
+index 1cd990468d3d..d05e222b3921 100644
+--- a/drivers/media/pci/zoran/zoran.h
++++ b/drivers/media/pci/zoran/zoran.h
+@@ -154,12 +154,6 @@ struct zoran_jpg_settings {
+ 
+ struct zoran;
+ 
+-/* zoran_fh contains per-open() settings */
+-struct zoran_fh {
+-	struct v4l2_fh fh;
+-	struct zoran *zr;
+-};
+-
+ struct card_info {
+ 	enum card_type type;
+ 	char name[32];
+diff --git a/drivers/media/pci/zoran/zoran_driver.c b/drivers/media/pci/zoran/zoran_driver.c
+index f42f596d3e62..ec7fc1da4cc0 100644
+--- a/drivers/media/pci/zoran/zoran_driver.c
++++ b/drivers/media/pci/zoran/zoran_driver.c
+@@ -511,12 +511,11 @@ static int zoran_s_fmt_vid_cap(struct file *file, void *__fh,
+ 			       struct v4l2_format *fmt)
  {
- 	struct video_device *vdev;
--	int ret = 0;
-+	int ret;
+ 	struct zoran *zr = video_drvdata(file);
+-	struct zoran_fh *fh = __fh;
+ 	int i;
+ 	int res = 0;
  
- 	/* Check if the video device is available */
- 	mutex_lock(&videodev_lock);
-@@ -424,12 +424,11 @@ static int v4l2_open(struct inode *inode, struct file *filp)
- 	/* and increase the device refcount */
- 	video_get(vdev);
- 	mutex_unlock(&videodev_lock);
--	if (vdev->fops->open) {
--		if (video_is_registered(vdev))
--			ret = vdev->fops->open(filp);
--		else
--			ret = -ENODEV;
--	}
-+
-+	if (video_is_registered(vdev))
-+		ret = vdev->fops->open(filp);
-+	else
-+		ret = -ENODEV;
+ 	if (fmt->fmt.pix.pixelformat == V4L2_PIX_FMT_MJPEG)
+-		return zoran_s_fmt_vid_out(file, fh, fmt);
++		return zoran_s_fmt_vid_out(file, __fh, fmt);
  
- 	if (vdev->dev_debug & V4L2_DEV_DEBUG_FOP)
- 		dprintk("%s: open (%d)\n",
-@@ -444,7 +443,7 @@ static int v4l2_open(struct inode *inode, struct file *filp)
- static int v4l2_release(struct inode *inode, struct file *filp)
- {
- 	struct video_device *vdev = video_devdata(filp);
--	int ret = 0;
-+	int ret;
- 
- 	/*
- 	 * We need to serialize the release() with queueing new requests.
-@@ -452,14 +451,12 @@ static int v4l2_release(struct inode *inode, struct file *filp)
- 	 * operation, and that should not be mixed with queueing a new
- 	 * request at the same time.
- 	 */
--	if (vdev->fops->release) {
--		if (v4l2_device_supports_requests(vdev->v4l2_dev)) {
--			mutex_lock(&vdev->v4l2_dev->mdev->req_queue_mutex);
--			ret = vdev->fops->release(filp);
--			mutex_unlock(&vdev->v4l2_dev->mdev->req_queue_mutex);
--		} else {
--			ret = vdev->fops->release(filp);
--		}
-+	if (v4l2_device_supports_requests(vdev->v4l2_dev)) {
-+		mutex_lock(&vdev->v4l2_dev->mdev->req_queue_mutex);
-+		ret = vdev->fops->release(filp);
-+		mutex_unlock(&vdev->v4l2_dev->mdev->req_queue_mutex);
-+	} else {
-+		ret = vdev->fops->release(filp);
- 	}
- 
- 	if (vdev->dev_debug & V4L2_DEV_DEBUG_FOP)
-@@ -922,6 +919,9 @@ int __video_register_device(struct video_device *vdev,
- 	/* the device_caps field MUST be set for all but subdevs */
- 	if (WARN_ON(type != VFL_TYPE_SUBDEV && !vdev->device_caps))
- 		return -EINVAL;
-+	/* the open and release file operations are mandatory */
-+	if (WARN_ON(!vdev->fops || !vdev->fops->open || !vdev->fops->release))
-+		return -EINVAL;
- 
- 	/* v4l2_fh support */
- 	spin_lock_init(&vdev->fh_lock);
+ 	for (i = 0; i < NUM_FORMATS; i++)
+ 		if (fmt->fmt.pix.pixelformat == zoran_formats[i].fourcc)
 -- 
 Regards,
 
