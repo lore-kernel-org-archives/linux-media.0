@@ -1,31 +1,31 @@
 Received: from smtp.forwardemail.net (smtp.forwardemail.net [121.127.44.73])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D427A28643F
-	for <linux-media@vger.kernel.org>; Sun, 10 Aug 2025 21:26:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 821D528643F
+	for <linux-media@vger.kernel.org>; Sun, 10 Aug 2025 21:26:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=121.127.44.73
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754861167; cv=none; b=JYSPH2eS7vky6L2Om2IIXTp7OaRjOrxhLp2eH++jFEuWiGh2tyuukBq7kXmkICXcJm7qfNOna+0dugJdTCdv8LuWWWtTDO6Pq/qa1IC1DvAGR5wvvgadu67BZtMo3IIaIhD/wMTy9qXbDib1E03whoGrxWDBZkpq9vR8czc4/f4=
+	t=1754861172; cv=none; b=AOOxuZT4XPDzTluEbr+UklkUP2kOq3vwLxm/ALVp8g5sE8tLMCf3DynhaNt3FqLiBnK5/wjAqLF3aJkX5Z0Dl5LcJlPh6W4KFeQ7DWszJAsicO23yzZL6SG+BzPL9LH2AbrA5KEQwAFUEeQjLPv2f+Icl6KP0XrBTnmMqAINz2Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754861167; c=relaxed/simple;
-	bh=x8mU9Y4HhV1FCoU2AUaPuUKXO5gWbXUK1l99Ba7jfvg=;
+	s=arc-20240116; t=1754861172; c=relaxed/simple;
+	bh=B97o6FrHK1xslxVHw0WLUvmxL7U8P6Hy89OqnlVzKTY=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=l/hzTLab4fmdGb5bGSPq4ucViGDEFZVGeYhjwhAAC2knfbK1fg0EqeXONV8o8hLLZt37IQhu+YF90eWFdvXBkq6OoFhX5CHPi6oMbjoeVTIbMKWaMsETLMpB/ajZX5sS+yj9KOENTc+CgjUYJbe9yv1va7aT87V49OUMOY1VQgg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=kwiboo.se; spf=pass smtp.mailfrom=fe-bounces.kwiboo.se; dkim=pass (2048-bit key) header.d=kwiboo.se header.i=@kwiboo.se header.b=QkcH4F2B; arc=none smtp.client-ip=121.127.44.73
+	 MIME-Version; b=HdI5G2p6dTHqEVpVPHHED/AmoDEoUPZMoweAJjujOmQhtxFEZnJ5AGvfHvzBZ5OZm1xpA4L/Ifh6MZaz+U4m+QxZMSJJrYzE94sMePi66EgEgaszacbJ7FRsl+0QLgujGEBpZO58taylJz6jt0WBW1HfUNBiDZ2s/259IDqK60Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=kwiboo.se; spf=pass smtp.mailfrom=fe-bounces.kwiboo.se; dkim=pass (2048-bit key) header.d=kwiboo.se header.i=@kwiboo.se header.b=Ezj8ighd; arc=none smtp.client-ip=121.127.44.73
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=kwiboo.se
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=fe-bounces.kwiboo.se
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kwiboo.se header.i=@kwiboo.se header.b="QkcH4F2B"
+	dkim=pass (2048-bit key) header.d=kwiboo.se header.i=@kwiboo.se header.b="Ezj8ighd"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kwiboo.se;
  h=Content-Transfer-Encoding: MIME-Version: References: In-Reply-To:
  Message-ID: Date: Subject: Cc: To: From; q=dns/txt; s=fe-e1b5cab7be;
- t=1754861159; bh=omailk5J82FETW0CF3chBXgq8BxD9mp50Z7b28u4AKs=;
- b=QkcH4F2BnxC8mqKIhjuebuu5OgrnliFhLQNdYLpl/Z7IXfw/ELlgGwHhTR6vKmEbVa9f1Gc8+
- Z0ukGvoLgjc7upluwiAkrrRlyKkT3KqY4kmvkqvxtprRL4GI0VBqU3FRJ0ku9Rr+4VEq9c0AJ7D
- sqxBuvPCvAbcS9150HVhztmxJZI8xW+Nsco8YYL3zIAMo51g63SK+ZO6FviRDMPCV9WkiWTexFc
- k+cg/UJYaon5IUZYxlAM/lfuUvN2TrYSFr0CUn6xFYA6EtxhVSu85Pgf7sac1oGOnMqFvzBUUmh
- q6dveoqGiN+cKWlK3BYSszKTd0BmCsGl6Ywd40fTSySQ==
-X-Forward-Email-ID: 68990e66797ab8962779243f
+ t=1754861169; bh=dhuwCZmH8EoRCECnmC3TQDpoh6EUZFY4ECh5j02bOWc=;
+ b=Ezj8ighdzThd/bRf44KMZHRHnMe75UDHpoiQovV2x6RrZluHjyfaTnGM6iSuKAYgzf8FmZmlv
+ dhm4YIYAP56b0v+RNKcpD1rj/hsK9vQj7JVcuyTDkbeSEEtam86DSJazn89Dm/I4S9x0ce4JwBW
+ gxgi8AeUD+x/6tBgGC/+cr8h+VoalZHgCAIxPFemHpQcpzQbjrIAZ1ks+7IpbT8cPhZbmW/VAGf
+ JJL1BcdcsuJ/xW/GbMaApvC6A7t+R+i7oEVRHf9D+DSqmT+2s1qi7twa2YOjFOEkBOYsjs9JqJm
+ YoUoQLg4HkzP86clgJh3EdZ2alq0vTWmQvi6kS5qgksA==
+X-Forward-Email-ID: 68990e70797ab89627792477
 X-Forward-Email-Sender: rfc822; jonas@kwiboo.se, smtp.forwardemail.net,
  121.127.44.73
 X-Forward-Email-Version: 1.2.4
@@ -37,6 +37,9 @@ From: Jonas Karlman <jonas@kwiboo.se>
 To: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
 	Detlev Casanova <detlev.casanova@collabora.com>,
 	Mauro Carvalho Chehab <mchehab@kernel.org>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
 	Heiko Stuebner <heiko@sntech.de>
 Cc: Alex Bee <knaerzche@gmail.com>,
 	Nicolas Dufresne <nicolas.dufresne@collabora.com>,
@@ -46,10 +49,11 @@ Cc: Alex Bee <knaerzche@gmail.com>,
 	devicetree@vger.kernel.org,
 	linux-arm-kernel@lists.infradead.org,
 	linux-kernel@vger.kernel.org,
-	Jonas Karlman <jonas@kwiboo.se>
-Subject: [PATCH v2 4/7] media: rkvdec: Add RK3288 variant
-Date: Sun, 10 Aug 2025 21:24:34 +0000
-Message-ID: <20250810212454.3237486-5-jonas@kwiboo.se>
+	Jonas Karlman <jonas@kwiboo.se>,
+	Conor Dooley <conor.dooley@microchip.com>
+Subject: [PATCH v2 6/7] media: dt-bindings: rockchip,vdec: Add RK3288 compatible
+Date: Sun, 10 Aug 2025 21:24:36 +0000
+Message-ID: <20250810212454.3237486-7-jonas@kwiboo.se>
 X-Mailer: git-send-email 2.50.1
 In-Reply-To: <20250810212454.3237486-1-jonas@kwiboo.se>
 References: <20250810212454.3237486-1-jonas@kwiboo.se>
@@ -61,46 +65,30 @@ List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-From: Alex Bee <knaerzche@gmail.com>
-
-Add a RK3288 variant, a version of the Rockchip VDEC IP that only
+Add a RK3288 compatible for a version of the Rockchip VDEC IP that only
 support HEVC decoding.
 
-Signed-off-by: Alex Bee <knaerzche@gmail.com>
 Signed-off-by: Jonas Karlman <jonas@kwiboo.se>
+Acked-by: Conor Dooley <conor.dooley@microchip.com>
 ---
 Changes in v2:
-- No change
+- Collect a-b tag
 ---
- drivers/media/platform/rockchip/rkvdec/rkvdec.c | 8 ++++++++
- 1 file changed, 8 insertions(+)
+ Documentation/devicetree/bindings/media/rockchip,vdec.yaml | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/media/platform/rockchip/rkvdec/rkvdec.c b/drivers/media/platform/rockchip/rkvdec/rkvdec.c
-index 56807122720e..c20e046205fe 100644
---- a/drivers/media/platform/rockchip/rkvdec/rkvdec.c
-+++ b/drivers/media/platform/rockchip/rkvdec/rkvdec.c
-@@ -1222,6 +1222,10 @@ static void rkvdec_watchdog_func(struct work_struct *work)
- 	}
- }
- 
-+static const struct rkvdec_variant rk3288_rkvdec_variant = {
-+	.capabilities = RKVDEC_CAPABILITY_HEVC,
-+};
-+
- static const struct rkvdec_variant rk3399_rkvdec_variant = {
- 	.capabilities = RKVDEC_CAPABILITY_HEVC |
- 			RKVDEC_CAPABILITY_H264 |
-@@ -1229,6 +1233,10 @@ static const struct rkvdec_variant rk3399_rkvdec_variant = {
- };
- 
- static const struct of_device_id of_rkvdec_match[] = {
-+	{
-+		.compatible = "rockchip,rk3288-vdec",
-+		.data = &rk3288_rkvdec_variant,
-+	},
- 	{
- 		.compatible = "rockchip,rk3399-vdec",
- 		.data = &rk3399_rkvdec_variant,
+diff --git a/Documentation/devicetree/bindings/media/rockchip,vdec.yaml b/Documentation/devicetree/bindings/media/rockchip,vdec.yaml
+index 96b6c8938768..809fda45b3bd 100644
+--- a/Documentation/devicetree/bindings/media/rockchip,vdec.yaml
++++ b/Documentation/devicetree/bindings/media/rockchip,vdec.yaml
+@@ -16,6 +16,7 @@ description: |-
+ properties:
+   compatible:
+     oneOf:
++      - const: rockchip,rk3288-vdec
+       - const: rockchip,rk3399-vdec
+       - const: rockchip,rk3576-vdec
+       - const: rockchip,rk3588-vdec
 -- 
 2.50.1
 
