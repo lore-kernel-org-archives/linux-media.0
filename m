@@ -1,46 +1,43 @@
 Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6A2051F4161
-	for <linux-media@vger.kernel.org>; Sun, 10 Aug 2025 01:32:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7BA1D158520;
+	Sun, 10 Aug 2025 01:32:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.167.242.64
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754789555; cv=none; b=TEj0HUntiuFw5CzfAP9HiNdrhLAcj/NwXUyIdBVrgSAJCcJrkEau6uaWvdLszvYPaJ8zFEcV59wb+3e0M0e2Asdv++X0dChZtO9kAlfWqwyXjW4pyQNzUB1frpQbj1jPeRD7mQclOYRlVRTIdsHKPlti+I0hAiY/0FupPa/HDRI=
+	t=1754789559; cv=none; b=BxFaSWWhS2HqsqVQ96jp94WTxzlCMqd/jlKRmEm8CPkMUD32Ajmku0jby/xgiKN9dOBITZNtapjI1dhALxtYgTiI85V+RhmGGwJubQY6HrQtWwBNEexqIfdmuJ3NASI1ZnrrKV2EBrw8uX+3xCgtDrXC0mikWl3FvuE2a5sNqTc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754789555; c=relaxed/simple;
-	bh=OalqXRX2BlFGyxMJdGnLlToeFLxIFE59sf/mpzpkEFk=;
+	s=arc-20240116; t=1754789559; c=relaxed/simple;
+	bh=1vT99Hy1o9+SjMX3wyA9kizBHdqfzTNdaopZLy4caKs=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=ZEMfSojY+8MAsJBtZAhrHVU0oTP3739IdxDb76GI4dQWyw7Gn4IvfDHB3Mwg+Gugwh5iAU1gS6Z3cGazOGIm+JAimpE6IbnwHjLnKNBtwTqFbB0J+VHa7nXwOzx6RY2xz18cbtwntbCcl3x3XVdkcAsZ1cmBcfM7smau1DDX9aY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ideasonboard.com; spf=pass smtp.mailfrom=ideasonboard.com; dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b=Ft+WpgzJ; arc=none smtp.client-ip=213.167.242.64
+	 MIME-Version; b=m3f7cS1mHgqUqCpxX3qAQ/4L5iaovZ1+OAfgU2Pxf/ML9Cg7MGfh8yq1LOMXQKxbKuVcc9qRLSuFWuNW86x4MFYmrFOx2g4g+DTtnnZWT/dIQ6t7mu3WHKrIEXs/wDYvsHb6Att6FacIf/tV7t0f9FOChf0tMzilvXeqASZdFmU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ideasonboard.com; spf=pass smtp.mailfrom=ideasonboard.com; dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b=UfWZA/Wq; arc=none smtp.client-ip=213.167.242.64
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ideasonboard.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ideasonboard.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="Ft+WpgzJ"
+	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="UfWZA/Wq"
 Received: from pendragon.ideasonboard.com (81-175-209-231.bb.dnainternet.fi [81.175.209.231])
-	by perceval.ideasonboard.com (Postfix) with UTF8SMTPSA id F272E104D;
-	Sun, 10 Aug 2025 03:31:41 +0200 (CEST)
+	by perceval.ideasonboard.com (Postfix) with UTF8SMTPSA id 532D119C6;
+	Sun, 10 Aug 2025 03:31:45 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-	s=mail; t=1754789502;
-	bh=OalqXRX2BlFGyxMJdGnLlToeFLxIFE59sf/mpzpkEFk=;
+	s=mail; t=1754789505;
+	bh=1vT99Hy1o9+SjMX3wyA9kizBHdqfzTNdaopZLy4caKs=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=Ft+WpgzJ5TKvLfgzbdV8vv2daDiEGd/rGYkAfT0DpXtoDYpnnqqmU5H6bsTznNCMS
-	 JzAQo8ts6cQ1vpLWGx/QKQKsvDJ2Ye+tyGrPWCxk6xBDICkm/RXjMOO0joFSRIorYz
-	 1RInpb1NKhl147NS8mNQRxGs5ZFu4UVZa2Fsa+/c=
+	b=UfWZA/Wq+qaWBe5NsfSnXx8l8vIMkBvTn8wjvjE1BoyxQVzQJ5l8kjBA4XOfXzU3r
+	 ktDS9vNQ+nFGCksGjCYrjqnqWmVW8OBq2CVlulTxSSq+oLmZk9RuhP6oVtLKKl4T3C
+	 KSOckPth8+numwuY5oY20W/NRjGNVCXLyjx6uhYA=
 From: Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>
 To: linux-media@vger.kernel.org
 Cc: Jacopo Mondi <jacopo.mondi@ideasonboard.com>,
 	Hans Verkuil <hans@jjverkuil.nl>,
 	Mauro Carvalho Chehab <mchehab@kernel.org>,
-	Matthias Brugger <matthias.bgg@gmail.com>,
-	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
-	Hans Verkuil <hverkuil@kernel.org>,
-	Neil Armstrong <neil.armstrong@linaro.org>,
-	Andrzej Pietrasiewicz <andrzejtp2010@gmail.com>,
-	linux-arm-kernel@lists.infradead.org,
-	linux-mediatek@lists.infradead.org
-Subject: [PATCH v3 43/76] media: mtk: mdp3: Access v4l2_fh from file
-Date: Sun, 10 Aug 2025 04:30:25 +0300
-Message-ID: <20250810013100.29776-44-laurent.pinchart+renesas@ideasonboard.com>
+	Dmitry Osipenko <digetx@gmail.com>,
+	Thierry Reding <thierry.reding@gmail.com>,
+	Jonathan Hunter <jonathanh@nvidia.com>,
+	linux-tegra@vger.kernel.org
+Subject: [PATCH v3 45/76] media: tegra-vde: Access v4l2_fh from file
+Date: Sun, 10 Aug 2025 04:30:27 +0300
+Message-ID: <20250810013100.29776-46-laurent.pinchart+renesas@ideasonboard.com>
 X-Mailer: git-send-email 2.49.1
 In-Reply-To: <20250810013100.29776-1-laurent.pinchart+renesas@ideasonboard.com>
 References: <20250810013100.29776-1-laurent.pinchart+renesas@ideasonboard.com>
@@ -61,90 +58,118 @@ Access the v4l2_fh, and from there the driver-specific structure,
 from the file * in all ioctl handlers.
 
 Signed-off-by: Jacopo Mondi <jacopo.mondi@ideasonboard.com>
-Co-developed-by: Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>
-Signed-off-by: Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>
 ---
-Changes since v1:
+ .../media/platform/nvidia/tegra-vde/v4l2.c    | 24 +++++++++----------
+ 1 file changed, 12 insertions(+), 12 deletions(-)
 
-- Update file-to-ctx macro due to removal of fh-to-ctx macro
----
- .../platform/mediatek/mdp3/mtk-mdp3-m2m.c     | 19 +++++++------------
- 1 file changed, 7 insertions(+), 12 deletions(-)
-
-diff --git a/drivers/media/platform/mediatek/mdp3/mtk-mdp3-m2m.c b/drivers/media/platform/mediatek/mdp3/mtk-mdp3-m2m.c
-index e68ae19d71a9..9ef956b565a7 100644
---- a/drivers/media/platform/mediatek/mdp3/mtk-mdp3-m2m.c
-+++ b/drivers/media/platform/mediatek/mdp3/mtk-mdp3-m2m.c
-@@ -10,14 +10,9 @@
- #include <media/videobuf2-dma-contig.h>
- #include "mtk-mdp3-m2m.h"
+diff --git a/drivers/media/platform/nvidia/tegra-vde/v4l2.c b/drivers/media/platform/nvidia/tegra-vde/v4l2.c
+index 0c50f4ff82e0..d94978ae2baf 100644
+--- a/drivers/media/platform/nvidia/tegra-vde/v4l2.c
++++ b/drivers/media/platform/nvidia/tegra-vde/v4l2.c
+@@ -46,9 +46,9 @@ static const struct v4l2_ctrl_config ctrl_cfgs[] = {
+ 	},
+ };
  
--static inline struct mdp_m2m_ctx *fh_to_ctx(struct v4l2_fh *fh)
--{
--	return container_of(fh, struct mdp_m2m_ctx, fh);
--}
--
- static inline struct mdp_m2m_ctx *file_to_ctx(struct file *filp)
+-static inline struct tegra_ctx *fh_to_tegra_ctx(struct v4l2_fh *fh)
++static inline struct tegra_ctx *file_to_tegra_ctx(struct file *file)
  {
--	return fh_to_ctx(file_to_v4l2_fh(filp));
-+	return container_of(file_to_v4l2_fh(filp), struct mdp_m2m_ctx, fh);
+-	return container_of(fh, struct tegra_ctx, fh);
++	return container_of(file_to_v4l2_fh(file), struct tegra_ctx, fh);
  }
  
- static inline struct mdp_m2m_ctx *ctrl_to_ctx(struct v4l2_ctrl *ctrl)
-@@ -290,7 +285,7 @@ static int mdp_m2m_querycap(struct file *file, void *fh,
- static int mdp_m2m_enum_fmt_mplane(struct file *file, void *fh,
- 				   struct v4l2_fmtdesc *f)
+ static void tegra_set_control_data(struct tegra_ctx *ctx, void *data, u32 id)
+@@ -506,7 +506,7 @@ static int tegra_querycap(struct file *file, void *priv,
+ static int tegra_enum_decoded_fmt(struct file *file, void *priv,
+ 				  struct v4l2_fmtdesc *f)
  {
--	struct mdp_m2m_ctx *ctx = fh_to_ctx(fh);
-+	struct mdp_m2m_ctx *ctx = file_to_ctx(file);
+-	struct tegra_ctx *ctx = fh_to_tegra_ctx(priv);
++	struct tegra_ctx *ctx = file_to_tegra_ctx(file);
  
- 	return mdp_enum_fmt_mplane(ctx->mdp_dev, f);
- }
-@@ -298,7 +293,7 @@ static int mdp_m2m_enum_fmt_mplane(struct file *file, void *fh,
- static int mdp_m2m_g_fmt_mplane(struct file *file, void *fh,
- 				struct v4l2_format *f)
- {
--	struct mdp_m2m_ctx *ctx = fh_to_ctx(fh);
-+	struct mdp_m2m_ctx *ctx = file_to_ctx(file);
- 	struct mdp_frame *frame;
- 	struct v4l2_pix_format_mplane *pix_mp;
- 
-@@ -316,7 +311,7 @@ static int mdp_m2m_g_fmt_mplane(struct file *file, void *fh,
- static int mdp_m2m_s_fmt_mplane(struct file *file, void *fh,
- 				struct v4l2_format *f)
- {
--	struct mdp_m2m_ctx *ctx = fh_to_ctx(fh);
-+	struct mdp_m2m_ctx *ctx = file_to_ctx(file);
- 	struct mdp_frame *frame = ctx_get_frame(ctx, f->type);
- 	struct mdp_frame *capture;
- 	const struct mdp_format *fmt;
-@@ -359,7 +354,7 @@ static int mdp_m2m_s_fmt_mplane(struct file *file, void *fh,
- static int mdp_m2m_try_fmt_mplane(struct file *file, void *fh,
- 				  struct v4l2_format *f)
- {
--	struct mdp_m2m_ctx *ctx = fh_to_ctx(fh);
-+	struct mdp_m2m_ctx *ctx = file_to_ctx(file);
- 
- 	if (!mdp_try_fmt_mplane(ctx->mdp_dev, f, &ctx->curr_param, ctx->id))
+ 	if (WARN_ON(!ctx->coded_fmt_desc))
  		return -EINVAL;
-@@ -370,7 +365,7 @@ static int mdp_m2m_try_fmt_mplane(struct file *file, void *fh,
- static int mdp_m2m_g_selection(struct file *file, void *fh,
- 			       struct v4l2_selection *s)
+@@ -522,7 +522,7 @@ static int tegra_enum_decoded_fmt(struct file *file, void *priv,
+ static int tegra_g_decoded_fmt(struct file *file, void *priv,
+ 			       struct v4l2_format *f)
  {
--	struct mdp_m2m_ctx *ctx = fh_to_ctx(fh);
-+	struct mdp_m2m_ctx *ctx = file_to_ctx(file);
- 	struct mdp_frame *frame;
- 	bool valid = false;
+-	struct tegra_ctx *ctx = fh_to_tegra_ctx(priv);
++	struct tegra_ctx *ctx = file_to_tegra_ctx(file);
  
-@@ -422,7 +417,7 @@ static int mdp_m2m_g_selection(struct file *file, void *fh,
- static int mdp_m2m_s_selection(struct file *file, void *fh,
- 			       struct v4l2_selection *s)
+ 	*f = ctx->decoded_fmt;
+ 	return 0;
+@@ -531,8 +531,8 @@ static int tegra_g_decoded_fmt(struct file *file, void *priv,
+ static int tegra_try_decoded_fmt(struct file *file, void *priv,
+ 				 struct v4l2_format *f)
  {
--	struct mdp_m2m_ctx *ctx = fh_to_ctx(fh);
-+	struct mdp_m2m_ctx *ctx = file_to_ctx(file);
- 	struct mdp_frame *frame = ctx_get_frame(ctx, s->type);
- 	struct mdp_frame *capture;
- 	struct v4l2_rect r;
++	struct tegra_ctx *ctx = file_to_tegra_ctx(file);
+ 	struct v4l2_pix_format_mplane *pix_mp = &f->fmt.pix_mp;
+-	struct tegra_ctx *ctx = fh_to_tegra_ctx(priv);
+ 	const struct tegra_coded_fmt_desc *coded_desc;
+ 	unsigned int i;
+ 
+@@ -571,7 +571,7 @@ static int tegra_try_decoded_fmt(struct file *file, void *priv,
+ static int tegra_s_decoded_fmt(struct file *file, void *priv,
+ 			       struct v4l2_format *f)
+ {
+-	struct tegra_ctx *ctx = fh_to_tegra_ctx(priv);
++	struct tegra_ctx *ctx = file_to_tegra_ctx(file);
+ 	struct vb2_queue *vq;
+ 	int err;
+ 
+@@ -593,7 +593,7 @@ static int tegra_s_decoded_fmt(struct file *file, void *priv,
+ static int tegra_enum_coded_fmt(struct file *file, void *priv,
+ 				struct v4l2_fmtdesc *f)
+ {
+-	struct tegra_ctx *ctx = fh_to_tegra_ctx(priv);
++	struct tegra_ctx *ctx = file_to_tegra_ctx(file);
+ 	const struct tegra_vde_soc *soc = ctx->vde->soc;
+ 
+ 	if (f->index >= soc->num_coded_fmts)
+@@ -607,7 +607,7 @@ static int tegra_enum_coded_fmt(struct file *file, void *priv,
+ static int tegra_g_coded_fmt(struct file *file, void *priv,
+ 			     struct v4l2_format *f)
+ {
+-	struct tegra_ctx *ctx = fh_to_tegra_ctx(priv);
++	struct tegra_ctx *ctx = file_to_tegra_ctx(file);
+ 
+ 	*f = ctx->coded_fmt;
+ 	return 0;
+@@ -631,7 +631,7 @@ static int tegra_try_coded_fmt(struct file *file, void *priv,
+ 			       struct v4l2_format *f)
+ {
+ 	struct v4l2_pix_format_mplane *pix_mp = &f->fmt.pix_mp;
+-	struct tegra_ctx *ctx = fh_to_tegra_ctx(priv);
++	struct tegra_ctx *ctx = file_to_tegra_ctx(file);
+ 	const struct tegra_vde_soc *soc = ctx->vde->soc;
+ 	int size = pix_mp->plane_fmt[0].sizeimage;
+ 	const struct tegra_coded_fmt_desc *desc;
+@@ -656,7 +656,7 @@ static int tegra_try_coded_fmt(struct file *file, void *priv,
+ static int tegra_s_coded_fmt(struct file *file, void *priv,
+ 			     struct v4l2_format *f)
+ {
+-	struct tegra_ctx *ctx = fh_to_tegra_ctx(priv);
++	struct tegra_ctx *ctx = file_to_tegra_ctx(file);
+ 	struct v4l2_m2m_ctx *m2m_ctx = ctx->fh.m2m_ctx;
+ 	const struct tegra_coded_fmt_desc *desc;
+ 	struct vb2_queue *peer_vq, *vq;
+@@ -718,7 +718,7 @@ static int tegra_s_coded_fmt(struct file *file, void *priv,
+ static int tegra_enum_framesizes(struct file *file, void *priv,
+ 				 struct v4l2_frmsizeenum *fsize)
+ {
+-	struct tegra_ctx *ctx = fh_to_tegra_ctx(priv);
++	struct tegra_ctx *ctx = file_to_tegra_ctx(file);
+ 	const struct tegra_coded_fmt_desc *fmt;
+ 
+ 	if (fsize->index)
+@@ -852,8 +852,8 @@ static int tegra_open(struct file *file)
+ 
+ static int tegra_release(struct file *file)
+ {
++	struct tegra_ctx *ctx = file_to_tegra_ctx(file);
+ 	struct v4l2_fh *fh = file_to_v4l2_fh(file);
+-	struct tegra_ctx *ctx = fh_to_tegra_ctx(fh);
+ 	struct tegra_vde *vde = ctx->vde;
+ 
+ 	v4l2_fh_del(fh, file);
 -- 
 Regards,
 
