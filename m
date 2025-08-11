@@ -1,48 +1,49 @@
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9CDF7140E34;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1E2C324679F;
 	Mon, 11 Aug 2025 03:26:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=60.244.123.138
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=210.61.82.184
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754882791; cv=none; b=Lma6qgFQQW52guxn1NJGnlN1KylqjTn1SIO4ViaGb2vdV8mVT7zmqdjFcuxV0Zt0vtLVcVpupCZ0U+RY7n6WIwMwjeXoingEVJcXNEULAAQ4PDLQh29yf2vCQCi7ebWdfNUlJqS9/jIHrs1IkuUvl2cqtZ4FibipSAXtoo8rICM=
+	t=1754882791; cv=none; b=rvJqeyhxxDCAQ/yFkdTp2qPWd9hqAlVbudc0Bh8yh+wGYqfvyIS+DsoodGcS5nkcQfXFxVTLkATTETgyF+wQCjNITkcu+J2wr6kFXvd+1BJq3G5UR3EzfFNzbFLWltNy8HBfytlbg5oVMiKCYjCsDftv8E6s2/agkQqGOVHbXu8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1754882791; c=relaxed/simple;
-	bh=enGTt9SMwY9c4TuHCqGxqIRS5dEw45DiMVXsaJ4Ho/o=;
-	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=NElCTuvSJTatOTeUQY7QsvJmGH8Ndm+F3VPOYDkjzeWfjRYx+qOWtdjC5n3gHhPFuVaUmpKbhgyoooBsX5pggCXOGN2dAgHzhzhoT4QhHBOzCov1EswjSObrL50VX9J6nltqt41D1+hZynogV9QFuJ+OH9MNP1DmYHV2l0aZ+sk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mediatek.com; spf=pass smtp.mailfrom=mediatek.com; dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b=kq3UKuz0; arc=none smtp.client-ip=60.244.123.138
+	bh=pK2ks1hK8M8X85NH5G2hAwzrVRwYcsTt9WfT/99n9KM=;
+	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=loy3VVe/L4KiHICVkzTNz60kKUgJ2XIwy1S1K/tj6J/lUUyxcwUAhfDRET2Cz9rpWfULTiah3/hffjSbuBNMBxEjy2TlgkLCcM8uU76FVSIhno5ZksBzCsSGtDWsDLIw3qea7hCdtEk1pqwON0fQgqZfTmB1Nk3JOP1lTddfFR8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mediatek.com; spf=pass smtp.mailfrom=mediatek.com; dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b=rQf8iJ4g; arc=none smtp.client-ip=210.61.82.184
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mediatek.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mediatek.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b="kq3UKuz0"
-X-UUID: f4c39bb8766211f08871991801538c65-20250811
+	dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b="rQf8iJ4g"
+X-UUID: f660539e766211f0b33aeb1e7f16c2b6-20250811
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-	h=Content-Type:Content-Transfer-Encoding:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=EcT+f/N6oe7EZKgGMDbwkDouTM31unC2D7Cmt7xG7RI=;
-	b=kq3UKuz0eKxoQAPjMneWAGZ+Y0nSl4ROMhdMPe8zSmpXrEbzsorTsrUn+2Hyd4nYVJ2POXTdPJ8507bQ10Y44/7IhDCLsJltYPKXNUVEu9T/8HPMn7tcC6Cflup6K1KdZrvy9qUXz1Oz8AR7BWonZ7ExURLNnTTsL/K/7Zzwms4=;
+	h=Content-Type:Content-Transfer-Encoding:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=PENGVBez1iKQo8DG6bSJoSPkqHuz4q03TiXxtDwZ8BQ=;
+	b=rQf8iJ4gf/iGoe49FMPumYjpqmxtLE/t7rWbIyqyUoqvMXyESmLROV83tM6v742g4QAs/VbwhRb8c0clFJdfKwZtLNZowsUpQyYvldPDcmtXxOFMuWSbCwpnPThHwg5L29sEuGGaDHz0nrDv2pnGLtmXZL8xXuaogQAmoNVD10A=;
 X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.3.3,REQID:758a7477-1be5-4b95-b201-2c49baae0187,IP:0,UR
-	L:0,TC:0,Content:-25,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION
-	:release,TS:-25
-X-CID-META: VersionHash:f1326cf,CLOUDID:bda444ce-1ac4-40cd-97d9-e8f32bab97d5,B
-	ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:-5,Content:0|15|50,EDM:-3,IP:
-	nil,URL:99|1,File:nil,RT:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:
-	0,LES:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0,ARC:0
+X-CID-O-INFO: VERSION:1.3.3,REQID:36ef3b5d-022d-43a4-89f6-ec2019b2e28b,IP:0,UR
+	L:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:r
+	elease,TS:0
+X-CID-META: VersionHash:f1326cf,CLOUDID:9edc4aa1-1800-4e4f-b665-a3d622db32cf,B
+	ulkID:nil,BulkQuantity:0,Recheck:0,SF:81|82|102,TC:-5,Content:0|15|50,EDM:
+	-3,IP:nil,URL:0,File:nil,RT:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,
+	AV:0,LES:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0,ARC:0
 X-CID-BVR: 2,SSN|SDN
 X-CID-BAS: 2,SSN|SDN,0,_
-X-CID-FACTOR: TF_CID_SPAM_SNR,TF_CID_SPAM_ULS
+X-CID-FACTOR: TF_CID_SPAM_SNR
 X-CID-RHF: D41D8CD98F00B204E9800998ECF8427E
-X-UUID: f4c39bb8766211f08871991801538c65-20250811
-Received: from mtkmbs09n1.mediatek.inc [(172.21.101.35)] by mailgw01.mediatek.com
+X-UUID: f660539e766211f0b33aeb1e7f16c2b6-20250811
+Received: from mtkmbs14n2.mediatek.inc [(172.21.101.76)] by mailgw02.mediatek.com
 	(envelope-from <kyrie.wu@mediatek.com>)
 	(Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-	with ESMTP id 1671929269; Mon, 11 Aug 2025 11:26:23 +0800
+	with ESMTP id 1548649846; Mon, 11 Aug 2025 11:26:26 +0800
 Received: from mtkmbs13n1.mediatek.inc (172.21.101.193) by
- mtkmbs13n2.mediatek.inc (172.21.101.108) with Microsoft SMTP Server
+ MTKMBS09N2.mediatek.inc (172.21.101.94) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1258.39; Mon, 11 Aug 2025 11:26:16 +0800
+ 15.2.1258.39; Mon, 11 Aug 2025 11:26:19 +0800
 Received: from mhfsdcap04.gcn.mediatek.inc (10.17.3.154) by
  mtkmbs13n1.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
- 15.2.1258.39 via Frontend Transport; Mon, 11 Aug 2025 11:26:15 +0800
+ 15.2.1258.39 via Frontend Transport; Mon, 11 Aug 2025 11:26:18 +0800
 From: Kyrie Wu <kyrie.wu@mediatek.com>
 To: Tiffany Lin <tiffany.lin@mediatek.com>, Andrew-CT Chen
 	<andrew-ct.chen@mediatek.com>, Yunfei Dong <yunfei.dong@mediatek.com>, Mauro
@@ -60,10 +61,12 @@ To: Tiffany Lin <tiffany.lin@mediatek.com>, Andrew-CT Chen
 	<linux-arm-kernel@lists.infradead.org>, <linux-mediatek@lists.infradead.org>
 CC: Neil Armstrong <neil.armstrong@linaro.org>, Andrzej Pietrasiewicz
 	<andrzejtp2010@gmail.com>
-Subject: [PATCH v2 0/8] Enable video decoder & encoder for MT8189
-Date: Mon, 11 Aug 2025 11:26:07 +0800
-Message-ID: <20250811032616.1385-1-kyrie.wu@mediatek.com>
+Subject: [PATCH v2 2/8] media: mediatek: vcodec: add decoder compatible to support MT8189
+Date: Mon, 11 Aug 2025 11:26:09 +0800
+Message-ID: <20250811032616.1385-3-kyrie.wu@mediatek.com>
 X-Mailer: git-send-email 2.46.0
+In-Reply-To: <20250811032616.1385-1-kyrie.wu@mediatek.com>
+References: <20250811032616.1385-1-kyrie.wu@mediatek.com>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
@@ -74,264 +77,51 @@ Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
 X-MTK: N
 
-This series have the follow changing:
-Firstly add mt8189 video decoder compatible, profile and level to support
-MT8189 kernel driver.
-Secondly fix some bugs, including vp 4K profile2 and media device node
-number bug.
-Lastly, add mt8189 video encoder compatible.
+MT8189 is pure single core architecture. Support its compatible and
+use `mtk_vdec_single_core_pdata` to initialize platform data.
 
-This series has been tested with MT8189 tast test.
-Encoding and decoding worked for this chip.
-
-Patches 1-2 Add decoder compatible.
-Patches 3 Add profile and level supporting.
-Patches 4 Add core-only VP9 decoding supporting.
-Patches 5-6 fix some bugs.
-Patches 7-8 Adds encoder compatible.
-
+Signed-off-by: Kyrie Wu <kyrie.wu@mediatek.com>
 ---
-v4l2-compliance test results:
-v4l2-compliance -d /dev/video2
-v4l2-compliance 1.28.1, 64 bits, 64-bit time_t
+ .../platform/mediatek/vcodec/decoder/mtk_vcodec_dec_drv.c   | 6 ++++++
+ .../platform/mediatek/vcodec/decoder/mtk_vcodec_dec_drv.h   | 1 +
+ 2 files changed, 7 insertions(+)
 
-Compliance test for mtk-vcodec-enc device /dev/video2:
-
-Driver Info:
-        Driver name      : mtk-vcodec-enc
-        Card type        : MT8189 video encoder
-        Bus info         : platform:17020000.video-codec
-        Driver version   : 6.6.88
-        Capabilities     : 0x84204000
-                Video Memory-to-Memory Multiplanar
-                Streaming
-                Extended Pix Format
-                Device Capabilities
-        Device Caps      : 0x04204000
-                Video Memory-to-Memory Multiplanar
-                Streaming
-                Extended Pix Format
-        Detected Stateful Encoder
-
-Required ioctls:
-        test VIDIOC_QUERYCAP: OK
-        test invalid ioctls: OK
-
-Allow for multiple opens:
-        test second /dev/video2 open: OK
-        test VIDIOC_QUERYCAP: OK
-        test VIDIOC_G/S_PRIORITY: OK
-        test for unlimited opens: OK
-
-Debug ioctls:
-        test VIDIOC_DBG_G/S_REGISTER: OK (Not Supported)
-        test VIDIOC_LOG_STATUS: OK (Not Supported)
-
-Input ioctls:
-        test VIDIOC_G/S_TUNER/ENUM_FREQ_BANDS: OK (Not Supported)
-        test VIDIOC_G/S_FREQUENCY: OK (Not Supported)
-        test VIDIOC_S_HW_FREQ_SEEK: OK (Not Supported)
-        test VIDIOC_ENUMAUDIO: OK (Not Supported)
-        test VIDIOC_G/S/ENUMINPUT: OK (Not Supported)
-        test VIDIOC_G/S_AUDIO: OK (Not Supported)
-        Inputs: 0 Audio Inputs: 0 Tuners: 0
-
-Output ioctls:
-        test VIDIOC_G/S_MODULATOR: OK (Not Supported)
-        test VIDIOC_G/S_FREQUENCY: OK (Not Supported)
-        test VIDIOC_ENUMAUDOUT: OK (Not Supported)
-        test VIDIOC_G/S/ENUMOUTPUT: OK (Not Supported)
-        test VIDIOC_G/S_AUDOUT: OK (Not Supported)
-        Outputs: 0 Audio Outputs: 0 Modulators: 0
-
-Input/Output configuration ioctls:
-        test VIDIOC_ENUM/G/S/QUERY_STD: OK (Not Supported)
-        test VIDIOC_ENUM/G/S/QUERY_DV_TIMINGS: OK (Not Supported)
-        test VIDIOC_DV_TIMINGS_CAP: OK (Not Supported)
-        test VIDIOC_G/S_EDID: OK (Not Supported)
-
-Control ioctls:
-        test VIDIOC_QUERY_EXT_CTRL/QUERYMENU: OK
-        test VIDIOC_QUERYCTRL: OK
-        test VIDIOC_G/S_CTRL: OK
-        test VIDIOC_G/S/TRY_EXT_CTRLS: OK
-                fail: v4l2-test-controls.cpp(1171): node->codec_mask & STATEFUL_ENCODER
-        test VIDIOC_(UN)SUBSCRIBE_EVENT/DQEVENT: FAIL
-        test VIDIOC_G/S_JPEGCOMP: OK (Not Supported)
-        Standard Controls: 16 Private Controls: 0
-
-Format ioctls:
-        test VIDIOC_ENUM_FMT/FRAMESIZES/FRAMEINTERVALS: OK
-        test VIDIOC_G/S_PARM: OK
-        test VIDIOC_G_FBUF: OK (Not Supported)
-        test VIDIOC_G_FMT: OK
-        test VIDIOC_TRY_FMT: OK
-        test VIDIOC_S_FMT: OK
-        test VIDIOC_G_SLICED_VBI_CAP: OK (Not Supported)
-        test Cropping: OK
-        test Composing: OK (Not Supported)
-        test Scaling: OK (Not Supported)
-
-Codec ioctls:
-        test VIDIOC_(TRY_)ENCODER_CMD: OK
-        test VIDIOC_G_ENC_INDEX: OK (Not Supported)
-        test VIDIOC_(TRY_)DECODER_CMD: OK (Not Supported)
-
-Buffer ioctls:
-        test VIDIOC_REQBUFS/CREATE_BUFS/QUERYBUF: OK
-        test CREATE_BUFS maximum buffers: OK
-        test VIDIOC_REMOVE_BUFS: OK
-        test VIDIOC_EXPBUF: OK
-        test Requests: OK (Not Supported)
-
-Total for mtk-vcodec-enc device /dev/video2: 47, Succeeded: 46, Failed: 1, Warnings: 0
-
-v4l2-compliance -d /dev/video3
-v4l2-compliance 1.28.1, 64 bits, 64-bit time_t
-
-Compliance test for mtk-vcodec-dec device /dev/video3:
-
-Driver Info:
-        Driver name      : mtk-vcodec-dec
-        Card type        : MT8189 video decoder
-        Bus info         : platform:16000000.video-codec
-        Driver version   : 6.6.88
-        Capabilities     : 0x84204000
-                Video Memory-to-Memory Multiplanar
-                Streaming
-                Extended Pix Format
-                Device Capabilities
-        Device Caps      : 0x04204000
-                Video Memory-to-Memory Multiplanar
-                Streaming
-                Extended Pix Format
-        Detected Stateless Decoder
-Media Driver Info:
-        Driver name      : mtk-vcodec-dec
-        Model            : mtk-vcodec-dec
-        Serial           : 
-        Bus info         : platform:16000000.video-codec
-        Media version    : 6.6.88
-        Hardware revision: 0x00000000 (0)
-        Driver version   : 6.6.88
-Interface Info:
-        ID               : 0x0300000c
-        Type             : V4L Video
-Entity Info:
-        ID               : 0x00000001 (1)
-        Name             : mtk-vcodec-dec-source
-        Function         : V4L2 I/O
-        Pad 0x01000002   : 0: Source
-          Link 0x02000008: to remote pad 0x1000004 of entity 'mtk-vcodec-dec-proc' (Video Decoder): Data, Enabled, Immutable
-
-Required ioctls:
-        test MC information (see 'Media Driver Info' above): OK
-        test VIDIOC_QUERYCAP: OK
-        test invalid ioctls: OK
-
-Allow for multiple opens:
-        test second /dev/video3 open: OK
-        test VIDIOC_QUERYCAP: OK
-        test VIDIOC_G/S_PRIORITY: OK
-        test for unlimited opens: OK
-
-Debug ioctls:
-        test VIDIOC_DBG_G/S_REGISTER: OK (Not Supported)
-        test VIDIOC_LOG_STATUS: OK (Not Supported)
-
-Input ioctls:
-        test VIDIOC_G/S_TUNER/ENUM_FREQ_BANDS: OK (Not Supported)
-        test VIDIOC_G/S_FREQUENCY: OK (Not Supported)
-        test VIDIOC_S_HW_FREQ_SEEK: OK (Not Supported)
-        test VIDIOC_ENUMAUDIO: OK (Not Supported)
-        test VIDIOC_G/S/ENUMINPUT: OK (Not Supported)
-        test VIDIOC_G/S_AUDIO: OK (Not Supported)
-        Inputs: 0 Audio Inputs: 0 Tuners: 0
-
-Output ioctls:
-        test VIDIOC_G/S_MODULATOR: OK (Not Supported)
-        test VIDIOC_G/S_FREQUENCY: OK (Not Supported)
-        test VIDIOC_ENUMAUDOUT: OK (Not Supported)
-        test VIDIOC_G/S/ENUMOUTPUT: OK (Not Supported)
-        test VIDIOC_G/S_AUDOUT: OK (Not Supported)
-        Outputs: 0 Audio Outputs: 0 Modulators: 0
-
-Input/Output configuration ioctls:
-        test VIDIOC_ENUM/G/S/QUERY_STD: OK (Not Supported)
-        test VIDIOC_ENUM/G/S/QUERY_DV_TIMINGS: OK (Not Supported)
-        test VIDIOC_DV_TIMINGS_CAP: OK (Not Supported)
-        test VIDIOC_G/S_EDID: OK (Not Supported)
-
-Control ioctls:
-        test VIDIOC_QUERY_EXT_CTRL/QUERYMENU: OK
-        test VIDIOC_QUERYCTRL: OK
-        test VIDIOC_G/S_CTRL: OK
-        test VIDIOC_G/S/TRY_EXT_CTRLS: OK
-        test VIDIOC_(UN)SUBSCRIBE_EVENT/DQEVENT: OK
-        test VIDIOC_G/S_JPEGCOMP: OK (Not Supported)
-        Standard Controls: 15 Private Controls: 2
-        Standard Compound Controls: 13 Private Compound Controls: 0
-
-Format ioctls:
-        test VIDIOC_ENUM_FMT/FRAMESIZES/FRAMEINTERVALS: OK
-        test VIDIOC_G/S_PARM: OK (Not Supported)
-        test VIDIOC_G_FBUF: OK (Not Supported)
-        test VIDIOC_G_FMT: OK
-        test VIDIOC_TRY_FMT: OK
-        test VIDIOC_S_FMT: OK
-        test VIDIOC_G_SLICED_VBI_CAP: OK (Not Supported)
-        test Cropping: OK (Not Supported)
-        test Composing: OK
-        test Scaling: OK (Not Supported)
-
-Codec ioctls:
-        test VIDIOC_(TRY_)ENCODER_CMD: OK (Not Supported)
-        test VIDIOC_G_ENC_INDEX: OK (Not Supported)
-        test VIDIOC_(TRY_)DECODER_CMD: OK
-
-Buffer ioctls:
-        test VIDIOC_REQBUFS/CREATE_BUFS/QUERYBUF: OK
-        test CREATE_BUFS maximum buffers: OK
-        test VIDIOC_REMOVE_BUFS: OK
-        test VIDIOC_EXPBUF: OK
-        test Requests: OK
-
-Total for mtk-vcodec-dec device /dev/video3: 48, Succeeded: 48, Failed: 0, Warnings: 0
-
-scp upstream link:
-https://patchwork.kernel.org/project/linux-mediatek/patch/20250811015922.32680-1-huayu.zong@mediatek.com/
-
-Changes compared with v1:
---add v4l2-compliance test results
---add scp upstream link
---add HW difference discriptions for dt-bindings commit messages
-
-This series patches dependent on:
-[1]
-https://patchwork.linuxtv.org/project/linux-media/cover/20250510075357.11761-1-yunfei.dong@mediatek.com/
-[2]
-https://patchwork.linuxtv.org/project/linux-media/cover/20250528063633.14054-1-irui.wang@mediatek.com/
-
-Kyrie Wu (8):
-  dt-bindings: media: mediatek: decoder: Add MT8189
-    mediatek,vcodec-decoder
-  media: mediatek: vcodec: add decoder compatible to support MT8189
-  media: mediatek: vcodec: add profile and level supporting for MT8189
-  media: mediatek: vcodec: Add core-only VP9 decoding support for MT8189
-  media: mediatek: vcodec: fix vp9 4096x2176 fail for profile2
-  media: mediatek: vcodec: fix media device node number
-  dt-bindings: media: Add MT8189 mediatek,vcodec-encoder
-  media: mediatek: encoder: Add MT8189 encoder compatible data
-
- .../media/mediatek,vcodec-encoder.yaml        |  2 ++
- .../media/mediatek,vcodec-subdev-decoder.yaml |  1 +
- .../vcodec/decoder/mtk_vcodec_dec_drv.c       |  9 +++++-
- .../vcodec/decoder/mtk_vcodec_dec_drv.h       |  1 +
- .../vcodec/decoder/mtk_vcodec_dec_stateless.c |  4 +++
- .../vcodec/decoder/vdec/vdec_vp9_req_lat_if.c | 32 ++++++++++++-------
- .../vcodec/encoder/mtk_vcodec_enc_drv.c       | 14 ++++++++
- 7 files changed, 50 insertions(+), 13 deletions(-)
-
+diff --git a/drivers/media/platform/mediatek/vcodec/decoder/mtk_vcodec_dec_drv.c b/drivers/media/platform/mediatek/vcodec/decoder/mtk_vcodec_dec_drv.c
+index fabf969bc8a9..e7b6b108f4fb 100644
+--- a/drivers/media/platform/mediatek/vcodec/decoder/mtk_vcodec_dec_drv.c
++++ b/drivers/media/platform/mediatek/vcodec/decoder/mtk_vcodec_dec_drv.c
+@@ -348,6 +348,8 @@ static void mtk_vcodec_dec_get_chip_name(struct mtk_vcodec_dec_dev *vdec_dev)
+ 		vdec_dev->chip_name = MTK_VDEC_MT8188;
+ 	else if (of_device_is_compatible(dev->of_node, "mediatek,mt8196-vcodec-dec"))
+ 		vdec_dev->chip_name = MTK_VDEC_MT8196;
++	else if (of_device_is_compatible(dev->of_node, "mediatek,mt8189-vcodec-dec"))
++		vdec_dev->chip_name = MTK_VDEC_MT8189;
+ 	else
+ 		vdec_dev->chip_name = MTK_VDEC_INVAL;
+ }
+@@ -575,6 +577,10 @@ static const struct of_device_id mtk_vcodec_match[] = {
+ 		.compatible = "mediatek,mt8196-vcodec-dec",
+ 		.data = &mtk_lat_sig_core_pdata,
+ 	},
++	{
++		.compatible = "mediatek,mt8189-vcodec-dec",
++		.data = &mtk_vdec_single_core_pdata,
++	},
+ 	{},
+ };
+ 
+diff --git a/drivers/media/platform/mediatek/vcodec/decoder/mtk_vcodec_dec_drv.h b/drivers/media/platform/mediatek/vcodec/decoder/mtk_vcodec_dec_drv.h
+index 6bdde600a167..856d12aa84d8 100644
+--- a/drivers/media/platform/mediatek/vcodec/decoder/mtk_vcodec_dec_drv.h
++++ b/drivers/media/platform/mediatek/vcodec/decoder/mtk_vcodec_dec_drv.h
+@@ -25,6 +25,7 @@ enum mtk_vcodec_dec_chip_name {
+ 	MTK_VDEC_MT8183 = 8183,
+ 	MTK_VDEC_MT8186 = 8186,
+ 	MTK_VDEC_MT8188 = 8188,
++	MTK_VDEC_MT8189 = 8189,
+ 	MTK_VDEC_MT8192 = 8192,
+ 	MTK_VDEC_MT8195 = 8195,
+ 	MTK_VDEC_MT8196 = 8196,
 -- 
 2.46.0
 
