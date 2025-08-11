@@ -1,125 +1,264 @@
-Received: from mout.web.de (mout.web.de [212.227.15.4])
+Received: from bali.collaboradmins.com (bali.collaboradmins.com [148.251.105.195])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D5F282E3701;
-	Mon, 11 Aug 2025 14:30:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.15.4
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2223B23A99D
+	for <linux-media@vger.kernel.org>; Mon, 11 Aug 2025 14:36:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.251.105.195
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754922629; cv=none; b=dOm1oiRfFGA7KkVkwkGWtfNdcEpoTJHFXPcFJ9Ylgh6p1lvjo4BYcf1vbECvob22E5xzWro4+nuiww9j7DwPX3Fh1l7eV91eTb5/Q3hYe0CXGfmyP88WJ3nPv2U0z04wxv5Elvy7HXszQjPt4qxZKff0bhidrZ7X8jizJmVmwnw=
+	t=1754923010; cv=none; b=UqB56eYpUh49Kj+65WQh8inkWwACGt++KuIhxkjR/2k9M/3mPpFRLersJOxNyBCtnPjPGWOjG4ZQu9+4oHL/iMg00+x7fLI7VTxIgaf9gKldrzbNDfYJXKBxtfdcuCga2doWzhV7vhR9a7qM32c0OA/Q2e0hb57M/V9zicFHnqs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754922629; c=relaxed/simple;
-	bh=qncw7yxViaLIjgYRg+kCOYng6WevPU9RpyGML2QyKC0=;
-	h=Message-ID:Date:MIME-Version:To:Cc:References:Subject:From:
-	 In-Reply-To:Content-Type; b=B4pOrWHlKfVK7CltLRrUvPeP3/S/4k/I8pEK0xRSpgiljgDNHApzOyPnZUU7xESwfw0W05n/s3qYnWhWIRjarVpgdXGtD6PFu/I+bVmVSAJ6z3GayI0oKML7cubBGQuTVRo4qLcJrRaHnceuqb2bcavcxiz7HzEGtlbGB4F9s3s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de; spf=pass smtp.mailfrom=web.de; dkim=pass (2048-bit key) header.d=web.de header.i=markus.elfring@web.de header.b=qXCmBZUi; arc=none smtp.client-ip=212.227.15.4
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=web.de
+	s=arc-20240116; t=1754923010; c=relaxed/simple;
+	bh=76iwY8ZuIgwxFmVF2Z9+bPEyNiUKqcaNH5/RH6UKYug=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=XZRuqSHK9++vo1Odvk2JMQnCp8agFfp2a1unY3pB9YNXz2mxeLv5lYdnnsZiCixxePENOvAGdB3PyhXn0CU5s3P393X5XoB6FfAgF5hQr1JlPOSiMFJaMd21BTTduM9CyLe5FBv8BruyxUe3d/w56Exko7Mj8c8+/ncZ1cyCf2U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=qejlhNE+; arc=none smtp.client-ip=148.251.105.195
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=web.de header.i=markus.elfring@web.de header.b="qXCmBZUi"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=web.de;
-	s=s29768273; t=1754922611; x=1755527411; i=markus.elfring@web.de;
-	bh=S3ZlfFUOqraazFG4jozDKg8aCMSU0LqJMYEvzx4osOM=;
-	h=X-UI-Sender-Class:Message-ID:Date:MIME-Version:To:Cc:References:
-	 Subject:From:In-Reply-To:Content-Type:Content-Transfer-Encoding:
-	 cc:content-transfer-encoding:content-type:date:from:message-id:
-	 mime-version:reply-to:subject:to;
-	b=qXCmBZUiZpHKaK+YPtNtm8bDTidZfV5U5ktroQoYU2Bzel3CwgadautwMCNrCl9q
-	 R2tmHW1NEUIj9eIi7w8qwIi9ptAKLnKOjgCFraX0Jmt+XO3qMPvPktgC/gJYjME9a
-	 Ot8goTAL0YC0GvNLiHn1E1wEdCJHXim9TcYUSET5mgoggobBWbtppxlqzC5f7nj9g
-	 YasRZE6qFu4dg4AfzEq5Ys8Z+7sWgeWF9inJYnyDPUTCGJkc8sCY0RtnnbVvU/k9H
-	 CVKqLESfU4009k0a0G6qWbt0Z/ON9vx+ABiNiR5hraMPaOkrclVyUGre9fnjps/Nk
-	 Af7ZnYD1d5olwnsZJA==
-X-UI-Sender-Class: 814a7b36-bfc1-4dae-8640-3722d8ec6cd6
-Received: from [192.168.178.29] ([94.31.69.213]) by smtp.web.de (mrweb006
- [213.165.67.108]) with ESMTPSA (Nemesis) id 1MTvvy-1vCJmK3qZm-00KmlN; Mon, 11
- Aug 2025 16:30:10 +0200
-Message-ID: <50529d2c-a0a5-4c04-a562-78e4edadabbd@web.de>
-Date: Mon, 11 Aug 2025 16:30:08 +0200
+	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="qejlhNE+"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+	s=mail; t=1754923005;
+	bh=76iwY8ZuIgwxFmVF2Z9+bPEyNiUKqcaNH5/RH6UKYug=;
+	h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+	b=qejlhNE+RoBfYnA+8m4TKo3/rc7kBrqMUfSLeIPFYyd1fCE8lE9h4NBYPa/50TJQw
+	 VOlnrcN9BITvUCmUTZpK84IgXf291DpJkpf3c1JOMPWAn9PBO0kKjhXLIFym9ftIM6
+	 556f5yXc411dNnqIAL1jyPm1zOl/Fb2GpS9GEmYvCjEKlnfHAo/5Z8FM1+OpszE7G/
+	 J9P43a0X1ZwI7NdK6z3oY8ZRIZV/2SJnEUdUm9DdhoJJL4k7naeVwEs1KwwAwgughg
+	 lEjRteox28w6FlU6UgNrFhMHVYyNYxAMEnCQOjQ9d3jmSWypHkvY+dqFBOlyjT7edy
+	 jkOk+vp2E7H6w==
+Received: from [IPv6:2606:6d00:11:5a76::c41] (unknown [IPv6:2606:6d00:11:5a76::c41])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: nicolas)
+	by bali.collaboradmins.com (Postfix) with ESMTPSA id 4689417E0C87;
+	Mon, 11 Aug 2025 16:36:44 +0200 (CEST)
+Message-ID: <ab8d8470e9bcc9532d48ccd3287cf242e790dcad.camel@collabora.com>
+Subject: Re: [PATCH v3 62/76] media: hantro: Access v4l2_fh from
+ file->private_data
+From: Nicolas Dufresne <nicolas.dufresne@collabora.com>
+To: Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>, 
+	linux-media@vger.kernel.org
+Cc: Jacopo Mondi <jacopo.mondi@ideasonboard.com>, Hans Verkuil	
+ <hans@jjverkuil.nl>, Mauro Carvalho Chehab <mchehab@kernel.org>, Benjamin
+ Gaignard <benjamin.gaignard@collabora.com>, Philipp Zabel
+ <p.zabel@pengutronix.de>, 	linux-rockchip@lists.infradead.org
+Date: Mon, 11 Aug 2025 10:36:43 -0400
+In-Reply-To: <20250810013100.29776-63-laurent.pinchart+renesas@ideasonboard.com>
+References: 
+	<20250810013100.29776-1-laurent.pinchart+renesas@ideasonboard.com>
+	 <20250810013100.29776-63-laurent.pinchart+renesas@ideasonboard.com>
+Autocrypt: addr=nicolas.dufresne@collabora.com; prefer-encrypt=mutual;
+ keydata=mQGiBEUQN0MRBACQYceNSezSdMjx7sx6gwKkMghrrODgl3B0eXBTgNp6c431IfOOEsdvk
+ oOh1kwoYcQgbg4MXw6beOltysX4e8fFWsiRkc2nvvRW9ir9kHDm49MkBLqaDjTqOkYKNMiurFW+go
+ zpr/lUW15QqT6v68RYe0zRdtwGZqeLzX2LVuukGwCg4AISzswrrYHNV7vQLcbaUhPgIl0D+gILYT9
+ TJgAEK4YHW+bFRcY+cgUFoLQqQayECMlctKoLOE69nIYOc/hDr9uih1wxrQ/yL0NJvQCohSPyoyLF
+ 9b2EuIGhQVp05XP7FzlTxhYvGO/DtO08ec85+bTfVBMV6eeY4MS3ZU+1z7ObD7Pf29YjyTehN2Dan
+ 6w1g2rBk5MoA/9nDocSlk4pbFpsYSFmVHsDiAOFje3+iY4ftVDKunKYWMhwRVBjAREOByBagmRau0
+ cLEcElpf4hX5f978GoxSGIsiKoDAlXX+ICDOWC1/EXhEEmBR1gL0QJgiVviNyLfGJlZWnPjw6xhhm
+ tHYWTDxBOP5peztyc2PqeKsLsLWzAr7QnTmljb2xhcyBEdWZyZXNuZSA8bmljb2xhc0BuZHVmcmVz
+ bmUuY2E+iGIEExECACIFAlXA3CACGwMGCwkIBwMCBhUIAgkKCwQWAgMBAh4BAheAAAoJEHFTAi2sB
+ qgcJngAnRDBTr8bhzuH0KQwFP1nEYtfgpKdAKCrQ/sJfuG/8zsd7J8wVl7y3e8ARbRDTmljb2xhcy
+ BEdWZyZXNuZSAoQi4gU2MuIEluZm9ybWF0aXF1ZSkgPG5pY29sYXMuZHVmcmVzbmVAZ21haWwuY29
+ tPohgBBMRAgAgBQJFlCyOAhsDBgsJCAcDAgQVAggDBBYCAwECHgECF4AACgkQcVMCLawGqBwhLQCg
+ zYlrLBj6KIAZ4gmsfjXD6ZtddT8AoIeGDicVq5WvMHNWign6ApQcZUihtElOaWNvbGFzIER1ZnJlc
+ 25lIChCLiBTYy4gSW5mb3JtYXRpcXVlKSA8bmljb2xhcy5kdWZyZXNuZUBjb2xsYWJvcmEuY28udW
+ s+iGIEExECACIFAkuzca8CGwMGCwkIBwMCBhUIAgkKCwQWAgMBAh4BAheAAAoJEHFTAi2sBqgcQX8
+ An2By6LDEeMxi4B9hUbpvRnzaaeNqAJ9Rox8rfqHZnSErw9bCHiBwvwJZ77QxTmljb2xhcyBEdWZy
+ ZXNuZSA8bmljb2xhcy5kdWZyZXNuZUBjb2xsYWJvcmEuY29tPohiBBMRAgAiBQJNzZzPAhsDBgsJC
+ AcDAgYVCAIJCgsEFgIDAQIeAQIXgAAKCRBxUwItrAaoHLlxAKCYAGf4JL7DYDLs/188CPMGuwLypw
+ CfWKc9DorA9f5pyYlD5pQo6SgSoiC0R05pY29sYXMgRHVmcmVzbmUgKEIgU2MuIEluZm9ybWF0aXF
+ 1ZSkgPG5pY29sYXMuZHVmcmVzbmVAdXNoZXJicm9va2UuY2E+iGAEExECACAFAkUQN0MCGwMGCwkI
+ BwMCBBUCCAMEFgIDAQIeAQIXgAAKCRBxUwItrAaoHPTnAJ0WGgJJVspoctAvEcI00mtp5WAFGgCgr
+ +E7ItOqZEHAs+xabBgknYZIFPU=
+Organization: Collabora Canada
+Content-Type: multipart/signed; micalg="pgp-sha1"; protocol="application/pgp-signature";
+	boundary="=-OXBfOomi8BZGUmxwnrx0"
+User-Agent: Evolution 3.56.2 (3.56.2-1.fc42) 
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-To: Nicolas Dufresne <nicolas.dufresne@collabora.com>,
- Sakari Ailus <sakari.ailus@linux.intel.com>, linux-media@vger.kernel.org,
- linux-rockchip@lists.infradead.org, linux-arm-kernel@lists.infradead.org,
- Detlev Casanova <detlev.casanova@collabora.com>,
- =?UTF-8?Q?Heiko_St=C3=BCbner?= <heiko@sntech.de>,
- Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc: LKML <linux-kernel@vger.kernel.org>
-References: <20250811-rkvdec-redundant-pm-rebase-v2-1-90c47213fbbe@collabora.com>
-Subject: Re: [PATCH v2] media: rkvdec: Remove redundant
-Content-Language: en-GB, de-DE
-From: Markus Elfring <Markus.Elfring@web.de>
-In-Reply-To: <20250811-rkvdec-redundant-pm-rebase-v2-1-90c47213fbbe@collabora.com>
-Content-Type: text/plain; charset=UTF-8
+
+
+--=-OXBfOomi8BZGUmxwnrx0
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:MBeF5ls0UmFpbxTc6iMeAbb1gGvRwMD3xWbHVAvJIHN5JYINNUr
- 9UwZfStzjKDgLDGnfZO6eaDprq6yocz/iQDtajJj5naTbtZ5JpqX5r9atenkGkFCyWN3xgi
- mmcU9jFKTHPSL3k/t3aRvaW5fBq1f8NeNaVkt9C8xtqOeIGVyfjJUTeCfU8+LtKDVxrOIoK
- 9W3cQeHKlr98Xx/LK2IzA==
-X-Spam-Flag: NO
-UI-OutboundReport: notjunk:1;M01:P0:ew2c845iv3k=;kMQ3r4KKg/X9g/ThaHEG0O4PNJ/
- 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
 
->                               =E2=80=A6 Remove the now-reduntant explici=
-t call to
+Le dimanche 10 ao=C3=BBt 2025 =C3=A0 04:30 +0300, Laurent Pinchart a =C3=A9=
+crit=C2=A0:
+> To prepare for the introduction of video_device_state as second argument
+> of the v4l2_ioctl_ops handler, access the v4l2_fh from
+> file->private_data instead of using void *priv.
+>=20
+> The file->private_data is initialized to point to the v4l2_fh
+> by the usage of v4l2_fh_init() in the v4l2_file_operations.open()
+> handler.
+>=20
+> Signed-off-by: Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.co=
+m>
+> Reviewed-by: Paul Kocialkowski <paulk@sys-base.io>
 
-                                                 redundant?
+Acked-by: Nicolas Dufresne <nicolas.dufresne@collabora.com>
 
 
-> pm_runtime_mark_last_busy().
+> ---
+> Changes since v1:
+>=20
+> - Update file-to-ctx macro due to removal of fh-to-ctx macro
+> ---
+> =C2=A0drivers/media/platform/verisilicon/hantro.h=C2=A0=C2=A0 |=C2=A0 7 +=
+-----
+> =C2=A0.../media/platform/verisilicon/hantro_v4l2.c=C2=A0 | 22 +++++++++--=
+--------
+> =C2=A02 files changed, 12 insertions(+), 17 deletions(-)
+>=20
+> diff --git a/drivers/media/platform/verisilicon/hantro.h
+> b/drivers/media/platform/verisilicon/hantro.h
+> index 5b85c8a44706..e0fdc4535b2d 100644
+> --- a/drivers/media/platform/verisilicon/hantro.h
+> +++ b/drivers/media/platform/verisilicon/hantro.h
+> @@ -382,14 +382,9 @@ extern int hantro_debug;
+> =C2=A0	pr_err("%s:%d: " fmt, __func__, __LINE__, ##args)
+> =C2=A0
+> =C2=A0/* Structure access helpers. */
+> -static __always_inline struct hantro_ctx *fh_to_ctx(struct v4l2_fh *fh)
+> -{
+> -	return container_of(fh, struct hantro_ctx, fh);
+> -}
+> -
+> =C2=A0static __always_inline struct hantro_ctx *file_to_ctx(struct file *=
+filp)
+> =C2=A0{
+> -	return fh_to_ctx(file_to_v4l2_fh(filp));
+> +	return container_of(file_to_v4l2_fh(filp), struct hantro_ctx, fh);
+> =C2=A0}
+> =C2=A0
+> =C2=A0/* Register accessors. */
+> diff --git a/drivers/media/platform/verisilicon/hantro_v4l2.c
+> b/drivers/media/platform/verisilicon/hantro_v4l2.c
+> index 7c3515cf7d64..6bcd892e7bb4 100644
+> --- a/drivers/media/platform/verisilicon/hantro_v4l2.c
+> +++ b/drivers/media/platform/verisilicon/hantro_v4l2.c
+> @@ -185,7 +185,7 @@ static int vidioc_querycap(struct file *file, void *p=
+riv,
+> =C2=A0static int vidioc_enum_framesizes(struct file *file, void *priv,
+> =C2=A0				=C2=A0 struct v4l2_frmsizeenum *fsize)
+> =C2=A0{
+> -	struct hantro_ctx *ctx =3D fh_to_ctx(priv);
+> +	struct hantro_ctx *ctx =3D file_to_ctx(file);
+> =C2=A0	const struct hantro_fmt *fmt;
+> =C2=A0
+> =C2=A0	fmt =3D hantro_find_format(ctx, fsize->pixel_format);
+> @@ -217,7 +217,7 @@ static int vidioc_enum_fmt(struct file *file, void *p=
+riv,
+> =C2=A0			=C2=A0=C2=A0 struct v4l2_fmtdesc *f, bool capture)
+> =C2=A0
+> =C2=A0{
+> -	struct hantro_ctx *ctx =3D fh_to_ctx(priv);
+> +	struct hantro_ctx *ctx =3D file_to_ctx(file);
+> =C2=A0	const struct hantro_fmt *fmt, *formats;
+> =C2=A0	unsigned int num_fmts, i, j =3D 0;
+> =C2=A0	bool skip_mode_none, enum_all_formats;
+> @@ -297,7 +297,7 @@ static int vidioc_g_fmt_out_mplane(struct file *file,=
+ void
+> *priv,
+> =C2=A0				=C2=A0=C2=A0 struct v4l2_format *f)
+> =C2=A0{
+> =C2=A0	struct v4l2_pix_format_mplane *pix_mp =3D &f->fmt.pix_mp;
+> -	struct hantro_ctx *ctx =3D fh_to_ctx(priv);
+> +	struct hantro_ctx *ctx =3D file_to_ctx(file);
+> =C2=A0
+> =C2=A0	vpu_debug(4, "f->type =3D %d\n", f->type);
+> =C2=A0
+> @@ -310,7 +310,7 @@ static int vidioc_g_fmt_cap_mplane(struct file *file,=
+ void
+> *priv,
+> =C2=A0				=C2=A0=C2=A0 struct v4l2_format *f)
+> =C2=A0{
+> =C2=A0	struct v4l2_pix_format_mplane *pix_mp =3D &f->fmt.pix_mp;
+> -	struct hantro_ctx *ctx =3D fh_to_ctx(priv);
+> +	struct hantro_ctx *ctx =3D file_to_ctx(file);
+> =C2=A0
+> =C2=A0	vpu_debug(4, "f->type =3D %d\n", f->type);
+> =C2=A0
+> @@ -398,13 +398,13 @@ static int hantro_try_fmt(const struct hantro_ctx *=
+ctx,
+> =C2=A0static int vidioc_try_fmt_cap_mplane(struct file *file, void *priv,
+> =C2=A0				=C2=A0=C2=A0=C2=A0=C2=A0 struct v4l2_format *f)
+> =C2=A0{
+> -	return hantro_try_fmt(fh_to_ctx(priv), &f->fmt.pix_mp, f->type);
+> +	return hantro_try_fmt(file_to_ctx(file), &f->fmt.pix_mp, f->type);
+> =C2=A0}
+> =C2=A0
+> =C2=A0static int vidioc_try_fmt_out_mplane(struct file *file, void *priv,
+> =C2=A0				=C2=A0=C2=A0=C2=A0=C2=A0 struct v4l2_format *f)
+> =C2=A0{
+> -	return hantro_try_fmt(fh_to_ctx(priv), &f->fmt.pix_mp, f->type);
+> +	return hantro_try_fmt(file_to_ctx(file), &f->fmt.pix_mp, f->type);
+> =C2=A0}
+> =C2=A0
+> =C2=A0static void
+> @@ -648,19 +648,19 @@ static int hantro_set_fmt_cap(struct hantro_ctx *ct=
+x,
+> =C2=A0static int
+> =C2=A0vidioc_s_fmt_out_mplane(struct file *file, void *priv, struct v4l2_=
+format *f)
+> =C2=A0{
+> -	return hantro_set_fmt_out(fh_to_ctx(priv), &f->fmt.pix_mp,
+> HANTRO_AUTO_POSTPROC);
+> +	return hantro_set_fmt_out(file_to_ctx(file), &f->fmt.pix_mp,
+> HANTRO_AUTO_POSTPROC);
+> =C2=A0}
+> =C2=A0
+> =C2=A0static int
+> =C2=A0vidioc_s_fmt_cap_mplane(struct file *file, void *priv, struct v4l2_=
+format *f)
+> =C2=A0{
+> -	return hantro_set_fmt_cap(fh_to_ctx(priv), &f->fmt.pix_mp);
+> +	return hantro_set_fmt_cap(file_to_ctx(file), &f->fmt.pix_mp);
+> =C2=A0}
+> =C2=A0
+> =C2=A0static int vidioc_g_selection(struct file *file, void *priv,
+> =C2=A0			=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 struct v4l2_selection *sel)
+> =C2=A0{
+> -	struct hantro_ctx *ctx =3D fh_to_ctx(priv);
+> +	struct hantro_ctx *ctx =3D file_to_ctx(file);
+> =C2=A0
+> =C2=A0	/* Crop only supported on source. */
+> =C2=A0	if (!ctx->is_encoder ||
+> @@ -691,7 +691,7 @@ static int vidioc_g_selection(struct file *file, void
+> *priv,
+> =C2=A0static int vidioc_s_selection(struct file *file, void *priv,
+> =C2=A0			=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 struct v4l2_selection *sel)
+> =C2=A0{
+> -	struct hantro_ctx *ctx =3D fh_to_ctx(priv);
+> +	struct hantro_ctx *ctx =3D file_to_ctx(file);
+> =C2=A0	struct v4l2_rect *rect =3D &sel->r;
+> =C2=A0	struct vb2_queue *vq;
+> =C2=A0
+> @@ -738,7 +738,7 @@ static const struct v4l2_event hantro_eos_event =3D {
+> =C2=A0static int vidioc_encoder_cmd(struct file *file, void *priv,
+> =C2=A0			=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 struct v4l2_encoder_cmd *ec)
+> =C2=A0{
+> -	struct hantro_ctx *ctx =3D fh_to_ctx(priv);
+> +	struct hantro_ctx *ctx =3D file_to_ctx(file);
+> =C2=A0	int ret;
+> =C2=A0
+> =C2=A0	ret =3D v4l2_m2m_ioctl_try_encoder_cmd(file, priv, ec);
 
-Is the summary phrase incomplete?
+--=-OXBfOomi8BZGUmxwnrx0
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-Description: This is a digitally signed message part
+Content-Transfer-Encoding: 7bit
 
-Regards,
-Markus
+-----BEGIN PGP SIGNATURE-----
+
+iF0EABECAB0WIQSScpfJiL+hb5vvd45xUwItrAaoHAUCaJn/+wAKCRBxUwItrAao
+HEv2AJ0WNpp8XKQutm5U36TvGiQp1CyIvQCgonsta1h8f3lgUQ3RZ/9DLy0ob5E=
+=P6MX
+-----END PGP SIGNATURE-----
+
+--=-OXBfOomi8BZGUmxwnrx0--
