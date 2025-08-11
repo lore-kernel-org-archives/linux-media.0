@@ -1,278 +1,190 @@
-Received: from bali.collaboradmins.com (bali.collaboradmins.com [148.251.105.195])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f53.google.com (mail-wm1-f53.google.com [209.85.128.53])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1A7282DE6F5;
-	Mon, 11 Aug 2025 21:25:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.251.105.195
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 38B352E2F02
+	for <linux-media@vger.kernel.org>; Mon, 11 Aug 2025 21:31:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754947524; cv=none; b=cQ7atILBX+VpeEgvez37M5Sggc3K+0p7hpr8wLKs4LkCKnNH70gJ3d7KzSJrtQe4RS1pQVzz7pJ79gh23dKxlw7m1+N60VH0+jFl6MipbngMkBKaqn7clGKCKJVb4aRmeeT/0CfXxrFpWWVX1YXsIwbLYhdcGCJ/XUS0esWUgWQ=
+	t=1754947902; cv=none; b=VJG6TExvEZYD9ZxB/4zD6mDPqFdXrUV7gQv/cx8NA7tOBSybyBI3q27ra2k9furE7EXk+Chu8OY3XYx85OQFh4qcKvWtV2/r5kysZJfzNpVGM9Y9TyVbVt+Pf0O3YZ9Ma4/3c6es/XwUQ1MVezx9LGxhaV4OEGftg5shU7chZaE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754947524; c=relaxed/simple;
-	bh=Se/XuCy4Kpgqy/Lsz9lRmsfQvSwyPuBPc1dOKtWoRHY=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=g8sisJER4bDe2U9fLyi7cpilYBCWLIGhJEAJCC9CHzUhLXHYgaQC3Z6x6GzzYqWZP3VUbR4bT5ZsbRUoMlUWlgrQAgc1oZmldXjLPLaGLy2Mb/mQbMhqTlYxcpxOri0xNcN+7fPBJ9rT5X5Rd8Jo/C9KBOcdIgqEwD9BoekC8KI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=jgBRvlzz; arc=none smtp.client-ip=148.251.105.195
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
+	s=arc-20240116; t=1754947902; c=relaxed/simple;
+	bh=mH1KMnGR+XUrI8L0FCKy07QnW+kkqMzlPl8BlW5s7Xg=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=Rh5ew/EN/Lb68+qPQrwpsU5B0nl18zZyzploeMoSGYsd2QDl3h5ZZ0VlZP6r2eZcO4UnoXtGzF98+luLnzEyK4vuRDdVCkpkse3C56i1SH4OUPrM0K/RdW311cE81UD7+0hUZIiiSPajTgY+vo0+A/ci4pSfA76uzheYrxHhFfE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pinefeat.co.uk; spf=pass smtp.mailfrom=pinefeat.co.uk; dkim=pass (2048-bit key) header.d=pinefeat.co.uk header.i=@pinefeat.co.uk header.b=fHPznUfg; arc=none smtp.client-ip=209.85.128.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pinefeat.co.uk
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pinefeat.co.uk
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="jgBRvlzz"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1754947520;
-	bh=Se/XuCy4Kpgqy/Lsz9lRmsfQvSwyPuBPc1dOKtWoRHY=;
-	h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-	b=jgBRvlzzdsOk+nRTCAoFVfNBWHejCyBDoMfmnzydtgbaKzQE9nVRBUcluLx0TVEdd
-	 Im0M0I20QY6NBOpTKmm9otMYtILpQX6NiYhubmICYnhwRBLLUPINZMtkwN+hRIgkL4
-	 zBp2y7TDRR4YBglKkk55NETZdOif6lOafGLDRJev+tqTLbLP5Pt72vayKMXAhWSWLJ
-	 WG+d6z72yG5s96p/tpuPORauqOhBDgRuSZkkFmOjOVrhfMJs1w3qORV7mbM/x0RWgq
-	 XpLEYLal23sxUrgvO8XorKVJyC5nqwdjtOduHe+zeA4UaqMHlmvnYIZjiiJYjmqVc8
-	 3/mC18CD8k+iQ==
-Received: from [IPv6:2606:6d00:11:5a76::c41] (unknown [IPv6:2606:6d00:11:5a76::c41])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: nicolas)
-	by bali.collaboradmins.com (Postfix) with ESMTPSA id CF70217E090E;
-	Mon, 11 Aug 2025 23:25:18 +0200 (CEST)
-Message-ID: <3cf31d3b89a66b1bec57486c54c3df31393335e5.camel@collabora.com>
-Subject: Re: [PATCH v2 5/7] media: rkvdec: Disable QoS for HEVC and VP9 on
- RK3328
-From: Nicolas Dufresne <nicolas.dufresne@collabora.com>
-To: Jonas Karlman <jonas@kwiboo.se>, Ezequiel Garcia	
- <ezequiel@vanguardiasur.com.ar>, Detlev Casanova
- <detlev.casanova@collabora.com>,  Mauro Carvalho Chehab	
- <mchehab@kernel.org>, Heiko Stuebner <heiko@sntech.de>
-Cc: Alex Bee <knaerzche@gmail.com>, Sebastian Fricke
-	 <sebastian.fricke@collabora.com>, linux-media@vger.kernel.org, 
-	linux-rockchip@lists.infradead.org, devicetree@vger.kernel.org, 
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Date: Mon, 11 Aug 2025 17:25:17 -0400
-In-Reply-To: <20250810212454.3237486-6-jonas@kwiboo.se>
-References: <20250810212454.3237486-1-jonas@kwiboo.se>
-	 <20250810212454.3237486-6-jonas@kwiboo.se>
-Autocrypt: addr=nicolas.dufresne@collabora.com; prefer-encrypt=mutual;
- keydata=mQGiBEUQN0MRBACQYceNSezSdMjx7sx6gwKkMghrrODgl3B0eXBTgNp6c431IfOOEsdvk
- oOh1kwoYcQgbg4MXw6beOltysX4e8fFWsiRkc2nvvRW9ir9kHDm49MkBLqaDjTqOkYKNMiurFW+go
- zpr/lUW15QqT6v68RYe0zRdtwGZqeLzX2LVuukGwCg4AISzswrrYHNV7vQLcbaUhPgIl0D+gILYT9
- TJgAEK4YHW+bFRcY+cgUFoLQqQayECMlctKoLOE69nIYOc/hDr9uih1wxrQ/yL0NJvQCohSPyoyLF
- 9b2EuIGhQVp05XP7FzlTxhYvGO/DtO08ec85+bTfVBMV6eeY4MS3ZU+1z7ObD7Pf29YjyTehN2Dan
- 6w1g2rBk5MoA/9nDocSlk4pbFpsYSFmVHsDiAOFje3+iY4ftVDKunKYWMhwRVBjAREOByBagmRau0
- cLEcElpf4hX5f978GoxSGIsiKoDAlXX+ICDOWC1/EXhEEmBR1gL0QJgiVviNyLfGJlZWnPjw6xhhm
- tHYWTDxBOP5peztyc2PqeKsLsLWzAr7QnTmljb2xhcyBEdWZyZXNuZSA8bmljb2xhc0BuZHVmcmVz
- bmUuY2E+iGIEExECACIFAlXA3CACGwMGCwkIBwMCBhUIAgkKCwQWAgMBAh4BAheAAAoJEHFTAi2sB
- qgcJngAnRDBTr8bhzuH0KQwFP1nEYtfgpKdAKCrQ/sJfuG/8zsd7J8wVl7y3e8ARbRDTmljb2xhcy
- BEdWZyZXNuZSAoQi4gU2MuIEluZm9ybWF0aXF1ZSkgPG5pY29sYXMuZHVmcmVzbmVAZ21haWwuY29
- tPohgBBMRAgAgBQJFlCyOAhsDBgsJCAcDAgQVAggDBBYCAwECHgECF4AACgkQcVMCLawGqBwhLQCg
- zYlrLBj6KIAZ4gmsfjXD6ZtddT8AoIeGDicVq5WvMHNWign6ApQcZUihtElOaWNvbGFzIER1ZnJlc
- 25lIChCLiBTYy4gSW5mb3JtYXRpcXVlKSA8bmljb2xhcy5kdWZyZXNuZUBjb2xsYWJvcmEuY28udW
- s+iGIEExECACIFAkuzca8CGwMGCwkIBwMCBhUIAgkKCwQWAgMBAh4BAheAAAoJEHFTAi2sBqgcQX8
- An2By6LDEeMxi4B9hUbpvRnzaaeNqAJ9Rox8rfqHZnSErw9bCHiBwvwJZ77QxTmljb2xhcyBEdWZy
- ZXNuZSA8bmljb2xhcy5kdWZyZXNuZUBjb2xsYWJvcmEuY29tPohiBBMRAgAiBQJNzZzPAhsDBgsJC
- AcDAgYVCAIJCgsEFgIDAQIeAQIXgAAKCRBxUwItrAaoHLlxAKCYAGf4JL7DYDLs/188CPMGuwLypw
- CfWKc9DorA9f5pyYlD5pQo6SgSoiC0R05pY29sYXMgRHVmcmVzbmUgKEIgU2MuIEluZm9ybWF0aXF
- 1ZSkgPG5pY29sYXMuZHVmcmVzbmVAdXNoZXJicm9va2UuY2E+iGAEExECACAFAkUQN0MCGwMGCwkI
- BwMCBBUCCAMEFgIDAQIeAQIXgAAKCRBxUwItrAaoHPTnAJ0WGgJJVspoctAvEcI00mtp5WAFGgCgr
- +E7ItOqZEHAs+xabBgknYZIFPU=
-Organization: Collabora Canada
-Content-Type: multipart/signed; micalg="pgp-sha1"; protocol="application/pgp-signature";
-	boundary="=-XgQKcifX1OiDVJb6s0rw"
-User-Agent: Evolution 3.56.2 (3.56.2-1.fc42) 
+	dkim=pass (2048-bit key) header.d=pinefeat.co.uk header.i=@pinefeat.co.uk header.b="fHPznUfg"
+Received: by mail-wm1-f53.google.com with SMTP id 5b1f17b1804b1-458ba079338so37485345e9.1
+        for <linux-media@vger.kernel.org>; Mon, 11 Aug 2025 14:31:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=pinefeat.co.uk; s=google; t=1754947899; x=1755552699; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=nhHE/8QAww8bZTkCasgOGL4wfh1aWV6rClxlRHnPYl4=;
+        b=fHPznUfg087tFX79GvSm5ACDcYxGtLVV7priFLc6SLndYaww0u8EyApYltyac7/RZK
+         Spi1aawtayyELb+pgt1DLm8QVpXS4KbFZPujmXQhCm9IZSClCkAjImQ/QBS6j98AMthk
+         H+lqmSi8V7BzUlVTbKZjbawKaK9CGKlOP3Gdlm3ui0IokAUiiPR03PG6EnnV3MhOWZd/
+         PpO8yDnF2+/Woz0Go3WHOpd0CIO7cru2CL0sAoqB7Sjo7TRkMfCCVst37NDqpzuLR7Ry
+         hMwHmX7J8zP3mkYdSvLlmBF2Ypgww9p8N8EiffZe1ApfTZeKnKtnveWI1QDLhxpwcKYd
+         fJgQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1754947899; x=1755552699;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=nhHE/8QAww8bZTkCasgOGL4wfh1aWV6rClxlRHnPYl4=;
+        b=lGiPHDhGqoDDpYnAec4zy++T+ILS+Tni+JPmufFgeqqtifpLcWU/TzR3Td5xOQR32H
+         HB+OsemgutgiDSiICwPi8lizyDJ0lFiiqrVSmmEzhkMSkZ3B6BIQMXrG0ohEFTzVUWa+
+         sFOLGg+gjuUu+kBthsCRl+D/ImZOrTIPEr8E1PqMtrcMv2SSEv4VL8/ZfaAVqzfLDBxw
+         qoB+xZkL/khkHGn51d4Swf5lHapJDi4WTFV75SdOk4RhVBdd+dn5YHIu4u0cdHfs6BOL
+         13ZxPhfS2hgxvE10v1+HRd6rbNYihq9VIkQR+77zhDHLnLO0CCn3XXjYqfa4WUTMIB58
+         7bDA==
+X-Forwarded-Encrypted: i=1; AJvYcCUl93QGmCJznVf0XnV3oukXJu3b/OvnHkU7WKhs0VARxcRip9XHizks9IizAVZhMrnshGJ3EwiHbYHsVA==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yym7jjABld55HYFV0RX4+KdbhLtQiirRwsP2NE6FSSRPrtBAv4C
+	c1VM1LA+eRwHg08HBSUNZUTFVWhcH68FMTa/I9ALt1wD23gz2/Bv2VaV7LwbuHOyTc4=
+X-Gm-Gg: ASbGncvfMKXtkHsrjFqMuOA6LveCt8ZhOa/NR6RXoq9OQKdKqkndeuHs3fpzlfVu9Dq
+	SVNkJ3ddP/m9x4Pc2wBlvVpYh1UUgPaDGNGJYRo91IJ6lrGlKOqFH61UJkQlvdJ3haPOfqhJSRD
+	HqcHTeNb/wNktQNbTFInhwoBsIeFBcCBg5oYvbiXMF9Fed41rlDPiQBYtAahfFlUEMiSSSY1lcE
+	EHJiYDpWtTtUnBIdzmb3QasFw6T61f5NBearqsQMqGDAGCiQU3BKNKZ3AdrJeut50qJG2Zk5ROQ
+	miSDg3OsfKzobeuyytjI7o80xnZ/aRwin/KzOQfCQZ36u/+MYr5OoyG7az+Q6W0EqE+R1Svbyyd
+	TTQQxVg7eXLQqZtEzfLJMbOt40gTOZQfShsUzNfCl1BtaaIGTAFw8lYF8Nes=
+X-Google-Smtp-Source: AGHT+IF3sgOQh/DoU/bwRIxmb6kfg2ojWEPdxg5wHP7MJpFbD2YwAp8jeRfHrHkI1kRvJtz4JYjjSQ==
+X-Received: by 2002:a05:600c:47d4:b0:459:e002:8b1e with SMTP id 5b1f17b1804b1-45a10dd53ebmr5752515e9.13.1754947898989;
+        Mon, 11 Aug 2025 14:31:38 -0700 (PDT)
+Received: from asmirnov-G751JM.Home ([2a02:c7c:b28c:1f00:f8cb:3493:2eed:8d11])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3b79c485444sm42397387f8f.66.2025.08.11.14.31.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 11 Aug 2025 14:31:38 -0700 (PDT)
+From: Alexander Smirnov <asmirnou@pinefeat.co.uk>
+X-Google-Original-From: Alexander Smirnov <aliaksandr.smirnou@gmail.com>
+To: mchehab@kernel.org,
+	robh@kernel.org,
+	krzk+dt@kernel.org,
+	conor+dt@kernel.org
+Cc: devicetree@vger.kernel.org,
+	linux-media@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Aliaksandr Smirnou <support@pinefeat.co.uk>
+Subject: [PATCH v2 1/2] dt-bindings: Pinefeat cef168 lens control board
+Date: Mon, 11 Aug 2025 22:31:01 +0100
+Message-Id: <20250811213102.15703-2-aliaksandr.smirnou@gmail.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20250811213102.15703-1-aliaksandr.smirnou@gmail.com>
+References: <20250811213102.15703-1-aliaksandr.smirnou@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
+From: Aliaksandr Smirnou <support@pinefeat.co.uk>
 
---=-XgQKcifX1OiDVJb6s0rw
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Add the Device Tree schema and examples for the Pinefeat cef168 lens
+ control board. This board interfaces Canon EF & EF-S lenses with
+ non-Canon camera bodies, enabling electronic control of focus and
+ aperture via V4L2.
 
-Le dimanche 10 ao=C3=BBt 2025 =C3=A0 21:24 +0000, Jonas Karlman a =C3=A9cri=
-t=C2=A0:
-> From: Alex Bee <knaerzche@gmail.com>
->=20
-> The RK3328 VDEC has a HW quirk that require QoS to be disabled when HEVC
-> or VP9 is decoded, otherwise the decoded picture may become corrupted.
->=20
-> Add a RK3328 variant with a quirk flag to disable QoS when before
-> decoding is started.
->=20
-> Signed-off-by: Alex Bee <knaerzche@gmail.com>
-> Signed-off-by: Jonas Karlman <jonas@kwiboo.se>
-> ---
-> Changes in v2:
-> - No change
-> ---
-> =C2=A0drivers/media/platform/rockchip/rkvdec/rkvdec-hevc.c |=C2=A0 9 ++++=
-+++++
-> =C2=A0drivers/media/platform/rockchip/rkvdec/rkvdec-regs.h |=C2=A0 2 ++
-> =C2=A0drivers/media/platform/rockchip/rkvdec/rkvdec-vp9.c=C2=A0 | 10 ++++=
-++++++
-> =C2=A0drivers/media/platform/rockchip/rkvdec/rkvdec.c=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0 | 12 ++++++++++++
-> =C2=A0drivers/media/platform/rockchip/rkvdec/rkvdec.h=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0 |=C2=A0 4 ++++
-> =C2=A05 files changed, 37 insertions(+)
->=20
-> diff --git a/drivers/media/platform/rockchip/rkvdec/rkvdec-hevc.c
-> b/drivers/media/platform/rockchip/rkvdec/rkvdec-hevc.c
-> index 1994ea24f0be..f8bb8c4264f7 100644
-> --- a/drivers/media/platform/rockchip/rkvdec/rkvdec-hevc.c
-> +++ b/drivers/media/platform/rockchip/rkvdec/rkvdec-hevc.c
-> @@ -789,6 +789,15 @@ static int rkvdec_hevc_run(struct rkvdec_ctx *ctx)
-> =C2=A0	writel(1, rkvdec->regs + RKVDEC_REG_PREF_LUMA_CACHE_COMMAND);
-> =C2=A0	writel(1, rkvdec->regs + RKVDEC_REG_PREF_CHR_CACHE_COMMAND);
-> =C2=A0
-> +	if (rkvdec->quirks & RKVDEC_QUIRK_DISABLE_QOS) {
-> +		u32 reg;
-> +
-> +		reg =3D readl(rkvdec->regs + RKVDEC_REG_QOS_CTRL);
-> +		reg |=3D 0xFFFF;
-> +		reg &=3D ~BIT(12);
+Signed-off-by: Aliaksandr Smirnou <support@pinefeat.co.uk>
+---
+ .../bindings/media/i2c/pinefeat,cef168.yaml   | 52 +++++++++++++++++++
+ .../devicetree/bindings/vendor-prefixes.yaml  |  2 +
+ MAINTAINERS                                   |  6 +++
+ 3 files changed, 60 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/media/i2c/pinefeat,cef168.yaml
 
-I wonder if there is a better way to express that, if not, a comment for fu=
-ture
-readers would be nice. If read it will, we keep the upper 16bit, and replac=
-ed
-the lower bits with 0xEFFF (all bits set except 12) ? I'd rather not spend =
-time
-thinking if I walk by this code again.
+diff --git a/Documentation/devicetree/bindings/media/i2c/pinefeat,cef168.yaml b/Documentation/devicetree/bindings/media/i2c/pinefeat,cef168.yaml
+new file mode 100644
+index 000000000000..3563fb1d46db
+--- /dev/null
++++ b/Documentation/devicetree/bindings/media/i2c/pinefeat,cef168.yaml
+@@ -0,0 +1,52 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++# Copyright (c) 2025 Pinefeat LLP
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/media/i2c/pinefeat,cef168.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Pinefeat cef168 lens driver
++
++maintainers:
++  - Aliaksandr Smirnou <support@pinefeat.co.uk>
++
++description: |
++  Pinefeat produces an adapter designed to interface between
++  Canon EF & EF-S lenses and non-Canon camera bodies, incorporating
++  features for electronic focus and aperture adjustment. The cef168
++  circuit board, included with the adapter, provides a software
++  programming interface that allows control of lens focus and
++  aperture positions. This driver enables controlling the lens
++  focus and aperture via the V4L2 (Video4Linux2) API.
++
++properties:
++  compatible:
++    enum:
++      - pinefeat,cef168
++
++  reg:
++    maxItems: 1
++
++  vcc-supply:
++    description: VDD 3v3 power supply
++
++required:
++  - compatible
++  - reg
++
++additionalProperties: false
++
++examples:
++  - |
++    i2c {
++        #address-cells = <1>;
++        #size-cells = <0>;
++
++        camera-lens@d {
++            compatible = "pinefeat,cef168";
++            reg = <0x0d>;
++            vcc-supply = <&vdd_3v3_reg>;
++        };
++    };
++
++...
+diff --git a/Documentation/devicetree/bindings/vendor-prefixes.yaml b/Documentation/devicetree/bindings/vendor-prefixes.yaml
+index 77160cd47f54..dab27f769b0a 100644
+--- a/Documentation/devicetree/bindings/vendor-prefixes.yaml
++++ b/Documentation/devicetree/bindings/vendor-prefixes.yaml
+@@ -1195,6 +1195,8 @@ patternProperties:
+     description: Picochip Ltd
+   "^pine64,.*":
+     description: Pine64
++  "^pinefeat,.*":
++    description: Pinefeat LLP
+   "^pineriver,.*":
+     description: Shenzhen PineRiver Designs Co., Ltd.
+   "^pixcir,.*":
+diff --git a/MAINTAINERS b/MAINTAINERS
+index fe168477caa4..811c6a150029 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -19985,6 +19985,12 @@ S:	Supported
+ F:	Documentation/devicetree/bindings/input/pine64,pinephone-keyboard.yaml
+ F:	drivers/input/keyboard/pinephone-keyboard.c
+ 
++PINEFEAT CEF168 LENS DRIVER
++M:	Aliaksandr Smirnou <support@pinefeat.co.uk>
++L:	linux-media@vger.kernel.org
++S:	Supported
++F:	Documentation/devicetree/bindings/media/i2c/pinefeat,cef168.yaml
++
+ PLANTOWER PMS7003 AIR POLLUTION SENSOR DRIVER
+ M:	Tomasz Duszynski <tduszyns@gmail.com>
+ S:	Maintained
+-- 
+2.34.1
 
-> +		writel(reg, rkvdec->regs + RKVDEC_REG_QOS_CTRL);
-> +	}
-> +
-> =C2=A0	/* Start decoding! */
-> =C2=A0	reg =3D (run.pps->flags & V4L2_HEVC_PPS_FLAG_TILES_ENABLED) ?
-> =C2=A0		0 : RKVDEC_WR_DDR_ALIGN_EN;
-> diff --git a/drivers/media/platform/rockchip/rkvdec/rkvdec-regs.h
-> b/drivers/media/platform/rockchip/rkvdec/rkvdec-regs.h
-> index 540c8bdf24e4..c627b6b6f53a 100644
-> --- a/drivers/media/platform/rockchip/rkvdec/rkvdec-regs.h
-> +++ b/drivers/media/platform/rockchip/rkvdec/rkvdec-regs.h
-> @@ -219,6 +219,8 @@
-> =C2=A0#define RKVDEC_REG_H264_ERR_E				0x134
-> =C2=A0#define RKVDEC_H264_ERR_EN_HIGHBITS(x)			((x) & 0x3fffffff)
-> =C2=A0
-> +#define RKVDEC_REG_QOS_CTRL				0x18C
-> +
-> =C2=A0#define RKVDEC_REG_PREF_LUMA_CACHE_COMMAND		0x410
-> =C2=A0#define RKVDEC_REG_PREF_CHR_CACHE_COMMAND		0x450
-> =C2=A0
-> diff --git a/drivers/media/platform/rockchip/rkvdec/rkvdec-vp9.c
-> b/drivers/media/platform/rockchip/rkvdec/rkvdec-vp9.c
-> index 0e7e16f20eeb..cadb9d592308 100644
-> --- a/drivers/media/platform/rockchip/rkvdec/rkvdec-vp9.c
-> +++ b/drivers/media/platform/rockchip/rkvdec/rkvdec-vp9.c
-> @@ -824,6 +824,16 @@ static int rkvdec_vp9_run(struct rkvdec_ctx *ctx)
-> =C2=A0	writel(1, rkvdec->regs + RKVDEC_REG_PREF_CHR_CACHE_COMMAND);
-> =C2=A0
-> =C2=A0	writel(0xe, rkvdec->regs + RKVDEC_REG_STRMD_ERR_EN);
-> +
-> +	if (rkvdec->quirks & RKVDEC_QUIRK_DISABLE_QOS) {
-> +		u32 reg;
-> +
-> +		reg =3D readl(rkvdec->regs + RKVDEC_REG_QOS_CTRL);
-> +		reg |=3D 0xFFFF;
-> +		reg &=3D ~BIT(12);
-> +		writel(reg, rkvdec->regs + RKVDEC_REG_QOS_CTRL);
-
-Can we deduplicate that ?
-
-> +	}
-> +
-> =C2=A0	/* Start decoding! */
-> =C2=A0	writel(RKVDEC_INTERRUPT_DEC_E | RKVDEC_CONFIG_DEC_CLK_GATE_E |
-> =C2=A0	=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 RKVDEC_TIMEOUT_E | RKVDEC_BUF=
-_EMPTY_E,
-> diff --git a/drivers/media/platform/rockchip/rkvdec/rkvdec.c
-> b/drivers/media/platform/rockchip/rkvdec/rkvdec.c
-> index c20e046205fe..d61d4c419992 100644
-> --- a/drivers/media/platform/rockchip/rkvdec/rkvdec.c
-> +++ b/drivers/media/platform/rockchip/rkvdec/rkvdec.c
-> @@ -1226,6 +1226,13 @@ static const struct rkvdec_variant
-> rk3288_rkvdec_variant =3D {
-> =C2=A0	.capabilities =3D RKVDEC_CAPABILITY_HEVC,
-> =C2=A0};
-> =C2=A0
-> +static const struct rkvdec_variant rk3328_rkvdec_variant =3D {
-> +	.capabilities =3D RKVDEC_CAPABILITY_HEVC |
-> +			RKVDEC_CAPABILITY_H264 |
-> +			RKVDEC_CAPABILITY_VP9,
-> +	.quirks =3D RKVDEC_QUIRK_DISABLE_QOS,
-> +};
-> +
-> =C2=A0static const struct rkvdec_variant rk3399_rkvdec_variant =3D {
-> =C2=A0	.capabilities =3D RKVDEC_CAPABILITY_HEVC |
-> =C2=A0			RKVDEC_CAPABILITY_H264 |
-> @@ -1237,6 +1244,10 @@ static const struct of_device_id of_rkvdec_match[]=
- =3D {
-> =C2=A0		.compatible =3D "rockchip,rk3288-vdec",
-> =C2=A0		.data =3D &rk3288_rkvdec_variant,
-> =C2=A0	},
-> +	{
-> +		.compatible =3D "rockchip,rk3328-vdec",
-> +		.data =3D &rk3328_rkvdec_variant,
-> +	},
-> =C2=A0	{
-> =C2=A0		.compatible =3D "rockchip,rk3399-vdec",
-> =C2=A0		.data =3D &rk3399_rkvdec_variant,
-> @@ -1267,6 +1278,7 @@ static int rkvdec_probe(struct platform_device *pde=
-v)
-> =C2=A0	platform_set_drvdata(pdev, rkvdec);
-> =C2=A0	rkvdec->dev =3D &pdev->dev;
-> =C2=A0	rkvdec->capabilities =3D variant->capabilities;
-> +	rkvdec->quirks =3D variant->quirks;
-> =C2=A0	mutex_init(&rkvdec->vdev_lock);
-> =C2=A0	INIT_DELAYED_WORK(&rkvdec->watchdog_work, rkvdec_watchdog_func);
-> =C2=A0
-> diff --git a/drivers/media/platform/rockchip/rkvdec/rkvdec.h
-> b/drivers/media/platform/rockchip/rkvdec/rkvdec.h
-> index 8e1f8548eae4..e633a879e9bf 100644
-> --- a/drivers/media/platform/rockchip/rkvdec/rkvdec.h
-> +++ b/drivers/media/platform/rockchip/rkvdec/rkvdec.h
-> @@ -26,6 +26,8 @@
-> =C2=A0#define RKVDEC_CAPABILITY_H264		BIT(1)
-> =C2=A0#define RKVDEC_CAPABILITY_VP9		BIT(2)
-> =C2=A0
-> +#define RKVDEC_QUIRK_DISABLE_QOS	BIT(0)
-
-Can you go back in the series, get H264 into bit 0, VP9 into bit 1, and set
-quirks from bit 16 ? Just worried the whole finding can becomes a mess in m=
-any
-years from now.
-
-> +
-> =C2=A0struct rkvdec_ctx;
-> =C2=A0
-> =C2=A0struct rkvdec_ctrl_desc {
-> @@ -69,6 +71,7 @@ vb2_to_rkvdec_decoded_buf(struct vb2_buffer *buf)
-> =C2=A0
-> =C2=A0struct rkvdec_variant {
-> =C2=A0	unsigned int capabilities;
-> +	unsigned int quirks;
-> =C2=A0};
-> =C2=A0
-> =C2=A0struct rkvdec_coded_fmt_ops {
-> @@ -121,6 +124,7 @@ struct rkvdec_dev {
-> =C2=A0	struct delayed_work watchdog_work;
-> =C2=A0	struct iommu_domain *empty_domain;
-> =C2=A0	unsigned int capabilities;
-> +	unsigned int quirks;
-> =C2=A0};
-> =C2=A0
-> =C2=A0struct rkvdec_ctx {
-
---=-XgQKcifX1OiDVJb6s0rw
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-Description: This is a digitally signed message part
-Content-Transfer-Encoding: 7bit
-
------BEGIN PGP SIGNATURE-----
-
-iF0EABECAB0WIQSScpfJiL+hb5vvd45xUwItrAaoHAUCaJpfvQAKCRBxUwItrAao
-HLVgAJsH8oUucLfcANkIKv4oo/Vz0zJLBwCeI2+6leJHXw15GvEeMoCS91Q9L84=
-=9eMj
------END PGP SIGNATURE-----
-
---=-XgQKcifX1OiDVJb6s0rw--
