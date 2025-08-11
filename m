@@ -1,113 +1,144 @@
-Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
+Received: from mailo.com (msg-3.mailo.com [213.182.54.8])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 083042D3228;
-	Mon, 11 Aug 2025 14:37:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.11.138.130
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2F8832E0B79;
+	Mon, 11 Aug 2025 14:40:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.182.54.8
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754923059; cv=none; b=grhtn0YEjxkbEeaMM1m55RmSkSZozOVt3mux+DY0Vl4GhaEkUaqFzE4Ps1ZJ+bBHNRBvLjZPdn+rEVfJai6+zp50Od3U5EcGPNtdd6iq6nGjBYHABFOhgjMWICtYxepBu9pCkFX7bdxG+ucZmdxkdPTiaTkHgHvQvfc5+zLojXc=
+	t=1754923262; cv=none; b=RNVZtBe7AMPm7U9DW5uEL193t9RIxaZfjp7MdUSjF0eGiCOYDnj9u7WmAEOnTINEKeBY4Sqcpyb5tlzWm2DzkA/xdZIOSAWZ85og9nzKGprAHbfRKiQFvgENBBnI7KnLmk0YPWSY+Hmr8lOE2GCTlHcG4jOd04giSshUuq/xq/c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754923059; c=relaxed/simple;
-	bh=I/F/dYBajC74Nt2UsFC9R8lYl1X/ITY2zVe1qGmEoxo=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=gkM6X73v/ELcoCWEUCoI3I6aaZGZzRCZFDoyA3X/0/WZ1oS45eIDDUQz9LDT1A7BGOenbMhqMOdyoeN9dOWNL/vWAVDfi/psggXNrBY8sfaSKWhhJXayF6vQhxDmiWUK+GVNj77nqShpD0QfplymwPL1rwq2IB7CkKod1oEmpB0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sntech.de; spf=pass smtp.mailfrom=sntech.de; dkim=pass (2048-bit key) header.d=sntech.de header.i=@sntech.de header.b=erg8R9/+; arc=none smtp.client-ip=185.11.138.130
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sntech.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sntech.de
+	s=arc-20240116; t=1754923262; c=relaxed/simple;
+	bh=WcbLtLQBy91cBUeeDQnn5F397N+v9eItLBsxZhKw2/A=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=bNjkGENJ/HW7q9Ksev+PwJgFoAHdU+plhalAKLsvpSvE6J+OW55r2fAEU9Vl71YHQEI26GLfIgP8f0w6XIqB+cJczdZjXe9LA2rjEGej8OQ0mB+9wY5mXj4xysLaZLRBsp7RNo3o/pzJyDE546a3BFVfBbm0HGZAEklRNaOo3ds=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mailoo.org; spf=pass smtp.mailfrom=mailoo.org; dkim=pass (1024-bit key) header.d=mailoo.org header.i=@mailoo.org header.b=fRYW9HR9; arc=none smtp.client-ip=213.182.54.8
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mailoo.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mailoo.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=sntech.de header.i=@sntech.de header.b="erg8R9/+"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=sntech.de;
-	s=gloria202408; h=Content-Type:Content-Transfer-Encoding:MIME-Version:
-	References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:Reply-To;
-	bh=NoSRkGb0dSVui2kGtJMRO3df9aT4TuXtCWAU8XI+je0=; b=erg8R9/+VSQSatTiLHhlebP75P
-	U+NhF7oAUdwhPfCtIOo9zP96Ns4yIcNv80x8QnpCQmd3H6PE96YtSC1SZvyNSLCXUK7lLi2U6W5yu
-	zXniKGWtaKm9dUAAejJ7MXv0vJn4OtjekveU4VvOdsJJg0gi5/UyGW9SOyX+XInkgQA/lxI0yJ2jO
-	y25aa/Vi2p+y5pPzz+uV4a1iRPr9af6zlaJhCVlYW91KF3eX8LDeG0A6//kW1T4WZ5y/2FMAQ+nwZ
-	fUl/Q4kU4F9lTPurUJ3hN2PZxgQi8SVln0eVK7xa89KNcL2zarlBmYSbUfnfGuS9CAKRN4whudZIr
-	xQjJOQpA==;
-Received: from i53875a0c.versanet.de ([83.135.90.12] helo=diego.localnet)
-	by gloria.sntech.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.94.2)
-	(envelope-from <heiko@sntech.de>)
-	id 1ulTeS-00021w-Ed; Mon, 11 Aug 2025 16:37:28 +0200
-From: Heiko =?UTF-8?B?U3TDvGJuZXI=?= <heiko@sntech.de>
-To: Detlev Casanova <detlev.casanova@collabora.com>,
- Mauro Carvalho Chehab <mchehab@kernel.org>,
- Nicolas Dufresne <nicolas.dufresne@collabora.com>
-Cc: linux-media@vger.kernel.org, linux-rockchip@lists.infradead.org,
- linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
- Sakari Ailus <sakari.ailus@linux.intel.com>,
- Nicolas Dufresne <nicolas.dufresne@collabora.com>
-Subject: Re: [PATCH v2] media: rkvdec: Remove redundant
-Date: Mon, 11 Aug 2025 16:37:27 +0200
-Message-ID: <1894144.QZUTf85G27@diego>
-In-Reply-To:
- <20250811-rkvdec-redundant-pm-rebase-v2-1-90c47213fbbe@collabora.com>
-References:
- <20250811-rkvdec-redundant-pm-rebase-v2-1-90c47213fbbe@collabora.com>
+	dkim=pass (1024-bit key) header.d=mailoo.org header.i=@mailoo.org header.b="fRYW9HR9"
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=mailoo.org; s=mailo;
+	t=1754922631; bh=WcbLtLQBy91cBUeeDQnn5F397N+v9eItLBsxZhKw2/A=;
+	h=X-EA-Auth:Message-ID:Subject:From:To:Cc:Date:In-Reply-To:
+	 References:Content-Type:Content-Transfer-Encoding:MIME-Version;
+	b=fRYW9HR9yCyYZB8EAkEWKgb2fGUrajHuXntl6PB9kwHOCW+NTyKiOHot+bu8FVi+Z
+	 uM6FZzrOv3VOPv53jOGriUjMyEk0VHFcY+xNV1lX5IGsS/IT+53AnTgllzi3TG3bEd
+	 4EV1pHsvmRlerk2o4/ZzW/IL4nmqW4Kwku08tFss=
+Received: by b221-5.in.mailobj.net [192.168.90.25] with ESMTP
+	via ip-22.mailoo.org [213.182.54.22]
+	Mon, 11 Aug 2025 16:30:31 +0200 (CEST)
+X-EA-Auth: Hg/exFp/+pX8QNqmfMA6P7RGU73U9i67bK+qYwUzVyHuqb3BttX1KbhCvRFdjjtEi5ZZJghPIEtv0vvHIQJLHDWolXoFlwutM0PrVXB5LYk=
+Message-ID: <bd5aec71222a98e51e6f0602b85d04d6ff3d6885.camel@mailoo.org>
+Subject: Re: [PATCH] media: i2c: ov8858: Add sensor's pixel matrix size
+From: Vincent Knecht <vincent.knecht@mailoo.org>
+To: Jacopo Mondi <jacopo.mondi@ideasonboard.com>, Nicholas Roth	
+ <nicholas@rothemail.net>, Sakari Ailus <sakari.ailus@linux.intel.com>,
+ Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc: linux-media@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	phone-devel@vger.kernel.org
+Date: Mon, 11 Aug 2025 16:30:30 +0200
+In-Reply-To: <20250509-ov8858-crop-v1-1-403a0993c1de@mailoo.org>
+References: <20250509-ov8858-crop-v1-1-403a0993c1de@mailoo.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.56.2 (3.56.2-1.fc42app2) 
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset="utf-8"
 
-Am Montag, 11. August 2025, 16:03:45 Mitteleurop=C3=A4ische Sommerzeit schr=
-ieb Nicolas Dufresne:
-> From: Sakari Ailus <sakari.ailus@linux.intel.com>
+Le vendredi 09 mai 2025 =C3=A0 09:33 +0200, Vincent Knecht via B4 Relay a =
+=C3=A9crit=C2=A0:
+> From: Vincent Knecht <vincent.knecht@mailoo.org>
 >=20
-> pm_runtime_put_autosuspend(), pm_runtime_put_sync_autosuspend(),
-> pm_runtime_autosuspend() and pm_request_autosuspend() now include a call
-> to pm_runtime_mark_last_busy(). Remove the now-reduntant explicit call to
-> pm_runtime_mark_last_busy().
+> The OV8858 pixel array is composed as:
+> - vertically: 16 dummy columns, 3264 valid ones and 16 dummy columns for
+> =C2=A0 a total of 3296 columns
+> - horizontally: 24 optical black lines, 16 dummy ones, 2448 valid, 16
+> =C2=A0 dummies and 24 optical black lines for a total of 2528 lines
 >=20
-> Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
-> Reviewed-by: Nicolas Dufresne <nicolas.dufresne@collabora.com>
-> Signed-off-by: Nicolas Dufresne <nicolas.dufresne@collabora.com>
-
-verif=C3=ADed the (new) definition of  pm_runtime_put_autosuspend()
-Reviewed-by: Heiko Stuebner <heiko@sntech.de>
-
-But the subject could use some work, I only got
-	"[PATCH v2] media: rkvdec: Remove redundant"
-
-so maybe make that
-"media: rkvdec: Remove redundant pm_runtime_mark_last_busy"
-
-
-Heiko
-
+> Set native and active sensor pixel sizes.
+>=20
+> Signed-off-by: Vincent Knecht <vincent.knecht@mailoo.org>
 > ---
-> Changes since V1:
->   - Re-applied since the driver have been moved out of staging
-> ---
->  drivers/media/platform/rockchip/rkvdec/rkvdec.c | 1 -
->  1 file changed, 1 deletion(-)
+> =C2=A0drivers/media/i2c/ov8858.c | 37 +++++++++++++++++++++++++++++++++++=
+++
+> =C2=A01 file changed, 37 insertions(+)
 >=20
-> diff --git a/drivers/media/platform/rockchip/rkvdec/rkvdec.c b/drivers/me=
-dia/platform/rockchip/rkvdec/rkvdec.c
-> index d707088ec0dc1f6a18b2d168ebdf20b443f2240e..445f7c92eee34f7d6f885bb51=
-9d9eb24313da548 100644
-> --- a/drivers/media/platform/rockchip/rkvdec/rkvdec.c
-> +++ b/drivers/media/platform/rockchip/rkvdec/rkvdec.c
-> @@ -765,7 +765,6 @@ static void rkvdec_job_finish(struct rkvdec_ctx *ctx,
->  {
->  	struct rkvdec_dev *rkvdec =3D ctx->dev;
-> =20
-> -	pm_runtime_mark_last_busy(rkvdec->dev);
->  	pm_runtime_put_autosuspend(rkvdec->dev);
->  	rkvdec_job_finish_no_pm(ctx, result);
->  }
+> diff --git a/drivers/media/i2c/ov8858.c b/drivers/media/i2c/ov8858.c
+> index 95f9ae7948463e95ce0b2cb58195de02ee72c02a..9a86aa46e20b48ef4bae7d70c=
+e485985c1ba886a 100644
+> --- a/drivers/media/i2c/ov8858.c
+> +++ b/drivers/media/i2c/ov8858.c
+> @@ -77,6 +77,14 @@
+> =C2=A0
+> =C2=A0#define REG_NULL			0xffff
+> =C2=A0
+> +/* OV8858 native and active pixel array size */
+> +#define OV8858_NATIVE_WIDTH		3296U
+> +#define OV8858_NATIVE_HEIGHT		2528U
+> +#define OV8858_PIXEL_ARRAY_LEFT		16U
+> +#define OV8858_PIXEL_ARRAY_TOP		40U
+> +#define OV8858_PIXEL_ARRAY_WIDTH	3264U
+> +#define OV8858_PIXEL_ARRAY_HEIGHT	2448U
+> +
+> =C2=A0static const char * const ov8858_supply_names[] =3D {
+> =C2=A0	"avdd",		/* Analog power */
+> =C2=A0	"dovdd",	/* Digital I/O power */
+> @@ -1492,11 +1500,40 @@ static int ov8858_init_state(struct v4l2_subdev *=
+sd,
+> =C2=A0	return 0;
+> =C2=A0}
+> =C2=A0
+> +static int ov8858_get_selection(struct v4l2_subdev *sd,
+> +				struct v4l2_subdev_state *sd_state,
+> +				struct v4l2_subdev_selection *sel)
+> +{
+> +	switch (sel->target) {
+> +	case V4L2_SEL_TGT_CROP:
+> +		sel->r =3D *v4l2_subdev_state_get_crop(sd_state, 0);
+> +		return 0;
+> +
+> +	case V4L2_SEL_TGT_NATIVE_SIZE:
+> +		sel->r.top =3D 0;
+> +		sel->r.left =3D 0;
+> +		sel->r.width =3D OV8858_NATIVE_WIDTH;
+> +		sel->r.height =3D OV8858_NATIVE_HEIGHT;
+> +		return 0;
+> +
+> +	case V4L2_SEL_TGT_CROP_DEFAULT:
+> +	case V4L2_SEL_TGT_CROP_BOUNDS:
+> +		sel->r.top =3D OV8858_PIXEL_ARRAY_TOP;
+> +		sel->r.left =3D OV8858_PIXEL_ARRAY_LEFT;
+> +		sel->r.width =3D OV8858_PIXEL_ARRAY_WIDTH;
+> +		sel->r.height =3D OV8858_PIXEL_ARRAY_HEIGHT;
+> +		return 0;
+> +	}
+> +
+> +	return -EINVAL;
+> +}
+> +
+> =C2=A0static const struct v4l2_subdev_pad_ops ov8858_pad_ops =3D {
+> =C2=A0	.enum_mbus_code =3D ov8858_enum_mbus_code,
+> =C2=A0	.enum_frame_size =3D ov8858_enum_frame_sizes,
+> =C2=A0	.get_fmt =3D v4l2_subdev_get_fmt,
+> =C2=A0	.set_fmt =3D ov8858_set_fmt,
+> +	.get_selection =3D ov8858_get_selection,
+> =C2=A0};
+> =C2=A0
+> =C2=A0static const struct v4l2_subdev_ops ov8858_subdev_ops =3D {
 >=20
 > ---
-> base-commit: 8f5ae30d69d7543eee0d70083daf4de8fe15d585
-> change-id: 20250811-rkvdec-redundant-pm-rebase-ed9b885eeadd
+> base-commit: 37ff6e9a2ce321b7932d3987701757fb4d87b0e6
+> change-id: 20250509-ov8858-crop-9c307bc9d5b6
 >=20
 > Best regards,
->=20
 
+Hi Sakari,
 
+I got no feedback about this patch, is it okay ?
+
+Thank you
 
 
