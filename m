@@ -1,84 +1,108 @@
 Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AB4DF2DF3F8
-	for <linux-media@vger.kernel.org>; Tue, 12 Aug 2025 06:04:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E80122D239A
+	for <linux-media@vger.kernel.org>; Tue, 12 Aug 2025 06:06:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754978666; cv=none; b=TSAK0RaJsNprWgMS62Rpl/fkOaiy5mcvYmlVg2NhD24jIE2DCIPW2SFNXrvM/K5LndLAmLNi0NBIg46LxdlJ8x9YaCDQ9MrHllgeC9AwSB505CE0v8mxEBhIUgCtOL1Kh6Ssk7B0oSKZA7lVc38sw4IUC+rcKTtnsBq/1ddFO+g=
+	t=1754978782; cv=none; b=FkdJytt0yMQA092DH86xkQwy+AaYr1QXrs6dTt6QT3Nj3eT9OpAbi4VIpKVQr9mfGTnH2FlaILyYIWxtCmikgKOX69QFJkS+TEERsnmRI0wNHkUZNefK64vUENox9KkqkU117oSKtURGA2OhQOmawW88rxuGhCAqAVyblEGVg0A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754978666; c=relaxed/simple;
-	bh=ZsFe4AzOwoPYfMJumjArWDT7EKHeGXtz6tSp/0vqINQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=WW6iSMhmu1FEA/X27yktfs1hS1i+WSGWh0R8FtswSxBRz5n5I6ysWy+xAlsgystrG0Zbh9FPd8UeX6XwjFcW0QOf+z0XFJFkxC2EGIgqEAi0RwUozd5WHBqPKLOfKpxv2n+u+gepROpPm653z0tntaJc5xd6oGSkpCta+ICCMQQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=dydURak4; arc=none smtp.client-ip=192.198.163.18
+	s=arc-20240116; t=1754978782; c=relaxed/simple;
+	bh=76tSm83gCwBuT15SPasidQuO3TOuUiDDGZBeYlMBFC8=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=qidBk+VZZOaqAy7vIkpgyHoOTyCASE/VbUITDAPL3fNB6AfLcP5sounw6I32b20/23gAZduqLsw+FAzGfIrBTF4dhGQASELVn8jpvXyjKNE4UET+8Q8Uq47CQYg11wwcLBWFnR40jH/nqXgkyJeO+C6vcNad7OIvNEYXK4tQDAI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=CtirKP8v; arc=none smtp.client-ip=192.198.163.18
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="dydURak4"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="CtirKP8v"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1754978665; x=1786514665;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=ZsFe4AzOwoPYfMJumjArWDT7EKHeGXtz6tSp/0vqINQ=;
-  b=dydURak4sMEEWi0BDTOAJzdhNZo8VgNJXCtl83ifA76dqZSu4778tjBB
-   IzbjUSFaiVEN/+IL75LVNc/eXm8OE/I8SQAPsmDWCBBQtFc4RAJ7SNynF
-   c3RCe8k3xYBek1fHxZ2ZXv64WiR8qymNH6nBFHEOjCBhf+FxPAjLseKBB
-   ZHXqLJB1L6jna5uk4O0g4TQgDYi5E54f4DHOB0vGxzrzLVplRPNAqwWcO
-   onhas7b2o8n9zLe6qFupqN8WFgXatyBB2KgppegFLiv139T+j4knZbyQj
-   7JVP4ltpvu7ehWVGtr8mJC3swksOUsMYQ2582SZmD+WFaKV0NgCXFg1a7
-   g==;
-X-CSE-ConnectionGUID: J6MAFr4XRV6YrpcfmUERBQ==
-X-CSE-MsgGUID: rG7IHei3TUmjyorCLNwgAg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11518"; a="56454874"
+  t=1754978781; x=1786514781;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=76tSm83gCwBuT15SPasidQuO3TOuUiDDGZBeYlMBFC8=;
+  b=CtirKP8vcYdJyYqxciSDB3RmXpGYgNYNn7Kww4q8ApRG/u7YveYqzfgo
+   rkfGGntAnidhSN5wrt+aN7PNIhiUgxbVwKVKI3p31+O6ImHkue+9lJK2n
+   m8jD8GzQDyYTTdU5l8pkvM3K+mh8TxXNb/32stuxlpiS8KIcCvhsHk1uU
+   J9G3/JUqiBvK0ikKsed9NoOcuWXqItUQ2rKum0/iOLLpEXNeRj64wGtXs
+   TWHgwUwZun4OBJY+jxB1sTvbpoGa74pzrOntzRQS5gFpVUJw1o8DvpdTD
+   BXglKWUYvnrEjMAwfi5ha6qS/KMa+vg2xI+v9m7LFFWR+2TM6lb4YF6//
+   Q==;
+X-CSE-ConnectionGUID: ExFCIeBrTr+cii40k6zjpg==
+X-CSE-MsgGUID: x9Xu30i8T7+GMf1eIcSpww==
+X-IronPort-AV: E=McAfee;i="6800,10657,11518"; a="56455056"
 X-IronPort-AV: E=Sophos;i="6.17,284,1747724400"; 
-   d="scan'208";a="56454874"
-Received: from orviesa003.jf.intel.com ([10.64.159.143])
-  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Aug 2025 23:04:24 -0700
-X-CSE-ConnectionGUID: RQwCSfmMRKSPYT69TDrl5A==
-X-CSE-MsgGUID: fQcZ3I+VQNaR9+LA796T/Q==
+   d="scan'208";a="56455056"
+Received: from orviesa001.jf.intel.com ([10.64.159.141])
+  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Aug 2025 23:06:17 -0700
+X-CSE-ConnectionGUID: zjrRCY14TrG7vuoN7Pt83A==
+X-CSE-MsgGUID: yTa8+M2aS+umG5wlzgy+ng==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.17,284,1747724400"; 
-   d="scan'208";a="170311398"
+   d="scan'208";a="203298492"
 Received: from agladkov-desk.ger.corp.intel.com (HELO kekkonen.fi.intel.com) ([10.245.245.28])
-  by ORVIESA003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Aug 2025 23:04:22 -0700
-Received: from kekkonen.localdomain (localhost [127.0.0.1])
-	by kekkonen.fi.intel.com (Postfix) with SMTP id 5925D11F831;
-	Tue, 12 Aug 2025 09:04:18 +0300 (EEST)
-Date: Tue, 12 Aug 2025 06:04:18 +0000
+  by smtpauth.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Aug 2025 23:06:15 -0700
+Received: from punajuuri.localdomain (unknown [192.168.240.130])
+	by kekkonen.fi.intel.com (Postfix) with ESMTP id 94E4311F831;
+	Tue, 12 Aug 2025 09:06:11 +0300 (EEST)
+Received: from sailus by punajuuri.localdomain with local (Exim 4.96)
+	(envelope-from <sakari.ailus@linux.intel.com>)
+	id 1uli9E-008tbE-1q;
+	Tue, 12 Aug 2025 09:06:12 +0300
 Organization: Intel Finland Oy - BIC 0357606-4 - c/o Alberga Business Park, 6 krs, Bertel Jungin Aukio 5, 02600 Espoo
 From: Sakari Ailus <sakari.ailus@linux.intel.com>
-To: Nikita Yushchenko <nikita.yoush@cogentembedded.com>
-Cc: linux-media@vger.kernel.org,
-	Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
+To: linux-media@vger.kernel.org
+Cc: Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
 	Geert Uytterhoeven <geert+renesas@glider.be>,
 	Magnus Damm <magnus.damm@gmail.com>,
+	Nikita Yushchenko <nikita.yoush@cogentembedded.com>,
 	Valentine Barshak <valentine.barshak@cogentembedded.com>,
 	Andrey Dolnikov <andrey.dolnikov@cogentembedded.com>
-Subject: Re: [RESEND PATCH 1/1] media: MAINTAINERS: Orphan the rcar_jpu driver
-Message-ID: <aJrZYodhprrJ_mqk@kekkonen.localdomain>
-References: <20250808202829.2115779-1-sakari.ailus@linux.intel.com>
- <c8b7c8d3-d016-4ffc-8f33-fe37fead0048@cogentembedded.com>
+Subject: [PATCH v2 1/1] media: MAINTAINERS: Change rcar-jpu maintainer
+Date: Tue, 12 Aug 2025 09:06:12 +0300
+Message-Id: <20250812060612.2120340-1-sakari.ailus@linux.intel.com>
+X-Mailer: git-send-email 2.39.5
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <c8b7c8d3-d016-4ffc-8f33-fe37fead0048@cogentembedded.com>
+Content-Transfer-Encoding: 8bit
 
-On Mon, Aug 11, 2025 at 07:55:06PM +0200, Nikita Yushchenko wrote:
-> > Mikhail's e-mail is bouncing:
-> > ...
-> > Assign the driver to Laurent with "Odd Fixes" status.
-> Indeed Mikhail is no longer available at Cogent.
-> 
-> Maybe my address could be used instead, I think I'm the most kernel oriented person at Cogent these days.
+Assign the driver to Nikita as discussed on LMML.
 
-Thanks, Nikita! I'll send v2 with that.
+Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
+---
+ MAINTAINERS                               | 2 +-
+ drivers/media/platform/renesas/rcar_jpu.c | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
+diff --git a/MAINTAINERS b/MAINTAINERS
+index f2bc83b96496..ae89671c70a7 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -13129,7 +13129,7 @@ F:	fs/jbd2/
+ F:	include/linux/jbd2.h
+ 
+ JPU V4L2 MEM2MEM DRIVER FOR RENESAS
+-M:	Mikhail Ulyanov <mikhail.ulyanov@cogentembedded.com>
++M:	Nikita Yushchenko <nikita.yoush@cogentembedded.com>
+ L:	linux-media@vger.kernel.org
+ L:	linux-renesas-soc@vger.kernel.org
+ S:	Maintained
+diff --git a/drivers/media/platform/renesas/rcar_jpu.c b/drivers/media/platform/renesas/rcar_jpu.c
+index 81038df71bb5..6cf1fef42617 100644
+--- a/drivers/media/platform/renesas/rcar_jpu.c
++++ b/drivers/media/platform/renesas/rcar_jpu.c
+@@ -1745,6 +1745,6 @@ static struct platform_driver jpu_driver = {
+ module_platform_driver(jpu_driver);
+ 
+ MODULE_ALIAS("platform:" DRV_NAME);
+-MODULE_AUTHOR("Mikhail Ulianov <mikhail.ulyanov@cogentembedded.com>");
++MODULE_AUTHOR("Mikhail Ulianov");
+ MODULE_DESCRIPTION("Renesas R-Car JPEG processing unit driver");
+ MODULE_LICENSE("GPL v2");
 -- 
-Sakari Ailus
+2.39.5
+
