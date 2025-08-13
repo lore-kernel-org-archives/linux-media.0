@@ -1,377 +1,223 @@
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6EB7F2F3C2B;
-	Wed, 13 Aug 2025 09:49:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.167.242.64
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 236CF212547;
+	Wed, 13 Aug 2025 09:55:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755078587; cv=none; b=Y4HDV68gEYj8jVhhv68M+vk1RXjovR2cTdryJYcT+XNRtGiL3IdietbyHme56i5gLmMbQZXVLUJx+o7T2ybbUcihpZ5wdWrce2pfycRkm+lTo5QpeKpeR/ipTgMcrFciJ5Cs4eJ4T8SrCJcPy7o74CwS1niqfs9f036OxuX+a+E=
+	t=1755078916; cv=none; b=b3qS49Bv68ZlbCcmzmGgLS7O5AJ50w0owlpK5BmeNxiTJIx6fwzi73MZK3kqK4QC212oc/LEINpwIPgLcbI3UyTz4Ybbj4q3DAiG5E3Jpg3IpoXF+s8GEh5y0i788ZqU2v9+YYXcgNqGy/WD+8ilAPCSLUaLc1FtBJ3sNslkP/Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755078587; c=relaxed/simple;
-	bh=tad6RttfNGtNcWBsq7Prb8747qumHdECnVZhvaOGkec=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=oKsKHCv4SxTTYMmPYzrVNJcWzx+4aD/pAXLpA0tTIOFNMARs4UMoUo6DQYLTYgBYwxjGFm67IJJ4QCIi250HEmaCDHsLmozRHO1ideHsDIZ6s9MHm8FQD5Fs+1YIX8URTk2Q9boAOS27VuL0KC6SLk7fPb0kasHW15uEz5hHvcY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ideasonboard.com; spf=pass smtp.mailfrom=ideasonboard.com; dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b=lDC3CUpR; arc=none smtp.client-ip=213.167.242.64
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ideasonboard.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ideasonboard.com
+	s=arc-20240116; t=1755078916; c=relaxed/simple;
+	bh=MvImjylXrI4+Mq4Y6GK4o5eaE5CpofQt90d5HdqT8Gs=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=Zlup6I13FmSG5HCke97R/oVWK98m/WucdyaUBknuOPhEesRs1sRGFZYYgeKFrfyhQIdQ1GwJHNUBNYY4f8CvEWcLEqqGJyVltWxi0KhdhUgxKuX9WWgNs+HdbArDZTohlJb56mQqaoTS083xt+BFOjWGJRGVhnbvIh/qJsGHepc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=u97YZHYG; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="lDC3CUpR"
-Received: from pendragon.ideasonboard.com (81-175-209-231.bb.dnainternet.fi [81.175.209.231])
-	by perceval.ideasonboard.com (Postfix) with UTF8SMTPSA id 3394A43;
-	Wed, 13 Aug 2025 11:48:49 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-	s=mail; t=1755078529;
-	bh=tad6RttfNGtNcWBsq7Prb8747qumHdECnVZhvaOGkec=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=lDC3CUpRtw0zV8JucUdEq1933fQtCi97ni3MEusJfyPNMGDzBGnSlAB39954tXz1o
-	 8RKpK/53FRqeyq4eYKt/bWjO7KMWbTaZI8pfgATwb/ozNI3tll9MfmS7BzVSgTFKCB
-	 puIMpHRtk8zCZfKLRcaL/oXdZePx1sgCodVPs7Fg=
-From: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To: linux-media@vger.kernel.org
-Cc: Loic Poulain <loic.poulain@oss.qualcomm.com>,
-	Robert Foss <rfoss@kernel.org>,
-	Andi Shyti <andi.shyti@kernel.org>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Sakari Ailus <sakari.ailus@linux.intel.com>,
-	Manivannan Sadhasivam <mani@kernel.org>,
-	Sylwester Nawrocki <s.nawrocki@samsung.com>,
-	Alim Akhtar <alim.akhtar@samsung.com>,
-	Dongchun Zhu <dongchun.zhu@mediatek.com>,
-	Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-	Todor Tomov <todor.too@gmail.com>,
-	linux-arm-msm@vger.kernel.org,
-	linux-i2c@vger.kernel.org,
-	devicetree@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-samsung-soc@vger.kernel.org
-Subject: [PATCH v2.1 01/72] dt-bindings: media: Deprecate clock-frequency property for camera sensors
-Date: Wed, 13 Aug 2025 12:49:23 +0300
-Message-ID: <20250813094923.23695-1-laurent.pinchart@ideasonboard.com>
-X-Mailer: git-send-email 2.49.1
-In-Reply-To: <20250812214620.30425-2-laurent.pinchart@ideasonboard.com>
-References: <20250812214620.30425-2-laurent.pinchart@ideasonboard.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="u97YZHYG"
+Received: by smtp.kernel.org (Postfix) with ESMTPS id F0FEBC4CEF5;
+	Wed, 13 Aug 2025 09:55:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1755078916;
+	bh=MvImjylXrI4+Mq4Y6GK4o5eaE5CpofQt90d5HdqT8Gs=;
+	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To:From;
+	b=u97YZHYGHoZNFIG8AIJ0X3727Xj+X01qP0U/D/kqhn3kym8gT2w2YmGh6DKGaEm3F
+	 bO5xsR1dt5WoLf3JjYrYATszkm/eE/yNWdNTEjZL3vnnrMt6OvjtD1UF+V5G7Ko5Ga
+	 T/Zpd7h979sCcAUPH12b9EQjvxY4MVhkKy1gvM4/1mECaoVktn/40D3p0zCFAuxJ1h
+	 vXJ0KNZ9IJ8/8v4WILbdnaRscOUk4Hu/TmToV/7yxQAqMO5dF7fHQcF8PfjsMRxn1V
+	 BvNoQjXva42VrC4WSEVZpc6Cms8B90SnpH2sXfIGo5HqsqmCoQMMo221m3Vw2X8XiV
+	 CTJbCGjW/X89A==
+Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E9A22CA0EE3;
+	Wed, 13 Aug 2025 09:55:15 +0000 (UTC)
+From: Yassine Ouaissa via B4 Relay <devnull+yassine.ouaissa.allegrodvt.com@kernel.org>
+Date: Wed, 13 Aug 2025 09:54:53 +0000
+Subject: [PATCH v5 1/4] media: allegro-dvt: Move the current driver to a
+ subdirectory
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20250813-allegro_dvt_al300_dec_driver-v5-1-a312ddebc4d8@allegrodvt.com>
+References: <20250813-allegro_dvt_al300_dec_driver-v5-0-a312ddebc4d8@allegrodvt.com>
+In-Reply-To: <20250813-allegro_dvt_al300_dec_driver-v5-0-a312ddebc4d8@allegrodvt.com>
+To: Mauro Carvalho Chehab <mchehab@kernel.org>, 
+ Michael Tretter <m.tretter@pengutronix.de>, 
+ Pengutronix Kernel Team <kernel@pengutronix.de>, 
+ Michal Simek <michal.simek@amd.com>, Rob Herring <robh@kernel.org>, 
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+ Conor Dooley <conor+dt@kernel.org>, 
+ Yassine OUAISSA <yassine.ouaissa@allegrodvt.com>, 
+ Nicolas Dufresne <nicolas@ndufresne.ca>
+Cc: linux-kernel@vger.kernel.org, linux-media@vger.kernel.org, 
+ linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org
+X-Mailer: b4 0.14.2
+X-Developer-Signature: v=1; a=openpgp-sha256; l=7230;
+ i=yassine.ouaissa@allegrodvt.com; h=from:subject:message-id;
+ bh=6nWciogZPWrY76bSytf/OtHi/QUgfGdILTn620+ZtjE=;
+ b=owGbwMvMwCV2oHftXqU9jLMZT6slMWTMSWScFlixpKWFqfVd1Je+pMq0SslFj1liXi0+uSDh/
+ cvK8vsdHaUsDGJcDLJiiiwfDJY++8JW4zOjhW0+zBxWJpAhDFycAjCRgvsM/7NlPSdpyO2d7t/O
+ F7v4V1hS0dPgy4mFayODG9a7fPbvPcvIsC7+RfWer3pMW8skMmrKXTVlHubrZ3oYz+U7Uat7+sx
+ OLgA=
+X-Developer-Key: i=yassine.ouaissa@allegrodvt.com; a=openpgp;
+ fpr=B0CE218FC8E89064DAED6179042F935CFB3AD0CC
+X-Endpoint-Received: by B4 Relay for yassine.ouaissa@allegrodvt.com/default
+ with auth_id=423
+X-Original-From: Yassine Ouaissa <yassine.ouaissa@allegrodvt.com>
+Reply-To: yassine.ouaissa@allegrodvt.com
 
-Usage of the clock-frequency property for camera sensors is discouraged
-in favour of using assigned-clock-rates (and assigned-clock-parents
-where needed). Mark the property as deprecated.
+From: Yassine Ouaissa <yassine.ouaissa@allegrodvt.com>
 
-Update the examples accordingly. In DT examples where the sensor input
-clock appears to come from a programmable clock generator, replace
-clock-frequency by the assigned-clocks and assigned-clock-rates
-properties. Otherwise, just drop clock-frequency.
+In preparation for the upcoming driver update, we need to relocate the
+current driver.
+This will help ensure a clean transition and avoid any potential
+conflicts with the new driver.
+This patch is crucial for keeping our directory organized and
+facilitating a smooth integration of the new driver.
 
-Signed-off-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Reviewed-by: Rob Herring (Arm) <robh@kernel.org>
+Signed-off-by: Yassine Ouaissa <yassine.ouaissa@allegrodvt.com>
 ---
-Changes since v2:
+ MAINTAINERS                                             |  2 +-
+ drivers/media/platform/allegro-dvt/Kconfig              | 16 +---------------
+ drivers/media/platform/allegro-dvt/Makefile             |  5 +----
+ drivers/media/platform/allegro-dvt/zynqmp/Kconfig       | 17 +++++++++++++++++
+ drivers/media/platform/allegro-dvt/zynqmp/Makefile      |  6 ++++++
+ .../platform/allegro-dvt/{ => zynqmp}/allegro-core.c    |  0
+ .../platform/allegro-dvt/{ => zynqmp}/allegro-mail.c    |  0
+ .../platform/allegro-dvt/{ => zynqmp}/allegro-mail.h    |  0
+ .../media/platform/allegro-dvt/{ => zynqmp}/nal-h264.c  |  0
+ .../media/platform/allegro-dvt/{ => zynqmp}/nal-h264.h  |  0
+ .../media/platform/allegro-dvt/{ => zynqmp}/nal-hevc.c  |  0
+ .../media/platform/allegro-dvt/{ => zynqmp}/nal-hevc.h  |  0
+ .../media/platform/allegro-dvt/{ => zynqmp}/nal-rbsp.c  |  0
+ .../media/platform/allegro-dvt/{ => zynqmp}/nal-rbsp.h  |  0
+ 14 files changed, 26 insertions(+), 20 deletions(-)
 
-- Don't remove clocks property in samsung,exynos4212-fimc-is.yaml
+diff --git a/MAINTAINERS b/MAINTAINERS
+index fe168477caa45799dfe07de2f54de6d6a1ce0615..88a76452956eb3b91e7813cbdc16c361f26216a5 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -820,7 +820,7 @@ R:	Pengutronix Kernel Team <kernel@pengutronix.de>
+ L:	linux-media@vger.kernel.org
+ S:	Maintained
+ F:	Documentation/devicetree/bindings/media/allegro,al5e.yaml
+-F:	drivers/media/platform/allegro-dvt/
++F:	drivers/media/platform/allegro-dvt/zynqmp
+ 
+ ALLIED VISION ALVIUM CAMERA DRIVER
+ M:	Tommaso Merciai <tomm.merciai@gmail.com>
+diff --git a/drivers/media/platform/allegro-dvt/Kconfig b/drivers/media/platform/allegro-dvt/Kconfig
+index 2182e1277568a407f51a23ea437811c50b1183c8..e9008614c27b9490d1cd29fab887977a1918ede4 100644
+--- a/drivers/media/platform/allegro-dvt/Kconfig
++++ b/drivers/media/platform/allegro-dvt/Kconfig
+@@ -2,18 +2,4 @@
+ 
+ comment "Allegro DVT media platform drivers"
+ 
+-config VIDEO_ALLEGRO_DVT
+-	tristate "Allegro DVT Video IP Core"
+-	depends on V4L_MEM2MEM_DRIVERS
+-	depends on VIDEO_DEV
+-	depends on ARCH_ZYNQMP || COMPILE_TEST
+-	select V4L2_MEM2MEM_DEV
+-	select VIDEOBUF2_DMA_CONTIG
+-	select REGMAP_MMIO
+-	help
+-	  Support for the encoder video IP core by Allegro DVT. This core is
+-	  found for example on the Xilinx ZynqMP SoC in the EV family and is
+-	  called VCU in the reference manual.
+-
+-	  To compile this driver as a module, choose M here: the module
+-	  will be called allegro.
++source "drivers/media/platform/allegro-dvt/zynqmp/Kconfig"
+diff --git a/drivers/media/platform/allegro-dvt/Makefile b/drivers/media/platform/allegro-dvt/Makefile
+index 66108a3037747020d549bc0a427881e0667a3f0a..d2aa6875edcf7760901996aac4d5ac98282cce20 100644
+--- a/drivers/media/platform/allegro-dvt/Makefile
++++ b/drivers/media/platform/allegro-dvt/Makefile
+@@ -1,6 +1,3 @@
+ # SPDX-License-Identifier: GPL-2.0
+ 
+-allegro-objs := allegro-core.o allegro-mail.o
+-allegro-objs += nal-rbsp.o nal-h264.o nal-hevc.o
+-
+-obj-$(CONFIG_VIDEO_ALLEGRO_DVT) += allegro.o
++obj-y += zynqmp/
+diff --git a/drivers/media/platform/allegro-dvt/zynqmp/Kconfig b/drivers/media/platform/allegro-dvt/zynqmp/Kconfig
+new file mode 100644
+index 0000000000000000000000000000000000000000..0a0a697c420da47f87f05153a2dbfbe5d3ccf988
+--- /dev/null
++++ b/drivers/media/platform/allegro-dvt/zynqmp/Kconfig
+@@ -0,0 +1,17 @@
++# SPDX-License-Identifier: GPL-2.0-only
++
++config VIDEO_ALLEGRO_DVT
++	tristate "Allegro DVT Video IP Core for ZynqMP"
++	depends on V4L_MEM2MEM_DRIVERS
++	depends on VIDEO_DEV
++	depends on ARCH_ZYNQMP || COMPILE_TEST
++	select V4L2_MEM2MEM_DEV
++	select VIDEOBUF2_DMA_CONTIG
++	select REGMAP_MMIO
++	help
++	  Support for the encoder video IP core by Allegro DVT. This core is
++	  found for example on the Xilinx ZynqMP SoC in the EV family and is
++	  called VCU in the reference manual.
++
++	  To compile this driver as a module, choose M here: the module
++	  will be called allegro.
+diff --git a/drivers/media/platform/allegro-dvt/zynqmp/Makefile b/drivers/media/platform/allegro-dvt/zynqmp/Makefile
+new file mode 100644
+index 0000000000000000000000000000000000000000..66108a3037747020d549bc0a427881e0667a3f0a
+--- /dev/null
++++ b/drivers/media/platform/allegro-dvt/zynqmp/Makefile
+@@ -0,0 +1,6 @@
++# SPDX-License-Identifier: GPL-2.0
++
++allegro-objs := allegro-core.o allegro-mail.o
++allegro-objs += nal-rbsp.o nal-h264.o nal-hevc.o
++
++obj-$(CONFIG_VIDEO_ALLEGRO_DVT) += allegro.o
+diff --git a/drivers/media/platform/allegro-dvt/allegro-core.c b/drivers/media/platform/allegro-dvt/zynqmp/allegro-core.c
+similarity index 100%
+rename from drivers/media/platform/allegro-dvt/allegro-core.c
+rename to drivers/media/platform/allegro-dvt/zynqmp/allegro-core.c
+diff --git a/drivers/media/platform/allegro-dvt/allegro-mail.c b/drivers/media/platform/allegro-dvt/zynqmp/allegro-mail.c
+similarity index 100%
+rename from drivers/media/platform/allegro-dvt/allegro-mail.c
+rename to drivers/media/platform/allegro-dvt/zynqmp/allegro-mail.c
+diff --git a/drivers/media/platform/allegro-dvt/allegro-mail.h b/drivers/media/platform/allegro-dvt/zynqmp/allegro-mail.h
+similarity index 100%
+rename from drivers/media/platform/allegro-dvt/allegro-mail.h
+rename to drivers/media/platform/allegro-dvt/zynqmp/allegro-mail.h
+diff --git a/drivers/media/platform/allegro-dvt/nal-h264.c b/drivers/media/platform/allegro-dvt/zynqmp/nal-h264.c
+similarity index 100%
+rename from drivers/media/platform/allegro-dvt/nal-h264.c
+rename to drivers/media/platform/allegro-dvt/zynqmp/nal-h264.c
+diff --git a/drivers/media/platform/allegro-dvt/nal-h264.h b/drivers/media/platform/allegro-dvt/zynqmp/nal-h264.h
+similarity index 100%
+rename from drivers/media/platform/allegro-dvt/nal-h264.h
+rename to drivers/media/platform/allegro-dvt/zynqmp/nal-h264.h
+diff --git a/drivers/media/platform/allegro-dvt/nal-hevc.c b/drivers/media/platform/allegro-dvt/zynqmp/nal-hevc.c
+similarity index 100%
+rename from drivers/media/platform/allegro-dvt/nal-hevc.c
+rename to drivers/media/platform/allegro-dvt/zynqmp/nal-hevc.c
+diff --git a/drivers/media/platform/allegro-dvt/nal-hevc.h b/drivers/media/platform/allegro-dvt/zynqmp/nal-hevc.h
+similarity index 100%
+rename from drivers/media/platform/allegro-dvt/nal-hevc.h
+rename to drivers/media/platform/allegro-dvt/zynqmp/nal-hevc.h
+diff --git a/drivers/media/platform/allegro-dvt/nal-rbsp.c b/drivers/media/platform/allegro-dvt/zynqmp/nal-rbsp.c
+similarity index 100%
+rename from drivers/media/platform/allegro-dvt/nal-rbsp.c
+rename to drivers/media/platform/allegro-dvt/zynqmp/nal-rbsp.c
+diff --git a/drivers/media/platform/allegro-dvt/nal-rbsp.h b/drivers/media/platform/allegro-dvt/zynqmp/nal-rbsp.h
+similarity index 100%
+rename from drivers/media/platform/allegro-dvt/nal-rbsp.h
+rename to drivers/media/platform/allegro-dvt/zynqmp/nal-rbsp.h
 
-Changes since v1:
-
-- Adapt examples in bindings that reference sensors
----
- Documentation/devicetree/bindings/i2c/qcom,i2c-cci.yaml    | 6 ++++--
- Documentation/devicetree/bindings/media/i2c/mipi-ccs.yaml  | 7 +++++--
- .../devicetree/bindings/media/i2c/ovti,ov02a10.yaml        | 3 +--
- .../devicetree/bindings/media/i2c/ovti,ov5645.yaml         | 6 +++++-
- .../devicetree/bindings/media/i2c/ovti,ov7251.yaml         | 6 +++++-
- .../devicetree/bindings/media/i2c/ovti,ov8856.yaml         | 3 +--
- .../devicetree/bindings/media/i2c/samsung,s5k5baf.yaml     | 6 +++++-
- .../devicetree/bindings/media/i2c/samsung,s5k6a3.yaml      | 6 +++++-
- .../devicetree/bindings/media/i2c/sony,imx290.yaml         | 5 +++--
- .../bindings/media/samsung,exynos4212-fimc-is.yaml         | 3 ++-
- Documentation/devicetree/bindings/media/samsung,fimc.yaml  | 3 ++-
- 11 files changed, 38 insertions(+), 16 deletions(-)
-
-diff --git a/Documentation/devicetree/bindings/i2c/qcom,i2c-cci.yaml b/Documentation/devicetree/bindings/i2c/qcom,i2c-cci.yaml
-index 73144473b9b2..1687b069e032 100644
---- a/Documentation/devicetree/bindings/i2c/qcom,i2c-cci.yaml
-+++ b/Documentation/devicetree/bindings/i2c/qcom,i2c-cci.yaml
-@@ -292,7 +292,8 @@ examples:
- 
-                 clocks = <&clock_camcc CAM_CC_MCLK0_CLK>;
-                 clock-names = "xvclk";
--                clock-frequency = <19200000>;
-+                assigned-clocks = <&clock_camcc CAM_CC_MCLK0_CLK>;
-+                assigned-clock-rates = <19200000>;
- 
-                 dovdd-supply = <&vreg_lvs1a_1p8>;
-                 avdd-supply = <&cam0_avdd_2v8>;
-@@ -324,7 +325,8 @@ examples:
- 
-                 clocks = <&clock_camcc CAM_CC_MCLK3_CLK>;
-                 clock-names = "xclk";
--                clock-frequency = <24000000>;
-+                assigned-clocks = <&clock_camcc CAM_CC_MCLK3_CLK>;
-+                assigned-clock-rates = <24000000>;
- 
-                 vdddo-supply = <&vreg_lvs1a_1p8>;
-                 vdda-supply = <&cam3_avdd_2v8>;
-diff --git a/Documentation/devicetree/bindings/media/i2c/mipi-ccs.yaml b/Documentation/devicetree/bindings/media/i2c/mipi-ccs.yaml
-index bc664a016396..217b08c8cbbd 100644
---- a/Documentation/devicetree/bindings/media/i2c/mipi-ccs.yaml
-+++ b/Documentation/devicetree/bindings/media/i2c/mipi-ccs.yaml
-@@ -55,6 +55,7 @@ properties:
- 
-   clock-frequency:
-     description: Frequency of the external clock to the sensor in Hz.
-+    deprecated: true
- 
-   reset-gpios:
-     description: Reset GPIO. Also commonly called XSHUTDOWN in hardware
-@@ -93,7 +94,6 @@ properties:
- required:
-   - compatible
-   - reg
--  - clock-frequency
-   - clocks
- 
- additionalProperties: false
-@@ -114,8 +114,11 @@ examples:
-             reg = <0x10>;
-             reset-gpios = <&gpio3 20 GPIO_ACTIVE_LOW>;
-             vana-supply = <&vaux3>;
-+
-             clocks = <&omap3_isp 0>;
--            clock-frequency = <9600000>;
-+            assigned-clocks = <&omap3_isp 0>;
-+            assigned-clock-rates = <9600000>;
-+
-             port {
-                 ccs_ep: endpoint {
-                     data-lanes = <1 2>;
-diff --git a/Documentation/devicetree/bindings/media/i2c/ovti,ov02a10.yaml b/Documentation/devicetree/bindings/media/i2c/ovti,ov02a10.yaml
-index 67c1c291327b..0e1d9c390180 100644
---- a/Documentation/devicetree/bindings/media/i2c/ovti,ov02a10.yaml
-+++ b/Documentation/devicetree/bindings/media/i2c/ovti,ov02a10.yaml
-@@ -39,6 +39,7 @@ properties:
-   clock-frequency:
-     description:
-       Frequency of the eclk clock in Hz.
-+    deprecated: true
- 
-   dovdd-supply:
-     description:
-@@ -100,7 +101,6 @@ required:
-   - reg
-   - clocks
-   - clock-names
--  - clock-frequency
-   - dovdd-supply
-   - avdd-supply
-   - dvdd-supply
-@@ -127,7 +127,6 @@ examples:
- 
-             clocks = <&ov02a10_clk>;
-             clock-names = "eclk";
--            clock-frequency = <24000000>;
- 
-             rotation = <180>;
- 
-diff --git a/Documentation/devicetree/bindings/media/i2c/ovti,ov5645.yaml b/Documentation/devicetree/bindings/media/i2c/ovti,ov5645.yaml
-index bc9b27afe3ea..a583714b1ac7 100644
---- a/Documentation/devicetree/bindings/media/i2c/ovti,ov5645.yaml
-+++ b/Documentation/devicetree/bindings/media/i2c/ovti,ov5645.yaml
-@@ -21,6 +21,7 @@ properties:
- 
-   clock-frequency:
-     description: Frequency of the xclk clock in Hz.
-+    deprecated: true
- 
-   vdda-supply:
-     description: Analog voltage supply, 2.8 volts
-@@ -83,8 +84,11 @@ examples:
-         camera@3c {
-             compatible = "ovti,ov5645";
-             reg = <0x3c>;
-+
-             clocks = <&clks 1>;
--            clock-frequency = <24000000>;
-+            assigned-clocks = <&clks 1>;
-+            assigned-clock-rates = <24000000>;
-+
-             vdddo-supply = <&ov5645_vdddo_1v8>;
-             vdda-supply = <&ov5645_vdda_2v8>;
-             vddd-supply = <&ov5645_vddd_1v5>;
-diff --git a/Documentation/devicetree/bindings/media/i2c/ovti,ov7251.yaml b/Documentation/devicetree/bindings/media/i2c/ovti,ov7251.yaml
-index 2e5187acbbb8..922996da59b2 100644
---- a/Documentation/devicetree/bindings/media/i2c/ovti,ov7251.yaml
-+++ b/Documentation/devicetree/bindings/media/i2c/ovti,ov7251.yaml
-@@ -29,6 +29,7 @@ properties:
- 
-   clock-frequency:
-     description: Frequency of the xclk clock in Hz.
-+    deprecated: true
- 
-   vdda-supply:
-     description: Analog voltage supply, 2.8 volts
-@@ -89,8 +90,11 @@ examples:
-         camera@3c {
-             compatible = "ovti,ov7251";
-             reg = <0x3c>;
-+
-             clocks = <&clks 1>;
--            clock-frequency = <24000000>;
-+            assigned-clocks = <&clks 1>;
-+            assigned-clock-rates = <24000000>;
-+
-             vdddo-supply = <&ov7251_vdddo_1v8>;
-             vdda-supply = <&ov7251_vdda_2v8>;
-             vddd-supply = <&ov7251_vddd_1v5>;
-diff --git a/Documentation/devicetree/bindings/media/i2c/ovti,ov8856.yaml b/Documentation/devicetree/bindings/media/i2c/ovti,ov8856.yaml
-index 3f6f72c35485..fa71f24823f2 100644
---- a/Documentation/devicetree/bindings/media/i2c/ovti,ov8856.yaml
-+++ b/Documentation/devicetree/bindings/media/i2c/ovti,ov8856.yaml
-@@ -37,6 +37,7 @@ properties:
-   clock-frequency:
-     description:
-       Frequency of the xvclk clock in Hertz.
-+    deprecated: true
- 
-   dovdd-supply:
-     description:
-@@ -87,7 +88,6 @@ required:
-   - reg
-   - clocks
-   - clock-names
--  - clock-frequency
-   - dovdd-supply
-   - avdd-supply
-   - dvdd-supply
-@@ -114,7 +114,6 @@ examples:
- 
-             clocks = <&cam_osc>;
-             clock-names = "xvclk";
--            clock-frequency = <19200000>;
- 
-             avdd-supply = <&mt6358_vcama2_reg>;
-             dvdd-supply = <&mt6358_vcamd_reg>;
-diff --git a/Documentation/devicetree/bindings/media/i2c/samsung,s5k5baf.yaml b/Documentation/devicetree/bindings/media/i2c/samsung,s5k5baf.yaml
-index c8f2955e0825..ebd95a8d9b2f 100644
---- a/Documentation/devicetree/bindings/media/i2c/samsung,s5k5baf.yaml
-+++ b/Documentation/devicetree/bindings/media/i2c/samsung,s5k5baf.yaml
-@@ -26,6 +26,7 @@ properties:
-   clock-frequency:
-     default: 24000000
-     description: mclk clock frequency
-+    deprecated: true
- 
-   rstn-gpios:
-     maxItems: 1
-@@ -82,9 +83,12 @@ examples:
-         sensor@2d {
-             compatible = "samsung,s5k5baf";
-             reg = <0x2d>;
-+
-             clocks = <&camera 0>;
-+            assigned-clocks = <&camera 0>;
-+            assigned-clock-rates = <24000000>;
-+
-             clock-names = "mclk";
--            clock-frequency = <24000000>;
-             rstn-gpios = <&gpl2 1 GPIO_ACTIVE_LOW>;
-             stbyn-gpios = <&gpl2 0 GPIO_ACTIVE_LOW>;
-             vdda-supply = <&cam_io_en_reg>;
-diff --git a/Documentation/devicetree/bindings/media/i2c/samsung,s5k6a3.yaml b/Documentation/devicetree/bindings/media/i2c/samsung,s5k6a3.yaml
-index 7e83a94124b5..e563e35920c4 100644
---- a/Documentation/devicetree/bindings/media/i2c/samsung,s5k6a3.yaml
-+++ b/Documentation/devicetree/bindings/media/i2c/samsung,s5k6a3.yaml
-@@ -30,6 +30,7 @@ properties:
-   clock-frequency:
-     default: 24000000
-     description: extclk clock frequency
-+    deprecated: true
- 
-   gpios:
-     maxItems: 1
-@@ -80,8 +81,11 @@ examples:
-         sensor@10 {
-             compatible = "samsung,s5k6a3";
-             reg = <0x10>;
--            clock-frequency = <24000000>;
-+
-             clocks = <&camera 1>;
-+            assigned-clocks = <&camera 1>;
-+            assigned-clock-rates = <24000000>;
-+
-             clock-names = "extclk";
-             gpios = <&gpm1 6 GPIO_ACTIVE_LOW>;
-             afvdd-supply = <&ldo19_reg>;
-diff --git a/Documentation/devicetree/bindings/media/i2c/sony,imx290.yaml b/Documentation/devicetree/bindings/media/i2c/sony,imx290.yaml
-index 990acf89af8f..484039671cd1 100644
---- a/Documentation/devicetree/bindings/media/i2c/sony,imx290.yaml
-+++ b/Documentation/devicetree/bindings/media/i2c/sony,imx290.yaml
-@@ -51,6 +51,7 @@ properties:
- 
-   clock-frequency:
-     description: Frequency of the xclk clock in Hz
-+    deprecated: true
- 
-   vdda-supply:
-     description: Analog power supply (2.9V)
-@@ -100,7 +101,6 @@ required:
-   - reg
-   - clocks
-   - clock-names
--  - clock-frequency
-   - vdda-supply
-   - vddd-supply
-   - vdddo-supply
-@@ -125,7 +125,8 @@ examples:
- 
-             clocks = <&gcc 90>;
-             clock-names = "xclk";
--            clock-frequency = <37125000>;
-+            assigned-clocks = <&clks 1>;
-+            assigned-clock-rates = <37125000>;
- 
-             vdddo-supply = <&camera_vdddo_1v8>;
-             vdda-supply = <&camera_vdda_2v8>;
-diff --git a/Documentation/devicetree/bindings/media/samsung,exynos4212-fimc-is.yaml b/Documentation/devicetree/bindings/media/samsung,exynos4212-fimc-is.yaml
-index 3a5ff3f47060..71d63bb9abb5 100644
---- a/Documentation/devicetree/bindings/media/samsung,exynos4212-fimc-is.yaml
-+++ b/Documentation/devicetree/bindings/media/samsung,exynos4212-fimc-is.yaml
-@@ -209,9 +209,10 @@ examples:
-                 svdda-supply = <&cam_io_reg>;
-                 svddio-supply = <&ldo19_reg>;
-                 afvdd-supply = <&ldo19_reg>;
--                clock-frequency = <24000000>;
-                 clocks = <&camera 1>;
-                 clock-names = "extclk";
-+                assigned-clocks = <&camera 1>;
-+                assigned-clock-rates = <24000000>;
-                 gpios = <&gpm1 6 GPIO_ACTIVE_LOW>;
- 
-                 port {
-diff --git a/Documentation/devicetree/bindings/media/samsung,fimc.yaml b/Documentation/devicetree/bindings/media/samsung,fimc.yaml
-index 7808d61f1fa3..2a54379d9509 100644
---- a/Documentation/devicetree/bindings/media/samsung,fimc.yaml
-+++ b/Documentation/devicetree/bindings/media/samsung,fimc.yaml
-@@ -259,10 +259,11 @@ examples:
-                     svdda-supply = <&cam_io_reg>;
-                     svddio-supply = <&ldo19_reg>;
-                     afvdd-supply = <&ldo19_reg>;
--                    clock-frequency = <24000000>;
-                     /* CAM_B_CLKOUT */
-                     clocks = <&camera 1>;
-                     clock-names = "extclk";
-+                    assigned-clocks = <&camera 1>;
-+                    assigned-clock-rates = <24000000>;
-                     gpios = <&gpm1 6 GPIO_ACTIVE_LOW>;
- 
-                     port {
 -- 
-Regards,
+2.30.2
 
-Laurent Pinchart
 
