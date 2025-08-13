@@ -1,50 +1,50 @@
 Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E28622F7453;
-	Wed, 13 Aug 2025 09:38:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 206212F83CC;
+	Wed, 13 Aug 2025 09:38:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755077938; cv=none; b=MNRnGPBsmKJxD0Uyt3hXGYbE/hQk510wW5XDPUwWECZfIfarGbPX8JnwYJMKekd5VUR+dv03nPa8lpSjISz546Xf9I7KQ5HkxlUzKdWrxIO0xM9grhwjaqNb82NiCuuEkRplwEr4a8g9c9WyRquDZ/YZPHtp3lMgbgCcyXbk3l8=
+	t=1755077940; cv=none; b=j7L8w0z8wNCyQvptIvwXMOEhjU8nO0iksW642jzWMtTyKFd94lUmKRruyfCoy0gGEQL2i9plO/i0KilwdomSBoJvZsfuFDEazxE9qKtR5PZ5qS2UaWuQtCktu6CVx5D+nkc+qwNq6B0U7DpNn16bfkI37vxf9VMM5cGTjihUMLQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755077938; c=relaxed/simple;
-	bh=o9P/9HeF/vLTZ3+bj+e5bl4rRfh//8dSON5O9MVx71M=;
+	s=arc-20240116; t=1755077940; c=relaxed/simple;
+	bh=mej7gwFjK6P+WNnDSclAeKLSqFfQ3cnS30fvxIYdeI4=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-ID:References:
-	 In-Reply-To:To:CC; b=NcZ8xnMv3kZPZFkIz9vw3niONFzg1VNavQceKtvPlP8rLhZsyZkxsxdMZXsrXXQl+05ADOqdT5p2GvST+CuR/bbUYNECXs45K8HbdcLrjTUnx4U5l0vmXZcjITY1laAMufVoMspRDH0WU4A4xzCQ8rDFcwnLrnAEY40WU1pTz5s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=dAS07lWK; arc=none smtp.client-ip=205.220.168.131
+	 In-Reply-To:To:CC; b=C0wjFjmb/JOYBjqPrB2f5+Y58NhdOkKHm5+9Azpjd/+RYcuaZyP5aoiLn47ltV0KcIpp6TbHLl/vJbXuBwrP5fppHf4m/6mBzbNfaPYbf+JL/irjSb1mLRdL/2w0UKfypolhI3B8Y8yEnlORIX+JDPTNegWAOmgLMfczBkm09is=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=Y9LF0xIX; arc=none smtp.client-ip=205.220.168.131
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="dAS07lWK"
-Received: from pps.filterd (m0279866.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 57D6mHWx019405;
-	Wed, 13 Aug 2025 09:38:45 GMT
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="Y9LF0xIX"
+Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 57D6mRRO028954;
+	Wed, 13 Aug 2025 09:38:53 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
 	cc:content-transfer-encoding:content-type:date:from:in-reply-to
 	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	fvtyGThhSYIdmk4E4kgyqIOxe5mu65oao5CAetzcC48=; b=dAS07lWKTmMIDRko
-	WXWsWuzXD4YH8ATfnZgOx8IeLGYxMo2yhicxLdPgteTY2lQjUQA96q6b2C6n0Eol
-	FC5iKrI+h9bKCAYGg02iFTFZFAGAtGgcjYOrZ0T9WgBKm4wAVdYAg+1lnB9Qx0hH
-	1gQOnIeXm/Rrnt6c2Xb1jTetJzNc08/wnp40srJn/V4NEDeUeiZvBsdovbRQDZFk
-	aMlRN6EEEwi1kgqZhwPaBuHJq4ZEGFBfobSmc+mV2DQumArt17IivP04DvIg74d1
-	Hpu8+1mMOyoUR3TkmII9JvsKn9TbYxzKjVh8Ay9dM1Y/37Y7WemgajzSpjAiy529
-	SOjOLw==
-Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 48ffq6q5r5-1
+	26UVnRfTMd35fzwZQ/t2lpMAUaZJGvf7Ro7Uuktai+8=; b=Y9LF0xIXcBNsO9BR
+	WoqP989BTfxPcjwqtQNda2jBYbxTEvqX7w2bWV6sLk5SaUjlBLovWa4tzQkrkuTD
+	dTOuthFJuDgj+rZhwxOPOMQ24OlDoR4SYBO92IGD0S4tRmVUDMW9+9CJbtJq9X5r
+	m6KWDE3LRDdGyBZ4wapsSIRHKla8T7j/9rC6/7tCbY9Gi2T6HuftwEtQitxN473t
+	w9jMqZBa5YT53m5QSho9ROZBLl92/htx126AAFfhTn8E5MJw4bQ+I5YA/mqkIsON
+	VMKATUwo+ShY1ndoaTbPGnuRQ/uqZJStGI0drx67JK/pqmU7nWu6PpWzdFX5GWdD
+	++X6sw==
+Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 48dxj4b9vg-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 13 Aug 2025 09:38:45 +0000 (GMT)
+	Wed, 13 Aug 2025 09:38:53 +0000 (GMT)
 Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-	by NALASPPMTA02.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 57D9ci1n019505
+	by NALASPPMTA03.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 57D9cqPA028592
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 13 Aug 2025 09:38:44 GMT
+	Wed, 13 Aug 2025 09:38:52 GMT
 Received: from hu-dikshita-hyd.qualcomm.com (10.80.80.8) by
  nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1748.10; Wed, 13 Aug 2025 02:38:40 -0700
+ 15.2.1748.10; Wed, 13 Aug 2025 02:38:48 -0700
 From: Dikshita Agarwal <quic_dikshita@quicinc.com>
-Date: Wed, 13 Aug 2025 15:07:56 +0530
-Subject: [PATCH v2 06/24] media: iris: Always destroy internal buffers on
- firmware release response
+Date: Wed, 13 Aug 2025 15:07:58 +0530
+Subject: [PATCH v2 08/24] media: iris: Allow stop on firmware only if start
+ was issued.
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
@@ -53,7 +53,7 @@ List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-ID: <20250813-iris-video-encoder-v2-6-c725ff673078@quicinc.com>
+Message-ID: <20250813-iris-video-encoder-v2-8-c725ff673078@quicinc.com>
 References: <20250813-iris-video-encoder-v2-0-c725ff673078@quicinc.com>
 In-Reply-To: <20250813-iris-video-encoder-v2-0-c725ff673078@quicinc.com>
 To: Vikash Garodia <quic_vgarodia@quicinc.com>,
@@ -73,81 +73,74 @@ CC: <linux-media@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
         Dikshita Agarwal
 	<quic_dikshita@quicinc.com>
 X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1755077896; l=2068;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1755077896; l=1791;
  i=quic_dikshita@quicinc.com; s=20240917; h=from:subject:message-id;
- bh=o9P/9HeF/vLTZ3+bj+e5bl4rRfh//8dSON5O9MVx71M=;
- b=L7cmjGYb9wnxmn0AnAORdzb0vj92dI8tVxg2n7pIOxEl2k3XChOJyNURTLS26+oK7J5P59o9i
- Df8ViNgkiWECuPq2Ritd/4pBDGdq1nEODt8xx24gxhyUtiVO0znz50m
+ bh=mej7gwFjK6P+WNnDSclAeKLSqFfQ3cnS30fvxIYdeI4=;
+ b=c7kvX7bE9N94K6uP0ztpCR9Xc4V3t/EC8d+Ie05Wfu7HxdT+fB4MPqswL9QUpVytcY1jt3Huh
+ GT1a6sddII7Btflosy45fbHokyAIcV1gmITr9ib39yM84xz0OihxCXX
 X-Developer-Key: i=quic_dikshita@quicinc.com; a=ed25519;
  pk=EEvKY6Ar1OI5SWf44FJ1Ebo1KuQEVbbf5UNPO+UHVhM=
 X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
  nalasex01a.na.qualcomm.com (10.47.209.196)
 X-QCInternal: smtphost
 X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwODExMDA3NSBTYWx0ZWRfX3pTWWK4HWujk
- A2MBDqIJHJB0j0L1JEQQHPhA6kcpE31+lfCFTHKCe4bU7v8EZ1DDrlmm/jlmgi6++sOTCpLwr8V
- aabXdESjdvjEp844wTefygiJyHc1MuydRmD/TOI1XKSAGGPRlLgRpgoKu89Fr0JCETyUBoXDQ7U
- sIAF/iHJCXhAjwOCiFpELFgNFn6MGGuyjMJKiCkHDc44sl+rEWwS3XwlnkT1ZEdAMnoqZkyC4v/
- ifTR8/5B4I+T3gdxWV4h/0LucgSvDmb8Q8D8WE7ajzsNGhypINfazaKVgr+wjpgAhWO/vUL1vRM
- REBwD2MJR6cIo3nv0/iCRIaX0xS9aQQEiE9PWlx+YG9vNJCZoYG3pIW1a4iozBtZe79R0JE/bYn
- KQlPti4V
-X-Authority-Analysis: v=2.4 cv=TLZFS0la c=1 sm=1 tr=0 ts=689c5d25 cx=c_pps
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwODA5MDAyNyBTYWx0ZWRfX8DR2L5lsUju5
+ 10KWlPacQihU6rcAUey5t/5S4ijQnvQiONvixDhbnIR3SvoHR6Xl1r9Rpnt3niK8lbqnfzLlpAw
+ zTTIcrju/EU57Ggyd+hK07p3s8tlSf2mJYCWanOP8gyjJ/gHZDrdMpUtcBL5P36HY6FqDCRmKa5
+ cWA4/2BKHWvcDDmpDdSjFjt5+gNRNbb8U6uunU1VP69dGiidT288kRu2lcd5zmZPXs4JuUTiucC
+ 4atIyAuOk4774xY1LkXs2J62+y2Bx3dQyLR/Stwe3PDQA1Ld3pnVc3E7ZJG8k6B4rz157Mc0Ycs
+ KgVa0NILFyIUqch90Y4XkaRX1gJSlMATNq0ofWpOqQ/7aEBx+p92aG/8hCLYxBnNNOX84/K/k5T
+ qz/sJMIq
+X-Authority-Analysis: v=2.4 cv=fvDcZE4f c=1 sm=1 tr=0 ts=689c5d2d cx=c_pps
  a=ouPCqIW2jiPt+lZRy3xVPw==:117 a=ouPCqIW2jiPt+lZRy3xVPw==:17
  a=GEpy-HfZoHoA:10 a=IkcTkHD0fZMA:10 a=2OwXVqhp2XgA:10 a=COk6AnOGAAAA:8
- a=Xei55S-jlXPzQILQ8u0A:9 a=QEXdDO2ut3YA:10 a=TjNXssC_j7lpFel5tvFf:22
-X-Proofpoint-GUID: 4oZim8qVojmWk5sZBRbog1lfp9JjqvY8
-X-Proofpoint-ORIG-GUID: 4oZim8qVojmWk5sZBRbog1lfp9JjqvY8
+ a=rsWgEMF2Pf62jCDWMwkA:9 a=QEXdDO2ut3YA:10 a=TjNXssC_j7lpFel5tvFf:22
+X-Proofpoint-ORIG-GUID: XPuUwxK6-UYvSZzoi7GQHZDqKwFSAi8I
+X-Proofpoint-GUID: XPuUwxK6-UYvSZzoi7GQHZDqKwFSAi8I
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.1.9,FMLib:17.12.80.40
  definitions=2025-08-12_08,2025-08-11_01,2025-03-28_01
 X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- clxscore=1015 phishscore=0 malwarescore=0 spamscore=0 priorityscore=1501
- bulkscore=0 adultscore=0 impostorscore=0 suspectscore=0
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.19.0-2507300000 definitions=main-2508110075
+ malwarescore=0 adultscore=0 priorityscore=1501 spamscore=0 suspectscore=0
+ clxscore=1015 phishscore=0 bulkscore=0 impostorscore=0 classifier=typeunknown
+ authscore=0 authtc= authcc= route=outbound adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2507300000 definitions=main-2508090027
 
-Currently, internal buffers are destroyed only if 'PENDING_RELEASE' flag
-is set when a release response is received from the firmware, which is
-incorrect. Internal buffers should always be destroyed when the firmware
-explicitly releases it, regardless of whether the 'PENDING_RELEASE' flag
-was set by the driver. This is specially important during force-stop
-scenarios, where the firmware may release buffers without driver marking
-them for release.
-Fix this by removing the incorrect check and ensuring all buffers are
-properly cleaned up.
+For HFI Gen1, the instances substate is changed to LOAD_RESOURCES only
+when a START command is issues to the firmware. If STOP is called
+without a prior START, the firmware may reject the command and throw
+some erros.
+Handle this by adding a substate check before issuing STOP command to
+the firmware.
 
-Fixes: 73702f45db81 ("media: iris: allocate, initialize and queue internal buffers")
+Fixes: 11712ce70f8e ("media: iris: implement vb2 streaming ops")
 Reviewed-by: Vikash Garodia <quic_vgarodia@quicinc.com>
 Tested-by: Vikash Garodia <quic_vgarodia@quicinc.com> # X1E80100
 Signed-off-by: Dikshita Agarwal <quic_dikshita@quicinc.com>
 ---
- drivers/media/platform/qcom/iris/iris_hfi_gen2_response.c | 5 +----
- 1 file changed, 1 insertion(+), 4 deletions(-)
+ drivers/media/platform/qcom/iris/iris_hfi_gen1_command.c | 7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/media/platform/qcom/iris/iris_hfi_gen2_response.c b/drivers/media/platform/qcom/iris/iris_hfi_gen2_response.c
-index a8c30fc5c0d0668cc9980f2fcfcf21072cf9ef0a..dda775d463e916f70da0b879702d96df18ea8bf7 100644
---- a/drivers/media/platform/qcom/iris/iris_hfi_gen2_response.c
-+++ b/drivers/media/platform/qcom/iris/iris_hfi_gen2_response.c
-@@ -424,7 +424,6 @@ static int iris_hfi_gen2_handle_release_internal_buffer(struct iris_inst *inst,
- 	struct iris_buffers *buffers = &inst->buffers[buf_type];
- 	struct iris_buffer *buf, *iter;
- 	bool found = false;
--	int ret = 0;
+diff --git a/drivers/media/platform/qcom/iris/iris_hfi_gen1_command.c b/drivers/media/platform/qcom/iris/iris_hfi_gen1_command.c
+index 5fc30d54af4dc34616cfd08813940aa0b7044a20..5f1748ab80f88393215fc2d82c5c6b4af1266090 100644
+--- a/drivers/media/platform/qcom/iris/iris_hfi_gen1_command.c
++++ b/drivers/media/platform/qcom/iris/iris_hfi_gen1_command.c
+@@ -184,11 +184,12 @@ static int iris_hfi_gen1_session_stop(struct iris_inst *inst, u32 plane)
+ 	u32 flush_type = 0;
+ 	int ret = 0;
  
- 	list_for_each_entry(iter, &buffers->list, list) {
- 		if (iter->device_addr == buffer->base_address) {
-@@ -437,10 +436,8 @@ static int iris_hfi_gen2_handle_release_internal_buffer(struct iris_inst *inst,
- 		return -EINVAL;
- 
- 	buf->attr &= ~BUF_ATTR_QUEUED;
--	if (buf->attr & BUF_ATTR_PENDING_RELEASE)
--		ret = iris_destroy_internal_buffer(inst, buf);
- 
--	return ret;
-+	return iris_destroy_internal_buffer(inst, buf);
- }
- 
- static int iris_hfi_gen2_handle_session_stop(struct iris_inst *inst,
+-	if ((V4L2_TYPE_IS_OUTPUT(plane) &&
+-	     inst->state == IRIS_INST_INPUT_STREAMING) ||
++	if (((V4L2_TYPE_IS_OUTPUT(plane) &&
++	      inst->state == IRIS_INST_INPUT_STREAMING) ||
+ 	    (V4L2_TYPE_IS_CAPTURE(plane) &&
+ 	     inst->state == IRIS_INST_OUTPUT_STREAMING) ||
+-	    inst->state == IRIS_INST_ERROR) {
++	    inst->state == IRIS_INST_ERROR) &&
++		inst->sub_state & IRIS_INST_SUB_LOAD_RESOURCES) {
+ 		reinit_completion(&inst->completion);
+ 		iris_hfi_gen1_packet_session_cmd(inst, &pkt, HFI_CMD_SESSION_STOP);
+ 		ret = iris_hfi_queue_cmd_write(core, &pkt, pkt.shdr.hdr.size);
 
 -- 
 2.34.1
