@@ -1,231 +1,215 @@
-Received: from lahtoruutu.iki.fi (lahtoruutu.iki.fi [185.185.170.37])
+Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2079.outbound.protection.outlook.com [40.107.220.79])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CF8A12E8DE9
-	for <linux-media@vger.kernel.org>; Wed, 13 Aug 2025 13:23:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=185.185.170.37
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8056C2E172C
+	for <linux-media@vger.kernel.org>; Wed, 13 Aug 2025 13:29:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.220.79
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755091416; cv=pass; b=X2C7/0tQ28FaEuVAt7nftCRbqfVtzsoVIxyrO2QtPLQ8ZXVORmt6RcoOPNQRdLoB8fz3VSTbT3OQMxzSl+p7TJtX3r5m8poNfugbexRPPV45fy5xpr6ig+r3d13nnNwQLt77rZotZUsdZ5STcj2lSe862T45Q8QL+CQ45FyODLU=
+	t=1755091791; cv=fail; b=H1o54DxkrvR6X0aVEm0J3mWdDdAg86VSWwdUweAQsakd8Luv/Zc7f3r2d4HxTJkNz4rzz5utnJWTn5LtG2xb39OAmFpFCiMbhsVsY0sxmEZ4aQZpu/5elgAnicSApypkIjsvhoCWWGdgbpL9unsGAA3nA9UmO4eFVyaIYtWG12Q=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755091416; c=relaxed/simple;
-	bh=JJvQGoA2DKu0gJDwh/Cb7xLea/fNnQivON1hS+qFIvM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=FebUBsp/3waP9A64nrlT6PSUbx44ls6YBhlZ6rtPKWv7CbKxa++/3e+Ek0ycIER/q57TMsIo9w4SJHwDHCA5rzhP77UGTbdIavGTvEj76nRk/Uu4w6aG8xsZYMLYc09bsA9SN2WyikpTaKgc6KPpbIxJIv2Ipgbsy+FaVN4NzZw=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=iki.fi; spf=pass smtp.mailfrom=iki.fi; dkim=pass (2048-bit key) header.d=iki.fi header.i=@iki.fi header.b=bfyd8wlk; arc=pass smtp.client-ip=185.185.170.37
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=iki.fi
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iki.fi
+	s=arc-20240116; t=1755091791; c=relaxed/simple;
+	bh=k9pCP7ki5lrxgwWJZe31xLRh4M6UWR/Oa3wOEAq14LU=;
+	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
+	 Content-Type:MIME-Version; b=mUDfTh2fg0TT5d6C/mphNWehI/3ryWlgybjRyeoN+HhPi97rxNtfEUbIzgm6KQdauI1sp9HkWg0rgpfQWUiEUnAKYvLGE0LEsddSupn+4dpK2c31MZ9CgoOXDFEi5XtyvMaDfUYzMfKewr8T28/0hdmYJS8F4LeMUMBXUio7kF8=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=DSZiWdDN; arc=fail smtp.client-ip=40.107.220.79
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=iki.fi header.i=@iki.fi header.b="bfyd8wlk"
-Received: from hillosipuli.retiisi.eu (91-158-51-183.elisa-laajakaista.fi [91.158.51.183])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: sailus)
-	by lahtoruutu.iki.fi (Postfix) with ESMTPSA id 4c28Ff6VT8z49Q3D;
-	Wed, 13 Aug 2025 16:23:18 +0300 (EEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi; s=lahtoruutu;
-	t=1755091402;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=uMuD9E2qAwmiy5+TXpdEagb8GMe4WAOhAfYqsoF6bOU=;
-	b=bfyd8wlk1m3LibEJyVSDsg9NBhME2vnMgL697GPzYq2uYBejniFJjgimgLSpuwuRmfQeYq
-	i06glyLFBJOZX06Y2bL/AotqXxWmppLuQLLstIdjUcysoVJBOuyLSt1xkqRivtS0bUPWN/
-	HjVuC/59cLp3C4QTmYlSHpW0XaAh59+XXjyhWylDWVJJUgknYCJQ7BRU805dhP8Pd38XQv
-	XFbNeSxxhZRNxTAftpMjwCFijpl0AQI7CCvlT7+G9lFw86xnhznEVxzCM1TYGBmzPZ3KB9
-	IuZZf5N7ATLS8qybRO9GvdrB4KBVi4H330u30ihMZqP4X4Edh3w0A3cmHOvp+w==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi;
-	s=lahtoruutu; t=1755091402;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=uMuD9E2qAwmiy5+TXpdEagb8GMe4WAOhAfYqsoF6bOU=;
-	b=b+vhWPE0MFdCeN+JKt0JCijbEmuDQ/T0EDgEByODYbEHXdHERAPotqfbQlsbt6Oo9WtDHn
-	WtzJnldCn0JvHYUBBVSFulJpjX4JmrBwZfs7CR5jXeRNuK9CV/NN5RB9HY48E1L/9QbcBf
-	V2kVbjZ5vh66SZ1zdal2oPhxSmw6QiDa5NqtBzabjqtDK0MBTpMbCc/qfaXW2zosNrkj34
-	z+bo3WLAaRRlwvjFhmvbk3QmUiQlYmSjUVPj7nAc/ibiX81e7qtiSyr5jFPCSI5v+E+Xwq
-	hsGJBB5/55pcCo3duo5/CsgRzhakAZBJHOuFehUnMTCGIG9Te6bkEK+Q2lFdrg==
-ARC-Authentication-Results: i=1;
-	ORIGINATING;
-	auth=pass smtp.auth=sailus smtp.mailfrom=sakari.ailus@iki.fi
-ARC-Seal: i=1; s=lahtoruutu; d=iki.fi; t=1755091402; a=rsa-sha256;
-	cv=none;
-	b=iAmucjo0WKPuUVpu2keKdiTwjHRwBcTcJMX5ZYIJlY9cuhlUZj6AVW/f9D+4NxEsTRdCGR
-	wba5QMhM/CR/nBOf2ytrTTpN4kv0/Jry4t1rqcLV/U6/BHmKJD16SkxpaqKhuizJ4IlcqC
-	XpC3wC5FWxpStEilXkjAi2T06qi96JT6/aBpLKimyvwwa0c8f4N/iGsjYUWd7nWy1hBgFL
-	P8JmJ1Ab+PH7Qgs1cozxIi8HpAj7P+tBkdUvbeVS1TSiue2fzjC+HRrxh3rQgHgs438euz
-	KTU/7pQ6durveD3wu6RBM67cA82B7AkX9YpW8M2HVQLOf8u10NcNDUVm4PZzRQ==
-Received: from valkosipuli.retiisi.eu (valkosipuli.local [192.168.4.2])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by hillosipuli.retiisi.eu (Postfix) with ESMTPS id 9D5A3634C93;
-	Wed, 13 Aug 2025 16:22:29 +0300 (EEST)
-Date: Wed, 13 Aug 2025 13:22:30 +0000
-From: Sakari Ailus <sakari.ailus@iki.fi>
-To: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Cc: Hans Verkuil <hverkuil+cisco@kernel.org>,
-	Mehdi Djait <mehdi.djait@linux.intel.com>,
-	sakari.ailus@linux.intel.com, stanislaw.gruszka@linux.intel.com,
-	hdegoede@redhat.com, arnd@arndb.de, alain.volmat@foss.st.com,
-	andrzej.hajda@intel.com, benjamin.mugnier@foss.st.com,
-	dave.stevenson@raspberrypi.com, hansg@kernel.org,
-	hverkuil@xs4all.nl, jacopo.mondi@ideasonboard.com,
-	kieran.bingham@ideasonboard.com, khalasa@piap.pl, mani@kernel.org,
-	m.felsch@pengutronix.de, matthias.fend@emfend.at,
-	mchehab@kernel.org, michael.riesch@collabora.com,
-	naush@raspberrypi.com, nicholas@rothemail.net,
-	nicolas.dufresne@collabora.com, paul.elder@ideasonboard.com,
-	dan.scally@ideasonboard.com, pavel@kernel.org, rashanmu@gmail.com,
-	ribalda@chromium.org, slongerbeam@gmail.com,
-	tomi.valkeinen@ideasonboard.com, umang.jain@ideasonboard.com,
-	linux-media@vger.kernel.org,
-	Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Subject: Re: [PATCH v2 01/48] media: v4l2-common: Add a helper for obtaining
- the clock producer
-Message-ID: <aJyRlpCfI2ak31ms@valkosipuli.retiisi.eu>
-References: <cover.1750942967.git.mehdi.djait@linux.intel.com>
- <8ecbcafbd91b25ad5e188dbe127b921a1643027e.1750942967.git.mehdi.djait@linux.intel.com>
- <cd5ac9a7-ada2-4bdf-bc81-8290f0eb88d6@kernel.org>
- <aJyMOEs9UeiudvXh@valkosipuli.retiisi.eu>
- <20250813130831.GG20174@pendragon.ideasonboard.com>
+	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="DSZiWdDN"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=ijVlWNHrbCinkQ6Q53bmY8Pc/Ggis7zSeq4OhfMJlNpvd4Lm7SlyEpmB0LO9Q6gae24zgyCuR76/KVLN4xn+6n0tPav004aa7xD9KksN86AZfYNSu99Yx6hONbz6fyQ8hEIxv7/z9MZMPL7F2aild/Ck1szQ4bpfRK8eLr5CVjBMlxxi/hX73x6sSbJfvis9qgFlor9CN6PMK+9Mr1Viu91tQl/XBziPoWnvE27MExe+JTBgK25Zb6GK0trpB1OMqdE3Qp1Qu9eTXQcvZ9AFVmJgNLwy2c1OVxgOSo6iaBk2k/HSANo5qChQ1N2jLkkHtCN2xENJfqse62vxgayKKw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=udBotuc3mPjVA2Qqgr3sJdT02BCd66weOaAJ3l2dKM4=;
+ b=NMxdQcHUhyF5G9h1IkC6KBzjkMAUodb01k3yWwI9ikOYc22fYTCp+g2WiPdNZEet9ap7G+VjhxpkRsJkCNyv6yCzx6uVyDHyBnx8tD/cabQ+kjef93eV3xXdgqChFAmoTPYw212lZEWrnl+5qWibkkX6hy0RQdtMlHxIPvitSxxRgVqWSzklFcWIkStixe84rseggFBJ79qAx391EgNiK3knS/l67js7Qtqzqey/yDbu5jTFq0+CWoO5wl4XJDfF5GfaWlfAvpleU++a3KUEuVGUnKvm+lukW620h30TtS7SgaB263cAe9GCdbhS8/y1a8HChgtD9RcpIByGoxoGLw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=udBotuc3mPjVA2Qqgr3sJdT02BCd66weOaAJ3l2dKM4=;
+ b=DSZiWdDNmKGm3hjTnytfhu6oGoTZggHi7kQDMtYkGYI/Cn4NptffNVHt/keUgLOFTa4ARr7GigMfdNrTkXDRo1soK/y+6/nFo6tTp3R79uQYSQSssMbHsx/kxK6hMj+cIta1IF64hajkQimJDHdebqRfev9ahlYf+jptHEBWlp8=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from PH7PR12MB5685.namprd12.prod.outlook.com (2603:10b6:510:13c::22)
+ by SN7PR12MB8132.namprd12.prod.outlook.com (2603:10b6:806:321::6) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9031.16; Wed, 13 Aug
+ 2025 13:29:46 +0000
+Received: from PH7PR12MB5685.namprd12.prod.outlook.com
+ ([fe80::46fb:96f2:7667:7ca5]) by PH7PR12MB5685.namprd12.prod.outlook.com
+ ([fe80::46fb:96f2:7667:7ca5%5]) with mapi id 15.20.9031.014; Wed, 13 Aug 2025
+ 13:29:46 +0000
+Message-ID: <cf5d530e-6952-4e76-93e2-5c72b31b5c62@amd.com>
+Date: Wed, 13 Aug 2025 15:29:39 +0200
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] dma-buf: Take a breath during dma-fence-chain subtests
+To: Janusz Krzysztofik <janusz.krzysztofik@linux.intel.com>
+Cc: Andi Shyti <andi.shyti@linux.intel.com>,
+ Nitin Gote <nitin.r.gote@intel.com>, intel-gfx@lists.freedesktop.org,
+ chris.p.wilson@intel.com, Sumit Semwal <sumit.semwal@linaro.org>,
+ linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org
+References: <20250226155534.1099538-1-nitin.r.gote@intel.com>
+ <2153999.KlZ2vcFHjT@jkrzyszt-mobl2.ger.corp.intel.com>
+ <7a96d06d-54a9-42b4-84c7-0c262104ea5b@amd.com>
+ <7836906.EvYhyI6sBW@jkrzyszt-mobl2.ger.corp.intel.com>
+Content-Language: en-US
+From: =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>
+In-Reply-To: <7836906.EvYhyI6sBW@jkrzyszt-mobl2.ger.corp.intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: BLAPR03CA0087.namprd03.prod.outlook.com
+ (2603:10b6:208:329::32) To PH7PR12MB5685.namprd12.prod.outlook.com
+ (2603:10b6:510:13c::22)
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250813130831.GG20174@pendragon.ideasonboard.com>
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PH7PR12MB5685:EE_|SN7PR12MB8132:EE_
+X-MS-Office365-Filtering-Correlation-Id: 58375a55-2645-4217-f80d-08ddda6d7860
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;ARA:13230040|366016|1800799024|376014;
+X-Microsoft-Antispam-Message-Info:
+	=?utf-8?B?MXRZdUZqeEVLR1BORGxwVGhEQ3JWcVBHeWZ6NDRjY0NTbnhvNXNRMmVQK2hZ?=
+ =?utf-8?B?cVdGQTRXTzFMVnJsSHhsUGhRLzM5cUU0cXBrMWFQNHE5UllWeGRlZXZHSUEr?=
+ =?utf-8?B?c3V6U2VMdVBvS0crTEwyWjNVNkdtL2Fmd1hBRnk4V3p4dXQxTXVkS0hWck1w?=
+ =?utf-8?B?R0N2ZTVNbEN1ZGF1RWpxdSsyL200ZTdDN29tZ1NTbnF6NmdsT2hjaGJBQ3ZZ?=
+ =?utf-8?B?amRtRDdZRjE3a044bjBHd2dmdDYwbDN2TW1jNzV2K3ZNZFJxNmo1a2lpdWZa?=
+ =?utf-8?B?bFE2WDV3UU83UFd4RE5DejZINllEOTlhVVhDUG50MEpNeTRoNGh4blNlcmFK?=
+ =?utf-8?B?WERTS1IxY1RVU0Q4ajhuSTlsWitzR2d3MTdLdkdaelE2YlFtaTFiYys4NHFz?=
+ =?utf-8?B?MWwwMWMyQWpNY1pHZzFMWUNxbkUwa29VSjhuN1pNR3N0YWZHcVVadmozTXds?=
+ =?utf-8?B?ZERlWk5LaGo5alNVUHhqT2lqbkZIM1o0c1VWaWVRbmZYK0hZdVVjOW8wRHV2?=
+ =?utf-8?B?Nmg5OVNHY2FpNDdnUGNnVzFRVzhpQlg4aVlmbFJBY1JTcWdTbHA5RWIwN25u?=
+ =?utf-8?B?QjZ0elViY3IyQjVwWHZNT0xCQXk0ZHI5S2JpbTBsc1ZlRkl2TExUeUp4d041?=
+ =?utf-8?B?N0ZSYk9vUG9maUZYZFV1MURidlpGMVhrOGsrZ3MxT01XMjA5N1owWnJoSkxj?=
+ =?utf-8?B?NWJZU1AwM0lTcHpQcHh2QXlHZEFSeFdqMExDUzZNdm1iMTFOTW0vSlI5ZVB0?=
+ =?utf-8?B?eGhSVExRb1crMTBnTG9FcnJBTDNvVzhPdWtwVVl4Z1lESVlUbHhXU3R4N0J2?=
+ =?utf-8?B?bmhHNGxDcTlyUFFzTjRGejh3bFZUTUY1eWx3eklTMktzcEQ4eW02My9GbDB3?=
+ =?utf-8?B?cjBEbDNnUHBXWWhLQXpYeFc1bHB4YSsrbUVrYm54blBUSUgwTm8vV2gxeDM2?=
+ =?utf-8?B?bVhrNnZOUkhkcDJ6Y01yL1F6L3BNZnB4cHd6TEJ5WUtDKzRHSmhmZWpOb0pt?=
+ =?utf-8?B?WHFpOExiYVFxMkxUb3BlakVnallsbGFrZmd1RnFWdmpYZ2NBVVJJaHdHZ0JN?=
+ =?utf-8?B?blhucWFxWk14N0EwSHI0TVNPdmpBN1RzTlVHN1diUUxxeU41YVFzM3VSYmk5?=
+ =?utf-8?B?NXVaNkxlZGM5VFhQSkhsZHRGMkt2d0h5V0lYenJHcTZacElXWHVlUjRXNktZ?=
+ =?utf-8?B?TDM3aXBPQmxPM3JESnlHanRSbjdxUE50WGsreFQrVFBwblVQaHJQd1NDdGFv?=
+ =?utf-8?B?SktBVnI1Z3NMaXlDN3hMWndzeU9WUFZqNXo0N3FlZWRjSGppY3JlVmxxdGJS?=
+ =?utf-8?B?SHFHYVJSKzd2dU5nNXppcGRtblZIRHNwbVBMU1RMVSt5QmJGMTBpQ215Qm9a?=
+ =?utf-8?B?L0dzR0FhTm9tR3FMK3k5dmZyOGVXRHIwU1lnUFMvZ3kyL3VKdXpxTTlBcmpp?=
+ =?utf-8?B?VkZoOVVvTVhDaHR4ME03RkZMNjY0bU1Xb3lhSjV5d3pRRGlSUlJyUHc5STI2?=
+ =?utf-8?B?aXpHYWhBRmpSSWxpVGtQR2FOSThOL2hLMktXYW52VDVuR1ErMW04NzZ0d2FV?=
+ =?utf-8?B?SDNkRkFQV2VHZWs5MU1nRGVrQnR1ejJxWW5NUDJNdGxDZGw2UjR4SFo5UmJl?=
+ =?utf-8?B?V1lpOXZxZ2VSRzhlVGhIL3FqUk9HRitxSGUzcVErOWFaVk9hZkVOR3VwOWYr?=
+ =?utf-8?B?bmRvMDZGWDEzVVdEU3dSSi9pei9Pdk5rSnBpTms4N3pEVTUvR1g1M3ZLRTVD?=
+ =?utf-8?B?VDg3eHk0b2dGc3JnNVdqc0VSN0lFajA5SUJpYkZFajI1SVZOV3RWZThza2FY?=
+ =?utf-8?B?UXB2ZVZ5eVN0QTZPZE9FNnE0TnY4cGdqbHh0OWl5aTVPc1hQS0JialJXYWpJ?=
+ =?utf-8?B?SzE1NlhaNXRjTVN6Y0hwU3FWSm90YmF3Tjh2Wk5td04xaFVIUzZveVlua2FI?=
+ =?utf-8?Q?tEf4I4kMBgw=3D?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH7PR12MB5685.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(1800799024)(376014);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?MTNkL2FLdmY3cC9CQUQ5cXFlbXdjVjZNNC9lK1RkZElZWGZIYnRFWFJUZ21G?=
+ =?utf-8?B?Qjc2bHNOZDVFMlBOZ0UxVWtFbThHdGhUOFlVQ2tMMHp1SVBGekVpemFkdVFo?=
+ =?utf-8?B?QUJJUHRmaUJlM2o2RGRnVmlSL3MrMGl4bjhxZ2NmVHpxSmVmeU5pZDd0V040?=
+ =?utf-8?B?ellnQXgzMTcxaUQ4eFptaXNmR2VMUDQ0SzV6cFc3MS9FWGpSejAwaG9qckNI?=
+ =?utf-8?B?OUdBZkpiYnR6QWVZd3VabUJXZytxWHFTMEFmQWtKdzhSeko4dkZUTm9GM3h1?=
+ =?utf-8?B?NDI3ajViS3J1V3NmVGhaSjc0dFBQTXoydjVKb3k4MG9MK2tOMi9Dc0ZYQTJo?=
+ =?utf-8?B?bnNhcUVIM0lOdGZEa2xrcURkODQ1OEs0N0Z5THJzN1p1elhkekFESXZ3RHph?=
+ =?utf-8?B?ZDhrZU45bVljN05SSGFFNHlXckRaK1ZYaEZJbHQ2R3BMZU9pREZydkg1ZnU0?=
+ =?utf-8?B?bzV0bklRWWZQWDRrcXcvU3Nqd3lYa2JpTjRjSlh1cHNYS2ZiWHdlS0Z6M2E1?=
+ =?utf-8?B?bkY4d3hRKytTeCtPRnFCZks5NnI3SVRkVzZKa1d1UytKaVA3dElrQTIrdU1S?=
+ =?utf-8?B?T0VIelVNLzVsUkpHUGxZcVlWMUZZMDg5UEthMTVXUVVSK3dHSlJrVVpMUENB?=
+ =?utf-8?B?WjgzR1JvaFI1M0FlR1ozY2MzaGJxZE5taS9uTVFvazRUYmd4ZWRkamZoVGNS?=
+ =?utf-8?B?ckRweUZmZjRnNVRFam9kQWlha2RmdXIzTDQzVnozV3dZRitwbFRLRWtXaVpp?=
+ =?utf-8?B?MTkrZ2hNTjh2Q1Z4bEJDSVFyaU9PTXZBdFVPbk5CTkMya2FWZFVXdkVwNmV6?=
+ =?utf-8?B?dENJQXJFakMvTVY1RURCTzV6R3NRYUIxZUlKOGU5b1I2aFdlakVqbzMvamRq?=
+ =?utf-8?B?dEJZTlg2S3hYMlRUK0lrMjVFNG5iY2pWZ1FERnpOdnJFL2lldDB6MVZFT2NB?=
+ =?utf-8?B?cUtoNmxoaEpLYUM1VnJKRURWUm1HaC92UWZqdkQ2MWVyUys5RVArU1FodkFS?=
+ =?utf-8?B?NUFWN21iRVhWeFhMYXp3UHZGZGdNZUpMVU54d3FsS1FlREs2YzliZ3lFVUcw?=
+ =?utf-8?B?dE11dlQ1ZitrU1pMWTV0WXVaVGFiUERxaDM3ZEdNeU5MRUdnWjBIV1E0ZW5L?=
+ =?utf-8?B?RnZxVG1TU0gxR0ZraEQxRzRRZFhkSTBVeGNHcGZXeUU3UDJlVUQvaXY4RUU4?=
+ =?utf-8?B?d0lHZmNOREwySk4yc29pcHcveG1taEdndi9IYktFYmdtQlVIU2U3THE5Rko4?=
+ =?utf-8?B?czg2QUlkY0kyRnFQZU8vTzh1Rno4Q3NCMnZ6SWFKek84NW1HckJLelg2em5Q?=
+ =?utf-8?B?cEVveE9BT3RzZ2R0Y1JHS05ETVZnYkFkOW4yb3Y3SDhFU3o2VG5yNVY3cFUw?=
+ =?utf-8?B?Wm5qakFLNXlVazNHem4zaDRjWkZlcUlCZEFtbFNMaWVHYWRDc2swMSt0bHdK?=
+ =?utf-8?B?OEcvSm1YckU4ZDJQNFRrWlMrVW15MWw4dE95NVg2Uk9TYkZtVHdxYmRCTUVq?=
+ =?utf-8?B?Z3dSQVpZbkNzbTVOZTQwbDhaaDBhWk56cDJ6b1hvanpndHVhdTkzcVlXRFov?=
+ =?utf-8?B?TDgrbGlCeHVGYnBXRVpXeGE5THRDamZpYWRheStzOEdlNXRCczVhRTZRdVhS?=
+ =?utf-8?B?Z3N2M05VNzV0Wk8zRTk5WStWZWZ0WTVGNGVJZXFJRWxxSnIyK2NmdGtqSW1p?=
+ =?utf-8?B?V3ViMXpURks0WS9Sd09mT1pnV040aW5ydllzVmlGYUpUNlJOdytuWVpNVEpY?=
+ =?utf-8?B?SjNMaUZCaUQyTmhwTEdGQ2RseVJ4d2Fqc1RReUxYQVdOVlNseVJxYVNGRjgz?=
+ =?utf-8?B?L25KQm1VbmpzZ2FFK0VVWjVIWXBpNjQ5RXlWK2tWK3psV1VWUmE1K29OMWRv?=
+ =?utf-8?B?UWJpVm9ibnBJWmhpNkw0Q2Yxd1R6MlRlcnJKaG9HTm9WeFV3bmltczNUQmJI?=
+ =?utf-8?B?cURMOWlQTStNeU5SRnZpWDZDSDJLVWdDUmNyemFrY0ZKdXVlZVJ6YVJOMjRJ?=
+ =?utf-8?B?WG1BaEY3SGk0Rm51cWFOb2V1ZXh1Um44a3BEaUV3dFRJZkxGTDlmUFE2NkNW?=
+ =?utf-8?B?UGtwNTZ3K085NmdtL2NUM0Rib0xvSDZGeHVKOEI5R01QbGc0WUpYNkZaVk9C?=
+ =?utf-8?Q?4TxP7Vbpg5SF96TGHP7mqpWRW?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 58375a55-2645-4217-f80d-08ddda6d7860
+X-MS-Exchange-CrossTenant-AuthSource: PH7PR12MB5685.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Aug 2025 13:29:46.3895
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: HRhuoJ6m8oJoqd2vBKi76NPQsahRbwm9PuKZRMXX98nAwbXF3anrZl+y848ZcSyk
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN7PR12MB8132
 
-Hi Laurent,
-
-On Wed, Aug 13, 2025 at 04:08:31PM +0300, Laurent Pinchart wrote:
-> On Wed, Aug 13, 2025 at 12:59:36PM +0000, Sakari Ailus wrote:
-> > On Wed, Aug 13, 2025 at 12:15:29PM +0200, Hans Verkuil wrote:
-> > > On 26/06/2025 15:33, Mehdi Djait wrote:
-> > > > Introduce a helper for v4l2 sensor drivers on both DT- and ACPI-based
-> > > > platforms to retrieve a reference to the clock producer from firmware.
-> > > > 
-> > > > This helper behaves the same as devm_clk_get() except where there is
-> > > > no clock producer like in ACPI-based platforms.
-> > > > 
-> > > > For ACPI-based platforms the function will read the "clock-frequency"
-> > > > ACPI _DSD property and register a fixed frequency clock with the frequency
-> > > > indicated in the property.
-> > > > 
-> > > > This function also handles the special ACPI-based system case where:
-> > > > The clock-frequency _DSD property is present.
-> > > > A reference to the clock producer is present, where the clock is provided
-> > > > by a camera sensor PMIC driver (e.g. int3472/tps68470.c)
-> > > > In this case try to set the clock-frequency value to the provided clock.
-> > > 
-> > > On irc I wondered about the name of the new function since it is sensor
-> > > specific, and if it can also be used for e.g. video receivers, then it
-> > > should be renamed to something more generic.
-> > > 
-> > > According to Laurent there is no ACPI standard for video receivers, so
-> > > that's the reason this is sensor specific.
-> > > 
-> > > I'd like to see that documented in this patch. Either in the commit log,
-> > > or, preferred, in the header in the function description.
-> > 
-> > Given this patch has been around for quite some time and I've sent a PR on
-> > it, I'd prefer to proceed with the current PR. I'm fine with adding more
-> > documentation though if you think we should do that.
+On 13.08.25 14:43, Janusz Krzysztofik wrote:
+> Hi Christian,
 > 
-> How about a separate patch that Hans can merge just on top of your PR ?
-> Could you send one ?
+> On Tuesday, 8 July 2025 12:09:58 CEST Christian König wrote:
+>> On 08.07.25 10:56, Janusz Krzysztofik wrote:
+>>>>
+>>>> There is no reason to test enabling signaling each of the element in a loop. So there should be something like 4096 calls to the dma_fence_chain_cb function each jumping to the next unsignaled fence and re-installing the callback.
+>>>
+>>> So how building a chain should look like in real use cases?  When a user 
+>>> builds a chained link of her fence with another fence then may she enable 
+>>> signaling on the new chain link?  If that other fence occurs a chain link then 
+>>> who should take care of disabling signaling on it so signaling is enabled only 
+>>> on the last link of the chain, not leading to a situation similar to what we 
+>>> have now in the test case?  IOW, what's a correct use pattern of 
+>>> dma_fence_chain?  I can't find that documented anywhere, neither in inline 
+>>> docs nor in commit descriptions.
+>>
+>> The dma_fence_chain container is basically a single linked list which allows to "chain" together multiple dma_fence objects.
+>>
+>> The use cases is to keep only a single fence even when multiple asynchronous operations have been started.
+>>
+>> So you usually keep only the most recently created dma_fence_chain and eventually ask that one to signal when you need to wait for all fences inside the container.
+>>
+>> The tricky part is that since the chain can get very long the implementation can't use recursion or otherwise we would potentially overflow the kernel stack. And that needs to be tested and made sure we don't accidentally break the implementation somehow.
+>>
+>> Keeping all elements of a dma_fence_chain in an array and asking all of them to signal individually makes no sense, for this use case we have the dma_fence_array in the first place.
+> 
+> I'm going to submit a patch that drops enabling of signaling on each link of 
+> the tested chain, as you suggested.  Don't you mind if I add your Suggested-
+> by:?
 
-Sure. Let's try to agree on what it should contain. :-)
+Sure.
+
+Thanks for looking into that,
+Christian.
 
 > 
-> > > I made a suggestion below.
-> > > 
-> > > > Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-> > > > Reviewed-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-> > > > Signed-off-by: Mehdi Djait <mehdi.djait@linux.intel.com>
-> > > > ---
-> > > >  drivers/media/v4l2-core/v4l2-common.c | 52 +++++++++++++++++++++++++++
-> > > >  include/media/v4l2-common.h           | 27 ++++++++++++++
-> > > >  2 files changed, 79 insertions(+)
-> > > > 
-> > > > diff --git a/drivers/media/v4l2-core/v4l2-common.c b/drivers/media/v4l2-core/v4l2-common.c
-> > > 
-> > > <snip>
-> > > 
-> > > > diff --git a/include/media/v4l2-common.h b/include/media/v4l2-common.h
-> > > > index 0a43f56578bc..1c79ca4d5c73 100644
-> > > > --- a/include/media/v4l2-common.h
-> > > > +++ b/include/media/v4l2-common.h
-> > > > @@ -100,6 +100,7 @@ int v4l2_ctrl_query_fill(struct v4l2_queryctrl *qctrl,
-> > > >  struct v4l2_device;
-> > > >  struct v4l2_subdev;
-> > > >  struct v4l2_subdev_ops;
-> > > > +struct clk;
-> > > >  
-> > > >  /* I2C Helper functions */
-> > > >  #include <linux/i2c.h>
-> > > > @@ -620,6 +621,32 @@ int v4l2_link_freq_to_bitmap(struct device *dev, const u64 *fw_link_freqs,
-> > > >  			     unsigned int num_of_driver_link_freqs,
-> > > >  			     unsigned long *bitmap);
-> > > >  
-> > > > +/**
-> > > > + * devm_v4l2_sensor_clk_get - lookup and obtain a reference to a clock producer
-> > > > + *	for a camera sensor.
-> > > > + *
-> > > > + * @dev: device for v4l2 sensor clock "consumer"
-> > > > + * @id: clock consumer ID
-> > > > + *
-> > > > + * This function behaves the same way as devm_clk_get() except where there
-> > > > + * is no clock producer like in ACPI-based platforms.
-> > > > + *
-> > > > + * For ACPI-based platforms, the function will read the "clock-frequency"
-> > > > + * ACPI _DSD property and register a fixed-clock with the frequency indicated
-> > > > + * in the property.
-> > > > + *
-> > > > + * This function also handles the special ACPI-based system case where:
-> > > > + *
-> > > > + * * The clock-frequency _DSD property is present.
-> > > > + * * A reference to the clock producer is present, where the clock is provided
-> > > > + *   by a camera sensor PMIC driver (e.g. int3472/tps68470.c)
-> > > > + *
-> > > > + * In this case try to set the clock-frequency value to the provided clock.
-> > > 
-> > >     *
-> > >     * While ACPI has standardized sensor support, there is no standard support for
-> > >     * e.g. video receivers. So this function is specific to sensors, hence the
-> > >     * chosen function name.
-> > > 
-> > > Better suggestions are welcome.
-> > 
-> > ACPI itself does not standardise camera sensor support. What driver authors
+> Thanks,
+> Janusz
 > 
-> But there's a de facto standard that makes this helper function
-> suitable, isn't there ?
-
-In this context DisCo for Imaging and Intel Windows ACPI camera description
-are worth mentioning. I wouldn't call the latter a "standard" though. But
-it doesn't matter whether it is or not, all the caller needs to know is
-that the function returns a usable clock.
-
+>>
+>> Regards,
+>> Christian.
+>>
+>>>
+>>> Thanks,
+>>> Janusz
+>>
 > 
-> > should know indeed is that this function provides a clock that can be at
-> > least queried for frequency, independently of how that clock is controlled
-> > or how its frequency is configured.
-> > 
-> > How about:
-> > 
-> >  * This function may be used in camera sensor drivers only.
-> > 
-> > > If it is just adding a paragraph, then I can just add that manually. If the change
-> > > is more involved, then a v2.1 for just this patch should be posted.
-> > > 
-> > > Other than this, the series looks good.
+> 
+> 
 > 
 
--- 
-Regards,
-
-Sakari Ailus
