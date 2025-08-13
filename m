@@ -1,100 +1,200 @@
-Received: from forward502b.mail.yandex.net (forward502b.mail.yandex.net [178.154.239.146])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f50.google.com (mail-ed1-f50.google.com [209.85.208.50])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A7F392D1F61
-	for <linux-media@vger.kernel.org>; Wed, 13 Aug 2025 06:32:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=178.154.239.146
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 69DB42D3220;
+	Wed, 13 Aug 2025 06:38:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755066728; cv=none; b=j0T1OnZ2NHU6wDg2OU2YVPfT3IeXaygNpB4svv5GKjBd7JGwHzY8ey7fBBiaLGXrnBHGYU0PeLdwS4q2kzPb4jXLJJZfx8FN2+Jf8nWe4uLlkv+aary10QOtbycpIb2ujlNLw+j0NyHzpmCsfBJsVGcISmMRix7Ot+JX3owz2Nc=
+	t=1755067104; cv=none; b=KfBnN//mJKNwhM7+Fgb3MwqGX7dtBnFhuOVGxA2qHFF0OygCAC5gGzs6OuVQDbQlXxS873bPtBTQGRdMJF4GpNfWA7p3ig7EguOxZlVia6F/S7YXt0h/HHYQvKv3PlT67Tf4oRl0z+TQYZ/qjVkt86zItS4YDBw2O7tDDHmad7g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755066728; c=relaxed/simple;
-	bh=Av15Sih7NZD9QPXPVuQz1OSv7MD8PFdywy6zAQsQ0rY=;
-	h=Message-ID:Date:MIME-Version:To:Cc:References:From:Subject:
-	 In-Reply-To:Content-Type; b=UvgGeswHGhB3oaiDd4bv7VkRtLLnIn6qYsMta5sEWWBox3M9ndLGA1NS1W7Iy+qMtUkrmWwk+9bR4mtc0IBbHTXLIPrexWGgu9AkQKpWEPNEF9lA7rapZXbf2gUfLeTD9WF1VhlUpPSFo61pFNYNJecnbKpGahx9poWx+T+bF9I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=yandex.ru; spf=pass smtp.mailfrom=yandex.ru; dkim=pass (1024-bit key) header.d=yandex.ru header.i=@yandex.ru header.b=lOlpB/Kd; arc=none smtp.client-ip=178.154.239.146
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=yandex.ru
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=yandex.ru
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=yandex.ru header.i=@yandex.ru header.b="lOlpB/Kd"
-Received: from mail-nwsmtp-smtp-production-main-74.sas.yp-c.yandex.net (mail-nwsmtp-smtp-production-main-74.sas.yp-c.yandex.net [IPv6:2a02:6b8:c1b:3715:0:640:1185:0])
-	by forward502b.mail.yandex.net (Yandex) with ESMTPS id 6D81881E56;
-	Wed, 13 Aug 2025 09:24:18 +0300 (MSK)
-Received: by mail-nwsmtp-smtp-production-main-74.sas.yp-c.yandex.net (smtp/Yandex) with ESMTPSA id FOEJ2UPLn0U0-QNd8oHtT;
-	Wed, 13 Aug 2025 09:24:17 +0300
-X-Yandex-Fwd: 1
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yandex.ru; s=mail;
-	t=1755066257; bh=Av15Sih7NZD9QPXPVuQz1OSv7MD8PFdywy6zAQsQ0rY=;
-	h=In-Reply-To:Subject:To:From:Cc:Date:References:Message-ID;
-	b=lOlpB/KdSkD/tc6x58yIaL2+d3kuhtTLXwDvaLPwBBGPoMehv5SfYuXIp4d9UwjPD
-	 /oCDcpKazCXSve3YiO/2RWgGb1A+NbfmdXumyF2fj4O0G0zGfk5VKxCra2HNeEleYs
-	 m2/97kx+gOIc4LDPHJT4BR2FW1yfYFJTJAic9tpQ=
-Authentication-Results: mail-nwsmtp-smtp-production-main-74.sas.yp-c.yandex.net; dkim=pass header.i=@yandex.ru
-Message-ID: <fc99a75e-2c85-4291-9856-29e20eedafff@yandex.ru>
-Date: Wed, 13 Aug 2025 09:24:15 +0300
+	s=arc-20240116; t=1755067104; c=relaxed/simple;
+	bh=NlaZC1vsg/3EvL4u3fWp4og70gDFoZCZIHdYTf1ff9U=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=QINQm/+R42VCniuuVpBDLzJyD/26d+gytI7ZibTyymrEvs81Ho/fy+zV27myuiQS1p9mPkUMzBugPZKxPZPf/AifqnimY0Lurha/X38axJ+CXtKZSfF75OSDUHEgFEbK7bO5dOIQ6up0kMDN7XsELwsL1XJSJnQR2hP2OzsC/9s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=willwhang.com; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.208.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=willwhang.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ed1-f50.google.com with SMTP id 4fb4d7f45d1cf-61568fbed16so9849058a12.3;
+        Tue, 12 Aug 2025 23:38:22 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1755067101; x=1755671901;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=hANsG9cDZ8y0uwjnNV/4yPX2jp2bM/vF9ssenK54Q3g=;
+        b=CBPCUSviIuMT5j+kj2m61Lcg0oxSxzT5bMLWc+geZjKokyLpAIWGqh8AcPVZWqlnvl
+         Z2Ig7oLBvAkfiza6oydmE9jZHfqHfO7MY/PnQZSCbCMaDrt/MLY0N7YfJaYrlgk99DRg
+         vQioWVy2wgYgDCnFWQ+MCu2mQVPQhohLcMPoZgdg2f2gQmcRX/3X4SSX9QxIYHFUs8ZK
+         WkY65WSxqCpHMdX3GGZZvNnHFIOHp5qIwAaDznenjBXZSTN6qpnVTOvg0BjoQKAu1NI4
+         pY+P4eQKBkIyKgtWNoFn/ZocekigRp650c0RIpDJvupPmCrXWr65ouO7IaymVhJSgguu
+         EQzg==
+X-Forwarded-Encrypted: i=1; AJvYcCV6golCLnZ4bKo15rjevADvZYhnqlxNWogzgLsWpRSRUbxQWbjHdYdCjf6cowZ/jrJWo4qAZZ/xR5Nt@vger.kernel.org, AJvYcCVM/hdPvDpaoIDVo5xHPv8pGNWvjccHYDU4HxovfrF1PvRm9a1cJKdgkero/1aNobvvw2UxGT8mqto+U7k=@vger.kernel.org, AJvYcCX57xvRfKZ/8YOZ2bXkteW2BubuY68TVIC/CdCy40dAQJMv0IEzi5fKyeoBR9te89NqSgSoUjKWJ9zHxmdM@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw20u2p0g91ZaVyiazXUSODYgWl5oTneon2fSL2Lqe8PbIZGQ11
+	YUbdXWzX3R5e4TwrUykUj8DqJVZNIQYrK6MwXZSpdI8WUiSoi6vdeXFn8wwTQA9HM5g=
+X-Gm-Gg: ASbGncsw6Jn323Wqc6vTeQyZGiYxk7z2TLRvXcV+21f7+0gpccSmX0HvLXo/zmppFP9
+	podnYAkGp8h/D+Nev4g87i4whIR8zDFWo3N/3XvR0zmem5v/Pi6qq1Iq+BsoTr5qcvX05hRR6Dq
+	E531Us85QEydi8fuadvahvy+93yENh/9AziLBHIOq6ovfXT6b2Skz8xwC84L5Y/PaPuj2sO2DtB
+	A/Y/GN/8P5XAz4RnRe0iSrYcJUvwxaCF0vP1JKq295XOS3TPDpP17sVT1IVIdN2/Lq4Nwr9jnmu
+	UeWv3tYXik8iICBtORKFh8dtrR7+h1FOtge/bJcxQHPFeMlDiOgKLW/uwZTfU5G+qsuyNkyvhQ7
+	sdR8R4jIdZyg9ZtJ/x1Wc+wXN/2Doeo5dg2mP/DhJzwBHi8jgandQOW2eBw==
+X-Google-Smtp-Source: AGHT+IFgrcpGLwy1D4Ab6xWE5L9jJ2olv+s4GNqUG3YfEdp6MbWv+JTYO29SqKMXRBr9ujxBm6QZNw==
+X-Received: by 2002:a17:907:72d4:b0:ae3:4f99:a5a5 with SMTP id a640c23a62f3a-afca4cc8debmr162755666b.6.1755067100225;
+        Tue, 12 Aug 2025 23:38:20 -0700 (PDT)
+Received: from mail-ed1-f54.google.com (mail-ed1-f54.google.com. [209.85.208.54])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-af9247845edsm2278268966b.46.2025.08.12.23.38.19
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 12 Aug 2025 23:38:19 -0700 (PDT)
+Received: by mail-ed1-f54.google.com with SMTP id 4fb4d7f45d1cf-60c9d8a169bso11430361a12.1;
+        Tue, 12 Aug 2025 23:38:19 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCV03C5hMh+xzh9W7SJRbabUWZl0ZcZHXBrq0jqK8dWyPI1HNJ/hzq2Hi8XvL9SCfglP4NJ01BxQWyfUUCp0@vger.kernel.org, AJvYcCW42IawvgX5YFj0c/Qjn+v/vDgfpyjpyjxpqYubVFmZhG8p2ULX1NjjSy9k/Hq8QEitZvT1F9c//3dtCY8=@vger.kernel.org, AJvYcCXWQSNKkIuUubfO23fgTtKQ8206N/2258bJnmEU/jbmJrRlp1X++tkyvF94qnkXBQQmG6mBiShWCJa4@vger.kernel.org
+X-Received: by 2002:a05:6402:35d5:b0:618:6a75:75a0 with SMTP id
+ 4fb4d7f45d1cf-6186b4b1ed4mr1626683a12.0.1755067099429; Tue, 12 Aug 2025
+ 23:38:19 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-To: Chi Zhiling <chizhiling@163.com>,
- Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc: Chi Zhiling <chizhiling@kylinos.cn>,
- Hans Verkuil <hverkuil-cisco@xs4all.nl>, linux-media@vger.kernel.org,
- syzbot+db4326df1b9af04f68fc@syzkaller.appspotmail.com
-References: <20250811072326.44569-1-dmantipov@yandex.ru>
- <20250811072326.44569-2-dmantipov@yandex.ru>
- <d333a8ef-32fc-4a53-acbf-b5b30d621c3a@163.com>
-Content-Language: en-MW
-From: Dmitry Antipov <dmantipov@yandex.ru>
-Autocrypt: addr=dmantipov@yandex.ru; keydata=
- xsDNBGBYjL8BDAC1iFIjCNMSvYkyi04ln+5sTl5TCU9O5Ot/kaKKCstLq3TZ1zwsyeqF7S/q
- vBVSmkWHQaj80BlT/1m7BnFECMNV0M72+cTGfrX8edesMSzv/id+M+oe0adUeA07bBc2Rq2V
- YD88b1WgIkACQZVFCo+y7zXY64cZnf+NnI3jCPRfCKOFVwtj4OfkGZfcDAVAtxZCaksBpTHA
- tf24ay2PmV6q/QN+3IS9ZbHBs6maC1BQe6clFmpGMTvINJ032oN0Lm5ZkpNN+Xcp9393W34y
- v3aYT/OuT9eCbOxmjgMcXuERCMok72uqdhM8zkZlV85LRdW/Vy99u9gnu8Bm9UZrKTL94erm
- 0A9LSI/6BLa1Qzvgwkyd2h1r6f2MVmy71/csplvaDTAqlF/4iA4TS0icC0iXDyD+Oh3EfvgP
- iEc0OAnNps/SrDWUdZbJpLtxDrSl/jXEvFW7KkW5nfYoXzjfrdb89/m7o1HozGr1ArnsMhQC
- Uo/HlX4pPHWqEAFKJ5HEa/0AEQEAAc0kRG1pdHJ5IEFudGlwb3YgPGRtYW50aXBvdkB5YW5k
- ZXgucnU+wsEJBBMBCAAzFiEEgi6CDXNWvLfa6d7RtgcLSrzur7cFAmYEXUsCGwMFCwkIBwIG
- FQgJCgsCBRYCAwEAAAoJELYHC0q87q+3ghQL/10U/CvLStTGIgjRmux9wiSmGtBa/dUHqsp1
- W+HhGrxkGvLheJ7KHiva3qBT++ROHZxpIlwIU4g1s6y3bqXqLFMMmfH1A+Ldqg1qCBj4zYPG
- lzgMp2Fjc+hD1oC7k7xqxemrMPstYQKPmA9VZo4w3+97vvnwDNO7iX3r0QFRc9u19MW36wq8
- 6Yq/EPTWneEDaWFIVPDvrtIOwsLJ4Bu8v2l+ejPNsEslBQv8YFKnWZHaH3o+9ccAcgpkWFJg
- Ztj7u1NmXQF2HdTVvYd2SdzuJTh3Zwm/n6Sw1czxGepbuUbHdXTkMCpJzhYy18M9vvDtcx67
- 10qEpJbe228ltWvaLYfHfiJQ5FlwqNU7uWYTKfaE+6Qs0fmHbX2Wlm6/Mp3YYL711v28b+lp
- 9FzPDFqVPfVm78KyjW6PcdFsKu40GNFo8gFW9e8D9vwZPJsUniQhnsGF+zBKPeHi/Sb0DtBt
- enocJIyYt/eAY2hGOOvRLDZbGxtOKbARRwY4id6MO4EuSs7AzQRgWIzAAQwAyZj14kk+OmXz
- TpV9tkUqDGDseykicFMrEE9JTdSO7fiEE4Al86IPhITKRCrjsBdQ5QnmYXcnr3/9i2RFI0Q7
- Evp0gD242jAJYgnCMXQXvWdfC55HyppWazwybDiyufW/CV3gmiiiJtUj3d8r8q6laXMOGky3
- 7sRlv1UvjGyjwOxY6hBpB2oXdbpssqFOAgEw66zL54pazMOQ6g1fWmvQhUh0TpKjJZRGF/si
- b/ifBFHA/RQfAlP/jCsgnX57EOP3ALNwQqdsd5Nm1vxPqDOtKgo7e0qx3sNyk05FFR+f9px6
- eDbjE3dYfsicZd+aUOpa35EuOPXS0MC4b8SnTB6OW+pmEu/wNzWJ0vvvxX8afgPglUQELheY
- +/bH25DnwBnWdlp45DZlz/LdancQdiRuCU77hC4fnntk2aClJh7L9Mh4J3QpBp3dh+vHyESF
- dWo5idUSNmWoPwLSYQ/evKynzeODU/afzOrDnUBEyyyPTknDxvBQZLv0q3vT0UiqcaL7ABEB
- AAHCwPYEGAEIACAWIQSCLoINc1a8t9rp3tG2BwtKvO6vtwUCZgRdSwIbDAAKCRC2BwtKvO6v
- t9sFC/9Ga7SI4CaIqfkye1EF7q3pe+DOr4NsdsDxnPiQuG39XmpmJdgNI139TqroU5VD7dyy
- 24YjLTH6uo0+dcj0oeAk5HEY7LvzQ8re6q/omOi3V0NVhezdgJdiTgL0ednRxRRwNDpXc2Zg
- kg76mm52BoJXC7Kd/l5QrdV8Gq5WJbLA9Kf0pTr1QEf44bVR0bajW+0Lgyb7w4zmaIagrIdZ
- fwuYZWso3Ah/yl6v1//KP2ppnG0d9FGgO9iz576KQZjsMmQOM7KYAbkVPkZ3lyRJnukrW6jC
- bdrQgBsPubep/g9Ulhkn45krX5vMbP3wp1mJSuNrACQFbpJW3t0Da4DfAFyTttltVntr/ljX
- 5TXWnMCmaYHDS/lP20obHMHW1MCItEYSIn0c5DaAIfD+IWAg8gn7n5NwrMj0iBrIVHBa5mRp
- KkzhwiUObL7NO2cnjzTQgAVUGt0MSN2YfJwmSWjKH6uppQ7bo4Z+ZEOToeBsl6waJnjCL38v
- A/UwwXBRuvydGV0=
-Subject: Re: [PATCH v2 2/2] media: xc2028: hold the device if firmware loading
- is in progress
-In-Reply-To: <d333a8ef-32fc-4a53-acbf-b5b30d621c3a@163.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+References: <20250810220921.14307-1-will@willwhang.com> <20250810220921.14307-2-will@willwhang.com>
+ <20250811-successful-military-dragon-d72486@kuoka> <CAFoNnrxWwqT9WA-h2WOsUe6Q-qEoz2mTHLpDogAyMwiXXZ9MrA@mail.gmail.com>
+ <f12e6ff3-6ec3-487f-bf9c-0f8c06ee6444@kernel.org> <CAFoNnrxhUof8BBrefm1L1peTxg==Koz72TY+54G_8QUy-rrT8g@mail.gmail.com>
+ <e695c61a-e183-4eea-a7f6-1b2861b2129f@kernel.org> <20250812095543.GJ30054@pendragon.ideasonboard.com>
+ <CAFoNnrzWot_Bf=YZFac1GkZgOOnJycwpidvwL93p3p-C-zn8BA@mail.gmail.com> <6d6dc9e6-751f-4079-b21e-2e3461885b03@kernel.org>
+In-Reply-To: <6d6dc9e6-751f-4079-b21e-2e3461885b03@kernel.org>
+From: Will Whang <will@willwhang.com>
+Date: Tue, 12 Aug 2025 23:38:08 -0700
+X-Gmail-Original-Message-ID: <CAFoNnrwoRbtvTHHnjarDTKEHnQMaMDERPKi_vnYym3n8tVpzOA@mail.gmail.com>
+X-Gm-Features: Ac12FXzzLLrmw8gIl8Z6rXDfhueeMgmWZqS1-9wCIvFbO51xu2pnx-aLX2I9B8Q
+Message-ID: <CAFoNnrwoRbtvTHHnjarDTKEHnQMaMDERPKi_vnYym3n8tVpzOA@mail.gmail.com>
+Subject: Re: [PATCH v2 1/4] dt-bindings: media: Add Sony IMX585 CMOS image sensor
+To: Krzysztof Kozlowski <krzk@kernel.org>
+Cc: Laurent Pinchart <laurent.pinchart@ideasonboard.com>, 
+	Mauro Carvalho Chehab <mchehab@kernel.org>, Rob Herring <robh@kernel.org>, 
+	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
+	Shawn Guo <shawnguo@kernel.org>, Sascha Hauer <s.hauer@pengutronix.de>, 
+	Pengutronix Kernel Team <kernel@pengutronix.de>, Fabio Estevam <festevam@gmail.com>, 
+	Sakari Ailus <sakari.ailus@linux.intel.com>, linux-media@vger.kernel.org, 
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, imx@lists.linux.dev, 
+	linux-arm-kernel@lists.infradead.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 8/13/25 5:59 AM, Chi Zhiling wrote:
+On Tue, Aug 12, 2025 at 11:08=E2=80=AFPM Krzysztof Kozlowski <krzk@kernel.o=
+rg> wrote:
+>
+> On 13/08/2025 06:30, Will Whang wrote:
+> > On Tue, Aug 12, 2025 at 2:56=E2=80=AFAM Laurent Pinchart
+> > <laurent.pinchart@ideasonboard.com> wrote:
+> >>
+> >> On Tue, Aug 12, 2025 at 08:47:12AM +0200, Krzysztof Kozlowski wrote:
+> >>> On 12/08/2025 08:31, Will Whang wrote:
+> >>>> On Mon, Aug 11, 2025 at 11:23=E2=80=AFPM Krzysztof Kozlowski <krzk@k=
+ernel.org> wrote:
+> >>>>> On 12/08/2025 04:47, Will Whang wrote:
+> >>>>>> On Mon, Aug 11, 2025 at 1:01=E2=80=AFAM Krzysztof Kozlowski <krzk@=
+kernel.org> wrote:
+> >>>>>>> On Sun, Aug 10, 2025 at 11:09:18PM +0100, Will Whang wrote:
+> >>>>>>>> +description:
+> >>>>>>>> +  IMX585 sensor is a Sony CMOS sensor with 4K and FHD outputs.
+> >>>>>>>> +
+> >>>>>>>> +properties:
+> >>>>>>>> +  compatible:
+> >>>>>>>> +    enum:
+> >>>>>>>> +      - sony,imx585
+> >>>>>>>> +      - sony,imx585-mono
+> >>>>>>>
+> >>>>>>> I don't understand this second compatible. Is this different hard=
+ware?
+> >>>>>>> Can you point me to "mono" datasheet?
+> >>>>>>>
+> >>>>>>> Your description should explain this. Commit msg as well, instead=
+ of
+> >>>>>>> speaking about driver (in fact drop all driver related comments).
+> >>>>>>>
+> >>>>>> Mono version of this sensor is basically just removing the bayer
+> >>>>>> filter, so the sensor itself actually doesn't know if it is color =
+or
+> >>>>>> mono and from my knowledge there are no registers programmed in th=
+e
+> >>>>>> factory that will show the variant and model number. (That is why =
+when
+> >>>>>> the driver probing it only test blacklevel register because there =
+are
+> >>>>>> no ID registers)
+> >>>>>> Originally in V1 patch I've made the switch between color and mono=
+ in
+> >>>>>> dtoverlay config but reviewer comments is to move it to compatible
+> >>>>>> string and not property.(https://lore.kernel.org/linux-media/20250=
+703175121.GA17709@pendragon.ideasonboard.com/)
+> >>>>>
+> >>>>> You only partially answer and judging by mentioning driver below:
+> >>>>>
+> >>>>>> In this case, what would you recommend?
+> >>>>>>
+> >>>>>> compatible:
+> >>>>>>   enum:
+> >>>>>>     - sony,imx585
+> >>>>>>     - sony,imx585-mono
+> >>>>>>   description: IMX585 has two variants, color and mono which the
+> >>>>>> driver supports both.
+> >>>>>
+> >>>>> ... I still have doubts that you really understand what I am asking=
+. Is
+> >>>>> this one device or two different devices?
+> >>>>
+> >>>> One device that has two variants: IMX585-AAMJ1 (Mono) and IMX585-AAQ=
+J1
+> >>>> (Color). Silicon-wise the difference is just with or without bayer
+> >>>> filter.
+> >>>
+> >>> Then I would propose to use sony,imx585-aamj1 and -aaqj1 with short
+> >>> explanation either in comment or description about difference in RGB
+> >>> mosaic filter.
+> >>
+> >> Works for me. We could possibly omit the "j1" suffix too.
+> >>
+> > My thinking is that imx585 and imx585-mono are easier to comprehend
+> > than IMX585-AAM and IMX585-AAQ.
+> > Because in dtoverlay for the users/me they will have to know what is
+> > the exact name instead of easy to remember name.
+> >
+> > dtoverlay=3Dimx585-aam
+> > is not as nice as
+> > dtoverlay=3Dimx585-mono
+>
+> I have datasheet for AAQ, so how above is easier for me to figure out
+> which compatible I am using?
+>
+I propose this:
 
-> FWIW, how about call cancel_work_sync() before free the firmware?
+compatible:
+  enum:
+    - sony,imx585
+    - sony,imx585-mono
+    - sony,imx585-AAQJ1
+    - sony,imx585-AAMJ1
 
-IIUC there is no way to access 'struct work_struct' (embedded into 'struct firmware_work')
-internally used by request_firmware_nowait(), at least via the public API exposed via
-include/linux/firmware.h.
+  description: IMX585 has two variants, color (IMX585-AAQ) and mono
+(IMX585-AAM) which
+the driver supports both.
 
-Dmitry
+Description is there for a reason, dtoverlay has description also. See
+sony,imx296.yaml as an example.
+If you are looking at AAQ you know it is a color sensor and all the
+color sensors from sony can be used with imx+three numbers in the
+current list.
+This is following the established convention.
 
+> >
+> > which is what it does, a mono variant of the sensor.
+> >
+> > I really don't understand the standard for compatible string naming
+> > here, is there something I missed? Is it required to use the full name
+> > of the sensor parts number as a compatible string?
+>
+> It's not part number. You have there different models. We don't add
+> prose to compatibles, but use device or model names.
+>
+> Best regards,
+> Krzysztof
