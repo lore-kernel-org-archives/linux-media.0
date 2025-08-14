@@ -1,160 +1,209 @@
-Received: from fllvem-ot03.ext.ti.com (fllvem-ot03.ext.ti.com [198.47.19.245])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 60BE217D346;
-	Thu, 14 Aug 2025 16:11:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.47.19.245
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A47AD25A344;
+	Thu, 14 Aug 2025 16:17:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755187867; cv=none; b=rDn6a0cPaimVkOSBkQB2bbCV3qSYXslckI/Mu/VHw2swsKt5YBG/jw5+WySH5EY/boFIqytoarU0lnABv63NPDkHO4Tunlq7mD0BZHkro9rxHeqbYNnzsyzjcPLXoPNuXr89nlPQcs/b5c/4lO9yzNtZTbZeuean4CId+snU1vs=
+	t=1755188239; cv=none; b=gAHVRx+FyTZAxrFZepEWlkzrEFEMEOly6caQ4M8ZKXl4aSzRWiIWw5jP/E7T4NUcWxfE9n6wn8vyeFJ3zUc8WpWVo2CRcKeJ104gjHkrpVba+4SJQte2KecrZr7A4ogr8Xez9Fy8O43TSyik02PfA5eZWBQft+BIhe2vlLT34rM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755187867; c=relaxed/simple;
-	bh=A0jG8wOd7Hat1JLqO4ngknfrGOTBOMaGZuwjPaIHNTU=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=Kb6PHFcMvQXfnP+d8NuHQ5QeSv/qFNYuNpi7dYcsZJY51EWorIybNDVxJ1OoDdKfMEFEuWVZBeIYpYnuM8TvIWPt7xLc4ew8M09LCu6LzRHpJR7/9DRnWK2eMgUxLseOZPDjXsADwls51vHrYYQXGlbet9qiJdf50KDkQkHv1ic=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com; spf=pass smtp.mailfrom=ti.com; dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b=REiJyXhb; arc=none smtp.client-ip=198.47.19.245
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ti.com
+	s=arc-20240116; t=1755188239; c=relaxed/simple;
+	bh=t1D6JoRLNosJcvcAajcvRlnrHWGxzsuS/lzNJzOW0hI=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=pNsyJ78u3aa/XG8534vXKiXtbdZKZROf9woRYc+WJMjpD7sXK3f3WJxXVBMFT02FloP9Jxzz/QIgGQ5m7Y6Wlyvs/mV0t+/0PhW1X9RJC9tZHBUMxxAfxmPBe7opTviU21tuLlrKDV7Awy2NSib085rUnUhhQfGUjSB1AyA+yhI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=pio9G6wb; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="REiJyXhb"
-Received: from fllvem-sh03.itg.ti.com ([10.64.41.86])
-	by fllvem-ot03.ext.ti.com (8.15.2/8.15.2) with ESMTP id 57EGApFV1916359;
-	Thu, 14 Aug 2025 11:10:51 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-	s=ti-com-17Q1; t=1755187851;
-	bh=2Ig6l3paNM4Nw8JsMQGv/kPeljj1hI9QWQbQPT8/jcE=;
-	h=From:To:CC:Subject:Date:In-Reply-To:References;
-	b=REiJyXhb1QBaC7QWdN1cY2FkQId2g/WGpcR70iGO+x/FmqvaPIv8a+SE8BgyuA03N
-	 GPv15OjQ/ONcSn82Vm/QUl0TVJ9FpE3VBsDHWX71puodO6O7EBPP+qJV1TXrP/JmPW
-	 /PB/Y9VfNHPBMRNhF9acXaMzQGFUuDvSOJpw/sXQ=
-Received: from DFLE110.ent.ti.com (dfle110.ent.ti.com [10.64.6.31])
-	by fllvem-sh03.itg.ti.com (8.18.1/8.18.1) with ESMTPS id 57EGApQ61264126
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-SHA256 bits=128 verify=FAIL);
-	Thu, 14 Aug 2025 11:10:51 -0500
-Received: from DFLE108.ent.ti.com (10.64.6.29) by DFLE110.ent.ti.com
- (10.64.6.31) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.55; Thu, 14
- Aug 2025 11:10:51 -0500
-Received: from lelvem-mr05.itg.ti.com (10.180.75.9) by DFLE108.ent.ti.com
- (10.64.6.29) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.55 via
- Frontend Transport; Thu, 14 Aug 2025 11:10:50 -0500
-Received: from lelvem-mr06.itg.ti.com ([10.249.42.149])
-	by lelvem-mr05.itg.ti.com (8.18.1/8.18.1) with ESMTP id 57EGAndl4172380;
-	Thu, 14 Aug 2025 11:10:50 -0500
-From: Andrew Davis <afd@ti.com>
-To: Gerd Hoffmann <kraxel@redhat.com>, Sumit Semwal <sumit.semwal@linaro.org>,
-        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
-        Paul Cercueil
-	<paul@crapouillou.net>,
-        Vivek Kasireddy <vivek.kasireddy@intel.com>,
-        Daniel
- Vetter <daniel@ffwll.ch>
-CC: <dri-devel@lists.freedesktop.org>, <linux-media@vger.kernel.org>,
-        <linaro-mm-sig@lists.linaro.org>, <linux-kernel@vger.kernel.org>,
-        Andrew
- Davis <afd@ti.com>
-Subject: [PATCH v2 1/3] udmabuf: Keep track current device mappings
-Date: Thu, 14 Aug 2025 11:10:47 -0500
-Message-ID: <20250814161049.678672-2-afd@ti.com>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20250814161049.678672-1-afd@ti.com>
-References: <20250814161049.678672-1-afd@ti.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="pio9G6wb"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 537E7C4CEED;
+	Thu, 14 Aug 2025 16:17:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1755188239;
+	bh=t1D6JoRLNosJcvcAajcvRlnrHWGxzsuS/lzNJzOW0hI=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=pio9G6wbquRvNu83KBNo2X4ztLrxi/r01Yra2kDpuajo7CBkUHYYdvK4faGGh0HAb
+	 rjx5Jgv7eKKlNVHsDBdwh6KVPR/H86dc/0jE4Ulqbyw2S9fQgN/GnAbwPsbeyMyOwh
+	 Chfx2v5gw69odeDgxyQhKNpeonaJFTYVzkOrmTP0ZtQraFQBTrcxusI+woyhb3Mu2X
+	 KOQEiRaxdyE0Vkl5ywCpafmAZVj8+ZlCmDK2W9tI8bja1kwi6xsM2NdYTCv+aZ8bva
+	 3+GYCvPHocaHi8HN9R6QSONg6DmD7PBKMBCGQ+nBxRsAEyuM6T6HEnlxupBmmEUjU1
+	 sRjtoDvFgxQow==
+Date: Thu, 14 Aug 2025 11:17:18 -0500
+From: Rob Herring <robh@kernel.org>
+To: Daniel Stone <daniel@fooishbar.org>
+Cc: Tomeu Vizoso <tomeu@tomeuvizoso.net>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Oded Gabbay <ogabbay@kernel.org>,
+	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+	Maxime Ripard <mripard@kernel.org>,
+	Thomas Zimmermann <tzimmermann@suse.de>,
+	David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
+	Sumit Semwal <sumit.semwal@linaro.org>,
+	Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
+	Robin Murphy <robin.murphy@arm.com>,
+	Steven Price <steven.price@arm.com>, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+	linux-media@vger.kernel.org, linaro-mm-sig@lists.linaro.org
+Subject: Re: [PATCH v2 2/2] accel: Add Arm Ethos-U NPU driver
+Message-ID: <20250814161718.GA3117411-robh@kernel.org>
+References: <20250811-ethos-v2-0-a219fc52a95b@kernel.org>
+ <20250811-ethos-v2-2-a219fc52a95b@kernel.org>
+ <CAPj87rNG8gT-Wk+rQnFMsbCBqX6pL=qZY--_5=Z4XchLNsM5Ng@mail.gmail.com>
+ <CAPj87rNDPQqTqj1LAdFYmd4Y12UHXWi5+65i0RepkcOX3wvEyA@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-C2ProcessedOrg: 333ef613-75bf-4e12-a4b1-8e3623f5dcea
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAPj87rNDPQqTqj1LAdFYmd4Y12UHXWi5+65i0RepkcOX3wvEyA@mail.gmail.com>
 
-When a device attaches to and maps our buffer we need to keep track
-of this mapping/device. This is needed for synchronization with these
-devices when beginning and ending CPU access for instance. Add a list
-that tracks device mappings as part of {map,unmap}_udmabuf().
+On Thu, Aug 14, 2025 at 11:51:44AM +0100, Daniel Stone wrote:
+> Hi Rob,
 
-Signed-off-by: Andrew Davis <afd@ti.com>
----
- drivers/dma-buf/udmabuf.c | 45 +++++++++++++++++++++++++++++++++++++--
- 1 file changed, 43 insertions(+), 2 deletions(-)
+Thanks for the review.
 
-diff --git a/drivers/dma-buf/udmabuf.c b/drivers/dma-buf/udmabuf.c
-index 40399c26e6be6..cc5c1cc42c7f2 100644
---- a/drivers/dma-buf/udmabuf.c
-+++ b/drivers/dma-buf/udmabuf.c
-@@ -42,6 +42,14 @@ struct udmabuf {
- 	struct sg_table *sg;
- 	struct miscdevice *device;
- 	pgoff_t *offsets;
-+	struct list_head attachments;
-+	struct mutex lock; /* for attachments list */
-+};
-+
-+struct udmabuf_attachment {
-+	struct device *dev;
-+	struct sg_table *table;
-+	struct list_head list;
- };
- 
- static vm_fault_t udmabuf_vm_fault(struct vm_fault *vmf)
-@@ -185,14 +193,44 @@ static void put_sg_table(struct device *dev, struct sg_table *sg,
- static struct sg_table *map_udmabuf(struct dma_buf_attachment *at,
- 				    enum dma_data_direction direction)
- {
--	return get_sg_table(at->dev, at->dmabuf, direction);
-+	struct udmabuf *ubuf = at->dmabuf->priv;
-+	struct udmabuf_attachment *a;
-+	struct sg_table *table;
-+
-+	a = kzalloc(sizeof(*a), GFP_KERNEL);
-+	if (!a)
-+		return ERR_PTR(-ENOMEM);
-+
-+	table = get_sg_table(at->dev, at->dmabuf, direction);
-+	if (IS_ERR(table)) {
-+		kfree(a);
-+		return table;
-+	}
-+
-+	a->dev = at->dev;
-+	a->table = table;
-+
-+	mutex_lock(&ubuf->lock);
-+	list_add(&a->list, &ubuf->attachments);
-+	mutex_unlock(&ubuf->lock);
-+
-+	return a->table;
- }
- 
- static void unmap_udmabuf(struct dma_buf_attachment *at,
- 			  struct sg_table *sg,
- 			  enum dma_data_direction direction)
- {
--	return put_sg_table(at->dev, sg, direction);
-+	struct udmabuf_attachment *a = at->priv;
-+	struct udmabuf *ubuf = at->dmabuf->priv;
-+
-+	mutex_lock(&ubuf->lock);
-+	list_del(&a->list);
-+	mutex_unlock(&ubuf->lock);
-+
-+	put_sg_table(at->dev, sg, direction);
-+
-+	kfree(a);
- }
- 
- static void unpin_all_folios(struct udmabuf *ubuf)
-@@ -384,6 +422,9 @@ static long udmabuf_create(struct miscdevice *device,
- 	if (!ubuf)
- 		return -ENOMEM;
- 
-+	INIT_LIST_HEAD(&ubuf->attachments);
-+	mutex_init(&ubuf->lock);
-+
- 	pglimit = ((u64)size_limit_mb * 1024 * 1024) >> PAGE_SHIFT;
- 	for (i = 0; i < head->count; i++) {
- 		pgoff_t subpgcnt;
--- 
-2.39.2
+> 
+> On Tue, 12 Aug 2025 at 13:53, Daniel Stone <daniel@fooishbar.org> wrote:
+> > On Mon, 11 Aug 2025 at 22:05, Rob Herring (Arm) <robh@kernel.org> wrote:
+> > > +static int ethos_ioctl_submit_job(struct drm_device *dev, struct drm_file *file,
+> > > +                                  struct drm_ethos_job *job)
+> > > +{
+> > > +       [...]
+> > > +       ejob->cmd_bo = drm_gem_object_lookup(file, job->cmd_bo);
+> > > +       cmd_info = to_ethos_bo(ejob->cmd_bo)->info;
+> > > +       if (!ejob->cmd_bo)
+> > > +               goto out_cleanup_job;
+> >
+> > NULL deref here if this points to a non-command BO. Which is better
+> > than wild DMA, but hey.
+> 
+> Sorry this wasn't more clear. There are two NULL derefs here. If you
+> pass an invalid BO, ejob->cmd_bo is dereferenced before the NULL
+> check, effectively neutering it and winning you a mail from the other
+> Dan when he runs sparse on it. Secondly you pass a BO which is valid
+> but not a command BO, cmd_info gets unconditionally dereferenced so it
+> will fall apart there too.
 
+Yep. And there's a 3rd issue that I'm not setting 'ret' to an error 
+value.
+
+> 
+> > > +       for (int i = 0; i < NPU_BASEP_REGION_MAX; i++) {
+> > > +               struct drm_gem_object *gem;
+> > > +
+> > > +               if (job->region_bo_handles[i] == 0)
+> > > +                       continue;
+> > > +
+> > > +               /* Don't allow a region to point to the cmd BO */
+> > > +               if (job->region_bo_handles[i] == job->cmd_bo) {
+> > > +                       ret = -EINVAL;
+> > > +                       goto out_cleanup_job;
+> > > +               }
+> >
+> > And here I suppose you want to check if the BO's info pointer is
+> > non-NULL, i.e. disallow use of _any_ command BO instead of only
+> > disallowing this job's own command BO.
+> 
+> This is the main security issue, since it would allow writes a
+> cmdstream BO which has been created but is not _the_ cmdstream BO for
+> this job. Fixing that is pretty straightforward, but given that
+> someone will almost certainly try to add dmabuf support to this
+> driver, it's also probably worth a comment in the driver flags telling
+> anyone who tries to add DRIVER_PRIME that they need to disallow export
+> of cmdbuf BOs.
+
+What would be the usecase for exporting BOs here?
+
+I suppose if one wants to feed in camera data and we need to do the 
+allocation in the ethos driver since it likely has more constraints 
+(i.e. must be contiguous). (Whatever happened on the universal allocator 
+or constraint solver? I haven't been paying attention for a while...)
+
+> Relatedly, I think there's missing validity checks around the regions.
+> AFAICT it would be possible to do wild memory access:
+> * create a cmdstream BO which accesses one region
+> * submit a job using that cmdstream with one data BO correctly
+> attached to the region, execute the job and wait for completion
+> * free the data BO
+> * resubmit that job but declare zero BO handles
+> 
+> The first issue is that the job will be accepted by the processing
+> ioctl, because it doesn't check that all the regions specified by the
+> cmdstream are properly filled in by the job, which is definitely one
+> to fix for validation. The second issue is that region registers are
+> not cleared in any way, so in the above example, the second job will
+> reuse the region configuration from the first. I'm not sure if
+> clearing out unused job fields would be helpful defence in depth or
+> not; your call.
+
+I had considered clearing unused the region registers. That really has 
+little effect. There's not any way to disable regions. And region 
+offsets are a full 64-bits, so even if one set base address to 0 or some 
+faulting region, a cmdstream can still get to any address.
+
+The other issue is just whether there's leftover cmdstream state from 
+prior jobs. That's why the cmd_info is initialized to all 1s so that the 
+cmdstream has to setup all the state.
+
+> > (There's also a NULL deref if an invalid GEM handle is specified.)
+> 
+> This one is similar to the first; drm_gem_object_lookup() return isn't
+> checked so it gets dereferenced unconditionally.
+
+Here's the reworked (but not yet tested) code which I think should solve 
+all of the above issues. There was also an issue with the cleanup path 
+that we wouldn't do a put on the last BO if there was a size error. We 
+just need to set ejob->region_bo[ejob->region_cnt] and increment 
+region_cnt before any checks.
+
+	ejob->cmd_bo = drm_gem_object_lookup(file, job->cmd_bo);
+	if (!ejob->cmd_bo) {
+		ret = -ENOENT;
+		goto out_cleanup_job;
+	}
+	cmd_info = to_ethos_bo(ejob->cmd_bo)->info;
+	if (!cmd_info) {
+		ret = -EINVAL;
+		goto out_cleanup_job;
+	}
+
+	for (int i = 0; i < NPU_BASEP_REGION_MAX; i++) {
+		struct drm_gem_object *gem;
+
+		/* Can only omit a BO handle if the region is not used or used for SRAM */
+		if (!job->region_bo_handles[i] &&
+		    (!cmd_info->region_size[i] || (i == ETHOS_SRAM_REGION && job->sram_size)))
+			continue;
+
+		gem = drm_gem_object_lookup(file, job->region_bo_handles[i]);
+		if (!gem) {
+			dev_err(dev->dev,
+				"Invalid BO handle %d for region %d\n",
+				job->region_bo_handles[i], i);
+			ret = -ENOENT;
+			goto out_cleanup_job;
+		}
+
+		ejob->region_bo[ejob->region_cnt] = gem;
+		ejob->region_bo_num[ejob->region_cnt] = i;
+		ejob->region_cnt++;
+
+		if (to_ethos_bo(gem)->info) {
+			dev_err(dev->dev,
+				"Cmdstream BO handle %d used for region %d\n",
+				job->region_bo_handles[i], i);
+			ret = -EINVAL;
+			goto out_cleanup_job;
+		}
+
+		/* Verify the command stream doesn't have accesses outside the BO */
+		if (cmd_info->region_size[i] > gem->size) {
+			dev_err(dev->dev,
+				"cmd stream region %d size greater than BO size (%llu > %zu)\n",
+				i, cmd_info->region_size[i], gem->size);
+			ret = -EOVERFLOW;
+			goto out_cleanup_job;
+		}
+	}
