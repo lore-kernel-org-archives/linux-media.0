@@ -1,66 +1,59 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 32CB52F0C54;
-	Thu, 14 Aug 2025 09:49:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 57FA72F83CC;
+	Thu, 14 Aug 2025 10:17:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755164950; cv=none; b=EO7XyOGd+g7HGNEqM0Wbqai9lxaUtkwlcJvBI0bavzEYw9RqcG/zBO7e7j5O1m/NcBTsSfqnZlVnGxkPlirDkDxBYRDWA4fyCXMol4r7cYfSw91dcbigO8/HaZMU2Uglyfh+yq+TaXGLZ9PGq5urvx2CdhW47x8sLZXY72NG5U8=
+	t=1755166624; cv=none; b=COZcFEYSOaE4ExsK5uj1z80foKbwxyB1Q631Kj+9Z5qACYFUe1ae4KRHWtcabRu8ypVfSE4UVcFAh8YYKU6R1TY/CJm7ppNx3I//Lnlw52+WxoIjqc5OcN+KnJ1ceye5TpePpX+/gK/DV1Gx52L6LN4pYWo2w2/yD1IvR6qQhrA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755164950; c=relaxed/simple;
-	bh=QkPxUdpuqr1DUVmmOcH04Inx+a3RZmbXnCVVRgnM76I=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=p3G9ABgJpiQKZcvZs8SVz1utTKrkk6Ltr3gy3QIEl/HuGsvSjQ48tZsznnggfyS6MxBYwfBVtZvL26CF9U5eBsrUsjnUqWPXrbsxuYBisKnHIS+UaXb/OCMnhisctsLZbDCI/9Kl/7hxVTpqxFoN5/J4NvhqO4elUZv3FbUBqso=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=lzIDCjbd; arc=none smtp.client-ip=198.175.65.11
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+	s=arc-20240116; t=1755166624; c=relaxed/simple;
+	bh=5C6A2etCAWerG0rmnrnHqZxn+WDNZ96iXOqPCUfg108=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=Zt6OVN039zlKCwh4hWPRXBO43f18gZTSFLXC9Chj7YNUtQiNcUuAjx7YF7Nzxtgn0pv+YWMmVpFMG24PFvwK0AEoCVrNje57FeSHJTEB9brA+ouXj8iwzlkpYmC/9jjE/yEBfI3b0r0YVbz28oopzQx0YPq7VVYb64eqBl84GoY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=dEqMoNMS; arc=none smtp.client-ip=205.220.168.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="lzIDCjbd"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1755164949; x=1786700949;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=QkPxUdpuqr1DUVmmOcH04Inx+a3RZmbXnCVVRgnM76I=;
-  b=lzIDCjbdP+qGy95hJCWu/kZzb9EOXKNC4GS27FAowwm/unV4ai0OFV5/
-   KaCN+Dj4d82hN+r5Stv9Zx7HzS3W9XgrN+ugYJmkaU+yMRI9KBPWTrRYX
-   8CEneg9aRcau0jAxdcruQVd1R1iVRUN5YwzHkEMa7fYHM0+O2iu9o3y19
-   3+Y2Fo1+YEnR7brDc1nV3IQG/vrW7G89OW6+yyLBVtl/6kbkwePnhJS1i
-   nHZvkhpP9zutCKQgc1SwLsqqAY5aeKH8cQnm8/u08FbunI98a4sUcVchn
-   4n/IGNuswHQI9z1fFuYapjgHpOPIbhU0oV40KTRYfj8udPyU4udG2bz4H
-   Q==;
-X-CSE-ConnectionGUID: rGmNI3EzTUC3N5tEia6NlA==
-X-CSE-MsgGUID: 6z4rDNLXQ6utJWJe+GsRVQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11520"; a="67746987"
-X-IronPort-AV: E=Sophos;i="6.17,287,1747724400"; 
-   d="scan'208";a="67746987"
-Received: from orviesa008.jf.intel.com ([10.64.159.148])
-  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Aug 2025 02:49:09 -0700
-X-CSE-ConnectionGUID: Rs2vrowXQQyB6UfU1Y+Jjw==
-X-CSE-MsgGUID: MVSGJjwDRbG3McwsLsRftw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.17,287,1747724400"; 
-   d="scan'208";a="166980981"
-Received: from jkrzyszt-mobl2.ger.corp.intel.com ([10.245.244.150])
-  by orviesa008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Aug 2025 02:49:05 -0700
-From: Janusz Krzysztofik <janusz.krzysztofik@linux.intel.com>
-To: =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>
-Cc: Sumit Semwal <sumit.semwal@linaro.org>,
-	Gustavo Padovan <gustavo@padovan.org>,
-	Chris Wilson <chris.p.wilson@linux.intel.com>,
-	linux-media@vger.kernel.org,
-	dri-devel@lists.freedesktop.org,
-	linaro-mm-sig@lists.linaro.org,
-	linux-kernel@vger.kernel.org,
-	intel-gfx@lists.freedesktop.org,
-	intel-xe@lists.freedesktop.org,
-	Janusz Krzysztofik <janusz.krzysztofik@linux.intel.com>
-Subject: [PATCH 4/4] dma-buf/fence-chain: Speed up processing of rearmed callbacks
-Date: Thu, 14 Aug 2025 10:16:15 +0200
-Message-ID: <20250814094824.217142-10-janusz.krzysztofik@linux.intel.com>
-X-Mailer: git-send-email 2.50.1
-In-Reply-To: <20250814094824.217142-6-janusz.krzysztofik@linux.intel.com>
-References: <20250814094824.217142-6-janusz.krzysztofik@linux.intel.com>
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="dEqMoNMS"
+Received: from pps.filterd (m0279862.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 57E9NHnW025666;
+	Thu, 14 Aug 2025 10:16:50 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	cc:content-transfer-encoding:content-type:date:from:message-id
+	:mime-version:subject:to; s=qcppdkim1; bh=HHqTE40OeZMLliROMlhjzv
+	XOYxWvPRUMusZKV+Xmu40=; b=dEqMoNMSgPmtONmC30si4KNfKYRi8Y70573+nA
+	+z9TUT/1Yys+yR/nesKXEkdMsTaivxjwrAidEjG5jfjTgcbJt2/4GOj6kZJl+ewz
+	eMVaQzkuyW92S9Ot3CZneDC1fESm6lJ7CvhCYf9RjXM6xqZ6adji0xARTYvrbpLZ
+	tTc3eyXO4AuV+iKUl9qfkAZDMeB5udn20+Uf19h+fiBu9d4ZcZikfPyDGnIei5CW
+	pInNpR2oq114BgFk3d3zuwgiNvYDcM46MO/GGzVFtgcYYxKy+miZcIpvGven1xqG
+	glbKy9DtktpkiESlpyspWw6ihImUrZ8mxrc52YaB+b5vG/Rg==
+Received: from nasanppmta04.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 48dy3gf7cq-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 14 Aug 2025 10:16:50 +0000 (GMT)
+Received: from nasanex01b.na.qualcomm.com (nasanex01b.na.qualcomm.com [10.46.141.250])
+	by NASANPPMTA04.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 57EAGnrc028198
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 14 Aug 2025 10:16:49 GMT
+Received: from hu-vikramsa-hyd.qualcomm.com (10.80.80.8) by
+ nasanex01b.na.qualcomm.com (10.46.141.250) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1748.10; Thu, 14 Aug 2025 03:16:44 -0700
+From: Vikram Sharma <quic_vikramsa@quicinc.com>
+To: <rfoss@kernel.org>, <todor.too@gmail.com>, <bryan.odonoghue@linaro.org>,
+        <mchehab@kernel.org>, <robh@kernel.org>, <krzk+dt@kernel.org>,
+        <conor+dt@kernel.org>, <andersson@kernel.org>,
+        <konradybcio@kernel.org>, <hverkuil-cisco@xs4all.nl>,
+        <cros-qcom-dts-watchers@chromium.org>, <catalin.marinas@arm.com>,
+        <will@kernel.org>
+CC: <linux-arm-kernel@lists.infradead.org>, <quic_svankada@quicinc.com>,
+        <quic_vikramsa@quicinc.com>, <linux-media@vger.kernel.org>,
+        <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: [PATCH v5 0/9] Add lemans(sa8775p) camss support
+Date: Thu, 14 Aug 2025 15:46:06 +0530
+Message-ID: <20250814101615.1102795-1-quic_vikramsa@quicinc.com>
+X-Mailer: git-send-email 2.25.1
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
@@ -68,171 +61,136 @@ List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nasanex01b.na.qualcomm.com (10.46.141.250)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Authority-Analysis: v=2.4 cv=X4lSKHTe c=1 sm=1 tr=0 ts=689db792 cx=c_pps
+ a=JYp8KDb2vCoCEuGobkYCKw==:117 a=JYp8KDb2vCoCEuGobkYCKw==:17
+ a=GEpy-HfZoHoA:10 a=2OwXVqhp2XgA:10 a=VwQbUJbxAAAA:8 a=EUspDBNiAAAA:8
+ a=COk6AnOGAAAA:8 a=7F3gip01v3SWeLcEoC0A:9 a=TjNXssC_j7lpFel5tvFf:22
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwODA5MDAzMSBTYWx0ZWRfXweDiPgpSvyCy
+ cRawQZOSSmBQQN8NCAgSKlMI8RhtSkcUKZa5KuJQQEsUZB5PXxV4/Q8SZX+g0uRmddC9xTBUfx6
+ T/6/bQBjx2C2DdUS/iKr52XkygLPxdsI5lmXagFhjOZguzCLrSrgdij2+xm8iPtWFFGxsPSzLTz
+ qd1UhkkR2/9V5sI4pRjhpBEwXEDwMLK4SuiA9NAEuD/Cd94ftemvCdWWMdadpA81qrRYj+KKq4T
+ tiI9h5ym+kbn9xJSIgpNX0O1VoIG0aY3Vuw1LLy8VHLTUwQauW0069/xwz1rmfUY7D4ZB2Yeu9n
+ 2zJ/mL8WNT+2Vd9he1mDLCvP6HPN9TK+wFG2uF7vFj8KJHVCaOs7MD0ZX4D6iRwqamT5ihdGe+X
+ XPRn3hHF
+X-Proofpoint-GUID: tSfxV8QJNIEnt0AI7WY1bR-yfYcyu3tx
+X-Proofpoint-ORIG-GUID: tSfxV8QJNIEnt0AI7WY1bR-yfYcyu3tx
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.1.9,FMLib:17.12.80.40
+ definitions=2025-08-13_02,2025-08-11_01,2025-03-28_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ phishscore=0 priorityscore=1501 clxscore=1015 malwarescore=0 adultscore=0
+ spamscore=0 bulkscore=0 suspectscore=0 impostorscore=0 classifier=typeunknown
+ authscore=0 authtc= authcc= route=outbound adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2507300000 definitions=main-2508090031
 
-When first user starts waiting on a not yet signaled fence of a chain
-link, a dma_fence_chain callback is added to a user fence of that link.
-When the user fence of that chain link is then signaled, the chain is
-traversed in search for a first not signaled link and the callback is
-rearmed on a user fence of that link.
+From: Vikram Sharma <vikramsa@qti.qualcomm.com>
 
-Since chain fences may be exposed to user space, e.g. over drm_syncobj
-IOCTLs, users may start waiting on any link of the chain, then many links
-of a chain may have signaling enabled and their callbacks added to their
-user fences.  Once an arbitrary user fence is signaled, all
-dma_fence_chain callbacks added to it so far must be rearmed to another
-user fence of the chain.  In extreme scenarios, when all N links of a
-chain are awaited and then signaled in reverse order, the dma_fence_chain
-callback may be called up to N * (N + 1) / 2 times (an arithmetic series).
+Lemans is a Qualcomm SoC. Previously referred to as SA8775P. This series adds
+bindings and devicetree to bring up CSIPHY, TPG, CSID, VFE/RDI interfaces
+in Lemans.
 
-To avoid that potential excessive accumulation of dma_fence_chain
-callbacks, rearm a trimmed-down, signal only callback version to the base
-fence of a previous link, if not yet signaled, otherwise just signal the
-base fence of the current link instead of traversing the chain in search
-for a first not signaled link and moving all callbacks collected so far to
-a user fence of that link.
+Lemans provides
+- 2 x VFE, 3 RDI per VFE
+- 5 x VFE Lite, 6 RDI per VFE
+- 2 x CSID
+- 5 x CSID Lite
+- 3 x TPG
+- 4 x CSIPHY
 
-Closes: https://gitlab.freedesktop.org/drm/i915/kernel/-/issues/12904
-Suggested-by: Chris Wilson <chris.p.wilson@linux.intel.com>
-Signed-off-by: Janusz Krzysztofik <janusz.krzysztofik@linux.intel.com>
----
- drivers/dma-buf/dma-fence-chain.c | 101 +++++++++++++++++++++++++-----
- 1 file changed, 84 insertions(+), 17 deletions(-)
+Changes in v5:
+- Update commit texts for almost all the patches to refer sa8775p soc
+  as lemans. This is required because sa8775p.dtsi is now changed to
+  lemans.dtsi for IOT platforms.
+  Name change is done as per:
+  https://lore.kernel.org/all/20250803110113.401927-1-wasim.nazir@oss.qualcomm.com/
+- Link to v4:
+  https://lore.kernel.org/all/20250807121105.710072-1-quic_vikramsa@quicinc.com/
 
-diff --git a/drivers/dma-buf/dma-fence-chain.c b/drivers/dma-buf/dma-fence-chain.c
-index a8a90acf4f34d..90eff264ee05c 100644
---- a/drivers/dma-buf/dma-fence-chain.c
-+++ b/drivers/dma-buf/dma-fence-chain.c
-@@ -119,46 +119,113 @@ static const char *dma_fence_chain_get_timeline_name(struct dma_fence *fence)
-         return "unbound";
- }
- 
--static void dma_fence_chain_irq_work(struct irq_work *work)
-+static void signal_irq_work(struct irq_work *work)
- {
- 	struct dma_fence_chain *chain;
- 
- 	chain = container_of(work, typeof(*chain), work);
- 
--	/* Try to rearm the callback */
--	if (!dma_fence_chain_enable_signaling(&chain->base))
--		/* Ok, we are done. No more unsignaled fences left */
--		dma_fence_signal(&chain->base);
-+	dma_fence_signal(&chain->base);
- 	dma_fence_put(&chain->base);
- }
- 
--static void dma_fence_chain_cb(struct dma_fence *f, struct dma_fence_cb *cb)
-+static void signal_cb(struct dma_fence *f, struct dma_fence_cb *cb)
-+{
-+	struct dma_fence_chain *chain;
-+
-+	chain = container_of(cb, typeof(*chain), cb);
-+	init_irq_work(&chain->work, signal_irq_work);
-+	irq_work_queue(&chain->work);
-+}
-+
-+static void rearm_irq_work(struct irq_work *work)
-+{
-+	struct dma_fence_chain *chain;
-+	struct dma_fence *prev;
-+
-+	chain = container_of(work, typeof(*chain), work);
-+
-+	rcu_read_lock();
-+	prev = rcu_dereference(chain->prev);
-+	if (prev && dma_fence_add_callback(prev, &chain->cb, signal_cb))
-+		prev = NULL;
-+	rcu_read_unlock();
-+	if (prev)
-+		return;
-+
-+	/* Ok, we are done. No more unsignaled fences left */
-+	signal_irq_work(work);
-+}
-+
-+static inline bool fence_is_signaled__nested(struct dma_fence *fence)
-+{
-+	if (test_bit(DMA_FENCE_FLAG_SIGNALED_BIT, &fence->flags))
-+		return true;
-+
-+	if (fence->ops->signaled && fence->ops->signaled(fence)) {
-+		unsigned long flags;
-+
-+		spin_lock_irqsave_nested(fence->lock, flags, SINGLE_DEPTH_NESTING);
-+		dma_fence_signal_locked(fence);
-+		spin_unlock_irqrestore(fence->lock, flags);
-+
-+		return true;
-+	}
-+
-+	return false;
-+}
-+
-+static bool prev_is_signaled(struct dma_fence_chain *chain)
-+{
-+	struct dma_fence *prev;
-+	bool result;
-+
-+	rcu_read_lock();
-+	prev = rcu_dereference(chain->prev);
-+	result = !prev || fence_is_signaled__nested(prev);
-+	rcu_read_unlock();
-+
-+	return result;
-+}
-+
-+static void rearm_or_signal_cb(struct dma_fence *f, struct dma_fence_cb *cb)
- {
- 	struct dma_fence_chain *chain;
- 
- 	chain = container_of(cb, typeof(*chain), cb);
--	init_irq_work(&chain->work, dma_fence_chain_irq_work);
-+	if (prev_is_signaled(chain)) {
-+		/* Ok, we are done. No more unsignaled fences left */
-+		init_irq_work(&chain->work, signal_irq_work);
-+	} else {
-+		/* Try to rearm the callback */
-+		init_irq_work(&chain->work, rearm_irq_work);
-+	}
-+
- 	irq_work_queue(&chain->work);
--	dma_fence_put(f);
- }
- 
- static bool dma_fence_chain_enable_signaling(struct dma_fence *fence)
- {
- 	struct dma_fence_chain *head = to_dma_fence_chain(fence);
-+	int err = -ENOENT;
- 
--	dma_fence_get(&head->base);
--	dma_fence_chain_for_each(fence, &head->base) {
--		struct dma_fence *f = dma_fence_chain_contained(fence);
-+	if (WARN_ON(!head))
-+		return false;
- 
--		dma_fence_get(f);
--		if (!dma_fence_add_callback(f, &head->cb, dma_fence_chain_cb)) {
-+	dma_fence_get(fence);
-+	if (head->fence)
-+		err = dma_fence_add_callback(head->fence, &head->cb, rearm_or_signal_cb);
-+	if (err) {
-+		if (prev_is_signaled(head)) {
- 			dma_fence_put(fence);
--			return true;
-+		} else {
-+			init_irq_work(&head->work, rearm_irq_work);
-+			irq_work_queue(&head->work);
-+			err = 0;
- 		}
--		dma_fence_put(f);
- 	}
--	dma_fence_put(&head->base);
--	return false;
-+
-+	return !err;
- }
- 
- static bool dma_fence_chain_signaled(struct dma_fence *fence)
+Changes in v4 compared to v3:
+- Bindings and Device Tree: Reordered the csid_wrapper to be the first
+  entry in the register list. (Suggested by Bryan)
+- CSIPHY Driver: Added comments indicating the CSIPHY process node number.
+- VFE Configuration: Defined bit fields for vfe_top_core_cfg.
+- Clock Optimization: Trimmed down the clock list for VFE.
+- Cleanup: Removed newly added deadlines from the CSIPHY, CSID, and VFE
+  files.
+- Link to v3:
+  https://lore.kernel.org/all/20250703171938.3606998-1-quic_vikramsa@quicinc.com/
+
+Changes compared to v2:
+- Renaming camss-vfe-780.c to camss-vfe-gen3.c and camss-csid-780 to
+  camss-csid-gen3 to avoid code duplication for SA8775P.SA877P have csid
+  690 and vfe 690 which is almost same as csid/vfe 780 with very minor
+  change in register bitfield.
+- Restructure vfe and csid addition to reuse existing files.
+- Updated commit text for Bindings patch.
+- renamed cpas_ife_lite clock to cpas_vfe_lite. 
+- added voltage rails for csiphy in documentation.
+- removed sf and icp clocks.
+- removed sf_0 interconnect.
+- Link to v2:
+  https://lore.kernel.org/linux-arm-msm/20250427070135.884623-1-quic_vikramsa@quicinc.com/
+
+Changes compared to v1:
+- Renaming camss-vfe-780.c to camss-vfe-gen2.c and camss-csid-780 to
+  camss-csid-gen3 to avoid code duplication for SA8775P.SA877P have csid
+  690 and vfe 690 which is almost same as csid/vfe 780 with very minor
+  change in register bitfield.
+- Restructure vfe and csid addition to reuse existing files.
+- Updated cisd-lite and vfe-lite interuppt names.
+- add enumeration changes as seprate patch. 
+- Update required fileds in bindings.
+- Link to v1:
+  DT: https://lore.kernel.org/linux-arm-msm/20250210155605.575367-1-quic_vikramsa@quicinc.com/
+  Driver: https://lore.kernel.org/linux-media/20250210162843.609337-1-quic_vikramsa@quicinc.com/
+
+Sanity check for these patches:
+- checkpatch.pl
+- Smatch: make CHECK="smatch --full-path" M=drivers/media/platform/qcom/camss/
+- Sparse: make C=2 M=drivers/media/platform/qcom/camss/
+- make -j32 W=1
+
+We have tested this on qcs9100-ride board with 'Test Pattern Generator'
+https://lore.kernel.org/all/20250717-lemans_tpg-v2-0-a2538659349c@quicinc.com/
+
+A rebased version of the TPG driver, built on top of this series, will be
+shared as v3 in a follow-up post.
+
+Vikram Sharma (9):
+  media: qcom: camss: Rename camss-csid-780.c to camss-csid-gen3.c
+  media: qcom: camss: Rename camss-vfe-780.c to camss-vfe-gen3.c
+  media: dt-bindings: Add qcom,sa8775p-camss compatible
+  media: qcom: camss: Add qcom,sa8775p-camss compatible
+  media: qcom: camss: Add support for CSIPHY (v1.3.0)
+  media: qcom: camss: Add support for CSID 690
+  media: qcom: camss: Add support for VFE 690
+  media: qcom: camss: Enumerate resources for lemans(sa8775p)
+  arm64: dts: qcom: lemans: Add support for camss
+
+ .../bindings/media/qcom,sa8775p-camss.yaml    | 361 +++++++++++++++
+ arch/arm64/boot/dts/qcom/lemans.dtsi          | 185 ++++++++
+ drivers/media/platform/qcom/camss/Makefile    |   4 +-
+ .../{camss-csid-780.c => camss-csid-gen3.c}   |  33 +-
+ .../{camss-csid-780.h => camss-csid-gen3.h}   |   8 +-
+ .../media/platform/qcom/camss/camss-csid.h    |   2 +-
+ .../qcom/camss/camss-csiphy-3ph-1-0.c         |  84 ++++
+ .../{camss-vfe-780.c => camss-vfe-gen3.c}     |  75 ++-
+ drivers/media/platform/qcom/camss/camss-vfe.c |   5 +-
+ drivers/media/platform/qcom/camss/camss-vfe.h |   2 +-
+ drivers/media/platform/qcom/camss/camss.c     | 428 +++++++++++++++++-
+ drivers/media/platform/qcom/camss/camss.h     |   1 +
+ 12 files changed, 1138 insertions(+), 50 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/media/qcom,sa8775p-camss.yaml
+ rename drivers/media/platform/qcom/camss/{camss-csid-780.c => camss-csid-gen3.c} (89%)
+ rename drivers/media/platform/qcom/camss/{camss-csid-780.h => camss-csid-gen3.h} (84%)
+ rename drivers/media/platform/qcom/camss/{camss-vfe-780.c => camss-vfe-gen3.c} (70%)
+
+Signed-off-by: Vikram Sharma <quic_vikramsa@quicinc.com>
 -- 
-2.50.1
+2.25.1
 
