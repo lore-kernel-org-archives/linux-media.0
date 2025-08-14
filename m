@@ -1,148 +1,138 @@
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+Received: from mailout2.samsung.com (mailout2.samsung.com [203.254.224.25])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7C705DF59;
-	Mon, 18 Aug 2025 03:28:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 423C825B1C5
+	for <linux-media@vger.kernel.org>; Mon, 18 Aug 2025 04:37:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.254.224.25
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755487709; cv=none; b=t7pMIm/RqtPYcqB3pm0rGLqoLmLACYpDx1AaVhxMKb7qk67xAEXxCLym7PFeaIm7d4LGwRJQts1bSBDA6ImkXI4BjyGg4bMm2/TJXbDQPxzAKKuLmsDPLayH1PHZHz1pnsB3JKh2inIx71Gm33PUDoT47nGMCeBy6he7eo7MrLM=
+	t=1755491843; cv=none; b=FAFl6Jg8Cf/Zjdi5h9RHc22Fbn+HFBVcKUnm2HcRfKyUdYCqkA8qv6lQuulTSiJ5BaUKAM3BATufvofLEfQCTE0dHIR2YdcIBIMqfUFaCDdSQORn6uSpaPT1ejuD54p9vHAbhTgmGHeOFUSLbKo/wqQDYmCXTuRCHKmMrLXbgJ4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755487709; c=relaxed/simple;
-	bh=VEdmm8Ly9rd5GgdWQijBdnCM8PhJeNKqtW5R3z9XprE=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=lBQzzAmPhTTX8z7H6fpYBHNJzT3oDxgUsEa7qeQVbqLFiTz438okB7OjZAKk30rGX8LCS0jV1YzQFTMfwYv92P1OPgpv/evTwTDr6FveGLiSdj+T2JG8eD6f5lo/0Hbqak1o3lzWkSbvWzyHRVoAd1mrenpDKETV76EwDP7+GKI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=c47OxqGV; arc=none smtp.client-ip=205.220.180.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+	s=arc-20240116; t=1755491843; c=relaxed/simple;
+	bh=GGMEHVB0X2VGIc4wzUyfGmQwSg52QCIC5HEXNyGM8To=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type:
+	 References; b=GnzRsOAfhJxz8nO41EnCxDwNF9I8VSEhncVpYJNK5L/+V6yGK34riGhCNBElDF9kpda8Cqi7mOab/qiJS9eQlNaynhvFFkl5azEer6XjYl4HFZF9hhdq+UdN/x67MBF5nrSVnI1mgczmnQnhj5/OGc+LENmOmJ4p2TKLPR3K/SM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com; spf=pass smtp.mailfrom=samsung.com; dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b=hs6f1N5I; arc=none smtp.client-ip=203.254.224.25
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=samsung.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="c47OxqGV"
-Received: from pps.filterd (m0279873.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 57HNWTro009258;
-	Mon, 18 Aug 2025 03:28:23 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	9HOClPwCZBAzYCHxsO6Lv+hpRwszaNAO4tX05QwrBaw=; b=c47OxqGVL5TPVXi6
-	bvROd+ldghiOVfj1B2R+iLGQvyLFEIrm/i1Bf1tfOrcQPToydWmsHe4Vno4KrqOz
-	74PXJEQrtDtHJtavZfNe6AvJ0C7JCZbL43uetSWyKIQN1qrChzw9sNgwUmEXxCpH
-	ClTR/PZIA36YDimpPN2jexLMpqobghFnpI+/8J9gR8xsM+J18sygWx541HSkQSKW
-	BD6Yrt4UyD9qQ9oeLNjfB6udxAGqyDktR6aZ6yRsKGfRKxS5S6z9qBuroyK7q64T
-	k//G+sfiHdhbytVScEXPkIKNsHpFvQ55FMoxTLZGEXYRpRlLiQusc6/qmskZ7g+T
-	CtvVsw==
-Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 48jfbnbawn-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 18 Aug 2025 03:28:23 +0000 (GMT)
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-	by NALASPPMTA01.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 57I3SMJL004801
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 18 Aug 2025 03:28:22 GMT
-Received: from [10.50.13.61] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1748.10; Sun, 17 Aug
- 2025 20:28:17 -0700
-Message-ID: <6b3a247f-5d54-0e5b-adf7-68a126d08c8b@quicinc.com>
-Date: Mon, 18 Aug 2025 08:58:15 +0530
+	dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b="hs6f1N5I"
+Received: from epcas5p3.samsung.com (unknown [182.195.41.41])
+	by mailout2.samsung.com (KnoxPortal) with ESMTP id 20250818043719epoutp02273fff7638319f309f46c5829e29001b~cwobTFfEj1614916149epoutp028
+	for <linux-media@vger.kernel.org>; Mon, 18 Aug 2025 04:37:19 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.samsung.com 20250818043719epoutp02273fff7638319f309f46c5829e29001b~cwobTFfEj1614916149epoutp028
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+	s=mail20170921; t=1755491839;
+	bh=44MXY/Ntu9rAF0ovbjOJnvuaxkF7loC1JC6bTAe9rcc=;
+	h=From:To:Cc:Subject:Date:References:From;
+	b=hs6f1N5IFuWk+6F5dtOPgis0vajdlWb4bFzF6EZRtUBVaHfpqrLJBxqSBsHDZKBT5
+	 /+rsGn7ltJQhYRWmKrNxZBVrFXUCdRALJQY8zXdS4dWcoKrdxSRj7civ/mQSjEkLCz
+	 7WWIA4dGzeIvz5Ob5KdBV6bfzRa5QfZsBIzhMQ8I=
+Received: from epsnrtp04.localdomain (unknown [182.195.42.156]) by
+	epcas5p3.samsung.com (KnoxPortal) with ESMTPS id
+	20250818043718epcas5p3efbcae916de49e498b30a4a88463536a~cwoat_LHK0408004080epcas5p3U;
+	Mon, 18 Aug 2025 04:37:18 +0000 (GMT)
+Received: from epcas5p2.samsung.com (unknown [182.195.38.87]) by
+	epsnrtp04.localdomain (Postfix) with ESMTP id 4c50LG6cnmz6B9mL; Mon, 18 Aug
+	2025 04:37:10 +0000 (GMT)
+Received: from epsmtip2.samsung.com (unknown [182.195.34.31]) by
+	epcas5p4.samsung.com (KnoxPortal) with ESMTPA id
+	20250814140956epcas5p480aa24441933523484da5c241a201d3c~bp3QEJitT1225312253epcas5p4t;
+	Thu, 14 Aug 2025 14:09:56 +0000 (GMT)
+Received: from cheetah.samsungds.net (unknown [107.109.115.53]) by
+	epsmtip2.samsung.com (KnoxPortal) with ESMTPA id
+	20250814140952epsmtip2b069f926cc266c22788710b6b7b5e597~bp3MNOvQB1162411624epsmtip2h;
+	Thu, 14 Aug 2025 14:09:52 +0000 (GMT)
+From: Inbaraj E <inbaraj.e@samsung.com>
+To: mturquette@baylibre.com, sboyd@kernel.org, robh@kernel.org,
+	krzk+dt@kernel.org, conor+dt@kernel.org, krzk@kernel.org,
+	s.nawrocki@samsung.com, s.hauer@pengutronix.de, shawnguo@kernel.org,
+	cw00.choi@samsung.com, rmfrfs@gmail.com, laurent.pinchart@ideasonboard.com,
+	martink@posteo.de, mchehab@kernel.org, linux-fsd@tesla.com, will@kernel.org,
+	catalin.marinas@arm.com, pankaj.dubey@samsung.com, shradha.t@samsung.com,
+	ravi.patel@samsung.com
+Cc: linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org, alim.akhtar@samsung.com,
+	linux-samsung-soc@vger.kernel.org, kernel@puri.sm, kernel@pengutronix.de,
+	festevam@gmail.com, linux-media@vger.kernel.org, imx@lists.linux.dev,
+	linux-arm-kernel@lists.infradead.org, Inbaraj E <inbaraj.e@samsung.com>
+Subject: [PATCH v2 00/12] Add FSD CSI support
+Date: Thu, 14 Aug 2025 19:39:31 +0530
+Message-ID: <20250814140943.22531-1-inbaraj.e@samsung.com>
+X-Mailer: git-send-email 2.49.0
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.13.0
-Subject: Re: [PATCH v2 11/24] media: iris: Add support for video encoder
- device
-Content-Language: en-US
-To: Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
-        Vikash Garodia
-	<quic_vgarodia@quicinc.com>,
-        Abhinav Kumar <abhinav.kumar@linux.dev>,
-        "Mauro
- Carvalho Chehab" <mchehab@kernel.org>,
-        Hans Verkuil <hverkuil@xs4all.nl>,
-        Stefan Schmidt <stefan.schmidt@linaro.org>,
-        Vedang Nagar
-	<quic_vnagar@quicinc.com>
-CC: <linux-media@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        Renjiang Han <quic_renjiang@quicinc.com>,
-        Wangao Wang <quic_wangaow@quicinc.com>
-References: <20250813-iris-video-encoder-v2-0-c725ff673078@quicinc.com>
- <20250813-iris-video-encoder-v2-11-c725ff673078@quicinc.com>
- <e4dd20ac-84d8-422a-95a3-4d5c77b875a0@linaro.org>
-From: Dikshita Agarwal <quic_dikshita@quicinc.com>
-In-Reply-To: <e4dd20ac-84d8-422a-95a3-4d5c77b875a0@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwODE2MDAwMSBTYWx0ZWRfX9XXuHCQLIBJa
- 006TZds4LzU7ied11IQ9Z3eIaf62zBZDuFYpfxhOmIl5nfkEsoiY6+zDaYXb4+GCNSlhnfVEnX4
- Ofh74+HBqXleqtpogdihBdpLO6A5Wu7RVNn6FbXL5TQpw1XIsF9sRP0VW/TFG3tVZccrn9nX2gM
- qAGWbzJeJpB5WY5Ls2QD9Ine5rWnlDdieWCIHlyPXW+C4f1wjogM/l7biCyA2n1OTg5LSP6sgIi
- USDSUddFFca0KfllzMmpDjN3+0fExsgHMkYA6GuI5p8zZPdI1Q1RlZa4ngYMUz/H/pysLctgye+
- jcFmIt07tst+LqaHejRgnv+FPWwimMJUC7V3MeFBYtA6DgA/uFtArCRkbrERQPYT5CAwhoSi2Co
- Mu22yiZ2
-X-Authority-Analysis: v=2.4 cv=A+1sP7WG c=1 sm=1 tr=0 ts=68a29dd7 cx=c_pps
- a=ouPCqIW2jiPt+lZRy3xVPw==:117 a=ouPCqIW2jiPt+lZRy3xVPw==:17
- a=GEpy-HfZoHoA:10 a=IkcTkHD0fZMA:10 a=2OwXVqhp2XgA:10 a=KKAkSRfTAAAA:8
- a=YjSu5EbHJjcfT-LQ2oYA:9 a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10
- a=cvBusfyB2V15izCimMoJ:22
-X-Proofpoint-GUID: UR8NsWowYyEyKePGgoJUyaP737wQB-B8
-X-Proofpoint-ORIG-GUID: UR8NsWowYyEyKePGgoJUyaP737wQB-B8
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.1.9,FMLib:17.12.80.40
- definitions=2025-08-18_01,2025-08-14_01,2025-03-28_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- clxscore=1015 priorityscore=1501 suspectscore=0 phishscore=0 malwarescore=0
- adultscore=0 spamscore=0 impostorscore=0 bulkscore=0 classifier=typeunknown
- authscore=0 authtc= authcc= route=outbound adjust=0 reason=mlx scancount=1
- engine=8.19.0-2507300000 definitions=main-2508160001
+X-CMS-MailID: 20250814140956epcas5p480aa24441933523484da5c241a201d3c
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-Sendblock-Type: REQ_APPROVE
+CMS-TYPE: 105P
+cpgsPolicy: CPGSC10-541,Y
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20250814140956epcas5p480aa24441933523484da5c241a201d3c
+References: <CGME20250814140956epcas5p480aa24441933523484da5c241a201d3c@epcas5p4.samsung.com>
 
+FSD CSI(Camera Serial Interface) IP bundles Link controller and DMA
+controller for receiving frames. FSD SoC has 12 instances of CSI IP and
+3 D-PHY. 4 instances of CSI IP use 1 D-PHY.
 
+This patch series does the following:
+1) Refactor the imx-mipi-csis driver to support platform specific
+clock names and interrupt handlers through device specific data
+(struct mipi_csis_info).
+2) Add FSD CSI link controller support in imx-mipi-csis driver.
+3) Introduce a new media driver for FSD CSI DMA providing support for
+video capture and streaming.
+ 
+These patches were tested on the FSD platform using the
+capture_raw_frames application.
 
-On 8/16/2025 4:51 PM, Bryan O'Donoghue wrote:
-> On 13/08/2025 10:38, Dikshita Agarwal wrote:
->> +    if (type == DECODER) {
->> +        strscpy(vdev->name, "qcom-iris-decoder", sizeof(vdev->name));
->> +        ret = video_register_device(vdev, VFL_TYPE_VIDEO, -1);
->> +        if (ret)
->> +            goto err_vdev_release;
->> +        core->vdev_dec = vdev;
->> +    } else if (type == ENCODER) {
->> +        strscpy(vdev->name, "qcom-iris-encoder", sizeof(vdev->name));
->> +        ret = video_register_device(vdev, VFL_TYPE_VIDEO, -1);
->> +        if (ret)
->> +            goto err_vdev_release;
->> +        core->vdev_enc = vdev;
->> +    } else {
-> 
-> A bit of duplicate reduction.
-> 
-> if (type == DECODER) {
->     strscpy(vdev->name, "qcom-iris-decoder", sizeof(vdev->name));
->     core->vdev_dec = vdev;
-> } else if (type == ENCODER) {
->     strscpy(vdev->name, "qcom-iris-encoder", sizeof(vdev->name));
->     core->vdev_enc = vdev;
-> } else {
->     ret = -EINVAL;
->     goto err_vdev_release;
-> }
-> 
-> ret = video_register_device(vdev, VFL_TYPE_VIDEO, -1);
-> if (ret)
->     goto err_vdev_release;
-> 
-> once done
+Changes since v1:
+1. Addressed review comments from Laurent Pinchart to integrate the
+with imx-mipi-csis.c to handle the CSIS and expose it as a subdev.
 
-Sure, will fix.
+Here is the link to v1 patch for reference:
+https://patchwork.kernel.org/project/linux-media/patch/7e7832c16925386b771ddb7e00e08661115aa0ea.1668963790.git.sathya@samsung.com/
 
-> 
-> Reviewed-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-> 
-> ---
-> bod
+Inbaraj E (12):
+  dt-bindings: clock: Add CAM_CSI clock macro for FSD
+  clk: samsung: fsd: Add clk id for PCLK and PLL in CAM_CSI block
+  dt-bindings: media: nxp: Add support for FSD SoC
+  arm64: dts: fsd: Add CSI nodes
+  media: imx-mipi-csis: Move clk to mipi_csis_info structure
+  media: imx-mipi-csis: Move irq flag and handler to mipi_csis_info
+    structure
+  media: imx-mipi-csis: Add support to configure specific vc
+  media: imx-mipi-csis: Add support to dump all vc regs
+  media: imx-mipi-csis: Add support for FSD CSI Rx
+  dt-bindings: media: fsd: Document CSIS DMA controller
+  arm64: defconfig: Enable FSD CSIS DMA driver
+  media: fsd-csis: Add support for FSD CSIS DMA
+
+ .../bindings/media/nxp,imx-mipi-csi2.yaml     |   88 +-
+ .../bindings/media/tesla,fsd-csis-media.yaml  |   74 +
+ MAINTAINERS                                   |    8 +
+ arch/arm64/boot/dts/tesla/fsd-evb.dts         |   96 +
+ arch/arm64/boot/dts/tesla/fsd.dtsi            |  552 ++++++
+ arch/arm64/configs/defconfig                  |    1 +
+ drivers/clk/samsung/clk-fsd.c                 |   28 +-
+ drivers/media/platform/nxp/imx-mipi-csis.c    |  354 +++-
+ drivers/media/platform/samsung/Kconfig        |    1 +
+ drivers/media/platform/samsung/Makefile       |    1 +
+ .../media/platform/samsung/fsd-csis/Kconfig   |   16 +
+ .../media/platform/samsung/fsd-csis/Makefile  |    3 +
+ .../platform/samsung/fsd-csis/fsd-csis.c      | 1730 +++++++++++++++++
+ include/dt-bindings/clock/fsd-clk.h           |   13 +
+ 14 files changed, 2890 insertions(+), 75 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/media/tesla,fsd-csis-media.yaml
+ create mode 100644 drivers/media/platform/samsung/fsd-csis/Kconfig
+ create mode 100644 drivers/media/platform/samsung/fsd-csis/Makefile
+ create mode 100644 drivers/media/platform/samsung/fsd-csis/fsd-csis.c
+
+-- 
+2.49.0
+
