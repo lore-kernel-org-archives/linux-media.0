@@ -1,285 +1,113 @@
-Received: from mail-vk1-f175.google.com (mail-vk1-f175.google.com [209.85.221.175])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3C8662ED169
-	for <linux-media@vger.kernel.org>; Thu, 14 Aug 2025 09:47:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 475002ED876;
+	Thu, 14 Aug 2025 09:48:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755164869; cv=none; b=ralBji48Pr09TB0cXdO6dNGQwycxBfbaRMIUzhHegq4wRJcDxE8HGFMUiqrBfrHdPalrxiRLU/gQZGCzlO0NQ/e/+0CDjzdl1qr2UGWw8i3jyIe3LLzYyB2M2fAewLIJkC0M9eUSiHOaBY+x8ZvVkH1RUPjV39+2H2OHakBM0dA=
+	t=1755164935; cv=none; b=YRiCEoC1eQvg390KXH0SMAx9hg2j6IEmotm0+bksU1fL3TLPozQxezi4CbB9wsM9PaPNltuor+pQYBZh0ZICM3v9BYUsrweZII9hDGOo/ZsIar6MyBnNPskTC+U4EZuOUINOa7SZHSQHyuGeFpUfWCre4q/mqZ/IVMwxtKCXHQ0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755164869; c=relaxed/simple;
-	bh=v9C2ecqKzEtjQd1RNjsgQNhdCAyuEymNZb/w43UXQ4w=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=D2j1QvpRbIHiFi7f1viy4lxmLVdgRbn5E9FcOM9kDC3RZOjX389u7uZMhR8WVx7RtuLUtVth5hcd4OHTfhOKV4hKmecTPYKhTFZeRlTZAipAUvz0FrOGdcmiM/XgwvgdXQgAsWfNYyBZFpLGt6+fGQ01X93z1e8rlEoRYv4B+UY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=iFMK5efK; arc=none smtp.client-ip=209.85.221.175
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
+	s=arc-20240116; t=1755164935; c=relaxed/simple;
+	bh=oHZCjCggCGmF2cqQ/pqAIGefHXk/xNas8BCsSHYLSzI=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=WHwdolKNb2PdKSvgsupgaoNUBzxpSlkcBbofAtKBlLyH5wJdx7fmSjfIcNUX1RpAKBunhSYecua0427Z+/68R/lzgmUGZeRdPIaiwk5SztRZKkC2LM4Sn8Wl0LKmLuYDPhkiqAXSQGk9OQU/nHir2HBmDIOd60HArgov7isaMRk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=X5+rh+QN; arc=none smtp.client-ip=198.175.65.11
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="iFMK5efK"
-Received: by mail-vk1-f175.google.com with SMTP id 71dfb90a1353d-53b1738e8e3so605405e0c.1
-        for <linux-media@vger.kernel.org>; Thu, 14 Aug 2025 02:47:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1755164866; x=1755769666; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=YiDCfbM3bTCVcLsZuPU1JDs4qEWT1BpZ2ztHAIDrKGI=;
-        b=iFMK5efKcF7HfhKZzhJKkPEVMGqEHMnNIqTAacT2L1KJWCN/fKWqRCoA0VPPKq3uh1
-         aqwQLjxUGlMiM3g85Kof//j5Xloxeq9Se+s+VoKGSOBBX+b8cAWml4b0TeBGSZU+TIEe
-         nfB/NOoc4O+rhO5WLJC726DqKhuh7hMtaFFns=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1755164866; x=1755769666;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=YiDCfbM3bTCVcLsZuPU1JDs4qEWT1BpZ2ztHAIDrKGI=;
-        b=PVH8SvYZ3WbY7ievliY1jJRkzV2+GDVcjTSqgF8BfV+5frE0RYkt2SYM91caisONM4
-         l+1eM+VvKGWwXiwSo4EhIgrbvGeUDYmwH6HprHPfeVxDYK9EQNG47YWqjH9Q/Gr6oYs+
-         htVK27zHvmAm0tvp0rFZyoSmSEzlXWv2wogNBknit0VP8phSKIHnX1YZbMHQNx6WNBh9
-         1wc/RDaNCuTE3lYzDY4G6MwJBb9ipveJSHIfZLrsop1nj5Nnf3+XVsdV/TE1iUIU1eLe
-         sdrFhr4bs22DqlX29ACKg1FZ5iwb9jX3bGmA9AAYkBFRHHltiSDOz3j3btkPQ201RT1d
-         1Etw==
-X-Forwarded-Encrypted: i=1; AJvYcCUau3bDOcjlNOlCKScsXQJcr5XrBi/wczwBnHc6VZleVjERKNSQSnaP7ZBrmIkZU6diSL8AuggrH30iSQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw4huwEKbhq0HfOSzp0ft44klE+vKydc7KgD/pl1lj873c3tRhm
-	w8/r5L5Isvw3aW0Faw2aBuwkBXwtmLb2C6OgpOkAN+Pt5chSiAFNcOUJkOHPlx1b4JBqgqsdhaG
-	7wws=
-X-Gm-Gg: ASbGncuY0Gu9Q0/nZgLo03S8co3BOAPPB4d/bxpvzJ/opOfTZIi2l4e3jdW2ihjLyVI
-	uJGJ9B+U/pNl8BAurU/McwMVU6YPUBYb3KU1R6EFbHaj6dXQzEKV/AtJJdlSNdhew8Za1GHHTqi
-	/89OuZ+Zy+5QEgkQZp3+xNw5B75Jln6JDnMiyfAU454DChd09AbYffOiZBubkzBSVhxNpqLUmvE
-	+uEReXoD0DYqkYrR+k2pRsRDAIVANNUhpk4w5kPNySqkojur5dvQ17fCkQkwmMKoVu9fhzNYx3X
-	AgVtVa7vpMK1+NqJTSYxz/GNOE5r7hJVVe5NZwmo56GSBfGxvvRcvBxJQCvvlkP+xvqOF0q6sHD
-	ezj+Xq4CVxixgOupNTNKUazCkuXxGHSPyN2aurCG8lWlHGhSlebq7LLxTg/mxPqV5YZY1qTo9
-X-Google-Smtp-Source: AGHT+IFH1L0eQfKk6UUm1l7pP1EO5zD9tGC7cE60xA47TBxJ+AOF0tp7AiqkoXV8a3s8q9yKqIEytg==
-X-Received: by 2002:a05:6122:3102:b0:539:1dd1:1d17 with SMTP id 71dfb90a1353d-53b189a746amr837838e0c.3.1755164865656;
-        Thu, 14 Aug 2025 02:47:45 -0700 (PDT)
-Received: from mail-vk1-f172.google.com (mail-vk1-f172.google.com. [209.85.221.172])
-        by smtp.gmail.com with ESMTPSA id 71dfb90a1353d-539b02a575bsm4423798e0c.29.2025.08.14.02.47.45
-        for <linux-media@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 14 Aug 2025 02:47:45 -0700 (PDT)
-Received: by mail-vk1-f172.google.com with SMTP id 71dfb90a1353d-53b1719b717so679653e0c.0
-        for <linux-media@vger.kernel.org>; Thu, 14 Aug 2025 02:47:45 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCVeZqwzMPzig/cBdx+4Fl0yTjWkn1gqwlxOaSLU5Omxtuuo9JajXwOKe1uahp1bHN7XFacMontXKp8lVA==@vger.kernel.org
-X-Received: by 2002:a05:6122:82a3:b0:538:dbc9:17a6 with SMTP id
- 71dfb90a1353d-53b189eb471mr820629e0c.4.1755164864462; Thu, 14 Aug 2025
- 02:47:44 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="X5+rh+QN"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1755164933; x=1786700933;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=oHZCjCggCGmF2cqQ/pqAIGefHXk/xNas8BCsSHYLSzI=;
+  b=X5+rh+QN9MyOtF5aqOPFM7jCoKCjLwqcTmw+URELBUq79wq52iNcHZIa
+   BAQkyNpTbzk9wEUuCJXDtir7VJJIOYya3EdrOKJK3kyDlsCSBj+yuzB6m
+   Ep59hwl/NjF1wKG5G9Z80eeVrmKxWszr8n5EoVvJKeA3c9TX8VWMRLvuA
+   30QnEoHUocMBs8whCkrRH6H9wL86bxAsFBrJq/lqJZFSPQeAOdlf1z/26
+   JnOYVa0nGGK1RQT6zFe15dMpTcoHXric93jYAZokQD3FJVtdHMqjdt3t9
+   xKhV2aqky+YnP1OPQB54P77kZ2AG/oA/EpSe7KbRe7Oxw0AWEwnMyUeK6
+   g==;
+X-CSE-ConnectionGUID: 9gtcPflcTu2bQ882g6yptA==
+X-CSE-MsgGUID: +CjbQ9ooQTSTGLAWJUtRzw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11520"; a="67746941"
+X-IronPort-AV: E=Sophos;i="6.17,287,1747724400"; 
+   d="scan'208";a="67746941"
+Received: from orviesa008.jf.intel.com ([10.64.159.148])
+  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Aug 2025 02:48:53 -0700
+X-CSE-ConnectionGUID: bMnA+89jTyC7F2UB3p4EAA==
+X-CSE-MsgGUID: i2qJNeW5RP22Q9bH7GHNVw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.17,287,1747724400"; 
+   d="scan'208";a="166980939"
+Received: from jkrzyszt-mobl2.ger.corp.intel.com ([10.245.244.150])
+  by orviesa008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Aug 2025 02:48:49 -0700
+From: Janusz Krzysztofik <janusz.krzysztofik@linux.intel.com>
+To: =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>
+Cc: Sumit Semwal <sumit.semwal@linaro.org>,
+	Gustavo Padovan <gustavo@padovan.org>,
+	Chris Wilson <chris.p.wilson@linux.intel.com>,
+	linux-media@vger.kernel.org,
+	dri-devel@lists.freedesktop.org,
+	linaro-mm-sig@lists.linaro.org,
+	linux-kernel@vger.kernel.org,
+	intel-gfx@lists.freedesktop.org,
+	intel-xe@lists.freedesktop.org,
+	Janusz Krzysztofik <janusz.krzysztofik@linux.intel.com>
+Subject: [PATCH 0/4] dma-buf/fence-chain: Speed up processing of rearmed callbacks
+Date: Thu, 14 Aug 2025 10:16:11 +0200
+Message-ID: <20250814094824.217142-6-janusz.krzysztofik@linux.intel.com>
+X-Mailer: git-send-email 2.50.1
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250814083144.191554-1-wenst@chromium.org> <CAC=S1nhz_ESY4VrgWs=dVinLtdOamh6to3EgD1w1Kx=4YBOD9A@mail.gmail.com>
- <CAGXv+5Hke6aEYdyc096_aeS9KHiOzcNqirB-rFT2odepaYhayQ@mail.gmail.com>
-In-Reply-To: <CAGXv+5Hke6aEYdyc096_aeS9KHiOzcNqirB-rFT2odepaYhayQ@mail.gmail.com>
-From: Fei Shao <fshao@chromium.org>
-Date: Thu, 14 Aug 2025 17:47:08 +0800
-X-Gmail-Original-Message-ID: <CAC=S1nheT46K+jkmtq4EJxOVO=nwasan0LCJwv-HTEK6P6DgxA@mail.gmail.com>
-X-Gm-Features: Ac12FXzvFfMabP6kQ3r7qgde36ENXvfds4n3oOTocQXTQlh5-zck0_vwf1VSQ1c
-Message-ID: <CAC=S1nheT46K+jkmtq4EJxOVO=nwasan0LCJwv-HTEK6P6DgxA@mail.gmail.com>
-Subject: Re: [PATCH] media: mediatek: vcodec: Use spinlock for context list
- protection lock
-To: Chen-Yu Tsai <wenst@chromium.org>
-Cc: Yunfei Dong <yunfei.dong@mediatek.com>, Mauro Carvalho Chehab <mchehab@kernel.org>, 
-	Hans Verkuil <hverkuil@xs4all.nl>, Matthias Brugger <matthias.bgg@gmail.com>, 
-	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>, linux-media@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-mediatek@lists.infradead.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-On Thu, Aug 14, 2025 at 5:06=E2=80=AFPM Chen-Yu Tsai <wenst@chromium.org> w=
-rote:
->
-> On Thu, Aug 14, 2025 at 4:59=E2=80=AFPM Fei Shao <fshao@chromium.org> wro=
-te:
-> >
-> > On Thu, Aug 14, 2025 at 4:38=E2=80=AFPM Chen-Yu Tsai <wenst@chromium.or=
-g> wrote:
-> > >
-> > > Previously a mutex was added to protect the encoder and decoder conte=
-xt
-> > > lists from unexpected changes originating from the SCP IP block, caus=
-ing
-> > > the context pointer to go invalid, resulting in a NULL pointer
-> > > dereference in the IPI handler.
-> > >
-> > > Turns out on the MT8173, the VPU IPI handler is called from hard IRQ
-> > > context. This causes a big warning from the scheduler. This was first
-> > > reported downstream on the ChromeOS kernels, but is also reproducible
-> > > on mainline using Fluster with the FFmpeg v4l2m2m decoders. Even thou=
-gh
-> > > the actual capture format is not supported, the affected code paths
-> > > are triggered.
-> > >
-> > > Since this lock just protects the context list and operations on it a=
-re
-> > > very fast, it should be OK to switch to a spinlock.
-> > >
-> > > Fixes: 6467cda18c9f ("media: mediatek: vcodec: adding lock to protect=
- decoder context list")
-> > > Fixes: afaaf3a0f647 ("media: mediatek: vcodec: adding lock to protect=
- encoder context list")
-> > > Cc: Yunfei Dong <yunfei.dong@mediatek.com>
-> > > Signed-off-by: Chen-Yu Tsai <wenst@chromium.org>
-> > > ---
-> > >  .../mediatek/vcodec/common/mtk_vcodec_fw_vpu.c       | 10 ++++++----
-> > >  .../mediatek/vcodec/decoder/mtk_vcodec_dec_drv.c     | 12 +++++++---=
---
-> > >  .../mediatek/vcodec/decoder/mtk_vcodec_dec_drv.h     |  2 +-
-> > >  .../platform/mediatek/vcodec/decoder/vdec_vpu_if.c   |  4 ++--
-> > >  .../mediatek/vcodec/encoder/mtk_vcodec_enc_drv.c     | 12 +++++++---=
---
-> > >  .../mediatek/vcodec/encoder/mtk_vcodec_enc_drv.h     |  2 +-
-> > >  .../platform/mediatek/vcodec/encoder/venc_vpu_if.c   |  4 ++--
-> > >  7 files changed, 26 insertions(+), 20 deletions(-)
-> > >
-> >
-> > [...]
-> >
-> > > diff --git a/drivers/media/platform/mediatek/vcodec/decoder/vdec_vpu_=
-if.c b/drivers/media/platform/mediatek/vcodec/decoder/vdec_vpu_if.c
-> > > index 145958206e38..e9b5cac9c63b 100644
-> > > --- a/drivers/media/platform/mediatek/vcodec/decoder/vdec_vpu_if.c
-> > > +++ b/drivers/media/platform/mediatek/vcodec/decoder/vdec_vpu_if.c
-> > > @@ -77,14 +77,14 @@ static bool vpu_dec_check_ap_inst(struct mtk_vcod=
-ec_dec_dev *dec_dev, struct vde
-> > >         struct mtk_vcodec_dec_ctx *ctx;
-> > >         int ret =3D false;
-> > >
-> > > -       mutex_lock(&dec_dev->dev_ctx_lock);
-> > > +       spin_lock(&dec_dev->dev_ctx_lock);
-> >
-> > Do you mean spin_lock_irqsave()?
->
-> This function is only called from the handler below (outside the diff
-> context), which itself is called from hard IRQ context. This is mentioned
-> in the comment above the handler.
+CI results indicate excessive time spent on processing of wait_backward
+selftest.  The test case enables signaling on each link of a 4096 links
+long chain, then signals those links one after another in reverse order.
+That scanario corresponds to user space potentially building a dma_fence
+chain of an arbitrary length step by step, e.g. via drm_syncobj IOCTLs,
+and each step waiting on a chain link it has added.
 
-I see. I only searched here but didn't check the full source.
-Leaving a comment would be clearer if a revision is made, but it's not
-worth resending just for that alone.
+When first user starts waiting on a not yet signaled fence of a chain
+link, or signaling is explicitly enabled on it, a dma_fence_chain callback
+is added to a user fence of that link.  When the user fence of that chain
+link is then signaled, the chain is traversed in search for a first not
+signaled link and the callback is rearmed on a user fence of that link.
+Each time an arbitrary user fence is signaled, all dma_fence_chain
+callbacks added to it so far must be rearmed to another user fence of the
+chain.  In extreme scenarios, when all N links of a chain are awaited and
+then signaled in reverse order, the dma_fence_chain callback may be called
+up to N * (N + 1) / 2 times (an arithmetic series).
 
-Reviewed-by: Fei Shao <fshao@chromium.org>
+To avoid that potential excessive accumulation of dma_fence_chain
+callbacks, rearm a trimmed-down, signal only callback version to the base
+fence of a previous link, if not yet signaled, otherwise just signal the
+base fence of the current link instead of traversing the chain in search
+for a first not signaled link and moving all callbacks collected so far to
+a user fence of that link.
+
+For more clear correspondence to a potential userspace scenario, update
+the wait_* selftests so they actually wait on each link fence of the chain
+instead of just enabling signaling.  For easy evaluation of the change
+impact, report processing time of signaling loop of each wait_* test case.
 
 
-On Thu, Aug 14, 2025 at 5:06=E2=80=AFPM Chen-Yu Tsai <wenst@chromium.org> w=
-rote:
->
-> On Thu, Aug 14, 2025 at 4:59=E2=80=AFPM Fei Shao <fshao@chromium.org> wro=
-te:
-> >
-> > On Thu, Aug 14, 2025 at 4:38=E2=80=AFPM Chen-Yu Tsai <wenst@chromium.or=
-g> wrote:
-> > >
-> > > Previously a mutex was added to protect the encoder and decoder conte=
-xt
-> > > lists from unexpected changes originating from the SCP IP block, caus=
-ing
-> > > the context pointer to go invalid, resulting in a NULL pointer
-> > > dereference in the IPI handler.
-> > >
-> > > Turns out on the MT8173, the VPU IPI handler is called from hard IRQ
-> > > context. This causes a big warning from the scheduler. This was first
-> > > reported downstream on the ChromeOS kernels, but is also reproducible
-> > > on mainline using Fluster with the FFmpeg v4l2m2m decoders. Even thou=
-gh
-> > > the actual capture format is not supported, the affected code paths
-> > > are triggered.
-> > >
-> > > Since this lock just protects the context list and operations on it a=
-re
-> > > very fast, it should be OK to switch to a spinlock.
-> > >
-> > > Fixes: 6467cda18c9f ("media: mediatek: vcodec: adding lock to protect=
- decoder context list")
-> > > Fixes: afaaf3a0f647 ("media: mediatek: vcodec: adding lock to protect=
- encoder context list")
-> > > Cc: Yunfei Dong <yunfei.dong@mediatek.com>
-> > > Signed-off-by: Chen-Yu Tsai <wenst@chromium.org>
-> > > ---
-> > >  .../mediatek/vcodec/common/mtk_vcodec_fw_vpu.c       | 10 ++++++----
-> > >  .../mediatek/vcodec/decoder/mtk_vcodec_dec_drv.c     | 12 +++++++---=
---
-> > >  .../mediatek/vcodec/decoder/mtk_vcodec_dec_drv.h     |  2 +-
-> > >  .../platform/mediatek/vcodec/decoder/vdec_vpu_if.c   |  4 ++--
-> > >  .../mediatek/vcodec/encoder/mtk_vcodec_enc_drv.c     | 12 +++++++---=
---
-> > >  .../mediatek/vcodec/encoder/mtk_vcodec_enc_drv.h     |  2 +-
-> > >  .../platform/mediatek/vcodec/encoder/venc_vpu_if.c   |  4 ++--
-> > >  7 files changed, 26 insertions(+), 20 deletions(-)
-> > >
-> >
-> > [...]
-> >
-> > > diff --git a/drivers/media/platform/mediatek/vcodec/decoder/vdec_vpu_=
-if.c b/drivers/media/platform/mediatek/vcodec/decoder/vdec_vpu_if.c
-> > > index 145958206e38..e9b5cac9c63b 100644
-> > > --- a/drivers/media/platform/mediatek/vcodec/decoder/vdec_vpu_if.c
-> > > +++ b/drivers/media/platform/mediatek/vcodec/decoder/vdec_vpu_if.c
-> > > @@ -77,14 +77,14 @@ static bool vpu_dec_check_ap_inst(struct mtk_vcod=
-ec_dec_dev *dec_dev, struct vde
-> > >         struct mtk_vcodec_dec_ctx *ctx;
-> > >         int ret =3D false;
-> > >
-> > > -       mutex_lock(&dec_dev->dev_ctx_lock);
-> > > +       spin_lock(&dec_dev->dev_ctx_lock);
-> >
-> > Do you mean spin_lock_irqsave()?
->
-> This function is only called from the handler below (outside the diff
-> context), which itself is called from hard IRQ context. This is mentioned
-> in the comment above the handler.
->
-> > >         list_for_each_entry(ctx, &dec_dev->ctx_list, list) {
-> > >                 if (!IS_ERR_OR_NULL(ctx) && ctx->vpu_inst =3D=3D vpu)=
- {
-> > >                         ret =3D true;
-> > >                         break;
-> > >                 }
-> > >         }
-> > > -       mutex_unlock(&dec_dev->dev_ctx_lock);
-> > > +       spin_unlock(&dec_dev->dev_ctx_lock);
-> > >
-> > >         return ret;
-> > >  }
-> >
-> > [...]
-> >
-> > > diff --git a/drivers/media/platform/mediatek/vcodec/encoder/venc_vpu_=
-if.c b/drivers/media/platform/mediatek/vcodec/encoder/venc_vpu_if.c
-> > > index 51bb7ee141b9..79a91283da78 100644
-> > > --- a/drivers/media/platform/mediatek/vcodec/encoder/venc_vpu_if.c
-> > > +++ b/drivers/media/platform/mediatek/vcodec/encoder/venc_vpu_if.c
-> > > @@ -47,14 +47,14 @@ static bool vpu_enc_check_ap_inst(struct mtk_vcod=
-ec_enc_dev *enc_dev, struct ven
-> > >         struct mtk_vcodec_enc_ctx *ctx;
-> > >         int ret =3D false;
-> > >
-> > > -       mutex_lock(&enc_dev->dev_ctx_lock);
-> > > +       spin_lock(&enc_dev->dev_ctx_lock);
-> >
-> > Also here.
->
-> Same reasoning applies here as well.
->
-> ChenYu
->
-> > Regards,
-> > Fei
-> >
-> > >         list_for_each_entry(ctx, &enc_dev->ctx_list, list) {
-> > >                 if (!IS_ERR_OR_NULL(ctx) && ctx->vpu_inst =3D=3D vpu)=
- {
-> > >                         ret =3D true;
-> > >                         break;
-> > >                 }
-> > >         }
-> > > -       mutex_unlock(&enc_dev->dev_ctx_lock);
-> > > +       spin_unlock(&enc_dev->dev_ctx_lock);
-> > >
-> > >         return ret;
-> > >  }
-> > > --
-> > > 2.51.0.rc1.163.g2494970778-goog
-> > >
-> > >
+Janusz Krzysztofik (4):
+  dma-buf/fence-chain: Report time spent in wait_* test cases
+  dma-buf/fence-chain: Let test cases decide which fence to wait on
+  dma-buf/fence-chain: Wait on each tested chain link
+  dma-buf/fence-chain: Speed up processing of rearmed callbacks
+
+ drivers/dma-buf/dma-fence-chain.c    | 101 ++++++++++++++++----
+ drivers/dma-buf/st-dma-fence-chain.c | 133 +++++++++++++++++++++------
+ 2 files changed, 189 insertions(+), 45 deletions(-)
+
+-- 
+2.50.1
+
