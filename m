@@ -1,41 +1,40 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 095242FA0CD;
-	Thu, 14 Aug 2025 09:00:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A1AB92F60DC;
+	Thu, 14 Aug 2025 09:04:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755162040; cv=none; b=AX684Po0byKUpXWmYB/LqQU2g09dd6zOCfraGhfUiIzdTCl+9JyUE6eAYSYhWf0eoJCIC/UxQJtVX3TLK6h8Yz13JdOqRn9hJ6107JKextr3LBADPpUXqfFro67dsVWGRRzNyQgV4Vy3a8eNDLfOhMqNZpS/pF1zNPR7m90BVW4=
+	t=1755162253; cv=none; b=bli29oaGWPFaw2zu132nMIXhEiQd3AxDVuMXsVSq8Fw47gZR9EDZ2fTOUeQ3t1bTHQl9L+Idyl7AouwMPhpsJvAEi0EoewKo4DH2KYsiqjFI5XcymZmgyPbjbNmGOgi7Ql2v8zl0yvubYbJN7KKFSUw4yv6IVunZihLsWa0mCy8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755162040; c=relaxed/simple;
-	bh=EGVHfeu0wPCbhXQ0h6+1/VSrfLHeLlCk/KVjHEkCufY=;
+	s=arc-20240116; t=1755162253; c=relaxed/simple;
+	bh=+hes8Uw8cz0/rORYil46CAxBPAq3vqX7kyMyB4BvUto=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=T70uICB80SyjezK4023rmaO9wqVOJOLTdIGJVqvfFzqXdqCXVsN7wkPU0ystsoVxpSw9CsuxhK93B0aF/V3CNeLPIzgjeYPeLZnaLvRBhbBrzeUP+fSaNesFzuQhUcaGBp6SR7eOdROb1gvM/RW19yRYahSHP24hhX5T6FeMcsw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=GbXqa7gm; arc=none smtp.client-ip=10.30.226.201
+	 Content-Type:Content-Disposition:In-Reply-To; b=TEeK8iWPkYm6DCvhaf6wTsHjwGMZ5OMrYqTAw/6iz8n8lFQu1I7JPhLJ2bMHOz3vwx7eI/0tM2pWVkmPGKTvz/TJ/31D4CkV+Ylax5/t8ikuIurlEVBx0krpZJUV8WlGXrco07V+22XBourY+a2jAgQTE5y55ErZ2ibbcXyfXWY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=OSxP7qnG; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GbXqa7gm"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EA089C4CEED;
-	Thu, 14 Aug 2025 09:00:38 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="OSxP7qnG"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AD360C4CEED;
+	Thu, 14 Aug 2025 09:04:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1755162039;
-	bh=EGVHfeu0wPCbhXQ0h6+1/VSrfLHeLlCk/KVjHEkCufY=;
+	s=k20201202; t=1755162253;
+	bh=+hes8Uw8cz0/rORYil46CAxBPAq3vqX7kyMyB4BvUto=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=GbXqa7gmmKg9J1uFmxvqJx7OqUY9EXZqk/wrAJ0kW4qOc0I495spwEFyuXfX4J9qS
-	 NvxKYJmugRwGBq46XXNoIqgMUfH0C+TR+LYGhtRN3+VShPwFCLjjS81T+EXi+zY4Ja
-	 NhE1XNX5UI2gmxcXJOnIc9x4c3ZKqSQn0FJzDdgAy2hLQXcdI7krOm7gjrkeMLcqrf
-	 xjXTG2USDd0PX2+FZRTPSD7ceAA8z8waj+NkefNBtJ2e1qT2kyfNwm5Cntn/6YnrB1
-	 a2B0Ui7GXlwHEnvm3oHU0o2wFcWs32c0igzKM0ozTMdkwZhUfNilZZANGfhMID1cxU
-	 hn7K38Qpo1pDw==
-Date: Thu, 14 Aug 2025 11:00:36 +0200
+	b=OSxP7qnGvjSYJT07N0j1Idr0YTt3ppN+kKEJredDKNPwHfttNEh2VT+NZbq4/GzjP
+	 R/QL6uKVN4saMrqIv2Q1UdcMgfRf62OqtmX0CTV1PuyN1RhKVURZAAJ78/6xOKQz/N
+	 BG02RXcuWQz3ZzwbXyfI8URvF71Cq910Y2r6COJIuGcE8U5SSu3M5DO/aqTXbpoM2B
+	 XYi1E9YrpQkLxtPd/t5Q7G+djEAZYjX5ITjEE5SRUh2IkFOR0y/LZU+FxfoVenIO+g
+	 lAX5+MaB/TjDKexwtGqsdp9dvb2+S0X5cnbYbKVG9O/ZbJwqFvVvGhQaqIT5ZsqlS2
+	 gdKjuuiOKgglA==
+Date: Thu, 14 Aug 2025 11:04:10 +0200
 From: Krzysztof Kozlowski <krzk@kernel.org>
-To: Alexander Smirnov <asmirnou@pinefeat.co.uk>
-Cc: mchehab@kernel.org, robh@kernel.org, krzk+dt@kernel.org, 
-	conor+dt@kernel.org, devicetree@vger.kernel.org, linux-media@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, Aliaksandr Smirnou <support@pinefeat.co.uk>
+To: Aliaksandr Smirnou <support@pinefeat.co.uk>
+Cc: conor+dt@kernel.org, devicetree@vger.kernel.org, krzk+dt@kernel.org, 
+	linux-kernel@vger.kernel.org, linux-media@vger.kernel.org, mchehab@kernel.org, robh@kernel.org
 Subject: Re: [PATCH v2 1/2] dt-bindings: Pinefeat cef168 lens control board
-Message-ID: <20250814-imaginary-authentic-agouti-07a3dd@kuoka>
-References: <20250811213102.15703-1-aliaksandr.smirnou@gmail.com>
- <20250811213102.15703-2-aliaksandr.smirnou@gmail.com>
+Message-ID: <20250814-intelligent-industrious-cassowary-b73c9b@kuoka>
+References: <84262447-0877-4c52-8c80-65f1288e5944@kernel.org>
+ <20250812193722.10193-1-support@pinefeat.co.uk>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
@@ -44,20 +43,39 @@ List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20250811213102.15703-2-aliaksandr.smirnou@gmail.com>
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20250812193722.10193-1-support@pinefeat.co.uk>
 
-On Mon, Aug 11, 2025 at 10:31:01PM +0100, Alexander Smirnov wrote:
-> From: Aliaksandr Smirnou <support@pinefeat.co.uk>
-> 
-> Add the Device Tree schema and examples for the Pinefeat cef168 lens
->  control board. This board interfaces Canon EF & EF-S lenses with
+On Tue, Aug 12, 2025 at 08:37:22PM +0100, Aliaksandr Smirnou wrote:
+> On Tue, 12 Aug 2025 09:13:22 +0200, Krzysztof Kozlowski wrote:
+> > Property says VCC, description says VDD, datasheet says 5V (not 3.3V).
+> >
+> > I guess this should be for the 5V case, no?
+>=20
+> Thank you following up.
+>=20
+> The 5V line is used exclusively to power the lens motor (through the
+> power switch). This 5V supply can come from the Raspberry Pi GPIO
+> header, a battery, or other sources. Importantly, this power source
+> is independent of the board=E2=80=99s MCU and its kernel driver.
 
-Also, some stray indent is here.
+You describe here the entire board, not the MCU only or lens motor
+only...
 
->  non-Canon camera bodies, enabling electronic control of focus and
->  aperture via V4L2.
-> 
-> Signed-off-by: Aliaksandr Smirnou <support@pinefeat.co.uk>
+>=20
+> Additionally, the board does not include any voltage regulators.
+> The MCU operates at 3.3V, which is supplied either via the CSI connector
+> or the serial connector directly from the Raspberry Pi GPIO 3.3V rail.
+> Therefore, the driver does not manage any regulator, which is why the
+> =E2=80=9Cvcc-supply=E2=80=9D property was absent in the binding.
+>=20
+> Would you like me to remove the =E2=80=9Cvcc-supply=E2=80=9D property as =
+it was
+> originally?
+
+Can the board be used outside of above setup? I understand so far this
+is only for Rpi where both above supplies - 3.3 V and 5 V - are coming
+=66rom the header pins, so supplies would be totally redundant.
 
 Best regards,
 Krzysztof
