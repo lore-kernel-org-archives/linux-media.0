@@ -1,45 +1,46 @@
 Received: from fllvem-ot03.ext.ti.com (fllvem-ot03.ext.ti.com [198.47.19.245])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 60CB022422B;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 60C4A21FF5D;
 	Thu, 14 Aug 2025 16:11:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.47.19.245
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755187866; cv=none; b=hPrxqhrhYR/ACqNbBLwEji/vYnf5d0T7Ut8SjgTQ0IQZ62PY6dexgBl5q9FxJ3oP7QaVRY68n4quV1x6lYAndP2Jryva/U/+gGMPM84bzVZMTFTNgHEfdPg1L5A88cqB9P0mkfPkON9YaHxqL/eBj+0L3Zi9TaY1x1p9WZ/MgCE=
+	t=1755187866; cv=none; b=SgWoFmIWV0i/yjSVUIOw/CopInCaqrtMugGY6VebCftLmQKNCy6sjxKk1rNgnZ080n/WX3A2zpAfhxej09D7/MW70o5B2SMrc1YOM78L9/q354jrEOSNa3AOi3bcMemXswMnVvsfb4P8M0qawFqvfjLXl2g2VU1kd3P1wIAy5Ao=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1755187866; c=relaxed/simple;
-	bh=XHV9UrGEnitol49ftiO/ZNvDXQoRWNPkFOwiowa3AcI=;
-	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=oXONuczvWUmuJAztWuO9c8sXNMi9tctnU6XZo+Sfe9MbrcZTAsbIxo3wA5bfHQV373OV+6nEf4oYJh2FaxZoWIzp9KBO8J66EQBxqy0s4eGTlTIVBwEf47az2JxxbEmrA5Ox49BqlwPq3HoZvpXNUY9ByxLAYB0N74fIvPqAvgc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com; spf=pass smtp.mailfrom=ti.com; dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b=c0+a11b0; arc=none smtp.client-ip=198.47.19.245
+	bh=y9am9xltrW3534LcpckWsyuFtUZ4VO+0ecgGxs7lRAg=;
+	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=PlG04p0E+101vWUbFe8LusjiSyoC1jiPgUynS6VD5snmg+4sUYWXDr3d/boVPBmnT0Px6Mvr1R0opogxwLrGhzI+QMmVhMwd+ITjhYNezGL1cmFGuOAPLw/qRHE8LAkhx2ymDXyjjRJ9oW5tclGS1S4qcgsN+HYC9229q4ye7jQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com; spf=pass smtp.mailfrom=ti.com; dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b=tydm61H8; arc=none smtp.client-ip=198.47.19.245
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ti.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="c0+a11b0"
+	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="tydm61H8"
 Received: from lelvem-sh02.itg.ti.com ([10.180.78.226])
-	by fllvem-ot03.ext.ti.com (8.15.2/8.15.2) with ESMTP id 57EGAokI1916355;
-	Thu, 14 Aug 2025 11:10:50 -0500
+	by fllvem-ot03.ext.ti.com (8.15.2/8.15.2) with ESMTP id 57EGAq8q1916363;
+	Thu, 14 Aug 2025 11:10:52 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-	s=ti-com-17Q1; t=1755187850;
-	bh=LpgToupgEg8P8EBDABiEqZQeCDsv8DH/034a0fs0cvQ=;
-	h=From:To:CC:Subject:Date;
-	b=c0+a11b0yLEg+ccD8HKj+/j0zFUIHqh9owudS+mB9eqhfIKaS3T7ekVztpa7JcDjK
-	 w0q6bS0Z7zigiTFxe5WJ7nZpzZYs795fC2KacWctqRII1sRFo0twdVU3bM2Z2RHWBV
-	 oO0YCuP2gI10SD1zeNkyjSdQUWQY7edb6W8UC+jc=
-Received: from DFLE111.ent.ti.com (dfle111.ent.ti.com [10.64.6.32])
-	by lelvem-sh02.itg.ti.com (8.18.1/8.18.1) with ESMTPS id 57EGAoBo1823421
+	s=ti-com-17Q1; t=1755187852;
+	bh=zNxFBetvcy3aVTCoqvvC2GPeFMAlHszkPcmJmnZNL2U=;
+	h=From:To:CC:Subject:Date:In-Reply-To:References;
+	b=tydm61H8/ZRDrdubLCHh+jz62yx6nUrLynUbWBpiV+QyoDpR8mA/PRpJAdi7GgsGP
+	 NRcsMHCa7oaYauG1Q56ewVBoIn6c3F/LXHPJy4irNk877td5QfE8Zta0iPgYKsVWii
+	 aJ3bZaaelJPT+8uECJL5bE3rHL7II/P3ihVoD8k0=
+Received: from DFLE109.ent.ti.com (dfle109.ent.ti.com [10.64.6.30])
+	by lelvem-sh02.itg.ti.com (8.18.1/8.18.1) with ESMTPS id 57EGAqLh1823425
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-SHA256 bits=128 verify=FAIL);
-	Thu, 14 Aug 2025 11:10:50 -0500
-Received: from DFLE113.ent.ti.com (10.64.6.34) by DFLE111.ent.ti.com
- (10.64.6.32) with Microsoft SMTP Server (version=TLS1_2,
+	Thu, 14 Aug 2025 11:10:52 -0500
+Received: from DFLE107.ent.ti.com (10.64.6.28) by DFLE109.ent.ti.com
+ (10.64.6.30) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.55; Thu, 14
- Aug 2025 11:10:50 -0500
-Received: from lelvem-mr05.itg.ti.com (10.180.75.9) by DFLE113.ent.ti.com
- (10.64.6.34) with Microsoft SMTP Server (version=TLS1_2,
+ Aug 2025 11:10:51 -0500
+Received: from lelvem-mr05.itg.ti.com (10.180.75.9) by DFLE107.ent.ti.com
+ (10.64.6.28) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.55 via
- Frontend Transport; Thu, 14 Aug 2025 11:10:50 -0500
+ Frontend Transport; Thu, 14 Aug 2025 11:10:51 -0500
 Received: from lelvem-mr06.itg.ti.com ([10.249.42.149])
-	by lelvem-mr05.itg.ti.com (8.18.1/8.18.1) with ESMTP id 57EGAndk4172380;
-	Thu, 14 Aug 2025 11:10:50 -0500
+	by lelvem-mr05.itg.ti.com (8.18.1/8.18.1) with ESMTP id 57EGAndn4172380;
+	Thu, 14 Aug 2025 11:10:51 -0500
 From: Andrew Davis <afd@ti.com>
 To: Gerd Hoffmann <kraxel@redhat.com>, Sumit Semwal <sumit.semwal@linaro.org>,
         =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
@@ -52,10 +53,12 @@ CC: <dri-devel@lists.freedesktop.org>, <linux-media@vger.kernel.org>,
         <linaro-mm-sig@lists.linaro.org>, <linux-kernel@vger.kernel.org>,
         Andrew
  Davis <afd@ti.com>
-Subject: [PATCH v2 0/3] udmabuf: Sync to attached devices
-Date: Thu, 14 Aug 2025 11:10:46 -0500
-Message-ID: <20250814161049.678672-1-afd@ti.com>
+Subject: [PATCH v2 3/3] udmabuf: Use module_misc_device() to register this device
+Date: Thu, 14 Aug 2025 11:10:49 -0500
+Message-ID: <20250814161049.678672-4-afd@ti.com>
 X-Mailer: git-send-email 2.39.2
+In-Reply-To: <20250814161049.678672-1-afd@ti.com>
+References: <20250814161049.678672-1-afd@ti.com>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
@@ -66,27 +69,53 @@ Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
 X-C2ProcessedOrg: 333ef613-75bf-4e12-a4b1-8e3623f5dcea
 
-Hello all,
+Now that we do not need to call dma_coerce_mask_and_coherent() on our
+miscdevice device, use the module_misc_device() helper for registering
+and module init/exit.
 
-This series makes it so the udmabuf will sync the backing buffer
-with the set of attached devices as required for DMA-BUFs when
-doing {begin,end}_cpu_access.
+While here, add module description and license, modules built with W=1
+warn if built without these.
 
-Thanks
-Andrew
+Signed-off-by: Andrew Davis <afd@ti.com>
+Acked-by: Vivek Kasireddy <vivek.kasireddy@intel.com>
+---
+ drivers/dma-buf/udmabuf.c | 24 +++---------------------
+ 1 file changed, 3 insertions(+), 21 deletions(-)
 
-Changes for v2:
- - fix attachment table use-after-free
- - rebased on v6.17-rc1
-
-Andrew Davis (3):
-  udmabuf: Keep track current device mappings
-  udmabuf: Sync buffer mappings for attached devices
-  udmabuf: Use module_misc_device() to register this device
-
- drivers/dma-buf/udmabuf.c | 133 +++++++++++++++++++-------------------
- 1 file changed, 67 insertions(+), 66 deletions(-)
-
+diff --git a/drivers/dma-buf/udmabuf.c b/drivers/dma-buf/udmabuf.c
+index 8d71c3d72eb5e..d888e4d667c67 100644
+--- a/drivers/dma-buf/udmabuf.c
++++ b/drivers/dma-buf/udmabuf.c
+@@ -566,26 +566,8 @@ static struct miscdevice udmabuf_misc = {
+ 	.name           = "udmabuf",
+ 	.fops           = &udmabuf_fops,
+ };
+-
+-static int __init udmabuf_dev_init(void)
+-{
+-	int ret;
+-
+-	ret = misc_register(&udmabuf_misc);
+-	if (ret < 0) {
+-		pr_err("Could not initialize udmabuf device\n");
+-		return ret;
+-	}
+-
+-	return 0;
+-}
+-
+-static void __exit udmabuf_dev_exit(void)
+-{
+-	misc_deregister(&udmabuf_misc);
+-}
+-
+-module_init(udmabuf_dev_init)
+-module_exit(udmabuf_dev_exit)
++module_misc_device(udmabuf_misc);
+ 
+ MODULE_AUTHOR("Gerd Hoffmann <kraxel@redhat.com>");
++MODULE_DESCRIPTION("Userspace memfd to DMA-BUF misc Driver");
++MODULE_LICENSE("GPL");
 -- 
 2.39.2
 
