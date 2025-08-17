@@ -1,148 +1,208 @@
-Received: from smtp.forwardemail.net (smtp.forwardemail.net [121.127.44.73])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 42A4F1F4717
-	for <linux-media@vger.kernel.org>; Sun, 17 Aug 2025 16:46:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=121.127.44.73
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7ABA617BB21;
+	Sun, 17 Aug 2025 17:09:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755449212; cv=none; b=Tpa5YHbI239hjTJ2HR8nnkmb2+a2yr2fb6n8bUp25srvy6qEQuA6OmqeJ0ekGDsfOcRBIVuevHzIdgnksvU3zMkyq2h8Uh3OVOKHfliFhtIOpUTYS5BI0nZRrfGhdMdkkyHfRQ9S+rjmF05Vk+lzibweCNp6bTkHdtEKIxqPOsM=
+	t=1755450584; cv=none; b=Z+GOq+n87LYBafweH8KFNk3sKw0ZBVypU5JUHTuT10/wZNOWFqNlNAGjCS8mH601NkSYUwhiGcEauMrC6FMYqGA1WWkqsN957r33e5B89pzd1QNPWHDbYqbRuXl8kl0JsMkWYfA2HFS3ZPPsZhkMHoslN120ApuZHdUlHYu8ydY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755449212; c=relaxed/simple;
-	bh=wemZUqS+A99/VxPlNDzmg1mhu/qnaB75Q4d073x9468=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=O0HLWpFoTtoV8HW8aakQqm8nrZ4f56OpjQrYptvrbxW2w4qRlKnyxwk4832f2aFcaaq+4xq/sZBaIL14KDQ5/mW+qASRZe+63uoMIOnQSQGnZpTA8jWU55FwwO0fl56duwn8H3l6xCTp3N1cGmwRKt6BBGQIuewANGyTH3rl9pI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=kwiboo.se; spf=pass smtp.mailfrom=fe-bounces.kwiboo.se; dkim=pass (2048-bit key) header.d=kwiboo.se header.i=@kwiboo.se header.b=Sayp2sr7; arc=none smtp.client-ip=121.127.44.73
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=kwiboo.se
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=fe-bounces.kwiboo.se
+	s=arc-20240116; t=1755450584; c=relaxed/simple;
+	bh=COo3AY6pdjE+8kF28sRx10wI/ohSiKeJKJJYJqxHSfY=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=uaRIwXPX4824W5OAf+E4kvxun9r0Tm4lUk4sLNPag3Pq+VkhyFwEPYgJA3P7buM9wqqzgWjzfcd/Z7eLmNE5MUxEFJVv5Ps1o2zOwxJtHQlPMdoNqiKMx8+2pFSqJRWJ6vvtuwg2L5q+9gmLM85CRDoBVjG40OI38nL79KrAefA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VKdNdwg0; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kwiboo.se header.i=@kwiboo.se header.b="Sayp2sr7"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kwiboo.se;
- h=Content-Transfer-Encoding: Content-Type: In-Reply-To: From: References:
- Cc: To: Subject: MIME-Version: Date: Message-ID; q=dns/txt;
- s=fe-e1b5cab7be; t=1755449208;
- bh=V0JgX9niK/jrh4YSavrLzHuTfEZE1FFWTu/eobrzLTk=;
- b=Sayp2sr7ACsvw8CnhuK71MfnNoHK2w+HgeroUX5Ju0r3GJOeJuvTaMXKKwlmAVn8KpZGj7UW3
- 16Z5OlXdI8IwdGtKIAGa55m5KdzT5e0rQ7oZa4FXOHzHG2/6NE5poOKka7cI7QBoneXwgwp2pZs
- 9JENLeiqsYBJMGw9DLrUT7dnEwlBvk8sl4MfhwwDiz6tb1bOsUQAxW0whXjHidN2PikmTtD4IY/
- sMSmZLKaWmtYBSWOizv7RGyiioHfqeb8C0qG+A6mEgOi1c4ROslVwzaJXRbcU70fO0Qko8ocyde
- HP0LvHPth28vIbZdCOk6FnWD2bBytuRM39Aqvenf+LaQ==
-X-Forward-Email-ID: 68a207649a82a81f459cfa06
-X-Forward-Email-Sender: rfc822; jonas@kwiboo.se, smtp.forwardemail.net,
- 121.127.44.73
-X-Forward-Email-Version: 1.2.4
-X-Forward-Email-Website: https://forwardemail.net
-X-Complaints-To: abuse@forwardemail.net
-X-Report-Abuse: abuse@forwardemail.net
-X-Report-Abuse-To: abuse@forwardemail.net
-Message-ID: <c0573db5-17df-4c8a-abfb-af7163f6b1b3@kwiboo.se>
-Date: Sun, 17 Aug 2025 18:46:24 +0200
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VKdNdwg0"
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 41FF1C4CEF1;
+	Sun, 17 Aug 2025 17:09:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1755450584;
+	bh=COo3AY6pdjE+8kF28sRx10wI/ohSiKeJKJJYJqxHSfY=;
+	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To:From;
+	b=VKdNdwg0kYwJZ4jEc8SctlFKMfZWAXkkEbZ/C5pZPZFxQ2j97EczWXN65735TOUdx
+	 BbaCCSGa2Odp98m3n0VKQ9AFMgnfu3kY34lvtB+ULnMJlOEu8Y+kksXa9YDbT1hIhR
+	 mE3FSsVVgdCP0aEPwXgrS6zeZ5DRZPxPJxfsnRPo3OVPHMfH8XZhceinvg2AuFFKGt
+	 oNs24LfGyG6CSUOPwRh9IN4T6G7fInRVn7onGtIiT0aX5IsIRM9IrvhXcQ68lpwr5T
+	 URyvQ97QvMes7rAvYVxf2DljppHYyuEK1lJjuAmfHleENRskU0e9yREXGRVl2u79hi
+	 cXADonDDxEwVw==
+Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2BC5DCA0EDC;
+	Sun, 17 Aug 2025 17:09:44 +0000 (UTC)
+From: =?utf-8?q?Andr=C3=A9_Apitzsch_via_B4_Relay?= <devnull+git.apitzsch.eu@kernel.org>
+Date: Sun, 17 Aug 2025 19:09:20 +0200
+Subject: [PATCH 1/7] dt-bindings: media: i2c: Add DW9718S, DW9719 and
+ DW9761 VCM
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 1/7] media: rkvdec: Add HEVC backend
-To: Detlev Casanova <detlev.casanova@collabora.com>
-Cc: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
- Mauro Carvalho Chehab <mchehab@kernel.org>, Heiko Stuebner
- <heiko@sntech.de>, Alex Bee <knaerzche@gmail.com>,
- Nicolas Dufresne <nicolas.dufresne@collabora.com>,
- Sebastian Fricke <sebastian.fricke@collabora.com>,
- linux-media@vger.kernel.org, linux-rockchip@lists.infradead.org,
- devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- linux-kernel@vger.kernel.org
-References: <20250810212454.3237486-1-jonas@kwiboo.se>
- <20250810212454.3237486-2-jonas@kwiboo.se> <22971824.EfDdHjke4D@earth>
-Content-Language: en-US
-From: Jonas Karlman <jonas@kwiboo.se>
-In-Reply-To: <22971824.EfDdHjke4D@earth>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+Message-Id: <20250817-dw9719-v1-1-426f46c69a5a@apitzsch.eu>
+References: <20250817-dw9719-v1-0-426f46c69a5a@apitzsch.eu>
+In-Reply-To: <20250817-dw9719-v1-0-426f46c69a5a@apitzsch.eu>
+To: Mauro Carvalho Chehab <mchehab@kernel.org>, 
+ Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+ Conor Dooley <conor+dt@kernel.org>, devicetree@vger.kernel.org, 
+ Sakari Ailus <sakari.ailus@linux.intel.com>, 
+ Daniel Scally <djrscally@gmail.com>
+Cc: ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org, 
+ linux-media@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ Val Packett <val@packett.cool>, 
+ =?utf-8?q?Andr=C3=A9_Apitzsch?= <git@apitzsch.eu>
+X-Mailer: b4 0.14.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1755450582; l=3802;
+ i=git@apitzsch.eu; s=20240325; h=from:subject:message-id;
+ bh=uotT9zX/NyzbQ5ZP2dvOeAvtz2yUFcyTvMlfBKstnHQ=;
+ b=H/CLKgAntzvZCcxKzMvVNrEb2+3T4O+GFwO6Oe/DcDOL1te1R7KMaafFTugwXS5sdH2NjG5mL
+ 3iBwVze/E3UAYwYb5wqfOz7K4eQSS6u7bUW3uz0ZajR3UV+IfI86xdJ
+X-Developer-Key: i=git@apitzsch.eu; a=ed25519;
+ pk=wxovcZRfvNYBMcTw4QFFtNEP4qv39gnBfnfyImXZxiU=
+X-Endpoint-Received: by B4 Relay for git@apitzsch.eu/20240325 with
+ auth_id=142
+X-Original-From: =?utf-8?q?Andr=C3=A9_Apitzsch?= <git@apitzsch.eu>
+Reply-To: git@apitzsch.eu
 
-Hi Detlev,
+From: André Apitzsch <git@apitzsch.eu>
 
-On 8/12/2025 10:10 PM, Detlev Casanova wrote:
-> Hi Jonas,
-> 
-> On Sunday, 10 August 2025 17:24:31 EDT Jonas Karlman wrote:
->> The Rockchip VDEC supports the HEVC codec with the Main and Main10
->> Profile up to Level 5.1 High tier: 4096x2304@60 fps.
->>
->> Add the backend for HEVC format to the decoder.
->>
->> Signed-off-by: Alex Bee <knaerzche@gmail.com>
->> Signed-off-by: Nicolas Dufresne <nicolas.dufresne@collabora.com>
->> Signed-off-by: Sebastian Fricke <sebastian.fricke@collabora.com>
->> Signed-off-by: Jonas Karlman <jonas@kwiboo.se>
->> ---
->> Changes in v2:
->> - Use new_value in transpose_and_flatten_matrices()
->> - Add NULL check for ctrl->new_elems in rkvdec_hevc_run_preamble()
->> - Set RKVDEC_WR_DDR_ALIGN_EN for RK3328
->> ---
->>  .../media/platform/rockchip/rkvdec/Makefile   |    2 +-
->>  .../rockchip/rkvdec/rkvdec-hevc-data.c        | 1848 +++++++++++++++++
->>  .../platform/rockchip/rkvdec/rkvdec-hevc.c    |  817 ++++++++
->>  .../platform/rockchip/rkvdec/rkvdec-regs.h    |    2 +
->>  .../media/platform/rockchip/rkvdec/rkvdec.c   |   76 +
->>  .../media/platform/rockchip/rkvdec/rkvdec.h   |    1 +
->>  6 files changed, 2745 insertions(+), 1 deletion(-)
->>  create mode 100644
->> drivers/media/platform/rockchip/rkvdec/rkvdec-hevc-data.c create mode
->> 100644 drivers/media/platform/rockchip/rkvdec/rkvdec-hevc.c
->>
-> 
-> [snip]
-> 
->> diff --git a/drivers/media/platform/rockchip/rkvdec/rkvdec-hevc.c
->> b/drivers/media/platform/rockchip/rkvdec/rkvdec-hevc.c new file mode 100644
->> index 000000000000..1994ea24f0be
->> --- /dev/null
->> +++ b/drivers/media/platform/rockchip/rkvdec/rkvdec-hevc.c
-> 
-> [snip]
-> 
->> +
->> +static enum rkvdec_image_fmt rkvdec_hevc_get_image_fmt(struct rkvdec_ctx
->> *ctx, +						       struct 
-> v4l2_ctrl *ctrl)
->> +{
->> +	const struct v4l2_ctrl_hevc_sps *sps = ctrl->p_new.p_hevc_sps;
->> +
->> +	if (ctrl->id != V4L2_CID_STATELESS_HEVC_SPS)
->> +		return RKVDEC_IMG_FMT_ANY;
->> +
->> +	if (sps->bit_depth_luma_minus8 == 0) {
->> +		if (sps->chroma_format_idc == 2)
->> +			return RKVDEC_IMG_FMT_422_8BIT;
-> 
-> Is 4:2:2 really supported ? It is not on rk3588 and likely neither on rk3576.
-> You also mention later that Only 4:0:0 and 4:2:0 are supported.
+Document Dongwoon DW9718S, DW9719 and DW9761 VCM devicetree bindings.
 
-On the older rkvdec it is not, and I was unsure about the newer SoCs at
-the time of initial re-work of this. Regardless this is more correct
-when only looking at this function, it does not include 4:4:4 but is
-correct for all currently known RKVDEC_IMG_FMT. Also to keep this
-function in sync with the h264 variant for more easy compare and less
-confusion about the two down the line.
+Signed-off-by: André Apitzsch <git@apitzsch.eu>
 
-Regards,
-Jonas
+--
 
-> 
->> +		else
->> +			return RKVDEC_IMG_FMT_420_8BIT;
->> +	} else if (sps->bit_depth_luma_minus8 == 2) {
->> +		if (sps->chroma_format_idc == 2)
->> +			return RKVDEC_IMG_FMT_422_10BIT;
-> 
-> Same here.
-> 
-> --
-> Detlev.
-> 
-> 
-> 
+The possible values for sac-mode and vcm-prescale of DW9719 and DW9761
+are missing because there is no documentation available.
+---
+ .../bindings/media/i2c/dongwoon,dw9719.yaml        | 115 +++++++++++++++++++++
+ 1 file changed, 115 insertions(+)
+
+diff --git a/Documentation/devicetree/bindings/media/i2c/dongwoon,dw9719.yaml b/Documentation/devicetree/bindings/media/i2c/dongwoon,dw9719.yaml
+new file mode 100644
+index 0000000000000000000000000000000000000000..80fd3fd42327fcafe3ff209d1cd6bbe17b8a211b
+--- /dev/null
++++ b/Documentation/devicetree/bindings/media/i2c/dongwoon,dw9719.yaml
+@@ -0,0 +1,115 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/media/i2c/dongwoon,dw9719.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Dongwoon Anatech DW9719 Voice Coil Motor (VCM) Controller
++
++maintainers:
++  - devicetree@vger.kernel.org
++
++description:
++  The Dongwoon DW9718S/9719/9761 is a single 10-bit digital-to-analog converter
++  with 100 mA output current sink capability, designed for linear control of
++  voice coil motors (VCM) in camera lenses. This chip provides a Smart Actuator
++  Control (SAC) mode intended for driving voice coil lenses in camera modules.
++
++properties:
++  compatible:
++    enum:
++      - dongwoon,dw9718s
++      - dongwoon,dw9719
++      - dongwoon,dw9761
++
++  reg:
++    maxItems: 1
++
++  vdd-supply:
++    description: VDD power supply
++
++  dongwoon,sac-mode:
++    description: |
++      Slew Rate Control mode to use: direct, LSC (Linear Slope Control) or
++      SAC1-SAC6 (Smart Actuator Control).
++    $ref: /schemas/types.yaml#/definitions/uint32
++    enum:
++      - 0   # Direct mode
++      - 1   # LSC mode
++      - 2   # SAC1 mode (operation time# 0.32 x Tvib)
++      - 3   # SAC2 mode (operation time# 0.48 x Tvib)
++      - 4   # SAC3 mode (operation time# 0.72 x Tvib)
++      - 5   # SAC4 mode (operation time# 1.20 x Tvib)
++      - 6   # SAC5 mode (operation time# 1.64 x Tvib)
++      - 7   # SAC6 mode (operation time# 1.88 x Tvib)
++    default: 4
++
++  dongwoon,vcm-prescale:
++    description:
++      Indication of VCM switching frequency dividing rate select.
++    $ref: /schemas/types.yaml#/definitions/uint32
++
++required:
++  - compatible
++  - reg
++  - vdd-supply
++
++allOf:
++  - if:
++      properties:
++        compatible:
++          contains:
++            const: dongwoon,dw9718s
++    then:
++      properties:
++        dongwoon,sac-mode:
++          default: 4
++        dongwoon,vcm-prescale:
++          description:
++            The final frequency is 10 MHz divided by (value + 2).
++          minimum: 0
++          maximum: 15
++          default: 0
++
++  - if:
++      properties:
++        compatible:
++          contains:
++            const: dongwoon,dw9719
++    then:
++      properties:
++        dongwoon,sac-mode:
++          default: 4
++        dongwoon,vcm-prescale:
++          default: 96
++
++  - if:
++      properties:
++        compatible:
++          contains:
++            const: dongwoon,dw9761
++    then:
++      properties:
++        dongwoon,sac-mode:
++          default: 6
++        dongwoon,vcm-prescale:
++          default: 62
++
++additionalProperties: false
++
++examples:
++  - |
++    i2c {
++        #address-cells = <1>;
++        #size-cells = <0>;
++
++        actuator@c {
++            compatible = "dongwoon,dw9718s";
++            reg = <0x0c>;
++
++            vdd-supply = <&pm8937_l17>;
++
++            dongwoon,sac-mode = <4>;
++            dongwoon,vcm-prescale = <0>;
++        };
++    };
+
+-- 
+2.50.1
+
 
