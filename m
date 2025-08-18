@@ -1,44 +1,44 @@
 Received: from sender4-op-o12.zoho.com (sender4-op-o12.zoho.com [136.143.188.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 28C85273809;
-	Mon, 18 Aug 2025 05:52:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F337A271476;
+	Mon, 18 Aug 2025 05:52:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.12
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755496338; cv=pass; b=Sy29bnBgD1vhNhEs5pR04qirasQxSbyopdl/XxRF7SsNSRelhl40nAf3e4hJPTJCkpGm4d9zXZt9w/ei4Or/NOY4hQ7w7Wt2QDYOwEGmSK3HDyzUR0+QPzf3bdhqOOejAMS/+n/oHLChMj7I3oFIGHda+1PVL92Y7aObhFM+KjE=
+	t=1755496346; cv=pass; b=U1o5PeCYHRwZ3IJXP53N8Sht2px4M25M7DebFzCeZNbTVnwBSMUJK6tLgpMisa1oLYpOEONtbd55KxVzcWHGG9EEO3e/+NHxkUyvaC7486giZBZMXP2eHIinKBRlTQn7kZTd0LHT2Wa17pk3ywD4NL2T8cm+CqgJWE/W/E+bUKk=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755496338; c=relaxed/simple;
-	bh=6pqASn4SzC1u/BEBTbp+uXsGW36FexlGozR/smmOfcI=;
+	s=arc-20240116; t=1755496346; c=relaxed/simple;
+	bh=RBZwr7i7mu4f81XKdVBGd1PjZ1NQ30apiDuf3T4SOBM=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=KZmy6fYZXxUJSf1kYL+E2pvtrUem1udinTVSZzwWFPXozE31+RQUR19SRfZrTaqdap2Fbnd6tieJopC+FpHatPikSaT9hrq7YYUoczG8e4p+19ZUS3udM0WS3mI2gnzx6H0P+oRgjAQI87wIBICuaVHAa2VTwSMCNbbnLQjLhQo=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (1024-bit key) header.d=collabora.com header.i=daniel.almeida@collabora.com header.b=NoLHIfYn; arc=pass smtp.client-ip=136.143.188.12
+	 In-Reply-To:To:Cc; b=dM2jtQ71yVwWirzLHaM2kIKuBfqn7afjQb9sTP73AZfF66womcPW2EHX4kUGzrE+4XIcPQL2low85bDI7ZgNQyEsNaZowbW7UUf599IBqlmg3h6sIvVef/LO0YOqcXNcG++/SH5eFKMIvpb7nTR8HE4l+evFIqkJ+XTXge10ht8=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (1024-bit key) header.d=collabora.com header.i=daniel.almeida@collabora.com header.b=OlJCJkr/; arc=pass smtp.client-ip=136.143.188.12
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=collabora.com header.i=daniel.almeida@collabora.com header.b="NoLHIfYn"
-ARC-Seal: i=1; a=rsa-sha256; t=1755496317; cv=none; 
+	dkim=pass (1024-bit key) header.d=collabora.com header.i=daniel.almeida@collabora.com header.b="OlJCJkr/"
+ARC-Seal: i=1; a=rsa-sha256; t=1755496309; cv=none; 
 	d=zohomail.com; s=zohoarc; 
-	b=mzWN4mZ8qAXPbu8AcXjX570nUHCWkDddJEmjfhWLopaw7YdBsqHp77qYlDycbHYGOC6KJesuZGS+PQYTwvm7D3v99uVejYBg9H1C6sU/4TOSfpyzM8551FLuaShjN3xsqP7UgcdJeAycwuNHMLMcQb3tRSsu5jWyd8W3ICE/7Ko=
+	b=XgAmQ2x20QJmKuhtXxRgnDvXcQyEXFzqbtQbU7bBZaF5xW6nhK+U/+pMoYECj2SOMekykWkDPnUDXgCEcyUOOA7Z1fWu2zEl5wtGhUORJ2f5Mxy7Jvc2F4cKqkBrRJI5siyw2Zd+5TK5tij73DfnvClH6S/Fk+BhCtceIjoekj0=
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-	t=1755496317; h=Content-Type:Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To; 
-	bh=FpKivAok/pykbmMpsZP4KwMmuHYi5cOWw+sKKTmE2sA=; 
-	b=BSJhqMJxRnX+Ahd5ODvZ+Bd38KOgPdzumg1cvUTtgjJ0yJnixecPeddLSO5dc7SqF/NvdwVYB+wfNf8u5hVF9MWqP9c4pAB4O1AnpR5nR0VJVxSBCzDz5J4223T6du8BKRKKn/KFu0qDGE4BpaU/QrlmnDroWKp9xQCB55qaEwc=
+	t=1755496309; h=Content-Type:Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To; 
+	bh=dmuZuxPv44ha8AiyUg7rl9Ghj4JlB91sUyy/1+MmJjQ=; 
+	b=j9TJmnQIsgy/aidtlutqtgOwdJlmvOXE85kUkhZhPRUiqKJ12mbH/GpWwv2lNrzPfO5aL391BqQSCA+eRVkul259gDX8pbhuz8+lEJszT14Uq36jOYO/1Qqa839i2eV7HtvFZ3oHGJf3AXDvkZOJ1/rGM/ZATwxJeUAIbZatmIE=
 ARC-Authentication-Results: i=1; mx.zohomail.com;
 	dkim=pass  header.i=collabora.com;
 	spf=pass  smtp.mailfrom=daniel.almeida@collabora.com;
 	dmarc=pass header.from=<daniel.almeida@collabora.com>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1755496317;
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1755496309;
 	s=zohomail; d=collabora.com; i=daniel.almeida@collabora.com;
 	h=From:From:Date:Date:Subject:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:Message-Id:Message-Id:References:In-Reply-To:To:To:Cc:Cc:Reply-To;
-	bh=FpKivAok/pykbmMpsZP4KwMmuHYi5cOWw+sKKTmE2sA=;
-	b=NoLHIfYnJEjh32gsoF0TH4eExEXJ7im0Gjhx7EFOp7e4VziBhDtHdatkzrMWEnZK
-	yk1JOsk14LxN3BKlgtSQP8x3hhtSI8cFF3cTAWZsNSxEyCaM7nlpveyC2YOCk9WoYnu
-	DA+tPqUQdbfx62deS7FBkZhG/NA3+XX4qjBhdX5c=
-Received: by mx.zohomail.com with SMTPS id 1755496315573741.0467126621251;
-	Sun, 17 Aug 2025 22:51:55 -0700 (PDT)
+	bh=dmuZuxPv44ha8AiyUg7rl9Ghj4JlB91sUyy/1+MmJjQ=;
+	b=OlJCJkr/76o806UYpE3tN5VQTBE/CAKxaYgJzr1xRF5LVE01/Hnp05xlxVZJloq9
+	edQ8AsF6P9pmE4kRIj2YziGFMAJPe5CqcGYGI2sHIkxgTO/D+WvfMB4XsAEuwgOBtPp
+	eu/T4f5JjnwNUpjrY3kzDBBYTwNAtdRyOU747bTE=
+Received: by mx.zohomail.com with SMTPS id 1755496307449714.2271839560013;
+	Sun, 17 Aug 2025 22:51:47 -0700 (PDT)
 From: Daniel Almeida <daniel.almeida@collabora.com>
-Date: Mon, 18 Aug 2025 02:49:52 -0300
-Subject: [PATCH 6/7] rust: v4l2: add basic ioctl support
+Date: Mon, 18 Aug 2025 02:49:50 -0300
+Subject: [PATCH 4/7] rust: v4l2: add support for v4l2 file handles
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
@@ -47,7 +47,7 @@ List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20250818-v4l2-v1-6-6887e772aac2@collabora.com>
+Message-Id: <20250818-v4l2-v1-4-6887e772aac2@collabora.com>
 References: <20250818-v4l2-v1-0-6887e772aac2@collabora.com>
 In-Reply-To: <20250818-v4l2-v1-0-6887e772aac2@collabora.com>
 To: Miguel Ojeda <ojeda@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>, 
@@ -62,185 +62,277 @@ Cc: linux-kernel@vger.kernel.org, rust-for-linux@vger.kernel.org,
 X-Mailer: b4 0.14.2
 X-ZohoMailClient: External
 
-Most of the v4l2 API is implemented through ioctl(), so adding support
-for them is essential in order to be able to write v4l2 drivers.
+V4L2 allow multiple opens for a variety of use-cases, where the actual
+meaning of opening a node more than once is defined by the driver.
 
-Hook up ioctl support by filling up an instance of v4l2_ioctl_ops. For
-now, we only support the most basic v4l2 ioctl: VIDIOC_QUERYCAPS. This
-is used by userspace to retrieve information about the device, and is
-considered enough to implement a simple v4l2 sample Rust driver.
+Each open call is associated with its own v4l2_fh instance, and these
+instances are collected at the struct video_device level, making up a
+private context that can be retrieved at later calls, like ioctl()s
+performed on the node's file descriptor.
+
+Add basic support for v4l2_fh and a corresponding DriverFile trait to
+help model it. This will be needed in future patches in order to add
+v4l2 ioctl support, among other things.
 
 Signed-off-by: Daniel Almeida <daniel.almeida@collabora.com>
 ---
- rust/kernel/media/v4l2/file.rs  |  1 -
- rust/kernel/media/v4l2/ioctl.rs | 92 +++++++++++++++++++++++++++++++++++++++++
- rust/kernel/media/v4l2/mod.rs   |  3 ++
- rust/kernel/media/v4l2/video.rs | 13 +++++-
- 4 files changed, 107 insertions(+), 2 deletions(-)
+ rust/bindings/bindings_helper.h |   1 +
+ rust/helpers/v4l2-device.c      |   6 ++
+ rust/kernel/media/v4l2/file.rs  | 165 ++++++++++++++++++++++++++++++++++++++++
+ rust/kernel/media/v4l2/mod.rs   |   3 +
+ rust/kernel/media/v4l2/video.rs |   7 +-
+ 5 files changed, 180 insertions(+), 2 deletions(-)
 
+diff --git a/rust/bindings/bindings_helper.h b/rust/bindings/bindings_helper.h
+index 95651c4bc9e561d9f4949111961f41e65d8c1585..11ff2c018515e99c8af9ad91ab09f8f15ae224c1 100644
+--- a/rust/bindings/bindings_helper.h
++++ b/rust/bindings/bindings_helper.h
+@@ -76,6 +76,7 @@
+ #include <linux/workqueue.h>
+ #include <linux/xarray.h>
+ #include <media/v4l2-device.h>
++#include <media/v4l2-ioctl.h>
+ #include <trace/events/rust_sample.h>
+ 
+ #if defined(CONFIG_DRM_PANIC_SCREEN_QR_CODE)
+diff --git a/rust/helpers/v4l2-device.c b/rust/helpers/v4l2-device.c
+index 0ead52b9a1ccc0fbc4d7df63578b334b17c05b70..24fa41fe570d1263313e70325c4b39f819cb4177 100644
+--- a/rust/helpers/v4l2-device.c
++++ b/rust/helpers/v4l2-device.c
+@@ -1,5 +1,6 @@
+ // SPDX-License-Identifier: GPL-2.0
+ 
++#include <media/v4l2-dev.h>
+ #include <media/v4l2-device.h>
+ 
+ void rust_helper_v4l2_device_get(struct v4l2_device *v4l2_dev)
+@@ -22,3 +23,8 @@ int rust_helper_video_register_device(struct video_device *vdev,
+ {
+     return video_register_device(vdev, type, nr);
+ }
++
++struct video_device *rust_helper_video_devdata(struct file *filp)
++{
++    return video_devdata(filp);
++}
 diff --git a/rust/kernel/media/v4l2/file.rs b/rust/kernel/media/v4l2/file.rs
-index 37b34f8e6f251fafde5f7e6b4bd654519d8247a5..8817051268323866f41fd56a0c7e8fa4b7537858 100644
---- a/rust/kernel/media/v4l2/file.rs
-+++ b/rust/kernel/media/v4l2/file.rs
-@@ -50,7 +50,6 @@ impl<T: DriverFile> File<T> {
-     ///
-     /// - `ptr` must be a valid pointer to a `struct v4l2_file`.
-     /// - `ptr` must be valid for 'a.
--    #[expect(dead_code)]
-     pub(super) unsafe fn from_raw<'a>(ptr: *mut bindings::v4l2_fh) -> &'a File<T> {
-         // SAFETY: `ptr` is a valid pointer to a `struct v4l2_file` as per the
-         // safety requirements of this function.
-diff --git a/rust/kernel/media/v4l2/ioctl.rs b/rust/kernel/media/v4l2/ioctl.rs
 new file mode 100644
-index 0000000000000000000000000000000000000000..e8d20d4cb70f5722c0109ea5bad36041355fc7a1
+index 0000000000000000000000000000000000000000..37b34f8e6f251fafde5f7e6b4bd654519d8247a5
 --- /dev/null
-+++ b/rust/kernel/media/v4l2/ioctl.rs
-@@ -0,0 +1,92 @@
++++ b/rust/kernel/media/v4l2/file.rs
+@@ -0,0 +1,165 @@
 +// SPDX-License-Identifier: GPL-2.0
 +// SPDX-copyrightText: Copyright (C) 2025 Collabora Ltd.
 +
-+//! V4L2 device node ioctl support.
++//! V4L2 file handle support.
 +//!
-+//! Most of the V4L2 API is implemented through the ioctl system call. This
-+//! module provides support for ioctl operations on V4L2 device nodes.
++//! V4L2 allow multiple opens for a variety of use-cases, where the actual
++//! meaning of opening a node more than once is defined by the driver.
++//!
++//! Each open call is associated with its own v4l2_fh instance, and these
++//! instances are collected at the struct video_device level, making up a
++//! private context that can be retrieved at later calls, like ioctl()s
++//! performed on the node's file descriptor.
 +
-+use core::{marker::PhantomData, mem::MaybeUninit};
++use core::{marker::PhantomData, mem::MaybeUninit, ops::Deref};
 +
-+use crate::{
-+    media::v4l2::{
-+        self,
-+        video::{self, Driver},
-+    },
-+    prelude::*,
-+};
++use pin_init::PinInit;
 +
-+/// The vtable for the ioctls of a registered Rust [`video::Device`].
++use crate::{alloc::KBox, init::InPlaceInit, media::v4l2::video, prelude::*, types::Opaque};
++
++/// Trait that must be implemented by V4L2 drivers to represent a V4L2 file.
++pub trait DriverFile {
++    /// The parent `Driver` implementation for this `DriverFile`.
++    type Driver: video::Driver;
++
++    /// A reference to the module that this driver belongs to.
++    const MODULE: &'static ThisModule;
++
++    /// Called when a client opens a V4L2 node.
++    fn open(vdev: &video::Device<Self::Driver>) -> impl PinInit<Self, Error>;
++}
++
++/// An open V4L2 file handle.
 +///
 +/// # Invariants
 +///
-+/// - All the callbacks in [`IoctlVtable`] are called after the underlying
-+///   [`video::Device`] has been registered.
-+pub(super) struct IoctlVtable<T: Driver>(PhantomData<T>);
++/// `inner` is a valid instance of a `struct v4l2_fh`.
++#[repr(C)]
++#[pin_data]
++pub struct File<T: DriverFile> {
++    #[pin]
++    inner: Opaque<bindings::v4l2_fh>,
++    #[pin]
++    driver_file: T,
++}
 +
-+impl<T: Driver> IoctlVtable<T> {
++impl<T: DriverFile> File<T> {
++    /// Converts a raw pointer to a `File<T>` reference.
++    ///
 +    /// # Safety
 +    ///
-+    /// This should only be called from the ioctl callbacks and the returned
-+    /// reference should not outlive the callback itself.
-+    unsafe fn data<'a>(file: *mut bindings::file) -> &'a <T as Driver>::Data
-+    where
-+        T: 'a,
-+    {
-+        // SAFETY: This was set during the video device registration process.
-+        let vdev = unsafe { bindings::video_devdata(file) };
-+
-+        // SAFETY: `video_device` is a valid pointer to a `struct video_device`
-+        // returned by `bindings::video_devdata` and it is valid while the
-+        // reference is alive.
-+        unsafe { video::Device::<T>::from_raw(vdev) }
++    /// - `ptr` must be a valid pointer to a `struct v4l2_file`.
++    /// - `ptr` must be valid for 'a.
++    #[expect(dead_code)]
++    pub(super) unsafe fn from_raw<'a>(ptr: *mut bindings::v4l2_fh) -> &'a File<T> {
++        // SAFETY: `ptr` is a valid pointer to a `struct v4l2_file` as per the
++        // safety requirements of this function.
++        unsafe { &*(ptr.cast::<File<T>>()) }
 +    }
 +
++    /// Returns the raw pointer to the `struct v4l2_fh`.
++    pub(super) fn as_raw(&self) -> *mut bindings::v4l2_fh {
++        self.inner.get()
++    }
++
++    /// The open callback of a `struct video_device`
++    ///
 +    /// # Safety
 +    ///
-+    /// This should only be used as the `videoc_querycap` callback.
-+    unsafe extern "C" fn vidioc_querycap_callback(
-+        file: *mut bindings::file,
-+        _fh: *mut c_void,
-+        cap: *mut bindings::v4l2_capability,
-+    ) -> core::ffi::c_int {
-+        // SAFETY: this is being called from an ioctl callback and the returned
-+        // reference does not outlive it.
-+        let data = unsafe { Self::data(file) };
++    /// - this function must be called as the open callback of a `struct video_device`.
++    /// - `raw_file` must be a valid pointer to a `struct file`.
++    pub(super) unsafe extern "C" fn open_callback(raw_file: *mut bindings::file) -> c_int {
++        // SAFETY: `raw_file` is a valid pointer to a `struct file` and this is
++        // the open callback for a `struct video device` as per the safety
++        // requirements. This means that the `struct video_device` can be
++        // retrieved by this FFI call.
++        let vdev = unsafe { bindings::video_devdata(raw_file) };
 +
-+        // SAFETY: the fact that this is being called from an ioctl callback means that:
-+        //
-+        // - the video device has been registered.
-+        // - `open()` has been called (as you cannot call ioctl() on a file that
-+        // has not been previously opened).
-+        // - as a result from the statement above, a valid `v4l2_fh` was
-+        // installed in `bindings::file::private_data`, which we then convert
-+        // into `File<T>` here.
-+        // - `ptr` is valid for 'a, i.e.: for the scope of this function.
-+        let file = unsafe { v4l2::file::File::<T::File>::from_raw((*file).private_data.cast()) };
++        let file = try_pin_init!(File::<T> {
++            inner <- Opaque::ffi_init(move |slot: *mut bindings::v4l2_fh| {
++                // SAFETY:
++                // - it is safe for the initializer to write to the slot,
++                // - zeroed() is a valid value for `struct v4l2_fh`.
++                unsafe { *slot = MaybeUninit::zeroed().assume_init() };
 +
-+        // SAFETY: the safety requirements ensure that `cap` is a valid pointer
-+        // to a `struct v4l2_capability`, which fulfills the requirements of the
-+        // `Capabilities::from_raw`.
-+        let cap = unsafe { v4l2::caps::Capabilities::from_raw(cap) };
++                // SAFETY: `slot` was zero-initialized and `vdev` is a valid
++                // video device that was retrieved by `video_devdata`.
++                unsafe { bindings::v4l2_fh_init(slot, vdev) }
++            }),
++            driver_file <- {
++                // SAFETY: `vdev` is a valid pointer to a `struct video_device` that was
++                // retrieved using `video_devdata`. The underlying `struct video_device`
++                // remains valid for the lifetime 'a, i.e.: for the entire scope of this
++                // function.
++                let vdev = unsafe { video::Device::from_raw(vdev) };
++                T::open(vdev)
++            }
++        });
 +
-+        match T::querycap(file, data, cap) {
-+            Ok(()) => 0,
-+            Err(err) => err.to_errno(),
-+        }
++        let file = match KBox::pin_init(file, GFP_KERNEL) {
++            Ok(file) => file,
++            Err(e) => return e.to_errno(),
++        };
++
++        let v4l2_fh = file.as_ref().as_raw();
++
++        // SAFETY: We are passing ownership of the `File<T>` to the kernel,
++        // which treats the underlying memory as pinned throughout its lifetime.
++        let ptr = KBox::into_raw(unsafe { Pin::into_inner_unchecked(file) });
++
++        // SAFETY: `raw_file` points to a valid `struct file` as per the safety
++        // requirements, so it is safe to dereference it.
++        unsafe { (*raw_file).private_data = ptr.cast() };
++
++        // SAFETY: `v4l2_fh` was initialized above in `v4l2_fh_init`.
++        unsafe { bindings::v4l2_fh_add(v4l2_fh) };
++
++        0
 +    }
 +
-+    const VTABLE: bindings::v4l2_ioctl_ops = bindings::v4l2_ioctl_ops {
-+        vidioc_querycap: if T::HAS_QUERYCAP {
-+            Some(Self::vidioc_querycap_callback)
-+        } else {
-+            None
-+        },
-+        // SAFETY: All zeros is a valid value for `bindings::v4l2_ioctl_ops`.
++    /// The release callback of a `struct v4l2_fh`.
++    ///
++    /// # Safety
++    ///
++    /// - this function must be called as the release callback of a `struct v4l2_fh`.
++    /// - `raw_file` must be a valid pointer to a `struct file`.
++    pub(super) unsafe extern "C" fn release_callback(raw_file: *mut bindings::file) -> c_int {
++        // SAFETY: `raw_file::private_data` was set to `Pin<KBox<File<T>` in
++        // `open_callback`.
++        let file: Pin<KBox<File<T>>> =
++            unsafe { Pin::new_unchecked(Box::from_raw((*raw_file).private_data.cast())) };
++
++        // SAFETY: `file.inner` is a valid pointer to a `struct v4l2_fh`.
++        unsafe { bindings::v4l2_fh_del(file.as_raw()) };
++        // SAFETY: `file.inner` is a valid pointer to a `struct v4l2_fh`.
++        unsafe { bindings::v4l2_fh_exit(file.as_raw()) };
++
++        0
++    }
++}
++
++impl<T: DriverFile> Deref for File<T> {
++    type Target = T;
++
++    fn deref(&self) -> &Self::Target {
++        &self.driver_file
++    }
++}
++
++pub(super) struct FileVtable<T: DriverFile>(PhantomData<T>);
++
++impl<T: DriverFile> FileVtable<T> {
++    const VTABLE: bindings::v4l2_file_operations = bindings::v4l2_file_operations {
++        open: Some(File::<T>::open_callback),
++        release: Some(File::<T>::release_callback),
++        owner: T::MODULE.as_ptr(),
++        unlocked_ioctl: Some(bindings::video_ioctl2),
++        // SAFETY: All zeros is valid for the rest of the fields in this C
++        // type.
 +        ..unsafe { MaybeUninit::zeroed().assume_init() }
 +    };
 +
-+    pub(super) const fn build() -> &'static bindings::v4l2_ioctl_ops {
++    pub(super) const fn build() -> &'static bindings::v4l2_file_operations {
 +        &Self::VTABLE
 +    }
 +}
 diff --git a/rust/kernel/media/v4l2/mod.rs b/rust/kernel/media/v4l2/mod.rs
-index 1d8241f8a2230954371965bb91b20e726f144dce..4caa9fdc1ff3ed2bd6145cc653b49a84873ecac2 100644
+index ba1d4b7da8d8887b1604031497c300d7e0609cd2..1195c18f1336891c4b9b194d4e7e5cd40989ace9 100644
 --- a/rust/kernel/media/v4l2/mod.rs
 +++ b/rust/kernel/media/v4l2/mod.rs
-@@ -15,3 +15,6 @@
- pub mod caps;
- /// Support for Video for Linux 2 (V4L2) file handles.
- pub mod file;
+@@ -10,3 +10,6 @@
+ 
+ /// Support for Video for Linux 2 (V4L2) video devices.
+ pub mod video;
 +
-+/// Support for Video for Linux 2 (V4L2) ioctls.
-+pub mod ioctl;
++/// Support for Video for Linux 2 (V4L2) file handles.
++pub mod file;
 diff --git a/rust/kernel/media/v4l2/video.rs b/rust/kernel/media/v4l2/video.rs
-index c0ac99a8234d2f7a8effd4701b9f7440236540c8..2390a93a39925dbff3f809bc65adfac1d881309c 100644
+index e6954d3e6ac65201bd40a0215babb354ae10cd12..7ef2111c32ca55a2bced8325cd883b28204dc3ee 100644
 --- a/rust/kernel/media/v4l2/video.rs
 +++ b/rust/kernel/media/v4l2/video.rs
-@@ -19,7 +19,7 @@
- 
+@@ -20,7 +20,7 @@
  use crate::{
      alloc,
--    error::to_result,
-+    error::{to_result, VTABLE_DEFAULT_ERROR},
-     media::v4l2::{self, caps::DeviceCaps, file::DriverFile, video},
+     error::to_result,
+-    media::v4l2::{self, video},
++    media::v4l2::{self, file::DriverFile, video},
      prelude::*,
      types::{ARef, AlwaysRefCounted, Opaque},
-@@ -143,6 +143,7 @@ unsafe impl<T: Driver> Sync for Device<T> {}
- 
- /// The interface that must be implemented by structs that would otherwise embed
- /// a C [`struct video_device`](srctree/include/media/v4l2-dev.h).
-+#[vtable]
- pub trait Driver: v4l2::device::Driver {
+ };
+@@ -73,7 +73,6 @@ pub(super) fn as_raw(&self) -> *mut bindings::video_device {
+     ///
+     /// - `ptr` must be a valid pointer to a `struct video_device` that must
+     ///   remain valid for the lifetime 'a.
+-    #[expect(dead_code)]
+     pub(super) unsafe fn from_raw<'a>(ptr: *mut bindings::video_device) -> &'a Device<T> {
+         // SAFETY: `ptr` is a valid pointer to a `struct video_device` as per the
+         // safety requirements of this function.
+@@ -148,6 +147,9 @@ pub trait Driver: v4l2::device::Driver {
      /// The type of the driver's private data.
      type Data;
-@@ -161,6 +162,15 @@ pub trait Driver: v4l2::device::Driver {
  
-     /// The capabilities offered by this device node.
-     const CAPS: DeviceCaps;
++    /// The driver's file type.
++    type File: DriverFile;
 +
-+    /// Driver implementation for the `querycap` ioctl.
-+    fn querycap(
-+        _file: &v4l2::file::File<<Self as Driver>::File>,
-+        _data: &<Self as Driver>::Data,
-+        _cap: &mut v4l2::caps::Capabilities,
-+    ) -> Result {
-+        build_error!(VTABLE_DEFAULT_ERROR)
-+    }
- }
+     /// The [`NodeType`] to use when registering the device node.
+     const NODE_TYPE: NodeType;
  
- struct DeviceOptions<'a, T: Driver> {
-@@ -184,6 +194,7 @@ fn into_raw(self) -> bindings::video_device {
+@@ -177,6 +179,7 @@ fn into_raw(self) -> bindings::video_device {
+             },
+             vfl_dir: T::DIRECTION as c_uint,
              release: Some(Device::<T>::release_callback),
-             fops: super::file::FileVtable::<T::File>::build(),
-             device_caps: T::CAPS.as_raw(),
-+            ioctl_ops: super::ioctl::IoctlVtable::<T>::build(),
++            fops: super::file::FileVtable::<T::File>::build(),
              // SAFETY: All zeros is valid for the rest of the fields in this C
              // type.
              ..unsafe { MaybeUninit::zeroed().assume_init() }
