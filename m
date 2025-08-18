@@ -1,162 +1,187 @@
-Received: from sender4-pp-f112.zoho.com (sender4-pp-f112.zoho.com [136.143.188.112])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9EDC73009F0;
-	Mon, 18 Aug 2025 08:26:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.112
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755505606; cv=pass; b=XeLFqCP91uzE9Xf/lrA4dEcfhCbBRDKDbJ+lsPe3jBaELunxvVahXPvUyFJCIaFrcM+3lOu+KR2l5ez/nMUOqXFqv3IoorfTjurdIGmyG8NAtNFNKSXxMqnUzmMB46/+6o6DGOwXgb95A34J4gHwofT5bD9hCGi6ERNYdy+GSv8=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755505606; c=relaxed/simple;
-	bh=tj2yGevcfo5KIS3N2gQc2IK6xq5EamVZy8KjuhEWC4g=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=YRUTDc2Jbbe0OpsYUjN7u+nfMGhCYtxTOTi4MolNnZ+sFKOHtG1aDjnIXmPBbc0HeiJlKZsJB4lisrGO3Qo8mqb8hmSwN0nqtOP91odNfrbatd7Bo3HcHU9y6DCjgICxGRgOKiUJ7dRQ/dP99e6xhqce9Z/+MnKzZcMe2a+3VVY=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (1024-bit key) header.d=collabora.com header.i=detlev.casanova@collabora.com header.b=UdZmtK5L; arc=pass smtp.client-ip=136.143.188.112
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EE95B2F9C53;
+	Mon, 18 Aug 2025 08:29:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1755505801; cv=none; b=pRjoBc7BMoQmIgetmo0h3rnCdq9rMjxqcZhDwqEu+BJrPzqq/oSHfrBjF1UrZDsF54za86XHBXxv2wT5I8pl1yGoDmucwbu71mick2wC3tAIDxF5xDyGFMmrkK71yA/qle3YF8JyHm0WS0Rfc/vVYut0lQJgRC/5griqsger5vA=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1755505801; c=relaxed/simple;
+	bh=exYibdCxTidtmiMn53gTLXZ7IWFOL/uqk+UPXBrBBwk=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=ntGHzGAv3WkIpvCZ7k39n9NgonSehq+odLR/+wAN+QjqM3AGIpawBgXCnQhRqecdP7HhJQrOLBUFHwYf/4NX9SLsdt1k8KFiC60WEjKnFiRFStAQiCDL9mZXI6Ego80idPz/f8ws6JuAub7rezABSzI40c9VGGc81JDMEZTfTNU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=cnGjhLjH; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=collabora.com header.i=detlev.casanova@collabora.com header.b="UdZmtK5L"
-ARC-Seal: i=1; a=rsa-sha256; t=1755505586; cv=none; 
-	d=zohomail.com; s=zohoarc; 
-	b=TkJ31jB1dC74/EBx/flkMf5oj39dXFkwhuGHCgNWMHshBoZwvchGHGGaLjonlfPpqgvfLjUrSldiTo2oevGRJV0Lxe4HcEjF5MqnEWAUBqNviLmUMnnyBleq+Tsu1uW/POR83UfsEVEKZ42FucmIKAJK7uka8HXXft2/7JHakF4=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-	t=1755505586; h=Content-Type:Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To; 
-	bh=tj2yGevcfo5KIS3N2gQc2IK6xq5EamVZy8KjuhEWC4g=; 
-	b=PqLvXOzE7JsmOuiLkeNQpW6C6Ss9RuJxdxmj9VlOs0A1EyuMGiJ9/dNdOD+pwHb9e96QZ3t1QsqjyMlEVyrWOjQMdn9eu4RVi/WX4IPWcCN2X9Plb5eglP6XF07IoLEqOH+fhPvaS4EpcMSHMccPcGkinXnAZGF1yyfiQ4noLRk=
-ARC-Authentication-Results: i=1; mx.zohomail.com;
-	dkim=pass  header.i=collabora.com;
-	spf=pass  smtp.mailfrom=detlev.casanova@collabora.com;
-	dmarc=pass header.from=<detlev.casanova@collabora.com>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1755505586;
-	s=zohomail; d=collabora.com; i=detlev.casanova@collabora.com;
-	h=From:From:To:To:Cc:Cc:Subject:Subject:Date:Date:Message-ID:In-Reply-To:References:MIME-Version:Content-Transfer-Encoding:Content-Type:Message-Id:Reply-To;
-	bh=tj2yGevcfo5KIS3N2gQc2IK6xq5EamVZy8KjuhEWC4g=;
-	b=UdZmtK5LGeSmkPXn3snFHzL0cEnDQv2TqrktxrtgQhUDAVyuoZYSchXasjg6Z5+e
-	NClvxAnPJEmnI5f3CqlQxKGBH6QzG4VI0aRtiD64hpcuAAWZxMUiq9sxUiDlFanjmFH
-	MIcPnxrtFGCBnWSho07TqHbBltep/zVYUH1aYLJA=
-Received: by mx.zohomail.com with SMTPS id 1755505583162870.9854534398668;
-	Mon, 18 Aug 2025 01:26:23 -0700 (PDT)
-From: Detlev Casanova <detlev.casanova@collabora.com>
-To: Nicolas Dufresne <nicolas.dufresne@collabora.com>,
- Jonas Karlman <jonas@kwiboo.se>
-Cc: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
- Mauro Carvalho Chehab <mchehab@kernel.org>, Heiko Stuebner <heiko@sntech.de>,
- Alex Bee <knaerzche@gmail.com>, linux-media@vger.kernel.org,
- linux-rockchip@lists.infradead.org, devicetree@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 1/7] media: rkvdec: Add HEVC backend
-Date: Mon, 18 Aug 2025 04:25:58 -0400
-Message-ID: <6183937.lOV4Wx5bFT@earth>
-In-Reply-To: <d7446ed8-4af1-475f-88e0-07025c60d0b1@kwiboo.se>
-References:
- <20250810212454.3237486-1-jonas@kwiboo.se> <13998356.uLZWGnKmhe@earth>
- <d7446ed8-4af1-475f-88e0-07025c60d0b1@kwiboo.se>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="cnGjhLjH"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D9B71C4CEED;
+	Mon, 18 Aug 2025 08:29:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1755505799;
+	bh=exYibdCxTidtmiMn53gTLXZ7IWFOL/uqk+UPXBrBBwk=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=cnGjhLjH5rRWZspYAD7FNglSmP/ZVMNIeQlf//xe39ldZUTuqTszI4xH/4sgmcrAQ
+	 Q6o85sEdCvArYxNdDEX7Ao/bo7Wds20DvGTTbulNGNN1/kRQfElyU+kn84HS6guvkp
+	 aiz/GKT5TBW31gdoZQ53ciLgsgmBjDk9M5heNSgOznXt7/KRmfLE6A6/X1/IVREVIa
+	 l+xSQxbH11gDVu+OKVxOlkCuacCR0dC3+E205ZX1SWRQrla7z3lflByf2eelGqoZ+6
+	 bCpw0of/mnHjWE7tgsvkYWDuZOgCSDggQHWvjmhg5lcjmGt2LNVRg/5QdnfBjlRFeG
+	 x2Xpi/Lze7bew==
+Message-ID: <67199625-13d2-4510-bbbd-3dd2f61c62fd@kernel.org>
+Date: Mon, 18 Aug 2025 10:29:51 +0200
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset="utf-8"
-X-ZohoMailClient: External
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 10/12] dt-bindings: media: fsd: Document CSIS DMA
+ controller
+To: Inbaraj E <inbaraj.e@samsung.com>, mturquette@baylibre.com,
+ sboyd@kernel.org, robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org,
+ s.nawrocki@samsung.com, s.hauer@pengutronix.de, shawnguo@kernel.org,
+ cw00.choi@samsung.com, rmfrfs@gmail.com, laurent.pinchart@ideasonboard.com,
+ martink@posteo.de, mchehab@kernel.org, linux-fsd@tesla.com, will@kernel.org,
+ catalin.marinas@arm.com, pankaj.dubey@samsung.com, shradha.t@samsung.com,
+ ravi.patel@samsung.com
+Cc: linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org, alim.akhtar@samsung.com,
+ linux-samsung-soc@vger.kernel.org, kernel@puri.sm, kernel@pengutronix.de,
+ festevam@gmail.com, linux-media@vger.kernel.org, imx@lists.linux.dev,
+ linux-arm-kernel@lists.infradead.org
+References: <20250814140943.22531-1-inbaraj.e@samsung.com>
+ <CGME20250814141051epcas5p14dccee388087372973988aeebcb872cf@epcas5p1.samsung.com>
+ <20250814140943.22531-11-inbaraj.e@samsung.com>
+From: Krzysztof Kozlowski <krzk@kernel.org>
+Content-Language: en-US
+Autocrypt: addr=krzk@kernel.org; keydata=
+ xsFNBFVDQq4BEAC6KeLOfFsAvFMBsrCrJ2bCalhPv5+KQF2PS2+iwZI8BpRZoV+Bd5kWvN79
+ cFgcqTTuNHjAvxtUG8pQgGTHAObYs6xeYJtjUH0ZX6ndJ33FJYf5V3yXqqjcZ30FgHzJCFUu
+ JMp7PSyMPzpUXfU12yfcRYVEMQrmplNZssmYhiTeVicuOOypWugZKVLGNm0IweVCaZ/DJDIH
+ gNbpvVwjcKYrx85m9cBVEBUGaQP6AT7qlVCkrf50v8bofSIyVa2xmubbAwwFA1oxoOusjPIE
+ J3iadrwpFvsZjF5uHAKS+7wHLoW9hVzOnLbX6ajk5Hf8Pb1m+VH/E8bPBNNYKkfTtypTDUCj
+ NYcd27tjnXfG+SDs/EXNUAIRefCyvaRG7oRYF3Ec+2RgQDRnmmjCjoQNbFrJvJkFHlPeHaeS
+ BosGY+XWKydnmsfY7SSnjAzLUGAFhLd/XDVpb1Een2XucPpKvt9ORF+48gy12FA5GduRLhQU
+ vK4tU7ojoem/G23PcowM1CwPurC8sAVsQb9KmwTGh7rVz3ks3w/zfGBy3+WmLg++C2Wct6nM
+ Pd8/6CBVjEWqD06/RjI2AnjIq5fSEH/BIfXXfC68nMp9BZoy3So4ZsbOlBmtAPvMYX6U8VwD
+ TNeBxJu5Ex0Izf1NV9CzC3nNaFUYOY8KfN01X5SExAoVTr09ewARAQABzSVLcnp5c3p0b2Yg
+ S296bG93c2tpIDxrcnprQGtlcm5lbC5vcmc+wsGVBBMBCgA/AhsDBgsJCAcDAgYVCAIJCgsE
+ FgIDAQIeAQIXgBYhBJvQfg4MUfjVlne3VBuTQ307QWKbBQJoF1BKBQkWlnSaAAoJEBuTQ307
+ QWKbHukP/3t4tRp/bvDnxJfmNdNVn0gv9ep3L39IntPalBFwRKytqeQkzAju0whYWg+R/rwp
+ +r2I1Fzwt7+PTjsnMFlh1AZxGDmP5MFkzVsMnfX1lGiXhYSOMP97XL6R1QSXxaWOpGNCDaUl
+ ajorB0lJDcC0q3xAdwzRConxYVhlgmTrRiD8oLlSCD5baEAt5Zw17UTNDnDGmZQKR0fqLpWy
+ 786Lm5OScb7DjEgcA2PRm17st4UQ1kF0rQHokVaotxRM74PPDB8bCsunlghJl1DRK9s1aSuN
+ hL1Pv9VD8b4dFNvCo7b4hfAANPU67W40AaaGZ3UAfmw+1MYyo4QuAZGKzaP2ukbdCD/DYnqi
+ tJy88XqWtyb4UQWKNoQqGKzlYXdKsldYqrLHGoMvj1UN9XcRtXHST/IaLn72o7j7/h/Ac5EL
+ 8lSUVIG4TYn59NyxxAXa07Wi6zjVL1U11fTnFmE29ALYQEXKBI3KUO1A3p4sQWzU7uRmbuxn
+ naUmm8RbpMcOfa9JjlXCLmQ5IP7Rr5tYZUCkZz08LIfF8UMXwH7OOEX87Y++EkAB+pzKZNNd
+ hwoXulTAgjSy+OiaLtuCys9VdXLZ3Zy314azaCU3BoWgaMV0eAW/+gprWMXQM1lrlzvwlD/k
+ whyy9wGf0AEPpLssLVt9VVxNjo6BIkt6d1pMg6mHsUEVzsFNBFVDXDQBEADNkrQYSREUL4D3
+ Gws46JEoZ9HEQOKtkrwjrzlw/tCmqVzERRPvz2Xg8n7+HRCrgqnodIYoUh5WsU84N03KlLue
+ MNsWLJBvBaubYN4JuJIdRr4dS4oyF1/fQAQPHh8Thpiz0SAZFx6iWKB7Qrz3OrGCjTPcW6ei
+ OMheesVS5hxietSmlin+SilmIAPZHx7n242u6kdHOh+/SyLImKn/dh9RzatVpUKbv34eP1wA
+ GldWsRxbf3WP9pFNObSzI/Bo3kA89Xx2rO2roC+Gq4LeHvo7ptzcLcrqaHUAcZ3CgFG88CnA
+ 6z6lBZn0WyewEcPOPdcUB2Q7D/NiUY+HDiV99rAYPJztjeTrBSTnHeSBPb+qn5ZZGQwIdUW9
+ YegxWKvXXHTwB5eMzo/RB6vffwqcnHDoe0q7VgzRRZJwpi6aMIXLfeWZ5Wrwaw2zldFuO4Dt
+ 91pFzBSOIpeMtfgb/Pfe/a1WJ/GgaIRIBE+NUqckM+3zJHGmVPqJP/h2Iwv6nw8U+7Yyl6gU
+ BLHFTg2hYnLFJI4Xjg+AX1hHFVKmvl3VBHIsBv0oDcsQWXqY+NaFahT0lRPjYtrTa1v3tem/
+ JoFzZ4B0p27K+qQCF2R96hVvuEyjzBmdq2esyE6zIqftdo4MOJho8uctOiWbwNNq2U9pPWmu
+ 4vXVFBYIGmpyNPYzRm0QPwARAQABwsF8BBgBCgAmAhsMFiEEm9B+DgxR+NWWd7dUG5NDfTtB
+ YpsFAmgXUF8FCRaWWyoACgkQG5NDfTtBYptO0w//dlXJs5/42hAXKsk+PDg3wyEFb4NpyA1v
+ qmx7SfAzk9Hf6lWwU1O6AbqNMbh6PjEwadKUk1m04S7EjdQLsj/MBSgoQtCT3MDmWUUtHZd5
+ RYIPnPq3WVB47GtuO6/u375tsxhtf7vt95QSYJwCB+ZUgo4T+FV4hquZ4AsRkbgavtIzQisg
+ Dgv76tnEv3YHV8Jn9mi/Bu0FURF+5kpdMfgo1sq6RXNQ//TVf8yFgRtTUdXxW/qHjlYURrm2
+ H4kutobVEIxiyu6m05q3e9eZB/TaMMNVORx+1kM3j7f0rwtEYUFzY1ygQfpcMDPl7pRYoJjB
+ dSsm0ZuzDaCwaxg2t8hqQJBzJCezTOIkjHUsWAK+tEbU4Z4SnNpCyM3fBqsgYdJxjyC/tWVT
+ AQ18NRLtPw7tK1rdcwCl0GFQHwSwk5pDpz1NH40e6lU+NcXSeiqkDDRkHlftKPV/dV+lQXiu
+ jWt87ecuHlpL3uuQ0ZZNWqHgZoQLXoqC2ZV5KrtKWb/jyiFX/sxSrodALf0zf+tfHv0FZWT2
+ zHjUqd0t4njD/UOsuIMOQn4Ig0SdivYPfZukb5cdasKJukG1NOpbW7yRNivaCnfZz6dTawXw
+ XRIV/KDsHQiyVxKvN73bThKhONkcX2LWuD928tAR6XMM2G5ovxLe09vuOzzfTWQDsm++9UKF a/A=
+In-Reply-To: <20250814140943.22531-11-inbaraj.e@samsung.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Hi Jonas,
+On 14/08/2025 16:09, Inbaraj E wrote:
+> Document bindings for the FSD CSIS DMA controller.
+> 
+> Signed-off-by: Inbaraj E <inbaraj.e@samsung.com>
+> ---
+>  .../bindings/media/tesla,fsd-csis-media.yaml  | 74 +++++++++++++++++++
 
-On Sunday, 17 August 2025 12:39:01 EDT Jonas Karlman wrote:
-> Hi Detlev,
->=20
-> On 8/12/2025 9:54 PM, Detlev Casanova wrote:
-> > On Tuesday, 12 August 2025 09:07:33 EDT Nicolas Dufresne wrote:
-> >> Le mardi 12 ao=C3=BBt 2025 =C3=A0 02:58 +0200, Jonas Karlman a =C3=A9c=
-rit :
-> >>> Hi Nicolas,
-> >>>=20
-> >>> On 8/11/2025 11:07 PM, Nicolas Dufresne wrote:
-> >>>> First pass of review,
-> >>>>=20
-> >>>> There is obvious conflict between Detlev RK3388/3576 series, please
-> >>>> coordinate. By picking the same direction, the common code can be sp=
-lit
-> >>>> from platform code, and then both sets can share that common code and
-> >>>> avoid conflicts.>
-> >>>=20
-> >>> Yes, it is very unfortunate that Detlev did not base the work on v1 of
-> >>> this series, this has been sitting idle on the list for almost 2 years
-> >>> only waiting on its dependent H264 High10/4:2:2 series to be merged.
-> >>>=20
-> >>> Most feedback for v1 was related to unstaging and the series could be
-> >>> applied clean until iommu detach/attach was introduced very recently.
-> >>>=20
-> >>> This series has also been referenced in multiple threads related to
-> >>> rkvdec2 work, most recent at [1]. Unfortunately, I have missed both v1
-> >>> and v2 of Detlev's new rkvdec2 series, and was not able to send a v2 =
-of
-> >>> this until now due to family tragedy.
-> >>>=20
-> >>> I will take a closer look at Detlev's new rkvdec2 series and see what=
- I
-> >>> can do in a v3 to ease any merge conflicts.
-> >>=20
-> >> All in all, I'd like to have both of these series ready for 6.18. To
-> >> avoid
-> >> the need for dependant series, I can pick top patches if the preparati=
-on
-> >> is
-> >> properly split from the platform specific code. Please make you
-> >> recommendation.
-> >>=20
-> >> My main concern at the moment is the back and forth from register to
-> >> structure, Detlev already ported everything else to structures, so
-> >> porting
-> >> a single codec for a single SoC seems like the least amount of work. I=
-'d
-> >> like to ear if any of you would be willing to convert it. This way I c=
-an
-> >> land the conversion early, and we remove one massive clash between the
-> >> two
-> >> sets.
-> >=20
-> > The conversion won't be too difficult to manage, I can do it as I did f=
-or
-> > h264 and add that to my serie over this one.
->=20
-> Thanks, I very much appreciate that!, I won't have time to look into a
-> conversion until at earliest next weekend.
-
-I pushed a branch with my series rebased on yours[1]. It ports the hevc cod=
-e=20
-to using structs (for registers).
-Also move the cabac table and common hevc functions.
-
-Reports indicate that all works well :)
-
-> > As my series is already doing a conversion, I'm not against keeping this
-> > one without structs and simply do the conversion later, even if that
-> > means merging code we know will change later.
-> >=20
-> > I'd also like to mention that currently, my serie changes the writel to
-> > structs only for the registers, not for PPS and SPS.
-> > So I don't mind keeping that part as is for rkvdec-hevc.
-> >=20
-> > For the variants support, I can also merge in my changes: my rkvdec_con=
-fig
-> > would just become an extention your rkvdec_variant.
-> >=20
-> > Finally, this series has been here for longer than mine, so it's only f=
-air
-> > to have me rebase mine, especially because it means doing a bit more of
-> > what I already did.
->=20
-> Great, I will try to get a v3 out in next few days after addressing some
-> of the feedback.
-
-I will rebase on your v3 and send my v3 when this one is accepted.
+Your patchset is organized in total mess. First clock, then media
+bindings, then arm64,  then media drivers, then media bindings, then
+arm64... Please organize it in standard way - about independent
+subsystems I mentioned, so within media first bindings, then driver. Not
+intermixed.
 
 
-[1]: https://gitlab.collabora.com/detlev/linux/-/commits/add-vdpu381-and-38=
-3-to-rkvdec-v3
-Regards,
-Detlev.
+
+>  1 file changed, 74 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/media/tesla,fsd-csis-media.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/media/tesla,fsd-csis-media.yaml b/Documentation/devicetree/bindings/media/tesla,fsd-csis-media.yaml
+> new file mode 100644
+> index 000000000000..ce6c2e58ed4e
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/media/tesla,fsd-csis-media.yaml
+> @@ -0,0 +1,74 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/media/tesla,fsd-csis-media.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Tesla FSD SoC MIPI CSI-2 DMA (Bridge device) receiver
+> +
+> +maintainers:
+> +  - Inbaraj E <inbaraj.e@samsung.com>
+> +
+> +description: |-
+
+Drop |-
+
+> +  The FSD MIPI CSI-2 (Camera Serial Interface 2) have internal DMA engine to
+> +  capture frames originating from the sensor.
+> +
+> +properties:
+> +  compatible:
+> +    const: tesla,fsd-csis-media
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  interrupts:
+> +    maxItems: 1
+> +
+> +  clocks:
+> +    maxItems: 3
+> +
+> +  clock-names:
+> +    items:
+> +      - const: aclk
+> +      - const: pclk
+> +      - const: pll
+> +
+> +  iommus:
+> +    maxItems: 1
+> +
+> +  port:
+> +    $ref: /schemas/graph.yaml#/properties/port
+
+Don't you need second port to CSIS block? I guess this one is input from
+the sensor?
+
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - interrupts
+> +  - clocks
+> +  - clock-names
+> +  - iommus
+> +  - port
 
 
+
+Best regards,
+Krzysztof
