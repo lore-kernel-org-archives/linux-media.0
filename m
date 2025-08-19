@@ -1,127 +1,120 @@
-Received: from lahtoruutu.iki.fi (lahtoruutu.iki.fi [185.185.170.37])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 33E332773CB
-	for <linux-media@vger.kernel.org>; Tue, 19 Aug 2025 09:43:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=185.185.170.37
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755596595; cv=pass; b=OEChZiivzx3rzjZjeBeD7ZwcKC8uoLi3N0oZnE2VSFWi9hGvPCgsPo3ZVgHHXy2O8GWZlQ3NAqMmSPAxPWS0sNY2jL9l0qU/P0rB4MmjCGX0LzvuQQwzhzr4UZRdJdGTHsUyqLFBmvFxOFRVYmLDxHaBpRhuSnACBuYeDE+K6zw=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755596595; c=relaxed/simple;
-	bh=d6TXVPNvs6Qz8oa9iM3dJQNDUb4dcwnvV3u1liq7iuk=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=LLz8VFlB8+/oACnuTHSrvAobmpwKz0m8CtKLqtKMm+g4mFgxUUI0CEGwpTlcFH+N0B+PHZs2OtheE9Wtayy6eMhQ2k6PTlhZcHmL4Qtn5CHzzFAZsDsEN3HUiaZcvLbOePXYvuU8wLbsPWelTpoH9W/5dFMv2nkNhpjKrAVTxhM=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=iki.fi; spf=pass smtp.mailfrom=iki.fi; dkim=pass (2048-bit key) header.d=iki.fi header.i=@iki.fi header.b=EYEe6G19; arc=pass smtp.client-ip=185.185.170.37
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=iki.fi
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iki.fi
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 14F29221FD4
+	for <linux-media@vger.kernel.org>; Tue, 19 Aug 2025 09:45:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1755596741; cv=none; b=mj6DxEaQMsPPBKEerlog0xVcYkjnmqWp1rSwkm9dqRvLXDPmJ9ZN6kIrsL2M5+WPjYxaU+k0o4d0HJjqmfYOBmBU4P+5p59QKuC6LnFulpdxOjugMzWVtnNV7phMAyyhacRS+zc4MYZfIPzQHkpz4+Oq9HquTZ2C3xN1J2AW+QM=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1755596741; c=relaxed/simple;
+	bh=1i2i/+OPK4jXbuDq9ZzXkQz5Lh2sVXv9v/4wjzBFpK8=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=JfrPoNi0PTWb1Xfy99SbJxjM8X73ALjQ0dPJwbItDNM8UayTb1utIN4mlbbzMN2ZZMN4uQ84+wNfAZGpj6G42pFT4AsBitpV+Dc8r2qs+WmJ1Mm158aKsSNqBG+OGEs16McyDm62bD4a8tFzzeeL3iGXhPxz2ipCbB5v5yNDb/Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=HUMoJCip; arc=none smtp.client-ip=198.175.65.19
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=iki.fi header.i=@iki.fi header.b="EYEe6G19"
-Received: from hillosipuli.retiisi.eu (91-158-51-183.elisa-laajakaista.fi [91.158.51.183])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: sailus)
-	by lahtoruutu.iki.fi (Postfix) with ESMTPSA id 4c5l4p2fpKz49PyD;
-	Tue, 19 Aug 2025 12:43:06 +0300 (EEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi; s=lahtoruutu;
-	t=1755596587;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=ELDE9VgCMQrMa5lumt+VQWhKaeGXjnYcBY8Gb8lDtRA=;
-	b=EYEe6G191V7FPAfodmovJuA2jFowisy0hxciM2MIOqpkdgAdJV05ldVfHPahgzVGKYAKzC
-	DI/vv6Z+okwaTWOrt0DB7igHlHsAviIP4r0Dwkyt+Zwuv02JRq+DYnipBQejqK1CEvZp/X
-	cGPOT9ASrRaHNs/hIZEjFXfI5VsDilV/E83fZ8cb8reYe/luOnnU4uZTz3Q1UbN8KcmGl3
-	7zvFhId9XJ7+mfHjhR7QjKV3o0jM59H0Gv/DQ6V0wQsNIeSYO3ffS4Tx6kERGoxYI51z3n
-	v/lZrr6Cmrbta3rZ7W2sqD4z81BnYVqXdHSX/ZplGVMkEJhMAGA18Br0HZ26bg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi;
-	s=lahtoruutu; t=1755596587;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=ELDE9VgCMQrMa5lumt+VQWhKaeGXjnYcBY8Gb8lDtRA=;
-	b=E/w67RI6xUVixixq7Lik65oWlxvGENv1ngM8OPsJJ+eBoiMU+LJX4nhBbJbUjFsswjIhxY
-	WYvCHSvv7PqgGf7AD7T4RZC8ezXytgT/v7LeY0r6ExIldpXRPxQD/9naYmCUDw7nWOUBGX
-	kOseI0flUAHf666X2J6+ezHOq/H2MYXT2EjOTu+Yo9PEwaINXW9/LePgMMwjM7aFsUdO5H
-	LMQutONj4f9lZQA/aDTJhDc+FSCoV2iqr48yzXsp73k75aaUdsAqufaC489dR4OFJmX0lB
-	2poGiYTWoCH8e9FusGcKPbnTqJ3qE9U5o5T8kvYuw1URlziXIVWOqpRi089jhg==
-ARC-Authentication-Results: i=1;
-	ORIGINATING;
-	auth=pass smtp.auth=sailus smtp.mailfrom=sakari.ailus@iki.fi
-ARC-Seal: i=1; s=lahtoruutu; d=iki.fi; t=1755596587; a=rsa-sha256;
-	cv=none;
-	b=Ico+og8clpbGivIcJyXP0tmDNP1u+OfcDvRAn/yqxqrZWYi/fTkypULEQ1iXCokb9apPhR
-	3lLO6JY9jxjbOGtGK8NnSvz8AdzFT/bARmgl67SscDD70ejGSeF7HZJ0xYqEn5GMYdmT76
-	uG0aAA5aMF5GzRgGfmVMtyCNPWRTKZ//r4WOFQPpxnyqF2X2qx5/jPDR0tUmYCOV82lVLz
-	mYm95QP5/AGHdW3jTcCxtx3RYdVoSdwCyU3vwLcEdgOgT8Jb+YnlHZ8CpQHl8WPUHdv/9E
-	WQCxTtzzWrGprpvAq3FOtmNSWnKodtJT+dLDUzS8V6/qdSn3UqGy89aObVUvoQ==
-Received: from valkosipuli.retiisi.eu (valkosipuli.local [192.168.4.2])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by hillosipuli.retiisi.eu (Postfix) with ESMTPS id 3782B634C96;
-	Tue, 19 Aug 2025 12:41:51 +0300 (EEST)
-Date: Tue, 19 Aug 2025 09:41:51 +0000
-From: Sakari Ailus <sakari.ailus@iki.fi>
-To: Niklas =?iso-8859-1?Q?S=F6derlund?= <niklas.soderlund+renesas@ragnatech.se>
-Cc: Sakari Ailus <sakari.ailus@linux.intel.com>,
-	linux-media@vger.kernel.org, Keke Li <keke.li@amlogic.com>,
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="HUMoJCip"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1755596741; x=1787132741;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=1i2i/+OPK4jXbuDq9ZzXkQz5Lh2sVXv9v/4wjzBFpK8=;
+  b=HUMoJCipO8N7AVIKCbbobdl0HIK6SJgQ1BaillwQjY5jFksClECiV5HO
+   Zg18Zn/Xh/itaszeOcSuj/rbz6KkprgPHxk44Aap8WrZes6OZwhI2rGID
+   sCwEzpM+2/+4bDOKcLCjM+/EBGDlYKWFwzEAWMqe8DKsLiUTF/IWjd2Qe
+   96cXGbA5eSRd4XmKndAKIlIbLSlUn8rJTj0XLMaXk9dveyM1M02RT6+kH
+   HaueDL3g4JK1A/NNT5dmEmr07uK8wdEMDNHWEx3Li0rYX9abTi7Qgf9NF
+   Rdw9k5PxQULzROPrIfMP6H+rkezr5C1U+JM+QFQhJBittOv/iAM1XcyFc
+   A==;
+X-CSE-ConnectionGUID: /kuF3cssQUuQm2n7w4xINg==
+X-CSE-MsgGUID: B2NfEU37T1uMGcvOafF8Aw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11526"; a="57691416"
+X-IronPort-AV: E=Sophos;i="6.17,300,1747724400"; 
+   d="scan'208";a="57691416"
+Received: from orviesa003.jf.intel.com ([10.64.159.143])
+  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Aug 2025 02:45:40 -0700
+X-CSE-ConnectionGUID: BmdcXX6FTKS6Tr5oYl4+4A==
+X-CSE-MsgGUID: 3C45M6iGRBaUB0PC6L0QqQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.17,300,1747724400"; 
+   d="scan'208";a="172045334"
+Received: from bergbenj-mobl1.ger.corp.intel.com (HELO kekkonen.fi.intel.com) ([10.245.244.148])
+  by ORVIESA003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Aug 2025 02:45:37 -0700
+Received: from punajuuri.localdomain (unknown [192.168.240.130])
+	by kekkonen.fi.intel.com (Postfix) with ESMTP id 1CF5811FC36;
+	Tue, 19 Aug 2025 12:45:34 +0300 (EEST)
+Received: from sailus by punajuuri.localdomain with local (Exim 4.98.2)
+	(envelope-from <sakari.ailus@linux.intel.com>)
+	id 1uoIuM-000000000c0-0NCs;
+	Tue, 19 Aug 2025 12:45:34 +0300
+Organization: Intel Finland Oy - BIC 0357606-4 - c/o Alberga Business Park, 6 krs, Bertel Jungin Aukio 5, 02600 Espoo
+From: Sakari Ailus <sakari.ailus@linux.intel.com>
+To: linux-media@vger.kernel.org
+Cc: Keke Li <keke.li@amlogic.com>,
 	Hans Verkuil <hverkuil@kernel.org>,
 	Nicolas Dufresne <nicolas.dufresne@collabora.com>,
 	Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
 	Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>,
 	Jonas Karlman <jonas@kwiboo.se>,
 	Mehdi Djait <mehdi.djait@linux.intel.com>,
-	Daniel Scally <dan.scally+renesas@ideasonboard.com>
-Subject: Re: [PATCH 2/2] media: v4l2-common: Drop the workaround from
- v4l2_get_link_freq()
-Message-ID: <aKRG3-ZUIP_pCq8-@valkosipuli.retiisi.eu>
-References: <20250818141444.1160565-1-sakari.ailus@linux.intel.com>
- <20250818141444.1160565-3-sakari.ailus@linux.intel.com>
- <20250819054804.GC2197757@ragnatech.se>
+	Daniel Scally <dan.scally+renesas@ideasonboard.com>,
+	=?UTF-8?q?Niklas=20S=C3=B6derlund?= <niklas.soderlund+renesas@ragnatech.se>,
+	Jacopo Mondi <jacopo.mondi@ideasonboard.com>
+Subject: [PATCH v2 1/2] media: amlogic: c3-mipi-csi2: Call v4l2_get_link_freq() on source pad
+Date: Tue, 19 Aug 2025 12:45:31 +0300
+Message-ID: <20250819094533.2335-2-sakari.ailus@linux.intel.com>
+X-Mailer: git-send-email 2.47.2
+In-Reply-To: <20250819094533.2335-1-sakari.ailus@linux.intel.com>
+References: <20250819094533.2335-1-sakari.ailus@linux.intel.com>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20250819054804.GC2197757@ragnatech.se>
 
-Hejssan, Niklas!
+Call v4l2_get_link_freq() on the source pad so we can remove the
+workaround that allows calling it on a control handler.
 
-On Tue, Aug 19, 2025 at 07:48:04AM +0200, Niklas Söderlund wrote:
-> Hej Sakair,
-> 
-> Tack för ditt arbete.
-> 
-> On 2025-08-18 17:14:44 +0300, Sakari Ailus wrote:
-> > Remove the workaround and don't allow v4l2_get_link_freq() to be called on
-> > the control handler anymore.
-> 
-> nit: Maybe set out what the workaround was in the commit message?
+Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
+Reviewed-by: Jacopo Mondi <jacopo.mondi@ideasonboard.com>
+---
+ drivers/media/platform/amlogic/c3/mipi-csi2/c3-mipi-csi2.c | 7 +++----
+ 1 file changed, 3 insertions(+), 4 deletions(-)
 
-I'll use this, it's shorter, too:
-
-Remove the workaround that allowed calling v4l2_get_link_freq() on the
-control handler.
-
-> 
-> > 
-> > Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
-> 
-> It is exciting to see things moving along! With, or without, the nit 
-> addressed,
-> 
-> Reviewed-by: Niklas Söderlund <niklas.soderlund+renesas@ragnatech.se>
-
-Thanks!
-
+diff --git a/drivers/media/platform/amlogic/c3/mipi-csi2/c3-mipi-csi2.c b/drivers/media/platform/amlogic/c3/mipi-csi2/c3-mipi-csi2.c
+index 1011ab3ebac7..b9e4ef3fc308 100644
+--- a/drivers/media/platform/amlogic/c3/mipi-csi2/c3-mipi-csi2.c
++++ b/drivers/media/platform/amlogic/c3/mipi-csi2/c3-mipi-csi2.c
+@@ -388,13 +388,12 @@ static void c3_mipi_csi_cfg_host(struct c3_csi_device *csi)
+ 	c3_mipi_csi_write(csi, CSI2_HOST_N_LANES, csi->bus.num_data_lanes - 1);
+ }
+ 
+-static int c3_mipi_csi_start_stream(struct c3_csi_device *csi,
+-				    struct v4l2_subdev *src_sd)
++static int c3_mipi_csi_start_stream(struct c3_csi_device *csi)
+ {
+ 	s64 link_freq;
+ 	s64 lane_rate;
+ 
+-	link_freq = v4l2_get_link_freq(src_sd->ctrl_handler, 0, 0);
++	link_freq = v4l2_get_link_freq(csi->src_pad, 0, 0);
+ 	if (link_freq < 0) {
+ 		dev_err(csi->dev,
+ 			"Unable to obtain link frequency: %lld\n", link_freq);
+@@ -434,7 +433,7 @@ static int c3_mipi_csi_enable_streams(struct v4l2_subdev *sd,
+ 
+ 	pm_runtime_resume_and_get(csi->dev);
+ 
+-	c3_mipi_csi_start_stream(csi, src_sd);
++	c3_mipi_csi_start_stream(csi);
+ 
+ 	ret = v4l2_subdev_enable_streams(src_sd, csi->src_pad->index, BIT(0));
+ 	if (ret) {
 -- 
-Med trevliga hälsningar,
+2.47.2
 
-Sakari Ailus
