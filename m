@@ -1,184 +1,195 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 67944283C87;
-	Tue, 19 Aug 2025 16:46:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BBCA42C11EC
+	for <linux-media@vger.kernel.org>; Tue, 19 Aug 2025 16:55:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755622005; cv=none; b=LLAlkNwO4K57bEhBKaqS3TqogPC4mHE99le/XdR1NlsN+gJazP7nwMRAGQzexHpblrWqdmhJVrBQSCBiiAA5kpy74FD0/k4wcZm+lXt1QS9106I1Gyc3bz+IlbEZ2gVdvm4s95A6nAIRJiYbdxx5ZA8hRNzDqOBhsFAlyTubIm4=
+	t=1755622529; cv=none; b=Fhl1UjlYOGjp8+nl+seJJ/BNY3kt2kGWzAV/tSN4GXrBtinPA39IWazOi1rYFp9P1PWqXtN0HzSSpWYCr54dx9gtGNrGwuoibwnMHjdg1Hi5+N9ZGlxzLyEkHpWYHRTaxGJzkNCTtsLBzPXSl3wdnl1IvE0wbY9hayGb65DzPag=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755622005; c=relaxed/simple;
-	bh=gJlCbtML3/hYLPe1GeD4TuTAglGALBUIYnsjaTlV7b4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=gMzt8ukFTna0pb+uTj5NYofBXHymQkJDdhqlB7mg4O9MrQcKnD+rajQdSJ1/PoP5u0arBm7/ET0upqFaNnVpy3jgun5eCDgYTlOAnPXPNsnK0jLw1/7ngqW8j4CLNKV9iMmrhK96X2tAf6ag2TBbul8X3UtWLE9x0oElmfouhDY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=eyCEA3rR; arc=none smtp.client-ip=198.175.65.14
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+	s=arc-20240116; t=1755622529; c=relaxed/simple;
+	bh=/AflHXTFVOH16SOW2V+0meYRbIqCERPZj2WZC7Vo8H8=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=MJG2yiIDgBKP0n5dCm9+p7Kchp+19JiiteWNXSp9n/7zwp/jLd2LIgGu4LcQT4VEuSZWUz7MC4PevSY4VNFBm8N3KZEyP1yht3+abp02d+lJGpTGey2u9IopxS7XddxeIK1HDSfTJ8m3ODrx/NmIcuCUWCbKqhCRGJccfAoM55o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=cXRdml3m; arc=none smtp.client-ip=205.220.168.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="eyCEA3rR"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1755622004; x=1787158004;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=gJlCbtML3/hYLPe1GeD4TuTAglGALBUIYnsjaTlV7b4=;
-  b=eyCEA3rROmmN2FsjLM69oXtYtuEa7rmGSieeFwpNawu1bCjWyE8bOqoT
-   ggEyDrLsqm5jt9HibkXFccAgeggype/5wusCgQCQnxcKHLf2SlkROgXC6
-   uf4fJiHaH/7doYL6PZclK8I8sfyqoYa9Xq30ze1AkIbEgtGkZ+zvkbGkd
-   zX07Al66wNDdm6P1L67WrMzZijVx8O65qT68voJkI4ksQsApBd6M/ScT+
-   IJbAvrhVEHjseFC3AmMCtzxklOOtcUgllo8zDZ1AE4sXEtOcSFUyzBCh6
-   qt6kuNkuCOzmx7otflbqLq/ofTpgmow0EI8Y8SN/991H5ATfAtnnNl/Ul
-   g==;
-X-CSE-ConnectionGUID: zBNFfusJT8KG3/muG3iBUQ==
-X-CSE-MsgGUID: GhhwPI3cSXqyI3gnH+qCqQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11527"; a="61706165"
-X-IronPort-AV: E=Sophos;i="6.17,302,1747724400"; 
-   d="scan'208";a="61706165"
-Received: from orviesa001.jf.intel.com ([10.64.159.141])
-  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Aug 2025 09:46:43 -0700
-X-CSE-ConnectionGUID: R+JSMxuVTImX1WWpIWSi/A==
-X-CSE-MsgGUID: hNi8ogtaSYuLdJCpLMDC7g==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.17,302,1747724400"; 
-   d="scan'208";a="205044336"
-Received: from johunt-mobl9.ger.corp.intel.com (HELO mdjait-mobl) ([10.245.244.222])
-  by smtpauth.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Aug 2025 09:46:37 -0700
-Date: Tue, 19 Aug 2025 18:46:29 +0200
-From: Mehdi Djait <mehdi.djait@linux.intel.com>
-To: michael.riesch@collabora.com
-Cc: Maxime Chevallier <maxime.chevallier@bootlin.com>, 
-	=?utf-8?B?VGjDqW8=?= Lebrun <theo.lebrun@bootlin.com>, Thomas Petazzoni <thomas.petazzoni@bootlin.com>, 
-	Gerald Loacker <gerald.loacker@wolfvision.net>, Bryan O'Donoghue <bryan.odonoghue@linaro.org>, 
-	Markus Elfring <Markus.Elfring@web.de>, Laurent Pinchart <laurent.pinchart@ideasonboard.com>, 
-	Mauro Carvalho Chehab <mchehab@kernel.org>, Rob Herring <robh+dt@kernel.org>, 
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Heiko Stuebner <heiko@sntech.de>, Kever Yang <kever.yang@rock-chips.com>, 
-	Nicolas Dufresne <nicolas.dufresne@collabora.com>, Sebastian Reichel <sebastian.reichel@collabora.com>, 
-	Collabora Kernel Team <kernel@collabora.com>, Paul Kocialkowski <paulk@sys-base.io>, 
-	Alexander Shiyan <eagle.alexander923@gmail.com>, Val Packett <val@packett.cool>, Rob Herring <robh@kernel.org>, 
-	Philipp Zabel <p.zabel@pengutronix.de>, Sakari Ailus <sakari.ailus@linux.intel.com>, 
-	linux-media@vger.kernel.org, devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-arm-kernel@lists.infradead.org, linux-rockchip@lists.infradead.org
-Subject: Re: [PATCH v10 08/13] media: rockchip: rkcif: add support for mipi
- csi-2 capture
-Message-ID: <rpaa2jspgmw3do5y367kq4pvvtpboeu7gjd4chmh6pgztmj6ar@ckh7jxvfuhlg>
-References: <20240220-rk3568-vicap-v10-0-62d8a7b209b4@collabora.com>
- <20240220-rk3568-vicap-v10-8-62d8a7b209b4@collabora.com>
+	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="cXRdml3m"
+Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 57JFLGSO007362
+	for <linux-media@vger.kernel.org>; Tue, 19 Aug 2025 16:55:27 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
+	cc:content-transfer-encoding:date:from:in-reply-to:message-id
+	:mime-version:references:subject:to; s=qcppdkim1; bh=pXVD6URM8iG
+	tLYeJuDTnL3ZNXgs+m9zGa8usL8h3epI=; b=cXRdml3mbCs2lHhaZJZzWvieN84
+	kUS2hI4UYd+t00HXPun/dT3q0wvOzh+VJZq5Sz4z68oWu6692DeoM6iHmvklrRvk
+	3kO1lhs7ViWgxA7Tc/8A06DVdWK60h+dHVuL4iS4EVmLd7n7orD79MAnQhiq9Vea
+	x8mZItrgJUcJNZo06G0lcAL8rfbWcfRdZwY4kzuyGkAAMKVwMehXWpGYZMQfcL8c
+	983esjVm9Rovo/ji4enBKuQseE70aQHRkDTwV2jGVxXPg3QtFeb8XiXiB3pkMrAK
+	rdh2t6kW9+ewtdHjPflu6mtlmLLbkbFSZzRHSfsZ+kIrBBC/BRbbPRx342A==
+Received: from mail-pl1-f198.google.com (mail-pl1-f198.google.com [209.85.214.198])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 48muu0ga13-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+	for <linux-media@vger.kernel.org>; Tue, 19 Aug 2025 16:55:26 +0000 (GMT)
+Received: by mail-pl1-f198.google.com with SMTP id d9443c01a7336-24457f59889so58907855ad.0
+        for <linux-media@vger.kernel.org>; Tue, 19 Aug 2025 09:55:26 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1755622526; x=1756227326;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=pXVD6URM8iGtLYeJuDTnL3ZNXgs+m9zGa8usL8h3epI=;
+        b=DNuATG0JmDXn2bkllp9I8GMaI21ZzTsDsQVwDERSxuaTxavebkSWM72RJjdqHAtmzD
+         n7s/u4CJrOhAjXECDdOL+v3C1iJ9qEnS0s2m7jxpW+vFjCqod6YJiW3hOx41yc0ZkC6g
+         trAppXVXzdSED14o33/t/FVvXckdwXPzqoOyuNihPLS87FBIiuhkxN9LOoR1US7qGqV8
+         ZenBc3sGjmiVTlHNQilJx3F47Yx38pCfjWhPzecz/roPL88uwD7+d7mXsWNjFq1bOYmJ
+         UyCXzek2+Uu43mGEPBd9FeIpeYBGMjcg1RYb7G07sHOvSiZLcMrbL52uZVM7HppOJhQk
+         3+7Q==
+X-Forwarded-Encrypted: i=1; AJvYcCWPuDYCHJd/al25CYL1ki1SabjpkhSn61ijYFheJuZG4exxXga+Kd3Tn2H9Ue1880sPYJDe4BWv8/7uLg==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy6PDBPYqzJETiGiL71PocDElWCpkNUwDA0ZsdqvxCDpv257t//
+	+JeyYB6Dud8zaig1ZLSHfB49iatDVuyxj7+LWQBC2Es2WoAr9f1xbAzk3QruupxeWTZMZ4yN6Y+
+	uVLRZkB12QlLKhG02BGmrBKrJDuh+Zbgbizu3YJj1xg1iI6Xd4uNOqB0r6XUA+Tm+9Q==
+X-Gm-Gg: ASbGnculT+1WPKGdl4fL0vW4UtW1rrR0l7J6bvV6uo1egLjQF9Lgxm9Zj9lO4uRowsO
+	BnXg7uiKhZQiRg9pR0elgWgwGWWx4AjXGd5aELmrhV0t154yGQD3Hdd6ztlPw9vPAs7Wy2j+Eg9
+	WFtdiO5yfZDvcL4Uip4s0CqGRevykiO8FSX1oytGvtb6pm+yvOGo+s46VUZm9emHaQPvtTHP/Dl
+	BzaQEOXRxgB0am800d0DgXGC9YfkksFwDsIeNDxq97i3QJVyOnnEmstyFdwiodlQx9+B3XId0xD
+	B+3DwC3+oAoJtl85zB83wgThDR7aEwvUW30GOT8JVSq1qwPUHJXm7Db7CBO0AoLqf7U=
+X-Received: by 2002:a17:903:198e:b0:240:967a:fec3 with SMTP id d9443c01a7336-245e0484a9amr41225745ad.29.1755622525688;
+        Tue, 19 Aug 2025 09:55:25 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IH+lNYppywDdTFFexVwLhEK+BRHzaI9WsoHo0SSwLAnNl6dT+h/o5sN/sHh1+Wi0XAryEA6Lg==
+X-Received: by 2002:a17:903:198e:b0:240:967a:fec3 with SMTP id d9443c01a7336-245e0484a9amr41225205ad.29.1755622524920;
+        Tue, 19 Aug 2025 09:55:24 -0700 (PDT)
+Received: from hu-mojha-hyd.qualcomm.com ([202.46.23.25])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-245ed33aa3esm2273885ad.24.2025.08.19.09.55.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 19 Aug 2025 09:55:24 -0700 (PDT)
+From: Mukesh Ojha <mukesh.ojha@oss.qualcomm.com>
+To: Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konradybcio@kernel.org>,
+        Vikash Garodia <quic_vgarodia@quicinc.com>,
+        Dikshita Agarwal <quic_dikshita@quicinc.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>
+Cc: Abhinav Kumar <abhinav.kumar@linux.dev>,
+        "Bryan O'Donoghue" <bryan.odonoghue@linaro.org>,
+        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-media@vger.kernel.org, linux-remoteproc@vger.kernel.org,
+        Mukesh Ojha <mukesh.ojha@oss.qualcomm.com>
+Subject: [PATCH v2 01/11] firmware: qcom_scm: Introduce PAS context initialization helper
+Date: Tue, 19 Aug 2025 22:24:36 +0530
+Message-ID: <20250819165447.4149674-2-mukesh.ojha@oss.qualcomm.com>
+X-Mailer: git-send-email 2.50.1
+In-Reply-To: <20250819165447.4149674-1-mukesh.ojha@oss.qualcomm.com>
+References: <20250819165447.4149674-1-mukesh.ojha@oss.qualcomm.com>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240220-rk3568-vicap-v10-8-62d8a7b209b4@collabora.com>
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-GUID: khNofPLLUpzhXzEQkZ9OC8y9UpM460IB
+X-Authority-Analysis: v=2.4 cv=YtYPR5YX c=1 sm=1 tr=0 ts=68a4ac7e cx=c_pps
+ a=MTSHoo12Qbhz2p7MsH1ifg==:117 a=ZePRamnt/+rB5gQjfz0u9A==:17
+ a=2OwXVqhp2XgA:10 a=EUspDBNiAAAA:8 a=3w5JJ7MTCOpz5QvkTaEA:9
+ a=GvdueXVYPmCkWapjIL-Q:22
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwODE5MDE0MyBTYWx0ZWRfX4jQO/upVV1A8
+ xi38OQT1zjygnnIV5fClK8UNQ5F4G48mG74Al8K3+z+egSzA2W0ZLOp4Vjo0mqg5J0rFYwbKVQG
+ bAVG3x3N9nZ45V4l7kXO5htILjtBis4vBoQNWLiWV3dNXk0ZpHPA9w8Qb3NDDrIQabgGemO36P8
+ ZUApwMoAphlWLw4+9rE2u8PRai+8b7n/oWK/p2UmhNg3wUlD6WQT2UHQ9jZ/GRZjYMYqTP7hTh5
+ /qee7pHwOBimz38k1gVtEDcmplaYnGhsSMsKsZhlDoFJ5pNB+LCEPO7txdtlxbwJer8Gq/Whqln
+ RhmvB4YJXPXP/au2qt/XAfFMtWocVGTbgY++yi1FCsSMEinojDXEDds3nK+KfERUA9dVIlC+PxP
+ HTHzX1HY
+X-Proofpoint-ORIG-GUID: khNofPLLUpzhXzEQkZ9OC8y9UpM460IB
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.1.9,FMLib:17.12.80.40
+ definitions=2025-08-19_02,2025-08-14_01,2025-03-28_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ impostorscore=0 malwarescore=0 spamscore=0 priorityscore=1501 clxscore=1015
+ suspectscore=0 bulkscore=0 phishscore=0 adultscore=0 classifier=typeunknown
+ authscore=0 authtc= authcc= route=outbound adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2507300000 definitions=main-2508190143
 
-Hi Michael,
+Currently, remoteproc and non-remoteproc subsystems use different
+variants of the MDT loader helper API, primarily due to the handling of
+the metadata context. Remoteproc subsystems retain this context until
+authentication and reset, while non-remoteproc subsystems (e.g., video,
+graphics) do not require it.
 
-I am seeing IOMMU page faults: See below.
+Unify the metadata loading process for both remoteproc and
+non-remoteproc subsystems by introducing a dedicated PAS context
+initialization function.
 
-On Tue, Aug 19, 2025 at 01:26:00AM +0200, Michael Riesch via B4 Relay wrote:
-> From: Michael Riesch <michael.riesch@collabora.com>
-> 
-> The RK3568 Video Capture (VICAP) unit features a MIPI CSI-2 capture
-> interface that can receive video data and write it into system memory
-> using the ping-pong scheme. Add support for it.
-> 
-> Signed-off-by: Michael Riesch <michael.riesch@wolfvision.net>
-> Reviewed-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-> Signed-off-by: Michael Riesch <michael.riesch@collabora.com>
+By introducing qcom_scm_pas_ctx_init(), we can standardize the API usage
+across subsystems and reduce the number of parameters passed to MDT
+loader functions, improving code clarity and maintainability.
 
-[..]
+Signed-off-by: Mukesh Ojha <mukesh.ojha@oss.qualcomm.com>
+---
+ drivers/firmware/qcom/qcom_scm.c       | 26 ++++++++++++++++++++++++++
+ include/linux/firmware/qcom/qcom_scm.h | 11 +++++++++++
+ 2 files changed, 37 insertions(+)
 
->  irqreturn_t rkcif_mipi_isr(int irq, void *ctx)
->  {
-> +	struct device *dev = ctx;
-> +	struct rkcif_device *rkcif = dev_get_drvdata(dev);
->  	irqreturn_t ret = IRQ_NONE;
-> +	u32 intstat;
-> +
-> +	for (unsigned int i = 0; i < rkcif->match_data->mipi->mipi_num; i++) {
-> +		enum rkcif_interface_index index = RKCIF_MIPI_BASE + i;
-> +		struct rkcif_interface *interface = &rkcif->interfaces[index];
-> +
-> +		intstat = rkcif_mipi_read(interface, RKCIF_MIPI_INTSTAT);
-> +		rkcif_mipi_write(interface, RKCIF_MIPI_INTSTAT, intstat);
-> +
-> +		for (unsigned int j = 0; j < interface->streams_num; j++) {
-> +			struct rkcif_stream *stream = &interface->streams[j];
+diff --git a/drivers/firmware/qcom/qcom_scm.c b/drivers/firmware/qcom/qcom_scm.c
+index 96d5cf40a74c..33187d4f4aef 100644
+--- a/drivers/firmware/qcom/qcom_scm.c
++++ b/drivers/firmware/qcom/qcom_scm.c
+@@ -558,6 +558,32 @@ static void qcom_scm_set_download_mode(u32 dload_mode)
+ 		dev_err(__scm->dev, "failed to set download mode: %d\n", ret);
+ }
+ 
++void *qcom_scm_pas_ctx_init(struct device *dev, u32 peripheral, phys_addr_t mem_phys,
++			    size_t mem_size, bool save_mdt_ctx)
++{
++	struct qcom_scm_pas_ctx *ctx;
++
++	ctx = devm_kzalloc(dev, sizeof(*ctx), GFP_KERNEL);
++	if (!ctx)
++		return NULL;
++
++	ctx->dev = dev;
++	ctx->peripheral = peripheral;
++	ctx->mem_phys = mem_phys;
++	ctx->mem_size = mem_size;
++	ctx->save_mdt_ctx = save_mdt_ctx;
++	ctx->metadata = NULL;
++
++	if (save_mdt_ctx) {
++		ctx->metadata = devm_kzalloc(dev, sizeof(*ctx->metadata), GFP_KERNEL);
++		if (!ctx->metadata)
++			return NULL;
++	}
++
++	return ctx;
++}
++EXPORT_SYMBOL_GPL(qcom_scm_pas_ctx_init);
++
+ /**
+  * qcom_scm_pas_init_image() - Initialize peripheral authentication service
+  *			       state machine for a given peripheral, using the
+diff --git a/include/linux/firmware/qcom/qcom_scm.h b/include/linux/firmware/qcom/qcom_scm.h
+index a55ca771286b..b7eb206561a9 100644
+--- a/include/linux/firmware/qcom/qcom_scm.h
++++ b/include/linux/firmware/qcom/qcom_scm.h
+@@ -72,6 +72,17 @@ struct qcom_scm_pas_metadata {
+ 	ssize_t size;
+ };
+ 
++struct qcom_scm_pas_ctx {
++	struct device *dev;
++	u32 peripheral;
++	phys_addr_t mem_phys;
++	size_t mem_size;
++	struct qcom_scm_pas_metadata *metadata;
++	bool save_mdt_ctx;
++};
++
++void *qcom_scm_pas_ctx_init(struct device *dev, u32 peripheral, phys_addr_t mem_phys,
++			    size_t mem_size, bool save_mdt_ctx);
+ int qcom_scm_pas_init_image(u32 peripheral, const void *metadata, size_t size,
+ 			    struct qcom_scm_pas_metadata *ctx);
+ void qcom_scm_pas_metadata_release(struct qcom_scm_pas_metadata *ctx);
+-- 
+2.50.1
 
-In the TRM you can see in the MIPI_INTSTAT interrupts to detect
-overflows: why not activate them ?
-
-something like this:
-
-#define RKCIF_MIPI_INT_Y_OVERFLOW(id)          BIT(16)
-#define RKCIF_MIPI_INT_UV_OVERFLOW(id)         BIT(17)
-#define RKCIF_MIPI_INT_FIFO_OVERFLOW(id)       BIT(18)
-#define RKCIF_MIPI_INT_CSI2RX_FIFO_OVERFLOW(id)        BIT(20)
-
-and then OR them with the int_mask in rkcif_mipi_start_streaming()
-
-and then you can log the err if something happened ?
-
-> +
-> +			if (intstat & RKCIF_MIPI_INT_FRAME0_END(stream->id) ||
-> +			    intstat & RKCIF_MIPI_INT_FRAME1_END(stream->id)) {
-> +				ret = IRQ_HANDLED;
-> +
-> +				if (stream->stopping) {
-> +					rkcif_mipi_stop_streaming(stream);
-> +					wake_up(&stream->wq_stopped);
-> +					continue;
-> +				}
-> +
-> +				rkcif_stream_pingpong(stream);
-> +			}
-> +		}
-> +	}
->  
->  	return ret;
->  }
-
-Now to the IOMMU page faults:
-
-Camera Sensor: IMX219
-Frame Size: 1920x1080
-Format: SRGGB10P
-
-Packed SRGGB10
---> Every four consecutive samples are packed into 5 bytes
---> Stride = 2400 bytes (1920 * 5/4)
-
-So the imagesize = 1080 * 2400 = 2 592 000
-
-in __vb2_buf_mem_alloc() the size of the buf will be PAGE_ALIGNED in:
-PAGE_ALIGN(vb->planes[plane].length);
-
-So we allocate a buffer with the size: 2 592 768 -> hex = 0x297000
-
-In rkcif_mipi_queue_buffer():
-We will queue a total of two buffers to the HW (2 because of pingpong)
-The first buffer will have the address: 0x00000000ffc00000
-
-We start to capture and then this happens:
-
-rk_iommu fdfe0800.iommu: Page fault at 0x00000000ffe79000 of type write
-rk_iommu fdfe0800.iommu: iova = 0x00000000ffe79000: dte_index: 0x3ff pte_index: 0x279 page_offset: 0x0
-rk_iommu fdfe0800.iommu: mmu_dte_addr: 0x0000000012cc8000 dte@0x0000000012cc8ffc: 0x11a0d001 valid: 1 pte@0x0000000011a0d9e4: 0x31b79006 valid: 0 page@0x0000000000000000 flags: 0x0
-
-With:
-0xffe79000 = 0xffc00000 (buffer address) + 0x297000 (buffersize)
-
---> So the VICAP is overflowing the buffer even though everything was
-correctly configured ?! (If I understood everything correctly ofc.)
-
-I also see the same problem with the SRGGB8 format. It also happens in
-the downstream Radxa/Rockchip Kernel.
-
-Do you see the same problem ?
-
---
-Kind Regards
-Mehdi Djait
