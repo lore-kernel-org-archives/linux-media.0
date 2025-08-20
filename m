@@ -1,54 +1,54 @@
 Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E842C27D771;
-	Wed, 20 Aug 2025 14:38:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D607F27F198;
+	Wed, 20 Aug 2025 14:38:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755700719; cv=none; b=pezbi4cA8lKZ9OCpWB9725OFtOXNPhxf4hd04/kjdPnqa3eEKdHOWMdi9Hwg4dRy3JeoiKy5Er00EWxaEdlNUS2Wt7AX+oOraV16sjfUAGKbYISbFc5Hjnta764DSe7nbc0CnHbMsHO7iA9HK+CFSERCxpfdU2t5lDYZ/htE2gU=
+	t=1755700720; cv=none; b=V4D6zjl4j2LM1mDEaHM8/bXoNSMN7asE11gqKia3aHzbphJ9BVZZIRRvAtinyZJk27sReyxZKAJx+tZMfYmEs1LYGDCiHK+DUCLB4ShBuJzLmNCPjDblaiwEdl10h2Ka25eVTIM2jC17O+3ThGs9OLXKbj9mHe7Lf0q99JpQtKM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755700719; c=relaxed/simple;
-	bh=BWLA8NyQymYqgp4W4q1/N6dJ7i3U2k10OE+hF7iKINY=;
+	s=arc-20240116; t=1755700720; c=relaxed/simple;
+	bh=8mNuVyZZ6/04CjbW2f1Qcv3mBrbieKJFOwuK6BResis=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Iq/O83+0rud3qB2yWzLA6UkNe9vNjxU4qxGOAixC7DhVHBCn4IKIJlBKmPIt6ZZHYCrUSpZf9L2IIsXPVYGD5bi8w5Yg/gvdDF8xE2RuB6Yy1PeXSt3v81Nbb4sdhEn6Mlp2WGhR6DWmlJPk+eCO02JOR71pmhvZW2ciP5hrYHY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=VT9zGo78; arc=none smtp.client-ip=192.198.163.18
+	 MIME-Version:Content-Type; b=Dvt8gvtT8YeJUhxpr/EjOWCszgjQFYb28zSz6HJWYk3Aauo2x4ilMEl+i/QEOAVrgBEQZOCjByceSQfQ3wymouZkztUYDOveW4D/QnCr1k6Py1a0VzNgWGa6486DPtQi8shGtVL7vZBQ27NkIoCzO+3aHwdEhOcdhxlLUJ3Z0ko=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ZRz/974x; arc=none smtp.client-ip=192.198.163.18
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="VT9zGo78"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ZRz/974x"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1755700718; x=1787236718;
+  t=1755700719; x=1787236719;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=BWLA8NyQymYqgp4W4q1/N6dJ7i3U2k10OE+hF7iKINY=;
-  b=VT9zGo78bblLMLeTmNihfXw7Ho7IOkAmxw/mp9f2hhksK6zo6o6EaeiL
-   jdPVATWMMWVqdG2iRETYs7Vxy4Q7d44Wgp+wtPD0teF6FjGP8Cs+6QKrS
-   uxCuZxh9qjxgSoZU6QSyVlZlvjLtfjqm86rb81x/9x69+7TYb2aVZi+ad
-   xJlSFsmT2WjYlGw3weo/J2RvbxJzYbwx6WzQ5xs3/KSK4GDRLvmg8WwsH
-   3GFWvKRRmk4gdlFwj9KNDfhZX/8p4Ldgf6btKVfgQSOPAilxPEH18zEi8
-   RRBwcIuEyiHfX74HiXAhkofXia+KCFHb33J+jjS+17xRrTU7cuN1GFcoB
+  bh=8mNuVyZZ6/04CjbW2f1Qcv3mBrbieKJFOwuK6BResis=;
+  b=ZRz/974xa4MjPFMOUJT6V80+jqbhZCr4uCGLFk9N/tnjFq4eiDLcJ3g2
+   eSdY58kEiNEQS5EnlzbzbpA1ZITR3QHT8KB4yrWl4iEMwwTlEB4Pq16V4
+   cthad18hBdfI50+iFf9Rxb2F0FRFjjKl0PjKjwKGKYnIiT6PBgKchMB5m
+   V9W+dqB5QUClQ5YeAmmC5fN+GMXTjrXJv5RRNTSYy4UDTzTQCb6dHEKI+
+   klFFs6WnKUtWMGiuYOlCpZCQnwfy6QI0RNnzLBGZ3k0s4klZA1BufIJMm
+   lUlKk0a1CQ95WwsC0hrPHzn+H34aOh19Kqb+6vCSp1x9KzhIfSZueV2oM
    A==;
-X-CSE-ConnectionGUID: jczU4iNJQvizAV9R3AQtbw==
-X-CSE-MsgGUID: OlHM+gnYROW8g9gUldeRHg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11527"; a="57167774"
+X-CSE-ConnectionGUID: WrmVbLg4S2yPXgOM1Ubldw==
+X-CSE-MsgGUID: c+H2VRRcSVOXmU6a0zGKIA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11527"; a="57167799"
 X-IronPort-AV: E=Sophos;i="6.17,302,1747724400"; 
-   d="scan'208";a="57167774"
+   d="scan'208";a="57167799"
 Received: from orviesa010.jf.intel.com ([10.64.159.150])
   by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Aug 2025 07:38:35 -0700
-X-CSE-ConnectionGUID: 0QYJhf53S7GQygS/QccVSw==
-X-CSE-MsgGUID: wScCQPMVT5+iFPw9QjPzCg==
+X-CSE-ConnectionGUID: bznL2+JcQgeXRjCSHKHaoQ==
+X-CSE-MsgGUID: d3BaKXGxSMWoSqEoYHc56A==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.17,302,1747724400"; 
-   d="scan'208";a="167368830"
+   d="scan'208";a="167368838"
 Received: from ettammin-desk.ger.corp.intel.com (HELO kekkonen.fi.intel.com) ([10.245.245.19])
   by orviesa010-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Aug 2025 07:38:33 -0700
 Received: from punajuuri.localdomain (unknown [192.168.240.130])
-	by kekkonen.fi.intel.com (Postfix) with ESMTP id DE3F1121FAA;
+	by kekkonen.fi.intel.com (Postfix) with ESMTP id E80B5121FAD;
 	Wed, 20 Aug 2025 17:38:24 +0300 (EEST)
 Received: from sailus by punajuuri.localdomain with local (Exim 4.98.2)
 	(envelope-from <sakari.ailus@linux.intel.com>)
-	id 1uojxI-00000002JYY-3gNl;
+	id 1uojxI-00000002JYn-3sdM;
 	Wed, 20 Aug 2025 17:38:24 +0300
 Organization: Intel Finland Oy - BIC 0357606-4 - c/o Alberga Business Park, 6 krs, Bertel Jungin Aukio 5, 02600 Espoo
 From: Sakari Ailus <sakari.ailus@linux.intel.com>
@@ -63,9 +63,9 @@ Cc: linux-media@vger.kernel.org,
 	Mathias Nyman <mathias.nyman@linux.intel.com>,
 	Alan Stern <stern@rowland.harvard.edu>,
 	=?UTF-8?q?Micha=C5=82=20Pecio?= <michal.pecio@gmail.com>
-Subject: [PATCH v5 6/9] usb: core: Introduce usb_endpoint_is_hs_isoc_double()
-Date: Wed, 20 Aug 2025 17:38:21 +0300
-Message-ID: <20250820143824.551777-7-sakari.ailus@linux.intel.com>
+Subject: [PATCH v5 9/9] media: uvcvideo: eUSB2 double isochronous bandwidth support
+Date: Wed, 20 Aug 2025 17:38:24 +0300
+Message-ID: <20250820143824.551777-10-sakari.ailus@linux.intel.com>
 X-Mailer: git-send-email 2.47.2
 In-Reply-To: <20250820143824.551777-1-sakari.ailus@linux.intel.com>
 References: <20250820143824.551777-1-sakari.ailus@linux.intel.com>
@@ -75,61 +75,125 @@ List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-Introduce usb_endpoint_is_hs_isoc_double() tell whether an endpoint
-conforms to USB 2.0 Isochronous Double IN Bandwidth ECN.
+From: Tao Q Tao <tao.q.tao@intel.com>
 
+Use usb_endpoint_max_esit_payload() from the USB framework to find the
+maximum bytes per interval for the endpoint. Consequently this adds eUSB2
+isochronous mode and SuperSpeedPlus Isochronous Endpoint Companion support
+where larger payloads within a service interval are possible.
+
+Co-developed-by: Amardeep Rai <amardeep.rai@intel.com>
+Signed-off-by: Amardeep Rai <amardeep.rai@intel.com>
+Signed-off-by: Tao Q Tao <tao.q.tao@intel.com>
+Signed-off-by: Mathias Nyman <mathias.nyman@linux.intel.com>
+Co-developed-by: Sakari Ailus <sakari.ailus@linux.intel.com>
 Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
+Reviewed-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
+Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 ---
- drivers/usb/core/usb.c | 19 +++++++++++++++++++
- include/linux/usb.h    |  3 +++
- 2 files changed, 22 insertions(+)
+ drivers/media/usb/uvc/uvc_driver.c |  4 ++--
+ drivers/media/usb/uvc/uvc_video.c  | 24 +++---------------------
+ drivers/media/usb/uvc/uvcvideo.h   |  4 +---
+ 3 files changed, 6 insertions(+), 26 deletions(-)
 
-diff --git a/drivers/usb/core/usb.c b/drivers/usb/core/usb.c
-index ca9ff6ad8e73..939dc4aafb89 100644
---- a/drivers/usb/core/usb.c
-+++ b/drivers/usb/core/usb.c
-@@ -1139,6 +1139,25 @@ u32 usb_endpoint_max_periodic_payload(struct usb_device *udev,
+diff --git a/drivers/media/usb/uvc/uvc_driver.c b/drivers/media/usb/uvc/uvc_driver.c
+index 775bede0d93d..d06ca79ae2d9 100644
+--- a/drivers/media/usb/uvc/uvc_driver.c
++++ b/drivers/media/usb/uvc/uvc_driver.c
+@@ -539,7 +539,7 @@ static int uvc_parse_streaming(struct uvc_device *dev,
+ 	unsigned int nformats = 0, nframes = 0, nintervals = 0;
+ 	unsigned int size, i, n, p;
+ 	u32 *interval;
+-	u16 psize;
++	u32 psize;
+ 	int ret = -EINVAL;
+ 
+ 	if (intf->cur_altsetting->desc.bInterfaceSubClass
+@@ -775,7 +775,7 @@ static int uvc_parse_streaming(struct uvc_device *dev,
+ 				streaming->header.bEndpointAddress);
+ 		if (ep == NULL)
+ 			continue;
+-		psize = uvc_endpoint_max_bpi(dev->udev, ep);
++		psize = usb_endpoint_max_periodic_payload(dev->udev, ep);
+ 		if (psize > streaming->maxpsize)
+ 			streaming->maxpsize = psize;
+ 	}
+diff --git a/drivers/media/usb/uvc/uvc_video.c b/drivers/media/usb/uvc/uvc_video.c
+index a5013a7fbca4..1a0cc937de9b 100644
+--- a/drivers/media/usb/uvc/uvc_video.c
++++ b/drivers/media/usb/uvc/uvc_video.c
+@@ -1869,24 +1869,6 @@ static void uvc_video_stop_transfer(struct uvc_streaming *stream,
+ 		uvc_free_urb_buffers(stream);
  }
- EXPORT_SYMBOL_GPL(usb_endpoint_max_periodic_payload);
  
-+/**
-+ * usb_endpoint_is_hs_isoc_double - Tell whether an endpoint uses USB 2
-+ *                                  Isochronous Double IN Bandwidth
-+ * @udev: The USB device
-+ * @ep: The endpoint
-+ *
-+ * Returns: true if an endpoint @ep conforms to USB 2 Isochronous Double IN
-+ * Bandwidth ECN, false otherwise.
-+ */
-+bool usb_endpoint_is_hs_isoc_double(struct usb_device *udev,
-+				    const struct usb_host_endpoint *ep)
-+{
-+	return ep->eusb2_isoc_ep_comp.bDescriptorType &&
-+		le16_to_cpu(udev->descriptor.bcdUSB) == 0x220 &&
-+		usb_endpoint_is_isoc_in(&ep->desc) &&
-+		!le16_to_cpu(ep->desc.wMaxPacketSize);
-+}
-+EXPORT_SYMBOL_GPL(usb_endpoint_is_hs_isoc_double);
-+
+-/*
+- * Compute the maximum number of bytes per interval for an endpoint.
+- */
+-u16 uvc_endpoint_max_bpi(struct usb_device *dev, struct usb_host_endpoint *ep)
+-{
+-	u16 psize;
+-
+-	switch (dev->speed) {
+-	case USB_SPEED_SUPER:
+-	case USB_SPEED_SUPER_PLUS:
+-		return le16_to_cpu(ep->ss_ep_comp.wBytesPerInterval);
+-	default:
+-		psize = usb_endpoint_maxp(&ep->desc);
+-		psize *= usb_endpoint_maxp_mult(&ep->desc);
+-		return psize;
+-	}
+-}
+-
  /*
-  * Notifications of device and interface registration
-  */
-diff --git a/include/linux/usb.h b/include/linux/usb.h
-index e9cf2786d8bd..70ef00c42d22 100644
---- a/include/linux/usb.h
-+++ b/include/linux/usb.h
-@@ -2042,6 +2042,9 @@ static inline u16 usb_maxpacket(struct usb_device *udev, int pipe)
- u32 usb_endpoint_max_periodic_payload(struct usb_device *udev,
- 				      const struct usb_host_endpoint *ep);
+  * Initialize isochronous URBs and allocate transfer buffers. The packet size
+  * is given by the endpoint.
+@@ -1897,10 +1879,10 @@ static int uvc_init_video_isoc(struct uvc_streaming *stream,
+ 	struct urb *urb;
+ 	struct uvc_urb *uvc_urb;
+ 	unsigned int npackets, i;
+-	u16 psize;
++	u32 psize;
+ 	u32 size;
  
-+bool usb_endpoint_is_hs_isoc_double(struct usb_device *udev,
-+				    const struct usb_host_endpoint *ep);
-+
- /* translate USB error codes to codes user space understands */
- static inline int usb_translate_errors(int error_code)
- {
+-	psize = uvc_endpoint_max_bpi(stream->dev->udev, ep);
++	psize = usb_endpoint_max_periodic_payload(stream->dev->udev, ep);
+ 	size = stream->ctrl.dwMaxVideoFrameSize;
+ 
+ 	npackets = uvc_alloc_urb_buffers(stream, size, psize, gfp_flags);
+@@ -2043,7 +2025,7 @@ static int uvc_video_start_transfer(struct uvc_streaming *stream,
+ 				continue;
+ 
+ 			/* Check if the bandwidth is high enough. */
+-			psize = uvc_endpoint_max_bpi(stream->dev->udev, ep);
++			psize = usb_endpoint_max_periodic_payload(stream->dev->udev, ep);
+ 			if (psize >= bandwidth && psize < best_psize) {
+ 				altsetting = alts->desc.bAlternateSetting;
+ 				best_psize = psize;
+diff --git a/drivers/media/usb/uvc/uvcvideo.h b/drivers/media/usb/uvc/uvcvideo.h
+index 757254fc4fe9..ac19ca721f29 100644
+--- a/drivers/media/usb/uvc/uvcvideo.h
++++ b/drivers/media/usb/uvc/uvcvideo.h
+@@ -456,7 +456,7 @@ struct uvc_streaming {
+ 
+ 	struct usb_interface *intf;
+ 	int intfnum;
+-	u16 maxpsize;
++	u32 maxpsize;
+ 
+ 	struct uvc_streaming_header header;
+ 	enum v4l2_buf_type type;
+@@ -798,8 +798,6 @@ void uvc_ctrl_cleanup_fh(struct uvc_fh *handle);
+ /* Utility functions */
+ struct usb_host_endpoint *uvc_find_endpoint(struct usb_host_interface *alts,
+ 					    u8 epaddr);
+-u16 uvc_endpoint_max_bpi(struct usb_device *dev, struct usb_host_endpoint *ep);
+-
+ /* Quirks support */
+ void uvc_video_decode_isight(struct uvc_urb *uvc_urb,
+ 			     struct uvc_buffer *buf,
 -- 
 2.47.2
 
