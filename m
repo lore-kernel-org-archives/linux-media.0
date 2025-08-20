@@ -1,54 +1,54 @@
 Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 89FC41DFF7;
-	Wed, 20 Aug 2025 14:38:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 709972750E6;
+	Wed, 20 Aug 2025 14:38:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755700713; cv=none; b=g3V/7u6+BIuooBDqHkGUIaT/0Y6kjN4OKyjyCkwt2uotQRwf4/f1AZsmQuWs2LDiTUDtjrkb3Pg7QRCYkILXP16cFhxxGmR3vG1jHdfvwnjS8hCpAx5EENKkI5MlCv3ZgdMYIdQFlkFt+KmI/7Em3fguJD/SSZ9zuVXZO4sZSCU=
+	t=1755700715; cv=none; b=gYLwO7EQKIm7g5S5lRKZTM61sec4Yk8XnT+9e7g4ZwhJMg8iumqeZqNTqqYL0UmES14M93nl9fNlrPHwnM0Up0ASB7FFDHQNyHUrvelrMXWBu1FQTI6K1oIIZbJb7pEU7zKYGKjLgNAC7F4+2BJLN5QNtYHcqb0LLZ62D0WO7cQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755700713; c=relaxed/simple;
-	bh=jdQKvzyXX6v4AIYBv0Jq2iWSFbl827i9QpWTzR+a4bY=;
+	s=arc-20240116; t=1755700715; c=relaxed/simple;
+	bh=c/gDBeHqhLS2B0MG5VePLJgchMYqWFdugigPjVUwqVM=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=bbsPD3w2YmIRetjo8aZ5vRO2Ql853HHw9VWw/2bOID9+MJQCYe9AgtGK63gr6nBWcFODFpVOt95RMRhYRWqC2m+0ZlCWmypl2KcEaFuhAHoDfHCWZegxHysnhendd6/so7S4mB7pN/EOqSTqMNv2WXTCIah8JZmsi+QnzDLLPQE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ndUepv82; arc=none smtp.client-ip=192.198.163.18
+	 MIME-Version; b=uqDmoSjBhGq+GeMyOXsYn+Fr1+joxmRnKeqnbg7E7oiUBKBu3Pvqx5QmoEnNiZgQVMkr4Vh52NnfdEKoEcwNlNlsT1FJftyEANjMIA0VUMNlaBiYt9VfxdYlI6EJMqzKh0LCAS03JMjG68RBZOk7XMu9hLulxGqwtYm/3c+OJxY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=QoR8pYxo; arc=none smtp.client-ip=192.198.163.18
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ndUepv82"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="QoR8pYxo"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1755700711; x=1787236711;
+  t=1755700713; x=1787236713;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=jdQKvzyXX6v4AIYBv0Jq2iWSFbl827i9QpWTzR+a4bY=;
-  b=ndUepv82r/Sh0wjUmJzV/BkAlxT6JXoKXNbT8jD+2e7lwvswb8j/Qdhl
-   bIhZPDcDgznXzApGIKRQmil/HOEetKAjB0ZlB0KuiVH5RcsHC/hfzgAtc
-   xSaBK3Oyptr5/HYNLstfv2vPYmLM0HGPlq0CAO9C4eTZVNekkQu0cpb45
-   /3C57B6FbyENYREO0OIc2JZQS6MQe524XS/YQvZMY1J+mhZMbDwd10p8i
-   fZjTzdlX6yY1a2nZqEsR9sztdni/XrwQxmLa8L5xcKRd8tYTlPQSd05Yl
-   TVSs5cyxLd0V041QIVVZSD/448NSEUGEp57ChMgaVTcrA29SVoLGb7U9N
-   Q==;
-X-CSE-ConnectionGUID: qc6c80qYTEWkS/woxOOIpQ==
-X-CSE-MsgGUID: SLuu/gm3SL+SsVO3cT309A==
-X-IronPort-AV: E=McAfee;i="6800,10657,11527"; a="57167744"
+  bh=c/gDBeHqhLS2B0MG5VePLJgchMYqWFdugigPjVUwqVM=;
+  b=QoR8pYxoq8QwQqHgv2Mh7sowswl1PfafgIzc76+eJa51PJ6VF0YFg1of
+   z9HmHLAf4gk/oeFsKrY8ayUxlDbgJX0pH+/McjiIm+Mbh9l/NVLCqb7oU
+   pQILNYZSin2IDxkUol1DPQOu/LFi8g9pTg7sNCZeI/a/JAZySRNtLOW1h
+   7WF2zvkjN0UW0QlJ6o/yF7x/U32LQj4QehyzPTSVxZoD5EvZUcAhEYcet
+   7YVJLmVLohzn6UlzCZHDU0p77vK06VbRszlDgfGxr5VG2L9X2OVk80oU2
+   1aZEIPqIq159tguQzr/1shALRzI925hLAl8wjYSSJR8pUdYshMBkiwnGj
+   A==;
+X-CSE-ConnectionGUID: MdGc6eVpRyC+v1bYVlN7og==
+X-CSE-MsgGUID: iL/KQ1ceSiOx1It4WYCkxA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11527"; a="57167736"
 X-IronPort-AV: E=Sophos;i="6.17,302,1747724400"; 
-   d="scan'208";a="57167744"
+   d="scan'208";a="57167736"
 Received: from orviesa010.jf.intel.com ([10.64.159.150])
   by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Aug 2025 07:38:30 -0700
-X-CSE-ConnectionGUID: psQ+mxnAQIqNTcp9ZKpwIA==
-X-CSE-MsgGUID: AtdBLjIaSPKCXv2ttHNBVQ==
+X-CSE-ConnectionGUID: uM+SNjF3S2m4xGbufGh4GA==
+X-CSE-MsgGUID: OcuveW05TZ+3EL47VWMECw==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.17,302,1747724400"; 
-   d="scan'208";a="167368809"
+   d="scan'208";a="167368808"
 Received: from ettammin-desk.ger.corp.intel.com (HELO kekkonen.fi.intel.com) ([10.245.245.19])
   by orviesa010-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Aug 2025 07:38:28 -0700
 Received: from punajuuri.localdomain (unknown [192.168.240.130])
-	by kekkonen.fi.intel.com (Postfix) with ESMTP id D1038121F96;
+	by kekkonen.fi.intel.com (Postfix) with ESMTP id D184A121F9D;
 	Wed, 20 Aug 2025 17:38:24 +0300 (EEST)
 Received: from sailus by punajuuri.localdomain with local (Exim 4.98.2)
 	(envelope-from <sakari.ailus@linux.intel.com>)
-	id 1uojxI-00000002JYE-3Qf1;
+	id 1uojxI-00000002JYA-3Lsr;
 	Wed, 20 Aug 2025 17:38:24 +0300
 Organization: Intel Finland Oy - BIC 0357606-4 - c/o Alberga Business Park, 6 krs, Bertel Jungin Aukio 5, 02600 Espoo
 From: Sakari Ailus <sakari.ailus@linux.intel.com>
@@ -63,9 +63,9 @@ Cc: linux-media@vger.kernel.org,
 	Mathias Nyman <mathias.nyman@linux.intel.com>,
 	Alan Stern <stern@rowland.harvard.edu>,
 	=?UTF-8?q?Micha=C5=82=20Pecio?= <michal.pecio@gmail.com>
-Subject: [PATCH v5 2/9] usb: core: Parse eUSB2 companion descriptors for high speed devices only
-Date: Wed, 20 Aug 2025 17:38:17 +0300
-Message-ID: <20250820143824.551777-3-sakari.ailus@linux.intel.com>
+Subject: [PATCH v5 1/9] usb: core: Use le16_to_cpu() to read __le16 value in usb_parse_endpoint()
+Date: Wed, 20 Aug 2025 17:38:16 +0300
+Message-ID: <20250820143824.551777-2-sakari.ailus@linux.intel.com>
 X-Mailer: git-send-email 2.47.2
 In-Reply-To: <20250820143824.551777-1-sakari.ailus@linux.intel.com>
 References: <20250820143824.551777-1-sakari.ailus@linux.intel.com>
@@ -77,25 +77,24 @@ List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Check that a device is a high-speed one before proceeding to parse the
-eUSB2 isochronous endpoint companion descriptors.
+wMaxPacketSize field in struct usb_endpoint_descriptor is an __le16, use
+le16_to_cpu() to read it.
 
 Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
 ---
- drivers/usb/core/config.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ drivers/usb/core/config.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/drivers/usb/core/config.c b/drivers/usb/core/config.c
-index cda595b4014f..29fcbd6de482 100644
+index 42468bbeffd2..cda595b4014f 100644
 --- a/drivers/usb/core/config.c
 +++ b/drivers/usb/core/config.c
-@@ -507,7 +507,8 @@ static int usb_parse_endpoint(struct device *ddev, int cfgno,
+@@ -507,7 +507,7 @@ static int usb_parse_endpoint(struct device *ddev, int cfgno,
  	}
  
  	/* Parse a possible eUSB2 periodic endpoint companion descriptor */
--	if (bcdUSB == 0x0220 && !le16_to_cpu(d->wMaxPacketSize) &&
-+	if (udev->speed == USB_SPEED_HIGH && bcdUSB == 0x0220 &&
-+	    !le16_to_cpu(d->wMaxPacketSize) &&
+-	if (bcdUSB == 0x0220 && d->wMaxPacketSize == 0 &&
++	if (bcdUSB == 0x0220 && !le16_to_cpu(d->wMaxPacketSize) &&
  	    (usb_endpoint_xfer_isoc(d) || usb_endpoint_xfer_int(d)))
  		usb_parse_eusb2_isoc_endpoint_companion(ddev, cfgno, inum, asnum,
  							endpoint, buffer, size);
