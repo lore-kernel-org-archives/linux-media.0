@@ -1,107 +1,121 @@
-Received: from mail-lf1-f52.google.com (mail-lf1-f52.google.com [209.85.167.52])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.19])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 149F3236453
-	for <linux-media@vger.kernel.org>; Thu, 21 Aug 2025 12:09:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BE79431079C
+	for <linux-media@vger.kernel.org>; Thu, 21 Aug 2025 12:12:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755778171; cv=none; b=Pb9B7FRFlT7H3ZJWBC2bFS6bh+zIyDNI2bYnj1uLHIQoh8JGKh000UIxYFUau73cOeWdumsFwaY/CdWDsd202u0hH0UH546zjbfdwjSHXH7RnE2QpiceG774PYO278KLg0KJOewTxzHLMsv/GP1QzvG+PqbcBZEofnweZYghumk=
+	t=1755778335; cv=none; b=vBNLBL0etHoMr26jGRCj5EQ1OYiOzkvnUz9P5V4Ot+6PETBL6kNTk1uPOP5alxdypfN/WC0CbQU+qbL9l4yV9fDXV/5/w86Aa/smeted7WaD96Mccih4ojaDZE7OiKJQj5o/gRxsYt1xk/wmJEuid0krDTbwbLB08yamuY/KRNY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755778171; c=relaxed/simple;
-	bh=S/Tcj7k1fvyu+MUdyFaMxX8E0mplGdjQTDqgU6HcZaw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=BHlndjWgkJezL/boUoi3827ILcqJaV/w3WOL4dKpcPlLlfOg6vAHqVqS7pH1zaVdLxrVnDlfNUR/MjzZl0lDuT10Nb5pE6SjVl6NkFiHZxWxG7voDZ+aK3W+PsGSB4JcfLNnXqKOxsHf9ZA9qmfzQjCiv8ZVhaJflUOrGdnNQkM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=sYgxJ9uz; arc=none smtp.client-ip=209.85.167.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+	s=arc-20240116; t=1755778335; c=relaxed/simple;
+	bh=r5iKvwNEPFLhfjSlc/+NQlSqBQ4txNFUKw46I1v9ZQI=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=ITy2U8sTxg9KFI1v2rc94tlo3saqkqjaUoHg4fYlxB7v96l8YOu1OX9Jsw6DO5RPVj9cqRMWlmEr2jASTvRffUxtMTSWdZc2N8mMqulqqr8JASq6MkqliU1eIUOiMxuwkYQH0cEleZ05ypQEvRsdglQanENMsWNovhDlc5mPsXA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=BjerxzuE; arc=none smtp.client-ip=192.198.163.19
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="sYgxJ9uz"
-Received: by mail-lf1-f52.google.com with SMTP id 2adb3069b0e04-55ce528022eso816676e87.3
-        for <linux-media@vger.kernel.org>; Thu, 21 Aug 2025 05:09:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1755778168; x=1756382968; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=S/Tcj7k1fvyu+MUdyFaMxX8E0mplGdjQTDqgU6HcZaw=;
-        b=sYgxJ9uzihuji64/IdMyt4EHsjShPUBnkNNpwV6QSFqQouoiyH5WAGSungprTE2VdU
-         /VmVU8taK1f8z4Zso2slAW4m/3X0/KKFwOxJSw8Vl2tR9VVootqxpL3tCdww7BAeiIpG
-         AgdDAd8cgCV0i00B/EY2K+rqF5TXPRfZzKWL57lys6L0KA6QEPN/EuheceL76sXzT1sr
-         lOeupQeEEFtovuWkiVE3ZHlbYgwHeNUYI3yy5qfXaKC0HoikQC2AUgy3nflsCJ5xWNbU
-         v0AgKif78hAxrQVIMAk5FK/le/Sj4cKOWWSn3pD3Jd0ku0fOpWt6fhgHWkO9yfnf0ch4
-         E1yA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1755778168; x=1756382968;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=S/Tcj7k1fvyu+MUdyFaMxX8E0mplGdjQTDqgU6HcZaw=;
-        b=W6+K35Mq/34shCxaqdnkXa0FFHldQXyoMIIMDDG7i5Y9rZGM7kCWaCu+QgLaKVjN45
-         vXCIHQV17gGo/D2FBPofNjfn4Na+iRK6r7e3SV6guBjMovS1DaAHZ741dpl4kTNK2tVV
-         2fFfPqFZmh4MIMAHxWDUimq+yE5PCtz0e1Hg2sTGcm9mwYyCb9ySgqMLuu3aFJJ/D9Sf
-         OfZwGAxfZGlfv7ODYhzzor3bHJfV3+vGvQnKJaGqP91mKQcnbIDviebSKl8z0ip62XWz
-         AXUT/bDh8ohvCQ7Cz5SRuYQkdhUnwCrA4KuGjea4HdaXXhfjhvOACvLcaAlII2KlGbkX
-         4ksw==
-X-Forwarded-Encrypted: i=1; AJvYcCXRP4qJXydy7NkQb3qZqKjWvgASqMbxu/Dp71WHVcsxmAWlqame5Qua1C95WnW9yHLwAScM9NPBIDpqrg==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy6/MHYCvB8m6eHoQmrajDcnYX8/9TC/mz7OZ1OhEgRdd+5uhdr
-	aOSq/EAy+zI2R5bu/D4JRIvNKjSEiBYKMKLzIFVpej1I7xignrKR7IVNbbVO+QrXfxU=
-X-Gm-Gg: ASbGncswbjUHHToZj+yCbHL93DzwDQaTM4iyoUMIQkiWXx+YWAU2FE+7pfoCPf6Z1ec
-	+2poJKcgvvsgXtgZrcbIZqPEkla3I2qg0Y+UZsg8xmmvKjX8TxGpvkvyM+gCfQrxYAy5kSunm7Y
-	1rUD8C9UjKrdH/v6NwOmsVzAZEj8vHFx9gc3J7yrpVY7Jwnh95feGH1PnZ70cVzvM2ql9DJPTXK
-	D0ANah2tdQDyj4Ltq8uy5yqO56nq8OqOajoLVJuy270d2edm1oPXtJocTZaExalnhKbu2TC2oB8
-	Qt/VHbelvtWY69AWrxf6i4buo9bEAp3eELItTYEXsgBe6TBo+Jl6h5W7xO3zIxbW+Z6m3ymgUjv
-	yRAW5xs00JLCA6XWFNur3LK7M06fSYHAoaJPPPM1rft+/
-X-Google-Smtp-Source: AGHT+IGaaCCMTb+GY0WxEiA8aIjR4ryzxzqZ4dp3Zq2ctdGCP7YbQha8ZNnpdix3i4pfLzcLwMPwIQ==
-X-Received: by 2002:a05:6512:6408:b0:55b:94ea:1d38 with SMTP id 2adb3069b0e04-55e0d4fb7c8mr825892e87.16.1755778168039;
-        Thu, 21 Aug 2025 05:09:28 -0700 (PDT)
-Received: from linaro.org ([2a02:2454:ff21:ef30:6153:383:a3fe:6207])
-        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-55cef3f358bsm2991125e87.110.2025.08.21.05.09.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 21 Aug 2025 05:09:27 -0700 (PDT)
-Date: Thu, 21 Aug 2025 14:09:21 +0200
-From: Stephan Gerhold <stephan.gerhold@linaro.org>
-To: Dikshita Agarwal <quic_dikshita@quicinc.com>
-Cc: Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
-	Vikash Garodia <quic_vgarodia@quicinc.com>,
-	Abhinav Kumar <abhinav.kumar@linux.dev>,
-	Mauro Carvalho Chehab <mchehab@kernel.org>,
-	Stefan Schmidt <stefan.schmidt@linaro.org>,
-	Hans Verkuil <hverkuil@kernel.org>, linux-media@vger.kernel.org,
-	linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-	Neil Armstrong <neil.armstrong@linaro.org>
-Subject: Re: [PATCH] media: iris: Fix firmware reference leak and unmap
- memory after load
-Message-ID: <aKcMZ7vTYAOBWuha@linaro.org>
-References: <20250818-iris-firmware-leak-v1-1-1e3f9b8d31ce@linaro.org>
- <fe1fe768-678a-48db-c603-2fda3effffb9@quicinc.com>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="BjerxzuE"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1755778334; x=1787314334;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=r5iKvwNEPFLhfjSlc/+NQlSqBQ4txNFUKw46I1v9ZQI=;
+  b=BjerxzuEXI/DzkrF6GKPigkzqa77xvpVsLryD48aE3A8gtyqiHQd0Rhh
+   pRxJRomtxJoOVEb/xddIECPYtceCTuWgE71/zDfFWCmZz/ypahADrAaj2
+   +Get2vU+rZljqhrS+a0+ozZPdbLYt7IgtMjWdOzvZoibYEI3yg8NAFZYu
+   OWIcHWElK/CXB+eRk73hsZW/ZLZ4rEQWK5v4GN9psKPgWXzEZh+M3wnsa
+   F40y8Qg/ihvkmPYXENTvPpl2XwWQCv2e7NweiqmbXDf0onxdHp8IVBDwS
+   8WNUVMy3ojm0yGs0KapdSD21r08Snz+g8DopMkEsiRj47RdFuTr78gblZ
+   g==;
+X-CSE-ConnectionGUID: ZyfFGYAiTC6sbcQYWIoRcg==
+X-CSE-MsgGUID: eOexYjE/SAGsK/QtiEW3XA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11529"; a="57089494"
+X-IronPort-AV: E=Sophos;i="6.17,306,1747724400"; 
+   d="scan'208";a="57089494"
+Received: from fmviesa002.fm.intel.com ([10.60.135.142])
+  by fmvoesa113.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Aug 2025 05:12:12 -0700
+X-CSE-ConnectionGUID: ebMAWbhFSAal0GB6xRWfUg==
+X-CSE-MsgGUID: HkS1SWH9S6qjysfQuEdzfA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.17,306,1747724400"; 
+   d="scan'208";a="192077010"
+Received: from vpanait-mobl.ger.corp.intel.com (HELO kekkonen.fi.intel.com) ([10.245.245.237])
+  by fmviesa002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Aug 2025 05:12:10 -0700
+Received: from punajuuri.localdomain (unknown [192.168.240.130])
+	by kekkonen.fi.intel.com (Postfix) with ESMTP id 15C9C120247;
+	Thu, 21 Aug 2025 15:12:08 +0300 (EEST)
+Received: from sailus by punajuuri.localdomain with local (Exim 4.98.2)
+	(envelope-from <sakari.ailus@linux.intel.com>)
+	id 1up49I-00000002Jra-0JbH;
+	Thu, 21 Aug 2025 15:12:08 +0300
+Organization: Intel Finland Oy - BIC 0357606-4 - c/o Alberga Business Park, 6 krs, Bertel Jungin Aukio 5, 02600 Espoo
+From: Sakari Ailus <sakari.ailus@linux.intel.com>
+To: linux-media@vger.kernel.org
+Cc: Keke Li <keke.li@amlogic.com>,
+	Hans Verkuil <hverkuil@kernel.org>,
+	Nicolas Dufresne <nicolas.dufresne@collabora.com>,
+	Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+	Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>,
+	Jonas Karlman <jonas@kwiboo.se>,
+	Mehdi Djait <mehdi.djait@linux.intel.com>,
+	Daniel Scally <dan.scally+renesas@ideasonboard.com>,
+	=?UTF-8?q?Niklas=20S=C3=B6derlund?= <niklas.soderlund+renesas@ragnatech.se>
+Subject: [PATCH v3 1/3] media: amlogic: c3-mipi-csi2: Call v4l2_get_link_freq() on source pad
+Date: Thu, 21 Aug 2025 15:12:05 +0300
+Message-ID: <20250821121207.552993-2-sakari.ailus@linux.intel.com>
+X-Mailer: git-send-email 2.47.2
+In-Reply-To: <20250821121207.552993-1-sakari.ailus@linux.intel.com>
+References: <20250821121207.552993-1-sakari.ailus@linux.intel.com>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <fe1fe768-678a-48db-c603-2fda3effffb9@quicinc.com>
+Content-Transfer-Encoding: 8bit
 
-On Thu, Aug 21, 2025 at 02:33:18PM +0530, Dikshita Agarwal wrote:
-> I noticed that the maintainers were included in the CC list rather than the
-> "To" field. please ensure that all relevant maintainers are added directly
-> to the "To" list in your future submissions.
+Call v4l2_get_link_freq() on the source pad so we can remove the
+workaround that allows calling it on a control handler.
 
-Yeah, I had a bit weird choice between To/Cc in this patch. I'll change
-it for my patches in the future.
+Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
+Reviewed-by: Jacopo Mondi <jacopo.mondi@ideasonboard.com>
+Reviewed-by: Keke Li <keke.li@amlogic.com>
+Tested-by: Keke Li <keke.li@amlogic.com>
+---
+ drivers/media/platform/amlogic/c3/mipi-csi2/c3-mipi-csi2.c | 7 +++----
+ 1 file changed, 3 insertions(+), 4 deletions(-)
 
-Note however that there isn't any convention given for To/Cc in the
-process document [1]. It just says you should "copy the appropriate
-subsystem maintainer(s)", so everyone does it a bit differently.
+diff --git a/drivers/media/platform/amlogic/c3/mipi-csi2/c3-mipi-csi2.c b/drivers/media/platform/amlogic/c3/mipi-csi2/c3-mipi-csi2.c
+index 1011ab3ebac7..b9e4ef3fc308 100644
+--- a/drivers/media/platform/amlogic/c3/mipi-csi2/c3-mipi-csi2.c
++++ b/drivers/media/platform/amlogic/c3/mipi-csi2/c3-mipi-csi2.c
+@@ -388,13 +388,12 @@ static void c3_mipi_csi_cfg_host(struct c3_csi_device *csi)
+ 	c3_mipi_csi_write(csi, CSI2_HOST_N_LANES, csi->bus.num_data_lanes - 1);
+ }
+ 
+-static int c3_mipi_csi_start_stream(struct c3_csi_device *csi,
+-				    struct v4l2_subdev *src_sd)
++static int c3_mipi_csi_start_stream(struct c3_csi_device *csi)
+ {
+ 	s64 link_freq;
+ 	s64 lane_rate;
+ 
+-	link_freq = v4l2_get_link_freq(src_sd->ctrl_handler, 0, 0);
++	link_freq = v4l2_get_link_freq(csi->src_pad, 0, 0);
+ 	if (link_freq < 0) {
+ 		dev_err(csi->dev,
+ 			"Unable to obtain link frequency: %lld\n", link_freq);
+@@ -434,7 +433,7 @@ static int c3_mipi_csi_enable_streams(struct v4l2_subdev *sd,
+ 
+ 	pm_runtime_resume_and_get(csi->dev);
+ 
+-	c3_mipi_csi_start_stream(csi, src_sd);
++	c3_mipi_csi_start_stream(csi);
+ 
+ 	ret = v4l2_subdev_enable_streams(src_sd, csi->src_pad->index, BIT(0));
+ 	if (ret) {
+-- 
+2.47.2
 
-I would recommend to avoid relying on To vs Cc, to make sure you don't
-accidentally miss submissions from others as well.
-
-> Reviewed-by: Dikshita Agarwal <quic_dikshita@quicinc.com>
-
-Thanks for the review!
-
-Stephan
-
-[1]: https://www.kernel.org/doc/html/latest/process/submitting-patches.html
