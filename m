@@ -1,46 +1,46 @@
 Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4009E3376B2;
-	Thu, 21 Aug 2025 13:29:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D2C31338F26;
+	Thu, 21 Aug 2025 13:29:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755782982; cv=none; b=XlYTq8p/PCJHHJRKXfaTzPCWIGLMitIoEFMDhcpCSy/9o71Eyv5Q/PWT+3sb2KWANf3IygRRvt8ZuS9jJjg4Ud6n71BXP3H3Oj0vwgD6aChePx2SHl0DcBGDaYzK0td9FsijZMcInhiLYwCdGgeN/lD3RyG3QOn1TCvCL1GPDCc=
+	t=1755782983; cv=none; b=ulY9zzxgnvu7ANvcoQdbFZwvmqxIJQeSrYw3tOsMIpuHW9tzgctgfGLVwYUNKFaKLZWVwh841XHpob73Wl4eVGQV7kf5X5VD6/vtweNoqVqOPpsadzXosxbJf2cAkIa2NzoVKpk0iRJPLoaOTLNXtk2E28VT3oNKxEu6yzd2pys=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755782982; c=relaxed/simple;
-	bh=R99664LLCcZJl6Qz3rbhs4Lz9ZnyWhsrUx+hOEuxb9M=;
+	s=arc-20240116; t=1755782983; c=relaxed/simple;
+	bh=gpXy2GjW3NstgkefEL7nb0bYvGGEsP7NwP6FnKaezKA=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=ayjKK9D5vfW5Eay429AGYy218cH79HkHK/ikUhibv9SvZL/wQsCvHw8Y15MsuSP8Csp0UCHeCTE6XmLRj8In8i35swm7inQxU3IwVYQPysGabLUk5ySBsC+liHKS8EN2W+GHNz8prLIGe2aB2S32IksXIhP6FjZkRfwkfE65/3g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=JOwT72+f; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=SOT7LMa/; arc=none smtp.client-ip=193.142.43.55
+	 In-Reply-To:To:Cc; b=VDALbFDtrn0YyH5uNwsinCgEFpSzBfWA73pq+XvVz1pe2z2Y2so6+Lb9HTmYniTNfaV7G+wtliSNaR6EFPoP2HSejJ1Oxj2/eXtZPcFLoCH0VUI2Olh5E/bR4zg31cDtoBV78x+JPKaJT5FfrKckYvZQ+3v3B6SA0/toMaHYqr0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=tgsUFy1Y; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=eHleXzNJ; arc=none smtp.client-ip=193.142.43.55
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="JOwT72+f";
-	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="SOT7LMa/"
+	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="tgsUFy1Y";
+	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="eHleXzNJ"
 From: =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020; t=1755782979;
+	s=2020; t=1755782980;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=d98YrRaD6ZBonCTSAveiD2NgcBz4Lno//N+VhhhS+z4=;
-	b=JOwT72+fkJ+YSdBJAQxBPH/cT4fV0s6ukMjz4LPhtJhxStWxoHOuGiMgdKJaknDMv4leVJ
-	Zj28wHmcXb7LFoClhu3PUOnd0pRgt/CSL4JPGbqhIDuUbZ+z2ag1mBfLlx3c/g39b4AggF
-	F5IzufuysLy4q/q1iqLsQDXNHWZfHnQ3AAnWVxCIdVl+6qZ1KyANlDEKNtbsldZ6vN5+gU
-	6gML8tqZJMxkeP7xV3Cl/hsHltEJiSfQI8Gy8pdS1iiLo04WGoL7/Z94U3/7sQ1EE4m7jI
-	IXWpNIb95zy7aPududcR9jkg3wI1qaO8YPgbNk3r5j24GYOMklvvOikGpJLS5A==
+	bh=LQ6UHeBc4TYS0MVyvj20OtZxtPShZrHBOAEWRaqEkWU=;
+	b=tgsUFy1YSinjiYltQZAabBGZRv/YzxWuGd67x58NbfBmEWbsuNETCDnVsKXJEbjtSxylig
+	l/subEZvhekAFr0lH1Ee/10Kla/rkxZvIK+CXajQIQVt5QeOFbe9xZAFeta/xLXFJaX3A7
+	FcLjfCy0vddFi6+HGsD0Jk1YIojDQEdc9nQnqeJ1TuEBU+QbHmBykNDIrE525PPBzt+AeS
+	9MBJfz3t+ILqv9qynxKgSlLl9wMtJeStQv6seXjiWD3Mv1KJD058DFs0GOjmZVbSdPp66u
+	MpReC/2XRju4O8BDp2WAvi6vkY2D+5Z/ACCQOhL3Y4VFOEX5lr7jvBNoHlJ8YA==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020e; t=1755782979;
+	s=2020e; t=1755782980;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=d98YrRaD6ZBonCTSAveiD2NgcBz4Lno//N+VhhhS+z4=;
-	b=SOT7LMa/FysiKypRUv2iEW2gXx7CyKkMKohDWUTdmrbH1RHGLlBOUqCCGMZHdBp5K5cM2w
-	q2lRJo6d6VpNA4AQ==
-Date: Thu, 21 Aug 2025 15:28:08 +0200
-Subject: [PATCH v2 1/9] posix-timers: Avoid direct access to hrtimer
+	bh=LQ6UHeBc4TYS0MVyvj20OtZxtPShZrHBOAEWRaqEkWU=;
+	b=eHleXzNJYKy06BSGAiV2zMojorWvaG3upzol4W3wXXjCY8WOIgfTyZTPhBPcrk7LNu92d6
+	KrJQ3Uy1Ndg2bzCA==
+Date: Thu, 21 Aug 2025 15:28:10 +0200
+Subject: [PATCH v2 3/9] sched/core: Avoid direct access to hrtimer
  clockbase
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
@@ -50,7 +50,7 @@ List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Message-Id: <20250821-hrtimer-cleanup-get_time-v2-1-3ae822e5bfbd@linutronix.de>
+Message-Id: <20250821-hrtimer-cleanup-get_time-v2-3-3ae822e5bfbd@linutronix.de>
 References: <20250821-hrtimer-cleanup-get_time-v2-0-3ae822e5bfbd@linutronix.de>
 In-Reply-To: <20250821-hrtimer-cleanup-get_time-v2-0-3ae822e5bfbd@linutronix.de>
 To: Anna-Maria Behnsen <anna-maria@linutronix.de>, 
@@ -69,48 +69,38 @@ To: Anna-Maria Behnsen <anna-maria@linutronix.de>,
 Cc: linux-kernel@vger.kernel.org, linux-sound@vger.kernel.org, 
  linux-media@vger.kernel.org, 
  =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1755782975; l=1359;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1755782975; l=945;
  i=thomas.weissschuh@linutronix.de; s=20240209; h=from:subject:message-id;
- bh=R99664LLCcZJl6Qz3rbhs4Lz9ZnyWhsrUx+hOEuxb9M=;
- b=I7tZZwqdGqbhXx6yqnjYphyXgfeMQUUpxeo4unscIZHNMMtJEv8+N4I2MpyigoWVHLqDxKr60
- C3PrK8QBhmXC+VkMpJEcv0M3CZF8zi+Hjy6zTfZIvLEeBXuskVw319T
+ bh=gpXy2GjW3NstgkefEL7nb0bYvGGEsP7NwP6FnKaezKA=;
+ b=3JuQ9pzBlUOX66p0yHXqiM2ErjzTIqpIV+LcgLLopIK+gP2xTxN8xgmU17OaAJtWbnghEqJc/
+ xqykf3x+QXQBk1hTF2WRPA7iHccdbeCOMjhBsWTQgh5q8cTHhnshf+Z
 X-Developer-Key: i=thomas.weissschuh@linutronix.de; a=ed25519;
  pk=pfvxvpFUDJV2h2nY0FidLUml22uGLSjByFbM6aqQQws=
 
 The field timer->base->get_time is a private implementation detail and
 should not be accessed outside of the hrtimer core.
 
-Switch to the equivalent helpers.
+Switch to the equivalent helper.
 
 Signed-off-by: Thomas Weißschuh <thomas.weissschuh@linutronix.de>
 Acked-by: Peter Zijlstra (Intel) <peterz@infradead.org>
 ---
- kernel/time/posix-timers.c | 5 ++---
- 1 file changed, 2 insertions(+), 3 deletions(-)
+ kernel/sched/core.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/kernel/time/posix-timers.c b/kernel/time/posix-timers.c
-index 8b582174b1f9498a548fc1c214185577f994a647..2741f3725de48ea8f73cc279287631f9d5a6e960 100644
---- a/kernel/time/posix-timers.c
-+++ b/kernel/time/posix-timers.c
-@@ -299,8 +299,7 @@ static void common_hrtimer_rearm(struct k_itimer *timr)
- {
- 	struct hrtimer *timer = &timr->it.real.timer;
+diff --git a/kernel/sched/core.c b/kernel/sched/core.c
+index be00629f0ba4cc5832189c0052b0b632deb4ea2e..4dc12838ad4fdf086b3f3f1168072d6301f51aa3 100644
+--- a/kernel/sched/core.c
++++ b/kernel/sched/core.c
+@@ -917,7 +917,7 @@ void hrtick_start(struct rq *rq, u64 delay)
+ 	 * doesn't make sense and can cause timer DoS.
+ 	 */
+ 	delta = max_t(s64, delay, 10000LL);
+-	rq->hrtick_time = ktime_add_ns(timer->base->get_time(), delta);
++	rq->hrtick_time = ktime_add_ns(hrtimer_cb_get_time(timer), delta);
  
--	timr->it_overrun += hrtimer_forward(timer, timer->base->get_time(),
--					    timr->it_interval);
-+	timr->it_overrun += hrtimer_forward_now(timer, timr->it_interval);
- 	hrtimer_restart(timer);
- }
- 
-@@ -825,7 +824,7 @@ static void common_hrtimer_arm(struct k_itimer *timr, ktime_t expires,
- 	hrtimer_setup(&timr->it.real.timer, posix_timer_fn, timr->it_clock, mode);
- 
- 	if (!absolute)
--		expires = ktime_add_safe(expires, timer->base->get_time());
-+		expires = ktime_add_safe(expires, hrtimer_cb_get_time(timer));
- 	hrtimer_set_expires(timer, expires);
- 
- 	if (!sigev_none)
+ 	if (rq == this_rq())
+ 		__hrtick_restart(rq);
 
 -- 
 2.50.1
