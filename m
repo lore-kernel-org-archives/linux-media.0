@@ -1,138 +1,121 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 80C5A2C11FA;
-	Fri, 22 Aug 2025 08:30:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C121F224225;
+	Fri, 22 Aug 2025 08:33:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755851433; cv=none; b=onPfCyj4KPW5tkVD1g+dhSWsH20ccnz2fmwWPz2N7tCPnwH3ZV+M34+ZkJ1TdXhYcBOwa4q2B3JaHcluMH6oYf+7jcFJ6Nrr81uc25tbmC2l54Be9Qyu5GrbGW/2ASwY1MemRVXqVuB4LBLl4scidujv++X0hC1rz3Zn4q1cGCw=
+	t=1755851635; cv=none; b=AnTfuRPAFg1PUm66WG7i5qiSifA41X6mhNzRL3S2E1XanyO7ZIryB2D22BWDq75kibyjlfXvonPDlR+bWl3MHBZRNkUlnw26KU4u+yDJp4L3jZ8aovsfhImEFwjxlP9+o+dhvdU/S2H81LLNJ8Uuz4ZuWGgf9hA2bawGDytsOLc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755851433; c=relaxed/simple;
-	bh=AxK/GoCw3MHhRHI3TEY7MZkHfJclsaHmg2x1YWuJfvQ=;
-	h=Message-ID:Date:MIME-Version:Subject:From:To:References:
-	 In-Reply-To:Content-Type; b=DjtjVc/ZZDW0ksd5Apa3cLp5ZcZZxRIcCDlrBpbtT/y79lFUWCDUduQq/AG0CfXsP0DdS1zB8BrJcN2/emXE1VxTss9W2SgPoOo17fzVMFpWV74viOK7vzK7bSNHd1Wuv/5D+tZJlonSHocHQWICTexjtEHoaSxgupFNOLK0E7A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Up+Vs1Ce; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1755851635; c=relaxed/simple;
+	bh=hZCILAL9RcFUhkEdhO/hcljCTbxz8sP0ZtdxheVHbzk=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=uCupCf83O7MND3YemgycjJxxFoHK9Q7EbyV00nIFT8ClHb0pIUwrEUVBwzvipass8pbrsu0qN7mU5zsb/oRmpB1QKuVFA4ilam+mafgrAcgnzeRxNSp90tXvNooimX7L8jXVSPs3PO4b9vcSmKNI764Pbq9oCnjyoHDeEzgd7Is=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=LgnqeUP/; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Up+Vs1Ce"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 75984C4CEF1;
-	Fri, 22 Aug 2025 08:30:30 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="LgnqeUP/"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 756DFC4CEF1;
+	Fri, 22 Aug 2025 08:33:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1755851433;
-	bh=AxK/GoCw3MHhRHI3TEY7MZkHfJclsaHmg2x1YWuJfvQ=;
-	h=Date:Subject:From:To:References:In-Reply-To:From;
-	b=Up+Vs1CeNdgpnM+zWU0tUf42oBESeU7bN1ukPQbzn2FPUDX0fZ2MUNzUy+O541TGe
-	 2iu8NvKQ+BUGda2ZVhWiJ9YQFbNVE1kEKKCcZCPKwQ/OMW4hOWcqaMVwv5jBHgBYZT
-	 NMePuocVxG9jwKM6cbWze1RcfzO4imguiLtzA7adLnQXEHxC1Xybs2bvOkiHaTRBnu
-	 9XRqdUZPRzXELSn+T6ReXnswU/chlojQpblhPSo7zD3QzgzqULWrZB84FY6bhzNYnh
-	 dYjjIK9yqIgmmLZGhAAOkfwTuw/JkN7u7Ps8+3UxZgXg4aczyA/FRZDyI/ag1BzShd
-	 wGRx/zToNZrhQ==
-Message-ID: <705e0588-50be-477f-a515-089df2d9bfd2@kernel.org>
-Date: Fri, 22 Aug 2025 10:30:28 +0200
+	s=k20201202; t=1755851635;
+	bh=hZCILAL9RcFUhkEdhO/hcljCTbxz8sP0ZtdxheVHbzk=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=LgnqeUP/tH8uxoHEpSWrMOANOHCB92XjslueMvKTTID9yhxJFe4RRw4YoKWZg8dcB
+	 NvK4wMXVya5Xr4gCgI4pWIPtFsR7aRSTEvrvMYB37srU5EyZDnefH/sjDpItnXJjiS
+	 eSBAiJnUbr5DTh1s54pAEFUHAym8D0apBN1svARMRv8CYWQOQUI76DJ0hVh4POSgB3
+	 COCeu6iC7OkZFp6xdtzmfCQjvZ3bMj1tu2n0y+yL2KzBJFCeIWNgBLWHBfivuppBbJ
+	 y1OdyevFl7wlurSZUREAB2ZwJ+EEOoSq2l1zchGdAzM9RrMBiplYKnp/ftX3DBjnep
+	 +3VMmaOVzFCvw==
+Received: from mchehab by mail.kernel.org with local (Exim 4.98.2)
+	(envelope-from <mchehab+huawei@kernel.org>)
+	id 1upNDd-0000000C1VG-35nU;
+	Fri, 22 Aug 2025 10:33:53 +0200
+From: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+To: 
+Cc: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+	Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+	linux-kernel@vger.kernel.org,
+	linux-media@vger.kernel.org,
+	Hans Verkuil <hverkuil@xs4all.nl>
+Subject: [PATCH v5 5/5] docs: media: profile: make it clearer about maintainership duties
+Date: Fri, 22 Aug 2025 10:33:45 +0200
+Message-ID: <a17ca9fa81e95aff9167c6f1162b4703178c65c9.1755851331.git.mchehab+huawei@kernel.org>
+X-Mailer: git-send-email 2.50.1
+In-Reply-To: <cover.1755851331.git.mchehab+huawei@kernel.org>
+References: <cover.1755851331.git.mchehab+huawei@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 07/11] firmware: qcom_scm: Add
- qcom_scm_pas_get_rsc_table() to get resource table
-From: Krzysztof Kozlowski <krzk@kernel.org>
-To: Bjorn Andersson <andersson@kernel.org>,
- Konrad Dybcio <konradybcio@kernel.org>,
- Vikash Garodia <quic_vgarodia@quicinc.com>,
- Dikshita Agarwal <quic_dikshita@quicinc.com>,
- Mauro Carvalho Chehab <mchehab@kernel.org>,
- Mathieu Poirier <mathieu.poirier@linaro.org>,
- Abhinav Kumar <abhinav.kumar@linux.dev>,
- Bryan O'Donoghue <bryan.odonoghue@linaro.org>, linux-kernel@vger.kernel.org,
- linux-arm-msm@vger.kernel.org, linux-media@vger.kernel.org,
- linux-remoteproc@vger.kernel.org
-References: <20250819165447.4149674-1-mukesh.ojha@oss.qualcomm.com>
- <20250819165447.4149674-8-mukesh.ojha@oss.qualcomm.com>
- <4a60c3d3-11fb-40fb-8686-3d83539f250b@kernel.org>
- <20250821172043.fh6sr6w4bwyhov5q@hu-mojha-hyd.qualcomm.com>
- <0741fed1-33d3-431d-8cf3-04b47fe80b03@kernel.org>
-Content-Language: en-US
-Autocrypt: addr=krzk@kernel.org; keydata=
- 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 a/A=
-In-Reply-To: <0741fed1-33d3-431d-8cf3-04b47fe80b03@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+Sender: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 
-On 22/08/2025 08:22, Krzysztof Kozlowski wrote:
-> On 21/08/2025 19:20, Mukesh Ojha wrote:
->>>
->>> Srsly, what sort of AI hallucinated slop it is?
->>>
->>> I think this is pretty close to proof that your submission does not meet
->>> criteria of open source contribution.
->>>
->>> Did you run any of this through your legal process in Qualcomm?
->>>
->>> I don't trust any part of this code.
->>
->> I don't know what made you think that way. There could be confusion with
->> my writing and may not have expressed the thing i wanted.
-> Commits were written by two different people, but signed only by you.
-> They have 100% different style and the other looks like taken out of
-> ChatGPT.
-> 
-> Editing patches post factum is another reason.
-> 
-> Reasoning here is typical for LLM - first claim something ("static is
-> possible"), then claim another ("dynamic are always") and then connect
-> these two to create false third statement (static and dynamic are always).
-> 
-> You got three strong indications. So this is what made me think that way.
+During the review of the media committer's profile, it was noticed
+that the responsibility for timely review patches was not clear:
+such review is expected that all developers listed at MAINTAINERS
+with the "M:" tag (e.g. "maintainers" on its broad sense).
 
-Huh, so this email was not sent to you, because of weird headers you
-have in your email client ("Mail-Followup-To:"). You were notified about
-this by Stephan and yet you ignored the problem.
+This is orthogonal of being a media committer or not. Such duty
+is implied at:
 
-Well, your call, your problem to find emails if you decide not to
-receive replies. :/
+	Documentation/admin-guide/reporting-issues.rst
 
-Best regards,
-Krzysztof
+and at the MAINTAINERS header, when it says that even when the
+status is "odd fixes", the patches will flow in.
+
+So, let make it explicit at the maintainer-entry-profile that
+maintainers need to do timely reviews.
+
+Also, while right now our focus is on granting committer rights to
+maintainers, the media-committer model may evolve in the future to
+accept other committers that don't have such duties.
+
+So, make it clear at the media-committer.rst that the duties
+related to reviewing patches from others are for the drivers
+they are maintainers as well.
+
+Reviewed-by: Hans Verkuil <hverkuil@xs4all.nl>
+Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+---
+ Documentation/driver-api/media/maintainer-entry-profile.rst | 5 +++++
+ Documentation/driver-api/media/media-committer.rst          | 6 +++---
+ 2 files changed, 8 insertions(+), 3 deletions(-)
+
+diff --git a/Documentation/driver-api/media/maintainer-entry-profile.rst b/Documentation/driver-api/media/maintainer-entry-profile.rst
+index 41a1a2326bef..67a18f82f857 100644
+--- a/Documentation/driver-api/media/maintainer-entry-profile.rst
++++ b/Documentation/driver-api/media/maintainer-entry-profile.rst
+@@ -177,6 +177,11 @@ b. Committers' workflow: patches are handled by media committers::
+ On both workflows, all patches shall be properly reviewed at
+ linux-media@vger.kernel.org (LMML) before being merged at media-committers.git.
+ 
++Such patches will be reviewed timely by the maintainers and reviewers as
++listed in the MAINTAINERS file. The subsystem maintainers will follow one of
++the above workflows, e. g. they will either send a pull request or merge
++patches directly at the media-committers tree.
++
+ When patches are picked by patchwork and when merged at media-committers,
+ CI bots will check for errors and may provide e-mail feedback about
+ patch problems. When this happens, the patch submitter must fix them or
+diff --git a/Documentation/driver-api/media/media-committer.rst b/Documentation/driver-api/media/media-committer.rst
+index 3d0987a8a93b..0bc038a0fdcc 100644
+--- a/Documentation/driver-api/media/media-committer.rst
++++ b/Documentation/driver-api/media/media-committer.rst
+@@ -90,9 +90,9 @@ be a part of their maintenance tasks.
+ Due to that, to become a committer or a core committer, a consensus between
+ all subsystem maintainers is required, as they all need to trust a developer
+ well enough to be delegated the responsibility to maintain part of the code
+-and to properly review patches from third parties, in a timely manner and
+-keeping the status of the reviewed code at https://patchwork.linuxtv.org
+-updated.
++and to properly review patches from third parties for the drivers that they
++maintain in a timely manner and keeping the status of the patches at
++https://patchwork.linuxtv.org updated.
+ 
+ .. Note::
+ 
+-- 
+2.50.1
+
