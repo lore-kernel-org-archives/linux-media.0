@@ -1,254 +1,182 @@
-Received: from MRWPR03CU001.outbound.protection.outlook.com (mail-francesouthazon11011051.outbound.protection.outlook.com [40.107.130.51])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-io1-f78.google.com (mail-io1-f78.google.com [209.85.166.78])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 093DE35FC21;
-	Thu, 21 Aug 2025 20:19:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.130.51
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755807561; cv=fail; b=g7da6CHwnHa7nMLr+zubCDH9gEF8GMxkRwDF6aKjluXoikNqqCzBbBMm1Dr8fDpW9S8Ptpm5KoLSyVbAnbpkT/QDIFdo4HhNsaNgVIlX3LSf1ZePMq+c8bAuApuWhyLf33yrM1+rl1+sV9qEj3zCgeKrQvo9xQ6rnjvIWY7+Xgg=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755807561; c=relaxed/simple;
-	bh=Ag9nOnfiNl255Z/8uV4MDE77idoaoGDH/nePpztgNkE=;
-	h=From:Date:Subject:Content-Type:Message-Id:References:In-Reply-To:
-	 To:Cc:MIME-Version; b=UVjhDiAn+20aOwq3Vw8iAZxc6O0onCqTbNkLdWAD5v2XrRbfXSTBtSgUPU9krQFV1AFpOMxy7Ub06WN+H8exeIWwpS3fV/+tjgCksXw7TfsoN9POnwtu7z/7Khlt8nm+31NL5bwRUIs4Q9abFyMN37rxLoNIy0Wd6tI4fH5IuXE=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com; spf=pass smtp.mailfrom=nxp.com; dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b=Beg6JjIL; arc=fail smtp.client-ip=40.107.130.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nxp.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b="Beg6JjIL"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=CQh/j5Skhw3LoEpkxpkkVQWVEy99pG+56Kfd0oz5cUrjtXzPkvBifkLRAV7Vbohu113mpgLeXQR3wKf8qXJ2FxS7agKseCYs7OEhzvMDUcWYLcjV0dW3QvGp2q+ffXUtbZC4uFS1VY/0Gv+T6CSR1uWDAimbb8NklAzHjOFnHAd/uQOV0cI4cJVpDsrW7onyc6+8RQD54mefhqfKx+Ib3qSAWt3PudiS4I3AtDqrG6rrY40hKMo0bXurG0chyCsv0tHK2VWI00Mv+dXPqA8Y+7tHnqDpK5cAVEHf1J0kurmEcyZQaDZ7+FVUeJMHCQPEy8sy5Ppu8bHe7BnM251Rrw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=FOjStedagn0a7Crc8liM4rlJBF43/uvGuUCflfIyP9g=;
- b=MgvxMsrK7vCB9ztDUCR5g6ZW2bpzyHuaVjttQFJZyfelBXJrDbBQr4WglEPWzdwTN0nd+kQznMO8XYyqt5jCWuuDToDYnwwAUDc9gerx/To5j6chjObbdD+TFmnOrW8Y387/L1G/ZF+oW267SmhQag3BmyXpXVA4JdWt0bIbNAw7qES7J09qAxTichJ4nvhVICbTZteglGur6/L3mhTnqSoGYfhKnLTlwE1nGsPkjUYRbl0R2w4cEeCz5dsE5VOUZLwoL1y62WITofn73uHnpJWWmO3Bsyz0r2VrskHb/cidL083wkeqyApDGs5dbxFG5uQej0M2u+MsA0g9sdC6LA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=FOjStedagn0a7Crc8liM4rlJBF43/uvGuUCflfIyP9g=;
- b=Beg6JjILyV//H6BlMEVvRgGXp6UP6+mhWa4hATuxGLoUzne8rl0MxdyJY2lJYIqx1Ie1PLMKAcTnPm10aGCal53JJkjd0pADYX4TaUMUrxW3nbNgCxRiLpQMeTXUPCiMeu56tSvLpXFs9pfiQAoU2W8UDdlBkleNagcxsJto2vbpxNBCTpDL7cZ+j+WDy8ukHgoDKUvhAAyM5LY7uNTNbtp2xvovCfEuL62pdIIssZUnOaVdT10qj1Bwb76lUxVj82y780xC4/IpspgC+3C7K/SZ2P+Ygivgw4AdUMUpod51bthSgTKIGdZBkmWe/92c1WrlIfs35kjHfmN6J2RP9g==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-Received: from DB9PR04MB9626.eurprd04.prod.outlook.com (2603:10a6:10:309::18)
- by DU0PR04MB9228.eurprd04.prod.outlook.com (2603:10a6:10:353::8) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9052.14; Thu, 21 Aug
- 2025 20:19:16 +0000
-Received: from DB9PR04MB9626.eurprd04.prod.outlook.com
- ([fe80::e81:b393:ebc5:bc3d]) by DB9PR04MB9626.eurprd04.prod.outlook.com
- ([fe80::e81:b393:ebc5:bc3d%5]) with mapi id 15.20.9052.012; Thu, 21 Aug 2025
- 20:19:16 +0000
-From: Frank Li <Frank.Li@nxp.com>
-Date: Thu, 21 Aug 2025 16:16:05 -0400
-Subject: [PATCH v3 30/31] media: synopsys: csi2: Remove source pad
- connected check at dw_csi2_enable_streams()
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20250821-95_cam-v3-30-c9286fbb34b9@nxp.com>
-References: <20250821-95_cam-v3-0-c9286fbb34b9@nxp.com>
-In-Reply-To: <20250821-95_cam-v3-0-c9286fbb34b9@nxp.com>
-To: Rui Miguel Silva <rmfrfs@gmail.com>, 
- Laurent Pinchart <laurent.pinchart@ideasonboard.com>, 
- Martin Kepplinger <martink@posteo.de>, Purism Kernel Team <kernel@puri.sm>, 
- Mauro Carvalho Chehab <mchehab@kernel.org>, Rob Herring <robh@kernel.org>, 
- Krzysztof Kozlowski <krzk+dt@kernel.org>, 
- Conor Dooley <conor+dt@kernel.org>, 
- Eugen Hristev <eugen.hristev@linaro.org>, Shawn Guo <shawnguo@kernel.org>, 
- Sascha Hauer <s.hauer@pengutronix.de>, 
- Pengutronix Kernel Team <kernel@pengutronix.de>, 
- Fabio Estevam <festevam@gmail.com>, Peng Fan <peng.fan@nxp.com>, 
- Alice Yuan <alice.yuan@nxp.com>, Vinod Koul <vkoul@kernel.org>, 
- Kishon Vijay Abraham I <kishon@kernel.org>, 
- Philipp Zabel <p.zabel@pengutronix.de>, 
- Steve Longerbeam <slongerbeam@gmail.com>, 
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: linux-media@vger.kernel.org, devicetree@vger.kernel.org, 
- linux-kernel@vger.kernel.org, imx@lists.linux.dev, 
- linux-arm-kernel@lists.infradead.org, linux-phy@lists.infradead.org, 
- linux-staging@lists.linux.dev, Frank Li <Frank.Li@nxp.com>
-X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1755807362; l=2239;
- i=Frank.Li@nxp.com; s=20240130; h=from:subject:message-id;
- bh=Ag9nOnfiNl255Z/8uV4MDE77idoaoGDH/nePpztgNkE=;
- b=EirUTGedqBJZMhNaFdpKBq+InMA95M3SU0+kZ0QUfiRJndqFMbdkcsR78qtmYBeHUioW4pY4R
- v689PwdFocXCCnidMEjF1gM+Cts4s9MlaoRxE+CTbWnw4MHQQqmcywg
-X-Developer-Key: i=Frank.Li@nxp.com; a=ed25519;
- pk=I0L1sDUfPxpAkRvPKy7MdauTuSENRq+DnA+G4qcS94Q=
-X-ClientProxiedBy: SJ0PR03CA0338.namprd03.prod.outlook.com
- (2603:10b6:a03:39c::13) To DB9PR04MB9626.eurprd04.prod.outlook.com
- (2603:10a6:10:309::18)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DF447522F
+	for <linux-media@vger.kernel.org>; Fri, 22 Aug 2025 00:15:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.78
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1755821731; cv=none; b=GGX/SG3pyM0zy+JLfxEw1j2uJ0hbLWOROagHuLuAc1MkYpvh3Nbxa80f7UW6CLL/MsVDtjU1JG2tzM2zcUYFCfGWF9shtxYY/s7piBCBwMleiF7HdOX1Gt84Hu5bM6co/j75aU1gArMpu8+7O4jz9EqIyGB+mJmFJbWeod41WRM=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1755821731; c=relaxed/simple;
+	bh=CsQ2g5rgnURgAxGrsOg8jGu31SG0qFAec8vbDN/JAgk=;
+	h=MIME-Version:Date:Message-ID:Subject:From:To:Content-Type; b=gKb+ck3dloW8covmSSbyu9x5RE8iMZKpVQYJcKsB7odHcOrOzatQm6YzjNgwTZj+J6fQQGoZudevnZO0DA6ui2+25yWtUDt/PK/xBW2icvzVrfi9r2fyg7X69w+kRrlft2fcPWomJcZpQjBxwIBaRoGR0zvceNxGrOJ9QWGFIXA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.166.78
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
+Received: by mail-io1-f78.google.com with SMTP id ca18e2360f4ac-88432e1c782so171990339f.2
+        for <linux-media@vger.kernel.org>; Thu, 21 Aug 2025 17:15:28 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1755821728; x=1756426528;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=FyKM0EQABf3vNkgSV/GGQkPbG27/7UYkkIP+/kbpuq0=;
+        b=PqeOMiG7gj4eity8BeByPQJQNcoRNEfm9Uaiu3s1cWnLPPKf+qtDVCiLNoewm0Q/DM
+         eHeFxg0g+hRo7kMXqSimxcV7BfsINasTcLD7WISvH1b9VlOzaj/igf4FUPAPb7m7dkZE
+         Zf7YA2OlDTr+QWcgjAdg7kVC16kEjXrc6YnfHOOhQU5y3Cs8xx6Y4J4jvBGcCQ/E8Nb7
+         gaDjQI7Viv3bQLM9EHkXB6WkjkBEXZ6NEdZNZPtw2HtRyy7gr8oRNyMJqLrTeWbw4K4l
+         MlsXIh7Pt06c3/Z3PGLaT/UD2HDFyPG0bGBwmUPk+XemsUfMOx9HL75Ut8y/YZs8YOEG
+         JVDA==
+X-Forwarded-Encrypted: i=1; AJvYcCVyxu1nMyihheD137DqDIp/9UKDlwgFBZWUdMzrQvyggiI+Uxh4jvOOLD6LdIG7cq7e69tgK/0zQC333Q==@vger.kernel.org
+X-Gm-Message-State: AOJu0YxA10GyiFiNDo+59JJgqLTjlgIQWZ1jWCiH3SVPe/65gv3GUuJF
+	0+/FijiHJay66NhcUZUizBbrNw0nxwydkkGu5oFLT+UxZGe8dWtXoRYJyBEHl64O0YgXbmAsB2T
+	APeIj6YYBHtzKserq9yrBFJgj4XW1dZ3lPkYgXLaR4ial29eFXpe32bEHTDQ=
+X-Google-Smtp-Source: AGHT+IFK/IGsPoyrVcHADKuPfHfHmrFijMeNTA/eFat7zqh6BYi11CogvPZ/K4TcCxDF4JKwCRWMBw+GisHdXXYvrC8jUJLApW1U
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DB9PR04MB9626:EE_|DU0PR04MB9228:EE_
-X-MS-Office365-Filtering-Correlation-Id: 7fbae4b3-472f-4b96-c5fb-08dde0f00089
-X-LD-Processed: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635,ExtAddr
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
- BCL:0;ARA:13230040|52116014|19092799006|376014|7416014|366016|1800799024|38350700014|921020;
-X-Microsoft-Antispam-Message-Info:
- =?utf-8?B?REkzbFpIdWNwemFTNDNuTVgrdDRyZWFCc25MaFdsamJEMXd0TDhCeVM5V0Qr?=
- =?utf-8?B?SCtmU3FnUjBTNU8wZ1Y4UWNyMjNGb2U0Qk9NQmN4dW5KUFlJRmJkcjZhMkNh?=
- =?utf-8?B?OFB3M2Y2bXB2aFlBb0lRYkI5YVZSZFFQMlZBQXA0L2tsM1cxbUhwTkFZWElW?=
- =?utf-8?B?cm9sanhKOGczQis5bXlZT282MllzS3hBY2xFMHRYNmx1VkFGckhrMGhmRU90?=
- =?utf-8?B?OXJ2Y1kyOFBIQkJQZ0VzT3JVZnN0WmZNT1pnUWZ4Um5wbURaTW1mSDJTT2ow?=
- =?utf-8?B?aVh4cXYwZFZRdmk2N2lIdDNRaGlGRDB5cmRvbjE4RWtDOU9tK0J3SXNQMzhJ?=
- =?utf-8?B?dERwR2ZNMExjTjdCR1V6c2JTYzNpbUpBUFVzLzFhQmNFMGRKU1JzS1B0N09F?=
- =?utf-8?B?ZlVYSThhSmFwRk1kM29VaW9wcGRwL1J0TDduckZ0dmJsbm1XNllMeGNvem9L?=
- =?utf-8?B?T29uZ3d4MFUwTzFQRk8ralJucDdWU1hnTFVzS1JkT0JqSDkvalpEb2l2a0ha?=
- =?utf-8?B?ckZkRXNHUERJMWgyQ0VsU1ZmT3F2SkZENmtOT0RZQjUwOHYzakljTHB4OTFo?=
- =?utf-8?B?S0k3ZzhmMXdkcWxUQ1hoUUd4SjBicmZTYUs4MnpKdTVnMXdCaDQ2KzlCcVY5?=
- =?utf-8?B?aGhXOFRZYjZDZFBJbGJYMzNwd1M2L3pTNVduaFNyblFGVnVWaEhWamxKTzNw?=
- =?utf-8?B?b0dIZVVLUWlIRGdWVWpaZ05MdDU1a2U4aTFqWU9nWHkwZ2ZFd0VaMXo1WitV?=
- =?utf-8?B?OEtDWkdIdE9qQkNuZWlTeVpKbEVOS3Q5UUtkYjZucDMwdU0wc3FhK3FkNC9C?=
- =?utf-8?B?dWp0cndOWWxielZYaXJNanRNZk9GS05LUUxrSHRhaWdHY1pRZmtHazNrS2ZU?=
- =?utf-8?B?U2pyWjNTeWMxODMwNWFiZ3p5QzRiSVBGUmI5NVA5RzdTdEwrRmhaN2l2eXh3?=
- =?utf-8?B?aUwzbld4RklsU3pBZnlscm9NM1k5VTlobXdjcEQ4VVVlSGJVY0lVRXR6ZWll?=
- =?utf-8?B?bDUrV2xlK2IvcHhuVHRLUlE3YU5KUERFbFJCMndveGh6NXpOaVJFY1FaaElw?=
- =?utf-8?B?a2tkQ3dBUGFhMkZZZlNJZ0ptUFkvcmRxdzFFWE5GNlFpdjdnbUdLUk9IdzRr?=
- =?utf-8?B?UkZFR3gzQnpzamlhYnpVbWQ0TXAxN0lzYnpMM29ReS9LV1RlSXZyZE83S2p6?=
- =?utf-8?B?UTVmUStjWXZ2TTZTa1k0QlRWMWV6MzR2bFVEdk5rMlR6bElCWEpHV1h3ZmVi?=
- =?utf-8?B?WDRhSWZnNUR4WGRJR0N5b21zYTEzUTdkQzZJNFpSYnR1NXNGRHpIYUV6T0ZP?=
- =?utf-8?B?dzZINGFMc2JVT0xyM29PbjlmbVdxUnY1K01xZmlPRTRvT0RnL2lVY0Y2VkxF?=
- =?utf-8?B?aFp0N2FydFc3WUQyak1XMVp1eVdLa0hwSkdJTVR1K053b0JRNm9ucTN0WkRy?=
- =?utf-8?B?enBWTHRIdlVia0p4VWc4MUk5bHBYMEkvZ1E2RUs4alpQVXdIWGF1YitvMVR4?=
- =?utf-8?B?MkI0akZLVWlPT3RqaXhJcmdTbFlDR3FicjNmeUJRcG8wV1RXbXZia1RQRnRy?=
- =?utf-8?B?THhnTG5YbVVRQy9obkx2LzJ2TWpWTHZWWmtEaUZlU3JnNld3R24rM2Z5ZTA0?=
- =?utf-8?B?T3FPUHZ4cW11UWt5N1VlTHYzQ0xqOWIwYjQ1T3cvRk1GMmJxRzhPU3VxYmhN?=
- =?utf-8?B?U3QwVFB3bUxTSnJFZWdxbGFRQzFYWHg1czQyTWtYTHNTdlp3WFZxbmEySm1F?=
- =?utf-8?B?dzFNeEZzZGhPQ1QwQVVkSG1NaVluRmdGb3R3QzhGUloxWUlNdmtreDZwUmFP?=
- =?utf-8?B?YUpaTUVKcFNFajFkY3dpVUVZb3JsMmtmZEsyRHI0ZkxWdFdZZVFQSXZJb1JV?=
- =?utf-8?B?aUNUcnh1UnMvVFFUczJEbzllZmdDYTdiSzRCWFpoVVZ6bUFnZ00wWFFiZ3Ft?=
- =?utf-8?B?R0dYUnpaYzM1N1RGd2ZrZ2NwbzVHT09GNmlCN2ZjTXBxUGVZZnFvenNwc20r?=
- =?utf-8?Q?XcUtDx0o3lVQv3grWcROO4SiyG+MIQ=3D?=
-X-Forefront-Antispam-Report:
- CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DB9PR04MB9626.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(52116014)(19092799006)(376014)(7416014)(366016)(1800799024)(38350700014)(921020);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
- =?utf-8?B?blFscWkxaUNuSjg5SGZ2ZVBrNkZ0eGx5bUJBNVp1N1F5K3R3L2tXZnlPNGZQ?=
- =?utf-8?B?djJjWXcxZXEycVdSaFY0WFRpallraG8yZUJ2TXovREVxM01OZm5PRTdxc3V1?=
- =?utf-8?B?UzhNUjVSZitIVWFxdlZlUDdxb0FqSU1OUWpiVmlDNUsrVy9zM2tlb0Q3b1Ir?=
- =?utf-8?B?NDhtN1F2U3MzVGlzRm9pKytsNXo2aEZoSFMyY04wNmMyejY4NlhJWGxPOTJz?=
- =?utf-8?B?cFdzMlI5eHVqUnFtSUpJaUZwY2ltU01sTjROY2hRcjd5WG9lYkJzWVAxa1ZR?=
- =?utf-8?B?OWg4Q1YxbXVDaTJ5cERVdW5nRVhOU1dPRi9qYU5pREw1M05oeCtaR2hNT09I?=
- =?utf-8?B?ZkFPWHhuYVFjeXc0S3FyaXVZWnlmeEp4SVh1cjdqYXdyeHFETFhjdlVjTGRm?=
- =?utf-8?B?MkFzbVJib1pWR01GMk5HSGtYWWs2S0FDTFNlUlhyVFdsbzE3bjNxREVhTDAz?=
- =?utf-8?B?OW8zS2hJdVhXYTJUdGFXd3lxdnJvOEVCVkNLTWxzUklrTUY3S1dlMnJNYnUr?=
- =?utf-8?B?S2Q4c3dtcTY1cG5TZW8wci9HQVpLT1Q4OGFFVHpPbUJwNUJxQ283YVlzV2Ew?=
- =?utf-8?B?dTNJbmZ2RVRNZENnZGJQbmsyUlM2b08xU3BJVjVrTitQUXROYUkwdFExTXRV?=
- =?utf-8?B?L3diSTh0dUhoaG5Dd0NWZzhGV3ZjT0JvY0RjYWhnY3JWa1NHT1FULzdndTlz?=
- =?utf-8?B?UUllOWFhMGhOS0hodUFydDljNHFQNFhkY0t4TU9XbjcvWlRPOGpNVjc0RW1p?=
- =?utf-8?B?SVZ5c1lySC92Uml5UXVWN2ppTFFoN2dBN2k0aUpQdmxlZUZBRWhxb2xsRlk2?=
- =?utf-8?B?dVZmMGRVUkgzTDBvQmVzWXpmQ0JRRXZaMDZJNHk5OHE1NVBTMHNBclAyQVQ1?=
- =?utf-8?B?Ymd3S1BnSFFsSnpjaFZxaDBUb1AyUFRaWHJQcVNIRVBQRHpTZEFkWVZPWFhV?=
- =?utf-8?B?Ykl6N3lucCtZbFdMcXBFeFdadEtlQkpqQUJBYWwrbmIzSTB6QVZxVlk1VnF5?=
- =?utf-8?B?R0NrdDZrMklzdm9GR3NhMVVVdjRZYkRyb3BXano3NjNuNGFNRm5ERENVYWZv?=
- =?utf-8?B?bUc5TlB5VDc2V0R3b0NCTjI5UmxxTFdTZ3JEMHBuWDV4enNEWElnb2pEQnVx?=
- =?utf-8?B?dkNaVS9UOFl6Tm1sK01mOVdBak1UNXBRNFE5OXkrVlRiZjg4dzhGNnVYVHo1?=
- =?utf-8?B?U1lNdnFkQU5NbHBnZVAvNFhFUDBYOUFpRm0xazhsZWloeWZWbEtJTHNoRTJa?=
- =?utf-8?B?SVpiVWM1aHRqVXhPY2hLNFlvRnIxeWFhbmdDM0J5RVpVOWVlUDAyUHZkdXhW?=
- =?utf-8?B?QnZQZVpMTktsRnlZUmMyWjIrai9zWExMZVViNjJMNHUxdVpTMFV6YVJCNlZz?=
- =?utf-8?B?ellYSC9waE12YlUzTjArOHJTN3FLZUJObUdpZ1IvOExLZXFBWDZ0L3FmOWJr?=
- =?utf-8?B?dk1DUDl2NXRqVWlJZ0IycnNobDVkeExDcG9HWXdYYmJmOEhLMDNpNlZiTDhL?=
- =?utf-8?B?cGQwZENoVmR1NDFicmY4WHFRM1hEY3d1OGlPbHFMa3hIYW5lc1pxc015WG5w?=
- =?utf-8?B?UEZ0akZDUFZoTWIyU055QUhCNi8xOGtqbEJQQkNMY3hHMnJNa0M1V2NrQXRX?=
- =?utf-8?B?NjVITEl1SGRHUU1UdjJBTEtyUEhlbno4TTNVa29NSjZYc3dZZEFHTkhDemdD?=
- =?utf-8?B?WTRsbVl4eEZQMFFQTTdxTEkyQkEyZnZ3K2NIOERkVU9iSVdrSnkvZGdNMjV2?=
- =?utf-8?B?WU03OW55Q3d2eG9qN2ZiZlM4OU16WXVPMGNYM1lCaHZTcXBaTVltV3d0eE1t?=
- =?utf-8?B?TzZibXB0MS9GeTJmRmpta1Z6STMvZDFETUlrTFltTEtCbUNzYytHd2swTktu?=
- =?utf-8?B?TEdkWm1PVEtldFIrUEZuMUlrSjBFMUg4Z3Q4dGFSWDZEOXUvejVtOEphQzdC?=
- =?utf-8?B?eGI4YlNWOVNtMytyMEl3MC9icnJnUTVVaTdNbkJ0bVVaaC9mTW12UDRrSmpt?=
- =?utf-8?B?cXVXK0JuUTF4ckNKUm5vR1NITmpPb2d6Y0hrRkxpRUJ5Q2Y0eFFPV1pQWWNp?=
- =?utf-8?B?d09zRlNuUS9VVUhJZm1hRmp5cXFITnBQWFVWWFFnQlNBZGcxMWNXNFNxazhM?=
- =?utf-8?Q?QmVs=3D?=
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 7fbae4b3-472f-4b96-c5fb-08dde0f00089
-X-MS-Exchange-CrossTenant-AuthSource: DB9PR04MB9626.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Aug 2025 20:19:16.3604
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: +cROeGMfix2clTjZD9c9UpTNQqImMZbC7awNvQdFFjfim7ky5pQt5SIf9gYS1WDkJ8p+/moe4W2VxWMTs449/Q==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DU0PR04MB9228
+X-Received: by 2002:a92:ca08:0:b0:3e5:5c80:2cf3 with SMTP id
+ e9e14a558f8ab-3e921d46281mr20832795ab.13.1755821727811; Thu, 21 Aug 2025
+ 17:15:27 -0700 (PDT)
+Date: Thu, 21 Aug 2025 17:15:27 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <68a7b69f.050a0220.37038e.0047.GAE@google.com>
+Subject: [syzbot] [media?] general protection fault in su3000_i2c_transfer
+From: syzbot <syzbot+d99f3a288cc7d8ef60fb@syzkaller.appspotmail.com>
+To: linux-kernel@vger.kernel.org, linux-media@vger.kernel.org, 
+	mchehab@kernel.org, micha@freedict.org, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
 
-link_setup() callback is not called if remote linked subdev use flag
-MEDIA_LNK_FL_ENABLED.
+Hello,
 
-Driver needn't track if source pad is connected since framework already do
-that. So remove these check and related variable.
+syzbot found the following issue on:
 
-Signed-off-by: Frank Li <Frank.Li@nxp.com>
+HEAD commit:    8d561baae505 Merge tag 'x86_urgent_for_v6.17_rc2' of git:/..
+git tree:       upstream
+console+strace: https://syzkaller.appspot.com/x/log.txt?x=15226ba2580000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=ce98061fb8ee27bc
+dashboard link: https://syzkaller.appspot.com/bug?extid=d99f3a288cc7d8ef60fb
+compiler:       Debian clang version 20.1.7 (++20250616065708+6146a88f6049-1~exp1~20250616065826.132), Debian LLD 20.1.7
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=176206f0580000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=102993a2580000
+
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/f70b0639e5f7/disk-8d561baa.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/8d12dcdbfe95/vmlinux-8d561baa.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/47f7ceb7ac19/bzImage-8d561baa.xz
+
+The issue was bisected to:
+
+commit 0e148a522b8453115038193e19ec7bea71403e4a
+Author: Michael Bunk <micha@freedict.org>
+Date:   Sun Jan 16 11:22:36 2022 +0000
+
+    media: dw2102: Don't translate i2c read into write
+
+bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=14657ba2580000
+final oops:     https://syzkaller.appspot.com/x/report.txt?x=16657ba2580000
+console output: https://syzkaller.appspot.com/x/log.txt?x=12657ba2580000
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+d99f3a288cc7d8ef60fb@syzkaller.appspotmail.com
+Fixes: 0e148a522b84 ("media: dw2102: Don't translate i2c read into write")
+
+Oops: general protection fault, probably for non-canonical address 0xdffffc0000000002: 0000 [#1] SMP KASAN PTI
+KASAN: null-ptr-deref in range [0x0000000000000010-0x0000000000000017]
+CPU: 1 UID: 0 PID: 5865 Comm: syz-executor259 Not tainted 6.17.0-rc1-syzkaller-00224-g8d561baae505 #0 PREEMPT(full) 
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 07/12/2025
+RIP: 0010:su3000_i2c_transfer+0x1ad/0x1040 drivers/media/usb/dvb-usb/dw2102.c:740
+Code: 4c 89 f8 48 c1 e8 03 49 bc 00 00 00 00 00 fc ff df 42 80 3c 20 00 74 08 4c 89 ff e8 8d b6 3c fa 49 8b 1f 48 89 d8 48 c1 e8 03 <42> 0f b6 04 20 84 c0 0f 85 5f 09 00 00 0f b6 1b 48 8b 44 24 38 42
+RSP: 0018:ffffc9000411faa8 EFLAGS: 00010202
+
+RAX: 0000000000000002 RBX: 0000000000000010 RCX: 0000000000000003
+RDX: ffffffff87e65d05 RSI: ffffffff8f0d3a50 RDI: 0000000000001900
+RBP: 0000000000000000 R08: ffff888032dd0000 R09: 0000000000000002
+R10: 0000000000001a00 R11: 0000000000000000 R12: dffffc0000000000
+R13: 1ffff1100fb25968 R14: 0000000000000002 R15: ffff88807d92cb48
+FS:  000055556ae14380(0000) GS:ffff888125d1b000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 000055b6f1430230 CR3: 000000007277a000 CR4: 00000000003526f0
+Call Trace:
+ <TASK>
+ __i2c_transfer+0x871/0x2170 drivers/i2c/i2c-core-base.c:-1
+ i2c_transfer+0x25b/0x3a0 drivers/i2c/i2c-core-base.c:2320
+ i2cdev_ioctl_rdwr+0x460/0x740 drivers/i2c/i2c-dev.c:306
+ i2cdev_ioctl+0x64b/0x7f0 drivers/i2c/i2c-dev.c:467
+ vfs_ioctl fs/ioctl.c:51 [inline]
+ __do_sys_ioctl fs/ioctl.c:598 [inline]
+ __se_sys_ioctl+0xf9/0x170 fs/ioctl.c:584
+ do_syscall_x64 arch/x86/entry/syscall_64.c:63 [inline]
+ do_syscall_64+0xfa/0x3b0 arch/x86/entry/syscall_64.c:94
+ entry_SYSCALL_64_after_hwframe+0x77/0x7f
+RIP: 0033:0x7fc919191e19
+Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 31 17 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007ffcc5ebd038 EFLAGS: 00000246 ORIG_RAX: 0000000000000010
+RAX: ffffffffffffffda RBX: 00007fc9191cd533 RCX: 00007fc919191e19
+RDX: 0000200000000a40 RSI: 0000000000000707 RDI: 0000000000000004
+RBP: 00007fc919205610 R08: 0000000000002a00 R09: 00007ffcc5ebd208
+R10: 0000000000000001 R11: 0000000000000246 R12: 0000000000000001
+R13: 00007ffcc5ebd1f8 R14: 0000000000000001 R15: 0000000000000001
+ </TASK>
+Modules linked in:
+---[ end trace 0000000000000000 ]---
+RIP: 0010:su3000_i2c_transfer+0x1ad/0x1040 drivers/media/usb/dvb-usb/dw2102.c:740
+Code: 4c 89 f8 48 c1 e8 03 49 bc 00 00 00 00 00 fc ff df 42 80 3c 20 00 74 08 4c 89 ff e8 8d b6 3c fa 49 8b 1f 48 89 d8 48 c1 e8 03 <42> 0f b6 04 20 84 c0 0f 85 5f 09 00 00 0f b6 1b 48 8b 44 24 38 42
+RSP: 0018:ffffc9000411faa8 EFLAGS: 00010202
+RAX: 0000000000000002 RBX: 0000000000000010 RCX: 0000000000000003
+RDX: ffffffff87e65d05 RSI: ffffffff8f0d3a50 RDI: 0000000000001900
+RBP: 0000000000000000 R08: ffff888032dd0000 R09: 0000000000000002
+R10: 0000000000001a00 R11: 0000000000000000 R12: dffffc0000000000
+R13: 1ffff1100fb25968 R14: 0000000000000002 R15: ffff88807d92cb48
+FS:  000055556ae14380(0000) GS:ffff888125c1b000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 0000562d24ac2168 CR3: 000000007277a000 CR4: 00000000003526f0
+----------------
+Code disassembly (best guess):
+   0:	4c 89 f8             	mov    %r15,%rax
+   3:	48 c1 e8 03          	shr    $0x3,%rax
+   7:	49 bc 00 00 00 00 00 	movabs $0xdffffc0000000000,%r12
+   e:	fc ff df
+  11:	42 80 3c 20 00       	cmpb   $0x0,(%rax,%r12,1)
+  16:	74 08                	je     0x20
+  18:	4c 89 ff             	mov    %r15,%rdi
+  1b:	e8 8d b6 3c fa       	call   0xfa3cb6ad
+  20:	49 8b 1f             	mov    (%r15),%rbx
+  23:	48 89 d8             	mov    %rbx,%rax
+  26:	48 c1 e8 03          	shr    $0x3,%rax
+* 2a:	42 0f b6 04 20       	movzbl (%rax,%r12,1),%eax <-- trapping instruction
+  2f:	84 c0                	test   %al,%al
+  31:	0f 85 5f 09 00 00    	jne    0x996
+  37:	0f b6 1b             	movzbl (%rbx),%ebx
+  3a:	48 8b 44 24 38       	mov    0x38(%rsp),%rax
+  3f:	42                   	rex.X
+
+
 ---
- drivers/media/platform/synopsys/mipi-csi2.c | 21 +++------------------
- include/media/dw-mipi-csi2.h                |  1 -
- 2 files changed, 3 insertions(+), 19 deletions(-)
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-diff --git a/drivers/media/platform/synopsys/mipi-csi2.c b/drivers/media/platform/synopsys/mipi-csi2.c
-index 8ccd3d4960801cccd8d24647f726e4653955f90c..66207a601c228bfd3d79b7a2053458870622b039 100644
---- a/drivers/media/platform/synopsys/mipi-csi2.c
-+++ b/drivers/media/platform/synopsys/mipi-csi2.c
-@@ -710,18 +710,12 @@ static int dw_csi2_enable_streams(struct v4l2_subdev *sd,
- 				  u64 streams_mask)
- {
- 	struct dw_mipi_csi2_dev *csi2 = sd_to_dev(sd);
--	int i, ret = 0;
-+	int ret = 0;
- 
- 	guard(mutex)(&csi2->lock);
- 
--	if (!csi2->src_sd)
--		return -EPIPE;
- 
--	for (i = 0; i < csi2->num_sink_pads; i++) {
--		if (csi2->sink_linked[i])
--			break;
--	}
--	if (i >= csi2->num_sink_pads)
-+	if (!csi2->src_sd)
- 		return -EPIPE;
- 
- 	if (csi2->stream_count)
-@@ -773,16 +767,7 @@ static int csi2_link_setup(struct media_entity *entity,
- 
- 	guard(mutex)(&csi2->lock);
- 
--	if (local->flags & MEDIA_PAD_FL_SOURCE) {
--		if (flags & MEDIA_LNK_FL_ENABLED) {
--			if (csi2->sink_linked[local->index - 1])
--				return -EBUSY;
--
--			csi2->sink_linked[local->index - 1] = true;
--		} else {
--			csi2->sink_linked[local->index - 1] = false;
--		}
--	} else {
-+	if (local->flags & MEDIA_PAD_FL_SINK) {
- 		if (flags & MEDIA_LNK_FL_ENABLED) {
- 			if (csi2->src_sd)
- 				return -EBUSY;
-diff --git a/include/media/dw-mipi-csi2.h b/include/media/dw-mipi-csi2.h
-index d1afd8c6d95457c28d7e1de6935908437372572d..977a9e27cc50ad6ecfb47ebf8d42f115bc51c1ae 100644
---- a/include/media/dw-mipi-csi2.h
-+++ b/include/media/dw-mipi-csi2.h
-@@ -75,7 +75,6 @@ struct dw_mipi_csi2_dev {
- 
- 	int				stream_count;
- 	struct v4l2_subdev		*src_sd;
--	bool				sink_linked[DW_MAX_PAD_NUM];
- 	const struct dw_mipi_csi2_config *config;
- 
- 	struct dw_csi2_event		*event;
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+For information about bisection process see: https://goo.gl/tpsmEJ#bisection
 
--- 
-2.34.1
+If the report is already addressed, let syzbot know by replying with:
+#syz fix: exact-commit-title
 
+If you want syzbot to run the reproducer, reply with:
+#syz test: git://repo/address.git branch-or-commit-hash
+If you attach or paste a git patch, syzbot will apply it before testing.
+
+If you want to overwrite report's subsystems, reply with:
+#syz set subsystems: new-subsystem
+(See the list of subsystem names on the web dashboard)
+
+If the report is a duplicate of another one, reply with:
+#syz dup: exact-subject-of-another-report
+
+If you want to undo deduplication, reply with:
+#syz undup
