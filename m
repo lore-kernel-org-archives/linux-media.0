@@ -1,30 +1,31 @@
 Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 22C9B4A3E;
-	Fri, 22 Aug 2025 00:27:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9ED794A3E;
+	Fri, 22 Aug 2025 00:28:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.167.242.64
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755822483; cv=none; b=RX+fgOL5jASwqVgwwgn8qWHvawUgE6JOdN08Tfhru8ho71CMHX4nyfMljJNgr2+I465SDCNsC7zXPTf2P27MweYLePQxgf6RXDcYArxCH0e9hPUSk34EG2ZhvZDqlT3p5nQ1ZrLddz5UXUAIr4AlFk2PQY+nfmD4ncSEauyOlGE=
+	t=1755822486; cv=none; b=LOerTc65IWmO06/TDS4QBPJdFn8yVVNYgSzvwv2P3AMpTZxY4jqi9FzUavqYv7InzNK92NVdCMh3BqtnoN5S9A5j9K71iS5U3kEAcsMbwIr5bMtwtxqaYuSJlErWcuvL53dvACn3g3llDLahrmrHhgdy9BlL9mpyX9y9ZRmVx54=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755822483; c=relaxed/simple;
-	bh=hvocuKs0+lw53BxD/QtBS2ovnPYm5W3zP08TmRzB3Eg=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=aFLoWF/S7jHHOXnOe4b/1htjEQnIZWU5yOZ7kUDKaaRjZGXGfd+z2Z6yau8BqaFOJRUhqtQMybv1AcT8ok29xrRWWABA27dnRwmiOVXaRELHUCLvwNxGVrXI8oxw7jEe/DruT9NXreefmtJrns0Jhojweo5J+i8Voym2qP2twIY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ideasonboard.com; spf=pass smtp.mailfrom=ideasonboard.com; dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b=F9J1ksJ7; arc=none smtp.client-ip=213.167.242.64
+	s=arc-20240116; t=1755822486; c=relaxed/simple;
+	bh=ovnp78uxCAMSAIEe6ksQSf7uTZ5gFLsD1WnNZZ9DQWs=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=JpB+2JrXY7c7DtpzIs2MNj5dp0gM7ACbylfD8Zmy/AKrnBBwPy/PnKc/QNrK70BzPLV7oz2EPRYTeYDgWDGVxWrytfq+UY+2dIEfKKSIrmYLwHvFLnnOFtC/GUyH6iNhJxVMtI8/+oc1F6m1qk7+/xcw166QpuGJmEv8vqONKig=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ideasonboard.com; spf=pass smtp.mailfrom=ideasonboard.com; dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b=LDDAHb2B; arc=none smtp.client-ip=213.167.242.64
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ideasonboard.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ideasonboard.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="F9J1ksJ7"
+	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="LDDAHb2B"
 Received: from pendragon.ideasonboard.com (81-175-209-231.bb.dnainternet.fi [81.175.209.231])
-	by perceval.ideasonboard.com (Postfix) with UTF8SMTPSA id 77C36228;
-	Fri, 22 Aug 2025 02:26:58 +0200 (CEST)
+	by perceval.ideasonboard.com (Postfix) with UTF8SMTPSA id 9EC2CE45;
+	Fri, 22 Aug 2025 02:27:01 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-	s=mail; t=1755822418;
-	bh=hvocuKs0+lw53BxD/QtBS2ovnPYm5W3zP08TmRzB3Eg=;
-	h=From:To:Cc:Subject:Date:From;
-	b=F9J1ksJ7ShlCf2QiTyLFtXUeecI3jn8g0Iz2Er3pQMMVky6EqM+YG/3wic5ZcHmes
-	 Ig0cgiOtD4ZwGmuDsP2Z9aFJM+Lan6d6bw/EvDiXutQkUQyJI13MhicK+Ti+xHmFnT
-	 M1miaP9s/xGxH4eg0qcKUWf9ZRFoBizFbAQaEUEM=
+	s=mail; t=1755822421;
+	bh=ovnp78uxCAMSAIEe6ksQSf7uTZ5gFLsD1WnNZZ9DQWs=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=LDDAHb2BLRjxMsVzpJMUtCia3uu6KKrjUquwsKlGro2FUc4+rhHqXFpeFsgnTJWLu
+	 WG6ZUxjkhYH3Jb8Dn84KEvC2QMuyxfgHdysuJWir+ghgKc7en6/wOmu/pAFgUULbAA
+	 kJXMqbJN2CBBMdF6Evx15W182TqVkGUyj5yUvAkU=
 From: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 To: linux-media@vger.kernel.org
 Cc: Conor Dooley <conor+dt@kernel.org>,
@@ -43,10 +44,12 @@ Cc: Conor Dooley <conor+dt@kernel.org>,
 	devicetree@vger.kernel.org,
 	imx@lists.linux.dev,
 	linux-arm-kernel@lists.infradead.org
-Subject: [PATCH v3 00/13] media: imx-mipi-csis: Cleanups and debugging improvements
-Date: Fri, 22 Aug 2025 03:27:20 +0300
-Message-ID: <20250822002734.23516-1-laurent.pinchart@ideasonboard.com>
+Subject: [PATCH v3 02/13] media: imx-mipi-csis: Simplify access to source pad
+Date: Fri, 22 Aug 2025 03:27:22 +0300
+Message-ID: <20250822002734.23516-3-laurent.pinchart@ideasonboard.com>
 X-Mailer: git-send-email 2.49.1
+In-Reply-To: <20250822002734.23516-1-laurent.pinchart@ideasonboard.com>
+References: <20250822002734.23516-1-laurent.pinchart@ideasonboard.com>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
@@ -55,70 +58,38 @@ List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Hello,
+The mipi_csis_calculate_params() function needs to access the pad of the
+connected source. The pad is already available in csis->source.pad, but
+the function takes a convoluted path by getting the pad index and
+indexing the source subdev's pads array. Simplify it.
 
-This patch series bring a few miscellaneous improvements to the
-imx-mipi-csis driver, and in particular improves the debugging
-infrastructure.
+No functional change is intended.
 
-Patch 01/13 starts by making the v4l2_get_link_freq() function accept a
-const media_pad argument. This conflicts with [1], I don't mind rebasing
-on top of it. Sakari, if you plan to get that patch merged soon, feel
-free to take 01/13 too.
+Signed-off-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Reviewed-by: Frank Li <Frank.Li@nxp.com>
+---
+ drivers/media/platform/nxp/imx-mipi-csis.c | 4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
 
-The next three patches, 02/13 to 04/13, are small cleanups. Patch 05/13
-then aligns the code with the reference manual for register field names,
-increasing readability of the driver when read alongside the hardware
-documentation. Patch 06/13 (new in this version) also improves the
-register macros by standardizing usage of GENMASK. Patch 07/13 fixes a
-small alignment issue in register dumps, and patch 08/13 logs per-lane
-start of transmission error instead of supporting the first data lane
-only, easing debugging of D-PHY issues.
-
-The next two patches deprecate the clock-frequency DT property, which
-shouldn't have been added in the first place. Patch 09/13 improves
-handling of the clock frequency in the driver, and patch 10/13
-deprecates the property in the DT bindings. The driver still supports
-the property to ensure backward compatibility.
-
-The last three patches introduce support for multiple output channels
-and wire it up in the debugging infrastructure. The CSIS IP core
-supports up to 4 output channels, with the number of instantiated
-channels being a property of the SoC integration. So far, only the
-i.MX8MP is known to have multiple output channels. Patch 11/13 adds a
-corresponding DT property, and patch 12/13 adds initial support for that
-property in the driver, and uses it to dump per-channel registers and
-event counters. Finally, patch 13/13 sets the property in the i.MX8MP
-DT.
-
-[1] https://lore.kernel.org/linux-media/20250819094533.2335-3-sakari.ailus@linux.intel.com
-
-Laurent Pinchart (13):
-  media: v4l2-common: Constify media_pad argument to
-    v4l2_get_link_freq()
-  media: imx-mipi-csis: Simplify access to source pad
-  media: imx-mipi-csis: Standardize const keyword placement
-  media: imx-mipi-csis: Shorten name of subdev state variables
-  media: imx-mipi-csis: Rename register macros to match reference manual
-  media: imx-mipi-csis: Use GENMASK for all register field masks
-  media: imx-mipi-csis: Fix field alignment in register dump
-  media: imx-mipi-csis: Log per-lane start of transmission errors
-  media: imx-mipi-csis: Only set clock rate when specified in DT
-  dt-bindings: media: nxp,imx-mipi-csi2: Mark clock-frequency as
-    deprecated
-  dt-bindings: media: nxp,imx-mipi-csi2: Add fsl,num-channels property
-  media: imx-mipi-csis: Initial support for multiple output channels
-  arm64: dts: imx8mp: Specify the number of channels for CSI-2 receivers
-
- .../bindings/media/nxp,imx-mipi-csi2.yaml     |  18 +-
- arch/arm64/boot/dts/freescale/imx8mp.dtsi     |   2 +
- drivers/media/platform/nxp/imx-mipi-csis.c    | 353 +++++++++++-------
- drivers/media/v4l2-core/v4l2-common.c         |   2 +-
- include/media/v4l2-common.h                   |   3 +-
- 5 files changed, 232 insertions(+), 146 deletions(-)
-
-
-base-commit: a75b8d198c55e9eb5feb6f6e155496305caba2dc
+diff --git a/drivers/media/platform/nxp/imx-mipi-csis.c b/drivers/media/platform/nxp/imx-mipi-csis.c
+index 2beb5f43c2c0..46f93cd677e3 100644
+--- a/drivers/media/platform/nxp/imx-mipi-csis.c
++++ b/drivers/media/platform/nxp/imx-mipi-csis.c
+@@ -579,13 +579,11 @@ static void __mipi_csis_set_format(struct mipi_csis_device *csis,
+ static int mipi_csis_calculate_params(struct mipi_csis_device *csis,
+ 				      const struct csis_pix_format *csis_fmt)
+ {
+-	struct media_pad *src_pad =
+-		&csis->source.sd->entity.pads[csis->source.pad->index];
+ 	s64 link_freq;
+ 	u32 lane_rate;
+ 
+ 	/* Calculate the line rate from the pixel rate. */
+-	link_freq = v4l2_get_link_freq(src_pad, csis_fmt->width,
++	link_freq = v4l2_get_link_freq(csis->source.pad, csis_fmt->width,
+ 				       csis->bus.num_data_lanes * 2);
+ 	if (link_freq < 0) {
+ 		dev_err(csis->dev, "Unable to obtain link frequency: %d\n",
 -- 
 Regards,
 
