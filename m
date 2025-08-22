@@ -1,49 +1,50 @@
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EFE032FC025;
-	Fri, 22 Aug 2025 12:10:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6629E2FCBE8;
+	Fri, 22 Aug 2025 12:10:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755864605; cv=none; b=E9ES8rVefXZcCwSMAbBTtvQV0QJokoD4LtnJJU5+oqkx9Hs+X6vss8x2+XIlJHLxHWxxd+tNhMjOd/OqCwJlCeSw4pIgZcne00yL/04P4dCSJ3yqAiAFBI+ki0quAW03TwtacRcWKvhTA8deyAH6UXZXOeS5ViHcdVCp0lGVoxE=
+	t=1755864608; cv=none; b=H46OE7Sb90aDcBwLTVpnEANcdAPmXHjxygkwz8OMRCudd1w77nhwo8zJ+dJnHifulFG95FLMHpOJy05zZUW8xHxJodPMvh1dkSULrMk59jfPkcbbd7xgitfwDbjXKLbVUsuXenhTDEHzNoeHPnfLiu6ZL8O5E9vpQFzVNpLcolk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755864605; c=relaxed/simple;
-	bh=tegx+XuwjE+JgwUd2LJISfacZXz7RRMmQ7cjuqwWOCU=;
+	s=arc-20240116; t=1755864608; c=relaxed/simple;
+	bh=A7e4WA2/mlaneyWWBhdDiDjGJMBAaDnF4ihd8CyB0Ao=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-ID:References:
-	 In-Reply-To:To:CC; b=QuMXe18T+n8UsaMg/o/sB0R75zooEyM+RWQH1X5RvNJ31jSk2T8OvQr7xJmKEcWFwiJawBOJPLxQYyHMGmHBPUmigPizkBmKBcCOVyKxz8l7d86D9QeZyCaVu+2zTeLXBG/VlWGZR+59aGQ2nk9wsjT1P4KhUSO2c/mn59PrBu0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=KxceqBji; arc=none smtp.client-ip=205.220.180.131
+	 In-Reply-To:To:CC; b=GyfxO/S3/CSN1aHQhAhqZnFtji4iUUK1sjGmIBScpVC2VuzKYu1S3fKxBGg3mky4H8Y77MDQZd190o9JmHrujv8zxdIRdC+OyKPS05I4tFqZflT/0mCtKfr+/YfeJ1ZGG2ZQxBFkrRC06z6q2zKDPzhMQ7Xv4jIbLKtX8ay6msY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=gDKZYUdx; arc=none smtp.client-ip=205.220.168.131
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="KxceqBji"
-Received: from pps.filterd (m0279872.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 57M8UGAD005791;
-	Fri, 22 Aug 2025 12:09:56 GMT
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="gDKZYUdx"
+Received: from pps.filterd (m0279866.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 57M8UdFT001340;
+	Fri, 22 Aug 2025 12:10:01 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
 	cc:content-transfer-encoding:content-type:date:from:in-reply-to
 	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	f27RsjwDNTlDuZraRvVJxHpPfk0jQLYa7HQGOq8MoaQ=; b=KxceqBjiZyAH4DRv
-	I4mi+UOUEjMKzr2/NJs758cA0REiQB4/VNYRS1OLRsERTvKiYv6GVP7Hn2um/lS1
-	iHbvvYLcAQjHQrimqmv62ULhXILpPwPJnys2srm5WHQRlfNy/Sp3HwTKv9wBxran
-	n5lXYCW64pH2gh/8phBx7cozxaHZQCK+otxIzIBBbpAqx2CvBlTOLw3Dkd26+9HY
-	XMWu3XDXxn0D5eoWkCdprdD3KLAWkiNGcKuqF0LNzOrEA4/ppXLp/DQB5rOwDS7+
-	yoyRkr+YognWGJl5IWSXc7J3jqtWqtKLhxgvyS4E/ESqdfj74ZhtLFlLz3i0aGSq
-	CF2zYw==
-Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 48n5291443-1
+	vEZjixj3QlAZurCDy4DGlD6ZYee0x7e6mb/CwwMXGig=; b=gDKZYUdxerlebGlJ
+	mHGLDffX3UdqCx+aLgDD72Uh3YPABaBbm6aaN+vqnDOTbZek88+Jkp19P10Ea9WI
+	JT8YcVZBG1s/ZLqLhop0GKnaUfq3Xl9Y65uKAYCtIp4wD5WD/iKIGh23b8fCwvap
+	j0WnuUtMMcVRojvDaNf6fWR8NWpeFERmUaVN8mt2mXKWS7x76QvUXfqivVGz8shJ
+	rXzY90MfcKTeIT/KKlU51TK509zNTlnxEmB8EtvErBGifVQMz4LOaLryKzlpxvjW
+	QUpgZAuZn1LXGChQK9B3AMp2Rd7ZHEymMlT8uAIniLRrVJ325XEYjFFkvW32guy6
+	Eml5xA==
+Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 48n529952y-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 22 Aug 2025 12:09:56 +0000 (GMT)
+	Fri, 22 Aug 2025 12:10:01 +0000 (GMT)
 Received: from nalasex01c.na.qualcomm.com (nalasex01c.na.qualcomm.com [10.47.97.35])
-	by NALASPPMTA05.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 57MC9trj023602
+	by NALASPPMTA01.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 57MCA061030031
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 22 Aug 2025 12:09:55 GMT
+	Fri, 22 Aug 2025 12:10:00 GMT
 Received: from cse-cd01-lnx.ap.qualcomm.com (10.80.80.8) by
  nalasex01c.na.qualcomm.com (10.47.97.35) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1748.24; Fri, 22 Aug 2025 05:09:52 -0700
+ 15.2.1748.24; Fri, 22 Aug 2025 05:09:58 -0700
 From: Wenmeng Liu <quic_wenmliu@quicinc.com>
-Date: Fri, 22 Aug 2025 20:09:19 +0800
-Subject: [PATCH v3 1/3] media: qcom: camss: Add support for TPG common
+Date: Fri, 22 Aug 2025 20:09:21 +0800
+Subject: [PATCH v3 3/3] media: qcom: camss: tpg: Add TPG support for
+ SA8775P and QCS8300
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
@@ -52,7 +53,7 @@ List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-ID: <20250822-camss_tpg-v3-1-c7833a5f10d0@quicinc.com>
+Message-ID: <20250822-camss_tpg-v3-3-c7833a5f10d0@quicinc.com>
 References: <20250822-camss_tpg-v3-0-c7833a5f10d0@quicinc.com>
 In-Reply-To: <20250822-camss_tpg-v3-0-c7833a5f10d0@quicinc.com>
 To: Robert Foss <rfoss@kernel.org>, Todor Tomov <todor.too@gmail.com>,
@@ -65,939 +66,523 @@ CC: <linux-kernel@vger.kernel.org>, <linux-media@vger.kernel.org>,
         <linux-arm-msm@vger.kernel.org>,
         Wenmeng Liu <quic_wenmliu@quicinc.com>
 X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1755864589; l=23824;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1755864589; l=16527;
  i=quic_wenmliu@quicinc.com; s=20250211; h=from:subject:message-id;
- bh=tegx+XuwjE+JgwUd2LJISfacZXz7RRMmQ7cjuqwWOCU=;
- b=6Zopppy1jdb9Bkdi0H9X7HjS+Nb1OziWcAM7q/unVLybrp2wLm0myo0vtEJqayjO0wNeMyaFe
- nwy/8JZmUKuD0i6waSiEDKRzU2GkyYemf/Oub7QSRMr6N4PanyIdd/e
+ bh=A7e4WA2/mlaneyWWBhdDiDjGJMBAaDnF4ihd8CyB0Ao=;
+ b=IWWxN3hxQRrOQyGEraLogj5slm31weYe36vVmuyaHB0bIn2UnLyjVwY7RfZVijKgRDvLyfsbp
+ xU3ZJNYkvUECB0rEMePnihhKQhkB98B1CAlmLZxAebQXkdtMd4br9Y0
 X-Developer-Key: i=quic_wenmliu@quicinc.com; a=ed25519;
  pk=PTegr3w0f1C9dOSL6CUdJR5+u+X/4vsW7VMfwIMeMXQ=
 X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
  nalasex01c.na.qualcomm.com (10.47.97.35)
 X-QCInternal: smtphost
 X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Authority-Analysis: v=2.4 cv=fpOFpF4f c=1 sm=1 tr=0 ts=68a85e14 cx=c_pps
+X-Proofpoint-GUID: eGz3fbWJRCty08gyBBPkre2isuYMtGSr
+X-Proofpoint-ORIG-GUID: eGz3fbWJRCty08gyBBPkre2isuYMtGSr
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwODIwMDAxMyBTYWx0ZWRfXxDLIUJUBlEzR
+ oRlvhsyD9Z6ZKp4+/XZu1XYrK9c0LfUvnSjDcUJ6VKhW/eWLymgXeboaP7wgIo1dD35qNpcfpQE
+ +x8D9UMozYomQz/qtlMVA6I9263205knqKZVSJBoAb8Q/2PDmFIJMT91fxKc9J2cPt1dQGY/slO
+ 39grHVQPynad2uIggaCfbgXDuTAyd8z+vUqeOt7RyIEGJ9tb96Q+9ZemPvpZ/Y0+KtnpYA88XTp
+ L6yLmxzJSKtPZ60tk4V5m2k7V3w5uwwk6sLwFQ1ZSFKe8/8wk9ewsCAGnXt8hCRW/nDcqMREr53
+ vNvW/lKVz1fed+8x7TXp9OR+2XtwPEcWbtg4qjOQWv94C0f8bGPSbt6zioGFz87tE11zGe0LnaN
+ A3dp+NhFLioNnDmybcmIy1pmrhU6eg==
+X-Authority-Analysis: v=2.4 cv=SPkblOvH c=1 sm=1 tr=0 ts=68a85e19 cx=c_pps
  a=ouPCqIW2jiPt+lZRy3xVPw==:117 a=ouPCqIW2jiPt+lZRy3xVPw==:17
  a=GEpy-HfZoHoA:10 a=IkcTkHD0fZMA:10 a=2OwXVqhp2XgA:10 a=COk6AnOGAAAA:8
- a=1QTxKwTKk6MdpbaaNKEA:9 a=QEXdDO2ut3YA:10 a=TjNXssC_j7lpFel5tvFf:22
+ a=La8v_oc1BwVkbj4Qz5QA:9 a=QEXdDO2ut3YA:10 a=TjNXssC_j7lpFel5tvFf:22
  a=cPQSjfK2_nFv0Q5t_7PE:22
-X-Proofpoint-GUID: 7SS_EEyC4GdfcORrj3u6J359xOYdPZam
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwODIwMDAxMyBTYWx0ZWRfX6ERiOxVzhi8f
- Fd1oz59GVB1SrjsQqHiv5vtxYJdDeHGQNOwc+LlYsc2Dca+pZBKc66P3wRS9oTi0imff/hRbf8d
- 6eeUBHiP/zefk3tZ6D2X7qiqTa66eC2fiHapO3c07hKjwMbz46t1YxqSQNG7O3iABNy9Qenvu3x
- Fwgrtb8fD/0oPXiNXFrADkCxQK970PUf7hC1DghWN/4J0/wWMKMp4Wtf+YBAb1pNJzTU32zhwvo
- DIfsP5NvgK+7U++rvRZOm+pzgMBqGxLdojRIcqrFXKQ0jttroSskygI8RQilEWQZaOVcVSc3BxS
- FDm1ZupREt60LY4oCgFYBvbDkqOrygPeHB7CwKwYqvW+xxkW/mcFZ6YqZ+m/Sv1Mzz/lOmOTCRb
- TQRZztWqOD3xkDz3p1/GX2CrGzE/Gw==
-X-Proofpoint-ORIG-GUID: 7SS_EEyC4GdfcORrj3u6J359xOYdPZam
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.1.9,FMLib:17.12.80.40
  definitions=2025-08-22_04,2025-08-20_03,2025-03-28_01
 X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- malwarescore=0 priorityscore=1501 spamscore=0 clxscore=1015 adultscore=0
- suspectscore=0 bulkscore=0 phishscore=0 impostorscore=0 lowpriorityscore=0
+ suspectscore=0 priorityscore=1501 bulkscore=0 spamscore=0 phishscore=0
+ impostorscore=0 adultscore=0 malwarescore=0 lowpriorityscore=0 clxscore=1015
  classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
  reason=mlx scancount=1 engine=8.19.0-2508110000 definitions=main-2508200013
 
-Add support for TPG common, unlike CSID TPG, this TPG can
-be seen as a combination of CSIPHY and sensor.
+Add support for TPG found on SA8775P and QCS8300.
 
 Signed-off-by: Wenmeng Liu <quic_wenmliu@quicinc.com>
 ---
- drivers/media/platform/qcom/camss/Makefile    |   1 +
- drivers/media/platform/qcom/camss/camss-tpg.c | 696 ++++++++++++++++++++++++++
- drivers/media/platform/qcom/camss/camss-tpg.h | 125 +++++
- drivers/media/platform/qcom/camss/camss.h     |   5 +
- 4 files changed, 827 insertions(+)
+ drivers/media/platform/qcom/camss/Makefile         |   1 +
+ .../media/platform/qcom/camss/camss-csid-gen3.c    |  17 ++
+ drivers/media/platform/qcom/camss/camss-tpg-gen1.c | 219 +++++++++++++++++++++
+ drivers/media/platform/qcom/camss/camss.c          |  78 ++++++++
+ 4 files changed, 315 insertions(+)
 
 diff --git a/drivers/media/platform/qcom/camss/Makefile b/drivers/media/platform/qcom/camss/Makefile
-index 76845a456c459538b8e9f782dd58e3b59aff3ef1..e4cf3033b8798cf0ffeff85409ae4ed3559879c1 100644
+index e4cf3033b8798cf0ffeff85409ae4ed3559879c1..274fa1e8fef3ce972a94e7355651c3801bc1dddc 100644
 --- a/drivers/media/platform/qcom/camss/Makefile
 +++ b/drivers/media/platform/qcom/camss/Makefile
-@@ -24,5 +24,6 @@ qcom-camss-objs += \
- 		camss-vfe.o \
+@@ -25,5 +25,6 @@ qcom-camss-objs += \
  		camss-video.o \
  		camss-format.o \
-+		camss-tpg.o \
+ 		camss-tpg.o \
++		camss-tpg-gen1.o \
  
  obj-$(CONFIG_VIDEO_QCOM_CAMSS) += qcom-camss.o
-diff --git a/drivers/media/platform/qcom/camss/camss-tpg.c b/drivers/media/platform/qcom/camss/camss-tpg.c
+diff --git a/drivers/media/platform/qcom/camss/camss-csid-gen3.c b/drivers/media/platform/qcom/camss/camss-csid-gen3.c
+index 664245cf6eb0cac662b02f8b920cd1c72db0aeb2..8e0b0cbaa0010f4b4a156877ac2fe805e5c4422e 100644
+--- a/drivers/media/platform/qcom/camss/camss-csid-gen3.c
++++ b/drivers/media/platform/qcom/camss/camss-csid-gen3.c
+@@ -66,6 +66,8 @@
+ #define		CSI2_RX_CFG0_VC_MODE		3
+ #define		CSI2_RX_CFG0_DL0_INPUT_SEL	4
+ #define		CSI2_RX_CFG0_PHY_NUM_SEL	20
++#define		CSI2_RX_CFG0_TPG_NUM_EN		27
++#define		CSI2_RX_CFG0_TPG_NUM_SEL	28
+ 
+ #define CSID_CSI2_RX_CFG1		0x204
+ #define		CSI2_RX_CFG1_ECC_CORRECTION_EN	BIT(0)
+@@ -109,11 +111,26 @@ static void __csid_configure_rx(struct csid_device *csid,
+ 				struct csid_phy_config *phy, int vc)
+ {
+ 	int val;
++	struct camss *camss;
++	struct tpg_device *tpg;
+ 
++	camss = csid->camss;
+ 	val = (phy->lane_cnt - 1) << CSI2_RX_CFG0_NUM_ACTIVE_LANES;
+ 	val |= phy->lane_assign << CSI2_RX_CFG0_DL0_INPUT_SEL;
+ 	val |= (phy->csiphy_id + CSI2_RX_CFG0_PHY_SEL_BASE_IDX) << CSI2_RX_CFG0_PHY_NUM_SEL;
+ 
++	if (camss->tpg) {
++		tpg = &camss->tpg[phy->csiphy_id];
++
++		if (tpg->testgen.mode > 0) {
++			val |= (phy->csiphy_id + 1) << CSI2_RX_CFG0_TPG_NUM_SEL;
++			val |= 1 << CSI2_RX_CFG0_TPG_NUM_EN;
++		} else {
++			val |= 0 << CSI2_RX_CFG0_TPG_NUM_SEL;
++			val |= 0 << CSI2_RX_CFG0_TPG_NUM_EN;
++		}
++	}
++
+ 	writel(val, csid->base + CSID_CSI2_RX_CFG0);
+ 
+ 	val = CSI2_RX_CFG1_ECC_CORRECTION_EN;
+diff --git a/drivers/media/platform/qcom/camss/camss-tpg-gen1.c b/drivers/media/platform/qcom/camss/camss-tpg-gen1.c
 new file mode 100644
-index 0000000000000000000000000000000000000000..c436cdb7041b555ce9458270eb46996e78f1d5eb
+index 0000000000000000000000000000000000000000..e498e4065d53eca7982590a057c2532eaa12ac68
 --- /dev/null
-+++ b/drivers/media/platform/qcom/camss/camss-tpg.c
-@@ -0,0 +1,696 @@
++++ b/drivers/media/platform/qcom/camss/camss-tpg-gen1.c
+@@ -0,0 +1,219 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
 + *
-+ * Qualcomm MSM Camera Subsystem - TPG Module
++ * Qualcomm MSM Camera Subsystem - TPG (Test Patter Generator) Module
 + *
 + * Copyright (c) Qualcomm Technologies, Inc. and/or its subsidiaries.
 + */
-+#include <linux/clk.h>
-+#include <linux/delay.h>
++#include <linux/completion.h>
 +#include <linux/io.h>
 +#include <linux/kernel.h>
 +#include <linux/of.h>
-+#include <linux/platform_device.h>
-+#include <linux/pm_runtime.h>
-+#include <media/media-entity.h>
-+#include <media/v4l2-device.h>
-+#include <media/v4l2-subdev.h>
 +
 +#include "camss-tpg.h"
 +#include "camss.h"
 +
-+const char * const testgen_payload_modes[] = {
-+	"Disabled",
-+	"Incrementing",
-+	"Alternating 0x55/0xAA",
-+	"Reserved",
-+	"Reserved",
-+	"Pseudo-random Data",
-+	"User Specified",
-+	"Reserved",
-+	"Reserved",
-+	"Color bars",
-+	"Reserved"
-+};
++#define TPG_HW_VERSION		0x0
++#define		HW_VERSION_STEPPING		0
++#define		HW_VERSION_REVISION		16
++#define		HW_VERSION_GENERATION		28
 +
-+static const struct tpg_format_info formats_gen1[] = {
-+	{
-+		MEDIA_BUS_FMT_SBGGR8_1X8,
-+		DATA_TYPE_RAW_8BIT,
-+		ENCODE_FORMAT_UNCOMPRESSED_8_BIT,
-+	},
-+	{
-+		MEDIA_BUS_FMT_SGBRG8_1X8,
-+		DATA_TYPE_RAW_8BIT,
-+		ENCODE_FORMAT_UNCOMPRESSED_8_BIT,
-+	},
-+	{
-+		MEDIA_BUS_FMT_SGRBG8_1X8,
-+		DATA_TYPE_RAW_8BIT,
-+		ENCODE_FORMAT_UNCOMPRESSED_8_BIT,
-+	},
-+	{
-+		MEDIA_BUS_FMT_SRGGB8_1X8,
-+		DATA_TYPE_RAW_8BIT,
-+		ENCODE_FORMAT_UNCOMPRESSED_8_BIT,
-+	},
-+	{
-+		MEDIA_BUS_FMT_SBGGR10_1X10,
-+		DATA_TYPE_RAW_10BIT,
-+		ENCODE_FORMAT_UNCOMPRESSED_10_BIT,
-+	},
-+	{
-+		MEDIA_BUS_FMT_SGBRG10_1X10,
-+		DATA_TYPE_RAW_10BIT,
-+		ENCODE_FORMAT_UNCOMPRESSED_10_BIT,
-+	},
-+	{
-+		MEDIA_BUS_FMT_SGRBG10_1X10,
-+		DATA_TYPE_RAW_10BIT,
-+		ENCODE_FORMAT_UNCOMPRESSED_10_BIT,
-+	},
-+	{
-+		MEDIA_BUS_FMT_SRGGB10_1X10,
-+		DATA_TYPE_RAW_10BIT,
-+		ENCODE_FORMAT_UNCOMPRESSED_10_BIT,
-+	},
-+	{
-+		MEDIA_BUS_FMT_SBGGR12_1X12,
-+		DATA_TYPE_RAW_12BIT,
-+		ENCODE_FORMAT_UNCOMPRESSED_12_BIT,
-+	},
-+	{
-+		MEDIA_BUS_FMT_SGBRG12_1X12,
-+		DATA_TYPE_RAW_12BIT,
-+		ENCODE_FORMAT_UNCOMPRESSED_12_BIT,
-+	},
-+	{
-+		MEDIA_BUS_FMT_SGRBG12_1X12,
-+		DATA_TYPE_RAW_12BIT,
-+		ENCODE_FORMAT_UNCOMPRESSED_12_BIT,
-+	},
-+	{
-+		MEDIA_BUS_FMT_SRGGB12_1X12,
-+		DATA_TYPE_RAW_12BIT,
-+		ENCODE_FORMAT_UNCOMPRESSED_12_BIT,
-+	},
-+	{
-+		MEDIA_BUS_FMT_Y8_1X8,
-+		DATA_TYPE_RAW_8BIT,
-+		ENCODE_FORMAT_UNCOMPRESSED_8_BIT,
-+	},
-+	{
-+		MEDIA_BUS_FMT_Y10_1X10,
-+		DATA_TYPE_RAW_10BIT,
-+		ENCODE_FORMAT_UNCOMPRESSED_10_BIT,
-+	},
-+};
++#define TPG_HW_STATUS		0x4
 +
-+const struct tpg_formats tpg_formats_gen1 = {
-+	.nformats = ARRAY_SIZE(formats_gen1),
-+	.formats = formats_gen1
-+};
++#define TPG_VC_n_GAIN_CFG(n)	(0x60 + (n) * 0x60)
 +
-+const struct tpg_format_info *tpg_get_fmt_entry(struct tpg_device *tpg,
-+						const struct tpg_format_info *formats,
-+						unsigned int nformats,
-+						u32 code)
++#define TPG_CTRL	0x64
++#define		TPG_CTRL_TEST_EN		0
++#define		TPG_CTRL_PHY_SEL		3
++#define		TPG_CTRL_NUM_ACTIVE_LANES	4
++#define		TPG_CTRL_VC_DT_PATTERN_ID	6
++#define		TPG_CTRL_OVERLAP_SHDR_EN	10
++#define		TPG_CTRL_NUM_ACTIVE_VC		30
++#define			NUM_ACTIVE_VC_0_ENABLED		0
++#define			NUM_ACTIVE_VC_0_1_ENABLED	1
++#define			NUM_ACTIVE_VC_0_1_2_ENABLED	2
++#define			NUM_ACTIVE_VC_0_1_3_ENABLED	3
++
++#define TPG_VC_n_CFG0(n)	(0x68 + (n) * 0x60)
++#define		TPG_VC_n_CFG0_VC_NUM		0
++#define		TPG_VC_n_CFG0_NUM_ACTIVE_DT	8
++#define			NUM_ACTIVE_SLOTS_0_ENABLED		0
++#define			NUM_ACTIVE_SLOTS_0_1_ENABLED		1
++#define			NUM_ACTIVE_SLOTS_0_1_2_ENABLED		2
++#define			NUM_ACTIVE_SLOTS_0_1_3_ENABLED		3
++#define		TPG_VC_n_CFG0_NUM_BATCH		12
++#define		TPG_VC_n_CFG0_NUM_FRAMES	16
++
++#define TPG_VC_n_LSFR_SEED(n)		(0x6C + (n) * 0x60)
++
++#define TPG_VC_n_HBI_CFG(n)		(0x70 + (n) * 0x60)
++
++#define TPG_VC_n_VBI_CFG(n)		(0x74 + (n) * 0x60)
++
++#define TPG_VC_n_COLOR_BARS_CFG(n)		(0x78 + (n) * 0x60)
++#define		TPG_VC_n_COLOR_BARS_CFG_PIX_PATTERN		0
++#define		TPG_VC_n_COLOR_BARS_CFG_QCFA_EN			3
++#define		TPG_VC_n_COLOR_BARS_CFG_SPLIT_EN		4
++#define		TPG_VC_n_COLOR_BARS_CFG_NOISE_EN		5
++#define		TPG_VC_n_COLOR_BARS_CFG_ROTATE_PERIOD		8
++#define		TPG_VC_n_COLOR_BARS_CFG_XCFA_EN			16
++#define		TPG_VC_n_COLOR_BARS_CFG_SIZE_X			24
++#define		TPG_VC_n_COLOR_BARS_CFG_SIZE_Y			28
++
++#define TPG_VC_m_DT_n_CFG_0(m, n)	(0x7C + (m) * 0x60 + (n) * 0xC)
++#define		TPG_VC_m_DT_n_CFG_0_FRAME_HEIGHT	0
++#define		TPG_VC_m_DT_n_CFG_0_FRAME_WIDTH		16
++
++#define TPG_VC_m_DT_n_CFG_1(m, n)	(0x80 + (m) * 0x60 + (n) * 0xC)
++#define		TPG_VC_m_DT_n_CFG_1_DATA_TYPE		0
++#define		TPG_VC_m_DT_n_CFG_1_ECC_XOR_MASK	8
++#define		TPG_VC_m_DT_n_CFG_1_CRC_XOR_MASK	16
++
++#define TPG_VC_m_DT_n_CFG_2(m, n)	(0x84 + (m) * 0x60 + (n) * 0xC)
++#define		TPG_VC_m_DT_n_CFG_2_PAYLOAD_MODE		0
++#define		TPG_VC_m_DT_n_CFG_2_USER_SPECIFIED_PAYLOAD	4
++#define		TPG_VC_m_DT_n_CFG_2_ENCODE_FORMAT		28
++
++#define TPG_VC_n_COLOR_BAR_CFA_COLOR0(n)	(0xB0 + (n) * 0x60)
++#define TPG_VC_n_COLOR_BAR_CFA_COLOR1(n)	(0xB4 + (n) * 0x60)
++#define TPG_VC_n_COLOR_BAR_CFA_COLOR2(n)	(0xB8 + (n) * 0x60)
++#define TPG_VC_n_COLOR_BAR_CFA_COLOR3(n)	(0xBC + (n) * 0x60)
++
++/* Line offset between VC(n) and VC(n-1), n form 1 to 3 */
++#define TPG_VC_n_SHDR_CFG	(0x84 + (n) * 0x60)
++
++#define TPG_CLEAR		0x1F4
++
++#define TPG_USER_SPECIFIED_PAYLOAD_DEFAULT	0xBE
++#define TPG_HBI_CFG_DEFAULT		0x4701
++#define TPG_VBI_CFG_DEFAULT		0x438
++#define TPG_LFSR_SEED_DEFAULT	0x12345678
++#define TPG_COLOR_BARS_CFG_STANDARD \
++	(0xA << TPG_VC_n_COLOR_BARS_CFG_ROTATE_PERIOD)
++
++static int tpg_stream_on(struct tpg_device *tpg)
 +{
-+	struct device *dev = tpg->camss->dev;
-+	size_t i;
++	struct tpg_testgen_config *tg = &tpg->testgen;
++	struct v4l2_mbus_framefmt *input_format;
++	const struct tpg_format_info *format;
++	u8 lane_cnt = tpg->res->lane_cnt;
++	u8 dt_cnt = 0;
++	u8 i;
++	u32 val;
 +
-+	for (i = 0; i < nformats; i++)
-+		if (code == formats[i].code)
-+			return &formats[i];
++	/* Loop through all enabled VCs and configure stream for each */
++	for (i = 0; i < tpg->res->vc_cnt; i++) {
++		input_format = &tpg->fmt[MSM_TPG_PAD_SRC + i];
++		format = tpg_get_fmt_entry(tpg,
++					   tpg->res->formats->formats,
++					   tpg->res->formats->nformats,
++					   input_format->code);
 +
-+	dev_warn_once(dev, "Unknown format\n");
++		val = (input_format->height & 0xffff) << TPG_VC_m_DT_n_CFG_0_FRAME_HEIGHT;
++		val |= (input_format->width & 0xffff) << TPG_VC_m_DT_n_CFG_0_FRAME_WIDTH;
++		writel(val, tpg->base + TPG_VC_m_DT_n_CFG_0(i, dt_cnt));
 +
-+	return ERR_PTR(-EINVAL);
++		val = format->data_type << TPG_VC_m_DT_n_CFG_1_DATA_TYPE;
++		writel(val, tpg->base + TPG_VC_m_DT_n_CFG_1(i, dt_cnt));
++
++		val = (tg->mode - 1) << TPG_VC_m_DT_n_CFG_2_PAYLOAD_MODE;
++		val |= TPG_USER_SPECIFIED_PAYLOAD_DEFAULT <<
++			TPG_VC_m_DT_n_CFG_2_USER_SPECIFIED_PAYLOAD;
++		val |= format->encode_format << TPG_VC_m_DT_n_CFG_2_ENCODE_FORMAT;
++		writel(val, tpg->base + TPG_VC_m_DT_n_CFG_2(i, dt_cnt));
++
++		writel(TPG_COLOR_BARS_CFG_STANDARD, tpg->base + TPG_VC_n_COLOR_BARS_CFG(i));
++
++		writel(TPG_HBI_CFG_DEFAULT, tpg->base + TPG_VC_n_HBI_CFG(i));
++		writel(TPG_VBI_CFG_DEFAULT, tpg->base + TPG_VC_n_VBI_CFG(i));
++
++		writel(TPG_LFSR_SEED_DEFAULT, tpg->base + TPG_VC_n_LSFR_SEED(i));
++
++		/* configure one DT, infinite frames */
++		val = i << TPG_VC_n_CFG0_VC_NUM;
++		val |= 0 << TPG_VC_n_CFG0_NUM_FRAMES;
++		writel(val, tpg->base + TPG_VC_n_CFG0(i));
++	}
++
++	val = 1 << TPG_CTRL_TEST_EN;
++	val |= 0 << TPG_CTRL_PHY_SEL;
++	val |= (lane_cnt - 1) << TPG_CTRL_NUM_ACTIVE_LANES;
++	val |= 0 << TPG_CTRL_VC_DT_PATTERN_ID;
++	val |= (tpg->res->vc_cnt - 1) << TPG_CTRL_NUM_ACTIVE_VC;
++	writel(val, tpg->base + TPG_CTRL);
++
++	return 0;
++}
++
++static void tpg_stream_off(struct tpg_device *tpg)
++{
++	writel(0, tpg->base + TPG_CTRL);
++	writel(1, tpg->base + TPG_CLEAR);
++}
++
++static void tpg_configure_stream(struct tpg_device *tpg, u8 enable)
++{
++	if (enable)
++		tpg_stream_on(tpg);
++	else
++		tpg_stream_off(tpg);
++}
++
++static int tpg_configure_testgen_pattern(struct tpg_device *tpg, s32 val)
++{
++	if (val > 0 && val <= TPG_PAYLOAD_MODE_COLOR_BARS)
++		tpg->testgen.mode = val;
++
++	return 0;
 +}
 +
 +/*
-+ * tpg_set_clock_rates - set clock rates on tpg module
++ * tpg_hw_version - tpg hardware version query
 + * @tpg: tpg device
-+ */
-+static int tpg_set_clock_rates(struct tpg_device *tpg)
-+{
-+	struct device *dev = tpg->camss->dev;
-+	int ret;
-+	int i;
-+
-+	for (i = 0; i < tpg->nclocks; i++) {
-+		struct camss_clock *clock = &tpg->clock[i];
-+		long round_rate;
-+
-+		if (clock->freq[0] > 0) {
-+			round_rate = clk_round_rate(clock->clk, clock->freq[0]);
-+			if (round_rate < 0) {
-+				dev_err(dev, "clk round rate failed: %ld\n",
-+					round_rate);
-+				return -EINVAL;
-+			}
-+
-+			ret = clk_set_rate(clock->clk, round_rate);
-+			if (ret < 0) {
-+				dev_err(dev, "clk set rate failed: %d\n", ret);
-+				return ret;
-+			}
-+		}
-+	}
-+
-+	return 0;
-+}
-+
-+/*
-+ * tpg_set_power - Power on/off tpg module
-+ * @sd: tpg V4L2 subdevice
-+ * @on: Requested power state
 + *
-+ * Return 0 on success or a negative error code otherwise
++ * Return HW version or error
 + */
-+static int tpg_set_power(struct v4l2_subdev *sd, int on)
++static u32 tpg_hw_version(struct tpg_device *tpg)
 +{
-+	struct tpg_device *tpg = v4l2_get_subdevdata(sd);
-+	struct device *dev = tpg->camss->dev;
++	u32 hw_version;
++	u32 hw_gen;
++	u32 hw_rev;
++	u32 hw_step;
 +
-+	if (on) {
-+		int ret;
++	hw_version = readl(tpg->base + TPG_HW_VERSION);
++	hw_gen = FIELD_GET(0xF << HW_VERSION_GENERATION, hw_version);
++	hw_rev = FIELD_GET(0xFFF << HW_VERSION_REVISION, hw_version);
++	hw_step = FIELD_GET(0xFFFF << HW_VERSION_STEPPING, hw_version);
++	dev_dbg_once(tpg->camss->dev, "tpg HW Version = %u.%u.%u\n",
++		     hw_gen, hw_rev, hw_step);
 +
-+		ret = pm_runtime_resume_and_get(dev);
-+		if (ret < 0)
-+			return ret;
-+
-+		ret = tpg_set_clock_rates(tpg);
-+		if (ret < 0) {
-+			pm_runtime_put_sync(dev);
-+			return ret;
-+		}
-+
-+		ret = camss_enable_clocks(tpg->nclocks, tpg->clock, dev);
-+		if (ret < 0) {
-+			pm_runtime_put_sync(dev);
-+			return ret;
-+		}
-+
-+		tpg->res->hw_ops->reset(tpg);
-+
-+		tpg->res->hw_ops->hw_version(tpg);
-+	} else {
-+		camss_disable_clocks(tpg->nclocks, tpg->clock);
-+
-+		pm_runtime_put_sync(dev);
-+	}
-+
-+	return 0;
++	return hw_version;
 +}
 +
 +/*
-+ * tpg_set_stream - Enable/disable streaming on tpg module
-+ * @sd: tpg V4L2 subdevice
-+ * @enable: Requested streaming state
-+ *
-+ * Return 0 on success or a negative error code otherwise
-+ */
-+static int tpg_set_stream(struct v4l2_subdev *sd, int enable)
-+{
-+	struct tpg_device *tpg = v4l2_get_subdevdata(sd);
-+	int ret = 0;
-+
-+	if (enable) {
-+		ret = v4l2_ctrl_handler_setup(&tpg->ctrls);
-+		if (ret < 0) {
-+			dev_err(tpg->camss->dev,
-+				"could not sync v4l2 controls: %d\n", ret);
-+			return ret;
-+		}
-+	}
-+
-+	tpg->res->hw_ops->configure_stream(tpg, enable);
-+
-+	return 0;
-+}
-+
-+/*
-+ * __tpg_get_format - Get pointer to format structure
++ * tpg_reset - Trigger reset on tpg module and wait to complete
 + * @tpg: tpg device
-+ * @cfg: V4L2 subdev pad configuration
-+ * @pad: pad from which format is requested
-+ * @which: TRY or ACTIVE format
-+ *
-+ * Return pointer to TRY or ACTIVE format structure
-+ */
-+static struct v4l2_mbus_framefmt *
-+__tpg_get_format(struct tpg_device *tpg,
-+		 struct v4l2_subdev_state *sd_state,
-+		 unsigned int pad,
-+		 enum v4l2_subdev_format_whence which)
-+{
-+	if (which == V4L2_SUBDEV_FORMAT_TRY)
-+		return v4l2_subdev_state_get_format(sd_state,
-+						    pad);
-+
-+	return &tpg->fmt[pad];
-+}
-+
-+/*
-+ * tpg_try_format - Handle try format by pad subdev method
-+ * @tpg: tpg device
-+ * @cfg: V4L2 subdev pad configuration
-+ * @pad: pad on which format is requested
-+ * @fmt: pointer to v4l2 format structure
-+ * @which: wanted subdev format
-+ */
-+static void tpg_try_format(struct tpg_device *tpg,
-+			   struct v4l2_subdev_state *sd_state,
-+			   unsigned int pad,
-+			   struct v4l2_mbus_framefmt *fmt,
-+			   enum v4l2_subdev_format_whence which)
-+{
-+	unsigned int i;
-+
-+	switch (pad) {
-+	case MSM_TPG_PAD_SINK:
-+		for (i = 0; i < tpg->res->formats->nformats; i++)
-+			if (tpg->res->formats->formats[i].code == fmt->code)
-+				break;
-+
-+		/* If not found, use SBGGR8 as default */
-+		if (i >= tpg->res->formats->nformats)
-+			fmt->code = MEDIA_BUS_FMT_SBGGR8_1X8;
-+
-+		fmt->width = clamp_t(u32, fmt->width, 1, 8191);
-+		fmt->height = clamp_t(u32, fmt->height, 1, 8191);
-+
-+		fmt->field = V4L2_FIELD_NONE;
-+		fmt->colorspace = V4L2_COLORSPACE_SRGB;
-+
-+		break;
-+	case MSM_TPG_PAD_SRC:
-+		*fmt = *__tpg_get_format(tpg, sd_state,
-+					 MSM_TPG_PAD_SINK,
-+					 which);
-+
-+		break;
-+	}
-+}
-+
-+/*
-+ * tpg_enum_mbus_code - Handle format enumeration
-+ * @sd: tpg V4L2 subdevice
-+ * @cfg: V4L2 subdev pad configuration
-+ * @code: pointer to v4l2_subdev_mbus_code_enum structure
-+ * return -EINVAL or zero on success
-+ */
-+static int tpg_enum_mbus_code(struct v4l2_subdev *sd,
-+			      struct v4l2_subdev_state *sd_state,
-+			      struct v4l2_subdev_mbus_code_enum *code)
-+{
-+	struct tpg_device *tpg = v4l2_get_subdevdata(sd);
-+	struct v4l2_mbus_framefmt *format;
-+
-+	if (code->pad == MSM_TPG_PAD_SINK) {
-+		if (code->index >= tpg->res->formats->nformats)
-+			return -EINVAL;
-+
-+		code->code = tpg->res->formats->formats[code->index].code;
-+	} else {
-+		if (code->index > 0)
-+			return -EINVAL;
-+
-+		format = __tpg_get_format(tpg, sd_state,
-+					  MSM_TPG_PAD_SINK,
-+					  code->which);
-+
-+		code->code = format->code;
-+	}
-+
-+	return 0;
-+}
-+
-+/*
-+ * tpg_enum_frame_size - Handle frame size enumeration
-+ * @sd: tpg V4L2 subdevice
-+ * @cfg: V4L2 subdev pad configuration
-+ * @fse: pointer to v4l2_subdev_frame_size_enum structure
-+ * return -EINVAL or zero on success
-+ */
-+static int tpg_enum_frame_size(struct v4l2_subdev *sd,
-+			       struct v4l2_subdev_state *sd_state,
-+			       struct v4l2_subdev_frame_size_enum *fse)
-+{
-+	struct tpg_device *tpg = v4l2_get_subdevdata(sd);
-+	struct v4l2_mbus_framefmt format;
-+
-+	if (fse->index != 0)
-+		return -EINVAL;
-+
-+	format.code = fse->code;
-+	format.width = 1;
-+	format.height = 1;
-+	tpg_try_format(tpg, sd_state, fse->pad, &format, fse->which);
-+	fse->min_width = format.width;
-+	fse->min_height = format.height;
-+
-+	if (format.code != fse->code)
-+		return -EINVAL;
-+
-+	format.code = fse->code;
-+	format.width = -1;
-+	format.height = -1;
-+	tpg_try_format(tpg, sd_state, fse->pad, &format, fse->which);
-+	fse->max_width = format.width;
-+	fse->max_height = format.height;
-+
-+	return 0;
-+}
-+
-+/*
-+ * tpg_get_format - Handle get format by pads subdev method
-+ * @sd: tpg V4L2 subdevice
-+ * @cfg: V4L2 subdev pad configuration
-+ * @fmt: pointer to v4l2 subdev format structure
-+ *
-+ * Return -EINVAL or zero on success
-+ */
-+static int tpg_get_format(struct v4l2_subdev *sd,
-+			  struct v4l2_subdev_state *sd_state,
-+			  struct v4l2_subdev_format *fmt)
-+{
-+	struct tpg_device *tpg = v4l2_get_subdevdata(sd);
-+	struct v4l2_mbus_framefmt *format;
-+
-+	format = __tpg_get_format(tpg, sd_state, fmt->pad, fmt->which);
-+	if (!format)
-+		return -EINVAL;
-+
-+	fmt->format = *format;
-+
-+	return 0;
-+}
-+
-+/*
-+ * tpg_set_format - Handle set format by pads subdev method
-+ * @sd: tpg V4L2 subdevice
-+ * @cfg: V4L2 subdev pad configuration
-+ * @fmt: pointer to v4l2 subdev format structure
-+ *
-+ * Return -EINVAL or zero on success
-+ */
-+static int tpg_set_format(struct v4l2_subdev *sd,
-+			  struct v4l2_subdev_state *sd_state,
-+			  struct v4l2_subdev_format *fmt)
-+{
-+	struct tpg_device *tpg = v4l2_get_subdevdata(sd);
-+	struct v4l2_mbus_framefmt *format;
-+
-+	format = __tpg_get_format(tpg, sd_state, fmt->pad, fmt->which);
-+	if (!format)
-+		return -EINVAL;
-+
-+	tpg_try_format(tpg, sd_state, fmt->pad, &fmt->format,
-+		       fmt->which);
-+	*format = fmt->format;
-+
-+	if (fmt->pad == MSM_TPG_PAD_SINK) {
-+		format = __tpg_get_format(tpg, sd_state,
-+					  MSM_TPG_PAD_SRC,
-+					  fmt->which);
-+
-+		*format = fmt->format;
-+		tpg_try_format(tpg, sd_state, MSM_TPG_PAD_SRC,
-+			       format,
-+			       fmt->which);
-+	}
-+	return 0;
-+}
-+
-+/*
-+ * tpg_init_formats - Initialize formats on all pads
-+ * @sd: tpg V4L2 subdevice
-+ * @fh: V4L2 subdev file handle
-+ *
-+ * Initialize all pad formats with default values.
 + *
 + * Return 0 on success or a negative error code otherwise
 + */
-+static int tpg_init_formats(struct v4l2_subdev *sd,
-+			    struct v4l2_subdev_fh *fh)
++static int tpg_reset(struct tpg_device *tpg)
 +{
-+	struct v4l2_subdev_format format = {
-+		.pad = MSM_TPG_PAD_SINK,
-+		.which = fh ? V4L2_SUBDEV_FORMAT_TRY :
-+			      V4L2_SUBDEV_FORMAT_ACTIVE,
-+		.format = {
-+			.code = MEDIA_BUS_FMT_SBGGR8_1X8,
-+			.width = 1920,
-+			.height = 1080
-+		}
-+	};
-+
-+	return tpg_set_format(sd, fh ? fh->state : NULL, &format);
-+}
-+
-+/*
-+ * tpg_set_test_pattern - Set test generator's pattern mode
-+ * @tpg: TPG device
-+ * @value: desired test pattern mode
-+ *
-+ * Return 0 on success or a negative error code otherwise
-+ */
-+static int tpg_set_test_pattern(struct tpg_device *tpg, s32 value)
-+{
-+	return tpg->res->hw_ops->configure_testgen_pattern(tpg, value);
-+}
-+
-+/*
-+ * tpg_s_ctrl - Handle set control subdev method
-+ * @ctrl: pointer to v4l2 control structure
-+ *
-+ * Return 0 on success or a negative error code otherwise
-+ */
-+static int tpg_s_ctrl(struct v4l2_ctrl *ctrl)
-+{
-+	struct tpg_device *tpg = container_of(ctrl->handler,
-+					      struct tpg_device, ctrls);
-+	int ret = -EINVAL;
-+
-+	switch (ctrl->id) {
-+	case V4L2_CID_TEST_PATTERN:
-+		ret = tpg_set_test_pattern(tpg, ctrl->val);
-+		break;
-+	}
-+
-+	return ret;
-+}
-+
-+static const struct v4l2_ctrl_ops tpg_ctrl_ops = {
-+	.s_ctrl = tpg_s_ctrl,
-+};
-+
-+/*
-+ * msm_tpg_subdev_init - Initialize tpg device structure and resources
-+ * @tpg: tpg device
-+ * @res: tpg module resources table
-+ * @id: tpg module id
-+ *
-+ * Return 0 on success or a negative error code otherwise
-+ */
-+int msm_tpg_subdev_init(struct camss *camss,
-+			struct tpg_device *tpg,
-+			const struct camss_subdev_resources *res, u8 id)
-+{
-+	struct platform_device *pdev;
-+	struct device *dev;
-+	int i, j;
-+
-+	dev  = camss->dev;
-+	pdev = to_platform_device(dev);
-+
-+	tpg->camss = camss;
-+	tpg->id = id;
-+	tpg->res = &res->tpg;
-+	tpg->res->hw_ops->subdev_init(tpg);
-+
-+	tpg->base = devm_platform_ioremap_resource_byname(pdev, res->reg[0]);
-+	if (IS_ERR(tpg->base))
-+		return PTR_ERR(tpg->base);
-+
-+	tpg->nclocks = 0;
-+	while (res->clock[tpg->nclocks])
-+		tpg->nclocks++;
-+
-+	if (tpg->nclocks) {
-+		tpg->clock = devm_kcalloc(dev,
-+					  tpg->nclocks, sizeof(*tpg->clock),
-+					  GFP_KERNEL);
-+		if (!tpg->clock)
-+			return -ENOMEM;
-+
-+		for (i = 0; i < tpg->nclocks; i++) {
-+			struct camss_clock *clock = &tpg->clock[i];
-+
-+			clock->clk = devm_clk_get(dev, res->clock[i]);
-+			if (IS_ERR(clock->clk))
-+				return PTR_ERR(clock->clk);
-+
-+			clock->name = res->clock[i];
-+
-+			clock->nfreqs = 0;
-+			while (res->clock_rate[i][clock->nfreqs])
-+				clock->nfreqs++;
-+
-+			if (!clock->nfreqs) {
-+				clock->freq = NULL;
-+				continue;
-+			}
-+
-+			clock->freq = devm_kcalloc(dev,
-+						   clock->nfreqs,
-+						   sizeof(*clock->freq),
-+						   GFP_KERNEL);
-+			if (!clock->freq)
-+				return -ENOMEM;
-+
-+			for (j = 0; j < clock->nfreqs; j++)
-+				clock->freq[j] = res->clock_rate[i][j];
-+		}
-+	}
++	writel(0, tpg->base + TPG_CTRL);
++	writel(1, tpg->base + TPG_CLEAR);
 +
 +	return 0;
 +}
 +
-+/*
-+ * tpg_link_setup - Setup tpg connections
-+ * @entity: Pointer to media entity structure
-+ * @local: Pointer to local pad
-+ * @remote: Pointer to remote pad
-+ * @flags: Link flags
-+ *
-+ * Rreturn 0 on success
-+ */
-+static int tpg_link_setup(struct media_entity *entity,
-+			  const struct media_pad *local,
-+			  const struct media_pad *remote, u32 flags)
++static void tpg_subdev_init(struct tpg_device *tpg)
 +{
-+	if (flags & MEDIA_LNK_FL_ENABLED)
-+		if (media_pad_remote_pad_first(local))
-+			return -EBUSY;
-+
-+	return 0;
++	tpg->testgen.modes = testgen_payload_modes;
++	tpg->testgen.nmodes = TPG_PAYLOAD_MODE_NUM_SUPPORTED_GEN1;
 +}
 +
-+static const struct v4l2_subdev_core_ops tpg_core_ops = {
-+	.s_power = tpg_set_power,
++const struct tpg_hw_ops tpg_ops_gen1 = {
++	.configure_stream = tpg_configure_stream,
++	.configure_testgen_pattern = tpg_configure_testgen_pattern,
++	.hw_version = tpg_hw_version,
++	.reset = tpg_reset,
++	.subdev_init = tpg_subdev_init,
 +};
-+
-+static const struct v4l2_subdev_video_ops tpg_video_ops = {
-+	.s_stream = tpg_set_stream,
-+};
-+
-+static const struct v4l2_subdev_pad_ops tpg_pad_ops = {
-+	.enum_mbus_code = tpg_enum_mbus_code,
-+	.enum_frame_size = tpg_enum_frame_size,
-+	.get_fmt = tpg_get_format,
-+	.set_fmt = tpg_set_format,
-+};
-+
-+static const struct v4l2_subdev_ops tpg_v4l2_ops = {
-+	.core = &tpg_core_ops,
-+	.video = &tpg_video_ops,
-+	.pad = &tpg_pad_ops,
-+};
-+
-+static const struct v4l2_subdev_internal_ops tpg_v4l2_internal_ops = {
-+	.open = tpg_init_formats,
-+};
-+
-+static const struct media_entity_operations tpg_media_ops = {
-+	.link_setup = tpg_link_setup,
-+	.link_validate = v4l2_subdev_link_validate,
-+};
-+
-+/*
-+ * msm_tpg_register_entity - Register subdev node for tpg module
-+ * @tpg: tpg device
-+ * @v4l2_dev: V4L2 device
-+ *
-+ * Return 0 on success or a negative error code otherwise
-+ */
-+int msm_tpg_register_entity(struct tpg_device *tpg,
-+			    struct v4l2_device *v4l2_dev)
-+{
-+	struct v4l2_subdev *sd = &tpg->subdev;
-+	struct media_pad *pads = tpg->pads;
-+	struct device *dev = tpg->camss->dev;
-+	int ret;
-+
-+	v4l2_subdev_init(sd, &tpg_v4l2_ops);
-+	sd->internal_ops = &tpg_v4l2_internal_ops;
-+	sd->flags |= V4L2_SUBDEV_FL_HAS_DEVNODE |
-+		     V4L2_SUBDEV_FL_HAS_EVENTS;
-+	snprintf(sd->name, ARRAY_SIZE(sd->name), "%s%d",
-+		 MSM_TPG_NAME, tpg->id);
-+	sd->grp_id = TPG_GUP_ID;
-+	v4l2_set_subdevdata(sd, tpg);
-+
-+	ret = v4l2_ctrl_handler_init(&tpg->ctrls, 1);
-+	if (ret < 0) {
-+		dev_err(dev, "Failed to init ctrl handler: %d\n", ret);
-+		return ret;
-+	}
-+
-+	tpg->testgen_mode = v4l2_ctrl_new_std_menu_items(&tpg->ctrls,
-+							 &tpg_ctrl_ops, V4L2_CID_TEST_PATTERN,
-+							 tpg->testgen.nmodes, 0, 0,
-+							 tpg->testgen.modes);
-+
-+	if (tpg->ctrls.error) {
-+		dev_err(dev, "Failed to init ctrl: %d\n", tpg->ctrls.error);
-+		ret = tpg->ctrls.error;
-+		goto free_ctrl;
-+	}
-+
-+	tpg->subdev.ctrl_handler = &tpg->ctrls;
-+
-+	ret = tpg_init_formats(sd, NULL);
-+	if (ret < 0) {
-+		dev_err(dev, "Failed to init format: %d\n", ret);
-+		goto free_ctrl;
-+	}
-+
-+	pads[MSM_TPG_PAD_SINK].flags = MEDIA_PAD_FL_SINK;
-+	pads[MSM_TPG_PAD_SRC].flags = MEDIA_PAD_FL_SOURCE;
-+
-+	sd->entity.function = MEDIA_ENT_F_PROC_VIDEO_PIXEL_FORMATTER;
-+	sd->entity.ops = &tpg_media_ops;
-+	ret = media_entity_pads_init(&sd->entity, MSM_TPG_PADS_NUM, pads);
-+	if (ret < 0) {
-+		dev_err(dev, "Failed to init media entity: %d\n", ret);
-+		goto free_ctrl;
-+	}
-+
-+	ret = v4l2_device_register_subdev(v4l2_dev, sd);
-+	if (ret < 0) {
-+		dev_err(dev, "Failed to register subdev: %d\n", ret);
-+		media_entity_cleanup(&sd->entity);
-+		goto free_ctrl;
-+	}
-+
-+	return 0;
-+
-+free_ctrl:
-+	v4l2_ctrl_handler_free(&tpg->ctrls);
-+
-+	return ret;
-+}
-+
-+/*
-+ * msm_tpg_unregister_entity - Unregister tpg module subdev node
-+ * @tpg: tpg device
-+ */
-+void msm_tpg_unregister_entity(struct tpg_device *tpg)
-+{
-+	v4l2_device_unregister_subdev(&tpg->subdev);
-+	media_entity_cleanup(&tpg->subdev.entity);
-+	v4l2_ctrl_handler_free(&tpg->ctrls);
-+}
-diff --git a/drivers/media/platform/qcom/camss/camss-tpg.h b/drivers/media/platform/qcom/camss/camss-tpg.h
-new file mode 100644
-index 0000000000000000000000000000000000000000..c40c10cc4ad1d7967c5d9dd878a8d69177b2281f
---- /dev/null
-+++ b/drivers/media/platform/qcom/camss/camss-tpg.h
-@@ -0,0 +1,125 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+/*
-+ * camss-tpg.h
-+ *
-+ * Qualcomm MSM Camera Subsystem - TPG Module
-+ *
-+ * Copyright (c) 2024 Qualcomm Innovation Center, Inc. All rights reserved.
-+ */
-+#ifndef QC_MSM_CAMSS_TPG_H
-+#define QC_MSM_CAMSS_TPG_H
-+
-+#include <linux/clk.h>
-+#include <media/media-entity.h>
-+#include <media/v4l2-ctrls.h>
-+#include <media/v4l2-device.h>
-+#include <media/v4l2-mediabus.h>
-+#include <media/v4l2-subdev.h>
-+
-+#define MSM_TPG_PAD_SINK 0
-+#define MSM_TPG_PAD_SRC 1
-+#define MSM_TPG_PADS_NUM 2
-+
-+#define DATA_TYPE_RAW_8BIT		0x2a
-+#define DATA_TYPE_RAW_10BIT		0x2b
-+#define DATA_TYPE_RAW_12BIT		0x2c
-+
-+#define ENCODE_FORMAT_UNCOMPRESSED_8_BIT	0x1
-+#define ENCODE_FORMAT_UNCOMPRESSED_10_BIT	0x2
-+#define ENCODE_FORMAT_UNCOMPRESSED_12_BIT	0x3
-+#define ENCODE_FORMAT_UNCOMPRESSED_14_BIT	0x4
-+#define ENCODE_FORMAT_UNCOMPRESSED_16_BIT	0x5
-+#define ENCODE_FORMAT_UNCOMPRESSED_20_BIT	0x6
-+#define ENCODE_FORMAT_UNCOMPRESSED_24_BIT	0x7
-+
-+#define TPG_GUP_ID 0
-+#define MSM_TPG_NAME "msm_tpg"
-+
-+enum tpg_testgen_mode {
-+	TPG_PAYLOAD_MODE_DISABLED = 0,
-+	TPG_PAYLOAD_MODE_INCREMENTING = 1,
-+	TPG_PAYLOAD_MODE_ALTERNATING_55_AA = 2,
-+	TPG_PAYLOAD_MODE_RANDOM = 5,
-+	TPG_PAYLOAD_MODE_USER_SPECIFIED = 6,
-+	TPG_PAYLOAD_MODE_COLOR_BARS = 9,
-+	TPG_PAYLOAD_MODE_NUM_SUPPORTED_GEN1 = 9,
-+};
-+
-+struct tpg_testgen_config {
-+	enum tpg_testgen_mode mode;
-+	const char * const*modes;
-+	u8 nmodes;
-+};
-+
-+struct tpg_format_info {
-+	u32 code;
-+	u8 data_type;
-+	u8 encode_format;
-+};
-+
-+struct tpg_formats {
-+	unsigned int nformats;
-+	const struct tpg_format_info *formats;
-+};
-+
-+struct tpg_device;
-+
-+struct tpg_hw_ops {
-+	void (*configure_stream)(struct tpg_device *tpg, u8 enable);
-+
-+	int (*configure_testgen_pattern)(struct tpg_device *tpg, s32 val);
-+
-+	u32 (*hw_version)(struct tpg_device *tpg);
-+
-+	int (*reset)(struct tpg_device *tpg);
-+
-+	void (*subdev_init)(struct tpg_device *tpg);
-+};
-+
-+struct tpg_subdev_resources {
-+	u8 lane_cnt;
-+	u8 vc_cnt;
-+	const struct tpg_formats *formats;
-+	const struct tpg_hw_ops *hw_ops;
-+};
-+
-+struct tpg_device {
-+	struct camss *camss;
-+	u8 id;
-+	struct v4l2_subdev subdev;
-+	struct media_pad pads[MSM_TPG_PADS_NUM];
-+	void __iomem *base;
-+	struct camss_clock *clock;
-+	int nclocks;
-+	struct tpg_testgen_config testgen;
-+	struct v4l2_mbus_framefmt fmt[MSM_TPG_PADS_NUM];
-+	struct v4l2_ctrl_handler ctrls;
-+	struct v4l2_ctrl *testgen_mode;
-+	const struct tpg_subdev_resources *res;
-+	const struct tpg_format *formats;
-+	unsigned int nformats;
-+};
-+
-+struct camss_subdev_resources;
-+
-+const struct tpg_format_info *tpg_get_fmt_entry(struct tpg_device *tpg,
-+						const struct tpg_format_info *formats,
-+						unsigned int nformats,
-+						u32 code);
-+
-+int msm_tpg_subdev_init(struct camss *camss,
-+			struct tpg_device *tpg,
-+			const struct camss_subdev_resources *res, u8 id);
-+
-+int msm_tpg_register_entity(struct tpg_device *tpg,
-+			    struct v4l2_device *v4l2_dev);
-+
-+void msm_tpg_unregister_entity(struct tpg_device *tpg);
-+
-+extern const char * const testgen_payload_modes[];
-+
-+extern const struct tpg_formats tpg_formats_gen1;
-+
-+extern const struct tpg_hw_ops tpg_ops_gen1;
-+
-+#endif /* QC_MSM_CAMSS_TPG_H */
-diff --git a/drivers/media/platform/qcom/camss/camss.h b/drivers/media/platform/qcom/camss/camss.h
-index b5600a8b2c4b3972633d42938feec9265b44dec5..99392e3bada80a8736b2c317308e510e5a7c66ea 100644
---- a/drivers/media/platform/qcom/camss/camss.h
-+++ b/drivers/media/platform/qcom/camss/camss.h
-@@ -21,6 +21,7 @@
- #include "camss-csid.h"
- #include "camss-csiphy.h"
- #include "camss-ispif.h"
-+#include "camss-tpg.h"
- #include "camss-vfe.h"
- #include "camss-format.h"
+diff --git a/drivers/media/platform/qcom/camss/camss.c b/drivers/media/platform/qcom/camss/camss.c
+index 53477a97dcba8385611398dfd07d41653e6ebaf9..3bdd8427fe6d6f1768a65204518075dd8a09ca08 100644
+--- a/drivers/media/platform/qcom/camss/camss.c
++++ b/drivers/media/platform/qcom/camss/camss.c
+@@ -2611,6 +2611,62 @@ static const struct camss_subdev_resources csiphy_res_8775p[] = {
+ 	},
+ };
  
-@@ -51,6 +52,7 @@ struct camss_subdev_resources {
- 	char *interrupt[CAMSS_RES_MAX];
- 	union {
- 		struct csiphy_subdev_resources csiphy;
-+		struct tpg_subdev_resources tpg;
- 		struct csid_subdev_resources csid;
- 		struct vfe_subdev_resources vfe;
- 	};
-@@ -100,6 +102,7 @@ struct camss_resources {
- 	enum camss_version version;
- 	const char *pd_name;
- 	const struct camss_subdev_resources *csiphy_res;
-+	const struct camss_subdev_resources *tpg_res;
- 	const struct camss_subdev_resources *csid_res;
- 	const struct camss_subdev_resources *ispif_res;
- 	const struct camss_subdev_resources *vfe_res;
-@@ -107,6 +110,7 @@ struct camss_resources {
- 	const struct resources_icc *icc_res;
- 	const unsigned int icc_path_num;
- 	const unsigned int csiphy_num;
-+	const unsigned int tpg_num;
- 	const unsigned int csid_num;
- 	const unsigned int vfe_num;
- 	int (*link_entities)(struct camss *camss);
-@@ -118,6 +122,7 @@ struct camss {
- 	struct media_device media_dev;
- 	struct device *dev;
- 	struct csiphy_device *csiphy;
-+	struct tpg_device *tpg;
- 	struct csid_device *csid;
- 	struct ispif_device *ispif;
- 	struct vfe_device *vfe;
++static const struct camss_subdev_resources tpg_res_8775p[] = {
++	/* TPG0 */
++	{
++		.regulators = {  },
++		.clock = { "csiphy_rx", "camnoc_axi" },
++		.clock_rate = {
++			{ 400000000 },
++			{ 400000000 },
++		},
++		.reg = { "tpg0" },
++		.interrupt = { "tpg0" },
++		.tpg = {
++			.lane_cnt = 4,
++			.vc_cnt = 1,
++			.formats = &tpg_formats_gen1,
++			.hw_ops = &tpg_ops_gen1
++		}
++	},
++
++	/* TPG1 */
++	{
++		.regulators = {  },
++		.clock = { "csiphy_rx", "camnoc_axi" },
++		.clock_rate = {
++			{ 400000000 },
++			{ 400000000 },
++		},
++		.reg = { "tpg1" },
++		.interrupt = { "tpg1" },
++		.tpg = {
++			.lane_cnt = 4,
++			.vc_cnt = 1,
++			.formats = &tpg_formats_gen1,
++			.hw_ops = &tpg_ops_gen1
++		}
++	},
++
++	/* TPG2 */
++	{
++		.regulators = {  },
++		.clock = { "csiphy_rx", "camnoc_axi" },
++		.clock_rate = {
++			{ 400000000 },
++			{ 400000000 },
++		},
++		.reg = { "tpg2" },
++		.interrupt = { "tpg2" },
++		.tpg = {
++			.lane_cnt = 4,
++			.vc_cnt = 1,
++			.formats = &tpg_formats_gen1,
++			.hw_ops = &tpg_ops_gen1
++		}
++	},
++};
++
+ static const struct camss_subdev_resources csid_res_8775p[] = {
+ 	/* CSID0 */
+ 	{
+@@ -4088,6 +4144,13 @@ static int camss_probe(struct platform_device *pdev)
+ 	if (!camss->csiphy)
+ 		return -ENOMEM;
+ 
++	if (camss->res->tpg_num > 0) {
++		camss->tpg = devm_kcalloc(dev, camss->res->tpg_num,
++					  sizeof(*camss->tpg), GFP_KERNEL);
++		if (!camss->tpg)
++			return -ENOMEM;
++	}
++
+ 	camss->csid = devm_kcalloc(dev, camss->res->csid_num, sizeof(*camss->csid),
+ 				   GFP_KERNEL);
+ 	if (!camss->csid)
+@@ -4234,6 +4297,7 @@ static const struct camss_resources msm8916_resources = {
+ 	.ispif_res = &ispif_res_8x16,
+ 	.vfe_res = vfe_res_8x16,
+ 	.csiphy_num = ARRAY_SIZE(csiphy_res_8x16),
++	.tpg_num = 0,
+ 	.csid_num = ARRAY_SIZE(csid_res_8x16),
+ 	.vfe_num = ARRAY_SIZE(vfe_res_8x16),
+ 	.link_entities = camss_link_entities
+@@ -4248,6 +4312,7 @@ static const struct camss_resources msm8953_resources = {
+ 	.ispif_res = &ispif_res_8x53,
+ 	.vfe_res = vfe_res_8x53,
+ 	.csiphy_num = ARRAY_SIZE(csiphy_res_8x96),
++	.tpg_num = 0,
+ 	.csid_num = ARRAY_SIZE(csid_res_8x53),
+ 	.vfe_num = ARRAY_SIZE(vfe_res_8x53),
+ 	.link_entities = camss_link_entities
+@@ -4260,6 +4325,7 @@ static const struct camss_resources msm8996_resources = {
+ 	.ispif_res = &ispif_res_8x96,
+ 	.vfe_res = vfe_res_8x96,
+ 	.csiphy_num = ARRAY_SIZE(csiphy_res_8x96),
++	.tpg_num = 0,
+ 	.csid_num = ARRAY_SIZE(csid_res_8x96),
+ 	.vfe_num = ARRAY_SIZE(vfe_res_8x96),
+ 	.link_entities = camss_link_entities
+@@ -4269,11 +4335,13 @@ static const struct camss_resources qcs8300_resources = {
+ 	.version = CAMSS_8300,
+ 	.pd_name = "top",
+ 	.csiphy_res = csiphy_res_8300,
++	.tpg_res = tpg_res_8775p,
+ 	.csid_res = csid_res_8775p,
+ 	.csid_wrapper_res = &csid_wrapper_res_sm8550,
+ 	.vfe_res = vfe_res_8775p,
+ 	.icc_res = icc_res_qcs8300,
+ 	.csiphy_num = ARRAY_SIZE(csiphy_res_8300),
++	.tpg_num = ARRAY_SIZE(tpg_res_8775p),
+ 	.csid_num = ARRAY_SIZE(csid_res_8775p),
+ 	.vfe_num = ARRAY_SIZE(vfe_res_8775p),
+ 	.icc_path_num = ARRAY_SIZE(icc_res_qcs8300),
+@@ -4284,11 +4352,13 @@ static const struct camss_resources sa8775p_resources = {
+ 	.version = CAMSS_8775P,
+ 	.pd_name = "top",
+ 	.csiphy_res = csiphy_res_8775p,
++	.tpg_res = tpg_res_8775p,
+ 	.csid_res = csid_res_8775p,
+ 	.csid_wrapper_res = &csid_wrapper_res_sm8550,
+ 	.vfe_res = vfe_res_8775p,
+ 	.icc_res = icc_res_sa8775p,
+ 	.csiphy_num = ARRAY_SIZE(csiphy_res_8775p),
++	.tpg_num = ARRAY_SIZE(tpg_res_8775p),
+ 	.csid_num = ARRAY_SIZE(csid_res_8775p),
+ 	.vfe_num = ARRAY_SIZE(vfe_res_8775p),
+ 	.icc_path_num = ARRAY_SIZE(icc_res_sa8775p),
+@@ -4302,6 +4372,7 @@ static const struct camss_resources sdm660_resources = {
+ 	.ispif_res = &ispif_res_660,
+ 	.vfe_res = vfe_res_660,
+ 	.csiphy_num = ARRAY_SIZE(csiphy_res_660),
++	.tpg_num = 0,
+ 	.csid_num = ARRAY_SIZE(csid_res_660),
+ 	.vfe_num = ARRAY_SIZE(vfe_res_660),
+ 	.link_entities = camss_link_entities
+@@ -4313,6 +4384,7 @@ static const struct camss_resources sdm670_resources = {
+ 	.csid_res = csid_res_670,
+ 	.vfe_res = vfe_res_670,
+ 	.csiphy_num = ARRAY_SIZE(csiphy_res_670),
++	.tpg_num = 0,
+ 	.csid_num = ARRAY_SIZE(csid_res_670),
+ 	.vfe_num = ARRAY_SIZE(vfe_res_670),
+ 	.link_entities = camss_link_entities
+@@ -4325,6 +4397,7 @@ static const struct camss_resources sdm845_resources = {
+ 	.csid_res = csid_res_845,
+ 	.vfe_res = vfe_res_845,
+ 	.csiphy_num = ARRAY_SIZE(csiphy_res_845),
++	.tpg_num = 0,
+ 	.csid_num = ARRAY_SIZE(csid_res_845),
+ 	.vfe_num = ARRAY_SIZE(vfe_res_845),
+ 	.link_entities = camss_link_entities
+@@ -4339,6 +4412,7 @@ static const struct camss_resources sm8250_resources = {
+ 	.icc_res = icc_res_sm8250,
+ 	.icc_path_num = ARRAY_SIZE(icc_res_sm8250),
+ 	.csiphy_num = ARRAY_SIZE(csiphy_res_8250),
++	.tpg_num = 0,
+ 	.csid_num = ARRAY_SIZE(csid_res_8250),
+ 	.vfe_num = ARRAY_SIZE(vfe_res_8250),
+ 	.link_entities = camss_link_entities
+@@ -4354,6 +4428,7 @@ static const struct camss_resources sc8280xp_resources = {
+ 	.icc_res = icc_res_sc8280xp,
+ 	.icc_path_num = ARRAY_SIZE(icc_res_sc8280xp),
+ 	.csiphy_num = ARRAY_SIZE(csiphy_res_sc8280xp),
++	.tpg_num = 0,
+ 	.csid_num = ARRAY_SIZE(csid_res_sc8280xp),
+ 	.vfe_num = ARRAY_SIZE(vfe_res_sc8280xp),
+ 	.link_entities = camss_link_entities
+@@ -4368,6 +4443,7 @@ static const struct camss_resources sc7280_resources = {
+ 	.icc_res = icc_res_sc7280,
+ 	.icc_path_num = ARRAY_SIZE(icc_res_sc7280),
+ 	.csiphy_num = ARRAY_SIZE(csiphy_res_7280),
++	.tpg_num = 0,
+ 	.csid_num = ARRAY_SIZE(csid_res_7280),
+ 	.vfe_num = ARRAY_SIZE(vfe_res_7280),
+ 	.link_entities = camss_link_entities
+@@ -4383,6 +4459,7 @@ static const struct camss_resources sm8550_resources = {
+ 	.icc_res = icc_res_sm8550,
+ 	.icc_path_num = ARRAY_SIZE(icc_res_sm8550),
+ 	.csiphy_num = ARRAY_SIZE(csiphy_res_8550),
++	.tpg_num = 0,
+ 	.csid_num = ARRAY_SIZE(csid_res_8550),
+ 	.vfe_num = ARRAY_SIZE(vfe_res_8550),
+ 	.link_entities = camss_link_entities
+@@ -4398,6 +4475,7 @@ static const struct camss_resources x1e80100_resources = {
+ 	.icc_res = icc_res_x1e80100,
+ 	.icc_path_num = ARRAY_SIZE(icc_res_x1e80100),
+ 	.csiphy_num = ARRAY_SIZE(csiphy_res_x1e80100),
++	.tpg_num = 0,
+ 	.csid_num = ARRAY_SIZE(csid_res_x1e80100),
+ 	.vfe_num = ARRAY_SIZE(vfe_res_x1e80100),
+ 	.link_entities = camss_link_entities
 
 -- 
 2.34.1
