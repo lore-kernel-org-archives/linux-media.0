@@ -1,118 +1,144 @@
-Received: from mx0b-0064b401.pphosted.com (mx0b-0064b401.pphosted.com [205.220.178.238])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yw1-f182.google.com (mail-yw1-f182.google.com [209.85.128.182])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A25DD23B63F;
-	Fri, 22 Aug 2025 02:41:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.178.238
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DA10122127A
+	for <linux-media@vger.kernel.org>; Fri, 22 Aug 2025 03:11:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755830508; cv=none; b=lG0v0tCCRKV7VMXoFs+MB9hcieBJAhUIOAdoJu4aUyqir8i4w4ZkCDmfyBDD0XGoOufGVo6Q2IAhAHAETwaf59QfJZjBoN7EvQcZlvkEjdlyIXa+OS9xLiqTTTlu/0V/AkhiEutOjEhh1g+4fyxGvrVxJ19L5mJ+gfyeOyq2XC4=
+	t=1755832281; cv=none; b=YKoilrbUs7JXwZpAEKReCJSMFCc3yKDxVtvI0C5i7MFddzhdU8GC2aZT5o5z8AZaZl0IcYmnOnhQhHkb0cweedqY1ieoHS0ipWC5fIHcZcQ4L8FIxpuYliJFynAfo0grg5h+GHatMgjdQEypwqTLmhtTMV0Kj/Xch/tWikh0Uwc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755830508; c=relaxed/simple;
-	bh=p4sorkCBJWlsizUJRbX51L1d1iI51BqF1Brpp4gmraU=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=JDqiV1QVHX76KE0bF8DjaRsZpu7TL4s4V+ChRsQjBBEhne+pVEpzL/VCHF2NaipAvSEU9/qZwkULiDURVTKDHaAoJN6kquUKNTp2xh3RwSVxyNcSQs5WsPHz3evTsUJeMOEMg9a+128b6/Kwjt5BYZ9ur50+n+pLSm10ZmIUsFA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=windriver.com; spf=pass smtp.mailfrom=windriver.com; dkim=pass (2048-bit key) header.d=windriver.com header.i=@windriver.com header.b=NPnCiVL1; arc=none smtp.client-ip=205.220.178.238
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=windriver.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=windriver.com
+	s=arc-20240116; t=1755832281; c=relaxed/simple;
+	bh=Qg0tKoyStlqwSRv0HhTWh/TwyYqr/JJMQJP72gTLj9s=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=YVEEPxYji0l+X8rZ5QbAgVFvpquhvdxSa3xw28CGlFXsmtXfcNUhH6Yj9FAbJq+efCAwdrwcKeH7dtiwIVh7qDTOgv7sp+ak5IFL8zuTvky5nnGfDaaMitpe48GkjMNhzzFmO4311lIHr2SZDXstGvsiHfoyxIlHA78SmNXHUW0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=gj4/G62q; arc=none smtp.client-ip=209.85.128.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=windriver.com header.i=@windriver.com header.b="NPnCiVL1"
-Received: from pps.filterd (m0250811.ppops.net [127.0.0.1])
-	by mx0a-0064b401.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 57M1eWaR3925966;
-	Fri, 22 Aug 2025 02:09:59 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=windriver.com;
-	 h=cc:content-transfer-encoding:content-type:date:from
-	:in-reply-to:message-id:mime-version:references:subject:to; s=
-	PPS06212021; bh=XsuDtQ+9nvWfXiIYVbBm8oQt0Gk+bbePOLhK19iuPgk=; b=
-	NPnCiVL14TDDK69paX7JmJvT8Qe2vmU2ZMupjzMjS1xggY3p2jmV7TvB4rMxSRKW
-	NrAajQ0cmu26Ly+wpBTAFeEh4hre7qDQbrgB6lhzDH5snv6i4reewW/57PpW627H
-	C4NyB5u5KKAQQRgo89/aMarEKZihwCIEBofbXZ2mstR6XwTQL9OsRM4iROwYiL3B
-	aUR5gd/F1QzgYqOM++Z2bzblUupAfRLrawN3ny2Kc7ExtqDWOPwjUQ+vUNx5DvkS
-	HmK0AeRyFsCCtSkxET5dFiJ2USVYfkpMIj/L/0rdLAxOCC43sMEYaE75rZ2biFc+
-	+xywRyE7iPM8sN9VANTwAw==
-Received: from ala-exchng02.corp.ad.wrs.com ([128.224.246.37])
-	by mx0a-0064b401.pphosted.com (PPS) with ESMTPS id 48nekjtd2b-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
-	Fri, 22 Aug 2025 02:09:59 +0000 (GMT)
-Received: from ala-exchng01.corp.ad.wrs.com (10.11.224.121) by
- ALA-EXCHNG02.corp.ad.wrs.com (10.11.224.122) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.57; Thu, 21 Aug 2025 19:09:44 -0700
-Received: from pek-lpd-ccm6.wrs.com (10.11.232.110) by
- ala-exchng01.corp.ad.wrs.com (10.11.224.121) with Microsoft SMTP Server id
- 15.1.2507.57 via Frontend Transport; Thu, 21 Aug 2025 19:09:51 -0700
-From: Lizhi Xu <lizhi.xu@windriver.com>
-To: <syzbot+d99f3a288cc7d8ef60fb@syzkaller.appspotmail.com>
-CC: <linux-kernel@vger.kernel.org>, <linux-media@vger.kernel.org>,
-        <mchehab@kernel.org>, <micha@freedict.org>,
-        <syzkaller-bugs@googlegroups.com>
-Subject: [PATCH] i2c: dev: Block zero-length messages
-Date: Fri, 22 Aug 2025 10:09:51 +0800
-Message-ID: <20250822020951.919822-1-lizhi.xu@windriver.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <68a7b69f.050a0220.37038e.0047.GAE@google.com>
-References: <68a7b69f.050a0220.37038e.0047.GAE@google.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="gj4/G62q"
+Received: by mail-yw1-f182.google.com with SMTP id 00721157ae682-71fb85c4b59so28257637b3.1
+        for <linux-media@vger.kernel.org>; Thu, 21 Aug 2025 20:11:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1755832279; x=1756437079; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=G5vYyHrmF/bUEegllwDeFAZ8/aIhsfymLG3ivU9KTho=;
+        b=gj4/G62qMV4JsMWg03lFbqaXdcH8pfrn1QgpknR40Vqy/M1iDROZ8WyVrJ/jQgmQIp
+         1IfvLaxUA4eNmQf3lQMVfsVVioEzHqkohxKuUKfZjB9CGlwrFF4fxgVijWKRa616BzHm
+         XkUYG7lUC93hUknfWSxWFMkBCNp8fyKAz7hMZF7d7DO/WzEiMBTnXOHkiXzn3u30yUKs
+         F5n+Cz3cjXNpFs22xiNIriMoiRplHnjSz5QKUM5ijCPeTjnqDKVmzZozZyA4M1JXO95I
+         CKZEkYJCnyQE4essGopK+mVtrQRU0pKIXRc37s2HRzy2ZC/rJhnloF3igmys+1Y2jbgv
+         9Qqg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1755832279; x=1756437079;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=G5vYyHrmF/bUEegllwDeFAZ8/aIhsfymLG3ivU9KTho=;
+        b=PqcPpNyxKw2KStrou3bONwrFDlAeyrKr+p6C4Y8qXbRVL+MMaQbOz5T7NbCRgVIH4n
+         5S1RiVPQdFhbomFkiVmsqgYFldq8Z4SqNnm7sq0/6GTZtCVJo+eOB1jnumRHzS9IAtkr
+         wVTYJTcNFuYfsdsbkFhqMIHy5z4nx5gW2rR11tNpwyoCzir7bBjwYZ/EAqzCG28ZIPBN
+         ZxzLQHFEpS9EeREjtvp9MAI/6b5ozWojsUoSDNxz0MfqzyahGi6+2Uewr2D7Tv+bhAkM
+         L6LfVFXWeRmapYeDWQLg6qM9Dn35n+YO+9CVVchVQdIhWfobmHhccechkZZzBkGdsvhH
+         PsRQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUc53pdkA0Ky42O/RsUoxPAJCAT2Z1v1iVrz5kZBXvO9Pc8W/wvYZWdzuAALuxNZ/FCnPehH3iDqp4kcw==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz+GUVrtZChqylnNg/5iqK1pAjPhvdAKCHFrkYNnPZsxvWHwxr7
+	4DrvTDBdf0M42l3azP7NSq61nocr673ahDmBX8yRDHuC987ImvUHeX//6/sCkj7yYTnyCZvrPFW
+	9SbV3K8eTrzpxTelcpp9yAYb0tuXVsyo=
+X-Gm-Gg: ASbGncvc/fci0Z5824E9RLPAu20wGFoCM1Pcj61YYgMMcysQbDarTZkn+oeVdaOsVPP
+	gkEEf0m/CXs/WVzK6FI2Bs7GyOOp2Xica90JO6OAivE+WOLwRKRDzSSeGdIMYgQlkTfzPm9uAI4
+	gbTd4WSokpKx0qQpSQSTnRcSFZ/DB5eLqCyQWqrck07U8CuZxGP5XIIRDCbRvOwr73vphuKIkZS
+	FnuQ2g9AzuTemmRKVyqRw4aPsrZ0bmV/O5WJNE=
+X-Google-Smtp-Source: AGHT+IEt8PH9/sXqPDbYtckv5kTTfLPn5oKJHWIGi/sdlPO8MD6VYwtNnxskjLMg1Cft09p+xydf65liGokfDREYBRE=
+X-Received: by 2002:a05:690c:8e07:b0:71e:57bd:f2a with SMTP id
+ 00721157ae682-71fc9f6b0f7mr44681547b3.21.1755832278410; Thu, 21 Aug 2025
+ 20:11:18 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwODIyMDAxOSBTYWx0ZWRfX5wFP/Nuqq6LI
- Jz0sGlgNKAnBYXiQ7un8gcWVqNZ46TjcReT2tAt2i0i93MgsKbx37zmVXcztisVXmxoAN5jg7Qi
- 3QCQhkW52HjH8a7a3DCCRUVpGBaepT39PRp/sJH2SZ+OfmUE4tH/9BbmXvlG5KA0Lp64Nw8LJoh
- iWJzOm3HxLbWGvIVRuGsw0KOHaa6r6j5nHBYakNOzFp0mbOlrbmZisr5ONZC1Lvhaw9omw9uElr
- yddYPJIC4gfUGNuGEmdWArUUQ9Bm7yy+PQdkpEYlRnl7AqeCXWTiAhE+0ddC9xTw6gd/gzjbr68
- 0xxTVmIn5idGD17GYL+oIPDii62JlV4rLKZFE7LzaT5I8NYLjI6+yFowleYoN22FcA2O9V3ORuz
- 2MojpzI3T6Zr0s0apRUM9XdVf2YE3w==
-X-Proofpoint-ORIG-GUID: azOTVpda7hzb8SauqhBgs8Rk78wdyNzu
-X-Proofpoint-GUID: azOTVpda7hzb8SauqhBgs8Rk78wdyNzu
-X-Authority-Analysis: v=2.4 cv=L5pEg+T8 c=1 sm=1 tr=0 ts=68a7d177 cx=c_pps
- a=Lg6ja3A245NiLSnFpY5YKQ==:117 a=Lg6ja3A245NiLSnFpY5YKQ==:17
- a=2OwXVqhp2XgA:10 a=edf1wS77AAAA:8 a=hSkVLCK3AAAA:8 a=t7CeM3EgAAAA:8
- a=f8YqMda3FKrJFGOuSw0A:9 a=DcSpbTIhAlouE1Uv7lRv:22 a=cQPPKAXgyycSBL8etih5:22
- a=FdTzh2GWekK77mhwV6Dw:22 a=cPQSjfK2_nFv0Q5t_7PE:22 a=poXaRoVlC6wW9_mwW8W4:22
- a=Z5ABNNGmrOfJ6cZ5bIyy:22 a=SsAZrZ5W_gNWK9tOzrEV:22
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.1.9,FMLib:17.12.80.40
- definitions=2025-08-21_04,2025-08-20_03,2025-03-28_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- spamscore=0 malwarescore=0 priorityscore=1501 clxscore=1011 impostorscore=0
- suspectscore=0 bulkscore=0 lowpriorityscore=0 adultscore=0 phishscore=0
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.22.0-2508110000 definitions=firstrun
+References: <20250818093159.612208-1-chandramohan.explore@gmail.com> <aKdWnKdSDs2j73F-@valkosipuli.retiisi.eu>
+In-Reply-To: <aKdWnKdSDs2j73F-@valkosipuli.retiisi.eu>
+From: Chandra Mohan Sundar <chandramohan.explore@gmail.com>
+Date: Fri, 22 Aug 2025 08:41:07 +0530
+X-Gm-Features: Ac12FXyI8CJxEnrdzUP15elpoDm4F6JwNduF5hnyReTTklvEz5zEGZlo0cj4N6o
+Message-ID: <CADBJw5bgK9Hcs3SwB0fU0yjiAqD1OZvc5RQT+yVHRAX7EjCG=g@mail.gmail.com>
+Subject: Re: [PATCH] media: v4l: Fix dereference before NULL check
+To: Sakari Ailus <sakari.ailus@iki.fi>
+Cc: alain.volmat@foss.st.com, mchehab@kernel.org, mcoquelin.stm32@gmail.com, 
+	alexandre.torgue@foss.st.com, linux-media@vger.kernel.org, 
+	linux-arm-kernel@lists.infradead.org, shuah@kernel.org, 
+	linux-kernel-mentees@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-The user passed two messages via ioctl, both of which were zero-length.
-This caused i2cdev_ioctl_rdwr() to allocate zero-length memory for msgs[i].buf
-when executing memdup_user(), resulting in a ZERO_SIZE_PTR.
-i2cdev_ioctl_rdwr() did not handle this situation, leading to a null-ptr-deref
-when accessing msgs[i].buf in su3000_i2c_transfer().
+Hi Sakari Ailus,
 
-Adding a zero-length check in i2cdev_ioctl_rdwr() resolves the ZERO_SIZE_PTR
-issue.
+Thanks a lot for your review and suggestions. Sure, I will choose an
+appropriate subject.
 
-Reported-by: syzbot+d99f3a288cc7d8ef60fb@syzkaller.appspotmail.com
-Closes: https://syzkaller.appspot.com/bug?extid=d99f3a288cc7d8ef60fb
-Tested-by: syzbot+d99f3a288cc7d8ef60fb@syzkaller.appspotmail.com
-Signed-off-by: Lizhi Xu <lizhi.xu@windriver.com>
----
- drivers/i2c/i2c-dev.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Thanks,
+Chandra Mohan Sundar
 
-diff --git a/drivers/i2c/i2c-dev.c b/drivers/i2c/i2c-dev.c
-index e9577f920286..17b0bec53e21 100644
---- a/drivers/i2c/i2c-dev.c
-+++ b/drivers/i2c/i2c-dev.c
-@@ -257,7 +257,7 @@ static noinline int i2cdev_ioctl_rdwr(struct i2c_client *client,
- 	res = 0;
- 	for (i = 0; i < nmsgs; i++) {
- 		/* Limit the size of the message to a sane amount */
--		if (msgs[i].len > 8192) {
-+		if (msgs[i].len > 8192 || msgs[i].len == 0) {
- 			res = -EINVAL;
- 			break;
- 		}
--- 
-2.43.0
-
+On Thu, Aug 21, 2025 at 10:57=E2=80=AFPM Sakari Ailus <sakari.ailus@iki.fi>=
+ wrote:
+>
+> Hi Chandra,
+>
+> Please choose an appropriate subject on the next time, this is missing wh=
+at
+> the patch is for -- see git log if in doubt.
+>
+> On Mon, Aug 18, 2025 at 03:01:57PM +0530, Chandra Mohan Sundar wrote:
+> > In 'stm32_csi_start', 'csidev->s_subdev' is dereferenced directly while
+> > assigning a value to the 'src_pad'. However the same value is being
+> > checked against NULL at a later point of time indicating that there
+> > are chances that the value can be NULL.
+> >
+> > Move the dereference after the NULL check.
+> >
+> > Fixes: e7bad98c205d1 ("media: v4l: Convert the users of v4l2_get_link_f=
+req to call it on a pad")
+>
+> Fixes: requires Cc: stable. I've fixed these this time. See
+> Documentation/process/submitting-patches.rst .
+>
+> > Signed-off-by: Chandra Mohan Sundar <chandramohan.explore@gmail.com>
+> > ---
+> >  drivers/media/platform/st/stm32/stm32-csi.c | 4 ++--
+> >  1 file changed, 2 insertions(+), 2 deletions(-)
+> >
+> > diff --git a/drivers/media/platform/st/stm32/stm32-csi.c b/drivers/medi=
+a/platform/st/stm32/stm32-csi.c
+> > index b69048144cc1..fd2b6dfbd44c 100644
+> > --- a/drivers/media/platform/st/stm32/stm32-csi.c
+> > +++ b/drivers/media/platform/st/stm32/stm32-csi.c
+> > @@ -443,8 +443,7 @@ static void stm32_csi_phy_reg_write(struct stm32_cs=
+i_dev *csidev,
+> >  static int stm32_csi_start(struct stm32_csi_dev *csidev,
+> >                          struct v4l2_subdev_state *state)
+> >  {
+> > -     struct media_pad *src_pad =3D
+> > -             &csidev->s_subdev->entity.pads[csidev->s_subdev_pad_nb];
+> > +     struct media_pad *src_pad;
+> >       const struct stm32_csi_mbps_phy_reg *phy_regs =3D NULL;
+> >       struct v4l2_mbus_framefmt *sink_fmt;
+> >       const struct stm32_csi_fmts *fmt;
+> > @@ -466,6 +465,7 @@ static int stm32_csi_start(struct stm32_csi_dev *cs=
+idev,
+> >       if (!csidev->s_subdev)
+> >               return -EIO;
+> >
+> > +     src_pad =3D &csidev->s_subdev->entity.pads[csidev->s_subdev_pad_n=
+b];
+> >       link_freq =3D v4l2_get_link_freq(src_pad,
+> >                                      fmt->bpp, 2 * csidev->num_lanes);
+> >       if (link_freq < 0)
+>
+> --
+> Regards,
+>
+> Sakari Ailus
