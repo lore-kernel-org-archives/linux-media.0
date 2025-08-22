@@ -1,350 +1,118 @@
-Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2054.outbound.protection.outlook.com [40.107.92.54])
+Received: from mx0b-0064b401.pphosted.com (mx0b-0064b401.pphosted.com [205.220.178.238])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 861E78F7D;
-	Fri, 22 Aug 2025 02:28:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.92.54
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755829733; cv=fail; b=hdWR/8RUT+aGvW6dndZ3TiP6S4jWHam8IUO7g5GL3ptgbmUhbjInz3yAp19S4wb+Dw9cuPP3+ONGzd3UpScD+gIlofce+JjYAGgxS/sFdR1OWYg/3t4wtxN7/RybRwu0j6lW1go2SQRhvTNgR+4S9Cwfxzr2H/eZuLU291kaJ48=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755829733; c=relaxed/simple;
-	bh=68lIB3m7iFgTzngOJL6flDrO5LFKESaxV5EB52mNMnI=;
-	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
-	 Content-Type:MIME-Version; b=Hpm49qxaILvNam7zTBZc8HN3NsWojup2KkY2YdZyAZX/U+wh36Ih/QHahujA2lfmYHZRqnm9V1QuO7QM83j5oUScVoq52axPRmiTQ6tOHOm8yJEyy0oDXfGVGyRgBiAE6JqhbLsq39dk/625Lit9AzBc7Kv4PGdxomKcGoutXbY=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=TjQL9815; arc=fail smtp.client-ip=40.107.92.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A25DD23B63F;
+	Fri, 22 Aug 2025 02:41:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.178.238
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1755830508; cv=none; b=lG0v0tCCRKV7VMXoFs+MB9hcieBJAhUIOAdoJu4aUyqir8i4w4ZkCDmfyBDD0XGoOufGVo6Q2IAhAHAETwaf59QfJZjBoN7EvQcZlvkEjdlyIXa+OS9xLiqTTTlu/0V/AkhiEutOjEhh1g+4fyxGvrVxJ19L5mJ+gfyeOyq2XC4=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1755830508; c=relaxed/simple;
+	bh=p4sorkCBJWlsizUJRbX51L1d1iI51BqF1Brpp4gmraU=;
+	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=JDqiV1QVHX76KE0bF8DjaRsZpu7TL4s4V+ChRsQjBBEhne+pVEpzL/VCHF2NaipAvSEU9/qZwkULiDURVTKDHaAoJN6kquUKNTp2xh3RwSVxyNcSQs5WsPHz3evTsUJeMOEMg9a+128b6/Kwjt5BYZ9ur50+n+pLSm10ZmIUsFA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=windriver.com; spf=pass smtp.mailfrom=windriver.com; dkim=pass (2048-bit key) header.d=windriver.com header.i=@windriver.com header.b=NPnCiVL1; arc=none smtp.client-ip=205.220.178.238
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=windriver.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=windriver.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="TjQL9815"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=YtZSz+NTItLVTC2Uojr62pU70jFTowL8P/kKOZrfC0eX/uhDvCfg5PKR3U+JrqOHN5RHLFi1XT+WQx3Rbn/red4P+N9YVK1thkUQWG0jO8yelK96fIUiZi47m1oIuceUrMM7jYceRl2cqGJqHG4Ul5EW6LQA7PxW/nGa6k5kABTJ/WbyC6nc0Esh6lfRLpn4Nr4q0Irj1Lt6VsrTg/dXrtOspKIlyghBgHLdfjLlvpE4QHYvP69sEFszk7ZsMdS64al+HJCkBclARbDuJpeWqpolmPWPRirpEmsfRslnceo9Zq7xO/A6XQbg92XiBd43Aq8GEmn4E3PTdCCj8iVIoQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=6aiyszTl1KCm60yvL9/uRh908YrvLG4PW6iniDAJFzY=;
- b=pRMQhUkZNCJk9hRAn2nlQSfIl7UDKRPWxf6yZksC0FZpzqafL4eTkyo2PT1vrFYeAYwfi2nEE/jdagI9WyYadY5C2plwOEDclW/RlGyDs5Jcb7n73EzlS7H8x+WInYdPksHvQfiS/1tsPUaiN0tuS5rP5egpNy8wRC6hXD9+nhQc5m9qrtdS4zmvA/9NH0S9ytjrvQtMVsJcLxF7ZjMx69Lzgeuml983HOS9k0G4Q6tnD0KkMhkLFzYVXIiFecVkxZ6dKB1SgYt/Jd0fO8jT9pSUbAaZew1YFcHCr11aZO5xettIBa5bLXYJtrZaSTV9Ixfk4Bhm9NN3HLA80fndTg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=6aiyszTl1KCm60yvL9/uRh908YrvLG4PW6iniDAJFzY=;
- b=TjQL9815df2ohpPEfcnpKLrXDaniivMxj2SVDayerYz5aDNVuFruGh7Be62Ly4oMvHYAiUVRLWkh3XpzkeuNpuMXXljhj/b3mW/ppzEFJjc9hiVsKQDcknqkudQP5HlQMUiGZ+tqGI/PZbQrQoYg9DDEE9zxFKt4hENBA3md8ls=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from PH8PR12MB7446.namprd12.prod.outlook.com (2603:10b6:510:216::13)
- by DM4PR12MB6446.namprd12.prod.outlook.com (2603:10b6:8:be::7) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.9052.14; Fri, 22 Aug 2025 02:28:48 +0000
-Received: from PH8PR12MB7446.namprd12.prod.outlook.com
- ([fe80::e5c1:4cae:6e69:52d7]) by PH8PR12MB7446.namprd12.prod.outlook.com
- ([fe80::e5c1:4cae:6e69:52d7%4]) with mapi id 15.20.9031.023; Fri, 22 Aug 2025
- 02:28:47 +0000
-Message-ID: <9b56ab20-dc09-47a8-8ab2-c8ef1fd8f782@amd.com>
-Date: Fri, 22 Aug 2025 10:28:37 +0800
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 8/8] Documentation: add documentation of AMD isp 4
- driver
-To: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Cc: mchehab@kernel.org, hverkuil@xs4all.nl, bryan.odonoghue@linaro.org,
- sakari.ailus@linux.intel.com, prabhakar.mahadev-lad.rj@bp.renesas.com,
- linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
- pratap.nirujogi@amd.com, benjamin.chan@amd.com, king.li@amd.com,
- gjorgji.rosikopulos@amd.com, Phil.Jawich@amd.com, Dominic.Antony@amd.com,
- bin.du@amd.com, Mario Limonciello <mario.limonciello@amd.com>,
- Richard.Gong@amd.com, anson.tsao@amd.com
-References: <20250618091959.68293-1-Bin.Du@amd.com>
- <20250618091959.68293-9-Bin.Du@amd.com>
- <20250805113719.GF24627@pendragon.ideasonboard.com>
- <e614b565-81e0-49c0-93dc-af1936462728@amd.com>
- <20250812134222.GN30054@pendragon.ideasonboard.com>
-Content-Language: en-US
-From: "Du, Bin" <bin.du@amd.com>
-In-Reply-To: <20250812134222.GN30054@pendragon.ideasonboard.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: SG2PR02CA0108.apcprd02.prod.outlook.com
- (2603:1096:4:92::24) To PH8PR12MB7446.namprd12.prod.outlook.com
- (2603:10b6:510:216::13)
+	dkim=pass (2048-bit key) header.d=windriver.com header.i=@windriver.com header.b="NPnCiVL1"
+Received: from pps.filterd (m0250811.ppops.net [127.0.0.1])
+	by mx0a-0064b401.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 57M1eWaR3925966;
+	Fri, 22 Aug 2025 02:09:59 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=windriver.com;
+	 h=cc:content-transfer-encoding:content-type:date:from
+	:in-reply-to:message-id:mime-version:references:subject:to; s=
+	PPS06212021; bh=XsuDtQ+9nvWfXiIYVbBm8oQt0Gk+bbePOLhK19iuPgk=; b=
+	NPnCiVL14TDDK69paX7JmJvT8Qe2vmU2ZMupjzMjS1xggY3p2jmV7TvB4rMxSRKW
+	NrAajQ0cmu26Ly+wpBTAFeEh4hre7qDQbrgB6lhzDH5snv6i4reewW/57PpW627H
+	C4NyB5u5KKAQQRgo89/aMarEKZihwCIEBofbXZ2mstR6XwTQL9OsRM4iROwYiL3B
+	aUR5gd/F1QzgYqOM++Z2bzblUupAfRLrawN3ny2Kc7ExtqDWOPwjUQ+vUNx5DvkS
+	HmK0AeRyFsCCtSkxET5dFiJ2USVYfkpMIj/L/0rdLAxOCC43sMEYaE75rZ2biFc+
+	+xywRyE7iPM8sN9VANTwAw==
+Received: from ala-exchng02.corp.ad.wrs.com ([128.224.246.37])
+	by mx0a-0064b401.pphosted.com (PPS) with ESMTPS id 48nekjtd2b-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
+	Fri, 22 Aug 2025 02:09:59 +0000 (GMT)
+Received: from ala-exchng01.corp.ad.wrs.com (10.11.224.121) by
+ ALA-EXCHNG02.corp.ad.wrs.com (10.11.224.122) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.57; Thu, 21 Aug 2025 19:09:44 -0700
+Received: from pek-lpd-ccm6.wrs.com (10.11.232.110) by
+ ala-exchng01.corp.ad.wrs.com (10.11.224.121) with Microsoft SMTP Server id
+ 15.1.2507.57 via Frontend Transport; Thu, 21 Aug 2025 19:09:51 -0700
+From: Lizhi Xu <lizhi.xu@windriver.com>
+To: <syzbot+d99f3a288cc7d8ef60fb@syzkaller.appspotmail.com>
+CC: <linux-kernel@vger.kernel.org>, <linux-media@vger.kernel.org>,
+        <mchehab@kernel.org>, <micha@freedict.org>,
+        <syzkaller-bugs@googlegroups.com>
+Subject: [PATCH] i2c: dev: Block zero-length messages
+Date: Fri, 22 Aug 2025 10:09:51 +0800
+Message-ID: <20250822020951.919822-1-lizhi.xu@windriver.com>
+X-Mailer: git-send-email 2.43.0
+In-Reply-To: <68a7b69f.050a0220.37038e.0047.GAE@google.com>
+References: <68a7b69f.050a0220.37038e.0047.GAE@google.com>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PH8PR12MB7446:EE_|DM4PR12MB6446:EE_
-X-MS-Office365-Filtering-Correlation-Id: 5ff12188-fad8-4e52-7fa9-08dde1239f56
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230040|366016|1800799024|376014;
-X-Microsoft-Antispam-Message-Info:
-	=?utf-8?B?MFFCbHExMWpqb1Jab29lTlVzT1JHREF2ZWc0SlpDc0gyeG9kNTJHMm5WZHJr?=
- =?utf-8?B?N3VzWWwyUGZTdlpHMExrSHZZRUtkejN4VmlpN04wdDM2aDNLVEdLRDFqc05T?=
- =?utf-8?B?RlNmWWgxM3dpL3NDRktVV3V0TnNkY2h5MFdIcnIxU3dzSG1hZEJxOXd5ZXcx?=
- =?utf-8?B?V3hUaUQveUMvb1BZZUEybEg3UTh4YUF6UFlKbEJrWk9wTTRBWU9vY3d5eTlJ?=
- =?utf-8?B?ZlROcWxBem1CUkFPbzd1eE9TZ2tCSXE0OVIzRkswVHdMd3BVRmFuZjJmUVp1?=
- =?utf-8?B?a2FzRG5PWXZuTUN4LzlNUVJzUmNuMDQ5QzRvV3FIdk1jeVJTVEhtYnNZMnBh?=
- =?utf-8?B?M1BsM0VtWW1FN3d0Qy9QdHVtMDViVG5Uelh5bWxDVmc2djkzZ0FHVUt5a2Fp?=
- =?utf-8?B?QnV1U0V3QVIyTFQxSitOZE9za3BTUFhUd0ozK3k3L2pFbHpwSjlXcmtabjhX?=
- =?utf-8?B?VWpjdXFKeXZ6SDIvbFVDeTdUVmMwbytZZmUzeTV5bCtKNmtGQzVpdzNBcnZP?=
- =?utf-8?B?NnRtWDNFNm5XSUhQREZXc001OXE4RGhPMHZYNGJ2WnUyS01tY0x3SGRSM3l2?=
- =?utf-8?B?K1NHZ2VSaStuNGF4OERJUm4zM1JSR0hnMUllSEhCVFRhOS9FQnlaM0tjR2pV?=
- =?utf-8?B?NzNTUE9JOE5oeEFyQUVycGZJWTBVYllldWlPWldHeXRCeFZVbmZDLzJOaEF5?=
- =?utf-8?B?MW9lTStGUHgxVGlJWGk4RHpIK0ovcWtxcGRFTkpsenVkeEZkTEtVbFgrVmpi?=
- =?utf-8?B?T2txQUx3NVVvODFWcVR5VWpKVktkWFQ5VFk2Vm5JaFBmZkRSSi95NWFCK3Jx?=
- =?utf-8?B?TU9OTXo0NjNIQ0Jlajd2RXVHTXF6bXpocml5eVQwa0FzaDdEOWh4Rk96M25G?=
- =?utf-8?B?WVBYRC9aTVRySDVHcStvTSt4Q29ZTXpMU1E0ZzRSUkZmZlZzeU45Z1RzTTlG?=
- =?utf-8?B?OTQ2enFmV1VJcC9ta2lzdWNVVVc3RWZiZm5EN3FQSjZ1Ulo5RGFzUFl6cjcy?=
- =?utf-8?B?dHYrd3BZVzhsQ2FaaWU5ZTRjN3Y1Y2Y1dkxhWUFLVUNSeUR4NHpFR2psdVFE?=
- =?utf-8?B?TjFUNEhzVVFFL1NGdE9LR1pkMy9GRU1CNHMwa2ZVbTZpWGtWVDVDOVhoQmR1?=
- =?utf-8?B?MkNpZGI1SnNaVzVEd0tyOHRsNzFtTTdZekhwbEdRcDk3TVBCUjhmbk5jNTI3?=
- =?utf-8?B?bklZYmdTdXdPTVBpN3Z6bmNpeGliSWl2cmtSMEt5RytGY3djTmJjaWU3ZkxS?=
- =?utf-8?B?UGR0eVpvNUhVTHlldmxuN01zSUE1TjVSczNwQkxsLzEyVnZhOW03MUNRcHVy?=
- =?utf-8?B?clFoVUtpQVRRTkp5bWNwcXoxTVhJNG16VHNmeUxQalNUcy95d1lNYWdmQk5Z?=
- =?utf-8?B?MThVcWEyNnlGU2pnb0t3WGhydW9CWVJMakp4VXpQWEtVdEJpcEFzTVZyRko3?=
- =?utf-8?B?ek9NalJsclBrdGg4V3FtQzhHTFFzTGs4U2R3R21yR0xtbkVCeURtOEtLZU5I?=
- =?utf-8?B?RTZSMnNhT3FyeVlDVnR0Q0pLYTNtN0liRnFuVlNONjVsV1REOUJITW1WdldX?=
- =?utf-8?B?R2J3ODA5cUZ3Y1loSDRwRlFyVzhoT2E0MWdxY1ZQZ29mcWduV0JRVDdkb3c1?=
- =?utf-8?B?ZHZNTlo0WG5aSSt5WTdPc2E1T0J6R0Rzb2prQndQeXczRSs5NTk2ejArK3h4?=
- =?utf-8?B?d3dyd2Vjc0U4bHRHMnp2SnhHZTZORk41SHdBdWxJZFBDamo1LzJ0MGpqSHlJ?=
- =?utf-8?B?Q2s2cFd1bmwzTXpNNlN5aDVQOVhlYWR6bjFBZW1udDUyYXlndGJXVHdma2cw?=
- =?utf-8?B?em5QeWVIdHZBVUdJWW0vZ3gwcjA4VjVOdExyK3psN09yOFFQYzVqeEdBUWd4?=
- =?utf-8?B?a3hGeGU4eTkybjNyN1lpOHdPU2VtQWJCeHV3TkpySEQ0VDI1WkNOd3prS000?=
- =?utf-8?Q?kzyIVg60gRE=3D?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH8PR12MB7446.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(1800799024)(376014);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?RFVjV0tQRFhlOXRMa3pBcXFpd0Vtc3JNeDJMb1lFaHFJL1A4T3FyYjhMMVA4?=
- =?utf-8?B?TFdNQTBjQ0ZsOWp2RzZBdkpBcWU1aE5kRElIQlRHa21LWXhSbFp4Q1hhekgy?=
- =?utf-8?B?N29vbVhtemVwTWl3WnFWOHJTY3VsSUdEaWJ4dDRxejRsS0JOUFZBTzdPc1hS?=
- =?utf-8?B?SUNvVU9yVTB6Z01RcUpwVUdUTVVVZmlFY0oyckNscXZGUnp6Yms4dGdGSzAy?=
- =?utf-8?B?U3UzQTV0aUFjdHVmcit4WHJ0WHIzTFE4MWM4cFBscUIxbUtCY2hUeFRON0I1?=
- =?utf-8?B?QzQrTnhBa2VtRFlNMmw3M2hKRXllY2ZWN1RER2NMN1hqMXhWRElxeDhWTFBN?=
- =?utf-8?B?RVNuektEb0g2a1p4SWovb3lXVHg2SG4vb3ZobGJDSGZqbGI3WW5EZE9JdzNH?=
- =?utf-8?B?QkMvVVhBeG5nQll6bTV3cEJTdno1ZGpMR1k0clhSNXNUallicVRpc0FJR2c3?=
- =?utf-8?B?bm1oUG5ObythODgwN25icTdLdWRHNHoxMUZmRktBV3MvazJzQlo1cUJVTW5J?=
- =?utf-8?B?OEl1cU01eTVGNGptNWM3WlQzZ1BIS0o5K0tod2YxZ1Z5bHhwNmhDMXhDREpW?=
- =?utf-8?B?L3lJS0FNTFNoQ3Y1enByZDNWZUtrYW1ZNWhPeEZEYmU5UWF3R2RMeWRFeXhZ?=
- =?utf-8?B?d1Rib2NyZitTS2Y4bzExQ1EycFdmTzdCQ3I2SVVSY1ZYSHlkNFBqanRrLzRV?=
- =?utf-8?B?LzFwZnpLT2VrUW0ybEthdThxekxwRWVyTVNGS1V1b21mRC9xZEFPUXFwL0Fo?=
- =?utf-8?B?UUphekhWNTJWdWN0bWxmR3VzbFJvVWJxR3FYeHJVMFcrY2M0T0tkMzZBYnBq?=
- =?utf-8?B?blZhMlpmTmRKQUFuUXVQTXdFbHdxdTEzMEtFUFhzbTlTL25pNnBlUUhlQnZi?=
- =?utf-8?B?NjlzTGpZcTh3YkZuRldNNHg1OG9TWHNLNUdUTFQycER3eFk1K0xUeXR3aHcr?=
- =?utf-8?B?ZENoZytEWHhDKzFBQk9ERm5Ka1djK3ZERmpjbVI4dzBkdU0yQ3Bxa3BZSGxo?=
- =?utf-8?B?WFRBYkNoOCs4NW8zUVVrc3RmSHQxWlVFT3BXSGp6WkVuMCtBMTQyUWJiZ0t6?=
- =?utf-8?B?SFBNZGpEbVpweGlwd3ZQT1l5YkNMemxQZmxUbk5yUExwaCsyY0N5bmdDbk1w?=
- =?utf-8?B?N29jM0Y4bkM0bU5EMThTS1NPdHJFTnc5OHgzTkdYUm45dU9rTXdleTJFZjV5?=
- =?utf-8?B?OW9aTFVTd0lkM051azdTdTBvS3ZMNUFuNEV0Q0NpN1NMVlBpcmY1T0VjZWdT?=
- =?utf-8?B?YWJTTmh2bkhBY3BKNkgvelRrN0xkU25HYWF3QWpWT2dRbk9uTUNYdWk4U0Z5?=
- =?utf-8?B?YnVwdTFCQkE3VHJncmtZWmdsUXJ5VGkwcXVZbXBta09QV0NidWh2N3ZHbmhW?=
- =?utf-8?B?b1FJems1WGZUM1R0TGRXRzZrMEdBU1BVZ0tSd2lsZzhiN0VrMmdCUjFOT2V6?=
- =?utf-8?B?ekpoOWhZSENSSGtJcDFjS0FOa3MzMkpHZ0dvbExOTlZTTFdCSHkrVjVaUEs4?=
- =?utf-8?B?L0ZZak4rakE0QmhFS1hvQTJVeUJPSHF2OG0vc21CMHZaeWt1VFBIdUlzNE1X?=
- =?utf-8?B?UmNhZm5zVUxvS1ZwWnRMV1VzUWptUEVFN3BQVUpvb3Y4MXlkSzFGT0Q1RkJu?=
- =?utf-8?B?aitWckFpeTViNmNmNk1KVUVmek85RUhMWHhDdFR3cWZza0FRais1dkY3RG5L?=
- =?utf-8?B?blVxcnFUZlRWcUNJRlVzRFgrUkxkUDVRczk0YWQ0TGVwQ0pjNTRaZlUzS3ZF?=
- =?utf-8?B?cGQ2Q0cwYTl0OHFMbUdsL2xmcUhvMFpoRVFtc0x3RmNPeVRaRlFQZGh6eFBt?=
- =?utf-8?B?NUxQcm55b1ZCZEFKYk1LRjNFQ2p1eVREZ0w2U3l0OEpKY3k3MmlCRnlYbmp2?=
- =?utf-8?B?K2dmZWpDa2ZRbkxqYmJCd1JUWEsxZkN1QXZmS043U3NFdGpXTjVaUC8zQ3l0?=
- =?utf-8?B?bEFWMGMyWXVzRWIxMXo4bGxuU0xoTEx1eklid2IrUHFBc01YT1JrWHNwYkwy?=
- =?utf-8?B?MExiZk1od2owd0c1K1dhWm5uZVFTQ3BtNkdBQjdLQ2Nyc3RSUThpcmpwTGdM?=
- =?utf-8?B?dFdJWFdHbTcwVk5oOHNzd0FBQjREdUJNVnY3TTlPbXorelhzaUlKd3laM1g0?=
- =?utf-8?Q?hh0g=3D?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 5ff12188-fad8-4e52-7fa9-08dde1239f56
-X-MS-Exchange-CrossTenant-AuthSource: PH8PR12MB7446.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 Aug 2025 02:28:47.3719
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 8nqGGTnzmxDiwnH5sWC5TWGoEm1aeui4z6OvDshM4UTQel4/kcNVlRXfHGI8vV9S
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR12MB6446
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwODIyMDAxOSBTYWx0ZWRfX5wFP/Nuqq6LI
+ Jz0sGlgNKAnBYXiQ7un8gcWVqNZ46TjcReT2tAt2i0i93MgsKbx37zmVXcztisVXmxoAN5jg7Qi
+ 3QCQhkW52HjH8a7a3DCCRUVpGBaepT39PRp/sJH2SZ+OfmUE4tH/9BbmXvlG5KA0Lp64Nw8LJoh
+ iWJzOm3HxLbWGvIVRuGsw0KOHaa6r6j5nHBYakNOzFp0mbOlrbmZisr5ONZC1Lvhaw9omw9uElr
+ yddYPJIC4gfUGNuGEmdWArUUQ9Bm7yy+PQdkpEYlRnl7AqeCXWTiAhE+0ddC9xTw6gd/gzjbr68
+ 0xxTVmIn5idGD17GYL+oIPDii62JlV4rLKZFE7LzaT5I8NYLjI6+yFowleYoN22FcA2O9V3ORuz
+ 2MojpzI3T6Zr0s0apRUM9XdVf2YE3w==
+X-Proofpoint-ORIG-GUID: azOTVpda7hzb8SauqhBgs8Rk78wdyNzu
+X-Proofpoint-GUID: azOTVpda7hzb8SauqhBgs8Rk78wdyNzu
+X-Authority-Analysis: v=2.4 cv=L5pEg+T8 c=1 sm=1 tr=0 ts=68a7d177 cx=c_pps
+ a=Lg6ja3A245NiLSnFpY5YKQ==:117 a=Lg6ja3A245NiLSnFpY5YKQ==:17
+ a=2OwXVqhp2XgA:10 a=edf1wS77AAAA:8 a=hSkVLCK3AAAA:8 a=t7CeM3EgAAAA:8
+ a=f8YqMda3FKrJFGOuSw0A:9 a=DcSpbTIhAlouE1Uv7lRv:22 a=cQPPKAXgyycSBL8etih5:22
+ a=FdTzh2GWekK77mhwV6Dw:22 a=cPQSjfK2_nFv0Q5t_7PE:22 a=poXaRoVlC6wW9_mwW8W4:22
+ a=Z5ABNNGmrOfJ6cZ5bIyy:22 a=SsAZrZ5W_gNWK9tOzrEV:22
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.1.9,FMLib:17.12.80.40
+ definitions=2025-08-21_04,2025-08-20_03,2025-03-28_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ spamscore=0 malwarescore=0 priorityscore=1501 clxscore=1011 impostorscore=0
+ suspectscore=0 bulkscore=0 lowpriorityscore=0 adultscore=0 phishscore=0
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.22.0-2508110000 definitions=firstrun
 
-Many thanks Laurent, sorry for the late response because we had a lot of 
-internal discussion and did possible solution prototype validation.
+The user passed two messages via ioctl, both of which were zero-length.
+This caused i2cdev_ioctl_rdwr() to allocate zero-length memory for msgs[i].buf
+when executing memdup_user(), resulting in a ZERO_SIZE_PTR.
+i2cdev_ioctl_rdwr() did not handle this situation, leading to a null-ptr-deref
+when accessing msgs[i].buf in su3000_i2c_transfer().
 
-On 8/12/2025 9:42 PM, Laurent Pinchart wrote:
-> On Tue, Aug 12, 2025 at 09:36:04AM +0800, Du, Bin wrote:
->> On 8/5/2025 7:37 PM, Laurent Pinchart wrote:
->>> On Wed, Jun 18, 2025 at 05:19:59PM +0800, Bin Du wrote:
->>>> Add documentation for AMD isp 4 and describe the main components
->>>>
->>>> Signed-off-by: Bin Du <Bin.Du@amd.com>
->>>> Signed-off-by: Svetoslav Stoilov <Svetoslav.Stoilov@amd.com>
->>>> ---
->>>>    Documentation/admin-guide/media/amdisp4-1.rst | 64 +++++++++++++++++++
->>>>    Documentation/admin-guide/media/amdisp4.dot   |  8 +++
->>>>    MAINTAINERS                                   |  2 +
->>>>    3 files changed, 74 insertions(+)
->>>>    create mode 100644 Documentation/admin-guide/media/amdisp4-1.rst
->>>>    create mode 100644 Documentation/admin-guide/media/amdisp4.dot
->>>>
->>>> diff --git a/Documentation/admin-guide/media/amdisp4-1.rst b/Documentation/admin-guide/media/amdisp4-1.rst
->>>> new file mode 100644
->>>> index 000000000000..417b15af689a
->>>> --- /dev/null
->>>> +++ b/Documentation/admin-guide/media/amdisp4-1.rst
->>>> @@ -0,0 +1,64 @@
->>>> +.. SPDX-License-Identifier: GPL-2.0
->>>> +
->>>> +.. include:: <isonum.txt>
->>>> +
->>>> +====================================
->>>> +AMD Image Signal Processor (amdisp4)
->>>> +====================================
->>>> +
->>>> +Introduction
->>>> +============
->>>> +
->>>> +This file documents the driver for the AMD ISP4 that is part of
->>>> +AMD Ryzen AI Max 385 SoC.
->>>> +
->>>> +The driver is located under drivers/media/platform/amd/isp4 and uses
->>>> +the Media-Controller API.
->>>> +
->>>> +Topology
->>>> +========
->>>> +
->>>> +.. _amdisp4_topology_graph:
->>>> +
->>>> +.. kernel-figure:: amdisp4.dot
->>>> +     :alt:   Diagram of the media pipeline topology
->>>> +     :align: center
->>>> +
->>>> +
->>>> +
->>>> +The driver has 1 sub-device:
->>>> +
->>>> +- isp: used to resize and process bayer raw frames in to yuv.
->>>> +
->>>> +The driver has 1 video device:
->>>> +
->>>> +- <capture video device: capture device for retrieving images.
->>>> +
->>>> +
->>>> +  - ISP4 Image Signal Processing Subdevice Node
->>>> +-----------------------------------------------
->>>> +
->>>> +The isp4 is represented as a single V4L2 subdev, the sub-device does not
->>>> +provide interface to the user space.
->>>
->>> Doesn't it ? The driver sets the V4L2_SUBDEV_FL_HAS_DEVNODE flag for the
->>> subdev, and calls v4l2_device_register_subdev_nodes().
->>
->> We have exported subdev device to user space during the testing with
->> libcamera sample pipeline.
-> 
-> But it's not needed anymore ? If not, you could stop exposing the subdev
-> to userspace for the time being.
-> 
+Adding a zero-length check in i2cdev_ioctl_rdwr() resolves the ZERO_SIZE_PTR
+issue.
 
-Yes, will not expose ISP subdev to userspace. Please see more details below.
+Reported-by: syzbot+d99f3a288cc7d8ef60fb@syzkaller.appspotmail.com
+Closes: https://syzkaller.appspot.com/bug?extid=d99f3a288cc7d8ef60fb
+Tested-by: syzbot+d99f3a288cc7d8ef60fb@syzkaller.appspotmail.com
+Signed-off-by: Lizhi Xu <lizhi.xu@windriver.com>
+---
+ drivers/i2c/i2c-dev.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
->>> As far as I understand, the camera is exposed by the firmware with a
->>> webcam-like interface. We need to better understand your plans with this
->>> driver. If everything is handled by the firmware, why are the sensor and
->>> subdev exposed to userspace ? Why can't you expose a single video
->>> capture device, with a media device, and handle everything behind the
->>> scene ? I assume there may be more features coming later. Please
->>> document the plan, we can't provide feedback on the architecture
->>> otherwise.
->>
->> Currently, isp fw is controlling the sensor to update just the exposure
->> and gain, since the 3A algorithms run on ISP HW rather than on x86.
-> 
-> This design decision makes my hair stand on end :-( Exposing the camera
-> sensor to both the firmware and the host concurrently is asking for
-> trouble. If you really want to abstract the camera behind a firmware and
-> only expose a webcam-like API (or not even that in this version, as the
-> driver exposes no control as far as I can see), then you should push the
-> whole sensor handling to the firmware too. In my opinion that would not
-> be a good solution compared to exposing the ISP to the host, but it
-> would be better than this hybrid model.
-> 
-
-Totally agree, yes, the hybrid model is really a bad idea, based on our 
-internal validation, we plan to take one of your suggestions, that is to 
-push the whole sensor handling to the firmware, so our ISP driver will 
-work like UVC driver.
-
->> In a
->> future version, we plan to introduce raw output support in the ISP
->> driver, allowing users to choose between AMD’s 3A running on ISP
->> hardware or a custom 3A running on x86. If the user opts for the
->> x86-based 3A, the firmware will relinquish control of the sensor, and
->> hands over full control to the x86 system.
-> 
-> Will the firmware at that point expose to Linux all the ISP statistics
-> needed to implement auto-exposure ? What if I want to also set digital
-> gain ? Or have manual white balance (requiring statistics), and manual
-> CCM ?
-> 
-
-No, because all 3A, ISP and camera control will be put inside firmware. 
-Currently, we only support auto mode, so, no manual control will be exposed
-
->>>> The sub-device is connected to one video node
->>>> +(isp4_capture) with immutable active link. The isp entity is connected
->>>> +to sensor pad 0 and receives the frames using CSI-2 protocol. The sub-device is
->>>> +also responsible to configure CSI2-2 receiver.
->>>> +The sub-device processes bayer raw data from the connected sensor and output
->>>> +them to different YUV formats. The isp also has scaling capabilities.
->>>> +
->>>> +  - isp4_capture - Frames Capture Video Node
->>>> +--------------------------------------------
->>>> +
->>>> +Isp4_capture is a capture device to capture frames to memory.
->>>> +This entity is the DMA engine that write the frames to memory.
->>>> +The entity is connected to isp4 sub-device.
->>>> +
->>>> +Capturing Video Frames Example
->>>> +==============================
->>>> +
->>>> +.. code-block:: bash
->>>> +
->>>> +         # set the links
->>>
->>> This seems very under-documented.
->>
->> Yes, documentation needs to be updated.
->>
->>>> +
->>>> +         # start streaming:
->>>> +         v4l2-ctl "-d" "/dev/video0" "--set-fmt-video=width=1920,height=1080,pixelformat=NV12" "--stream-mmap" "--stream-count=10"
->>>> diff --git a/Documentation/admin-guide/media/amdisp4.dot b/Documentation/admin-guide/media/amdisp4.dot
->>>> new file mode 100644
->>>> index 000000000000..a4c2f0cceb30
->>>> --- /dev/null
->>>> +++ b/Documentation/admin-guide/media/amdisp4.dot
->>>> @@ -0,0 +1,8 @@
->>>> +digraph board {
->>>> +	rankdir=TB
->>>> +	n00000001 [label="{{<port0> 0} | amd isp4\n | {<port1> 1}}", shape=Mrecord, style=filled, fillcolor=green]
->>>> +	n00000001:port1 -> n00000004 [style=bold]
->>>> +	n00000004 [label="Preview\n/dev/video0", shape=box, style=filled, fillcolor=yellow]
->>>> +	n0000000a [label="{{} | ov05c10 22-0010\n/dev/v4l-subdev0 | {<port0> 0}}", shape=Mrecord, style=filled, fillcolor=green]
->>>> +	n0000000a:port0 -> n00000001:port0 [style=bold]
->>>> +}
->>>> diff --git a/MAINTAINERS b/MAINTAINERS
->>>> index 15070afb14b5..e4455bde376f 100644
->>>> --- a/MAINTAINERS
->>>> +++ b/MAINTAINERS
->>>> @@ -1113,6 +1113,8 @@ M:	Nirujogi Pratap <pratap.nirujogi@amd.com>
->>>>    L:	linux-media@vger.kernel.org
->>>>    S:	Maintained
->>>>    T:	git git://linuxtv.org/media.git
->>>> +F:	Documentation/admin-guide/media/amdisp4-1.rst
->>>> +F:	Documentation/admin-guide/media/amdisp4.dot
->>>>    F:	drivers/media/platform/amd/Kconfig
->>>>    F:	drivers/media/platform/amd/Makefile
->>>>    F:	drivers/media/platform/amd/isp4/*
-> 
-
+diff --git a/drivers/i2c/i2c-dev.c b/drivers/i2c/i2c-dev.c
+index e9577f920286..17b0bec53e21 100644
+--- a/drivers/i2c/i2c-dev.c
++++ b/drivers/i2c/i2c-dev.c
+@@ -257,7 +257,7 @@ static noinline int i2cdev_ioctl_rdwr(struct i2c_client *client,
+ 	res = 0;
+ 	for (i = 0; i < nmsgs; i++) {
+ 		/* Limit the size of the message to a sane amount */
+-		if (msgs[i].len > 8192) {
++		if (msgs[i].len > 8192 || msgs[i].len == 0) {
+ 			res = -EINVAL;
+ 			break;
+ 		}
 -- 
-Regards,
-Bin
+2.43.0
 
