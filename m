@@ -1,54 +1,54 @@
 Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5515B2DF71F
-	for <linux-media@vger.kernel.org>; Mon, 25 Aug 2025 09:51:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CF6922E03E1
+	for <linux-media@vger.kernel.org>; Mon, 25 Aug 2025 09:51:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.20
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756115516; cv=none; b=BASxip/szzoTQRjAPeYKHv87Timvg0OPUe9rkBWvrsqg1t54ePUcL+Ymze6Vi2kz9T7hYDzsUl9aVx98CEjU4DChFjAl5uG8ighJ1+QRbBjNIR7eZxHMRnRvN6dmh8nH7n6dt8ZouwOaa2Iv6ClkJjyHFDAegAhU26xuCQ0a4VA=
+	t=1756115518; cv=none; b=RZu55SWaHgtKFiQXGPkurcKxU/hh/4I097MI1myHtiPB4Jdi2q2BawfrkqOdPhZ5I88iLKMGTQsDkBKO4/UKUQSqCZmumRxfi/CRLwz8aKuTKiUw8vwUhQY3e6SMaJMBOpkGPKpaPU+AfDdxj+lltXzs6+wEiBdH5MbotRwVQYU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756115516; c=relaxed/simple;
-	bh=Eaus8bI2b93z8V6NqpCoQoHVvIXHMkPKyYb36XrIGik=;
+	s=arc-20240116; t=1756115518; c=relaxed/simple;
+	bh=H3CTGjYs3TxJoTvmZDjqCNtYPeLUKmp6JgvxcHF3uzY=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=o4nh82St45PRM9jzrKae99nouSauuUsBuqRHhk6hEubnD+HX+EVdQyZAkmHaJq5Nnn6oISkrW4NeozjljijND4i0Ld2tsz3rH0WmymmAAqxpfCuThQS8CiUUCE6C+ehu/DcupBL/pm7Ekbpi2KwU7aU0OLn2aAfjmjarQcZbftw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Z9HQtrz/; arc=none smtp.client-ip=198.175.65.20
+	 MIME-Version; b=RZe2RyZ24mjvf5tdLIK+ntfwBA05E2xdve0Uxcm0kQgtCddxJwif2CEtex4LE13PJxUXvYcMpqRThpO9AJm9erwKuyyg+7Tmw2UCilAmx1a6n5ZGx76VSs+cIzbbFPtT2Qwyob6IvpDAzCLF5F5d/v21VaK0lbWMphesr7rmODw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=lqDcUOQV; arc=none smtp.client-ip=198.175.65.20
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Z9HQtrz/"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="lqDcUOQV"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1756115516; x=1787651516;
+  t=1756115517; x=1787651517;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=Eaus8bI2b93z8V6NqpCoQoHVvIXHMkPKyYb36XrIGik=;
-  b=Z9HQtrz/DkHDsbizm3JGo8D8KHzZaCGOjXJT/+kHdwvK0GXesgSQ4ObE
-   FbX2IBuf/GqtSAO05tmLfGf7AXyTnVuZjmux2om9Nz89oC0Y4MfydHaKC
-   PMx8Jpmc9GGH1HSLE2LImjXtPTBnvVh44TnJo/BorcBz2yTMBnfEcu8DM
-   YDksQACig2wjpp76ctx828K2ROo30ze/+DSUV6iLxtQFQak24uVdqhnlz
-   LUGHUtdKKyx7N0JICq0igPiD2myPdWlC2HhM4LpQMaTPy8/j71DbNw/8o
-   M6UrjHvtNuCcteMK+DQbF3pUJZMn8/PnkjNQjStY51WI+t26AHz7ZGT02
-   w==;
-X-CSE-ConnectionGUID: rPfCfXHmQByopazsnuYfIg==
-X-CSE-MsgGUID: w14IqTGnR+i04hT9OupG6A==
-X-IronPort-AV: E=McAfee;i="6800,10657,11532"; a="58032331"
+  bh=H3CTGjYs3TxJoTvmZDjqCNtYPeLUKmp6JgvxcHF3uzY=;
+  b=lqDcUOQVCOOSlePy6b48MutIA+dWPnYIG9bH1n/ngwQnnBG5mOrrceUR
+   QZcdXI6zRCA6jZwErUmSbm3xJSteaVH59tSFhAQN7q2E2AVC149NAHDA9
+   idHoRLrO9WFE+aGDBDHkumspSWYKATxxIMwpRsE07IkFOgfNmSuQ9mqwl
+   jJN5ilJBHVCFg8nzHqUFYQgKcHWTztHBIejjGXDnLnSHiVN+3EG2dChSH
+   /U8AIvdPka4o1JPAuEmM/pfagLXd2kpSaJVEqe2bojph402X0vXmsbZQU
+   d8BOKo7u6OvVykwYOw2mSqC7uTsHiqMAM/kv0ZSxuPxTqEUl16/VqBche
+   Q==;
+X-CSE-ConnectionGUID: vuucajjDRzeR+G+w9hfBOg==
+X-CSE-MsgGUID: nSRXBgnrT2COvBmzhaMuKg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11532"; a="58032347"
 X-IronPort-AV: E=Sophos;i="6.17,312,1747724400"; 
-   d="scan'208";a="58032331"
+   d="scan'208";a="58032347"
 Received: from orviesa003.jf.intel.com ([10.64.159.143])
   by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Aug 2025 02:51:46 -0700
-X-CSE-ConnectionGUID: 4UW+y4GyQFe6rQY8V9KUEA==
-X-CSE-MsgGUID: pjOW91K8SMGrXh4ukwe2UA==
+X-CSE-ConnectionGUID: sNX9XoMlTtKr+801CFjDTQ==
+X-CSE-MsgGUID: Iq7NaFlTSKKEVL0s5XsvKg==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.17,312,1747724400"; 
-   d="scan'208";a="173431102"
+   d="scan'208";a="173431105"
 Received: from vpanait-mobl.ger.corp.intel.com (HELO kekkonen.fi.intel.com) ([10.245.245.7])
-  by ORVIESA003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Aug 2025 02:51:39 -0700
+  by ORVIESA003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Aug 2025 02:51:38 -0700
 Received: from punajuuri.localdomain (unknown [192.168.240.130])
-	by kekkonen.fi.intel.com (Postfix) with ESMTP id DE56D122007;
+	by kekkonen.fi.intel.com (Postfix) with ESMTP id BE845121FF7;
 	Mon, 25 Aug 2025 12:51:08 +0300 (EEST)
 Received: from sailus by punajuuri.localdomain with local (Exim 4.98.2)
 	(envelope-from <sakari.ailus@linux.intel.com>)
-	id 1uqTr2-00000005ahY-3ft9;
+	id 1uqTr2-00000005agu-37ss;
 	Mon, 25 Aug 2025 12:51:08 +0300
 Organization: Intel Finland Oy - BIC 0357606-4 - c/o Alberga Business Park, 6 krs, Bertel Jungin Aukio 5, 02600 Espoo
 From: Sakari Ailus <sakari.ailus@linux.intel.com>
@@ -81,9 +81,9 @@ Cc: hans@jjverkuil.nl,
 	Hans de Goede <hdegoede@redhat.com>,
 	Jacopo Mondi <jacopo.mondi@ideasonboard.com>,
 	Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
-Subject: [PATCH v11 54/66] media: uapi: v4l: subdev: Enable streams API
-Date: Mon, 25 Aug 2025 12:50:55 +0300
-Message-ID: <20250825095107.1332313-55-sakari.ailus@linux.intel.com>
+Subject: [PATCH v11 46/66] media: uapi: Add metadata layout for ov2740 embedded data
+Date: Mon, 25 Aug 2025 12:50:47 +0300
+Message-ID: <20250825095107.1332313-47-sakari.ailus@linux.intel.com>
 X-Mailer: git-send-email 2.47.2
 In-Reply-To: <20250825095107.1332313-1-sakari.ailus@linux.intel.com>
 References: <20250825095107.1332313-1-sakari.ailus@linux.intel.com>
@@ -95,87 +95,120 @@ List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Remove v4l2_subdev_enable_streams_api variable that was used to easily
-enable streams API for development, and conditions that use the variable.
-
-This patch enables the streams API for V4L2 sub-device interface which
-allows transporting multiple streams on a single MC link.
+Add a metadata layout for ov2740 camera sensor embedded data and document
+it.
 
 Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
-Reviewed-by: Jacopo Mondi <jacopo.mondi@ideasonboard.com>
+Reviewed-by: Julien Massot <julien.massot@collabora.com>
 ---
- drivers/media/v4l2-core/v4l2-subdev.c | 30 ---------------------------
- 1 file changed, 30 deletions(-)
+ .../media/v4l/ext-ctrls-image-source.rst      |  3 +
+ .../media/v4l/metadata-layouts.rst            | 72 +++++++++++++++++++
+ include/uapi/linux/v4l2-controls.h            |  1 +
+ 3 files changed, 76 insertions(+)
 
-diff --git a/drivers/media/v4l2-core/v4l2-subdev.c b/drivers/media/v4l2-core/v4l2-subdev.c
-index 8d4c484109fb..8100a812c766 100644
---- a/drivers/media/v4l2-core/v4l2-subdev.c
-+++ b/drivers/media/v4l2-core/v4l2-subdev.c
-@@ -50,15 +50,6 @@ struct v4l2_subdev_stream_config {
- 	struct v4l2_fract interval;
- };
+diff --git a/Documentation/userspace-api/media/v4l/ext-ctrls-image-source.rst b/Documentation/userspace-api/media/v4l/ext-ctrls-image-source.rst
+index 371c155a88f7..ced358d7c250 100644
+--- a/Documentation/userspace-api/media/v4l/ext-ctrls-image-source.rst
++++ b/Documentation/userspace-api/media/v4l/ext-ctrls-image-source.rst
+@@ -165,3 +165,6 @@ Image Source Control IDs
+     * - V4L2_METADATA_LAYOUT_CCS
+       - :ref:`CCS embedded data <media-metadata-layout-ccs>`
+       - 1
++    * - V4L2_METADATA_LAYOUT_OV2740
++      - :ref:`OV2740 embedded data <media-metadata-layout-ov2740>`
++      - 2
+diff --git a/Documentation/userspace-api/media/v4l/metadata-layouts.rst b/Documentation/userspace-api/media/v4l/metadata-layouts.rst
+index a4f7e93e6a29..e667148cc3cb 100644
+--- a/Documentation/userspace-api/media/v4l/metadata-layouts.rst
++++ b/Documentation/userspace-api/media/v4l/metadata-layouts.rst
+@@ -39,3 +39,75 @@ format" (code ``0xa``) but their use may be extended further in the future, to
+ cover other CCS embedded data format codes.
  
--#if defined(CONFIG_VIDEO_V4L2_SUBDEV_API)
--/*
-- * The Streams API is an experimental feature. To use the Streams API, set
-- * 'v4l2_subdev_enable_streams_api' to 1 below.
-- */
--
--static bool v4l2_subdev_enable_streams_api;
--#endif
--
- /*
-  * Maximum stream ID is 63 for now, as we use u64 bitmask to represent a set
-  * of streams.
-@@ -642,13 +633,6 @@ static long subdev_do_ioctl(struct file *file, unsigned int cmd, void *arg,
- 				       V4L2_SUBDEV_CLIENT_CAP_STREAMS;
- 	int rval;
+ Also see :ref:`CCS driver documentation <media-ccs-routes>`.
++
++.. _media-metadata-layout-ov2740:
++
++Omnivision OV2740 Embedded Data Layout (``V4L2_METADATA_LAYOUT_OV2740``)
++^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
++
++The Omnivision OV2740 camera sensor produces the following embedded data layout,
++indicated by ``V4L2_METADATA_LAYOUT_CCS`` metadata layout. The format conforms
++to :ref:`CCS embedded data layout <media-metadata-layout-ccs>` up to level 1.
++
++.. flat-table:: Omnivision OV2740 Embedded Data Layout. Octets at indices marked
++                reserved or unused have been omitted from the table. The values
++                are big endian byte order.
++    :header-rows: 1
++
++    * - Offset
++      - Size in bits (active bits if not the same as size)
++      - Content description
++    * - 4
++      - 16 (10--0)
++      - Analogue gain
++    * - 6
++      - 16
++      - Coarse integration time
++    * - 10
++      - 8
++      - Dpc correction threshold
++    * - 15
++      - 16
++      - Output image width
++    * - 17
++      - 16
++      - Output image height
++    * - 23
++      - 8
++      - MIPI header revision number (2)
++    * - 31
++      - 8
++      - Vertical (bit 1) and horizontal flip (bit 0)
++    * - 32
++      - 8
++      - Frame duration A
++    * - 33
++      - 8
++      - Frame duration B
++    * - 34
++      - 8
++      - Context count (2)
++    * - 35
++      - 8
++      - Context select
++    * - 54
++      - 8
++      - Data pedestal bits 9--2
++    * - 63
++      - 8
++      - Frame average bits 9--2
++    * - 64
++      - 16
++      - Digital gain red
++    * - 66
++      - 16
++      - Digital gain greenr
++    * - 68
++      - 16
++      - Digital gain blue
++    * - 70
++      - 16
++      - Digital gain greenb
++    * - 89
++      - 8
++      - Frame counter (starts at 1, wraps to 0 after 255)
+diff --git a/include/uapi/linux/v4l2-controls.h b/include/uapi/linux/v4l2-controls.h
+index 51d43d4a3151..bac2fdcbd202 100644
+--- a/include/uapi/linux/v4l2-controls.h
++++ b/include/uapi/linux/v4l2-controls.h
+@@ -1244,6 +1244,7 @@ enum v4l2_jpeg_chroma_subsampling {
  
--	/*
--	 * If the streams API is not enabled, remove V4L2_SUBDEV_CAP_STREAMS.
--	 * Remove this when the API is no longer experimental.
--	 */
--	if (!v4l2_subdev_enable_streams_api)
--		streams_subdev = false;
--
- 	switch (cmd) {
- 	case VIDIOC_SUBDEV_QUERYCAP: {
- 		struct v4l2_subdev_capability *cap = arg;
-@@ -1002,9 +986,6 @@ static long subdev_do_ioctl(struct file *file, unsigned int cmd, void *arg,
- 		struct v4l2_subdev_routing *routing = arg;
- 		struct v4l2_subdev_krouting *krouting;
+ #define V4L2_CID_METADATA_LAYOUT		(V4L2_CID_IMAGE_SOURCE_CLASS_BASE + 12)
+ #define V4L2_METADATA_LAYOUT_CCS		1U
++#define V4L2_METADATA_LAYOUT_OV2740		2U
  
--		if (!v4l2_subdev_enable_streams_api)
--			return -ENOIOCTLCMD;
--
- 		if (!(sd->flags & V4L2_SUBDEV_FL_STREAMS))
- 			return -ENOIOCTLCMD;
  
-@@ -1029,9 +1010,6 @@ static long subdev_do_ioctl(struct file *file, unsigned int cmd, void *arg,
- 		unsigned int num_active_routes = 0;
- 		unsigned int i;
- 
--		if (!v4l2_subdev_enable_streams_api)
--			return -ENOIOCTLCMD;
--
- 		if (!(sd->flags & V4L2_SUBDEV_FL_STREAMS))
- 			return -ENOIOCTLCMD;
- 
-@@ -1122,14 +1100,6 @@ static long subdev_do_ioctl(struct file *file, unsigned int cmd, void *arg,
- 	case VIDIOC_SUBDEV_S_CLIENT_CAP: {
- 		struct v4l2_subdev_client_capability *client_cap = arg;
- 
--		/*
--		 * Clear V4L2_SUBDEV_CLIENT_CAP_STREAMS if streams API is not
--		 * enabled. Remove this when streams API is no longer
--		 * experimental.
--		 */
--		if (!v4l2_subdev_enable_streams_api)
--			client_cap->capabilities &= ~V4L2_SUBDEV_CLIENT_CAP_STREAMS;
--
- 		/* Filter out unsupported capabilities */
- 		client_cap->capabilities &= (V4L2_SUBDEV_CLIENT_CAP_STREAMS |
- 					     V4L2_SUBDEV_CLIENT_CAP_INTERVAL_USES_WHICH);
+ /* Image processing controls */
 -- 
 2.47.2
 
