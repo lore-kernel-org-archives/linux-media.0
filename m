@@ -1,54 +1,54 @@
 Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.10])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DC18E2D46B3
-	for <linux-media@vger.kernel.org>; Mon, 25 Aug 2025 09:51:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D67152D46DB
+	for <linux-media@vger.kernel.org>; Mon, 25 Aug 2025 09:51:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756115484; cv=none; b=TaAyPETLBSElo9y5NjjD6OLG4PhEDC3nkSsnzgThQ7JxUBc/5x9YNveEHuQV/fxx1luuK2gvR488bKoTgmf1/s3a9EX8a1fJwV5/FHgx5IJNuqdKvtSGFPiXwKI22e+/sOHc/pNxY7rZO4DpDCC4zqZURDYmQqu/ERUnT+MZBEU=
+	t=1756115485; cv=none; b=T3YjLq1gfecHQ0uHuuUFYLlgc2/1tpAMtVf1IWkZkWepJOv9FyOlwHnz5/DbCVII6q0ZbgS8e8uSef67o4eC7HKc46UBfnCIAG4VGVXKeZjkZuwRnSClWLB+OwFW7B20/R3NXtOXjUiGvP7EkJ71ccDSvpnWxY38DGZEeTV5oWk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756115484; c=relaxed/simple;
-	bh=TJpxzv+aTeHJgXT6dqi7wWphXEXmHl6pG2zHU0wchEM=;
+	s=arc-20240116; t=1756115485; c=relaxed/simple;
+	bh=/RmmH0yT7/5iQ0HDUuVbe/Ei+gflOATp9Q7tRRD3zNc=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=dmxFMkGU9gtaKwFvlSjo8UNkL1s6QBSIooaPU/5EMwIh/ax7y/rx9Z/SFjt49a6lMdNufHzupmYuah1Djl1IJrTqGmPbsurMAKKDF0xi+fH+n/092L62GmLHSsdK509XgpOOQ8pmw50NU9ZZFVZw9wdVLO2R8AKhhhKKjAH3IUk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=GmyGZ2qZ; arc=none smtp.client-ip=192.198.163.10
+	 MIME-Version; b=OlQ38sbFbvjnHFgfJ3L5AljqIWLdjueqf905ylMP5ZhCFpLXDaNEvGKpiBzLCZRdJP7BbVdRiXaMjVbsPQS+FXVSmmZv1VBk0gBqwH3n39Ec5aoWugAzMdEEiXc8BPyg3vNSGZm+QhiycPNoy/sMCGM4UEcpq/TxilSnI5idals=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=J7/ONk8X; arc=none smtp.client-ip=192.198.163.10
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="GmyGZ2qZ"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="J7/ONk8X"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1756115483; x=1787651483;
+  t=1756115484; x=1787651484;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=TJpxzv+aTeHJgXT6dqi7wWphXEXmHl6pG2zHU0wchEM=;
-  b=GmyGZ2qZOxWpgF/9JKWkdCBwkWrtgKuUtr4dMJj4xbAWPenQS0nbKQF8
-   vdsZNFwQ+61vDVhGJOM+K09EHaBWEnWEgj3tUGt/nwOWXzLYg6zKj6yK0
-   wohLfguAkZJ0AV1as4q+0fzSe/hReIpx6NKdL8eGrJYl22J4tjXNBhlYI
-   uE/JWuEl3zM5lVpk/vIWDZgga8fWiLJTrsL1HkBPo7GQRArPuip5thDSP
-   GafgzKviIIP3q4rDf99p3GoOjZgd0hPm35GxcY5FmmOI019iJmMFdKmaR
-   ephP16S0YpIYlCRjnl3eE1uyR2gcbXK7MH9t7jwcvl0EHJk2UVBqhKxbC
-   w==;
-X-CSE-ConnectionGUID: 83c25XPBRJGU7DSCnfjRZg==
-X-CSE-MsgGUID: +kwkKIhrSbOJT3S6ZQtlDQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11532"; a="69695755"
+  bh=/RmmH0yT7/5iQ0HDUuVbe/Ei+gflOATp9Q7tRRD3zNc=;
+  b=J7/ONk8Xo8sWtFNI4WUZYqhMvstQRcYce57tNXPKFsjNI1fGR6wwLmuB
+   xhPzNea+5gJT4hygwYkvNflL/+2dtxt0G7IUDoV9bkg1gSChgYWZW34y/
+   F4YUS5Ws9rbMyIdmKCtXCgISlhqRtEeRikp+tP5eTM+e+qUU4rEbR1C1P
+   p2qAKCb0SSf1Wi10XhTX/2Cu9EbFO2JDpsU49gUsFlj4SxiaJ+kcUb9DC
+   LFvnSDn6hlPpU6kAcDmeSKRNW1R9n2bPUpYvL9lk3VDtmnjE5gsP2Do2Z
+   51OF+itDjNI241KDc68ZUxJ1MbB7/ZLwHYmMuGmnbFajpSqAn23ocA4st
+   g==;
+X-CSE-ConnectionGUID: VRAvWF+eQZSJ71Ij8yUVvA==
+X-CSE-MsgGUID: CswHrPNoSI2qO1dpSEbKLw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11532"; a="69695766"
 X-IronPort-AV: E=Sophos;i="6.17,312,1747724400"; 
-   d="scan'208";a="69695755"
+   d="scan'208";a="69695766"
 Received: from orviesa002.jf.intel.com ([10.64.159.142])
   by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Aug 2025 02:51:18 -0700
-X-CSE-ConnectionGUID: g2pZqWQTSjKGMhhlw4/xGw==
-X-CSE-MsgGUID: 8Bonr/3YT7edfXaR99zEXA==
+X-CSE-ConnectionGUID: GT6sSiokTe6KK7QQK4xVww==
+X-CSE-MsgGUID: H2Gp+GjpQTquUyNPsj8wWw==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.17,312,1747724400"; 
-   d="scan'208";a="200195361"
+   d="scan'208";a="200195366"
 Received: from vpanait-mobl.ger.corp.intel.com (HELO kekkonen.fi.intel.com) ([10.245.245.7])
   by orviesa002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Aug 2025 02:51:11 -0700
 Received: from punajuuri.localdomain (unknown [192.168.240.130])
-	by kekkonen.fi.intel.com (Postfix) with ESMTP id 1948C121F6C;
+	by kekkonen.fi.intel.com (Postfix) with ESMTP id 10EE91203CE;
 	Mon, 25 Aug 2025 12:51:08 +0300 (EEST)
 Received: from sailus by punajuuri.localdomain with local (Exim 4.98.2)
 	(envelope-from <sakari.ailus@linux.intel.com>)
-	id 1uqTr2-00000005adU-0FSM;
+	id 1uqTr2-00000005adI-00ou;
 	Mon, 25 Aug 2025 12:51:08 +0300
 Organization: Intel Finland Oy - BIC 0357606-4 - c/o Alberga Business Park, 6 krs, Bertel Jungin Aukio 5, 02600 Espoo
 From: Sakari Ailus <sakari.ailus@linux.intel.com>
@@ -81,9 +81,9 @@ Cc: hans@jjverkuil.nl,
 	Hans de Goede <hdegoede@redhat.com>,
 	Jacopo Mondi <jacopo.mondi@ideasonboard.com>,
 	Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
-Subject: [PATCH v11 04/66] media: Documentation: Document -ENXIO for VIDIOC_SUBDEV_S_ROUTING
-Date: Mon, 25 Aug 2025 12:50:05 +0300
-Message-ID: <20250825095107.1332313-5-sakari.ailus@linux.intel.com>
+Subject: [PATCH v11 01/66] media: Documentation: Clean up figure titles
+Date: Mon, 25 Aug 2025 12:50:02 +0300
+Message-ID: <20250825095107.1332313-2-sakari.ailus@linux.intel.com>
 X-Mailer: git-send-email 2.47.2
 In-Reply-To: <20250825095107.1332313-1-sakari.ailus@linux.intel.com>
 References: <20250825095107.1332313-1-sakari.ailus@linux.intel.com>
@@ -95,40 +95,91 @@ List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Document that -ENXIO is returned when the user tries to set a routing
-configuration not supported by the hardware (or rather the driver). The
-documentation details the exact cases of this, besides -EINVAL that is
-already documented for VIDIOC_SUBDEV_S_ROUTING.
+Remove DocBook (?) conversion leftovers from figure titles, including
+obsolete numbering and highlighting. This aligns these titles with others.
 
 Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
 ---
- .../media/v4l/vidioc-subdev-g-routing.rst             | 11 ++++++++++-
- 1 file changed, 10 insertions(+), 1 deletion(-)
+ Documentation/userspace-api/media/v4l/dev-raw-vbi.rst    | 6 +++---
+ Documentation/userspace-api/media/v4l/dev-subdev.rst     | 6 +++---
+ Documentation/userspace-api/media/v4l/subdev-formats.rst | 2 +-
+ 3 files changed, 7 insertions(+), 7 deletions(-)
 
-diff --git a/Documentation/userspace-api/media/v4l/vidioc-subdev-g-routing.rst b/Documentation/userspace-api/media/v4l/vidioc-subdev-g-routing.rst
-index 1cf795480602..15f448664e6b 100644
---- a/Documentation/userspace-api/media/v4l/vidioc-subdev-g-routing.rst
-+++ b/Documentation/userspace-api/media/v4l/vidioc-subdev-g-routing.rst
-@@ -155,9 +155,18 @@ appropriately. The generic error codes are described at the
- :ref:`Generic Error Codes <gen-errors>` chapter.
+diff --git a/Documentation/userspace-api/media/v4l/dev-raw-vbi.rst b/Documentation/userspace-api/media/v4l/dev-raw-vbi.rst
+index 2bec20d87928..1f7bb8fd15e7 100644
+--- a/Documentation/userspace-api/media/v4l/dev-raw-vbi.rst
++++ b/Documentation/userspace-api/media/v4l/dev-raw-vbi.rst
+@@ -221,7 +221,7 @@ and always returns default parameters as :ref:`VIDIOC_G_FMT <VIDIOC_G_FMT>` does
+     :alt:   vbi_hsync.svg
+     :align: center
  
- EINVAL
-+
-    The sink or source pad identifiers reference a non-existing pad or reference
-    pads of different types (ie. the sink_pad identifiers refers to a source
--   pad), or the ``which`` field has an unsupported value.
-+   pad), the ``which`` field has an unsupported value, or, for
-+   ``VIDIOC_SUBDEV_S_ROUTING``, the num_routes field value is larger than that
-+   of the len_routes field.
-+
-+ENXIO
-+   No such link can be created or such link state change can be made. Either the
-+   sink or source (pad, stream) pair or the combination of the sink and source
-+   is not supported by the hardware, or no multiple routes from or to the same
-+   (pad, stream) pair are supported.
+-    **Figure 4.1. Line synchronization**
++    Line synchronization
  
- E2BIG
-    The application provided ``num_routes`` for ``VIDIOC_SUBDEV_S_ROUTING`` is
+ .. _vbi-525:
+ 
+@@ -229,7 +229,7 @@ and always returns default parameters as :ref:`VIDIOC_G_FMT <VIDIOC_G_FMT>` does
+     :alt:   vbi_525.svg
+     :align: center
+ 
+-    **Figure 4.2. ITU-R 525 line numbering (M/NTSC and M/PAL)**
++    ITU-R 525 line numbering (M/NTSC and M/PAL)
+ 
+ .. _vbi-625:
+ 
+@@ -237,7 +237,7 @@ and always returns default parameters as :ref:`VIDIOC_G_FMT <VIDIOC_G_FMT>` does
+     :alt:   vbi_625.svg
+     :align: center
+ 
+-    **Figure 4.3. ITU-R 625 line numbering**
++    ITU-R 625 line numbering
+ 
+ Remember the VBI image format depends on the selected video standard,
+ therefore the application must choose a new standard or query the
+diff --git a/Documentation/userspace-api/media/v4l/dev-subdev.rst b/Documentation/userspace-api/media/v4l/dev-subdev.rst
+index 225a45fef994..24a69c419dfe 100644
+--- a/Documentation/userspace-api/media/v4l/dev-subdev.rst
++++ b/Documentation/userspace-api/media/v4l/dev-subdev.rst
+@@ -459,7 +459,7 @@ selection will refer to the sink pad format dimensions instead.
+     :alt:   subdev-image-processing-crop.svg
+     :align: center
+ 
+-    **Figure 4.5. Image processing in subdevs: simple crop example**
++    Image processing in subdevs: simple crop example
+ 
+ In the above example, the subdev supports cropping on its sink pad. To
+ configure it, the user sets the media bus format on the subdev's sink
+@@ -476,7 +476,7 @@ pad.
+     :alt:   subdev-image-processing-scaling-multi-source.svg
+     :align: center
+ 
+-    **Figure 4.6. Image processing in subdevs: scaling with multiple sources**
++    Image processing in subdevs: scaling with multiple sources
+ 
+ In this example, the subdev is capable of first cropping, then scaling
+ and finally cropping for two source pads individually from the resulting
+@@ -492,7 +492,7 @@ an area at location specified by the source crop rectangle from it.
+     :alt:    subdev-image-processing-full.svg
+     :align:  center
+ 
+-    **Figure 4.7. Image processing in subdevs: scaling and composition with multiple sinks and sources**
++    Image processing in subdevs: scaling and composition with multiple sinks and sources
+ 
+ The subdev driver supports two sink pads and two source pads. The images
+ from both of the sink pads are individually cropped, then scaled and
+diff --git a/Documentation/userspace-api/media/v4l/subdev-formats.rst b/Documentation/userspace-api/media/v4l/subdev-formats.rst
+index 2a94371448dc..9ef1bc22ad9c 100644
+--- a/Documentation/userspace-api/media/v4l/subdev-formats.rst
++++ b/Documentation/userspace-api/media/v4l/subdev-formats.rst
+@@ -2631,7 +2631,7 @@ be named ``MEDIA_BUS_FMT_SRGGB10_2X8_PADHI_LE``.
+     :alt:    bayer.svg
+     :align:  center
+ 
+-    **Figure 4.8 Bayer Patterns**
++    Bayer Patterns
+ 
+ The following table lists existing packed Bayer formats. The data
+ organization is given as an example for the first pixel only.
 -- 
 2.47.2
 
