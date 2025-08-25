@@ -1,54 +1,54 @@
 Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2B9642E03F8
-	for <linux-media@vger.kernel.org>; Mon, 25 Aug 2025 09:51:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3565E2E06EF
+	for <linux-media@vger.kernel.org>; Mon, 25 Aug 2025 09:52:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.20
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756115520; cv=none; b=h8b+a4FWXzS94If9recRiQpVxsG0Fy1UC6I4QBK4lRaA5LKsqGGxydtai4bL880z6n+52uQuD4lrY5hxT1b7hMUGa7cMJ3YTJBVKIjrUAAsGqc8IG4CSZJXNgysly5IsaYHo1TAQKxj3FciYJ2I1yeMgMFYMXvRKh16psEbMgJ8=
+	t=1756115521; cv=none; b=Qg4Po9qJnBoL4o1uS1gceSENyaAZCwDZ3+utuMg6JJiZ2ygC2IIvIIXfjffHA5si69tBx9ZKHdxRJ7NpMt0kCG2a1UfMcPqjwTqtB39EYVM/slkBTbZkFEOh9fzBiV5YVXDZ4FnzdNmlPQKFWFLonfouMmk68EJi3S1qpJZ8aAA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756115520; c=relaxed/simple;
-	bh=AtT1Lyyh8mRQLdBcLWUeA3Yf7QuPUQD7Bnr6VAPu4c0=;
+	s=arc-20240116; t=1756115521; c=relaxed/simple;
+	bh=CqX02frfH11vFTTD2JdtFnuXFfPDaTSGh+Djy70GjeE=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=IATlPtEwLoXYLRIUr9+8xjY8Q7zkmJGLc09hlnNDZUIfO1BKO5AEDv7kFLWAIPgG3yXC0uQoN2xzsaE5zWqBRxqvM3iSn6UPJR3bh/u4vO7wdMnoxPTLR3HNnPCdaBRRH2uY1SXT8SdrV8WJsjV2uDesUxjV6jimxuoMeiXL6aA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Mi1DPHAC; arc=none smtp.client-ip=198.175.65.20
+	 MIME-Version; b=eoaMmaXliCrXO4q2JPaCEgdUzYquUzRWIJhWxRlntPsrAo+C+CJC75wZosTCiUNc1POXBFnSs+Dcead97DxERuaadASd6tEOM8In8+4myGjg1rahb9ZrZZwYv2rgbJZv+TbpXkc/Xm7n3pISehYPXj+RYq/9EshAw2yNfLNfm58=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=QM83f6Za; arc=none smtp.client-ip=198.175.65.20
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Mi1DPHAC"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="QM83f6Za"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1756115520; x=1787651520;
+  t=1756115521; x=1787651521;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=AtT1Lyyh8mRQLdBcLWUeA3Yf7QuPUQD7Bnr6VAPu4c0=;
-  b=Mi1DPHACVuEF0eOQ2PYDxDJTfjeyPoR2cxmL8YR/3Pd8YIhf1EvkI5z1
-   Sxadbi1TSh8fNQFP2bAL1qyS8xX2N5jbqrzgeHZgx16qRylUy6884x2zZ
-   nY6PHmit9bYcFRMZ5IJG6BxvnyzwcUXFbmViHHTjwyw7GbRlouJ9mqgp+
-   Oiwn6l1Vi9WDGjR7qgZFT58/sGcb+SYzsZE4c0dRa/b1BbIAzrusvG5cC
-   1TTrOHmK+mMmPigwnCo0l0sEdtGjfZMAp+zv4yJ1i4bxfxaHpEbRhR1so
-   oGYXokpIEYLwFxdJPmd6WHRy4GqkditQxi5QBAVcxRZcszyFQKZjXab8L
+  bh=CqX02frfH11vFTTD2JdtFnuXFfPDaTSGh+Djy70GjeE=;
+  b=QM83f6ZaVPFD1n2UmIb6T3q4BNSOhN754zIbfvj0daBnHlgz68LaCt9c
+   JlqmHN5PcIcig4LCHpxV7VWLkV7wylBanGuDYX3TvEPqudjd4DMaLVpcg
+   g+2HS9OAP1EB73UZrN1jYsnvq1yJ+wNGuGpt93XCk/UWw8H9haKT2Nwvp
+   +P7wTeBHaujZLULGPE+dHVDDSHOP0GtRvxpu+Xv7+XJWDRzdmZ0pJRyTY
+   +fnDawZaY0X19EB4rwb82qT/HV8ZG9xPVWLR/7tzN5GNC9gK2ANEPy7bE
+   QuinbX2zs6JHUZmcEWDTqes5d7XptlPEFqGZh+7TMKLOUXEpfyiJ6x6Y6
    A==;
-X-CSE-ConnectionGUID: rfm7+Pb7RLmYcbyBMLnRuQ==
-X-CSE-MsgGUID: uAf2A6HAQNmBRCsX9h/HPg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11532"; a="58032426"
+X-CSE-ConnectionGUID: moJ8Wor4SM+YZdo75dtKmw==
+X-CSE-MsgGUID: 4K1qwEpST5Cp2mATgBBsrg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11532"; a="58032435"
 X-IronPort-AV: E=Sophos;i="6.17,312,1747724400"; 
-   d="scan'208";a="58032426"
+   d="scan'208";a="58032435"
 Received: from orviesa003.jf.intel.com ([10.64.159.143])
-  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Aug 2025 02:51:53 -0700
-X-CSE-ConnectionGUID: ql2waNXnTa21KWemxToxiQ==
-X-CSE-MsgGUID: /Kf8wUpoQBuPFTlTPSWRow==
+  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Aug 2025 02:51:54 -0700
+X-CSE-ConnectionGUID: AiHfd+3YT4eys+GOj9xktQ==
+X-CSE-MsgGUID: tNRoVUMvTveDARLa7OU8pA==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.17,312,1747724400"; 
-   d="scan'208";a="173431142"
+   d="scan'208";a="173431145"
 Received: from vpanait-mobl.ger.corp.intel.com (HELO kekkonen.fi.intel.com) ([10.245.245.7])
   by ORVIESA003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Aug 2025 02:51:47 -0700
 Received: from punajuuri.localdomain (unknown [192.168.240.130])
-	by kekkonen.fi.intel.com (Postfix) with ESMTP id E4FA9122009;
+	by kekkonen.fi.intel.com (Postfix) with ESMTP id F0D7D12200C;
 	Mon, 25 Aug 2025 12:51:08 +0300 (EEST)
 Received: from sailus by punajuuri.localdomain with local (Exim 4.98.2)
 	(envelope-from <sakari.ailus@linux.intel.com>)
-	id 1uqTr2-00000005ahi-3n1B;
+	id 1uqTr2-00000005ahx-3zXT;
 	Mon, 25 Aug 2025 12:51:08 +0300
 Organization: Intel Finland Oy - BIC 0357606-4 - c/o Alberga Business Park, 6 krs, Bertel Jungin Aukio 5, 02600 Espoo
 From: Sakari Ailus <sakari.ailus@linux.intel.com>
@@ -81,9 +81,9 @@ Cc: hans@jjverkuil.nl,
 	Hans de Goede <hdegoede@redhat.com>,
 	Jacopo Mondi <jacopo.mondi@ideasonboard.com>,
 	Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
-Subject: [PATCH v11 56/66] media: ov2740: Add IMMUTABLE and STATIC route flags
-Date: Mon, 25 Aug 2025 12:50:57 +0300
-Message-ID: <20250825095107.1332313-57-sakari.ailus@linux.intel.com>
+Subject: [PATCH v11 59/66] media: i2c: imx219: Add image stream
+Date: Mon, 25 Aug 2025 12:51:00 +0300
+Message-ID: <20250825095107.1332313-60-sakari.ailus@linux.intel.com>
 X-Mailer: git-send-email 2.47.2
 In-Reply-To: <20250825095107.1332313-1-sakari.ailus@linux.intel.com>
 References: <20250825095107.1332313-1-sakari.ailus@linux.intel.com>
@@ -95,39 +95,74 @@ List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Add immutable and static route flags to the routing table. The driver does
-not support disabling the embedded data whereas the sensor itself does.
+From: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 
+In preparation for embedded data stream support, introduce a new
+imx219_stream_ids enumeration for stream IDs, with a single value,
+IMX219_STREAM_IMAGE for the image data stream. Use it when accessing the
+formats, crop and compose rectangles on the source pad. This is meant to
+reduce the size of further commits, and doesn't introduce any functional
+change.
+
+Signed-off-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
-Reviewed-by: Julien Massot <julien.massot@collabora.com>
-Reviewed-by: Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>
 ---
- drivers/media/i2c/ov2740.c | 8 ++++++--
- 1 file changed, 6 insertions(+), 2 deletions(-)
+ drivers/media/i2c/imx219.c | 16 ++++++++++++----
+ 1 file changed, 12 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/media/i2c/ov2740.c b/drivers/media/i2c/ov2740.c
-index 2480813113cb..8a2f22a7cf1e 100644
---- a/drivers/media/i2c/ov2740.c
-+++ b/drivers/media/i2c/ov2740.c
-@@ -1235,12 +1235,16 @@ static int ov2740_init_state(struct v4l2_subdev *sd,
- 			.sink_pad = OV2740_PAD_PIXEL,
- 			.source_pad = OV2740_PAD_SOURCE,
- 			.source_stream = OV2740_STREAM_PIXEL,
--			.flags = V4L2_SUBDEV_ROUTE_FL_ACTIVE,
-+			.flags = V4L2_SUBDEV_ROUTE_FL_ACTIVE |
-+				 V4L2_SUBDEV_ROUTE_FL_IMMUTABLE |
-+				 V4L2_SUBDEV_ROUTE_FL_STATIC,
- 		}, {
- 			.sink_pad = OV2740_PAD_META,
- 			.source_pad = OV2740_PAD_SOURCE,
- 			.source_stream = OV2740_STREAM_META,
--			.flags = V4L2_SUBDEV_ROUTE_FL_ACTIVE,
-+			.flags = V4L2_SUBDEV_ROUTE_FL_ACTIVE |
-+				 V4L2_SUBDEV_ROUTE_FL_IMMUTABLE |
-+				 V4L2_SUBDEV_ROUTE_FL_STATIC,
- 		},
- 	};
- 	struct v4l2_subdev_krouting routing = {
+diff --git a/drivers/media/i2c/imx219.c b/drivers/media/i2c/imx219.c
+index 1ab7fb1f220c..bb972fd90026 100644
+--- a/drivers/media/i2c/imx219.c
++++ b/drivers/media/i2c/imx219.c
+@@ -341,6 +341,10 @@ enum imx219_pad_ids {
+ 	IMX219_NUM_PADS,
+ };
+ 
++enum imx219_stream_ids {
++	IMX219_STREAM_IMAGE,
++};
++
+ struct imx219 {
+ 	struct v4l2_subdev sd;
+ 	struct media_pad pads[IMX219_NUM_PADS];
+@@ -460,7 +464,8 @@ static int imx219_set_ctrl(struct v4l2_ctrl *ctrl)
+ 	int ret = 0;
+ 
+ 	state = v4l2_subdev_get_locked_active_state(&imx219->sd);
+-	format = v4l2_subdev_state_get_format(state, IMX219_PAD_SOURCE);
++	format = v4l2_subdev_state_get_format(state, IMX219_PAD_SOURCE,
++					      IMX219_STREAM_IMAGE);
+ 	rate_factor = imx219_get_rate_factor(state);
+ 
+ 	if (ctrl->id == V4L2_CID_VBLANK) {
+@@ -682,7 +687,8 @@ static int imx219_set_framefmt(struct imx219 *imx219,
+ 	u32 bpp;
+ 	int ret = 0;
+ 
+-	format = v4l2_subdev_state_get_format(state, IMX219_PAD_SOURCE);
++	format = v4l2_subdev_state_get_format(state, IMX219_PAD_SOURCE,
++					      IMX219_STREAM_IMAGE);
+ 	crop = v4l2_subdev_state_get_crop(state, IMX219_PAD_IMAGE);
+ 	bpp = imx219_get_format_bpp(format);
+ 
+@@ -938,13 +944,15 @@ static int imx219_set_pad_format(struct v4l2_subdev *sd,
+ 	 * No mode use digital crop, the source pad crop rectangle size and
+ 	 * format are thus identical to the image pad compose rectangle.
+ 	 */
+-	crop = v4l2_subdev_state_get_crop(state, IMX219_PAD_SOURCE);
++	crop = v4l2_subdev_state_get_crop(state, IMX219_PAD_SOURCE,
++					  IMX219_STREAM_IMAGE);
+ 	crop->left = 0;
+ 	crop->top = 0;
+ 	crop->width = fmt->format.width;
+ 	crop->height = fmt->format.height;
+ 
+-	format = v4l2_subdev_state_get_format(state, IMX219_PAD_SOURCE);
++	format = v4l2_subdev_state_get_format(state, IMX219_PAD_SOURCE,
++					      IMX219_STREAM_IMAGE);
+ 	*format = fmt->format;
+ 
+ 	if (fmt->which == V4L2_SUBDEV_FORMAT_ACTIVE) {
 -- 
 2.47.2
 
