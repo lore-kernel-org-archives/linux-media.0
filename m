@@ -1,54 +1,54 @@
 Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D66692E0B73
-	for <linux-media@vger.kernel.org>; Mon, 25 Aug 2025 09:52:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 831502C0F93
+	for <linux-media@vger.kernel.org>; Mon, 25 Aug 2025 09:52:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.20
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756115523; cv=none; b=LRFR60dDctqyYpZ5X3rvnigs66rZaTQBgRA+kTAePd/UCjCcMnfxVICfnE167i7VhD5CJT9EuIZbBquOpMGWc4zEj6eUbD3MWObNRku/dh3fE9qnBuCtMAgf21oNa0klP9aM82IlEAwGjUHPbES1o3xwnvuVojYynVf6l/8/UJ0=
+	t=1756115524; cv=none; b=eJC0f6spCac+41EO3nQRRgMx4ZBjqaUW2wuvI2q+DFbYhDWwpzdcheUh2lQA0TLW24f/1jdJLRyvtjd9t90v4h119GRBqerZuV5Bj2eph/JYJDWymu1c+wijCGERuPGeB8rlqxcxgVbf33xbmgR+bg5uX/dNxkvLEpV/xAGzqkM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756115523; c=relaxed/simple;
-	bh=8HJcfMcOOvD2BQv2SOLqsTBuHafldVIEOuAJr3++6m4=;
+	s=arc-20240116; t=1756115524; c=relaxed/simple;
+	bh=uXZAM9Xr+J0CHnJJeX5VgO6qpprlt/q7Mvs3ZC6RzfA=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=nKgK7Sok6/MykMSd55hSPuOCTrPN/SuzlJeQpEQPHy8F98yspIMI6oDE4VMTnEb8Oex7TlG3ozWjQaVJH6vyyRzwnSDbQJ56AXd1xRHW9DCZbVJ1F+gG8lRpVf2eMQPGAfneIksUJxqkccTfesamZgacQC0zk1k0hGF5uFU6uH4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=GHAMaJ88; arc=none smtp.client-ip=198.175.65.20
+	 MIME-Version; b=cDnxV41dw6jlFSiK/qAM0Tsih1JLRIbX/wVjBlfGAJq5DMjTIv8EtGlgefnSa/GorqaqsWpKEiJxB3weV+fXJqNLVW9Lw2A9zvLGrBK0LmXZ7mx33RpQP6wJmaCLv48viqe34Njez5Y5260hICeMqdnWSXDXQ2OmkVUrrGv5kQA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=YYAqueKP; arc=none smtp.client-ip=198.175.65.20
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="GHAMaJ88"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="YYAqueKP"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1756115522; x=1787651522;
+  t=1756115523; x=1787651523;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=8HJcfMcOOvD2BQv2SOLqsTBuHafldVIEOuAJr3++6m4=;
-  b=GHAMaJ88bcaSF6Jy45WWwmRtRR84heL2gh3JzczIZmwXNnehtU3rPNNK
-   VrhaatOu/eUwxdxQ2FOTOSZxFaJ+iXDuQGew3RZb2TXyKT70JdXsYBWAt
-   Fux9pGwUJyLPB7/h1mKhdmUk6BG/hF4Oywpnc5OKVXnrkzMylF+k+lvn5
-   jsqszfmM6uOfwAOW1R5gSVKckbD7pYWXyNHlie/OTbeJFWti4pPcG+8NM
-   kQoR4yzFqr9YimtEcIJ0twFjZxz/ciZ7WqMRNAOoJx5y2FP36BobgDnoP
-   tpjESJGx048HuFQf/XJx+GbyiJrWF3vJxQr9Gsy0y0Y0kaaYrnTE4p0pr
-   A==;
-X-CSE-ConnectionGUID: YuhUziqAQwyXoAWftc8IkA==
-X-CSE-MsgGUID: Xh/EFxgQS8mYGtDoba3COw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11532"; a="58032479"
+  bh=uXZAM9Xr+J0CHnJJeX5VgO6qpprlt/q7Mvs3ZC6RzfA=;
+  b=YYAqueKPmVqznRCFkEJzKOcxMknsEzMgwzd6mSQ6Zj7fkG8DTjuiP0gP
+   r6r0kPHtjuASALfveO4USTvp04L+j9ReXXPNTwIQwBkYcOVhaPLMZIYLR
+   g2A+aUpu46BqsBwIYspeZXzOIyU5gKnQvbIa8uTXoRMwRxRRDsfSWOeKv
+   TntXczqcXj84W1HYj6zEbX59QPaR0L9HJaHoqfXMY1kJMAi8mTaqeIeHL
+   rwqm4NhGfgmlV7Ejb2M8MX+zPFji0euNwEVbrHcSkEySOaxh295amCUCs
+   GLn9mBrvrHhSzs3bM2gnlWNGgpzZxkM8EeFC4TvvBzZUCTGyL1A31HMm0
+   Q==;
+X-CSE-ConnectionGUID: INW/BOPRTsS8dzlhQDpK7w==
+X-CSE-MsgGUID: cKtMd59lS9a5XdeZrwrhxg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11532"; a="58032490"
 X-IronPort-AV: E=Sophos;i="6.17,312,1747724400"; 
-   d="scan'208";a="58032479"
+   d="scan'208";a="58032490"
 Received: from orviesa003.jf.intel.com ([10.64.159.143])
-  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Aug 2025 02:51:54 -0700
-X-CSE-ConnectionGUID: sZOdu5FgQDmcmmdj/LOpuQ==
-X-CSE-MsgGUID: 1ZiHL8FRRbKdGP34pg5lOg==
+  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Aug 2025 02:51:55 -0700
+X-CSE-ConnectionGUID: IQAfYVP0TiyBNrm/7AI0Tg==
+X-CSE-MsgGUID: gVvU9AwXSb2R5oMR449l9A==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.17,312,1747724400"; 
-   d="scan'208";a="173431157"
+   d="scan'208";a="173431161"
 Received: from vpanait-mobl.ger.corp.intel.com (HELO kekkonen.fi.intel.com) ([10.245.245.7])
   by ORVIESA003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Aug 2025 02:51:47 -0700
 Received: from punajuuri.localdomain (unknown [192.168.240.130])
-	by kekkonen.fi.intel.com (Postfix) with ESMTP id 4A66C12200E;
+	by kekkonen.fi.intel.com (Postfix) with ESMTP id 5EAB5122013;
 	Mon, 25 Aug 2025 12:51:09 +0300 (EEST)
 Received: from sailus by punajuuri.localdomain with local (Exim 4.98.2)
 	(envelope-from <sakari.ailus@linux.intel.com>)
-	id 1uqTr3-00000005ai8-17BH;
+	id 1uqTr3-00000005aiW-1TfP;
 	Mon, 25 Aug 2025 12:51:09 +0300
 Organization: Intel Finland Oy - BIC 0357606-4 - c/o Alberga Business Park, 6 krs, Bertel Jungin Aukio 5, 02600 Espoo
 From: Sakari Ailus <sakari.ailus@linux.intel.com>
@@ -81,9 +81,9 @@ Cc: hans@jjverkuil.nl,
 	Hans de Goede <hdegoede@redhat.com>,
 	Jacopo Mondi <jacopo.mondi@ideasonboard.com>,
 	Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
-Subject: [PATCH v11 61/66] media: i2c: imx219: Report streams using frame descriptors
-Date: Mon, 25 Aug 2025 12:51:02 +0300
-Message-ID: <20250825095107.1332313-62-sakari.ailus@linux.intel.com>
+Subject: [PATCH v11 66/66] media: ipu6: Add support for raw CFA-agnostic formats
+Date: Mon, 25 Aug 2025 12:51:07 +0300
+Message-ID: <20250825095107.1332313-67-sakari.ailus@linux.intel.com>
 X-Mailer: git-send-email 2.47.2
 In-Reply-To: <20250825095107.1332313-1-sakari.ailus@linux.intel.com>
 References: <20250825095107.1332313-1-sakari.ailus@linux.intel.com>
@@ -95,100 +95,84 @@ List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-From: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Add support for CFA-agnostic mbus codes and V4L2 pixelformats.
 
-Implement the .get_frame_desc() subdev operation to report information
-about streams to the connected CSI-2 receiver. This is required to let
-the CSI-2 receiver driver know about virtual channels and data types for
-each stream.
-
-Signed-off-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Reviewed-by: Jacopo Mondi <jacopo.mondi@ideasonboard.com>
 Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
 ---
- drivers/media/i2c/imx219.c | 48 ++++++++++++++++++++++++++++++++++++++
- 1 file changed, 48 insertions(+)
+ drivers/media/pci/intel/ipu6/ipu6-isys-csi2.c   | 3 +++
+ drivers/media/pci/intel/ipu6/ipu6-isys-subdev.c | 3 +++
+ drivers/media/pci/intel/ipu6/ipu6-isys-video.c  | 6 ++++++
+ 3 files changed, 12 insertions(+)
 
-diff --git a/drivers/media/i2c/imx219.c b/drivers/media/i2c/imx219.c
-index 136c084bb930..8ed1febc7b21 100644
---- a/drivers/media/i2c/imx219.c
-+++ b/drivers/media/i2c/imx219.c
-@@ -23,6 +23,7 @@
- #include <linux/pm_runtime.h>
- #include <linux/regulator/consumer.h>
- 
-+#include <media/mipi-csi2.h>
- #include <media/v4l2-cci.h>
- #include <media/v4l2-ctrls.h>
- #include <media/v4l2-device.h>
-@@ -678,6 +679,24 @@ static void imx219_free_controls(struct imx219 *imx219)
-  * Subdev operations
-  */
- 
-+static unsigned int imx219_format_bpp(u32 code)
-+{
-+	switch (code) {
-+	case MEDIA_BUS_FMT_SRGGB8_1X8:
-+	case MEDIA_BUS_FMT_SGRBG8_1X8:
-+	case MEDIA_BUS_FMT_SGBRG8_1X8:
-+	case MEDIA_BUS_FMT_SBGGR8_1X8:
-+		return 8;
-+
-+	case MEDIA_BUS_FMT_SRGGB10_1X10:
-+	case MEDIA_BUS_FMT_SGRBG10_1X10:
-+	case MEDIA_BUS_FMT_SGBRG10_1X10:
-+	case MEDIA_BUS_FMT_SBGGR10_1X10:
-+	default:
-+		return 10;
-+	}
-+}
-+
- static int imx219_set_framefmt(struct imx219 *imx219,
- 			       struct v4l2_subdev_state *state)
- {
-@@ -1063,6 +1082,34 @@ static int imx219_get_selection(struct v4l2_subdev *sd,
- 	return -EINVAL;
- }
- 
-+static int imx219_get_frame_desc(struct v4l2_subdev *sd, unsigned int pad,
-+				 struct v4l2_mbus_frame_desc *fd)
-+{
-+	const struct v4l2_mbus_framefmt *fmt;
-+	struct v4l2_subdev_state *state;
-+	u32 code;
-+
-+	if (pad != IMX219_PAD_SOURCE)
-+		return -EINVAL;
-+
-+	state = v4l2_subdev_lock_and_get_active_state(sd);
-+	fmt = v4l2_subdev_state_get_format(state, IMX219_PAD_SOURCE,
-+					   IMX219_STREAM_IMAGE);
-+	code = fmt->code;
-+	v4l2_subdev_unlock_state(state);
-+
-+	fd->type = V4L2_MBUS_FRAME_DESC_TYPE_CSI2;
-+	fd->num_entries = 1;
-+
-+	fd->entry[0].pixelcode = code;
-+	fd->entry[0].stream = IMX219_STREAM_IMAGE;
-+	fd->entry[0].bus.csi2.vc = 0;
-+	fd->entry[0].bus.csi2.dt = imx219_format_bpp(code) == 8 ?
-+		MIPI_CSI2_DT_RAW8 : MIPI_CSI2_DT_RAW10;
-+
-+	return 0;
-+}
-+
- static int imx219_init_state(struct v4l2_subdev *sd,
- 			     struct v4l2_subdev_state *state)
- {
-@@ -1113,6 +1160,7 @@ static const struct v4l2_subdev_pad_ops imx219_pad_ops = {
- 	.set_fmt = imx219_set_pad_format,
- 	.get_selection = imx219_get_selection,
- 	.enum_frame_size = imx219_enum_frame_size,
-+	.get_frame_desc = imx219_get_frame_desc,
- 	.enable_streams = imx219_enable_streams,
- 	.disable_streams = imx219_disable_streams,
- };
+diff --git a/drivers/media/pci/intel/ipu6/ipu6-isys-csi2.c b/drivers/media/pci/intel/ipu6/ipu6-isys-csi2.c
+index b6421d6b978a..21a4f130bb34 100644
+--- a/drivers/media/pci/intel/ipu6/ipu6-isys-csi2.c
++++ b/drivers/media/pci/intel/ipu6/ipu6-isys-csi2.c
+@@ -35,16 +35,19 @@ static const u32 csi2_supported_codes[] = {
+ 	MEDIA_BUS_FMT_SGRBG10_1X10,
+ 	MEDIA_BUS_FMT_SRGGB10_1X10,
+ 	MEDIA_BUS_FMT_Y10_1X10,
++	MEDIA_BUS_FMT_RAW_10,
+ 	MEDIA_BUS_FMT_SBGGR12_1X12,
+ 	MEDIA_BUS_FMT_SGBRG12_1X12,
+ 	MEDIA_BUS_FMT_SGRBG12_1X12,
+ 	MEDIA_BUS_FMT_SRGGB12_1X12,
+ 	MEDIA_BUS_FMT_Y12_1X12,
++	MEDIA_BUS_FMT_RAW_12,
+ 	MEDIA_BUS_FMT_SBGGR8_1X8,
+ 	MEDIA_BUS_FMT_SGBRG8_1X8,
+ 	MEDIA_BUS_FMT_SGRBG8_1X8,
+ 	MEDIA_BUS_FMT_SRGGB8_1X8,
+ 	MEDIA_BUS_FMT_Y8_1X8,
++	MEDIA_BUS_FMT_RAW_8,
+ 	MEDIA_BUS_FMT_META_8,
+ 	MEDIA_BUS_FMT_META_10,
+ 	MEDIA_BUS_FMT_META_12,
+diff --git a/drivers/media/pci/intel/ipu6/ipu6-isys-subdev.c b/drivers/media/pci/intel/ipu6/ipu6-isys-subdev.c
+index 5db59cec821e..407db2ebe6ee 100644
+--- a/drivers/media/pci/intel/ipu6/ipu6-isys-subdev.c
++++ b/drivers/media/pci/intel/ipu6/ipu6-isys-subdev.c
+@@ -32,6 +32,7 @@ unsigned int ipu6_isys_mbus_code_to_bpp(u32 code)
+ 	case MEDIA_BUS_FMT_SGRBG12_1X12:
+ 	case MEDIA_BUS_FMT_SRGGB12_1X12:
+ 	case MEDIA_BUS_FMT_Y12_1X12:
++	case MEDIA_BUS_FMT_RAW_12:
+ 	case MEDIA_BUS_FMT_META_12:
+ 		return 12;
+ 	case MEDIA_BUS_FMT_SBGGR10_1X10:
+@@ -39,6 +40,7 @@ unsigned int ipu6_isys_mbus_code_to_bpp(u32 code)
+ 	case MEDIA_BUS_FMT_SGRBG10_1X10:
+ 	case MEDIA_BUS_FMT_SRGGB10_1X10:
+ 	case MEDIA_BUS_FMT_Y10_1X10:
++	case MEDIA_BUS_FMT_RAW_10:
+ 	case MEDIA_BUS_FMT_META_10:
+ 		return 10;
+ 	case MEDIA_BUS_FMT_SBGGR8_1X8:
+@@ -46,6 +48,7 @@ unsigned int ipu6_isys_mbus_code_to_bpp(u32 code)
+ 	case MEDIA_BUS_FMT_SGRBG8_1X8:
+ 	case MEDIA_BUS_FMT_SRGGB8_1X8:
+ 	case MEDIA_BUS_FMT_Y8_1X8:
++	case MEDIA_BUS_FMT_RAW_8:
+ 	case MEDIA_BUS_FMT_META_8:
+ 		return 8;
+ 	default:
+diff --git a/drivers/media/pci/intel/ipu6/ipu6-isys-video.c b/drivers/media/pci/intel/ipu6/ipu6-isys-video.c
+index 9a6b4736cd67..362608f89fc5 100644
+--- a/drivers/media/pci/intel/ipu6/ipu6-isys-video.c
++++ b/drivers/media/pci/intel/ipu6/ipu6-isys-video.c
+@@ -91,6 +91,12 @@ const struct ipu6_isys_pixelformat ipu6_isys_pfmts[] = {
+ 	  IPU6_FW_ISYS_FRAME_FORMAT_RAW10 },
+ 	{ V4L2_PIX_FMT_Y12, 12, 12, MEDIA_BUS_FMT_Y12_1X12,
+ 	  IPU6_FW_ISYS_FRAME_FORMAT_RAW12 },
++	{ V4L2_PIX_FMT_RAW_8, 8, 8, MEDIA_BUS_FMT_RAW_8,
++	  IPU6_FW_ISYS_FRAME_FORMAT_RAW8 },
++	{ V4L2_PIX_FMT_RAW_CSI2_10, 10, 10, MEDIA_BUS_FMT_RAW_10,
++	  IPU6_FW_ISYS_FRAME_FORMAT_RAW10 },
++	{ V4L2_PIX_FMT_RAW_CSI2_12, 12, 12, MEDIA_BUS_FMT_RAW_12,
++	  IPU6_FW_ISYS_FRAME_FORMAT_RAW12 },
+ 	{ V4L2_META_FMT_GENERIC_8, 8, 8, MEDIA_BUS_FMT_META_8,
+ 	  IPU6_FW_ISYS_FRAME_FORMAT_RAW8, true },
+ 	{ V4L2_META_FMT_GENERIC_CSI2_10, 10, 10, MEDIA_BUS_FMT_META_10,
 -- 
 2.47.2
 
