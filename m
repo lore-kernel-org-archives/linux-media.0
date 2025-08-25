@@ -1,54 +1,54 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.10])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D8F412DC320
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E0CE92DBF4B
 	for <linux-media@vger.kernel.org>; Mon, 25 Aug 2025 09:51:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.10
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.20
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756115509; cv=none; b=gSLbsjp8tkCVlPvZ5KtCp55+GHiBugXSiOyKeC16MCv1xeonDO6qw14FdtS4xJASz0tFqZ7fsKVxi0h7Bwa3OU0+iAV5oSB5Pba/CYtT8QsSHZ551QaHD1r3cV6Qtqvyf/3nJoTWdxFSjCJPvEycc/UfTRRu08hA30zsyeD1tRU=
+	t=1756115509; cv=none; b=UbPbHfXDyNEL1x2QyfJ6A9oQvxrxITOlH2f2OejmX2npjKpVr4DsV+dRMiLXHgHH8jVgv356ypBHo4n6d0vAay9IJUwa1DCu8mZPtIjJS85KKnMCKwT637cp+Lp/aHzGjRsNp7Y8DYoMAxM0jQKSpTuQQr++WSbq2O9pioGAq34=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1756115509; c=relaxed/simple;
-	bh=hCWyZCZhkdYl0i27EIlj5gUC0Z40yBYA3js+FgJl110=;
+	bh=3vcfuxXcVOYoXS2oSu+cg0iM3wIDuOrXWjtrL3FMPME=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=ldDY7iuWLWfo/QRxUxBPYL/m3Xm99JgIwtpyHhFGxarSNJU8vM1G/b+92dMEZsGh0W/FU5WVl4i+gWMWdkb/ZOWMZDkeVu2PMbHFSJ2V5X3GfiaFobyTqejgPrL4ucvTIaPoSDwAdX3jeAn5osJrZo7kamLqhQ/dIbR+GsH+TU0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=PCIBcdTo; arc=none smtp.client-ip=192.198.163.10
+	 MIME-Version; b=muXVlJQjoaMqdjR8kyK3q2swwnueoYHsmaqSd93l8eujULLspQPc3f+iHoLasKbrQy+WSoNvDx2IoNWHI9jdE5qirw7OM0HblorD3UZyzHuFO9pDeD/s2BCxfo2XL8yXV63HRaFSDvVTe2PfxmQ7S454JleDDdaV19UIMS5dlMo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=BCYYeGHA; arc=none smtp.client-ip=198.175.65.20
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="PCIBcdTo"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="BCYYeGHA"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1756115508; x=1787651508;
+  t=1756115509; x=1787651509;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=hCWyZCZhkdYl0i27EIlj5gUC0Z40yBYA3js+FgJl110=;
-  b=PCIBcdToWiClXHBCAxzE2xE4BKxL26zw81hQpgB2JUgRifkFXr99vz2R
-   cXl/S9zcfiGOZKRwO/6jZ7WeEeWOtPNLnpFvVbryoRHVojR0AkRl86u/S
-   m3B3z+Bgd9v8CiN8/ewTkuDMoH4N8T/P9CPdjzXXCMlpCAUQIj2fN9vJ0
-   4MFs0cvqe4/zKQ7MmS3C+0G22BCH2aamlTj+QrNjo3jLRcDcHCb3L0yrW
-   /v+A2xX+t1KEI2ONENdIBk4EVfsgWkc16wYyPl5KVEQpig23D6/9UrCHd
-   rJXnL/gVopsGnFRdNTFEmc4HdphLLLyfvuv5qbLA/jGDbCseAtdnuSSvL
+  bh=3vcfuxXcVOYoXS2oSu+cg0iM3wIDuOrXWjtrL3FMPME=;
+  b=BCYYeGHAufieGkpws5q167saUec9S2E15xEyNk6m4wwTfI93/YHBHeQx
+   0avyr3lIQDlMX/zJRbjIi0bXk+xYogGxOn5+V8+d8YruZQ4alBSG4f2P9
+   b46xipY/gzNYLNYvlNnz1uHU3SNDd5S/gO70BnwGj9RJmHISbCBd4yA3C
+   3dcDOuOOyrsMPbxkrpJPNDf07OLIOeSzIs0RiAx0Ov8phxXG0A5szx4Y2
+   ZwRZ2wj3ebXaaPrIOCG2S4mHbxuMSpr2B+P1XMfd6FIMu+yMjN0/5nzOC
+   cdcbu3kqaA3xYUfzleICMZdjVnMTPGuShRK2yRJfKGZBJAApMsi23l2vB
    w==;
-X-CSE-ConnectionGUID: k3RkqzErTvGiMCrOxC8oaw==
-X-CSE-MsgGUID: bztKrFRgSYCV+wmComC5jg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11532"; a="69696129"
+X-CSE-ConnectionGUID: 2QMINbsfQFGcqrpMcqMNJw==
+X-CSE-MsgGUID: 4UvHazjdSr2eKfl+BrwFDw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11532"; a="58032194"
 X-IronPort-AV: E=Sophos;i="6.17,312,1747724400"; 
-   d="scan'208";a="69696129"
-Received: from orviesa002.jf.intel.com ([10.64.159.142])
-  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Aug 2025 02:51:37 -0700
-X-CSE-ConnectionGUID: lq98tOJFQEihqx1pi/JnwA==
-X-CSE-MsgGUID: N4mmGA6sQ4+Tc+mJmIetsQ==
+   d="scan'208";a="58032194"
+Received: from orviesa003.jf.intel.com ([10.64.159.143])
+  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Aug 2025 02:51:45 -0700
+X-CSE-ConnectionGUID: OGttgdjvQMSKaeSwv/kG/w==
+X-CSE-MsgGUID: kJXVYgTaSIKo7w/xiLge8w==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.17,312,1747724400"; 
-   d="scan'208";a="200195537"
+   d="scan'208";a="173431072"
 Received: from vpanait-mobl.ger.corp.intel.com (HELO kekkonen.fi.intel.com) ([10.245.245.7])
-  by orviesa002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Aug 2025 02:51:29 -0700
+  by ORVIESA003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Aug 2025 02:51:38 -0700
 Received: from punajuuri.localdomain (unknown [192.168.240.130])
-	by kekkonen.fi.intel.com (Postfix) with ESMTP id 8C2A6121FE6;
+	by kekkonen.fi.intel.com (Postfix) with ESMTP id 99805121FEB;
 	Mon, 25 Aug 2025 12:51:08 +0300 (EEST)
 Received: from sailus by punajuuri.localdomain with local (Exim 4.98.2)
 	(envelope-from <sakari.ailus@linux.intel.com>)
-	id 1uqTr2-00000005afs-2DZG;
+	id 1uqTr2-00000005ag6-2T5w;
 	Mon, 25 Aug 2025 12:51:08 +0300
 Organization: Intel Finland Oy - BIC 0357606-4 - c/o Alberga Business Park, 6 krs, Bertel Jungin Aukio 5, 02600 Espoo
 From: Sakari Ailus <sakari.ailus@linux.intel.com>
@@ -81,9 +81,9 @@ Cc: hans@jjverkuil.nl,
 	Hans de Goede <hdegoede@redhat.com>,
 	Jacopo Mondi <jacopo.mondi@ideasonboard.com>,
 	Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
-Subject: [PATCH v11 33/66] media: ccs: Compute binning configuration from sub-device state
-Date: Mon, 25 Aug 2025 12:50:34 +0300
-Message-ID: <20250825095107.1332313-34-sakari.ailus@linux.intel.com>
+Subject: [PATCH v11 36/66] media: ccs: Detemine emb_data_ctrl register from sub-device state
+Date: Mon, 25 Aug 2025 12:50:37 +0300
+Message-ID: <20250825095107.1332313-37-sakari.ailus@linux.intel.com>
 X-Mailer: git-send-email 2.47.2
 In-Reply-To: <20250825095107.1332313-1-sakari.ailus@linux.intel.com>
 References: <20250825095107.1332313-1-sakari.ailus@linux.intel.com>
@@ -95,147 +95,187 @@ List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Calculate binning configuration from sub-device state so the state related
-configuration can be removed from the driver's device context struct.
+Determine the value to write to emb_data_ctrl register from sub-device
+state.
+
+This also moves up the embedded data definitions. There are no changes to
+the definitions themselves.
 
 Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
 ---
- drivers/media/i2c/ccs/ccs-core.c | 56 +++++++++++++++++++-------------
- drivers/media/i2c/ccs/ccs.h      |  3 --
- 2 files changed, 33 insertions(+), 26 deletions(-)
+ drivers/media/i2c/ccs/ccs-core.c | 118 ++++++++++++++++---------------
+ drivers/media/i2c/ccs/ccs.h      |   2 -
+ 2 files changed, 62 insertions(+), 58 deletions(-)
 
 diff --git a/drivers/media/i2c/ccs/ccs-core.c b/drivers/media/i2c/ccs/ccs-core.c
-index 2d2ae568739b..1eb63956ef1f 100644
+index 1193cde1c98c..87a1614a020b 100644
 --- a/drivers/media/i2c/ccs/ccs-core.c
 +++ b/drivers/media/i2c/ccs/ccs-core.c
-@@ -511,13 +511,36 @@ static int ccs_pll_try(struct ccs_sensor *sensor, struct ccs_pll *pll)
- 	return ccs_pll_calculate(&client->dev, &lim, pll);
+@@ -1869,6 +1869,57 @@ static int ccs_pm_get_init(struct ccs_sensor *sensor)
+ 	return rval;
  }
  
-+static void
-+ccs_get_binning(struct ccs_sensor *sensor, u8 *binning_mode, u8 *binh, u8 *binv)
++#define CCS_EMBEDDED_CODE_DEPTH(depth, half_depth)			\
++	depth,								\
++	CCS_EMB_DATA_CAPABILITY_TWO_BYTES_PER_RAW##depth,		\
++	CCS_EMB_DATA_CAPABILITY_NO_ONE_BYTE_PER_RAW##depth,		\
++	CCS_EMB_DATA_CTRL_RAW##half_depth##_PACKING_FOR_RAW##depth,	\
++	MEDIA_BUS_FMT_META_##half_depth,				\
++	MEDIA_BUS_FMT_META_##depth,					\
++
++static const struct ccs_embedded_code {
++	u8 depth;
++	u8 cap_two_bytes_per_sample;
++	u8 cap_no_legacy;
++	u8 ctrl;
++	u32 code_two_bytes;
++	u32 code_legacy;
++} ccs_embedded_codes[] = {
++	{ CCS_EMBEDDED_CODE_DEPTH(16, 8) },
++	{ CCS_EMBEDDED_CODE_DEPTH(20, 10) },
++	{ CCS_EMBEDDED_CODE_DEPTH(24, 12) },
++};
++
++static const struct ccs_embedded_code *ccs_embedded_code(unsigned int bpp)
 +{
-+	struct v4l2_subdev_state *state =
-+		v4l2_subdev_get_locked_active_state(&sensor->binner->sd);
-+	const struct v4l2_rect *sink_crop =
-+		v4l2_subdev_state_get_crop(state, CCS_PAD_SINK,
-+					   CCS_STREAM_PIXEL);
-+	const struct v4l2_rect *sink_comp =
-+		v4l2_subdev_state_get_compose(state, CCS_PAD_SINK,
-+					      CCS_STREAM_PIXEL);
++	unsigned int i;
 +
-+	if (binning_mode)
-+		*binning_mode =	sink_crop->width == sink_comp->width &&
-+				sink_crop->height == sink_comp->height ? 0 : 1;
++	for (i = 0; i < ARRAY_SIZE(ccs_embedded_codes); i++)
++		if (ccs_embedded_codes[i].depth == bpp)
++			return ccs_embedded_codes + i;
 +
-+	*binh = sink_crop->width / sink_comp->width;
-+	*binv = sink_crop->height / sink_comp->height;
++	WARN_ON(1);
++
++	return ccs_embedded_codes;
 +}
 +
- static int ccs_pll_update(struct ccs_sensor *sensor)
- {
- 	struct ccs_pll *pll = &sensor->pll;
-+	u8 binh, binv;
- 	int rval;
- 
--	pll->binning_horizontal = sensor->binning_horizontal;
--	pll->binning_vertical = sensor->binning_vertical;
-+	ccs_get_binning(sensor, NULL, &binh, &binv);
++static u32
++ccs_default_embedded_code(struct ccs_sensor *sensor,
++			  const struct ccs_embedded_code *embedded_code)
++{
++	if (CCS_LIM(sensor, EMB_DATA_CAPABILITY) &
++	    BIT(embedded_code->cap_two_bytes_per_sample))
++		return embedded_code->code_two_bytes;
 +
-+	pll->binning_horizontal = binh;
-+	pll->binning_vertical = binv;
- 	pll->link_freq =
- 		sensor->link_freq->qmenu_int[sensor->link_freq->val];
- 	pll->scale_m = sensor->scale_m;
-@@ -1258,8 +1281,11 @@ static void ccs_update_blanking(struct ccs_sensor *sensor,
- 	struct v4l2_ctrl *hblank = sensor->hblank;
- 	u16 min_fll, max_fll, min_llp, max_llp, min_lbp;
- 	int min, max;
-+	u8 binh, binv;
++	if (!(CCS_LIM(sensor, EMB_DATA_CAPABILITY) &
++	      BIT(embedded_code->cap_no_legacy)))
++		return embedded_code->code_legacy;
 +
-+	ccs_get_binning(sensor, NULL, &binh, &binv);
++	WARN_ON(1);
++
++	return embedded_code->code_legacy;
++}
++
+ static int ccs_enable_streams(struct v4l2_subdev *subdev,
+ 			      struct v4l2_subdev_state *state, u32 pad,
+ 			      u64 streams_mask)
+@@ -2003,7 +2054,16 @@ static int ccs_enable_streams(struct v4l2_subdev *subdev,
  
--	if (sensor->binning_vertical > 1 || sensor->binning_horizontal > 1) {
-+	if (binv > 1 || binh > 1) {
- 		min_fll = CCS_LIM(sensor, MIN_FRAME_LENGTH_LINES_BIN);
- 		max_fll = CCS_LIM(sensor, MAX_FRAME_LENGTH_LINES_BIN);
- 		min_llp = CCS_LIM(sensor, MIN_LINE_LENGTH_PCK_BIN);
-@@ -1827,7 +1853,7 @@ static int ccs_enable_streams(struct v4l2_subdev *subdev,
- 		v4l2_subdev_state_get_crop(src_state, CCS_PAD_SRC,
- 					   CCS_STREAM_PIXEL);
- 	struct i2c_client *client = v4l2_get_subdevdata(&sensor->src->sd);
--	unsigned int binning_mode;
-+	u8 binning_mode, binh, binv;
- 	int rval;
- 
- 	if (pad != CCS_PAD_SRC)
-@@ -1849,19 +1875,12 @@ static int ccs_enable_streams(struct v4l2_subdev *subdev,
- 		goto err_pm_put;
- 
- 	/* Binning configuration */
--	if (sensor->binning_horizontal == 1 &&
--	    sensor->binning_vertical == 1) {
--		binning_mode = 0;
--	} else {
--		u8 binning_type =
--			(sensor->binning_horizontal << 4)
--			| sensor->binning_vertical;
-+	ccs_get_binning(sensor,	&binning_mode, &binh, &binv);
- 
--		rval = ccs_write(sensor, BINNING_TYPE, binning_type);
-+	if (binning_mode) {
-+		rval = ccs_write(sensor, BINNING_TYPE, (binh << 4) | binv);
+ 	/* Configure embedded data */
+ 	if (sensor->csi_format->compressed >= 16) {
+-		rval = ccs_write(sensor, EMB_DATA_CTRL, sensor->emb_data_ctrl);
++		const struct ccs_embedded_code *embedded_code =
++			ccs_embedded_code(sensor->csi_format->compressed);
++		const struct v4l2_mbus_framefmt *meta_out_fmt =
++			v4l2_subdev_state_get_format(src_state, CCS_PAD_SRC,
++						     CCS_STREAM_META);
++
++		rval = ccs_write(sensor, EMB_DATA_CTRL,
++				 meta_out_fmt->code ==
++				 embedded_code->code_legacy ?
++				 0 : embedded_code->ctrl);
  		if (rval < 0)
  			goto err_pm_put;
+ 	}
+@@ -2127,57 +2187,6 @@ static const struct ccs_csi_data_format
+ 	return sensor->csi_format;
+ }
+ 
+-#define CCS_EMBEDDED_CODE_DEPTH(depth, half_depth)			\
+-	depth,								\
+-	CCS_EMB_DATA_CAPABILITY_TWO_BYTES_PER_RAW##depth,		\
+-	CCS_EMB_DATA_CAPABILITY_NO_ONE_BYTE_PER_RAW##depth,		\
+-	CCS_EMB_DATA_CTRL_RAW##half_depth##_PACKING_FOR_RAW##depth,	\
+-	MEDIA_BUS_FMT_META_##half_depth,				\
+-	MEDIA_BUS_FMT_META_##depth,					\
 -
--		binning_mode = 1;
- 	}
- 	rval = ccs_write(sensor, BINNING_MODE, binning_mode);
- 	if (rval < 0)
-@@ -2260,9 +2279,6 @@ static void ccs_propagate(struct v4l2_subdev *subdev,
- 				sensor->scale_m = CCS_LIM(sensor, SCALER_N_MIN);
- 				sensor->scaling_mode =
- 					CCS_SCALING_MODE_NO_SCALING;
--			} else if (ssd == sensor->binner) {
--				sensor->binning_horizontal = 1;
--				sensor->binning_vertical = 1;
- 			}
- 		}
- 		fallthrough;
-@@ -2542,10 +2558,6 @@ static void ccs_set_compose_binner(struct v4l2_subdev *subdev,
- 			best = this;
- 		}
- 	}
--	if (sel->which == V4L2_SUBDEV_FORMAT_ACTIVE) {
--		sensor->binning_vertical = binv;
--		sensor->binning_horizontal = binh;
--	}
+-static const struct ccs_embedded_code {
+-	u8 depth;
+-	u8 cap_two_bytes_per_sample;
+-	u8 cap_no_legacy;
+-	u8 ctrl;
+-	u32 code_two_bytes;
+-	u32 code_legacy;
+-} ccs_embedded_codes[] = {
+-	{ CCS_EMBEDDED_CODE_DEPTH(16, 8) },
+-	{ CCS_EMBEDDED_CODE_DEPTH(20, 10) },
+-	{ CCS_EMBEDDED_CODE_DEPTH(24, 12) },
+-};
+-
+-static const struct ccs_embedded_code *ccs_embedded_code(unsigned int bpp)
+-{
+-	unsigned int i;
+-
+-	for (i = 0; i < ARRAY_SIZE(ccs_embedded_codes); i++)
+-		if (ccs_embedded_codes[i].depth == bpp)
+-			return ccs_embedded_codes + i;
+-
+-	WARN_ON(1);
+-
+-	return ccs_embedded_codes;
+-}
+-
+-static u32
+-ccs_default_embedded_code(struct ccs_sensor *sensor,
+-			  const struct ccs_embedded_code *embedded_code)
+-{
+-	if (CCS_LIM(sensor, EMB_DATA_CAPABILITY) &
+-	    BIT(embedded_code->cap_two_bytes_per_sample))
+-		return embedded_code->code_two_bytes;
+-
+-	if (!(CCS_LIM(sensor, EMB_DATA_CAPABILITY) &
+-	      BIT(embedded_code->cap_no_legacy)))
+-		return embedded_code->code_legacy;
+-
+-	WARN_ON(1);
+-
+-	return embedded_code->code_legacy;
+-}
+-
+ static int ccs_enum_mbus_code(struct v4l2_subdev *subdev,
+ 			      struct v4l2_subdev_state *sd_state,
+ 			      struct v4l2_subdev_mbus_code_enum *code)
+@@ -2429,16 +2438,13 @@ static int ccs_set_format_meta(struct v4l2_subdev *subdev,
  
- 	sel->r.width = (sink_crop->width / binh) & ~1;
- 	sel->r.height = (sink_crop->height / binv) & ~1;
-@@ -3736,8 +3748,6 @@ static int ccs_probe(struct i2c_client *client)
- 				sensor->binning_subtypes[i].vertical);
- 		}
- 	}
--	sensor->binning_horizontal = 1;
--	sensor->binning_vertical = 1;
+ 		if (!(CCS_LIM(sensor, EMB_DATA_CAPABILITY) &
+ 		      BIT(embedded_code->cap_no_legacy)) &&
+-		    code == embedded_code->code_legacy) {
++		    code == embedded_code->code_legacy)
+ 			meta_fmt->code = embedded_code->code_legacy;
+-			sensor->emb_data_ctrl = 0;
+-		}
  
- 	if (device_create_file(&client->dev, &dev_attr_ident) != 0) {
- 		dev_err(&client->dev, "sysfs ident entry creation failed\n");
+ 		if (CCS_LIM(sensor, EMB_DATA_CAPABILITY) &
+ 		    BIT(embedded_code->cap_two_bytes_per_sample) &&
+ 		    code == embedded_code->code_two_bytes) {
+ 			meta_fmt->code = embedded_code->code_two_bytes;
+-			sensor->emb_data_ctrl = embedded_code->ctrl;
+ 			meta_fmt->width <<= 1;
+ 		}
+ 
 diff --git a/drivers/media/i2c/ccs/ccs.h b/drivers/media/i2c/ccs/ccs.h
-index 338209950fcb..9671883e4885 100644
+index 3fddbe267409..27d38cf927ac 100644
 --- a/drivers/media/i2c/ccs/ccs.h
 +++ b/drivers/media/i2c/ccs/ccs.h
-@@ -238,9 +238,6 @@ struct ccs_sensor {
+@@ -236,8 +236,6 @@ struct ccs_sensor {
+ 	int default_pixel_order;
+ 	struct ccs_data_container sdata, mdata;
  
- 	u8 emb_data_ctrl;
- 
--	u8 binning_horizontal;
--	u8 binning_vertical;
+-	u8 emb_data_ctrl;
 -
- 	u8 scale_m;
- 	u8 scaling_mode;
- 
+ 	u8 frame_skip;
+ 	u16 embedded_start; /* embedded data start line */
+ 	u16 embedded_end;
 -- 
 2.47.2
 
