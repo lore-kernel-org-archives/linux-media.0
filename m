@@ -1,54 +1,54 @@
 Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.10])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2DFD92D6E75
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0FEA92D7386
 	for <linux-media@vger.kernel.org>; Mon, 25 Aug 2025 09:51:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756115496; cv=none; b=o3yx+zYpatBcVcWTmuBPfwMDZBts+ydux5MZzlgnYinTSoBlhD+kTnrbndYzr0pjcUyqY5LvtEqxJtECwbS+/5d1L7dqFOLeI4t6CYJ++h8v2MzW1I40hYstCvK1QDwAIAdwyJBZ9yUxkTE+IK+jX5YPpV5g6ROXmL5bgMv4+Sw=
+	t=1756115497; cv=none; b=AuZxJsLvpt96m0XgLCK/8zUn+pBU+8pVUMvcb2cf0dJ6yHGAh1LX4GA4UGC9AzESnYVTetnBU8AXtbfOa89qufd+7HIclGVkLbaROskqd29m6vzfBclmOQLcFE3DfxxuOdZOBMN/rusa9p/ky5d30sZ5j6HdTdJ/eq0b9nsAtIA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756115496; c=relaxed/simple;
-	bh=fnIvM30knaf5nTEWJ8isfJN0f9IAy9fhfpe04Py1iSY=;
+	s=arc-20240116; t=1756115497; c=relaxed/simple;
+	bh=tppQ0Yx+OwS2mHHjiqf1escBxU4AeRSmYrEO4ZGBt5s=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=I3o2BHDXnAEXWV2mSKrPoLytOghWUuyhKSeYx4G3WOdmbtjK68Au9by2AA35w4AI6Weh1XbrYqpwJvcnyC1BFz5BENoXraZaDt0iJ/ZuMqDEzOCAMbPTn2ZYW9LDqtHHpdNyuyoAW+2mE+i57dRUl53HZc3TV/Jv7RnOx7JnrpU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=hU9uPzOf; arc=none smtp.client-ip=192.198.163.10
+	 MIME-Version; b=nSTlGFUDP2Uigkznj0GjmMPNa9CcjjOxPzjPxJps96mcZaChLg8HWBC0cYECW3SdSKA3eiTPSQUiU/GK5qdlVg/IyZLEL5aGMCIusW6uM8U6urxe73z6vH14+i6DJ23HiUI+zO7j/uwkimJYtoOYxX7dvjrYiWR/q1uezr3EE4g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=UQwFDAkX; arc=none smtp.client-ip=192.198.163.10
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="hU9uPzOf"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="UQwFDAkX"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1756115495; x=1787651495;
+  t=1756115496; x=1787651496;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=fnIvM30knaf5nTEWJ8isfJN0f9IAy9fhfpe04Py1iSY=;
-  b=hU9uPzOfVCzFUEomZ8nFulDZNx5rvSNCX81Ip/J6sFRyDNd2m5pZmQ2l
-   sqSaYlVw0vCLSGu8Nl34tPTVivpVjF+nG0QK3A3ryP0gCksgeMUq+28/x
-   OkRAuynaiE7rkX8KLC9p2tbV2fCeoNgm/Ezk1Puz8TNY6wfLwWzEF0e4J
-   VP5vLDfKQz6y9wtYZvLGot8w+e0mdT78dkq2bl/1BkaqAYDc29jtdJ664
-   Y56mv6g1Zt4EaIoyL2SVRpSMsIIU9DuUlRaqhhNC1tRjvJHFe4yjOn9tY
-   loml32eZMGv/GuZMyX2aRLvo+anIGRrqKuyvLz9yz4b5XOM46k8PN6LiB
+  bh=tppQ0Yx+OwS2mHHjiqf1escBxU4AeRSmYrEO4ZGBt5s=;
+  b=UQwFDAkX02VtPIDp/I/Yg4IwNZ4Y5niMO3vsVvCdpoRMiwgLmcZwIk56
+   /7FK2OOwCy2HmmfgyfCGoJwByem5O1Xul/LDQZ0PvU4TzhBrKnwLZHhHZ
+   K7fCVzo8Sad9lMasvmxyiz5edfteIqzedvRgpfv0VP7esqSxzgRuDGN/0
+   si18qIEC/IL1aXTLreufDpI9etu61J2Ex+3DYECCl4Uo7gdl52vaOGBjK
+   mDm8B0Ckhhcstrpcq9EdQM6ai4mhtShUGK8DX7wNMj9pDB8xVUkoghTYh
+   zUgtCyeTaNjb+H5YLvT9Rxm8atktcXnyfGDREIRcKaR1sRfisK95A2lqq
    w==;
-X-CSE-ConnectionGUID: HMuWONG6SrOrMZSuyFw9Gw==
-X-CSE-MsgGUID: UH9semCpTvOE0UsXcqslFQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11532"; a="69695913"
+X-CSE-ConnectionGUID: DlVY2XdJRpWkBJJZn0L7tg==
+X-CSE-MsgGUID: fDV8LS/6RsyHVcdFO9qSbg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11532"; a="69695925"
 X-IronPort-AV: E=Sophos;i="6.17,312,1747724400"; 
-   d="scan'208";a="69695913"
+   d="scan'208";a="69695925"
 Received: from orviesa002.jf.intel.com ([10.64.159.142])
   by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Aug 2025 02:51:35 -0700
-X-CSE-ConnectionGUID: hq1ThGajSxGBbxmSyOgg2w==
-X-CSE-MsgGUID: bg3cAkyiRNySL5/lEZ86Vw==
+X-CSE-ConnectionGUID: /ZJ+kiXcSouP4MWXIJtRhw==
+X-CSE-MsgGUID: gDqRHmPiQVSgp6N2PsLL3w==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.17,312,1747724400"; 
-   d="scan'208";a="200195481"
+   d="scan'208";a="200195484"
 Received: from vpanait-mobl.ger.corp.intel.com (HELO kekkonen.fi.intel.com) ([10.245.245.7])
   by orviesa002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Aug 2025 02:51:28 -0700
 Received: from punajuuri.localdomain (unknown [192.168.240.130])
-	by kekkonen.fi.intel.com (Postfix) with ESMTP id 47289121FB2;
+	by kekkonen.fi.intel.com (Postfix) with ESMTP id 64125121FCD;
 	Mon, 25 Aug 2025 12:51:08 +0300 (EEST)
 Received: from sailus by punajuuri.localdomain with local (Exim 4.98.2)
 	(envelope-from <sakari.ailus@linux.intel.com>)
-	id 1uqTr2-00000005aeU-14as;
+	id 1uqTr2-00000005af3-1Vso;
 	Mon, 25 Aug 2025 12:51:08 +0300
 Organization: Intel Finland Oy - BIC 0357606-4 - c/o Alberga Business Park, 6 krs, Bertel Jungin Aukio 5, 02600 Espoo
 From: Sakari Ailus <sakari.ailus@linux.intel.com>
@@ -81,9 +81,9 @@ Cc: hans@jjverkuil.nl,
 	Hans de Goede <hdegoede@redhat.com>,
 	Jacopo Mondi <jacopo.mondi@ideasonboard.com>,
 	Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
-Subject: [PATCH v11 16/66] media: Documentation: Reference color pattern control in format docs
-Date: Mon, 25 Aug 2025 12:50:17 +0300
-Message-ID: <20250825095107.1332313-17-sakari.ailus@linux.intel.com>
+Subject: [PATCH v11 23/66] media: Documentation: Document raw mbus codes and CFA for cameras
+Date: Mon, 25 Aug 2025 12:50:24 +0300
+Message-ID: <20250825095107.1332313-24-sakari.ailus@linux.intel.com>
 X-Mailer: git-send-email 2.47.2
 In-Reply-To: <20250825095107.1332313-1-sakari.ailus@linux.intel.com>
 References: <20250825095107.1332313-1-sakari.ailus@linux.intel.com>
@@ -95,29 +95,38 @@ List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Refer to the color pattern control in the generic raw pixelformat
-documentation.
+Document the use of raw mbus codes for camera sensors and how the
+V4L2_CID_COLOR_PATTERN and V4L2_CID_COLOR_PATTERN_FLIP controls are used
+to convey the color filter array pattern on UAPI.
 
 Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
 ---
- Documentation/userspace-api/media/v4l/pixfmt-raw-generic.rst | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+ .../userspace-api/media/drivers/camera-sensor.rst   | 13 +++++++++++++
+ 1 file changed, 13 insertions(+)
 
-diff --git a/Documentation/userspace-api/media/v4l/pixfmt-raw-generic.rst b/Documentation/userspace-api/media/v4l/pixfmt-raw-generic.rst
-index 9fda7a36cd3a..034d4f3e0499 100644
---- a/Documentation/userspace-api/media/v4l/pixfmt-raw-generic.rst
-+++ b/Documentation/userspace-api/media/v4l/pixfmt-raw-generic.rst
-@@ -13,7 +13,10 @@ Description
+diff --git a/Documentation/userspace-api/media/drivers/camera-sensor.rst b/Documentation/userspace-api/media/drivers/camera-sensor.rst
+index 75fd9166383f..a8e0e4accbc9 100644
+--- a/Documentation/userspace-api/media/drivers/camera-sensor.rst
++++ b/Documentation/userspace-api/media/drivers/camera-sensor.rst
+@@ -39,6 +39,19 @@ format set on a source pad at the end of the device's internal pipeline.
  
- These generic raw image data formats define the memory layout of the data
- without defining the order of the pixels in the format or even the CFA (Colour
--Filter Array) itself. See also :ref:`source routes <subdev-routing>`.
-+Filter Array) itself. These formats may only be used with a Media Controller
-+pipeline where the more specific format is reported by the
-+:ref:`V4L2_CID_COLOR_PATTERN <image-source-control-color-pattern>` control on
-+the source sub-device. See also :ref:`source routes <subdev-routing>`.
+ Most sensor drivers are implemented this way.
  
- .. _v4l2-pix-fmt-raw-8:
++V4L2_CID_COLOR_PATTERN, raw mbus formats, flipping and cropping
++~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
++
++For raw image data originating from camera sensors, specific :ref:`raw mbus
++codes MEDIA_BUS_FMT_RAW_x (where 'x' is the bit depth)
++<v4l2-mbus-pixelcode-generic-raw>` are used as Color Filter Array (CFA) agnostic
++raw formats. The ``V4L2_CID_COLOR_PATTERN <image-source-control-color-pattern>``
++control in the same sub-device defines the native color pattern of the
++device. Flipping may further affect the readout pattern as indicated by the
++``V4L2_CID_COLOR_PATTERN_FLIP <image-source-control-color-pattern-flip>``
++control. Further on, cropping also has an effect on the pattern if cropped
++amount is not divisible by the size of the pattern, horizontally and vertically.
++
+ Frame interval configuration
+ ----------------------------
  
 -- 
 2.47.2
