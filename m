@@ -1,54 +1,54 @@
 Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 30C882DA77A
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A24EA2DBF5C
 	for <linux-media@vger.kernel.org>; Mon, 25 Aug 2025 09:51:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.20
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756115508; cv=none; b=lOr2fy5+IAJwbnvHdAuk8iGJseJwed9MHGpmxSayx+GCNX1AvBysP7RsyD/b5TQ+G9TQh0ZlFlTbLIE9Dp2dIblL/ErRbADOZeIAL1bl62yDVL18ohSKASXv0l842CMCRpqTSphPj1FWwiDKelJZiH90TlJ+fkKhQwDkL2rOXRw=
+	t=1756115509; cv=none; b=H7Vn1MDwnJpj69skN6uzQDjmaGWPa/lJANnqDddhGTz11SM2Gh5kVD4gAp/FozijNjHpSsE4I6MvekWkK4uUTeQCQwVpT6hbHb54W95ucUaq8/+EuL8D9E56+Bqk3PJX91X9WdVtoMMqOGWmv3XQ++DTsN0GQws2ASk4rTC02Y0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756115508; c=relaxed/simple;
-	bh=dfjIyoXUR55sBMJkXA3CHkuZfHMZ3RfadmAuGybN5VY=;
+	s=arc-20240116; t=1756115509; c=relaxed/simple;
+	bh=ll1ntIYYQb8o0yIdfVhCSNLzjzY/CAqIfG+Y6a6ikU0=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=mO1FRHFZ3Yd0cwhmMzDQsE8Ki0g/mhEoswnSeFxgzeJMui+dVIeuxxYiam+v4/O843exlaZh1lqAZ7Jm0COmf2NvKPy8bp2+LXobXdsBSsfVT0XZOO+t/S5jroKTO90RcbL9XBWJXfsmfmgeLQ+vmECJJRSTXfdter0VprA9iXM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=MLDcQ/+M; arc=none smtp.client-ip=198.175.65.20
+	 MIME-Version; b=sqb9sU4vMHc/sP1XiN+2jX9RYC2fmsba2yGKyTrYp27sDMHJ5rAN3B1SlS1IZODHxlolYRxypWTtxkA1HR18jOCiWD7NFpx7j2mHStKVoYLBIF1dlBxXUsaDTYUY/tC2GRWmdQoJr1mM+Py22rdDzHIvEMGZU6QFFq5jHx6q9YE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=d07bO/It; arc=none smtp.client-ip=198.175.65.20
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="MLDcQ/+M"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="d07bO/It"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
   t=1756115508; x=1787651508;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=dfjIyoXUR55sBMJkXA3CHkuZfHMZ3RfadmAuGybN5VY=;
-  b=MLDcQ/+MegMDER2dYBq+8pPvTY6RHAKvCSGJgmBPBGEKXbNlZAFgNEF2
-   F3b085D7AopWuPVuwObnXTX7b0SGwb9zxUmWVmMD5oYFOL3G33pbBaKzZ
-   m6KzFaYDToDrjoqVoZbTC0ENf5B+gV4FYdJ2i52s0bsUZgYJvnilYivJr
-   SlXTsGQwGnh8tldtNZSUOHEp/xDqwrw6/C6Xr5IntNeOMEds/TsVdH9Hd
-   wbdKmNejNvUgfp2Cty1BLtssBmsD7XM2FbuE6iraihcZZG0BVbZki3nr0
-   NeTO2uVYJPGRj/pVNX5nxCZYY+JzrYd0cLHAgAGMLGsp8XNAUvIr1Vq7H
-   Q==;
-X-CSE-ConnectionGUID: 9EoiXG+AQy2l+gQceczZgA==
-X-CSE-MsgGUID: xPwBn53lTc+pqELsrYUICA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11532"; a="58032177"
+  bh=ll1ntIYYQb8o0yIdfVhCSNLzjzY/CAqIfG+Y6a6ikU0=;
+  b=d07bO/ItC52XVT/1Y+8WyP7DxKE9HPmEGUSHl2gMVPlXcuB1AfKnkb9v
+   DA74DPeVrql5cJnvajDEDkGYMJeht/UD9tXhnIYvamEAGRMwh0Dhja9VV
+   6B5UtZEf4RCgydV+2odhqxl22kfC8SKQie/9V2AC8ATx5KCmWl1TDLxys
+   gHWjAyz61q4PN1LvFq7ZFHntMkuLKjbjc/LWJNSoM8DwIO7Qnb7oOwuYa
+   OB/EmKIuYF3+lKYkywVq9kyqd90/EIxr2b6vlfZGqTO1xOzP0sfW4S8te
+   5U7iNgy5Snq1UiR0UwA/dt+oBcXuivyIFI8kJykJejYmKr8jKvXsU6/Ro
+   A==;
+X-CSE-ConnectionGUID: jIoNjP7yRDytgjbhlbsI2w==
+X-CSE-MsgGUID: ts13x6q+TDSUXXh1kvQNnQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11532"; a="58032187"
 X-IronPort-AV: E=Sophos;i="6.17,312,1747724400"; 
-   d="scan'208";a="58032177"
+   d="scan'208";a="58032187"
 Received: from orviesa003.jf.intel.com ([10.64.159.143])
   by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Aug 2025 02:51:45 -0700
-X-CSE-ConnectionGUID: UYvu0bjfRwSkaOPNxAydNw==
-X-CSE-MsgGUID: Dx2/md+OTjOZsXzr0eC1mQ==
+X-CSE-ConnectionGUID: 0A4vhtRySMe9fEuiIcTNXA==
+X-CSE-MsgGUID: ZppFCuxKSJK0ttATcXt99A==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.17,312,1747724400"; 
-   d="scan'208";a="173431065"
+   d="scan'208";a="173431067"
 Received: from vpanait-mobl.ger.corp.intel.com (HELO kekkonen.fi.intel.com) ([10.245.245.7])
   by ORVIESA003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Aug 2025 02:51:38 -0700
 Received: from punajuuri.localdomain (unknown [192.168.240.130])
-	by kekkonen.fi.intel.com (Postfix) with ESMTP id A1724121FED;
+	by kekkonen.fi.intel.com (Postfix) with ESMTP id A7EB7121FF1;
 	Mon, 25 Aug 2025 12:51:08 +0300 (EEST)
 Received: from sailus by punajuuri.localdomain with local (Exim 4.98.2)
 	(envelope-from <sakari.ailus@linux.intel.com>)
-	id 1uqTr2-00000005agG-2aef;
+	id 1uqTr2-00000005agQ-2jBf;
 	Mon, 25 Aug 2025 12:51:08 +0300
 Organization: Intel Finland Oy - BIC 0357606-4 - c/o Alberga Business Park, 6 krs, Bertel Jungin Aukio 5, 02600 Espoo
 From: Sakari Ailus <sakari.ailus@linux.intel.com>
@@ -81,9 +81,9 @@ Cc: hans@jjverkuil.nl,
 	Hans de Goede <hdegoede@redhat.com>,
 	Jacopo Mondi <jacopo.mondi@ideasonboard.com>,
 	Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
-Subject: [PATCH v11 38/66] Revert "media: uapi: v4l: Don't expose generic metadata formats to userspace"
-Date: Mon, 25 Aug 2025 12:50:39 +0300
-Message-ID: <20250825095107.1332313-39-sakari.ailus@linux.intel.com>
+Subject: [PATCH v11 40/66] media: Document enable_streams and disable_streams behaviour
+Date: Mon, 25 Aug 2025 12:50:41 +0300
+Message-ID: <20250825095107.1332313-41-sakari.ailus@linux.intel.com>
 X-Mailer: git-send-email 2.47.2
 In-Reply-To: <20250825095107.1332313-1-sakari.ailus@linux.intel.com>
 References: <20250825095107.1332313-1-sakari.ailus@linux.intel.com>
@@ -95,35 +95,40 @@ List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-This reverts commit d69c8429ea80af02e89e5b3eecb78e417ad049c8.
-
-Make the generic metadata formats visible for the userspace again.
+Document that enable_streams may start additional streams and
+disable_streams may not disable requested streams if other related streams
+are still enabled.
 
 Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
 ---
- include/uapi/linux/videodev2.h | 2 --
- 1 file changed, 2 deletions(-)
+ include/media/v4l2-subdev.h | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-diff --git a/include/uapi/linux/videodev2.h b/include/uapi/linux/videodev2.h
-index 6a5d9ac7bdb9..2b2e070f272c 100644
---- a/include/uapi/linux/videodev2.h
-+++ b/include/uapi/linux/videodev2.h
-@@ -890,7 +890,6 @@ struct v4l2_pix_format {
- #define V4L2_META_FMT_RPI_FE_CFG	v4l2_fourcc('R', 'P', 'F', 'C') /* PiSP FE configuration */
- #define V4L2_META_FMT_RPI_FE_STATS	v4l2_fourcc('R', 'P', 'F', 'S') /* PiSP FE stats */
- 
--#ifdef __KERNEL__
- /*
-  * Line-based metadata formats. Remember to update v4l_fill_fmtdesc() when
-  * adding new ones!
-@@ -902,7 +901,6 @@ struct v4l2_pix_format {
- #define V4L2_META_FMT_GENERIC_16	v4l2_fourcc('M', 'E', 'T', 'G') /* Generic 16-bit 8-bit metadata */
- #define V4L2_META_FMT_GENERIC_CSI2_20	v4l2_fourcc('M', 'E', 'C', 'K') /* 20-bit CSI-2 packed 8-bit metadata */
- #define V4L2_META_FMT_GENERIC_24	v4l2_fourcc('M', 'E', 'T', 'O') /* Generic 24-bit 8-bit metadata */
--#endif
- 
- /* priv field value to indicates that subsequent fields are valid. */
- #define V4L2_PIX_FMT_PRIV_MAGIC		0xfeedcafe
+diff --git a/include/media/v4l2-subdev.h b/include/media/v4l2-subdev.h
+index 4b28086808c9..96a9c869ffb1 100644
+--- a/include/media/v4l2-subdev.h
++++ b/include/media/v4l2-subdev.h
+@@ -814,6 +814,10 @@ struct v4l2_subdev_state {
+  *	V4L2_SUBDEV_CAP_STREAMS sub-device capability flag can ignore the mask
+  *	argument.
+  *
++ *	Starting the requested streams may require starting additional
++ *	streams. Streams that are started together due to hardware are called a
++ *	stream group.
++ *
+  * @disable_streams: Disable the streams defined in streams_mask on the given
+  *	source pad. Subdevs that implement this operation must use the active
+  *	state management provided by the subdev core (enabled through a call to
+@@ -823,6 +827,9 @@ struct v4l2_subdev_state {
+  *	Drivers that support only a single stream without setting the
+  *	V4L2_SUBDEV_CAP_STREAMS sub-device capability flag can ignore the mask
+  *	argument.
++ *
++ *	A stream is only disabled once all streams in the stream group are
++ *	disabled.
+  */
+ struct v4l2_subdev_pad_ops {
+ 	int (*enum_mbus_code)(struct v4l2_subdev *sd,
 -- 
 2.47.2
 
