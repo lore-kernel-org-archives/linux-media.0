@@ -1,54 +1,54 @@
 Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.10])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B6CAF2D59E9
-	for <linux-media@vger.kernel.org>; Mon, 25 Aug 2025 09:51:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6EF312D5C6E
+	for <linux-media@vger.kernel.org>; Mon, 25 Aug 2025 09:51:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756115490; cv=none; b=Zp3NSm2Pp0JY/ArnC9s3Q2V3PazwyVAgGwS/xvLZt5qwh7mRa9M1xYhd5zgNjFu29flu9ubcEjUJrQQrNsB2jLtX+b92PePnLy23FH8UrDTntIUY5kXhIT3/vaUmjr2DJMsypT3o1xinsqxfplhOIS2rlLq3ZQH0/loyRZIrQ4Y=
+	t=1756115490; cv=none; b=Q1GYIZgpWKc8HyeLa9IoLEH3HjVxYAVxTlH4BESgToM4z8B4wHEBSQieFOtDd4rlpNRS4N4C5hdt8s7vE2NoP8ENrPGAHcWmoJwEuq5Y4DTdSpxswHSpPPibd4ZKwNvl7RH3UpzznLTIlNw3yvh1TCXxwthl8yCAOVqImtc9X9E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1756115490; c=relaxed/simple;
-	bh=yGSb5RtTsy31lhtwLlwfvK8Rrqyj83T9KD5q6TpOpKA=;
+	bh=z3OT9BwgLZsjMCY3Dn5di2E7N0fRMlZdcarxvhWYZYk=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=n3oTEj+qzZYBgdXglYW2WoasOZu278EmnPBQN68hYVw4lsg/m7RQL/rBcx4IcsAM5IG/6vwlYnAmqxiM0T5q8Ci/7nPSP4WhqRQp9nz2+Psqe6QveGzRdNFVXXzOtia3rYnz6jpy3IP3bYyBDGIRZdNW8IAZfleKc7O7ciIi56Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=SD0wH09V; arc=none smtp.client-ip=192.198.163.10
+	 MIME-Version; b=mBsOTVvtgOEl7UnSxCGxzF6ACOs9vZOPJH0owJYbNYYCefOPU6RA8PI8kvUavPkDC5BA59sDahNe0/DcF88EJW1y1DdN1ngnv5uGDBBvC9gFv+LQsVCuiMbCX58p/d8a26K0obtmXHPNh+q6gtRJJxDh4Fs6sGYPgSNG4ekox7c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=mSgtObte; arc=none smtp.client-ip=192.198.163.10
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="SD0wH09V"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="mSgtObte"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
   t=1756115489; x=1787651489;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=yGSb5RtTsy31lhtwLlwfvK8Rrqyj83T9KD5q6TpOpKA=;
-  b=SD0wH09VBjunWAHLhPs1p1tjZJTNbaiAgMq75VGOHBqrSwMfxHlpcSUx
-   MR+BSnUNfcMJoLNyjANm5sITM9P0+twKTIHtfD7kxE0zZqG+wUuedbgA2
-   S89OBH+wa5gs3ClmjJPdUHSOYNV/i79F5KfqCb0Upi6zWUA9/nmn8UOk7
-   uxuLP41etBUvwW8MDwseccdsHRqGB/h0SORUnFLBeuzihUG4+nS2QlZvj
-   qZhUJHw3ETKdtJ0Agvd48vsnhI2jY4eEAKzMCrZmp7tvdY8y98XrjqNd4
-   wxXVYVwHqbp89B1BiL0Pz+w58APChHCZq+rcopVKG0xI34N2Qe9Ow3Tut
-   Q==;
-X-CSE-ConnectionGUID: qGpE7SoHRjWzU0SWJiocng==
-X-CSE-MsgGUID: ZnoI5nOlSBGufPX0bDEZ0w==
-X-IronPort-AV: E=McAfee;i="6800,10657,11532"; a="69695833"
+  bh=z3OT9BwgLZsjMCY3Dn5di2E7N0fRMlZdcarxvhWYZYk=;
+  b=mSgtObtemSdAmGlo+sJxhegskiCkbyVHSEhdlIQ4W03A3AEucH4glr0S
+   0KtL/M5ehqlzppK+ARhz6ffcZ5R8V374H/2b7XaLUHaS+sQJpy/MYLjxY
+   +Fg9LPt6cEnUflrFAWQwIjjuH0Af/6SMrkgqnzujX3ESRJUE4w+9QWSkY
+   nedCOXLoNO33T3vm57ZKJQjlabF+zEqLqOJk/eAgV4lY1/0pfZ8Fq6uPv
+   UT/F1nvor1T4eztCQ4hsmdcw1g4uaJ6r33CP5mdYUDb0+gxMQKBMuwRrS
+   GdbiEu1oZL2Rr/ggLPzVWJOLeAbXKmwcHbG50sBIkMO92eHc5Fur8PPj6
+   A==;
+X-CSE-ConnectionGUID: SSt/8KXTTlazkYqchLfQnQ==
+X-CSE-MsgGUID: abaGqZ7zRTqmm0jO69gxLQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11532"; a="69695845"
 X-IronPort-AV: E=Sophos;i="6.17,312,1747724400"; 
-   d="scan'208";a="69695833"
+   d="scan'208";a="69695845"
 Received: from orviesa002.jf.intel.com ([10.64.159.142])
   by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Aug 2025 02:51:27 -0700
-X-CSE-ConnectionGUID: ST02KL44R3mHrdTEkwvdGw==
-X-CSE-MsgGUID: 8nZVN6hzR8WcxSeBhpTWMg==
+X-CSE-ConnectionGUID: I9DVnCAITbiU7IiV8JxDWA==
+X-CSE-MsgGUID: Qhp4mYtGSm21gjI4o0ai6Q==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.17,312,1747724400"; 
-   d="scan'208";a="200195419"
+   d="scan'208";a="200195423"
 Received: from vpanait-mobl.ger.corp.intel.com (HELO kekkonen.fi.intel.com) ([10.245.245.7])
-  by orviesa002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Aug 2025 02:51:19 -0700
+  by orviesa002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Aug 2025 02:51:20 -0700
 Received: from punajuuri.localdomain (unknown [192.168.240.130])
-	by kekkonen.fi.intel.com (Postfix) with ESMTP id 2B9E1121F7B;
+	by kekkonen.fi.intel.com (Postfix) with ESMTP id 4059F121FA8;
 	Mon, 25 Aug 2025 12:51:08 +0300 (EEST)
 Received: from sailus by punajuuri.localdomain with local (Exim 4.98.2)
 	(envelope-from <sakari.ailus@linux.intel.com>)
-	id 1uqTr2-00000005adv-0bUO;
+	id 1uqTr2-00000005aeK-0wKL;
 	Mon, 25 Aug 2025 12:51:08 +0300
 Organization: Intel Finland Oy - BIC 0357606-4 - c/o Alberga Business Park, 6 krs, Bertel Jungin Aukio 5, 02600 Espoo
 From: Sakari Ailus <sakari.ailus@linux.intel.com>
@@ -81,9 +81,9 @@ Cc: hans@jjverkuil.nl,
 	Hans de Goede <hdegoede@redhat.com>,
 	Jacopo Mondi <jacopo.mondi@ideasonboard.com>,
 	Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
-Subject: [PATCH v11 09/66] media: ccs: Move ccs_validate_csi_data_format up
-Date: Mon, 25 Aug 2025 12:50:10 +0300
-Message-ID: <20250825095107.1332313-10-sakari.ailus@linux.intel.com>
+Subject: [PATCH v11 14/66] media: Documentation: Refer to internal pads in metadata documentation
+Date: Mon, 25 Aug 2025 12:50:15 +0300
+Message-ID: <20250825095107.1332313-15-sakari.ailus@linux.intel.com>
 X-Mailer: git-send-email 2.47.2
 In-Reply-To: <20250825095107.1332313-1-sakari.ailus@linux.intel.com>
 References: <20250825095107.1332313-1-sakari.ailus@linux.intel.com>
@@ -95,62 +95,37 @@ List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-ccs_validate_csi_data_format() will soon be needed elsewhere, above its
-current location. Move it up.
+Metadata is intended to be used with internal pads when it comes to the
+source of the data. Document this.
 
 Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
-Reviewed-by: Julien Massot <julien.massot@collabora.com>
-Reviewed-by: Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>
 ---
- drivers/media/i2c/ccs/ccs-core.c | 28 ++++++++++++++--------------
- 1 file changed, 14 insertions(+), 14 deletions(-)
+ Documentation/userspace-api/media/v4l/metafmt-generic.rst | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/media/i2c/ccs/ccs-core.c b/drivers/media/i2c/ccs/ccs-core.c
-index 1aa5a06d7cde..6cf60e1758b4 100644
---- a/drivers/media/i2c/ccs/ccs-core.c
-+++ b/drivers/media/i2c/ccs/ccs-core.c
-@@ -1981,6 +1981,20 @@ static int ccs_post_streamoff(struct v4l2_subdev *subdev)
- 	return pm_runtime_put(&client->dev);
- }
+diff --git a/Documentation/userspace-api/media/v4l/metafmt-generic.rst b/Documentation/userspace-api/media/v4l/metafmt-generic.rst
+index 39d529c910a8..e8824b5a65d6 100644
+--- a/Documentation/userspace-api/media/v4l/metafmt-generic.rst
++++ b/Documentation/userspace-api/media/v4l/metafmt-generic.rst
+@@ -7,12 +7,17 @@ V4L2_META_FMT_GENERIC_8 ('MET8'), V4L2_META_FMT_GENERIC_CSI2_10 ('MC1A'), V4L2_M
  
-+static const struct ccs_csi_data_format
-+*ccs_validate_csi_data_format(struct ccs_sensor *sensor, u32 code)
-+{
-+	unsigned int i;
-+
-+	for (i = 0; i < ARRAY_SIZE(ccs_csi_data_formats); i++) {
-+		if (sensor->mbus_frame_fmts & (1 << i) &&
-+		    ccs_csi_data_formats[i].code == code)
-+			return &ccs_csi_data_formats[i];
-+	}
-+
-+	return sensor->csi_format;
-+}
-+
- static int ccs_enum_mbus_code(struct v4l2_subdev *subdev,
- 			      struct v4l2_subdev_state *sd_state,
- 			      struct v4l2_subdev_mbus_code_enum *code)
-@@ -2116,20 +2130,6 @@ static void ccs_propagate(struct v4l2_subdev *subdev,
- 	}
- }
+ Generic line-based metadata formats
  
--static const struct ccs_csi_data_format
--*ccs_validate_csi_data_format(struct ccs_sensor *sensor, u32 code)
--{
--	unsigned int i;
--
--	for (i = 0; i < ARRAY_SIZE(ccs_csi_data_formats); i++) {
--		if (sensor->mbus_frame_fmts & (1 << i) &&
--		    ccs_csi_data_formats[i].code == code)
--			return &ccs_csi_data_formats[i];
--	}
--
--	return sensor->csi_format;
--}
--
- static int ccs_set_format_source(struct v4l2_subdev *subdev,
- 				 struct v4l2_subdev_state *sd_state,
- 				 struct v4l2_subdev_format *fmt)
++.. _v4l2-format-generic-meta:
+ 
+ Description
+ ===========
+ 
+ These generic line-based metadata formats define the memory layout of the data
+-without defining the format or meaning of the metadata itself.
++without defining the format or meaning of the metadata itself. These formats may
++only be used with a Media Controller pipeline where the more specific metadata
++layout is reported by an :ref:`V4L2_CID_METADATA_LAYOUT control
++<image_source_control_metadata_layout>` of the source sub-device. See also
++:ref:`source routes <subdev-routing>`.
+ 
+ .. _v4l2-meta-fmt-generic-8:
+ 
 -- 
 2.47.2
 
