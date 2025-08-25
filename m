@@ -1,46 +1,46 @@
-Received: from lelvem-ot02.ext.ti.com (lelvem-ot02.ext.ti.com [198.47.23.235])
+Received: from fllvem-ot04.ext.ti.com (fllvem-ot04.ext.ti.com [198.47.19.246])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BFFEB2F39B1;
-	Mon, 25 Aug 2025 14:26:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.47.23.235
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 516582FFDD3;
+	Mon, 25 Aug 2025 14:26:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.47.19.246
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756131996; cv=none; b=hz8WdZeV3QzwqdDl/XxgkcUblt44M6RgdPT8xwVbhAwgJFChLRc5LnrYs+0XoLT+DtziU6oQXK6Yhstonc1jjQyDi/5g1xapves5fI7/Weai4vJHMUyF/XXithrCO/RAN57CzOHBFL2TzrfZ/rd9snytzwq3GUNkIMbPPVsjAKY=
+	t=1756132000; cv=none; b=PTCy1N61cdDN29mDI8m11bqInoPTR+NnpRd9ITJJGBa2JZ+BPb1yvnVEGhZ4WL0wXu19uzocgVzkze9yDqmrPffGHHUhNYZ+HhRc5GyOJoAvkdaH9AQV6kMCorao7zoD4AiJqqupcUpASHKfIEQz6Pbt98IR7T0EsUof+dI2QOg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756131996; c=relaxed/simple;
-	bh=oy/FqP/g+SbZhVpKS68mLdaW+1sNSe5OV359W/qnbJY=;
+	s=arc-20240116; t=1756132000; c=relaxed/simple;
+	bh=+ATgwERUjCMk+mbyg0rUpYLOyGZJJnUWX/wmnPZ9hlY=;
 	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=f3YUR8ZJJNhf07u197OLJCle6LWrpyIl56TVe1jNhjHlb6v0HWTUS4Y5w0hCqHE98aLbKwYpCg+CR0zV0yXMjNngHY5VdBYW2BrzMdSWLgS2LK4K3/4Yu2ixVxPaSf+hFwG9RSeo4zN3VTrDGKXBdYbxYCwDFjuPzEj9eUQGa/I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com; spf=pass smtp.mailfrom=ti.com; dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b=NSlA3ktj; arc=none smtp.client-ip=198.47.23.235
+	 MIME-Version:Content-Type; b=CU/26h5zshXHBD+cEQvVoZNPlxYcjGZud3awKuQOuD6UZv4hyos4ZKzhYM5Fhd7QEyP0rJbsVAZFLZa//H2W0fs/Jzk6Qx8a476CffGKlaz8v9Qv83EgkYA9SGeM6YLlmeK7OYpJXOXCoDUc77JYx98AR4Kud8S9rd108VKG8es=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com; spf=pass smtp.mailfrom=ti.com; dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b=gFg7BsLo; arc=none smtp.client-ip=198.47.19.246
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ti.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="NSlA3ktj"
-Received: from lelvem-sh01.itg.ti.com ([10.180.77.71])
-	by lelvem-ot02.ext.ti.com (8.15.2/8.15.2) with ESMTP id 57PEQ0qD1311037;
-	Mon, 25 Aug 2025 09:26:00 -0500
+	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="gFg7BsLo"
+Received: from lelvem-sh02.itg.ti.com ([10.180.78.226])
+	by fllvem-ot04.ext.ti.com (8.15.2/8.15.2) with ESMTP id 57PEQJMu1294928;
+	Mon, 25 Aug 2025 09:26:19 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-	s=ti-com-17Q1; t=1756131960;
-	bh=jOYAJxh0WPskVMFabb7tswjjdVmgor+qBbtpEoJsbc8=;
+	s=ti-com-17Q1; t=1756131979;
+	bh=H+ovSwcuIBBodDc5Y/doW/VxN5p2BDHHt12bqipJ0o8=;
 	h=From:To:CC:Subject:Date:In-Reply-To:References;
-	b=NSlA3ktjm6mNWU/XiBlVTIJ15xACVjq70IqivlLZN01qfa9jF0xTBkcMmNyO0GGZa
-	 b0IMZaGHtwWU5zyCD0+S0OZ0QaNf5MHlFYZm6oODuTOsPg4Jbv+qtTeNzWSQpRQoC/
-	 uiF1BQfMxd3LPwjr7xgj7mhwzx99xfPrKwKMKhJU=
-Received: from DFLE112.ent.ti.com (dfle112.ent.ti.com [10.64.6.33])
-	by lelvem-sh01.itg.ti.com (8.18.1/8.18.1) with ESMTPS id 57PEQ0Ne669096
+	b=gFg7BsLofrHB3OxFKQu2cNulnBGQj90hQdHojjB+p/h4i/xKTzHQVI+lJIEXmY7lJ
+	 2OwmTHqOYSBMoV7R7Nx7/Op7TshWCHRvaixgLE1sHhC2mOQ0YDDO64viQpIAGNsoTx
+	 VA6Oc4/t2qG+jhFKIXSTm6sG4ICKl8kHnFjg58Go=
+Received: from DFLE103.ent.ti.com (dfle103.ent.ti.com [10.64.6.24])
+	by lelvem-sh02.itg.ti.com (8.18.1/8.18.1) with ESMTPS id 57PEQJE71235883
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-SHA256 bits=128 verify=FAIL);
-	Mon, 25 Aug 2025 09:26:00 -0500
-Received: from DFLE108.ent.ti.com (10.64.6.29) by DFLE112.ent.ti.com
- (10.64.6.33) with Microsoft SMTP Server (version=TLS1_2,
+	Mon, 25 Aug 2025 09:26:19 -0500
+Received: from DFLE113.ent.ti.com (10.64.6.34) by DFLE103.ent.ti.com
+ (10.64.6.24) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.55; Mon, 25
- Aug 2025 09:26:00 -0500
-Received: from lelvem-mr06.itg.ti.com (10.180.75.8) by DFLE108.ent.ti.com
- (10.64.6.29) with Microsoft SMTP Server (version=TLS1_2,
+ Aug 2025 09:26:18 -0500
+Received: from lelvem-mr06.itg.ti.com (10.180.75.8) by DFLE113.ent.ti.com
+ (10.64.6.34) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.55 via
- Frontend Transport; Mon, 25 Aug 2025 09:26:00 -0500
+ Frontend Transport; Mon, 25 Aug 2025 09:26:18 -0500
 Received: from ws.dhcp.ti.com (ws.dhcp.ti.com [172.24.233.149])
-	by lelvem-mr06.itg.ti.com (8.18.1/8.18.1) with ESMTP id 57PEPN3s3747540;
-	Mon, 25 Aug 2025 09:25:54 -0500
+	by lelvem-mr06.itg.ti.com (8.18.1/8.18.1) with ESMTP id 57PEPN3v3747540;
+	Mon, 25 Aug 2025 09:26:13 -0500
 From: Rishikesh Donadkar <r-donadkar@ti.com>
 To: <jai.luthra@linux.dev>, <laurent.pinchart@ideasonboard.com>,
         <mripard@kernel.org>
@@ -52,9 +52,9 @@ CC: <r-donadkar@ti.com>, <y-abhilashchandra@ti.com>, <devarsht@ti.com>,
         <jai.luthra@ideasonboard.com>, <changhuang.liang@starfivetech.com>,
         <jack.zhu@starfivetech.com>, <linux-kernel@vger.kernel.org>,
         <linux-media@vger.kernel.org>, <devicetree@vger.kernel.org>
-Subject: [PATCH v5 05/14] media: ti: j721e-csi2rx: allocate DMA channel based on context index
-Date: Mon, 25 Aug 2025 19:55:13 +0530
-Message-ID: <20250825142522.1826188-6-r-donadkar@ti.com>
+Subject: [PATCH v5 08/14] media: cadence: csi2rx: add get_frame_desc wrapper
+Date: Mon, 25 Aug 2025 19:55:16 +0530
+Message-ID: <20250825142522.1826188-9-r-donadkar@ti.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20250825142522.1826188-1-r-donadkar@ti.com>
 References: <20250825142522.1826188-1-r-donadkar@ti.com>
@@ -70,38 +70,68 @@ X-C2ProcessedOrg: 333ef613-75bf-4e12-a4b1-8e3623f5dcea
 
 From: Pratyush Yadav <p.yadav@ti.com>
 
-With multiple contexts, there needs to be a different DMA channel for
-each context. Earlier, the DMA channel name was hard coded to "rx0" for
-the sake of simplicity. Generate the DMA channel name based on its index
-and get the channel corresponding to the context.
+J721E wrapper CSI2RX driver needs to get the frame descriptor from the
+source to find out info about virtual channel. This driver itself does
+not touch the routing or virtual channels in any way. So simply pass the
+descriptor through from the source.
 
 Signed-off-by: Pratyush Yadav <p.yadav@ti.com>
 Signed-off-by: Jai Luthra <j-luthra@ti.com>
 Reviewed-by: Jacopo Mondi <jacopo.mondi@ideasonboard.com>
+Reviewed-by: Changhuang Liang <changhuang.liang@starfivetech.com>
 Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 Reviewed-by: Yemike Abhilash Chandra <y-abhilashchandra@ti.com>
 Signed-off-by: Rishikesh Donadkar <r-donadkar@ti.com>
 ---
- drivers/media/platform/ti/j721e-csi2rx/j721e-csi2rx.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ drivers/media/platform/cadence/cdns-csi2rx.c | 24 ++++++++++++++++++++
+ 1 file changed, 24 insertions(+)
 
-diff --git a/drivers/media/platform/ti/j721e-csi2rx/j721e-csi2rx.c b/drivers/media/platform/ti/j721e-csi2rx/j721e-csi2rx.c
-index 50a935494e43..4b5e49c2244e 100644
---- a/drivers/media/platform/ti/j721e-csi2rx/j721e-csi2rx.c
-+++ b/drivers/media/platform/ti/j721e-csi2rx/j721e-csi2rx.c
-@@ -1042,9 +1042,11 @@ static int ti_csi2rx_init_dma(struct ti_csi2rx_ctx *ctx)
- 	struct dma_slave_config cfg = {
- 		.src_addr_width = DMA_SLAVE_BUSWIDTH_16_BYTES,
- 	};
-+	char name[5];
- 	int ret;
+diff --git a/drivers/media/platform/cadence/cdns-csi2rx.c b/drivers/media/platform/cadence/cdns-csi2rx.c
+index 828b4ba4301d..3c99de56c095 100644
+--- a/drivers/media/platform/cadence/cdns-csi2rx.c
++++ b/drivers/media/platform/cadence/cdns-csi2rx.c
+@@ -235,6 +235,21 @@ static const struct csi2rx_fmt *csi2rx_get_fmt_by_code(u32 code)
+ 	return NULL;
+ }
  
--	ctx->dma.chan = dma_request_chan(ctx->csi->dev, "rx0");
-+	snprintf(name, sizeof(name), "rx%u", ctx->idx);
-+	ctx->dma.chan = dma_request_chan(ctx->csi->dev, name);
- 	if (IS_ERR(ctx->dma.chan))
- 		return PTR_ERR(ctx->dma.chan);
++static int csi2rx_get_frame_desc_from_source(struct csi2rx_priv *csi2rx,
++					     struct v4l2_mbus_frame_desc *fd)
++{
++	struct media_pad *remote_pad;
++
++	remote_pad = media_entity_remote_source_pad_unique(&csi2rx->subdev.entity);
++	if (!remote_pad) {
++		dev_err(csi2rx->dev, "No remote pad found for sink\n");
++		return -ENODEV;
++	}
++
++	return v4l2_subdev_call(csi2rx->source_subdev, pad, get_frame_desc,
++				remote_pad->index, fd);
++}
++
+ static inline
+ struct csi2rx_priv *v4l2_subdev_to_csi2rx(struct v4l2_subdev *subdev)
+ {
+@@ -607,10 +622,19 @@ int cdns_csi2rx_negotiate_ppc(struct v4l2_subdev *subdev, unsigned int pad,
+ }
+ EXPORT_SYMBOL_GPL_FOR_MODULES(cdns_csi2rx_negotiate_ppc, "j721e-csi2rx");
  
++static int csi2rx_get_frame_desc(struct v4l2_subdev *subdev, unsigned int pad,
++				 struct v4l2_mbus_frame_desc *fd)
++{
++	struct csi2rx_priv *csi2rx = v4l2_subdev_to_csi2rx(subdev);
++
++	return csi2rx_get_frame_desc_from_source(csi2rx, fd);
++}
++
+ static const struct v4l2_subdev_pad_ops csi2rx_pad_ops = {
+ 	.enum_mbus_code	= csi2rx_enum_mbus_code,
+ 	.get_fmt	= v4l2_subdev_get_fmt,
+ 	.set_fmt	= csi2rx_set_fmt,
++	.get_frame_desc	= csi2rx_get_frame_desc,
+ };
+ 
+ static const struct v4l2_subdev_video_ops csi2rx_video_ops = {
 -- 
 2.34.1
 
