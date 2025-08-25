@@ -1,54 +1,54 @@
 Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 981632DF6F4
-	for <linux-media@vger.kernel.org>; Mon, 25 Aug 2025 09:51:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6874F2DCF71
+	for <linux-media@vger.kernel.org>; Mon, 25 Aug 2025 09:51:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.20
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756115515; cv=none; b=MQtjVvI25M8Km4X7MZgcSoA+ireNV3j20Jm4TmLutTDWxkEIRty0oS8iQ5+XFjCKybfuhjpshE0wSDNOS8y63kSaupqcGJ9IDdvj8FfvA1SbsPmRPqKhXft1KYptFQgszVSVnEgA7S3TFSeAqNkhqGg3Faj6V5uU1IPa0vIPG/s=
+	t=1756115515; cv=none; b=mQmsIZPhABfYJG1jlCFbsL17JTuzoJk6OsGin5Kl1vmuFjoLmVA/pxGk8PJSXqtGy9bG2Dfji8Ov62Cq5HiFqywQxk+kC6FP5kEk2Q8JaUrLV+UwfXZYfhCKnY/eT8fir7NIyOnn1tx5knGU46ovv3P+ADElNi0CC5rLLWDZJjc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1756115515; c=relaxed/simple;
-	bh=50LCVsXFqX3R3jq+il6VgraYsi45QNMs0B2da8St4D4=;
+	bh=FBy6BciTHuAueDy5+YJlIkge/wfUYMA6PjWInIjYlxs=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=uBnIXN8agCZydMiI4r70eGw7UA6Mk9OEqogUbytXmaywmDY00SGl5gcE54MbiItOKMFB9DjNVtjR+tyQZ+1Ptx5cHnXH9y2TlGPt2ZHiZBbsimerh/dPtKPxYtIJ5rK7BVotKQSHQlyDdGGYCEa7JxW/kXiPiri8gzPa2Mbbj2A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=CNm5H/Df; arc=none smtp.client-ip=198.175.65.20
+	 MIME-Version; b=AKBUiz1i4+rSsGIIZ7qKHoA/rchibaTNCzYtWhAL/hjswGfxtoZdgSKBI42P+c390KopjAUpFLoGcbeiXPWc4LvtUaW2B70F0972sN3D1o84nvzWEMDk3kD3ry9B36yeMYKAbUBKAucFH+Tsht9HvcN2O7qkbnW4emrJeyNu7RM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=b+WJ94jS; arc=none smtp.client-ip=198.175.65.20
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="CNm5H/Df"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="b+WJ94jS"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1756115514; x=1787651514;
+  t=1756115513; x=1787651513;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=50LCVsXFqX3R3jq+il6VgraYsi45QNMs0B2da8St4D4=;
-  b=CNm5H/DfqMI3XMBY9eA0ULxX+Vr//d/1o/wL/eD+9rS4FtdHIoIzhRzR
-   PUz4wtc19XDtymnI+DP5KGmp4xZvpeaBzlzj1AbXhry8ro5oq8bCLGu8V
-   UBHaSWgXKLPgVJwy8lasABiQLG/84gbv+kQr9l8qqxwNd8esIlBl1OBaR
-   hKCv2jchxMZkZICcDZZd7aHb3O1vfp/3M2+3DIYMovigr3czONW2vHaNB
-   17jIMNVzqvgjttwn4gbHeXbbr5XBoYTXHvLp6Y9K5XGgSqLwIEfR/boan
-   dooHPzTb7b6M5h/4Vq3vTpQH0aB5iVf6H6NOsBrEA0ID1CXQGzp0XABHu
-   w==;
-X-CSE-ConnectionGUID: ABUuhlTNRue8Vf2tbyAevA==
-X-CSE-MsgGUID: SgWChOTaR4mrJvkSEVrQlA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11532"; a="58032292"
+  bh=FBy6BciTHuAueDy5+YJlIkge/wfUYMA6PjWInIjYlxs=;
+  b=b+WJ94jSe9MB7H06LBVShfiQHEvvoXr3/+1dsVPnKlM2JgA+ot2OaH5M
+   4qE63s8kkJOVQoWjot6d/oR8ZMHyopwKYHyaGJgEA5XtwujfGfDfgv27Q
+   YvMLNJHAjyO1CN0NNlKCpfRBJJ9KjJPIrDzBugd7MiTp+plRKVhzB9cAJ
+   RzkMBsvP119yF24VbAobfFW951Pe2WCZ2sMUXgJqA1qhVnHDTSyGYFRo9
+   Uh9lFi+E7/4EsCpz+EGKWwIH384raRQnmpjvL5Q5yd6ZA717Z9ex4OUBN
+   DL52wGVrj0fI3y/x+CAbO7lHpdGJV/yFjOE8x3QrJ8zfyDJ5Yxke0Xg43
+   A==;
+X-CSE-ConnectionGUID: qMVqyjTjQ4OtsFtJCQSEFA==
+X-CSE-MsgGUID: vPDMXLHVThCpyuwZE2RaiQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11532"; a="58032272"
 X-IronPort-AV: E=Sophos;i="6.17,312,1747724400"; 
-   d="scan'208";a="58032292"
+   d="scan'208";a="58032272"
 Received: from orviesa003.jf.intel.com ([10.64.159.143])
-  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Aug 2025 02:51:46 -0700
-X-CSE-ConnectionGUID: WCByvH3+Q/CZ4hqzw5pKJA==
-X-CSE-MsgGUID: uk+atSgLS9apHGZenbh+lg==
+  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Aug 2025 02:51:45 -0700
+X-CSE-ConnectionGUID: b2oLrQSZQF2D3UX+CtPxJg==
+X-CSE-MsgGUID: OZo37EICRsiV6DxfADoedQ==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.17,312,1747724400"; 
-   d="scan'208";a="173431094"
+   d="scan'208";a="173431091"
 Received: from vpanait-mobl.ger.corp.intel.com (HELO kekkonen.fi.intel.com) ([10.245.245.7])
   by ORVIESA003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Aug 2025 02:51:38 -0700
 Received: from punajuuri.localdomain (unknown [192.168.240.130])
-	by kekkonen.fi.intel.com (Postfix) with ESMTP id B690F121FF5;
+	by kekkonen.fi.intel.com (Postfix) with ESMTP id D235E122003;
 	Mon, 25 Aug 2025 12:51:08 +0300 (EEST)
 Received: from sailus by punajuuri.localdomain with local (Exim 4.98.2)
 	(envelope-from <sakari.ailus@linux.intel.com>)
-	id 1uqTr2-00000005agk-2yhQ;
+	id 1uqTr2-00000005ahJ-3SG0;
 	Mon, 25 Aug 2025 12:51:08 +0300
 Organization: Intel Finland Oy - BIC 0357606-4 - c/o Alberga Business Park, 6 krs, Bertel Jungin Aukio 5, 02600 Espoo
 From: Sakari Ailus <sakari.ailus@linux.intel.com>
@@ -81,9 +81,9 @@ Cc: hans@jjverkuil.nl,
 	Hans de Goede <hdegoede@redhat.com>,
 	Jacopo Mondi <jacopo.mondi@ideasonboard.com>,
 	Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
-Subject: [PATCH v11 44/66] media: uapi: Add controls for sub-sampling configuration
-Date: Mon, 25 Aug 2025 12:50:45 +0300
-Message-ID: <20250825095107.1332313-45-sakari.ailus@linux.intel.com>
+Subject: [PATCH v11 51/66] media: v4l: Add V4L2_SUBDEV_ROUTE_FL_IMMUTABLE sub-device routing flag
+Date: Mon, 25 Aug 2025 12:50:52 +0300
+Message-ID: <20250825095107.1332313-52-sakari.ailus@linux.intel.com>
 X-Mailer: git-send-email 2.47.2
 In-Reply-To: <20250825095107.1332313-1-sakari.ailus@linux.intel.com>
 References: <20250825095107.1332313-1-sakari.ailus@linux.intel.com>
@@ -95,99 +95,64 @@ List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Sub-sampling is a way to decrease the data rates after the pixel array by
-systematically discarding some samples, either vertically or horizontally
-or both. Add two controls for the purpose and document them. The
-sub-sampling configuration is taken into account in the compose rectangle.
+Add a flag to denote immutable routes, V4L2_SUBDEV_ROUTE_FL_IMMUTABLE.
+Such routes cannot be changed and they're always active.
 
 Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
-Reviewed-by: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
+Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 ---
- .../media/drivers/camera-sensor.rst              | 16 +++++++++++++---
- .../userspace-api/media/v4l/ext-ctrls-camera.rst | 11 +++++++++++
- drivers/media/v4l2-core/v4l2-ctrls-defs.c        |  2 ++
- include/uapi/linux/v4l2-controls.h               |  2 ++
- 4 files changed, 28 insertions(+), 3 deletions(-)
+ Documentation/userspace-api/media/v4l/dev-subdev.rst         | 4 +++-
+ .../userspace-api/media/v4l/vidioc-subdev-g-routing.rst      | 5 +++++
+ include/uapi/linux/v4l2-subdev.h                             | 5 +++++
+ 3 files changed, 13 insertions(+), 1 deletion(-)
 
-diff --git a/Documentation/userspace-api/media/drivers/camera-sensor.rst b/Documentation/userspace-api/media/drivers/camera-sensor.rst
-index ef1f51862980..b0ad0d778396 100644
---- a/Documentation/userspace-api/media/drivers/camera-sensor.rst
-+++ b/Documentation/userspace-api/media/drivers/camera-sensor.rst
-@@ -120,8 +120,8 @@ values programmed by the register sequences. The default values of these
- controls shall be 0 (disabled). Especially these controls shall not be inverted,
- independently of the sensor's mounting rotation.
+diff --git a/Documentation/userspace-api/media/v4l/dev-subdev.rst b/Documentation/userspace-api/media/v4l/dev-subdev.rst
+index b0774b9a9b71..684ef0844517 100644
+--- a/Documentation/userspace-api/media/v4l/dev-subdev.rst
++++ b/Documentation/userspace-api/media/v4l/dev-subdev.rst
+@@ -572,7 +572,9 @@ internal pad always has a single stream only (0).
+ Routes from an internal sink pad to an external source pad are typically not
+ modifiable but they can be activated and deactivated using the
+ :ref:`V4L2_SUBDEV_ROUTE_FL_ACTIVE <v4l2-subdev-routing-flags>` flag, depending
+-on driver capabilities.
++on driver capabilities. The :ref:`V4L2_SUBDEV_ROUTE_FL_IMMUTABLE
++<v4l2-subdev-routing-flags>` flag indicates that the
++``V4L2_SUBDEV_ROUTE_FLAG_ACTIVE`` of the route may not be unset.
  
--Binning
---------
-+Binning and sub-sampling
-+------------------------
+ Interaction between routes, streams, formats and selections
+ -----------------------------------------------------------
+diff --git a/Documentation/userspace-api/media/v4l/vidioc-subdev-g-routing.rst b/Documentation/userspace-api/media/v4l/vidioc-subdev-g-routing.rst
+index 15f448664e6b..0b90be43af57 100644
+--- a/Documentation/userspace-api/media/v4l/vidioc-subdev-g-routing.rst
++++ b/Documentation/userspace-api/media/v4l/vidioc-subdev-g-routing.rst
+@@ -146,6 +146,11 @@ wants to retrieve the missing routes, it can issue a new
+     * - V4L2_SUBDEV_ROUTE_FL_ACTIVE
+       - 0x0001
+       - The route is enabled. Set by applications.
++    * - V4L2_SUBDEV_ROUTE_FL_IMMUTABLE
++      - 0x0002
++      - The route is immutable. Set by the driver. Indicates that the
++	``V4L2_SUBDEV_ROUTE_FL_ACTIVE`` flag of an immutable route may not be
++	unset.
  
- Binning has traditionally been configured using :ref:`the compose selection
- rectangle <v4l2-selection-targets-table>`. The :ref:`V4L2_CID_BINNING
-@@ -130,7 +130,17 @@ users should use it when it's available. Drivers supporting the control shall
- also support the compose rectangle, albeit the rectangle may be read-only when
- the control is present.
+ Return Value
+ ============
+diff --git a/include/uapi/linux/v4l2-subdev.h b/include/uapi/linux/v4l2-subdev.h
+index 2347e266cf75..839b1329afb2 100644
+--- a/include/uapi/linux/v4l2-subdev.h
++++ b/include/uapi/linux/v4l2-subdev.h
+@@ -204,6 +204,11 @@ struct v4l2_subdev_capability {
+  * on a video node.
+  */
+ #define V4L2_SUBDEV_ROUTE_FL_ACTIVE		(1U << 0)
++/*
++ * Is the route immutable? The ACTIVE flag of an immutable route may not be
++ * unset.
++ */
++#define V4L2_SUBDEV_ROUTE_FL_IMMUTABLE		(1U << 1)
  
--Binning isn't affected by flipping.
-+Sub-sampling is often supported as part of a camera sensor's binning
-+functionality and performed after the binning operation. Sub-sampling typically
-+produces quality-wise worse results than binning. Sub-sampling factors are
-+independent horizontally and vertically and they are controlled using two
-+controls, :ref:`V4L2_CID_SUBSAMPLING_HORIZONTAL and
-+V4L2_CID_SUBSAMPLING_VERTICAL <v4l2-cid-camera-sensor-subsampling>`. In
-+sub-sampling, the image size before sub-sampling is horizontally and vertically
-+divided by the respective sub-sampling factors. Drivers supporting the control shall
-+also reflect the sub-sampling configuration in the compose rectangle.
-+
-+Binning and sub-sampling aren't affected by flipping.
- 
- .. _media_using_camera_sensor_drivers_embedded_data:
- 
-diff --git a/Documentation/userspace-api/media/v4l/ext-ctrls-camera.rst b/Documentation/userspace-api/media/v4l/ext-ctrls-camera.rst
-index 18b484ff5d75..577b73045bee 100644
---- a/Documentation/userspace-api/media/v4l/ext-ctrls-camera.rst
-+++ b/Documentation/userspace-api/media/v4l/ext-ctrls-camera.rst
-@@ -701,3 +701,14 @@ enum v4l2_scene_mode -
- 
- For instance, a value of ``0x0001000300020003`` indicates binning by 3
- (horizontally) * 3/2 (vertically).
-+
-+.. _v4l2-cid-camera-sensor-subsampling:
-+
-+``V4L2_CID_SUBSAMPLING_HORIZONTAL`` and ``V4L2_CID_SUBSAMPLING_VERTICAL``
-+(integer)
-+
-+    Horizontal and vertical subsampling factors.
-+
-+    Sub-sampling is used to downscale an image, horizontally and vertically, by
-+    discarding a part of the image data. Typically sub-sampling produces lower
-+    quality images than binning.
-diff --git a/drivers/media/v4l2-core/v4l2-ctrls-defs.c b/drivers/media/v4l2-core/v4l2-ctrls-defs.c
-index 5e1c28850e87..9f8816bfffbe 100644
---- a/drivers/media/v4l2-core/v4l2-ctrls-defs.c
-+++ b/drivers/media/v4l2-core/v4l2-ctrls-defs.c
-@@ -1088,6 +1088,8 @@ const char *v4l2_ctrl_get_name(u32 id)
- 	case V4L2_CID_CAMERA_SENSOR_ROTATION:	return "Camera Sensor Rotation";
- 	case V4L2_CID_HDR_SENSOR_MODE:		return "HDR Sensor Mode";
- 	case V4L2_CID_BINNING_FACTORS:		return "Binning Factors";
-+	case V4L2_CID_SUBSAMPLING_HORIZONTAL:	return "Sub-Sampling Factor, Horizontal";
-+	case V4L2_CID_SUBSAMPLING_VERTICAL:	return "Sub-Sampling Factor, Vertical";
- 
- 	/* FM Radio Modulator controls */
- 	/* Keep the order of the 'case's the same as in v4l2-controls.h! */
-diff --git a/include/uapi/linux/v4l2-controls.h b/include/uapi/linux/v4l2-controls.h
-index 90f47f4780e5..51d43d4a3151 100644
---- a/include/uapi/linux/v4l2-controls.h
-+++ b/include/uapi/linux/v4l2-controls.h
-@@ -1102,6 +1102,8 @@ enum v4l2_auto_focus_range {
- 
- #define V4L2_CID_HDR_SENSOR_MODE		(V4L2_CID_CAMERA_CLASS_BASE+36)
- #define V4L2_CID_BINNING_FACTORS		(V4L2_CID_CAMERA_CLASS_BASE+37)
-+#define V4L2_CID_SUBSAMPLING_HORIZONTAL		(V4L2_CID_CAMERA_CLASS_BASE+38)
-+#define V4L2_CID_SUBSAMPLING_VERTICAL		(V4L2_CID_CAMERA_CLASS_BASE+39)
- 
- /* FM Modulator class control IDs */
- 
+ /**
+  * struct v4l2_subdev_route - A route inside a subdev
 -- 
 2.47.2
 
