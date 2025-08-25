@@ -1,54 +1,54 @@
 Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.10])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 635902D738B
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A1F062D73B3
 	for <linux-media@vger.kernel.org>; Mon, 25 Aug 2025 09:51:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756115501; cv=none; b=nIDzgGh8Z93z5BvfoLZ2Z5/riEhMNjhKmeRC11e2OIqJu/MwtU68rboO2oepldUc0U6LZgAKZUzmLIyADg+Fq07G4FMz4X7iTvSU66LeODkU2OtRAw2zaKJDiPb6UhtdpL02U+yZq4bY/ffRwFqmnlGtmbEvi1Mi6NU41ZiEgL4=
+	t=1756115501; cv=none; b=MNM/dFBamo9jprtZVDLZKzHUyYmBCXoWUz0/4r6WT9nOo/Rba/2MMEZRjJ87MqKZK/OPJmnOlghQZLPjmNbG3jMpBH014t/YlSM19tPHSuV5Xtf5cgULrkmpHwaOrrQhqDjnagT28yh6/IohPAc5xNPvXeYrBKUhfvy63np2K2E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1756115501; c=relaxed/simple;
-	bh=Eg2AZKzmivhrdIUbilyj4JZWbsDEFY8mm8S0VjY2ZZ4=;
+	bh=Woh3Nd9iqks7ratYx5U6suOkof04Dg4E3k1Peu1v3L8=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=EX0Y2nea38zs8L8PjLG9grxIS4PjnPCLKumI+li58x2ts4i0n9WJselOn29gCNRotfZO7osrr3B4Hxwl+VHrclJcHYpod66AMx9spD56uzf8h61ZJWDhluAQmhgbG/NsCLIgIi5TRg6p/kZp3flguXr0ZADx2243ACeR/YHRGyY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=nSCJEHjK; arc=none smtp.client-ip=192.198.163.10
+	 MIME-Version; b=BPhDxg8IelDdknelXJZqPU/DObDmYQwMiI1GCnDKMga3sLAaBFr/TsQ08wLATVWm2K71utev+ssubNVM+npC51Jva2fyCKl9ZAg+6YzVDpaFiZkHJOzdF/g/htTaWHEmJyTsOUtoBpwx7nQd3g80tOQHO7PIBnijnYKmjGImQT4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=f2msE/36; arc=none smtp.client-ip=192.198.163.10
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="nSCJEHjK"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="f2msE/36"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
   t=1756115500; x=1787651500;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=Eg2AZKzmivhrdIUbilyj4JZWbsDEFY8mm8S0VjY2ZZ4=;
-  b=nSCJEHjKBhuUJ5Zj2ukaTAEN2k5JIEk0d30UbZyVQ/ncr+P6gmNMNoHB
-   eRR6yg4r6xn6AQo4TR7+ymVwLJl01D6pn2J7UYS9dZZkboLCug3ZqBF+N
-   oojLsoEGUf4mIPaQZzz7T3DyJ/hYQlfIPSzdi8ntNtznrO8iWkpmjfNjb
-   +7hHUr02/yGJ1ygTc4VOO8Bfi2RRxNnGJOH9GbLPuaoVE3dM6hH6DkR8H
-   tRIAL4Cm9YTW6UiT0+JO/uW77WgKDwAWG19H2G0lZ7eqcxzQSXz/Q5fV4
-   /hGnDW1+1DpB7Ge3T0h3uNR3MVsQM3iabicR59etolznhRzGu7huVqRIZ
-   w==;
-X-CSE-ConnectionGUID: th4KzwNfQduCww5VYbLEfA==
-X-CSE-MsgGUID: X23XiRMYRVGnSdkzVaB57A==
-X-IronPort-AV: E=McAfee;i="6800,10657,11532"; a="69695985"
+  bh=Woh3Nd9iqks7ratYx5U6suOkof04Dg4E3k1Peu1v3L8=;
+  b=f2msE/36KDcuLIKAPz+lMnhoUnlolYb4HiEYoVtnPrqoxARt+tMOrQ/R
+   Vp4FBfc6TDHECXGrXT1OKods9c1MfCF84YbMnIJsOw4A3Ey0iPbwY84b4
+   ix+sPyGpO/i5vN9OqAyeAdIHlpqv7130YHUHw/kdAJBPMKJUEp8HD2vzb
+   lbmOfXvjzRMcKFMgMHD2jDbX4lrZ5ZUPNpOQNzsMXAglC9T9oi5RCd1w6
+   hIBNTGkU4RnXx4IqLp3iaWIIHeWWIv47mZDC4yC3nWiWVYZ5v0V3I/KDt
+   aG0i9smukYLdgLZCafxIy69g5CX5AqTrjg4Uw5ddV21H8F6raE+YSeLu9
+   Q==;
+X-CSE-ConnectionGUID: BY5bLsRSS8WZQfbdtLvoQg==
+X-CSE-MsgGUID: z5VZZ2jDTyaXg43YW1vtKw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11532"; a="69696007"
 X-IronPort-AV: E=Sophos;i="6.17,312,1747724400"; 
-   d="scan'208";a="69695985"
+   d="scan'208";a="69696007"
 Received: from orviesa002.jf.intel.com ([10.64.159.142])
   by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Aug 2025 02:51:36 -0700
-X-CSE-ConnectionGUID: WCKkGj/5Q8uKohQRvSf4SQ==
-X-CSE-MsgGUID: iwP7hb4nRhael0MVhzQ9JA==
+X-CSE-ConnectionGUID: 3yoi2AuVSE29m09+tnhrkQ==
+X-CSE-MsgGUID: YDnlcNvmSuiJ+BXtRKlQbQ==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.17,312,1747724400"; 
-   d="scan'208";a="200195494"
+   d="scan'208";a="200195498"
 Received: from vpanait-mobl.ger.corp.intel.com (HELO kekkonen.fi.intel.com) ([10.245.245.7])
   by orviesa002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Aug 2025 02:51:28 -0700
 Received: from punajuuri.localdomain (unknown [192.168.240.130])
-	by kekkonen.fi.intel.com (Postfix) with ESMTP id 4B580121FB5;
+	by kekkonen.fi.intel.com (Postfix) with ESMTP id 52C37121FB8;
 	Mon, 25 Aug 2025 12:51:08 +0300 (EEST)
 Received: from sailus by punajuuri.localdomain with local (Exim 4.98.2)
 	(envelope-from <sakari.ailus@linux.intel.com>)
-	id 1uqTr2-00000005aeZ-18b9;
+	id 1uqTr2-00000005aej-1GFo;
 	Mon, 25 Aug 2025 12:51:08 +0300
 Organization: Intel Finland Oy - BIC 0357606-4 - c/o Alberga Business Park, 6 krs, Bertel Jungin Aukio 5, 02600 Espoo
 From: Sakari Ailus <sakari.ailus@linux.intel.com>
@@ -81,9 +81,9 @@ Cc: hans@jjverkuil.nl,
 	Hans de Goede <hdegoede@redhat.com>,
 	Jacopo Mondi <jacopo.mondi@ideasonboard.com>,
 	Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
-Subject: [PATCH v11 17/66] media: uapi: Add new media bus codes for generic raw formats
-Date: Mon, 25 Aug 2025 12:50:18 +0300
-Message-ID: <20250825095107.1332313-18-sakari.ailus@linux.intel.com>
+Subject: [PATCH v11 19/66] media: uapi: Add V4L2_CID_COLOR_PATTERN for describing color patterns
+Date: Mon, 25 Aug 2025 12:50:20 +0300
+Message-ID: <20250825095107.1332313-20-sakari.ailus@linux.intel.com>
 X-Mailer: git-send-email 2.47.2
 In-Reply-To: <20250825095107.1332313-1-sakari.ailus@linux.intel.com>
 References: <20250825095107.1332313-1-sakari.ailus@linux.intel.com>
@@ -95,74 +95,107 @@ List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Add new media bus codes for generic raw formats that are not specific to
-the colour filter array but that simply specify the bit depth. The layout
-(packing) of the data is interface specific.
-
-The rest of the properties of the format are specified with controls in
-the image source.
-
-The mbus codes added by this patch have bit depth of 8, 10, 12 and 14.
+Add V4L2_CID_COLOR_PATTERN to tell the camera sensor's native color
+pattern.
 
 Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
+Reviewed-by: Jacopo Mondi <jacopo.mondi@ideasonboard.com>
 ---
- .../media/v4l/subdev-formats.rst              | 27 +++++++++++++++++++
- include/uapi/linux/media-bus-format.h         |  6 +++++
- 2 files changed, 33 insertions(+)
+ .../media/v4l/ext-ctrls-image-source.rst      | 39 +++++++++++++++++++
+ .../media/v4l/subdev-formats.rst              |  2 +
+ drivers/media/v4l2-core/v4l2-ctrls-defs.c     |  1 +
+ include/uapi/linux/v4l2-controls.h            |  6 +++
+ 4 files changed, 48 insertions(+)
 
+diff --git a/Documentation/userspace-api/media/v4l/ext-ctrls-image-source.rst b/Documentation/userspace-api/media/v4l/ext-ctrls-image-source.rst
+index 71f23f131f97..b19aaaffbce0 100644
+--- a/Documentation/userspace-api/media/v4l/ext-ctrls-image-source.rst
++++ b/Documentation/userspace-api/media/v4l/ext-ctrls-image-source.rst
+@@ -92,3 +92,42 @@ Image Source Control IDs
+     representing a gain of exactly 1.0. For example, if this default value
+     is reported as being (say) 128, then a value of 192 would represent
+     a gain of exactly 1.5.
++
++``V4L2_CID_COLOR_PATTERN (integer)``
++    This control determines the color components and native pixel order in the
++    sensor's CFA (Color Filter Array) when used in conjunction with
++    :ref:`generic raw mbus codes MEDIA_BUS_FMT_RAW_x (where 'x' is the bit
++    depth) <v4l2-mbus-pixelcode-generic-raw>` pixelcodes. The native pixel
++    order is constant for a given device, it is not affected by cropping or
++    flipping.
++
++    This control may only be used on V4L2 sub-devices.
++
++    This is a read-only control.
++
++    Available patterns:
++
++.. flat-table:: V4L2 color patterns
++    :header-rows:  1
++    :stub-columns: 0
++    :widths:       1 2 1
++
++    * - Macro name
++      - Synopsis
++      - Value
++    * - V4L2_COLOR_PATTERN_GRBG
++      - Raw Bayer, with alternating lines beginning with green, red pixels and
++        blue, green pixels.
++      - 0
++    * - V4L2_COLOR_PATTERN_RGGB
++      - Raw Bayer, with alternating lines beginning with red, green pixels and
++        green, blue pixels.
++      - 1
++    * - V4L2_COLOR_PATTERN_BGGR
++      - Raw Bayer, with alternating lines beginning with blue, green pixels and
++        green, red pixels.
++      - 2
++    * - V4L2_COLOR_PATTERN_GBRG
++      - Raw Bayer, with alternating lines beginning with green, blue pixels and
++        red, green pixels.
++      - 3
 diff --git a/Documentation/userspace-api/media/v4l/subdev-formats.rst b/Documentation/userspace-api/media/v4l/subdev-formats.rst
-index 9ef1bc22ad9c..1a51b5c817f1 100644
+index 1a51b5c817f1..e77b4ad19737 100644
 --- a/Documentation/userspace-api/media/v4l/subdev-formats.rst
 +++ b/Documentation/userspace-api/media/v4l/subdev-formats.rst
-@@ -3434,6 +3434,33 @@ organization is given as an example for the first pixel only.
+@@ -3434,6 +3434,8 @@ organization is given as an example for the first pixel only.
  
      \endgroup
  
-+Generic raw formats on serial interfaces
-+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
++.. _v4l2-mbus-pixelcode-generic-raw:
 +
-+Those formats transfer (largely) unprocessed raw pixel data typically from raw
-+camera sensors using Bayer and other Colour Filter Arrays (CFAs) on serial
-+interfaces. The packing of the data on the bus is determined by the hardware,
-+however the bit depth is still specific to the format.
-+
-+.. tabularcolumns:: |p{2.0cm}|p{4.0cm}|p{11.3cm}|
-+
-+.. cssclass:: longtable
-+
-+.. flat-table:: Generic raw formats on serial buses
-+    :header-rows:  1
-+    :stub-columns: 0
-+    :widths:       1 1
-+
-+    * - Format name
-+      - Bit depth
-+    * - MEDIA_BUS_FMT_RAW_8
-+      - 8
-+    * - MEDIA_BUS_FMT_RAW_10
-+      - 10
-+    * - MEDIA_BUS_FMT_RAW_12
-+      - 12
-+    * - MEDIA_BUS_FMT_RAW_14
-+      - 14
+ Generic raw formats on serial interfaces
+ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
  
- Packed YUV Formats
- ^^^^^^^^^^^^^^^^^^
-diff --git a/include/uapi/linux/media-bus-format.h b/include/uapi/linux/media-bus-format.h
-index ff62056feed5..b71120bc1788 100644
---- a/include/uapi/linux/media-bus-format.h
-+++ b/include/uapi/linux/media-bus-format.h
-@@ -185,4 +185,10 @@
- #define MEDIA_BUS_FMT_META_20			0x8006
- #define MEDIA_BUS_FMT_META_24			0x8007
+diff --git a/drivers/media/v4l2-core/v4l2-ctrls-defs.c b/drivers/media/v4l2-core/v4l2-ctrls-defs.c
+index dd5f06546773..8119012c2638 100644
+--- a/drivers/media/v4l2-core/v4l2-ctrls-defs.c
++++ b/drivers/media/v4l2-core/v4l2-ctrls-defs.c
+@@ -1155,6 +1155,7 @@ const char *v4l2_ctrl_get_name(u32 id)
+ 	case V4L2_CID_TEST_PATTERN_BLUE:	return "Blue Pixel Value";
+ 	case V4L2_CID_TEST_PATTERN_GREENB:	return "Green (Blue) Pixel Value";
+ 	case V4L2_CID_NOTIFY_GAINS:		return "Notify Gains";
++	case V4L2_CID_COLOR_PATTERN:		return "Color Pattern";
  
-+/* Generic (CFA independent) pixel data formats. Next is 0xa009. */
-+#define MEDIA_BUS_FMT_RAW_8			0xa001
-+#define MEDIA_BUS_FMT_RAW_10			0xa002
-+#define MEDIA_BUS_FMT_RAW_12			0xa003
-+#define MEDIA_BUS_FMT_RAW_14			0xa004
+ 	/* Image processing controls */
+ 	/* Keep the order of the 'case's the same as in v4l2-controls.h! */
+diff --git a/include/uapi/linux/v4l2-controls.h b/include/uapi/linux/v4l2-controls.h
+index 3c0f6afe7500..e552f6655fd0 100644
+--- a/include/uapi/linux/v4l2-controls.h
++++ b/include/uapi/linux/v4l2-controls.h
+@@ -1227,6 +1227,12 @@ enum v4l2_jpeg_chroma_subsampling {
+ #define V4L2_CID_UNIT_CELL_SIZE			(V4L2_CID_IMAGE_SOURCE_CLASS_BASE + 8)
+ #define V4L2_CID_NOTIFY_GAINS			(V4L2_CID_IMAGE_SOURCE_CLASS_BASE + 9)
+ 
++#define V4L2_CID_COLOR_PATTERN			(V4L2_CID_IMAGE_SOURCE_CLASS_BASE + 10)
++#define V4L2_COLOR_PATTERN_GRBG			0U
++#define V4L2_COLOR_PATTERN_RGGB			1U
++#define V4L2_COLOR_PATTERN_BGGR			2U
++#define V4L2_COLOR_PATTERN_GBRG			3U
 +
- #endif /* __LINUX_MEDIA_BUS_FORMAT_H */
+ 
+ /* Image processing controls */
+ 
 -- 
 2.47.2
 
