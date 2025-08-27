@@ -1,223 +1,173 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f47.google.com (mail-ed1-f47.google.com [209.85.208.47])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EA0C330CDBB
-	for <linux-media@vger.kernel.org>; Wed, 27 Aug 2025 04:30:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 54FD83BB44;
+	Wed, 27 Aug 2025 04:32:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756269055; cv=none; b=fgidOPTkXQhWCOCTGqjl0/eLlYSuVRlYtNMP0GwUWhjmbEn2Jtt0u+gB3wD4pLUVzPs0Ua1n/VG4Ar2Z0Rjz2NOixbedntQPdlI11MkHQf8WsEVgtTP+bfU7W5G8s+gFhNM4ZiN6zHo6kJ00O3+azOapB+ixGq6dz/uoKjcoReY=
+	t=1756269153; cv=none; b=Jl3X52VDmhOG01Ixnt8oN5R1fjFTATOexUPVE2nvicEWFywEtmwkH4q7IVz86/SQeM4D+hDkzZDvJMpoABy5a4w6oY+ariZdwoi6rL7yD2hLyGxWBCsVHd0lD8u85x0g6YrTcmGviSXYhZYXvYECElf1GH/Lomb2ZVIBt0ZhkQ0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756269055; c=relaxed/simple;
-	bh=ERRo0n8Mzw2npL5WOLmi6/TDE8zyM6FdGRwcR5Gnqt8=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=cf2/dg8C8qWfrkGrpZzApG92wsCQLgJ5EaT1w6CS6xWnC5haeyCxbKDb92tRJqrpVCi9X+v4Yot/bknn1XKDi1e8S5mT+2zTMonb4HVBUGN0vjos3UHwarm2D8QCVs8bWYFYa/CCTgcp5+Rx8VC6x3S8l9/JuMBPFUUsw4D0BbY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=E8zBqOIk; arc=none smtp.client-ip=198.175.65.19
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1756269153; c=relaxed/simple;
+	bh=P9yK6j01vQIjUrDmFztN5hiPanzCry8mwLN54etanfw=;
+	h=Date:From:To:CC:Subject:In-Reply-To:References:Message-ID:
+	 MIME-Version:Content-Type; b=HcNSWwAQMOXaF+iL7Gz9RmytdsWODmKUQoHGUifg1/dmrqmbOpPOZvTfA3VQ2yNI/l0EXlDqwXaLkgjELutswarfmOsl2XdASILIBcuCfxA7bZng9C2k03XGJTU7uM12+qteJI6APkAD1ngHiDftj+tAqSbMofPVQg0OhJP0PZQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=YZ2WOR/7; arc=none smtp.client-ip=209.85.208.47
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="E8zBqOIk"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1756269054; x=1787805054;
-  h=date:from:to:cc:subject:message-id;
-  bh=ERRo0n8Mzw2npL5WOLmi6/TDE8zyM6FdGRwcR5Gnqt8=;
-  b=E8zBqOIkR8/iywg0onQRglVxdsESz7R1P1bI3nC9nmAGNbd2uTsNGza8
-   OKOI1I62fsifKA4t4Yh4i6A7m5dSSk2z6/WBimRZzVl7J1lGAIy7mK5eW
-   F5WgA4YVMtAGBr8OdqE5mE8YAjAK3vsY8mBVBGPiTcZ5ItgMYFFQdqsiv
-   ULElmLfc6TyPLjkP+PMBjR9VQBuUXNpsdXuZ64JMNu4piJAQC2NaulWMx
-   o4yuWalZG8sUf65PlVLY4XoD0kH1Yqc9SfknHvU+Iy/FCmQZ1OoDOSMxX
-   JepZ8feD7Oc4A1zY8Dpas81SdKz6gRO4JKMePYtJ4cHyXJ530okcQMUCA
-   Q==;
-X-CSE-ConnectionGUID: SMT7QgEnTRWB+mBzZtM5RQ==
-X-CSE-MsgGUID: Ea8TnXzsT2axS0wALmb7ow==
-X-IronPort-AV: E=McAfee;i="6800,10657,11534"; a="58373994"
-X-IronPort-AV: E=Sophos;i="6.18,214,1751266800"; 
-   d="scan'208";a="58373994"
-Received: from fmviesa001.fm.intel.com ([10.60.135.141])
-  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Aug 2025 21:30:54 -0700
-X-CSE-ConnectionGUID: blfbA92VShGYnzwte6s8Bw==
-X-CSE-MsgGUID: mITuWWZzTreGEXOpoB+YvQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.18,214,1751266800"; 
-   d="scan'208";a="200638763"
-Received: from lkp-server02.sh.intel.com (HELO 4ea60e6ab079) ([10.239.97.151])
-  by fmviesa001.fm.intel.com with ESMTP; 26 Aug 2025 21:30:52 -0700
-Received: from kbuild by 4ea60e6ab079 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1ur7nR-000Sfr-0M;
-	Wed, 27 Aug 2025 04:30:18 +0000
-Date: Wed, 27 Aug 2025 12:29:18 +0800
-From: kernel test robot <lkp@intel.com>
-To: Sakari Ailus <sakari.ailus@linux.intel.com>
-Cc: linux-media@vger.kernel.org
-Subject: [sailus-media-tree:cleanup] BUILD SUCCESS
- 9a8e7210e8e21ebba263affd0d7481ef0d6c323e
-Message-ID: <202508271207.dHu5lY5j-lkp@intel.com>
-User-Agent: s-nail v14.9.24
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="YZ2WOR/7"
+Received: by mail-ed1-f47.google.com with SMTP id 4fb4d7f45d1cf-61c266e81caso5608219a12.3;
+        Tue, 26 Aug 2025 21:32:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1756269150; x=1756873950; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:references
+         :in-reply-to:user-agent:subject:cc:to:from:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=nPT7S7ck2OMPXfBxc+RzMc8Kxenf3tVh8lBsVSZT310=;
+        b=YZ2WOR/7kAG7rb0/cIiOc5bhpgQaf+JOgI7BQ5zTaO+eVxgh3LNrmiMrSUd7RdvJWC
+         xchm22x2ERkHufCg7gsUFNPaj+xliMUXdF08O6OCRu5/VaTdwy7Fguz/4NkDyP0/OeQi
+         9cBy1kXu3LuozSe8qBECPAjJpNQNQ7Y9o/rQBLv32xfVgPnUD7KV2I6qQ9CxJNbNnUDB
+         ZdCL4ZvRYX+oRkNYMcEziv0p+43+URM7jaCQUFxJyur/Lrex2qkEhcQAIZ+iA3BGbmK6
+         NUk5PkD6PyN2OegUYss1b8OHDgsqH3w/tcaaUQJLeI/A6OKk9AdWYaIuqD7FEbf15Pvd
+         nTVw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1756269150; x=1756873950;
+        h=content-transfer-encoding:mime-version:message-id:references
+         :in-reply-to:user-agent:subject:cc:to:from:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=nPT7S7ck2OMPXfBxc+RzMc8Kxenf3tVh8lBsVSZT310=;
+        b=Fw/8G295UrQkYYZadPRl8pOVOKf9SPNAlbAyoSKnYnDYn7PNYcusAgCghJ21cWXpZH
+         J5FU1Pi4AaK2c+vxZkw4ycH1iKhuy420oBEQYNCz09phjnLzvOIfwXDTYUr/2t2Z310Y
+         7C7XcuDyYWlgof8sGbEdLHCiCmFDKTvHwYF1O/zNu9SuDhtgexc+06bD3aJV+1xxw2ua
+         38Vh8CLJsoXbP+BbiuyMLjvoTn+cMJgHc80s6St0rikaXbf1wN6++60PwhLD9XLi+1tT
+         u6vuwLx4yKMbbNyVZEbyyYLs4dlYvSxWEEObn+QXDJM7WkMKaCJiVFfLsG7YAbJbBoJs
+         YaQw==
+X-Forwarded-Encrypted: i=1; AJvYcCV5CJ2TwtQQisEfdUbYe/6aSoM3xBca5imh5uzbaGIbHWdHdEt9OPubaP2DW1Gmc3vK/hfTF/ibTPqlnzU=@vger.kernel.org, AJvYcCW0wBj4q5rXthLM7K/wIZ77PGyDW5UcERQ2qctO0hB5uLrhQoBH8q7rZ3INUo6V+S2tQDA8kAOO2ZncFmq8@vger.kernel.org, AJvYcCW8MPtjnSV0fU72OxhcrKiu+eyjINi1KR0mUd7LY/FGo1awyd9HKSydxHmBffnuN46jadSlvuhk7bMJ@vger.kernel.org, AJvYcCX58Uxr/4vLhd4IgJMQ4MeARbWVO01zlOcrBPKPgS4nmIt/Qg+ENeH5EajYHBRBzLC/UT7pNOEpbDWI@vger.kernel.org
+X-Gm-Message-State: AOJu0YxS65nbI4jtNQx604vNQ33Ay806ha2Gy39oWNQhNhbBdeHwG2Ms
+	BVGz0+kMAXwduhyeU8/abTMm5Wny/XV1Kl197wjngTPHp+lC3dWCsPim
+X-Gm-Gg: ASbGnctJGM5qNG2ht99BN7PNsaCvaQqmO5dVMPQ8Q3hVJS5HwHlxEs/gE0YKAswxcrC
+	T0YnObEyUqh63mVj9T24lZM9VCtFRRkErh98P0FUxtBMQr4o/uP0d1q7UjwF7Okr4dwGezI79jj
+	kj8hLHjSbpdclca6pDsCsUU4IHxpix0MN7w/cTthczzmvZAsUdWzJa/yUcGvLMdsniFR6M23H2H
+	taI6Y9tn5mzJ3YGMbXYtc8Y5nTwr1zbs2d0YGC/sDFua+TBJc8v1+wZGXID7cNxx4gqjq5sl2F2
+	nQzLSTor2GbZQCmASxq9/Fkgm+P+E/yq5EJuM6DIqnyr0C7f0Ho6AzOFC0vtqDWTnb6t4tinGY3
+	/CqP7jFwtpCrnBQ==
+X-Google-Smtp-Source: AGHT+IF+5wxPF37wRl5q6Zpcp5YXeXsq5X1FBZFa1yIqF0zMTpeqok9u42a8ivFBmKB0sTZEfjjT5A==
+X-Received: by 2002:a05:6402:13d4:b0:61c:4c77:cb8 with SMTP id 4fb4d7f45d1cf-61c4c771153mr10662557a12.15.1756269149569;
+        Tue, 26 Aug 2025 21:32:29 -0700 (PDT)
+Received: from [127.0.0.1] ([5.248.55.4])
+        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-61c78e49ca4sm4263216a12.47.2025.08.26.21.32.28
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 26 Aug 2025 21:32:29 -0700 (PDT)
+Date: Wed, 27 Aug 2025 07:32:27 +0300
+From: Svyatoslav <clamor95@gmail.com>
+To: Mikko Perttunen <mperttunen@nvidia.com>,
+ Thierry Reding <thierry.reding@gmail.com>,
+ Thierry Reding <treding@nvidia.com>, Jonathan Hunter <jonathanh@nvidia.com>,
+ Sowjanya Komatineni <skomatineni@nvidia.com>,
+ Luca Ceresoli <luca.ceresoli@bootlin.com>, David Airlie <airlied@gmail.com>,
+ Simona Vetter <simona@ffwll.ch>,
+ Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+ Maxime Ripard <mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>,
+ Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
+ Conor Dooley <conor+dt@kernel.org>,
+ Peter De Schrijver <pdeschrijver@nvidia.com>,
+ Prashant Gaikwad <pgaikwad@nvidia.com>,
+ Michael Turquette <mturquette@baylibre.com>, Stephen Boyd <sboyd@kernel.org>,
+ Mauro Carvalho Chehab <mchehab@kernel.org>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Dmitry Osipenko <digetx@gmail.com>,
+ Charan Pedumuru <charan.pedumuru@gmail.com>
+CC: linux-media@vger.kernel.org, linux-tegra@vger.kernel.org,
+ dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
+ linux-staging@lists.linux.dev
+Subject: =?US-ASCII?Q?Re=3A_=5BPATCH_v1_01/19=5D_clk=3A_tegra=3A_ini?=
+ =?US-ASCII?Q?t_CSUS_clock_for_Tegra20_and_Tegra30?=
+User-Agent: K-9 Mail for Android
+In-Reply-To: <1909286.atdPhlSkOF@senjougahara>
+References: <20250819121631.84280-1-clamor95@gmail.com> <20250819121631.84280-2-clamor95@gmail.com> <1909286.atdPhlSkOF@senjougahara>
+Message-ID: <76B1EB6D-B149-43C2-AA56-A15C9DCCA3AF@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-tree/branch: git://linuxtv.org/sailus/media_tree.git cleanup
-branch HEAD: 9a8e7210e8e21ebba263affd0d7481ef0d6c323e  media: i2c: mt9p031: fix mbus code initialization
 
-Unverified Warning (likely false positive, kindly check if interested):
 
-    drivers/media/i2c/imx214.c:1109 imx214_ctrls_init() error: we previously assumed 'imx214->link_freq' could be null (see line 1017)
+27 =D1=81=D0=B5=D1=80=D0=BF=D0=BD=D1=8F 2025=E2=80=AF=D1=80=2E 07:09:45 GM=
+T+03:00, Mikko Perttunen <mperttunen@nvidia=2Ecom> =D0=BF=D0=B8=D1=88=D0=B5=
+:
+>On Tuesday, August 19, 2025 9:16=E2=80=AFPM Svyatoslav Ryhel wrote:
+>> CSUS clock is required to be enabled on camera device configuration or
+>> else camera module refuses to initiate properly=2E
+>>=20
+>> Signed-off-by: Svyatoslav Ryhel <clamor95@gmail=2Ecom>
+>> ---
+>>  drivers/clk/tegra/clk-tegra20=2Ec | 1 +
+>>  drivers/clk/tegra/clk-tegra30=2Ec | 1 +
+>>  2 files changed, 2 insertions(+)
+>>=20
+>> diff --git a/drivers/clk/tegra/clk-tegra20=2Ec
+>> b/drivers/clk/tegra/clk-tegra20=2Ec index 551ef0cf0c9a=2E=2E42f8150c611=
+0 100644
+>> --- a/drivers/clk/tegra/clk-tegra20=2Ec
+>> +++ b/drivers/clk/tegra/clk-tegra20=2Ec
+>> @@ -1043,6 +1043,7 @@ static struct tegra_clk_init_table init_table[] =
+=3D {
+>>  	{ TEGRA20_CLK_GR3D, TEGRA20_CLK_PLL_C, 300000000, 0 },
+>>  	{ TEGRA20_CLK_VDE, TEGRA20_CLK_PLL_C, 300000000, 0 },
+>>  	{ TEGRA20_CLK_PWM, TEGRA20_CLK_PLL_P, 48000000, 0 },
+>> +	{ TEGRA20_CLK_CSUS, TEGRA20_CLK_CLK_MAX, 6000000, 1 },
+>>  	/* must be the last entry */
+>>  	{ TEGRA20_CLK_CLK_MAX, TEGRA20_CLK_CLK_MAX, 0, 0 },
+>>  };
+>> diff --git a/drivers/clk/tegra/clk-tegra30=2Ec
+>> b/drivers/clk/tegra/clk-tegra30=2Ec index 82a8cb9545eb=2E=2E70e85e2949e=
+0 100644
+>> --- a/drivers/clk/tegra/clk-tegra30=2Ec
+>> +++ b/drivers/clk/tegra/clk-tegra30=2Ec
+>> @@ -1237,6 +1237,7 @@ static struct tegra_clk_init_table init_table[] =
+=3D {
+>>  	{ TEGRA30_CLK_HDA, TEGRA30_CLK_PLL_P, 102000000, 0 },
+>>  	{ TEGRA30_CLK_HDA2CODEC_2X, TEGRA30_CLK_PLL_P, 48000000, 0 },
+>>  	{ TEGRA30_CLK_PWM, TEGRA30_CLK_PLL_P, 48000000, 0 },
+>> +	{ TEGRA30_CLK_CSUS, TEGRA30_CLK_CLK_MAX, 6000000, 1 },
+>>  	/* must be the last entry */
+>>  	{ TEGRA30_CLK_CLK_MAX, TEGRA30_CLK_CLK_MAX, 0, 0 },
+>>  };
+>
+>I looked into what this clock does and it seems to be a gate for the CSUS=
+ pin,=20
+>which provides an output clock for camera sensors (VI MCLK)=2E Default so=
+urce=20
+>seems to be PLLC_OUT1=2E It would be good to note that on the commit mess=
+age, as=20
+>I can't find any documentation about the CSUS clock elsewhere=2E
+>
+>What is the 6MHz rate based on?
+>
 
-Warning ids grouped by kconfigs:
+6mhz is the statistic value which I was not able to alter while testing=2E=
+ I have tried 12mhz and 24mhz too but it remained 6mhz, so I left it 6mhz=
+=2E
 
-recent_errors
-`-- i386-randconfig-141-20250827
-    `-- drivers-media-i2c-imx214.c-imx214_ctrls_init()-error:we-previously-assumed-imx214-link_freq-could-be-null-(see-line-)
+>Since this seems to be a clock consumed by the sensor, it seems to me tha=
+t=20
+>rather than making it always on, we could point to it in the sensor's dev=
+ice=20
+>tree entry=2E
+>
 
-elapsed time: 1207m
+Sensor device tree uses vi_sensor as clocks source and sensor drivers don'=
+t support multiple linked clocks=2E
 
-configs tested: 136
-configs skipped: 3
-
-The following configs have been built successfully.
-More configs may be tested in the coming days.
-
-tested configs:
-alpha                             allnoconfig    gcc-15.1.0
-alpha                            allyesconfig    gcc-15.1.0
-alpha                               defconfig    gcc-15.1.0
-arc                              allmodconfig    gcc-15.1.0
-arc                               allnoconfig    gcc-15.1.0
-arc                              allyesconfig    gcc-15.1.0
-arc                                 defconfig    gcc-15.1.0
-arc                   randconfig-001-20250826    gcc-11.5.0
-arc                   randconfig-002-20250826    gcc-8.5.0
-arc                        vdk_hs38_defconfig    gcc-15.1.0
-arm                              allmodconfig    gcc-15.1.0
-arm                               allnoconfig    clang-22
-arm                              allyesconfig    gcc-15.1.0
-arm                                 defconfig    clang-22
-arm                   randconfig-001-20250826    gcc-12.5.0
-arm                   randconfig-002-20250826    gcc-13.4.0
-arm                   randconfig-003-20250826    gcc-8.5.0
-arm                   randconfig-004-20250826    gcc-10.5.0
-arm                    vt8500_v6_v7_defconfig    gcc-15.1.0
-arm64                            allmodconfig    clang-19
-arm64                             allnoconfig    gcc-15.1.0
-arm64                               defconfig    gcc-15.1.0
-arm64                 randconfig-001-20250826    clang-22
-arm64                 randconfig-002-20250826    gcc-8.5.0
-arm64                 randconfig-003-20250826    clang-22
-arm64                 randconfig-004-20250826    gcc-8.5.0
-csky                              allnoconfig    gcc-15.1.0
-csky                                defconfig    gcc-15.1.0
-csky                  randconfig-001-20250826    gcc-15.1.0
-csky                  randconfig-002-20250826    gcc-11.5.0
-hexagon                          allmodconfig    clang-17
-hexagon                           allnoconfig    clang-22
-hexagon                          allyesconfig    clang-22
-hexagon                             defconfig    clang-22
-hexagon               randconfig-001-20250826    clang-19
-hexagon               randconfig-002-20250826    clang-22
-i386                             allmodconfig    gcc-12
-i386                              allnoconfig    gcc-12
-i386                             allyesconfig    gcc-12
-i386        buildonly-randconfig-001-20250826    gcc-12
-i386        buildonly-randconfig-002-20250826    gcc-12
-i386        buildonly-randconfig-003-20250826    clang-20
-i386        buildonly-randconfig-004-20250826    gcc-12
-i386        buildonly-randconfig-005-20250826    clang-20
-i386        buildonly-randconfig-006-20250826    gcc-12
-i386                                defconfig    clang-20
-loongarch                        allmodconfig    clang-19
-loongarch                         allnoconfig    clang-22
-loongarch                           defconfig    clang-19
-loongarch             randconfig-001-20250826    gcc-14.3.0
-loongarch             randconfig-002-20250826    gcc-14.3.0
-m68k                             allmodconfig    gcc-15.1.0
-m68k                              allnoconfig    gcc-15.1.0
-m68k                             allyesconfig    gcc-15.1.0
-m68k                         amcore_defconfig    gcc-15.1.0
-m68k                                defconfig    gcc-15.1.0
-microblaze                       allmodconfig    gcc-15.1.0
-microblaze                        allnoconfig    gcc-15.1.0
-microblaze                       allyesconfig    gcc-15.1.0
-microblaze                          defconfig    gcc-15.1.0
-mips                              allnoconfig    gcc-15.1.0
-mips                  cavium_octeon_defconfig    gcc-15.1.0
-nios2                             allnoconfig    gcc-11.5.0
-nios2                               defconfig    gcc-11.5.0
-nios2                 randconfig-001-20250826    gcc-8.5.0
-nios2                 randconfig-002-20250826    gcc-10.5.0
-openrisc                          allnoconfig    gcc-15.1.0
-openrisc                         allyesconfig    gcc-15.1.0
-openrisc                            defconfig    gcc-15.1.0
-parisc                           allmodconfig    gcc-15.1.0
-parisc                            allnoconfig    gcc-15.1.0
-parisc                           allyesconfig    gcc-15.1.0
-parisc                              defconfig    gcc-15.1.0
-parisc                randconfig-001-20250826    gcc-8.5.0
-parisc                randconfig-002-20250826    gcc-15.1.0
-parisc64                            defconfig    gcc-15.1.0
-powerpc                          allmodconfig    gcc-15.1.0
-powerpc                           allnoconfig    gcc-15.1.0
-powerpc                          allyesconfig    clang-22
-powerpc                  iss476-smp_defconfig    gcc-15.1.0
-powerpc               randconfig-001-20250826    gcc-8.5.0
-powerpc               randconfig-002-20250826    clang-22
-powerpc               randconfig-003-20250826    gcc-13.4.0
-powerpc64             randconfig-001-20250826    gcc-10.5.0
-powerpc64             randconfig-002-20250826    gcc-11.5.0
-powerpc64             randconfig-003-20250826    gcc-14.3.0
-riscv                            allmodconfig    clang-22
-riscv                             allnoconfig    gcc-15.1.0
-riscv                            allyesconfig    clang-16
-riscv                               defconfig    clang-22
-riscv                 randconfig-001-20250826    gcc-8.5.0
-riscv                 randconfig-002-20250826    gcc-11.5.0
-s390                             allmodconfig    clang-18
-s390                              allnoconfig    clang-22
-s390                             allyesconfig    gcc-15.1.0
-s390                                defconfig    clang-22
-s390                  randconfig-001-20250826    clang-22
-s390                  randconfig-002-20250826    clang-18
-sh                               allmodconfig    gcc-15.1.0
-sh                                allnoconfig    gcc-15.1.0
-sh                               allyesconfig    gcc-15.1.0
-sh                                  defconfig    gcc-15.1.0
-sh                    randconfig-001-20250826    gcc-11.5.0
-sh                    randconfig-002-20250826    gcc-9.5.0
-sh                          rsk7264_defconfig    gcc-15.1.0
-sh                          sdk7780_defconfig    gcc-15.1.0
-sh                           se7724_defconfig    gcc-15.1.0
-sparc                            allmodconfig    gcc-15.1.0
-sparc                             allnoconfig    gcc-15.1.0
-sparc                               defconfig    gcc-15.1.0
-sparc                 randconfig-001-20250826    gcc-13.4.0
-sparc                 randconfig-002-20250826    gcc-8.5.0
-sparc64                             defconfig    clang-20
-sparc64               randconfig-001-20250826    gcc-8.5.0
-sparc64               randconfig-002-20250826    clang-22
-um                               allmodconfig    clang-19
-um                                allnoconfig    clang-22
-um                               allyesconfig    gcc-12
-um                                  defconfig    clang-22
-um                             i386_defconfig    gcc-12
-um                    randconfig-001-20250826    gcc-12
-um                    randconfig-002-20250826    clang-17
-um                           x86_64_defconfig    clang-22
-x86_64                            allnoconfig    clang-20
-x86_64                           allyesconfig    clang-20
-x86_64      buildonly-randconfig-001-20250826    clang-20
-x86_64      buildonly-randconfig-002-20250826    clang-20
-x86_64      buildonly-randconfig-003-20250826    gcc-12
-x86_64      buildonly-randconfig-004-20250826    clang-20
-x86_64      buildonly-randconfig-005-20250826    gcc-12
-x86_64      buildonly-randconfig-006-20250826    gcc-12
-x86_64                              defconfig    gcc-11
-x86_64                          rhel-9.4-rust    clang-20
-xtensa                            allnoconfig    gcc-15.1.0
-xtensa                randconfig-001-20250826    gcc-11.5.0
-xtensa                randconfig-002-20250826    gcc-8.5.0
-
---
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+>Cheers,
+>Mikko
+>
+>
+>
