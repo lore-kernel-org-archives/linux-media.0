@@ -1,191 +1,137 @@
-Received: from mail-wr1-f54.google.com (mail-wr1-f54.google.com [209.85.221.54])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9E07E41C71;
-	Wed, 27 Aug 2025 10:45:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 32BF520B7EE;
+	Wed, 27 Aug 2025 11:40:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=210.61.82.184
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756291543; cv=none; b=KulB6DuikwMjOF49RQYsd6tKXlVUMAmkinf+nA5YcjRnYabbZlnkhdcdzpYlakWgznSAKbUMoLObh+Q0qZrIpvxJ1dqQO8mzXwQr/5CqRpgm9JP9UQwl+ak6Ki+n0z88zMeFPmZCbwOeMw9nazKBny8doDo33U9yPueNS9O1aKM=
+	t=1756294818; cv=none; b=ILLwTO/UR0dJ0y9kZcGUl1NqzRscHEDSersIUS6Xvgaa45ikwkl51exU6gxKZqWSKMARKyh8fCXgG2lB8bLb9A5CVoypfgr5Zbz9BMOJxYmZTINvxkaIuukPMfnc71RaaGPkNIE0M85NFwtxo6ysGWXWJEQCGWhMXNNNs0EsuoQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756291543; c=relaxed/simple;
-	bh=ZpGh8FURfNBFRxpWoGhtdsBg8oR3Yo8/IMlZBZL39CQ=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=X7350c2gr3EgHenQCxbvBKYCmxRrlVkyYugYckxdP7RklUeCL9rGhaFO3vau6+QVI7LlN5Y7lkD3ACz8bwOfjbUSqo9tukvOm9EUcFoFAuLJ1oC/7Iv+vMX1oMfYnRsYm3f+cLmOtqmQqqiynjV9NEGDY1WIbyDMxoT/HD/l8cw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=echDGeEf; arc=none smtp.client-ip=209.85.221.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1756294818; c=relaxed/simple;
+	bh=Qk9KPWQt4bTNmxVI3gWvhUd0hvWtSFEc7GzrMMxmdnI=;
+	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=jHY5Zlon3qxmMco6Ar+HeYCHwobFvkSW0WpWOMIuRMrhdUdTTVNCGLTp+htlInaJnnzHEJ/5mYi4TfvkRGd5IKR/S7GVEo9ksufHVaFhUHWnUpfxo0bhLQ+mdiKVJa0DGX6GGUwG7i8f/2t2QpQ4jGevS73li+ORlUx6SUYpwW8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mediatek.com; spf=pass smtp.mailfrom=mediatek.com; dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b=siJroKyw; arc=none smtp.client-ip=210.61.82.184
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mediatek.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mediatek.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="echDGeEf"
-Received: by mail-wr1-f54.google.com with SMTP id ffacd0b85a97d-3c79f0a5b8bso3316378f8f.1;
-        Wed, 27 Aug 2025 03:45:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1756291540; x=1756896340; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ywFtIUPgkefEyFmx2NKt2azET6uVxnWh9aDDLWNj8mM=;
-        b=echDGeEfEiHzanGwBopfSoeQNt7aKpyKB/Tb7MacNqq90Xorl+9K0qiZMEsF4XHtPn
-         RhYXwL2SODbFLdqXxbVk2sM5yh4uJfn1uiS3lejWqqYO7CyMZpd/SyBMHUfmv3u5+ja+
-         5ct0Nv1wOrOSdVmZupkGr0XXEVKByVLSshUCRVwKM+NBefklUSw1CxeJ1uuT5JJRbs5W
-         3z9vxtL5GnBbPXDaSuZ5lJJG5QN4AzxnJ6SqYE1aJBJeudBjrJSJsexjHkfhpmWMtuIn
-         pymPHLCEjpvSVz2jtIVRK3+bDrdmAKkQpJBW9oa61S+kXVCESAw9S2ED+bHCn8U1mDDC
-         w/og==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1756291540; x=1756896340;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=ywFtIUPgkefEyFmx2NKt2azET6uVxnWh9aDDLWNj8mM=;
-        b=hv1dekpn0jQw1/5UCkvQQx6w9GH8+jbw4cbi1wsNz07OGkxOaS8Y7/sHn8ia65d/ml
-         CG/ZHzFd+EXoJ/LGpD7ZUkah7jMjn0lLMdCapGgvXbAK5am+4btT6J0Bm4g0v9UoQeLU
-         ERGRzngtGpml84Rigi1CevZuRSg4LDR1mwEAJhmrU/lT3WY9Xj/hYbR2KDQ4yZ6SMC6/
-         NBhBJmC003rYJLm5jY/aCNNrtWT64/+z+YxjpBako5R37m3STICmSAm6Lj0X3vxZpmqJ
-         ynbyX1j8Lm0Y+oaqKgaRqoh/hNoV0F8m4t2MxBt/OqTjfGWwzzN5KckV1SD3oHFWmvTO
-         KBqA==
-X-Forwarded-Encrypted: i=1; AJvYcCUHIT8WM53RmcfZ6A4sx7FKN+WIuKp3aWvnaMq8+x6x4n5YgzDuaZGIwxffTXIEDDmS84HK2iBBTi0jhQki@vger.kernel.org, AJvYcCUwpNLDFyoRsZrDtamLIHrMhnjO7OBoVKF42ix0adUYoSNtThQWapNhM6m7UCZi9TwHO8R6W06Io5c5f3U=@vger.kernel.org, AJvYcCV+spoupZZh8y9JbmdsYVYiOwelCVbaE0GZFI6cFe1PaJEwne1YSmpNaYSnYMvR4AJlEAC+GPaBAcgV@vger.kernel.org, AJvYcCW5+pkZS80Ylxc99N2mxm8t/ZsD+4604DEmtyT14X1NwaycfAqV5FK4sK+kXmA6J/Z8/VWfJ1dJSdZ+@vger.kernel.org, AJvYcCXLU7psdqJP38ML90wOjojfM6fT+RSgu+OP1EQ10QafFh+C8OiqeUNKuJzvh1ireAB+H0djMV6jCIPl1KM=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy66X0w5M7pSVrI3cJd+kekLTvarYBf+IzxPMJuiD/JtSor3aKx
-	Vb1MDVjQdfl94f/aXUh2KiuNlBg2WMhL6Aq/zJ2bycTqGhz8BaooCXi8PeCgXmlBK0lPPCreI4o
-	P3rsnMQeKiAtbyV1CN6Uw249/5m04fDo=
-X-Gm-Gg: ASbGnctJaptnxf26AuN1VTjHSItRElnVjPuRbwAa/GxpvlKB/4p45BcjflvvmsCeuXq
-	F8H7LWOaa2UhrtdjGfOPo7i4e/BDN2UA1EXwzllz9VZ9qO5MPgBPz4FxTfnkUn1R20vdWholSHJ
-	7/PaNVUdLmjAS/71Nst/Z74UpZ98NBIHej//37lUU6ZdEktLacLvsEs6Ed1OeUmolWokcLsdDB7
-	P7QCRd1z6eMiSFStEI=
-X-Google-Smtp-Source: AGHT+IHJqbTQlZxQrSzgsn7uAhDMaT3ieXLEx/3wOIxur6z+DYM0qqrydbeR13Y1wCHEumVIHPbjQZcDuzqpaIwgUiU=
-X-Received: by 2002:a05:6000:2407:b0:3c8:9cfa:c178 with SMTP id
- ffacd0b85a97d-3c89cfac400mr11428571f8f.25.1756291539709; Wed, 27 Aug 2025
- 03:45:39 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b="siJroKyw"
+X-UUID: 968b11ae833a11f0b33aeb1e7f16c2b6-20250827
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+	h=Content-Type:Content-Transfer-Encoding:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=VqzEUSqWA7sXTJW9bQVqniHpSO4Qo2zMHDCuhXD+LGU=;
+	b=siJroKywMAdK+MX/qS5kLF8/W4v6GieM0KeUs1SsCas86tPRLFMtXNHcbWHiBn0kfwESaZcoH39BFvA9dvY+3EFBmILLt4IMaVoc+UN7NEpzoFd9PRp253T6Hl5k0b8yoJd0FFPHWhcGLDswUmmGwI1ecgWOqIsaz3vJ6DYO2t0=;
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.3.3,REQID:dce32d61-288c-4654-88f2-f1c472444163,IP:0,UR
+	L:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:r
+	elease,TS:0
+X-CID-META: VersionHash:f1326cf,CLOUDID:69b6ec44-18c5-4075-a135-4c0afe29f9d6,B
+	ulkID:nil,BulkQuantity:0,Recheck:0,SF:81|82|102,TC:-5,Content:0|15|50,EDM:
+	-3,IP:nil,URL:0,File:nil,RT:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,
+	AV:0,LES:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0,ARC:0
+X-CID-BVR: 2,SSN|SDN
+X-CID-BAS: 2,SSN|SDN,0,_
+X-CID-FACTOR: TF_CID_SPAM_SNR
+X-CID-RHF: D41D8CD98F00B204E9800998ECF8427E
+X-UUID: 968b11ae833a11f0b33aeb1e7f16c2b6-20250827
+Received: from mtkmbs14n2.mediatek.inc [(172.21.101.76)] by mailgw02.mediatek.com
+	(envelope-from <jason-jh.lin@mediatek.com>)
+	(Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+	with ESMTP id 1369436969; Wed, 27 Aug 2025 19:40:10 +0800
+Received: from mtkmbs11n1.mediatek.inc (172.21.101.185) by
+ MTKMBS09N2.mediatek.inc (172.21.101.94) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1258.39; Wed, 27 Aug 2025 19:40:09 +0800
+Received: from mtksitap99.mediatek.inc (10.233.130.16) by
+ mtkmbs11n1.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
+ 15.2.1258.39 via Frontend Transport; Wed, 27 Aug 2025 19:40:08 +0800
+From: Jason-JH Lin <jason-jh.lin@mediatek.com>
+To: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>, Jassi Brar <jassisinghbrar@gmail.com>,
+	Chun-Kuang Hu <chunkuang.hu@kernel.org>, AngeloGioacchino Del Regno
+	<angelogioacchino.delregno@collabora.com>, Mauro Carvalho Chehab
+	<mchehab@kernel.org>
+CC: Matthias Brugger <matthias.bgg@gmail.com>, Nicolas Dufresne
+	<nicolas@ndufresne.ca>, Jason-JH Lin <jason-jh.lin@mediatek.com>, Nancy Lin
+	<nancy.lin@mediatek.com>, Singo Chang <singo.chang@mediatek.com>, Paul-PL
+ Chen <paul-pl.chen@mediatek.com>, Moudy Ho <moudy.ho@mediatek.com>, Xiandong
+ Wang <xiandong.wang@mediatek.com>, Sirius Wang <sirius.wang@mediatek.com>,
+	Fei Shao <fshao@chromium.org>, Chen-yu Tsai <wenst@chromium.org>,
+	<Project_Global_Chrome_Upstream_Group@mediatek.com>,
+	<devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+	<dri-devel@lists.freedesktop.org>, <linux-mediatek@lists.infradead.org>,
+	<linux-arm-kernel@lists.infradead.org>, <linux-media@vger.kernel.org>, CK Hu
+	<ck.hu@mediatek.com>
+Subject: [PATCH v7 08/20] mailbox: mtk-cmdq: Add driver data to support for MT8196
+Date: Wed, 27 Aug 2025 19:37:40 +0800
+Message-ID: <20250827114006.3310175-9-jason-jh.lin@mediatek.com>
+X-Mailer: git-send-email 2.45.2
+In-Reply-To: <20250827114006.3310175-1-jason-jh.lin@mediatek.com>
+References: <20250827114006.3310175-1-jason-jh.lin@mediatek.com>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250819121631.84280-1-clamor95@gmail.com> <1909286.atdPhlSkOF@senjougahara>
- <76B1EB6D-B149-43C2-AA56-A15C9DCCA3AF@gmail.com> <14287352.RDIVbhacDa@senjougahara>
-In-Reply-To: <14287352.RDIVbhacDa@senjougahara>
-From: Svyatoslav Ryhel <clamor95@gmail.com>
-Date: Wed, 27 Aug 2025 13:45:28 +0300
-X-Gm-Features: Ac12FXzDJMFwSyCznjWDvhfBWLuEGGUDton2Z3d8Y-Yt9F2wgfNpu5x2X_82XmI
-Message-ID: <CAPVz0n0kCBAh7W0R766A_dXbcM3E=EoSXemuc0_rOm+Qch-a+Q@mail.gmail.com>
-Subject: Re: [PATCH v1 01/19] clk: tegra: init CSUS clock for Tegra20 and Tegra30
-To: Mikko Perttunen <mperttunen@nvidia.com>
-Cc: Thierry Reding <thierry.reding@gmail.com>, Thierry Reding <treding@nvidia.com>, 
-	Jonathan Hunter <jonathanh@nvidia.com>, Sowjanya Komatineni <skomatineni@nvidia.com>, 
-	Luca Ceresoli <luca.ceresoli@bootlin.com>, David Airlie <airlied@gmail.com>, 
-	Simona Vetter <simona@ffwll.ch>, Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, 
-	Maxime Ripard <mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>, Rob Herring <robh@kernel.org>, 
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Peter De Schrijver <pdeschrijver@nvidia.com>, Prashant Gaikwad <pgaikwad@nvidia.com>, 
-	Michael Turquette <mturquette@baylibre.com>, Stephen Boyd <sboyd@kernel.org>, 
-	Mauro Carvalho Chehab <mchehab@kernel.org>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
-	Dmitry Osipenko <digetx@gmail.com>, Charan Pedumuru <charan.pedumuru@gmail.com>, 
-	linux-media@vger.kernel.org, linux-tegra@vger.kernel.org, 
-	dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org, 
-	linux-staging@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-MTK: N
 
-=D1=81=D1=80, 27 =D1=81=D0=B5=D1=80=D0=BF. 2025=E2=80=AF=D1=80. =D0=BE 13:3=
-6 Mikko Perttunen <mperttunen@nvidia.com> =D0=BF=D0=B8=D1=88=D0=B5:
->
-> On Wednesday, August 27, 2025 1:32=E2=80=AFPM Svyatoslav wrote:
-> > 27 =D1=81=D0=B5=D1=80=D0=BF=D0=BD=D1=8F 2025=E2=80=AF=D1=80. 07:09:45 G=
-MT+03:00, Mikko Perttunen
-> <mperttunen@nvidia.com> =D0=BF=D0=B8=D1=88=D0=B5:
-> > >On Tuesday, August 19, 2025 9:16=E2=80=AFPM Svyatoslav Ryhel wrote:
-> > >> CSUS clock is required to be enabled on camera device configuration =
-or
-> > >> else camera module refuses to initiate properly.
-> > >>
-> > >> Signed-off-by: Svyatoslav Ryhel <clamor95@gmail.com>
-> > >> ---
-> > >>
-> > >>  drivers/clk/tegra/clk-tegra20.c | 1 +
-> > >>  drivers/clk/tegra/clk-tegra30.c | 1 +
-> > >>  2 files changed, 2 insertions(+)
-> > >>
-> > >> diff --git a/drivers/clk/tegra/clk-tegra20.c
-> > >> b/drivers/clk/tegra/clk-tegra20.c index 551ef0cf0c9a..42f8150c6110 1=
-00644
-> > >> --- a/drivers/clk/tegra/clk-tegra20.c
-> > >> +++ b/drivers/clk/tegra/clk-tegra20.c
-> > >> @@ -1043,6 +1043,7 @@ static struct tegra_clk_init_table init_table[=
-] =3D {
-> > >>
-> > >>    { TEGRA20_CLK_GR3D, TEGRA20_CLK_PLL_C, 300000000, 0 },
-> > >>    { TEGRA20_CLK_VDE, TEGRA20_CLK_PLL_C, 300000000, 0 },
-> > >>    { TEGRA20_CLK_PWM, TEGRA20_CLK_PLL_P, 48000000, 0 },
-> > >>
-> > >> +  { TEGRA20_CLK_CSUS, TEGRA20_CLK_CLK_MAX, 6000000, 1 },
-> > >>
-> > >>    /* must be the last entry */
-> > >>    { TEGRA20_CLK_CLK_MAX, TEGRA20_CLK_CLK_MAX, 0, 0 },
-> > >>
-> > >>  };
-> > >>
-> > >> diff --git a/drivers/clk/tegra/clk-tegra30.c
-> > >> b/drivers/clk/tegra/clk-tegra30.c index 82a8cb9545eb..70e85e2949e0 1=
-00644
-> > >> --- a/drivers/clk/tegra/clk-tegra30.c
-> > >> +++ b/drivers/clk/tegra/clk-tegra30.c
-> > >> @@ -1237,6 +1237,7 @@ static struct tegra_clk_init_table init_table[=
-] =3D {
-> > >>
-> > >>    { TEGRA30_CLK_HDA, TEGRA30_CLK_PLL_P, 102000000, 0 },
-> > >>    { TEGRA30_CLK_HDA2CODEC_2X, TEGRA30_CLK_PLL_P, 48000000, 0 },
-> > >>    { TEGRA30_CLK_PWM, TEGRA30_CLK_PLL_P, 48000000, 0 },
-> > >>
-> > >> +  { TEGRA30_CLK_CSUS, TEGRA30_CLK_CLK_MAX, 6000000, 1 },
-> > >>
-> > >>    /* must be the last entry */
-> > >>    { TEGRA30_CLK_CLK_MAX, TEGRA30_CLK_CLK_MAX, 0, 0 },
-> > >>
-> > >>  };
-> > >
-> > >I looked into what this clock does and it seems to be a gate for the C=
-SUS
-> > >pin, which provides an output clock for camera sensors (VI MCLK). Defa=
-ult
-> > >source seems to be PLLC_OUT1. It would be good to note that on the com=
-mit
-> > >message, as I can't find any documentation about the CSUS clock elsewh=
-ere.
-> > >
-> > >What is the 6MHz rate based on?
-> >
-> > 6mhz is the statistic value which I was not able to alter while testing=
-. I
-> > have tried 12mhz and 24mhz too but it remained 6mhz, so I left it 6mhz.
-> > >Since this seems to be a clock consumed by the sensor, it seems to me =
-that
-> > >rather than making it always on, we could point to it in the sensor's
-> > >device tree entry.
-> >
-> > Sensor device tree uses vi_sensor as clocks source and sensor drivers d=
-on't
-> > support multiple linked clocks.
->
-> AIUI vi_sensor is an internal clock so the sensor cannot be receiving it
-> directly. Perhaps the sensor is actually connected to csus, and the reaso=
-n we
-> need to enable it is to allow the vi_sensor clock to pass through the csu=
-s
-> gate?
->
-> That leaves the question of why the csus pad would be muxed to vi_sensor =
-by
-> default, but perhaps there's an explanation for that.
->
+MT8196 has 2 new hardware configuration compared with the previous SoC,
+which correspond to the 2 new driver data:
 
-From downstream T30 sources csus and vi_sensor are always called in
-pair (6MHz csus and 24MHz for vi_sensor), naturally I assumed that
-latter is used as camera reference clock since most sensors has
-reference clock around 24 MHz
+1. mminfra_offset: For GCE data path control
+   Since GCE has been moved into mminfra, GCE needs to append the
+   mminfra offset to the DRAM address when accessing the DRAM.
 
-> > >Cheers,
-> > >Mikko
->
->
->
->
+2. gce_vm: For GCE hardware virtualization control
+   Currently, the first version of the mt8196 mailbox controller only
+   requires setting the VM-related registers to enable the permissions
+   of a host VM.
+
+Signed-off-by: Jason-JH Lin <jason-jh.lin@mediatek.com>
+Reviewed-by: CK Hu <ck.hu@mediatek.com>
+---
+ drivers/mailbox/mtk-cmdq-mailbox.c | 12 ++++++++++++
+ 1 file changed, 12 insertions(+)
+
+diff --git a/drivers/mailbox/mtk-cmdq-mailbox.c b/drivers/mailbox/mtk-cmdq-mailbox.c
+index 373effbcfa40..316082938977 100644
+--- a/drivers/mailbox/mtk-cmdq-mailbox.c
++++ b/drivers/mailbox/mtk-cmdq-mailbox.c
+@@ -14,6 +14,7 @@
+ #include <linux/module.h>
+ #include <linux/platform_device.h>
+ #include <linux/pm_runtime.h>
++#include <linux/sizes.h>
+ #include <linux/mailbox_controller.h>
+ #include <linux/mailbox/mtk-cmdq-mailbox.h>
+ #include <linux/of.h>
+@@ -848,6 +849,16 @@ static const struct gce_plat gce_plat_mt8195 = {
+ 	.gce_num = 2
+ };
+ 
++static const struct gce_plat gce_plat_mt8196 = {
++	.thread_nr = 32,
++	.shift = 3,
++	.mminfra_offset = SZ_2G,
++	.control_by_sw = true,
++	.sw_ddr_en = true,
++	.gce_vm = true,
++	.gce_num = 2
++};
++
+ static const struct of_device_id cmdq_of_ids[] = {
+ 	{.compatible = "mediatek,mt6779-gce", .data = (void *)&gce_plat_mt6779},
+ 	{.compatible = "mediatek,mt8173-gce", .data = (void *)&gce_plat_mt8173},
+@@ -856,6 +867,7 @@ static const struct of_device_id cmdq_of_ids[] = {
+ 	{.compatible = "mediatek,mt8188-gce", .data = (void *)&gce_plat_mt8188},
+ 	{.compatible = "mediatek,mt8192-gce", .data = (void *)&gce_plat_mt8192},
+ 	{.compatible = "mediatek,mt8195-gce", .data = (void *)&gce_plat_mt8195},
++	{.compatible = "mediatek,mt8196-gce", .data = (void *)&gce_plat_mt8196},
+ 	{}
+ };
+ MODULE_DEVICE_TABLE(of, cmdq_of_ids);
+-- 
+2.43.0
+
