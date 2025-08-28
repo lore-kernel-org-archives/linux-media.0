@@ -1,96 +1,217 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
+Received: from fhigh-b3-smtp.messagingengine.com (fhigh-b3-smtp.messagingengine.com [202.12.124.154])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8EB89285065;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A5160283682;
 	Thu, 28 Aug 2025 16:08:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.154
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756397298; cv=none; b=GaL5WQ5IUtYB0myCIoSvjXbH8sGvd+2tc+lWGA7l2QNWVTKpOMVgrLYa6SQdyPrQi527xxpygoqPJsW9dlgkTnjlYDqby7daltFe3fIGWPzuz6PlDtVL/Pp0+In2kr3UAyXuFtTS1LXXacomHZEXqv+9w97lit4V0yk8U701veo=
+	t=1756397298; cv=none; b=Ld/1wRdZ9gAxxU2NsEezBSQxcBG5UvPaTfoxBZj6TwsLBiv3oGsLjHVRpdBo5eCNyzCUtmYuIogTykknha+FC8dZplFvm+sNoipT/tiWpdDnSUVRBiuCesYsSnhd3D2KMEna3C9xVk82Jzqe52tIVO6rkdnOfT9FHUGejbXc49s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1756397298; c=relaxed/simple;
-	bh=chl2pglmKuX5THNV4UczW2DfJ8GWxqeVOVktQ94bii0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=VQ0iPO2urATIExs855kEOTD9zwSXSsLJle8XRxFdrgWRsGJpzB+JLUVZzcKAj7k8tgs7AaB8chpWyl2816H3is3dsVUmAju+3Bxvv3z4F8jH0IB6UkZdONEpAu00MwmXP4gWs8YDHAk18kFW9grbsB6AUMgtR5iHCZWtvLBs+78=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=gAJdjTK2; arc=none smtp.client-ip=192.198.163.13
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+	bh=b/LnpskgQPV15S71m1V/5Bonxy0bHmaq98KjFJi+XQs=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=gUuDEFXOw3M36MX1ey69odUtfVP07uv/2norBu6yshtgrIYY908psyGXb6LmeJyy+UpP23VCEAcACv31NoCAbEBFBXgPCGcypm+0eB2S1h+eL1PULzZ2IqgLxW1D3fGO9S7E0iEJrVvAb3DbFTy2QCbTLNt+J/fOQA3n+bSE9NE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ragnatech.se; spf=pass smtp.mailfrom=ragnatech.se; dkim=pass (2048-bit key) header.d=ragnatech.se header.i=@ragnatech.se header.b=LrpWPz9I; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=SxuzDxPb; arc=none smtp.client-ip=202.12.124.154
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ragnatech.se
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ragnatech.se
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="gAJdjTK2"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1756397297; x=1787933297;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=chl2pglmKuX5THNV4UczW2DfJ8GWxqeVOVktQ94bii0=;
-  b=gAJdjTK2tyJp6Kma2k1Gwzx4+iEoaX0M/3jdWjpdQMnMqubZ4p5sh787
-   0VrCZPUdTjTy4wCxJjdnxFUB7nydPkaYcW6LnJVJCsFJUJqgUcIH6c4Jh
-   B3tct9fp7EbQpPuhdc9UjML68BgqpGQTBqy7O8SMvUWlqe/WW7XAd9Sdn
-   47rGfOQ7QH0LASk6pQ19nlR5FW0nGOEHAfwANf9Z8iIYBmqglX0ch5o4h
-   5y7kfa1UPL0uLVq6ffzkiFNRtjeLVn+1BzGR5Ffyfphlbm0nnoo8pcgvH
-   APY69hKJOxb4JIFOJ5CKgF7kSEkAB7LlKd7bFYVH68l/kb2hIgG2qMacZ
-   g==;
-X-CSE-ConnectionGUID: wQklFKzrR1ulYeD3orhqjg==
-X-CSE-MsgGUID: C7YqnZdMRWaslGcvh+dypA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11536"; a="61306461"
-X-IronPort-AV: E=Sophos;i="6.18,220,1751266800"; 
-   d="scan'208";a="61306461"
-Received: from fmviesa003.fm.intel.com ([10.60.135.143])
-  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Aug 2025 09:08:16 -0700
-X-CSE-ConnectionGUID: 6NXhRMzqTDaxYPKfnPew0g==
-X-CSE-MsgGUID: d3UIs7vBS2q49mxX4Zsurg==
-X-ExtLoop1: 1
-Received: from fpallare-mobl4.ger.corp.intel.com (HELO kekkonen.fi.intel.com) ([10.245.245.135])
-  by fmviesa003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Aug 2025 09:08:11 -0700
-Received: from kekkonen.localdomain (localhost [IPv6:::1])
-	by kekkonen.fi.intel.com (Postfix) with SMTP id ABFA411F9D4;
-	Thu, 28 Aug 2025 19:08:08 +0300 (EEST)
-Date: Thu, 28 Aug 2025 19:08:08 +0300
-Organization: Intel Finland Oy - BIC 0357606-4 - c/o Alberga Business Park, 6 krs, Bertel Jungin Aukio 5, 02600 Espoo
-From: Sakari Ailus <sakari.ailus@linux.intel.com>
-To: Hardevsinh Palaniya <hardevsinh.palaniya@siliconsignals.io>
-Cc: Himanshu Bhavani <himanshu.bhavani@siliconsignals.io>,
+	dkim=pass (2048-bit key) header.d=ragnatech.se header.i=@ragnatech.se header.b="LrpWPz9I";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="SxuzDxPb"
+Received: from phl-compute-06.internal (phl-compute-06.internal [10.202.2.46])
+	by mailfhigh.stl.internal (Postfix) with ESMTP id BDC317A01E6;
+	Thu, 28 Aug 2025 12:08:15 -0400 (EDT)
+Received: from phl-mailfrontend-01 ([10.202.2.162])
+  by phl-compute-06.internal (MEProxy); Thu, 28 Aug 2025 12:08:15 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ragnatech.se; h=
+	cc:cc:content-transfer-encoding:content-type:content-type:date
+	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to; s=fm3; t=1756397295;
+	 x=1756483695; bh=ziIy7q4mBFefeCnH73xKTWuwUJnVXZuJE/sZyi5wZ5U=; b=
+	LrpWPz9It9yNQrTQOhSfuUkwV8qMjmzPJPG3bpUULvANteIw5XUi8rtoGsLs4WPZ
+	9Os/p0sRXwI+morp8D9U49qpcwaxxO0vywRNetlqm6W//tAdb9QqSflUExd0jnDn
+	odJRkgB7qgPpev3JQTQyCK/WE1G1Ft+FWsiLeJOBrhTA/U/LRzz4IBYBxeOP7XHQ
+	5Lvq5nvgD1ll5DH/WH3fU4Tu+k3dl0Qi3rhxhg/wMPTTsuIJYyPKyyrCPnVt056U
+	DOKWkOllf6frypS2xM4wLx3tia+iAbGeUujKeOmT7O4rIhIM6qCalL19C+7tba44
+	B4OGGuukMsUB8BMOKhUrLA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to:x-me-proxy
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1756397295; x=
+	1756483695; bh=ziIy7q4mBFefeCnH73xKTWuwUJnVXZuJE/sZyi5wZ5U=; b=S
+	xuzDxPbUbQzoIQELDq6tOuugu7HJviCyaq221pnvS1ka0h1C0zDdssBkOgyuhSc2
+	srccPNT0YiHYFgoaJgYMJtYel/G//iH9MLYZ4uxX8TRCad9HGrQOSJ34JO6bdWsu
+	ltA80IqYX/YeODyuDfBYYsPoiGrGJ6xkeAkvuX/ZEfHx89R07Ki+vddAaQ5Ux0kF
+	hWHcudxGsRUHV8s9zWQErZh4whdbZHlGVVfQ14wckuu+iq6zsLt9Lx+9A5ORlIAq
+	IlPl6ZiRMyicKS4JafLfr+irWFMcgp7qDzbQCfxKGiY2qc+45dshJPhNUydECxqr
+	g9HcjmY/N9NN8aOWLTEew==
+X-ME-Sender: <xms:736waEfMj055JeZnekHwJBXOKDLws8ycPzK-FEvKqqNjktBSwITIeQ>
+    <xme:736waKCY6s_UkvvqeK9TmLE0bwi1Hghl5Px0sPWBVFRBu19Uw7MlbNFHo2f1d_-bi
+    MGXLKW1DZGMrYYwWVc>
+X-ME-Received: <xmr:736waOkb0BHmLB_COfxG1qwA2f0XcqWOgTCYNBlLtBWmGgq3UU5MFt3QUeMVJxm314hnTmxj5rDgznhfyfqGuDerww>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtdefgddukedugeeiucetufdoteggodetrf
+    dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfurfetoffkrfgpnffqhgenuceu
+    rghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujf
+    gurhephffvvefufffkofgjfhggtgfgsehtkeertdertdejnecuhfhrohhmpefpihhklhgr
+    shcuufpnuggvrhhluhhnugcuoehnihhklhgrshdrshhouggvrhhluhhnugdorhgvnhgvsh
+    grshesrhgrghhnrghtvggthhdrshgvqeenucggtffrrghtthgvrhhnpeehiefgueevuedt
+    fefhheegkeevtdelueeukeevfeduhefhhfejfffggeffleefgeenucevlhhushhtvghruf
+    hiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehnihhklhgrshdrshhouggvrhhl
+    uhhnugesrhgrghhnrghtvggthhdrshgvpdhnsggprhgtphhtthhopeejpdhmohguvgepsh
+    hmthhpohhuthdprhgtphhtthhopehlrghrshesmhgvthgrfhhoohdruggvpdhrtghpthht
+    ohepmhgthhgvhhgrsgeskhgvrhhnvghlrdhorhhgpdhrtghpthhtohephhhvvghrkhhuih
+    hlseigshegrghllhdrnhhlpdhrtghpthhtoheplhgruhhrvghnthdrphhinhgthhgrrhht
+    sehiuggvrghsohhnsghorghrugdrtghomhdprhgtphhtthhopehlihhnuhigqdhmvgguih
+    grsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqrhgvnhgv
+    shgrshdqshhotgesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehnihhklh
+    grshdrshhouggvrhhluhhnugdorhgvnhgvshgrshesrhgrghhnrghtvggthhdrshgv
+X-ME-Proxy: <xmx:736waNeTVcs0Dc3ZNnjddQmxOHvXWQCcxzpC3mb_URGhZFfFnkYRdw>
+    <xmx:736waKQX4MAA4eZRGFEuEmJFI6WmZbAtfzlVa1WeND6_srOWoADXHg>
+    <xmx:736waMsmZAvd4f3Wbmbr8qkL31mOuMrypcQKipnTJolTHlzevE-Gqw>
+    <xmx:736waDcEjBYrDgPrkFTmQpHyLXjvPfyBIgD2__c6gtGzQAShXov9WA>
+    <xmx:736waNDL6m9RT3okKWKhGk29DeEPwIFOUYWbqdKUNcmbA5m2XQAUCoe2>
+Feedback-ID: i80c9496c:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
+ 28 Aug 2025 12:08:14 -0400 (EDT)
+From: =?UTF-8?q?Niklas=20S=C3=B6derlund?= <niklas.soderlund+renesas@ragnatech.se>
+To: Lars-Peter Clausen <lars@metafoo.de>,
 	Mauro Carvalho Chehab <mchehab@kernel.org>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
 	Hans Verkuil <hverkuil@xs4all.nl>,
-	Ricardo Ribalda <ribalda@chromium.org>,
-	Hans de Goede <hansg@kernel.org>,
-	Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
-	=?iso-8859-1?Q?Andr=E9?= Apitzsch <git@apitzsch.eu>,
-	Matthias Fend <matthias.fend@emfend.at>,
-	Arnd Bergmann <arnd@arndb.de>,
-	Dongcheng Yan <dongcheng.yan@intel.com>,
-	Benjamin Mugnier <benjamin.mugnier@foss.st.com>,
-	Sylvain Petinot <sylvain.petinot@foss.st.com>,
-	Jingjing Xiong <jingjing.xiong@intel.com>,
-	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-	Heimir Thor Sverrisson <heimir.sverrisson@gmail.com>,
-	linux-media@vger.kernel.org, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v8 0/2] media: i2c: Add ov2735 camera sensor driver
-Message-ID: <aLB-6GsY-OiCZi9I@kekkonen.localdomain>
-References: <20250821143126.319470-1-hardevsinh.palaniya@siliconsignals.io>
+	Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+	linux-media@vger.kernel.org
+Cc: linux-renesas-soc@vger.kernel.org,
+	=?UTF-8?q?Niklas=20S=C3=B6derlund?= <niklas.soderlund+renesas@ragnatech.se>
+Subject: [PATCH v2 06/11] media: adv7180: Power down decoder when configuring the device
+Date: Thu, 28 Aug 2025 18:06:49 +0200
+Message-ID: <20250828160654.1467762-7-niklas.soderlund+renesas@ragnatech.se>
+X-Mailer: git-send-email 2.51.0
+In-Reply-To: <20250828160654.1467762-1-niklas.soderlund+renesas@ragnatech.se>
+References: <20250828160654.1467762-1-niklas.soderlund+renesas@ragnatech.se>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250821143126.319470-1-hardevsinh.palaniya@siliconsignals.io>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-Hi Hardev,
+Some variants of the chip (ADV7180) have it's decoder powered up after
+reset, while others (ADV7280, ADV7281, ADV7282, ADV7283) have it powered
+down.
 
-On Thu, Aug 21, 2025 at 08:01:11PM +0530, Hardevsinh Palaniya wrote:
-> The Omnivision OV2735 is a 1/2.7-Inch CMOS image sensor with an                 
-> active array size of 1920 x 1080.                                               
+This is tracked by the feature flag ADV7180_FLAG_RESET_POWERED. At probe
+this flag is used to initialize the state variable powered which keeps
+track of if the decoder is powered on, or off, for the resume callback.
 
-Have you run v4l2-compliance on this? Could you do so and provide the
-report, please?
+This however misses that the decoder needs to be powered off for some
+configuration of the device to take hold. So for devices where it's left
+on (ADV7180) the format configuration at probe time have little effect.
+This worked as the .set_fmt callback powers down the decoder, updates
+the format, and powers back on the decoder.
 
+Before moving all configuration to .s_stream this needs to be fixed.
+Instead of tracking if the decoder is powered on or off, use the
+flag to determine if needs to be powered down after a reset to do the
+configuration.
+
+To keep the behavior consistent with the currents implementation switch
+the decoder back on for devices where this is the reset behavior. The
+primary reason for this is that if not done the first 35+ frames or so
+of the capture session is garbage.
+
+To keep the support of starting the decoder when resuming from sleep on
+devices where the reset behavior is to start with the decoder powered
+off, use the state variable streaming. If it is set the decoder was
+powered on when the system suspended so we know to start it again when
+resuming.
+
+Signed-off-by: Niklas Söderlund <niklas.soderlund+renesas@ragnatech.se>
+---
+ drivers/media/i2c/adv7180.c | 34 ++++++++++++++++++++++------------
+ 1 file changed, 22 insertions(+), 12 deletions(-)
+
+diff --git a/drivers/media/i2c/adv7180.c b/drivers/media/i2c/adv7180.c
+index 8409ee9acc4f..0bc608291df7 100644
+--- a/drivers/media/i2c/adv7180.c
++++ b/drivers/media/i2c/adv7180.c
+@@ -214,7 +214,6 @@ struct adv7180_state {
+ 	struct gpio_desc	*pwdn_gpio;
+ 	struct gpio_desc	*rst_gpio;
+ 	v4l2_std_id		curr_norm;
+-	bool			powered;
+ 	bool			streaming;
+ 	u8			input;
+ 
+@@ -556,8 +555,6 @@ static int adv7180_s_power(struct v4l2_subdev *sd, int on)
+ 		return ret;
+ 
+ 	ret = adv7180_set_power(state, on);
+-	if (ret == 0)
+-		state->powered = on;
+ 
+ 	mutex_unlock(&state->mutex);
+ 	return ret;
+@@ -887,6 +884,13 @@ static int init_device(struct adv7180_state *state)
+ 	adv7180_write(state, ADV7180_REG_PWR_MAN, ADV7180_PWR_MAN_RES);
+ 	usleep_range(5000, 10000);
+ 
++	/*
++	 * If the devices decoder is power on after reset, power off so the
++	 * device can be configured.
++	 */
++	if (state->chip_info->flags & ADV7180_FLAG_RESET_POWERED)
++		adv7180_set_power(state, false);
++
+ 	ret = state->chip_info->init(state);
+ 	if (ret)
+ 		return ret;
+@@ -927,6 +931,14 @@ static int init_device(struct adv7180_state *state)
+ 			return ret;
+ 	}
+ 
++	/*
++	 * If the devices decoder is power on after reset, restore the power
++	 * after configuration. This is to preserve the behavior of the driver,
++	 * not doing this result in the first 35+ frames captured being garbage.
++	 */
++	if (state->chip_info->flags & ADV7180_FLAG_RESET_POWERED)
++		adv7180_set_power(state, true);
++
+ 	return 0;
+ }
+ 
+@@ -1457,10 +1469,7 @@ static int adv7180_probe(struct i2c_client *client)
+ 	state->irq = client->irq;
+ 	mutex_init(&state->mutex);
+ 	state->curr_norm = V4L2_STD_NTSC;
+-	if (state->chip_info->flags & ADV7180_FLAG_RESET_POWERED)
+-		state->powered = true;
+-	else
+-		state->powered = false;
++
+ 	state->input = 0;
+ 	sd = &state->sd;
+ 	v4l2_i2c_subdev_init(sd, client, &adv7180_ops);
+@@ -1568,11 +1577,12 @@ static int adv7180_resume(struct device *dev)
+ 	if (ret < 0)
+ 		return ret;
+ 
+-	guard(mutex)(&state->mutex);
+-
+-	ret = adv7180_set_power(state, state->powered);
+-	if (ret)
+-		return ret;
++	/* If we where streaming when suspending, start decoder. */
++	if (state->streaming) {
++		ret = adv7180_set_power(state, true);
++		if (ret)
++			return ret;
++	}
+ 
+ 	return 0;
+ }
 -- 
-Kind regards,
+2.51.0
 
-Sakari Ailus
