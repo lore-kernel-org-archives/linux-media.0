@@ -1,55 +1,55 @@
-Received: from fhigh-b3-smtp.messagingengine.com (fhigh-b3-smtp.messagingengine.com [202.12.124.154])
+Received: from fout-b8-smtp.messagingengine.com (fout-b8-smtp.messagingengine.com [202.12.124.151])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2B9DF27B35C;
-	Thu, 28 Aug 2025 16:08:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.154
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0E97421C16E;
+	Thu, 28 Aug 2025 16:08:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.151
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756397288; cv=none; b=rllWuUTOxRLabkF1R2EpItqTxJyBvULdOC9OV5NjzJ8ZuQC5GarhR3ZiA2wMIy6FzPh63IVlc7KfbQfMpcE1Q+XGyBLRBlRiHjIO+7dEatZZ1p0/oOc7Lq0pn1oOTTn3ns+AnfQywzZTep8JAEd0RO+WjhOgfWkrsWjUz+mVTG8=
+	t=1756397293; cv=none; b=SZs5EqfgJypOXUx4LaV4nsdXgnBlNskWBRNdrsefhJj0c2SD+gI6FdvYFHDwTj2eD+eFk4TmTbwFAjKHIamaKM4pesQVIrkwbUdiHRgkX8NY/hBYZUHXdHP1QK5TRnPlimSgwpfVj8ZiGGfiNJX88yZBb8l19PMpkTyaMxoEVs4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756397288; c=relaxed/simple;
-	bh=rwMBLiOsufQz1Ru63HI0VN0UKVZYZ2NpNwNtFHdr3tE=;
+	s=arc-20240116; t=1756397293; c=relaxed/simple;
+	bh=Bl3SZhRSqoCS5tRDxTOOYAJVu6kppyTwN9m93wS8ClM=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=NIwz7mUywHA2F7uWGph5ZSQ0ZqSWG5Cgsz25wA4t4VyBHqm1Qoj4L2hfhK4trbdOyMlrsSSpp4hRaZufdXlu50QWUk5ZAlr4lPMuEKFXBsA23qJqRXA4bxQdJDn9icNyl6aI1xvtB8T32/dN8i3FXksdujgvRx0aV7cdtK3TGvM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ragnatech.se; spf=pass smtp.mailfrom=ragnatech.se; dkim=pass (2048-bit key) header.d=ragnatech.se header.i=@ragnatech.se header.b=p98XwB86; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=E35LDZ7m; arc=none smtp.client-ip=202.12.124.154
+	 MIME-Version:Content-Type; b=X6OodMQ6S4C5V+TIRMtRaiX46C5H70N1vjakwgrgy/MO1uSpgKhZlFs3i5dnfmG/hZtvhX+T9Cc0rQIgL863zqBLLC5AwkIeKFjxcJTC3hwstmSd2wsPAVAqrnMHkNBkDZuqTd58y8WndBmm35VwX10pVOj+Pjc/6gWOwIe+/U0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ragnatech.se; spf=pass smtp.mailfrom=ragnatech.se; dkim=pass (2048-bit key) header.d=ragnatech.se header.i=@ragnatech.se header.b=IuSu/4lB; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=SCDWaWbC; arc=none smtp.client-ip=202.12.124.151
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ragnatech.se
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ragnatech.se
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ragnatech.se header.i=@ragnatech.se header.b="p98XwB86";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="E35LDZ7m"
-Received: from phl-compute-03.internal (phl-compute-03.internal [10.202.2.43])
-	by mailfhigh.stl.internal (Postfix) with ESMTP id 1C00C7A0127;
-	Thu, 28 Aug 2025 12:08:06 -0400 (EDT)
+	dkim=pass (2048-bit key) header.d=ragnatech.se header.i=@ragnatech.se header.b="IuSu/4lB";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="SCDWaWbC"
+Received: from phl-compute-12.internal (phl-compute-12.internal [10.202.2.52])
+	by mailfout.stl.internal (Postfix) with ESMTP id 08CEB1D00161;
+	Thu, 28 Aug 2025 12:08:11 -0400 (EDT)
 Received: from phl-mailfrontend-01 ([10.202.2.162])
-  by phl-compute-03.internal (MEProxy); Thu, 28 Aug 2025 12:08:06 -0400
+  by phl-compute-12.internal (MEProxy); Thu, 28 Aug 2025 12:08:11 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ragnatech.se; h=
 	cc:cc:content-transfer-encoding:content-type:content-type:date
 	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to; s=fm3; t=1756397285;
-	 x=1756483685; bh=z6vq1lgYIumxgNTU0MjeeDv0mZ3xyQGMxbD4nffoFgk=; b=
-	p98XwB86lEj/Bqp4vBDZrJKXUA/jo8jrzrhf6N681tgNs5zhMc7Cy84h3z3sMCbk
-	EczKRs8RKj9ojWlbpU5uFzMKWYHbBcJ/P78/KXgswjfDcKPW/slkMW/ApM4bKGUX
-	lJBdBoghlNWiCElcxTizotZ4BdouT8UvgeaQJyY60qvZZbtDu4Hr02aKP4AamXjG
-	3mOUwoP17hH1/47OP5t2tzBhN1dDUoRsl7lHcSSOrCUz7nleKKnxG32kp3S0oBYD
-	7yOKCo6ayvWe48BihEoVoUP2/Cul3wzJWA/mEXQq+RuaX8V1ljy6AmdQWz80CXbz
-	4Rq/qUlxBHNutZUcrn17cA==
+	:references:reply-to:subject:subject:to:to; s=fm3; t=1756397290;
+	 x=1756483690; bh=j3+OWkF07y6yjk82e93qe4TzhTV25wy1lyEByeMssKg=; b=
+	IuSu/4lB7mJVxQpu6RiKn6VP1PELziOXu8xWl/TlSgjrRnYfdqXGVYZUZ9CSVQQW
+	yOunNePYBnF0bISloE6xepvhD5p5VeT65tOObxFCvRaGhdEF03eSyBiWhEZQahkA
+	4/EiIcfs4HhCK00y86OsjzeRyyGs5Vo5qcsVYWT/FCktx33Iia4PDMRWxjjh6dA6
+	TevRZVBxg05f1p7nkqmhb6CrZDpfrQJ9fynv2q44OGqPiFQBNcMA4Ue5HnPhwk0E
+	OdoyTfSBdJea94xh7CDdV6ZX0mhfRJj56PGJ0NeIE4XY41zDQjMa4KtAQ8lNjVRS
+	8l6CPFJiL1Mjn526TnfSqQ==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
 	messagingengine.com; h=cc:cc:content-transfer-encoding
 	:content-type:content-type:date:date:feedback-id:feedback-id
 	:from:from:in-reply-to:in-reply-to:message-id:mime-version
 	:references:reply-to:subject:subject:to:to:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1756397285; x=
-	1756483685; bh=z6vq1lgYIumxgNTU0MjeeDv0mZ3xyQGMxbD4nffoFgk=; b=E
-	35LDZ7mSAENzWTjLD/n16dnGaRKozdkogIKQLglDbkzpD/qO125Y84SKwUqQyyAQ
-	h8e/eeoEV/Jj9WzygfMEGB24VuC7lSJSJztB+eaSiM7woTp2wA2+Z+leaF0SZgLq
-	hQuv/wyz8wunNklFJHZbO6PN3UtXdKIyVoIr/8227Swuz3m7b9Oi4plht6SvavIE
-	L/rAxZ9MeA4IOrvyKBpisotukWfr9DQwvOSX07cPRHdHFCG9oh+pSgNIGXLK+sP1
-	IKpr2RKWk8nFplv2emdgS7ZWRZaL0FGn5gDamE15XZURVMOLxQ79WqZi1fWYWDZr
-	4ffdcHJI31AJoSwWWwvKQ==
-X-ME-Sender: <xms:5X6waNHgQdO_rlr2AhdFXPcXJcLWlPFT41L8hdQMK_SHcnl5kYHjTg>
-    <xme:5X6waGJTaem7nhmTP82Zm4qk8zBbKwtPAHrtPGJ1_fH3Vd9qjMnYX9vbtmuLZfl0p
-    d4oEHrFA9V9HssLlC8>
-X-ME-Received: <xmr:5X6waIPsZy-A6ovG6w9vXuLu7RmJTdcxV0Jx10NuAvnU_gkG5ZRY-euslqo_CSCTyVpnePj7xmtlitEVhUtpJhoMEQ>
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1756397290; x=
+	1756483690; bh=j3+OWkF07y6yjk82e93qe4TzhTV25wy1lyEByeMssKg=; b=S
+	CDWaWbCixKxQRbgJLfivzTAZC8nnlKEWeqeYdfIoZPdAXnSrByOeyskh719weh1i
+	CK/TsxC0P0WbOVWZcPxTF/a2+hKB3KxMWmkPLJUE1SH2OugmzY79LO04wwa+Kkcj
+	Xjv2Utsj/NcDBes3paZYCbWtIfItSUZQ3b2Z9e2n5WVxCQk1STb0d3HSy08OoHG9
+	8GrcETJ8RXtw5E/SqyQS8n/RAudOeqsLq09sb7TJIhXQDv9bdQLK335i/H352xnd
+	tpapoGkQISgve7VUfGnnwzxPP5FOJ+NJwqgSgvcjyR7bxdd6puQQqBFdpsmyiPzH
+	/7XV2xBnYIDU9zdngneYA==
+X-ME-Sender: <xms:6n6waIsTgPyCCBacL43ssgKlLP9byhZybNyi-S6vrGTC1REjQp6ezQ>
+    <xme:6n6waKrCeUrgLyjCZKkumAAM1_XrRu-64H_kMlfFLqUPjqxw-2B8bexslmUgk7rOP
+    E6dN_V_v8q5PU9mDOo>
+X-ME-Received: <xmr:6n6waEqcLNyoIq1BR7tusNzyL_Fm9vrNGf2fczA6zohmxgvyULMzIjS0QnWNWs0LmOQTwRGmOr7fyfWICXnRSIPH3A>
 X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtdefgddukedugeejucetufdoteggodetrf
     dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfurfetoffkrfgpnffqhgenuceu
     rghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujf
@@ -58,22 +58,24 @@ X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtdefgddukedugeejucetufdote
     grshesrhgrghhnrghtvggthhdrshgvqeenucggtffrrghtthgvrhhnpeehiefgueevuedt
     fefhheegkeevtdelueeukeevfeduhefhhfejfffggeffleefgeenucevlhhushhtvghruf
     hiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehnihhklhgrshdrshhouggvrhhl
-    uhhnugesrhgrghhnrghtvggthhdrshgvpdhnsggprhgtphhtthhopeejpdhmohguvgepsh
+    uhhnugesrhgrghhnrghtvggthhdrshgvpdhnsggprhgtphhtthhopeekpdhmohguvgepsh
     hmthhpohhuthdprhgtphhtthhopehlrghrshesmhgvthgrfhhoohdruggvpdhrtghpthht
     ohepmhgthhgvhhgrsgeskhgvrhhnvghlrdhorhhgpdhrtghpthhtohephhhvvghrkhhuih
     hlseigshegrghllhdrnhhlpdhrtghpthhtoheplhgruhhrvghnthdrphhinhgthhgrrhht
     sehiuggvrghsohhnsghorghrugdrtghomhdprhgtphhtthhopehlihhnuhigqdhmvgguih
     grsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqrhgvnhgv
     shgrshdqshhotgesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehnihhklh
-    grshdrshhouggvrhhluhhnugdorhgvnhgvshgrshesrhgrghhnrghtvggthhdrshgv
-X-ME-Proxy: <xmx:5X6waGnBW6QcmgPSajy2QHDioXDULQcpgEC3wrtiWsmRBvYlySnIvA>
-    <xmx:5X6waM6qClTTZywjfK8ppAamchUq9hXmuyeDuPbhs1bRxleUm5Y1AQ>
-    <xmx:5X6waK2LdAsBEVkF2MMGtBPI_h8cT9CMBZRVNKd3irqAcl0VqqFNdg>
-    <xmx:5X6waHEEgtQj_xkqRsEKDrmXtGrdt5qz9qWv6brRfTMZkj4NHLWBUw>
-    <xmx:5X6waNIuvyshyWUKgYUMG7l_Usdv-nTJhaql6BNX-Aoe-6ZcOVz2-LuZ>
+    grshdrshhouggvrhhluhhnugdorhgvnhgvshgrshesrhgrghhnrghtvggthhdrshgvpdhr
+    tghpthhtoheplhgruhhrvghnthdrphhinhgthhgrrhhtodhrvghnvghsrghssehiuggvrg
+    hsohhnsghorghrugdrtghomh
+X-ME-Proxy: <xmx:6n6waBZYZJY70ACnimfMHO9r7ulE9P1vuozIN2SQcmXxYP6NGZKjIg>
+    <xmx:6n6waK8l2aqqw5HU76L4fcG4zvbeG9FE-AknTWTsMlk7DCD5lYuMvw>
+    <xmx:6n6waHkawtzpOJMz_jsl2vmjZelMk5VYzg-jdNWMI1QJA56rioQKSw>
+    <xmx:6n6waPywhsXfMYlFQA9uvFEDzxM36eIFIYhrLCnEnbAljpdrHkD7Uw>
+    <xmx:6n6waHa1aQ_moOE4YhrPdI4VSUWSZ-DQHW2GWFWz6BBUZ9fqwlk-qNT2>
 Feedback-ID: i80c9496c:Fastmail
 Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
- 28 Aug 2025 12:08:05 -0400 (EDT)
+ 28 Aug 2025 12:08:10 -0400 (EDT)
 From: =?UTF-8?q?Niklas=20S=C3=B6derlund?= <niklas.soderlund+renesas@ragnatech.se>
 To: Lars-Peter Clausen <lars@metafoo.de>,
 	Mauro Carvalho Chehab <mchehab@kernel.org>,
@@ -81,10 +83,11 @@ To: Lars-Peter Clausen <lars@metafoo.de>,
 	Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
 	linux-media@vger.kernel.org
 Cc: linux-renesas-soc@vger.kernel.org,
-	=?UTF-8?q?Niklas=20S=C3=B6derlund?= <niklas.soderlund+renesas@ragnatech.se>
-Subject: [PATCH v2 02/11] media: adv7180: Add missing lock in suspend callback
-Date: Thu, 28 Aug 2025 18:06:45 +0200
-Message-ID: <20250828160654.1467762-3-niklas.soderlund+renesas@ragnatech.se>
+	=?UTF-8?q?Niklas=20S=C3=B6derlund?= <niklas.soderlund+renesas@ragnatech.se>,
+	Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>
+Subject: [PATCH v2 04/11] media: adv7180: Use v4l2-ctrls core to handle s_ctrl locking
+Date: Thu, 28 Aug 2025 18:06:47 +0200
+Message-ID: <20250828160654.1467762-5-niklas.soderlund+renesas@ragnatech.se>
 X-Mailer: git-send-email 2.51.0
 In-Reply-To: <20250828160654.1467762-1-niklas.soderlund+renesas@ragnatech.se>
 References: <20250828160654.1467762-1-niklas.soderlund+renesas@ragnatech.se>
@@ -97,50 +100,57 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-The adv7180_set_power() utilizes adv7180_write() which in turn requires
-the state mutex to be held, take it before calling adv7180_set_power()
-to avoid tripping a lockdep_assert_held().
+Instead of handling the state lock ourself in .s_ctrl use the v4l2-ctrls
+core to handle it for us. This will allow us later to use the unlocked
+__v4l2_ctrl_handler_setup() in initialization code where the state lock
+is already held.
+
+Add a lockdep assert to demonstrate the mutex must be held when setting
+controls.
+
+There is no functional change.
 
 Signed-off-by: Niklas Söderlund <niklas.soderlund+renesas@ragnatech.se>
+Reviewed-by: Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>
 ---
-* Changes since v1
-- Take the lock in more locations that was ignored as later patches in
-  the series reworked them and solved the issue in the rework process.
----
- drivers/media/i2c/adv7180.c | 6 ++++++
- 1 file changed, 6 insertions(+)
+ drivers/media/i2c/adv7180.c | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
 diff --git a/drivers/media/i2c/adv7180.c b/drivers/media/i2c/adv7180.c
-index ef63b0ee9b8d..b7f175650bd0 100644
+index 9dbd33c4a30c..7b0387151c3a 100644
 --- a/drivers/media/i2c/adv7180.c
 +++ b/drivers/media/i2c/adv7180.c
-@@ -813,6 +813,8 @@ static int adv7180_set_pad_format(struct v4l2_subdev *sd,
- 
- 	if (format->which == V4L2_SUBDEV_FORMAT_ACTIVE) {
- 		if (state->field != format->format.field) {
-+			guard(mutex)(&state->mutex);
-+
- 			state->field = format->format.field;
- 			adv7180_set_power(state, false);
- 			adv7180_set_field_mode(state);
-@@ -1549,6 +1551,8 @@ static int adv7180_suspend(struct device *dev)
- 	struct v4l2_subdev *sd = dev_get_drvdata(dev);
+@@ -601,11 +601,11 @@ static int adv7180_s_ctrl(struct v4l2_ctrl *ctrl)
+ {
+ 	struct v4l2_subdev *sd = to_adv7180_sd(ctrl);
  	struct adv7180_state *state = to_state(sd);
+-	int ret = mutex_lock_interruptible(&state->mutex);
++	int ret = 0;
+ 	int val;
  
-+	guard(mutex)(&state->mutex);
+-	if (ret)
+-		return ret;
++	lockdep_assert_held(&state->mutex);
 +
- 	return adv7180_set_power(state, false);
+ 	val = ctrl->val;
+ 	switch (ctrl->id) {
+ 	case V4L2_CID_BRIGHTNESS:
+@@ -647,7 +647,6 @@ static int adv7180_s_ctrl(struct v4l2_ctrl *ctrl)
+ 		ret = -EINVAL;
+ 	}
+ 
+-	mutex_unlock(&state->mutex);
+ 	return ret;
  }
  
-@@ -1562,6 +1566,8 @@ static int adv7180_resume(struct device *dev)
- 	if (ret < 0)
- 		return ret;
+@@ -668,6 +667,7 @@ static const struct v4l2_ctrl_config adv7180_ctrl_fast_switch = {
+ static int adv7180_init_controls(struct adv7180_state *state)
+ {
+ 	v4l2_ctrl_handler_init(&state->ctrl_hdl, 4);
++	state->ctrl_hdl.lock = &state->mutex;
  
-+	guard(mutex)(&state->mutex);
-+
- 	ret = adv7180_set_power(state, state->powered);
- 	if (ret)
- 		return ret;
+ 	v4l2_ctrl_new_std(&state->ctrl_hdl, &adv7180_ctrl_ops,
+ 			  V4L2_CID_BRIGHTNESS, ADV7180_BRI_MIN,
 -- 
 2.51.0
 
