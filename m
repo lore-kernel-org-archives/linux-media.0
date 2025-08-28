@@ -1,143 +1,96 @@
-Received: from fhigh-b3-smtp.messagingengine.com (fhigh-b3-smtp.messagingengine.com [202.12.124.154])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5533527E7FB;
-	Thu, 28 Aug 2025 16:08:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.154
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8EB89285065;
+	Thu, 28 Aug 2025 16:08:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756397296; cv=none; b=tp01NkJGy7Wv3e5gJ6n8QaeFTakek0WOU1qyHKhNKOvI1maS1Hh5VO5Ar4PuSZHnqNLMGQarWJIS7CS3ZwhfMvFw8xVHCaeu7qlbuRGME98qEpZT+zDxnOQJV9GotKHOxYV2LuuVEzZEr6VaAKz6MV+In0Wvh2ol5AwhtFBLv6s=
+	t=1756397298; cv=none; b=GaL5WQ5IUtYB0myCIoSvjXbH8sGvd+2tc+lWGA7l2QNWVTKpOMVgrLYa6SQdyPrQi527xxpygoqPJsW9dlgkTnjlYDqby7daltFe3fIGWPzuz6PlDtVL/Pp0+In2kr3UAyXuFtTS1LXXacomHZEXqv+9w97lit4V0yk8U701veo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756397296; c=relaxed/simple;
-	bh=jnVPRNznxjDgwuNDiSyCXzcT3UR3gg3VlLLzZg+Dnqg=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=NCY8R2n6FmQPyYrEReaK82gmdiyzU8GCMNA2gqr4xjDMWmQkQ6InBcLlD13RU1tbOdQzibVqzp0K5bFIYRh7RaOrLStXm+pJgXt1xj8OhjIMZ/Rq5l/1ylLPn0E4VL5hpw0E+LC5yxR048YVVmttfwQrwNT6wmXa8+rHveBnfzE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ragnatech.se; spf=pass smtp.mailfrom=ragnatech.se; dkim=pass (2048-bit key) header.d=ragnatech.se header.i=@ragnatech.se header.b=gb9CL1P5; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=d8+QHjT9; arc=none smtp.client-ip=202.12.124.154
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ragnatech.se
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ragnatech.se
+	s=arc-20240116; t=1756397298; c=relaxed/simple;
+	bh=chl2pglmKuX5THNV4UczW2DfJ8GWxqeVOVktQ94bii0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=VQ0iPO2urATIExs855kEOTD9zwSXSsLJle8XRxFdrgWRsGJpzB+JLUVZzcKAj7k8tgs7AaB8chpWyl2816H3is3dsVUmAju+3Bxvv3z4F8jH0IB6UkZdONEpAu00MwmXP4gWs8YDHAk18kFW9grbsB6AUMgtR5iHCZWtvLBs+78=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=gAJdjTK2; arc=none smtp.client-ip=192.198.163.13
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ragnatech.se header.i=@ragnatech.se header.b="gb9CL1P5";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="d8+QHjT9"
-Received: from phl-compute-05.internal (phl-compute-05.internal [10.202.2.45])
-	by mailfhigh.stl.internal (Postfix) with ESMTP id 621107A01BC;
-	Thu, 28 Aug 2025 12:08:13 -0400 (EDT)
-Received: from phl-mailfrontend-02 ([10.202.2.163])
-  by phl-compute-05.internal (MEProxy); Thu, 28 Aug 2025 12:08:13 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ragnatech.se; h=
-	cc:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to; s=fm3; t=1756397293;
-	 x=1756483693; bh=HHaRGTVk2JXY1NoNjjdd7UT/faquBH+w5rUZ4m7wa6E=; b=
-	gb9CL1P59XArEjugFU9x7qd33uS/y6raF9jOtOEaLtCBb0jLTdCqd2Zxz7A9sh79
-	7GpzXLjbmI4lms/vum1BRKpRgf+0jVdY6TMOysuoiZyAm1u67wCb3/7oI6vAViUG
-	8VJvYfMz70TFBLnjw6/EXWRKQoK80xGeE/kAkVSmL7OPQBlqwtADOg1bIMRUzrag
-	muD2D46F4hu4LhjTWurxXy4H5+5WUcvbhv55y1ihRLfujlPBoHpFZax4Ne7qGB/y
-	fFhsofFwjZ2kX3jgm0P27DQGzu8YCmTTmLwcqItXMy4IY0zXGIZzMd09iI5IUVBx
-	3HBKfSLPZm1TAeso0HUi3w==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1756397293; x=
-	1756483693; bh=HHaRGTVk2JXY1NoNjjdd7UT/faquBH+w5rUZ4m7wa6E=; b=d
-	8+QHjT9e3paV1eWKwr/YhJcp+Z1fnUWP4lqZ414vUBsG244D5+DTRzTTKvw+IGiL
-	H8UAsW6zttN1AuhgvDcO5+cw0bJz39e8LmCyAKsgigXA2LnEDRBfAj41ADVzUMje
-	wuwq0MgN1Ifp+HTD7uZwDniIGL1lCXp2OFxebVFBx3wb4KvnmR12Y37XtlgD4lS8
-	NapJU+adjuMxmUR/riyGR+Dn9xcf2udK8QldgOEJGIeUoczLDeSFR4yM7D5pW9Sk
-	LRkuHaQtUY0mltPf7PfiNcVC71tHWhgtJiSSLM9oJojxqUQZrX4K6qnAnk1oSwfA
-	OAgchq2sz4OEy26U9bAWg==
-X-ME-Sender: <xms:7X6waB3eI4rtrVO4l41BKojnk3NoH5iGOmRh0GcSGBfZXG9sHzFstg>
-    <xme:7X6waNQuzhtL_p2qc4mepbEMb5yQpy56oixyop0Pv7rM0fTBZkA9TVJMFbf1fhfT9
-    PqZNGIw4dHcQ0VdFDU>
-X-ME-Received: <xmr:7X6waCxmBPlE9_XAKgDL-FyPubqOMV3B2vwIa8Zr_bLQtww8WQ2TOJ1gNB8GRMdRlZ83fWmRQ64W6oIO-OvuFMlRUA>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtdefgddukedugeeiucetufdoteggodetrf
-    dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfurfetoffkrfgpnffqhgenuceu
-    rghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujf
-    gurhephffvvefufffkofgjfhggtgfgsehtkeertdertdejnecuhfhrohhmpefpihhklhgr
-    shcuufpnuggvrhhluhhnugcuoehnihhklhgrshdrshhouggvrhhluhhnugdorhgvnhgvsh
-    grshesrhgrghhnrghtvggthhdrshgvqeenucggtffrrghtthgvrhhnpeehiefgueevuedt
-    fefhheegkeevtdelueeukeevfeduhefhhfejfffggeffleefgeenucevlhhushhtvghruf
-    hiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehnihhklhgrshdrshhouggvrhhl
-    uhhnugesrhgrghhnrghtvggthhdrshgvpdhnsggprhgtphhtthhopeekpdhmohguvgepsh
-    hmthhpohhuthdprhgtphhtthhopehlrghrshesmhgvthgrfhhoohdruggvpdhrtghpthht
-    ohepmhgthhgvhhgrsgeskhgvrhhnvghlrdhorhhgpdhrtghpthhtohephhhvvghrkhhuih
-    hlseigshegrghllhdrnhhlpdhrtghpthhtoheplhgruhhrvghnthdrphhinhgthhgrrhht
-    sehiuggvrghsohhnsghorghrugdrtghomhdprhgtphhtthhopehlihhnuhigqdhmvgguih
-    grsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqrhgvnhgv
-    shgrshdqshhotgesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehnihhklh
-    grshdrshhouggvrhhluhhnugdorhgvnhgvshgrshesrhgrghhnrghtvggthhdrshgvpdhr
-    tghpthhtoheplhgruhhrvghnthdrphhinhgthhgrrhhtodhrvghnvghsrghssehiuggvrg
-    hsohhnsghorghrugdrtghomh
-X-ME-Proxy: <xmx:7X6waFBZ_tW_99-JUpeBi0SH_dEgYsoMDKpHsq-cikXQU111OTDekA>
-    <xmx:7X6waGHH_Yl766gywDsTbFXvfL7qNYKKYvuFYsyHclGWmAE-PTitvw>
-    <xmx:7X6waEPfuDQKjoAym5_aiMD5QmZ7LjzMaOjgAfduCfI_xrqdBMzcwA>
-    <xmx:7X6waP72nYRcXJ9Gsyb_XP2WqtVfXaq5H-vcV1HGhy_ehj_8NPfhlw>
-    <xmx:7X6waJgLFnEN9QOIO1lMIH0tgAvxzj5IeNyAYr0D76tUdb-v7FFPDT3H>
-Feedback-ID: i80c9496c:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
- 28 Aug 2025 12:08:12 -0400 (EDT)
-From: =?UTF-8?q?Niklas=20S=C3=B6derlund?= <niklas.soderlund+renesas@ragnatech.se>
-To: Lars-Peter Clausen <lars@metafoo.de>,
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="gAJdjTK2"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1756397297; x=1787933297;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=chl2pglmKuX5THNV4UczW2DfJ8GWxqeVOVktQ94bii0=;
+  b=gAJdjTK2tyJp6Kma2k1Gwzx4+iEoaX0M/3jdWjpdQMnMqubZ4p5sh787
+   0VrCZPUdTjTy4wCxJjdnxFUB7nydPkaYcW6LnJVJCsFJUJqgUcIH6c4Jh
+   B3tct9fp7EbQpPuhdc9UjML68BgqpGQTBqy7O8SMvUWlqe/WW7XAd9Sdn
+   47rGfOQ7QH0LASk6pQ19nlR5FW0nGOEHAfwANf9Z8iIYBmqglX0ch5o4h
+   5y7kfa1UPL0uLVq6ffzkiFNRtjeLVn+1BzGR5Ffyfphlbm0nnoo8pcgvH
+   APY69hKJOxb4JIFOJ5CKgF7kSEkAB7LlKd7bFYVH68l/kb2hIgG2qMacZ
+   g==;
+X-CSE-ConnectionGUID: wQklFKzrR1ulYeD3orhqjg==
+X-CSE-MsgGUID: C7YqnZdMRWaslGcvh+dypA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11536"; a="61306461"
+X-IronPort-AV: E=Sophos;i="6.18,220,1751266800"; 
+   d="scan'208";a="61306461"
+Received: from fmviesa003.fm.intel.com ([10.60.135.143])
+  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Aug 2025 09:08:16 -0700
+X-CSE-ConnectionGUID: 6NXhRMzqTDaxYPKfnPew0g==
+X-CSE-MsgGUID: d3UIs7vBS2q49mxX4Zsurg==
+X-ExtLoop1: 1
+Received: from fpallare-mobl4.ger.corp.intel.com (HELO kekkonen.fi.intel.com) ([10.245.245.135])
+  by fmviesa003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Aug 2025 09:08:11 -0700
+Received: from kekkonen.localdomain (localhost [IPv6:::1])
+	by kekkonen.fi.intel.com (Postfix) with SMTP id ABFA411F9D4;
+	Thu, 28 Aug 2025 19:08:08 +0300 (EEST)
+Date: Thu, 28 Aug 2025 19:08:08 +0300
+Organization: Intel Finland Oy - BIC 0357606-4 - c/o Alberga Business Park, 6 krs, Bertel Jungin Aukio 5, 02600 Espoo
+From: Sakari Ailus <sakari.ailus@linux.intel.com>
+To: Hardevsinh Palaniya <hardevsinh.palaniya@siliconsignals.io>
+Cc: Himanshu Bhavani <himanshu.bhavani@siliconsignals.io>,
 	Mauro Carvalho Chehab <mchehab@kernel.org>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
 	Hans Verkuil <hverkuil@xs4all.nl>,
-	Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-	linux-media@vger.kernel.org
-Cc: linux-renesas-soc@vger.kernel.org,
-	=?UTF-8?q?Niklas=20S=C3=B6derlund?= <niklas.soderlund+renesas@ragnatech.se>,
-	Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>
-Subject: [PATCH v2 05/11] media: adv7180: Setup controls every time the device is reset
-Date: Thu, 28 Aug 2025 18:06:48 +0200
-Message-ID: <20250828160654.1467762-6-niklas.soderlund+renesas@ragnatech.se>
-X-Mailer: git-send-email 2.51.0
-In-Reply-To: <20250828160654.1467762-1-niklas.soderlund+renesas@ragnatech.se>
-References: <20250828160654.1467762-1-niklas.soderlund+renesas@ragnatech.se>
+	Ricardo Ribalda <ribalda@chromium.org>,
+	Hans de Goede <hansg@kernel.org>,
+	Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
+	=?iso-8859-1?Q?Andr=E9?= Apitzsch <git@apitzsch.eu>,
+	Matthias Fend <matthias.fend@emfend.at>,
+	Arnd Bergmann <arnd@arndb.de>,
+	Dongcheng Yan <dongcheng.yan@intel.com>,
+	Benjamin Mugnier <benjamin.mugnier@foss.st.com>,
+	Sylvain Petinot <sylvain.petinot@foss.st.com>,
+	Jingjing Xiong <jingjing.xiong@intel.com>,
+	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+	Heimir Thor Sverrisson <heimir.sverrisson@gmail.com>,
+	linux-media@vger.kernel.org, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v8 0/2] media: i2c: Add ov2735 camera sensor driver
+Message-ID: <aLB-6GsY-OiCZi9I@kekkonen.localdomain>
+References: <20250821143126.319470-1-hardevsinh.palaniya@siliconsignals.io>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250821143126.319470-1-hardevsinh.palaniya@siliconsignals.io>
 
-The device initialization code resets the whole device, thus the initial
-controls set at probe are lost as adv7180_init_controls() are called
-before init_device(). Additionally the controls were never restored
-after the device where reset coming back from suspend.
+Hi Hardev,
 
-Solve this by separate the setup of the controls from the creation of
-them, and always set them up when the device is reset.
+On Thu, Aug 21, 2025 at 08:01:11PM +0530, Hardevsinh Palaniya wrote:
+> The Omnivision OV2735 is a 1/2.7-Inch CMOS image sensor with an                 
+> active array size of 1920 x 1080.                                               
 
-Signed-off-by: Niklas Söderlund <niklas.soderlund+renesas@ragnatech.se>
-Reviewed-by: Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>
----
-* Changes since v1
-- Fix spelling in commit message.
----
- drivers/media/i2c/adv7180.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+Have you run v4l2-compliance on this? Could you do so and provide the
+report, please?
 
-diff --git a/drivers/media/i2c/adv7180.c b/drivers/media/i2c/adv7180.c
-index 7b0387151c3a..8409ee9acc4f 100644
---- a/drivers/media/i2c/adv7180.c
-+++ b/drivers/media/i2c/adv7180.c
-@@ -700,7 +700,6 @@ static int adv7180_init_controls(struct adv7180_state *state)
- 		v4l2_ctrl_handler_free(&state->ctrl_hdl);
- 		return err;
- 	}
--	v4l2_ctrl_handler_setup(&state->ctrl_hdl);
- 
- 	return 0;
- }
-@@ -898,6 +897,8 @@ static int init_device(struct adv7180_state *state)
- 
- 	adv7180_set_field_mode(state);
- 
-+	__v4l2_ctrl_handler_setup(&state->ctrl_hdl);
-+
- 	/* register for interrupts */
- 	if (state->irq > 0) {
- 		/* config the Interrupt pin to be active low */
 -- 
-2.51.0
+Kind regards,
 
+Sakari Ailus
