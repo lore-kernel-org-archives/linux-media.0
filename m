@@ -1,170 +1,92 @@
-Received: from fout-b8-smtp.messagingengine.com (fout-b8-smtp.messagingengine.com [202.12.124.151])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.21])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B68E72C2374;
-	Thu, 28 Aug 2025 16:08:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.151
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BBC9A2522A1;
+	Thu, 28 Aug 2025 16:09:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.21
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756397310; cv=none; b=Af91Ph4ToCYg4QmeZX6po+nl9oZPLSrzNrsGahkiELHS2j3x5wvxYVLOVOGamdbJDy2yrIYq/D+HrRBluz0KXAM+usYhZ10dPgeEZjEdXaLqLpItYQZs881xxNfNEk51MjKxpo41CXPfG6zec1l91CdNDtZa/UvTgbOEoL25Lyc=
+	t=1756397393; cv=none; b=kIytx9bgOkeHDeQv9rGCU869bGzN572NrT8BR2sgH4GpIOvxFUmLRQgy3SWZTXykkU/mV6aN13R3dFDuoyvLTYPSy5wEvQBSS16w+V6DyWfPqdOMA/l7aGI0TXq/mpLqkpZLzwhBLB6QhaKZK6ISog+6kAr1GJRsyMAuGKIzqNM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756397310; c=relaxed/simple;
-	bh=VJfn+oYYSy4ZA3gD/v34MccuM8z6wCCXGEg2ktmhxn4=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=iikfyxUBb3DSCg62ezOBh95B1GY6ECYEEsRrRX3wqLDiHcWMNfDaocHLmpbWL8Vxn22uODZSomrQpb5SI51qkVh9xUWxtBP5Tvg+RjRWKmqWMzUl2BRtMIne3Yaw0iap2cnD6nkKjzTibXY7OMgnvYaJvfZez0TrKtcVV+totFU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ragnatech.se; spf=pass smtp.mailfrom=ragnatech.se; dkim=pass (2048-bit key) header.d=ragnatech.se header.i=@ragnatech.se header.b=YSdu8507; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=gKB7u7xo; arc=none smtp.client-ip=202.12.124.151
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ragnatech.se
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ragnatech.se
+	s=arc-20240116; t=1756397393; c=relaxed/simple;
+	bh=DJV4nOIO3nuYh+b58vU1ix9mpvZ2wK7fZXE/eeHyXPQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=PSQLVvgRatawLUPW4goV4tCen0avf/c54OFajJcJko7jP5l7cgZVwyZEcc/DYhasWE9eKjJrBF+a1arH3IsOqOrYjoy2jPlYBFJxh5XUGN7Wu1sxE8vySdCWxoJIV/l8a01iDpgzBQ0i0QYS9toICk7dWnUPB3xXiRYv6wEFifE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=SuS1wiSQ; arc=none smtp.client-ip=198.175.65.21
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ragnatech.se header.i=@ragnatech.se header.b="YSdu8507";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="gKB7u7xo"
-Received: from phl-compute-09.internal (phl-compute-09.internal [10.202.2.49])
-	by mailfout.stl.internal (Postfix) with ESMTP id B640D1D0017C;
-	Thu, 28 Aug 2025 12:08:27 -0400 (EDT)
-Received: from phl-mailfrontend-02 ([10.202.2.163])
-  by phl-compute-09.internal (MEProxy); Thu, 28 Aug 2025 12:08:27 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ragnatech.se; h=
-	cc:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to; s=fm3; t=1756397307;
-	 x=1756483707; bh=y5BVgo3OvyYLOab0BxHeSijM5P7vg3KbiuQ4Gr8Z3eU=; b=
-	YSdu8507rv++pX1Qiyr2f5ng9/tlWhyxIiTvbutc3IMJdZ5ldan792/mD3vjfIFM
-	Y+oVCSwG+SdUObBY7TuFBHQ1XZ1zOoBb/BnDu5eCZHmjmDgjMdT7tAWIaK9TdcvO
-	RptzEQXIg38VTdOBRUXR25tW2rSxrTgXyivwazZ8GY6BZnni5TIeJgnZenEDMdEo
-	lLRyeIhcTPX+xtYU5Bct/qVb4CSqUEFhmVTs2FYGXGChoJOjjygkVkgr3NFtdnt4
-	DxSneWtCQjYjmFByT9bPkwfcMemfbSKwDx1iVrCQp5dUI1xnKRVKI2FD8sHAWR5p
-	sAHPtxunsDzO6ALWAQpT3g==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1756397307; x=
-	1756483707; bh=y5BVgo3OvyYLOab0BxHeSijM5P7vg3KbiuQ4Gr8Z3eU=; b=g
-	KB7u7xoBO26MH8kn3CX5kHnBlf9XWKfO06ilGikkQaUkAZn6G69rS6e6nrHGgGz5
-	mf73sk2zhiqjR+1qEJ8zLrjTPuXAsQ2blHWnRzzajnWeAVY+DU8V28gkSIjLsz9e
-	qaCHacYwulO9+IaOz9VJsMSmWmtLq5+f+5+TMwKYl9/c9btVS4psV+56kH7G8wYs
-	1qAG6UoYTElP+sz3Vp+c1+e6WwOARp42aflujxmMgdnk7On7lIPw4uigWencG5VA
-	AzoWlDYAZjCj3drW5NiY51188g32GolnkZnHx1Ozp13OR9PEHQdVfDZDMuZ7Bcsn
-	ky14RRKySgNdins0WWQgw==
-X-ME-Sender: <xms:-36waN6KMHi9kphkQWW_3hA8GYpH2RjTRv-SMeJ4ThBMzPPnxXg6jg>
-    <xme:-36waOtoy5l7WG8N3ikSzBnmwNSkYRZ6l2lFaIhKD2y4ahnuF30cbENBdP-d2LUOU
-    TmYnLSfHjzwF7gxCwQ>
-X-ME-Received: <xmr:-36waNgt0BCua9w695w1Ms4GarpFR08YU8hDrYY22Dg4yLafoN4-m6d99GAu8ZzrQM5OO4K8jqcw4WB_9i4finWUfw>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtdefgddukedugeeiucetufdoteggodetrf
-    dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfurfetoffkrfgpnffqhgenuceu
-    rghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujf
-    gurhephffvvefufffkofgjfhggtgfgsehtkeertdertdejnecuhfhrohhmpefpihhklhgr
-    shcuufpnuggvrhhluhhnugcuoehnihhklhgrshdrshhouggvrhhluhhnugdorhgvnhgvsh
-    grshesrhgrghhnrghtvggthhdrshgvqeenucggtffrrghtthgvrhhnpeehiefgueevuedt
-    fefhheegkeevtdelueeukeevfeduhefhhfejfffggeffleefgeenucevlhhushhtvghruf
-    hiiigvpedvnecurfgrrhgrmhepmhgrihhlfhhrohhmpehnihhklhgrshdrshhouggvrhhl
-    uhhnugesrhgrghhnrghtvggthhdrshgvpdhnsggprhgtphhtthhopeejpdhmohguvgepsh
-    hmthhpohhuthdprhgtphhtthhopehlrghrshesmhgvthgrfhhoohdruggvpdhrtghpthht
-    ohepmhgthhgvhhgrsgeskhgvrhhnvghlrdhorhhgpdhrtghpthhtohephhhvvghrkhhuih
-    hlseigshegrghllhdrnhhlpdhrtghpthhtoheplhgruhhrvghnthdrphhinhgthhgrrhht
-    sehiuggvrghsohhnsghorghrugdrtghomhdprhgtphhtthhopehlihhnuhigqdhmvgguih
-    grsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqrhgvnhgv
-    shgrshdqshhotgesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehnihhklh
-    grshdrshhouggvrhhluhhnugdorhgvnhgvshgrshesrhgrghhnrghtvggthhdrshgv
-X-ME-Proxy: <xmx:-36waJrwzTji2JOwgSPKGZ1exMFbeLO4oMJt076NN89_tPlp_TYkaQ>
-    <xmx:-36waKvIOh599zNhEy7FrdHu4RLxvLA6nYWo0_zizq2san3NzJhQFQ>
-    <xmx:-36waMbQgYo9SlMCNci43oz0EqLDkQWDGcKENny0KN5s9W8CtlULYw>
-    <xmx:-36waBbmSDp4dsT7OkxLQRtTwdUUoZNMsrmw3gW9xz06atImbWk_PA>
-    <xmx:-36waHtdqaDubB9UxdeO4oTw4Dp0dDGFFnw9uiL-3mmy3RiRLmz_AS0u>
-Feedback-ID: i80c9496c:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
- 28 Aug 2025 12:08:26 -0400 (EDT)
-From: =?UTF-8?q?Niklas=20S=C3=B6derlund?= <niklas.soderlund+renesas@ragnatech.se>
-To: Lars-Peter Clausen <lars@metafoo.de>,
-	Mauro Carvalho Chehab <mchehab@kernel.org>,
-	Hans Verkuil <hverkuil@xs4all.nl>,
-	Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-	linux-media@vger.kernel.org
-Cc: linux-renesas-soc@vger.kernel.org,
-	=?UTF-8?q?Niklas=20S=C3=B6derlund?= <niklas.soderlund+renesas@ragnatech.se>
-Subject: [PATCH v2 11/11] media: adv7180: Only validate format in querystd
-Date: Thu, 28 Aug 2025 18:06:54 +0200
-Message-ID: <20250828160654.1467762-12-niklas.soderlund+renesas@ragnatech.se>
-X-Mailer: git-send-email 2.51.0
-In-Reply-To: <20250828160654.1467762-1-niklas.soderlund+renesas@ragnatech.se>
-References: <20250828160654.1467762-1-niklas.soderlund+renesas@ragnatech.se>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="SuS1wiSQ"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1756397392; x=1787933392;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=DJV4nOIO3nuYh+b58vU1ix9mpvZ2wK7fZXE/eeHyXPQ=;
+  b=SuS1wiSQUDVn9ybRjmYasxaMlod5UANlU8WtJVtqxaFP273HMyEBJpWe
+   uX+S1oVjpK+wt42JWha7BfFDs/wecSM0CXbgL+Mhk0cZ3RtlSI9ck2mPT
+   doItWajHcjj6RQmqcSY0ZVzmA3B+V5zmayuoFDyBbtC0rASG8NkuX++0B
+   8CWvvNKtfRROaJRSgLHS1oVC7u0nkglTD4FQwredWKwHSMqd981UbZ2pC
+   gppDaJjq00WQLjidirbWuCwEjJ6SvQtF25awou/DGthSgWAoSVND7dZDM
+   B6OgQu90ibBrfS1hxdCFFb3iNx3/tU3KeHd5V+ijWsAILHMqvR6IgNLRy
+   A==;
+X-CSE-ConnectionGUID: pxQA7LywQ6W0EvR6GCUs3A==
+X-CSE-MsgGUID: yT6HW2ptSkahllxQbyiZ1g==
+X-IronPort-AV: E=McAfee;i="6800,10657,11531"; a="58598950"
+X-IronPort-AV: E=Sophos;i="6.17,312,1747724400"; 
+   d="scan'208";a="58598950"
+Received: from orviesa005.jf.intel.com ([10.64.159.145])
+  by orvoesa113.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Aug 2025 09:09:51 -0700
+X-CSE-ConnectionGUID: PYb5NkQMRASt7Jce8kfFLQ==
+X-CSE-MsgGUID: 42Vi0V64S1qDo6iY6wtvYQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.18,220,1751266800"; 
+   d="scan'208";a="175440381"
+Received: from fpallare-mobl4.ger.corp.intel.com (HELO kekkonen.fi.intel.com) ([10.245.245.135])
+  by orviesa005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Aug 2025 09:09:50 -0700
+Received: from kekkonen.localdomain (localhost [IPv6:::1])
+	by kekkonen.fi.intel.com (Postfix) with SMTP id 305AF11F9D4;
+	Thu, 28 Aug 2025 19:09:46 +0300 (EEST)
+Date: Thu, 28 Aug 2025 19:09:46 +0300
+Organization: Intel Finland Oy - BIC 0357606-4 - c/o Alberga Business Park, 6 krs, Bertel Jungin Aukio 5, 02600 Espoo
+From: Sakari Ailus <sakari.ailus@linux.intel.com>
+To: Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>
+Cc: Mauro Carvalho Chehab <mchehab@kernel.org>,
+	Hans Verkuil <hverkuil@kernel.org>, Rob Herring <robh@kernel.org>,
+	Tarang Raval <tarang.raval@siliconsignals.io>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>, linux-media@vger.kernel.org,
+	devicetree@vger.kernel.org
+Subject: Re: [PATCH v4 0/2] media: i2c: Add OmniVision OV6211 image sensor
+ driver
+Message-ID: <aLB_SnOcAeCndNcf@kekkonen.localdomain>
+References: <20250820224541.130229-1-vladimir.zapolskiy@linaro.org>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250820224541.130229-1-vladimir.zapolskiy@linaro.org>
 
-The .querystd callback should not program the device with the detected
-standard, it should only report the standard to user-space. User-space
-may then use .s_std to set the standard, if it wants to use it.
+Hi Vladimir,
 
-All that is required of .querystd is to setup the auto detection of
-standards and report its findings.
+On Thu, Aug 21, 2025 at 01:45:39AM +0300, Vladimir Zapolskiy wrote:
+> OmniVision OV6211 is a monochrome image sensor, which produces frames in
+> 8/10-bit raw output format and supports 400x400, 200x200 and 100x100
+> output image resolution modes.
+> 
+> At the moment the only supported resolution in the device driver is
+> 400x400@120fps (Y8).
+> 
+> The driver version is based on top media/master, which contains a new
+> devm_v4l2_sensor_clk_get() helper.
 
-While at it add some documentation on why this can't happen while
-streaming and improve the error handling using a scoped guard.
+Could you provide a v4l2-compliance output on this and the other driver,
+please?
 
-Signed-off-by: Niklas Söderlund <niklas.soderlund+renesas@ragnatech.se>
----
- drivers/media/i2c/adv7180.c | 37 ++++++++++++++++---------------------
- 1 file changed, 16 insertions(+), 21 deletions(-)
-
-diff --git a/drivers/media/i2c/adv7180.c b/drivers/media/i2c/adv7180.c
-index 47112b43769d..ca0bdfa9dcda 100644
---- a/drivers/media/i2c/adv7180.c
-+++ b/drivers/media/i2c/adv7180.c
-@@ -388,32 +388,27 @@ static inline struct adv7180_state *to_state(struct v4l2_subdev *sd)
- static int adv7180_querystd(struct v4l2_subdev *sd, v4l2_std_id *std)
- {
- 	struct adv7180_state *state = to_state(sd);
--	int err = mutex_lock_interruptible(&state->mutex);
--	if (err)
--		return err;
-+	int ret;
- 
--	if (state->streaming) {
--		err = -EBUSY;
--		goto unlock;
--	}
-+	guard(mutex)(&state->mutex);
- 
--	err = adv7180_set_video_standard(state,
--			ADV7180_STD_AD_PAL_BG_NTSC_J_SECAM);
--	if (err)
--		goto unlock;
-+	/*
-+	 * We can't sample the standard if the device is streaming as that would
-+	 * interfere with the capture session as the VID_SEL reg is touched.
-+	 */
-+	if (state->streaming)
-+		return -EBUSY;
- 
-+	/* Set the standard to autodetect PAL B/G/H/I/D, NTSC J or SECAM */
-+	ret = adv7180_set_video_standard(state,
-+					 ADV7180_STD_AD_PAL_BG_NTSC_J_SECAM);
-+	if (ret)
-+		return ret;
-+
-+	/* Allow some time for the autodetection to run. */
- 	msleep(100);
--	__adv7180_status(state, NULL, std);
- 
--	err = v4l2_std_to_adv7180(state->curr_norm);
--	if (err < 0)
--		goto unlock;
--
--	err = adv7180_set_video_standard(state, err);
--
--unlock:
--	mutex_unlock(&state->mutex);
--	return err;
-+	return __adv7180_status(state, NULL, std);
- }
- 
- static int adv7180_s_routing(struct v4l2_subdev *sd, u32 input,
 -- 
-2.51.0
+Kind regards,
 
+Sakari Ailus
