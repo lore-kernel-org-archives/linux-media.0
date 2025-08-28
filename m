@@ -1,761 +1,400 @@
-Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2052.outbound.protection.outlook.com [40.107.93.52])
+Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2081.outbound.protection.outlook.com [40.107.94.81])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 30305308F30;
-	Thu, 28 Aug 2025 10:09:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.93.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D8EFF309DC1;
+	Thu, 28 Aug 2025 10:15:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.94.81
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756375762; cv=fail; b=NBdBJ6kBR9ogQypZ1Jdm4PgRcKhL83nItwTyehtJWUy+x56xocEM+kaJ8TAEoCkMfYyd1nZ658zeAecvQfquTitb0NlQJAlkUVxX3fhQmqg2OH6j4JzUOFoPwUfa1vLbwKZ7bhTvFWuUsViM1c1Yu4v31Izmx5wIT1C2aU9esXE=
+	t=1756376151; cv=fail; b=lDSoX4g+o+Mfre4lw5Kj+p3pwauvEEh/29wy5OYtDcsaCi1/s36BXzFkYKaIblQ9XiBz2bUu22oWERQwARrY1VoGVvkwgjZwT3UC0ZnEsf4FDtqvSXgDgB6BxjiR1R69q8dFlinCBk8vYMYfZ7krxHPs3YMB/ijhG4ObEHms1bI=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756375762; c=relaxed/simple;
-	bh=Ri2ttzRBlksCLPHQcOVIVeuYsealhfvbZPkJUAq8j1s=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=TwiTY5ByN5KAVPuCn+SVrRLH1jun3FTcghC/4Ow1Pii7i1TRibziUgmRuFaJTh3SfWPhIYwp/aomXaxxeWY0JMxKMvvPXioX30jQcu1+7bHACGZbsI5ZM9vhXEJ9XQ/DxC57TCmguYNKHnyYIlbtfGbj701CuO+hEI6Z1OtukMY=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=OlxmYpkw; arc=fail smtp.client-ip=40.107.93.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
+	s=arc-20240116; t=1756376151; c=relaxed/simple;
+	bh=3dMGRBzLed/GqAI6h734dvWQm1P0Kago5a2PDQITyCc=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=HoaULxbUmATTDyG2A7kbYWavZ6WR1Yav890zpmL1tUYKyg+lGoORwS6ZjUQjXa39cfnC6ooaXWENWRxq0Ywvj8T8qTtRoh3zRrjGbaIJsflpRyCCX6jqA6V38DKKWd/IJp9g/HhqmhKHKQt1rc9qjY58CNIfKew/hXXuDsK0hvs=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=D7PydIXi; arc=fail smtp.client-ip=40.107.94.81
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="OlxmYpkw"
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="D7PydIXi"
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=HpiI4L03QXZM5RpjP/Pgr1S8cXHYVMcKKMnN1JFmfraJZhp9EsH087e6n/Apv4L/0aCk/XrL+ofI7yNrCYQLk6123lCNneDmIDwZ08b+1fF2ta8QLjwAMxXQ3yr1cZmGpf3HIz+1zkfxZIbnkZvs7npF66WO3iSRVQanYR0yWbRKrlWlnW/nL0D4KLf8188xPAKa4Jjybi+uDDr9zScRjclOcoJ9Ch11R93Du/tZom2kK0/DMPBp5hazgJYSQ9UIC19mhszZO3X5aIVH8g8d6agTV38qBF0yWTTPaCUbePnQhhwMF/1i3xUWq5/bYdYWsY7pDWmkLwsPpZnMvXSZVw==
+ b=iZSFE0wy2L8c2Tw6EyioNqG45RsKkodMGlivku6nRYJufHEaH9rRJmR8CkCu6hkatwElPoJeo7KfNqcqOudOUiGqsbXeT0DgYCipkWj11s9MCPl8YiiQiiUejV1jQQqB6pNiLna/CfQSKaNYTBwajdS2VJGoD2UQFUes3hcQKuHgtZx3Kf0mgQlJ0PJZOS0VUOgHSctCLdB7DxSGc+dzTbcdtFiRmCxtoBhA6e+9NCgAsgIbLhN3osgYnqFrmsfF3I1NSnTMmtdYs9tn2QcRhRNFv653KfY/57Vkk5kfxQNw1dBTH1Zu4G5QINkLybz+aqT5f5tYYgiS0fCb40gzeg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=F2Tx4bJkSIJEZE8UNvfRuphtf7hDh6cdvzD45Q7XCgc=;
- b=arcsbrSJ4tFiIQk9ZsnLMLbF6AIY4UxvjFQWUFFc1W/uRA3LEzb2tPpfywn/FWhnJXvpUrpqkr3r9oEVT5gEzh726qsBh/+QvFdUOtMZchsFXErP5cu2ApJliauZTdsUoAW4zsEHcPzflCS0CjccDl5zZzlHoajVx2Hjat55bes6R7funkxWyJU2hIJ5qwyfGJkLsKzB+9kacOnjiirbImmug7M8iYsCigSJRLL2pnfQACj67yoRf6FVXlGZtgxrBt4MzfFjTgUAs4k+bzoYa42pCB9tha7SPwvdjC3H0grUOwYS/YeM+6Fgp60W/4Qfylbiyhx+LikkktV5EFMhMg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=kernel.org smtp.mailfrom=amd.com; dmarc=pass
- (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
- dkim=none (message not signed); arc=none (0)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ bh=iiOuYtCW//x6U93G7j0jdDQRBSe4GhR5fIY6f8R23uI=;
+ b=QkQ3HsQYNobaIOs2bP8UklgszMH8gW4PS763va+s8urGvDbzhy//rQkRuxu5/4j3ZFQ9E/ZfX3b45mM9geOoaDq2rCd56HAO1eeCasXVXfrUK2ILaPK04Mum3amWKTJIQW71L+ZluJGCz+0mFXtBJDe3PGSeHN92GToJfh4goHfwZvdTtrI23yKBJxQZILzvUWh9hu79yaEhi3rUgMZ+f1WcTIAbpjbxHQ3w81KYidkq0t2waoELgFbeE7tty9jzxgYesYfWltpNie3jDH7SE2lr3tqjrOn7tJmiu/suwToXxjNBcjMsR/+falD1RRxqnUpoGM8bjwaM9rLgBZKEyw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=F2Tx4bJkSIJEZE8UNvfRuphtf7hDh6cdvzD45Q7XCgc=;
- b=OlxmYpkw3jRD94XpYtNJSyij4Bdshh7YkjsZsyBtfcHywd3weAt+mLNDt/smB6s42uGFbxEN7s6vyNUw7de+zu7BNIJlqhWo2C8DT5xwzoLqJnEgbcJ9s7l2sUQw2zzUYyRJI8NrLWA19J76AbqwCOcMkJjd7pp/tz1Xi7yxBHs=
-Received: from MN2PR03CA0001.namprd03.prod.outlook.com (2603:10b6:208:23a::6)
- by SJ0PR12MB6807.namprd12.prod.outlook.com (2603:10b6:a03:479::13) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8989.18; Thu, 28 Aug
- 2025 10:09:10 +0000
-Received: from BN2PEPF000044AB.namprd04.prod.outlook.com
- (2603:10b6:208:23a:cafe::28) by MN2PR03CA0001.outlook.office365.com
- (2603:10b6:208:23a::6) with Microsoft SMTP Server (version=TLS1_3,
- cipher=TLS_AES_256_GCM_SHA384) id 15.20.9073.19 via Frontend Transport; Thu,
- 28 Aug 2025 10:09:10 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB03.amd.com; pr=C
-Received: from SATLEXMB03.amd.com (165.204.84.17) by
- BN2PEPF000044AB.mail.protection.outlook.com (10.167.243.106) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.9073.11 via Frontend Transport; Thu, 28 Aug 2025 10:09:10 +0000
-Received: from Satlexmb09.amd.com (10.181.42.218) by SATLEXMB03.amd.com
- (10.181.40.144) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.39; Thu, 28 Aug
- 2025 05:09:09 -0500
-Received: from 555e2b870847.amd.com (10.180.168.240) by satlexmb09.amd.com
- (10.181.42.218) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.2.1748.10; Thu, 28 Aug
- 2025 03:09:05 -0700
-From: Bin Du <Bin.Du@amd.com>
-To: <mchehab@kernel.org>, <hverkuil@xs4all.nl>,
-	<laurent.pinchart+renesas@ideasonboard.com>, <bryan.odonoghue@linaro.org>,
-	<sakari.ailus@linux.intel.com>, <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-	<linux-media@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-	<sultan@kerneltoast.com>
-CC: <pratap.nirujogi@amd.com>, <benjamin.chan@amd.com>, <king.li@amd.com>,
-	<gjorgji.rosikopulos@amd.com>, <Phil.Jawich@amd.com>,
-	<Dominic.Antony@amd.com>, <mario.limonciello@amd.com>,
-	<richard.gong@amd.com>, <anson.tsao@amd.com>, <bin.du@amd.com>, Bin Du
-	<Bin.Du@amd.com>, Svetoslav Stoilov <Svetoslav.Stoilov@amd.com>
-Subject: [PATCH v3 6/7] media: platform: amd: isp4 debug fs logging and  more descriptive errors
-Date: Thu, 28 Aug 2025 18:08:10 +0800
-Message-ID: <20250828100811.95722-6-Bin.Du@amd.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20250828100811.95722-1-Bin.Du@amd.com>
-References: <20250828100811.95722-1-Bin.Du@amd.com>
+ bh=iiOuYtCW//x6U93G7j0jdDQRBSe4GhR5fIY6f8R23uI=;
+ b=D7PydIXimHcpFBIbwjIEQqUVLEAcs18pVel32vw/lCYNsf5hcvCe4cfloTNb3ghjqTqKq65NytliSHbtVVc8l5piPWbnb+3bcUOHtZul/XA9HpzzP6E2c/5ZRa3UUNIBGkHOmnq+zXClqxCZU6YmpyyKLK9f1PYojeIs3hsz+87Gc1ACF1kG+QvsH/qvBCMYhASjAyz4k4SLXoujWvWaLZOZNpDwgTc8MgiwGzd4c40Qw2lKkGNP8h+lCJf1ZgUWtTM8/letwiXZIA9c47TNrubtongyTG+2/qPXErO9bgCNIpKI/6ybuBR09djDLbGrVV/H07d4DyURedoLcuEm1g==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from DM4PR12MB6494.namprd12.prod.outlook.com (2603:10b6:8:ba::19) by
+ CY5PR12MB6597.namprd12.prod.outlook.com (2603:10b6:930:43::18) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.9052.21; Thu, 28 Aug 2025 10:15:43 +0000
+Received: from DM4PR12MB6494.namprd12.prod.outlook.com
+ ([fe80::346b:2daf:d648:2e11]) by DM4PR12MB6494.namprd12.prod.outlook.com
+ ([fe80::346b:2daf:d648:2e11%6]) with mapi id 15.20.9052.019; Thu, 28 Aug 2025
+ 10:15:43 +0000
+From: Mikko Perttunen <mperttunen@nvidia.com>
+To: Svyatoslav Ryhel <clamor95@gmail.com>
+Cc: Thierry Reding <thierry.reding@gmail.com>,
+ Thierry Reding <treding@nvidia.com>, Jonathan Hunter <jonathanh@nvidia.com>,
+ Sowjanya Komatineni <skomatineni@nvidia.com>,
+ Luca Ceresoli <luca.ceresoli@bootlin.com>, David Airlie <airlied@gmail.com>,
+ Simona Vetter <simona@ffwll.ch>,
+ Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+ Maxime Ripard <mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>,
+ Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
+ Conor Dooley <conor+dt@kernel.org>,
+ Peter De Schrijver <pdeschrijver@nvidia.com>,
+ Prashant Gaikwad <pgaikwad@nvidia.com>,
+ Michael Turquette <mturquette@baylibre.com>, Stephen Boyd <sboyd@kernel.org>,
+ Mauro Carvalho Chehab <mchehab@kernel.org>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Dmitry Osipenko <digetx@gmail.com>,
+ Charan Pedumuru <charan.pedumuru@gmail.com>, linux-media@vger.kernel.org,
+ linux-tegra@vger.kernel.org, dri-devel@lists.freedesktop.org,
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-clk@vger.kernel.org, linux-staging@lists.linux.dev
+Subject:
+ Re: [PATCH v1 01/19] clk: tegra: init CSUS clock for Tegra20 and Tegra30
+Date: Thu, 28 Aug 2025 19:15:38 +0900
+Message-ID: <2263218.C4sosBPzcN@senjougahara>
+In-Reply-To:
+ <CAPVz0n2JdRXQ7oUJqXkmGO+EPZTq3t6k8HY7pWHT3eAVXj9T3w@mail.gmail.com>
+References:
+ <20250819121631.84280-1-clamor95@gmail.com> <1797126.QkHrqEjB74@senjougahara>
+ <CAPVz0n2JdRXQ7oUJqXkmGO+EPZTq3t6k8HY7pWHT3eAVXj9T3w@mail.gmail.com>
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+X-ClientProxiedBy: TYCP286CA0241.JPNP286.PROD.OUTLOOK.COM
+ (2603:1096:400:456::6) To DM4PR12MB6494.namprd12.prod.outlook.com
+ (2603:10b6:8:ba::19)
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To satlexmb09.amd.com
- (10.181.42.218)
-X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BN2PEPF000044AB:EE_|SJ0PR12MB6807:EE_
-X-MS-Office365-Filtering-Correlation-Id: 90639db4-af26-4fa4-6a26-08dde61aee7a
+X-MS-TrafficTypeDiagnostic: DM4PR12MB6494:EE_|CY5PR12MB6597:EE_
+X-MS-Office365-Filtering-Correlation-Id: d1976fb2-f1ad-4f55-ce66-08dde61bd89f
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|36860700013|1800799024|82310400026|376014;
+	BCL:0;ARA:13230040|10070799003|1800799024|7416014|366016|376014|7053199007;
 X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?Ox7rxP0fxwgrUT961kuIh7W+qDr2Tm9qP8BzD2/VR+uxBl6o+ine0EeffVQd?=
- =?us-ascii?Q?nrSaDuqc0t9YECOPK+ieruG0EKbikW5S9Leea3mglaEJGTsrpCkAo79y1N3l?=
- =?us-ascii?Q?yoJlAyeN6N8B0A0vTNyrzccXyK2RoAj94p8+thR9h0ZR/w1lO8yaMhBaFHDU?=
- =?us-ascii?Q?tkivVMH13WnJ5wljubRfu6dJKn3Cfdf19Fo/661IcyumqGFvh8LQwHkR5ooq?=
- =?us-ascii?Q?GHPTS+nH69ORUukDxxZPPyixV6VNGBIo2hqDBXAQlOzghX0Bm0pBVa1FMZBw?=
- =?us-ascii?Q?Kp5lujiHmIRKV0BdzWB/pDHaadQERkmnLhjv/kZSzUuE/ZVcTBEdFJWj4LPh?=
- =?us-ascii?Q?0Jg0V2gOdmDVAn/32cuZrT2mjUEj0J+KgAz5MgjyHZXqtzTo1T3tkXx5R3hW?=
- =?us-ascii?Q?yk0kPqpZylI9Qq5kBI2SfVncEyunyyeZbMsb0ux4KxIwVtjA90Of570k1x2W?=
- =?us-ascii?Q?mBCVJvVAdrgTX/vtNlgWy0uEAmgRO/m7cDeyz7sdsLcjZ1WXylJbrJSBJKY0?=
- =?us-ascii?Q?IM28ReqYo2MPVkjL6dxE1j28uRWZy3hZgvo4Od1ferCF6p463jGdx6XnKWCp?=
- =?us-ascii?Q?P2u1rg5HQofOqj5OVmhn+AINlDWZCHgiAYDWpPWZubBm2spOcYtDOnKVBC9i?=
- =?us-ascii?Q?746I/qcw1+EaS9jeTTrqMGfAD1uIkU2YOyaeMnZryPY0BL63Hla/oA9KGaVz?=
- =?us-ascii?Q?twccfFnb1xmNgOmH/tT+bDhdCivGsgDHnAPFwlOPMYxm5vfTH0dljLujmpbd?=
- =?us-ascii?Q?C3CYHHoQrhOraMo2BLdiqlyDhF2sGQs7XTXbbQuj8zYEpd8Rk5O1mVaT6uIk?=
- =?us-ascii?Q?p9NMs9LXj4Fi55K0EVXRP2eqHEw3TnJVY7izgXuzsSZ6EuAu8ASc201S3da9?=
- =?us-ascii?Q?C4JPOURvvA+Q2OgG7Pwxg4Yg33SDQcFTzdAcq1fZ6jiGmaWEE1dCl7jGCea+?=
- =?us-ascii?Q?lC5T94Ned/7v48nugxDzcN8KXcgNeuF8pCZmv+FwYysjxaS+cKznJ7OLYnY3?=
- =?us-ascii?Q?sqKdjJ91QpxuNCQxlz5lQUt5nmpQhGz3cQiDi9FxjP2qhmfzDXM5IJ/B9Pqf?=
- =?us-ascii?Q?+8A+KAT137tlW6sLlQstJk4lAWNCmd9mj6/0rMZhK/ddOTXrU3Ll6IRSVgh5?=
- =?us-ascii?Q?QGpOc2F1bp77DQuuyiySb/XT9c+VC0jO3tcDc2pr6k6sWJhp+AvlcP7sEFBc?=
- =?us-ascii?Q?rmmVgVn0GFw8PsjRbDLuR/jq+mwRGLbtd20YYKyF4E8nycDymfphP2RYNbI3?=
- =?us-ascii?Q?AIAEr2dIhZvsAMaA+SKwxC+aVsZnWvHOCr2LcZNiCiE6Vkd+0NsJOJ64UxeC?=
- =?us-ascii?Q?tOkZyOr9jpfAoBVXeHv3sCylteHGIMOSMLoVKT2Grok7TGHkOXhhUxm8fzru?=
- =?us-ascii?Q?w+5VWqDkhnd3CfbUoF86bsry2sD9koDnw4YfLdY7sl7VRJ53eg4n0mBfFD5o?=
- =?us-ascii?Q?6V+0CiKbi1bwlMHfUxtKieENlZXz4KcY4AcQO4i/lUzkTjJCxVTf1O0dwXK3?=
- =?us-ascii?Q?apngEzTiZt6jmB6s/QgLlz+TmFzZ+Z/HGV9Q?=
+	=?utf-8?B?NWF3R0FsRkxVOGE2LzNpcDFBaE1pYkhVSGhpOVNVMkVzcU5DWUlHc3pCUlFp?=
+ =?utf-8?B?SnJwcjUzQWQ1UEdnVXBTR1dPeXF5OTJBVGNuMHJjMXhUOTY0WHlUWUdsK3VL?=
+ =?utf-8?B?aWZWQUkyeFliOXo3L1lSVjhvd3JaWWRCUDQwakU5aUhjRExsMGxoMExpY1VY?=
+ =?utf-8?B?S3p0T2dtQ091NW1iSjViTjUydCtqaVNQNG9odXgxTWsrU1JMbUdmSEpPaGpl?=
+ =?utf-8?B?bm56REtuSkE5N2ZoSm9Od01vYkoxVE9FaUFicHpJM0JVK3o2YUNLVjErR3BV?=
+ =?utf-8?B?ZkxKbUtFb05lbi9FNCtBbjVqazNrV2xTNCtaaWl1REMxaGhxVzRnWE9PSWMw?=
+ =?utf-8?B?WWoyTE9mYkRyMWZBVG16cTZyQ0FRc1pQaHd5bEhwRkxCNVF6S3lVWXRlcVha?=
+ =?utf-8?B?SVU5Ny9CMjZJWVE4bjlMN0taTTJvRE5ONENkSG1BSmk1WFhSYVdJeVIrTEtL?=
+ =?utf-8?B?akpsMEo2V3ZDeW04QTF4QVZzQWE1aEwyNVNEbFRnRHc0aElqclBwT1Fkd2RU?=
+ =?utf-8?B?dDJ5N0pselE5UXNVVTlzNDZ4TVlrK3RtWUZwZ0h2OUwvWG5KaXFoSGZxS2gv?=
+ =?utf-8?B?b1pYUHFNc3hpeWw2Q3Q5K2FvTHIvL0o1a1Z6SURJaWtuUTlwYWRXTFZ5OWJX?=
+ =?utf-8?B?SjI4OUg4NTl1OGdtZi9uSlJPa3AyWUFqQk1VQzZaYXk4ci9NMUh1YnplaHZO?=
+ =?utf-8?B?eGFQVVFCYVgycFAzczI1WC81NGpPMGdFQ3pqRnVVSkxXVlhtMWdJYXpYSTlm?=
+ =?utf-8?B?eHRMWDlhL1lINzlzalFQcFErb0JPN0cxbWtqdjhiYlVRajhCWXZ0NUNqZk9n?=
+ =?utf-8?B?WXRHVkQ5UTB6Mlhld24vZVI3Ly9Jak52MmYvQlEvTmJ1K0J6MnBQa0hlL1VW?=
+ =?utf-8?B?ZzhpYnhBYm5yZFZDUFRwQStNcFpNQ0xRQmhvekJKWVhYWWJ4ZUJXZnVNeWV4?=
+ =?utf-8?B?VjRDQUFoYzlocXN1bW56VWxETCttK3hROE5YN3ByY3Vlb2FZNlBRVXJTYmZi?=
+ =?utf-8?B?YnZwYVNrUDRqSS9ldFladEZJdndmbVI0MTM4R2YzdStJa1lsei9kdWxLbGkw?=
+ =?utf-8?B?VFpKWVZmSStMOU85N2g2L1kxS240TGxTaTk5R1NmRHdmQVFXLzc1blRnUXNk?=
+ =?utf-8?B?ei95U1A5MXAzSE5zMXAwNzFwbG42NFkyWTljVmg3SEtJNXJ4TkdtajNYTEhJ?=
+ =?utf-8?B?QkkyZHJrYlAyWkI4eGpkaVpmSUNGSFhZYU50cWZuMmQ5Z3Y4NGp4UHhYdkpk?=
+ =?utf-8?B?T2lzUm1SdUlwMzVVMlQwR3cxRHo5aFJ3RXJ5UDdzd3h6Qzh1NWttTnVPZjdU?=
+ =?utf-8?B?RGJ2WC8xU1UxMmVuMlE1c3B1TnBva21nS1o0MzVtVk1BM2tXQkNvbG5rTC9U?=
+ =?utf-8?B?NzRoV3Bkdy9HaktTdTJQbVRQSisvZDAreVE2RnZhYnltTm5Wd0VncTZlWkE3?=
+ =?utf-8?B?bHNHcW9Fa3h0eGwrbDhMY2Jjdmt0M3RGMTRYbjhnc2xLTHJGS0hzZTc1SlE2?=
+ =?utf-8?B?cnJnQzU5QW8zbzYzTnJnTUFjQUdZYVpHUStId3Awc2RWWEkyWXJRLzIzR1VZ?=
+ =?utf-8?B?M0FPbFdrMVBrOXRGMXB5TXpDSWdaSkRVeXR4dXh4VXBwR25ERFo4aGQ1UTMx?=
+ =?utf-8?B?YlJqYnZod1M1TDBJRGVpaldJM2tUQ01kam52dmxuRGNxNkNGbkRRUURUMk9h?=
+ =?utf-8?B?M0RhcG9qODhsYkg0a0VFRXRXakVId2k0cWg2YkJnQjAyeFdWOEtJZHdKOXNM?=
+ =?utf-8?B?dVNsRjdTejlVdzZIUHNKbWx0QUlJcktrWG1GVXdEcE51bXhLU0JzR0VMZkF4?=
+ =?utf-8?B?NGVSLzRYY2pFZSttSnMzVU14NWhEQTRGQm5PSFg5aGEzdkVlZmZlOVlXMklm?=
+ =?utf-8?B?b1VyMVdoZVY1VFRKbnQrL0NnaFlWb0szeWt6K2NDbFExZ3JpM2o3QUgxYlJy?=
+ =?utf-8?Q?APTyJTZUNW8=3D?=
 X-Forefront-Antispam-Report:
-	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB03.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(36860700013)(1800799024)(82310400026)(376014);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 Aug 2025 10:09:10.0592
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM4PR12MB6494.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(10070799003)(1800799024)(7416014)(366016)(376014)(7053199007);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?YkUwRUhFRnBDQ3dOb245Z2k1R1BwUmFlN3VaTFRHYWRnVFErZEw4V3YvWmtY?=
+ =?utf-8?B?ZHVFMDlDeGRKcHNmM2hCWHYvbFA1U0lWamgxZllmREl2Q3N5cTdxT0tSbkpr?=
+ =?utf-8?B?bTBtWnU3NzBZYWlFMlI0RG9MenpISTlyOE1ibElaMC95OWlFVTJXaHpzOENk?=
+ =?utf-8?B?MCtDdC9qRHF6bmZ4K3ZkTktMc05waXBzbnJjT0Rxbm16S1hyNC9kcWl6UTYr?=
+ =?utf-8?B?VUl6YnFQNUVoenpMbHJuZVFRYStGc3BpZ0tqVVMydHg0czBTODlNTUp4dXBt?=
+ =?utf-8?B?RnlRUmFmRGdsc1Bod1VNSVlzRWNqeVVFVGpPWmtKTXdndENsd0k0a1pLQm5N?=
+ =?utf-8?B?cE1CNnNpZnpzeWpQbjZSVC9jYXhNVmZtenpIdE5KZ0dVcmc4c3VCY1NHa2dN?=
+ =?utf-8?B?ZGEyVGNhZ1N6SkU5UmgyZjR0bmdtekhJN0JEd0Eram5XYkR2eDNTQklKcG56?=
+ =?utf-8?B?NXZDRFZXRTJUSFVXQ0dkVGs3a2VLNlRGbU5jemhQR2dSSzFnTnhoeGwvN0hZ?=
+ =?utf-8?B?cUVxemRjcXRqRVpuOS9ONXcxR2tJRGx5U2kzVnNUSGpDYTNGUFc1QXpORlph?=
+ =?utf-8?B?ekI2Ry9rZ1RWbFFwS3dVUzRwZTNLck5KKzUxQ1ZFMHF3Qmp2RUNRVzFCZjlo?=
+ =?utf-8?B?WDg1dTk2Z1VKWEZBRHZGK0RWTGJXOFdEaStYYzIxTGk5My9iTG8vRVpNUjYr?=
+ =?utf-8?B?ZXZRNVNHd2xsT0ZDNzNqaVdrOGN0MGUvb3dzemRsZjZ0bW4yY3N4aUpiRGpZ?=
+ =?utf-8?B?TXIvQ1dLMkZYVXd5SWpnSzNUMGl2UGJzUDVyWDdyWlRyWGovazlWNjlndkQr?=
+ =?utf-8?B?VERNY2V2M1VqWEQxcFllRkI3Wi9HM2o3c25RZ1k3cGxtZjFRVnVPVnV4Ti90?=
+ =?utf-8?B?aDdlRmh1MXVOY2ZSTElqOHN3dVlTRzFmcnAwYTl3VkRSaC9WSzJiV1RWZzNv?=
+ =?utf-8?B?N3ZPK3NxNTZmeXQvSWZSNUQ5eFZEQ1Y5K2ErSEU1aDFFTVNKcnRRZStoKzgy?=
+ =?utf-8?B?YWJRT0ZyUGZ2L0hndk0xR25YNVFtbDFOc25GcXd6SXBSYmsweEovRWU1WEtz?=
+ =?utf-8?B?SVpZcTZxWnpPdFpMNURQMW5FQjVQeTQreEN6RGh1a2luVEk3ejRWWU5YMHhj?=
+ =?utf-8?B?RytibWVtR2NPaWZnaXZIMGN4NHRnak11SlBBdjArRmcvSXVUc3liMEQrZmtF?=
+ =?utf-8?B?dUlOL3R2Z3IvSFZZZUI5WEtHTkR0ZEdTRDNsa09iaVVFTkQrbzNhbzRiN2RD?=
+ =?utf-8?B?N2dNVFpFR21DTUhKS3c5YUprNnhWOTRrRFdsc3NNSmZlVVF2RzlHY1dNcUFI?=
+ =?utf-8?B?eVhBUEZCYS81L1M3aUVsZG1CaEhBWGtiMzNlK001dDh3dEdhdGRybmZadEU5?=
+ =?utf-8?B?aFNBMUZUR092UFBFaEpoeTk4VVlaY0hHVU5SZ3k4SDhtOHN6SFVRL0dvTVRu?=
+ =?utf-8?B?T3BzbTVXQW8wdUFtWVhUWXVqNGgvRWw0ZXpQUC9EdStuNGlCYjdMWTJXRjBI?=
+ =?utf-8?B?dlpwZGZWdUxTdTRDcnRxYTA2MTlhVzl2enI5V2ptZC81NjB0c2hrUHhTYXQ4?=
+ =?utf-8?B?R0dpL1Fka3hQeEpRLy9OaG9UNEFiSDBHb0lUSm9XV2Q5NTNFb3pmTUtiQVN2?=
+ =?utf-8?B?NkRxT1pkUXIramdJdll2MDkzTVNSWjY0RWxLZVFqdXNGbk5qVG1YNFQwUk9F?=
+ =?utf-8?B?YmV6ZFlKU1dicFVUYmtvRzFCKzFHVGI5Qmh1QTBuaFo4QS9CRytMVFd0eFZT?=
+ =?utf-8?B?ZzZBWHJIV1l6M2kzVzEwM0N0RmZqdjRyS1dRcy84YmRTeSsvbms5aW5CSzdv?=
+ =?utf-8?B?RThpaFg4RXYrSmFTdmFCTi9vZmp4bDIrNVBOaXVJREJTeGFtTmV3WVhOMEZ0?=
+ =?utf-8?B?Zm44MXZMWk13K1NrYnJ2WDgrUTFDZFVFVGNQalVqYkhaYmQ5VEI2MURISStk?=
+ =?utf-8?B?SGdzRnVDVWhRckdOQjRLT3N5TG5uVlBkY0paUzh2QndvajArYVdSYkNUbDlu?=
+ =?utf-8?B?aWp4aEFTaTdJZGxQRkRRdFhWUG1mZFNVbzNNNXd2eFRVeStLMHlpSjl3OVZj?=
+ =?utf-8?B?MS9oVVVZZnZpYlhISG5YNFVNbDNKNUZoVkYvNForMVFtVFRZQ0tVMi82a25V?=
+ =?utf-8?B?eUFQSlNOdmhGcFBYRDRFTGdFcnZvZWpPMVhTQXVockFrUEs1ZXdRa1ovSnp5?=
+ =?utf-8?B?TFB1dG03bzNuTVdrTlYzWFNpQU91WDVnTmt1dUNvUlNFNVhNbUhLSzd6RTJM?=
+ =?utf-8?B?cXNUTkFRVUVYd3lhVk5KRW5peTlnPT0=?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: d1976fb2-f1ad-4f55-ce66-08dde61bd89f
+X-MS-Exchange-CrossTenant-AuthSource: DM4PR12MB6494.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 Aug 2025 10:15:43.0887
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 90639db4-af26-4fa4-6a26-08dde61aee7a
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB03.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource:
-	BN2PEPF000044AB.namprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR12MB6807
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: yRTtXsvc2qc+BfxY59Bl4XopwKzUD9aKbtvtNvJfSuuToZHuYQrfen4BdbJaieNDAJLj2xB2u2Vk9pANRRafgw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY5PR12MB6597
 
-Add debug fs for isp4 driver and add more detailed descriptive error info
-to some of the log message
+On Thursday, August 28, 2025 5:28=E2=80=AFPM Svyatoslav Ryhel wrote:
+> =D1=87=D1=82, 28 =D1=81=D0=B5=D1=80=D0=BF. 2025=E2=80=AF=D1=80. =D0=BE 11=
+:13 Mikko Perttunen <mperttunen@nvidia.com> =D0=BF=D0=B8=D1=88=D0=B5:
+> > On Wednesday, August 27, 2025 7:45=E2=80=AFPM Svyatoslav Ryhel wrote:
+> > > =D1=81=D1=80, 27 =D1=81=D0=B5=D1=80=D0=BF. 2025=E2=80=AF=D1=80. =D0=
+=BE 13:36 Mikko Perttunen <mperttunen@nvidia.com>=20
+=D0=BF=D0=B8=D1=88=D0=B5:
+> > > > On Wednesday, August 27, 2025 1:32=E2=80=AFPM Svyatoslav wrote:
+> > > > > 27 =D1=81=D0=B5=D1=80=D0=BF=D0=BD=D1=8F 2025=E2=80=AF=D1=80. 07:0=
+9:45 GMT+03:00, Mikko Perttunen
+> > > >=20
+> > > > <mperttunen@nvidia.com> =D0=BF=D0=B8=D1=88=D0=B5:
+> > > > > >On Tuesday, August 19, 2025 9:16=E2=80=AFPM Svyatoslav Ryhel wro=
+te:
+> > > > > >> CSUS clock is required to be enabled on camera device
+> > > > > >> configuration
+> > > > > >> or
+> > > > > >> else camera module refuses to initiate properly.
+> > > > > >>=20
+> > > > > >> Signed-off-by: Svyatoslav Ryhel <clamor95@gmail.com>
+> > > > > >> ---
+> > > > > >>=20
+> > > > > >>  drivers/clk/tegra/clk-tegra20.c | 1 +
+> > > > > >>  drivers/clk/tegra/clk-tegra30.c | 1 +
+> > > > > >>  2 files changed, 2 insertions(+)
+> > > > > >>=20
+> > > > > >> diff --git a/drivers/clk/tegra/clk-tegra20.c
+> > > > > >> b/drivers/clk/tegra/clk-tegra20.c index
+> > > > > >> 551ef0cf0c9a..42f8150c6110
+> > > > > >> 100644
+> > > > > >> --- a/drivers/clk/tegra/clk-tegra20.c
+> > > > > >> +++ b/drivers/clk/tegra/clk-tegra20.c
+> > > > > >> @@ -1043,6 +1043,7 @@ static struct tegra_clk_init_table
+> > > > > >> init_table[]
+> > > > > >> =3D {
+> > > > > >>=20
+> > > > > >>    { TEGRA20_CLK_GR3D, TEGRA20_CLK_PLL_C, 300000000, 0 },
+> > > > > >>    { TEGRA20_CLK_VDE, TEGRA20_CLK_PLL_C, 300000000, 0 },
+> > > > > >>    { TEGRA20_CLK_PWM, TEGRA20_CLK_PLL_P, 48000000, 0 },
+> > > > > >>=20
+> > > > > >> +  { TEGRA20_CLK_CSUS, TEGRA20_CLK_CLK_MAX, 6000000, 1 },
+> > > > > >>=20
+> > > > > >>    /* must be the last entry */
+> > > > > >>    { TEGRA20_CLK_CLK_MAX, TEGRA20_CLK_CLK_MAX, 0, 0 },
+> > > > > >> =20
+> > > > > >>  };
+> > > > > >>=20
+> > > > > >> diff --git a/drivers/clk/tegra/clk-tegra30.c
+> > > > > >> b/drivers/clk/tegra/clk-tegra30.c index
+> > > > > >> 82a8cb9545eb..70e85e2949e0
+> > > > > >> 100644
+> > > > > >> --- a/drivers/clk/tegra/clk-tegra30.c
+> > > > > >> +++ b/drivers/clk/tegra/clk-tegra30.c
+> > > > > >> @@ -1237,6 +1237,7 @@ static struct tegra_clk_init_table
+> > > > > >> init_table[]
+> > > > > >> =3D {
+> > > > > >>=20
+> > > > > >>    { TEGRA30_CLK_HDA, TEGRA30_CLK_PLL_P, 102000000, 0 },
+> > > > > >>    { TEGRA30_CLK_HDA2CODEC_2X, TEGRA30_CLK_PLL_P, 48000000, 0 =
+},
+> > > > > >>    { TEGRA30_CLK_PWM, TEGRA30_CLK_PLL_P, 48000000, 0 },
+> > > > > >>=20
+> > > > > >> +  { TEGRA30_CLK_CSUS, TEGRA30_CLK_CLK_MAX, 6000000, 1 },
+> > > > > >>=20
+> > > > > >>    /* must be the last entry */
+> > > > > >>    { TEGRA30_CLK_CLK_MAX, TEGRA30_CLK_CLK_MAX, 0, 0 },
+> > > > > >> =20
+> > > > > >>  };
+> > > > > >
+> > > > > >I looked into what this clock does and it seems to be a gate for
+> > > > > >the
+> > > > > >CSUS
+> > > > > >pin, which provides an output clock for camera sensors (VI MCLK)=
+.
+> > > > > >Default
+> > > > > >source seems to be PLLC_OUT1. It would be good to note that on t=
+he
+> > > > > >commit
+> > > > > >message, as I can't find any documentation about the CSUS clock
+> > > > > >elsewhere.
+> > > > > >
+> > > > > >What is the 6MHz rate based on?
+> > > > >=20
+> > > > > 6mhz is the statistic value which I was not able to alter while
+> > > > > testing.
+> > > > > I
+> > > > > have tried 12mhz and 24mhz too but it remained 6mhz, so I left it
+> > > > > 6mhz.
+> > > > >=20
+> > > > > >Since this seems to be a clock consumed by the sensor, it seems =
+to
+> > > > > >me
+> > > > > >that
+> > > > > >rather than making it always on, we could point to it in the
+> > > > > >sensor's
+> > > > > >device tree entry.
+> > > > >=20
+> > > > > Sensor device tree uses vi_sensor as clocks source and sensor
+> > > > > drivers
+> > > > > don't
+> > > > > support multiple linked clocks.
+> > > >=20
+> > > > AIUI vi_sensor is an internal clock so the sensor cannot be receivi=
+ng
+> > > > it
+> > > > directly. Perhaps the sensor is actually connected to csus, and the
+> > > > reason
+> > > > we need to enable it is to allow the vi_sensor clock to pass throug=
+h
+> > > > the
+> > > > csus gate?
+> > > >=20
+> > > > That leaves the question of why the csus pad would be muxed to
+> > > > vi_sensor
+> > > > by
+> > > > default, but perhaps there's an explanation for that.
+> > >=20
+> > > From downstream T30 sources csus and vi_sensor are always called in
+> > > pair (6MHz csus and 24MHz for vi_sensor), naturally I assumed that
+> > > latter is used as camera reference clock since most sensors has
+> > > reference clock around 24 MHz
+> >=20
+> > It's possible that the csus pad is still outputting 24MHz. The pinmux
+> > options for the csus pad are various clocks, so it would seem logical
+> > that the clock source for the pad is one of those clocks. However, on t=
+he
+> > clock framework side, the csus clock is just a gate. What I'm confused
+> > about is that since on the clock framework side the parent of csus is
+> > currently set to clk_m, I don't know why setting the rate of csus would
+> > affect the output of the pad, given clk_m is not one of the options for
+> > the pinmux.
+> >=20
+> > It's be good to verify the register value for the csus pinmux to see wh=
+ere
+> > it thinks the clock is coming from, and then check how that matches wit=
+h
+> > what we are seeing.
+>=20
+> TRM does not provide such data, it has only register address with
+> layout for it as a plain pad control, that register has only DRVDN,
+> DRVUP, SLWR and SLWF and I don't see a way to decode clock value or
+> parent or anything similar. If you give me a method I will calculate
+> those values.
 
-Co-developed-by: Svetoslav Stoilov <Svetoslav.Stoilov@amd.com>
-Signed-off-by: Svetoslav Stoilov <Svetoslav.Stoilov@amd.com>
-Signed-off-by: Bin Du <Bin.Du@amd.com>
----
- MAINTAINERS                                   |   2 +
- drivers/media/platform/amd/isp4/Makefile      |   1 +
- drivers/media/platform/amd/isp4/isp4.c        |   4 +
- drivers/media/platform/amd/isp4/isp4_debug.c  | 272 ++++++++++++++++++
- drivers/media/platform/amd/isp4/isp4_debug.h  |  41 +++
- .../media/platform/amd/isp4/isp4_interface.c  |  41 ++-
- drivers/media/platform/amd/isp4/isp4_subdev.c |  29 +-
- 7 files changed, 368 insertions(+), 22 deletions(-)
- create mode 100644 drivers/media/platform/amd/isp4/isp4_debug.c
- create mode 100644 drivers/media/platform/amd/isp4/isp4_debug.h
+I notice that on Tegra20, there is a mux pingroup called 'csus', which has =
+the=20
+mux options PLLC_OUT1, PLLP_OUT2, PLLP_OUT3, and VI_SENSOR_CLK (based on=20
+upstream pinctrl-tegra20.c). The TRM also says 'Enable clock to SUS pad.'=20
+about the CSUS (or SUS) clock.
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 437232d4912d..7724620896e7 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -1145,6 +1145,8 @@ F:	drivers/media/platform/amd/isp4/Kconfig
- F:	drivers/media/platform/amd/isp4/Makefile
- F:	drivers/media/platform/amd/isp4/isp4.c
- F:	drivers/media/platform/amd/isp4/isp4.h
-+F:	drivers/media/platform/amd/isp4/isp4_debug.c
-+F:	drivers/media/platform/amd/isp4/isp4_debug.h
- F:	drivers/media/platform/amd/isp4/isp4_fw_cmd_resp.h
- F:	drivers/media/platform/amd/isp4/isp4_hw_reg.h
- F:	drivers/media/platform/amd/isp4/isp4_interface.c
-diff --git a/drivers/media/platform/amd/isp4/Makefile b/drivers/media/platform/amd/isp4/Makefile
-index 33589091ca96..c89355fb2374 100644
---- a/drivers/media/platform/amd/isp4/Makefile
-+++ b/drivers/media/platform/amd/isp4/Makefile
-@@ -4,6 +4,7 @@
- 
- obj-$(CONFIG_AMD_ISP4) += amd_capture.o
- amd_capture-objs := isp4_subdev.o \
-+			isp4_debug.o \
- 			isp4_interface.o \
- 			isp4.o	\
- 			isp4_video.o
-\ No newline at end of file
-diff --git a/drivers/media/platform/amd/isp4/isp4.c b/drivers/media/platform/amd/isp4/isp4.c
-index a46e110a396f..f129a9fbf315 100644
---- a/drivers/media/platform/amd/isp4/isp4.c
-+++ b/drivers/media/platform/amd/isp4/isp4.c
-@@ -10,6 +10,7 @@
- #include <media/v4l2-ioctl.h>
- 
- #include "isp4.h"
-+#include "isp4_debug.h"
- #include "isp4_hw_reg.h"
- 
- #define ISP4_DRV_NAME "amd_isp_capture"
-@@ -189,6 +190,7 @@ static int isp4_capture_probe(struct platform_device *pdev)
- 	}
- 
- 	platform_set_drvdata(pdev, isp_dev);
-+	isp_debugfs_create(isp_dev);
- 
- 	return 0;
- 
-@@ -204,6 +206,8 @@ static void isp4_capture_remove(struct platform_device *pdev)
- {
- 	struct isp4_device *isp_dev = platform_get_drvdata(pdev);
- 
-+	isp_debugfs_remove(isp_dev);
-+
- 	v4l2_device_unregister_subdev(&isp_dev->isp_sdev.sdev);
- 
- 	media_device_unregister(&isp_dev->mdev);
-diff --git a/drivers/media/platform/amd/isp4/isp4_debug.c b/drivers/media/platform/amd/isp4/isp4_debug.c
-new file mode 100644
-index 000000000000..cc99b357df27
---- /dev/null
-+++ b/drivers/media/platform/amd/isp4/isp4_debug.c
-@@ -0,0 +1,272 @@
-+// SPDX-License-Identifier: GPL-2.0+
-+/*
-+ * Copyright (C) 2025 Advanced Micro Devices, Inc.
-+ */
-+
-+#include "isp4.h"
-+#include "isp4_debug.h"
-+#include "isp4_hw_reg.h"
-+#include "isp4_interface.h"
-+
-+#define ISP4DBG_FW_LOG_RINGBUF_SIZE (2 * 1024 * 1024)
-+#define ISP4DBG_MACRO_2_STR(X) #X
-+#define ISP4DBG_MAX_ONE_TIME_LOG_LEN 510
-+
-+#ifdef CONFIG_DEBUG_FS
-+
-+void isp_debugfs_create(struct isp4_device *isp_dev)
-+{
-+	isp_dev->isp_sdev.debugfs_dir = debugfs_create_dir("amd_isp", NULL);
-+	debugfs_create_bool("fw_log_enable", 0644,
-+			    isp_dev->isp_sdev.debugfs_dir,
-+			    &isp_dev->isp_sdev.enable_fw_log);
-+	isp_dev->isp_sdev.fw_log_output =
-+		devm_kzalloc(&isp_dev->pdev->dev,
-+			     ISP4DBG_FW_LOG_RINGBUF_SIZE + 32,
-+			     GFP_KERNEL);
-+}
-+
-+void isp_debugfs_remove(struct isp4_device *isp_dev)
-+{
-+	debugfs_remove_recursive(isp_dev->isp_sdev.debugfs_dir);
-+	isp_dev->isp_sdev.debugfs_dir = NULL;
-+}
-+
-+static u32 isp_fw_fill_rb_log(struct isp4_subdev *isp, u8 *sys, u32 rb_size)
-+{
-+	struct isp4_interface *ispif = &isp->ispif;
-+	struct device *dev = isp->dev;
-+	u8 *buf = isp->fw_log_output;
-+	u32 rd_ptr, wr_ptr;
-+	u32 total_cnt = 0;
-+	u32 offset = 0;
-+	u32 cnt;
-+
-+	if (!sys || rb_size == 0)
-+		return 0;
-+
-+	mutex_lock(&ispif->isp4if_mutex);
-+
-+	rd_ptr = isp4hw_rreg(ISP4_GET_ISP_REG_BASE(isp), ISP_LOG_RB_RPTR0);
-+	wr_ptr = isp4hw_rreg(ISP4_GET_ISP_REG_BASE(isp), ISP_LOG_RB_WPTR0);
-+
-+	do {
-+		if (wr_ptr > rd_ptr)
-+			cnt = wr_ptr - rd_ptr;
-+		else if (wr_ptr < rd_ptr)
-+			cnt = rb_size - rd_ptr;
-+		else
-+			goto unlock_and_quit;
-+
-+		if (cnt > rb_size) {
-+			dev_err(dev, "fail bad fw log size %u\n", cnt);
-+			goto unlock_and_quit;
-+		}
-+
-+		memcpy(buf + offset, (u8 *)(sys + rd_ptr), cnt);
-+
-+		offset += cnt;
-+		total_cnt += cnt;
-+		rd_ptr = (rd_ptr + cnt) % rb_size;
-+	} while (rd_ptr < wr_ptr);
-+
-+	isp4hw_wreg(ISP4_GET_ISP_REG_BASE(isp), ISP_LOG_RB_RPTR0, rd_ptr);
-+
-+unlock_and_quit:
-+	mutex_unlock(&ispif->isp4if_mutex);
-+	return total_cnt;
-+}
-+
-+void isp_fw_log_print(struct isp4_subdev *isp)
-+{
-+	struct isp4_interface *ispif = &isp->ispif;
-+	char *fw_log_buf = isp->fw_log_output;
-+	u32 cnt;
-+
-+	if (!isp->enable_fw_log || !fw_log_buf)
-+		return;
-+
-+	cnt = isp_fw_fill_rb_log(isp, ispif->fw_log_buf->sys_addr,
-+				 ispif->fw_log_buf->mem_size);
-+
-+	if (cnt) {
-+		char *line_end;
-+		char temp_ch;
-+		char *str;
-+		char *end;
-+
-+		str = (char *)fw_log_buf;
-+		end = ((char *)fw_log_buf + cnt);
-+		fw_log_buf[cnt] = 0;
-+
-+		while (str < end) {
-+			line_end = strchr(str, 0x0A);
-+			if ((line_end && (str + ISP4DBG_MAX_ONE_TIME_LOG_LEN) >= line_end) ||
-+			    (!line_end && (str + ISP4DBG_MAX_ONE_TIME_LOG_LEN) >= end)) {
-+				if (line_end)
-+					*line_end = 0;
-+
-+				if (*str != '\0')
-+					dev_dbg(isp->dev,
-+						"%s", str);
-+
-+				if (line_end) {
-+					*line_end = 0x0A;
-+					str = line_end + 1;
-+				} else {
-+					break;
-+				}
-+			} else {
-+				u32 tmp_len = ISP4DBG_MAX_ONE_TIME_LOG_LEN;
-+
-+				temp_ch = str[tmp_len];
-+				str[tmp_len] = 0;
-+				dev_dbg(isp->dev, "%s", str);
-+				str[tmp_len] = temp_ch;
-+				str = &str[tmp_len];
-+			}
-+		}
-+	}
-+}
-+#endif
-+
-+char *isp4dbg_get_buf_src_str(u32 src)
-+{
-+	switch (src) {
-+	case BUFFER_SOURCE_STREAM:
-+		return ISP4DBG_MACRO_2_STR(BUFFER_SOURCE_STREAM);
-+	default:
-+		return "Unknown buf source";
-+	}
-+}
-+
-+char *isp4dbg_get_buf_done_str(u32 status)
-+{
-+	switch (status) {
-+	case BUFFER_STATUS_INVALID:
-+		return ISP4DBG_MACRO_2_STR(BUFFER_STATUS_INVALID);
-+	case BUFFER_STATUS_SKIPPED:
-+		return ISP4DBG_MACRO_2_STR(BUFFER_STATUS_SKIPPED);
-+	case BUFFER_STATUS_EXIST:
-+		return ISP4DBG_MACRO_2_STR(BUFFER_STATUS_EXIST);
-+	case BUFFER_STATUS_DONE:
-+		return ISP4DBG_MACRO_2_STR(BUFFER_STATUS_DONE);
-+	case BUFFER_STATUS_LACK:
-+		return ISP4DBG_MACRO_2_STR(BUFFER_STATUS_LACK);
-+	case BUFFER_STATUS_DIRTY:
-+		return ISP4DBG_MACRO_2_STR(BUFFER_STATUS_DIRTY);
-+	case BUFFER_STATUS_MAX:
-+		return ISP4DBG_MACRO_2_STR(BUFFER_STATUS_MAX);
-+	default:
-+		return "Unknown Buf Done Status";
-+	}
-+};
-+
-+char *isp4dbg_get_img_fmt_str(int fmt /* enum isp4fw_image_format * */)
-+{
-+	switch (fmt) {
-+	case IMAGE_FORMAT_NV12:
-+		return "NV12";
-+	case IMAGE_FORMAT_YUV422INTERLEAVED:
-+		return "YUV422INTERLEAVED";
-+	default:
-+		return "unknown fmt";
-+	}
-+}
-+
-+void isp4dbg_show_bufmeta_info(struct device *dev, char *pre,
-+			       void *in, void *orig_buf)
-+{
-+	struct isp4fw_buffer_meta_info *p;
-+	struct isp4if_img_buf_info *orig;
-+
-+	if (!in)
-+		return;
-+
-+	if (!pre)
-+		pre = "";
-+
-+	p = in;
-+	orig = orig_buf;
-+
-+	dev_dbg(dev, "%s(%s) en:%d,stat:%s(%u),src:%s\n", pre,
-+		isp4dbg_get_img_fmt_str(p->image_prop.image_format),
-+		p->enabled, isp4dbg_get_buf_done_str(p->status), p->status,
-+		isp4dbg_get_buf_src_str(p->source));
-+
-+	dev_dbg(dev, "%p,0x%llx(%u) %p,0x%llx(%u) %p,0x%llx(%u)\n",
-+		orig->planes[0].sys_addr, orig->planes[0].mc_addr,
-+		orig->planes[0].len, orig->planes[1].sys_addr,
-+		orig->planes[1].mc_addr, orig->planes[1].len,
-+		orig->planes[2].sys_addr, orig->planes[2].mc_addr,
-+		orig->planes[2].len);
-+}
-+
-+char *isp4dbg_get_buf_type(u32 type)
-+{
-+	/* enum isp4fw_buffer_type */
-+	switch (type) {
-+	case BUFFER_TYPE_PREVIEW:
-+		return ISP4DBG_MACRO_2_STR(BUFFER_TYPE_PREVIEW);
-+	case BUFFER_TYPE_META_INFO:
-+		return ISP4DBG_MACRO_2_STR(BUFFER_TYPE_META_INFO);
-+	case BUFFER_TYPE_MEM_POOL:
-+		return ISP4DBG_MACRO_2_STR(BUFFER_TYPE_MEM_POOL);
-+	default:
-+		return "unknown type";
-+	}
-+}
-+
-+char *isp4dbg_get_cmd_str(u32 cmd)
-+{
-+	switch (cmd) {
-+	case CMD_ID_START_STREAM:
-+		return ISP4DBG_MACRO_2_STR(CMD_ID_START_STREAM);
-+	case CMD_ID_STOP_STREAM:
-+		return ISP4DBG_MACRO_2_STR(CMD_ID_STOP_STREAM);
-+	case CMD_ID_SEND_BUFFER:
-+		return ISP4DBG_MACRO_2_STR(CMD_ID_SEND_BUFFER);
-+	case CMD_ID_SET_STREAM_CONFIG:
-+		return ISP4DBG_MACRO_2_STR(CMD_ID_SET_STREAM_CONFIG);
-+	case CMD_ID_SET_OUT_CHAN_PROP:
-+		return ISP4DBG_MACRO_2_STR(CMD_ID_SET_OUT_CHAN_PROP);
-+	case CMD_ID_ENABLE_OUT_CHAN:
-+		return ISP4DBG_MACRO_2_STR(CMD_ID_ENABLE_OUT_CHAN);
-+	default:
-+		return "unknown cmd";
-+	};
-+}
-+
-+char *isp4dbg_get_resp_str(u32 cmd)
-+{
-+	switch (cmd) {
-+	case RESP_ID_CMD_DONE:
-+		return ISP4DBG_MACRO_2_STR(RESP_ID_CMD_DONE);
-+	case RESP_ID_NOTI_FRAME_DONE:
-+		return ISP4DBG_MACRO_2_STR(RESP_ID_NOTI_FRAME_DONE);
-+	default:
-+		return "unknown respid";
-+	};
-+}
-+
-+char *isp4dbg_get_if_stream_str(u32 stream /* enum fw_cmd_resp_stream_id */)
-+{
-+	switch (stream) {
-+	case ISP4IF_STREAM_ID_GLOBAL:
-+		return "STREAM_GLOBAL";
-+	case ISP4IF_STREAM_ID_1:
-+		return "STREAM1";
-+	default:
-+		return "unknown streamID";
-+	}
-+}
-+
-+char *isp4dbg_get_out_ch_str(int ch /* enum isp4fw_pipe_out_ch */)
-+{
-+	switch ((enum isp4fw_pipe_out_ch)ch) {
-+	case ISP_PIPE_OUT_CH_PREVIEW:
-+		return "prev";
-+	default:
-+		return "unknown channel";
-+	}
-+}
-diff --git a/drivers/media/platform/amd/isp4/isp4_debug.h b/drivers/media/platform/amd/isp4/isp4_debug.h
-new file mode 100644
-index 000000000000..0c75ddae4882
---- /dev/null
-+++ b/drivers/media/platform/amd/isp4/isp4_debug.h
-@@ -0,0 +1,41 @@
-+/* SPDX-License-Identifier: GPL-2.0+ */
-+/*
-+ * Copyright (C) 2025 Advanced Micro Devices, Inc.
-+ */
-+
-+#ifndef _ISP4_DEBUG_H_
-+#define _ISP4_DEBUG_H_
-+
-+#include <linux/printk.h>
-+#include <linux/dev_printk.h>
-+
-+#include "isp4_subdev.h"
-+
-+#ifdef CONFIG_DEBUG_FS
-+struct isp4_device;
-+
-+void isp_debugfs_create(struct isp4_device *isp_dev);
-+void isp_debugfs_remove(struct isp4_device *isp_dev);
-+void isp_fw_log_print(struct isp4_subdev *isp);
-+
-+#else
-+
-+/* to avoid checkpatch warning */
-+#define isp_debugfs_create(cam) ((void)(cam))
-+#define isp_debugfs_remove(cam) ((void)(cam))
-+#define isp_fw_log_print(isp) ((void)(isp))
-+
-+#endif /* CONFIG_DEBUG_FS */
-+
-+void isp4dbg_show_bufmeta_info(struct device *dev, char *pre, void *p,
-+			       void *orig_buf /* struct sys_img_buf_handle */);
-+char *isp4dbg_get_img_fmt_str(int fmt /* enum _image_format_t */);
-+char *isp4dbg_get_out_ch_str(int ch /* enum _isp_pipe_out_ch_t */);
-+char *isp4dbg_get_cmd_str(u32 cmd);
-+char *isp4dbg_get_buf_type(u32 type);/* enum _buffer_type_t */
-+char *isp4dbg_get_resp_str(u32 resp);
-+char *isp4dbg_get_buf_src_str(u32 src);
-+char *isp4dbg_get_buf_done_str(u32 status);
-+char *isp4dbg_get_if_stream_str(u32 stream);
-+
-+#endif
-diff --git a/drivers/media/platform/amd/isp4/isp4_interface.c b/drivers/media/platform/amd/isp4/isp4_interface.c
-index d381785c8ac2..1da970fee20f 100644
---- a/drivers/media/platform/amd/isp4/isp4_interface.c
-+++ b/drivers/media/platform/amd/isp4/isp4_interface.c
-@@ -6,8 +6,8 @@
- #include <drm/amd/isp.h>
- #include <linux/iopoll.h>
- #include <linux/mutex.h>
--#include <linux/platform_device.h>
- 
-+#include "isp4_debug.h"
- #include "isp4_fw_cmd_resp.h"
- #include "isp4_hw_reg.h"
- #include "isp4_interface.h"
-@@ -357,7 +357,8 @@ static int isp4if_insert_isp_fw_cmd(struct isp4_interface *ispif, enum isp4if_st
- 	len = rb_config->val_size;
- 
- 	if (isp4if_is_cmdq_rb_full(ispif, stream)) {
--		dev_err(dev, "fail no cmdslot (%d)\n", stream);
-+		dev_err(dev, "fail no cmdslot %s(%d)\n",
-+			isp4dbg_get_if_stream_str(stream), stream);
- 		return -EINVAL;
- 	}
- 
-@@ -365,13 +366,15 @@ static int isp4if_insert_isp_fw_cmd(struct isp4_interface *ispif, enum isp4if_st
- 	rd_ptr = isp4hw_rreg(ispif->mmio, rreg);
- 
- 	if (rd_ptr > len) {
--		dev_err(dev, "fail (%u),rd_ptr %u(should<=%u),wr_ptr %u\n",
-+		dev_err(dev, "fail %s(%u),rd_ptr %u(should<=%u),wr_ptr %u\n",
-+			isp4dbg_get_if_stream_str(stream),
- 			stream, rd_ptr, len, wr_ptr);
- 		return -EINVAL;
- 	}
- 
- 	if (wr_ptr > len) {
--		dev_err(dev, "fail (%u),wr_ptr %u(should<=%u), rd_ptr %u\n",
-+		dev_err(dev, "fail %s(%u),wr_ptr %u(should<=%u), rd_ptr %u\n",
-+			isp4dbg_get_if_stream_str(stream),
- 			stream, wr_ptr, len, rd_ptr);
- 		return -EINVAL;
- 	}
-@@ -453,7 +456,8 @@ static int isp4if_send_fw_cmd(struct isp4_interface *ispif, u32 cmd_id, void *pa
- 		u32 wr_ptr = isp4hw_rreg(ispif->mmio, wreg);
- 
- 		dev_err(dev,
--			"failed to get free cmdq slot, stream (%d),rd %u, wr %u\n",
-+			"failed to get free cmdq slot, stream %s(%d),rd %u, wr %u\n",
-+			isp4dbg_get_if_stream_str(stream),
- 			stream, rd_ptr, wr_ptr);
- 		return -ETIMEDOUT;
- 	}
-@@ -503,9 +507,11 @@ static int isp4if_send_fw_cmd(struct isp4_interface *ispif, u32 cmd_id, void *pa
- 
- 	ret = isp4if_insert_isp_fw_cmd(ispif, stream, &cmd);
- 	if (ret) {
--		dev_err(dev, "fail for insert_isp_fw_cmd camId (0x%08x)\n", cmd_id);
-+		dev_err(dev, "fail for insert_isp_fw_cmd camId %s(0x%08x)\n",
-+			isp4dbg_get_cmd_str(cmd_id), cmd_id);
- 		if (cmd_ele) {
--			isp4if_rm_cmd_from_cmdq(ispif, cmd_ele->seq_num, cmd_ele->cmd_id);
-+			isp4if_rm_cmd_from_cmdq(ispif, cmd_ele->seq_num,
-+						cmd_ele->cmd_id);
- 			kfree(cmd_ele);
- 		}
- 	}
-@@ -716,13 +722,15 @@ int isp4if_f2h_resp(struct isp4_interface *ispif, enum isp4if_stream_id stream,
- 	wr_ptr_dbg = wr_ptr;
- 
- 	if (rd_ptr > len) {
--		dev_err(dev, "fail (%u),rd_ptr %u(should<=%u),wr_ptr %u\n",
-+		dev_err(dev, "fail %s(%u),rd_ptr %u(should<=%u),wr_ptr %u\n",
-+			isp4dbg_get_if_stream_str(stream),
- 			stream, rd_ptr, len, wr_ptr);
- 		return -EINVAL;
- 	}
- 
- 	if (wr_ptr > len) {
--		dev_err(dev, "fail (%u),wr_ptr %u(should<=%u), rd_ptr %u\n",
-+		dev_err(dev, "fail %s(%u),wr_ptr %u(should<=%u), rd_ptr %u\n",
-+			isp4dbg_get_if_stream_str(stream),
- 			stream, wr_ptr, len, rd_ptr);
- 		return -EINVAL;
- 	}
-@@ -737,7 +745,8 @@ int isp4if_f2h_resp(struct isp4_interface *ispif, enum isp4if_stream_id stream,
- 				isp4hw_wreg(GET_ISP4IF_REG_BASE(ispif),
- 					    rreg, rd_ptr);
- 			} else {
--				dev_err(dev, "(%u),rd %u(should<=%u),wr %u\n",
-+				dev_err(dev, "%s(%u),rd %u(should<=%u),wr %u\n",
-+					isp4dbg_get_if_stream_str(stream),
- 					stream, rd_ptr, len, wr_ptr);
- 				return -EINVAL;
- 			}
-@@ -763,7 +772,8 @@ int isp4if_f2h_resp(struct isp4_interface *ispif, enum isp4if_stream_id stream,
- 				isp4hw_wreg(GET_ISP4IF_REG_BASE(ispif),
- 					    rreg, rd_ptr);
- 			} else {
--				dev_err(dev, "(%u),rd %u(should<=%u),wr %u\n",
-+				dev_err(dev, "%s(%u),rd %u(should<=%u),wr %u\n",
-+					isp4dbg_get_if_stream_str(stream),
- 					stream, rd_ptr, len, wr_ptr);
- 				return -EINVAL;
- 			}
-@@ -785,7 +795,8 @@ int isp4if_f2h_resp(struct isp4_interface *ispif, enum isp4if_stream_id stream,
- 				isp4hw_wreg(GET_ISP4IF_REG_BASE(ispif),
- 					    rreg, rd_ptr);
- 			} else {
--				dev_err(dev, "(%u),rd %u(should<=%u),wr %u\n",
-+				dev_err(dev, "%s(%u),rd %u(should<=%u),wr %u\n",
-+					isp4dbg_get_if_stream_str(stream),
- 					stream, rd_ptr, len, wr_ptr);
- 				return -EINVAL;
- 			}
-@@ -800,9 +811,9 @@ int isp4if_f2h_resp(struct isp4_interface *ispif, enum isp4if_stream_id stream,
- 		dev_err(dev, "resp checksum 0x%x,should 0x%x,rptr %u,wptr %u\n",
- 			checksum, response->resp_check_sum, rd_ptr_dbg, wr_ptr_dbg);
- 
--		dev_err(dev, "(%u), seqNo %u, resp_id (0x%x)\n", stream,
--			response->resp_seq_num,
--			response->resp_id);
-+		dev_err(dev, "%s(%u), seqNo %u, resp_id %s(0x%x)\n",
-+			isp4dbg_get_if_stream_str(stream), stream, response->resp_seq_num,
-+			isp4dbg_get_resp_str(response->resp_id), response->resp_id);
- 
- 		return -EINVAL;
- 	}
-diff --git a/drivers/media/platform/amd/isp4/isp4_subdev.c b/drivers/media/platform/amd/isp4/isp4_subdev.c
-index 2eb9446bfea7..a82ea4c80ea3 100644
---- a/drivers/media/platform/amd/isp4/isp4_subdev.c
-+++ b/drivers/media/platform/amd/isp4/isp4_subdev.c
-@@ -7,6 +7,7 @@
- #include <linux/pm_domain.h>
- #include <linux/pm_runtime.h>
- 
-+#include "isp4_debug.h"
- #include "isp4_fw_cmd_resp.h"
- #include "isp4_interface.h"
- #include "isp4_subdev.h"
-@@ -252,7 +253,9 @@ static int isp4sd_setup_output(struct isp4_subdev *isp_subdev,
- 		return -EINVAL;
- 	}
- 
--	dev_dbg(dev, "channel: w:h=%u:%u,lp:%u,cp%u\n",
-+	dev_dbg(dev, "channel:%s,fmt %s,w:h=%u:%u,lp:%u,cp%u\n",
-+		isp4dbg_get_out_ch_str(cmd_ch_prop.ch),
-+		isp4dbg_get_img_fmt_str(cmd_ch_prop.image_prop.image_format),
- 		cmd_ch_prop.image_prop.width, cmd_ch_prop.image_prop.height,
- 		cmd_ch_prop.image_prop.luma_pitch,
- 		cmd_ch_prop.image_prop.chroma_pitch);
-@@ -275,6 +278,9 @@ static int isp4sd_setup_output(struct isp4_subdev *isp_subdev,
- 		return ret;
- 	}
- 
-+	dev_dbg(dev, "enable channel %s\n",
-+		isp4dbg_get_out_ch_str(cmd_ch_en.ch));
-+
- 	if (!sensor_info->start_stream_cmd_sent) {
- 		ret = isp4sd_kickoff_stream(isp_subdev, out_prop->width,
- 					    out_prop->height);
-@@ -428,8 +434,9 @@ static void isp4sd_fw_resp_cmd_done(struct isp4_subdev *isp_subdev,
- 		isp4if_rm_cmd_from_cmdq(ispif, para->cmd_seq_num, para->cmd_id);
- 	struct device *dev = isp_subdev->dev;
- 
--	dev_dbg(dev, "stream %d,cmd (0x%08x)(%d),seq %u, ele %p\n",
-+	dev_dbg(dev, "stream %d,cmd %s(0x%08x)(%d),seq %u, ele %p\n",
- 		stream_id,
-+		isp4dbg_get_cmd_str(para->cmd_id),
- 		para->cmd_id, para->cmd_status, para->cmd_seq_num,
- 		ele);
- 
-@@ -486,8 +493,9 @@ isp4sd_preview_done(struct isp4_subdev *isp_subdev,
- 			pcb->preview.status = ISP4VID_BUF_DONE_STATUS_SUCCESS;
- 		}
- 	} else if (meta->preview.enabled) {
--		dev_err(dev, "fail bad preview status %u\n",
--			meta->preview.status);
-+		dev_err(dev, "fail bad preview status %u(%s)\n",
-+			meta->preview.status,
-+			isp4dbg_get_buf_done_str(meta->preview.status));
- 	}
- 
- 	return prev;
-@@ -546,14 +554,18 @@ static void isp4sd_fw_resp_frame_done(struct isp4_subdev *isp_subdev,
- 	pcb.poc = meta->poc;
- 	pcb.cam_id = 0;
- 
--	dev_dbg(dev, "ts:%llu,streamId:%d,poc:%u,preview_en:%u,(%i)\n",
-+	dev_dbg(dev, "ts:%llu,streamId:%d,poc:%u,preview_en:%u,%s(%i)\n",
- 		ktime_get_ns(), stream_id, meta->poc,
- 		meta->preview.enabled,
-+		isp4dbg_get_buf_done_str(meta->preview.status),
- 		meta->preview.status);
- 
- 	prev = isp4sd_preview_done(isp_subdev, meta, &pcb);
--	if (pcb.preview.status != ISP4VID_BUF_DONE_STATUS_ABSENT)
-+	if (pcb.preview.status != ISP4VID_BUF_DONE_STATUS_ABSENT) {
-+		isp4dbg_show_bufmeta_info(dev, "prev", &meta->preview,
-+					  &pcb.preview.buf);
- 		isp4vid_notify(&isp_subdev->isp_vdev, &pcb);
-+	}
- 
- 	isp4if_dealloc_buffer_node(prev);
- 
-@@ -574,6 +586,8 @@ static void isp4sd_fw_resp_func(struct isp4_subdev *isp_subdev,
- 	if (ispif->status < ISP4IF_STATUS_FW_RUNNING)
- 		return;
- 
-+	isp_fw_log_print(isp_subdev);
-+
- 	while (true) {
- 		s32 ret;
- 
-@@ -591,7 +605,8 @@ static void isp4sd_fw_resp_func(struct isp4_subdev *isp_subdev,
- 						  &resp.param.frame_done);
- 			break;
- 		default:
--			dev_err(dev, "-><- fail respid (0x%x)\n",
-+			dev_err(dev, "-><- fail respid %s(0x%x)\n",
-+				isp4dbg_get_resp_str(resp.resp_id),
- 				resp.resp_id);
- 			break;
- 		}
--- 
-2.34.1
+On Tegra30, however, which I guess you refer to, I guess mux pingroups are=
+=20
+gone and each pin has its own mux (again looking at upstream pinctrl-
+tegra30.c). vi_mclk_pt1 is now its own mux with the options VI, VI_ALT1,=20
+VI_ALT2, VI_ALT3. The drive group for this pin is still called csus, so by=
+=20
+that name it only has the drive settings as you mention.
+
+Are you testing on Tegra20, Tegra30, or both?
+
+I've looked at some Tegra30 schematics, and they show a signal called VI_MC=
+LK=20
+being routed to CSI cameras.
+
+>=20
+> Another theory is that maybe csus is used for VIP cameras only and
+> vi_sensor is used for CSI cameras, but they both have to be on in
+> order to work correctly. Csus was removed from Tegra114 along with
+> VIP, might not be a coincidence. Moreover, T124 uses vi_sensor as
+> camera mclk source.
+
+I see the CSUS clock still on Tegra124 based on the upstream kernel. There =
+is=20
+also a CAM_MCLK pin. It seems Tegra30 has both VI_MCLK and CAM_MCLK pins,=20
+which both can output the clock. After Tegra30 there is only CAM_MCLK.
+
+Looking at L4T r21, in tegra12_clocks.c, it defines the clocks mclk and mcl=
+k2.=20
+There is a comment on mclk saying:
+
+	               .clk_num =3D 92, /* csus */
+
+whereas mclk2 is vim2_clk. These clocks are indeed defined as gates, with=20
+vi_sensor / vi_sensor2 as parent, set_rate being passed onto the parent.
+
+All of that wasn't very coherently written, but to summarize my thoughts:
+
+On Tegra30, we have
+- Pins vi_mclk and cam_mclk. Both can only source from (vi_)mclk which also=
+=20
+goes by name csus. The mclk/csus clock is a clock gate with vi_sensor as=20
+parent.
+On Tegra114 and later,
+- Same situation, but vi_mclk is gone, so instead we have cam_mclk (possibl=
+y=20
+multiple with associated mclkN and vi_sensorN clocks)
+On Tegra20,
+- The vi_mclk pin has a variety of mux options, one of which is VI_SENSOR_C=
+LK.=20
+I expect this to correspond to the same behavior as later chips, i.e. sourc=
+es=20
+from the csus(/mclk) clock, which sources from vi_sensor.
+
+>=20
+> Here is a fragment of Tegra124 clock tree (dumped from Mi pad 1)
+>=20
+>          pll_p                                 on     13  x34      408000=
+000
+> vi_sensor2                       $ off    0   3.0      136000000 mclk2   =
+ =20
+>                    $ off    0            136000000 vi_sensor             =
+ =20
+>         $ off    0   3.0      136000000 mclk                          $ o=
+ff
+>    0            136000000
+> > > > > >Cheers,
+> > > > > >Mikko
+
+
+
 
