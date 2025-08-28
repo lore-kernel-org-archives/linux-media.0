@@ -1,55 +1,55 @@
-Received: from fout-b8-smtp.messagingengine.com (fout-b8-smtp.messagingengine.com [202.12.124.151])
+Received: from fhigh-b3-smtp.messagingengine.com (fhigh-b3-smtp.messagingengine.com [202.12.124.154])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A13F12848BA;
-	Thu, 28 Aug 2025 16:08:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.151
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5533527E7FB;
+	Thu, 28 Aug 2025 16:08:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.154
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756397294; cv=none; b=KelagEQMKtxEPau4pXTcny5MmhyjxdOn9HPAkVNaF8mMk/RoFb7l5stpXLkRtEZ6yjJqjPc0lR/dVlnLMjn5osq+bSaWdsUhhZ2L2K+8Z18NXN0spfO6TV1S/Qb2iJLc95grEcj1XD5HYVCutJ9ZrKAzrEAJmeyuecO4IT8j9sI=
+	t=1756397296; cv=none; b=tp01NkJGy7Wv3e5gJ6n8QaeFTakek0WOU1qyHKhNKOvI1maS1Hh5VO5Ar4PuSZHnqNLMGQarWJIS7CS3ZwhfMvFw8xVHCaeu7qlbuRGME98qEpZT+zDxnOQJV9GotKHOxYV2LuuVEzZEr6VaAKz6MV+In0Wvh2ol5AwhtFBLv6s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756397294; c=relaxed/simple;
-	bh=IR6HyWJkFnmM9cDzkiAb1R8i52IvsJXLDYdEAIKsihU=;
+	s=arc-20240116; t=1756397296; c=relaxed/simple;
+	bh=jnVPRNznxjDgwuNDiSyCXzcT3UR3gg3VlLLzZg+Dnqg=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=Ng7oCFUZbHa8i/mEWU4ONHzRvj4yhXhSyoVcUl56vQ4EvO2p3iv2ttaiRJhXwhTGyMTvO1yrCLFBfwoJb60wZKf0Mjr/y4PqxZSkoUrdKqEhU2eW5NSVvvt/+t/lZR4noB28BehHmyFQC+A31GD0z/r30RmwgwC0S962vkVDUgw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ragnatech.se; spf=pass smtp.mailfrom=ragnatech.se; dkim=pass (2048-bit key) header.d=ragnatech.se header.i=@ragnatech.se header.b=VlsY+QYC; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=ksYH0PvO; arc=none smtp.client-ip=202.12.124.151
+	 MIME-Version:Content-Type; b=NCY8R2n6FmQPyYrEReaK82gmdiyzU8GCMNA2gqr4xjDMWmQkQ6InBcLlD13RU1tbOdQzibVqzp0K5bFIYRh7RaOrLStXm+pJgXt1xj8OhjIMZ/Rq5l/1ylLPn0E4VL5hpw0E+LC5yxR048YVVmttfwQrwNT6wmXa8+rHveBnfzE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ragnatech.se; spf=pass smtp.mailfrom=ragnatech.se; dkim=pass (2048-bit key) header.d=ragnatech.se header.i=@ragnatech.se header.b=gb9CL1P5; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=d8+QHjT9; arc=none smtp.client-ip=202.12.124.154
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ragnatech.se
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ragnatech.se
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ragnatech.se header.i=@ragnatech.se header.b="VlsY+QYC";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="ksYH0PvO"
-Received: from phl-compute-09.internal (phl-compute-09.internal [10.202.2.49])
-	by mailfout.stl.internal (Postfix) with ESMTP id A68111D0013C;
-	Thu, 28 Aug 2025 12:08:08 -0400 (EDT)
+	dkim=pass (2048-bit key) header.d=ragnatech.se header.i=@ragnatech.se header.b="gb9CL1P5";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="d8+QHjT9"
+Received: from phl-compute-05.internal (phl-compute-05.internal [10.202.2.45])
+	by mailfhigh.stl.internal (Postfix) with ESMTP id 621107A01BC;
+	Thu, 28 Aug 2025 12:08:13 -0400 (EDT)
 Received: from phl-mailfrontend-02 ([10.202.2.163])
-  by phl-compute-09.internal (MEProxy); Thu, 28 Aug 2025 12:08:08 -0400
+  by phl-compute-05.internal (MEProxy); Thu, 28 Aug 2025 12:08:13 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ragnatech.se; h=
 	cc:cc:content-transfer-encoding:content-type:content-type:date
 	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to; s=fm3; t=1756397288;
-	 x=1756483688; bh=YUHjV8pe1amqq18XMN7EVry19UNalLRUFwLRZlDKv/w=; b=
-	VlsY+QYCp5Ou3E7bJSK09AJdQVr3PdhZo8vETdNy8o5gjd+ZfO3u4uHMyQJn1l96
-	tkAfHRqHEM+sh+LXxOBu+w0oGYENYvM1y2h0PxeFIyWfDCSDd+gYV3nnfCG9mNUP
-	uByUZaBRjxKY6KTiWFriLJzSBJK7+eqr2H1VN8Sj4EKQ6K/bYKlIqzKe+/Y/SdsM
-	QU4tZCKRjIjlMyA86y+aFf7ZZWKAG/4GEAqFMwKTFfrTswMoY3QSskF+BjLj4pPv
-	oza/KcAqcWyRY5zy9kmYqbcyxRTxy/0p3qz7jDZiBWD+TtUo+8EtgdQhsTmcEBdS
-	AgyeJJz1sKTP8mz+CxbHdw==
+	:references:reply-to:subject:subject:to:to; s=fm3; t=1756397293;
+	 x=1756483693; bh=HHaRGTVk2JXY1NoNjjdd7UT/faquBH+w5rUZ4m7wa6E=; b=
+	gb9CL1P59XArEjugFU9x7qd33uS/y6raF9jOtOEaLtCBb0jLTdCqd2Zxz7A9sh79
+	7GpzXLjbmI4lms/vum1BRKpRgf+0jVdY6TMOysuoiZyAm1u67wCb3/7oI6vAViUG
+	8VJvYfMz70TFBLnjw6/EXWRKQoK80xGeE/kAkVSmL7OPQBlqwtADOg1bIMRUzrag
+	muD2D46F4hu4LhjTWurxXy4H5+5WUcvbhv55y1ihRLfujlPBoHpFZax4Ne7qGB/y
+	fFhsofFwjZ2kX3jgm0P27DQGzu8YCmTTmLwcqItXMy4IY0zXGIZzMd09iI5IUVBx
+	3HBKfSLPZm1TAeso0HUi3w==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
 	messagingengine.com; h=cc:cc:content-transfer-encoding
 	:content-type:content-type:date:date:feedback-id:feedback-id
 	:from:from:in-reply-to:in-reply-to:message-id:mime-version
 	:references:reply-to:subject:subject:to:to:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1756397288; x=
-	1756483688; bh=YUHjV8pe1amqq18XMN7EVry19UNalLRUFwLRZlDKv/w=; b=k
-	sYH0PvO/GOlBS98fD/LGD2jPqdZbwZLafx9IBjEzNKmSkUvX/8vSILzvEBQgzViX
-	qndO0tQJ6DNNU7LMRMXq/sU9kiO8M5+4w37iaRvQkIBJQ+GPQJLzPvksmRvlrVgz
-	3j4aeBbiZPH6aAghuDJbBBRINfjHQbOfVGjrPhVhy1pTbY1pR0WxsLdHXz0EKUcl
-	elTQtcIpAejViFGI40cIXiVRr6H2hryyaN1YZNqXim2eK91HCIY+wcF9Hqm02s+k
-	E1O4M0Yo3lLsPpU+DOp06PwzQyVKQ0ry6wEWuV7w+6g1nqK0Sl70bqbzJxPCSmMY
-	VbJZSXmX4YBAFOo2MxJaw==
-X-ME-Sender: <xms:6H6waNj5cFUQOXm6_XB7KXPEM0GjKMkfKDTe-QCb0vFQ6Cq0WTd4BA>
-    <xme:6H6waHP_8KxHjyrQkgRFkhA88SaQTRhXczlaK4GSvqZUpmCi5I3arHBMZyafX8Hzs
-    5tN1Jd23SWiHdImGd8>
-X-ME-Received: <xmr:6H6waN8T2kAVxD0QY41hIgkiSEYRNOQhIVHTvl6QjWAuK-cjLw9IGWptKBpH4lDx566wilaLnW0eK7bCdhFYZ9E_VA>
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1756397293; x=
+	1756483693; bh=HHaRGTVk2JXY1NoNjjdd7UT/faquBH+w5rUZ4m7wa6E=; b=d
+	8+QHjT9e3paV1eWKwr/YhJcp+Z1fnUWP4lqZ414vUBsG244D5+DTRzTTKvw+IGiL
+	H8UAsW6zttN1AuhgvDcO5+cw0bJz39e8LmCyAKsgigXA2LnEDRBfAj41ADVzUMje
+	wuwq0MgN1Ifp+HTD7uZwDniIGL1lCXp2OFxebVFBx3wb4KvnmR12Y37XtlgD4lS8
+	NapJU+adjuMxmUR/riyGR+Dn9xcf2udK8QldgOEJGIeUoczLDeSFR4yM7D5pW9Sk
+	LRkuHaQtUY0mltPf7PfiNcVC71tHWhgtJiSSLM9oJojxqUQZrX4K6qnAnk1oSwfA
+	OAgchq2sz4OEy26U9bAWg==
+X-ME-Sender: <xms:7X6waB3eI4rtrVO4l41BKojnk3NoH5iGOmRh0GcSGBfZXG9sHzFstg>
+    <xme:7X6waNQuzhtL_p2qc4mepbEMb5yQpy56oixyop0Pv7rM0fTBZkA9TVJMFbf1fhfT9
+    PqZNGIw4dHcQ0VdFDU>
+X-ME-Received: <xmr:7X6waCxmBPlE9_XAKgDL-FyPubqOMV3B2vwIa8Zr_bLQtww8WQ2TOJ1gNB8GRMdRlZ83fWmRQ64W6oIO-OvuFMlRUA>
 X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtdefgddukedugeeiucetufdoteggodetrf
     dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfurfetoffkrfgpnffqhgenuceu
     rghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujf
@@ -68,14 +68,14 @@ X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtdefgddukedugeeiucetufdote
     grshdrshhouggvrhhluhhnugdorhgvnhgvshgrshesrhgrghhnrghtvggthhdrshgvpdhr
     tghpthhtoheplhgruhhrvghnthdrphhinhgthhgrrhhtodhrvghnvghsrghssehiuggvrg
     hsohhnsghorghrugdrtghomh
-X-ME-Proxy: <xmx:6H6waIcgDMFoSL0P9SjZ9aO3lPUDh-AE59d9H7R1c0j2zp_gBjA0iw>
-    <xmx:6H6waMwDi1hSQKxTCBMBGZsFgas3wDFs3VrHWv3d9G6QtkE8LqtKmw>
-    <xmx:6H6waNK6x4emVzjff5Sds0DaIGWLVOD87iyVUFl4UGYHqZvOeWl6Gw>
-    <xmx:6H6waOHsB6W_GUDxumeVHekD44PLhcLKfLdQBuyjFRpZ4bFe3T_YnA>
-    <xmx:6H6waKtnPeW0WDsvwoOjmv03UTUcWHZOd9Liic39tzA9EFsG_kdahAKf>
+X-ME-Proxy: <xmx:7X6waFBZ_tW_99-JUpeBi0SH_dEgYsoMDKpHsq-cikXQU111OTDekA>
+    <xmx:7X6waGHH_Yl766gywDsTbFXvfL7qNYKKYvuFYsyHclGWmAE-PTitvw>
+    <xmx:7X6waEPfuDQKjoAym5_aiMD5QmZ7LjzMaOjgAfduCfI_xrqdBMzcwA>
+    <xmx:7X6waP72nYRcXJ9Gsyb_XP2WqtVfXaq5H-vcV1HGhy_ehj_8NPfhlw>
+    <xmx:7X6waJgLFnEN9QOIO1lMIH0tgAvxzj5IeNyAYr0D76tUdb-v7FFPDT3H>
 Feedback-ID: i80c9496c:Fastmail
 Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
- 28 Aug 2025 12:08:07 -0400 (EDT)
+ 28 Aug 2025 12:08:12 -0400 (EDT)
 From: =?UTF-8?q?Niklas=20S=C3=B6derlund?= <niklas.soderlund+renesas@ragnatech.se>
 To: Lars-Peter Clausen <lars@metafoo.de>,
 	Mauro Carvalho Chehab <mchehab@kernel.org>,
@@ -85,9 +85,9 @@ To: Lars-Peter Clausen <lars@metafoo.de>,
 Cc: linux-renesas-soc@vger.kernel.org,
 	=?UTF-8?q?Niklas=20S=C3=B6derlund?= <niklas.soderlund+renesas@ragnatech.se>,
 	Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>
-Subject: [PATCH v2 03/11] media: adv7180: Move state mutex handling outside init_device()
-Date: Thu, 28 Aug 2025 18:06:46 +0200
-Message-ID: <20250828160654.1467762-4-niklas.soderlund+renesas@ragnatech.se>
+Subject: [PATCH v2 05/11] media: adv7180: Setup controls every time the device is reset
+Date: Thu, 28 Aug 2025 18:06:48 +0200
+Message-ID: <20250828160654.1467762-6-niklas.soderlund+renesas@ragnatech.se>
 X-Mailer: git-send-email 2.51.0
 In-Reply-To: <20250828160654.1467762-1-niklas.soderlund+renesas@ragnatech.se>
 References: <20250828160654.1467762-1-niklas.soderlund+renesas@ragnatech.se>
@@ -100,103 +100,44 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-Future rework to get rid of .s_power requires the state mutex to be
-held for multiple operations where initializing the device is one of
-them.
+The device initialization code resets the whole device, thus the initial
+controls set at probe are lost as adv7180_init_controls() are called
+before init_device(). Additionally the controls were never restored
+after the device where reset coming back from suspend.
 
-Move lock handling outside init_device() but enforce the lock is held
-with a lockdep_assert_held().
+Solve this by separate the setup of the controls from the creation of
+them, and always set them up when the device is reset.
 
 Signed-off-by: Niklas Söderlund <niklas.soderlund+renesas@ragnatech.se>
 Reviewed-by: Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>
 ---
- drivers/media/i2c/adv7180.c | 25 +++++++++++++------------
- 1 file changed, 13 insertions(+), 12 deletions(-)
+* Changes since v1
+- Fix spelling in commit message.
+---
+ drivers/media/i2c/adv7180.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
 diff --git a/drivers/media/i2c/adv7180.c b/drivers/media/i2c/adv7180.c
-index b7f175650bd0..9dbd33c4a30c 100644
+index 7b0387151c3a..8409ee9acc4f 100644
 --- a/drivers/media/i2c/adv7180.c
 +++ b/drivers/media/i2c/adv7180.c
-@@ -880,7 +880,7 @@ static int init_device(struct adv7180_state *state)
- {
- 	int ret;
+@@ -700,7 +700,6 @@ static int adv7180_init_controls(struct adv7180_state *state)
+ 		v4l2_ctrl_handler_free(&state->ctrl_hdl);
+ 		return err;
+ 	}
+-	v4l2_ctrl_handler_setup(&state->ctrl_hdl);
  
--	mutex_lock(&state->mutex);
-+	lockdep_assert_held(&state->mutex);
- 
- 	adv7180_set_power_pin(state, true);
- 	adv7180_set_reset_pin(state, false);
-@@ -890,11 +890,11 @@ static int init_device(struct adv7180_state *state)
- 
- 	ret = state->chip_info->init(state);
- 	if (ret)
--		goto out_unlock;
-+		return ret;
- 
- 	ret = adv7180_program_std(state);
- 	if (ret)
--		goto out_unlock;
-+		return ret;
+ 	return 0;
+ }
+@@ -898,6 +897,8 @@ static int init_device(struct adv7180_state *state)
  
  	adv7180_set_field_mode(state);
  
-@@ -905,31 +905,28 @@ static int init_device(struct adv7180_state *state)
- 				    ADV7180_ICONF1_ACTIVE_LOW |
- 				    ADV7180_ICONF1_PSYNC_ONLY);
- 		if (ret < 0)
--			goto out_unlock;
-+			return ret;
- 
- 		ret = adv7180_write(state, ADV7180_REG_IMR1, 0);
- 		if (ret < 0)
--			goto out_unlock;
-+			return ret;
- 
- 		ret = adv7180_write(state, ADV7180_REG_IMR2, 0);
- 		if (ret < 0)
--			goto out_unlock;
-+			return ret;
- 
- 		/* enable AD change interrupts */
- 		ret = adv7180_write(state, ADV7180_REG_IMR3,
- 				    ADV7180_IRQ3_AD_CHANGE);
- 		if (ret < 0)
--			goto out_unlock;
-+			return ret;
- 
- 		ret = adv7180_write(state, ADV7180_REG_IMR4, 0);
- 		if (ret < 0)
--			goto out_unlock;
-+			return ret;
- 	}
- 
--out_unlock:
--	mutex_unlock(&state->mutex);
--
--	return ret;
-+	return 0;
- }
- 
- static int adv7180_s_stream(struct v4l2_subdev *sd, int enable)
-@@ -1479,7 +1476,9 @@ static int adv7180_probe(struct i2c_client *client)
- 	if (ret)
- 		goto err_free_ctrl;
- 
-+	mutex_lock(&state->mutex);
- 	ret = init_device(state);
-+	mutex_unlock(&state->mutex);
- 	if (ret)
- 		goto err_media_entity_cleanup;
- 
-@@ -1562,6 +1561,8 @@ static int adv7180_resume(struct device *dev)
- 	struct adv7180_state *state = to_state(sd);
- 	int ret;
- 
-+	guard(mutex)(&state->mutex);
++	__v4l2_ctrl_handler_setup(&state->ctrl_hdl);
 +
- 	ret = init_device(state);
- 	if (ret < 0)
- 		return ret;
+ 	/* register for interrupts */
+ 	if (state->irq > 0) {
+ 		/* config the Interrupt pin to be active low */
 -- 
 2.51.0
 
