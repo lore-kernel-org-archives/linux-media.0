@@ -1,158 +1,203 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
+Received: from lx20.hoststar.hosting (lx20.hoststar.hosting [168.119.41.54])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8F4A332F764;
-	Mon,  1 Sep 2025 15:42:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 18F8C32F772;
+	Mon,  1 Sep 2025 15:43:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=168.119.41.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756741355; cv=none; b=NnDsc1oaZa9tnq4inp+qzZopN2UK6DftFVX3DW0QojnFuOTXuNn3k1oey6rJ2sf8z+PE70CU7cgAUraHEasrwszG2bS9I2pc7zgM2qKRh+EIdJj5njG6A5ON8aao40LiX61CMwfzrAW2igxxZCYA9DJjoZUzR58R9rzXdvmBsA4=
+	t=1756741431; cv=none; b=Jyr0h9TgShOYjx177AUs+wwkd09l1kwdDrjkRB7Oflih0kj1kZmD+tUQvMroRqiZlLLqWlrZ9cCFDF/g60EIl2+fXFV87GO3JAEGmyN2UPYYQ97+CwJyJzQ0IPG9m88TSUJEcsPerzoeXIj4VaDQTSYIZ6tV4QDlug5SBuqBUu4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756741355; c=relaxed/simple;
-	bh=41yILyPaRdGVTtOmRTVGMgEgTRygcovNRJ8+oQjhy8o=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=qmzlocrH+zSmweZm0V9MEXA9NH5RUOS5/jEKA8juLpsYOWnNL3uuaw8V6uRMYjtnqCn5AOInW06FwniF1pDN80NCrbgK9a3zm1XQbPDwzImb7h/bsP12ruznfHAJL4ImV1+JBwGkTWh3amH1Av8y509p2BfgE3zj4PoBLKJ6mUI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=YNE8HIwF; arc=none smtp.client-ip=192.198.163.9
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1756741431; c=relaxed/simple;
+	bh=inglLfU5gjsaZCpx+FkdLCa8PO3vi3J62HKV+6JkDAk=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=odCRAUnAffDv/7abAq5ifGKpit3VIKXCEBNMFJKYn38gT4hvtPJoNdPG72uen9EtYEP2kvxjlwJZRGnWRIAnaNuiVbdnQSFu9ZyXymeYXO/vqG0OLYRJNr3usjbg9aaZ2YQ8IeprfVX489vXUAsLPrh3sgsHLExkPDEgcxzcItU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=emfend.at; spf=pass smtp.mailfrom=emfend.at; dkim=pass (1024-bit key) header.d=emfend.at header.i=@emfend.at header.b=Ms48I5P+; arc=none smtp.client-ip=168.119.41.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=emfend.at
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=emfend.at
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="YNE8HIwF"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1756741354; x=1788277354;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=41yILyPaRdGVTtOmRTVGMgEgTRygcovNRJ8+oQjhy8o=;
-  b=YNE8HIwFc/DHubxUPb4idax8A7WZrEi1IKqAQxW/iJaevMhQnnJqMdfm
-   a1CNUNtDBorCDpx1PEYjrdOJZixGzrc5UvfVTDKLgPnCeXj9r6AWCqi0y
-   oaTxsVjwgJjhwDr26f4tR8avxrmsGJfJXiqtCqBY5Pe+jU58wlXX6JNwu
-   jB9wpOro5OumOgYGvT1DkA7K8j8I9cfzbRq3o+bjzmZ5CiWfQpPK8mIAf
-   +2S7jbYnSluKDNaZwnqPkWqy5ppdyeV2/GIPMU5bt6QuanbZsknDzbs0y
-   RGav6gKNdKILRG4wWxrE8k9/qoExnRUUCXK6ztGIS1JMTvtBDTVjAh4za
-   Q==;
-X-CSE-ConnectionGUID: f+uLuOlZR6y1hbNAq3s76w==
-X-CSE-MsgGUID: aol7O1E8QQGhkQRB/9KiaA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11540"; a="69709201"
-X-IronPort-AV: E=Sophos;i="6.18,225,1751266800"; 
-   d="scan'208";a="69709201"
-Received: from fmviesa010.fm.intel.com ([10.60.135.150])
-  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Sep 2025 08:42:33 -0700
-X-CSE-ConnectionGUID: iWIyUrZTS6iG0koM7qv4Fw==
-X-CSE-MsgGUID: lIbgDhB1RhWSK/DxIdYagg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.18,225,1751266800"; 
-   d="scan'208";a="171902172"
-Received: from smile.fi.intel.com ([10.237.72.52])
-  by fmviesa010.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Sep 2025 08:42:30 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.98.2)
-	(envelope-from <andriy.shevchenko@intel.com>)
-	id 1ut6fr-0000000ASaN-3aHa;
-	Mon, 01 Sep 2025 18:42:27 +0300
-Date: Mon, 1 Sep 2025 18:42:27 +0300
-From: Andy Shevchenko <andriy.shevchenko@intel.com>
-To: Adrian =?utf-8?Q?Barna=C5=9B?= <abarnas@google.com>
-Cc: Hans de Goede <hansg@kernel.org>,
-	Mauro Carvalho Chehab <mchehab@kernel.org>,
-	Sakari Ailus <sakari.ailus@linux.intel.com>,
-	Andy Shevchenko <andy@kernel.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Dan Carpenter <dan.carpenter@linaro.org>,
-	linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-staging@lists.linux.dev
-Subject: Re: [PATCH 1/2] staging: media: atomisp: Remove typedefs for basic
- types in vmem.c
-Message-ID: <aLW-45MfPpLSNi0n@smile.fi.intel.com>
-References: <20250901091050.1935505-1-abarnas@google.com>
- <20250901091050.1935505-2-abarnas@google.com>
- <aLWS9QsvmzZW4Bak@smile.fi.intel.com>
- <CAATBrPFnSnxwzBQTOdbt0h=epXW7G5Rj8Sr_erKKzUzCH6xC5g@mail.gmail.com>
+	dkim=pass (1024-bit key) header.d=emfend.at header.i=@emfend.at header.b="Ms48I5P+"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=emfend.at;
+	 s=mail; h=Cc:To:In-Reply-To:References:Message-Id:Content-Transfer-Encoding:
+	Content-Type:MIME-Version:Subject:Date:From:Sender:Reply-To:Content-ID:
+	Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+	:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+	List-Post:List-Owner:List-Archive;
+	bh=ywncx89NF7pFbZJ1GzTfJ9q/DxkEWttcK9TGbAeufeA=; b=Ms48I5P+r9Oa7LE4AIKdyg+6HF
+	DFWTI2HA3sC4nTjqHl6PPXwAcRhipRjcYNGcBj5BU21MITR5IVaY0/ZDT75N/B0FJn9u7h9ZW2pFT
+	waDRgVdUZpSixLM58f1Kwi/QMiLOU6SOhoiZSharq4iJ7CuglPiAcEnJot2M/Y61Swc8=;
+Received: from 194-208-208-245.tele.net ([194.208.208.245]:61156 helo=[127.0.1.1])
+	by lx20.hoststar.hosting with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.93)
+	(envelope-from <matthias.fend@emfend.at>)
+	id 1ut6E3-009YyN-Mb; Mon, 01 Sep 2025 17:13:44 +0200
+From: Matthias Fend <matthias.fend@emfend.at>
+Date: Mon, 01 Sep 2025 17:13:37 +0200
+Subject: [PATCH 2/3] media: allegro: process all pending status mbox
+ messages
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAATBrPFnSnxwzBQTOdbt0h=epXW7G5Rj8Sr_erKKzUzCH6xC5g@mail.gmail.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - c/o Alberga Business Park, 6
- krs, Bertel Jungin Aukio 5, 02600 Espoo
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20250901-allegro-dvt-fixes-v1-2-4e4d493836ef@emfend.at>
+References: <20250901-allegro-dvt-fixes-v1-0-4e4d493836ef@emfend.at>
+In-Reply-To: <20250901-allegro-dvt-fixes-v1-0-4e4d493836ef@emfend.at>
+To: Michael Tretter <m.tretter@pengutronix.de>, 
+ Pengutronix Kernel Team <kernel@pengutronix.de>, 
+ Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc: linux-media@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ Matthias Fend <matthias.fend@emfend.at>
+X-Mailer: b4 0.14.2
+X-Spam-Score: -1.0
+X-Spam-Bar: -
+X-Spam-Report: Spam detection software, running on the system "lx20.hoststar.hosting",
+ has NOT identified this incoming email as spam.  The original
+ message has been attached to this so you can view it or label
+ similar future email.  If you have any questions, see
+ the administrator of that system for details.
+ 
+ Content preview:  This message can be helpful for troubleshooting and there
+   is already a corresponding message in case of a channel destroy timeout. Add
+    a similar message for channel creation. Signed-off-by: Matthias Fend <matthias.fend@emfend.at>
+    --- drivers/media/platform/allegro-dvt/allegro-core.c | 8 +++++++- 1 file
+    changed, 7 insertions(+), 1 deletion(-) 
+ 
+ Content analysis details:   (-1.0 points, 5.0 required)
+ 
+  pts rule name              description
+ ---- ---------------------- --------------------------------------------------
+ -1.0 ALL_TRUSTED            Passed through trusted hosts only via SMTP
+  0.0 TVD_RCVD_IP            Message was received from an IP address
+  0.0 Local_hs1_NotHoststar  Sender is not from hoststar.ch|de|com
+  0.0 KAM_DMARC_STATUS       Test Rule for DKIM or SPF Failure with Strict
+                             Alignment
 
-On Mon, Sep 01, 2025 at 03:27:19PM +0200, Adrian Barnaś wrote:
-> On Mon, Sep 1, 2025 at 2:35 PM Andy Shevchenko
-> <andriy.shevchenko@intel.com> wrote:
-> > On Mon, Sep 01, 2025 at 09:10:49AM +0000, Adrian Barnaś wrote:
+Under certain circumstances, not every message written by the MCU to the
+status mailbox may trigger a corresponding interrupt. This is likely when
+multiple messages are generated in a very short period of time. Since the
+current implementation only processes one message per interrupt, even if
+multiple messages are already available in the mailbox, expected messages
+are either not received or are processed late. This leads to various
+subsequent problems and causes the driver to no longer function properly.
 
-...
+The behavior has been adjusted so that after an interrupt, all messages
+available in the mailbox are processed.
 
-> > > -static inline hive_uedge
-> > > -subword(hive_uedge w, unsigned int start, unsigned int end)
-> > > +static inline unsigned long long
-> > > +subword(unsigned long long w, unsigned int start, unsigned int end)
-> > >  {
-> > >       return (w & (((1ULL << (end - 1)) - 1) << 1 | 1)) >> start;
-> > >  }
-> > >
-> > >  /* inverse subword bits move like this: MSB[xxxx____xxxx]LSB -> MSB[xxxx0000xxxx]LSB */
-> > > -static inline hive_uedge
-> > > -inv_subword(hive_uedge w, unsigned int start, unsigned int end)
-> > > +static inline unsigned long long
-> > > +inv_subword(unsigned long long w, unsigned int start, unsigned int end)
-> > >  {
-> > >       return w & (~(((1ULL << (end - 1)) - 1) << 1 | 1) | ((1ULL << start) - 1));
-> > >  }
-> >
-> > Also consider to simplify the above (in a separate change).
-> >
-> > static inline unsigned long long
-> > subword(unsigned long long w, unsigned int start, unsigned int end)
-> > {
-> >         return (w & GENMASK_ULL(end, 0)) >> start;
-> > }
-> >
-> > static inline unsigned long long
-> > inv_subword(unsigned long long w, unsigned int start, unsigned int end)
-> > {
-> >         return w & (~GENMASK_ULL(end, 0) | GENMASK_ULL(start, 0));
-> > }
-> >
-> > ...if I'm not mistaken, so double check all these.
-> >
-> > At least in my case the end == 64 is not allowed while it seems the original
-> > code allows it to be equal to the end == 63 case. Needs testing anyway...
-> 
-> Those functions works odd:
-> when (end = 8, start = 0) it affects bits 0...7
+Signed-off-by: Matthias Fend <matthias.fend@emfend.at>
+---
+ drivers/media/platform/allegro-dvt/allegro-core.c | 42 ++++++++++++++++++-----
+ 1 file changed, 34 insertions(+), 8 deletions(-)
 
-Yes, that's what I meant. But it does the same for 7, 0.
-That's why every caller needs to be carefully checked for these corner cases.
-
-64 is special because it will give complete garbage in my case.
-I suspect they never extracting anything on the non-aligned byte borders.
-
-> This should make the same results, will check twice if i not missed
-> anything and post v2:
-> 
-> static inline unsigned long long _subword(unsigned long long w,
-> unsigned int start,
-> unsigned int end)
-> {
-> return (w & GENMASK_ULL(end-1, 0)) >> start;
-> }
-> 
-> static inline unsigned long long _inv_subword(unsigned long long w,
-> unsigned int start,
-> unsigned int end)
-> {
-> return w & (~GENMASK_ULL(end-1, start));
-> }
-
-Maybe, but again needs to be carefully checked and tested.
-
-You can propose a separate patch as RFC.
+diff --git a/drivers/media/platform/allegro-dvt/allegro-core.c b/drivers/media/platform/allegro-dvt/allegro-core.c
+index 4c5c2a7fe5426aa81ba341aba046ef166c51f664..d3aea46b7d1d9854307d61d2f1647eaa340d504d 100644
+--- a/drivers/media/platform/allegro-dvt/allegro-core.c
++++ b/drivers/media/platform/allegro-dvt/allegro-core.c
+@@ -828,6 +828,20 @@ static int allegro_mbox_write(struct allegro_mbox *mbox,
+ 	return err;
+ }
+ 
++static unsigned int allegro_mbox_get_available(struct allegro_mbox *mbox)
++{
++	struct regmap *sram = mbox->dev->sram;
++	unsigned int head, tail;
++
++	regmap_read(sram, mbox->head, &head);
++	regmap_read(sram, mbox->tail, &tail);
++
++	if (tail >= head)
++		return tail - head;
++	else
++		return mbox->size - (head - tail);
++}
++
+ static ssize_t allegro_mbox_read(struct allegro_mbox *mbox,
+ 				 u32 *dst, size_t nbyte)
+ {
+@@ -836,11 +850,15 @@ static ssize_t allegro_mbox_read(struct allegro_mbox *mbox,
+ 		u16 type;
+ 	} __attribute__ ((__packed__)) *header;
+ 	struct regmap *sram = mbox->dev->sram;
+-	unsigned int head;
++	unsigned int available, head;
+ 	ssize_t size;
+ 	size_t body_no_wrap;
+ 	int stride = regmap_get_reg_stride(sram);
+ 
++	available = allegro_mbox_get_available(mbox);
++	if (available < sizeof(*header))
++		return -EAGAIN;
++
+ 	regmap_read(sram, mbox->head, &head);
+ 	if (head > mbox->size)
+ 		return -EIO;
+@@ -854,6 +872,8 @@ static ssize_t allegro_mbox_read(struct allegro_mbox *mbox,
+ 		return -EIO;
+ 	if (size > nbyte)
+ 		return -EINVAL;
++	if (size > available)
++		return -EAGAIN;
+ 
+ 	/*
+ 	 * The message might wrap within the mailbox. If the message does not
+@@ -913,26 +933,27 @@ static int allegro_mbox_send(struct allegro_mbox *mbox, void *msg)
+  * allegro_mbox_notify() - Notify the mailbox about a new message
+  * @mbox: The allegro_mbox to notify
+  */
+-static void allegro_mbox_notify(struct allegro_mbox *mbox)
++static int allegro_mbox_notify(struct allegro_mbox *mbox)
+ {
+ 	struct allegro_dev *dev = mbox->dev;
+ 	union mcu_msg_response *msg;
+-	ssize_t size;
+ 	u32 *tmp;
+ 	int err;
+ 
+ 	msg = kmalloc(sizeof(*msg), GFP_KERNEL);
+ 	if (!msg)
+-		return;
++		return -ENOMEM;
+ 
+ 	msg->header.version = dev->fw_info->mailbox_version;
+ 
+ 	tmp = kmalloc(mbox->size, GFP_KERNEL);
+-	if (!tmp)
++	if (!tmp) {
++		err = -ENOMEM;
+ 		goto out;
++	}
+ 
+-	size = allegro_mbox_read(mbox, tmp, mbox->size);
+-	if (size < 0)
++	err = allegro_mbox_read(mbox, tmp, mbox->size);
++	if (err < 0)
+ 		goto out;
+ 
+ 	err = allegro_decode_mail(msg, tmp);
+@@ -944,6 +965,8 @@ static void allegro_mbox_notify(struct allegro_mbox *mbox)
+ out:
+ 	kfree(tmp);
+ 	kfree(msg);
++
++	return err;
+ }
+ 
+ static int allegro_encoder_buffer_init(struct allegro_dev *dev,
+@@ -2326,7 +2349,10 @@ static irqreturn_t allegro_irq_thread(int irq, void *data)
+ 	if (!dev->mbox_status)
+ 		return IRQ_NONE;
+ 
+-	allegro_mbox_notify(dev->mbox_status);
++	while (allegro_mbox_get_available(dev->mbox_status) > 0) {
++		if (allegro_mbox_notify(dev->mbox_status))
++			break;
++	}
+ 
+ 	return IRQ_HANDLED;
+ }
 
 -- 
-With Best Regards,
-Andy Shevchenko
-
+2.25.1
 
