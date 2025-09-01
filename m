@@ -1,108 +1,137 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 68AFB34A33E;
-	Mon,  1 Sep 2025 15:05:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 629DF352065
+	for <linux-media@vger.kernel.org>; Mon,  1 Sep 2025 15:08:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.167.242.64
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756739147; cv=none; b=tO2fBGerS9VBk2gXc5XL+U25nIzjBxV2OO5Jiv5+WNYyE7jTrwTLNAedqIzf3HzXLhKEbhNDAYkLNJp4evSfNNZMhxj8XA4WxppsCL5E2YJxCTdnYPacHs06bEUTZqKi7epF8BCEfJVzhJ85TcWY/JCWoQxUkAp4lvaKTsE1kHo=
+	t=1756739286; cv=none; b=k4n5XAtWYrUXk+FlmEH2+rSGGcpCR1obQ/29lXUnrE/QLo9zzHdQaJi1YKqoipbqIEPwk7RaukSBmxq85EORCa5aqEL07xM8aFPSJd8p6uH8PNt4HgJnSftl1ZdeyY5dKha6d04nSQoOO/xRgBOid2llfzP8Zq9rt3kbk6CjiqQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756739147; c=relaxed/simple;
-	bh=2+Ajed5E1fXJz3nZ8NS8d6YJI4WoVgJl21IHABX6Yk4=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=eq6t3GF8YcigamJSbQFzAKNT1ARybeH7Pe9ehKfHPtwLTdr8QG+Qgqk6PhInA4yP2ZEN5yGqRLyxSmCBqhzwuJgjr/o3fOiQbSvl9RzjY1/ER8EX1ZDUGtpaMv6Jfue86a7FctIPjp/ynDObRJ0PyN4fryUXrHoWmE8OLlB1QeM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=BSa17T9r; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1756739286; c=relaxed/simple;
+	bh=olhTGIsE8oLmTWBFxEyhYRe+AJQ60FIySVO6IDiTE1s=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=m4QaB3rIDNdY1squ+XAvC2GlP0DkJfNqutN4t1SdNBzC6SWoiHZtyxePXL7zPRYQ8xCMNVnCjUMystBXxr08uxU9Q0Zv9UgxjQFhcStz9/LvGfHVLldH/Wpf+pLhhxaJ5Vg9JbKEEPhU/whO+pJNwezppKC111+EmPxXr+njsCs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ideasonboard.com; spf=pass smtp.mailfrom=ideasonboard.com; dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b=fN5FCQlj; arc=none smtp.client-ip=213.167.242.64
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ideasonboard.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ideasonboard.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="BSa17T9r"
-Received: by smtp.kernel.org (Postfix) with ESMTPS id EACCEC19421;
-	Mon,  1 Sep 2025 15:05:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux.dev; s=korg;
-	t=1756739147; bh=2+Ajed5E1fXJz3nZ8NS8d6YJI4WoVgJl21IHABX6Yk4=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=BSa17T9rYYkWiL0uWAaRAiiDcWIrspdRe7SoBWhpkVX8B5X4no2fkdz4CjMv/Rh0x
-	 pjnENJfu+ROFE6BYUwZ5Ju+pXxSfjwy/TZeD2BPacdrdPN7Ku+iB2tUW6SYmeU5a1f
-	 HuvqTNvJAGEyXnftupvXe4+2QY27D3tW+lwHMUM4=
-Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E1B43CA1007;
-	Mon,  1 Sep 2025 15:05:46 +0000 (UTC)
-From: Richard Leitner <richard.leitner@linux.dev>
-Date: Mon, 01 Sep 2025 17:05:13 +0200
-Subject: [PATCH v7 08/10] media: i2c: ov9282: add strobe_source v4l2
+	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="fN5FCQlj"
+Received: from ideasonboard.com (mob-5-90-63-95.net.vodafone.it [5.90.63.95])
+	by perceval.ideasonboard.com (Postfix) with ESMTPSA id 27363DF3;
+	Mon,  1 Sep 2025 17:06:52 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+	s=mail; t=1756739213;
+	bh=olhTGIsE8oLmTWBFxEyhYRe+AJQ60FIySVO6IDiTE1s=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=fN5FCQljsCjPocsLGMtHJouSP+qeDA5jg5RUmtqE1CGL6S9CHHdugJVqH+Jn9mT/3
+	 VTrcLL2Rsg/Rayr0FE8YLh3TYQG8dfwhGKyAM207OsLHfkSKZAXxgbv3PowWE9g7o9
+	 0ufMK23K6oYzsd4vALfSNc0mjC11iL61juAAf7aQ=
+Date: Mon, 1 Sep 2025 17:07:55 +0200
+From: Jacopo Mondi <jacopo.mondi@ideasonboard.com>
+To: Sakari Ailus <sakari.ailus@linux.intel.com>
+Cc: linux-media@vger.kernel.org, hans@jjverkuil.nl, 
+	laurent.pinchart@ideasonboard.com, Prabhakar <prabhakar.csengg@gmail.com>, 
+	Kate Hsuan <hpa@redhat.com>, Alexander Shiyan <eagle.alexander923@gmail.com>, 
+	Dave Stevenson <dave.stevenson@raspberrypi.com>, Tommaso Merciai <tomm.merciai@gmail.com>, 
+	Umang Jain <umang.jain@ideasonboard.com>, Benjamin Mugnier <benjamin.mugnier@foss.st.com>, 
+	Sylvain Petinot <sylvain.petinot@foss.st.com>, Christophe JAILLET <christophe.jaillet@wanadoo.fr>, 
+	Julien Massot <julien.massot@collabora.com>, Naushir Patuck <naush@raspberrypi.com>, 
+	"Yan, Dongcheng" <dongcheng.yan@intel.com>, "Cao, Bingbu" <bingbu.cao@intel.com>, 
+	"Qiu, Tian Shu" <tian.shu.qiu@intel.com>, "Wang, Hongju" <hongju.wang@intel.com>, 
+	Stefan Klug <stefan.klug@ideasonboard.com>, Mirela Rabulea <mirela.rabulea@nxp.com>, 
+	=?utf-8?B?QW5kcsOp?= Apitzsch <git@apitzsch.eu>, Heimir Thor Sverrisson <heimir.sverrisson@gmail.com>, 
+	Kieran Bingham <kieran.bingham@ideasonboard.com>, Stanislaw Gruszka <stanislaw.gruszka@linux.intel.com>, 
+	Mehdi Djait <mehdi.djait@linux.intel.com>, Ricardo Ribalda Delgado <ribalda@kernel.org>, 
+	Hans de Goede <hdegoede@redhat.com>, Jacopo Mondi <jacopo.mondi@ideasonboard.com>, 
+	Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
+Subject: Re: [PATCH v11 24/66] media: uapi: Add V4L2_CID_METADATA_LAYOUT
  control
+Message-ID: <qeuueahbuofjmeird3dr7xtcosfhymk72ceuma4dibudf2nn3s@z6smlg4yn2rf>
+References: <20250825095107.1332313-1-sakari.ailus@linux.intel.com>
+ <20250825095107.1332313-25-sakari.ailus@linux.intel.com>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20250901-ov9282-flash-strobe-v7-8-d58d5a694afc@linux.dev>
-References: <20250901-ov9282-flash-strobe-v7-0-d58d5a694afc@linux.dev>
-In-Reply-To: <20250901-ov9282-flash-strobe-v7-0-d58d5a694afc@linux.dev>
-To: Sakari Ailus <sakari.ailus@linux.intel.com>, 
- Dave Stevenson <dave.stevenson@raspberrypi.com>, 
- Mauro Carvalho Chehab <mchehab@kernel.org>, Lee Jones <lee@kernel.org>, 
- Pavel Machek <pavel@kernel.org>, 
- Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Cc: linux-media@vger.kernel.org, linux-kernel@vger.kernel.org, 
- linux-leds@vger.kernel.org, Richard Leitner <richard.leitner@linux.dev>, 
- Hans Verkuil <hverkuil@kernel.org>
-X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1756739145; l=1686;
- i=richard.leitner@linux.dev; s=20250225; h=from:subject:message-id;
- bh=2+Ajed5E1fXJz3nZ8NS8d6YJI4WoVgJl21IHABX6Yk4=;
- b=8OHsE22R2cOPgWq3x0l1CfnNzun/KyfadK8N9dqtfPAy9BPhJwFcG3TI2RlZUE+FeJGvRe98H
- tmsICNYjHadCohKKUclKZBtCYU65z9X+ZzjjCfMwdnUE9djwmUetSDs
-X-Developer-Key: i=richard.leitner@linux.dev; a=ed25519;
- pk=8hZNyyyQFqZ5ruVJsSGBSPIrmJpfDm5HwHU4QVOP1Pk=
-X-Endpoint-Received: by B4 Relay for richard.leitner@linux.dev/20250225
- with auth_id=350
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20250825095107.1332313-25-sakari.ailus@linux.intel.com>
 
-Add read-only V4L2_CID_FLASH_STROBE_SOURCE control. Its value is fixed
-to V4L2_FLASH_STROBE_SOURCE_EXTERNAL as the camera sensor triggers the
-strobe based on its register settings.
+Hi Sakari
 
-Signed-off-by: Richard Leitner <richard.leitner@linux.dev>
----
- drivers/media/i2c/ov9282.c | 11 ++++++++++-
- 1 file changed, 10 insertions(+), 1 deletion(-)
+On Mon, Aug 25, 2025 at 12:50:25PM +0300, Sakari Ailus wrote:
+> The metadata layout control defines the layout of the metadata on the bus.
+> It is used on sub-devices that use generic metadata mbus codes on at least
+> on one of the pads.
 
-diff --git a/drivers/media/i2c/ov9282.c b/drivers/media/i2c/ov9282.c
-index c405e3411daf37cf98d5af3535702f8321394af5..9efc82a1929a76c6fb245e7dbfb5276a133d1c5d 100644
---- a/drivers/media/i2c/ov9282.c
-+++ b/drivers/media/i2c/ov9282.c
-@@ -1368,11 +1368,12 @@ static int ov9282_init_controls(struct ov9282 *ov9282)
- 	struct v4l2_ctrl_handler *ctrl_hdlr = &ov9282->ctrl_handler;
- 	const struct ov9282_mode *mode = ov9282->cur_mode;
- 	struct v4l2_fwnode_device_properties props;
-+	struct v4l2_ctrl *ctrl;
- 	u32 hblank_min;
- 	u32 lpfr;
- 	int ret;
- 
--	ret = v4l2_ctrl_handler_init(ctrl_hdlr, 12);
-+	ret = v4l2_ctrl_handler_init(ctrl_hdlr, 13);
- 	if (ret)
- 		return ret;
- 
-@@ -1443,6 +1444,14 @@ static int ov9282_init_controls(struct ov9282 *ov9282)
- 	v4l2_ctrl_new_std(ctrl_hdlr, &ov9282_ctrl_ops, V4L2_CID_FLASH_DURATION,
- 			  0, 13900, 1, 8);
- 
-+	ctrl = v4l2_ctrl_new_std_menu(ctrl_hdlr, &ov9282_ctrl_ops,
-+				      V4L2_CID_FLASH_STROBE_SOURCE,
-+				      V4L2_FLASH_STROBE_SOURCE_EXTERNAL,
-+				      ~(1 << V4L2_FLASH_STROBE_SOURCE_EXTERNAL),
-+				      V4L2_FLASH_STROBE_SOURCE_EXTERNAL);
-+	if (ctrl)
-+		ctrl->flags |= V4L2_CTRL_FLAG_READ_ONLY;
-+
- 	ret = v4l2_fwnode_device_parse(ov9282->dev, &props);
- 	if (!ret) {
- 		/* Failure sets ctrl_hdlr->error, which we check afterwards anyway */
+Ideally:
+1) we have per pad controls
+2) s/V4L2_CID_COLOR_PATTERN/V4L2_CID_DATA_PATTERN
+3) we use V4L2_CID_DATA_PATTERN for both color components ordering and
+   metadata layouts. A sub-device will expose the same control, but on
+   different pads
 
--- 
-2.47.2
+I know we don't want to block this series to wait for per-pad
+controls, but I'm a bit afraid V4L2_CID_METADATA_LAYOUT will be made
+redundant before it gets used for real (which maybe it's not a big
+deal as if no one uses it, we will be able to easily replace it).
 
+>
+> Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
+> ---
+>  .../userspace-api/media/v4l/ext-ctrls-image-source.rst      | 6 ++++++
+>  drivers/media/v4l2-core/v4l2-ctrls-defs.c                   | 1 +
+>  include/uapi/linux/v4l2-controls.h                          | 2 ++
+>  3 files changed, 9 insertions(+)
+>
+> diff --git a/Documentation/userspace-api/media/v4l/ext-ctrls-image-source.rst b/Documentation/userspace-api/media/v4l/ext-ctrls-image-source.rst
+> index 3cb7ee1b0aed..64c0f9ff5b1b 100644
+> --- a/Documentation/userspace-api/media/v4l/ext-ctrls-image-source.rst
+> +++ b/Documentation/userspace-api/media/v4l/ext-ctrls-image-source.rst
+> @@ -145,3 +145,9 @@ Image Source Control IDs
+>      of the reversed readout. ``V4L2_COLOR_PATTERN_FLIP_BOTH`` for setting both
+>      ``V4L2_COLOR_PATTERN_FLIP_HORIZONTAL`` and
+>      ``V4L2_COLOR_PATTERN_FLIP_VERTICAL`` is provided as well.
+> +
+> +``V4L2_CID_METADATA_LAYOUT (integer)``
+> +    The metadata layout control defines the on-bus metadata layout for metadata
+> +    streams. The control is used in conjunction with :ref:`generic metadata
+> +    formats <media-bus-format-generic-meta>` formats to specify the layout of the
+> +    data.
+> diff --git a/drivers/media/v4l2-core/v4l2-ctrls-defs.c b/drivers/media/v4l2-core/v4l2-ctrls-defs.c
+> index 9ec65998a8f7..a7ea380de5ee 100644
+> --- a/drivers/media/v4l2-core/v4l2-ctrls-defs.c
+> +++ b/drivers/media/v4l2-core/v4l2-ctrls-defs.c
+> @@ -1157,6 +1157,7 @@ const char *v4l2_ctrl_get_name(u32 id)
+>  	case V4L2_CID_NOTIFY_GAINS:		return "Notify Gains";
+>  	case V4L2_CID_COLOR_PATTERN:		return "Color Pattern";
+>  	case V4L2_CID_COLOR_PATTERN_FLIP:	return "Color Pattern Flip";
+> +	case V4L2_CID_METADATA_LAYOUT:		return "Metadata Layout";
+>
+>  	/* Image processing controls */
+>  	/* Keep the order of the 'case's the same as in v4l2-controls.h! */
+> diff --git a/include/uapi/linux/v4l2-controls.h b/include/uapi/linux/v4l2-controls.h
+> index eb9ffdd74d32..74e22a930be4 100644
+> --- a/include/uapi/linux/v4l2-controls.h
+> +++ b/include/uapi/linux/v4l2-controls.h
+> @@ -1239,6 +1239,8 @@ enum v4l2_jpeg_chroma_subsampling {
+>  #define V4L2_COLOR_PATTERN_FLIP_BOTH \
+>  	(V4L2_COLOR_PATTERN_FLIP_HORIZONTAL | V4L2_COLOR_PATTERN_FLIP_VERTICAL)
+>
+> +#define V4L2_CID_METADATA_LAYOUT		(V4L2_CID_IMAGE_SOURCE_CLASS_BASE + 12)
+> +
 
+Intentional empty line ?
+
+For the time being
+Reviewed-by: Jacopo Mondi <jacopo.mondi@ideasonboard.com>
+
+>
+>  /* Image processing controls */
+>
+> --
+> 2.47.2
+>
+>
