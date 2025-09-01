@@ -1,54 +1,45 @@
 Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 629DF352065
-	for <linux-media@vger.kernel.org>; Mon,  1 Sep 2025 15:08:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8608A1DEFE8;
+	Mon,  1 Sep 2025 15:30:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.167.242.64
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756739286; cv=none; b=k4n5XAtWYrUXk+FlmEH2+rSGGcpCR1obQ/29lXUnrE/QLo9zzHdQaJi1YKqoipbqIEPwk7RaukSBmxq85EORCa5aqEL07xM8aFPSJd8p6uH8PNt4HgJnSftl1ZdeyY5dKha6d04nSQoOO/xRgBOid2llfzP8Zq9rt3kbk6CjiqQ=
+	t=1756740618; cv=none; b=FzOqAnJuHaFAlzt+XQqLEVblsihzrbaigceV838y1Ot/CsUTDD5O3lBW9rvozMkFke9p4rJa0qNwwF2YatuWIxzlNw6uSE3huANttoZzhKpoK4FZrYiYa+TrgC2QuWETrHgefP4tSnF/7J4NFHgZA70/Gaf7P57V+ExD/5VmEW4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756739286; c=relaxed/simple;
-	bh=olhTGIsE8oLmTWBFxEyhYRe+AJQ60FIySVO6IDiTE1s=;
+	s=arc-20240116; t=1756740618; c=relaxed/simple;
+	bh=kX/tZVYiEk5ptHhznnvQ9//utnSoIvf0wDikGmrLZD0=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=m4QaB3rIDNdY1squ+XAvC2GlP0DkJfNqutN4t1SdNBzC6SWoiHZtyxePXL7zPRYQ8xCMNVnCjUMystBXxr08uxU9Q0Zv9UgxjQFhcStz9/LvGfHVLldH/Wpf+pLhhxaJ5Vg9JbKEEPhU/whO+pJNwezppKC111+EmPxXr+njsCs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ideasonboard.com; spf=pass smtp.mailfrom=ideasonboard.com; dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b=fN5FCQlj; arc=none smtp.client-ip=213.167.242.64
+	 Content-Type:Content-Disposition:In-Reply-To; b=Qlf7ZTTblTaNXDMDsjaMPyrGOxUXrtlEEaEzxEzAx6QQCo82Nj81KUAhaxqSSuPo4a/1vLDbWGy8kxs7wWwBXvP/28T7bdBx8PtCfp9+sD6sDCcaJ7PEGsqmWrUQWcyC9H/VH+ay2auM017qdfqg29HxXCcdqe46d/hZNm6E5Bk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ideasonboard.com; spf=pass smtp.mailfrom=ideasonboard.com; dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b=uRCQ1bUW; arc=none smtp.client-ip=213.167.242.64
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ideasonboard.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ideasonboard.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="fN5FCQlj"
-Received: from ideasonboard.com (mob-5-90-63-95.net.vodafone.it [5.90.63.95])
-	by perceval.ideasonboard.com (Postfix) with ESMTPSA id 27363DF3;
-	Mon,  1 Sep 2025 17:06:52 +0200 (CEST)
+	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="uRCQ1bUW"
+Received: from pendragon.ideasonboard.com (230.215-178-91.adsl-dyn.isp.belgacom.be [91.178.215.230])
+	by perceval.ideasonboard.com (Postfix) with UTF8SMTPSA id BFC9EB63;
+	Mon,  1 Sep 2025 17:29:07 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-	s=mail; t=1756739213;
-	bh=olhTGIsE8oLmTWBFxEyhYRe+AJQ60FIySVO6IDiTE1s=;
+	s=mail; t=1756740547;
+	bh=kX/tZVYiEk5ptHhznnvQ9//utnSoIvf0wDikGmrLZD0=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=fN5FCQljsCjPocsLGMtHJouSP+qeDA5jg5RUmtqE1CGL6S9CHHdugJVqH+Jn9mT/3
-	 VTrcLL2Rsg/Rayr0FE8YLh3TYQG8dfwhGKyAM207OsLHfkSKZAXxgbv3PowWE9g7o9
-	 0ufMK23K6oYzsd4vALfSNc0mjC11iL61juAAf7aQ=
-Date: Mon, 1 Sep 2025 17:07:55 +0200
-From: Jacopo Mondi <jacopo.mondi@ideasonboard.com>
-To: Sakari Ailus <sakari.ailus@linux.intel.com>
-Cc: linux-media@vger.kernel.org, hans@jjverkuil.nl, 
-	laurent.pinchart@ideasonboard.com, Prabhakar <prabhakar.csengg@gmail.com>, 
-	Kate Hsuan <hpa@redhat.com>, Alexander Shiyan <eagle.alexander923@gmail.com>, 
-	Dave Stevenson <dave.stevenson@raspberrypi.com>, Tommaso Merciai <tomm.merciai@gmail.com>, 
-	Umang Jain <umang.jain@ideasonboard.com>, Benjamin Mugnier <benjamin.mugnier@foss.st.com>, 
-	Sylvain Petinot <sylvain.petinot@foss.st.com>, Christophe JAILLET <christophe.jaillet@wanadoo.fr>, 
-	Julien Massot <julien.massot@collabora.com>, Naushir Patuck <naush@raspberrypi.com>, 
-	"Yan, Dongcheng" <dongcheng.yan@intel.com>, "Cao, Bingbu" <bingbu.cao@intel.com>, 
-	"Qiu, Tian Shu" <tian.shu.qiu@intel.com>, "Wang, Hongju" <hongju.wang@intel.com>, 
-	Stefan Klug <stefan.klug@ideasonboard.com>, Mirela Rabulea <mirela.rabulea@nxp.com>, 
-	=?utf-8?B?QW5kcsOp?= Apitzsch <git@apitzsch.eu>, Heimir Thor Sverrisson <heimir.sverrisson@gmail.com>, 
-	Kieran Bingham <kieran.bingham@ideasonboard.com>, Stanislaw Gruszka <stanislaw.gruszka@linux.intel.com>, 
-	Mehdi Djait <mehdi.djait@linux.intel.com>, Ricardo Ribalda Delgado <ribalda@kernel.org>, 
-	Hans de Goede <hdegoede@redhat.com>, Jacopo Mondi <jacopo.mondi@ideasonboard.com>, 
-	Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
-Subject: Re: [PATCH v11 24/66] media: uapi: Add V4L2_CID_METADATA_LAYOUT
- control
-Message-ID: <qeuueahbuofjmeird3dr7xtcosfhymk72ceuma4dibudf2nn3s@z6smlg4yn2rf>
-References: <20250825095107.1332313-1-sakari.ailus@linux.intel.com>
- <20250825095107.1332313-25-sakari.ailus@linux.intel.com>
+	b=uRCQ1bUWAoopTIxGVntirUbeLed9iVrDYu/KGOXF1pNadYVR0TUSnhluZh/tPMFJL
+	 SWS1RDZ+0dS5ARvJsLgAkXvtWX+Rc3+kWa8MtqhLgdyHoCjA5wZJnjVRpH7ENJKCfi
+	 MNvVz8/rU5JtklAakY97YN9G8lKhAgSbC+WQwdNc=
+Date: Mon, 1 Sep 2025 17:29:54 +0200
+From: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To: Jacopo Mondi <jacopo.mondi@ideasonboard.com>
+Cc: Mauro Carvalho Chehab <mchehab@kernel.org>,
+	Hans Verkuil <hverkuil@kernel.org>,
+	Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+	Tommaso Merciai <tommaso.merciai.xr@bp.renesas.com>,
+	Biju Das <biju.das.jz@bp.renesas.com>,
+	Daniel Scally <dan.scally+renesas@ideasonboard.com>,
+	linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+	Jacopo Mondi <jacopo.mondi+renesas@ideasonboard.com>
+Subject: Re: [PATCH v2] media: rzg2l-cru: csi-2: Support RZ/V2H input sizes
+Message-ID: <20250901152954.GH1705@pendragon.ideasonboard.com>
+References: <20250829-rzv2h-cru-sizes-v2-1-cc5050ddb145@ideasonboard.com>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
@@ -57,81 +48,159 @@ List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20250825095107.1332313-25-sakari.ailus@linux.intel.com>
+In-Reply-To: <20250829-rzv2h-cru-sizes-v2-1-cc5050ddb145@ideasonboard.com>
 
-Hi Sakari
-
-On Mon, Aug 25, 2025 at 12:50:25PM +0300, Sakari Ailus wrote:
-> The metadata layout control defines the layout of the metadata on the bus.
-> It is used on sub-devices that use generic metadata mbus codes on at least
-> on one of the pads.
-
-Ideally:
-1) we have per pad controls
-2) s/V4L2_CID_COLOR_PATTERN/V4L2_CID_DATA_PATTERN
-3) we use V4L2_CID_DATA_PATTERN for both color components ordering and
-   metadata layouts. A sub-device will expose the same control, but on
-   different pads
-
-I know we don't want to block this series to wait for per-pad
-controls, but I'm a bit afraid V4L2_CID_METADATA_LAYOUT will be made
-redundant before it gets used for real (which maybe it's not a big
-deal as if no one uses it, we will be able to easily replace it).
-
->
-> Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
+On Fri, Aug 29, 2025 at 01:12:14PM +0200, Jacopo Mondi wrote:
+> From: Jacopo Mondi <jacopo.mondi+renesas@ideasonboard.com>
+> 
+> The CRU version on the RZ/V2H SoC supports larger input sizes
+> (4096x4096) compared to the version on the RZ/G2L (2800x4095).
+> 
+> Store the per-SoC min/max sizes in the device match info and use them
+> in place of the hardcoded ones.
+> 
+> While at it, use the min sizes reported by the info structure to replace
+> the RZG2L_CSI2_DEFAULT_WIDTH/HEIGHT macros.
+> 
+> Signed-off-by: Jacopo Mondi <jacopo.mondi+renesas@ideasonboard.com>
+> Tested-by: Tommaso Merciai <tommaso.merciai.xr@bp.renesas.com>
 > ---
->  .../userspace-api/media/v4l/ext-ctrls-image-source.rst      | 6 ++++++
->  drivers/media/v4l2-core/v4l2-ctrls-defs.c                   | 1 +
->  include/uapi/linux/v4l2-controls.h                          | 2 ++
->  3 files changed, 9 insertions(+)
->
-> diff --git a/Documentation/userspace-api/media/v4l/ext-ctrls-image-source.rst b/Documentation/userspace-api/media/v4l/ext-ctrls-image-source.rst
-> index 3cb7ee1b0aed..64c0f9ff5b1b 100644
-> --- a/Documentation/userspace-api/media/v4l/ext-ctrls-image-source.rst
-> +++ b/Documentation/userspace-api/media/v4l/ext-ctrls-image-source.rst
-> @@ -145,3 +145,9 @@ Image Source Control IDs
->      of the reversed readout. ``V4L2_COLOR_PATTERN_FLIP_BOTH`` for setting both
->      ``V4L2_COLOR_PATTERN_FLIP_HORIZONTAL`` and
->      ``V4L2_COLOR_PATTERN_FLIP_VERTICAL`` is provided as well.
+
+Spurious ---
+
+> Signed-off-by: Jacopo Mondi <jacopo.mondi@ideasonboard.com>
+> ---
+> Changes in v2:
+> - Use the size values in the rzg2l_csi2_info instea of going through
+>   macros
+> - Use min_width/min_height to initialize the format and drop
+>   RZG2L_CSI2_DEFAULT_WIDTH/HEIGHT
+> - Add Tommaso's tag
+> - Link to v1: https://lore.kernel.org/r/20250826-rzv2h-cru-sizes-v1-1-dbdfc54bba11@ideasonboard.com
+> ---
+>  .../media/platform/renesas/rzg2l-cru/rzg2l-csi2.c  | 41 ++++++++++++++--------
+>  1 file changed, 26 insertions(+), 15 deletions(-)
+> 
+> diff --git a/drivers/media/platform/renesas/rzg2l-cru/rzg2l-csi2.c b/drivers/media/platform/renesas/rzg2l-cru/rzg2l-csi2.c
+> index 1520211e74185fea3bca85f36239254f6b4651db..183598d6cf0b255f779b4398e027d626ad1f3c1b 100644
+> --- a/drivers/media/platform/renesas/rzg2l-cru/rzg2l-csi2.c
+> +++ b/drivers/media/platform/renesas/rzg2l-cru/rzg2l-csi2.c
+> @@ -96,13 +96,6 @@
+>  
+>  #define VSRSTS_RETRIES			20
+>  
+> -#define RZG2L_CSI2_MIN_WIDTH		320
+> -#define RZG2L_CSI2_MIN_HEIGHT		240
+> -#define RZG2L_CSI2_MAX_WIDTH		2800
+> -#define RZG2L_CSI2_MAX_HEIGHT		4095
+> -
+> -#define RZG2L_CSI2_DEFAULT_WIDTH	RZG2L_CSI2_MIN_WIDTH
+> -#define RZG2L_CSI2_DEFAULT_HEIGHT	RZG2L_CSI2_MIN_HEIGHT
+>  #define RZG2L_CSI2_DEFAULT_FMT		MEDIA_BUS_FMT_UYVY8_1X16
+>  
+>  enum rzg2l_csi2_pads {
+> @@ -137,6 +130,10 @@ struct rzg2l_csi2_info {
+>  	int (*dphy_enable)(struct rzg2l_csi2 *csi2);
+>  	int (*dphy_disable)(struct rzg2l_csi2 *csi2);
+>  	bool has_system_clk;
+> +	unsigned int min_width;
+> +	unsigned int min_height;
+> +	unsigned int max_width;
+> +	unsigned int max_height;
+>  };
+>  
+>  struct rzg2l_csi2_timings {
+> @@ -418,6 +415,10 @@ static const struct rzg2l_csi2_info rzg2l_csi2_info = {
+>  	.dphy_enable = rzg2l_csi2_dphy_enable,
+>  	.dphy_disable = rzg2l_csi2_dphy_disable,
+>  	.has_system_clk = true,
+> +	.min_width = 320,
+> +	.min_height = 240,
+> +	.max_width = 2800,
+> +	.max_height = 4095,
+>  };
+>  
+>  static int rzg2l_csi2_dphy_setting(struct v4l2_subdev *sd, bool on)
+> @@ -542,6 +543,10 @@ static const struct rzg2l_csi2_info rzv2h_csi2_info = {
+>  	.dphy_enable = rzv2h_csi2_dphy_enable,
+>  	.dphy_disable = rzv2h_csi2_dphy_disable,
+>  	.has_system_clk = false,
+> +	.min_width = 320,
+> +	.min_height = 240,
+
+As the minimum for all SoCs is the same, I'd keep the MIN macros.
+
+Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+
+> +	.max_width = 4096,
+> +	.max_height = 4096,
+>  };
+>  
+>  static int rzg2l_csi2_mipi_link_setting(struct v4l2_subdev *sd, bool on)
+> @@ -631,6 +636,7 @@ static int rzg2l_csi2_set_format(struct v4l2_subdev *sd,
+>  				 struct v4l2_subdev_state *state,
+>  				 struct v4l2_subdev_format *fmt)
+>  {
+> +	struct rzg2l_csi2 *csi2 = sd_to_csi2(sd);
+>  	struct v4l2_mbus_framefmt *src_format;
+>  	struct v4l2_mbus_framefmt *sink_format;
+>  
+> @@ -653,9 +659,11 @@ static int rzg2l_csi2_set_format(struct v4l2_subdev *sd,
+>  	sink_format->ycbcr_enc = fmt->format.ycbcr_enc;
+>  	sink_format->quantization = fmt->format.quantization;
+>  	sink_format->width = clamp_t(u32, fmt->format.width,
+> -				     RZG2L_CSI2_MIN_WIDTH, RZG2L_CSI2_MAX_WIDTH);
+> +				     csi2->info->min_width,
+> +				     csi2->info->max_width);
+>  	sink_format->height = clamp_t(u32, fmt->format.height,
+> -				      RZG2L_CSI2_MIN_HEIGHT, RZG2L_CSI2_MAX_HEIGHT);
+> +				     csi2->info->min_height,
+> +				     csi2->info->max_height);
+>  	fmt->format = *sink_format;
+>  
+>  	/* propagate format to source pad */
+> @@ -668,9 +676,10 @@ static int rzg2l_csi2_init_state(struct v4l2_subdev *sd,
+>  				 struct v4l2_subdev_state *sd_state)
+>  {
+>  	struct v4l2_subdev_format fmt = { .pad = RZG2L_CSI2_SINK, };
+> +	struct rzg2l_csi2 *csi2 = sd_to_csi2(sd);
+>  
+> -	fmt.format.width = RZG2L_CSI2_DEFAULT_WIDTH;
+> -	fmt.format.height = RZG2L_CSI2_DEFAULT_HEIGHT;
+> +	fmt.format.width = csi2->info->min_width;
+> +	fmt.format.height = csi2->info->min_height;
+>  	fmt.format.field = V4L2_FIELD_NONE;
+>  	fmt.format.code = RZG2L_CSI2_DEFAULT_FMT;
+>  	fmt.format.colorspace = V4L2_COLORSPACE_SRGB;
+> @@ -697,16 +706,18 @@ static int rzg2l_csi2_enum_frame_size(struct v4l2_subdev *sd,
+>  				      struct v4l2_subdev_state *sd_state,
+>  				      struct v4l2_subdev_frame_size_enum *fse)
+>  {
+> +	struct rzg2l_csi2 *csi2 = sd_to_csi2(sd);
 > +
-> +``V4L2_CID_METADATA_LAYOUT (integer)``
-> +    The metadata layout control defines the on-bus metadata layout for metadata
-> +    streams. The control is used in conjunction with :ref:`generic metadata
-> +    formats <media-bus-format-generic-meta>` formats to specify the layout of the
-> +    data.
-> diff --git a/drivers/media/v4l2-core/v4l2-ctrls-defs.c b/drivers/media/v4l2-core/v4l2-ctrls-defs.c
-> index 9ec65998a8f7..a7ea380de5ee 100644
-> --- a/drivers/media/v4l2-core/v4l2-ctrls-defs.c
-> +++ b/drivers/media/v4l2-core/v4l2-ctrls-defs.c
-> @@ -1157,6 +1157,7 @@ const char *v4l2_ctrl_get_name(u32 id)
->  	case V4L2_CID_NOTIFY_GAINS:		return "Notify Gains";
->  	case V4L2_CID_COLOR_PATTERN:		return "Color Pattern";
->  	case V4L2_CID_COLOR_PATTERN_FLIP:	return "Color Pattern Flip";
-> +	case V4L2_CID_METADATA_LAYOUT:		return "Metadata Layout";
->
->  	/* Image processing controls */
->  	/* Keep the order of the 'case's the same as in v4l2-controls.h! */
-> diff --git a/include/uapi/linux/v4l2-controls.h b/include/uapi/linux/v4l2-controls.h
-> index eb9ffdd74d32..74e22a930be4 100644
-> --- a/include/uapi/linux/v4l2-controls.h
-> +++ b/include/uapi/linux/v4l2-controls.h
-> @@ -1239,6 +1239,8 @@ enum v4l2_jpeg_chroma_subsampling {
->  #define V4L2_COLOR_PATTERN_FLIP_BOTH \
->  	(V4L2_COLOR_PATTERN_FLIP_HORIZONTAL | V4L2_COLOR_PATTERN_FLIP_VERTICAL)
->
-> +#define V4L2_CID_METADATA_LAYOUT		(V4L2_CID_IMAGE_SOURCE_CLASS_BASE + 12)
-> +
+>  	if (fse->index != 0)
+>  		return -EINVAL;
+>  
+>  	if (!rzg2l_csi2_code_to_fmt(fse->code))
+>  		return -EINVAL;
+>  
+> -	fse->min_width = RZG2L_CSI2_MIN_WIDTH;
+> -	fse->min_height = RZG2L_CSI2_MIN_HEIGHT;
+> -	fse->max_width = RZG2L_CSI2_MAX_WIDTH;
+> -	fse->max_height = RZG2L_CSI2_MAX_HEIGHT;
+> +	fse->min_width = csi2->info->min_width;
+> +	fse->min_height = csi2->info->min_height;
+> +	fse->max_width = csi2->info->max_width;
+> +	fse->max_height = csi2->info->max_height;
+>  
+>  	return 0;
+>  }
+> 
+> ---
+> base-commit: 16428e2449ab96cce27be6ab17b750b404c76c7c
+> change-id: 20250826-rzv2h-cru-sizes-371ff5a88081
 
-Intentional empty line ?
+-- 
+Regards,
 
-For the time being
-Reviewed-by: Jacopo Mondi <jacopo.mondi@ideasonboard.com>
-
->
->  /* Image processing controls */
->
-> --
-> 2.47.2
->
->
+Laurent Pinchart
