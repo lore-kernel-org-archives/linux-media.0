@@ -1,39 +1,38 @@
 Received: from lx20.hoststar.hosting (lx20.hoststar.hosting [168.119.41.54])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 251F419CC37;
-	Mon,  1 Sep 2025 15:43:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C4152D593E;
+	Mon,  1 Sep 2025 15:43:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=168.119.41.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756741436; cv=none; b=ijcPdSRZj63qev5OlgLSWIbrdJ55QgFRUJlEdtkzal0d4OULCRgtRjxR+i9dy0nTutofH1lWhLNhKRGCMReZBPXWBtOMW85oD7z+UVzapejpxuijmHcYIbEmZ59AS4JkNUpISgCJHolvSDyZBpLj0K+PNbSZLatquG8zFA+jH3M=
+	t=1756741442; cv=none; b=IdFGgM+OlNaIQG4TAsw6vjdUM0ePUXB5xfJW7jQvy+aNpWJy52nfyW/FL7mJ/frgQSC/dECpO1EOQVhaLhPCKXys0gX0OqjrFCV2pA8XXk/UMeR4kJGPH15LBeqmSW0sq62Vq1871QT4eTuFFxhsarLjO6RgSR3EjMQV+DU+5kA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756741436; c=relaxed/simple;
-	bh=am4bL3m9AU3nNCPWaO6cdfHt55wwlOiuU308mgqRkQ4=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=rNTMoWBilnFMk6oiaCCEsP763G86Fo3RHjT1k8+qtnk1QvMH4EE1lgMsrTeUIL4CjKFvkKspKLXaxdkUClxmoaPSEdMQJa+Ue2zkOQYnOxzGoiaCa9KwgD1lNpXC/Va0bjZYSn4nk6ZYsdGj05+ZFVF221OQzvU7BLxW6gHlzdE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=emfend.at; spf=pass smtp.mailfrom=emfend.at; dkim=pass (1024-bit key) header.d=emfend.at header.i=@emfend.at header.b=lE5xbrB2; arc=none smtp.client-ip=168.119.41.54
+	s=arc-20240116; t=1756741442; c=relaxed/simple;
+	bh=LXIBSIO6pDV8V3QkWU7mtWXQrCEg3CtRlBkkoG63Jt0=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=JHpByGX4xe/A+IGNNLnkTqi6aBHWj7iHiOHIJ/9Oq8zq9edGQ5n6g4eX2C9RJEY5Kmoh3XbkJ1+pz6YvyczlwLlBkFKapkkwmu9fY5triEfPxkW++pjRzcg7EueAfe6ol2uL/xegpYaevc/E1bHJyPGnnTr0iM7h7Nbmo6xr8l8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=emfend.at; spf=pass smtp.mailfrom=emfend.at; dkim=pass (1024-bit key) header.d=emfend.at header.i=@emfend.at header.b=YXrUhYHR; arc=none smtp.client-ip=168.119.41.54
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=emfend.at
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=emfend.at
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=emfend.at header.i=@emfend.at header.b="lE5xbrB2"
+	dkim=pass (1024-bit key) header.d=emfend.at header.i=@emfend.at header.b="YXrUhYHR"
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=emfend.at;
-	 s=mail; h=Cc:To:In-Reply-To:References:Message-Id:Content-Transfer-Encoding:
-	Content-Type:MIME-Version:Subject:Date:From:Sender:Reply-To:Content-ID:
-	Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-	:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+	 s=mail; h=Cc:To:Content-Transfer-Encoding:Content-Type:MIME-Version:
+	Message-Id:Date:Subject:From:Sender:Reply-To:Content-ID:Content-Description:
+	Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:
+	In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
 	List-Post:List-Owner:List-Archive;
-	bh=wzd0Xe2NufD57luvKvcTjx6X7hryM1+600ih+eNfwKA=; b=lE5xbrB2FQFeNfasHfBCjFAi1B
-	J3n+QDAzSIPOGNCHmxx8ENwSWmkPCvP2IZSjwBukeS9MofF+OvYEV62QeLwA9fbj/NNuHhLDDCDXw
-	sHyGHY0n+Wa6tgwhztjodbluKura3BddKtduJzsqc6NC59bT/C3N61i1dSXGKm3R0ucU=;
+	bh=FQJhfrqZwWX8BoGnnRMx78+JY5x+yi7uSulwN+BYSvg=; b=YXrUhYHRaQOpycNyZ4QcKwVhwz
+	EPcVBdbtmUsdFPyu/8qCCcsd9A6bFkyVZERMOacLysQo6VbHG0AfjHezVzUbb5PXqRMGcDg4qB0JO
+	ZBmSvEkxWnChbsQ6abe9m51Bz89akqaLPZwll5Q8rEueFWtDbhqV+uz1En+Y92tK9KnI=;
 Received: from 194-208-208-245.tele.net ([194.208.208.245]:61156 helo=[127.0.1.1])
 	by lx20.hoststar.hosting with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
 	(Exim 4.93)
 	(envelope-from <matthias.fend@emfend.at>)
-	id 1ut6E4-009YyN-Kz; Mon, 01 Sep 2025 17:13:45 +0200
+	id 1ut6E2-009YyN-Ca; Mon, 01 Sep 2025 17:13:42 +0200
 From: Matthias Fend <matthias.fend@emfend.at>
-Date: Mon, 01 Sep 2025 17:13:38 +0200
-Subject: [PATCH 3/3] media: allegro: fix race conditions in channel
- handling
+Subject: [PATCH 0/3] media: allegro: fixes and improvements
+Date: Mon, 01 Sep 2025 17:13:35 +0200
+Message-Id: <20250901-allegro-dvt-fixes-v1-0-4e4d493836ef@emfend.at>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
@@ -42,237 +41,42 @@ List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20250901-allegro-dvt-fixes-v1-3-4e4d493836ef@emfend.at>
-References: <20250901-allegro-dvt-fixes-v1-0-4e4d493836ef@emfend.at>
-In-Reply-To: <20250901-allegro-dvt-fixes-v1-0-4e4d493836ef@emfend.at>
+X-B4-Tracking: v=1; b=H4sIAB+4tWgC/x3LQQqAIBBA0avErBswpcKuEi0kRxsQC40IxLsnL
+ R+fXyBTYsqwdAUSPZz5jA1D38F+mOgJ2TaDFHIUWgxoQiCfTrTPjY5fyqiVdHLXs5gUQfuuRH9
+ o27rV+gE5x2K9YwAAAA==
+X-Change-ID: 20250901-allegro-dvt-fixes-932f2c97063e
 To: Michael Tretter <m.tretter@pengutronix.de>, 
  Pengutronix Kernel Team <kernel@pengutronix.de>, 
  Mauro Carvalho Chehab <mchehab@kernel.org>
 Cc: linux-media@vger.kernel.org, linux-kernel@vger.kernel.org, 
  Matthias Fend <matthias.fend@emfend.at>
 X-Mailer: b4 0.14.2
-X-Spam-Score: -1.0
-X-Spam-Bar: -
-X-Spam-Report: Spam detection software, running on the system "lx20.hoststar.hosting",
- has NOT identified this incoming email as spam.  The original
- message has been attached to this so you can view it or label
- similar future email.  If you have any questions, see
- the administrator of that system for details.
- 
- Content preview:  Under certain circumstances, not every message written by
-   the MCU to the status mailbox may trigger a corresponding interrupt. This
-   is likely when multiple messages are generated in a very short perio [...]
-    
- 
- Content analysis details:   (-1.0 points, 5.0 required)
- 
-  pts rule name              description
- ---- ---------------------- --------------------------------------------------
- -1.0 ALL_TRUSTED            Passed through trusted hosts only via SMTP
-  0.0 TVD_RCVD_IP            Message was received from an IP address
-  0.0 Local_hs1_NotHoststar  Sender is not from hoststar.ch|de|com
-  0.0 KAM_DMARC_STATUS       Test Rule for DKIM or SPF Failure with Strict
-                             Alignment
+X-Spam-Score: 
+X-Spam-Bar: 
+X-Spam-Report: 
 
-Since the channel list is used in different contexts, it must be ensured
-that it is always consistent. Also, the channels contained in the list may
-only be released when they are no longer needed in any context.
-
-Add a lock to protect the list and reference handling for the channels.
+Several fixes and improvements for the Allegro DVT video IP encoder.
+These relate to race conditions that occur when multiple streams are used
+simultaneously.
+The problems could be reproduced on a ZCU-104 eval board with VCU firmware
+version 2019.2 on various kernel versions (6.4, 6.12 and 6.16).
+It is highly likely that these problems can also occur with other firmware
+versions.
 
 Signed-off-by: Matthias Fend <matthias.fend@emfend.at>
 ---
- drivers/media/platform/allegro-dvt/allegro-core.c | 64 ++++++++++++++++++-----
- 1 file changed, 50 insertions(+), 14 deletions(-)
+Matthias Fend (3):
+      media: allegro: print warning if channel creation timeout occurs
+      media: allegro: process all pending status mbox messages
+      media: allegro: fix race conditions in channel handling
 
-diff --git a/drivers/media/platform/allegro-dvt/allegro-core.c b/drivers/media/platform/allegro-dvt/allegro-core.c
-index d3aea46b7d1d9854307d61d2f1647eaa340d504d..adcaa4f877df1c58807d62ddf3eb21848fb08520 100644
---- a/drivers/media/platform/allegro-dvt/allegro-core.c
-+++ b/drivers/media/platform/allegro-dvt/allegro-core.c
-@@ -177,6 +177,7 @@ struct allegro_dev {
- 	 */
- 	unsigned long channel_user_ids;
- 	struct list_head channels;
-+	struct mutex channels_lock;
- };
- 
- static const struct regmap_config allegro_regmap_config = {
-@@ -200,6 +201,7 @@ static const struct regmap_config allegro_sram_config = {
- #define fh_to_channel(__fh) container_of(__fh, struct allegro_channel, fh)
- 
- struct allegro_channel {
-+	struct kref ref;
- 	struct allegro_dev *dev;
- 	struct v4l2_fh fh;
- 	struct v4l2_ctrl_handler ctrl_handler;
-@@ -427,33 +429,55 @@ static unsigned long allegro_next_user_id(struct allegro_dev *dev)
- }
- 
- static struct allegro_channel *
--allegro_find_channel_by_user_id(struct allegro_dev *dev,
--				unsigned int user_id)
-+allegro_ref_get_channel_by_user_id(struct allegro_dev *dev,
-+				   unsigned int user_id)
- {
- 	struct allegro_channel *channel;
- 
-+	guard(mutex)(&dev->channels_lock);
-+
- 	list_for_each_entry(channel, &dev->channels, list) {
--		if (channel->user_id == user_id)
--			return channel;
-+		if (channel->user_id == user_id) {
-+			if (kref_get_unless_zero(&channel->ref))
-+				return channel;
-+			break;
-+		}
- 	}
- 
- 	return ERR_PTR(-EINVAL);
- }
- 
- static struct allegro_channel *
--allegro_find_channel_by_channel_id(struct allegro_dev *dev,
--				   unsigned int channel_id)
-+allegro_ref_get_channel_by_channel_id(struct allegro_dev *dev,
-+				      unsigned int channel_id)
- {
- 	struct allegro_channel *channel;
- 
-+	guard(mutex)(&dev->channels_lock);
-+
- 	list_for_each_entry(channel, &dev->channels, list) {
--		if (channel->mcu_channel_id == channel_id)
--			return channel;
-+		if (channel->mcu_channel_id == channel_id) {
-+			if (kref_get_unless_zero(&channel->ref))
-+				return channel;
-+			break;
-+		}
- 	}
- 
- 	return ERR_PTR(-EINVAL);
- }
- 
-+static void allegro_free_channel(struct kref *ref)
-+{
-+	struct allegro_channel *channel = container_of(ref, struct allegro_channel, ref);
-+
-+	kfree(channel);
-+}
-+
-+static int allegro_ref_put_channel(struct allegro_channel *channel)
-+{
-+	return kref_put(&channel->ref, allegro_free_channel);
-+}
-+
- static inline bool channel_exists(struct allegro_channel *channel)
- {
- 	return channel->mcu_channel_id != -1;
-@@ -2183,7 +2207,7 @@ allegro_handle_create_channel(struct allegro_dev *dev,
- 	int err = 0;
- 	struct create_channel_param param;
- 
--	channel = allegro_find_channel_by_user_id(dev, msg->user_id);
-+	channel = allegro_ref_get_channel_by_user_id(dev, msg->user_id);
- 	if (IS_ERR(channel)) {
- 		v4l2_warn(&dev->v4l2_dev,
- 			  "received %s for unknown user %d\n",
-@@ -2250,6 +2274,7 @@ allegro_handle_create_channel(struct allegro_dev *dev,
- out:
- 	channel->error = err;
- 	complete(&channel->completion);
-+	allegro_ref_put_channel(channel);
- 
- 	/* Handled successfully, error is passed via channel->error */
- 	return 0;
-@@ -2261,7 +2286,7 @@ allegro_handle_destroy_channel(struct allegro_dev *dev,
- {
- 	struct allegro_channel *channel;
- 
--	channel = allegro_find_channel_by_channel_id(dev, msg->channel_id);
-+	channel = allegro_ref_get_channel_by_channel_id(dev, msg->channel_id);
- 	if (IS_ERR(channel)) {
- 		v4l2_err(&dev->v4l2_dev,
- 			 "received %s for unknown channel %d\n",
-@@ -2274,6 +2299,7 @@ allegro_handle_destroy_channel(struct allegro_dev *dev,
- 		 "user %d: vcu destroyed channel %d\n",
- 		 channel->user_id, channel->mcu_channel_id);
- 	complete(&channel->completion);
-+	allegro_ref_put_channel(channel);
- 
- 	return 0;
- }
-@@ -2284,7 +2310,7 @@ allegro_handle_encode_frame(struct allegro_dev *dev,
- {
- 	struct allegro_channel *channel;
- 
--	channel = allegro_find_channel_by_channel_id(dev, msg->channel_id);
-+	channel = allegro_ref_get_channel_by_channel_id(dev, msg->channel_id);
- 	if (IS_ERR(channel)) {
- 		v4l2_err(&dev->v4l2_dev,
- 			 "received %s for unknown channel %d\n",
-@@ -2294,6 +2320,7 @@ allegro_handle_encode_frame(struct allegro_dev *dev,
- 	}
- 
- 	allegro_channel_finish_frame(channel, msg);
-+	allegro_ref_put_channel(channel);
- 
- 	return 0;
- }
-@@ -3079,6 +3106,8 @@ static int allegro_open(struct file *file)
- 	if (!channel)
- 		return -ENOMEM;
- 
-+	kref_init(&channel->ref);
-+
- 	v4l2_fh_init(&channel->fh, vdev);
- 
- 	init_completion(&channel->completion);
-@@ -3245,7 +3274,10 @@ static int allegro_open(struct file *file)
- 		goto error;
- 	}
- 
--	list_add(&channel->list, &dev->channels);
-+	scoped_guard(mutex, &dev->channels_lock) {
-+		list_add(&channel->list, &dev->channels);
-+	}
-+
- 	file->private_data = &channel->fh;
- 	v4l2_fh_add(&channel->fh);
- 
-@@ -3262,17 +3294,20 @@ static int allegro_open(struct file *file)
- static int allegro_release(struct file *file)
- {
- 	struct allegro_channel *channel = fh_to_channel(file->private_data);
-+	struct allegro_dev *dev = channel->dev;
- 
- 	v4l2_m2m_ctx_release(channel->fh.m2m_ctx);
- 
--	list_del(&channel->list);
-+	scoped_guard(mutex, &dev->channels_lock) {
-+		list_del(&channel->list);
-+	}
- 
- 	v4l2_ctrl_handler_free(&channel->ctrl_handler);
- 
- 	v4l2_fh_del(&channel->fh);
- 	v4l2_fh_exit(&channel->fh);
- 
--	kfree(channel);
-+	allegro_ref_put_channel(channel);
- 
- 	return 0;
- }
-@@ -3867,6 +3902,7 @@ static int allegro_probe(struct platform_device *pdev)
- 	dev->plat_dev = pdev;
- 	init_completion(&dev->init_complete);
- 	INIT_LIST_HEAD(&dev->channels);
-+	mutex_init(&dev->channels_lock);
- 
- 	mutex_init(&dev->lock);
- 
+ drivers/media/platform/allegro-dvt/allegro-core.c | 114 +++++++++++++++++-----
+ 1 file changed, 91 insertions(+), 23 deletions(-)
+---
+base-commit: b320789d6883cc00ac78ce83bccbfe7ed58afcf0
+change-id: 20250901-allegro-dvt-fixes-932f2c97063e
 
+Best regards,
 -- 
-2.25.1
+Matthias Fend <matthias.fend@emfend.at>
 
