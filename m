@@ -1,82 +1,187 @@
-Received: from lx20.hoststar.hosting (lx20.hoststar.hosting [168.119.41.54])
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C4152D593E;
-	Mon,  1 Sep 2025 15:43:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=168.119.41.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C87EE202997;
+	Mon,  1 Sep 2025 15:46:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.167.242.64
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756741442; cv=none; b=IdFGgM+OlNaIQG4TAsw6vjdUM0ePUXB5xfJW7jQvy+aNpWJy52nfyW/FL7mJ/frgQSC/dECpO1EOQVhaLhPCKXys0gX0OqjrFCV2pA8XXk/UMeR4kJGPH15LBeqmSW0sq62Vq1871QT4eTuFFxhsarLjO6RgSR3EjMQV+DU+5kA=
+	t=1756741594; cv=none; b=hRktzUZGGpBMbLj6b32ckA7dYP1N9LR2gkKVXrGaENz6N4DeNvgLa8RjAwFMUg6VrjnRk2BllnRwgPxrfudKoTPHT2hQXp/ha1F7e4KPZF/Wq3vAgOlAb+Tp8k2CZGlVl1TNGXTB6VDbGgvfPYssWWHT82pNZTs3cqyUZ16h4Nc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756741442; c=relaxed/simple;
-	bh=LXIBSIO6pDV8V3QkWU7mtWXQrCEg3CtRlBkkoG63Jt0=;
-	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=JHpByGX4xe/A+IGNNLnkTqi6aBHWj7iHiOHIJ/9Oq8zq9edGQ5n6g4eX2C9RJEY5Kmoh3XbkJ1+pz6YvyczlwLlBkFKapkkwmu9fY5triEfPxkW++pjRzcg7EueAfe6ol2uL/xegpYaevc/E1bHJyPGnnTr0iM7h7Nbmo6xr8l8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=emfend.at; spf=pass smtp.mailfrom=emfend.at; dkim=pass (1024-bit key) header.d=emfend.at header.i=@emfend.at header.b=YXrUhYHR; arc=none smtp.client-ip=168.119.41.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=emfend.at
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=emfend.at
+	s=arc-20240116; t=1756741594; c=relaxed/simple;
+	bh=Rtorms0Y8xcxRezMkXYYQWv9ZH000JtLph0sJAKDMHc=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=GefwJGqYTCo5JjsV++TViMRPN8aItBp/aiIyl+Gn5NN4ApNcHQoPpoMlY5iYv/48sJSLbB/NsPeOAEL3RckdSwcZasUcoQbVfyQpHrRjpSImC6l+1qFluZ1SiPJhsBSeiz5ahOgwA8XOt8eScx1447QSXmrPaBURg9MDO1W+g7A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ideasonboard.com; spf=pass smtp.mailfrom=ideasonboard.com; dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b=ZD5WCl6g; arc=none smtp.client-ip=213.167.242.64
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ideasonboard.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ideasonboard.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=emfend.at header.i=@emfend.at header.b="YXrUhYHR"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=emfend.at;
-	 s=mail; h=Cc:To:Content-Transfer-Encoding:Content-Type:MIME-Version:
-	Message-Id:Date:Subject:From:Sender:Reply-To:Content-ID:Content-Description:
-	Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:
-	In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
-	List-Post:List-Owner:List-Archive;
-	bh=FQJhfrqZwWX8BoGnnRMx78+JY5x+yi7uSulwN+BYSvg=; b=YXrUhYHRaQOpycNyZ4QcKwVhwz
-	EPcVBdbtmUsdFPyu/8qCCcsd9A6bFkyVZERMOacLysQo6VbHG0AfjHezVzUbb5PXqRMGcDg4qB0JO
-	ZBmSvEkxWnChbsQ6abe9m51Bz89akqaLPZwll5Q8rEueFWtDbhqV+uz1En+Y92tK9KnI=;
-Received: from 194-208-208-245.tele.net ([194.208.208.245]:61156 helo=[127.0.1.1])
-	by lx20.hoststar.hosting with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.93)
-	(envelope-from <matthias.fend@emfend.at>)
-	id 1ut6E2-009YyN-Ca; Mon, 01 Sep 2025 17:13:42 +0200
-From: Matthias Fend <matthias.fend@emfend.at>
-Subject: [PATCH 0/3] media: allegro: fixes and improvements
-Date: Mon, 01 Sep 2025 17:13:35 +0200
-Message-Id: <20250901-allegro-dvt-fixes-v1-0-4e4d493836ef@emfend.at>
+	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="ZD5WCl6g"
+Received: from pendragon.ideasonboard.com (230.215-178-91.adsl-dyn.isp.belgacom.be [91.178.215.230])
+	by perceval.ideasonboard.com (Postfix) with UTF8SMTPSA id BA526E8A;
+	Mon,  1 Sep 2025 17:45:23 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+	s=mail; t=1756741523;
+	bh=Rtorms0Y8xcxRezMkXYYQWv9ZH000JtLph0sJAKDMHc=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=ZD5WCl6gznFYbvwUnNzz6vwIBq/2t0l0g6ae24Zq9w7aovOcQIf7uMu1roOSB85Ro
+	 fTUq+4fYoQJxfzny+jG68ZsmAx1HW42143vtbIYZaqbItIZ3Ri5O2RHSXrGq6xy77p
+	 kygdRmzqc9FYVNA0XjwoOPHqTJNG6bhtSV6U9LLA=
+Date: Mon, 1 Sep 2025 17:46:10 +0200
+From: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To: Guoniu Zhou <guoniu.zhou@nxp.com>
+Cc: Rui Miguel Silva <rmfrfs@gmail.com>,
+	Martin Kepplinger <martink@posteo.de>,
+	Purism Kernel Team <kernel@puri.sm>,
+	Mauro Carvalho Chehab <mchehab@kernel.org>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>, Shawn Guo <shawnguo@kernel.org>,
+	Sascha Hauer <s.hauer@pengutronix.de>,
+	Pengutronix Kernel Team <kernel@pengutronix.de>,
+	Fabio Estevam <festevam@gmail.com>,
+	Philipp Zabel <p.zabel@pengutronix.de>, Frank Li <Frank.Li@nxp.com>,
+	linux-media@vger.kernel.org, devicetree@vger.kernel.org,
+	imx@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v5 1/4] media: dt-bindings: nxp,imx8mq-mipi-csi2: Add
+ i.MX8ULP compatible string
+Message-ID: <20250901154610.GB13448@pendragon.ideasonboard.com>
+References: <20250901-csi2_imx8ulp-v5-0-67964d1471f3@nxp.com>
+ <20250901-csi2_imx8ulp-v5-1-67964d1471f3@nxp.com>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-B4-Tracking: v=1; b=H4sIAB+4tWgC/x3LQQqAIBBA0avErBswpcKuEi0kRxsQC40IxLsnL
- R+fXyBTYsqwdAUSPZz5jA1D38F+mOgJ2TaDFHIUWgxoQiCfTrTPjY5fyqiVdHLXs5gUQfuuRH9
- o27rV+gE5x2K9YwAAAA==
-X-Change-ID: 20250901-allegro-dvt-fixes-932f2c97063e
-To: Michael Tretter <m.tretter@pengutronix.de>, 
- Pengutronix Kernel Team <kernel@pengutronix.de>, 
- Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc: linux-media@vger.kernel.org, linux-kernel@vger.kernel.org, 
- Matthias Fend <matthias.fend@emfend.at>
-X-Mailer: b4 0.14.2
-X-Spam-Score: 
-X-Spam-Bar: 
-X-Spam-Report: 
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20250901-csi2_imx8ulp-v5-1-67964d1471f3@nxp.com>
 
-Several fixes and improvements for the Allegro DVT video IP encoder.
-These relate to race conditions that occur when multiple streams are used
-simultaneously.
-The problems could be reproduced on a ZCU-104 eval board with VCU firmware
-version 2019.2 on various kernel versions (6.4, 6.12 and 6.16).
-It is highly likely that these problems can also occur with other firmware
-versions.
+Hi Guoniu,
 
-Signed-off-by: Matthias Fend <matthias.fend@emfend.at>
----
-Matthias Fend (3):
-      media: allegro: print warning if channel creation timeout occurs
-      media: allegro: process all pending status mbox messages
-      media: allegro: fix race conditions in channel handling
+Thank you for the patch.
 
- drivers/media/platform/allegro-dvt/allegro-core.c | 114 +++++++++++++++++-----
- 1 file changed, 91 insertions(+), 23 deletions(-)
----
-base-commit: b320789d6883cc00ac78ce83bccbfe7ed58afcf0
-change-id: 20250901-allegro-dvt-fixes-932f2c97063e
+On Mon, Sep 01, 2025 at 02:25:29PM +0800, Guoniu Zhou wrote:
+> The CSI-2 receiver in the i.MX8ULP is almost identical to the version
+> present in the i.MX8QXP/QM, but i.MX8ULP CSI-2 controller needs pclk
+> clock as the input clock for its APB interface of Control and Status
+> register(CSR). So add compatible string fsl,imx8ulp-mipi-csi2 and
+> increase maxItems of Clocks (clock-names) to 4 from 3.  And keep the
+> same restriction for existed compatible.
 
-Best regards,
+s/existed/existing/
+
+> Signed-off-by: Guoniu Zhou <guoniu.zhou@nxp.com>
+> ---
+>  .../bindings/media/nxp,imx8mq-mipi-csi2.yaml       | 46 ++++++++++++++++++++--
+>  1 file changed, 43 insertions(+), 3 deletions(-)
+> 
+> diff --git a/Documentation/devicetree/bindings/media/nxp,imx8mq-mipi-csi2.yaml b/Documentation/devicetree/bindings/media/nxp,imx8mq-mipi-csi2.yaml
+> index 3389bab266a9adbda313c8ad795b998641df12f3..412cedddb0efee1a49d1b90b02baa7a625c797ec 100644
+> --- a/Documentation/devicetree/bindings/media/nxp,imx8mq-mipi-csi2.yaml
+> +++ b/Documentation/devicetree/bindings/media/nxp,imx8mq-mipi-csi2.yaml
+> @@ -21,7 +21,9 @@ properties:
+>            - fsl,imx8mq-mipi-csi2
+>            - fsl,imx8qxp-mipi-csi2
+>        - items:
+> -          - const: fsl,imx8qm-mipi-csi2
+> +          - enum:
+> +              - fsl,imx8qm-mipi-csi2
+> +              - fsl,imx8ulp-mipi-csi2
+>            - const: fsl,imx8qxp-mipi-csi2
+
+According to this, the ULP version is compatible with the QXP version.
+
+>  
+>    reg:
+> @@ -39,12 +41,16 @@ properties:
+>                       clock that the RX DPHY receives.
+>        - description: ui is the pixel clock (phy_ref up to 333Mhz).
+>                       See the reference manual for details.
+> +      - description: pclk is clock for csr APB interface.
+> +    minItems: 3
+>  
+>    clock-names:
+>      items:
+>        - const: core
+>        - const: esc
+>        - const: ui
+> +      - const: pclk
+> +    minItems: 3
+>  
+>    power-domains:
+>      maxItems: 1
+> @@ -130,19 +136,53 @@ allOf:
+>          compatible:
+>            contains:
+>              enum:
+> -              - fsl,imx8qxp-mipi-csi2
+> +              - fsl,imx8ulp-mipi-csi2
+> +    then:
+> +      properties:
+> +        reg:
+> +          minItems: 2
+> +        resets:
+> +          minItems: 2
+> +          maxItems: 2
+> +        clocks:
+> +          minItems: 4
+> +        clock-names:
+> +          minItems: 4
+
+But according to this, the ULP version requires more clocks than the QXP
+version.
+
+> +
+> +  - if:
+> +      properties:
+> +        compatible:
+> +          contains:
+> +            enum:
+> +              - fsl,imx8qm-mipi-csi2
+
+QM is compatible with the QXP, so you don't need to list it here.
+
+          contains:
+            const: fsl,imx8qxp-mipi-csi2
+
+is enough to cover both.
+
+> +            const: fsl,imx8qxp-mipi-csi2
+>      then:
+>        properties:
+>          reg:
+>            minItems: 2
+>          resets:
+>            maxItems: 1
+> -    else:
+> +        clocks:
+> +          maxItems: 3
+> +        clock-names:
+> +          maxItems: 3
+> +
+> +  - if:
+> +      properties:
+> +        compatible:
+> +          contains:
+> +            enum:
+> +              - fsl,imx8mq-mipi-csi2
+> +    then:
+>        properties:
+>          reg:
+>            maxItems: 1
+>          resets:
+>            minItems: 3
+> +        clocks:
+> +          maxItems: 3
+> +        clock-names:
+> +          maxItems: 3
+>        required:
+>          - fsl,mipi-phy-gpr
+>  
+
 -- 
-Matthias Fend <matthias.fend@emfend.at>
+Regards,
 
+Laurent Pinchart
