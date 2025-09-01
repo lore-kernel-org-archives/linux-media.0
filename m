@@ -1,135 +1,107 @@
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C1D92334372
-	for <linux-media@vger.kernel.org>; Mon,  1 Sep 2025 14:59:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.167.242.64
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 070773451AB;
+	Mon,  1 Sep 2025 15:05:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756738791; cv=none; b=H8QZhCXx0gBzbNIo2LimscOoKSHAYvz/8wTHsYuNtqCZwWAnSt3rJAze8aXAC0WfSMdfjuipvw11QP2H6FVBU7GcmyD8DLzBK8JuFabHXVxVAp8rSymGF1qrTPriLw98BjoPn/TSgBcnh1gBfpIk0wnzv32kbbI7lLZi4aZ1cmE=
+	t=1756739147; cv=none; b=FtbDKLEpSg4ppnZmyk+zCRZ8irhOCpQsNE6984IfZdsjSb1U3Bo/6gslfoQiM/U0Y6XWHVQkUqTwRDQHMUt2c61SbtX7h3PQCacOQkC1vQSZ/VxzcL3jPJr7smkekJr6260ptR7ObdkEM+x2VOjjNG6buIjnAo8cTrD/ygNOe+Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756738791; c=relaxed/simple;
-	bh=IRQUeBVB7M4k02c7Nj+tT8w1E94+iIQs17zEouTbt1o=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Q3aQ7+GxXpHEFMiyaEHpSjWvtO+JVkw83JZi2qo7xdxwX86oKGKFdRZ6oWHwhUSW1Zs7yKwNDhT+29iCdgYlni7Uerhi+xNkjIxd/VUD9v0oGr5Ey/wGWXCISa+RThQzjI8DEkN1GYu30Hj7kNhIPORyQteOm0AcaFHTR6ICgbo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ideasonboard.com; spf=pass smtp.mailfrom=ideasonboard.com; dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b=fPi7SPyI; arc=none smtp.client-ip=213.167.242.64
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ideasonboard.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ideasonboard.com
+	s=arc-20240116; t=1756739147; c=relaxed/simple;
+	bh=5h7OmJD5PtNvkXILVzg5eDKV/6YNZ11G+Tij3lhOaeE=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=LSFtq5KdEh+dofkbCQ132ULSL3uJAotE7jZ3QRx+nWpNlQ6l4yDIxMDRamHCAREclxFuvNo8I4iHJR918qocKVUjNoR9Z6x2YXASJIpDaAXiwls/kah8SncbOIo1bW3TMaXjcT0TV8WmvxDU/1Th4DVwDgnU3/kNwigVlvR/Xh4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=FM2kQiPX; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="fPi7SPyI"
-Received: from ideasonboard.com (mob-5-90-63-95.net.vodafone.it [5.90.63.95])
-	by perceval.ideasonboard.com (Postfix) with ESMTPSA id 3B3F0D77;
-	Mon,  1 Sep 2025 16:58:39 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-	s=mail; t=1756738719;
-	bh=IRQUeBVB7M4k02c7Nj+tT8w1E94+iIQs17zEouTbt1o=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=fPi7SPyIV6R1EpJI/BKyiaKN4TbEbdo173QMHsv5k9vIYzQr9UZV8admHKFI2D5s2
-	 GHhCOSX41DViTSSO6gqfRo9oGTmTKBi1zXifEZkYg9hNSEeSW8eES/bLiIgEavajce
-	 zcfN369X2WV6OVTadazwElvTBWkFjBcmy2aaXSUY=
-Date: Mon, 1 Sep 2025 16:59:42 +0200
-From: Jacopo Mondi <jacopo.mondi@ideasonboard.com>
-To: Sakari Ailus <sakari.ailus@linux.intel.com>
-Cc: linux-media@vger.kernel.org, hans@jjverkuil.nl, 
-	laurent.pinchart@ideasonboard.com, Prabhakar <prabhakar.csengg@gmail.com>, 
-	Kate Hsuan <hpa@redhat.com>, Alexander Shiyan <eagle.alexander923@gmail.com>, 
-	Dave Stevenson <dave.stevenson@raspberrypi.com>, Tommaso Merciai <tomm.merciai@gmail.com>, 
-	Umang Jain <umang.jain@ideasonboard.com>, Benjamin Mugnier <benjamin.mugnier@foss.st.com>, 
-	Sylvain Petinot <sylvain.petinot@foss.st.com>, Christophe JAILLET <christophe.jaillet@wanadoo.fr>, 
-	Julien Massot <julien.massot@collabora.com>, Naushir Patuck <naush@raspberrypi.com>, 
-	"Yan, Dongcheng" <dongcheng.yan@intel.com>, "Cao, Bingbu" <bingbu.cao@intel.com>, 
-	"Qiu, Tian Shu" <tian.shu.qiu@intel.com>, "Wang, Hongju" <hongju.wang@intel.com>, 
-	Stefan Klug <stefan.klug@ideasonboard.com>, Mirela Rabulea <mirela.rabulea@nxp.com>, 
-	=?utf-8?B?QW5kcsOp?= Apitzsch <git@apitzsch.eu>, Heimir Thor Sverrisson <heimir.sverrisson@gmail.com>, 
-	Kieran Bingham <kieran.bingham@ideasonboard.com>, Stanislaw Gruszka <stanislaw.gruszka@linux.intel.com>, 
-	Mehdi Djait <mehdi.djait@linux.intel.com>, Ricardo Ribalda Delgado <ribalda@kernel.org>, 
-	Hans de Goede <hdegoede@redhat.com>, Jacopo Mondi <jacopo.mondi@ideasonboard.com>, 
-	Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
-Subject: Re: [PATCH v11 23/66] media: Documentation: Document raw mbus codes
- and CFA for cameras
-Message-ID: <5ajf3ywfraxumrcm6a6mrwgcl6koutghyivftuhbcxs3tcwi7f@6toxy2ikdkwv>
-References: <20250825095107.1332313-1-sakari.ailus@linux.intel.com>
- <20250825095107.1332313-24-sakari.ailus@linux.intel.com>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="FM2kQiPX"
+Received: by smtp.kernel.org (Postfix) with ESMTPS id B4C41C4CEF5;
+	Mon,  1 Sep 2025 15:05:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux.dev; s=korg;
+	t=1756739146; bh=5h7OmJD5PtNvkXILVzg5eDKV/6YNZ11G+Tij3lhOaeE=;
+	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
+	b=FM2kQiPX3VS5j68xI5jLlfzp9Q6mEMgcey8zEJXY2bDeTlVc21BIiM5SD1h+b4zvd
+	 sEJk+Q9GFcGqaTd4kHMbVFStoqMQ/fniqeGGIlMi3MYAp/IvmQX6lTAbB97z+Ajh12
+	 yaBYlgmOP3Fu+5dwdd0Y4Gs8zWz/hqil2YkOqz3w=
+Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A3214CA1007;
+	Mon,  1 Sep 2025 15:05:46 +0000 (UTC)
+From: Richard Leitner <richard.leitner@linux.dev>
+Date: Mon, 01 Sep 2025 17:05:08 +0200
+Subject: [PATCH v7 03/10] media: v4l: ctrls: add a control for enabling hw
+ strobe signal
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20250825095107.1332313-24-sakari.ailus@linux.intel.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20250901-ov9282-flash-strobe-v7-3-d58d5a694afc@linux.dev>
+References: <20250901-ov9282-flash-strobe-v7-0-d58d5a694afc@linux.dev>
+In-Reply-To: <20250901-ov9282-flash-strobe-v7-0-d58d5a694afc@linux.dev>
+To: Sakari Ailus <sakari.ailus@linux.intel.com>, 
+ Dave Stevenson <dave.stevenson@raspberrypi.com>, 
+ Mauro Carvalho Chehab <mchehab@kernel.org>, Lee Jones <lee@kernel.org>, 
+ Pavel Machek <pavel@kernel.org>, 
+ Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Cc: linux-media@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ linux-leds@vger.kernel.org, Richard Leitner <richard.leitner@linux.dev>, 
+ Hans Verkuil <hverkuil@kernel.org>
+X-Mailer: b4 0.14.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1756739145; l=2084;
+ i=richard.leitner@linux.dev; s=20250225; h=from:subject:message-id;
+ bh=5h7OmJD5PtNvkXILVzg5eDKV/6YNZ11G+Tij3lhOaeE=;
+ b=rw1kcybSIDOWGaINS1Hbvsrq6PdolMoPzFOK/dCXzHwfo9SXC7aM+fd8E5if/ZRyJScI3Y1Nv
+ SVFYVgPuLElCMDtqp+4YwgRdyG06w5TWSer1cZ+wITgzFYoLoi8W4Al
+X-Developer-Key: i=richard.leitner@linux.dev; a=ed25519;
+ pk=8hZNyyyQFqZ5ruVJsSGBSPIrmJpfDm5HwHU4QVOP1Pk=
+X-Endpoint-Received: by B4 Relay for richard.leitner@linux.dev/20250225
+ with auth_id=350
 
-Hi Sakari
+Add a control V4L2_CID_FLASH_HW_STROBE_SIGNAL to en- or disable the
+strobe output of v4l2 devices (most likely sensors).
 
-On Mon, Aug 25, 2025 at 12:50:24PM +0300, Sakari Ailus wrote:
-> Document the use of raw mbus codes for camera sensors and how the
-> V4L2_CID_COLOR_PATTERN and V4L2_CID_COLOR_PATTERN_FLIP controls are used
-> to convey the color filter array pattern on UAPI.
->
-> Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
-> ---
->  .../userspace-api/media/drivers/camera-sensor.rst   | 13 +++++++++++++
->  1 file changed, 13 insertions(+)
->
-> diff --git a/Documentation/userspace-api/media/drivers/camera-sensor.rst b/Documentation/userspace-api/media/drivers/camera-sensor.rst
-> index 75fd9166383f..a8e0e4accbc9 100644
-> --- a/Documentation/userspace-api/media/drivers/camera-sensor.rst
-> +++ b/Documentation/userspace-api/media/drivers/camera-sensor.rst
-> @@ -39,6 +39,19 @@ format set on a source pad at the end of the device's internal pipeline.
->
->  Most sensor drivers are implemented this way.
->
-> +V4L2_CID_COLOR_PATTERN, raw mbus formats, flipping and cropping
-> +~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Signed-off-by: Richard Leitner <richard.leitner@linux.dev>
+---
+ drivers/media/v4l2-core/v4l2-ctrls-defs.c | 2 ++
+ include/uapi/linux/v4l2-controls.h        | 1 +
+ 2 files changed, 3 insertions(+)
 
-This will appear as a subsection of
+diff --git a/drivers/media/v4l2-core/v4l2-ctrls-defs.c b/drivers/media/v4l2-core/v4l2-ctrls-defs.c
+index f9ed7273a9f3eafe01c31b638e1c8d9fcf5424af..e13214ca362b9bdd2302118963008b04fcad8d4c 100644
+--- a/drivers/media/v4l2-core/v4l2-ctrls-defs.c
++++ b/drivers/media/v4l2-core/v4l2-ctrls-defs.c
+@@ -1136,6 +1136,7 @@ const char *v4l2_ctrl_get_name(u32 id)
+ 	case V4L2_CID_FLASH_CHARGE:		return "Charge";
+ 	case V4L2_CID_FLASH_READY:		return "Ready to Strobe";
+ 	case V4L2_CID_FLASH_DURATION:		return "Strobe Duration";
++	case V4L2_CID_FLASH_HW_STROBE_SIGNAL:	return "Hardware Strobe Signal";
+ 
+ 	/* JPEG encoder controls */
+ 	/* Keep the order of the 'case's the same as in v4l2-controls.h! */
+@@ -1282,6 +1283,7 @@ void v4l2_ctrl_fill(u32 id, const char **name, enum v4l2_ctrl_type *type,
+ 	case V4L2_CID_FLASH_STROBE_STATUS:
+ 	case V4L2_CID_FLASH_CHARGE:
+ 	case V4L2_CID_FLASH_READY:
++	case V4L2_CID_FLASH_HW_STROBE_SIGNAL:
+ 	case V4L2_CID_MPEG_VIDEO_DECODER_MPEG4_DEBLOCK_FILTER:
+ 	case V4L2_CID_MPEG_VIDEO_DECODER_SLICE_INTERFACE:
+ 	case V4L2_CID_MPEG_VIDEO_DEC_DISPLAY_DELAY_ENABLE:
+diff --git a/include/uapi/linux/v4l2-controls.h b/include/uapi/linux/v4l2-controls.h
+index a5b7c382d77118eb7966385c5b22d5a89bc2b272..2a09815939a6d9abbe2babb3429e2227970275e1 100644
+--- a/include/uapi/linux/v4l2-controls.h
++++ b/include/uapi/linux/v4l2-controls.h
+@@ -1187,6 +1187,7 @@ enum v4l2_flash_strobe_source {
+ #define V4L2_CID_FLASH_CHARGE			(V4L2_CID_FLASH_CLASS_BASE + 11)
+ #define V4L2_CID_FLASH_READY			(V4L2_CID_FLASH_CLASS_BASE + 12)
+ #define V4L2_CID_FLASH_DURATION			(V4L2_CID_FLASH_CLASS_BASE + 13)
++#define V4L2_CID_FLASH_HW_STROBE_SIGNAL		(V4L2_CID_FLASH_CLASS_BASE + 14)
+ 
+ 
+ /* JPEG-class control IDs */
 
-"2.1. Sensor internal pipeline configuration"
+-- 
+2.47.2
 
-With
 
-2.1.1. Freely configurable camera sensor drivers
-2.1.2. Register list-based drivers
-2.1.3. V4L2_CID_COLOR_PATTERN, raw mbus formats, flipping and cropping
-
-I don't know if it's intentional or not, but I would rather make out
-of this a paragraph of its own, as it will be done for
-
-2.3. Rotation, orientation and flipping
-2.4. Binning and sub-sampling
-
-etc
-
-> +
-> +For raw image data originating from camera sensors, specific :ref:`raw mbus
-> +codes MEDIA_BUS_FMT_RAW_x (where 'x' is the bit depth)
-> +<v4l2-mbus-pixelcode-generic-raw>` are used as Color Filter Array (CFA) agnostic
-> +raw formats. The ``V4L2_CID_COLOR_PATTERN <image-source-control-color-pattern>``
-
-This and the below ``V4L2_CID_COLOR_PATTERN_FLIP ...`` links are
-broken.
-
-Shuould this be
-
-:ref:`V4L2_CID_COLOR_PATTERN <image-source-control-color-pattern>`
-
-> +control in the same sub-device defines the native color pattern of the
-> +device. Flipping may further affect the readout pattern as indicated by the
-> +``V4L2_CID_COLOR_PATTERN_FLIP <image-source-control-color-pattern-flip>``
-
-and this
-
-:ref:`V4L2_CID_COLOR_PATTERN_FLIP <image-source-control-color-pattern-flip>`
-
-instead ?
-
-> +control. Further on, cropping also has an effect on the pattern if cropped
-> +amount is not divisible by the size of the pattern, horizontally and vertically.
-> +
->  Frame interval configuration
->  ----------------------------
->
-> --
-> 2.47.2
->
->
