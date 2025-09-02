@@ -1,256 +1,213 @@
-Received: from PNYPR01CU001.outbound.protection.outlook.com (mail-centralindiaazon11020117.outbound.protection.outlook.com [52.101.225.117])
+Received: from bali.collaboradmins.com (bali.collaboradmins.com [148.251.105.195])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 377D12D9EF0;
-	Tue,  2 Sep 2025 14:30:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.225.117
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756823445; cv=fail; b=qpAyy7wOqCSNwXGOZwZ/rkVHeAtQk47WqzbWAaIsRZRZKsK/TUMWCQCEIZc2wH6MQHJ0OdXv8C+M3zybxujAZUxgbtnO5ZrSNRzEJjuSlz7LjDAS4baFAgVg+pZucF/egrA62hZlKrQDYKEa1kSeQZ+pb5LWg+8p5x7MAZf+dyc=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756823445; c=relaxed/simple;
-	bh=mxRIvw8HsKTpXd110u8zN9wHG8N0sj9l0hjCJroqaJ8=;
-	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
-	 Content-Type:MIME-Version; b=RtwYMQAQfjMRuyYfrfgdDecUVI0/a6x0PDBDWjIyfw6lPzs0uM+0BJXzdoidVqIdHxlpQoA11DJZvmJWwVlxLo/tBDhOzt4XzvdXrZVBoq9uMwbiXRFevTOlGjmsVKUjiAtVk87109vr+619vJB8TL7s1RVpiWRO10OQjfDhJ5U=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=siliconsignals.io; spf=fail smtp.mailfrom=siliconsignals.io; arc=fail smtp.client-ip=52.101.225.117
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=siliconsignals.io
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=siliconsignals.io
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=VjtgqmCk2cyWsA9boPVBb1HOnWC+1+2yscFire45Fdp4Vvw55IsJEMrFyC2M+4QKzouJZ7gJ7M4vqC/g7wDyifZwTKrXwtvXocMCv45kGCdZARYecRYyKaoDX43nZNtElltlvT88Wf99qygZNBy9OzdEL/Mo4N/UnUNSWneTwZk7L7FF7P11kCQAEN8pMUnp4d+qGIB1kaEde2ChITJFhcwsNGlLVQVHTfUpj1SVfdomf5T6XmZlvJeGAskMQuVoO7zXIAlNWqPk2zKVuPZKYteISLy+scpcca3BILgiN2FSLow1pLrv0aGSfASxclvuIGwBbxSbgWfQw0yDTFuh1Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=mxRIvw8HsKTpXd110u8zN9wHG8N0sj9l0hjCJroqaJ8=;
- b=kv+qqmdZdrSi9v6wLO575i9CY7XqT5sg0755UBupo3o283DTiWsnE/KCORUiPRXJH0euVxN4pY7dAzs9GftTG8z9pb2CpKDgvi8LGkpO+MDj5YxLPxz4C0HTW0YKaBGflva+u7FlD1SGSB94uAF6OMhMR2DWy4yyGegQ886hZvz0KHum1XJf9JYetqkikimLMvrBhdcoCN2AwKzE1JjQID1LKyPjgZL8M+gBnHyAXIe1nUmjDIO9Mk0UnmZHV/K02fL5N3uHOG15WRWL6l2uCMfarc8as8HZ/y6ARUmPSfz5No4p8T6/yUgabfTjae+T659peBmwFs3pz1t6AiMbDw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=siliconsignals.io; dmarc=pass action=none
- header.from=siliconsignals.io; dkim=pass header.d=siliconsignals.io; arc=none
-Received: from PN3P287MB3519.INDP287.PROD.OUTLOOK.COM (2603:1096:c01:229::21)
- by PN2P287MB1165.INDP287.PROD.OUTLOOK.COM (2603:1096:c01:154::10) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9073.27; Tue, 2 Sep
- 2025 14:30:39 +0000
-Received: from PN3P287MB3519.INDP287.PROD.OUTLOOK.COM
- ([fe80::5c9a:906e:318b:c418]) by PN3P287MB3519.INDP287.PROD.OUTLOOK.COM
- ([fe80::5c9a:906e:318b:c418%6]) with mapi id 15.20.9094.015; Tue, 2 Sep 2025
- 14:30:39 +0000
-From: Hardevsinh Palaniya <hardevsinh.palaniya@siliconsignals.io>
-To: "sakari.ailus@linux.intel.com" <sakari.ailus@linux.intel.com>
-CC: Himanshu Bhavani <himanshu.bhavani@siliconsignals.io>, Mauro Carvalho
- Chehab <mchehab@kernel.org>, Rob Herring <robh@kernel.org>, Krzysztof
- Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, Hans
- Verkuil <hverkuil@xs4all.nl>, Ricardo Ribalda <ribalda@chromium.org>, Bryan
- O'Donoghue <bryan.odonoghue@linaro.org>, =?iso-8859-1?Q?Andr=E9_Apitzsch?=
-	<git@apitzsch.eu>, Heimir Thor Sverrisson <heimir.sverrisson@gmail.com>,
-	Benjamin Mugnier <benjamin.mugnier@foss.st.com>, Matthias Fend
-	<matthias.fend@emfend.at>, Dongcheng Yan <dongcheng.yan@intel.com>, Sylvain
- Petinot <sylvain.petinot@foss.st.com>, Arnd Bergmann <arnd@arndb.de>, Andy
- Shevchenko <andriy.shevchenko@linux.intel.com>, Hans de Goede
-	<hansg@kernel.org>, Jingjing Xiong <jingjing.xiong@intel.com>,
-	"linux-media@vger.kernel.org" <linux-media@vger.kernel.org>,
-	"devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>, Tarang Raval
-	<tarang.raval@siliconsignals.io>
-Subject: Re: [PATCH v9 2/2] media: i2c: add ov2735 image sensor driver
-Thread-Topic: [PATCH v9 2/2] media: i2c: add ov2735 image sensor driver
-Thread-Index: AQHcGMTYgOUZQjHc5UmWpQKIK5ImzrR95kUAgAGlZ4CAAG0SMw==
-Date: Tue, 2 Sep 2025 14:30:38 +0000
-Message-ID:
- <PN3P287MB35195F77DB9C8690ED553E1BFF06A@PN3P287MB3519.INDP287.PROD.OUTLOOK.COM>
-References: <20250829090959.82966-1-hardevsinh.palaniya@siliconsignals.io>
- <20250829090959.82966-3-hardevsinh.palaniya@siliconsignals.io>
- <PN3P287MB18298FB93EDC498572742B2A8B07A@PN3P287MB1829.INDP287.PROD.OUTLOOK.COM>
- <aLaiXTw2cieUCzn_@kekkonen.localdomain>
-In-Reply-To: <aLaiXTw2cieUCzn_@kekkonen.localdomain>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-msip_labels:
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=siliconsignals.io;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: PN3P287MB3519:EE_|PN2P287MB1165:EE_
-x-ms-office365-filtering-correlation-id: c589b224-05f8-4a2c-18e2-08ddea2d49d4
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam:
- BCL:0;ARA:13230040|7416014|376014|1800799024|366016|38070700018;
-x-microsoft-antispam-message-info:
- =?iso-8859-1?Q?JDiWxKC2O6VMr1NQpdLvNfY26QB5kDm45n4UqqTUBJH6azk4g+dozpEOCg?=
- =?iso-8859-1?Q?aNIikMxrQTUo/Ksg9wpvut1MYxAbDpMxDaexuwo/kTdgSXzfcCIQqGr7X5?=
- =?iso-8859-1?Q?o7NcyOIZw6S009smt8Jq8tRUckDtfs6DZdOb1NKVS454XNE8pkJdlupCG8?=
- =?iso-8859-1?Q?GrNZMK08S/es1IZDimsId6APwHhh5+F/bY3lKC+PcDSu57vRHaXQEMLFBP?=
- =?iso-8859-1?Q?CuorsPvr8B5Og6GnShnOeRjysh+yYepVmk6lmQSD3VsfPa2OyrX+GHm0XG?=
- =?iso-8859-1?Q?KdAOdNYeOl8aOHtctMw1LqquwVsdKMPNZHbTBmWFAqXpKDVRLzThIK/04m?=
- =?iso-8859-1?Q?Gkfrnn0vF6tI4IZefAxMsGA0LToRTR6jhRFQTjf/hXVz2LLNvGBRqofSHf?=
- =?iso-8859-1?Q?rpW59jx29PJ198qRnj87tNlDPn3UkjbdEaNHFMUoVskDiaTPPXOZZ2JzN+?=
- =?iso-8859-1?Q?MUoWq2OjTT0Qdsc6RkX76Dv3ZrcUM8uOR8J5+17FDNhOzVRd8wtaW6DV/L?=
- =?iso-8859-1?Q?SuKEyb2aL1WBJBxXc7RFKETYTtzngEw75EyEb9GrRzLv2z0PjnGBlOLlkl?=
- =?iso-8859-1?Q?hyc2dvbcSxqnvQzRonrPbmiqyLau3kNXq6FKSqb3EdLCrbOCbfo/O0RdEl?=
- =?iso-8859-1?Q?WUHukaQRT0FqKygzhSTfHGP+lEg69cneky7sIXuFe/aCsHHWdnlH9ggFXh?=
- =?iso-8859-1?Q?zakhp86Hgaqve4zDukJ5kV9DAwWt+053xtN+X78R996FQcOo7fv/esaFtJ?=
- =?iso-8859-1?Q?nVPa3xf/aLCqpnfeeQNsiwAinCLzf0W2VFQP0rm/ClDStip5KFCAOJMq0J?=
- =?iso-8859-1?Q?IBl2jIYoqy3zeKsx9EzGBvZLv8uE3DibeGuiiq3wteTalXOS+L68xhET3O?=
- =?iso-8859-1?Q?WfMafqonr4/oe47bpnU0HqnVS3Ua3bW4OUvTJnJObJ9qT9w7hKXpvjS8+z?=
- =?iso-8859-1?Q?YWbVNXirizWKMJOvWP1ulz5qlawmVB84Gr/B7cP43bLyKKiivtAhHDN1Se?=
- =?iso-8859-1?Q?2qf+JOV6D1/ziXl6LksXBz8LGk73yjPEnailtPor2DvWqDkijy3tCKN4Vq?=
- =?iso-8859-1?Q?VnA7OirH+vYjSQyizTObnq428bWR10YkTsgYEfl9yq8ifV5aKigNtGvslj?=
- =?iso-8859-1?Q?9kZxpDoPf/VBH8SWvGfCYGnHfQZUDvE6mnWiPcBWFaMImF2I1oR39sR6Hb?=
- =?iso-8859-1?Q?0bDyWwzpDY4iT1mQwgE5hbkCj3yZsG97Wuxmoccm3rNLk0YBQ3ju/mV2mR?=
- =?iso-8859-1?Q?fEe1WyGAkbZfslj8dmQrYP4wewdHzGyEMyrdTekfZMOWqrYrWI2QKz9kJE?=
- =?iso-8859-1?Q?C2kBXuHL7pSsXio16QcKjDnG2qvWv666+WqNwcYJtB6XRg7LiZqTD5drjx?=
- =?iso-8859-1?Q?xcV6wcLe9RZfb/zoDGGC2BVIBACj/re5t+vuARTEUQ/bP4tXYpjwev2AQU?=
- =?iso-8859-1?Q?eQcoY5krTZB7/BKJEMOVEuT6Hau5KdPwu195gqq3C1J9WKwkMqSWGIV83f?=
- =?iso-8859-1?Q?tzMKNRul6dk9gOpIm0CG6GcYob9mXD8v2kSqxXAEOeYQ=3D=3D?=
-x-forefront-antispam-report:
- CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PN3P287MB3519.INDP287.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230040)(7416014)(376014)(1800799024)(366016)(38070700018);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0:
- =?iso-8859-1?Q?yIGkZuQuBcbRrcHbCh45zlXoouE8KH2+YeMX06Ujdn0TcGCJJpW6g4oysQ?=
- =?iso-8859-1?Q?sY3TxGfWO9j57IfxAQW97kB84QzW+EZA/FglJsR2coaGG0ArQOicge6rYs?=
- =?iso-8859-1?Q?QMskCu4v0qFQE+Y4PoYLnymkEUVxgi7GCP1z0DBit0rbCtDywT4MfnLdzr?=
- =?iso-8859-1?Q?S5Pi55sr4QgZTXMM772vtIuMk97XC6hDV4kOqN/9cfM+GMA9pP40ud1tcX?=
- =?iso-8859-1?Q?prZcoiVcK3B8zHFFs1LcM/HWIwUEVIRXkE9W/UzRy6M07UC5yWLl1n5yFT?=
- =?iso-8859-1?Q?t6quBnls0fALhEceMvTKeEsVfuJwmhLwXvHzxDk0eICm7hJ/vEqipEWkFq?=
- =?iso-8859-1?Q?NveMIhIfeEjimq7gPKeR/Uw/dXbV9gKnODsv5hcb7HY+LlKGabvW2qCeEx?=
- =?iso-8859-1?Q?TGi1i2GZcxJR1xfNribJNplcg7hWXpoiRzygL099VGm0m77ZA6UM9i3JRF?=
- =?iso-8859-1?Q?/wclvQJjfk8yGpfCciBcV+/ILg6t2WkYuPN+bqCG0X5ey9+ZkcFouzDusI?=
- =?iso-8859-1?Q?NP2Hn+97Rpw14wgXKFxBO6XdF27fxyoYyPHrpWf0ARPpigq71jqsHm0X6M?=
- =?iso-8859-1?Q?2AESY85NlONd20gIHH15CUN/EJ5qep6j24ROWGjcc5h5p21cqxeaSjmhUz?=
- =?iso-8859-1?Q?kqy1WXBdLRW73j1GRDSagxsjbRGKw6h8CgqHfZIvoeoHqpbzPi6HVLkljB?=
- =?iso-8859-1?Q?49P/QdTALcdX7oH0DJNaRCS9ZKUAyA4wABdXmyUV4ckmyBd1jAGPXet8MI?=
- =?iso-8859-1?Q?vm8AzjogWT3PaKr0oiEQrI3B2xKbwWi+70xmPdJNU347iWCyljsFycdZ3D?=
- =?iso-8859-1?Q?4Y24WeMa/Rbk6cJRgIunuGxJfzpg6d+zP1uH2BNtGXaa5YNhSLZrPiF8Am?=
- =?iso-8859-1?Q?R9lx6VPW5RkfVrwGK9nZOmb9STJFVEx5zL84FI3ZCYagYTCNUND9+cf9Gz?=
- =?iso-8859-1?Q?rbKiAs2jR7Sx1/W0jrLRSuDAiuVl3EnLIJrMRIEwbxoz8TqCblq6GX2FaG?=
- =?iso-8859-1?Q?Gf+kBXHFLdPs9y8ZKVb0jSsgBidleEfq+TtaCPF07q6Oe4CPEql4qxY44K?=
- =?iso-8859-1?Q?vWz3RBbhic9iOmNDqgUklm6KfVZ6uF4RVP96V7EuaABMFVAPt+PxbcX2Eq?=
- =?iso-8859-1?Q?UBfF+R1/YQquG1k+ZDg3C8kb6BvyOaUFs96mpQyPebpatM3Mc7VlR9Fc/U?=
- =?iso-8859-1?Q?aPPTziQSth9iaQgZtlUgEEkyPhtouvngTqnWLY5bnpbkYY1W0IMCapj8xG?=
- =?iso-8859-1?Q?rX4b6H5OmDuxuUdtrGZSI5lzH+r9SpbDMptuHINTHaXUaMXzluxakD0AyT?=
- =?iso-8859-1?Q?6fK6Vei7jcP4xkO47CnC6ukRf2q+0RaemY3O6SvBG5DfmqdrwIDNxdiOrV?=
- =?iso-8859-1?Q?e70TT/4bexuN/kViTqrxXg3pgsTuOuCwwFak/YwEN9uhp1yMbTyZjbzRQu?=
- =?iso-8859-1?Q?hktKh6ZB5GlqNCpdXRSD6hBR9BjuMsgQyz258cFOAZIS4qPwz2e2J1V0Ml?=
- =?iso-8859-1?Q?LcV4YBrzXos5zN8+KCmckCqwrP4oTGloIhJNturEwlK8aC/0/0zEAh15JH?=
- =?iso-8859-1?Q?8nqcvEBReEoQxda8kGa02PTLQzymHwE6Aedwo4MVHN7p8sAVQhFnKDqDoa?=
- =?iso-8859-1?Q?ZefH8/PwWDImEPnRqb77pTVfmZ2ba9FfLiym7vDjRhk1By0q4mJnIZxg?=
- =?iso-8859-1?Q?=3D=3D?=
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 486692DFA3C
+	for <linux-media@vger.kernel.org>; Tue,  2 Sep 2025 14:55:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.251.105.195
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1756824919; cv=none; b=i5DtgyAxtGAj2EhReGKG9mATEWiYYhI5Tx1g1XdXYymT+KaU7Y5CqMLOgwWoDAExYe1DslY1u39wEjVQ4OuXr/NrtCaLDalaZsHv7lYNRpeTZ+tYmVYd/lGMtycVB68yM66GUSNhg0uvPaIbjSmxIfTX+UvPyLr6G+eVWO/Rzd8=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1756824919; c=relaxed/simple;
+	bh=zqQipLJwm+1nTt0uBUGs1NQb/hyubBn+kKYdOyvXXgA=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=kzJsPgjJVL2HmZA/zrQFIt6YsNRKipVx13+pw+8kHqbn9XMjVGgZdYKYSFopiUT6z7dCEupocuYi2iqsvqFAhnzBM7tGxOVZLNQ1nFTGPrOL5ZBoki9l1oFhCXS/kxVQjyQELzrPyhG0GoVuuQduHMxQpqtpkTbzQS1/jj2dg/k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=DoC5GhLJ; arc=none smtp.client-ip=148.251.105.195
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="DoC5GhLJ"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+	s=mail; t=1756824915;
+	bh=zqQipLJwm+1nTt0uBUGs1NQb/hyubBn+kKYdOyvXXgA=;
+	h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+	b=DoC5GhLJ7CRct+GLe67gr1wAmMTX7A+UpHrDCEU9cojf0mrv/CpFDrM9meXvDeh+0
+	 nfuzM7KS469Oo/zO2bGIY3buztYjk8HB4GPSH4wFolS/ZKWS6bF+mMzAYhrwvPCyGO
+	 NhHyceVncnnSnkQA0ZeSWMuncKQbaefcM7Llz0qZWxADLBUDmHVtdEYyk6AZ1CvOy1
+	 IBdnPJIut+6n17FlpbBpgHwlbRQfE8l+ibd8AEE+Fd9RBtDq0A4tfcy8FGHvVRGZsJ
+	 vt/GYBGov1/hy0+pCZALn0EJLFCecvNm5Qf2e5ZIISa9GNTn1p+QjhzevA9D980oTy
+	 uhpNrCUthKEPQ==
+Received: from [IPv6:2606:6d00:11:5a76::5ac] (unknown [IPv6:2606:6d00:11:5a76::5ac])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: nicolas)
+	by bali.collaboradmins.com (Postfix) with ESMTPSA id DE30E17E0456;
+	Tue,  2 Sep 2025 16:55:14 +0200 (CEST)
+Message-ID: <4158785f415986924f916f4bfe1988376806f8ed.camel@collabora.com>
+Subject: Re: Hantro G1 jpeg decoder stm32mp2 (plain text)
+From: Nicolas Dufresne <nicolas.dufresne@collabora.com>
+To: Michael Nazzareno Trimarchi <michael@amarulasolutions.com>
+Cc: linux-media <linux-media@vger.kernel.org>, Hugues Fruchet
+	 <hugues.fruchet@foss.st.com>, Mauro Carvalho Chehab <mchehab@kernel.org>
+Date: Tue, 02 Sep 2025 10:55:12 -0400
+In-Reply-To: <CAOf5uwnofTZ1ARzqAD0Tevz_gX1w=Uv5b7Q8=-ZnwQpioZvXuw@mail.gmail.com>
+References: 
+	<CAOf5uwmTTFcizew2QRAr=TZ12hTfXg6NFEsDYKASB7wPeB4odw@mail.gmail.com>
+	 <7b37c5679994281ae1806f2ee84d1aede77ca836.camel@collabora.com>
+	 <CAOf5uw=uPkC60gE7Ea_ZnEZdYJRYRJKz=OVUN0RvO_NVe2tw5A@mail.gmail.com>
+	 <96dc1231c7d18f8106e4b5e56a336add377ee235.camel@collabora.com>
+	 <CAOf5uwnofTZ1ARzqAD0Tevz_gX1w=Uv5b7Q8=-ZnwQpioZvXuw@mail.gmail.com>
+Autocrypt: addr=nicolas.dufresne@collabora.com; prefer-encrypt=mutual;
+ keydata=mDMEaCN2ixYJKwYBBAHaRw8BAQdAM0EHepTful3JOIzcPv6ekHOenE1u0vDG1gdHFrChD
+ /e0J05pY29sYXMgRHVmcmVzbmUgPG5pY29sYXNAbmR1ZnJlc25lLmNhPoicBBMWCgBEAhsDBQsJCA
+ cCAiICBhUKCQgLAgQWAgMBAh4HAheABQkJZfd1FiEE7w1SgRXEw8IaBG8S2UGUUSlgcvQFAmibrjo
+ CGQEACgkQ2UGUUSlgcvQlQwD/RjpU1SZYcKG6pnfnQ8ivgtTkGDRUJ8gP3fK7+XUjRNIA/iXfhXMN
+ abIWxO2oCXKf3TdD7aQ4070KO6zSxIcxgNQFtDFOaWNvbGFzIER1ZnJlc25lIDxuaWNvbGFzLmR1Z
+ nJlc25lQGNvbGxhYm9yYS5jb20+iJkEExYKAEECGwMFCwkIBwICIgIGFQoJCAsCBBYCAwECHgcCF4
+ AWIQTvDVKBFcTDwhoEbxLZQZRRKWBy9AUCaCyyxgUJCWX3dQAKCRDZQZRRKWBy9ARJAP96pFmLffZ
+ smBUpkyVBfFAf+zq6BJt769R0al3kHvUKdgD9G7KAHuioxD2v6SX7idpIazjzx8b8rfzwTWyOQWHC
+ AAS0LU5pY29sYXMgRHVmcmVzbmUgPG5pY29sYXMuZHVmcmVzbmVAZ21haWwuY29tPoiZBBMWCgBBF
+ iEE7w1SgRXEw8IaBG8S2UGUUSlgcvQFAmibrGYCGwMFCQll93UFCwkIBwICIgIGFQoJCAsCBBYCAw
+ ECHgcCF4AACgkQ2UGUUSlgcvRObgD/YnQjfi4+L8f4fI7p1pPMTwRTcaRdy6aqkKEmKsCArzQBAK8
+ bRLv9QjuqsE6oQZra/RB4widZPvphs78H0P6NmpIJ
+Organization: Collabora Canada
+Content-Type: multipart/signed; micalg="pgp-sha512";
+	protocol="application/pgp-signature"; boundary="=-PSKTQybYKSfTANFhdMyz"
+User-Agent: Evolution 3.56.2 (3.56.2-1.fc42) 
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-OriginatorOrg: siliconsignals.io
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: PN3P287MB3519.INDP287.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-Network-Message-Id: c589b224-05f8-4a2c-18e2-08ddea2d49d4
-X-MS-Exchange-CrossTenant-originalarrivaltime: 02 Sep 2025 14:30:38.9100
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 7ec5089e-a433-4bd1-a638-82ee62e21d37
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: 8kwOJd6+dSd2Jc5G/lP0fslidwXq+qgS/OHZFcmxp0hKPbDcfDP9NHRD8WMFLd9/wQ+mXFVIsgEG0wCmf28MZla5+YT7FUo72E6JBZ8rp9K4wY5RqyN2wYyb3N6O6gkO
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PN2P287MB1165
 
-Hi Sakari,=0A=
-=0A=
-> On Mon, Sep 01, 2025 at 06:44:46AM +0000, Tarang Raval wrote:=0A=
-> > Hi Hardev, Sakari=0A=
-> >=0A=
-> > > Add a v4l2 subdevice driver for the Omnivision OV2735 sensor.=0A=
-> > >=0A=
-> > > The Omnivision OV2735 is a 1/2.7-Inch CMOS image sensor with an=0A=
-> > > active array size of 1920 x 1080.=0A=
-> > >=0A=
-> > > The following features are supported:=0A=
-> > > - Manual exposure an gain control support=0A=
-> > > - vblank/hblank control support=0A=
-> > > - Test pattern support control=0A=
-> > > - Supported resolution: 1920 x 1080 @ 30fps (SGRBG10)=0A=
-> > >=0A=
-> > > Co-developed-by: Himanshu Bhavani <himanshu.bhavani@siliconsignals.io=
->=0A=
-> > > Signed-off-by: Himanshu Bhavani <himanshu.bhavani@siliconsignals.io>=
-=0A=
-> > > Signed-off-by: Hardevsinh Palaniya <hardevsinh.palaniya@siliconsignal=
-s.io>=0A=
-> > > ---=0A=
-> > >=A0 MAINTAINERS=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 |=A0=A0=
-=A0 1 +=0A=
-> > >=A0 drivers/media/i2c/Kconfig=A0 |=A0=A0 10 +=0A=
-> > >=A0 drivers/media/i2c/Makefile |=A0=A0=A0 1 +=0A=
-> > >=A0 drivers/media/i2c/ov2735.c | 1109 ++++++++++++++++++++++++++++++++=
-++++=0A=
-> > >=A0 4 files changed, 1121 insertions(+)=0A=
-> > >=A0 create mode 100644 drivers/media/i2c/ov2735.c=0A=
-> >=0A=
-> > ...=0A=
-> >=0A=
-> > > +static int ov2735_enum_mbus_code(struct v4l2_subdev *sd,=0A=
-> > > +=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=
-=A0=A0=A0=A0=A0=A0=A0=A0=A0 struct v4l2_subdev_state *sd_state,=0A=
-> > > +=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=
-=A0=A0=A0=A0=A0=A0=A0=A0=A0 struct v4l2_subdev_mbus_code_enum *code)=0A=
-> > > +{=0A=
-> > > +=A0=A0=A0=A0=A0=A0 if (code->index >=3D 0)=0A=
-> >=0A=
-> > Hardev, I believe this condition is always true.=0A=
-> >=0A=
-> > You should write:=0A=
-> > if (code->index > 0)=0A=
-> >=0A=
-> > Sakari, Could you please remove the equals sign when you apply the patc=
-h?=0A=
-> =0A=
-> Done. I also switched it to container_of_const(); the diff is:=0A=
-> =0A=
-> diff --git a/drivers/media/i2c/ov2735.c b/drivers/media/i2c/ov2735.c=0A=
-> index da5978b96146..b96600204141 100644=0A=
-> --- a/drivers/media/i2c/ov2735.c=0A=
-> +++ b/drivers/media/i2c/ov2735.c=0A=
-> @@ -402,7 +402,7 @@ static int ov2735_multi_reg_write(struct ov2735 *ov27=
-35,=0A=
-> =0A=
-> =A0static inline struct ov2735 *to_ov2735(struct v4l2_subdev *_sd)=0A=
-> =A0{=0A=
-> -=A0=A0=A0=A0=A0=A0 return container_of(_sd, struct ov2735, sd);=0A=
-> +=A0=A0=A0=A0=A0=A0 return container_of_const(_sd, struct ov2735, sd);=0A=
-> =A0}=0A=
-> =0A=
-> =A0static int ov2735_enable_test_pattern(struct ov2735 *ov2735, u32 patte=
-rn)=0A=
-> @@ -428,8 +428,8 @@ static int ov2735_enable_test_pattern(struct ov2735 *=
-ov2735, u32 pattern)=0A=
-> =0A=
-> =A0static int ov2735_set_ctrl(struct v4l2_ctrl *ctrl)=0A=
-> =A0{=0A=
-> -=A0=A0=A0=A0=A0=A0 struct ov2735 *ov2735 =3D container_of(ctrl->handler,=
- struct ov2735,=0A=
-> -=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=
-=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 handler);=0A=
-> +=A0=A0=A0=A0=A0=A0 struct ov2735 *ov2735 =3D=0A=
-> +=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 container_of_const(ctrl->hand=
-ler, struct ov2735, handler);=0A=
-> =A0=A0=A0=A0=A0=A0=A0 struct v4l2_mbus_framefmt *fmt;=0A=
-> =A0=A0=A0=A0=A0=A0=A0 struct v4l2_subdev_state *state;=0A=
-> =A0=A0=A0=A0=A0=A0=A0 u64 vts;=0A=
-> @@ -697,7 +697,7 @@ static int ov2735_enum_mbus_code(struct v4l2_subdev *=
-sd,=0A=
-> =A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=
-=A0=A0=A0=A0=A0=A0=A0=A0 struct v4l2_subdev_state *sd_state,=0A=
-> =A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=
-=A0=A0=A0=A0=A0=A0=A0=A0 struct v4l2_subdev_mbus_code_enum *code)=0A=
-> =A0{=0A=
-> -=A0=A0=A0=A0=A0=A0 if (code->index >=3D 0)=0A=
-> +=A0=A0=A0=A0=A0=A0 if (code->index)=0A=
-> =A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 return -EINVAL;=0A=
-> =0A=
-> =A0=A0=A0=A0=A0=A0=A0 code->code =3D MEDIA_BUS_FMT_SGRBG10_1X10;=0A=
-=0A=
-Thanks for your help.=0A=
-=0A=
-Best Regards,=0A=
-Hardev=0A=
+
+--=-PSKTQybYKSfTANFhdMyz
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+Le mardi 02 septembre 2025 =C3=A0 15:30 +0200, Michael Nazzareno Trimarchi =
+a =C3=A9crit=C2=A0:
+> Hi Nicolas
+>=20
+> On Tue, Sep 2, 2025 at 3:13=E2=80=AFPM Nicolas Dufresne
+> <nicolas.dufresne@collabora.com> wrote:
+> >=20
+> > Hi,
+> >=20
+> > Le mardi 02 septembre 2025 =C3=A0 15:01 +0200, Michael Nazzareno Trimar=
+chi a =C3=A9crit :
+> > > > If you only have one format support, you don't need to force anythi=
+ng in
+> > > > GStreamer. Some extra information about Hantro post-processor. When=
+ used, you
+> > > > need to provide 2 sets of buffers. The decoder will still produce N=
+V16, and a
+> > > > secondary set of buffers is (in parallel, pipeline mode) written ba=
+ck into the
+> > > > format you have configured on the PP register set.
+> > >=20
+> > > Those sets of buffers are provided by gstreamer or how does this
+> > > handle in practice for
+> > > other decoders?
+> > >=20
+> > > >=20
+> > > > The post-processor can also be used in standalone mode, but this fe=
+ature is
+> > > > often fused out. In that mode, in can input interleaved YUV, as oft=
+en produced
+> > > > as raw format by USB cameras (and most cameras using serial links).
+> > >=20
+> > > Much better. Now I need to understand better about the two set of buf=
+fers
+> >=20
+> > the V4L2 API does not have the notion of primary vs secondary buffers (=
+unlike as
+> > an example Vulkan Video, which is 20 years younger :-D). So we endup hi=
+ding the
+> > primary buffers inside the kernel driver [0]. Just notice the this allo=
+cation
+> > allocates reference buffers for the decoder, and the decoder actually a=
+llocate
+> > the final buffers. This is quite convoluted imho. Note that some import=
+ant fixes
+> > have happen on this part of the postproc code (which arguably still nee=
+d a lot
+> > of cleanup, a proper split between G1 and G2 (and merging back VC8000 i=
+nto G2
+> > since this is largely compatible).
+> >=20
+> > https://gitlab.freedesktop.org/linux-media/media-committers/-/blob/next=
+/drivers/media/platform/verisilicon/hantro_postproc.c?ref_type=3Dheads#L224
+> > https://gitlab.freedesktop.org/linux-media/media-committers/-/commit/db=
+300ab0e9d38b1e1b0b561333b66a5beacb9994
+> >=20
+>=20
+> Ok, I read the code, but I have some doubt:
+>=20
+> - the NV16 and NV12 are both available as the primary buffer for the
+> decoder but you don't know until you plug the camera and start
+> streaming, so I suppose that in this
+> case the size of the primary buffer should be computed based on the
+> biggest format.
+
+Since JPEG is a stateful decoder, it needs to implement the respective port=
+ion
+of the stateful decoder specification. In short,
+
+- Userspace should prepare the OUTPUT queue and provide a first buffer
+- The driver should parse the frame header**=20
+- The driver should notify that the resolution/format has been found
+- Userspace will enum or get the information and configura capture queue
+
+
+** JPEG is the only codec we allow in-kernel parsing to take place, other
+codec=C2=A0must defer this to a firmware or implement the stateless spec
+
+With that mechanism in-place, there is no need to allocate bigger then need=
+ed.
+
+> - I think that hantro_set_reference_frames_format assumption is to
+> keep the one supported from decoder and match the first one match the
+> bit_depth,
+> =C2=A0 so it can set as reference the NV12 and not the NV16
+>=20
+> Is this correct?
+
+Its the bitstream that dictate which of NV12 and NV16. The main issue you a=
+re
+facing is that only bit depth (8 and 10bit) has been implemented so far. Th=
+ere
+might be more work to support 422. Note that G1 is unique, since the decode=
+r
+part already support 2 formats. Though, in mainline we did not expose the t=
+iled
+format (8x4 tiling). So if you have a 422 JPEG stream, your choices are NV1=
+6 or
+8x4 NV16.
+>=20
+> The postproc_enable happens if we have prepare_run it means that the
+> buffers are allocated already but the buffer will be known only when
+> someone
+> enqueues them to the decoder. In such a scenario is there any driver
+> already solving it?
+
+As this code have only been used through the stateless specification, some =
+work
+will be needed to support stateful for that context. CODA960 support might =
+serve
+as inspiration.
+
+Nicolas
+
+>=20
+> Michael
+>=20
+> >=20
+> > regards,
+> > Nicolas
+
+--=-PSKTQybYKSfTANFhdMyz
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-Description: This is a digitally signed message part
+Content-Transfer-Encoding: 7bit
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQTvDVKBFcTDwhoEbxLZQZRRKWBy9AUCaLcFUAAKCRDZQZRRKWBy
+9BLoAQCSmMFd2QxdEUTtxOhuNIzqtTbwLvy0QYixQe76USGWVAEArB81c3DP6hTY
+uoIJqxVTn3M+Z2gAVa4ghCNSTZUgBAw=
+=kvDh
+-----END PGP SIGNATURE-----
+
+--=-PSKTQybYKSfTANFhdMyz--
