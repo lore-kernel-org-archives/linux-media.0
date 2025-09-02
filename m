@@ -1,83 +1,188 @@
-Received: from ni.piap.pl (ni.piap.pl [195.187.100.5])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.16])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 49EC72EFD8A;
-	Tue,  2 Sep 2025 09:59:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.187.100.5
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1BDBB2F291D
+	for <linux-media@vger.kernel.org>; Tue,  2 Sep 2025 10:00:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756807187; cv=none; b=pJTJrh3G8DDpmN0vFtCrJSNXWSGH9Q7oY7VAsroxTLB+rLuoMrTwSC2P10UfE9FN07myBzcj9Qy/BAj1R32d85glAfaWMzTtwCQ2PNkQdAyveo0mDfgLcWpIkYb3Ykw9MbNVJ6ERWLT0Q9alaXsoufKWLB2WLo4BdC2ybbC98Oc=
+	t=1756807233; cv=none; b=n/DB528pgBgyppFR4xhYu/9Ha7MxxHliJLEL7L+1AGmSDh3b2gr1Swt5WVn9feb9w2NqIDN/QkSj+NOxqH5muGhGky0AMx1FwePKWDahyKNZWJgmgTNrodnmYsBYqyTeodkzVJVGGFbBUFqO6mcH5SR5rCUZvZo2MRtCeXfcqgE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756807187; c=relaxed/simple;
-	bh=GNCNaMiPJDXvB/7iEX4grRokMrqO0VUFGnAoYlmBZNk=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=spscc8hEe82YSf/usC5ulpFKzVRZJrURI/lm6MkQe727YkmJkTNHZWIlwFCxHh3NuF+qa6xtK8YhvJZx1p5d/F6oFuAmYf0SsbMZBFqx8SDluoYJ7y36GD1dmu70BNJDDCU9ZzD47q1Ai0beECh8ycs3W4f1pOZlyY1/TLbunAs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=piap.pl; spf=pass smtp.mailfrom=piap.pl; arc=none smtp.client-ip=195.187.100.5
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=piap.pl
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=piap.pl
-Received: from t19.piap.pl (OSB1819.piap.pl [10.0.9.19])
-	by ni.piap.pl (Postfix) with ESMTPS id 16763C3EEACD;
-	Tue,  2 Sep 2025 11:54:28 +0200 (CEST)
-DKIM-Filter: OpenDKIM Filter v2.11.0 ni.piap.pl 16763C3EEACD
-From: =?utf-8?Q?Krzysztof_Ha=C5=82asa?= <khalasa@piap.pl>
-To: Adam Ford <aford173@gmail.com>
-Cc: Stefan Klug <stefan.klug@ideasonboard.com>,  Laurent Pinchart
- <laurent.pinchart@ideasonboard.com>,  Dafna Hirschfeld
- <dafna@fastmail.com>,  Heiko Stuebner <heiko@sntech.de>,  Paul Elder
- <paul.elder@ideasonboard.com>,  Jacopo Mondi
- <jacopo.mondi@ideasonboard.com>,  Ondrej Jirman <megi@xff.cz>,
-  linux-media@vger.kernel.org,  linux-rockchip@lists.infradead.org,
-  linux-arm-kernel@lists.infradead.org,  linux-kernel@vger.kernel.org
-Subject: Re: FYI: i.MX8MP ISP (RKISP1) MI registers corruption: resolved
-In-Reply-To: <CAHCN7xKq_o_u7PhPMcZ2W9nzrFP8+CnhaYJOyxnjpKfbMTBCEw@mail.gmail.com>
-	(Adam Ford's message of "Tue, 12 Aug 2025 13:22:54 -0500")
-References: <175308758352.3134829.9472501038683860006@localhost>
-	<175326599663.2811177.16620980968274114885@localhost>
-	<m3h5z2vw12.fsf@t19.piap.pl>
-	<175344176070.2811177.10693943493658922992@localhost>
-	<m3qzxyug1s.fsf@t19.piap.pl> <m3cy9futcj.fsf@t19.piap.pl>
-	<m34iumujcs.fsf@t19.piap.pl> <m3zfcet41n.fsf@t19.piap.pl>
-	<m3a545t789.fsf@t19.piap.pl>
-	<20250812103243.GK30054@pendragon.ideasonboard.com>
-	<175501095338.74722.11604545949710100799@localhost>
-	<CAHCN7xKq_o_u7PhPMcZ2W9nzrFP8+CnhaYJOyxnjpKfbMTBCEw@mail.gmail.com>
-Sender: khalasa@piap.pl
-Date: Tue, 02 Sep 2025 11:54:27 +0200
-Message-ID: <m31popxjqk.fsf@t19.piap.pl>
+	s=arc-20240116; t=1756807233; c=relaxed/simple;
+	bh=vZXLwM3788gEMHiAknq15oLU6b5v6EA6xYYBRrA1L1A=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=duCUlISei4XV4Q1czZe+9uwxmj6J7IWrnllIDeIHH7FeVbZ8RgEuw10v1kkDAB30P0PtHy27QW7TU2OxaPx/8j70iK1wpWoB07cp7FWcpIkGwfkhl0mdC/zCw7ommeL4PIMqmfRwdPzF+/XyBiTWC2XGJqEAboS7lgpM9k48Vko=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=dxP94eJ/; arc=none smtp.client-ip=198.175.65.16
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="dxP94eJ/"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1756807232; x=1788343232;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=vZXLwM3788gEMHiAknq15oLU6b5v6EA6xYYBRrA1L1A=;
+  b=dxP94eJ/lxvp1n65C9/hZAjR4DlA6LOeVD616DBJQyE2YbI1ER5vNPZa
+   PDGO5+MYvoTT3Hy18H+E+4YsLGa+NrWlIwi06gVd07Z+CcVt9CxWpexxs
+   n5lDwZqKr+mxsgaIciHZLanC22GLz7gMWoHFF43BZ04WbDyxxZ42szcqz
+   XP/PZTOe1S2rvi3A/TsxXftmHtTJT5z+68qGE9EiyITB8I/ZfxN4RvuTY
+   M3gQeMd/CnVOdT/VxhLJwvyiW6Z6dnEyYSVviK+ESjL+czAVa3DjXzbNF
+   38pe+7M5NZnJvxFT9kwBdebFkATxnBQfSKUHb3Enf9e1gaDwtPK4UAkPo
+   A==;
+X-CSE-ConnectionGUID: RC2CMZy0R62VTgkqcxl4xA==
+X-CSE-MsgGUID: xR28map9ST61gf2J/NXBDw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11540"; a="59210457"
+X-IronPort-AV: E=Sophos;i="6.18,230,1751266800"; 
+   d="scan'208";a="59210457"
+Received: from fmviesa010.fm.intel.com ([10.60.135.150])
+  by orvoesa108.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Sep 2025 03:00:30 -0700
+X-CSE-ConnectionGUID: OzhP45hLS46M5wUUEbcq2w==
+X-CSE-MsgGUID: Qx2RFY39RqKB8yIyPqBeKA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.18,230,1751266800"; 
+   d="scan'208";a="172074122"
+Received: from agladkov-desk.ger.corp.intel.com (HELO kekkonen.fi.intel.com) ([10.245.245.32])
+  by fmviesa010-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Sep 2025 03:00:23 -0700
+Received: from kekkonen.localdomain (localhost [IPv6:::1])
+	by kekkonen.fi.intel.com (Postfix) with SMTP id E41FF11F739;
+	Tue, 02 Sep 2025 13:00:20 +0300 (EEST)
+Date: Tue, 2 Sep 2025 13:00:20 +0300
+Organization: Intel Finland Oy - BIC 0357606-4 - c/o Alberga Business Park, 6 krs, Bertel Jungin Aukio 5, 02600 Espoo
+From: Sakari Ailus <sakari.ailus@linux.intel.com>
+To: Jacopo Mondi <jacopo.mondi@ideasonboard.com>
+Cc: linux-media@vger.kernel.org, hans@jjverkuil.nl,
+	laurent.pinchart@ideasonboard.com,
+	Prabhakar <prabhakar.csengg@gmail.com>, Kate Hsuan <hpa@redhat.com>,
+	Alexander Shiyan <eagle.alexander923@gmail.com>,
+	Dave Stevenson <dave.stevenson@raspberrypi.com>,
+	Tommaso Merciai <tomm.merciai@gmail.com>,
+	Umang Jain <umang.jain@ideasonboard.com>,
+	Benjamin Mugnier <benjamin.mugnier@foss.st.com>,
+	Sylvain Petinot <sylvain.petinot@foss.st.com>,
+	Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+	Julien Massot <julien.massot@collabora.com>,
+	Naushir Patuck <naush@raspberrypi.com>,
+	"Yan, Dongcheng" <dongcheng.yan@intel.com>,
+	"Cao, Bingbu" <bingbu.cao@intel.com>,
+	"Qiu, Tian Shu" <tian.shu.qiu@intel.com>,
+	"Wang, Hongju" <hongju.wang@intel.com>,
+	Stefan Klug <stefan.klug@ideasonboard.com>,
+	Mirela Rabulea <mirela.rabulea@nxp.com>,
+	=?iso-8859-1?Q?Andr=E9?= Apitzsch <git@apitzsch.eu>,
+	Heimir Thor Sverrisson <heimir.sverrisson@gmail.com>,
+	Kieran Bingham <kieran.bingham@ideasonboard.com>,
+	Stanislaw Gruszka <stanislaw.gruszka@linux.intel.com>,
+	Mehdi Djait <mehdi.djait@linux.intel.com>,
+	Ricardo Ribalda Delgado <ribalda@kernel.org>,
+	Hans de Goede <hdegoede@redhat.com>,
+	Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
+Subject: Re: [PATCH v11 04/66] media: Documentation: Document -ENXIO for
+ VIDIOC_SUBDEV_S_ROUTING
+Message-ID: <aLbANPWV4wmcMZgT@kekkonen.localdomain>
+References: <20250825095107.1332313-1-sakari.ailus@linux.intel.com>
+ <20250825095107.1332313-5-sakari.ailus@linux.intel.com>
+ <s7yxeudfc5n67v7po6rjb7zaxwy3cjxzflvb7v27owhe5hicyu@qqazppf4vajo>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <s7yxeudfc5n67v7po6rjb7zaxwy3cjxzflvb7v27owhe5hicyu@qqazppf4vajo>
 
-Hi,
+Hi Jacopo,
 
-summary:
+On Mon, Sep 01, 2025 at 01:33:56PM +0200, Jacopo Mondi wrote:
+> Hi Sakari
+> 
+> On Mon, Aug 25, 2025 at 12:50:05PM +0300, Sakari Ailus wrote:
+> > Document that -ENXIO is returned when the user tries to set a routing
+> > configuration not supported by the hardware (or rather the driver). The
+> > documentation details the exact cases of this, besides -EINVAL that is
+> > already documented for VIDIOC_SUBDEV_S_ROUTING.
+> >
+> > Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
+> > ---
+> >  .../media/v4l/vidioc-subdev-g-routing.rst             | 11 ++++++++++-
+> >  1 file changed, 10 insertions(+), 1 deletion(-)
+> >
+> > diff --git a/Documentation/userspace-api/media/v4l/vidioc-subdev-g-routing.rst b/Documentation/userspace-api/media/v4l/vidioc-subdev-g-routing.rst
+> > index 1cf795480602..15f448664e6b 100644
+> > --- a/Documentation/userspace-api/media/v4l/vidioc-subdev-g-routing.rst
+> > +++ b/Documentation/userspace-api/media/v4l/vidioc-subdev-g-routing.rst
+> > @@ -155,9 +155,18 @@ appropriately. The generic error codes are described at the
+> >  :ref:`Generic Error Codes <gen-errors>` chapter.
+> >
+> >  EINVAL
+> > +
+> 
+> Is this intended ?
 
-I've done a few additional tests and it seems the MEDIA_AXI clock is the
-problem. Reducing it to 400 MHz while still running MEDIA_ISP at 500 MHz
-produces no errors.
-MEDIA_ISP at 400 MHz and MEDIA_AXI at 500 MHz produces errors, though
-(register address errors while reading and writing from/to ISP MI
-(memory interface) registers, only on the secondary ISP (isp1), and
-generally only while streaming data from the ISP).
+Oops.
 
-What is driven by MEDIA_AXI clock root? MEDIAMIX: ISI, LCDIF, ISP, DWE.
+> 
+> >     The sink or source pad identifiers reference a non-existing pad or reference
+> >     pads of different types (ie. the sink_pad identifiers refers to a source
+> > -   pad), or the ``which`` field has an unsupported value.
+> > +   pad), the ``which`` field has an unsupported value, or, for
+> > +   ``VIDIOC_SUBDEV_S_ROUTING``, the num_routes field value is larger than that
+> > +   of the len_routes field.
+> 
+> Doesn't this contradicts the above
+> 
+> The kernel can return a ``num_routes`` value larger than ``len_routes`` from
+> both ioctls. This indicates thare are more routes in the routing table than fits
+> the ``routes`` array. In this case, the ``routes`` array is filled by the kernel
+> with the first ``len_routes`` entries of the subdevice routing table. This is
+> not considered to be an error, and the ioctl call succeeds. If the applications
+> wants to retrieve the missing routes, it can issue a new
+> ``VIDIOC_SUBDEV_G_ROUTING`` call with a large enough ``routes`` array.
+> 
+> Looking at the handler for VIDIOC_SUBDEV_S_ROUTING in v4l2-subdev.c I
+> think this should specify that is invalid to have userspace set a num_routes
+> value larger than len_routes.
+> 
+> I would simply add this to the above hunk
+> 
+> -   pad), or the ``which`` field has an unsupported value.
+> +   pad), the ``which`` field has an unsupported value, or, for
+> +   ``VIDIOC_SUBDEV_S_ROUTING``, the num_routes field provided by the
+> +   application is larger than the len_routes field value.
 
-According to both datasheets (industrial and commercial), MEDIA_AXI
-is limited to 400 MHz in normal mode and 500 MHz in overdrive mode.
-All my hardware is setup for overdrive mode, though (two manufacturers,
-both using the same PMIC setup).
+s/provided/set/ ?
 
-Since no hardware in the official Linux kernel tree (DT) uses the second
-ISP... Should we just add a warning to the imx8mp.dtsi and be done with
-it?
-Out of tree hardware using isp1 (csi1) obviously exists.
---=20
-Krzysztof "Chris" Ha=C5=82asa
+Looks good to me.
 
-Sie=C4=87 Badawcza =C5=81ukasiewicz
-Przemys=C5=82owy Instytut Automatyki i Pomiar=C3=B3w PIAP
-Al. Jerozolimskie 202, 02-486 Warszawa
+> 
+> > +
+> > +ENXIO
+> > +   No such link can be created or such link state change can be made. Either the
+> > +   sink or source (pad, stream) pair or the combination of the sink and source
+> > +   is not supported by the hardware, or no multiple routes from or to the same
+> > +   (pad, stream) pair are supported.
+> 
+> If I'm not mistaken this only applies to VIDIOC_SUBDEV_S_ROUTING, so I
+> would mention that. Also ENXIO is not returned by the core but by
+> drivers, so I would not limit the possible cases where ENXIO is
+> returned by making examples.
+> 
+> What about a simpler:
+> 
+> +ENXIO
+> +   The application requested routes cannot be created or the state of
+> +   the specified routes cannot be modified. Only returned for
+> +   ``VIDIOC_SUBDEV_S_ROUTING``.
+
+Sounds reasonable. I'll use this in the next version.
+
+> 
+> >
+> >  E2BIG
+> >     The application provided ``num_routes`` for ``VIDIOC_SUBDEV_S_ROUTING`` is
+
+-- 
+Regards,
+
+Sakari Ailus
