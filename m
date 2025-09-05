@@ -1,28 +1,27 @@
-Received: from smtp-190d.mail.infomaniak.ch (smtp-190d.mail.infomaniak.ch [185.125.25.13])
+Received: from smtp-8fab.mail.infomaniak.ch (smtp-8fab.mail.infomaniak.ch [83.166.143.171])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3DA90145B3F
-	for <linux-media@vger.kernel.org>; Fri,  5 Sep 2025 12:35:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.125.25.13
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7ACA019E7F8
+	for <linux-media@vger.kernel.org>; Fri,  5 Sep 2025 12:38:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=83.166.143.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757075714; cv=none; b=LvLK3w9yaErluT9fgG/rOBMoK9/b7WEoGWWbK1N2ieRv4tAytCe4U80J5286lz1JVsMLVgz4zRMnkJcKqzvUTUBYNkOI+ZasaIRFe7xSziYkzLTD5E+Sq6WRDf28CUm/g6GtVHFirPGB8VOZIY7LHYhPDvmNtICekdIgwtpkOvI=
+	t=1757075915; cv=none; b=ks0zgDgPKk9W6GkUfKuEkcv+fnaJP+S6aHgjCKmPPTaNzXo8t/p1il9hPYEOiMOdLT3xKj282N8fZ3PUm6F4rWi968N8VgyEDpRmkR2ATbG9sDDzR0YX3olZnc4vywDu3pR7O7/3FRnYM1CL2dUxSgbC6Mt048MO5pjPW2Daj+E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757075714; c=relaxed/simple;
-	bh=0Mmig8PuVe7QJjJsdRulCvLRiAbEx9jjoJb4e0XZKq8=;
+	s=arc-20240116; t=1757075915; c=relaxed/simple;
+	bh=C4Rce7a8cOJHrvGcslr+XIBdy0ab9aJhA3cPeVEok7c=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To; b=NLFm+jbNbYaS8doxkfbtAQThrB9FfnWSd2q5LbgdWKbBb3UtH3qghWMe7/F86rRuagwmSSddMkmySG13WwBGyeMUqXgBgKtyTawJqtyoAaV0UpXfOQgHvAsBCKQZuFZ64pp/4vN8Y1RHUn4zzwaR3e1sQZ1Kn8eRXGjPMbkyGFk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=0leil.net; spf=pass smtp.mailfrom=0leil.net; arc=none smtp.client-ip=185.125.25.13
+	 In-Reply-To:To:Cc; b=ovQEzSdb+XiOsXUtlhniIa1jvDj8u19H9VjamsennbWeOorPLbR38KsaTZkPxgtHtDGpCBZS/rKfXggOtzeN6vxmxVHMSHepMEYz6qqF5J3obt1V/zHw9VSHpe6O/51/aCQLruADoErfxZkeLru0mIAoac53IlLJXmZGIxge5vE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=0leil.net; spf=pass smtp.mailfrom=0leil.net; arc=none smtp.client-ip=83.166.143.171
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=0leil.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=0leil.net
 Received: from smtp-4-0000.mail.infomaniak.ch (unknown [IPv6:2001:1600:7:10::a6b])
-	by smtp-4-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4cJFlf4cb9zXfP;
-	Fri,  5 Sep 2025 14:19:42 +0200 (CEST)
-Received: from unknown by smtp-4-0000.mail.infomaniak.ch (Postfix) with ESMTPA id 4cJFlf1xz0zQ2L;
-	Fri,  5 Sep 2025 14:19:42 +0200 (CEST)
+	by smtp-4-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4cJG9M4jyyzlY6;
+	Fri,  5 Sep 2025 14:38:31 +0200 (CEST)
+Received: from unknown by smtp-4-0000.mail.infomaniak.ch (Postfix) with ESMTPA id 4cJG9M28PpzZC8;
+	Fri,  5 Sep 2025 14:38:31 +0200 (CEST)
 From: Quentin Schulz <foss+kernel@0leil.net>
-Date: Fri, 05 Sep 2025 14:19:34 +0200
-Subject: [PATCH 3/3] v4l2-ctl: do not fail on kernel not implementing
- VIDIOC_SUBDEV_QUERYCAP
+Date: Fri, 05 Sep 2025 14:38:13 +0200
+Subject: [PATCH 1/3] README.md: fix mailinglist typo
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
@@ -31,42 +30,39 @@ List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20250905-opt-ioctl-v1-3-4b3ae770fc4b@cherry.de>
-References: <20250905-opt-ioctl-v1-0-4b3ae770fc4b@cherry.de>
-In-Reply-To: <20250905-opt-ioctl-v1-0-4b3ae770fc4b@cherry.de>
-To: linux-media@vger.kernel.org, Quentin Schulz <quentin.schulz@cherry.de>
+Message-Id: <20250905-readme-typo-v1-1-4262d4acd65c@cherry.de>
+References: <20250905-readme-typo-v1-0-4262d4acd65c@cherry.de>
+In-Reply-To: <20250905-readme-typo-v1-0-4262d4acd65c@cherry.de>
+To: linux-media@vger.kernel.org
+Cc: Quentin Schulz <quentin.schulz@cherry.de>
 X-Mailer: b4 0.14.2
 X-Infomaniak-Routing: alpha
 
 From: Quentin Schulz <quentin.schulz@cherry.de>
 
-The comment above the code snippet specifies that we do not want to fail
-on kernels not implementing VIDIOC_SUBDEV_QUERYCAP (5.9 and earlier) but
-calling doioctl will still set app_result to a negative value if the
-kernel doesn't implement it.
+Should be "mailing list" instead.
 
-Therefore, let's mark this ioctl as optional to avoid falsely reporting
-an error.
-
-Fixes: fc89f67d9fe0 ("v4l2-ctl: add support for VIDIOC_SUBDEV_QUERYCAP")
 Signed-off-by: Quentin Schulz <quentin.schulz@cherry.de>
 ---
- utils/v4l2-ctl/v4l2-ctl.cpp | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ README.md | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/utils/v4l2-ctl/v4l2-ctl.cpp b/utils/v4l2-ctl/v4l2-ctl.cpp
-index c287c74d5dff869b2a74a2e2bfebc77d0b9e3f1e..afaffd71b1e9a50a7975dc3200825aaba16e1473 100644
---- a/utils/v4l2-ctl/v4l2-ctl.cpp
-+++ b/utils/v4l2-ctl/v4l2-ctl.cpp
-@@ -1369,7 +1369,7 @@ int main(int argc, char **argv)
- 	} else if (is_subdev) {
- 		// This ioctl was introduced in kernel 5.10, so don't
- 		// exit if this ioctl returns an error.
--		doioctl(fd, VIDIOC_SUBDEV_QUERYCAP, &subdevcap);
-+		doioctl_opt(fd, VIDIOC_SUBDEV_QUERYCAP, &subdevcap);
- 		subdevclientcap.capabilities = ~0ULL;
- 		if (doioctl_opt(fd, VIDIOC_SUBDEV_S_CLIENT_CAP, &subdevclientcap))
- 			subdevclientcap.capabilities = 0ULL;
+diff --git a/README.md b/README.md
+index 358960a78bcde62599fa572c33891d4a50a1dbcd..58bfa0fa55d1acfeaa6cdf6eaf7adb0226ede8f8 100644
+--- a/README.md
++++ b/README.md
+@@ -9,9 +9,9 @@ You can always find the latest development v4l-utils in the git repo:
+ Those utilities follow the latest Linux Kernel media API, as documented at:
+ [http://linuxtv.org/downloads/v4l-dvb-apis/](http://linuxtv.org/downloads/v4l-dvb-apis/).
+ 
+-Any questions/remarks/patches can be sent to the linux-media mailinglist. See
++Any questions/remarks/patches can be sent to the linux-media mailing list. See
+ [https://linuxtv.org/lists.php](https://linuxtv.org/lists.php) for more
+-information about the mailinglist.
++information about the mailing list.
+ 
+ There is also a wiki page for the v4l-utils:
+ [https://linuxtv.org/wiki/index.php/V4l-utils](https://linuxtv.org/wiki/index.php/V4l-utils).
 
 -- 
 2.51.0
