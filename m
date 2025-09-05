@@ -1,130 +1,134 @@
-Received: from sender4-pp-f112.zoho.com (sender4-pp-f112.zoho.com [136.143.188.112])
+Received: from smtp-190b.mail.infomaniak.ch (smtp-190b.mail.infomaniak.ch [185.125.25.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A6BF4350842;
-	Fri,  5 Sep 2025 12:54:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.112
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757076850; cv=pass; b=Bp5Au+q3cX6v6vOGfb3x4MWi7d+wPNYvHqO9urryEmI8e/G+vtqDJ/7ntt68GLji+rTegt0wnHbhA3o91Pq3zx2KA32vs8M94eyr+9Dq5RjBs0BBpfDVRtRQdO/ZALUU7vXvo8fQV1XIqdAVk2BTb6uogj3sr8zUDsvB+cm0C10=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757076850; c=relaxed/simple;
-	bh=IhV6JrFrqmw8qOU5WUVwAH8fqiEhjI9hAYG5HTMtCrU=;
-	h=Content-Type:Mime-Version:Subject:From:In-Reply-To:Date:Cc:
-	 Message-Id:References:To; b=DDSr7BKX+/A4nZaX5SmsNvq6uCH6D6idxIgVesgJkeH+YWKJHqqpnMSH83qLEvQpBAG7eZ3L+EuVxL5gYV8y1dXBQWm+hkUcl7mSUf7IzTtveJWDyssMK2zB4NLhqG4UjLhzcKtzLRmew3dQ5XluYjgmhHqgnx6jJocRvijepxw=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (1024-bit key) header.d=collabora.com header.i=daniel.almeida@collabora.com header.b=V6C7LERr; arc=pass smtp.client-ip=136.143.188.112
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=collabora.com header.i=daniel.almeida@collabora.com header.b="V6C7LERr"
-ARC-Seal: i=1; a=rsa-sha256; t=1757076843; cv=none; 
-	d=zohomail.com; s=zohoarc; 
-	b=SaTKMvMi6RhuoR3yzxnE16roLlxmcD7j2Q6c4VeJ37XA6Q7Hy1EowhR/zfJDis4BPJAFwvHGBkP4zHiWxqErjs2GD+my57Wbvnn1A1bDUvS9znlJ1v6v/ZCntUL4erRy/5dXJjRnf7lEKTTv9ngTRzRzJ8FKygPOhiqE3u22czI=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-	t=1757076843; h=Content-Type:Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To; 
-	bh=os9bh//smt/UIodGYqnwPtUu/En7lmpyHv6vRfiOJEM=; 
-	b=ihL8jBOQ0E1wAnntqtOJlGrOu0BwNxYQBsYM2y6A6e4fs5qptQhk0gKGAiha8fh887L00xa8AR3k3EFf/tYj9S37vkHBLNXa482XqK0/Sy5awULcWgVN0/GCcq2eNNwCZUkTfosQYu/a9QR6S9sXyxmJHaadQfRHGMfT7KBoAhY=
-ARC-Authentication-Results: i=1; mx.zohomail.com;
-	dkim=pass  header.i=collabora.com;
-	spf=pass  smtp.mailfrom=daniel.almeida@collabora.com;
-	dmarc=pass header.from=<daniel.almeida@collabora.com>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1757076843;
-	s=zohomail; d=collabora.com; i=daniel.almeida@collabora.com;
-	h=Content-Type:Mime-Version:Subject:Subject:From:From:In-Reply-To:Date:Date:Cc:Cc:Content-Transfer-Encoding:Message-Id:Message-Id:References:To:To:Reply-To;
-	bh=os9bh//smt/UIodGYqnwPtUu/En7lmpyHv6vRfiOJEM=;
-	b=V6C7LERriU8u8J1eQ7SL58HjnRIzzKUnVVq+ATmhgHCyh1uFJmwQRNJL2bmbUCBT
-	Z5W5Nfs6YmTKEJH3DH00lrWlPNc6PnHhiC3ozVy8NmoxT2hUmIDa6ibM8lrB9EZApjg
-	DNBuP+Eg8qZ8hHwjzpR06pZ4CvqEXn7/QoCv+ks8=
-Received: by mx.zohomail.com with SMTPS id 1757076841256971.3020603340233;
-	Fri, 5 Sep 2025 05:54:01 -0700 (PDT)
-Content-Type: text/plain;
-	charset=utf-8
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1329538DDB
+	for <linux-media@vger.kernel.org>; Fri,  5 Sep 2025 12:55:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.125.25.11
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1757076914; cv=none; b=lT3K6UFZfC/fyPaYjKdrqDPI6m4g35O6xMFInRGxfvfiqQEQJEPzwX3oBvXHDN6ntPEMllZNcSgKHNQm5pC7nxECIGHMhtV8Nrk+aGLWoW+CyHHPrF1a9bIRa3ZzOa7k4+epWu3WNo/uzTupdVlgqQoAbK0S6RshG1ITlQ8bj10=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1757076914; c=relaxed/simple;
+	bh=zbZCiwnA9/n9//sJLVv/4Th1878EKKBrR6WmlWPoU3M=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To; b=lvPj/G1L3yQ1YacRARvInRLklFQOXCv01KBM0/3jwydOu2jxy1yOMLyZOyx9WM1fJNaTOVOaMcdQ97uXeOp179PvoubYHQEIU/IaBGffwMyNO2gYwQCqjFKkAKxoPRIwbjHaFD591jzt4Y8ogBjGQDx8NF84Tam9TXrJ+13nmbg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=0leil.net; spf=pass smtp.mailfrom=0leil.net; arc=none smtp.client-ip=185.125.25.11
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=0leil.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=0leil.net
+Received: from smtp-4-0000.mail.infomaniak.ch (smtp-4-0000.mail.infomaniak.ch [10.7.10.107])
+	by smtp-4-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4cJFld6XblzYBS;
+	Fri,  5 Sep 2025 14:19:41 +0200 (CEST)
+Received: from unknown by smtp-4-0000.mail.infomaniak.ch (Postfix) with ESMTPA id 4cJFld3g50zQBM;
+	Fri,  5 Sep 2025 14:19:41 +0200 (CEST)
+From: Quentin Schulz <foss+kernel@0leil.net>
+Date: Fri, 05 Sep 2025 14:19:32 +0200
+Subject: [PATCH 1/3] v4l2-ctl/rds-ctl: do not set app_result if an ioctl is
+ optional
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3826.700.81\))
-Subject: Re: [PATCH v3] media: vidtv: initialize local pointers upon transfer
- of memory ownership
-From: Daniel Almeida <daniel.almeida@collabora.com>
-In-Reply-To: <20250905051816.4027814-1-aha310510@gmail.com>
-Date: Fri, 5 Sep 2025 09:53:46 -0300
-Cc: mchehab@kernel.org,
- linux-media@vger.kernel.org,
- linux-kernel@vger.kernel.org,
- stable@vger.kernel.org,
- syzbot+1d9c0edea5907af239e0@syzkaller.appspotmail.com
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <96EC5D66-18D8-42E6-BD3F-F07F220EA5EE@collabora.com>
-References: <20250905051816.4027814-1-aha310510@gmail.com>
-To: Jeongjun Park <aha310510@gmail.com>
-X-Mailer: Apple Mail (2.3826.700.81)
-X-ZohoMailClient: External
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20250905-opt-ioctl-v1-1-4b3ae770fc4b@cherry.de>
+References: <20250905-opt-ioctl-v1-0-4b3ae770fc4b@cherry.de>
+In-Reply-To: <20250905-opt-ioctl-v1-0-4b3ae770fc4b@cherry.de>
+To: linux-media@vger.kernel.org, Quentin Schulz <quentin.schulz@cherry.de>
+X-Mailer: b4 0.14.2
+X-Infomaniak-Routing: alpha
 
+From: Quentin Schulz <quentin.schulz@cherry.de>
 
+Some ioctls are optional and the logic around it handle it nicely,
+except that doioctl (via doioctl_name) sets app_result static variable
+to -1 if the ioctl fails.
 
-> On 5 Sep 2025, at 02:18, Jeongjun Park <aha310510@gmail.com> wrote:
->=20
-> vidtv_channel_si_init() creates a temporary list (program, service, =
-event)
-> and ownership of the memory itself is transferred to the PAT/SDT/EIT
-> tables through vidtv_psi_pat_program_assign(),
-> vidtv_psi_sdt_service_assign(), vidtv_psi_eit_event_assign().
->=20
-> The problem here is that the local pointer where the memory ownership
-> transfer was completed is not initialized to NULL. This causes the
-> vidtv_psi_pmt_create_sec_for_each_pat_entry() function to fail, and
-> in the flow that jumps to free_eit, the memory that was freed by
-> vidtv_psi_*_table_destroy() can be accessed again by
-> vidtv_psi_*_event_destroy() due to the uninitialized local pointer, so =
-it
-> is freed once again.
->=20
-> Therefore, to prevent use-after-free and double-free vulnerability,
-> local pointers must be initialized to NULL when transferring memory
-> ownership.
->=20
-> Cc: <stable@vger.kernel.org>
-> Reported-by: syzbot+1d9c0edea5907af239e0@syzkaller.appspotmail.com
-> Closes: https://syzkaller.appspot.com/bug?extid=3D1d9c0edea5907af239e0
-> Fixes: 3be8037960bc ("media: vidtv: add error checks")
-> Signed-off-by: Jeongjun Park <aha310510@gmail.com>
-> ---
-> v3: Improved patch description wording
-> - Link to v2: =
-https://lore.kernel.org/all/20250904054000.3848107-1-aha310510@gmail.com/
-> v2: Improved patch description wording and CC stable mailing list
-> - Link to v1: =
-https://lore.kernel.org/all/20250822065849.1145572-1-aha310510@gmail.com/
-> ---
-> drivers/media/test-drivers/vidtv/vidtv_channel.c | 3 +++
-> 1 file changed, 3 insertions(+)
->=20
-> diff --git a/drivers/media/test-drivers/vidtv/vidtv_channel.c =
-b/drivers/media/test-drivers/vidtv/vidtv_channel.c
-> index f3023e91b3eb..3541155c6fc6 100644
-> --- a/drivers/media/test-drivers/vidtv/vidtv_channel.c
-> +++ b/drivers/media/test-drivers/vidtv/vidtv_channel.c
-> @@ -461,12 +461,15 @@ int vidtv_channel_si_init(struct vidtv_mux *m)
->=20
-> /* assemble all programs and assign to PAT */
-> vidtv_psi_pat_program_assign(m->si.pat, programs);
-> + programs =3D NULL;
->=20
-> /* assemble all services and assign to SDT */
-> vidtv_psi_sdt_service_assign(m->si.sdt, services);
-> + services =3D NULL;
->=20
-> /* assemble all events and assign to EIT */
-> vidtv_psi_eit_event_assign(m->si.eit, events);
-> + events =3D NULL;
->=20
-> m->si.pmt_secs =3D =
-vidtv_psi_pmt_create_sec_for_each_pat_entry(m->si.pat,
->     m->pcr_pid);
-> =E2=80=94
->=20
+However, both rds-ctl and v4l2-ctl exit code is from app_result. So it
+is possible to have those tools perform the expected task (albeit
+failing to use an optional ioctl) and still report to the user that it
+failed to do so.
 
-Reviewed-by: Daniel Almeida <daniel.almeida@collabora.com>
+Instead, let's add doioctl_opt which allows to NOT set the app_result
+variable when the ioctl fails.
 
+Signed-off-by: Quentin Schulz <quentin.schulz@cherry.de>
+---
+ utils/rds-ctl/rds-ctl.cpp   | 7 ++++---
+ utils/v4l2-ctl/v4l2-ctl.cpp | 4 ++--
+ utils/v4l2-ctl/v4l2-ctl.h   | 5 +++--
+ 3 files changed, 9 insertions(+), 7 deletions(-)
+
+diff --git a/utils/rds-ctl/rds-ctl.cpp b/utils/rds-ctl/rds-ctl.cpp
+index 813b4f282ff06af82845a93249d5b41bb20f361c..bcd68ed7c7c360906bd30f0df60a983e54fa8344 100644
+--- a/utils/rds-ctl/rds-ctl.cpp
++++ b/utils/rds-ctl/rds-ctl.cpp
+@@ -169,11 +169,11 @@ static void signal_handler_interrupt(int signum)
+ 	params.terminate_decoding = true;
+ }
+ 
+-static int doioctl_name(int fd, unsigned long int request, void *parm, const char *name)
++static int doioctl_name(int fd, unsigned long int request, void *parm, const char *name, const bool optional)
+ {
+ 	int retval = ioctl(fd, request, parm);
+ 
+-	if (retval < 0) {
++	if (retval < 0 && !optional) {
+ 		app_result = -1;
+ 	}
+ 	if (params.options[OptSilent]) return retval;
+@@ -185,7 +185,8 @@ static int doioctl_name(int fd, unsigned long int request, void *parm, const cha
+ 	return retval;
+ }
+ 
+-#define doioctl(n, r, p) doioctl_name(n, r, p, #r)
++#define doioctl(n, r, p) doioctl_name(n, r, p, #r, false)
++#define doioctl_opt(n, r, p) doioctl_name(n, r, p, #r, true)
+ 
+ static bool is_radio_dev(const char *name)
+ {
+diff --git a/utils/v4l2-ctl/v4l2-ctl.cpp b/utils/v4l2-ctl/v4l2-ctl.cpp
+index 9b5b878951495f66082f1b5b13e7a744e45ae4ce..b71b24dab9aafd3538bd2ebc5999a32a5c3c3dfa 100644
+--- a/utils/v4l2-ctl/v4l2-ctl.cpp
++++ b/utils/v4l2-ctl/v4l2-ctl.cpp
+@@ -312,11 +312,11 @@ int test_ioctl(int fd, unsigned long cmd, void *arg)
+ 	return options[OptUseWrapper] ? v4l2_ioctl(fd, cmd, arg) : ioctl(fd, cmd, arg);
+ }
+ 
+-int doioctl_name(int fd, unsigned long int request, void *parm, const char *name)
++int doioctl_name(int fd, unsigned long int request, void *parm, const char *name, const bool optional)
+ {
+ 	int retval = test_ioctl(fd, request, parm);
+ 
+-	if (retval < 0)
++	if (retval < 0 && !optional)
+ 		app_result = -1;
+ 	if (options[OptSilent]) return retval;
+ 	if (retval < 0)
+diff --git a/utils/v4l2-ctl/v4l2-ctl.h b/utils/v4l2-ctl/v4l2-ctl.h
+index b0d42110ca0fbbf05dc3957a6fe08f426947b871..209a882fc1c8adf1dc08295fbbbe23964ce67649 100644
+--- a/utils/v4l2-ctl/v4l2-ctl.h
++++ b/utils/v4l2-ctl/v4l2-ctl.h
+@@ -296,7 +296,7 @@ extern int verbose;
+ #define FmtSizeImage		(1L<<14)
+ 
+ // v4l2-ctl.cpp
+-int doioctl_name(int fd, unsigned long int request, void *parm, const char *name);
++int doioctl_name(int fd, unsigned long int request, void *parm, const char *name, const bool optional);
+ int test_ioctl(int fd, unsigned long cmd, void *arg);
+ int parse_subopt(char **subs, const char * const *subopts, char **value);
+ __u32 parse_field(const char *s);
+@@ -331,7 +331,8 @@ static inline bool subscribe_event(cv4l_fd &fd, __u32 type)
+ 	return !fd.subscribe_event(sub);
+ }
+ 
+-#define doioctl(n, r, p) doioctl_name(n, r, p, #r)
++#define doioctl(n, r, p) doioctl_name(n, r, p, #r, false)
++#define doioctl_opt(n, r, p) doioctl_name(n, r, p, #r, true)
+ 
+ #define info(fmt, args...) 			\
+ 	do {					\
+
+-- 
+2.51.0
 
