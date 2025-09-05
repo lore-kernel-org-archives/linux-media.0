@@ -1,149 +1,90 @@
-Received: from mail-43170.protonmail.ch (mail-43170.protonmail.ch [185.70.43.170])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 823622FC026;
-	Fri,  5 Sep 2025 08:00:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.70.43.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C880727FB28
+	for <linux-media@vger.kernel.org>; Fri,  5 Sep 2025 08:42:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757059217; cv=none; b=pOVXMyLE0jSnIimMXl5bUH1br7WB+ZS6JWOqXBNUYbOfQEjz1ViPpwqK4JyEELCE2JIV7kjckIGe/LWkOZIXDbo3XHojLZCsFegD5WBKJlUf26j5Iu0vTSZGi2nWfKgNBLMocTN5aKKadaMMaG6kpjosWGH2/s6sBeJ+iMsF1xY=
+	t=1757061762; cv=none; b=BzH1jus7M9tj8YPV3NE6B067R0cbBTAB49231qM7Ml9tb6aALqySwR5YT4T3uFqQEgud07u8PQwyyBYLvYz71fwLaFiEj1JFHzJmoLpAQfW1/WgSf2OHrrZDW3gC2O5u9J9F32HSDj1W+D+a9gUmiTCPWUFhbbORRQskoFPoD0Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757059217; c=relaxed/simple;
-	bh=kLPrQ659PXpBtUHxSKyrlCPL8odBGqiSsZ+49Xj2WT4=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=HrxcjsV1YpOR67dgcntRZ3JGDZl9fchqWvuaQmiFrqhDeVA+mrWKxGzzVWRDLfjx44SnPdboLaRxJ3G2OM6VJsyJXWeo3s1Ve6E75BfRxmxaFJ4eSSg321D88diGTgiQDMBoQQnpcNRVa9uN6PiacH3CrAE84foerD0IpsaNyTQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=vinarskis.com; spf=pass smtp.mailfrom=vinarskis.com; dkim=pass (2048-bit key) header.d=vinarskis.com header.i=@vinarskis.com header.b=VBfMhe2F; arc=none smtp.client-ip=185.70.43.170
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=vinarskis.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=vinarskis.com
+	s=arc-20240116; t=1757061762; c=relaxed/simple;
+	bh=zf+3JsvKOG6fQD5XeeQVjsflmRftpLkAWn2Al7SZEi0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=t/dlRNSliSF77Mb/PIhZM9IyA0Dvu9Uf1HbnR9VY6EtExKLWrfGY1cJvQIRNYS0oVe3uxGnitK3H/vtpRgbHRJAdadQuPXcxB4kwk9Th1IhqRuTpAj81DfgjsR86/26G0nt3gC/fy0VAZHHfFDKSuKuFaH5+sASmzQQ96Wq3FGQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=hAo/W1Up; arc=none smtp.client-ip=192.198.163.11
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=vinarskis.com header.i=@vinarskis.com header.b="VBfMhe2F"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vinarskis.com;
-	s=protonmail; t=1757059208; x=1757318408;
-	bh=BJo0FJum8sQrRT4jsiM538uClhfHDmbKIzs7j5jXPQc=;
-	h=From:Date:Subject:Message-Id:References:In-Reply-To:To:Cc:From:To:
-	 Cc:Date:Subject:Reply-To:Feedback-ID:Message-ID:BIMI-Selector;
-	b=VBfMhe2FjrHeHJG53FiZ5vPPZ+AZ6DgtfeNSLJIKJTNA6nqgJT2MFiZu5zHAHPiAo
-	 WkAfizok97IA3GPc1sML1fz8rrOf/2nMLq/j8X8eqFZVdmpPlMDhkE/dbDZZglA444
-	 I+Ryi2EaRW9j8sS+m1YM5KVR+lQz0SRv0OvgoKS7S73N6aFhpa1jepFYU7xMlZGKmr
-	 krKC9TvxD62F94MJcA7hatjSzNflML6MruPoKGe8x86TXQXykyDxkvLgjFLoCLDyyK
-	 UeRd5CQdSEWhBUOTo95fvc8Sr8B0o9+fiNQu1eMLQz+eFFsvSnF2Zo7LWvw36H06iT
-	 Yg/akqmCu+++g==
-X-Pm-Submission-Id: 4cJ8050D40z2ScWX
-From: Aleksandrs Vinarskis <alex@vinarskis.com>
-Date: Fri, 05 Sep 2025 09:59:30 +0200
-Subject: [PATCH v2 2/4] dt-bindings: leds: commonize leds property
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="hAo/W1Up"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1757061761; x=1788597761;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=zf+3JsvKOG6fQD5XeeQVjsflmRftpLkAWn2Al7SZEi0=;
+  b=hAo/W1Upv3PPbc7cZQw7hgIzjoSUhsbmyWDB3F/nB7vy0RPF9Flr4uej
+   xHKAz0Br693tiU3MznnaLWK3AqWMBkPDzrbl/zGs7rQXQ+30VBaDyabXE
+   acVqt2FMba/Cq2zW9+KHywNtVcVf3EUUx0iLC51AUoCg8Mu82c+umlu6k
+   DLCFZeGbqNAwC9K8PboL9AXE+Rsp5dzf9a3DamjC1ncDI7KLZh0YHWVMr
+   2AFzH5msq4zMMbyj3CP91/Ke6t5BoKHHQY7YolWmj1Q5V8K5qVmUdrMHY
+   t8abRKt092HhUjdtJGQUs/Nx5dQusxcP5qpIj20LlOgy7TQRNygkio9Je
+   g==;
+X-CSE-ConnectionGUID: dGga7HMLQXSUy1gkTevh0Q==
+X-CSE-MsgGUID: jZJEMLe+QUWV/KpUpeNMSw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11543"; a="70026112"
+X-IronPort-AV: E=Sophos;i="6.18,240,1751266800"; 
+   d="scan'208";a="70026112"
+Received: from fmviesa001.fm.intel.com ([10.60.135.141])
+  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Sep 2025 01:42:40 -0700
+X-CSE-ConnectionGUID: 6sQ4EaDPSNuw3KEqwHAJbg==
+X-CSE-MsgGUID: G5TrC+ALQiaxJ37waY/W7A==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.18,240,1751266800"; 
+   d="scan'208";a="203040192"
+Received: from sschumil-mobl2.ger.corp.intel.com (HELO kekkonen.fi.intel.com) ([10.245.244.241])
+  by smtpauth.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Sep 2025 01:42:39 -0700
+Received: from kekkonen.localdomain (localhost [IPv6:::1])
+	by kekkonen.fi.intel.com (Postfix) with SMTP id 798C1121F43;
+	Fri, 05 Sep 2025 11:42:36 +0300 (EEST)
+Date: Fri, 5 Sep 2025 11:42:36 +0300
+Organization: Intel Finland Oy - BIC 0357606-4 - c/o Alberga Business Park, 6 krs, Bertel Jungin Aukio 5, 02600 Espoo
+From: Sakari Ailus <sakari.ailus@linux.intel.com>
+To: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Cc: linux-media@vger.kernel.org
+Subject: Re: [PATCH v2 10/72] media: i2c: hi556: Replace client->dev usage
+Message-ID: <aLqifDc9FqUh_oiC@kekkonen.localdomain>
+References: <20250812214620.30425-1-laurent.pinchart@ideasonboard.com>
+ <20250812214620.30425-11-laurent.pinchart@ideasonboard.com>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20250905-leds-v2-2-ed8f66f56da8@vinarskis.com>
-References: <20250905-leds-v2-0-ed8f66f56da8@vinarskis.com>
-In-Reply-To: <20250905-leds-v2-0-ed8f66f56da8@vinarskis.com>
-To: Hans de Goede <hansg@kernel.org>, Lee Jones <lee@kernel.org>, 
- Pavel Machek <pavel@kernel.org>, Rob Herring <robh@kernel.org>, 
- Krzysztof Kozlowski <krzk+dt@kernel.org>, 
- Conor Dooley <conor+dt@kernel.org>, 
- Bryan O'Donoghue <bryan.odonoghue@linaro.org>, 
- Daniel Thompson <danielt@kernel.org>, Jingoo Han <jingoohan1@gmail.com>, 
- Mauro Carvalho Chehab <mchehab@kernel.org>, 
- Jean-Jacques Hiblot <jjhiblot@traphandler.com>, 
- Jacopo Mondi <jacopo@jmondi.org>, 
- Sakari Ailus <sakari.ailus@linux.intel.com>, 
- Bjorn Andersson <andersson@kernel.org>, 
- Konrad Dybcio <konradybcio@kernel.org>
-Cc: linux-leds@vger.kernel.org, devicetree@vger.kernel.org, 
- linux-kernel@vger.kernel.org, Daniel Thompson <daniel.thompson@linaro.org>, 
- dri-devel@lists.freedesktop.org, linux-media@vger.kernel.org, 
- linux-arm-msm@vger.kernel.org, Aleksandrs Vinarskis <alex@vinarskis.com>
-X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=3023; i=alex@vinarskis.com;
- h=from:subject:message-id; bh=kLPrQ659PXpBtUHxSKyrlCPL8odBGqiSsZ+49Xj2WT4=;
- b=owGbwMvMwCX2dl3hIv4AZgHG02pJDBm7ZtTX877LP3guYc/u7lkf1hckTE5rDF0VHdJ2N+D00
- wvHT03Y1lHKwiDGxSArpsjS/edrWteiuWsZrmt8g5nDygQyhIGLUwAmIpHF8M9YNdZYddEO+VP1
- 7naREvM7zu6x3ujhfNNNvk/44uaKi3KMDN3Ghnd/MjwpYPmxaXmcypyq1+3977pn2C1edHRdsHX
- KVD4A
-X-Developer-Key: i=alex@vinarskis.com; a=openpgp;
- fpr=8E21FAE2D2967BB123303E8C684FD4BA28133815
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250812214620.30425-11-laurent.pinchart@ideasonboard.com>
 
-A number of existing schemas use 'leds' property to provide
-phandle-array of LED(s) to the consumer. Additionally, with the
-upcoming privacy-led support in device-tree, v4l2 subnode could be a
-LED consumer, meaning that all camera sensors should support 'leds'
-and 'led-names' property via common 'video-interface-devices.yaml'.
+Hi Laurent,
 
-To avoid dublication, commonize 'leds' property from existing schemas
-to newly introduced 'led-consumer.yaml'.
+On Wed, Aug 13, 2025 at 12:45:18AM +0300, Laurent Pinchart wrote:
+> The driver needs to access the struct device in many places, and
+> retrieves it from the i2c_client itself retrieved with
+> v4l2_get_subdevdata(). Store it as a pointer in struct hi556 and access
+> it from there instead, to simplify the driver.
+> 
+> While at it, fix a mistake in the sort order of include statements.
+> 
+> Signed-off-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 
-Signed-off-by: Aleksandrs Vinarskis <alex@vinarskis.com>
----
- .../devicetree/bindings/leds/backlight/led-backlight.yaml          | 7 +------
- Documentation/devicetree/bindings/leds/leds-group-multicolor.yaml  | 6 +-----
- .../devicetree/bindings/media/video-interface-devices.yaml         | 3 +++
- 3 files changed, 5 insertions(+), 11 deletions(-)
+Avoiding v4l2_get_subdevdata is a big plus. But instead of adding the dev
+field to every driver's context struct, could you use the dev field that
+exists in struct v4l2_subdev already?
 
-diff --git a/Documentation/devicetree/bindings/leds/backlight/led-backlight.yaml b/Documentation/devicetree/bindings/leds/backlight/led-backlight.yaml
-index f5554da6bc6c73e94c4a2c32b150b28351b25f16..5e19b4376715eeb05cb789255db209ed27f8822f 100644
---- a/Documentation/devicetree/bindings/leds/backlight/led-backlight.yaml
-+++ b/Documentation/devicetree/bindings/leds/backlight/led-backlight.yaml
-@@ -18,17 +18,12 @@ description:
- 
- allOf:
-   - $ref: common.yaml#
-+  - $ref: /schemas/leds/leds-consumer.yaml#
- 
- properties:
-   compatible:
-     const: led-backlight
- 
--  leds:
--    description: A list of LED nodes
--    $ref: /schemas/types.yaml#/definitions/phandle-array
--    items:
--      maxItems: 1
--
- required:
-   - compatible
-   - leds
-diff --git a/Documentation/devicetree/bindings/leds/leds-group-multicolor.yaml b/Documentation/devicetree/bindings/leds/leds-group-multicolor.yaml
-index 8ed059a5a724f68389a1d0c4396c85b9ccb2d9af..b4f326e8822a3bf452b22f5b9fa7189696f760a4 100644
---- a/Documentation/devicetree/bindings/leds/leds-group-multicolor.yaml
-+++ b/Documentation/devicetree/bindings/leds/leds-group-multicolor.yaml
-@@ -17,16 +17,12 @@ properties:
-   compatible:
-     const: leds-group-multicolor
- 
--  leds:
--    description:
--      An aray of monochromatic leds
--    $ref: /schemas/types.yaml#/definitions/phandle-array
--
- required:
-   - leds
- 
- allOf:
-   - $ref: leds-class-multicolor.yaml#
-+  - $ref: /schemas/leds/leds-consumer.yaml#
- 
- unevaluatedProperties: false
- 
-diff --git a/Documentation/devicetree/bindings/media/video-interface-devices.yaml b/Documentation/devicetree/bindings/media/video-interface-devices.yaml
-index cf7712ad297c01c946fa4dfdaf9a21646e125099..1e25cea0ff71da2cfd1c7c4642713199f3542c0a 100644
---- a/Documentation/devicetree/bindings/media/video-interface-devices.yaml
-+++ b/Documentation/devicetree/bindings/media/video-interface-devices.yaml
-@@ -10,6 +10,9 @@ maintainers:
-   - Jacopo Mondi <jacopo@jmondi.org>
-   - Sakari Ailus <sakari.ailus@linux.intel.com>
- 
-+allOf:
-+  - $ref: /schemas/leds/leds-consumer.yaml#
-+
- properties:
-   flash-leds:
-     $ref: /schemas/types.yaml#/definitions/phandle-array
+Should we repeat the pattern in this patch, the context structs of sensor
+(and other drivers) would be rather large.
 
 -- 
-2.48.1
+kind regards,
 
+Sakari Ailus
