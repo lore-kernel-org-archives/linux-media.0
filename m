@@ -1,129 +1,185 @@
-Received: from mslow3.mail.gandi.net (mslow3.mail.gandi.net [217.70.178.249])
+Received: from mail-4323.protonmail.ch (mail-4323.protonmail.ch [185.70.43.23])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6E855279780;
-	Fri,  5 Sep 2025 16:46:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.178.249
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C9E3A13D521;
+	Fri,  5 Sep 2025 16:49:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.70.43.23
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757090804; cv=none; b=m+CFkGszWCpLxwhOb7Ebcf/aZvnlSloZNd41w43C8c2Ej5QUUah0i0EuEN5cAZDO4U1HI/xyJ2GRwsMcmNDIO26VWjpFcGtbOucg85T7joNohae0vC1r7pU683ila0Ug+NY7IVeYqCTI+WlqhtBwGZq8aqEVAD4Iv1hEYmmioCw=
+	t=1757090943; cv=none; b=mYzeUXVenddgRHJEl3M+pg6SioC5/00AeakzpFEgqRJZBWla45CsIA4xdA6198DoNnGwvJlsMcX0p7T4v5gqWzuBvxlnyuENErDcjj5XOOjSu9tim+3vfmTKxF8n0UHfB23L1q5eljmI6TT81phNuKFbT5nmqmMzmfyUsNYFuvA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757090804; c=relaxed/simple;
-	bh=n7lgFTuAaHvirVe2HxCgamU69/Yv2hAYIZ80fnvRVso=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=Yc2BC9w+ToX9rhUwRzP4yT/rk9r4B6FObwB79KP+zZa/zlH2gZ5al2i3Fn6JfCWxbD35VwWUQs7tXmRtygNp5TFc26VqZWFHdXCGSWxKAAdRQ5B1t3v3XTMv+kMyFnh3twlt4MFus0wvDb31uU3KHsK9qFlHUpC5pooiDeKelZM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=YLRK4UfD; arc=none smtp.client-ip=217.70.178.249
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+	s=arc-20240116; t=1757090943; c=relaxed/simple;
+	bh=diSf69d2oQ1dS0WKoCbUPJHHMv6KOh1u+FVVXuJwOm4=;
+	h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=ShN71A+ChJ4BIYVa+Q8gl0DJF9XpSzuO/ZkJlHk6fLDx+TAScs3jm0gdM8De+JuPuH2MvqLu/IKTm7LIk6OqWEEU1//BNtQyGr0tcE80sLIX7U+PILVFi6HBahbNngCURswEXjCsJBwVBdRcTzwDDAmReWoAtoQddd02hXzrFKY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=vinarskis.com; spf=pass smtp.mailfrom=vinarskis.com; dkim=pass (2048-bit key) header.d=vinarskis.com header.i=@vinarskis.com header.b=ZDtmlhPR; arc=none smtp.client-ip=185.70.43.23
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=vinarskis.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=vinarskis.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="YLRK4UfD"
-Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net [217.70.183.195])
-	by mslow3.mail.gandi.net (Postfix) with ESMTP id 2C87C585463;
-	Fri,  5 Sep 2025 15:59:28 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 6310B1F74B;
-	Fri,  5 Sep 2025 15:59:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1757087961;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=NFFOsoL+0XB5VITOYkkT3Ujt/8Fw5vWv70yMLAox1vw=;
-	b=YLRK4UfDca2Z1SERSnWpY/5xU/0+E26t3jjeluQS906xxdoUWfgaysjGz2IvnsSkjIGb4e
-	9gcLy0PkCLWkl31aI+PhbvcmWZjhFmcva1tHgwYHIIxNSU15ArMgkzKOGosXgDLZjMuimH
-	55R52ga5aHzQdcUIzCIim48qLCgGE9RAsAhsH1PCNO5C5h/MT1z4JA57tTEzgJJf225nCD
-	pY1Vp5T7Bdd28lQ+LSemVgjBMLR0I5goURkdCklfeb7aKUINAgHsVHxaCGpiWFj/Qagiun
-	FT3m/Smxy9CblMIttmXedXwC2jhzZmMA2GD502u1WSOQJkENXjXGnDvAqT1ePA==
-Date: Fri, 5 Sep 2025 17:59:15 +0200
-From: Luca Ceresoli <luca.ceresoli@bootlin.com>
-To: Svyatoslav Ryhel <clamor95@gmail.com>
-Cc: Thierry Reding <thierry.reding@gmail.com>, Thierry Reding
- <treding@nvidia.com>, Mikko Perttunen <mperttunen@nvidia.com>, Jonathan
- Hunter <jonathanh@nvidia.com>, Sowjanya Komatineni
- <skomatineni@nvidia.com>, David Airlie <airlied@gmail.com>, Simona Vetter
- <simona@ffwll.ch>, Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
- Maxime Ripard <mripard@kernel.org>, Thomas Zimmermann
- <tzimmermann@suse.de>, Rob Herring <robh@kernel.org>, Krzysztof Kozlowski
- <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, Peter De
- Schrijver <pdeschrijver@nvidia.com>, Prashant Gaikwad
- <pgaikwad@nvidia.com>, Michael Turquette <mturquette@baylibre.com>, Stephen
- Boyd <sboyd@kernel.org>, Mauro Carvalho Chehab <mchehab@kernel.org>, Greg
- Kroah-Hartman <gregkh@linuxfoundation.org>, Dmitry Osipenko
- <digetx@gmail.com>, Charan Pedumuru <charan.pedumuru@gmail.com>,
- linux-media@vger.kernel.org, linux-tegra@vger.kernel.org,
- dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
- linux-staging@lists.linux.dev
-Subject: Re: [PATCH v1 09/19] staging: media: tegra-video: vi: add flip
- controls only if no source controls are provided
-Message-ID: <20250905175915.2d7e02a7@booty>
-In-Reply-To: <20250819121631.84280-10-clamor95@gmail.com>
-References: <20250819121631.84280-1-clamor95@gmail.com>
-	<20250819121631.84280-10-clamor95@gmail.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.3.1 (GTK 3.24.49; x86_64-redhat-linux-gnu)
+	dkim=pass (2048-bit key) header.d=vinarskis.com header.i=@vinarskis.com header.b="ZDtmlhPR"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vinarskis.com;
+	s=protonmail; t=1757090938; x=1757350138;
+	bh=diSf69d2oQ1dS0WKoCbUPJHHMv6KOh1u+FVVXuJwOm4=;
+	h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
+	 Feedback-ID:From:To:Cc:Date:Subject:Reply-To:Feedback-ID:
+	 Message-ID:BIMI-Selector;
+	b=ZDtmlhPROSqmOV/mM031irz4iMovwT/6c7BOlqR8Ko2upeeW6TEn7SntMw6fDzaw8
+	 qufJU7PvggauiQcOyjOrAzI3yS0QA+BYNuhcttRDGzTEZYXgriOgCZFO9/CrS7NmZ+
+	 vXeKW9lqxZ+c3FpKAnk5Rma4s0PIGZiCMtfP6yX3xK1uF2N500A8YyW6RI/xmeQJdf
+	 qzNR9dUL01iA1IZweZBwvtK64Ut0sdcFweynzR2gYabOjj/aXkPKVwdTEnqmnE/PVX
+	 Ztjcj1wPNky8uIsZSli6Y15XQYQXj9yTb8wy3xxlafgksyozXDcE7IVGZPqEJ4Z7PX
+	 I+EfDtxPPFVJQ==
+Date: Fri, 05 Sep 2025 16:48:52 +0000
+To: Rob Herring <robh@kernel.org>
+From: Aleksandrs Vinarskis <alex@vinarskis.com>
+Cc: Hans de Goede <hansg@kernel.org>, Lee Jones <lee@kernel.org>, Pavel Machek <pavel@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, Bryan O'Donoghue <bryan.odonoghue@linaro.org>, Daniel Thompson <danielt@kernel.org>, Jingoo Han <jingoohan1@gmail.com>, Mauro Carvalho Chehab <mchehab@kernel.org>, Jean-Jacques Hiblot <jjhiblot@traphandler.com>, Jacopo Mondi <jacopo@jmondi.org>, Sakari Ailus <sakari.ailus@linux.intel.com>, Bjorn Andersson <andersson@kernel.org>, Konrad Dybcio <konradybcio@kernel.org>, linux-leds@vger.kernel.org, devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, Daniel Thompson <daniel.thompson@linaro.org>, dri-devel@lists.freedesktop.org, linux-media@vger.kernel.org, linux-arm-msm@vger.kernel.org
+Subject: Re: [PATCH v2 2/4] dt-bindings: leds: commonize leds property
+Message-ID: <Lm6PLaup84KHzhxYTbsrQIbEeQpc6dj65aLkLFvOx7QwvuXS9ON53Csa2v6LBp4hd9iIQilvGhXqx4kXv4cfqgYUeA49vrVdWJw-fNMLu2Y=@vinarskis.com>
+In-Reply-To: <20250905152404.GB953718-robh@kernel.org>
+References: <20250905-leds-v2-0-ed8f66f56da8@vinarskis.com> <20250905-leds-v2-2-ed8f66f56da8@vinarskis.com> <20250905152404.GB953718-robh@kernel.org>
+Feedback-ID: 158356072:user:proton
+X-Pm-Message-ID: 8506bc237e49fba276022028e967299c197ecd38
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-GND-State: clean
-X-GND-Score: -100
-X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtdeggdelfeduucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuifetpfffkfdpucggtfgfnhhsuhgsshgtrhhisggvnecuuegrihhlohhuthemuceftddunecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpeffhffvvefukfgjfhhoofggtgfgsehtjeertdertddvnecuhfhrohhmpefnuhgtrgcuvegvrhgvshholhhiuceolhhutggrrdgtvghrvghsohhlihessghoohhtlhhinhdrtghomheqnecuggftrfgrthhtvghrnhepgeelffefgfehhfdtvdefueefieevkefggfelkeeiudetkeektedvhedukefgvddvnecuffhomhgrihhnpegsohhothhlihhnrdgtohhmnecukfhppedvrgdtvdemieejtdemvddtvddtmegvrgdtudemsggvgedumeelhegvjeemfeegfeemledufegvnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepvdgrtddvmeeijedtmedvtddvtdemvggrtddumegsvgegudemleehvgejmeefgeefmeeludefvgdphhgvlhhopegsohhothihpdhmrghilhhfrhhomheplhhutggrrdgtvghrvghsohhlihessghoohhtlhhinhdrtghomhdpnhgspghrtghpthhtohepvdelpdhrtghpthhtoheptghlrghmohhrleehsehgmhgrihhlrdgtohhmpdhrtghpthhtohepthhhihgvrhhrhidrrhgvughinhhgsehgmhgrihhlrdgtohhmpdhrtghpthhtohepthhrvgguihhnghesnhhvihguihgrrdgtohhmpdhrt
- ghpthhtohepmhhpvghrthhtuhhnvghnsehnvhhiughirgdrtghomhdprhgtphhtthhopehjohhnrghthhgrnhhhsehnvhhiughirgdrtghomhdprhgtphhtthhopehskhhomhgrthhinhgvnhhisehnvhhiughirgdrtghomhdprhgtphhtthhopegrihhrlhhivggusehgmhgrihhlrdgtohhmpdhrtghpthhtohepshhimhhonhgrsehffhiflhhlrdgthh
-X-GND-Sasl: luca.ceresoli@bootlin.com
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-Hello Svyatoslav,
 
-On Tue, 19 Aug 2025 15:16:21 +0300
-Svyatoslav Ryhel <clamor95@gmail.com> wrote:
 
-> Add HFLIP and VFLIP from SoC only if camera sensor does not provide those
-> controls.
-> 
-> Signed-off-by: Svyatoslav Ryhel <clamor95@gmail.com>
-> ---
->  drivers/staging/media/tegra-video/vi.c | 9 ++++++---
->  1 file changed, 6 insertions(+), 3 deletions(-)
-> 
-> diff --git a/drivers/staging/media/tegra-video/vi.c b/drivers/staging/media/tegra-video/vi.c
-> index 4f67adc395ac..61b65a2c1436 100644
-> --- a/drivers/staging/media/tegra-video/vi.c
-> +++ b/drivers/staging/media/tegra-video/vi.c
-> @@ -961,6 +961,7 @@ static int tegra_channel_setup_ctrl_handler(struct tegra_vi_channel *chan)
->  	}
->  #else
->  	struct v4l2_subdev *subdev;
-> +	struct v4l2_ctrl *hflip, *vflip;
->  
->  	/* custom control */
->  	v4l2_ctrl_new_custom(&chan->ctrl_handler, &syncpt_timeout_ctrl, NULL);
-> @@ -986,11 +987,13 @@ static int tegra_channel_setup_ctrl_handler(struct tegra_vi_channel *chan)
->  		return ret;
->  	}
->  
-> -	if (chan->vi->soc->has_h_v_flip) {
-> +	hflip = v4l2_ctrl_find(subdev->ctrl_handler, V4L2_CID_HFLIP);
-> +	if (chan->vi->soc->has_h_v_flip && !hflip)
->  		v4l2_ctrl_new_std(&chan->ctrl_handler, &vi_ctrl_ops, V4L2_CID_HFLIP, 0, 1, 1, 0);
-> -		v4l2_ctrl_new_std(&chan->ctrl_handler, &vi_ctrl_ops, V4L2_CID_VFLIP, 0, 1, 1, 0);
-> -	}
->  
-> +	vflip = v4l2_ctrl_find(subdev->ctrl_handler, V4L2_CID_VFLIP);
-> +	if (chan->vi->soc->has_h_v_flip && !vflip)
-> +		v4l2_ctrl_new_std(&chan->ctrl_handler, &vi_ctrl_ops, V4L2_CID_VFLIP, 0, 1, 1, 0);
 
-Based on my understanding of V4L2, this should not be done.
-AFAIK subdevs should expose what the hardware block can do,
-independently from other subdevs. It is up to userspace (e.g.
-libcamera) to use the most appropriate control when there are redundant
-ones.
 
-Luca
 
--- 
-Luca Ceresoli, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+On Friday, September 5th, 2025 at 17:24, Rob Herring <robh@kernel.org> wrot=
+e:
+
+>=20
+>=20
+> On Fri, Sep 05, 2025 at 09:59:30AM +0200, Aleksandrs Vinarskis wrote:
+>=20
+> > A number of existing schemas use 'leds' property to provide
+> > phandle-array of LED(s) to the consumer. Additionally, with the
+> > upcoming privacy-led support in device-tree, v4l2 subnode could be a
+> > LED consumer, meaning that all camera sensors should support 'leds'
+> > and 'led-names' property via common 'video-interface-devices.yaml'.
+> >=20
+> > To avoid dublication, commonize 'leds' property from existing schemas
+> > to newly introduced 'led-consumer.yaml'.
+> >=20
+> > Signed-off-by: Aleksandrs Vinarskis alex@vinarskis.com
+> > ---
+> > .../devicetree/bindings/leds/backlight/led-backlight.yaml | 7 +------
+> > Documentation/devicetree/bindings/leds/leds-group-multicolor.yaml | 6 +=
+-----
+> > .../devicetree/bindings/media/video-interface-devices.yaml | 3 +++
+> > 3 files changed, 5 insertions(+), 11 deletions(-)
+> >=20
+> > diff --git a/Documentation/devicetree/bindings/leds/backlight/led-backl=
+ight.yaml b/Documentation/devicetree/bindings/leds/backlight/led-backlight.=
+yaml
+> > index f5554da6bc6c73e94c4a2c32b150b28351b25f16..5e19b4376715eeb05cb7892=
+55db209ed27f8822f 100644
+> > --- a/Documentation/devicetree/bindings/leds/backlight/led-backlight.ya=
+ml
+> > +++ b/Documentation/devicetree/bindings/leds/backlight/led-backlight.ya=
+ml
+> > @@ -18,17 +18,12 @@ description:
+> >=20
+> > allOf:
+> > - $ref: common.yaml#
+> > + - $ref: /schemas/leds/leds-consumer.yaml#
+>=20
+>=20
+> Drop.
+>=20
+> > properties:
+> > compatible:
+> > const: led-backlight
+> >=20
+> > - leds:
+> > - description: A list of LED nodes
+> > - $ref: /schemas/types.yaml#/definitions/phandle-array
+> > - items:
+> > - maxItems: 1
+>=20
+>=20
+> You need to keep the property here:
+>=20
+> leds: true
+>=20
+> > -
+> > required:
+> > - compatible
+> > - leds
+> > diff --git a/Documentation/devicetree/bindings/leds/leds-group-multicol=
+or.yaml b/Documentation/devicetree/bindings/leds/leds-group-multicolor.yaml
+> > index 8ed059a5a724f68389a1d0c4396c85b9ccb2d9af..b4f326e8822a3bf452b22f5=
+b9fa7189696f760a4 100644
+> > --- a/Documentation/devicetree/bindings/leds/leds-group-multicolor.yaml
+> > +++ b/Documentation/devicetree/bindings/leds/leds-group-multicolor.yaml
+> > @@ -17,16 +17,12 @@ properties:
+> > compatible:
+> > const: leds-group-multicolor
+> >=20
+> > - leds:
+> > - description:
+> > - An aray of monochromatic leds
+> > - $ref: /schemas/types.yaml#/definitions/phandle-array
+> > -
+> > required:
+> > - leds
+> >=20
+> > allOf:
+> > - $ref: leds-class-multicolor.yaml#
+> > + - $ref: /schemas/leds/leds-consumer.yaml#
+>=20
+>=20
+>=20
+> Same comments in this one.
+>=20
+> > unevaluatedProperties: false
+> >=20
+> > diff --git a/Documentation/devicetree/bindings/media/video-interface-de=
+vices.yaml b/Documentation/devicetree/bindings/media/video-interface-device=
+s.yaml
+> > index cf7712ad297c01c946fa4dfdaf9a21646e125099..1e25cea0ff71da2cfd1c7c4=
+642713199f3542c0a 100644
+> > --- a/Documentation/devicetree/bindings/media/video-interface-devices.y=
+aml
+> > +++ b/Documentation/devicetree/bindings/media/video-interface-devices.y=
+aml
+> > @@ -10,6 +10,9 @@ maintainers:
+> > - Jacopo Mondi jacopo@jmondi.org
+> > - Sakari Ailus sakari.ailus@linux.intel.com
+> >=20
+> > +allOf:
+> > + - $ref: /schemas/leds/leds-consumer.yaml#
+>=20
+>=20
+> This can be dropped. The user still has to define how many entries and
+> what the values of led-names are.
+
+Hmm, but where should it be added then? If I just drop it, MIPI camera sche=
+mas which are based on 'video-interface-devices.yaml' and have 'unevaluated=
+Properties: false' throw warnings because 'leds' was not expected. Includin=
+g the example in 'led-consumer.yaml' as found by your bot (because of patch=
+ order your bot only run on 1/4, adding this very change fixes it).
+In this case, v4l2 subnode is the LED user, which is some camera. It seems =
+most/all of these cameras are based on this binding, so instead of adding n=
+ew led related properties to all of them, I thought this is a good common p=
+lace for it... Shall I add #entries and available options for 'led-names' h=
+ere to make it complete?
+
+Thanks,
+Alex
+
+>=20
+> > +
+> > properties:
+> > flash-leds:
+> > $ref: /schemas/types.yaml#/definitions/phandle-array
+> >=20
+> > --
+> > 2.48.1
