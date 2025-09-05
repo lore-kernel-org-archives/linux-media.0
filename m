@@ -1,48 +1,74 @@
-Received: from lelvem-ot01.ext.ti.com (lelvem-ot01.ext.ti.com [198.47.23.234])
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5ED7C2C0F72;
-	Fri,  5 Sep 2025 10:13:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.47.23.234
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3A4152D46B3
+	for <linux-media@vger.kernel.org>; Fri,  5 Sep 2025 10:20:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757067213; cv=none; b=UT22ESJGFdsLCGxpYGVupAgoCvLru4MxrKeHQ+NuMZiO35dkWGq4IsDCXzm2QVjWkNjZWcOvUiAi1npDuW2vrSVQZqmZ48wpmCEXA7JB3yF6sS/jJy0ZMa701m9/OKpyT0+FgzO1aXeInp1pBx6GVle4TIAbD6LsHaGaex/q7fU=
+	t=1757067624; cv=none; b=K+v4hseklyWh0mJjlujeEfPMZV+oufVk2OW5ivK/S/0GPgUcGuh5iw++2Dh4dwPT2jNjHSJswaKlY41db2sKnFxV11Blv9NcGLvyl19Dh8e0Ob5YJU8ZbCLJZ6ck2ZszhlXjzUic7jEzoywqUF10POLtOEMSvMlCWJaMUiz1N4k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757067213; c=relaxed/simple;
-	bh=TqQmjycQ68nhbXtYVQgaIVdU7BqZUAxPvwp8glcwet4=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=NH6nkOr3TBupNkOOgmdBIiyqHFFDQR3BtuEvYCgM3cadxLK9hoH0GgH7P45/khLmxpb65Dimd8miJdPf5ugbdUHCh1syaqTAYPVHzgd86Q3ODoeD2NMQIkuCkFtDZbBIOqCcO0ciA81fx2dGsi+1zXiLysRdqjPY+H27EU4hUu8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com; spf=pass smtp.mailfrom=ti.com; dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b=sGOQ8oOa; arc=none smtp.client-ip=198.47.23.234
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ti.com
+	s=arc-20240116; t=1757067624; c=relaxed/simple;
+	bh=NhL39okvE1UQ0JDbrGcrVCu7unTeSnVwrFd1RwYqZM4=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=ibQjMrLE00Sz921HjfrRLxZWlI53S4Tj+7NxiX+6sjgm2hkTRn9Ot8NXrTYVp2YUd8TSPcy3mxG0+XiF+bmKAknidFul4LUbRVIkbgaGzQd4d7K8AM7+Zdbv1ZDmZ93BGgk7PXItIA0FqAKl+xpiP63dDG4d4B+lpw+/vKc63vw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=iDWdCbR5; arc=none smtp.client-ip=205.220.168.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="sGOQ8oOa"
-Received: from lelvem-sh02.itg.ti.com ([10.180.78.226])
-	by lelvem-ot01.ext.ti.com (8.15.2/8.15.2) with ESMTP id 585ADAoN3299978;
-	Fri, 5 Sep 2025 05:13:10 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-	s=ti-com-17Q1; t=1757067190;
-	bh=PBuzO5UMHyr99m9u+p0R5HezHYfPcTXn/mBLP4pC3Ao=;
-	h=Date:Subject:To:CC:References:From:In-Reply-To;
-	b=sGOQ8oOa1exDwMdwuf9J+wJ/bxMaLmE/MJTrHraU0790cmLVopnjIx+BHsiPHLeYM
-	 TSg0VV2WrWNDwnDNiOh0cChv2r/mgjHbcYErn3FuBFQkqk7hdsQJY3TDzYZqmwyUlW
-	 zov6OFt8wrId8eTgI4ligpTpeyI177ZRw5tcyxAg=
-Received: from DFLE105.ent.ti.com (dfle105.ent.ti.com [10.64.6.26])
-	by lelvem-sh02.itg.ti.com (8.18.1/8.18.1) with ESMTPS id 585ADA6m849483
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-SHA256 bits=128 verify=FAIL);
-	Fri, 5 Sep 2025 05:13:10 -0500
-Received: from DFLE113.ent.ti.com (10.64.6.34) by DFLE105.ent.ti.com
- (10.64.6.26) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.55; Fri, 5
- Sep 2025 05:13:09 -0500
-Received: from lelvem-mr05.itg.ti.com (10.180.75.9) by DFLE113.ent.ti.com
- (10.64.6.34) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.55 via
- Frontend Transport; Fri, 5 Sep 2025 05:13:09 -0500
-Received: from [10.24.68.198] (abhilash-hp.dhcp.ti.com [10.24.68.198])
-	by lelvem-mr05.itg.ti.com (8.18.1/8.18.1) with ESMTP id 585AD3k6580702;
-	Fri, 5 Sep 2025 05:13:04 -0500
-Message-ID: <e8cf4381-6075-471c-a1ae-201677b1cec3@ti.com>
-Date: Fri, 5 Sep 2025 15:43:03 +0530
+	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="iDWdCbR5"
+Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 5856viP6002373
+	for <linux-media@vger.kernel.org>; Fri, 5 Sep 2025 10:20:22 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
+	cc:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
+	kTOVAGfJmHAMbslcDUKw3QbQxdL6mIKaKsV42CZz9as=; b=iDWdCbR5bU2UWlLU
+	y4vO0uzK/G082CYybYH9KBDzkgIiLLuDfn9q4i8gWqER57Y7OtZW00rEBUuV6zl6
+	Om4lUxRVewiEAxwZcqBC/hI6b6LtQgKMb416nUV1GcdIVpDXhAYBjI92I0IsjrEH
+	ZBqtY176u1be2bt5W7cnnS40jG5Fh4SAJgBtc7bu/7TtEwiOVF6JHtASmiEXYg/j
+	3ECvhkR55a5XHDPKKs7zB2jpTRjsUpNn5sl1hKCctVkD5/KuWPT9bIcKyZGj/zXG
+	R9N/qQJ5yquVKJBOwkqppq+Cpdw1sCokN8AaSlwshVaOJa+bZaseMXoRtfbgV9g+
+	FWlV6g==
+Received: from mail-qt1-f200.google.com (mail-qt1-f200.google.com [209.85.160.200])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 48ush3anhg-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+	for <linux-media@vger.kernel.org>; Fri, 05 Sep 2025 10:20:22 +0000 (GMT)
+Received: by mail-qt1-f200.google.com with SMTP id d75a77b69052e-4b3037bd983so9488411cf.1
+        for <linux-media@vger.kernel.org>; Fri, 05 Sep 2025 03:20:22 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1757067621; x=1757672421;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=kTOVAGfJmHAMbslcDUKw3QbQxdL6mIKaKsV42CZz9as=;
+        b=O75czuO8SVHcj604CzRjdSCpaYSJl4FyUOHS4H6AGphyxDEOy2TLw0d4uSAnHAP3YF
+         oDDkzCBtyNGZRq0V/YYR358pVbcbR8sK4gjaM4CQhJGSMJ1tpZg+Bogq8kxjX0phLd9R
+         Ij/x8d88EhDyuSQe1wbhSdqDG3G9Fzn+DfKC4NFzFDDGEauIJEvxN/cKt0ZApQ4xCFDL
+         iRS1y4WnHmdA3TJAglfBUa0YgtQmoszsGjlOlkEtlTV6aTT3VAZCHKvkJvP7hZnVcn7g
+         06FKlDwkHQykBb2ppm0CRYdZ9zy3wlP5nyJKejzgupcakXNSnsLAlFA0EJHRgtmpuqH6
+         9urg==
+X-Forwarded-Encrypted: i=1; AJvYcCXbdO/kS/5V54GLfc1PV5uo8zZc++vyrehXr6ym0QUxcEHy8phHJ+5Z+/koHhb32XA6ADghBYh43iKylw==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw3wwgANrXsAhSiC6+fb8/s4cpMHOFWxgue/7pF1BCUSbPRKcQ2
+	SQ2VsZgpm93qWh4TBp//W6MsUbEn3vGxiGHNgNBb5T4DgDr6Ou/7GYJgmMlnRDqT4zim6fUoLaw
+	YFdzCqlYCo/sF2B3IpT/E3nLzEMHXO+kdWkXNi5QbmtHBorwxq0dei7gxR+Gd1FMBhNBSqxlrpg
+	==
+X-Gm-Gg: ASbGncu57xyaRMA3D8bSgwO0AO6jRraBQhYiGGi3Qvohg1tWij/0XIguFyxGgW3UUFr
+	sXSrAkQpBKkBTW4VXjDztuyQ4P/pezmrxXzBbDlYCSbWSjbkDxWrCPIOE3b5b1/KQXAo2qieZZR
+	DnBTDzG8scWJp8XFblvIRQ8rcaRMfYt9VzH5QDi4jbkc6K8B26+kMPRPVJ+ehSasrO2fYohWipB
+	xx0qGuQCtTgdMbejna+Me2dCR1gtP7rjHwi4yMzIUMe7gLOzeYOdIaNeNKhwFWFjvk/H6bo3lY5
+	+8mA+xsjqsv3jo8KgAdZn/qm9qS/04hw71anqRUZNjbAHUiJUrDhdiXnn5IOiNU7KHhe1Di9WnT
+	qthrXFYqx5PKHkPP7bxU/aQ==
+X-Received: by 2002:a05:622a:1483:b0:4b4:8e4d:6671 with SMTP id d75a77b69052e-4b48e4d6f04mr83378581cf.13.1757067620930;
+        Fri, 05 Sep 2025 03:20:20 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IGO6Dw5E5OGVqQHPhLnTT6piTScFBZOcK2M8RO2gr8kQRnOFlQeerKrV8G2BH+P30VO7Bu8Lg==
+X-Received: by 2002:a05:622a:1483:b0:4b4:8e4d:6671 with SMTP id d75a77b69052e-4b48e4d6f04mr83378341cf.13.1757067620108;
+        Fri, 05 Sep 2025 03:20:20 -0700 (PDT)
+Received: from [192.168.149.223] (078088045245.garwolin.vectranet.pl. [78.88.45.245])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-b047373b000sm497098966b.68.2025.09.05.03.20.17
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 05 Sep 2025 03:20:19 -0700 (PDT)
+Message-ID: <e480ab16-bf98-4a3e-a7e1-67776a598201@oss.qualcomm.com>
+Date: Fri, 5 Sep 2025 12:20:16 +0200
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
@@ -50,112 +76,92 @@ List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v5 14/14] media: ti: j721e-csi2rx: Wait for the last drain
- completion
-To: Rishikesh Donadkar <r-donadkar@ti.com>, <jai.luthra@linux.dev>,
-        <laurent.pinchart@ideasonboard.com>, <mripard@kernel.org>
-CC: <devarsht@ti.com>, <vaishnav.a@ti.com>, <s-jain1@ti.com>,
-        <vigneshr@ti.com>, <mchehab@kernel.org>, <robh@kernel.org>,
-        <krzk+dt@kernel.org>, <conor+dt@kernel.org>,
-        <sakari.ailus@linux.intel.com>, <hverkuil-cisco@xs4all.nl>,
-        <tomi.valkeinen@ideasonboard.com>, <jai.luthra@ideasonboard.com>,
-        <changhuang.liang@starfivetech.com>, <jack.zhu@starfivetech.com>,
-        <linux-kernel@vger.kernel.org>, <linux-media@vger.kernel.org>,
-        <devicetree@vger.kernel.org>
-References: <20250825142522.1826188-1-r-donadkar@ti.com>
- <20250825142522.1826188-15-r-donadkar@ti.com>
+Subject: Re: [PATCH v2 1/4] dt-bindings: leds: add generic LED consumer
+ documentation
+To: Aleksandrs Vinarskis <alex@vinarskis.com>,
+        Hans de Goede <hansg@kernel.org>, Lee Jones <lee@kernel.org>,
+        Pavel Machek <pavel@kernel.org>, Rob Herring <robh@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Conor Dooley
+ <conor+dt@kernel.org>,
+        Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
+        Daniel Thompson <danielt@kernel.org>,
+        Jingoo Han <jingoohan1@gmail.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Jean-Jacques Hiblot <jjhiblot@traphandler.com>,
+        Jacopo Mondi <jacopo@jmondi.org>,
+        Sakari Ailus
+ <sakari.ailus@linux.intel.com>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konradybcio@kernel.org>
+Cc: linux-leds@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Daniel Thompson <daniel.thompson@linaro.org>,
+        dri-devel@lists.freedesktop.org, linux-media@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org
+References: <20250905-leds-v2-0-ed8f66f56da8@vinarskis.com>
+ <20250905-leds-v2-1-ed8f66f56da8@vinarskis.com>
 Content-Language: en-US
-From: Yemike Abhilash Chandra <y-abhilashchandra@ti.com>
-In-Reply-To: <20250825142522.1826188-15-r-donadkar@ti.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+From: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
+In-Reply-To: <20250905-leds-v2-1-ed8f66f56da8@vinarskis.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-C2ProcessedOrg: 333ef613-75bf-4e12-a4b1-8e3623f5dcea
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwODMwMDAzMiBTYWx0ZWRfX1H+n6dTwugYo
+ W6NqBU+AM5gakAChrqyEjtkUUsqQSM7x8pz6ZSdAQQsYuwIVnf5gSV73FRCPGgVvXH0IHTfZU8M
+ CPWxGh5arj/RMzyOT/VWRKrteHZUfQyTJ9SN0577GG+xdT4aGIdh4ac/HGzF9sqacT3rREoPmgS
+ RRqksr1j1i0mcYJzQkCZVsO0+cxczCN0xmzYCH4qTHk5TLxjACpugElTV/2U8aEjgjOl6lvQcbf
+ pwK1dCMnwo+VtEQNXrCdDtIHNhgMWLeY9IPb3l04gR8JumdHBxU5YV95sSxIoSyvrsMnRI39wEX
+ 2MNnjrgdkubo/t28zlJL4hI9Er+b2MFNceuDU9z3F8j7r9BXzdNH0ymEtbEW2aEBpvRNYfw6dVJ
+ OQ07ydjx
+X-Proofpoint-ORIG-GUID: 5qXe-MEGb2Ine8UtxOUw3sFMY4DuZWd1
+X-Proofpoint-GUID: 5qXe-MEGb2Ine8UtxOUw3sFMY4DuZWd1
+X-Authority-Analysis: v=2.4 cv=M9NNKzws c=1 sm=1 tr=0 ts=68bab966 cx=c_pps
+ a=JbAStetqSzwMeJznSMzCyw==:117 a=FpWmc02/iXfjRdCD7H54yg==:17
+ a=IkcTkHD0fZMA:10 a=yJojWOMRYYMA:10 a=I76Qk8w-AAAA:8 a=2ng2SV8iM2HKWhXzYmMA:9
+ a=QEXdDO2ut3YA:10 a=uxP6HrT_eTzRwkO_Te1X:22 a=vUPM0Wvl0xcrLs4nqPIT:22
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1117,Hydra:6.1.9,FMLib:17.12.80.40
+ definitions=2025-09-05_03,2025-09-04_01,2025-03-28_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ impostorscore=0 adultscore=0 spamscore=0 priorityscore=1501 malwarescore=0
+ clxscore=1015 suspectscore=0 phishscore=0 bulkscore=0 classifier=typeunknown
+ authscore=0 authtc= authcc= route=outbound adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2507300000 definitions=main-2508300032
 
-On 25/08/25 19:55, Rishikesh Donadkar wrote:
-> dmaengine_terminate_sync() causes all activity for the DMA channel to be
-> stopped, and may discard data in the DMA FIFO which hasn't been fully
-> transferred. No callback functions will be called for any
-> incomplete transfers[1].
+On 9/5/25 9:59 AM, Aleksandrs Vinarskis wrote:
+> Introduce common generic led consumer binding, where consumer defines
+> led(s) by phandle, as opposed to trigger-source binding where the
+> trigger source is defined in led itself.
 > 
-> In multistream use case, calling dmaengine_terminate_sync() immediately
-> after issuing the last drain transaction will result in no callback
-> for the last drain cycle.
+> Add already used in some schemas 'leds' parameter which expects
+> phandle-array. Additionally, introduce 'led-names' which could be used
+> by consumers to map LED devices to their respective functions.
 > 
-> Implement complete callback for the last drain cycle to make sure that
-> the last drain has completed properly, this will ensure that stale data
-> is not left out in the HW FIFO.
-> 
-> [1] : https://docs.kernel.org/driver-api/dmaengine/client.html
-> 
-> Signed-off-by: Rishikesh Donadkar <r-donadkar@ti.com>
+> Signed-off-by: Aleksandrs Vinarskis <alex@vinarskis.com>
 > ---
 
-Reviewed-by: Yemike Abhilash Chandra <y-abhilashchandra@ti.com>
+[...]
 
->   drivers/media/platform/ti/j721e-csi2rx/j721e-csi2rx.c | 11 +++++++++++
->   1 file changed, 11 insertions(+)
-> 
-> diff --git a/drivers/media/platform/ti/j721e-csi2rx/j721e-csi2rx.c b/drivers/media/platform/ti/j721e-csi2rx/j721e-csi2rx.c
-> index 4ac6a76b9409..520ee05eb5b4 100644
-> --- a/drivers/media/platform/ti/j721e-csi2rx/j721e-csi2rx.c
-> +++ b/drivers/media/platform/ti/j721e-csi2rx/j721e-csi2rx.c
-> @@ -62,6 +62,7 @@
->   #define TI_CSI2RX_MAX_PADS		(1 + TI_CSI2RX_MAX_SOURCE_PADS)
->   
->   #define DRAIN_BUFFER_SIZE		SZ_32K
-> +#define DRAIN_TIMEOUT_MS		50
->   
->   #define CSI2RX_BRIDGE_SOURCE_PAD	1
->   
-> @@ -137,6 +138,7 @@ struct ti_csi2rx_dev {
->   		size_t			len;
->   	} drain;
->   	bool				vc_cached;
-> +	struct completion drain_complete;
->   };
->   
->   static inline struct ti_csi2rx_dev *to_csi2rx_dev(struct v4l2_subdev *sd)
-> @@ -624,12 +626,14 @@ static void ti_csi2rx_setup_shim(struct ti_csi2rx_ctx *ctx)
->   static void ti_csi2rx_drain_callback(void *param)
->   {
->   	struct ti_csi2rx_ctx *ctx = param;
-> +	struct ti_csi2rx_dev *csi = ctx->csi;
->   	struct ti_csi2rx_dma *dma = &ctx->dma;
->   	unsigned long flags;
->   
->   	spin_lock_irqsave(&dma->lock, flags);
->   
->   	if (dma->state == TI_CSI2RX_DMA_STOPPED) {
-> +		complete(&csi->drain_complete);
->   		spin_unlock_irqrestore(&dma->lock, flags);
->   		return;
->   	}
-> @@ -774,6 +778,7 @@ static int ti_csi2rx_start_dma(struct ti_csi2rx_ctx *ctx,
->   static void ti_csi2rx_stop_dma(struct ti_csi2rx_ctx *ctx)
->   {
->   	struct ti_csi2rx_dma *dma = &ctx->dma;
-> +	struct ti_csi2rx_dev *csi = ctx->csi;
->   	enum ti_csi2rx_dma_state state;
->   	unsigned long flags;
->   	int ret;
-> @@ -783,6 +788,8 @@ static void ti_csi2rx_stop_dma(struct ti_csi2rx_ctx *ctx)
->   	dma->state = TI_CSI2RX_DMA_STOPPED;
->   	spin_unlock_irqrestore(&dma->lock, flags);
->   
-> +	init_completion(&csi->drain_complete);
+> +    i2c {
+> +      #address-cells = <1>;
+> +      #size-cells = <0>;
 > +
->   	if (state != TI_CSI2RX_DMA_STOPPED) {
->   		/*
->   		 * Normal DMA termination does not clean up pending data on
-> @@ -796,6 +803,10 @@ static void ti_csi2rx_stop_dma(struct ti_csi2rx_ctx *ctx)
->   				 "Failed to drain DMA. Next frame might be bogus\n");
->   	}
->   
-> +	if (!wait_for_completion_timeout(&csi->drain_complete,
-> +					 msecs_to_jiffies(DRAIN_TIMEOUT_MS)))
-> +		dev_dbg(csi->dev, "DMA transfer timed out for drain buffer\n");
+> +      camera@36 {
+> +        compatible = "ovti,ov02c10";
+> +        reg = <0x36>;
 > +
->   	ret = dmaengine_terminate_sync(ctx->dma.chan);
->   	if (ret)
->   		dev_err(ctx->csi->dev, "Failed to stop DMA: %d\n", ret);
+> +        reset-gpios = <&tlmm 237 GPIO_ACTIVE_LOW>;
+> +        pinctrl-names = "default";
+> +        pinctrl-0 = <&cam_rgb_default>;
+> +
+> +        led-names = "privacy-led";
+> +        leds = <&privacy_led>;
 
+property
+property-names
+
+is a common pattern
+
+I know this is just an example, but people will copypaste it
+
+Konrad
