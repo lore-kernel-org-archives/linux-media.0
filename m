@@ -1,27 +1,27 @@
-Received: from smtp-190b.mail.infomaniak.ch (smtp-190b.mail.infomaniak.ch [185.125.25.11])
+Received: from smtp-bc09.mail.infomaniak.ch (smtp-bc09.mail.infomaniak.ch [45.157.188.9])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 59214145B3F
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1BF151F1513
 	for <linux-media@vger.kernel.org>; Fri,  5 Sep 2025 12:38:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.125.25.11
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.157.188.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757075916; cv=none; b=kB+lrJneKiCrvYZikw68C0fgDv7elx3DHDJt/0ZLTTUNm6P9t2lqp3PAe9JjSaFh7tCtDLoRO0NrzNcUZQAyoS0X6IvfR82Lmd+VvPNb4a2bny2GcP86ILcoTLg1h6J48ReTNlSuVnSe3kOjojSCDxTe2cCzrqDARom0Fp7gcwM=
+	t=1757075916; cv=none; b=eRD26MUlpA+AoJzAleQ43KRZZGST1dn/cSpmzQraDJotNAIv/j4hoRFVUwlpTYrpjmKEJlx7YN0vOuRIG45U6fJBlUPP89Vam7kwMtOVaIgU4QpMc4w58WBWe+ggsKdqFEWxhG0ePc6REh6iPuGlrhXH2A7KIdyZe5btu6HSqj8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1757075916; c=relaxed/simple;
-	bh=LleV/p/p9B+eG2XmrJ50orPON4gyOKZecV5BCuGvzQ4=;
-	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=akkFiY0r3sxsVJ+zPaU9cG3DRJS5tKBNebWa7IbxAcJIzcCHKTFBwDlDHRJoOj+yEgWYrITLwUHyGjww6hTGgmkjZBhsrQHwIW3/I44VzSYIzgdErPUhgO2vs+jCXuy62XJIWay5ZJpZGzgDeaEiBFptagBYnnmYE62l+u5cbnA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=0leil.net; spf=pass smtp.mailfrom=0leil.net; arc=none smtp.client-ip=185.125.25.11
+	bh=Kh+LHr4Lf2MdUpSCZ86JQY/ipgIrF0HXsiUpxJXc8IU=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=cyyPdv9Y7LEWJx2jv5q5UF0JHNiSTg0dMP340Keaij2aNd1jOb6SUNWU98O1NhSu6PudS462An7IN9Hf8qbPoq7XkmTz6p7YWVlEAj2Z8lABwIN+R14GvqcLRMMtUf6iUoeMkzUGdbs3G2+zU2Q+Rnv3LMtOrA7Ehl7zlCbyDEg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=0leil.net; spf=pass smtp.mailfrom=0leil.net; arc=none smtp.client-ip=45.157.188.9
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=0leil.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=0leil.net
-Received: from smtp-4-0000.mail.infomaniak.ch (unknown [IPv6:2001:1600:7:10::a6b])
-	by smtp-4-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4cJG9M2FRjzkyZ;
-	Fri,  5 Sep 2025 14:38:31 +0200 (CEST)
-Received: from unknown by smtp-4-0000.mail.infomaniak.ch (Postfix) with ESMTPA id 4cJG9L6QPSzZXs;
-	Fri,  5 Sep 2025 14:38:30 +0200 (CEST)
+Received: from smtp-4-0000.mail.infomaniak.ch (smtp-4-0000.mail.infomaniak.ch [10.7.10.107])
+	by smtp-4-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4cJG9N35fszlM4;
+	Fri,  5 Sep 2025 14:38:32 +0200 (CEST)
+Received: from unknown by smtp-4-0000.mail.infomaniak.ch (Postfix) with ESMTPA id 4cJG9N0WfKzYg8;
+	Fri,  5 Sep 2025 14:38:32 +0200 (CEST)
 From: Quentin Schulz <foss+kernel@0leil.net>
-Subject: [PATCH 0/3] README.md: couple of typo fixes
-Date: Fri, 05 Sep 2025 14:38:12 +0200
-Message-Id: <20250905-readme-typo-v1-0-4262d4acd65c@cherry.de>
+Date: Fri, 05 Sep 2025 14:38:15 +0200
+Subject: [PATCH 3/3] README.md: fix requiried typo
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
@@ -30,29 +30,37 @@ List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-B4-Tracking: v=1; b=H4sIALTZumgC/6tWKk4tykwtVrJSqFYqSi3LLM7MzwNyDHUUlJIzE
- vPSU3UzU4B8JSMDI1MDSwNT3aLUxJTcVN2SyoJ8XUPLlGTzRFNzw8REUyWgjoKi1LTMCrBp0bG
- 1tQDJR4X3XQAAAA==
-X-Change-ID: 20250905-readme-typo-19dc7a571aa5
+Message-Id: <20250905-readme-typo-v1-3-4262d4acd65c@cherry.de>
+References: <20250905-readme-typo-v1-0-4262d4acd65c@cherry.de>
+In-Reply-To: <20250905-readme-typo-v1-0-4262d4acd65c@cherry.de>
 To: linux-media@vger.kernel.org
 Cc: Quentin Schulz <quentin.schulz@cherry.de>
 X-Mailer: b4 0.14.2
 X-Infomaniak-Routing: alpha
 
+From: Quentin Schulz <quentin.schulz@cherry.de>
+
+One too many i.
+
 Signed-off-by: Quentin Schulz <quentin.schulz@cherry.de>
 ---
-Quentin Schulz (3):
-      README.md: fix mailinglist typo
-      README.md: fix derivated typo
-      README.md: fix requiried typo
+ README.md | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
- README.md | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
----
-base-commit: fc46fc8771bff905204e7463ab03ed1f355436b1
-change-id: 20250905-readme-typo-19dc7a571aa5
+diff --git a/README.md b/README.md
+index 741cea5052f34c4319b64dec04b81fc05dc2a232..ccf286c2f0d75472990ca7a8fac17a0a828e1a55 100644
+--- a/README.md
++++ b/README.md
+@@ -38,7 +38,7 @@ On Fedora, the package list for a minimal install with `dnf` or `yum` is:
+ gcc gcc-c++ gettext-devel git meson perl which
+ ```
+ 
+-(git is only requiried if you're cloning from the main git repository at
++(git is only required if you're cloning from the main git repository at
+ linuxtv.org).
+ 
+ And, to be able to compile it with all usual functionality with qt5, you'll need
 
-Best regards,
 -- 
-Quentin Schulz <quentin.schulz@cherry.de>
+2.51.0
 
