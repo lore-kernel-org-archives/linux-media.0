@@ -1,86 +1,102 @@
-Received: from smtp-bc0e.mail.infomaniak.ch (smtp-bc0e.mail.infomaniak.ch [45.157.188.14])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 29308219EB
-	for <linux-media@vger.kernel.org>; Fri,  5 Sep 2025 13:05:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.157.188.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 828C9309F09;
+	Fri,  5 Sep 2025 15:02:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757077517; cv=none; b=JKbpw3hF30R1skD/WqS7cJVZacVqccI8i/4qN2EGgxRzfIVZKBAxWF267y86MP5a0lxEY2ML6C/i2/QghEpyAWVTn0LUrIzkLaeNOQlciMQu8l7wb/uGp2K83Jl8ZWMNoPW9wnhSYIwxjTnP0IzsgbXI2C2rRwirWGH3z0wz4VQ=
+	t=1757084577; cv=none; b=jl/pwDTupAWNBXBZ82/oE1XNzvt6MdIzraqzyTcW0PbLKJHSK5gHOMApCBCVviUI0jSLKaBqquCEo1Eu8sjJph3dWuuuYymmlF3SMBsJXigum5PST8fC+t8DYvsxSQGOMFutg81mFHypKonWXHeWOEI0ksSsFIxKsg8KEmy6GUE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757077517; c=relaxed/simple;
-	bh=WiM8j/bfQ90GVYkiebQPiCnykLhAM4/XnoYh3xbTqDA=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=E7jAbvWYCqVHuBChCBl1hmoBo0wRmScXEuZDuosGOY/nWUlTe8gA8cPPw98dbm5tePa1iL6AI140hKX9jppLY6b0IraiL/ge4VKQLow8BjTz8iQIJ6m0cLKdE/eqEcyCZzLeBYJfdqDOeVDrx+UUDMgs9OoRVF7J76Htvg5SM4I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=0leil.net; spf=pass smtp.mailfrom=0leil.net; arc=none smtp.client-ip=45.157.188.14
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=0leil.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=0leil.net
-Received: from smtp-3-0000.mail.infomaniak.ch (unknown [IPv6:2001:1600:4:17::246b])
-	by smtp-3-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4cJFzM53SQzcKC;
-	Fri,  5 Sep 2025 14:29:51 +0200 (CEST)
-Received: from unknown by smtp-3-0000.mail.infomaniak.ch (Postfix) with ESMTPA id 4cJFzM1yL7zgG7;
-	Fri,  5 Sep 2025 14:29:51 +0200 (CEST)
-From: Quentin Schulz <foss+kernel@0leil.net>
-Date: Fri, 05 Sep 2025 14:29:42 +0200
-Subject: [PATCH] add basic b4 config file
+	s=arc-20240116; t=1757084577; c=relaxed/simple;
+	bh=0tSTOuBy2edUU22nf2u/6hjfDK4cj0VMfFcTtP7ysrY=;
+	h=Date:Content-Type:MIME-Version:From:Cc:To:In-Reply-To:References:
+	 Message-Id:Subject; b=bTi+4/IiNPZAuyJcxxesoEjPRNAJBQgKpuptcl4I/cHd1hArlvibkyM0oLfInNTfdYcPGrrOi+WErpZnlqHRrwq1oun6Uc+SDseLML+wH0ItxNo8Ie+8VATXY6CiXzGmDAWfuJ7AzuXApu2mRGqmKvVQ9jZFSbDo2LCKSFrEHN4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=j6Jgl871; arc=none smtp.client-ip=10.30.226.201
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="j6Jgl871"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F108EC4CEF1;
+	Fri,  5 Sep 2025 15:02:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1757084577;
+	bh=0tSTOuBy2edUU22nf2u/6hjfDK4cj0VMfFcTtP7ysrY=;
+	h=Date:From:Cc:To:In-Reply-To:References:Subject:From;
+	b=j6Jgl871ZpOGLLTVIGzZAbMETn7GA9+trGgNUUA2jiCbTiQJLwJcSrdD1PCH+4lLj
+	 JM3MKCro/j4AU0DKFB2la6zhfv+7RlZzKxoO941U42scBfrYKi9uKfg3dkplvZIWcW
+	 7vOfR7Agjjoe7mDcpcElnCfxrudzh7wcTLPhk2JKsoRrYHfcbXMu+Xc2ErXX9RWfm+
+	 7EFZxP+46sNGrLn3w2BSSDIOteP/dxgTGfqqFkkGGipddPlZY1RK3m+EZmfblbmytM
+	 OQbgRbyx1yIg/v4z66o1S1CoCwGzFcfOQa/cUhe4FOzO4pxz13P/UJ0EulOvY9Y9d1
+	 knm2JLTAQvWCw==
+Date: Fri, 05 Sep 2025 10:02:56 -0500
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-Message-Id: <20250905-b4-v1-1-2cdc261fd86d@cherry.de>
-X-B4-Tracking: v=1; b=H4sIALXXumgC/6tWKk4tykwtVrJSqFYqSi3LLM7MzwNyDHUUlJIzE
- vPSU3UzU4B8JSMDI1MDSwNT3SQTXcNUC0NjExOzxLREEyWgwoKi1LTMCrAh0bG1tQAiTO4xVAA
- AAA==
-X-Change-ID: 20250905-b4-1e813446afa4
-To: linux-media@vger.kernel.org
-Cc: Quentin Schulz <quentin.schulz@cherry.de>
-X-Mailer: b4 0.14.2
-X-Infomaniak-Routing: alpha
+From: "Rob Herring (Arm)" <robh@kernel.org>
+Cc: devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, Lee Jones <lee@kernel.org>, 
+ Jacopo Mondi <jacopo@jmondi.org>, 
+ Jean-Jacques Hiblot <jjhiblot@traphandler.com>, 
+ Sakari Ailus <sakari.ailus@linux.intel.com>, 
+ Bjorn Andersson <andersson@kernel.org>, 
+ Konrad Dybcio <konradybcio@kernel.org>, 
+ Daniel Thompson <danielt@kernel.org>, Hans de Goede <hansg@kernel.org>, 
+ linux-media@vger.kernel.org, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+ Daniel Thompson <daniel.thompson@linaro.org>, 
+ Bryan O'Donoghue <bryan.odonoghue@linaro.org>, 
+ Jingoo Han <jingoohan1@gmail.com>, linux-leds@vger.kernel.org, 
+ dri-devel@lists.freedesktop.org, Pavel Machek <pavel@kernel.org>, 
+ Mauro Carvalho Chehab <mchehab@kernel.org>, 
+ Conor Dooley <conor+dt@kernel.org>
+To: Aleksandrs Vinarskis <alex@vinarskis.com>
+In-Reply-To: <20250905-leds-v2-1-ed8f66f56da8@vinarskis.com>
+References: <20250905-leds-v2-0-ed8f66f56da8@vinarskis.com>
+ <20250905-leds-v2-1-ed8f66f56da8@vinarskis.com>
+Message-Id: <175708448034.930549.7632913810070724509.robh@kernel.org>
+Subject: Re: [PATCH v2 1/4] dt-bindings: leds: add generic LED consumer
+ documentation
 
-From: Quentin Schulz <quentin.schulz@cherry.de>
 
-b4[1] is a very nice tool for mail-based contribution. A config[2] file
-exists to set up a few defaults. We can use it to set the To recipients
-to always add, in our case the mailing list.
+On Fri, 05 Sep 2025 09:59:29 +0200, Aleksandrs Vinarskis wrote:
+> Introduce common generic led consumer binding, where consumer defines
+> led(s) by phandle, as opposed to trigger-source binding where the
+> trigger source is defined in led itself.
+> 
+> Add already used in some schemas 'leds' parameter which expects
+> phandle-array. Additionally, introduce 'led-names' which could be used
+> by consumers to map LED devices to their respective functions.
+> 
+> Signed-off-by: Aleksandrs Vinarskis <alex@vinarskis.com>
+> ---
+>  .../devicetree/bindings/leds/leds-consumer.yaml    | 85 ++++++++++++++++++++++
+>  1 file changed, 85 insertions(+)
+> 
 
-This shouldn't be necessary if we had a script that b4 prep --auto-to-cc
-could call to find the mail address(es) to send to, à-la
-scripts/get_maintainer.pl from the kernel tree.
+My bot found errors running 'make dt_binding_check' on your patch:
 
-This allows us to not have to look for the mailing list to send the
-patches to, just use b4 and you're all set.
+yamllint warnings/errors:
 
-[1] https://pypi.org/project/b4/
-[2] https://b4.docs.kernel.org/en/latest/config.html
+dtschema/dtc warnings/errors:
+/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/leds/leds-consumer.example.dtb: camera@36 (ovti,ov02c10): Unevaluated properties are not allowed ('led-names', 'leds' were unexpected)
+	from schema $id: http://devicetree.org/schemas/media/i2c/ovti,ov02e10.yaml#
 
-Signed-off-by: Quentin Schulz <quentin.schulz@cherry.de>
----
-Since that ML is also used for other repos than v4l-utils and I've seen
-a few people using [v4l-utils] as prefixes, should we add
+doc reference errors (make refcheckdocs):
 
-send-prefixes = v4l-utils
+See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20250905-leds-v2-1-ed8f66f56da8@vinarskis.com
 
-to the config file as well?
----
- .b4-config | 2 ++
- 1 file changed, 2 insertions(+)
+The base for the series is generally the latest rc1. A different dependency
+should be noted in *this* patch.
 
-diff --git a/.b4-config b/.b4-config
-new file mode 100644
-index 0000000000000000000000000000000000000000..31873a088f0b32c174363f8b56a54a976b87fb17
---- /dev/null
-+++ b/.b4-config
-@@ -0,0 +1,2 @@
-+[b4]
-+  send-series-to = linux-media@vger.kernel.org
+If you already ran 'make dt_binding_check' and didn't see the above
+error(s), then make sure 'yamllint' is installed and dt-schema is up to
+date:
 
----
-base-commit: fc46fc8771bff905204e7463ab03ed1f355436b1
-change-id: 20250905-b4-1e813446afa4
+pip3 install dtschema --upgrade
 
-Best regards,
--- 
-Quentin Schulz <quentin.schulz@cherry.de>
+Please check and re-submit after running the above command yourself. Note
+that DT_SCHEMA_FILES can be set to your schema file to speed up checking
+your schema. However, it must be unset to test all examples with your schema.
 
