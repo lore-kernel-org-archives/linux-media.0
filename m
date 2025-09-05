@@ -1,28 +1,28 @@
-Received: from smtp-42af.mail.infomaniak.ch (smtp-42af.mail.infomaniak.ch [84.16.66.175])
+Received: from smtp-190d.mail.infomaniak.ch (smtp-190d.mail.infomaniak.ch [185.125.25.13])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 60B6432A81A
-	for <linux-media@vger.kernel.org>; Fri,  5 Sep 2025 12:25:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=84.16.66.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3DB26263F2D
+	for <linux-media@vger.kernel.org>; Fri,  5 Sep 2025 12:35:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.125.25.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757075114; cv=none; b=Qd56k7cMIedCTuvk+WKCX+Nq4VvLwBpw1/jAA4V1dPuhXfv3Ao0GB52VXiePJGcr1nRlSiYzKSNzMkbMC2gWCGiKnROO8mPXzNPH9g3glLgXEEVC4cj2TWKFEucnOOGDySysa4u6iV61cM4HIkuJnbW6Ende5l3cYh3uXtmCYv8=
+	t=1757075714; cv=none; b=bLAyTWDZcW26YAp2SSCdsyzyJjsZ0RhyEmB24XLKWahh+Fb/gZIAB/U5LahOfN/R1EQPMR59Glu+oiYu36zKpTjJpd/B8nEg3c7LgXShHKIp0gWLJpYcuLRNxEjfhVZlU7Q1ZTgdOVLkLGvzZE0HQj96rzIk5mOhEC7VqrtYjrA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757075114; c=relaxed/simple;
-	bh=fEyg1VwGXFAMnOiaAKbNczbWVFjl5nwxiSSc59c/UE4=;
-	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To; b=K7vmRBE2klwMPmDdwyZpRTdlNDoxyHqOV8+HqhfHNQtzCFo6Vy+6OoGkQEbXNJIwZ02FSSVJWjuE2HtqzAEYxhmhJ17TP6vEL4pst2iB1F09fJAv3PlDXUpAneUIvZ1tdPxwMxvdaI7zILPseJ+PYbCpl3J/RwEWCaoqA1lgpGc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=0leil.net; spf=pass smtp.mailfrom=0leil.net; arc=none smtp.client-ip=84.16.66.175
+	s=arc-20240116; t=1757075714; c=relaxed/simple;
+	bh=RejpoqRAsGCxH4TRngUHB64g5iARfkrSm8JtQAuWpjw=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To; b=eCzmouc16MDf/mcfN4M9CtAod4b31+YINRlI/8JITBrgM1EimanOg/TDgCCsc5u8U4tlaM8jgKqnpUiwhX1UO3D6ymNOOwfhm7he9yoZ/wNOafYuWgzsve3bGdyAja1bwoDi5oGkMbBEB6RVPtr726UWC1nd7UU51C7qpbwa2sM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=0leil.net; spf=pass smtp.mailfrom=0leil.net; arc=none smtp.client-ip=185.125.25.13
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=0leil.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=0leil.net
 Received: from smtp-4-0000.mail.infomaniak.ch (unknown [IPv6:2001:1600:7:10::a6b])
-	by smtp-4-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4cJFld3lgzzXGT;
-	Fri,  5 Sep 2025 14:19:41 +0200 (CEST)
-Received: from unknown by smtp-4-0000.mail.infomaniak.ch (Postfix) with ESMTPA id 4cJFld0QnRzPXD;
+	by smtp-4-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4cJFlf24QFzXCM;
+	Fri,  5 Sep 2025 14:19:42 +0200 (CEST)
+Received: from unknown by smtp-4-0000.mail.infomaniak.ch (Postfix) with ESMTPA id 4cJFld6SV0zSfD;
 	Fri,  5 Sep 2025 14:19:41 +0200 (CEST)
 From: Quentin Schulz <foss+kernel@0leil.net>
-Subject: [PATCH 0/3] v4l2-ctl/rds-ctl: support optional ioctl and migrate
- some code to it
-Date: Fri, 05 Sep 2025 14:19:31 +0200
-Message-Id: <20250905-opt-ioctl-v1-0-4b3ae770fc4b@cherry.de>
+Date: Fri, 05 Sep 2025 14:19:33 +0200
+Subject: [PATCH 2/3] v4l2-ctl: do not fail on kernel not implementing
+ VIDIOC_SUBDEV_S_CLIENT_CAP
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
@@ -31,62 +31,43 @@ List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-B4-Tracking: v=1; b=H4sIAFPVumgC/6tWKk4tykwtVrJSqFYqSi3LLM7MzwNyDHUUlJIzE
- vPSU3UzU4B8JSMDI1MDSwNT3fyCEt3M/OSSHF1jC3NDS6C4oYGZhRJQfUFRalpmBdis6NjaWgD
- /CY+FWwAAAA==
-X-Change-ID: 20250905-opt-ioctl-387192021068
+Message-Id: <20250905-opt-ioctl-v1-2-4b3ae770fc4b@cherry.de>
+References: <20250905-opt-ioctl-v1-0-4b3ae770fc4b@cherry.de>
+In-Reply-To: <20250905-opt-ioctl-v1-0-4b3ae770fc4b@cherry.de>
 To: linux-media@vger.kernel.org, Quentin Schulz <quentin.schulz@cherry.de>
 X-Mailer: b4 0.14.2
 X-Infomaniak-Routing: alpha
 
-Some ioctls are optional and the logic around it handle it nicely,
-except that doioctl (via doioctl_name) sets app_result static variable
-to -1 if the ioctl fails.
+From: Quentin Schulz <quentin.schulz@cherry.de>
 
-However, both rds-ctl and v4l2-ctl exit code is from app_result. So it
-is possible to have those tools perform the expected task (albeit
-failing to use an optional ioctl) and still report to the user that it
-failed to do so.
+VIDIOC_SUBDEV_S_CLIENT_CAP is only available in kernels 6.4 and later.
 
-Let's add a new function doioctl_opt which allows to NOT set the
-app_result variable when the ioctl fails.
+The current logic has a fallback in case the ioctl fails by simply
+stating there's no capabilities available for the subdev.
 
-This migrates two ioctl VIDIOC_SUBDEV_S_CLIENT_CAP and
-VIDIOC_SUBDEV_QUERYCAP to be optional ioctls.
+Let's mark this ioctl as optional to avoid kernels lacking it making
+v4l2-ctl command fail (but still doing what it's been asked to do).
 
-Note:
- - rds-ctl receives the same patch but doesn't make use of it, simply
-   for consistency, but can be dropped if desired,
- - wondering if VIDIOC_SUBDEV_QUERYCAP really is optional considering
-   the code in v4l2-compliance/v4l2-test-subdevs:
-   fail_on_test(doioctl(node, VIDIOC_SUBDEV_QUERYCAP, &caps));
-   which also has a nice comment above saying "// Must always be there"
- - wondering if there aren't more optional ioctl considering how many
-   doioctl calls aren't actually exiting early the tools,
-   Should we add something like __attribute__ ((warn_unused_result))
-   so we know for sure doioctl shouldn't be used if we don't check its
-   result, though that wouldn't catch if(do_ioctl(...)) for optional
-   ioctls like VIDIOC_SUBDEV_S_CLIENT_CAP here for example,
- - I assume we may want to backport those to stable branches? (e.g.
-   Debian Trixie is using 1.30.1 and I experienced this bug with that
-   package version)
-
+Fixes: 2b2ba7e0e86c ("v4l2-ctl/compliance: read and show the subdev client capabilities")
 Signed-off-by: Quentin Schulz <quentin.schulz@cherry.de>
 ---
-Quentin Schulz (3):
-      v4l2-ctl/rds-ctl: do not set app_result if an ioctl is optional
-      v4l2-ctl: do not fail on kernel not implementing VIDIOC_SUBDEV_S_CLIENT_CAP
-      v4l2-ctl: do not fail on kernel not implementing VIDIOC_SUBDEV_QUERYCAP
+ utils/v4l2-ctl/v4l2-ctl.cpp | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
- utils/rds-ctl/rds-ctl.cpp   | 7 ++++---
- utils/v4l2-ctl/v4l2-ctl.cpp | 8 ++++----
- utils/v4l2-ctl/v4l2-ctl.h   | 5 +++--
- 3 files changed, 11 insertions(+), 9 deletions(-)
----
-base-commit: fc46fc8771bff905204e7463ab03ed1f355436b1
-change-id: 20250905-opt-ioctl-387192021068
+diff --git a/utils/v4l2-ctl/v4l2-ctl.cpp b/utils/v4l2-ctl/v4l2-ctl.cpp
+index b71b24dab9aafd3538bd2ebc5999a32a5c3c3dfa..c287c74d5dff869b2a74a2e2bfebc77d0b9e3f1e 100644
+--- a/utils/v4l2-ctl/v4l2-ctl.cpp
++++ b/utils/v4l2-ctl/v4l2-ctl.cpp
+@@ -1371,7 +1371,7 @@ int main(int argc, char **argv)
+ 		// exit if this ioctl returns an error.
+ 		doioctl(fd, VIDIOC_SUBDEV_QUERYCAP, &subdevcap);
+ 		subdevclientcap.capabilities = ~0ULL;
+-		if (doioctl(fd, VIDIOC_SUBDEV_S_CLIENT_CAP, &subdevclientcap))
++		if (doioctl_opt(fd, VIDIOC_SUBDEV_S_CLIENT_CAP, &subdevclientcap))
+ 			subdevclientcap.capabilities = 0ULL;
+ 	}
+ 	if (!is_subdev) {
 
-Best regards,
 -- 
-Quentin Schulz <quentin.schulz@cherry.de>
+2.51.0
 
