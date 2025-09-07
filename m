@@ -1,37 +1,37 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F0BED13D503;
-	Sun,  7 Sep 2025 22:04:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 56848285054;
+	Sun,  7 Sep 2025 22:04:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757282676; cv=none; b=kqry0AH45roqG/qLxfVKBKQugGYd//rAttZ2Mr2QklQZ2SJ/9TWCGitH2pJVEhFujUPy9gDvZsv7kS47HkSCDL7ZhF57Nzrg4zIzn/0pt2crLmwoVtPpHXs7L1GZwsPcaa/PZQidGal0ExZFJ6sIyVr7+Iu3L4kcgw0nxfWjEJI=
+	t=1757282676; cv=none; b=eZwWC+AclUKbfWpLEWldJmIn/UTGm0/0OMbE9zaU5UtnmigdwJcDiQhgprQtyQ4WitrKvuIQPVDe7nqk8P5BjdsgVPbQxmhMPgT82Cy81SCIyrl+FNjq4ANLS6dcX2YFSMVT+2M2fRJmcxOzCaOKQDx511hwWVgvqnOnts1m2xg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1757282676; c=relaxed/simple;
-	bh=Jw8mPMFfqYMcbXvtMrCiDLWsQNiLvB3pNdrkghWYm04=;
+	bh=xfSGdSUAHfJ17ErfSSYDf9SpQbYAL3T8i7Whc1WvAa0=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=GWf/mak+ZkplXF9/PCqMXPmiezEmbY2IPmIWSpEKUGwlQtcS6hD5cIb1/8qYjFl3GxHHZP+S+qukW/s/AfnLgCJY9wSsruAyVLoEN4Kiv2uHIcBgjh/GwT2YYtl2QjtZkMd0Pq3yaistjuH+IxGVsVsx27M4kEON4Jftn1dGnf4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fGzcLJis; arc=none smtp.client-ip=10.30.226.201
+	 In-Reply-To:To:Cc; b=RV3kVCt0YHSiBLGzD9qYzW/0s/A2vuEWwPwzoLoDA7nzw6A4x5zgEmMqeJK8Dx8CniaePF9qrbJhI0yv7QJLOonLtatQEPznxXCUafB+3HBko4L5XphPOH0x4IRo07Hql4H2c1gwZ3hraX5PNHolrLzgJ6t+qfEwP1w1svHirf8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BMpmzOHF; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fGzcLJis"
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 823DEC4CEFA;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BMpmzOHF"
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 98E1EC116B1;
 	Sun,  7 Sep 2025 22:04:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1757282675;
-	bh=Jw8mPMFfqYMcbXvtMrCiDLWsQNiLvB3pNdrkghWYm04=;
+	bh=xfSGdSUAHfJ17ErfSSYDf9SpQbYAL3T8i7Whc1WvAa0=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To:From;
-	b=fGzcLJisCeBL3hWwFksuNstWkaUQc/Xs2mJHnsg+AQapqYO/Cqt0uNeBiskfAtqoF
-	 32DUt/3QtYqfLja/ghYffRBDQGOHsH3zguxDE8PSuBGBJtOWPPSzotnedZ5iqXZuFK
-	 EHixafTcvmUG9ptszrPAh7S9eUkJF+AX4eC5B68EhYQl6Y7/2d9oaMEUnY97XDoAPw
-	 U3On4I2OFhqhpiSvQbzw80UTFCm4wlft+t9uDJI1c4Q1ZNFLB7rkYkd684nhrzixtl
-	 boAzTbwmyit6CWaHTtP88eQNr7pCjW67kdX9kIhpdTKreYTnN3pFgCMB9ocW4Cw2pT
-	 kgP8z/gMpRJGA==
+	b=BMpmzOHFJpJDt20N/gskOcPHAk+rDSdXwx2izSpMSGbsWAfuj0Nq4zNnQtu67y5by
+	 LAUWN8cHG5DP86dcjZ0jwXvn3fsdUnzqXI16XyqQYTx9fa77WZNqhRr60jTq+dbdO0
+	 LKs4XEf+yCmsQhGS4NFQcJXF69l9WF9MJ/xPaaYNx20ul503bhpNhy2hxravN5Yzkv
+	 Z1GycV8dUWNeOgIITKvwqSto1oyRQflSuW1k86F5cJvTrANi4h86tlCNF5uvLZgJfI
+	 ThEYVs5cNiVq3jQZGIe5x7IO4iGKTiZC4b9a98ewR2amHNYp1c9qLkxbe27Oh5MC4c
+	 TvtfIQs2NRVDw==
 Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6EDC5CA101F;
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8ED85CAC581;
 	Sun,  7 Sep 2025 22:04:35 +0000 (UTC)
 From: =?utf-8?q?Andr=C3=A9_Apitzsch_via_B4_Relay?= <devnull+git.apitzsch.eu@kernel.org>
-Date: Mon, 08 Sep 2025 00:04:16 +0200
-Subject: [PATCH 2/4] media: qcom: camss: vfe: Add VBIF setting support
+Date: Mon, 08 Sep 2025 00:04:18 +0200
+Subject: [PATCH 4/4] arm64: dts: qcom: msm8939: Add camss and cci
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
@@ -40,7 +40,7 @@ List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Message-Id: <20250908-camss-8x39-vbif-v1-2-f198c9fd0d4d@apitzsch.eu>
+Message-Id: <20250908-camss-8x39-vbif-v1-4-f198c9fd0d4d@apitzsch.eu>
 References: <20250908-camss-8x39-vbif-v1-0-f198c9fd0d4d@apitzsch.eu>
 In-Reply-To: <20250908-camss-8x39-vbif-v1-0-f198c9fd0d4d@apitzsch.eu>
 To: Robert Foss <rfoss@kernel.org>, Todor Tomov <todor.too@gmail.com>, 
@@ -56,11 +56,11 @@ Cc: ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
  Vincent Knecht <vincent.knecht@mailoo.org>, 
  =?utf-8?q?Andr=C3=A9_Apitzsch?= <git@apitzsch.eu>
 X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1757282673; l=5754;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1757282673; l=5528;
  i=git@apitzsch.eu; s=20240325; h=from:subject:message-id;
- bh=ebmqD+SzWjo0K53+kBRQiZXPfrlcyeidPuYYpwnhFGU=;
- b=KLp/PQlK/VpazRVvugJqsI76429FJQoAWavn4RyPp0DuQfAtpA1cI6z0wA6OSn0UycqPmDhmh
- 1oR8hmLJCcuBUmMRAlJsNsz0bQkIj9juK9OjHdp4LizCKoeGFmESFXQ
+ bh=Lwz747jRCUvpyRjQGDYnWcOgT3CYQhxSZ9w8lZX4jnE=;
+ b=qFI80c15/O9BWbEQVlMk6+1LUZEJPKZJAYARQuykB2uZKjb22gy81TeCwjBwtyyFAwFar9Yg/
+ FXyNjOrjXjmDBH04B0UbwRXLd3jl09B7fJwIC3ShSzaXN5V6mXLojLl
 X-Developer-Key: i=git@apitzsch.eu; a=ed25519;
  pk=wxovcZRfvNYBMcTw4QFFtNEP4qv39gnBfnfyImXZxiU=
 X-Endpoint-Received: by B4 Relay for git@apitzsch.eu/20240325 with
@@ -70,167 +70,196 @@ Reply-To: git@apitzsch.eu
 
 From: Vincent Knecht <vincent.knecht@mailoo.org>
 
-Some devices need writing values to VFE VBIF registers.
-Add helper functions to do this.
+Add the camera subsystem and CCI used to interface with cameras on the
+Snapdragon 615.
 
-Reviewed-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
 Signed-off-by: Vincent Knecht <vincent.knecht@mailoo.org>
+[André: Make order of items the same as in 8916]
 Signed-off-by: André Apitzsch <git@apitzsch.eu>
 ---
- drivers/media/platform/qcom/camss/Makefile         |  1 +
- drivers/media/platform/qcom/camss/camss-vfe-4-1.c  | 12 +++++++++++
- drivers/media/platform/qcom/camss/camss-vfe-vbif.c | 25 ++++++++++++++++++++++
- drivers/media/platform/qcom/camss/camss-vfe-vbif.h | 19 ++++++++++++++++
- drivers/media/platform/qcom/camss/camss-vfe.c      |  9 ++++++++
- drivers/media/platform/qcom/camss/camss-vfe.h      |  3 +++
- 6 files changed, 69 insertions(+)
+ arch/arm64/boot/dts/qcom/msm8939-pm8916.dtsi |   4 +
+ arch/arm64/boot/dts/qcom/msm8939.dtsi        | 146 +++++++++++++++++++++++++++
+ 2 files changed, 150 insertions(+)
 
-diff --git a/drivers/media/platform/qcom/camss/Makefile b/drivers/media/platform/qcom/camss/Makefile
-index d26a9c24a430a831e0d865db4d96142da5276653..4c66d29ae505ae5adc717ae98f77fb736a6e15b9 100644
---- a/drivers/media/platform/qcom/camss/Makefile
-+++ b/drivers/media/platform/qcom/camss/Makefile
-@@ -21,6 +21,7 @@ qcom-camss-objs += \
- 		camss-vfe-680.o \
- 		camss-vfe-780.o \
- 		camss-vfe-gen1.o \
-+		camss-vfe-vbif.o \
- 		camss-vfe.o \
- 		camss-video.o \
- 		camss-format.o \
-diff --git a/drivers/media/platform/qcom/camss/camss-vfe-4-1.c b/drivers/media/platform/qcom/camss/camss-vfe-4-1.c
-index 901677293d971cf761944a660ef719af38203f22..9cf1ccdb2fe7ca9bf89b746af836e1035b457a8f 100644
---- a/drivers/media/platform/qcom/camss/camss-vfe-4-1.c
-+++ b/drivers/media/platform/qcom/camss/camss-vfe-4-1.c
-@@ -15,6 +15,7 @@
- #include "camss.h"
- #include "camss-vfe.h"
- #include "camss-vfe-gen1.h"
-+#include "camss-vfe-vbif.h"
+diff --git a/arch/arm64/boot/dts/qcom/msm8939-pm8916.dtsi b/arch/arm64/boot/dts/qcom/msm8939-pm8916.dtsi
+index adb96cd8d643e5fde1ac95c0fc3c9c3c3efb07e8..659d127b1bc3570d137ca986e4eacf600c183e5e 100644
+--- a/arch/arm64/boot/dts/qcom/msm8939-pm8916.dtsi
++++ b/arch/arm64/boot/dts/qcom/msm8939-pm8916.dtsi
+@@ -11,6 +11,10 @@
+ #include "msm8939.dtsi"
+ #include "pm8916.dtsi"
  
- #define VFE_0_HW_VERSION		0x000
++&camss {
++	vdda-supply = <&pm8916_l2>;
++};
++
+ &mdss_dsi0 {
+ 	vdda-supply = <&pm8916_l2>;
+ 	vddio-supply = <&pm8916_l6>;
+diff --git a/arch/arm64/boot/dts/qcom/msm8939.dtsi b/arch/arm64/boot/dts/qcom/msm8939.dtsi
+index 68b92fdb996c26e7a1aadedf0f52e1afca85c4ab..15ca28ed21ca80f9b35b5e64d3b704d14c9174f5 100644
+--- a/arch/arm64/boot/dts/qcom/msm8939.dtsi
++++ b/arch/arm64/boot/dts/qcom/msm8939.dtsi
+@@ -1434,6 +1434,145 @@ mdss_dsi1_phy: phy@1aa0300 {
+ 			};
+ 		};
  
-@@ -733,6 +734,7 @@ static void vfe_set_qos(struct vfe_device *vfe)
- {
- 	u32 val = VFE_0_BUS_BDG_QOS_CFG_0_CFG;
- 	u32 val7 = VFE_0_BUS_BDG_QOS_CFG_7_CFG;
-+	int ret;
++		camss: isp@1b0ac00 {
++			compatible = "qcom,msm8939-camss";
++			reg = <0x01b0ac00 0x200>,
++			      <0x01b00030 0x4>,
++			      <0x01b0b000 0x200>,
++			      <0x01b00038 0x4>,
++			      <0x01b08000 0x100>,
++			      <0x01b08400 0x100>,
++			      <0x01b0a000 0x500>,
++			      <0x01b00020 0x10>,
++			      <0x01b10000 0x1000>,
++			      <0x01b08800 0x100>,
++			      <0x01b40000 0x200>;
++			reg-names = "csiphy0",
++				    "csiphy0_clk_mux",
++				    "csiphy1",
++				    "csiphy1_clk_mux",
++				    "csid0",
++				    "csid1",
++				    "ispif",
++				    "csi_clk_mux",
++				    "vfe0",
++				    "csid2",
++				    "vfe0_vbif";
++
++			clocks = <&gcc GCC_CAMSS_TOP_AHB_CLK>,
++				 <&gcc GCC_CAMSS_ISPIF_AHB_CLK>,
++				 <&gcc GCC_CAMSS_CSI0PHYTIMER_CLK>,
++				 <&gcc GCC_CAMSS_CSI1PHYTIMER_CLK>,
++				 <&gcc GCC_CAMSS_CSI0_AHB_CLK>,
++				 <&gcc GCC_CAMSS_CSI0_CLK>,
++				 <&gcc GCC_CAMSS_CSI0PHY_CLK>,
++				 <&gcc GCC_CAMSS_CSI0PIX_CLK>,
++				 <&gcc GCC_CAMSS_CSI0RDI_CLK>,
++				 <&gcc GCC_CAMSS_CSI1_AHB_CLK>,
++				 <&gcc GCC_CAMSS_CSI1_CLK>,
++				 <&gcc GCC_CAMSS_CSI1PHY_CLK>,
++				 <&gcc GCC_CAMSS_CSI1PIX_CLK>,
++				 <&gcc GCC_CAMSS_CSI1RDI_CLK>,
++				 <&gcc GCC_CAMSS_AHB_CLK>,
++				 <&gcc GCC_CAMSS_VFE0_CLK>,
++				 <&gcc GCC_CAMSS_CSI_VFE0_CLK>,
++				 <&gcc GCC_CAMSS_VFE_AHB_CLK>,
++				 <&gcc GCC_CAMSS_VFE_AXI_CLK>,
++				 <&gcc GCC_CAMSS_CSI2_AHB_CLK>,
++				 <&gcc GCC_CAMSS_CSI2_CLK>,
++				 <&gcc GCC_CAMSS_CSI2PHY_CLK>,
++				 <&gcc GCC_CAMSS_CSI2PIX_CLK>,
++				 <&gcc GCC_CAMSS_CSI2RDI_CLK>;
++			clock-names = "top_ahb",
++				      "ispif_ahb",
++				      "csiphy0_timer",
++				      "csiphy1_timer",
++				      "csi0_ahb",
++				      "csi0",
++				      "csi0_phy",
++				      "csi0_pix",
++				      "csi0_rdi",
++				      "csi1_ahb",
++				      "csi1",
++				      "csi1_phy",
++				      "csi1_pix",
++				      "csi1_rdi",
++				      "ahb",
++				      "vfe0",
++				      "csi_vfe0",
++				      "vfe_ahb",
++				      "vfe_axi",
++				      "csi2_ahb",
++				      "csi2",
++				      "csi2_phy",
++				      "csi2_pix",
++				      "csi2_rdi";
++
++			interrupts = <GIC_SPI 78 IRQ_TYPE_EDGE_RISING>,
++				     <GIC_SPI 79 IRQ_TYPE_EDGE_RISING>,
++				     <GIC_SPI 51 IRQ_TYPE_EDGE_RISING>,
++				     <GIC_SPI 52 IRQ_TYPE_EDGE_RISING>,
++				     <GIC_SPI 55 IRQ_TYPE_EDGE_RISING>,
++				     <GIC_SPI 57 IRQ_TYPE_EDGE_RISING>,
++				     <GIC_SPI 153 IRQ_TYPE_EDGE_RISING>;
++			interrupt-names = "csiphy0",
++					  "csiphy1",
++					  "csid0",
++					  "csid1",
++					  "ispif",
++					  "vfe0",
++					  "csid2";
++
++			iommus = <&apps_iommu 3>;
++
++			power-domains = <&gcc VFE_GDSC>;
++
++			status = "disabled";
++
++			ports {
++				#address-cells = <1>;
++				#size-cells = <0>;
++
++				port@0 {
++					reg = <0>;
++				};
++
++				port@1 {
++					reg = <1>;
++				};
++			};
++		};
++
++		cci: cci@1b0c000 {
++			compatible = "qcom,msm8916-cci", "qcom,msm8226-cci";
++			reg = <0x01b0c000 0x1000>;
++			interrupts = <GIC_SPI 50 IRQ_TYPE_EDGE_RISING>;
++			clocks = <&gcc GCC_CAMSS_TOP_AHB_CLK>,
++				 <&gcc GCC_CAMSS_CCI_AHB_CLK>,
++				 <&gcc GCC_CAMSS_CCI_CLK>,
++				 <&gcc GCC_CAMSS_AHB_CLK>;
++			clock-names = "camss_top_ahb",
++				      "cci_ahb",
++				      "cci",
++				      "camss_ahb";
++			assigned-clocks = <&gcc GCC_CAMSS_CCI_AHB_CLK>,
++					  <&gcc GCC_CAMSS_CCI_CLK>;
++			assigned-clock-rates = <80000000>,
++					       <19200000>;
++			pinctrl-0 = <&cci0_default>;
++			pinctrl-names = "default";
++			#address-cells = <1>;
++			#size-cells = <0>;
++			status = "disabled";
++
++			cci_i2c0: i2c-bus@0 {
++				reg = <0>;
++				clock-frequency = <400000>;
++				#address-cells = <1>;
++				#size-cells = <0>;
++			};
++		};
++
+ 		gpu: gpu@1c00000 {
+ 			compatible = "qcom,adreno-405.0", "qcom,adreno";
+ 			reg = <0x01c00000 0x10000>;
+@@ -1498,6 +1637,13 @@ apps_iommu: iommu@1ef0000 {
+ 			#iommu-cells = <1>;
+ 			qcom,iommu-secure-id = <17>;
  
- 	writel_relaxed(val, vfe->base + VFE_0_BUS_BDG_QOS_CFG_0);
- 	writel_relaxed(val, vfe->base + VFE_0_BUS_BDG_QOS_CFG_1);
-@@ -742,6 +744,16 @@ static void vfe_set_qos(struct vfe_device *vfe)
- 	writel_relaxed(val, vfe->base + VFE_0_BUS_BDG_QOS_CFG_5);
- 	writel_relaxed(val, vfe->base + VFE_0_BUS_BDG_QOS_CFG_6);
- 	writel_relaxed(val7, vfe->base + VFE_0_BUS_BDG_QOS_CFG_7);
++			/* vfe */
++			iommu-ctx@3000 {
++				compatible = "qcom,msm-iommu-v1-sec";
++				reg = <0x3000 0x1000>;
++				interrupts = <GIC_SPI 70 IRQ_TYPE_LEVEL_HIGH>;
++			};
 +
-+	/* SoC-specific VBIF settings */
-+	if (vfe->res->has_vbif) {
-+		ret = vfe_vbif_apply_settings(vfe);
-+		if (ret < 0) {
-+			dev_err_ratelimited(vfe->camss->dev,
-+					    "VFE: VBIF error %d\n",
-+					    ret);
-+		}
-+	}
- }
- 
- static void vfe_set_ds(struct vfe_device *vfe)
-diff --git a/drivers/media/platform/qcom/camss/camss-vfe-vbif.c b/drivers/media/platform/qcom/camss/camss-vfe-vbif.c
-new file mode 100644
-index 0000000000000000000000000000000000000000..691335f231a6001e6c535431a18b2e21ddc832c9
---- /dev/null
-+++ b/drivers/media/platform/qcom/camss/camss-vfe-vbif.c
-@@ -0,0 +1,25 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/*
-+ * camss-vfe-vbif.c
-+ *
-+ * Qualcomm MSM Camera Subsystem - VFE VBIF Module
-+ *
-+ * Copyright (c) 2025, The Linux Foundation. All rights reserved.
-+ *
-+ */
-+
-+#include <linux/io.h>
-+
-+#include "camss.h"
-+#include "camss-vfe.h"
-+#include "camss-vfe-vbif.h"
-+
-+void vfe_vbif_write_reg(struct vfe_device *vfe, u32 reg, u32 val)
-+{
-+	writel_relaxed(val, vfe->vbif_base + reg);
-+}
-+
-+int vfe_vbif_apply_settings(struct vfe_device *vfe)
-+{
-+	return 0;
-+}
-diff --git a/drivers/media/platform/qcom/camss/camss-vfe-vbif.h b/drivers/media/platform/qcom/camss/camss-vfe-vbif.h
-new file mode 100644
-index 0000000000000000000000000000000000000000..502db629e961f67723b14a7c8c9ca973fe4c267c
---- /dev/null
-+++ b/drivers/media/platform/qcom/camss/camss-vfe-vbif.h
-@@ -0,0 +1,19 @@
-+/* SPDX-License-Identifier: GPL-2.0-only */
-+/*
-+ * camss-vfe-vbif.h
-+ *
-+ * Qualcomm MSM Camera Subsystem - VFE VBIF Module
-+ *
-+ * Copyright (c) 2025, The Linux Foundation. All rights reserved.
-+ *
-+ */
-+#ifndef QC_MSM_CAMSS_VFE_VBIF_H
-+#define QC_MSM_CAMSS_VFE_VBIF_H
-+
-+#include "camss-vfe.h"
-+
-+void vfe_vbif_write_reg(struct vfe_device *vfe, u32 reg, u32 val);
-+
-+int vfe_vbif_apply_settings(struct vfe_device *vfe);
-+
-+#endif /* QC_MSM_CAMSS_VFE_VBIF_H */
-diff --git a/drivers/media/platform/qcom/camss/camss-vfe.c b/drivers/media/platform/qcom/camss/camss-vfe.c
-index 4bca6c3abaff9b898ea879674a3ff8f3592d3139..ac8e5e9471a426bec5d989abd5e082f5fa027364 100644
---- a/drivers/media/platform/qcom/camss/camss-vfe.c
-+++ b/drivers/media/platform/qcom/camss/camss-vfe.c
-@@ -1807,6 +1807,15 @@ int msm_vfe_subdev_init(struct camss *camss, struct vfe_device *vfe,
- 		return PTR_ERR(vfe->base);
- 	}
- 
-+	if (vfe->res->has_vbif) {
-+		vfe->vbif_base = devm_platform_ioremap_resource_byname(pdev,
-+								       vfe->res->vbif_name);
-+		if (IS_ERR(vfe->vbif_base)) {
-+			dev_err(dev, "could not map vbif memory\n");
-+			return PTR_ERR(vfe->vbif_base);
-+		}
-+	}
-+
- 	/* Interrupt */
- 
- 	ret = platform_get_irq_byname(pdev, res->interrupt[0]);
-diff --git a/drivers/media/platform/qcom/camss/camss-vfe.h b/drivers/media/platform/qcom/camss/camss-vfe.h
-index a23f666be7531e0366c73faea44ed245e7a8e30f..614e932c33da78e02e0800ce6534af7b14822f83 100644
---- a/drivers/media/platform/qcom/camss/camss-vfe.h
-+++ b/drivers/media/platform/qcom/camss/camss-vfe.h
-@@ -136,6 +136,8 @@ struct vfe_subdev_resources {
- 	u8 line_num;
- 	bool has_pd;
- 	char *pd_name;
-+	bool has_vbif;
-+	char *vbif_name;
- 	const struct vfe_hw_ops *hw_ops;
- 	const struct camss_formats *formats_rdi;
- 	const struct camss_formats *formats_pix;
-@@ -145,6 +147,7 @@ struct vfe_device {
- 	struct camss *camss;
- 	u8 id;
- 	void __iomem *base;
-+	void __iomem *vbif_base;
- 	u32 irq;
- 	char irq_name[30];
- 	struct camss_clock *clock;
+ 			/* mdp_0: */
+ 			iommu-ctx@4000 {
+ 				compatible = "qcom,msm-iommu-v1-ns";
 
 -- 
 2.51.0
