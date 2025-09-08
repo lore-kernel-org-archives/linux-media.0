@@ -1,128 +1,118 @@
-Received: from www637.your-server.de (www637.your-server.de [168.119.26.117])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6476E258A;
-	Mon,  8 Sep 2025 06:05:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=168.119.26.117
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4EA821E1E1E
+	for <linux-media@vger.kernel.org>; Mon,  8 Sep 2025 06:49:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757311530; cv=none; b=H/1muxZdA6gX9C30XqsU8DXBYtU6eiFnv+c8fk4HhbiOzLlSuEyBvPrnP3SMb8Kz3OSvppfg/cmzzBpa6z+FHU6B4LjgBoy8JD6mXfcu/W6xWRSw1vm/2f9ay9ikTjEf1pC5l5KkjRjHOzmfk21JyY0e57PyiDkvMWyXN0Y/LGs=
+	t=1757314185; cv=none; b=fHKhYOfTTnMLQVfRuFUoU6hG9oQBOd0yrwySKKuys+Mk5eS6qXBl3pC1UUPs58c8JKWbrqn+Q6vKAPFCedwFP2CGuyCKh9xwrx+dT2sU39D32Zjk6/XwKBiPL+Ry/5M1QR89IAYBMMc1/Gg0jLzgbiAtRqO2vrkv0NqomP5ULDE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757311530; c=relaxed/simple;
-	bh=VEj+FcIjH8vMApuTrrOGRDhfsgKnPwgJ+AclFliyyyI=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=kCIwhxg1PhJgNB/XnCco/KDUtf4PkDu11LOueo9ScWkhXTx1j8az5WWhhFaFUnjmpwPZd/TXCOk9R5buAVsem8YmXyZTFKi2L/Dpj9BqdHrfYZxwDV/+4qdMdtVLnyY8WZhkVVos0LldVmsqpAjCpwU8tuZc9Ob5etOSingPLps=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=apitzsch.eu; spf=pass smtp.mailfrom=apitzsch.eu; dkim=pass (2048-bit key) header.d=apitzsch.eu header.i=@apitzsch.eu header.b=ZSggGL9x; arc=none smtp.client-ip=168.119.26.117
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=apitzsch.eu
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=apitzsch.eu
+	s=arc-20240116; t=1757314185; c=relaxed/simple;
+	bh=LM7VxyGsLs5M2XOXjO8TDmvLxI0rWqpYvtsTN2iDKno=;
+	h=Message-ID:Date:MIME-Version:From:Subject:To:Content-Type; b=fYjqn9irrezN9VtrF1G8QpJdqL9wfqhKobIkLM5S9eDuemfF+RiNNceGbSlBm7XJofX6Li9ZkhwNLW57hwyS/ByYYRtshN9X/lYFKdFj/74PDquLGXgiH6EFkvCdCgcFlg5ns6Wf6gvv2tx0eUrgj4EGeeqfLwVDQmyo8s6i9/k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PZxfv0p4; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=apitzsch.eu header.i=@apitzsch.eu header.b="ZSggGL9x"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=apitzsch.eu
-	; s=default2410; h=MIME-Version:Content-Transfer-Encoding:Content-Type:
-	References:In-Reply-To:Date:Cc:To:From:Subject:Message-ID:Sender:Reply-To:
-	Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-	Resent-To:Resent-Cc:Resent-Message-ID;
-	bh=CfsdsKfiWnNioTv736ibRPWjiInLASEhVaU5adm2kiY=; b=ZSggGL9x2fLao5yLUtulafVKEw
-	h2NETSUQYUi9xVEGccBOKY5ciDpfyeg585vJ96Dp3uDiYMvMlmKK1NJ3DaJtTEKyV8uTzKitJ4oRq
-	yCxj/32EsoD9A3Seir6AXttsrv1Gw262ZQTD0menkt1+AkZ1cPweBvFgJz2RxozcTK50Dd82b0aIV
-	jvKWKbv+a5QvpRtXCuU+ogeGTTh/oNBgULCi3U6N7Sl7Njc5nI/H97/0UQlHvhC5awKOeQhihQ95u
-	juAeP9+rBj5jEmc4SDqpmAe9q83bcYTRNco+whefTqD4OVfuk5HRN5oTJH2duaTuT6jRWPVbwTbL7
-	bwgQg0QQ==;
-Received: from sslproxy07.your-server.de ([78.47.199.104])
-	by www637.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-	(Exim 4.96.2)
-	(envelope-from <git@apitzsch.eu>)
-	id 1uvUfb-000Ed4-28;
-	Mon, 08 Sep 2025 07:44:03 +0200
-Received: from localhost ([127.0.0.1])
-	by sslproxy07.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-	(Exim 4.96)
-	(envelope-from <git@apitzsch.eu>)
-	id 1uvUfa-00088z-25;
-	Mon, 08 Sep 2025 07:44:03 +0200
-Message-ID: <6d875165ae2867fb0a49c19bdf18c0d948c783d3.camel@apitzsch.eu>
-Subject: Re: [PATCH 0/4] Add CAMSS support for MSM8939
-From: =?ISO-8859-1?Q?Andr=E9?= Apitzsch <git@apitzsch.eu>
-To: Bryan O'Donoghue <bryan.odonoghue@linaro.org>, Robert Foss	
- <rfoss@kernel.org>, Todor Tomov <todor.too@gmail.com>, Vladimir Zapolskiy	
- <vladimir.zapolskiy@linaro.org>, Mauro Carvalho Chehab
- <mchehab@kernel.org>,  Rob Herring <robh@kernel.org>, Krzysztof Kozlowski
- <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>,  Bjorn Andersson
- <andersson@kernel.org>, Konrad Dybcio <konradybcio@kernel.org>
-Cc: ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org, 
-	linux-media@vger.kernel.org, linux-arm-msm@vger.kernel.org, 
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, Vincent Knecht
-	 <vincent.knecht@mailoo.org>
-Date: Mon, 08 Sep 2025 07:44:01 +0200
-In-Reply-To: <e0e1827f-aa8b-4337-b26c-dc2ac43e0e2a@linaro.org>
-References: <20250908-camss-8x39-vbif-v1-0-f198c9fd0d4d@apitzsch.eu>
-	 <e0e1827f-aa8b-4337-b26c-dc2ac43e0e2a@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.56.2 
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PZxfv0p4"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8A8FDC4CEF5
+	for <linux-media@vger.kernel.org>; Mon,  8 Sep 2025 06:49:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1757314184;
+	bh=LM7VxyGsLs5M2XOXjO8TDmvLxI0rWqpYvtsTN2iDKno=;
+	h=Date:From:Subject:To:From;
+	b=PZxfv0p4v5MT0cNiRZbeuTKgEpYBjQM3jOk704ACa8izZc7Bauuh5LaPuRjUzCMOc
+	 JxyO/Jq9TOmREQeN8wpxDcrEW015FBytdfqNRJKyJyb68ARLuH4ovgRNww0UpkoVNF
+	 vrC7rzRWyuxSgbHeJ9kczp+WCOVrEXZssHmHTgejsRZQqkIpVJDrW4eqKEq0W9VqUH
+	 RGjDZN57ETulH/wEeII8YQZqPSzzZI0e8CZ/IamOtPjl7qfzGlQ4O209/+9RBuKkGe
+	 ALJz4OgbEV+X7AYJYIapYH1qW1GDvjfmudPKQIDa9ZmpLHBjN2Q3ZL2fXlxjGNvzJ1
+	 UQfAsu1QHUkTA==
+Message-ID: <5b0cbda3-0c70-4022-9d88-de9fd372d27d@kernel.org>
+Date: Mon, 8 Sep 2025 08:49:42 +0200
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Virus-Scanned: Clear (ClamAV 1.0.9/27756/Sun Sep  7 10:26:39 2025)
+User-Agent: Mozilla Thunderbird
+Content-Language: en-US, nl
+From: Hans Verkuil <hverkuil+cisco@kernel.org>
+Subject: [PATCH] media: vivid: fix disappearing <Vendor Command With ID>
+ messages
+To: Linux Media Mailing List <linux-media@vger.kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Hi Bryan,
+The vivid driver supports the <Vendor Command With ID> message,
+but if the Vendor ID of the received message didn't match the Vendor ID
+of the CEC Adapter, then it ignores it (good) and returns 0 (bad).
 
-Am Montag, dem 08.09.2025 um 05:51 +0100 schrieb Bryan O'Donoghue:
-> On 07/09/2025 23:04, Andr=C3=A9 Apitzsch via B4 Relay wrote:
-> > (This series resumes [1].)
->=20
-> Thank you for following up on this.
->=20
-> Could you give a brief synopsis what changed between this series and
-> the previous series ?
+It should return -ENOMSG to indicate that other followers should be
+asked to handle it. Return code 0 means that the driver handled it,
+which is wrong in this case.
 
-As Vincent seems currently quite busy I took over the series. Because
-of that I assumed I had to reset the revision number.
+As a result, userspace followers never get the chance to process such a
+message.
 
-At the end of the cover letter you can find what changed since the
-previous submission (v5 by Vincent), but I will add it here again in
-more details.
+Refactor the code a bit to have the function return -ENOMSG at the end,
+drop the default case, and ensure that the message handlers return 0.
 
-- Patch 1 (bindings) (previously patch 3):
-  - Make the order of {reg, clock, interrupt} items the same as in 8916
-    + append additional items
-  - update isp node unit address
-  - Drop R-b tag
-- Patch 2 (previously patch 1): no change
-- Patch 3 (previously patch 2): no change
-- Patch 4 (dts):
-  - Make the order of {reg, clock, interrupt} items the same as in 8916
-    + append additional items
-  - update isp node unit address
-  - Drop R-b tag
+That way 0 is only returned if the message is actually handled in the
+vivid_received() function.
 
-Best regards,
-Andr=C3=A9
+Fixes: 812765cd6954 ("media: vivid: add <Vendor Command With ID> support")
+Cc: stable@vger.kernel.org
+Signed-off-by: Hans Verkuil <hverkuil+cisco@kernel.org>
+---
+ drivers/media/test-drivers/vivid/vivid-cec.c | 12 +++++-------
+ 1 file changed, 5 insertions(+), 7 deletions(-)
 
->=20
-> > [1]
-> > https://lore.kernel.org/all/20250613-camss-8x39-vbif-v5-0-a002301a7730@=
-mailoo.org/
-> Good series submission style would have something in the coverletter
-> like.
->=20
-> "Here is my awesome series of patches which do X
->=20
-> v2:
-> - Fixed everything wise and benevolent kernel community asked for
->=20
-> v1:
-> - Enabled cool stuff
-> "
->=20
-> I recall we were pretty close to picking these patches up previously
-> so thank you for re-upping your effort.
->=20
-> A brief bit of guidance on what if anything changed from your last=20
-> submission is appreciated and good practice so that we can review and
-> apply quicker.
->=20
-> ---
-> bod
+diff --git a/drivers/media/test-drivers/vivid/vivid-cec.c b/drivers/media/test-drivers/vivid/vivid-cec.c
+index 356a988dd6a1..2d15fdd5d999 100644
+--- a/drivers/media/test-drivers/vivid/vivid-cec.c
++++ b/drivers/media/test-drivers/vivid/vivid-cec.c
+@@ -327,7 +327,7 @@ static int vivid_received(struct cec_adapter *adap, struct cec_msg *msg)
+ 		char osd[14];
+
+ 		if (!cec_is_sink(adap))
+-			return -ENOMSG;
++			break;
+ 		cec_ops_set_osd_string(msg, &disp_ctl, osd);
+ 		switch (disp_ctl) {
+ 		case CEC_OP_DISP_CTL_DEFAULT:
+@@ -348,7 +348,7 @@ static int vivid_received(struct cec_adapter *adap, struct cec_msg *msg)
+ 			cec_transmit_msg(adap, &reply, false);
+ 			break;
+ 		}
+-		break;
++		return 0;
+ 	}
+ 	case CEC_MSG_VENDOR_COMMAND_WITH_ID: {
+ 		u32 vendor_id;
+@@ -379,7 +379,7 @@ static int vivid_received(struct cec_adapter *adap, struct cec_msg *msg)
+ 		if (size == 1) {
+ 			// Ignore even op values
+ 			if (!(vendor_cmd[0] & 1))
+-				break;
++				return 0;
+ 			reply.len = msg->len;
+ 			memcpy(reply.msg + 1, msg->msg + 1, msg->len - 1);
+ 			reply.msg[msg->len - 1]++;
+@@ -388,12 +388,10 @@ static int vivid_received(struct cec_adapter *adap, struct cec_msg *msg)
+ 					      CEC_OP_ABORT_INVALID_OP);
+ 		}
+ 		cec_transmit_msg(adap, &reply, false);
+-		break;
++		return 0;
+ 	}
+-	default:
+-		return -ENOMSG;
+ 	}
+-	return 0;
++	return -ENOMSG;
+ }
+
+ static const struct cec_adap_ops vivid_cec_adap_ops = {
+-- 
+2.47.2
+
+
