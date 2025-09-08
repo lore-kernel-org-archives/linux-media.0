@@ -1,120 +1,128 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from www637.your-server.de (www637.your-server.de [168.119.26.117])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4526545945
-	for <linux-media@vger.kernel.org>; Mon,  8 Sep 2025 05:54:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6476E258A;
+	Mon,  8 Sep 2025 06:05:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=168.119.26.117
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757310867; cv=none; b=M8s0Bg3+tccq/wMu4F+wLGpqdzau7Xmzm4qiG6NvU8kl1xKuRSlPRZ60GdZnhfcgrVC8FlyvH4V8hsa3rvNAyJcNqK4Qq42n0P5UpOhlFqwv0SGglHt3iEA3IA3AXjO2qfHfbBgE4PM/GVNIQ6aMDOCQYG2px8unGWcxCx8te7Y=
+	t=1757311530; cv=none; b=H/1muxZdA6gX9C30XqsU8DXBYtU6eiFnv+c8fk4HhbiOzLlSuEyBvPrnP3SMb8Kz3OSvppfg/cmzzBpa6z+FHU6B4LjgBoy8JD6mXfcu/W6xWRSw1vm/2f9ay9ikTjEf1pC5l5KkjRjHOzmfk21JyY0e57PyiDkvMWyXN0Y/LGs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757310867; c=relaxed/simple;
-	bh=7/cwJ3SUkyV0ct7rXhCq6s3E3Vf4utM6sjm/ntEfuEU=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=F/Csubh1aRN9D+2H8Y9SyZHPdE6/+hHZwds1WL1tKpe9n59+dxs1XfFv+Fdl9GcrFZ9vLHRnCgZiVqNEI+JLPI+l0v048BfD0wv4r1TmO+3iQnTgmq1Zt8JE76Di01hiulzE8/baVBiw9TzxUUMcCiSYfox5RH0r7ugxIC6NsuM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=IG89zei1; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1757311530; c=relaxed/simple;
+	bh=VEj+FcIjH8vMApuTrrOGRDhfsgKnPwgJ+AclFliyyyI=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=kCIwhxg1PhJgNB/XnCco/KDUtf4PkDu11LOueo9ScWkhXTx1j8az5WWhhFaFUnjmpwPZd/TXCOk9R5buAVsem8YmXyZTFKi2L/Dpj9BqdHrfYZxwDV/+4qdMdtVLnyY8WZhkVVos0LldVmsqpAjCpwU8tuZc9Ob5etOSingPLps=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=apitzsch.eu; spf=pass smtp.mailfrom=apitzsch.eu; dkim=pass (2048-bit key) header.d=apitzsch.eu header.i=@apitzsch.eu header.b=ZSggGL9x; arc=none smtp.client-ip=168.119.26.117
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=apitzsch.eu
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=apitzsch.eu
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="IG89zei1"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BBF09C4CEF5;
-	Mon,  8 Sep 2025 05:54:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1757310866;
-	bh=7/cwJ3SUkyV0ct7rXhCq6s3E3Vf4utM6sjm/ntEfuEU=;
-	h=From:To:Cc:Subject:Date:From;
-	b=IG89zei1k+LXM0diZWLdkoVnkL8EX6HFssTlHA6GG8wGoAYbSr8oO1UEzf4WFnfyU
-	 PJ3BxCVd8dXh7fTHc+HmvLSPNBYmjdWYiVfS3PUW9NVkDaz1l1LfwLOK19t3Q1CQ+R
-	 xJeFpUjdSlAd9tX0SzA6puplgzsyuS9+eY0wPEtyHwcRYlU+Gu/VGq4gpshPxhvSDe
-	 gRNMf4SWCgKaH8udp2c1szPLyGZFV+6VWXu6a+3Od9sDDJLpXS23VPWHat/WUpU3DD
-	 Vsdqlbac13dPis/Aafv+ftChfK0HJVVcQk2jURZ9kUA3X/PVY85ulATg9qV2oVbBRk
-	 jc4tnxuwi/TfQ==
-From: bod@kernel.org
-To: linux-media@vger.kernel.org,
-	hans@jjverkuil.nl
-Cc: bryan.odonoghue@linaro.org,
-	Bryan O'Donoghue <bod@kernel.org>
-Subject: [GIT PULL FOR 6.18] Please pull platform-qcom-camss-for-6.18
-Date: Mon,  8 Sep 2025 06:54:18 +0100
-Message-ID: <20250908055422.18446-1-bod@kernel.org>
-X-Mailer: git-send-email 2.51.0
+	dkim=pass (2048-bit key) header.d=apitzsch.eu header.i=@apitzsch.eu header.b="ZSggGL9x"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=apitzsch.eu
+	; s=default2410; h=MIME-Version:Content-Transfer-Encoding:Content-Type:
+	References:In-Reply-To:Date:Cc:To:From:Subject:Message-ID:Sender:Reply-To:
+	Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+	Resent-To:Resent-Cc:Resent-Message-ID;
+	bh=CfsdsKfiWnNioTv736ibRPWjiInLASEhVaU5adm2kiY=; b=ZSggGL9x2fLao5yLUtulafVKEw
+	h2NETSUQYUi9xVEGccBOKY5ciDpfyeg585vJ96Dp3uDiYMvMlmKK1NJ3DaJtTEKyV8uTzKitJ4oRq
+	yCxj/32EsoD9A3Seir6AXttsrv1Gw262ZQTD0menkt1+AkZ1cPweBvFgJz2RxozcTK50Dd82b0aIV
+	jvKWKbv+a5QvpRtXCuU+ogeGTTh/oNBgULCi3U6N7Sl7Njc5nI/H97/0UQlHvhC5awKOeQhihQ95u
+	juAeP9+rBj5jEmc4SDqpmAe9q83bcYTRNco+whefTqD4OVfuk5HRN5oTJH2duaTuT6jRWPVbwTbL7
+	bwgQg0QQ==;
+Received: from sslproxy07.your-server.de ([78.47.199.104])
+	by www637.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+	(Exim 4.96.2)
+	(envelope-from <git@apitzsch.eu>)
+	id 1uvUfb-000Ed4-28;
+	Mon, 08 Sep 2025 07:44:03 +0200
+Received: from localhost ([127.0.0.1])
+	by sslproxy07.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+	(Exim 4.96)
+	(envelope-from <git@apitzsch.eu>)
+	id 1uvUfa-00088z-25;
+	Mon, 08 Sep 2025 07:44:03 +0200
+Message-ID: <6d875165ae2867fb0a49c19bdf18c0d948c783d3.camel@apitzsch.eu>
+Subject: Re: [PATCH 0/4] Add CAMSS support for MSM8939
+From: =?ISO-8859-1?Q?Andr=E9?= Apitzsch <git@apitzsch.eu>
+To: Bryan O'Donoghue <bryan.odonoghue@linaro.org>, Robert Foss	
+ <rfoss@kernel.org>, Todor Tomov <todor.too@gmail.com>, Vladimir Zapolskiy	
+ <vladimir.zapolskiy@linaro.org>, Mauro Carvalho Chehab
+ <mchehab@kernel.org>,  Rob Herring <robh@kernel.org>, Krzysztof Kozlowski
+ <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>,  Bjorn Andersson
+ <andersson@kernel.org>, Konrad Dybcio <konradybcio@kernel.org>
+Cc: ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org, 
+	linux-media@vger.kernel.org, linux-arm-msm@vger.kernel.org, 
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, Vincent Knecht
+	 <vincent.knecht@mailoo.org>
+Date: Mon, 08 Sep 2025 07:44:01 +0200
+In-Reply-To: <e0e1827f-aa8b-4337-b26c-dc2ac43e0e2a@linaro.org>
+References: <20250908-camss-8x39-vbif-v1-0-f198c9fd0d4d@apitzsch.eu>
+	 <e0e1827f-aa8b-4337-b26c-dc2ac43e0e2a@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.56.2 
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-Virus-Scanned: Clear (ClamAV 1.0.9/27756/Sun Sep  7 10:26:39 2025)
 
-From: Bryan O'Donoghue <bod@kernel.org>
+Hi Bryan,
 
-The following changes since commit 04f08db52b3f892c85bd92ebbc3a7ca32e4f60f3:
+Am Montag, dem 08.09.2025 um 05:51 +0100 schrieb Bryan O'Donoghue:
+> On 07/09/2025 23:04, Andr=C3=A9 Apitzsch via B4 Relay wrote:
+> > (This series resumes [1].)
+>=20
+> Thank you for following up on this.
+>=20
+> Could you give a brief synopsis what changed between this series and
+> the previous series ?
 
-  media: i2c: tc358743: add support for more infoframe types (2025-09-07 10:29:19 +0200)
+As Vincent seems currently quite busy I took over the series. Because
+of that I assumed I had to reset the revision number.
 
-are available in the Git repository at:
+At the end of the cover letter you can find what changed since the
+previous submission (v5 by Vincent), but I will add it here again in
+more details.
 
-  https://gitlab.freedesktop.org/linux-media/users/bodonoghue.git tags/platform-qcom-camss-for-6.18
+- Patch 1 (bindings) (previously patch 3):
+  - Make the order of {reg, clock, interrupt} items the same as in 8916
+    + append additional items
+  - update isp node unit address
+  - Drop R-b tag
+- Patch 2 (previously patch 1): no change
+- Patch 3 (previously patch 2): no change
+- Patch 4 (dts):
+  - Make the order of {reg, clock, interrupt} items the same as in 8916
+    + append additional items
+  - update isp node unit address
+  - Drop R-b tag
 
-for you to fetch changes up to 2d10474317358d41c7f746db4819ac4042a5ad11:
+Best regards,
+Andr=C3=A9
 
-  media: qcom: camss: remove a check for unavailable CAMSS endpoint (2025-09-08 06:19:38 +0100)
-
-----------------------------------------------------------------
-Adds support for the following SoC flavours:
-
-- sa8755p Lemans
-- qcs8300 Monaco
-- qcm2290 Agatti
-
-Includes code optimisation from Vladimir
-
-----------------------------------------------------------------
-Loic Poulain (5):
-      dt-bindings: media: Add qcom,qcm2290-camss
-      media: qcom: camss: Add support for TFE (Spectra 340)
-      media: qcom: camss: Add CSID 340 support
-      media: qcom: camss: csiphy-3ph: Add CSIPHY 2ph DPHY v2.0.1 init sequence
-      media: qcom: camss: add support for QCM2290 camss
-
-Vikram Sharma (14):
-      media: qcom: camss: Rename camss-csid-780.c to camss-csid-gen3.c
-      media: qcom: camss: Rename camss-vfe-780.c to camss-vfe-gen3.c
-      media: dt-bindings: Add qcom,sa8775p-camss compatible
-      media: qcom: camss: Add qcom,sa8775p-camss compatible
-      media: qcom: camss: Add support for CSIPHY (v1.3.0)
-      media: qcom: camss: Add support for CSID 690
-      media: qcom: camss: Add support for VFE 690
-      media: qcom: camss: Enumerate resources for lemans(sa8775p)
-      media: dt-bindings: Add qcom,qcs8300-camss compatible
-      media: qcom: camss: Add qcs8300 compatible
-      media: qcom: camss: Add CSIPHY support for QCS8300
-      media: qcom: camss: enable csid 690 for qcs8300
-      media: qcom: camss: enable vfe 690 for qcs8300
-      media: qcom: camss: Enumerate resources for QCS8300
-
-Vladimir Zapolskiy (3):
-      media: qcom: camss: remove .link_entities callback
-      media: qcom: camss: unconditionally set async notifier of subdevices
-      media: qcom: camss: remove a check for unavailable CAMSS endpoint
-
- .../bindings/media/qcom,qcm2290-camss.yaml         | 243 +++++++
- .../bindings/media/qcom,qcs8300-camss.yaml         | 336 ++++++++++
- .../bindings/media/qcom,sa8775p-camss.yaml         | 361 +++++++++++
- drivers/media/platform/qcom/camss/Makefile         |   6 +-
- drivers/media/platform/qcom/camss/camss-csid-340.c | 189 ++++++
- .../camss/{camss-csid-780.c => camss-csid-gen3.c}  |  34 +-
- .../camss/{camss-csid-780.h => camss-csid-gen3.h}  |   8 +-
- drivers/media/platform/qcom/camss/camss-csid.h     |   3 +-
- .../platform/qcom/camss/camss-csiphy-3ph-1-0.c     | 175 +++++
- drivers/media/platform/qcom/camss/camss-vfe-340.c  | 319 ++++++++++
- .../camss/{camss-vfe-780.c => camss-vfe-gen3.c}    |  76 ++-
- drivers/media/platform/qcom/camss/camss-vfe.c      |  29 +-
- drivers/media/platform/qcom/camss/camss-vfe.h      |   3 +-
- drivers/media/platform/qcom/camss/camss.c          | 705 +++++++++++++++++++--
- drivers/media/platform/qcom/camss/camss.h          |   4 +-
- 15 files changed, 2400 insertions(+), 91 deletions(-)
- create mode 100644 Documentation/devicetree/bindings/media/qcom,qcm2290-camss.yaml
- create mode 100644 Documentation/devicetree/bindings/media/qcom,qcs8300-camss.yaml
- create mode 100644 Documentation/devicetree/bindings/media/qcom,sa8775p-camss.yaml
- create mode 100644 drivers/media/platform/qcom/camss/camss-csid-340.c
- rename drivers/media/platform/qcom/camss/{camss-csid-780.c => camss-csid-gen3.c} (88%)
- rename drivers/media/platform/qcom/camss/{camss-csid-780.h => camss-csid-gen3.h} (84%)
- create mode 100644 drivers/media/platform/qcom/camss/camss-vfe-340.c
- rename drivers/media/platform/qcom/camss/{camss-vfe-780.c => camss-vfe-gen3.c} (69%)
+>=20
+> > [1]
+> > https://lore.kernel.org/all/20250613-camss-8x39-vbif-v5-0-a002301a7730@=
+mailoo.org/
+> Good series submission style would have something in the coverletter
+> like.
+>=20
+> "Here is my awesome series of patches which do X
+>=20
+> v2:
+> - Fixed everything wise and benevolent kernel community asked for
+>=20
+> v1:
+> - Enabled cool stuff
+> "
+>=20
+> I recall we were pretty close to picking these patches up previously
+> so thank you for re-upping your effort.
+>=20
+> A brief bit of guidance on what if anything changed from your last=20
+> submission is appreciated and good practice so that we can review and
+> apply quicker.
+>=20
+> ---
+> bod
