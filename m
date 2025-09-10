@@ -1,129 +1,146 @@
-Received: from mail-wr1-f45.google.com (mail-wr1-f45.google.com [209.85.221.45])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 39F6C239E7D;
-	Wed, 10 Sep 2025 10:48:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E14FA311955;
+	Wed, 10 Sep 2025 10:49:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757501334; cv=none; b=uEuhV6/IEJi1KmICLKXTadem/BW6rwzRlPVRog7cjuvNy62bF64nl4LN9RYcfj15GLtxDyniNCWAvAL4tWME1h3L5S7GJVsLceuT6lkOXdy6nu6b1LvBughV6D9GmmY/pGpRkEk2dzXqlBoOtP6asOn0QwE0lXvOPDY646LpaF8=
+	t=1757501373; cv=none; b=l8+ayDHM3MUDnHr607ngX5ixFLLLFZaR9ViN2YvLYmptsq8BAYXReExCgjBWloFh7fHM1F8VPeskbrUApUrXTQdwcsuHMnMwR8RPDz+zLtsNV3nlB6+q7Psq7r6H1T1XP8CiojMLONFCOBt4EcRQyfYdI9WwIwbSlQcKvU+9fJo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757501334; c=relaxed/simple;
-	bh=oZuskF8rQFH7X1X26xw4eX994bR051hWbKT9n03w/6Y=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=gTZtKydDKKD3Mz2yJ/rt4bD8USHOy6HEsym3eUMOc3+chVINabwBHUVgOpqYP0pDodVtVAPjoNs94t/elrYaz3JmSQnqHmMr5sBijmI7b+yyB0ynasm8tdddt6G19+V/c9T0/LMMPcsMRRPb64AWUJHmH893zwnFTk6i9BPRslo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=GFmjIxH0; arc=none smtp.client-ip=209.85.221.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1757501373; c=relaxed/simple;
+	bh=/2LYwDOI18N+ZMjRLoDchnmyG84ziDEmKMYQ60MhsY4=;
+	h=From:Date:To:cc:Subject:In-Reply-To:Message-ID:References:
+	 MIME-Version:Content-Type; b=HtW2A9PGieQQmB5AlK0kyfsBjB3v5kLe7RUaLmkqkBqT+m8gZtW/GADPKC37M00YcrkHVpAZ2lvM7XNw2Ljphux/xdq54ZnEQWEtaoyQ9KU8hQzmesQKa3oQn5S/zxvP+gCMMT2JCnct8Is5u4n6mUPj2DNS21bVn+gN8w53Dmg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=WXwQ0ElG; arc=none smtp.client-ip=198.175.65.11
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="GFmjIxH0"
-Received: by mail-wr1-f45.google.com with SMTP id ffacd0b85a97d-3d19699240dso299008f8f.1;
-        Wed, 10 Sep 2025 03:48:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1757501330; x=1758106130; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:content-language:from
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=+N7hk82kSw/hD5RnH/Wdj/jHeKN7m/X8ltb3+xi6FX4=;
-        b=GFmjIxH0/6BG9POU6zwX30h1CQxiF814sHXYThxhVMP5/19kxIpflWgpkB4vnjhssi
-         EkHp8F92zljsDvYAphYasdfpYnrW4B4VvCkxgNzdjp+vpiszuVv8VR0YLpMBeJf5kCxZ
-         y+fk00IWSvDxbn1rS3As26oAkxPkzkGNbKxxnD/1YrK0GV98a2yvtDOUJE4pPR9UxeVl
-         JHI8TJg/rkZHy4hJ+t8E2wDq+gO4Md9l5lrp4DgbpoeTfjBlEtaHOu+YQZO5yQsqFrKU
-         AEa7nLfDbiGUz9ppXPSRssDjRR7v4JF1b90ximl5hHOUHBVAlCJkCjohwLwtz+nG6mQS
-         6p4w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1757501330; x=1758106130;
-        h=content-transfer-encoding:in-reply-to:content-language:from
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=+N7hk82kSw/hD5RnH/Wdj/jHeKN7m/X8ltb3+xi6FX4=;
-        b=rUYWakpveUIVhIgSnZLq5SHXNqU8Ouo6jAZZ+QcxempGpN3D6IOmIdbWl/eMAvXTNS
-         LF6uMQCoTZn/Dd/NFF+GoOZaOMssxhUMACzhzPgLRLRsDaokWLXivRSGwgh8s6ZlWEPi
-         de68URyoWoeQB8w8UawcYypHF9P33DiAk32qiAvQS/dhHEewmGuH01kSsnUJ8SzdG/6y
-         h8fOKaSJ5jCHgX4twm0J3iYyuq7d/VLO9a0dsT6yqNOpnZlC+ByLBFaS7UK7raukb57T
-         k6hYM0a6sVX2mpL35f2aqbyCrQk5d5wv1zNJnlUXvFHwM1wRW620WOLzLXNEFqttnik9
-         Gxkw==
-X-Forwarded-Encrypted: i=1; AJvYcCU9BNfqh1GBAJValu3MS1wKjzYouNrxFktnk9sD4gpvAwPgcOAOSe1tvxM4T/z87pO+b+efS8YT6vL6@vger.kernel.org, AJvYcCWagSnM7Z9uWTKewpqcRnsii7qFq3m18/VMSDoVQVsoDu4/qbnDtYbnTaBr2fSBqCiA8lYbxadkcWKnnQ==@vger.kernel.org, AJvYcCX8UoKoyPxsFv8KjaA3HTzkmj8NiFnK8g3vhN88JFvej/RidJ7CmKQb9PN+gUkR7XTM6iP6v6yxpOJMiXE=@vger.kernel.org, AJvYcCXzt6NfotCEo4Zs4QBVdn26OC3P2btpc/MTM5TWS/qSxgJVrwhbDahxD+tEvYAwMyZMOBbFyCNbXWmcWR3p@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx+hkgS69zsv4WqhLEeSWX664UItnqGqqTD/b2s5+mMJspekfcz
-	xL1QF50d8+MuHAnQEpklZWd44ypNPw7pQp5MB+AxV2kM9sGNtE1iqTdF
-X-Gm-Gg: ASbGnct72QMffhGfYmv5huMHDjZYxVb3aK6lMxDC2bxl2pM5u0je/lHGwv/9D1EvQGB
-	bCz66qutr/W3sczr2moFsfCiIPHnYQ5wzUPNlDmszV+j6YauDjXxLIT+6rdXzxo2UfjbmMNNdCT
-	aDKQ3oL8MXr4csVk95f6sLY/c/Omwl/Fxr+tDhLCOHC1dTpLfMrmSCByvvcLiDY4AY1cXZVnCTN
-	LvtyEejTA8vDsDSrgSCHF3ihX5qziNAbo3KK+KlvUPsRZz5k5he0aXHmUykhwMRpL0mkhWijR75
-	3VUXocNkG1WGwXQh9ObMUldR8NIgSv55wGZUrFTolPnk2kYAY9FcGc4GaQBQAU6q2x/IPQGAzRY
-	YVm3FshS/FCJ0ZVVLUxgwCJP9KvUndX5WdPC9BPYxMo9+EtsWQwjoNrOWKBs12Jk=
-X-Google-Smtp-Source: AGHT+IG5tS3kYUiCCRtnanVvpm0dBMkyeaNotcMroSTBo+RZ/HHESf9S7ra3pDeqhyi3AeZM8IcVgA==
-X-Received: by 2002:a5d:5e92:0:b0:3e7:428f:d33 with SMTP id ffacd0b85a97d-3e7428f0fe6mr15632685f8f.16.1757501330343;
-        Wed, 10 Sep 2025 03:48:50 -0700 (PDT)
-Received: from [192.168.0.100] ([188.24.124.246])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3e7521ca0e9sm6821205f8f.25.2025.09.10.03.48.48
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 10 Sep 2025 03:48:49 -0700 (PDT)
-Message-ID: <1b79e467-1d39-457f-a488-0f3eb9e14efc@gmail.com>
-Date: Wed, 10 Sep 2025 13:48:29 +0300
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="WXwQ0ElG"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1757501372; x=1789037372;
+  h=from:date:to:cc:subject:in-reply-to:message-id:
+   references:mime-version;
+  bh=/2LYwDOI18N+ZMjRLoDchnmyG84ziDEmKMYQ60MhsY4=;
+  b=WXwQ0ElGd7zRbb8tsxrX/uxukZSGDyl75aqjlPJ/gSP6Lat4NWdR07sY
+   tJnfy6tqsBrRs94u2nXqSqeYINGfQl68csEgRMO8J708ZAEnmfkhFU+bh
+   prFX/veUMn2hwaEe7SmCIdYUxLAihS3xjbi2vTuN+WeL1HvGs8qJVK5Di
+   4aWiSuwmpcOWPX0VqI/D3RQXrSYqffkVTXGWn+yToA5UqNE8qEVLNace7
+   roxJ2kM1CPI62rirulk0YaeJ61j0RDqGL3DYP3tVowzg8IMlb3WxgnnkR
+   DNRMRBZCmXIAM7YW6bvgj4NsDFZinmU6JiFbcdyowuEQX1ol+sQOgAMFm
+   A==;
+X-CSE-ConnectionGUID: C42LOeGdTSO9m/yh2WLE2Q==
+X-CSE-MsgGUID: SL0miMeOSDOSJco2UKi98w==
+X-IronPort-AV: E=McAfee;i="6800,10657,11548"; a="70061933"
+X-IronPort-AV: E=Sophos;i="6.18,254,1751266800"; 
+   d="scan'208";a="70061933"
+Received: from fmviesa001.fm.intel.com ([10.60.135.141])
+  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Sep 2025 03:49:32 -0700
+X-CSE-ConnectionGUID: 2Om7UhE6QJinhFfs3ps7Xw==
+X-CSE-MsgGUID: LQKlI2iORrObhp1hlQDNeA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.18,254,1751266800"; 
+   d="scan'208";a="204346870"
+Received: from ijarvine-mobl1.ger.corp.intel.com (HELO localhost) ([10.245.245.59])
+  by smtpauth.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Sep 2025 03:49:28 -0700
+From: =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
+Date: Wed, 10 Sep 2025 13:49:25 +0300 (EEST)
+To: Hans de Goede <hansg@kernel.org>
+cc: Andy Shevchenko <andy.shevchenko@gmail.com>, 
+    Andy Shevchenko <andy@kernel.org>, 
+    Sakari Ailus <sakari.ailus@linux.intel.com>, 
+    Aleksandrs Vinarskis <alex@vinarskis.com>, 
+    platform-driver-x86@vger.kernel.org, 
+    Mauro Carvalho Chehab <mchehab@kernel.org>, linux-media@vger.kernel.org
+Subject: Re: [PATCH 0/2] v4l2-subdev/int3472: Use "privacy" as con_id for
+ the LED lookup
+In-Reply-To: <4d04e9a4-03cd-459c-be0d-2dcf0c38da14@kernel.org>
+Message-ID: <feebe2b1-a908-fed2-cc81-5badd26e2d1c@linux.intel.com>
+References: <20250909144823.27540-1-hansg@kernel.org> <CAHp75VeMMKCTDNWhdZJH2F=cmUObbpoYcDUch2jpsLBBNs_EhQ@mail.gmail.com> <e3edf119-2dfe-4857-842d-fb2a52470eb9@kernel.org> <0706ca2e-cee8-8f3c-b652-ac0cf0f087f8@linux.intel.com>
+ <4d04e9a4-03cd-459c-be0d-2dcf0c38da14@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v7 00/24] media: i2c: add Maxim GMSL2/3 serializer and
- deserializer drivers
-To: Sakari Ailus <sakari.ailus@linux.intel.com>
-Cc: Cosmin Tanislav <cosmin.tanislav@analog.com>,
- Tomi Valkeinen <tomi.valkeinen+renesas@ideasonboard.com>,
- Mauro Carvalho Chehab <mchehab@kernel.org>, Rob Herring <robh@kernel.org>,
- =?UTF-8?Q?Niklas_S=C3=B6derlund?= <niklas.soderlund@ragnatech.se>,
- Julien Massot <julien.massot@collabora.com>,
- Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Linus Walleij <linus.walleij@linaro.org>, linux-media@vger.kernel.org,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, linux-staging@lists.linux.dev,
- linux-gpio@vger.kernel.org
-References: <20250718152500.2656391-1-demonsingur@gmail.com>
- <aLBqxQQsnY3ZK4eT@kekkonen.localdomain>
- <d558ede0-5838-4a69-b25d-cafaa3b6cc97@gmail.com>
- <aMEgNtjcy1-NuBds@kekkonen.localdomain>
-From: Cosmin Tanislav <demonsingur@gmail.com>
-Content-Language: en-US
-In-Reply-To: <aMEgNtjcy1-NuBds@kekkonen.localdomain>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="8323328-88687938-1757501365=:937"
 
+  This message is in MIME format.  The first part should be readable text,
+  while the remaining parts are likely unreadable without MIME-aware tools.
 
+--8323328-88687938-1757501365=:937
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: QUOTED-PRINTABLE
 
-On 9/10/25 9:52 AM, Sakari Ailus wrote:
-> Hi Cosmin,
-> 
-> On Thu, Sep 04, 2025 at 10:52:09AM +0300, Cosmin Tanislav wrote:
->> Hi Sakari.
->>
->> I recently left Analog Devices but I will continue to try upstreaming
->> this driver. After the upstreaming is done we can switch the
->> maintainer status to someone else.
-> 
-> Ack, thank you.
-> 
->>
->> Here's the output for the commands you asked, provided by my
->> ex-coworker. It's for MAX96716 + 2xMAX96717 + 2x IMX219.
->>
->> Do we need to fix anything based on the compliance tests?
-> 
-> Looking at the errors, it looks like some fixing is needed, possibly also
-> on v4l2-compliance side.
-> 
+On Wed, 10 Sep 2025, Hans de Goede wrote:
 
-I'll take a closer look at the failures whenever I get the time.
+> Hi Ilpo,
+>=20
+> On 10-Sep-25 11:09 AM, Ilpo J=C3=A4rvinen wrote:
+> > On Tue, 9 Sep 2025, Hans de Goede wrote:
+> >> On 9-Sep-25 7:27 PM, Andy Shevchenko wrote:
+> >>> On Tue, Sep 9, 2025 at 5:48=E2=80=AFPM Hans de Goede <hansg@kernel.or=
+g> wrote:
+> >>>>
+> >>>> During DT-binding review for extending the V4L2 camera sensor privac=
+y LED
+> >>>> support to systems using devicetree, it has come up that having a "-=
+led"
+> >>>> suffix for the LED name / con_id is undesirable since it already is =
+clear
+> >>>> that it is a LED:
+> >>>>
+> >>>> https://lore.kernel.org/linux-media/0e030e7d-0a1a-4a00-ba18-ed26107d=
+07fa@oss.qualcomm.com/
+> >>>>
+> >>>> There was discussion about making an exception for "privacy-led" sin=
+ce
+> >>>> that is already used on x86/ACPI platforms, but I'm afraid that will=
+ set
+> >>>> a bad example which ends up being copy and pasted, so lets just drop
+> >>>> the "-led" prefix from the x86/ACPI side, which we can do since ther=
+e
+> >>>> this is only an in-kernel "API".
+> >>>
+> >>> Since it's an in-kernel API, why can't these two be simply squashed?
+> >>
+> >> Good question, this is only a runtime thing when running on actual
+> >> hw with a privacy LED. So having this separately will not break
+> >> the build in the middle.
+> >>
+> >> As such it seems better to have this as 2 patches since it involves
+> >> 2 different subsystems.
+> >=20
+> > But it's still only a single logical change, and not something with=20
+> > monsterous complexity which would warrant splitting it at the subsystem=
+=20
+> > boundary.
+> >
+> > Or do you immediately know about something that would conflict with eit=
+her=20
+> > of these changes which would warrant splitting it per subsystem to avoi=
+d=20
+> > merge challenges? If not, I agree with Andy this should just be squashe=
+d=20
+> > into a single patch.
+>=20
+> Ok, since both you and Andy are in favor of squashing the 2 patches
+> together I'll send out a v2 with the 2 patches squashed into
+> 1 patch.
+>
+> > Another question, is the "privacy_led" suffix added into pled.name stil=
+l
+> > acceptable despite the "led" suffix?
+>=20
+> That is just the name of the directory added under /sys/class/leds for
+> the LED some others, e.g. "phy0-led" also use a led suffix, so IMHO it
+> is fine to keep this as is.
 
-> Regarding GMSL, are the image width, height or mbus code used for anything
-> by the serialiser or deserialiser drivers?
-> 
+Okay, I'd no strong opinion on it but it felt like a similar case so=20
+asked. We can leave it as is.
 
-No, not really. All the information needed by the GMSL drivers is
-provided through get_frame_desc() ops, and there's no fallback for the
-data type, so the stream format is not involved at all, but as far as I
-remember it's necessary to be set properly for the media pipeline to
-pass validation.
+--=20
+ i.
 
+--8323328-88687938-1757501365=:937--
