@@ -1,297 +1,151 @@
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 80CB02DF158;
-	Thu, 11 Sep 2025 08:15:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.167.242.64
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3AFE82E03F9;
+	Thu, 11 Sep 2025 08:15:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757578539; cv=none; b=hyRuTjscLJz+iyDWspRAzGz4ZewJy+3clWC0qx3+sKwSDXRq1TTrr6XAyFjO/7mfNOrIRsTQ9d59NYW6GLQjK/aqC7J0B6H7Z+UVZoLEvcA5odfMNrk411CKTmDLhVp3Lf43Quduw+eIlG1D6q6wAjf4BLsHBSzUgIvDAEUGT+I=
+	t=1757578548; cv=none; b=mo/1L5QguIJgofkbTZ7D+tIZZm0qGoGL2guY7qhcZ+Rr7s8B8FzCh9Pogu/dLmsmzEPSeTztS9bQtv0vvh47Hdt1y7ApM+k6wiKnlnFtyJ/ulDw7kvbaVXXTNFESGuYbbDSYaffAjvNlj591R6u+M+3IOFNPOHJARUTTDzD2Lfg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757578539; c=relaxed/simple;
-	bh=gMvZYVz30eqvJbIVDZFXZ6aZlKWcQHZzSXmlx43ny9E=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=BeVWmJGDpxjY3cd31M14pe2pDa2mWjICWOEynu9f8cr3W8hu5wXKYQHiKcAu4jv68RfFoSz0KFaV9tBuBwitadZbq2WI2ORhSTbOOr6oyvbcOWzzPRRzbCxbyjThf2agsnURPbt/QXCM7DFAaNPyRAd/2vOvd1hXJCsrcTRtxQg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ideasonboard.com; spf=pass smtp.mailfrom=ideasonboard.com; dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b=RSlCGJ+c; arc=none smtp.client-ip=213.167.242.64
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ideasonboard.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ideasonboard.com
+	s=arc-20240116; t=1757578548; c=relaxed/simple;
+	bh=MZkSNF729QqNTQj4q9PWDrOZg6xdXAe10HC4k5HQhA8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=cY7uGiqc9t19ck2u4GVtFlI6b/i76bFtvPCtJMqsVNFha+Gv2PyQP+mBJmobHz5eBYBsHILHt7Q3japa16Z+pWSV5+OD3aaopPcV/+6dQ8gvfG4JcUTlbqLiftZ9uuhYXaAqYftWbsbvfyqQOh28iNbfVmQ3eFo/Hs7gf8+sYpw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=XWF4PwSs; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="RSlCGJ+c"
-Received: from mail.ideasonboard.com (unknown [IPv6:2401:4900:1c66:c9e9:75f9:f434:33cd:e4fe])
-	by perceval.ideasonboard.com (Postfix) with ESMTPSA id 7721D4A4;
-	Thu, 11 Sep 2025 10:14:21 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-	s=mail; t=1757578461;
-	bh=gMvZYVz30eqvJbIVDZFXZ6aZlKWcQHZzSXmlx43ny9E=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=RSlCGJ+cVoqf1Y3ZZmb0XCYEgZdeZAg+KraSv+e97MUvx/48sP6sZshGgPcKD/LGP
-	 TWYOEBaX7qxv5YEgZKJ1gyrnVgoApCNeQWObUWGmyXnAbCNjHXz9S7dObjVoGYNW1K
-	 xPSKnIJNkweqoe+JOa1k1581Hv5BHTbddmgyHW6w=
-From: Jai Luthra <jai.luthra@ideasonboard.com>
-Date: Thu, 11 Sep 2025 13:44:22 +0530
-Subject: [PATCH v2 6/8] media: imx355: Use subdev active state
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XWF4PwSs"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 33EAAC4CEF1;
+	Thu, 11 Sep 2025 08:15:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1757578547;
+	bh=MZkSNF729QqNTQj4q9PWDrOZg6xdXAe10HC4k5HQhA8=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=XWF4PwSs+H43I/a5ob6RMVM1e7DIddUYISGAQpdHdB80rrbiLOVmgcwYPDbdQnUnx
+	 omtvKRdXL9kTjEdlT/mA6jcklq7qN05N6uV9vCrQDL9vwf2XykyhKIe/72SVOdrx+A
+	 M7Ofe21pJ8uU3amFLq3Ax6U/b4wc38Lpy+nDSEAKq7mJut1cuyhKuyB4hcSPvxVZZc
+	 1iLX3srlsJ8AQTUL/+NQxW3+c4rSxYQDXBo0De6JI1YAEML44dP19+ZdA4PsVnYCWq
+	 SjViXlstokf3/Zj7+xaABT+0BnWcftX8znP6k27TosFQZFbWHmbojTAEUbEpqV+iWR
+	 BqXbC2lhEsZpA==
+Date: Thu, 11 Sep 2025 09:15:40 +0100
+From: Lee Jones <lee@kernel.org>
+To: Aleksandrs Vinarskis <alex@vinarskis.com>
+Cc: Hans de Goede <hansg@kernel.org>, Pavel Machek <pavel@kernel.org>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
+	Jingoo Han <jingoohan1@gmail.com>,
+	Mauro Carvalho Chehab <mchehab@kernel.org>,
+	Jean-Jacques Hiblot <jjhiblot@traphandler.com>,
+	Jacopo Mondi <jacopo@jmondi.org>,
+	Sakari Ailus <sakari.ailus@linux.intel.com>,
+	Bjorn Andersson <andersson@kernel.org>,
+	Konrad Dybcio <konradybcio@kernel.org>,
+	Daniel Thompson <danielt@kernel.org>, linux-leds@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+	dri-devel@lists.freedesktop.org, linux-media@vger.kernel.org,
+	linux-arm-msm@vger.kernel.org, threeway@gmail.com,
+	Andy Shevchenko <andy.shevchenko@gmail.com>,
+	Linus Walleij <linus.walleij@linaro.org>
+Subject: Re: [PATCH v5 3/4] leds: led-class: Add devicetree support to
+ led_get()
+Message-ID: <20250911081540.GD9224@google.com>
+References: <20250910-leds-v5-0-bb90a0f897d5@vinarskis.com>
+ <20250910-leds-v5-3-bb90a0f897d5@vinarskis.com>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20250911-imx335_binning-v2-6-30a28df74df6@ideasonboard.com>
-References: <20250911-imx335_binning-v2-0-30a28df74df6@ideasonboard.com>
-In-Reply-To: <20250911-imx335_binning-v2-0-30a28df74df6@ideasonboard.com>
-To: Kieran Bingham <kieran.bingham@ideasonboard.com>, 
- Sakari Ailus <sakari.ailus@linux.intel.com>, 
- Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc: linux-media@vger.kernel.org, linux-kernel@vger.kernel.org, 
- Tommaso Merciai <tomm.merciai@gmail.com>
-X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=7112;
- i=jai.luthra@ideasonboard.com; h=from:subject:message-id;
- bh=gMvZYVz30eqvJbIVDZFXZ6aZlKWcQHZzSXmlx43ny9E=;
- b=owEBbQKS/ZANAwAKAUPekfkkmnFFAcsmYgBowoTxE+yYnhbREwNWEoIlfutl0sjHOm58NhOS5
- AHKQ+/7g+aJAjMEAAEKAB0WIQRN4NgY5dV16NRar8VD3pH5JJpxRQUCaMKE8QAKCRBD3pH5JJpx
- RV1lEACmf4XJTwBm0o47L6Z6hZNl8lMkwy2eikrtYaqPSx1wjqpLkePSSo1p8Tg54a09iMBTtt+
- f9oK8D6Rmhtkz2hpylZnSqbnkjo+mylkdkd7odXa0elQoMO0WqO7qqAibI/3LB7zGwAPU++RWEa
- uyqZQwcEsTdVy5XGY+lbJtiiknyozNU2IASiQgNC9YPMB74jxgoUdADYyte1qjzMDaN715c4mQG
- olDM6L4ZY87W6/FROKugvj/9VaVRfJBqe6Ux+edBenZBFaiy8DKAErwWkrNpedGp79a9NoWb153
- uGcj5T+PfByKDSLiZ6EtCJidjvIk6rjqJW0oYuYPeDs53nUrqwxqWh8SqM7wcFC2/zPwxEAg31r
- gPMvmb6/cnti48dTSVr11kg4UZLYw2rwxU7N5oLgOvNALrenN85GqFc5ll0oujdicmkPRkHvJdp
- nwuyS1AGwjRH9aKAP8rI3WIusX60UqjbDvvBCo6ZiaJ3eBDxKpeSN6rft9xiUAAa8pW/xkLdzER
- MfCgHOvyjJc80+NKfdWBm4Zq+kiDdbnlvuI5Zn0nke6OhV04s3YxnL+qV33xl8KZVghu4GYzQuT
- CtBm2VzHtMw49e5Rl8e9600/nGp8sEdu4nMX3fr1hW2T9pbHHdVLAw+SdWOHmeYlf6Q30uPI5MU
- fMFwkFy+jh3dTmw==
-X-Developer-Key: i=jai.luthra@ideasonboard.com; a=openpgp;
- fpr=4DE0D818E5D575E8D45AAFC543DE91F9249A7145
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20250910-leds-v5-3-bb90a0f897d5@vinarskis.com>
 
-Port the driver to use the subdev active state. This simplifies locking,
-and makes it easier to support different crop sizes for binned modes, by
-storing the crop rectangle inside the subdev state.
+On Wed, 10 Sep 2025, Aleksandrs Vinarskis wrote:
 
-Signed-off-by: Jai Luthra <jai.luthra@ideasonboard.com>
----
- drivers/media/i2c/imx335.c | 79 ++++++++++++----------------------------------
- 1 file changed, 21 insertions(+), 58 deletions(-)
+> From: Hans de Goede <hansg@kernel.org>
+> 
+> Add 'name' argument to of_led_get() such that it can lookup LEDs in
+> devicetree by either name or index.
+> 
+> And use this modified function to add devicetree support to the generic
+> (non devicetree specific) [devm_]led_get() function.
+> 
+> This uses the standard devicetree pattern of adding a -names string array
+> to map names to the indexes for an array of resources.
+> 
+> Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
+> Reviewed-by: Lee Jones <lee@kernel.org>
 
-diff --git a/drivers/media/i2c/imx335.c b/drivers/media/i2c/imx335.c
-index 7631f41e6f1e65695fb76a66d9ac5a3588c69658..9b9bbe6473d545bc5618c0fe8191df0b18037cd8 100644
---- a/drivers/media/i2c/imx335.c
-+++ b/drivers/media/i2c/imx335.c
-@@ -204,7 +204,6 @@ struct imx335_mode {
-  * @vblank: Vertical blanking in lines
-  * @lane_mode: Mode for number of connected data lanes
-  * @cur_mode: Pointer to current selected sensor mode
-- * @mutex: Mutex for serializing sensor controls
-  * @link_freq_bitmap: Menu bitmap for link_freq_ctrl
-  * @cur_mbus_code: Currently selected media bus format code
-  */
-@@ -231,7 +230,6 @@ struct imx335 {
- 	u32 vblank;
- 	u32 lane_mode;
- 	const struct imx335_mode *cur_mode;
--	struct mutex mutex;
- 	unsigned long link_freq_bitmap;
- 	u32 cur_mbus_code;
- };
-@@ -766,36 +764,6 @@ static void imx335_fill_pad_format(struct imx335 *imx335,
- 	fmt->format.xfer_func = V4L2_XFER_FUNC_NONE;
- }
- 
--/**
-- * imx335_get_pad_format() - Get subdevice pad format
-- * @sd: pointer to imx335 V4L2 sub-device structure
-- * @sd_state: V4L2 sub-device configuration
-- * @fmt: V4L2 sub-device format need to be set
-- *
-- * Return: 0 if successful, error code otherwise.
-- */
--static int imx335_get_pad_format(struct v4l2_subdev *sd,
--				 struct v4l2_subdev_state *sd_state,
--				 struct v4l2_subdev_format *fmt)
--{
--	struct imx335 *imx335 = to_imx335(sd);
--
--	mutex_lock(&imx335->mutex);
--
--	if (fmt->which == V4L2_SUBDEV_FORMAT_TRY) {
--		struct v4l2_mbus_framefmt *framefmt;
--
--		framefmt = v4l2_subdev_state_get_format(sd_state, fmt->pad);
--		fmt->format = *framefmt;
--	} else {
--		imx335_fill_pad_format(imx335, imx335->cur_mode, fmt);
--	}
--
--	mutex_unlock(&imx335->mutex);
--
--	return 0;
--}
--
- /**
-  * imx335_set_pad_format() - Set subdevice pad format
-  * @sd: pointer to imx335 V4L2 sub-device structure
-@@ -809,12 +777,12 @@ static int imx335_set_pad_format(struct v4l2_subdev *sd,
- 				 struct v4l2_subdev_format *fmt)
- {
- 	struct imx335 *imx335 = to_imx335(sd);
-+	struct v4l2_mbus_framefmt *format;
- 	const struct imx335_mode *mode;
- 	int i, ret = 0;
- 
--	mutex_lock(&imx335->mutex);
--
- 	mode = &supported_mode;
-+
- 	for (i = 0; i < ARRAY_SIZE(imx335_mbus_codes); i++) {
- 		if (imx335_mbus_codes[i] == fmt->format.code)
- 			imx335->cur_mbus_code = imx335_mbus_codes[i];
-@@ -822,19 +790,15 @@ static int imx335_set_pad_format(struct v4l2_subdev *sd,
- 
- 	imx335_fill_pad_format(imx335, mode, fmt);
- 
--	if (fmt->which == V4L2_SUBDEV_FORMAT_TRY) {
--		struct v4l2_mbus_framefmt *framefmt;
-+	format = v4l2_subdev_state_get_format(sd_state, fmt->pad);
-+	*format = fmt->format;
- 
--		framefmt = v4l2_subdev_state_get_format(sd_state, fmt->pad);
--		*framefmt = fmt->format;
--	} else {
-+	if (fmt->which == V4L2_SUBDEV_FORMAT_ACTIVE) {
- 		ret = imx335_update_controls(imx335, mode);
- 		if (!ret)
- 			imx335->cur_mode = mode;
- 	}
- 
--	mutex_unlock(&imx335->mutex);
--
- 	return ret;
- }
- 
-@@ -854,12 +818,10 @@ static int imx335_init_state(struct v4l2_subdev *sd,
- 	fmt.which = sd_state ? V4L2_SUBDEV_FORMAT_TRY : V4L2_SUBDEV_FORMAT_ACTIVE;
- 	imx335_fill_pad_format(imx335, &supported_mode, &fmt);
- 
--	mutex_lock(&imx335->mutex);
- 	__v4l2_ctrl_modify_range(imx335->link_freq_ctrl, 0,
- 				 __fls(imx335->link_freq_bitmap),
- 				 ~(imx335->link_freq_bitmap),
- 				 __ffs(imx335->link_freq_bitmap));
--	mutex_unlock(&imx335->mutex);
- 
- 	return imx335_set_pad_format(sd, sd_state, &fmt);
- }
-@@ -1001,16 +963,17 @@ static void imx335_stop_streaming(struct imx335 *imx335)
- static int imx335_set_stream(struct v4l2_subdev *sd, int enable)
- {
- 	struct imx335 *imx335 = to_imx335(sd);
-+	struct v4l2_subdev_state *state;
- 	int ret = 0;
- 
--	mutex_lock(&imx335->mutex);
-+	state = v4l2_subdev_lock_and_get_active_state(sd);
- 
- 	if (enable)
- 		ret = imx335_start_streaming(imx335);
- 	else
- 		imx335_stop_streaming(imx335);
- 
--	mutex_unlock(&imx335->mutex);
-+	v4l2_subdev_unlock_state(state);
- 
- 	return ret;
- }
-@@ -1138,7 +1101,7 @@ static const struct v4l2_subdev_pad_ops imx335_pad_ops = {
- 	.enum_frame_size = imx335_enum_frame_size,
- 	.get_selection = imx335_get_selection,
- 	.set_selection = imx335_get_selection,
--	.get_fmt = imx335_get_pad_format,
-+	.get_fmt = v4l2_subdev_get_fmt,
- 	.set_fmt = imx335_set_pad_format,
- };
- 
-@@ -1233,9 +1196,6 @@ static int imx335_init_controls(struct imx335 *imx335)
- 	if (ret)
- 		return ret;
- 
--	/* Serialize controls with sensor device */
--	ctrl_hdlr->lock = &imx335->mutex;
--
- 	/* Initialize exposure and gain */
- 	lpfr = mode->vblank + mode->height;
- 	imx335->exp_ctrl = v4l2_ctrl_new_std(ctrl_hdlr,
-@@ -1355,12 +1315,10 @@ static int imx335_probe(struct i2c_client *client)
- 		return ret;
- 	}
- 
--	mutex_init(&imx335->mutex);
--
- 	ret = imx335_power_on(imx335->dev);
- 	if (ret) {
- 		dev_err(imx335->dev, "failed to power-on the sensor\n");
--		goto error_mutex_destroy;
-+		return ret;
- 	}
- 
- 	/* Check module identity */
-@@ -1393,11 +1351,18 @@ static int imx335_probe(struct i2c_client *client)
- 		goto error_handler_free;
- 	}
- 
-+	imx335->sd.state_lock = imx335->ctrl_handler.lock;
-+	ret = v4l2_subdev_init_finalize(&imx335->sd);
-+	if (ret < 0) {
-+		dev_err(imx335->dev, "subdev init error\n");
-+		goto error_media_entity;
-+	}
-+
- 	ret = v4l2_async_register_subdev_sensor(&imx335->sd);
- 	if (ret < 0) {
- 		dev_err(imx335->dev,
- 			"failed to register async subdev: %d\n", ret);
--		goto error_media_entity;
-+		goto error_subdev_cleanup;
- 	}
- 
- 	pm_runtime_set_active(imx335->dev);
-@@ -1406,14 +1371,14 @@ static int imx335_probe(struct i2c_client *client)
- 
- 	return 0;
- 
-+error_subdev_cleanup:
-+	v4l2_subdev_cleanup(&imx335->sd);
- error_media_entity:
- 	media_entity_cleanup(&imx335->sd.entity);
- error_handler_free:
- 	v4l2_ctrl_handler_free(imx335->sd.ctrl_handler);
- error_power_off:
- 	imx335_power_off(imx335->dev);
--error_mutex_destroy:
--	mutex_destroy(&imx335->mutex);
- 
- 	return ret;
- }
-@@ -1427,9 +1392,9 @@ static int imx335_probe(struct i2c_client *client)
- static void imx335_remove(struct i2c_client *client)
- {
- 	struct v4l2_subdev *sd = i2c_get_clientdata(client);
--	struct imx335 *imx335 = to_imx335(sd);
- 
- 	v4l2_async_unregister_subdev(sd);
-+	v4l2_subdev_cleanup(sd);
- 	media_entity_cleanup(&sd->entity);
- 	v4l2_ctrl_handler_free(sd->ctrl_handler);
- 
-@@ -1437,8 +1402,6 @@ static void imx335_remove(struct i2c_client *client)
- 	if (!pm_runtime_status_suspended(&client->dev))
- 		imx335_power_off(&client->dev);
- 	pm_runtime_set_suspended(&client->dev);
--
--	mutex_destroy(&imx335->mutex);
- }
- 
- static const struct dev_pm_ops imx335_pm_ops = {
+Remind me why this can't go in through LED again?
+
+> Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
+> Signed-off-by: Hans de Goede <hansg@kernel.org>
+> Signed-off-by: Aleksandrs Vinarskis <alex@vinarskis.com>
+> ---
+>  drivers/leds/led-class.c | 17 +++++++++++++++--
+>  1 file changed, 15 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/leds/led-class.c b/drivers/leds/led-class.c
+> index 15633fbf3c166aa4f521774d245f6399a642bced..f3faf37f9a08ac762ed87b91cb3cab5faa8eacb0 100644
+> --- a/drivers/leds/led-class.c
+> +++ b/drivers/leds/led-class.c
+> @@ -252,15 +252,23 @@ static const struct class leds_class = {
+>   * of_led_get() - request a LED device via the LED framework
+>   * @np: device node to get the LED device from
+>   * @index: the index of the LED
+> + * @name: the name of the LED used to map it to its function, if present
+>   *
+>   * Returns the LED device parsed from the phandle specified in the "leds"
+>   * property of a device tree node or a negative error-code on failure.
+>   */
+> -static struct led_classdev *of_led_get(struct device_node *np, int index)
+> +static struct led_classdev *of_led_get(struct device_node *np, int index,
+> +				       const char *name)
+>  {
+>  	struct device *led_dev;
+>  	struct device_node *led_node;
+>  
+> +	/*
+> +	 * For named LEDs, first look up the name in the "led-names" property.
+> +	 * If it cannot be found, then of_parse_phandle() will propagate the error.
+> +	 */
+> +	if (name)
+> +		index = of_property_match_string(np, "led-names", name);
+>  	led_node = of_parse_phandle(np, "leds", index);
+>  	if (!led_node)
+>  		return ERR_PTR(-ENOENT);
+> @@ -324,7 +332,7 @@ struct led_classdev *__must_check devm_of_led_get(struct device *dev,
+>  	if (!dev)
+>  		return ERR_PTR(-EINVAL);
+>  
+> -	led = of_led_get(dev->of_node, index);
+> +	led = of_led_get(dev->of_node, index, NULL);
+>  	if (IS_ERR(led))
+>  		return led;
+>  
+> @@ -342,9 +350,14 @@ EXPORT_SYMBOL_GPL(devm_of_led_get);
+>  struct led_classdev *led_get(struct device *dev, char *con_id)
+>  {
+>  	struct led_lookup_data *lookup;
+> +	struct led_classdev *led_cdev;
+>  	const char *provider = NULL;
+>  	struct device *led_dev;
+>  
+> +	led_cdev = of_led_get(dev->of_node, -1, con_id);
+> +	if (!IS_ERR(led_cdev) || PTR_ERR(led_cdev) != -ENOENT)
+> +		return led_cdev;
+> +
+>  	mutex_lock(&leds_lookup_lock);
+>  	list_for_each_entry(lookup, &leds_lookup_list, list) {
+>  		if (!strcmp(lookup->dev_id, dev_name(dev)) &&
+> 
+> -- 
+> 2.48.1
+> 
+> 
 
 -- 
-2.51.0
-
+Lee Jones [李琼斯]
