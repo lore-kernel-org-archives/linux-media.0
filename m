@@ -1,151 +1,543 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3AFE82E03F9;
-	Thu, 11 Sep 2025 08:15:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C8D602DECA1;
+	Thu, 11 Sep 2025 08:15:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.167.242.64
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757578548; cv=none; b=mo/1L5QguIJgofkbTZ7D+tIZZm0qGoGL2guY7qhcZ+Rr7s8B8FzCh9Pogu/dLmsmzEPSeTztS9bQtv0vvh47Hdt1y7ApM+k6wiKnlnFtyJ/ulDw7kvbaVXXTNFESGuYbbDSYaffAjvNlj591R6u+M+3IOFNPOHJARUTTDzD2Lfg=
+	t=1757578549; cv=none; b=NLyc5VfmmcU7WQpPT/Nm6oKYgYU2Ex/OCRvwjKSkO0g594odZJoSdMHQ7iqKwF/0pEcgWcd1vhzjor0/h0xppI6zLKBHAVqw3Rm4alnUzDlBK3YMHKD0hQM7ngYWy6eBU+OA0CCCgepelqJQkToOLTVRaftWHfGg9viN5xD0z58=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757578548; c=relaxed/simple;
-	bh=MZkSNF729QqNTQj4q9PWDrOZg6xdXAe10HC4k5HQhA8=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=cY7uGiqc9t19ck2u4GVtFlI6b/i76bFtvPCtJMqsVNFha+Gv2PyQP+mBJmobHz5eBYBsHILHt7Q3japa16Z+pWSV5+OD3aaopPcV/+6dQ8gvfG4JcUTlbqLiftZ9uuhYXaAqYftWbsbvfyqQOh28iNbfVmQ3eFo/Hs7gf8+sYpw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=XWF4PwSs; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1757578549; c=relaxed/simple;
+	bh=ZTldZJg3fSukQrYzsfoKKMopLHDHUG6BHoXEM47d4Dg=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=dTDuufA0qVhJs/84l00ca1FoQOk7Aw3ktJlFafLTHPwqBHEpz0dGNAmPrY55tRYU7l9/tyk5xhl7vUIG99namoYq+gt+trvF8VqVN7F+XHY+iAJUzTkUSXyOTBOtPZH37xEFOW3Y+0N7td+36++bFLuywM613xmXmZpd0FPH2Iw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ideasonboard.com; spf=pass smtp.mailfrom=ideasonboard.com; dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b=k04AlcJB; arc=none smtp.client-ip=213.167.242.64
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ideasonboard.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ideasonboard.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XWF4PwSs"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 33EAAC4CEF1;
-	Thu, 11 Sep 2025 08:15:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1757578547;
-	bh=MZkSNF729QqNTQj4q9PWDrOZg6xdXAe10HC4k5HQhA8=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=XWF4PwSs+H43I/a5ob6RMVM1e7DIddUYISGAQpdHdB80rrbiLOVmgcwYPDbdQnUnx
-	 omtvKRdXL9kTjEdlT/mA6jcklq7qN05N6uV9vCrQDL9vwf2XykyhKIe/72SVOdrx+A
-	 M7Ofe21pJ8uU3amFLq3Ax6U/b4wc38Lpy+nDSEAKq7mJut1cuyhKuyB4hcSPvxVZZc
-	 1iLX3srlsJ8AQTUL/+NQxW3+c4rSxYQDXBo0De6JI1YAEML44dP19+ZdA4PsVnYCWq
-	 SjViXlstokf3/Zj7+xaABT+0BnWcftX8znP6k27TosFQZFbWHmbojTAEUbEpqV+iWR
-	 BqXbC2lhEsZpA==
-Date: Thu, 11 Sep 2025 09:15:40 +0100
-From: Lee Jones <lee@kernel.org>
-To: Aleksandrs Vinarskis <alex@vinarskis.com>
-Cc: Hans de Goede <hansg@kernel.org>, Pavel Machek <pavel@kernel.org>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
-	Jingoo Han <jingoohan1@gmail.com>,
-	Mauro Carvalho Chehab <mchehab@kernel.org>,
-	Jean-Jacques Hiblot <jjhiblot@traphandler.com>,
-	Jacopo Mondi <jacopo@jmondi.org>,
-	Sakari Ailus <sakari.ailus@linux.intel.com>,
-	Bjorn Andersson <andersson@kernel.org>,
-	Konrad Dybcio <konradybcio@kernel.org>,
-	Daniel Thompson <danielt@kernel.org>, linux-leds@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-	dri-devel@lists.freedesktop.org, linux-media@vger.kernel.org,
-	linux-arm-msm@vger.kernel.org, threeway@gmail.com,
-	Andy Shevchenko <andy.shevchenko@gmail.com>,
-	Linus Walleij <linus.walleij@linaro.org>
-Subject: Re: [PATCH v5 3/4] leds: led-class: Add devicetree support to
- led_get()
-Message-ID: <20250911081540.GD9224@google.com>
-References: <20250910-leds-v5-0-bb90a0f897d5@vinarskis.com>
- <20250910-leds-v5-3-bb90a0f897d5@vinarskis.com>
+	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="k04AlcJB"
+Received: from mail.ideasonboard.com (unknown [IPv6:2401:4900:1c66:c9e9:75f9:f434:33cd:e4fe])
+	by perceval.ideasonboard.com (Postfix) with ESMTPSA id BD37A4A4;
+	Thu, 11 Sep 2025 10:14:30 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+	s=mail; t=1757578471;
+	bh=ZTldZJg3fSukQrYzsfoKKMopLHDHUG6BHoXEM47d4Dg=;
+	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
+	b=k04AlcJBc0pZH5GV8y4wvAJT9mghTY7WmhFOyiG5BPdzOHpX/9qKhOnyqE5cyxaNQ
+	 Bcc0MwePX/Gt8lLNtTqvUtW0DRS5CssO69BjXXlVA2WCNWdWJxmWjkAIpMPRFEc4zP
+	 I1MPiudpyIaEZ+6ZCzD/yeqexEzOmJxh7/NOzbWk=
+From: Jai Luthra <jai.luthra@ideasonboard.com>
+Date: Thu, 11 Sep 2025 13:44:23 +0530
+Subject: [PATCH v2 7/8] media: imx335: Support 2x2 binning
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20250910-leds-v5-3-bb90a0f897d5@vinarskis.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20250911-imx335_binning-v2-7-30a28df74df6@ideasonboard.com>
+References: <20250911-imx335_binning-v2-0-30a28df74df6@ideasonboard.com>
+In-Reply-To: <20250911-imx335_binning-v2-0-30a28df74df6@ideasonboard.com>
+To: Kieran Bingham <kieran.bingham@ideasonboard.com>, 
+ Sakari Ailus <sakari.ailus@linux.intel.com>, 
+ Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc: linux-media@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ Tommaso Merciai <tomm.merciai@gmail.com>
+X-Mailer: b4 0.14.2
+X-Developer-Signature: v=1; a=openpgp-sha256; l=15617;
+ i=jai.luthra@ideasonboard.com; h=from:subject:message-id;
+ bh=ZTldZJg3fSukQrYzsfoKKMopLHDHUG6BHoXEM47d4Dg=;
+ b=owEBbQKS/ZANAwAKAUPekfkkmnFFAcsmYgBowoTyXIoHsXINfi8MkIQlnN2zLt/IZ5VMOZ9Qm
+ IGTOkbLzSOJAjMEAAEKAB0WIQRN4NgY5dV16NRar8VD3pH5JJpxRQUCaMKE8gAKCRBD3pH5JJpx
+ RXuQD/93xwdCe18R+zBHXaTa1Hby5Rie00SXTUhD+5NnLDyLulOdm3iJUEC9X9vefRkovfG7lIh
+ o6Q+B1VI0YbfLVWhp41i/kZ006IoF3vKgmEXJEFc47yJhPFHpgM8mkwjUcddDlb9dVRh00BZbUu
+ E9u4Q/vzwKTI1UfpBgkK/el5gc99IcRWrPtpdzVBt0UzgyFR+xQ09bpz7EspWhqZq3BB/Qo3yRw
+ TTK3y3LAxoP+5Czm0e5KR6TiGD6cur9YYSUxiiSSqEDOnqmWg0vUW702EI3thowhfmDbow/osWF
+ bdNR92RulxzqyuJBdJEARnvd8g0ofICMPOv7p2kznWb/xWSLneoXDPvsiwIHuF/7QsF8Ue3jOp8
+ V32hojtKXl+P9KZjLQLd3XuZdEsqJM2BNXZ4x3Wkn9TRDbm9/2HeRQdLjRX0fpu0qNPEYTpKSZ7
+ xkoEgnG6cfd/95xz/rx36aADuuDOOVD2va+ocYa9fQF+23Pq3B4mKLYiueIJePW7TC46ykDua3m
+ EWRgJVmw8YF3Exqne9LtiKghpZJpRaHO+pAyrh6JQeOIChwdSCVSedLzXNahpyqWxwOZwAFMB2k
+ r+YdfymzLb/W9qqxLjBqV7q0jJIQaSiwokdjixXiPPvB18LCYLZt23YN2JCtjY2MZnBBJFnnOr+
+ 1H/rNSk92KpZJLw==
+X-Developer-Key: i=jai.luthra@ideasonboard.com; a=openpgp;
+ fpr=4DE0D818E5D575E8D45AAFC543DE91F9249A7145
 
-On Wed, 10 Sep 2025, Aleksandrs Vinarskis wrote:
+Introduce 2x2 binning mode (1312x972@60fps). Since there are multiple
+modes now, use v4l2_find_nearest_size() to select the appropriate mode
+in .set_fmt().
 
-> From: Hans de Goede <hansg@kernel.org>
-> 
-> Add 'name' argument to of_led_get() such that it can lookup LEDs in
-> devicetree by either name or index.
-> 
-> And use this modified function to add devicetree support to the generic
-> (non devicetree specific) [devm_]led_get() function.
-> 
-> This uses the standard devicetree pattern of adding a -names string array
-> to map names to the indexes for an array of resources.
-> 
-> Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
-> Reviewed-by: Lee Jones <lee@kernel.org>
+For 2x2 binning the minimum shutter value supported is 17 instead of 9.
+This effects the maximum allowed exposure time, and if not enforced then
+the sensor produces very dark frames when the minimum shutter limit is
+violated.
 
-Remind me why this can't go in through LED again?
+Lastly, update the crop size reported to the userspace. When trying 2x2
+binning with the datasheet suggested pixel array size (i.e. 2592 / 2 =>
+1296), on some platforms (Raspberry Pi 5) artefacts are introduced on
+the right edge of the output image. Instead, using a higher width of
+1312 works fine on all platforms.
 
-> Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
-> Signed-off-by: Hans de Goede <hansg@kernel.org>
-> Signed-off-by: Aleksandrs Vinarskis <alex@vinarskis.com>
-> ---
->  drivers/leds/led-class.c | 17 +++++++++++++++--
->  1 file changed, 15 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/leds/led-class.c b/drivers/leds/led-class.c
-> index 15633fbf3c166aa4f521774d245f6399a642bced..f3faf37f9a08ac762ed87b91cb3cab5faa8eacb0 100644
-> --- a/drivers/leds/led-class.c
-> +++ b/drivers/leds/led-class.c
-> @@ -252,15 +252,23 @@ static const struct class leds_class = {
->   * of_led_get() - request a LED device via the LED framework
->   * @np: device node to get the LED device from
->   * @index: the index of the LED
-> + * @name: the name of the LED used to map it to its function, if present
->   *
->   * Returns the LED device parsed from the phandle specified in the "leds"
->   * property of a device tree node or a negative error-code on failure.
->   */
-> -static struct led_classdev *of_led_get(struct device_node *np, int index)
-> +static struct led_classdev *of_led_get(struct device_node *np, int index,
-> +				       const char *name)
->  {
->  	struct device *led_dev;
->  	struct device_node *led_node;
->  
-> +	/*
-> +	 * For named LEDs, first look up the name in the "led-names" property.
-> +	 * If it cannot be found, then of_parse_phandle() will propagate the error.
-> +	 */
-> +	if (name)
-> +		index = of_property_match_string(np, "led-names", name);
->  	led_node = of_parse_phandle(np, "leds", index);
->  	if (!led_node)
->  		return ERR_PTR(-ENOENT);
-> @@ -324,7 +332,7 @@ struct led_classdev *__must_check devm_of_led_get(struct device *dev,
->  	if (!dev)
->  		return ERR_PTR(-EINVAL);
->  
-> -	led = of_led_get(dev->of_node, index);
-> +	led = of_led_get(dev->of_node, index, NULL);
->  	if (IS_ERR(led))
->  		return led;
->  
-> @@ -342,9 +350,14 @@ EXPORT_SYMBOL_GPL(devm_of_led_get);
->  struct led_classdev *led_get(struct device *dev, char *con_id)
->  {
->  	struct led_lookup_data *lookup;
-> +	struct led_classdev *led_cdev;
->  	const char *provider = NULL;
->  	struct device *led_dev;
->  
-> +	led_cdev = of_led_get(dev->of_node, -1, con_id);
-> +	if (!IS_ERR(led_cdev) || PTR_ERR(led_cdev) != -ENOENT)
-> +		return led_cdev;
-> +
->  	mutex_lock(&leds_lookup_lock);
->  	list_for_each_entry(lookup, &leds_lookup_list, list) {
->  		if (!strcmp(lookup->dev_id, dev_name(dev)) &&
-> 
-> -- 
-> 2.48.1
-> 
-> 
+Signed-off-by: Jai Luthra <jai.luthra@ideasonboard.com>
+---
+ drivers/media/i2c/imx335.c | 275 +++++++++++++++++++++++++++++++++++----------
+ 1 file changed, 217 insertions(+), 58 deletions(-)
+
+diff --git a/drivers/media/i2c/imx335.c b/drivers/media/i2c/imx335.c
+index 9b9bbe6473d545bc5618c0fe8191df0b18037cd8..c985edab7e2a965ccd9427b013cbb3fa8778de2b 100644
+--- a/drivers/media/i2c/imx335.c
++++ b/drivers/media/i2c/imx335.c
+@@ -35,6 +35,7 @@
+ 
+ /* Lines per frame */
+ #define IMX335_REG_VMAX			CCI_REG24_LE(0x3030)
++#define IMX335_REG_HMAX			CCI_REG16_LE(0x3034)
+ 
+ #define IMX335_REG_OPB_SIZE_V		CCI_REG8(0x304c)
+ #define IMX335_REG_ADBIT		CCI_REG8(0x3050)
+@@ -42,10 +43,13 @@
+ 
+ #define IMX335_REG_SHUTTER		CCI_REG24_LE(0x3058)
+ #define IMX335_EXPOSURE_MIN		1
+-#define IMX335_EXPOSURE_OFFSET		9
++#define IMX335_SHUTTER_MIN		9
++#define IMX335_SHUTTER_MIN_BINNED	17
+ #define IMX335_EXPOSURE_STEP		1
+ #define IMX335_EXPOSURE_DEFAULT		0x0648
+ 
++#define IMX335_REG_AREA2_WIDTH_1	CCI_REG16_LE(0x3072)
++
+ #define IMX335_REG_AREA3_ST_ADR_1	CCI_REG16_LE(0x3074)
+ #define IMX335_REG_AREA3_WIDTH_1	CCI_REG16_LE(0x3076)
+ 
+@@ -133,12 +137,11 @@ static const struct v4l2_rect imx335_native_area = {
+ 
+ static const struct v4l2_rect imx335_active_area = {
+ 	.top = 50,
+-	.left = 52,
+-	.width = 2592,
++	.left = 36,
++	.width = 2624,
+ 	.height = 1944,
+ };
+ 
+-
+ /**
+  * struct imx335_reg_list - imx335 sensor register list
+  * @num_of_regs: Number of registers in the list
+@@ -155,8 +158,14 @@ static const char * const imx335_supply_name[] = {
+ 	"dvdd", /* Digital Core (1.2V) supply */
+ };
+ 
++enum imx335_scan_mode {
++	IMX335_ALL_PIXEL,
++	IMX335_2_2_BINNING,
++};
++
+ /**
+  * struct imx335_mode - imx335 sensor mode structure
++ * @scan_mode: Configuration scan mode (All pixel / 2x2Binning)
+  * @width: Frame width
+  * @height: Frame height
+  * @code: Format code
+@@ -170,6 +179,7 @@ static const char * const imx335_supply_name[] = {
+  * @vflip_inverted: Register list vflip (inverted readout)
+  */
+ struct imx335_mode {
++	enum imx335_scan_mode scan_mode;
+ 	u32 width;
+ 	u32 height;
+ 	u32 code;
+@@ -271,12 +281,33 @@ static const struct cci_reg_sequence mode_2592x1944_regs[] = {
+ 	{ IMX335_REG_MODE_SELECT, IMX335_MODE_STANDBY },
+ 	{ IMX335_REG_MASTER_MODE, 0x00 },
+ 	{ IMX335_REG_WINMODE, 0x04 },
++	{ IMX335_REG_HMAX, 550 },
+ 	{ IMX335_REG_HTRIMMING_START, 48 },
+ 	{ IMX335_REG_HNUM, 2592 },
+ 	{ IMX335_REG_Y_OUT_SIZE, 1944 },
++	{ IMX335_REG_AREA2_WIDTH_1, 40 },
+ 	{ IMX335_REG_AREA3_WIDTH_1, 3928 },
+ 	{ IMX335_REG_OPB_SIZE_V, 0 },
+ 	{ IMX335_REG_XVS_XHS_DRV, 0x00 },
++};
++
++static const struct cci_reg_sequence mode_1312x972_regs[] = {
++	{ IMX335_REG_MODE_SELECT, IMX335_MODE_STANDBY },
++	{ IMX335_REG_MASTER_MODE, 0x00 },
++	{ IMX335_REG_WINMODE, 0x01 },
++	{ IMX335_REG_HMAX, 275 },
++	{ IMX335_REG_HTRIMMING_START, 48 },
++	{ IMX335_REG_HNUM, 2600 },
++	{ IMX335_REG_Y_OUT_SIZE, 972 },
++	{ IMX335_REG_AREA2_WIDTH_1, 48 },
++	{ IMX335_REG_AREA3_WIDTH_1, 3936 },
++	{ IMX335_REG_OPB_SIZE_V, 0 },
++	{ IMX335_REG_XVS_XHS_DRV, 0x00 },
++	{ CCI_REG8(0x3300), 1 }, /* TCYCLE */
++	{ CCI_REG8(0x3199), 0x30 }, /* HADD/VADD */
++};
++
++static const struct cci_reg_sequence imx335_common_regs[] = {
+ 	{ CCI_REG8(0x3288), 0x21 },
+ 	{ CCI_REG8(0x328a), 0x02 },
+ 	{ CCI_REG8(0x3414), 0x05 },
+@@ -367,16 +398,72 @@ static const struct cci_reg_sequence mode_2592x1944_vflip_inverted[] = {
+ 	{ CCI_REG16_LE(0x3116), 0x002 },
+ };
+ 
+-static const struct cci_reg_sequence raw10_framefmt_regs[] = {
+-	{ IMX335_REG_ADBIT, 0x00 },
+-	{ IMX335_REG_MDBIT, 0x00 },
+-	{ IMX335_REG_ADBIT1, 0x1ff },
++static const struct cci_reg_sequence mode_1312x972_vflip_normal[] = {
++	{ IMX335_REG_AREA3_ST_ADR_1, 176 },
++
++	/* Undocumented */
++	{ CCI_REG8(0x3078), 0x04 },
++	{ CCI_REG8(0x3079), 0xfd },
++	{ CCI_REG8(0x307a), 0x04 },
++	{ CCI_REG8(0x307b), 0xfe },
++	{ CCI_REG8(0x307c), 0x04 },
++	{ CCI_REG8(0x307d), 0xfb },
++	{ CCI_REG8(0x307e), 0x04 },
++	{ CCI_REG8(0x307f), 0x02 },
++	{ CCI_REG8(0x3080), 0x04, },
++	{ CCI_REG8(0x3081), 0xfd, },
++	{ CCI_REG8(0x3082), 0x04, },
++	{ CCI_REG8(0x3083), 0xfe, },
++	{ CCI_REG8(0x3084), 0x04, },
++	{ CCI_REG8(0x3085), 0xfb, },
++	{ CCI_REG8(0x3086), 0x04, },
++	{ CCI_REG8(0x3087), 0x02, },
++	{ CCI_REG8(0x30a4), 0x77, },
++	{ CCI_REG8(0x30a8), 0x20, },
++	{ CCI_REG8(0x30a9), 0x00, },
++	{ CCI_REG8(0x30ac), 0x08, },
++	{ CCI_REG8(0x30ad), 0x08, },
++	{ CCI_REG8(0x30b0), 0x20, },
++	{ CCI_REG8(0x30b1), 0x00, },
++	{ CCI_REG8(0x30b4), 0x10, },
++	{ CCI_REG8(0x30b5), 0x10, },
++	{ CCI_REG16_LE(0x30b6), 0x00 },
++	{ CCI_REG16_LE(0x3112), 0x10 },
++	{ CCI_REG16_LE(0x3116), 0x10 },
+ };
+ 
+-static const struct cci_reg_sequence raw12_framefmt_regs[] = {
+-	{ IMX335_REG_ADBIT, 0x01 },
+-	{ IMX335_REG_MDBIT, 0x01 },
+-	{ IMX335_REG_ADBIT1, 0x47 },
++static const struct cci_reg_sequence mode_1312x972_vflip_inverted[] = {
++	{ IMX335_REG_AREA3_ST_ADR_1, 4112 },
++
++	/* Undocumented */
++	{ CCI_REG8(0x3078), 0x04 },
++	{ CCI_REG8(0x3079), 0xfd },
++	{ CCI_REG8(0x307a), 0x04 },
++	{ CCI_REG8(0x307b), 0xfe },
++	{ CCI_REG8(0x307c), 0x04 },
++	{ CCI_REG8(0x307d), 0xfb },
++	{ CCI_REG8(0x307e), 0x04 },
++	{ CCI_REG8(0x307f), 0x02 },
++	{ CCI_REG8(0x3080), 0xfc, },
++	{ CCI_REG8(0x3081), 0x05, },
++	{ CCI_REG8(0x3082), 0xfc, },
++	{ CCI_REG8(0x3083), 0x02, },
++	{ CCI_REG8(0x3084), 0xfc, },
++	{ CCI_REG8(0x3085), 0x03, },
++	{ CCI_REG8(0x3086), 0xfc, },
++	{ CCI_REG8(0x3087), 0xfe, },
++	{ CCI_REG8(0x30a4), 0x77, },
++	{ CCI_REG8(0x30a8), 0x20, },
++	{ CCI_REG8(0x30a9), 0x00, },
++	{ CCI_REG8(0x30ac), 0x08, },
++	{ CCI_REG8(0x30ad), 0x78, },
++	{ CCI_REG8(0x30b0), 0x20, },
++	{ CCI_REG8(0x30b1), 0x00, },
++	{ CCI_REG8(0x30b4), 0x10, },
++	{ CCI_REG8(0x30b5), 0x70, },
++	{ CCI_REG16_LE(0x30b6), 0x01f2 },
++	{ CCI_REG16_LE(0x3112), 0x10 },
++	{ CCI_REG16_LE(0x3116), 0x02 },
+ };
+ 
+ static const struct cci_reg_sequence mipi_data_rate_1188Mbps[] = {
+@@ -441,25 +528,49 @@ static const u32 imx335_mbus_codes[] = {
+ };
+ 
+ /* Supported sensor mode configurations */
+-static const struct imx335_mode supported_mode = {
+-	.width = 2592,
+-	.height = 1944,
+-	.hblank = 342,
+-	.vblank = 2556,
+-	.vblank_min = 2556,
+-	.vblank_max = 133060,
+-	.pclk = 396000000,
+-	.reg_list = {
+-		.num_of_regs = ARRAY_SIZE(mode_2592x1944_regs),
+-		.regs = mode_2592x1944_regs,
+-	},
+-	.vflip_normal = {
+-		.num_of_regs = ARRAY_SIZE(mode_2592x1944_vflip_normal),
+-		.regs = mode_2592x1944_vflip_normal,
+-	},
+-	.vflip_inverted = {
+-		.num_of_regs = ARRAY_SIZE(mode_2592x1944_vflip_inverted),
+-		.regs = mode_2592x1944_vflip_inverted,
++static const struct imx335_mode supported_modes[] = {
++	{
++		.scan_mode = IMX335_ALL_PIXEL,
++		.width = 2592,
++		.height = 1944,
++		.hblank = 342,
++		.vblank = 2556,
++		.vblank_min = 2556,
++		.vblank_max = 133060,
++		.pclk = 396000000,
++		.reg_list = {
++			.num_of_regs = ARRAY_SIZE(mode_2592x1944_regs),
++			.regs = mode_2592x1944_regs,
++		},
++		.vflip_normal = {
++			.num_of_regs = ARRAY_SIZE(mode_2592x1944_vflip_normal),
++			.regs = mode_2592x1944_vflip_normal,
++		},
++		.vflip_inverted = {
++			.num_of_regs = ARRAY_SIZE(mode_2592x1944_vflip_inverted),
++			.regs = mode_2592x1944_vflip_inverted,
++		}
++	}, {
++		.scan_mode = IMX335_2_2_BINNING,
++		.width = 1312,
++		.height = 972,
++		.hblank = 155,
++		.vblank = 3528,
++		.vblank_min = 3528,
++		.vblank_max = 133060,
++		.pclk = 396000000,
++		.reg_list = {
++			.num_of_regs = ARRAY_SIZE(mode_1312x972_regs),
++			.regs = mode_1312x972_regs,
++		},
++		.vflip_normal = {
++			.num_of_regs = ARRAY_SIZE(mode_1312x972_vflip_normal),
++			.regs = mode_1312x972_vflip_normal,
++		},
++		.vflip_inverted = {
++			.num_of_regs = ARRAY_SIZE(mode_1312x972_vflip_inverted),
++			.regs = mode_1312x972_vflip_inverted,
++		},
+ 	},
+ };
+ 
+@@ -616,18 +727,22 @@ static int imx335_set_ctrl(struct v4l2_ctrl *ctrl)
+ 
+ 	/* Propagate change of current control to all related controls */
+ 	if (ctrl->id == V4L2_CID_VBLANK) {
++		u32 shutter_min = IMX335_SHUTTER_MIN;
++		u32 lpfr;
++
+ 		imx335->vblank = imx335->vblank_ctrl->val;
++		lpfr = imx335->vblank + imx335->cur_mode->height;
+ 
+ 		dev_dbg(imx335->dev, "Received vblank %u, new lpfr %u\n",
+-			imx335->vblank,
+-			imx335->vblank + imx335->cur_mode->height);
++			imx335->vblank, lpfr);
++
++		if (imx335->cur_mode->scan_mode == IMX335_2_2_BINNING)
++			shutter_min = IMX335_SHUTTER_MIN_BINNED;
+ 
+ 		ret = __v4l2_ctrl_modify_range(imx335->exp_ctrl,
+ 					       IMX335_EXPOSURE_MIN,
+-					       imx335->vblank +
+-					       imx335->cur_mode->height -
+-					       IMX335_EXPOSURE_OFFSET,
+-					       1, IMX335_EXPOSURE_DEFAULT);
++					       lpfr - shutter_min, 1,
++					       IMX335_EXPOSURE_DEFAULT);
+ 		if (ret)
+ 			return ret;
+ 	}
+@@ -727,17 +842,16 @@ static int imx335_enum_frame_size(struct v4l2_subdev *sd,
+ 	struct imx335 *imx335 = to_imx335(sd);
+ 	u32 code;
+ 
+-	/* Only a single supported_mode available. */
+-	if (fsize->index > 0)
++	if (fsize->index >= ARRAY_SIZE(supported_modes))
+ 		return -EINVAL;
+ 
+ 	code = imx335_get_format_code(imx335, fsize->code);
+ 	if (fsize->code != code)
+ 		return -EINVAL;
+ 
+-	fsize->min_width = supported_mode.width;
++	fsize->min_width = supported_modes[fsize->index].width;
+ 	fsize->max_width = fsize->min_width;
+-	fsize->min_height = supported_mode.height;
++	fsize->min_height = supported_modes[fsize->index].height;
+ 	fsize->max_height = fsize->min_height;
+ 
+ 	return 0;
+@@ -779,9 +893,13 @@ static int imx335_set_pad_format(struct v4l2_subdev *sd,
+ 	struct imx335 *imx335 = to_imx335(sd);
+ 	struct v4l2_mbus_framefmt *format;
+ 	const struct imx335_mode *mode;
++	struct v4l2_rect *crop;
+ 	int i, ret = 0;
+ 
+-	mode = &supported_mode;
++	mode = v4l2_find_nearest_size(supported_modes,
++				      ARRAY_SIZE(supported_modes),
++				      width, height,
++				      fmt->format.width, fmt->format.height);
+ 
+ 	for (i = 0; i < ARRAY_SIZE(imx335_mbus_codes); i++) {
+ 		if (imx335_mbus_codes[i] == fmt->format.code)
+@@ -793,6 +911,16 @@ static int imx335_set_pad_format(struct v4l2_subdev *sd,
+ 	format = v4l2_subdev_state_get_format(sd_state, fmt->pad);
+ 	*format = fmt->format;
+ 
++	crop = v4l2_subdev_state_get_crop(sd_state, fmt->pad);
++	crop->width = fmt->format.width;
++	crop->height = fmt->format.height;
++	if (mode->scan_mode == IMX335_2_2_BINNING) {
++		crop->width *= 2;
++		crop->height *= 2;
++	}
++	crop->left = (imx335_native_area.width - crop->width) / 2;
++	crop->top = (imx335_native_area.height - crop->height) / 2;
++
+ 	if (fmt->which == V4L2_SUBDEV_FORMAT_ACTIVE) {
+ 		ret = imx335_update_controls(imx335, mode);
+ 		if (!ret)
+@@ -816,7 +944,7 @@ static int imx335_init_state(struct v4l2_subdev *sd,
+ 	struct v4l2_subdev_format fmt = { 0 };
+ 
+ 	fmt.which = sd_state ? V4L2_SUBDEV_FORMAT_TRY : V4L2_SUBDEV_FORMAT_ACTIVE;
+-	imx335_fill_pad_format(imx335, &supported_mode, &fmt);
++	imx335_fill_pad_format(imx335, &supported_modes[0], &fmt);
+ 
+ 	__v4l2_ctrl_modify_range(imx335->link_freq_ctrl, 0,
+ 				 __fls(imx335->link_freq_bitmap),
+@@ -839,11 +967,15 @@ static int imx335_get_selection(struct v4l2_subdev *sd,
+ 				struct v4l2_subdev_selection *sel)
+ {
+ 	switch (sel->target) {
++	case V4L2_SEL_TGT_CROP:
++		sel->r = *v4l2_subdev_state_get_crop(sd_state, 0);
++
++		return 0;
++
+ 	case V4L2_SEL_TGT_NATIVE_SIZE:
+ 		sel->r = imx335_native_area;
+ 		return 0;
+ 
+-	case V4L2_SEL_TGT_CROP:
+ 	case V4L2_SEL_TGT_CROP_DEFAULT:
+ 	case V4L2_SEL_TGT_CROP_BOUNDS:
+ 		sel->r = imx335_active_area;
+@@ -855,19 +987,35 @@ static int imx335_get_selection(struct v4l2_subdev *sd,
+ 
+ static int imx335_set_framefmt(struct imx335 *imx335)
+ {
+-	switch (imx335->cur_mbus_code) {
+-	case MEDIA_BUS_FMT_SRGGB10_1X10:
+-		return cci_multi_reg_write(imx335->cci, raw10_framefmt_regs,
+-					   ARRAY_SIZE(raw10_framefmt_regs),
+-					   NULL);
+-
+-	case MEDIA_BUS_FMT_SRGGB12_1X12:
+-		return cci_multi_reg_write(imx335->cci, raw12_framefmt_regs,
+-					   ARRAY_SIZE(raw12_framefmt_regs),
+-					   NULL);
++	/*
++	 * In the all-pixel scan mode the AD conversion shall match the output
++	 * bit width requested.
++	 *
++	 * However, when 2/2 binning is enabled, the AD conversion is always
++	 * 10-bit, so we ensure ADBIT is clear and ADBIT1 is assigned 0x1ff.
++	 * That's as much as the documentation gives us...
++	 */
++	int ret = 0;
++	u8 bpp = imx335->cur_mbus_code == MEDIA_BUS_FMT_SRGGB10_1X10 ? 10 : 12;
++	u8 ad_conv = bpp;
++
++	/* Start with the output mode */
++	cci_write(imx335->cci, IMX335_REG_MDBIT, bpp == 12, &ret);
++
++	/* Enforce 10 bit AD on binning modes */
++	if (imx335->cur_mode->scan_mode == IMX335_2_2_BINNING)
++		ad_conv = 10;
++
++	/* AD Conversion configuration */
++	if (ad_conv == 10) {
++		cci_write(imx335->cci, IMX335_REG_ADBIT, 0x00, &ret);
++		cci_write(imx335->cci, IMX335_REG_ADBIT1, 0x1ff, &ret);
++	} else { /* 12 bit AD Conversion */
++		cci_write(imx335->cci, IMX335_REG_ADBIT, 0x01, &ret);
++		cci_write(imx335->cci, IMX335_REG_ADBIT1, 0x47, &ret);
+ 	}
+ 
+-	return -EINVAL;
++	return ret;
+ }
+ 
+ /**
+@@ -903,6 +1051,14 @@ static int imx335_start_streaming(struct imx335 *imx335)
+ 		goto err_rpm_put;
+ 	}
+ 
++	/* Write sensor common registers */
++	ret = cci_multi_reg_write(imx335->cci, imx335_common_regs,
++				  ARRAY_SIZE(imx335_common_regs), NULL);
++	if (ret) {
++		dev_err(imx335->dev, "fail to write initial registers\n");
++		goto err_rpm_put;
++	}
++
+ 	ret = imx335_set_framefmt(imx335);
+ 	if (ret) {
+ 		dev_err(imx335->dev, "%s failed to set frame format: %d\n",
+@@ -1184,7 +1340,7 @@ static int imx335_init_controls(struct imx335 *imx335)
+ 	struct v4l2_ctrl_handler *ctrl_hdlr = &imx335->ctrl_handler;
+ 	const struct imx335_mode *mode = imx335->cur_mode;
+ 	struct v4l2_fwnode_device_properties props;
+-	u32 lpfr;
++	u32 lpfr, shutter_min;
+ 	int ret;
+ 
+ 	ret = v4l2_fwnode_device_parse(imx335->dev, &props);
+@@ -1198,11 +1354,14 @@ static int imx335_init_controls(struct imx335 *imx335)
+ 
+ 	/* Initialize exposure and gain */
+ 	lpfr = mode->vblank + mode->height;
++	shutter_min = IMX335_SHUTTER_MIN;
++	if (mode->scan_mode == IMX335_2_2_BINNING)
++		shutter_min = IMX335_SHUTTER_MIN_BINNED;
+ 	imx335->exp_ctrl = v4l2_ctrl_new_std(ctrl_hdlr,
+ 					     &imx335_ctrl_ops,
+ 					     V4L2_CID_EXPOSURE,
+ 					     IMX335_EXPOSURE_MIN,
+-					     lpfr - IMX335_EXPOSURE_OFFSET,
++					     lpfr - shutter_min,
+ 					     IMX335_EXPOSURE_STEP,
+ 					     IMX335_EXPOSURE_DEFAULT);
+ 
+@@ -1329,7 +1488,7 @@ static int imx335_probe(struct i2c_client *client)
+ 	}
+ 
+ 	/* Set default mode to max resolution */
+-	imx335->cur_mode = &supported_mode;
++	imx335->cur_mode = &supported_modes[0];
+ 	imx335->cur_mbus_code = imx335_mbus_codes[0];
+ 	imx335->vblank = imx335->cur_mode->vblank;
+ 
 
 -- 
-Lee Jones [李琼斯]
+2.51.0
+
