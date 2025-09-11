@@ -1,146 +1,139 @@
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+Received: from fllvem-ot03.ext.ti.com (fllvem-ot03.ext.ti.com [198.47.19.245])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 672B123BD02
-	for <linux-media@vger.kernel.org>; Thu, 11 Sep 2025 10:16:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0E18B31159E;
+	Thu, 11 Sep 2025 10:29:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.47.19.245
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757585762; cv=none; b=aKDyu11mUBrzoraUGQroCbMwQeiDB/5U7jC9SL8LxrcRARSGd7G6xC53rciCbO3YQHlt+Co2X6ammtyDdRWP/FJry/7USySEbFPhvEDOwmhIpFnCGfMV2OYx3xyMrxXJowLsRV0wLkhO01Wx+qtXKDfKgNLXXhUHhYa01b4ssG8=
+	t=1757586567; cv=none; b=XjSVxfVm3JpDw/g46w8MyVGDF+kh9WBqVVrlh5yLVnejF8VIA5a29ZWdiE4ncux9IanXBKexF2P5n/Q8WBMLej3S5JiT/VWS0YTaoLXi6+d/Ow2xdJg2FN5iA367BHtSZvZbUTBiSY33XSbAXakhgBvz1F/w17mJ9NBON5dbhfA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757585762; c=relaxed/simple;
-	bh=ca2ySU4dyYlyOWJGaxHKU1ZLVW/b67pBynQ6HDMkqQY=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=WKay1iYgT+aXQ9xaW3UZYZQWqoIbhBoNoQ2x631hSaSTkwrmXZDrUhInjysfQdiwXsi9LZk7S9IY5WBfZ5B21jka9wWPIMpGboDFY5nzTRlxZqdfzDgyY5Cfeu5Y7bxBNpQJL74rM5GFN0lt9jUcHsbuNxdDYzBO42TO0DArG3U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=eAM12sLK; arc=none smtp.client-ip=205.220.180.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
+	s=arc-20240116; t=1757586567; c=relaxed/simple;
+	bh=1lg+IxVCNbAmPARiuPEFwAN+20mIakKwBhxEotv7hHg=;
+	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=Lo5ksuaS1bhrCXcqOT1a4QpVuqUc/y8B+ju7fwxCaEcQdmQBQB3tWPVyochO6NuYPBTN1qMp3Z4IpIbcQl8W8y9dEQP0//wYdRSb0Xws4J30tMzRioK8CanWTVoheqgzQfLrg/9umwUPlCJXLX2wdRIZfWtEEM/qxNVE1j1APKI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com; spf=pass smtp.mailfrom=ti.com; dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b=ieu2KQHP; arc=none smtp.client-ip=198.47.19.245
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ti.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="eAM12sLK"
-Received: from pps.filterd (m0279872.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 58B2IuJm002518
-	for <linux-media@vger.kernel.org>; Thu, 11 Sep 2025 10:15:59 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
-	cc:content-type:date:from:in-reply-to:message-id:mime-version
-	:references:subject:to; s=qcppdkim1; bh=oph/BqXdzMBPwBrMip4MvFuk
-	jtsewo8GJDCyXuPq3cc=; b=eAM12sLKRw7iHA4nK7P0RsTQpfsV6QY9XETeZn3G
-	UVIE2cPKj7JMqzAzfTrqecqCZw8BRXTrfl0dv7VkVDpH2gdQwye0xgVxCfwxn3vg
-	e8IXG0wo/pnmkmPYNxf1kgY8PeBawUXunhzz5IkfZFWwd3h+qYudDviRl8VIIzeo
-	fKk2qDnJrPGMt5JeBWs7B7tMV30KtgxXNw1yWd0iHH14snWTAhF2dbKy0JDp8A0p
-	8BAyy12bbX/BBo5O4pK1oyM6j/o1EVr6O3H5jKZlyIshw7yTR7s8sFAeKwKbbQ9G
-	mu/gGN3eK6Kj6NLxqc6l5nbM5WevE352xJjwO4goTBplNA==
-Received: from mail-qt1-f199.google.com (mail-qt1-f199.google.com [209.85.160.199])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 490db8q9cy-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-	for <linux-media@vger.kernel.org>; Thu, 11 Sep 2025 10:15:59 +0000 (GMT)
-Received: by mail-qt1-f199.google.com with SMTP id d75a77b69052e-4b5e9b60ce6so15892481cf.2
-        for <linux-media@vger.kernel.org>; Thu, 11 Sep 2025 03:15:59 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1757585758; x=1758190558;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=oph/BqXdzMBPwBrMip4MvFukjtsewo8GJDCyXuPq3cc=;
-        b=hDS3pQFXAczYr9RrC8OORl1h5yWiJ1DuFjPWbx2wpogV2Lwf3uzFjVIg1wY7kRys8J
-         Savew2QvEgphrXOEA50XiIjIgFH6R0XAIZvVguKOEPB8ze756uWxQIOnl74Wt8M8XQNs
-         XTG3eIjFRIqfvD6ASukS++X3Emov2R5/5rsPCg8M4n0p2UYbdOFQRd/YVcYO42+WLs1m
-         v/ZpzaKtqJhnrzpqxCLugqjTH9+SVSdqL2BEK7feUA5myABOY7y7XYtGclmitfjpL05+
-         s/BK03MrK5uWCu1ctXoxwAj4W469tc87V/hLcbN1Ew5PepZ99JdBDydvHJrybAE7XVb6
-         yohA==
-X-Forwarded-Encrypted: i=1; AJvYcCXQhslFX8hY5JROLbaAPR6tRTpe5ikJJOcOnyzBYRT2X/8Fpv80URx52/pO/Qcx/4n13pPdoM2QJjvlhQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz6thV249v+Un4Z1HgmgHj/vsBTtbEFLbWqlXMzHUMhzCD0mR3W
-	pfwMFCDNh47nn0Kp32Qwcfl6HnDnek3Y8+L/68fNl93EweX4QgrWCGbQdnb1fX5BYVsZEc57NsS
-	G1bJ5bYyH4WOm5Wkufvs8vydHay7X4TvmR3gHsJ/gbxCDMZpzvuz41jhCvbwP09zW0Q==
-X-Gm-Gg: ASbGnctGs8ZqhSaTnF6UpamOdCTWJXDzR0rytqTdIxdUDdtgMZa5L1A4reaadNlKbOq
-	7dbUcdrcGNXUQ6LlYipxZFdfVJiK42BB7qfvl9CoUYAlpvZv8lXACgrGOm1k4Jblw45KHgqaEQ7
-	m/nVmzhMaVnkw2HxmtKEUAtu1d3oTx1tdIhr8Stdo1AYo4s7XH3cetakZCY0aWUzJWi9wLXaSYr
-	kXn/j3L52qS3KNRMU+jMwUFJdpy3ut1y5XmTiG2BN1M2yTOnig6zfn9AafJQhkZSK/bPBC6mA2x
-	SgMxb+oFnBxuvJ9Ug1Cv07/8B7Bk34/B+a5bR4TFJvmxw1vdB22+2RCFUM/Kqa2D+w+8FA3cV0x
-	LitaA93kA0AN8nCWRRjKftBRr7pgQFInSc9iWvIFBVRINsXUhD87R
-X-Received: by 2002:a05:622a:a953:10b0:4b0:8890:105e with SMTP id d75a77b69052e-4b621507117mr87845231cf.2.1757585758267;
-        Thu, 11 Sep 2025 03:15:58 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IE+FP/EvbksufoGB7yZt87mFGo9Mn7VdVzO2soInO78NzAyreFx9DhQ6rNkNHS/PzrUOKTl/g==
-X-Received: by 2002:a05:622a:a953:10b0:4b0:8890:105e with SMTP id d75a77b69052e-4b621507117mr87844921cf.2.1757585757776;
-        Thu, 11 Sep 2025 03:15:57 -0700 (PDT)
-Received: from umbar.lan (2001-14ba-a0c3-3a00-264b-feff-fe8b-be8a.rev.dnainternet.fi. [2001:14ba:a0c3:3a00:264b:feff:fe8b:be8a])
-        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-56e65d11926sm321542e87.140.2025.09.11.03.15.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 11 Sep 2025 03:15:56 -0700 (PDT)
-Date: Thu, 11 Sep 2025 13:15:55 +0300
-From: Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>
-To: Wenmeng Liu <quic_wenmliu@qualcomm.com>
-Cc: Loic Poulain <loic.poulain@oss.qualcomm.com>,
-        Robert Foss <rfoss@kernel.org>, Andi Shyti <andi.shyti@kernel.org>,
-        Rob Herring <robh@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konradybcio@kernel.org>, todor.too@gmail.com,
-        bryan.odonoghue@linaro.org, vladimir.zapolskiy@linaro.org,
-        linux-i2c@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-media@vger.kernel.org,
-        Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
-Subject: Re: [PATCH v4 3/3] arm64: dts: qcom: lemans-evk-camera: Add DT
- overlay
-Message-ID: <srawt2oh3hcevopcrvpnmbocw4wknaytyvxt6yjmnet3yujupr@ub3t36ffbrcx>
-References: <20250910-camss_rb8-v4-0-28f44e1880b8@oss.qualcomm.com>
- <20250910-camss_rb8-v4-3-28f44e1880b8@oss.qualcomm.com>
- <u437qomhok4yg6pef4xttd3a6zibuybzaeys33gxu5frbyp2kp@mgmym6c5dr72>
- <8b194a19-182f-4f49-9427-c0044a9b4dfe@qualcomm.com>
+	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="ieu2KQHP"
+Received: from fllvem-sh03.itg.ti.com ([10.64.41.86])
+	by fllvem-ot03.ext.ti.com (8.15.2/8.15.2) with ESMTP id 58BASm0I273344;
+	Thu, 11 Sep 2025 05:28:48 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+	s=ti-com-17Q1; t=1757586528;
+	bh=sw+Y9HK+OCX/ewgJm+ovgqlmo96LecCzbzk1/NOhJb0=;
+	h=From:To:CC:Subject:Date:In-Reply-To:References;
+	b=ieu2KQHPC1VxkwAOxdF+GiOajbNoanjs85kXTO4yYyCpPt9nnVYlkSDzoGoCqs3oF
+	 sCZBXmU86HBHl07f1FPBNSN3Fd+ZFNVbSnxf/mxzQVAWHCtYJLZc/9wRz7nN0Kqd6N
+	 gDHqrPssjJ5LYnjMo3RJG4YT7psvPdxeAna6zvUM=
+Received: from DLEE102.ent.ti.com (dlee102.ent.ti.com [157.170.170.32])
+	by fllvem-sh03.itg.ti.com (8.18.1/8.18.1) with ESMTPS id 58BASmqH1091583
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-SHA256 bits=128 verify=FAIL);
+	Thu, 11 Sep 2025 05:28:48 -0500
+Received: from DLEE208.ent.ti.com (157.170.170.97) by DLEE102.ent.ti.com
+ (157.170.170.32) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.55; Thu, 11
+ Sep 2025 05:28:47 -0500
+Received: from lelvem-mr05.itg.ti.com (10.180.75.9) by DLEE208.ent.ti.com
+ (157.170.170.97) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.20 via Frontend
+ Transport; Thu, 11 Sep 2025 05:28:47 -0500
+Received: from ws.dhcp.ti.com (ws.dhcp.ti.com [172.24.233.149])
+	by lelvem-mr05.itg.ti.com (8.18.1/8.18.1) with ESMTP id 58BASXbf1985821;
+	Thu, 11 Sep 2025 05:28:41 -0500
+From: Rishikesh Donadkar <r-donadkar@ti.com>
+To: <jai.luthra@linux.dev>, <laurent.pinchart@ideasonboard.com>,
+        <mripard@kernel.org>
+CC: <r-donadkar@ti.com>, <y-abhilashchandra@ti.com>, <devarsht@ti.com>,
+        <s-jain1@ti.com>, <vigneshr@ti.com>, <mchehab@kernel.org>,
+        <robh@kernel.org>, <krzk+dt@kernel.org>, <p.zabel@pengutronix.de>,
+        <conor+dt@kernel.org>, <sakari.ailus@linux.intel.com>,
+        <hverkuil-cisco@xs4all.nl>, <tomi.valkeinen@ideasonboard.com>,
+        <jai.luthra@ideasonboard.com>, <changhuang.liang@starfivetech.com>,
+        <jack.zhu@starfivetech.com>, <sjoerd@collabora.com>,
+        <hverkuil+cisco@kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-media@vger.kernel.org>, <devicetree@vger.kernel.org>
+Subject: [PATCH v7 01/16] media: ti: j721e-csi2rx: Remove word size alignment on frame width
+Date: Thu, 11 Sep 2025 15:58:17 +0530
+Message-ID: <20250911102832.1583440-2-r-donadkar@ti.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20250911102832.1583440-1-r-donadkar@ti.com>
+References: <20250911102832.1583440-1-r-donadkar@ti.com>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <8b194a19-182f-4f49-9427-c0044a9b4dfe@qualcomm.com>
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwOTA2MDAzMSBTYWx0ZWRfX/vFy1YUs9gEV
- 4lijDZpweBFez/1iuiqQVUtT+UXt2TJ698rVCFvrhCR/ecw1b51reqyP7v7IuayJmoWW0Cmw6e0
- d526QE1GjRwIaIljXPRpzW/4oAMAlkR1V273rbfEndNIs1zi6BV10vj/nrI2B+aDLa5JUAbcsrr
- kEmGDfO8oIUz+Xr8FII4o5XAi6PD5OMUDI4C30pwSHfsuXc0a91UByHw/Ep2pkfJ6MplRSvWLza
- +sMwEb8qFOuh7JdeiL86K+LV2j20Cn9Vies/1yCH2M5PqpNlszdEIcZ+YEq7s5pi0Ka21zhubfr
- QbP1Ob37unfvOgaI8THJYMxi+8ymkU3O4T5J/u/biLLgP8CJFV124Bustd4iM639ORvuVdim1R5
- numtVSKt
-X-Proofpoint-ORIG-GUID: 7_LEWOE_uJ_L7-jYFjVC7y0Tp5gqpR1f
-X-Proofpoint-GUID: 7_LEWOE_uJ_L7-jYFjVC7y0Tp5gqpR1f
-X-Authority-Analysis: v=2.4 cv=VIDdn8PX c=1 sm=1 tr=0 ts=68c2a15f cx=c_pps
- a=WeENfcodrlLV9YRTxbY/uA==:117 a=xqWC_Br6kY4A:10 a=kj9zAlcOel0A:10
- a=yJojWOMRYYMA:10 a=lHPSLNiHg4AawE14pKwA:9 a=CjuIK1q_8ugA:10
- a=kacYvNCVWA4VmyqE58fU:22
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1117,Hydra:6.1.9,FMLib:17.12.80.40
- definitions=2025-09-10_04,2025-09-11_01,2025-03-28_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- priorityscore=1501 malwarescore=0 spamscore=0 suspectscore=0 bulkscore=0
- phishscore=0 adultscore=0 clxscore=1015 impostorscore=0
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.19.0-2507300000 definitions=main-2509060031
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-C2ProcessedOrg: 333ef613-75bf-4e12-a4b1-8e3623f5dcea
 
-On Thu, Sep 11, 2025 at 01:45:59PM +0800, Wenmeng Liu wrote:
-> 
-> 
-> On 9/10/2025 11:23 PM, Dmitry Baryshkov wrote:
-> > On Wed, Sep 10, 2025 at 07:06:23PM +0800, Wenmeng Liu wrote:
-> > > Enable IMX577 via CCI1 on LeMans EVK Core Kit.
-> > 
-> > Is it a part of the Core Kit? Is it a part of some kind of mezzanine
-> > board? Why is it being enabled as an overlay instead of being a part of
-> > lemans-evk.dts?
-> > 
-> Since the sensor is not part of the default hardware configuration on the
-> core kit, we adopt a device tree overlay solution to enable its integration
-> dynamically.
+j721e-csi2rx driver has a limitation of frame width being a multiple
+word size. However, there is no such limitation imposed by the
+hardware [1].
 
-This is less helpful than a similar response to the similar monaco-evk
-question.
+Remove this limitation from the driver.
 
-Is it the only configuration that we are going to support? If not, then
-the overlay should be named accordingly.
+Link: https://www.ti.com/lit/pdf/spruj16
+Reviewed-by: Yemike Abhilash Chandra <y-abhilashchandra@ti.com>
+Signed-off-by: Rishikesh Donadkar <r-donadkar@ti.com>
+---
+ .../platform/ti/j721e-csi2rx/j721e-csi2rx.c   | 23 ++++---------------
+ 1 file changed, 4 insertions(+), 19 deletions(-)
 
-These details should be described in the commit message.
-
+diff --git a/drivers/media/platform/ti/j721e-csi2rx/j721e-csi2rx.c b/drivers/media/platform/ti/j721e-csi2rx/j721e-csi2rx.c
+index 3992f8b754b7..6a981b5f5d51 100644
+--- a/drivers/media/platform/ti/j721e-csi2rx/j721e-csi2rx.c
++++ b/drivers/media/platform/ti/j721e-csi2rx/j721e-csi2rx.c
+@@ -250,19 +250,12 @@ static void ti_csi2rx_fill_fmt(const struct ti_csi2rx_fmt *csi_fmt,
+ 			       struct v4l2_format *v4l2_fmt)
+ {
+ 	struct v4l2_pix_format *pix = &v4l2_fmt->fmt.pix;
+-	unsigned int pixels_in_word;
+-
+-	pixels_in_word = PSIL_WORD_SIZE_BYTES * 8 / csi_fmt->bpp;
+ 
+ 	/* Clamp width and height to sensible maximums (16K x 16K) */
+ 	pix->width = clamp_t(unsigned int, pix->width,
+-			     pixels_in_word,
+-			     MAX_WIDTH_BYTES * 8 / csi_fmt->bpp);
++			     1, MAX_WIDTH_BYTES * 8 / csi_fmt->bpp);
+ 	pix->height = clamp_t(unsigned int, pix->height, 1, MAX_HEIGHT_LINES);
+ 
+-	/* Width should be a multiple of transfer word-size */
+-	pix->width = rounddown(pix->width, pixels_in_word);
+-
+ 	v4l2_fmt->type = V4L2_BUF_TYPE_VIDEO_CAPTURE;
+ 	pix->pixelformat = csi_fmt->fourcc;
+ 	pix->bytesperline = pix->width * (csi_fmt->bpp / 8);
+@@ -360,23 +353,15 @@ static int ti_csi2rx_enum_framesizes(struct file *file, void *fh,
+ 				     struct v4l2_frmsizeenum *fsize)
+ {
+ 	const struct ti_csi2rx_fmt *fmt;
+-	unsigned int pixels_in_word;
+ 
+ 	fmt = find_format_by_fourcc(fsize->pixel_format);
+ 	if (!fmt || fsize->index != 0)
+ 		return -EINVAL;
+ 
+-	/*
+-	 * Number of pixels in one PSI-L word. The transfer happens in multiples
+-	 * of PSI-L word sizes.
+-	 */
+-	pixels_in_word = PSIL_WORD_SIZE_BYTES * 8 / fmt->bpp;
+-
+ 	fsize->type = V4L2_FRMSIZE_TYPE_STEPWISE;
+-	fsize->stepwise.min_width = pixels_in_word;
+-	fsize->stepwise.max_width = rounddown(MAX_WIDTH_BYTES * 8 / fmt->bpp,
+-					      pixels_in_word);
+-	fsize->stepwise.step_width = pixels_in_word;
++	fsize->stepwise.min_width = 1;
++	fsize->stepwise.max_width = MAX_WIDTH_BYTES * 8 / fmt->bpp;
++	fsize->stepwise.step_width = 1;
+ 	fsize->stepwise.min_height = 1;
+ 	fsize->stepwise.max_height = MAX_HEIGHT_LINES;
+ 	fsize->stepwise.step_height = 1;
 -- 
-With best wishes
-Dmitry
+2.34.1
+
