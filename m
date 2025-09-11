@@ -1,215 +1,160 @@
-Received: from mail-wm1-f45.google.com (mail-wm1-f45.google.com [209.85.128.45])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from bali.collaboradmins.com (bali.collaboradmins.com [148.251.105.195])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 17481322536
-	for <linux-media@vger.kernel.org>; Thu, 11 Sep 2025 15:52:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 67B3C345726;
+	Thu, 11 Sep 2025 15:57:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.251.105.195
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757605964; cv=none; b=g48PeZmpnqEVl4QFFtajDxxFCbx+zkjyCE92Gr5xxBx87nW46t+rWxLL7FMjwXIY+MLsR2IQEypu4KBYAOw0GskD39BFAXJ9YqPFZbeb7FUkLH3bTNdho/pmydf2MbL2iV6yMDLUcSGE9i7tyUHJY9JvFS31uCplCI1jqlqTsY4=
+	t=1757606251; cv=none; b=n3FD8gmuGT0dcbkRrgg042KCjga5yKuaE9EnobmuJz+TgByJuKr/7kdILaFGzEfisDIIocJQgYQoDtAm0gc9FwDN1bw0y6JRZbOJEDG+eYZYB2EE2mMjSAhHEViHH5YEnGTkDYNJ+ngVFm21OlY4SiXpfkmJ8HINQdlWO+F0Hpg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757605964; c=relaxed/simple;
-	bh=foMaJCpT5aQB0DVDGayrfvczYmTKtjYQaxnfqBcxeQk=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Y9R6Xe1yrYK6mdC8ZSyLxF3q39k6jcV+OQLfhsrHUmIicDOrmNFapClOQ9M4YHdQPMzrgNzImDMxNWNTJA8IzSTmYua3QLQ2wD/uupvQVyYrehPKgme2/KmH2S3nFESEqWw2MOVax6krWBokYd556WK6mRu3P7CTuIGkxEbo0bM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=lyVGzEBJ; arc=none smtp.client-ip=209.85.128.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	s=arc-20240116; t=1757606251; c=relaxed/simple;
+	bh=heh+k/1ODoaxXv2R5HPjXJm6oybJcbQZVD3EyshC35g=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=A1KBFHa4sfpNvn0klibfqiYGqlOYni0BwUL4eumEiBLnQk9HKYNfPBXW43W7HkCFxm4Cn6g7QUz7JGzpid2Dbr5vZMBMwauWovAmP4Aw0ubfFGWW/Ru6M3wcrVHy9w7C/T0fY1b5ujuRiXkONdlRyp04WP30NGl2IIkXCnMAr/4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=GHbuWtUc; arc=none smtp.client-ip=148.251.105.195
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="lyVGzEBJ"
-Received: by mail-wm1-f45.google.com with SMTP id 5b1f17b1804b1-45dd9d72f61so103205e9.0
-        for <linux-media@vger.kernel.org>; Thu, 11 Sep 2025 08:52:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1757605959; x=1758210759; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=foMaJCpT5aQB0DVDGayrfvczYmTKtjYQaxnfqBcxeQk=;
-        b=lyVGzEBJZWsKaIbB3apC5mC2zHl9kkzUAsPP9DKFYnMfWl8Kcl75ils8I25fa0jEdL
-         wVV3/oXxepXtxPJmiTrVkTGXe5sYtv7fyOObJ18tjr3cfnSkwOKj1doCSU+/pLI1tW6n
-         itrLyT7f9zzoVLe+e/v1sGtkT6AAn827J6GzKgp/VYcwEvoxLPEHJ418lc0pu3Omu1O1
-         Oe/mUBIjm7uc4x/erbCsV3twb4BJeAy3iik0acxe63mkytm0cPvVNc4B6iHxBFNl2bmc
-         3p7C9socHqRpVDsc8lgiFrcuCKVoSItNFESV4e2SD3IEW7qhfQtPXgCtPVDWzhYsoDFW
-         mtqA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1757605959; x=1758210759;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=foMaJCpT5aQB0DVDGayrfvczYmTKtjYQaxnfqBcxeQk=;
-        b=a+qmfBgrbgDiokkef6pzO6jdtAbvCV97HykmhstY7hFijSO8KtyubOJDS7U1Pp5Axp
-         apTXHeBcPQfDHINVRoreH45AVMrjQUt/2l2/b//667TCxlRGqPjX3s02z3Jfs0sUHJmR
-         L04BXcZ9Geq6g02YK0yAgEDpbE5RGc1u3KxLx54i4jCd3H1b3xTB3sLII3GE3h+UMJdL
-         ZVdgNGuhFLLDKDnNwxZ/R6ceJCpCSa94JHoIGGOOO1qM9ywGljU5brdcLggxNZTegBMV
-         NShvtRzRssmmwyXb4uaCycKoVO6QPAXKkt9PnFBestk9rEVUkUZTuoF2q5aivsUYRW5p
-         m8rw==
-X-Forwarded-Encrypted: i=1; AJvYcCUvwDzO5DVJyYU7wbanEizsSDyoBhuRSak8qc6sH0gND4GYfjCYIyOOOS8WKraQ/rTPEfwue4o1Ci7ATg==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw+/9GIbL165T7bgAH59wIcYW5IK8EPYr/v7EtD2JLQYu6YTMNW
-	xytB2TA/UgHB72F4rY7MFJ8OI6iX+yaVJDQqrJVO5LDlGM85H4vzmeIt6LTBC0pw/sOMkhCSWCk
-	mnFPJiSfZmsjIzcBu3ug67AYuzsA4VJsod1Cy7BO/
-X-Gm-Gg: ASbGnctYUXvRFYz91EbdMPm8ozcnT27YvrLb2pB7IHfZBhusE1MEG97n/VkXBGMQd6q
-	WcIQQ/R27kZ12wgISkaW3HQ7J8JYxFFaNMeDg5OXPQOV46iIX3VudaBxVFYn0CDY1s/CjIuFdTs
-	GyV0l5CZxg7dQ3qCCmgdLc9+LtSbYNoNS1jbZgbY6N8rLxyayS4b6W9Dg65hwieeh6bkSC0FAx6
-	oqrpMHo8ItIrxDtfIiGov6K2Y8wfq3oiNiIQ/7E9KM=
-X-Google-Smtp-Source: AGHT+IFPtXGS3xfleXOqxUh4NB8MIkaUyVVSq3pObyoX2WKiKcEimPgaW/wvhaqmwPl3cn8wFgGAwaPg27+INgq99jg=
-X-Received: by 2002:a05:600c:4193:b0:45c:b621:9199 with SMTP id
- 5b1f17b1804b1-45df821ead8mr2846075e9.7.1757605959182; Thu, 11 Sep 2025
- 08:52:39 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="GHbuWtUc"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+	s=mail; t=1757606247;
+	bh=heh+k/1ODoaxXv2R5HPjXJm6oybJcbQZVD3EyshC35g=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=GHbuWtUcRVBoVaUx/NKmcy08pY/B8d5VQ27aFIwvZvgK8Gy9moE1hd95mLTpWD56I
+	 hbXUrRJ13vJL4n0J5WDMVjIHYkwCyREl9taUOgvULJFDxBlYTz5ovyqrV+bLxE23Ny
+	 blTviMbeJK1mYGAB75zb35jG4oL+tnoCy8ubiasiLBaIwYHhQe7XKEvzKFYGldMB0W
+	 ZISUzLXeFuGH6TYSW3imANRzw4ri947YdJ5CxHBj2zeEPmuVSxtpGBQ6eC5XWCmQ3u
+	 p4aGRfBm89qgewn3I5/Y4q9wtX2GpRU6Bk4OgPiJNMpvkFuPAQBjQOvKnlq7vV+Gzm
+	 k3joLjrg19y9A==
+Received: from benjamin-XPS-13-9310.. (unknown [IPv6:2a01:e0a:120:3210:36e5:357f:56a7:54dd])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: benjamin.gaignard)
+	by bali.collaboradmins.com (Postfix) with ESMTPSA id 59F4517E1091;
+	Thu, 11 Sep 2025 17:57:27 +0200 (CEST)
+From: Benjamin Gaignard <benjamin.gaignard@collabora.com>
+To: joro@8bytes.org,
+	robin.murphy@arm.com,
+	robh@kernel.org,
+	krzk+dt@kernel.org,
+	conor+dt@kernel.org,
+	heiko@sntech.de,
+	nicolas.dufresne@collabora.com,
+	jgg@ziepe.ca,
+	p.zabel@pengutronix.de,
+	mchehab@kernel.org
+Cc: iommu@lists.linux.dev,
+	devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-rockchip@lists.infradead.org,
+	kernel@collabora.com,
+	linux-media@vger.kernel.org,
+	Benjamin Gaignard <benjamin.gaignard@collabora.com>,
+	Conor Dooley <conor.dooley@microchip.com>
+Subject: [PATCH v9 2/7] dt-bindings: iommu: verisilicon: Add binding for VSI IOMMU
+Date: Thu, 11 Sep 2025 17:57:12 +0200
+Message-ID: <20250911155720.180465-3-benjamin.gaignard@collabora.com>
+X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20250911155720.180465-1-benjamin.gaignard@collabora.com>
+References: <20250911155720.180465-1-benjamin.gaignard@collabora.com>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250721-dma-buf-ecc-heap-v7-0-031836e1a942@kernel.org>
- <20250826-vagabond-catfish-of-courtesy-cbfa76@houat> <20250910-vigorous-attractive-gorilla-af6fec@houat>
- <CABdmKX29ftpNro+d=Ce6JGoMaG0UQeBbzL7DXiBkGkC0nwacTQ@mail.gmail.com> <20250911-didactic-authentic-cockle-e6d5fc@houat>
-In-Reply-To: <20250911-didactic-authentic-cockle-e6d5fc@houat>
-From: "T.J. Mercier" <tjmercier@google.com>
-Date: Thu, 11 Sep 2025 08:52:27 -0700
-X-Gm-Features: AS18NWAeBqzBQ72YMefW3bpdVUuxd7DtaUCa6fSUYA3My40EoN0I9-kxEb7x3sc
-Message-ID: <CABdmKX1RhwgHb1EizSHUE0PHnxgXib7C8=ZWuVeCi6QetQgGSw@mail.gmail.com>
-Subject: Re: [PATCH v7 0/5] dma-buf: heaps: Create a CMA heap for each CMA
- reserved region
-To: Maxime Ripard <mripard@kernel.org>
-Cc: Rob Herring <robh@kernel.org>, Saravana Kannan <saravanak@google.com>, 
-	Sumit Semwal <sumit.semwal@linaro.org>, 
-	Benjamin Gaignard <benjamin.gaignard@collabora.com>, Brian Starkey <Brian.Starkey@arm.com>, 
-	John Stultz <jstultz@google.com>, =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>, 
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Marek Szyprowski <m.szyprowski@samsung.com>, Robin Murphy <robin.murphy@arm.com>, 
-	Jonathan Corbet <corbet@lwn.net>, Andrew Davis <afd@ti.com>, Jared Kangas <jkangas@redhat.com>, 
-	Mattijs Korpershoek <mkorpershoek@kernel.org>, devicetree@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-media@vger.kernel.org, 
-	dri-devel@lists.freedesktop.org, linaro-mm-sig@lists.linaro.org, 
-	iommu@lists.linux.dev, linux-doc@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-On Thu, Sep 11, 2025 at 12:01=E2=80=AFAM Maxime Ripard <mripard@kernel.org>=
- wrote:
->
-> Hi TJ,
->
-> On Wed, Sep 10, 2025 at 01:44:45PM -0700, T.J. Mercier wrote:
-> > On Wed, Sep 10, 2025 at 12:33=E2=80=AFAM Maxime Ripard <mripard@kernel.=
-org> wrote:
-> > >
-> > > On Tue, Aug 26, 2025 at 09:36:03AM +0200, Maxime Ripard wrote:
-> > > > Hi,
-> > > >
-> > > > On Mon, Jul 21, 2025 at 01:17:29PM +0200, Maxime Ripard wrote:
-> > > > > Here's another attempt at supporting user-space allocations from =
-a
-> > > > > specific carved-out reserved memory region.
-> > > > >
-> > > > > The initial problem we were discussing was that I'm currently wor=
-king on
-> > > > > a platform which has a memory layout with ECC enabled. However, e=
-nabling
-> > > > > the ECC has a number of drawbacks on that platform: lower perform=
-ance,
-> > > > > increased memory usage, etc. So for things like framebuffers, the
-> > > > > trade-off isn't great and thus there's a memory region with ECC d=
-isabled
-> > > > > to allocate from for such use cases.
-> > > > >
-> > > > > After a suggestion from John, I chose to first start using heap
-> > > > > allocations flags to allow for userspace to ask for a particular =
-ECC
-> > > > > setup. This is then backed by a new heap type that runs from rese=
-rved
-> > > > > memory chunks flagged as such, and the existing DT properties to =
-specify
-> > > > > the ECC properties.
-> > > > >
-> > > > > After further discussion, it was considered that flags were not t=
-he
-> > > > > right solution, and relying on the names of the heaps would be en=
-ough to
-> > > > > let userspace know the kind of buffer it deals with.
-> > > > >
-> > > > > Thus, even though the uAPI part of it had been dropped in this se=
-cond
-> > > > > version, we still needed a driver to create heaps out of carved-o=
-ut memory
-> > > > > regions. In addition to the original usecase, a similar driver ca=
-n be
-> > > > > found in BSPs from most vendors, so I believe it would be a usefu=
-l
-> > > > > addition to the kernel.
-> > > > >
-> > > > > Some extra discussion with Rob Herring [1] came to the conclusion=
- that
-> > > > > some specific compatible for this is not great either, and as suc=
-h an
-> > > > > new driver probably isn't called for either.
-> > > > >
-> > > > > Some other discussions we had with John [2] also dropped some hin=
-ts that
-> > > > > multiple CMA heaps might be a good idea, and some vendors seem to=
- do
-> > > > > that too.
-> > > > >
-> > > > > So here's another attempt that doesn't affect the device tree at =
-all and
-> > > > > will just create a heap for every CMA reserved memory region.
-> > > > >
-> > > > > It also falls nicely into the current plan we have to support cgr=
-oups in
-> > > > > DRM/KMS and v4l2, which is an additional benefit.
-> > > > >
-> > > > > Let me know what you think,
-> > > > > Maxime
-> > > >
-> > > > Any chance we can get this merged?
-> > >
-> > > Guys, can we move forward on this?
-> > >
-> > > Maxime
-> >
-> > Hi Maxime,
-> >
-> > Sorry I've been MIA the last couple of months.
-> >
-> > The docs for the "reusable" property say, "device driver(s) owning the
-> > region need to be able to reclaim it back", but how can a driver
-> > reclaim memory backing a dmabuf, since pages allocated for a dmabuf
-> > aren't necessarily movable. Couldn't a user allocate all of it, and
-> > refuse to close those dmabufs?
->
-> I guess, but how is that any different than what we're doing on the
-> default allocator already?
+Add a device tree binding for the Verisilicon (VSI) IOMMU.
+This IOMMU sits in front of hardware encoder and decoder
+blocks on SoCs using Verisilicon IP, such as the Rockchip RK3588.
 
-Yeah fair, it's not. I'm thinking that makes determining a size for a
-reusable driver-specified region that's always exposed to userspace a
-bit fuzzy. The requirements for the driver can probably be known, but
-for potentially unrelated allocations from userspace? The default
-ownership / file permissions for the heap would have to be changed to
-allow those non-reclaimable allocations, so maybe that's enough of an
-opt-in for such regions.
+Signed-off-by: Benjamin Gaignard <benjamin.gaignard@collabora.com>
+Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
+---
+ .../bindings/iommu/verisilicon,iommu.yaml     | 71 +++++++++++++++++++
+ 1 file changed, 71 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/iommu/verisilicon,iommu.yaml
 
-> It also has to be reusable, and will not be able to reclaim any memory
-> allocated through the heap.
->
-> > I backported this to 6.6 and ran it on a Pixel. While there are
-> > already similar out-of-tree dmabuf heap drivers that expose heaps for
-> > these reserved regions, they do more than just cma_alloc (multiple
-> > flavors of buffer securing, use case specific alignment and padding,
-> > and slightly different allocation strategies) so I don't think this
-> > series would allow us to completely drop the custom heap code, but
-> > it's a nice start.
->
-> Thanks for testing, and I totally expect more heaps coming for things
-> like protected memory, but it should indeed reduce the number of heap
-> drivers needed going forward.
->
-> > Does the cgroup part come in because the plan is to add charging in
-> > cma_heap.c?
->
-> Yes, and the system heap as well.
->
-> Maxime
+diff --git a/Documentation/devicetree/bindings/iommu/verisilicon,iommu.yaml b/Documentation/devicetree/bindings/iommu/verisilicon,iommu.yaml
+new file mode 100644
+index 000000000000..d3ce9e603b61
+--- /dev/null
++++ b/Documentation/devicetree/bindings/iommu/verisilicon,iommu.yaml
+@@ -0,0 +1,71 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/iommu/verisilicon,iommu.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Verisilicon IOMMU
++
++maintainers:
++  - Benjamin Gaignard <benjamin.gaignard@collabora.com>
++
++description: |+
++  A Versilicon iommu translates io virtual addresses to physical addresses for
++  its associated video decoder.
++
++properties:
++  compatible:
++    items:
++      - const: rockchip,rk3588-av1-iommu
++      - const: verisilicon,iommu-1.2
++
++  reg:
++    maxItems: 1
++
++  interrupts:
++    maxItems: 1
++
++  clocks:
++    items:
++      - description: Core clock
++      - description: Interface clock
++
++  clock-names:
++    items:
++      - const: core
++      - const: iface
++
++  "#iommu-cells":
++    const: 0
++
++  power-domains:
++    maxItems: 1
++
++required:
++  - compatible
++  - reg
++  - interrupts
++  - clocks
++  - clock-names
++  - "#iommu-cells"
++
++additionalProperties: false
++
++examples:
++  - |
++    #include <dt-bindings/clock/rockchip,rk3588-cru.h>
++    #include <dt-bindings/interrupt-controller/arm-gic.h>
++
++    bus {
++      #address-cells = <2>;
++      #size-cells = <2>;
++
++      iommu@fdca0000 {
++        compatible = "rockchip,rk3588-av1-iommu","verisilicon,iommu-1.2";
++        reg = <0x0 0xfdca0000 0x0 0x600>;
++        interrupts = <GIC_SPI 109 IRQ_TYPE_LEVEL_HIGH 0>;
++        clocks = <&cru ACLK_AV1>, <&cru PCLK_AV1>;
++        clock-names = "core", "iface";
++        #iommu-cells = <0>;
++      };
++    };
+-- 
+2.43.0
 
-Thanks,
-
-Reviewed-by: T.J. Mercier <tjmercier@google.com>
