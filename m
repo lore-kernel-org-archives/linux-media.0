@@ -1,66 +1,66 @@
-Received: from mail-wr1-f52.google.com (mail-wr1-f52.google.com [209.85.221.52])
+Received: from mail-wm1-f53.google.com (mail-wm1-f53.google.com [209.85.128.53])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EEF5B283FDF
-	for <linux-media@vger.kernel.org>; Fri, 12 Sep 2025 14:03:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5E0903093D3
+	for <linux-media@vger.kernel.org>; Fri, 12 Sep 2025 14:03:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757685798; cv=none; b=B0CAGk8etFM0ANr1t0zh92VjW+z6gErnMJ2PMVjxTti75+2rFOGB6zwj/hPze/jOvKneg3wGPfJ0DRc58Xs/VwcYiC30GqtgVwxsVG/M7y11yATpTNxpIt5XntJ/LeoEsBKJj/r6Kq13csKVldhrvPUF27vmTWongBP8qqsvOpg=
+	t=1757685819; cv=none; b=fSsQmlIBIITUb/oidRbAWuZ7qSljWPpuXKeIXJyhSw7I9SWYPzOvcNLnr7jkDj6sANqnyg5RktndDkAqJSovfJualX4Z5pnq+4LJ60H0Aa4Aw6lXUYMNt3uwbcrRebqXmTPEpznSENiwc5OsJBdEoZ5CzI0nnozMYu8LLWvmYoE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757685798; c=relaxed/simple;
-	bh=aAY1g8zOPqBn5miZfFbCjKlL6xfEQPFSG95Zowlpqzg=;
+	s=arc-20240116; t=1757685819; c=relaxed/simple;
+	bh=I9n2pVmu6LmPD6zvLHRAM5ekmJJV3HNaSaih80Ri9aQ=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=g8SYCBsje1vcN5DXKwg/usdhqWqNM31Jj7+zGI7B3/A0PR6sVpZDn9+S8RBaxDRkBlfoN2WHA+GLTyuZut54En1bgINATg3qqnYtjTwtk9OFLn7Qx643Og5NdTtXpX0N3Ekj3qOyG0zqy713KEJkhMQolc52zfXFucateFk87Sw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=joRavizD; arc=none smtp.client-ip=209.85.221.52
+	 In-Reply-To:Content-Type; b=StJ5sXjaPzSnHkzB3laN+Uu5t75fe3Cbzm9+XdRvDwuMCqbpwdVDlPYEoyXicBDBBUedQAMUvUNkTn3xoaQraXtye2k22XU5IBEwmS9IxXxV8FdUmaBmsQJVtxlGQoFtyVxuHu+uE7A4I5pCOjtTX7gDhlmH5qNcoP0+xHAnBZQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=BypA0bHt; arc=none smtp.client-ip=209.85.128.53
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="joRavizD"
-Received: by mail-wr1-f52.google.com with SMTP id ffacd0b85a97d-3c68ac7e18aso1322685f8f.2
-        for <linux-media@vger.kernel.org>; Fri, 12 Sep 2025 07:03:16 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="BypA0bHt"
+Received: by mail-wm1-f53.google.com with SMTP id 5b1f17b1804b1-45dcfecdc0fso19053655e9.1
+        for <linux-media@vger.kernel.org>; Fri, 12 Sep 2025 07:03:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1757685795; x=1758290595; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1757685816; x=1758290616; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=uH+YHXFVH2K1mzrQAHIZiTdd0wND2UdYXw5OhP6ad/I=;
-        b=joRavizDgeqwMPy2GO941dAZlnGDdgRFCcQAhvfu2jv8w7yf/aXrXuDdGSuNACmW7Y
-         gB+0fQTN4KAsXe9t3n4U+FNJWhQRsRElye6MB21w7YIztFYBDdJqe5IrHdnWT+4pqKSh
-         x2nZWF8ZFh3+trITdOudXMlhPEgPmSkCGPO+1syKjs8PEjB7JYvgSjIlS71wadFYaH4/
-         Tp7Vj6Y7jPVCclyvCoO6F5BZUPO7uXTeAKtL2I7bDhb6fIzuVfqp/XXt/fipVI2BCHI0
-         jiJ/20AWbgFs6Y8m/eBuu+Wgrhc6pORzGXZjs90vHOmWPx7s/26nhVTDshQrNjZsYra3
-         4Gxg==
+        bh=/awESVZkJ9K+JfRYd9Rjr/yLS5bHXWrAEyFkBSavtRk=;
+        b=BypA0bHtW8dc/9jFOduQ+R25ll0YATGAEaWEVnPnqn7pWbwrmTbEVvtGUj3ynHfroY
+         s2PSNRHk2yNthP/TF1iOjTqEwoxDVOAghcPZ3vjw1FWt9hMoAnl+5lfMRMpxuy/EXJWO
+         YhdsLY0KSNR626866tS4QUcTkkJpj6xiywYTSX7VZ3jt0VnCFg8U0pjZNhVNiA/8TbTv
+         hBAdGcw03C0DJkYipsJsoMP7HjjVbjBQ+g5EXZJHQCu7WYjNpJdTB70hiVt7mW1yrdpd
+         7nubU2A9S0bZfSTfEXoDrLOegDyhwcQrhclEMFmg0jvKFJC7OIXm78GDYb1aj/eEzhud
+         40Tw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1757685795; x=1758290595;
+        d=1e100.net; s=20230601; t=1757685816; x=1758290616;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=uH+YHXFVH2K1mzrQAHIZiTdd0wND2UdYXw5OhP6ad/I=;
-        b=AvZ0PykQwD4CEGArl13vazFkPvmmlo+zY4dW3oY7ayR2eCh0NPahXOspKiYTIX9LIp
-         sO2SADR5vjK1tFzpCc+fH4EBLk493SZ32G3y/I+BfxYxk3T5PBT768gX69BI6RrWegpy
-         XYBX34CcvVPKBbJFXoZUEzVtUvADNeLQIbe8RuUZvOUQuicAKpG3LOwQcgoVXtbzj8ON
-         Ooq2pQTbLJEE56jrY35fZvPoi3Jz+UuupLEVPhPT1B2Gf7fGN9QGXvLRDHhaAZH7ogdZ
-         5Qg/authTp/uCWY1XXDnM6pEv8u+kTw3gB/gQVflJpm8EyYO3MEYF51JgIFEMJzEBlHh
-         6/2A==
-X-Forwarded-Encrypted: i=1; AJvYcCVY6xox/+YaXxG8Ox2BSoCq1rHkXVX6VvD7tdEk/wS0yK8+nW0WcHC4k/IB5kVLQIbzLTme1cKi2g/EwA==@vger.kernel.org
-X-Gm-Message-State: AOJu0YxAeyz38sArtMTRUELkFTrhF0+JH0rwKA+QVSYae5mtMwT3zrfe
-	dgrLGe6l+3CxG3nARGuU9ev3LCVHLUdD0fyatW93drcpM73vQiH55rev
-X-Gm-Gg: ASbGnctGli2oHfxb47Bu7LfDYsasp/12utbf6uYdGeRS/Jw4Th2uKZZ5VW0hSgAQhG5
-	UEJL0Rd6NluRNL65R083ejklLXDKmg49OFtp4PWPHi+EdTplK+uvYmhbJasMEy1Rz3WIAvbL6ch
-	htccTt4RjpeDA2cJsZh6DnT+oEz7lXstqeciiBwtzsfYFqKE3fpvON+6EqiVt8bjfs7gARM0bK7
-	xn1XXot9MSg6ULPpzJ08M/ePaPjWv2MxkPTD+iVqvF9jIwfi7a66RtB4tFnZiZ+XCIzeMX2zFZu
-	Bb4mzCAomO6Q7dQuDmrk8RYUVtaZt/7t4+N082kaQ3VCvFEokLmTzmOI3XKSmFVK1bocdHAh466
-	crUGYdAdcKC4dvmqyL5sPIorFdekRFaV2HIuV7Q17qz6HCreuiNVS
-X-Google-Smtp-Source: AGHT+IHkpXgL67su2eP0NWVxDv0gnk9lbCDXLQlAVKtF0IvH2Kl70osZH/zbwKbUjcuxvdmzPdw9Pw==
-X-Received: by 2002:a05:6000:61e:b0:3e7:4414:794b with SMTP id ffacd0b85a97d-3e765a018a5mr2537897f8f.50.1757685794754;
-        Fri, 12 Sep 2025 07:03:14 -0700 (PDT)
+        bh=/awESVZkJ9K+JfRYd9Rjr/yLS5bHXWrAEyFkBSavtRk=;
+        b=XQQLpRMIGZLdA0AyZ5CYGYPA3UyoLn90/prh+Ez3Yn2huI9Ea4lgLw9DMQm3RzUNsL
+         OChmryPEpDz1N508S8n8Ep+bVk8YUtvLAxx9TiRn1QIfrHMfJPZxQp94DN8AQv/I+JiF
+         4i2BtQB6eNbUGwcypYS9hko6Zl+/ZxoKBUwwgpb2RyCNEytDNwD9LnZQuMwc9yc6ATbR
+         aCAJBqiETyfwt9VPNmcUktFnGJyd8PoxLu5U627Txb1j5kfYULBbBzb2ry+akCjoNUcE
+         2X4RQ4CCKkEZ7iWznfSWIEwfZQMUbijIZxxctHOi/0sXh1G1rvjJqB8or+cV9le/YMhS
+         uirw==
+X-Forwarded-Encrypted: i=1; AJvYcCX+MVF5Q5SERBkalUj6yb/bbVTCm0fN65ZoGS4fXBs06sMdTGeLtD8ybynennrVxWBjI0MwFS72VuBmuA==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw6QDrCoQK4hCZ3pbHQQryfdaFqX0rrEkq1jzW8n710DczTIHso
+	3+JgSt1J2+IfiIKQkQmaH8CPI9NXyxkAGJkR3J0sJm/6g/Q1p1zTny2l
+X-Gm-Gg: ASbGncu1kk1/O+cVkd+90gRLgD/MfLCMuHtBtkjFzcTiVG5N9fCmlr6YbgPCKJvruuF
+	f2SE0jOW8cNTOrLZ7AVkg+7Lp076fcTPUbxCfiXaI1N2XIuO8BjX/XHFeUwcxGy1t99bQOxnvvw
+	ghodFnRyup2pbLVy/X5d1BD6xmX3JKQcXlMTxdRZMLT/l8B0NWA0dJg7pLBapt4KI7MhyL4b+Z0
+	mabXIP73gAcISevdSt05S4z917rS2zz3jNleXG/93qInYQpad0vRf0ivT7MrlxFIsZxNYXivrPT
+	9EniU+Eca0Lzd686CyFXKSm+nP/9c0nThy7CJvZpm7YUZivXF6fZTL6+ALeyjtAjKZvCaksLPce
+	WNs7yG8RgrBtWfQgHpJo4kT4rOyxnQHGHXcAn6LOG5Q==
+X-Google-Smtp-Source: AGHT+IFrFziaROE6t7OvfnHw1fSxmStjyRsw0iDsiUclaiLc+LNP4gi88MN0nbdrnjXQvf8i78gTdw==
+X-Received: by 2002:a7b:cd0b:0:b0:45d:dbf4:8880 with SMTP id 5b1f17b1804b1-45f211efda6mr20357825e9.27.1757685815284;
+        Fri, 12 Sep 2025 07:03:35 -0700 (PDT)
 Received: from [192.168.2.177] ([91.116.220.47])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3e774a3fb5bsm2033837f8f.58.2025.09.12.07.03.09
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-45e01832af1sm35682985e9.3.2025.09.12.07.03.30
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 12 Sep 2025 07:03:13 -0700 (PDT)
-Message-ID: <7765f224-60b2-4c92-a597-58c1c6bc5580@gmail.com>
-Date: Fri, 12 Sep 2025 16:03:08 +0200
+        Fri, 12 Sep 2025 07:03:34 -0700 (PDT)
+Message-ID: <0c088460-da7e-4443-92e3-23f160415ce8@gmail.com>
+Date: Fri, 12 Sep 2025 14:16:34 +0200
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
@@ -68,8 +68,8 @@ List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 19/38] arm64: dts: mediatek: mt6795: Add mediatek,infracfg
- to iommu node
+Subject: Re: [PATCH 17/38] arm64: dts: mediatek: mt6797: Fix pinctrl node
+ names
 To: Fei Shao <fshao@chromium.org>,
  AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 Cc: linux-mediatek@lists.infradead.org, robh@kernel.org,
@@ -93,8 +93,8 @@ Cc: linux-mediatek@lists.infradead.org, robh@kernel.org,
  linux-crypto@vger.kernel.org, tzimmermann@suse.de, atenart@kernel.org,
  krzk+dt@kernel.org, linux-media@vger.kernel.org, davem@davemloft.net
 References: <20250724083914.61351-1-angelogioacchino.delregno@collabora.com>
- <20250724083914.61351-20-angelogioacchino.delregno@collabora.com>
- <CAC=S1nguRWyG3ubmSFE95_zgsCjjq4dxGWr5ErV9-Yu2+mTmpw@mail.gmail.com>
+ <20250724083914.61351-18-angelogioacchino.delregno@collabora.com>
+ <CAC=S1nh5bF6kZe7TFA_EGPGt8Xp_rfuc-rkeXgjRCU=QEtZQiw@mail.gmail.com>
 Content-Language: en-US, ca-ES, es-ES
 From: Matthias Brugger <matthias.bgg@gmail.com>
 Autocrypt: addr=matthias.bgg@gmail.com; keydata=
@@ -140,42 +140,126 @@ Autocrypt: addr=matthias.bgg@gmail.com; keydata=
  +zFJv9fVUpo/bjePOL4PMP1y+PYrp4PmPmRwoklBpy1ep8m8XURv46fGUHUEIsTwPWs2Q87k
  7vjYyrcyAOarX2X5pvMQvpAMADGf2Z3wrCsDdG25w2HztweUNd9QEprtJG8GNNzMOD4cQ82T
  a7eGvPWPeXauWJDLVR9jHtWT9Ot3BQgmApLxACvwvD1a69jaFKov28SPHxUCQ9Y1Y/Ct
-In-Reply-To: <CAC=S1nguRWyG3ubmSFE95_zgsCjjq4dxGWr5ErV9-Yu2+mTmpw@mail.gmail.com>
+In-Reply-To: <CAC=S1nh5bF6kZe7TFA_EGPGt8Xp_rfuc-rkeXgjRCU=QEtZQiw@mail.gmail.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 
 
 
-On 25/07/2025 12:52, Fei Shao wrote:
-> On Thu, Jul 24, 2025 at 5:49 PM AngeloGioacchino Del Regno
+On 25/07/2025 12:56, Fei Shao wrote:
+> On Thu, Jul 24, 2025 at 5:48 PM AngeloGioacchino Del Regno
 > <angelogioacchino.delregno@collabora.com> wrote:
 >>
->> The "M4U" IOMMU requires a handle to the infracfg to switch to
->> the 4gb/pae addressing mode: add it.
+>> Change the pinctrl node names to adhere to the binding: the main
+>> nodes are now named like "uart0-pins" and the children "pins-bus".
 >>
 >> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 > 
 > Reviewed-by: Fei Shao <fshao@chromium.org>
-
-Applied thanks
-
 > 
+
+Applied, thanks
+
 >> ---
->>   arch/arm64/boot/dts/mediatek/mt6795.dtsi | 1 +
->>   1 file changed, 1 insertion(+)
+>>   arch/arm64/boot/dts/mediatek/mt6797.dtsi | 40 ++++++++++++------------
+>>   1 file changed, 20 insertions(+), 20 deletions(-)
 >>
->> diff --git a/arch/arm64/boot/dts/mediatek/mt6795.dtsi b/arch/arm64/boot/dts/mediatek/mt6795.dtsi
->> index e5e269a660b1..38f65aad2802 100644
->> --- a/arch/arm64/boot/dts/mediatek/mt6795.dtsi
->> +++ b/arch/arm64/boot/dts/mediatek/mt6795.dtsi
->> @@ -427,6 +427,7 @@ iommu: iommu@10205000 {
->>                          clocks = <&infracfg CLK_INFRA_M4U>;
->>                          clock-names = "bclk";
->>                          interrupts = <GIC_SPI 146 IRQ_TYPE_LEVEL_LOW>;
->> +                       mediatek,infracfg = <&infracfg>;
->>                          mediatek,larbs = <&larb0 &larb1 &larb2 &larb3>;
->>                          power-domains = <&spm MT6795_POWER_DOMAIN_MM>;
->>                          #iommu-cells = <1>;
+>> diff --git a/arch/arm64/boot/dts/mediatek/mt6797.dtsi b/arch/arm64/boot/dts/mediatek/mt6797.dtsi
+>> index 0e9d11b4585b..be401617dfd8 100644
+>> --- a/arch/arm64/boot/dts/mediatek/mt6797.dtsi
+>> +++ b/arch/arm64/boot/dts/mediatek/mt6797.dtsi
+>> @@ -135,71 +135,71 @@ pio: pinctrl@10005000 {
+>>                  gpio-controller;
+>>                  #gpio-cells = <2>;
+>>
+>> -               uart0_pins_a: uart0 {
+>> -                       pins0 {
+>> +               uart0_pins_a: uart0-pins {
+>> +                       pins-bus {
+>>                                  pinmux = <MT6797_GPIO234__FUNC_UTXD0>,
+>>                                           <MT6797_GPIO235__FUNC_URXD0>;
+>>                          };
+>>                  };
+>>
+>> -               uart1_pins_a: uart1 {
+>> -                       pins1 {
+>> +               uart1_pins_a: uart1-pins {
+>> +                       pins-bus {
+>>                                  pinmux = <MT6797_GPIO232__FUNC_URXD1>,
+>>                                           <MT6797_GPIO233__FUNC_UTXD1>;
+>>                          };
+>>                  };
+>>
+>> -               i2c0_pins_a: i2c0 {
+>> -                       pins0 {
+>> +               i2c0_pins_a: i2c0-pins {
+>> +                       pins-bus {
+>>                                  pinmux = <MT6797_GPIO37__FUNC_SCL0_0>,
+>>                                           <MT6797_GPIO38__FUNC_SDA0_0>;
+>>                          };
+>>                  };
+>>
+>> -               i2c1_pins_a: i2c1 {
+>> -                       pins1 {
+>> +               i2c1_pins_a: i2c1-pins {
+>> +                       pins-bus {
+>>                                  pinmux = <MT6797_GPIO55__FUNC_SCL1_0>,
+>>                                           <MT6797_GPIO56__FUNC_SDA1_0>;
+>>                          };
+>>                  };
+>>
+>> -               i2c2_pins_a: i2c2 {
+>> -                       pins2 {
+>> +               i2c2_pins_a: i2c2-pins {
+>> +                       pins-bus {
+>>                                  pinmux = <MT6797_GPIO96__FUNC_SCL2_0>,
+>>                                           <MT6797_GPIO95__FUNC_SDA2_0>;
+>>                          };
+>>                  };
+>>
+>> -               i2c3_pins_a: i2c3 {
+>> -                       pins3 {
+>> +               i2c3_pins_a: i2c3-pins {
+>> +                       pins-bus {
+>>                                  pinmux = <MT6797_GPIO75__FUNC_SDA3_0>,
+>>                                           <MT6797_GPIO74__FUNC_SCL3_0>;
+>>                          };
+>>                  };
+>>
+>> -               i2c4_pins_a: i2c4 {
+>> -                       pins4 {
+>> +               i2c4_pins_a: i2c4-pins {
+>> +                       pins-bus {
+>>                                  pinmux = <MT6797_GPIO238__FUNC_SDA4_0>,
+>>                                           <MT6797_GPIO239__FUNC_SCL4_0>;
+>>                          };
+>>                  };
+>>
+>> -               i2c5_pins_a: i2c5 {
+>> -                       pins5 {
+>> +               i2c5_pins_a: i2c5-pins {
+>> +                       pins-bus {
+>>                                  pinmux = <MT6797_GPIO240__FUNC_SDA5_0>,
+>>                                           <MT6797_GPIO241__FUNC_SCL5_0>;
+>>                          };
+>>                  };
+>>
+>> -               i2c6_pins_a: i2c6 {
+>> -                       pins6 {
+>> +               i2c6_pins_a: i2c6-pins {
+>> +                       pins-bus {
+>>                                  pinmux = <MT6797_GPIO152__FUNC_SDA6_0>,
+>>                                           <MT6797_GPIO151__FUNC_SCL6_0>;
+>>                          };
+>>                  };
+>>
+>> -               i2c7_pins_a: i2c7 {
+>> -                       pins7 {
+>> +               i2c7_pins_a: i2c7-pins {
+>> +                       pins-bus {
+>>                                  pinmux = <MT6797_GPIO154__FUNC_SDA7_0>,
+>>                                           <MT6797_GPIO153__FUNC_SCL7_0>;
+>>                          };
 >> --
 >> 2.50.1
 >>
