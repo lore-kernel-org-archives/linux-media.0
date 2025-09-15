@@ -1,127 +1,193 @@
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 846372F5327;
-	Mon, 15 Sep 2025 09:20:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=60.244.123.138
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4B1DA2F6176
+	for <linux-media@vger.kernel.org>; Mon, 15 Sep 2025 09:20:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757928016; cv=none; b=uvfEZSiE56MXuo5SA6PPco2DZS4aCTu3u32Gjr3eXz0MeTqk+aMBf1U37buksa2teAlhbYoNF4tjaXrr6NAVbRn+4WR+YPqSVQ9hzSYUQzQXu1nVOeGcz1xI/ZPS7DTPQpA5RwRHmUQ97dzbpjasbo49roVHYik84qhwURcWAQs=
+	t=1757928018; cv=none; b=oss7NVEu95doj0yipX4LCKGdKX4M3rP+0Nye76wLURDgQZEjxwe6Vf1pYJfTDW3RvIkue003vlB2s+QgyvMXScrRFMJBVToc+1CTLc3HnJ2J2AK0PWbT/U3T+lTVXxtC/PkzdRX+YRcA2QwUQCesTkh73WUn6NMvcGoqhcWB8g0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757928016; c=relaxed/simple;
-	bh=7lbNuLHxpd0olZA4QXnQ0hIQNCpG4e1XDctxzVQ3bZQ=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=t+IVW8Nx5gvMzaP7RqjcRSytKWT+vXt6gwvRK4I15c/dFjBxNaeea7O+fG7hKp55EQacrMPpvd70HfrWYSdB/36p0CL6zgUYldyEQpVH+N4nkGQK8Q0KeY+KT+Sb4tAtaBddQpin3eDF2pRDrOXD0+rO9aWofNZYsAl/h3WXA9k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mediatek.com; spf=pass smtp.mailfrom=mediatek.com; dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b=kuEMWtzI; arc=none smtp.client-ip=60.244.123.138
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mediatek.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mediatek.com
+	s=arc-20240116; t=1757928018; c=relaxed/simple;
+	bh=m+b1j4FS9dbDmgw9l3uxTTFLya3tLUUJMch1DCHkQag=;
+	h=Message-ID:Date:MIME-Version:From:Subject:To:Cc:References:
+	 In-Reply-To:Content-Type; b=ncXPaveKSqxuZGpFllU019hpalZRZd2ygSMympGBRJ+7GD+jPGs4LUSjPsX6tphaIBDvSGyYguymyIdPYmpYmBAn4DC7TZiWut0sALqnQ0lAIxIgetJMQayXcQ8z9k+v5Wu5tTpnY7rK+bCZAS45TKjDaidx2RpmId1yMytv+v4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=UUbIIUF7; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b="kuEMWtzI"
-X-UUID: 2e3abf34921511f0bd5779446731db89-20250915
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-	h=Content-Type:Content-Transfer-Encoding:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=GOLgmMpYR2ryZv6rUHWgYW+TGfr3B2tAoli1w7hdIug=;
-	b=kuEMWtzIe6gK8Hjh9/3EMx+RU3aq+mmuqACOBoEa+JXbBJ+M00WB1qp3+85rsjf2wJ7TEkgA+7zrh1Af6FKz7vJRfYsAjYD6BDlesw4T7NrBuI80AXnzaVMm40aAgZ0v14sw8u39vgGibg3ErVJIJDqazkMIFA+Wk1KgSf4rWOM=;
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.3.4,REQID:fcfff513-879c-408a-b582-fad48f14264e,IP:0,UR
-	L:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:r
-	elease,TS:0
-X-CID-META: VersionHash:1ca6b93,CLOUDID:910c916c-8443-424b-b119-dc42e68239b0,B
-	ulkID:nil,BulkQuantity:0,Recheck:0,SF:81|82|102,TC:-5,Content:0|15|50,EDM:
-	-3,IP:nil,URL:0,File:nil,RT:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,
-	AV:0,LES:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0,ARC:0
-X-CID-BVR: 2,SSN|SDN
-X-CID-BAS: 2,SSN|SDN,0,_
-X-CID-FACTOR: TF_CID_SPAM_SNR
-X-CID-RHF: D41D8CD98F00B204E9800998ECF8427E
-X-UUID: 2e3abf34921511f0bd5779446731db89-20250915
-Received: from mtkmbs10n2.mediatek.inc [(172.21.101.183)] by mailgw01.mediatek.com
-	(envelope-from <kyrie.wu@mediatek.com>)
-	(Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-	with ESMTP id 586112977; Mon, 15 Sep 2025 17:20:11 +0800
-Received: from mtkmbs13n2.mediatek.inc (172.21.101.108) by
- MTKMBS09N1.mediatek.inc (172.21.101.35) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1258.39; Mon, 15 Sep 2025 17:20:09 +0800
-Received: from mhfsdcap04.gcn.mediatek.inc (10.17.3.154) by
- mtkmbs13n2.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
- 15.2.1258.39 via Frontend Transport; Mon, 15 Sep 2025 17:20:08 +0800
-From: Kyrie Wu <kyrie.wu@mediatek.com>
-To: Tiffany Lin <tiffany.lin@mediatek.com>, Andrew-CT Chen
-	<andrew-ct.chen@mediatek.com>, Yunfei Dong <yunfei.dong@mediatek.com>, Mauro
- Carvalho Chehab <mchehab@kernel.org>, Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>,
-	Matthias Brugger <matthias.bgg@gmail.com>, AngeloGioacchino Del Regno
-	<angelogioacchino.delregno@collabora.com>, Kyrie Wu <kyrie.wu@mediatek.com>,
-	Hans Verkuil <hverkuil@xs4all.nl>, Nicolas Dufresne
-	<nicolas.dufresne@collabora.com>, Christophe JAILLET
-	<christophe.jaillet@wanadoo.fr>, Sebastian Fricke
-	<sebastian.fricke@collabora.com>, Nathan Hebert <nhebert@chromium.org>, Arnd
- Bergmann <arnd@arndb.de>, Irui Wang <irui.wang@mediatek.com>, George Sun
-	<george.sun@mediatek.com>, <linux-media@vger.kernel.org>,
-	<devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-	<linux-arm-kernel@lists.infradead.org>, <linux-mediatek@lists.infradead.org>
-CC: Neil Armstrong <neil.armstrong@linaro.org>, Andrzej Pietrasiewicz
-	<andrzejtp2010@gmail.com>
-Subject: [PATCH v3 2/8] media: mediatek: vcodec: add decoder compatible to support MT8189
-Date: Mon, 15 Sep 2025 17:19:52 +0800
-Message-ID: <20250915091958.31509-3-kyrie.wu@mediatek.com>
-X-Mailer: git-send-email 2.46.0
-In-Reply-To: <20250915091958.31509-1-kyrie.wu@mediatek.com>
-References: <20250915091958.31509-1-kyrie.wu@mediatek.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="UUbIIUF7"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 476E0C4CEF5;
+	Mon, 15 Sep 2025 09:20:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1757928015;
+	bh=m+b1j4FS9dbDmgw9l3uxTTFLya3tLUUJMch1DCHkQag=;
+	h=Date:From:Subject:To:Cc:References:In-Reply-To:From;
+	b=UUbIIUF7bkFuDeLPsanOC7aYTc/0rgVXD2YBhgqX7gMgUXgEKOFS81a1ufzMyMWtn
+	 SHiGIj9KIuQNbH6RwXlxisQw6zE9+z0/liAizZNEIap5lEcv9sjzLBQn8DrNWVdf65
+	 BNffnuHecONJ1Ap//kOhDpVoabCjQJhkmbgCqkeYiYZxQHmCt454xf5//foAQTK/qM
+	 kDUvweGt2YUmiDQxEK1ryj12sOuOfiKin7E3N/ii9x0H7YHb7/bRa/Ljqoqk6KFRHl
+	 KDzzvLL4KEjnDPEYTy92b9qYICy18BJBnwlGQPhQ2I+yrqOXwGGY86AEQGkil+6zkm
+	 3gnrqpdE/Yduw==
+Message-ID: <8de3180d-5d53-4aa1-9e01-b6add8d67477@kernel.org>
+Date: Mon, 15 Sep 2025 11:20:12 +0200
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-MTK: N
+User-Agent: Mozilla Thunderbird
+From: Hans Verkuil <hverkuil+cisco@kernel.org>
+Subject: Re: [GIT PULL FOR v6.18] TI and Cadence CSI2RX drivers changes
+To: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Cc: Jai Luthra <jai.luthra@linux.dev>, linux-media@vger.kernel.org,
+ Mauro Carvalho Chehab <mchehab@kernel.org>,
+ Maxime Ripard <mripard@kernel.org>,
+ Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>,
+ Devarsh Thakkar <devarsht@ti.com>
+References: <4wklgso7mjxss5nzrwtcwae6fm22snmw7zdx4lmdxs75tmklip@3w55xhfzkasw>
+ <9bc39cae-ea86-4ef7-a97c-66469b082375@kernel.org>
+ <v2xtw7soyiailistxcr24xj5uxzhlhljtf2hqdgarnzhnmms5d@rxojdydr7jqo>
+ <6aa144e0-5ea0-4669-8398-dc6a35674b63@kernel.org>
+ <20250915084427.GD22385@pendragon.ideasonboard.com>
+Content-Language: en-US, nl
+In-Reply-To: <20250915084427.GD22385@pendragon.ideasonboard.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-MT8189 is pure single core architecture. Support its compatible and
-use `mtk_vdec_single_core_pdata` to initialize platform data.
+On 15/09/2025 10:44, Laurent Pinchart wrote:
+> On Mon, Sep 15, 2025 at 10:24:34AM +0200, Hans Verkuil wrote:
+>> On 12/09/2025 13:21, Jai Luthra wrote:
+>>> On Fri, Sep 12, 2025 at 12:17:17PM +0200, Hans Verkuil wrote:
+>>>> On 12/09/2025 11:55, Jai Luthra wrote:
+>>>>> Hi Hans, Mauro,
+>>>>>
+>>>>> The following changes since commit ecba852dc9f4993f4f894ea1f352564560e19a3e:
+>>>>>
+>>>>>   media: redrat3: use int type to store negative error codes (2025-09-11 08:46:10 +0200)
+>>>>>
+>>>>> are available in the Git repository at:
+>>>>>
+>>>>>   https://gitlab.freedesktop.org/linux-media/users/jluthra.git tags/for-6.18-ti-j721e-csi2rx-signed
+>>>>>
+>>>>> for you to fetch changes up to c694e74c651e79838e817a8c6644dc72cf80540d:
+>>>>>
+>>>>>   media: ti: j721e-csi2rx: Support system suspend using pm_notifier (2025-09-12 14:37:56 +0530)
+>>>>>
+>>>>> ----------------------------------------------------------------
+>>>>> TI and Cadence CSI2RX driver changes:
+>>>>>
+>>>>> - Multistream support for Cadence and TI CSI2RX
+>>>>> - Runtime PM support for Cadence and TI CSI2RX
+>>>>> - System suspend and resume support for TI CSI2RX
+>>>>> - Misc cleanups
+>>>>
+>>>> This should go through Sakari most likely, possibly Laurent, seeing that this is CSI
+>>>> related. Several patches do not even have a Reviewed-by from Sakari or Laurent.
+>>>>
+>>>> I can't take this, I'm afraid.
+>>>>
+>>>> I'm not sure why we get a PR from you, was there some misunderstanding?
+>>>
+>>> Apologies. I had a look at other "GIT PULL" messages on linux-media and 
+>>> inferred that any driver maintainer can send a pull request for media tree.
+>>
+>> Ah, no. It's media maintainers that do that. For small subsystems you would post
+>> patches and the subsystem maintainer will (when ready) merge them and send a PR
+>> to Linus.
+>>
+>> For large subsystems like media you have multiple media maintainers, each responsible
+>> for a part of the subsystem. They will review and prep a PR for the media maintainers
+>> (me and Mauro) to pick up. The media subsystem is far too big for a single maintainer.
+>>
+>> Hopefully once we get the multi-committer up and running (pending doc changes) we can
+>> do away with most of the PRs.
+> 
+> Is there an objection against pull requests from driver maintainers ?
+> Assuming all the other rules and requirements are met (passing CI,
+> having the expected R-b tags, ...), is there a reason why I would need
+> to collect a series posted by Jai and then send a pull request, instead
+> of having Jai send the pull request directly ?
 
-Signed-off-by: Kyrie Wu <kyrie.wu@mediatek.com>
----
- .../platform/mediatek/vcodec/decoder/mtk_vcodec_dec_drv.c   | 6 ++++++
- .../platform/mediatek/vcodec/decoder/mtk_vcodec_dec_drv.h   | 1 +
- 2 files changed, 7 insertions(+)
+If I get a PR from you, then I know that you, with your expertise, judged the
+patches in the PR to be ready to be merged. Since it's from you I also can
+trust that all the right tags are in place, that all the right people have
+been pulled in if that was needed, etc.
 
-diff --git a/drivers/media/platform/mediatek/vcodec/decoder/mtk_vcodec_dec_drv.c b/drivers/media/platform/mediatek/vcodec/decoder/mtk_vcodec_dec_drv.c
-index fabf969bc8a9..e7b6b108f4fb 100644
---- a/drivers/media/platform/mediatek/vcodec/decoder/mtk_vcodec_dec_drv.c
-+++ b/drivers/media/platform/mediatek/vcodec/decoder/mtk_vcodec_dec_drv.c
-@@ -348,6 +348,8 @@ static void mtk_vcodec_dec_get_chip_name(struct mtk_vcodec_dec_dev *vdec_dev)
- 		vdec_dev->chip_name = MTK_VDEC_MT8188;
- 	else if (of_device_is_compatible(dev->of_node, "mediatek,mt8196-vcodec-dec"))
- 		vdec_dev->chip_name = MTK_VDEC_MT8196;
-+	else if (of_device_is_compatible(dev->of_node, "mediatek,mt8189-vcodec-dec"))
-+		vdec_dev->chip_name = MTK_VDEC_MT8189;
- 	else
- 		vdec_dev->chip_name = MTK_VDEC_INVAL;
- }
-@@ -575,6 +577,10 @@ static const struct of_device_id mtk_vcodec_match[] = {
- 		.compatible = "mediatek,mt8196-vcodec-dec",
- 		.data = &mtk_lat_sig_core_pdata,
- 	},
-+	{
-+		.compatible = "mediatek,mt8189-vcodec-dec",
-+		.data = &mtk_vdec_single_core_pdata,
-+	},
- 	{},
- };
- 
-diff --git a/drivers/media/platform/mediatek/vcodec/decoder/mtk_vcodec_dec_drv.h b/drivers/media/platform/mediatek/vcodec/decoder/mtk_vcodec_dec_drv.h
-index 6bdde600a167..856d12aa84d8 100644
---- a/drivers/media/platform/mediatek/vcodec/decoder/mtk_vcodec_dec_drv.h
-+++ b/drivers/media/platform/mediatek/vcodec/decoder/mtk_vcodec_dec_drv.h
-@@ -25,6 +25,7 @@ enum mtk_vcodec_dec_chip_name {
- 	MTK_VDEC_MT8183 = 8183,
- 	MTK_VDEC_MT8186 = 8186,
- 	MTK_VDEC_MT8188 = 8188,
-+	MTK_VDEC_MT8189 = 8189,
- 	MTK_VDEC_MT8192 = 8192,
- 	MTK_VDEC_MT8195 = 8195,
- 	MTK_VDEC_MT8196 = 8196,
--- 
-2.45.2
+If the PR would be from a driver maintainer, then I don't have that additional
+level of trust and I will have to pay closer attention to the patches in the PR,
+checking tags, checking that nothing was forgotten, etc. Precisely what happened
+in this case where tags were missing.
+
+As a general rule we don't accept PRs from non-media maintainers. It's something
+we can discuss, though.
+
+BTW, when I talk about 'trust', it's about trusting the PR author to know all the
+procedures, and having the expertise to know when something is ready to be merged.
+It's not about malicious code or anything like that.
+
+So a driver maintainer will certainly know the driver code, and is expected to review
+patches for that driver. But it takes time to gain the expertise to become a
+media maintainer.
+
+I hope this helps.
+
+Regards,
+
+	Hans
+
+> 
+>>> I looked at 
+>>> https://docs.kernel.org/driver-api/media/maintainer-entry-profile.html but 
+>>> that was not very informative.
+>>>
+>>> But yes, happy to wait for more reviews from Sakari and Laurent (or Tomi given 
+>>> this is about streams support).
+>>>
+>>> Could the process and who-owns-what sub-subsystem be better documented in 
+>>> docs.kernel.org or linuxtv.org? I am aware of the proposed multi-committer 
+>>> model, but until that is finalized even the current process is hard to 
+>>> understand for a newbie :-)
+>>
+>> It's here (link below), but I see that it is out-of-date: it's missing Nicolas Dufresne for
+>> codecs and Bryan O'Donoghue for Qualcomm drivers.
+>>
+>> https://linuxtv.org/downloads/v4l-dvb-apis-new/driver-api/maintainer-entry-profile.html#media-maintainers
+>>
+>> In any case, your PR came in too late. After rc6 is released we only merge fixes as a
+>> general rule. It's good to keep that in mind for the next kernel cycle.
+>>
+>> If your PR contains fixes that you believe are important for v6.18, then discuss that
+>> with Sakari and he can post a PR with those fixes.
+>>
+>>>>> ----------------------------------------------------------------
+>>>>> Changhuang Liang (1):
+>>>>>       media: cadence: csi2rx: Support runtime PM
+>>>>>
+>>>>> Jai Luthra (9):
+>>>>>       dt-bindings: media: ti,j721e-csi2rx-shim: Support 32 dma chans
+>>>>>       media: ti: j721e-csi2rx: separate out device and context
+>>>>>       media: ti: j721e-csi2rx: add a subdev for the core device
+>>>>>       media: ti: j721e-csi2rx: add support for processing virtual channels
+>>>>>       media: cadence: csi2rx: add multistream support
+>>>>>       media: ti: j721e-csi2rx: add multistream support
+>>>>>       media: ti: j721e-csi2rx: Submit all available buffers
+>>>>>       media: ti: j721e-csi2rx: Support runtime suspend
+>>>>>       media: ti: j721e-csi2rx: Support system suspend using pm_notifier
+>>>>>
+>>>>> Pratyush Yadav (4):
+>>>>>       media: ti: j721e-csi2rx: prepare SHIM code for multiple contexts
+>>>>>       media: ti: j721e-csi2rx: allocate DMA channel based on context index
+>>>>>       media: ti: j721e-csi2rx: get number of contexts from device tree
+>>>>>       media: cadence: csi2rx: add get_frame_desc wrapper
+>>>>>
+>>>>> Rishikesh Donadkar (2):
+>>>>>       media: ti: j721e-csi2rx: Remove word size alignment on frame width
+>>>>>       media: ti: j721e-csi2rx: Change the drain architecture for multistream
+>>>>>
+>>>>>  Documentation/devicetree/bindings/media/ti,j721e-csi2rx-shim.yaml |   39 ++++++-
+>>>>>  drivers/media/platform/cadence/Kconfig                            |    1 +
+>>>>>  drivers/media/platform/cadence/cdns-csi2rx.c                      |  491 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++---------------------
+>>>>>  drivers/media/platform/ti/Kconfig                                 |    1 +
+>>>>>  drivers/media/platform/ti/j721e-csi2rx/j721e-csi2rx.c             | 1167 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++--------------------------------------------------
+>>>>>  5 files changed, 1300 insertions(+), 399 deletions(-)
+> 
 
