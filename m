@@ -1,102 +1,76 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BB2C626F2AB;
-	Mon, 15 Sep 2025 05:48:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E08E41D63F7;
+	Mon, 15 Sep 2025 06:29:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.167.242.64
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757915310; cv=none; b=jBC9Sa18I1JnUSQojO5FPucKvWHEvzQlSSuamCNg+FoWMzXIigqxM6NtOKkENADFcSzeFrvEKEn6WidQ2OyNjNlXAfB/JX/Opmalkv6OU0G6OPb8LkM8QWnRe+ByQQWlW39roJLyIc+SBlfIbhPRdL+CDBM9R8tKhkT8omRt0ck=
+	t=1757917750; cv=none; b=D4Vgh/dms3Uc4rRJduT2Uwg7VKRSPiUve1G1a54bahRvVm+15mgMevBkpmTuykjPSARiDRgZ724WWqkthDaqPuvFDJnwisVpUc1SOOsCtuy6IUvzJLFZPB2SrtpKS4PHwPTmwqjqFJ+FKoeZj+YcsHzm5BKrx8Vr91bd+uIfo0A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757915310; c=relaxed/simple;
-	bh=pNhpXvcF7LKn5UVncvyxPjpBkffgzOi8e5YEIYnOU1E=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=WQO1WxIcjcXexOBbXkXYd/q/9ClYEreE6eR77lKTJArsRAbzdwHjzwAtfiw8Kubd0qRX+CbnN2lfL1al7aw8/yXwNgmS+yi+2q0WA0yDHz9e6MqvzP2hMCuO5JcJosbRk87voRU1vxX4iwCdBfRoHc3C5tAN0hwfxiClHwna1wM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nHe7Ty6+; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1757917750; c=relaxed/simple;
+	bh=FFuT5NX7cpSgcO6YIvMO0vxOF71nhfjyErPRNz2NRlE=;
+	h=Content-Type:MIME-Version:In-Reply-To:References:Subject:From:Cc:
+	 To:Date:Message-ID; b=khICXoLB0/8F/EF2+DN36v98v9AkIEm4O4k0Qf4OGhZOaJmB/2xhzgPT2kMO0NDvpWjsblvgHhaNQxgXULH7UZoodT/VlrgX3zulaVyg3d1la+TPoqsKfknZ9JwBXP6LQMo8a9STBQeyct6MxZED1mPJuEqbD3BQP+B1X3iIYGc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ideasonboard.com; spf=pass smtp.mailfrom=ideasonboard.com; dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b=N8eGrAd9; arc=none smtp.client-ip=213.167.242.64
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ideasonboard.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ideasonboard.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nHe7Ty6+"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9696EC4CEF1;
-	Mon, 15 Sep 2025 05:48:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1757915310;
-	bh=pNhpXvcF7LKn5UVncvyxPjpBkffgzOi8e5YEIYnOU1E=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=nHe7Ty6+c/JGvDY+UydwDMZNts0Mvoe5CmZXEM3wRbXlJQZsiKQbiHX1dqED8BM6L
-	 jhMyqCWP4HV33158JPyukMw9azmtNrGpkymRgEWzH8txAsk0rOblpfGqGH9ecTIJff
-	 SsLxSOkvzP5SEsR+y+RlPv8/wUQ9v3p6CHq91exxQSTUKjsxYQ6lnV1GyfIF3fLnn7
-	 aD6U1ucW6cOBHuGB2utJFKkQvvAjc/DWH2//axsYKrHMDRKhgk/Ut1ZqFbNUGkItPt
-	 mky2sisAv2UghibJpCApHoRxj04wcBuUhqn0dWEmz2sHkq/6x1znCKDKs3Y1Qa1pZc
-	 pNH0C9osgWH6A==
-Date: Sat, 13 Sep 2025 13:19:33 +0300
-From: Leon Romanovsky <leon@kernel.org>
-To: Alex Mastro <amastro@fb.com>
-Cc: Alex Williamson <alex.williamson@redhat.com>,
-	Jason Gunthorpe <jgg@nvidia.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Bjorn Helgaas <bhelgaas@google.com>,
-	Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
-	Christoph Hellwig <hch@lst.de>, dri-devel@lists.freedesktop.org,
-	iommu@lists.linux.dev, Jens Axboe <axboe@kernel.dk>,
-	Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
-	linaro-mm-sig@lists.linaro.org, linux-block@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
-	linux-mm@kvack.org, linux-pci@vger.kernel.org,
-	Logan Gunthorpe <logang@deltatee.com>,
-	Marek Szyprowski <m.szyprowski@samsung.com>,
-	Robin Murphy <robin.murphy@arm.com>,
-	Sumit Semwal <sumit.semwal@linaro.org>,
-	Vivek Kasireddy <vivek.kasireddy@intel.com>,
-	Will Deacon <will@kernel.org>
-Subject: Re: [PATCH v1 10/10] vfio/pci: Add dma-buf export support for MMIO
- regions
-Message-ID: <20250913101933.GW341237@unreal>
-References: <cover.1754311439.git.leon@kernel.org>
- <5e043d8b95627441db6156e7f15e6e1658e9d537.1754311439.git.leon@kernel.org>
- <aMRsoUx/NH/Dspm9@devgpu015.cco6.facebook.com>
+	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="N8eGrAd9"
+Received: from mail.ideasonboard.com (unknown [IPv6:2401:4900:1c66:2dbc:e233:e1b4:15e7:45cd])
+	by perceval.ideasonboard.com (Postfix) with ESMTPSA id C9F34C71;
+	Mon, 15 Sep 2025 08:27:41 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+	s=mail; t=1757917662;
+	bh=FFuT5NX7cpSgcO6YIvMO0vxOF71nhfjyErPRNz2NRlE=;
+	h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
+	b=N8eGrAd9MUiqOeidydsQDMB8llNKt3+oErcHtEacsKpRhI4w+G5BWAvov5PRJtQJo
+	 H4E06TmkcX2t2fVMnaxU/BKSJXIHZkgxf2zTgBNYp2KdShwfcYuuq5XQiXlJaZdA3Z
+	 txCF0uH/TyIxkhpfWLrMF6dLrUn1cb63WwqwW+hI=
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <aMRsoUx/NH/Dspm9@devgpu015.cco6.facebook.com>
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <175758928516.1246375.13284167198046981915@ping.linuxembedded.co.uk>
+References: <20250911-imx335_binning-v2-0-30a28df74df6@ideasonboard.com> <20250911-imx335_binning-v2-5-30a28df74df6@ideasonboard.com> <175758928516.1246375.13284167198046981915@ping.linuxembedded.co.uk>
+Subject: Re: [PATCH v2 5/8] media: imx335: Handle runtime PM in leaf functions
+From: Jai Luthra <jai.luthra@ideasonboard.com>
+Cc: linux-media@vger.kernel.org, linux-kernel@vger.kernel.org, Tommaso Merciai <tomm.merciai@gmail.com>
+To: Kieran Bingham <kieran.bingham@ideasonboard.com>, Mauro Carvalho Chehab <mchehab@kernel.org>, Sakari Ailus <sakari.ailus@linux.intel.com>
+Date: Mon, 15 Sep 2025 11:58:53 +0530
+Message-ID: <175791773319.7481.4286008141874758651@freya>
+User-Agent: alot/0.12.dev28+gd2c823fe
 
-On Fri, Sep 12, 2025 at 11:55:29AM -0700, Alex Mastro wrote:
-> On Mon, Aug 04, 2025 at 04:00:45PM +0300, Leon Romanovsky wrote:
-> > +static void dma_ranges_to_p2p_phys(struct vfio_pci_dma_buf *priv,
-> > +				   struct vfio_device_feature_dma_buf *dma_buf,
-> > +				   struct vfio_region_dma_range *dma_ranges)
-> > +{
-> > +	struct pci_dev *pdev = priv->vdev->pdev;
-> > +	phys_addr_t pci_start;
-> > +	int i;
-> > +
-> > +	pci_start = pci_resource_start(pdev, dma_buf->region_index);
-> > +	for (i = 0; i < dma_buf->nr_ranges; i++) {
-> > +		priv->phys_vec[i].len = dma_ranges[i].length;
-> > +		priv->phys_vec[i].paddr += pci_start + dma_ranges[i].offset;
-> 
-> Is the intent really to += paddr? I would have expected a plain assignment.
+Hi Kieran,
 
-In this specific case, there is no difference, because phys_vec is
-initialized to 0, but It needs to be "=" and not "+=".
+Thanks for the review.
 
-> 
-> > +		priv->size += priv->phys_vec[i].len;
-> > +	}
-> > +	priv->nr_ranges = dma_buf->nr_ranges;
-> > +}
-> 
-> ...
-> 
-> > +	priv->phys_vec = kcalloc(get_dma_buf.nr_ranges, sizeof(*priv->phys_vec),
-> > +				 GFP_KERNEL);
-> > +	if (!priv->phys_vec) {
-> > +		ret = -ENOMEM;
-> > +		goto err_free_priv;
-> > +	}
-> > +
-> > +	priv->vdev = vdev;
-> > +	dma_ranges_to_p2p_phys(priv, &get_dma_buf, dma_ranges);
-> 
+Quoting Kieran Bingham (2025-09-11 16:44:45)
+> Quoting Jai Luthra (2025-09-11 09:14:21)
+> > Simplify .s_stream callback implementation by moving the runtime PM
+> > calls to the leaf functions. This patch should not affect any
+> > functionality.
+> >=20
+> > Signed-off-by: Jai Luthra <jai.luthra@ideasonboard.com>
+>=20
+> Looks reasonable to me and although the stop_streaming function changes
+> to no longer return a value - it was previously unused so no functional
+> change indeed as far as I can see:
+
+Yeah it was unused before. This anyway gets fixed when switching to streams
+API in the last patch of the series.
+
+>=20
+> Reviewed-by: Kieran Bingham <kieran.bingham@ideasonboard.com>
+>=20
+> > ---
+> >  drivers/media/i2c/imx335.c | 51 ++++++++++++++++++++------------------=
+--------
+> >  1 file changed, 22 insertions(+), 29 deletions(-)
+> >=20
+
+Thanks,
+    Jai
