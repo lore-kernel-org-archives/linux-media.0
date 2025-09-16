@@ -1,116 +1,121 @@
-Received: from smtp.smtpout.orange.fr (smtp-28.smtpout.orange.fr [80.12.242.28])
+Received: from mail-lf1-f53.google.com (mail-lf1-f53.google.com [209.85.167.53])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BF1A232D5DB;
-	Tue, 16 Sep 2025 17:05:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=80.12.242.28
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 00FF414E2E2
+	for <linux-media@vger.kernel.org>; Tue, 16 Sep 2025 18:39:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758042346; cv=none; b=Ooud9fl/xRRMMOj+gG7vJz6AOWWP/2auY00bjmZPbK0a8Mt7eM2El9dtDz6OaRYSfSQAvSLN3Blk3+vaTagWED7w/BhOi+EjmWEKEwqfaat5NBPzVwh4fR2w2d0rT1uzpJvlEz2G6oOXS50IwZPs65+Bugx4AQfa9yJgfzaX6Kw=
+	t=1758047993; cv=none; b=iEzzTUfMHA8QD2VDsN2Egsnhr2LE/ulht8TYdEvsbfZPHfGZKa73S0hmHbseANf0hcaA3jKDBHb5wXqx8Ot4x43q8Ka3/DfcL6Ulw7baECcKulBykEB32CJKTwcV3nBRK13U/Jt9KcHlObVLlG6yK6DUlzLYfSFZfDHYVAnUc6k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758042346; c=relaxed/simple;
-	bh=f2S84XCnfyCMujHxvoGwdS9xv/u+KapxI+1bjHR3tJs=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=AHZpw7ZOXHDs9Iz7Yv04+dsPtzF/g+OGn94kxNVdyL809aJKg5tDzht2VAX/fdBp6dgekNEQ2KM3YAun3kUEhj1GA7vpSjwtFpYdfy7NUf/kr2TJjHyuvByLrBuAlsLox//geuoNERBxtLN8g/RQcyVBGQyD+/QF1KYFkm1NuxA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wanadoo.fr; spf=pass smtp.mailfrom=wanadoo.fr; dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b=COVHlHgZ; arc=none smtp.client-ip=80.12.242.28
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wanadoo.fr
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=wanadoo.fr
+	s=arc-20240116; t=1758047993; c=relaxed/simple;
+	bh=B0enEMFSwMyyhs+cWF9g0TMfM3A87TAdw61eXOIpRUs=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=B9G53LRnbKmtdayfOhZaDLHEvqxVWb8ZDTKgYBsBO3xlt6O4q94m44G6R8+MNs7GYUyOSqs+Uq47BeEoTw5WIEn6bGEzUa4kZnhW044FpkhkTzlpgYK3gCByvuSMG7g1ZIJrWPykQ3yGRW7XTmjrqLSp8ugOov3RXfgtPqmoSwk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=dKV5EcdR; arc=none smtp.client-ip=209.85.167.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b="COVHlHgZ"
-Received: from [IPV6:2a01:cb10:785:b00:8347:f260:7456:7662]
- ([IPv6:2a01:cb10:785:b00:8347:f260:7456:7662])
-	by smtp.orange.fr with ESMTPA
-	id yYyWugYwOPNPdyYyWuxO1w; Tue, 16 Sep 2025 18:56:20 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wanadoo.fr;
-	s=t20230301; t=1758041780;
-	bh=KxXeHLxPfTqm5VMdb4U/d3SjNLsOdUyu/UfmEVmpoBU=;
-	h=Message-ID:Date:MIME-Version:Subject:To:From;
-	b=COVHlHgZiQJu0vXSGCu8h560SE2GEPKVyuM25traI/yLHGjYZrafnA+mDEYAFiAN0
-	 Ql8lCne8c0zz5uCsgQHg0S5p8v56D5eb9mQIbvquYxx9trNJ2sCKjfsmX9iRXq5eTq
-	 wUMBCpBoVxlwPzQkBA4h7mTk905D0Zx4RPjefzdTBulkax9UyagZKleI00E/a3Oc24
-	 vz3iF0qP+60XJWCqEW1kWcx6IbxgFBiz0cUPyCuVupJEm1NKNwFTUCzAW+mUO5JbTs
-	 s06r3M0V8pPrC+StU+evUxWMGIAm6P20X7jSovxvu4qNO5Mc1w0Er0qMQMy5WiMXsD
-	 oEKLaKR1SF1hw==
-X-ME-Helo: [IPV6:2a01:cb10:785:b00:8347:f260:7456:7662]
-X-ME-Auth: bWFyaW9uLmphaWxsZXRAd2FuYWRvby5mcg==
-X-ME-Date: Tue, 16 Sep 2025 18:56:20 +0200
-X-ME-IP: 2a01:cb10:785:b00:8347:f260:7456:7662
-Message-ID: <a9b8f7bb-5704-48b0-9a33-e1470b222688@wanadoo.fr>
-Date: Tue, 16 Sep 2025 18:56:15 +0200
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="dKV5EcdR"
+Received: by mail-lf1-f53.google.com with SMTP id 2adb3069b0e04-5679dbcf9d8so5142866e87.0
+        for <linux-media@vger.kernel.org>; Tue, 16 Sep 2025 11:39:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1758047990; x=1758652790; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=gFe5GgbTNvGX3LB5KwQDm8MARSMgANeSXxzxhTr9uFg=;
+        b=dKV5EcdRzF6E4AL4g/UI0P+fRQLArT8TFdv0ZqMg2cnB3UNAugk6fJ79K3LqUO9CtN
+         5se0C3wY2dTe+uKUkI6DhzNtqTElcrQVYrfa3Z/5XFquvOtbGvWxGeV1QlXs0D2UV0t9
+         eFvq+CNrMtWlfenImuG1jKBlOCiYz5AtliHUI=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1758047990; x=1758652790;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=gFe5GgbTNvGX3LB5KwQDm8MARSMgANeSXxzxhTr9uFg=;
+        b=nekcTQuksMgjeVrEPSKSBFy94x1PCcWEHyxD7XnejkhrvGGIz1WDoWx+vy2tkAuQ41
+         Pv32S52d780bvbbW51wF/U4SifbHOyS3cgk5OM6uy/4/ja3zkBEgnHOAsPgMB8JlPzcM
+         eIxIrH24UB1FKkK1A3/b7eNSmbYpO7JNmFy1XXpSUwa2kl98MTzUgFDQJ+7L6Eb2tvye
+         wK8wcxArNq5obMgPtIdAEA7tNhoQcxxxC7BVLzxoclmYGBYOb6hxR04iSMdhFpsbWx2U
+         6gzH000Fxcu5envhfG2t4BveybrU5NAW2RKxzQ8ukiKP2fz/hxv+J262ZgmEAFnR2gXY
+         WeRw==
+X-Gm-Message-State: AOJu0YymvtrpqeLym2bhKs4f60cRVJMEFunU+EmYLwv8qPQFcim7u6dw
+	/RIbIiULYzvFr0WB8h8ZOgspbx6N98QCsSacSSb301EU/mN5YPdFWyAS7suXOtElZMvc0tGgc3q
+	Kb2U=
+X-Gm-Gg: ASbGncs3BjwZtykYO3N1CQojH8e2/UrEG0ncISGo61wg7wrYPQRGTrHK+YM6a0FROA6
+	6jCcmqqZcHJLI5/YzQ/vGH7mBKCLQIuh+rhxCvc+WAXh6TGjHOJJOoWuVAv2BXUsAHNSlmb3YXr
+	7QwyBSIMnPb0xwnw+rE8tyltsV2aO58V4ZoRZWMiG20lIcjWvBc9z/jXMFzQ01GPGtYJOn0VEh8
+	8IOhCmrtp65SvYsLX3aT0dJX+Giwtazoj2DV/BhgNTizEpKLeyPz8nPia5d6vQoBsoS2cCX881G
+	yE+uKOyxCb4sthniqQFQ6k+Hi3aOS1Bn9+0Yx7HPe8gfCE0+Iz66WGZzeOl17ICL/o9/us4Y2tB
+	1qR5fivvAQjPQJ6Hu1xtKqIP0tXpDXLBOij0rM2eRNmeZR6qlOOIIVPS4l9+g
+X-Google-Smtp-Source: AGHT+IFIzCTVLxVcFuOyWcUBTyKGxYoxy5Ln5WAbBhy1BLr4kwrDrWuz7AfAqrvMOe8zVhw/zq/KHQ==
+X-Received: by 2002:a05:6512:3599:b0:55f:4512:71f3 with SMTP id 2adb3069b0e04-5704f1ce923mr4457893e87.33.1758047989846;
+        Tue, 16 Sep 2025 11:39:49 -0700 (PDT)
+Received: from mail-lf1-f51.google.com (mail-lf1-f51.google.com. [209.85.167.51])
+        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-56e651919d1sm4678775e87.126.2025.09.16.11.39.49
+        for <linux-media@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 16 Sep 2025 11:39:49 -0700 (PDT)
+Received: by mail-lf1-f51.google.com with SMTP id 2adb3069b0e04-5679dbcf9d8so5142840e87.0
+        for <linux-media@vger.kernel.org>; Tue, 16 Sep 2025 11:39:49 -0700 (PDT)
+X-Received: by 2002:a05:651c:1118:10b0:338:d42:2a73 with SMTP id
+ 38308e7fff4ca-351409b51d3mr40724951fa.45.1758047988791; Tue, 16 Sep 2025
+ 11:39:48 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] media: mtk-mdp: Fix a reference leak in mtk_mdp_probe()
-To: Haoxiang Li <haoxiang_li2024@163.com>, minghsiu.tsai@mediatek.com,
- houlong.wei@mediatek.com, andrew-ct.chen@mediatek.com, mchehab@kernel.org,
- matthias.bgg@gmail.com, angelogioacchino.delregno@collabora.com,
- hverkuil@kernel.org, eballetbo@kernel.org, eizan@chromium.org
-Cc: linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, linux-mediatek@lists.infradead.org,
- stable@vger.kernel.org
-References: <20250915125248.181608-1-haoxiang_li2024@163.com>
-From: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Content-Language: en-US, fr-FR
-In-Reply-To: <20250915125248.181608-1-haoxiang_li2024@163.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+References: <20250916161453.24740-1-laurent.pinchart@ideasonboard.com>
+In-Reply-To: <20250916161453.24740-1-laurent.pinchart@ideasonboard.com>
+From: Ricardo Ribalda <ribalda@chromium.org>
+Date: Tue, 16 Sep 2025 20:39:36 +0200
+X-Gmail-Original-Message-ID: <CANiDSCtYZM25=764=VXj9wFKGRp5JSh=JdtFrAKguWYK2jb3ZQ@mail.gmail.com>
+X-Gm-Features: AS18NWA1iIUPNj1SaDvpeliFNlCuQVNRKtQH-xLfW3KcqdbpEr6mEKxDGItR_Fg
+Message-ID: <CANiDSCtYZM25=764=VXj9wFKGRp5JSh=JdtFrAKguWYK2jb3ZQ@mail.gmail.com>
+Subject: Re: [PATCH] media: uvcvideo: Replace dev_dbg() with uvc_dbg()
+To: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Cc: linux-media@vger.kernel.org, Hans de Goede <hansg@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 
-Le 15/09/2025 à 14:52, Haoxiang Li a écrit :
-> vpu_get_plat_device() increases the reference count of the returned
-> platform device. Add platform_device_put() to prevent reference leak.
-
-Hi,
-
-I think it is also missing in the remove function.
-
-And while at it, mtk_mdp_unregister_m2m_device(mdp) seems to also be 
-missing in the error handling path of the probe.
-
-Just my 2c.
-
-CJ
-
-> 
-> Fixes: ee18fc7b0b95 ("media: mtk-mdp: handle vpu_wdt_reg_handler() errors during probe")
-> Cc: stable@vger.kernel.org
-> Signed-off-by: Haoxiang Li <haoxiang_li2024@163.com>
+On Tue, 16 Sept 2025 at 18:15, Laurent Pinchart
+<laurent.pinchart@ideasonboard.com> wrote:
+>
+> The uvcvideo driver uses a uvc_dbg() macro that supports enabling debug
+> message categories selectively, and prints a KERN_DEBUG message. The
+> macro is used through the driver, but one direct dev_dbg() call creeped
+> in. Replace it with uvc_dbg().
+>
+> Signed-off-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 > ---
->   drivers/media/platform/mediatek/mdp/mtk_mdp_core.c | 7 +++++--
->   1 file changed, 5 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/media/platform/mediatek/mdp/mtk_mdp_core.c b/drivers/media/platform/mediatek/mdp/mtk_mdp_core.c
-> index 80fdc6ff57e0..6aedb6033010 100644
-> --- a/drivers/media/platform/mediatek/mdp/mtk_mdp_core.c
-> +++ b/drivers/media/platform/mediatek/mdp/mtk_mdp_core.c
-> @@ -198,7 +198,7 @@ static int mtk_mdp_probe(struct platform_device *pdev)
->   				  VPU_RST_MDP);
->   	if (ret) {
->   		dev_err(&pdev->dev, "Failed to register reset handler\n");
-> -		goto err_m2m_register;
-> +		goto err_vpu_get_dev;
->   	}
->   
->   	platform_set_drvdata(pdev, mdp);
-> @@ -206,7 +206,7 @@ static int mtk_mdp_probe(struct platform_device *pdev)
->   	ret = vb2_dma_contig_set_max_seg_size(&pdev->dev, DMA_BIT_MASK(32));
->   	if (ret) {
->   		dev_err(&pdev->dev, "Failed to set vb2 dma mag seg size\n");
-> -		goto err_m2m_register;
-> +		goto err_vpu_get_dev;
->   	}
->   
->   	pm_runtime_enable(dev);
-> @@ -214,6 +214,9 @@ static int mtk_mdp_probe(struct platform_device *pdev)
->   
->   	return 0;
->   
-> +err_vpu_get_dev:
-> +	platform_device_put(mdp->vpu_dev);
-> +
->   err_m2m_register:
->   	v4l2_device_unregister(&mdp->v4l2_dev);
->   
+>  drivers/media/usb/uvc/uvc_ctrl.c | 3 +--
+>  1 file changed, 1 insertion(+), 2 deletions(-)
+>
+> diff --git a/drivers/media/usb/uvc/uvc_ctrl.c b/drivers/media/usb/uvc/uvc_ctrl.c
+> index 2905505c240c..d58bd888f0bf 100644
+> --- a/drivers/media/usb/uvc/uvc_ctrl.c
+> +++ b/drivers/media/usb/uvc/uvc_ctrl.c
+> @@ -2929,8 +2929,7 @@ int uvc_ctrl_restore_values(struct uvc_device *dev)
+>                         if (!ctrl->initialized || !ctrl->modified ||
+>                             (ctrl->info.flags & UVC_CTRL_FLAG_RESTORE) == 0)
+>                                 continue;
+> -                       dev_dbg(&dev->intf->dev,
+> -                               "restoring control %pUl/%u/%u\n",
+> +                       uvc_dbg(dev, CONTROL, "restoring control %pUl/%u/%u\n",
+>                                 ctrl->info.entity, ctrl->info.index,
+>                                 ctrl->info.selector);
 
+Reviewed-by: Ricardo Ribalda <ribalda@chromium.org>
+
+>                         ctrl->dirty = 1;
+>
+> base-commit: 0e2ee70291e64a30fe36960c85294726d34a103e
+> --
+> Regards,
+>
+> Laurent Pinchart
+>
+
+
+-- 
+Ricardo Ribalda
