@@ -1,87 +1,116 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from smtp.smtpout.orange.fr (smtp-28.smtpout.orange.fr [80.12.242.28])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0CF833294E8;
-	Tue, 16 Sep 2025 16:58:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BF1A232D5DB;
+	Tue, 16 Sep 2025 17:05:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=80.12.242.28
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758041915; cv=none; b=r2+jpjNrXECXOQtShMumCjbaEZZMXBFhpDXuZe1WTGNy5K96XckHgzFnzTdsdns00fDvVIyM3D3t4X0I1byOK9Gii4icwElpuc50NwsesLfemi5gZqPHRm/pM6BFq4AQOgxDdGWh9G6BAMD22ntiMuMIOfhniG7EsRWd6Lc6RkI=
+	t=1758042346; cv=none; b=Ooud9fl/xRRMMOj+gG7vJz6AOWWP/2auY00bjmZPbK0a8Mt7eM2El9dtDz6OaRYSfSQAvSLN3Blk3+vaTagWED7w/BhOi+EjmWEKEwqfaat5NBPzVwh4fR2w2d0rT1uzpJvlEz2G6oOXS50IwZPs65+Bugx4AQfa9yJgfzaX6Kw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758041915; c=relaxed/simple;
-	bh=D3qvIg6ko2yKinLTtLMypu7l8kYVGM9TPZja3TTO2pY=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=jWc7j+csKtpQm/inuEwvRgHQdMO5GnqzipV78H3xMnv34MJ3wFD39SFdmMbrsVtmTBmkE69jTGDy4kSB/K1Eh+pEIU5IgdUpCT/hc8V9wq9JAuPOJ4cRtp9y7NuV0yFFWm8TDOphM6k+74UD2zRNUcUAoQj5GkuRH9oJOuhovkA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=iNfloWg+; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1758042346; c=relaxed/simple;
+	bh=f2S84XCnfyCMujHxvoGwdS9xv/u+KapxI+1bjHR3tJs=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=AHZpw7ZOXHDs9Iz7Yv04+dsPtzF/g+OGn94kxNVdyL809aJKg5tDzht2VAX/fdBp6dgekNEQ2KM3YAun3kUEhj1GA7vpSjwtFpYdfy7NUf/kr2TJjHyuvByLrBuAlsLox//geuoNERBxtLN8g/RQcyVBGQyD+/QF1KYFkm1NuxA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wanadoo.fr; spf=pass smtp.mailfrom=wanadoo.fr; dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b=COVHlHgZ; arc=none smtp.client-ip=80.12.242.28
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wanadoo.fr
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=wanadoo.fr
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="iNfloWg+"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7FC4FC4CEFD;
-	Tue, 16 Sep 2025 16:58:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1758041914;
-	bh=D3qvIg6ko2yKinLTtLMypu7l8kYVGM9TPZja3TTO2pY=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=iNfloWg+RYVsWVVUekTMIF7SiaatayhzqVsocVe2bBlFAtCHkJVS6b5eRCX6NhaPE
-	 fakx5iD9ewvQI2s/cwIpuNxDO2C+e+TJ3YAQimnOOaHiAnWSZzBOFIup0SrF4Fd1qm
-	 h+P6GV8YjwhS9mfPXaYD0gAtLqVUBFlf4+nX8YVv//zQAm3/iNXMl/7q/p5lV2rId+
-	 UU+x1b1b90QDosYsKb0Ff+b5k3TRLUohBEqr/XTsDeDKQ2ImqbWgwQ7n780sSyh8fv
-	 1SvXu/HVTCfILKAqE2b2txlgRoZezxvLIZ2j52GagqR+LPsoCVV0cSpYPNDD8iIt1B
-	 tchFKDp78eyfg==
-From: Bjorn Andersson <andersson@kernel.org>
-To: Loic Poulain <loic.poulain@oss.qualcomm.com>,
-	Robert Foss <rfoss@kernel.org>,
-	Andi Shyti <andi.shyti@kernel.org>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Konrad Dybcio <konradybcio@kernel.org>,
-	bryan.odonoghue@linaro.org,
-	Wenmeng Liu <quic_wenmliu@quicinc.com>
-Cc: linux-i2c@vger.kernel.org,
-	linux-arm-msm@vger.kernel.org,
-	devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-media@vger.kernel.org,
-	Wenmeng Liu <quic_wenmliu@qualcomm.com>,
-	Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
-Subject: Re: (subset) [PATCH v6 0/3] Add CCI and imx577 sensor support for LeMans EVK
-Date: Tue, 16 Sep 2025 11:58:17 -0500
-Message-ID: <175804189857.3983789.14525162950764666455.b4-ty@kernel.org>
-X-Mailer: git-send-email 2.51.0
-In-Reply-To: <20250912-camss_rb8-v6-0-c9a6c3d67392@oss.qualcomm.com>
-References: <20250912-camss_rb8-v6-0-c9a6c3d67392@oss.qualcomm.com>
+	dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b="COVHlHgZ"
+Received: from [IPV6:2a01:cb10:785:b00:8347:f260:7456:7662]
+ ([IPv6:2a01:cb10:785:b00:8347:f260:7456:7662])
+	by smtp.orange.fr with ESMTPA
+	id yYyWugYwOPNPdyYyWuxO1w; Tue, 16 Sep 2025 18:56:20 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wanadoo.fr;
+	s=t20230301; t=1758041780;
+	bh=KxXeHLxPfTqm5VMdb4U/d3SjNLsOdUyu/UfmEVmpoBU=;
+	h=Message-ID:Date:MIME-Version:Subject:To:From;
+	b=COVHlHgZiQJu0vXSGCu8h560SE2GEPKVyuM25traI/yLHGjYZrafnA+mDEYAFiAN0
+	 Ql8lCne8c0zz5uCsgQHg0S5p8v56D5eb9mQIbvquYxx9trNJ2sCKjfsmX9iRXq5eTq
+	 wUMBCpBoVxlwPzQkBA4h7mTk905D0Zx4RPjefzdTBulkax9UyagZKleI00E/a3Oc24
+	 vz3iF0qP+60XJWCqEW1kWcx6IbxgFBiz0cUPyCuVupJEm1NKNwFTUCzAW+mUO5JbTs
+	 s06r3M0V8pPrC+StU+evUxWMGIAm6P20X7jSovxvu4qNO5Mc1w0Er0qMQMy5WiMXsD
+	 oEKLaKR1SF1hw==
+X-ME-Helo: [IPV6:2a01:cb10:785:b00:8347:f260:7456:7662]
+X-ME-Auth: bWFyaW9uLmphaWxsZXRAd2FuYWRvby5mcg==
+X-ME-Date: Tue, 16 Sep 2025 18:56:20 +0200
+X-ME-IP: 2a01:cb10:785:b00:8347:f260:7456:7662
+Message-ID: <a9b8f7bb-5704-48b0-9a33-e1470b222688@wanadoo.fr>
+Date: Tue, 16 Sep 2025 18:56:15 +0200
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] media: mtk-mdp: Fix a reference leak in mtk_mdp_probe()
+To: Haoxiang Li <haoxiang_li2024@163.com>, minghsiu.tsai@mediatek.com,
+ houlong.wei@mediatek.com, andrew-ct.chen@mediatek.com, mchehab@kernel.org,
+ matthias.bgg@gmail.com, angelogioacchino.delregno@collabora.com,
+ hverkuil@kernel.org, eballetbo@kernel.org, eizan@chromium.org
+Cc: linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, linux-mediatek@lists.infradead.org,
+ stable@vger.kernel.org
+References: <20250915125248.181608-1-haoxiang_li2024@163.com>
+From: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Content-Language: en-US, fr-FR
+In-Reply-To: <20250915125248.181608-1-haoxiang_li2024@163.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 
+Le 15/09/2025 à 14:52, Haoxiang Li a écrit :
+> vpu_get_plat_device() increases the reference count of the returned
+> platform device. Add platform_device_put() to prevent reference leak.
 
-On Fri, 12 Sep 2025 23:19:24 +0800, Wenmeng Liu wrote:
-> This series adds cci definition and imx577 sensor enablement
-> via cci1 on LeMans EVK.
+Hi,
+
+I think it is also missing in the remove function.
+
+And while at it, mtk_mdp_unregister_m2m_device(mdp) seems to also be 
+missing in the error handling path of the probe.
+
+Just my 2c.
+
+CJ
+
 > 
-> An example media-ctl pipeline for the imx577 is:
+> Fixes: ee18fc7b0b95 ("media: mtk-mdp: handle vpu_wdt_reg_handler() errors during probe")
+> Cc: stable@vger.kernel.org
+> Signed-off-by: Haoxiang Li <haoxiang_li2024@163.com>
+> ---
+>   drivers/media/platform/mediatek/mdp/mtk_mdp_core.c | 7 +++++--
+>   1 file changed, 5 insertions(+), 2 deletions(-)
 > 
-> media-ctl -d /dev/media0 --reset
-> media-ctl -d /dev/media0 -V '"imx577 0-001a":0[fmt:SRGGB10/4056x3040 field:none]'
-> media-ctl -d /dev/media0 -V '"msm_csiphy1":0[fmt:SRGGB10/4056x3040]'
-> media-ctl -d /dev/media0 -V '"msm_csid0":0[fmt:SRGGB10/4056x3040]'
-> media-ctl -d /dev/media0 -V '"msm_vfe0_rdi0":0[fmt:SRGGB10/4056x3040]'
-> media-ctl -d /dev/media0 -l '"msm_csiphy1":1->"msm_csid0":0[1]'
-> media-ctl -d /dev/media0 -l '"msm_csid0":1->"msm_vfe0_rdi0":0[1]'
-> 
-> [...]
+> diff --git a/drivers/media/platform/mediatek/mdp/mtk_mdp_core.c b/drivers/media/platform/mediatek/mdp/mtk_mdp_core.c
+> index 80fdc6ff57e0..6aedb6033010 100644
+> --- a/drivers/media/platform/mediatek/mdp/mtk_mdp_core.c
+> +++ b/drivers/media/platform/mediatek/mdp/mtk_mdp_core.c
+> @@ -198,7 +198,7 @@ static int mtk_mdp_probe(struct platform_device *pdev)
+>   				  VPU_RST_MDP);
+>   	if (ret) {
+>   		dev_err(&pdev->dev, "Failed to register reset handler\n");
+> -		goto err_m2m_register;
+> +		goto err_vpu_get_dev;
+>   	}
+>   
+>   	platform_set_drvdata(pdev, mdp);
+> @@ -206,7 +206,7 @@ static int mtk_mdp_probe(struct platform_device *pdev)
+>   	ret = vb2_dma_contig_set_max_seg_size(&pdev->dev, DMA_BIT_MASK(32));
+>   	if (ret) {
+>   		dev_err(&pdev->dev, "Failed to set vb2 dma mag seg size\n");
+> -		goto err_m2m_register;
+> +		goto err_vpu_get_dev;
+>   	}
+>   
+>   	pm_runtime_enable(dev);
+> @@ -214,6 +214,9 @@ static int mtk_mdp_probe(struct platform_device *pdev)
+>   
+>   	return 0;
+>   
+> +err_vpu_get_dev:
+> +	platform_device_put(mdp->vpu_dev);
+> +
+>   err_m2m_register:
+>   	v4l2_device_unregister(&mdp->v4l2_dev);
+>   
 
-Applied, thanks!
-
-[2/3] arm64: dts: qcom: sa8775p: Add CCI definitions
-      commit: 3964a91e552880c356ec4d3f09eed927f48e9c66
-[3/3] arm64: dts: qcom: lemans-evk-camera: Add DT overlay
-      commit: b68fc45910d4eb1b3bb7e160282fba5a4bdd8409
-
-Best regards,
--- 
-Bjorn Andersson <andersson@kernel.org>
