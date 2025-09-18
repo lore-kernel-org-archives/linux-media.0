@@ -1,48 +1,33 @@
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BF4D178F59;
-	Thu, 18 Sep 2025 12:01:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DC398286427
+	for <linux-media@vger.kernel.org>; Thu, 18 Sep 2025 12:09:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.167.242.64
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758196909; cv=none; b=Q3RzEixpPLNIINV6BTN1ATYXrWMmDY1/So7VTK8VsaZYBpfYPMpKHu5pc1Ohtqh6EWhHssoAfllZ3cfn4mvXxRpIumgl9uAstzeXE3EwdBZ9ZMu6hVrAhfHKMJg3RvcN+2vwRFBRx4HN2QOdTt7XaAULMs6XJBYBxRKtUx2Jles=
+	t=1758197354; cv=none; b=OYQUMmg3kgx+NpWgcpnCXVtIQbYYIgDXX6ZbPfUjp3DuQEblcgxrFEtJGRJv8OxXXAuUa6GLZ2SYKmTuggp1WzHYM+W1UfKZSBoudYM4O79xsIn5763LtdMSPGTeZp5WrKE1zImnv3XgFO36NWacPbRLw4KIbCSHiq2vyqX9GlE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758196909; c=relaxed/simple;
-	bh=v9ef4nig/yfccKeAJEpJSA9wWCx0vUtghQ9jBLfY9mA=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-ID:To:CC; b=la9azZOdSEkFmRNC+93S8HiAgCiHCbZyO8zAneA6Zxb7YZ8pclRlh9B0XnMsbs5NNBL+1tyvMrkk3NgJYChBFg9gC+w/AlT+h6oo7207pLMmOJIhHK+pEZE/mlqdl8M2RGHaBwV3HMjCTjBlxvAL+l1DSFrWWhNRwxpenNRP4T8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=LPENl4dC; arc=none smtp.client-ip=205.220.168.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+	s=arc-20240116; t=1758197354; c=relaxed/simple;
+	bh=QNIGtamG6mL9Cw8rIuidVNIiFUf3eLWRIrQEXNqSJcw=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=uW/1y5FEjJsf3tnVy1rHFpysEtMxf/PxTSTrEBVwpB6+fKCVBAgeOrw3dOkYI6Z3CCCkDKRVrWXiwFAdBXNMv2I3fJXn9juYdFo29sdJBoei3F42QudJQP7lk9Z8dQFrhGgDR66x9KKzGechRbkTtM1zHIw1UXjew27psz4Ev80=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ideasonboard.com; spf=pass smtp.mailfrom=ideasonboard.com; dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b=baAHNJbL; arc=none smtp.client-ip=213.167.242.64
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ideasonboard.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ideasonboard.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="LPENl4dC"
-Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 58IBE51v018235;
-	Thu, 18 Sep 2025 12:01:44 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	cc:content-transfer-encoding:content-type:date:from:message-id
-	:mime-version:subject:to; s=qcppdkim1; bh=jhMIYoKWvCUeHJHXrv1GXj
-	gmb2V30bjN+YqRF48XxGc=; b=LPENl4dCyv17ldgTH5X7Qsn6B/ezlrELSSWI38
-	VGIOfsap0KqWRKsfoaJyUtqWdles3ehVDcMneotBBIKj1yghsQoOljKv3Q2TyCvd
-	YfwOobQK27cq6TBJvXrTSNd4H/h6k7lUuGRvdcDmicGog4TGNcuFxXSeWeBmJlA5
-	vIJQ0twpDw6cH+sqGakebdJVIMwHXKlI3AwL7WLKqaP73wWCrCHDhKXCcR6yrs5u
-	V11CL1x/3AIVELMDkn18JhMV57rMcQVV3UCvRMuluGodJeCmlzEhYBUJDKvG5O20
-	9RIc30WEoR5SPf2qcJ+B7pPFa/AxzSfwpFhVYGg330GX+t2Q==
-Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 497fxwe6u2-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 18 Sep 2025 12:01:43 +0000 (GMT)
-Received: from nalasex01c.na.qualcomm.com (nalasex01c.na.qualcomm.com [10.47.97.35])
-	by NALASPPMTA02.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 58IC1hsS011256
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 18 Sep 2025 12:01:43 GMT
-Received: from hu-renjiang-sha.qualcomm.com (10.80.80.8) by
- nalasex01c.na.qualcomm.com (10.47.97.35) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1748.24; Thu, 18 Sep 2025 05:01:40 -0700
-From: Renjiang Han <quic_renjiang@quicinc.com>
-Date: Thu, 18 Sep 2025 17:31:08 +0530
-Subject: [PATCH v3] media: venus: pm_helpers: add fallback for the
- opp-table
+	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="baAHNJbL"
+Received: from [127.0.1.1] (cpc141996-chfd3-2-0-cust928.12-3.cable.virginm.net [86.13.91.161])
+	by perceval.ideasonboard.com (Postfix) with ESMTPSA id 8092B55A;
+	Thu, 18 Sep 2025 14:07:43 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+	s=mail; t=1758197263;
+	bh=QNIGtamG6mL9Cw8rIuidVNIiFUf3eLWRIrQEXNqSJcw=;
+	h=From:Date:Subject:To:Cc:From;
+	b=baAHNJbLHxcV3oLpXZaDbF5zQEVnQ3FvkpixKnkypml4hNEg5h6X7uq6IT3qRPfhH
+	 Wsy56H0B3DAODhF95trVBgi8HqxQLNlVGbT3gC0p4EV4xVIIgSJi0ujIttSDbAo24W
+	 0KSe0czBcJwAl5usjJ+ZcbnB8dJiTCZqe0HCPVXQ=
+From: Daniel Scally <dan.scally@ideasonboard.com>
+Date: Thu, 18 Sep 2025 13:08:55 +0100
+Subject: [PATCH] media: rzg2l-cru: rework rzg2l_cru_fill_hw_slot()
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
@@ -51,137 +36,169 @@ List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-ID: <20250918-fallback_of_opp_table-v3-1-f07b34eb7b3a@quicinc.com>
-X-B4-Tracking: v=1; b=H4sIAIP0y2gC/3XOwU7DMAwG4FepciYocbtk3Yn3QKhyHIdFdE1JS
- gWa9u6k6wUOO/6/5c++isI5chGn5ioyr7HENNXQPjWCzji9s4y+ZgEKDqrXRxlwHB3Sx5DCkOZ
- 5WNCNLF1ANh0RalSi7s6ZQ/y+u69vNZ9jWVL+uZ9Z9dbuooX2gbhqqSUoNGBt8J79y+dXpDjRM
- 6WL2MwV/jrdIwc2J5DRATplPf13bvuzmWtb4rJ/LBwWlnV+icupQQYPStUz1ng49i0ThgAH71p
- vOfS6V0jKmYrdfgHoVmZUUAEAAA==
-X-Change-ID: 20250918-fallback_of_opp_table-bfae64cca1a0
-To: <quic_qiweil@quicinc.com>, <quic_wangaow@quicinc.com>,
-        Vikash Garodia
-	<vikash.garodia@oss.qualcomm.com>,
-        Dikshita Agarwal
-	<dikshita.agarwal@oss.qualcomm.com>,
-        Bryan O'Donoghue <bod@kernel.org>,
-        "Mauro Carvalho Chehab" <mchehab@kernel.org>,
-        Hans Verkuil
-	<hverkuil@kernel.org>
-CC: Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
-        <linux-media@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        Dmitry Baryshkov
-	<dmitry.baryshkov@oss.qualcomm.com>,
-        Renjiang Han
-	<quic_renjiang@quicinc.com>,
-        Vikash Garodia <vikash.garodia@oss.qualcomm.com>
+Message-Id: <20250918-rzg2l-cru-v1-1-fe110fdb91e5@ideasonboard.com>
+X-B4-Tracking: v=1; b=H4sIAFb2y2gC/6tWKk4tykwtVrJSqFYqSi3LLM7MzwNyDHUUlJIzE
+ vPSU3UzU4B8JSMDI1MDS0ML3aKqdKMc3eSiUl0DU1OTRBNjU6NEcwMloPqCotS0zAqwWdGxtbU
+ AD75XrlsAAAA=
+X-Change-ID: 20250918-rzg2l-cru-0554a4352a70
+To: linux-media@vger.kernel.org
+Cc: laurent.pinchart+renesas@ideasonboard.com, 
+ prabhakar.mahadev-lad.rj@bp.renesas.com, tommaso.merciai.xr@bp.renesas.com, 
+ biju.das.jz@bp.renesas.com, Daniel Scally <dan.scally@ideasonboard.com>
 X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1758196899; l=3078;
- i=quic_renjiang@quicinc.com; s=20241001; h=from:subject:message-id;
- bh=v9ef4nig/yfccKeAJEpJSA9wWCx0vUtghQ9jBLfY9mA=;
- b=6ZKoJ8sXbdGDLC1Fe3v5gSbZyHZUcSonIuID3w+9gqg7qCF95uKpW5NBuCfK2ETaq5NYiQFB+
- ITJ7YO3RgHKDqQXi4BfQhYBnNq8dSK/Za65tghOBkz3DavcYCeTRTy+
-X-Developer-Key: i=quic_renjiang@quicinc.com; a=ed25519;
- pk=8N59kMJUiVH++5QxJzTyHB/wh/kG5LxQ44j9zhUvZmw=
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01c.na.qualcomm.com (10.47.97.35)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Authority-Analysis: v=2.4 cv=HbIUTjE8 c=1 sm=1 tr=0 ts=68cbf4a8 cx=c_pps
- a=ouPCqIW2jiPt+lZRy3xVPw==:117 a=ouPCqIW2jiPt+lZRy3xVPw==:17
- a=GEpy-HfZoHoA:10 a=IkcTkHD0fZMA:10 a=yJojWOMRYYMA:10 a=VwQbUJbxAAAA:8
- a=pGLkceISAAAA:8 a=COk6AnOGAAAA:8 a=EUspDBNiAAAA:8 a=KKAkSRfTAAAA:8
- a=PqXIcnxwrCKdjwSptJ0A:9 a=QEXdDO2ut3YA:10 a=TjNXssC_j7lpFel5tvFf:22
- a=cvBusfyB2V15izCimMoJ:22
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwOTE2MDIwMiBTYWx0ZWRfX8VQDAt792iSH
- bwcOlK2S0VkaQ5nJw7WOrOKGtgiDHB8E9ITSULDcBLvUpQZ1HlAyNZp2aHKPQjbBzb2lxjr3Fnd
- xM2Lktbc+0EMEgDLaKv62Oc/BJx3T8Y2OD3JzOIOghbwTQBZoOMpy1n4Igf49ncOvkKDoZQyScA
- +4hbWn7xZkWdJzPPjSpXJplIu4fz989ubdmvd1TY6P14NSZKAmRDW/kH8Hkf2L+uURs4K/ZhAM6
- uQK260Hz3riwmwu50aPhgi6aF4UoIiA8Y6Jjc98gr0zXDoJRJuCtlHZZ73CpXQMOsReqZaEjmZ6
- NMK9hZIK/W9Dhe8qHoNCjnvBs+s8QbGvDlWV8znlcqiCZKBWAOnI9AXw7o9bsUbF08gWHwiO9UP
- 0KnhNfcs
-X-Proofpoint-GUID: gYL2dE6YZchjX0oGHgkGatNSYLOI4XIo
-X-Proofpoint-ORIG-GUID: gYL2dE6YZchjX0oGHgkGatNSYLOI4XIo
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1117,Hydra:6.1.9,FMLib:17.12.80.40
- definitions=2025-09-17_01,2025-09-18_02,2025-03-28_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- spamscore=0 impostorscore=0 bulkscore=0 suspectscore=0 clxscore=1011
- adultscore=0 priorityscore=1501 phishscore=0 malwarescore=0
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.19.0-2507300000 definitions=main-2509160202
+X-Developer-Signature: v=1; a=openpgp-sha256; l=4991;
+ i=dan.scally@ideasonboard.com; h=from:subject:message-id;
+ bh=QNIGtamG6mL9Cw8rIuidVNIiFUf3eLWRIrQEXNqSJcw=;
+ b=owEBbQKS/ZANAwAKAchJV3psRXUyAcsmYgBoy/ZeyeTlU+JRy2XX6WhtWBD05CiIpgy59wZsx
+ kAC2CjRVqyJAjMEAAEKAB0WIQQqyuwyDnZdb+mxmm/ISVd6bEV1MgUCaMv2XgAKCRDISVd6bEV1
+ Mj+/EAC8AlMngg0VHAebP68D3HX11sMMKTZGpJlV5KxfoGecLeL3Foajc5UuRJ7Qtpl1a11AIDF
+ GtAXpdzwnEJTC3o/AHCn2HrP3XEEuicJQPBRd0lONwRYJFgPDEFHv1o+QKjoDLR5o3aE3HgM+VP
+ o1TqE20rq5Mpg0rmJ2PddDAoR9GdaxbOZY6qKsUdFL1A8fvmFpki+ShnQhILMUUpL3ky3iwHO7O
+ O70As56rQBxiuD2V8khTMQoekNENO2JUupc9oont5WhAzt13B4gEoiL9h1js2RcxvEjb1Kg33h8
+ 3x50pkl5bzwAjf8erdRacKpM1F4AC2BSbYeK5IsuTnKT3M1wCcS3AKOsTQ1Sc8qDIkZ9dw8IdHu
+ SOMABfGJodtOwYCR2dWGWTWdej0r7VTPN8EDAyz5RIVYTsHmmCp6ldYh4NiVlK0ZJWTsc4vetat
+ wHukCd21HXIkukmc5mdzAD/fJ3PmRFoS3HkzKYe0We1cKuMekpL9e1OdXEGOiP7zb5QZjNl8dAe
+ tsCqqPdl4EzDGwZhORHu8xxFEm2lKwClEF/JXAUNYmLxBJz+LXmaiJpEYR+xqY23xQINPDYXJWY
+ /C/wThC2KxKc4Ewd47cjto+h16J+hRhoBr0Asgv73ip4J93tOv8lrtH4fb25U1BHefnBfZ+X0xn
+ LlT+X/9257+/CMg==
+X-Developer-Key: i=dan.scally@ideasonboard.com; a=openpgp;
+ fpr=EEC699ACA1B7CB5D31330C0BBD501C2A3546CCF6
 
-Since the device trees for both HFI_VERSION_1XX and HFI_VERSION_3XX
-do not include an opp-table and have not configured opp-pmdomain, they
-still need to use the frequencies defined in the driver's freq_tbl.
+The current implementation of rzg2l_cru_fill_hw_slot() results in the
+artificial loss of frames. At present whenever a frame-complete IRQ
+is received the driver fills the hardware slot that was just written
+to with the address of the next buffer in the driver's queue. If the
+queue is empty, that hardware slot's address is set to the address of
+the scratch buffer to enable the capture loop to keep running. There
+is a minimum of a two-frame delay before that slot will be written to
+however, and in the intervening period userspace may queue more
+buffers which could be used.
 
-Both core_power_v1 and core_power_v4 functions require core_clks_enable
-function during POWER_ON. Therefore, in the core_clks_enable function,
-if calling dev_pm_opp_find_freq_ceil to obtain the frequency fails,
-it needs to fall back to the freq_tbl to retrieve the frequency.
+To resolve the issue rework rzg2l_cru_fill_hw_slot() so that it
+iteratively fills all slots from the queue which currently do not
+have a buffer assigned, until the queue is empty. The scratch
+buffer is only resorted to in the event that the queue is empty and
+the next slot that will be written to does not already have a buffer
+assigned.
 
-Fixes: b179234b5e59 ("media: venus: pm_helpers: use opp-table for the frequency")
-Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>
-Reviewed-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-Reviewed-by: Vikash Garodia <quic_vgarodia@quicinc.com>
-Closes: https://lore.kernel.org/linux-media/CA+G9fYu5=3n84VY+vTbCAcfFKOq7Us5vgBZgpypY4MveM=eVwg@mail.gmail.com
-Signed-off-by: Renjiang Han <quic_renjiang@quicinc.com>
+Signed-off-by: Daniel Scally <dan.scally@ideasonboard.com>
 ---
-Since device trees for both HFI_VERSION_1XX and HFI_VERSION_3XX do not
-contain an opp-table and have not configured opp-pmdomain, they still
-need to use the frequencies defined in the driver's freq_tbl.
+ .../media/platform/renesas/rzg2l-cru/rzg2l-video.c | 63 +++++++++++-----------
+ 1 file changed, 32 insertions(+), 31 deletions(-)
 
-Therefore, if calling dev_pm_opp_find_freq_ceil to obtain the frequency
-fails in the core_clks_enable, it needs to fall back to the freq_tbl to
-retrieve the frequency.
-
-Validated this series on QCS615 and msm8916.
----
-Changes in v3:
-- 1. Fix patch conflict issue.
-- Link to v2: https://lore.kernel.org/r/20250724-fallback_of_opp_table-v2-1-2fc61f2407dc@quicinc.com
-
-Changes in v2:
-- 1. Update the returned error value as per the feedback.
-- Link to v1: https://lore.kernel.org/r/20250723-fallback_of_opp_table-v1-1-20a6277fdded@quicinc.com
----
- drivers/media/platform/qcom/venus/pm_helpers.c | 9 ++++++++-
- 1 file changed, 8 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/media/platform/qcom/venus/pm_helpers.c b/drivers/media/platform/qcom/venus/pm_helpers.c
-index 88618378129a086274b61be5b23410783b92ca26..f0269524ac70eb72384a06aa6a215e2046abf5c2 100644
---- a/drivers/media/platform/qcom/venus/pm_helpers.c
-+++ b/drivers/media/platform/qcom/venus/pm_helpers.c
-@@ -40,6 +40,8 @@ static int core_clks_get(struct venus_core *core)
+diff --git a/drivers/media/platform/renesas/rzg2l-cru/rzg2l-video.c b/drivers/media/platform/renesas/rzg2l-cru/rzg2l-video.c
+index 941badc90ff55c5225644f88de1d70239eb3a247..9ffafb0239a7388104219b2b72eec9051db82078 100644
+--- a/drivers/media/platform/renesas/rzg2l-cru/rzg2l-video.c
++++ b/drivers/media/platform/renesas/rzg2l-cru/rzg2l-video.c
+@@ -192,45 +192,47 @@ static void rzg2l_cru_set_slot_addr(struct rzg2l_cru_dev *cru,
+ }
  
- static int core_clks_enable(struct venus_core *core)
+ /*
+- * Moves a buffer from the queue to the HW slot. If no buffer is
+- * available use the scratch buffer. The scratch buffer is never
+- * returned to userspace, its only function is to enable the capture
+- * loop to keep running.
++ * Move as many buffers as possible from the queue to HW slots. If no buffer is
++ * available and the next slot currently lacks one then use the scratch buffer.
++ * The scratch buffer is never returned to userspace, its only function is to
++ * enable the capture loop to keep running.
+  */
+-static void rzg2l_cru_fill_hw_slot(struct rzg2l_cru_dev *cru, int slot)
++static void rzg2l_cru_fill_hw_slots(struct rzg2l_cru_dev *cru, int slot)
  {
-+	const struct freq_tbl *freq_tbl = core->res->freq_tbl;
-+	unsigned int freq_tbl_size = core->res->freq_tbl_size;
- 	const struct venus_resources *res = core->res;
- 	struct device *dev = core->dev;
- 	unsigned long freq = 0;
-@@ -48,8 +50,13 @@ static int core_clks_enable(struct venus_core *core)
- 	int ret;
+-	struct vb2_v4l2_buffer *vbuf;
++	unsigned int from_slot = slot;
+ 	struct rzg2l_cru_buffer *buf;
++	struct vb2_v4l2_buffer *vbuf;
+ 	dma_addr_t phys_addr;
  
- 	opp = dev_pm_opp_find_freq_ceil(dev, &freq);
--	if (!IS_ERR(opp))
-+	if (IS_ERR(opp)) {
-+		if (!freq_tbl)
-+			return -ENODEV;
-+		freq = freq_tbl[freq_tbl_size - 1].freq;
-+	} else {
- 		dev_pm_opp_put(opp);
-+	}
+-	/* A already populated slot shall never be overwritten. */
+-	if (WARN_ON(cru->queue_buf[slot]))
+-		return;
+-
+-	dev_dbg(cru->dev, "Filling HW slot: %d\n", slot);
++	do {
++		if (cru->queue_buf[slot]) {
++			slot = (slot + 1) % cru->num_buf;
++			continue;
++		}
  
- 	for (i = 0; i < res->clks_num; i++) {
- 		if (IS_V6(core) || (IS_V4(core) && is_lite(core))) {
+-	if (list_empty(&cru->buf_list)) {
+-		cru->queue_buf[slot] = NULL;
+-		phys_addr = cru->scratch_phys;
+-	} else {
+-		/* Keep track of buffer we give to HW */
+-		buf = list_entry(cru->buf_list.next,
+-				 struct rzg2l_cru_buffer, list);
+-		vbuf = &buf->vb;
+-		list_del_init(to_buf_list(vbuf));
+-		cru->queue_buf[slot] = vbuf;
+-
+-		/* Setup DMA */
+-		phys_addr = vb2_dma_contig_plane_dma_addr(&vbuf->vb2_buf, 0);
+-	}
++		if (list_empty(&cru->buf_list)) {
++			if (slot == from_slot)
++				phys_addr = cru->scratch_phys;
++			else
++				return;
++		} else {
++			buf = list_first_entry(&cru->buf_list,
++					       struct rzg2l_cru_buffer, list);
++			vbuf = &buf->vb;
++			list_del_init(&buf->list);
++			cru->queue_buf[slot] = vbuf;
++			phys_addr = vb2_dma_contig_plane_dma_addr(&vbuf->vb2_buf, 0);
++		}
+ 
+-	rzg2l_cru_set_slot_addr(cru, slot, phys_addr);
++		dev_dbg(cru->dev, "Filling HW slot: %d\n", slot);
++		rzg2l_cru_set_slot_addr(cru, slot, phys_addr);
++		slot = (slot + 1) % cru->num_buf;
++	} while (slot != from_slot);
+ }
+ 
+ static void rzg2l_cru_initialize_axi(struct rzg2l_cru_dev *cru)
+ {
+ 	const struct rzg2l_cru_info *info = cru->info;
+-	unsigned int slot;
+ 	u32 amnaxiattr;
+ 
+ 	/*
+@@ -239,8 +241,7 @@ static void rzg2l_cru_initialize_axi(struct rzg2l_cru_dev *cru)
+ 	 */
+ 	rzg2l_cru_write(cru, AMnMBVALID, AMnMBVALID_MBVALID(cru->num_buf - 1));
+ 
+-	for (slot = 0; slot < cru->num_buf; slot++)
+-		rzg2l_cru_fill_hw_slot(cru, slot);
++	rzg2l_cru_fill_hw_slots(cru, 0);
+ 
+ 	if (info->has_stride) {
+ 		u32 stride = cru->format.bytesperline;
+@@ -652,7 +653,7 @@ irqreturn_t rzg2l_cru_irq(int irq, void *data)
+ 	cru->sequence++;
+ 
+ 	/* Prepare for next frame */
+-	rzg2l_cru_fill_hw_slot(cru, slot);
++	rzg2l_cru_fill_hw_slots(cru, (slot + 1) % cru->num_buf);
+ 
+ done:
+ 	spin_unlock_irqrestore(&cru->qlock, flags);
+@@ -752,7 +753,7 @@ irqreturn_t rzg3e_cru_irq(int irq, void *data)
+ 		cru->sequence++;
+ 
+ 		/* Prepare for next frame */
+-		rzg2l_cru_fill_hw_slot(cru, slot);
++		rzg2l_cru_fill_hw_slots(cru, (slot + 1) % cru->num_buf);
+ 	}
+ 
+ 	return IRQ_HANDLED;
 
 ---
-base-commit: ae2d20002576d2893ecaff25db3d7ef9190ac0b6
-change-id: 20250918-fallback_of_opp_table-bfae64cca1a0
+base-commit: a75b8d198c55e9eb5feb6f6e155496305caba2dc
+change-id: 20250918-rzg2l-cru-0554a4352a70
 
 Best regards,
 -- 
-Renjiang Han <quic_renjiang@quicinc.com>
+Daniel Scally <dan.scally@ideasonboard.com>
 
