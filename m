@@ -1,195 +1,213 @@
-Received: from fra-out-001.esa.eu-central-1.outbound.mail-perimeter.amazon.com (fra-out-001.esa.eu-central-1.outbound.mail-perimeter.amazon.com [18.156.205.64])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C726030AAC2;
-	Fri, 19 Sep 2025 10:33:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=18.156.205.64
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 86F984315A
+	for <linux-media@vger.kernel.org>; Fri, 19 Sep 2025 10:36:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758278028; cv=none; b=iYBuaUVyy3k6wDBLck0lQ+Toe62uBNPryytNx0G0yw2Aqxm+pkjsmbXc+0WE4B5MXjtwLEHMKogYxWOLTGAAtIIeycTt8RudnkLVSvauf85yLWII3UulQBhCJpxLqr3sC0Cxlz/3NY9J2Hyzmykne2cacZUSIFXbja+N0ZsZimc=
+	t=1758278183; cv=none; b=HyvWb2e6V3hzoxAYC73I+HrmOg+kqAc/sS1Xcs1KC4/YubJ9tGhZt+zgQPNf8/DWvdBkxc9iOSMt4/iEQjWyrJfljfy+MjuJaEzIO7u6fvzndDnTqKpGbqKKOJRRicCMrHLHJzF0XqeMwXrA14clX7V2CgpEc3IKDMWIR9ol+v8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758278028; c=relaxed/simple;
-	bh=V2L3IilwofpV6SrsfVTvut5ipDXkokIOm+dTBT4i7eQ=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=rEE7jejMyi17Seb8Dt2Wm4XJuiVeS43qCvW9QikWBxQBOQBgQ9O77z8C9VgPdOOfp24iWFS+QYiK0LT5Fw8ZRSq/vEtFMx6a5oJpft/Fsuyx+SFNu1sRZriakY2ivLPxIexr3AnBuV74i8aN3z4JuLgMqxWowu22IrxFZlVw2Wg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com; spf=pass smtp.mailfrom=amazon.com; dkim=pass (2048-bit key) header.d=amazon.com header.i=@amazon.com header.b=Eym9F1Pj; arc=none smtp.client-ip=18.156.205.64
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=amazon.com
+	s=arc-20240116; t=1758278183; c=relaxed/simple;
+	bh=4zqYva0rpTx5isdzKdiBw4W3865TwJgrzOOTkYa+AHU=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=e9bs1082lH6eHn0/HRAuQ9Vwab+MJmlDJlvVvjUY5Aj3AsU0P2Xc6NJpH7xLYGx4t6T+3kTe5hm5wqm43LYzgOhmMHgW54PzJClw8AFzadloHtl7GV69qpGnf6n6rq+/Z5grWL1+dynp7/YkgK9xReQkSgxGxe5kid2UE/7sjNI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=hrE1lsKL; arc=none smtp.client-ip=192.198.163.14
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=amazon.com header.i=@amazon.com header.b="Eym9F1Pj"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazoncorp2;
-  t=1758278026; x=1789814026;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=k0dUe76w+6n5/NfsPbyefGVCom+xh3GGcFcV3Olhmks=;
-  b=Eym9F1PjjpHFlLj6A6HmQpNSa5L14TyKnwvYhbcayZDS61YiRPI95vai
-   v8Kh7ksFQTpY9/DXp+S1ve8WPcNPicgVxBZ6CT7AOFxBkeqHBHFAoL7K7
-   /exxOvo/gQXcWLPMKDIk2RQl91kJlUXJrfYyN+qn1QxYeTxDmlE2Tp/gH
-   Y2l0HbCR+vrxGBvchxMothWLqC/5M806aUTncTp7nPM1XN3Cm7KjqbcPb
-   fCCjW1G/wb8DzuQbMaa5wB7xFNVSO3IY1eLyN4bZHpXnfAGu8CoMUdFcm
-   AlOdJpObGZKLSUdMpbv1kiNN5RePYjItS5GqmLyi0SuI8QJLMKvcmtFrp
-   Q==;
-X-CSE-ConnectionGUID: IhsI0m9OQq6ZY3VFZZ/mVw==
-X-CSE-MsgGUID: F5UFpiBqSFqBWNN69Yc04Q==
-X-IronPort-AV: E=Sophos;i="6.18,277,1751241600"; 
-   d="scan'208";a="2369179"
-Received: from ip-10-6-3-216.eu-central-1.compute.internal (HELO smtpout.naws.eu-central-1.prod.farcaster.email.amazon.dev) ([10.6.3.216])
-  by internal-fra-out-001.esa.eu-central-1.outbound.mail-perimeter.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Sep 2025 10:33:43 +0000
-Received: from EX19MTAEUC001.ant.amazon.com [54.240.197.225:15647]
- by smtpin.naws.eu-central-1.prod.farcaster.email.amazon.dev [10.0.36.68:2525] with esmtp (Farcaster)
- id 88862edc-0f4e-43e1-b5c5-01b86f4ae053; Fri, 19 Sep 2025 10:33:43 +0000 (UTC)
-X-Farcaster-Flow-ID: 88862edc-0f4e-43e1-b5c5-01b86f4ae053
-Received: from EX19D018EUA004.ant.amazon.com (10.252.50.85) by
- EX19MTAEUC001.ant.amazon.com (10.252.51.155) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.2562.20;
- Fri, 19 Sep 2025 10:33:43 +0000
-Received: from dev-dsk-farbere-1a-46ecabed.eu-west-1.amazon.com
- (172.19.116.181) by EX19D018EUA004.ant.amazon.com (10.252.50.85) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.2562.20; Fri, 19 Sep 2025
- 10:33:13 +0000
-From: Eliav Farber <farbere@amazon.com>
-To: <linux@armlinux.org.uk>, <jdike@addtoit.com>, <richard@nod.at>,
-	<anton.ivanov@cambridgegreys.com>, <dave.hansen@linux.intel.com>,
-	<luto@kernel.org>, <peterz@infradead.org>, <tglx@linutronix.de>,
-	<mingo@redhat.com>, <bp@alien8.de>, <x86@kernel.org>, <hpa@zytor.com>,
-	<tony.luck@intel.com>, <qiuxu.zhuo@intel.com>, <mchehab@kernel.org>,
-	<james.morse@arm.com>, <rric@kernel.org>, <harry.wentland@amd.com>,
-	<sunpeng.li@amd.com>, <alexander.deucher@amd.com>,
-	<christian.koenig@amd.com>, <airlied@linux.ie>, <daniel@ffwll.ch>,
-	<evan.quan@amd.com>, <james.qian.wang@arm.com>, <liviu.dudau@arm.com>,
-	<mihail.atanassov@arm.com>, <brian.starkey@arm.com>,
-	<maarten.lankhorst@linux.intel.com>, <mripard@kernel.org>,
-	<tzimmermann@suse.de>, <robdclark@gmail.com>, <sean@poorly.run>,
-	<jdelvare@suse.com>, <linux@roeck-us.net>, <fery@cypress.com>,
-	<dmitry.torokhov@gmail.com>, <agk@redhat.com>, <snitzer@redhat.com>,
-	<dm-devel@redhat.com>, <rajur@chelsio.com>, <davem@davemloft.net>,
-	<kuba@kernel.org>, <peppe.cavallaro@st.com>, <alexandre.torgue@st.com>,
-	<joabreu@synopsys.com>, <mcoquelin.stm32@gmail.com>, <malattia@linux.it>,
-	<hdegoede@redhat.com>, <mgross@linux.intel.com>, <intel-linux-scu@intel.com>,
-	<artur.paszkiewicz@intel.com>, <jejb@linux.ibm.com>,
-	<martin.petersen@oracle.com>, <sakari.ailus@linux.intel.com>,
-	<gregkh@linuxfoundation.org>, <clm@fb.com>, <josef@toxicpanda.com>,
-	<dsterba@suse.com>, <jack@suse.com>, <tytso@mit.edu>,
-	<adilger.kernel@dilger.ca>, <dushistov@mail.ru>,
-	<luc.vanoostenryck@gmail.com>, <rostedt@goodmis.org>, <pmladek@suse.com>,
-	<sergey.senozhatsky@gmail.com>, <andriy.shevchenko@linux.intel.com>,
-	<linux@rasmusvillemoes.dk>, <minchan@kernel.org>, <ngupta@vflare.org>,
-	<akpm@linux-foundation.org>, <kuznet@ms2.inr.ac.ru>,
-	<yoshfuji@linux-ipv6.org>, <pablo@netfilter.org>, <kadlec@netfilter.org>,
-	<fw@strlen.de>, <jmaloy@redhat.com>, <ying.xue@windriver.com>,
-	<willy@infradead.org>, <farbere@amazon.com>, <sashal@kernel.org>,
-	<ruanjinjie@huawei.com>, <David.Laight@ACULAB.COM>,
-	<herve.codina@bootlin.com>, <Jason@zx2c4.com>, <bvanassche@acm.org>,
-	<keescook@chromium.org>, <linux-arm-kernel@lists.infradead.org>,
-	<linux-kernel@vger.kernel.org>, <linux-um@lists.infradead.org>,
-	<linux-edac@vger.kernel.org>, <amd-gfx@lists.freedesktop.org>,
-	<dri-devel@lists.freedesktop.org>, <linux-arm-msm@vger.kernel.org>,
-	<freedreno@lists.freedesktop.org>, <linux-hwmon@vger.kernel.org>,
-	<linux-input@vger.kernel.org>, <linux-media@vger.kernel.org>,
-	<netdev@vger.kernel.org>, <linux-stm32@st-md-mailman.stormreply.com>,
-	<platform-driver-x86@vger.kernel.org>, <linux-scsi@vger.kernel.org>,
-	<linux-staging@lists.linux.dev>, <linux-btrfs@vger.kernel.org>,
-	<linux-ext4@vger.kernel.org>, <linux-sparse@vger.kernel.org>,
-	<linux-mm@kvack.org>, <netfilter-devel@vger.kernel.org>,
-	<coreteam@netfilter.org>, <tipc-discussion@lists.sourceforge.net>,
-	<stable@vger.kernel.org>
-CC: <jonnyc@amazon.com>, Arnd Bergmann <arnd@kernel.org>, Christoph Hellwig
-	<hch@infradead.org>, Dan Carpenter <dan.carpenter@linaro.org>, Jens Axboe
-	<axboe@kernel.dk>, Lorenzo Stoakes <lorenzo.stoakes@oracle.com>, "Mateusz
- Guzik" <mjguzik@gmail.com>, Pedro Falcato <pedro.falcato@gmail.com>
-Subject: [PATCH 27/27 5.10.y] minmax.h: remove some #defines that are only expanded once
-Date: Fri, 19 Sep 2025 10:17:27 +0000
-Message-ID: <20250919101727.16152-28-farbere@amazon.com>
-X-Mailer: git-send-email 2.47.3
-In-Reply-To: <20250919101727.16152-1-farbere@amazon.com>
-References: <20250919101727.16152-1-farbere@amazon.com>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="hrE1lsKL"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1758278182; x=1789814182;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=4zqYva0rpTx5isdzKdiBw4W3865TwJgrzOOTkYa+AHU=;
+  b=hrE1lsKLvU3izWZ23voft1f1yz9QHFLfNumBM7H+NpqtRIsOO2T6LRvt
+   ae5mRxUcatSIrd5T3IhirnbS6fQcDXy2Jz6yGJtIBNtBhwh2ZNQX+hCLi
+   irYHxVFYdfiKqzdTwVx4A3WqHTH7/hKUTEbQL1sZaOQC+hMKQP7nu/Pbg
+   vE6i8OU/kb32az06xVITUW/7yOYZybncIsnPv2AC6LLKxuBjJso4Wag/S
+   Dky0keVh0iaLb+blXJXoiUYrtFIjIxtRuOJ66M0eJOwUj78F4LAMFKNsx
+   JRxXS/vxbFPEZR97viQXWBsykVCYVEHcRAwnElq61mGWNI6JUBIkVfBys
+   A==;
+X-CSE-ConnectionGUID: VxrMPXzdTXaMLaXhxZ6i/g==
+X-CSE-MsgGUID: AMCnXnZjQmy4UcHvTDHUSw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11557"; a="60686132"
+X-IronPort-AV: E=Sophos;i="6.18,277,1751266800"; 
+   d="scan'208";a="60686132"
+Received: from orviesa009.jf.intel.com ([10.64.159.149])
+  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Sep 2025 03:36:21 -0700
+X-CSE-ConnectionGUID: e8N0ZG+qRkmutZIzmwlurg==
+X-CSE-MsgGUID: LYKLJJiyQGWfboGGB3XAHA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.18,277,1751266800"; 
+   d="scan'208";a="175358526"
+Received: from ettammin-mobl2.ger.corp.intel.com (HELO kekkonen.fi.intel.com) ([10.245.245.108])
+  by orviesa009-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Sep 2025 03:36:14 -0700
+Received: from kekkonen.localdomain (localhost [IPv6:::1])
+	by kekkonen.fi.intel.com (Postfix) with SMTP id D570A11F982;
+	Fri, 19 Sep 2025 13:36:10 +0300 (EEST)
+Date: Fri, 19 Sep 2025 13:36:10 +0300
+Organization: Intel Finland Oy - BIC 0357606-4 - c/o Alberga Business Park, 6 krs, Bertel Jungin Aukio 5, 02600 Espoo
+From: Sakari Ailus <sakari.ailus@linux.intel.com>
+To: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Cc: Jacopo Mondi <jacopo.mondi@ideasonboard.com>,
+	linux-media@vger.kernel.org, hans@jjverkuil.nl,
+	Prabhakar <prabhakar.csengg@gmail.com>, Kate Hsuan <hpa@redhat.com>,
+	Alexander Shiyan <eagle.alexander923@gmail.com>,
+	Dave Stevenson <dave.stevenson@raspberrypi.com>,
+	Tommaso Merciai <tomm.merciai@gmail.com>,
+	Umang Jain <umang.jain@ideasonboard.com>,
+	Benjamin Mugnier <benjamin.mugnier@foss.st.com>,
+	Sylvain Petinot <sylvain.petinot@foss.st.com>,
+	Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+	Julien Massot <julien.massot@collabora.com>,
+	Naushir Patuck <naush@raspberrypi.com>,
+	"Yan, Dongcheng" <dongcheng.yan@intel.com>,
+	"Cao, Bingbu" <bingbu.cao@intel.com>,
+	"Qiu, Tian Shu" <tian.shu.qiu@intel.com>,
+	"Wang, Hongju" <hongju.wang@intel.com>,
+	Stefan Klug <stefan.klug@ideasonboard.com>,
+	Mirela Rabulea <mirela.rabulea@nxp.com>,
+	=?iso-8859-1?Q?Andr=E9?= Apitzsch <git@apitzsch.eu>,
+	Heimir Thor Sverrisson <heimir.sverrisson@gmail.com>,
+	Kieran Bingham <kieran.bingham@ideasonboard.com>,
+	Stanislaw Gruszka <stanislaw.gruszka@linux.intel.com>,
+	Mehdi Djait <mehdi.djait@linux.intel.com>,
+	Ricardo Ribalda Delgado <ribalda@kernel.org>,
+	Hans de Goede <hdegoede@redhat.com>,
+	Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
+Subject: Re: [PATCH v11 24/66] media: uapi: Add V4L2_CID_METADATA_LAYOUT
+ control
+Message-ID: <aM0yGiWgZLdaWTAe@kekkonen.localdomain>
+References: <20250825095107.1332313-1-sakari.ailus@linux.intel.com>
+ <20250825095107.1332313-25-sakari.ailus@linux.intel.com>
+ <qeuueahbuofjmeird3dr7xtcosfhymk72ceuma4dibudf2nn3s@z6smlg4yn2rf>
+ <aLgiwzB_IhGTHyHz@kekkonen.localdomain>
+ <20250903195211.GU3648@pendragon.ideasonboard.com>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: EX19D035UWB001.ant.amazon.com (10.13.138.33) To
- EX19D018EUA004.ant.amazon.com (10.252.50.85)
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250903195211.GU3648@pendragon.ideasonboard.com>
 
-From: David Laight <David.Laight@ACULAB.COM>
+Hi Laurent,
 
-[ Upstream commit 2b97aaf74ed534fb838d09867d09a3ca5d795208 ]
+On Wed, Sep 03, 2025 at 09:52:11PM +0200, Laurent Pinchart wrote:
+> On Wed, Sep 03, 2025 at 02:13:07PM +0300, Sakari Ailus wrote:
+> > On Mon, Sep 01, 2025 at 05:07:55PM +0200, Jacopo Mondi wrote:
+> > > On Mon, Aug 25, 2025 at 12:50:25PM +0300, Sakari Ailus wrote:
+> > > > The metadata layout control defines the layout of the metadata on the bus.
+> > > > It is used on sub-devices that use generic metadata mbus codes on at least
+> > > > on one of the pads.
+> > > 
+> > > Ideally:
+> > > 1) we have per pad controls
+> > > 2) s/V4L2_CID_COLOR_PATTERN/V4L2_CID_DATA_PATTERN
+> > > 3) we use V4L2_CID_DATA_PATTERN for both color components ordering and
+> > >    metadata layouts. A sub-device will expose the same control, but on
+> > >    different pads
+> > > 
+> > > I know we don't want to block this series to wait for per-pad
+> > > controls, but I'm a bit afraid V4L2_CID_METADATA_LAYOUT will be made
+> > > redundant before it gets used for real (which maybe it's not a big
+> > > deal as if no one uses it, we will be able to easily replace it).
+> > 
+> > I wouldn't do that, for the reason that the mbus codes in the two cases
+> > will be different in any case so both will have separate namespaces.
+> > 
+> > Metadata is also unaffected by flipping, unlike the colour patterns.
+> > 
+> > I wonder what others think.
+> 
+> Per-pad controls could possibly be used here, but they're not there yet,
+> and the CFA pattern and metadata layout are two different concepts.
+> 
+> This being said, if you consider a sensor that produces multiple
+> metadata streams (e.g. embedded data and NPU tensors, transported over
+> different DTs), a single V4L2_CID_METADATA_LAYOUT control won't scale.
+> We will likely need per-pad, or even per-stream controls for that.
+> 
+> We could start with V4L2_CID_METADATA_LAYOUT and later extend it with
+> per-pad/stream controls for additional metadata streams, I don't think
+> that would cause trouble in userspace.
+> 
+> > > > Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
+> > > > ---
+> > > >  .../userspace-api/media/v4l/ext-ctrls-image-source.rst      | 6 ++++++
+> > > >  drivers/media/v4l2-core/v4l2-ctrls-defs.c                   | 1 +
+> > > >  include/uapi/linux/v4l2-controls.h                          | 2 ++
+> > > >  3 files changed, 9 insertions(+)
+> > > >
+> > > > diff --git a/Documentation/userspace-api/media/v4l/ext-ctrls-image-source.rst b/Documentation/userspace-api/media/v4l/ext-ctrls-image-source.rst
+> > > > index 3cb7ee1b0aed..64c0f9ff5b1b 100644
+> > > > --- a/Documentation/userspace-api/media/v4l/ext-ctrls-image-source.rst
+> > > > +++ b/Documentation/userspace-api/media/v4l/ext-ctrls-image-source.rst
+> > > > @@ -145,3 +145,9 @@ Image Source Control IDs
+> > > >      of the reversed readout. ``V4L2_COLOR_PATTERN_FLIP_BOTH`` for setting both
+> > > >      ``V4L2_COLOR_PATTERN_FLIP_HORIZONTAL`` and
+> > > >      ``V4L2_COLOR_PATTERN_FLIP_VERTICAL`` is provided as well.
+> > > > +
+> > > > +``V4L2_CID_METADATA_LAYOUT (integer)``
+> > > > +    The metadata layout control defines the on-bus metadata layout for metadata
+> 
+> This needs to be clearer. "on-bus metadata layout" left me guessing what
+> values this control would take. Before the patches further in the series
+> that add layout values, I wasn't sure if the control would use media bus
+> codes or other types of values.
 
-The bodies of __signed_type_use() and __unsigned_type_use() are much the
-same size as their names - so put the bodies in the only line that expands
-them.
+A few lines below there's a reference to generic metadata formats where
+this is documented. I wouldn't try to replicate it here. As you also noted,
+this is relevant for the review of this patch but not so much after adding
+the actual values in later patches in the series.
 
-Similarly __signed_type() is defined separately for 64bit and then used
-exactly once just below.
+> 
+> > > > +    streams. The control is used in conjunction with :ref:`generic metadata
+> > > > +    formats <media-bus-format-generic-meta>` formats to specify the layout of the
+> > > > +    data.
+> > > > diff --git a/drivers/media/v4l2-core/v4l2-ctrls-defs.c b/drivers/media/v4l2-core/v4l2-ctrls-defs.c
+> > > > index 9ec65998a8f7..a7ea380de5ee 100644
+> > > > --- a/drivers/media/v4l2-core/v4l2-ctrls-defs.c
+> > > > +++ b/drivers/media/v4l2-core/v4l2-ctrls-defs.c
+> > > > @@ -1157,6 +1157,7 @@ const char *v4l2_ctrl_get_name(u32 id)
+> > > >  	case V4L2_CID_NOTIFY_GAINS:		return "Notify Gains";
+> > > >  	case V4L2_CID_COLOR_PATTERN:		return "Color Pattern";
+> > > >  	case V4L2_CID_COLOR_PATTERN_FLIP:	return "Color Pattern Flip";
+> > > > +	case V4L2_CID_METADATA_LAYOUT:		return "Metadata Layout";
+> 
+> How about v4l2_ctrl_fill() ?
 
-Change the test for __signed_type from CONFIG_64BIT to one based on gcc
-defined macros so that the code is valid if it gets used outside of a
-kernel build.
+I'll add that in the next version.
 
-Link: https://lkml.kernel.org/r/9386d1ebb8974fbabbed2635160c3975@AcuMS.aculab.com
-Signed-off-by: David Laight <david.laight@aculab.com>
-Cc: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc: Arnd Bergmann <arnd@kernel.org>
-Cc: Christoph Hellwig <hch@infradead.org>
-Cc: Dan Carpenter <dan.carpenter@linaro.org>
-Cc: Jason A. Donenfeld <Jason@zx2c4.com>
-Cc: Jens Axboe <axboe@kernel.dk>
-Cc: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>
-Cc: Mateusz Guzik <mjguzik@gmail.com>
-Cc: Matthew Wilcox <willy@infradead.org>
-Cc: Pedro Falcato <pedro.falcato@gmail.com>
-Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
-Signed-off-by: Eliav Farber <farbere@amazon.com>
----
- include/linux/minmax.h | 14 ++++++--------
- 1 file changed, 6 insertions(+), 8 deletions(-)
+> 
+> > > >
+> > > >  	/* Image processing controls */
+> > > >  	/* Keep the order of the 'case's the same as in v4l2-controls.h! */
+> > > > diff --git a/include/uapi/linux/v4l2-controls.h b/include/uapi/linux/v4l2-controls.h
+> > > > index eb9ffdd74d32..74e22a930be4 100644
+> > > > --- a/include/uapi/linux/v4l2-controls.h
+> > > > +++ b/include/uapi/linux/v4l2-controls.h
+> > > > @@ -1239,6 +1239,8 @@ enum v4l2_jpeg_chroma_subsampling {
+> > > >  #define V4L2_COLOR_PATTERN_FLIP_BOTH \
+> > > >  	(V4L2_COLOR_PATTERN_FLIP_HORIZONTAL | V4L2_COLOR_PATTERN_FLIP_VERTICAL)
+> > > >
+> > > > +#define V4L2_CID_METADATA_LAYOUT		(V4L2_CID_IMAGE_SOURCE_CLASS_BASE + 12)
+> > > > +
+> > > 
+> > > Intentional empty line ?
+> > 
+> > I'll drop it.
+> > 
+> > > For the time being
+> > > Reviewed-by: Jacopo Mondi <jacopo.mondi@ideasonboard.com>
+> > 
+> > Thank you.
+> 
 
-diff --git a/include/linux/minmax.h b/include/linux/minmax.h
-index 2bbdd5b5e07e..eaaf5c008e4d 100644
---- a/include/linux/minmax.h
-+++ b/include/linux/minmax.h
-@@ -46,10 +46,8 @@
-  * comparison, and these expressions only need to be careful to not cause
-  * warnings for pointer use.
-  */
--#define __signed_type_use(ux) (2 + __is_nonneg(ux))
--#define __unsigned_type_use(ux) (1 + 2 * (sizeof(ux) < 4))
- #define __sign_use(ux) (is_signed_type(typeof(ux)) ? \
--	__signed_type_use(ux) : __unsigned_type_use(ux))
-+	(2 + __is_nonneg(ux)) : (1 + 2 * (sizeof(ux) < 4)))
- 
- /*
-  * Check whether a signed value is always non-negative.
-@@ -57,7 +55,7 @@
-  * A cast is needed to avoid any warnings from values that aren't signed
-  * integer types (in which case the result doesn't matter).
-  *
-- * On 64-bit any integer or pointer type can safely be cast to 'long'.
-+ * On 64-bit any integer or pointer type can safely be cast to 'long long'.
-  * But on 32-bit we need to avoid warnings about casting pointers to integers
-  * of different sizes without truncating 64-bit values so 'long' or 'long long'
-  * must be used depending on the size of the value.
-@@ -66,12 +64,12 @@
-  * them, but we do not use s128 types in the kernel (we do use 'u128',
-  * but they are handled by the !is_signed_type() case).
-  */
--#ifdef CONFIG_64BIT
--  #define __signed_type(ux) long
-+#if __SIZEOF_POINTER__ == __SIZEOF_LONG_LONG__
-+#define __is_nonneg(ux) statically_true((long long)(ux) >= 0)
- #else
--  #define __signed_type(ux) typeof(__builtin_choose_expr(sizeof(ux) > 4, 1LL, 1L))
-+#define __is_nonneg(ux) statically_true( \
-+	(typeof(__builtin_choose_expr(sizeof(ux) > 4, 1LL, 1L)))(ux) >= 0)
- #endif
--#define __is_nonneg(ux) statically_true((__signed_type(ux))(ux) >= 0)
- 
- #define __types_ok(ux, uy) \
- 	(__sign_use(ux) & __sign_use(uy))
 -- 
-2.47.3
+Regards,
 
+Sakari Ailus
