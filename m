@@ -1,38 +1,38 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 866E5239E80;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 92653277CBC;
 	Sat, 20 Sep 2025 12:03:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758369835; cv=none; b=tSjAcnaurHHm6eX4qJ4SiaekVghVjXaWFf5R9U1P42v1DYESVtIYb3TFZEbYG4PIdZWE4nZi7bDX2+0/DwWfCnI5iriFcR2AqE1nwr67lY+6CigMMcLudzZevM4zaNF9cR+Das5ZCz4Cqqxe7kfjq0f+Tt2N9Iff3IPR93BAlRE=
+	t=1758369835; cv=none; b=FgUV5tBbIltGG5BspPs89bsE412P9r0qiMgPCQCZDlyTMIM4Oc17qAuEXVhb/ib1BVp+B33spiHF/nUgQNgUEii5aemrvvQ1MIGftqhb9hyGNHzB8HumWOBR2SUKBwwIc8nRYzi6cybjrBomZlQ9qsnMVksTOkT0+qMQTPf+R6Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1758369835; c=relaxed/simple;
-	bh=aSnqEfZR7zBlehk/04RiUI1LXQvjT7Jncpo1B2RAIeM=;
+	bh=puly70ickx/CJRoQqmK/c1OTqdtd5uGWc56u2FLtq3A=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=r6vzT+DRu9L+Lyz92b+RQx2awNIP9yVCAq8PSYQiw4Ti4p2B5y6yx9Urck4R5frzY1tEU+MC3mDLtwCdEoej39aUtwaksXKmWpTTLoxtDlCyxHlDT4axsWI8mKECZ/j7XfPMU5VXNXHOwD6PMmTDNHjfeFRPkaelp2JX8gEz/n8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=OsIZD36d; arc=none smtp.client-ip=10.30.226.201
+	 In-Reply-To:To:Cc; b=sbNLDBRDusHUcR8uWlKVh0LspoFVvl5JaK/le1Te+0FPJe+ORTIBQJbre+ucELV8fcjXFk7AYj/uvv8KRdyfMnIiGkoIB6+psZ166HTgGYcoVU0vwHay/IHisjYYnx+n6rr8p9Ke6TGgi4afMu+gZATgJFJpPmB3NWLQeCq0bx4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mKXPC3vy; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="OsIZD36d"
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 1107EC4CEF9;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mKXPC3vy"
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 2C00AC4AF09;
 	Sat, 20 Sep 2025 12:03:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1758369835;
-	bh=aSnqEfZR7zBlehk/04RiUI1LXQvjT7Jncpo1B2RAIeM=;
+	bh=puly70ickx/CJRoQqmK/c1OTqdtd5uGWc56u2FLtq3A=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To:From;
-	b=OsIZD36dtVQ7BnrDfkD7e8cRxuTgFdM0YH8FWAtxXkmiiZ+6lHevEsZxwCVlrlT7A
-	 XC31ceZSdhj07iURTbT7GwAfobBKpacGwRH2ADlVWRaXeD54XILGODhV7nubTjmlI2
-	 vCpI+iJ1pjVjcu9AoPfbtmJRCxjhdMqth4gapY4tiZlNipYd1STW7sgm7c3TFHy+ol
-	 vYFqDDPCLBNyFpAFKh6iTA4pZKtK1GEe67U+CvKXgm/rEx1Jk4dMvQAmZtph6ppXER
-	 MwBuF0n1dyV0U1ymdKdd/4JXxQnZWSpddGw2WlAcQvOzjDMWIEwxp0IKCqYNe59lgo
-	 mfBtmfIl5ZMGQ==
+	b=mKXPC3vyf4qGQqWxNS1gPVOJRaLN9EyDnRhSzOUpMBXgTs2obS3ENyRUM9LrHVBLF
+	 lXVqHMGeX/k96MupVVyKvUgDpu+lH3kmPmUlHRG5GM5LTouuaBqpl1JYMRqhg1R4fq
+	 RV+8snUnCThpP615JT/4v5Y7AeJz9pj1QqGFuEvHE4VT4DBdzTS/ZATGytkJ9WGDYf
+	 4fEkuDBwkJyX3nLT/WthNl9T4TNlrTdRcTQw8svaseZ+WoPIhHfGaaZoJ1zIcpa4Ap
+	 /iOFjg5rk822f0zca3dWc2nocq70JFUYOI1P3AZ2y0Lbf/0sWhMTkvIn/vwnur9Exp
+	 9kaGZb0hjIxVg==
 Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 00237CAC5A0;
-	Sat, 20 Sep 2025 12:03:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 20CC2CAC597;
+	Sat, 20 Sep 2025 12:03:55 +0000 (UTC)
 From: =?utf-8?q?Andr=C3=A9_Apitzsch_via_B4_Relay?= <devnull+git.apitzsch.eu@kernel.org>
-Date: Sat, 20 Sep 2025 14:03:40 +0200
-Subject: [PATCH v2 1/8] dt-bindings: media: i2c: Add DW9718S, DW9719 and
- DW9761 VCM
+Date: Sat, 20 Sep 2025 14:03:42 +0200
+Subject: [PATCH v2 3/8] media: i2c: dw9719: Remove unused i2c device id
+ table
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
@@ -41,7 +41,7 @@ List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Message-Id: <20250920-dw9719-v2-1-028cdaa156e5@apitzsch.eu>
+Message-Id: <20250920-dw9719-v2-3-028cdaa156e5@apitzsch.eu>
 References: <20250920-dw9719-v2-0-028cdaa156e5@apitzsch.eu>
 In-Reply-To: <20250920-dw9719-v2-0-028cdaa156e5@apitzsch.eu>
 To: Mauro Carvalho Chehab <mchehab@kernel.org>, 
@@ -54,11 +54,11 @@ Cc: ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
  Val Packett <val@packett.cool>, 
  =?utf-8?q?Andr=C3=A9_Apitzsch?= <git@apitzsch.eu>
 X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1758369833; l=3222;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1758369833; l=1027;
  i=git@apitzsch.eu; s=20240325; h=from:subject:message-id;
- bh=U1dQCoASOlcgvW2QOaQwioEIZZHAWC+INcxZcas3GAs=;
- b=PMdG/HXDxadTs0WMLWrqDMINslN9CihIzDtrxXagO+jY5yZ3UxNW3OQuj3h8cQLEIz1Mz7B04
- e9TDMKEBI5jAMzvgvC3qwiLJ+34E+MzdjZLFEoWFqnVpPdB04XKVAW1
+ bh=mUZrDSJoYo2aj0olxKZRSTyHXKgynAJkOjdM9pfxGf4=;
+ b=Yz8roYjQv9VoTv5p5CUVXxBWr5bvH5xPSAv3GxDTUwWmlZWQFujcMtDTNcchUuaoVdmIEBxS8
+ XutCP8Dh55dC0ZGY3fc4+ttaKn56oPuJ4Tvk1jhU9drzCQDLyeUPgww
 X-Developer-Key: i=git@apitzsch.eu; a=ed25519;
  pk=wxovcZRfvNYBMcTw4QFFtNEP4qv39gnBfnfyImXZxiU=
 X-Endpoint-Received: by B4 Relay for git@apitzsch.eu/20240325 with
@@ -68,112 +68,39 @@ Reply-To: git@apitzsch.eu
 
 From: André Apitzsch <git@apitzsch.eu>
 
-Document Dongwoon DW9718S, DW9719 and DW9761 VCM devicetree bindings.
+Nothing depends on the I²C device ID table, so remove it.
 
 Signed-off-by: André Apitzsch <git@apitzsch.eu>
-
---
-
-The possible values for sac-mode and vcm-prescale of DW9719 and DW9761
-are missing because there is no documentation available.
 ---
- .../bindings/media/i2c/dongwoon,dw9719.yaml        | 88 ++++++++++++++++++++++
- 1 file changed, 88 insertions(+)
+ drivers/media/i2c/dw9719.c | 8 --------
+ 1 file changed, 8 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/media/i2c/dongwoon,dw9719.yaml b/Documentation/devicetree/bindings/media/i2c/dongwoon,dw9719.yaml
-new file mode 100644
-index 0000000000000000000000000000000000000000..38db0764c0f70ad49295dcddc182b7e100a68b29
---- /dev/null
-+++ b/Documentation/devicetree/bindings/media/i2c/dongwoon,dw9719.yaml
-@@ -0,0 +1,88 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/media/i2c/dongwoon,dw9719.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Dongwoon Anatech DW9719 Voice Coil Motor (VCM) Controller
-+
-+maintainers:
-+  - André Apitzsch <git@apitzsch.eu>
-+
-+description:
-+  The Dongwoon DW9718S/9719/9761 is a single 10-bit digital-to-analog converter
-+  with 100 mA output current sink capability, designed for linear control of
-+  voice coil motors (VCM) in camera lenses. This chip provides a Smart Actuator
-+  Control (SAC) mode intended for driving voice coil lenses in camera modules.
-+
-+properties:
-+  compatible:
-+    enum:
-+      - dongwoon,dw9718s
-+      - dongwoon,dw9719
-+      - dongwoon,dw9761
-+
-+  reg:
-+    maxItems: 1
-+
-+  vdd-supply:
-+    description: VDD power supply
-+
-+  dongwoon,sac-mode:
-+    description: |
-+      Slew Rate Control mode to use: direct, LSC (Linear Slope Control) or
-+      SAC1-SAC6 (Smart Actuator Control).
-+    $ref: /schemas/types.yaml#/definitions/uint32
-+    enum:
-+      - 0   # Direct mode
-+      - 1   # LSC mode
-+      - 2   # SAC1 mode (operation time# 0.32 x Tvib)
-+      - 3   # SAC2 mode (operation time# 0.48 x Tvib)
-+      - 4   # SAC3 mode (operation time# 0.72 x Tvib)
-+      - 5   # SAC4 mode (operation time# 1.20 x Tvib)
-+      - 6   # SAC5 mode (operation time# 1.64 x Tvib)
-+      - 7   # SAC6 mode (operation time# 1.88 x Tvib)
-+    default: 4
-+
-+  dongwoon,vcm-prescale:
-+    description:
-+      Indication of VCM switching frequency dividing rate select.
-+    $ref: /schemas/types.yaml#/definitions/uint32
-+
-+required:
-+  - compatible
-+  - reg
-+  - vdd-supply
-+
-+allOf:
-+  - if:
-+      properties:
-+        compatible:
-+          contains:
-+            const: dongwoon,dw9718s
-+    then:
-+      properties:
-+        dongwoon,vcm-prescale:
-+          description:
-+            The final frequency is 10 MHz divided by (value + 2).
-+          maximum: 15
-+          default: 0
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    i2c {
-+        #address-cells = <1>;
-+        #size-cells = <0>;
-+
-+        actuator@c {
-+            compatible = "dongwoon,dw9718s";
-+            reg = <0x0c>;
-+
-+            vdd-supply = <&pm8937_l17>;
-+
-+            dongwoon,sac-mode = <4>;
-+            dongwoon,vcm-prescale = <0>;
-+        };
-+    };
+diff --git a/drivers/media/i2c/dw9719.c b/drivers/media/i2c/dw9719.c
+index 5ed0042fce18acd9e6ce9f6cf6c6982e36fed275..8d83e6fb478124d83d65f80d33a50c0aff438a6d 100644
+--- a/drivers/media/i2c/dw9719.c
++++ b/drivers/media/i2c/dw9719.c
+@@ -360,13 +360,6 @@ static void dw9719_remove(struct i2c_client *client)
+ 	pm_runtime_set_suspended(&client->dev);
+ }
+ 
+-static const struct i2c_device_id dw9719_id_table[] = {
+-	{ "dw9719" },
+-	{ "dw9761" },
+-	{ }
+-};
+-MODULE_DEVICE_TABLE(i2c, dw9719_id_table);
+-
+ static DEFINE_RUNTIME_DEV_PM_OPS(dw9719_pm_ops, dw9719_suspend, dw9719_resume,
+ 				 NULL);
+ 
+@@ -377,7 +370,6 @@ static struct i2c_driver dw9719_i2c_driver = {
+ 	},
+ 	.probe = dw9719_probe,
+ 	.remove = dw9719_remove,
+-	.id_table = dw9719_id_table,
+ };
+ module_i2c_driver(dw9719_i2c_driver);
+ 
 
 -- 
 2.51.0
