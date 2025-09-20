@@ -1,37 +1,38 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D214E2FFF83;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D1A1D2FFDF5;
 	Sat, 20 Sep 2025 12:03:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758369835; cv=none; b=LTKCYQ0zFKD7fCZjCL4hY3MqNez/gxKvVCZv1cdYsP5O1gi4sC4V5UqFB1/pMN3MnAl8UBZs8Etn9WQvS7/vsCSR2jcgzif5gB25xK1H9ePcfvazYbArB5k5xilGrTbhpvAkfSwBCyI6vUKu9Vmd6SEQD42qDCW3hwPH7reNfdE=
+	t=1758369835; cv=none; b=KD2OxgF+mD/Ul/4ACTK0KFx7iBZlny9UIpvg3wlJ3dE+ImvCenxPyuGpwbiI5GxB3nCjbcy9wv9sUu/i1lQ9J9QyFBNG12UpLZB+VCsx/iSrlQm+3EyX6GZUbFxHqthIy3PIvcFHZNz3GVVZxCBsOkTdctV5dRKMLGLX5uRrZQs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1758369835; c=relaxed/simple;
-	bh=6BTUfjD+QMxV2SawM2MgDcbd8aOdOkOPCop/RLrVvp0=;
+	bh=cuM0nBe1tiAuXnzV30is7jGUGiFTlfNi+vFVdoJb35E=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=ZKt7ZJjw6SSVook3OWUSA/d4a7w9TO3si5R5WnCgRm23KVvBrlRj/qOJ4MhGQNJui79txlvGGYFuKPu54sF07ylnCNi5q+aWzaG0HT6/C+GV+purdambd8UX5JShvRc/4j3ZkNwI7sVqxb8YbuOmdeP48WWrNMzMLhDYlg2AS/E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nZlXaiDb; arc=none smtp.client-ip=10.30.226.201
+	 In-Reply-To:To:Cc; b=YdBuV5XEMfIRMctKTXnpBY9r7VDJc+kvtGEYOEUaVvdgEcCLtBY0iosOqgp29OsJGMXC4ODLnzlV6uPdOTu4gBtM43bNO9ReFjjq2ZXrZGHBj7NRhy1Plh0rvXr1LMclu41ETnA0iDtiNEqwyPPVIaJsMvaAAT9kfAdSfYWYkDE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=bLgo5Ugy; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nZlXaiDb"
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 4D894C19421;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="bLgo5Ugy"
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 64EE6C4CEFA;
 	Sat, 20 Sep 2025 12:03:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1758369835;
-	bh=6BTUfjD+QMxV2SawM2MgDcbd8aOdOkOPCop/RLrVvp0=;
+	bh=cuM0nBe1tiAuXnzV30is7jGUGiFTlfNi+vFVdoJb35E=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To:From;
-	b=nZlXaiDbqhyPsCQj4gygJ9rGtmzqVvggJ764I+xQ4BfiERlGMVEfJNkslA7dI9r8e
-	 jdrJBw26MiQvK3+YSJxgrE8jAoME5/slZX/XMvuyhZM5Qu+jb1So6JDHTTAi/czYrn
-	 r2YAaqroaSNacXGm/2WwKvty1WeUJ7zo+IrPnrQI5WpXtA1H4xrRKMxBMOhTdO7aXs
-	 LpDPhuynWAKhCo8vSVY2pYocgeLLFOgUBWS4Y7Tc0EchycvgFo+9YJqdx84a9zykzF
-	 yxwPqt7eQsHGFGpPz3KaFB4QGDlkaK3MXoqoEqMt454AaThbb0X8tS8qWOnqTVFFa3
-	 IahIRxsSsA25A==
+	b=bLgo5UgytKuLJmazghZO14AD5FNIWngXjQvs6yE/qXiZcHIQIWU2jwFZjkhOUBc+T
+	 SsXrY5qCCFjP+PZLMldoM7aQmCYi8z2alqRtXMek6sd++Y6EMfVW7OElPRV0/h1NmD
+	 KcAnCTEPm0eo6q1D+eMfTi5OdWCN2JeB5S3CetR/sR1XBV9gea5h92hWB0hyhc6tVk
+	 y9av3D5/2/T6xBdWQLq3NxyjSj1k4xagQ0SY4ipyUJw27vsgyoaqsmnckNEXCZajqi
+	 mVqmUjkXVysrLm1/0l7ohzsqnf9cB6C+yL4dCJJKo58134BW1Ch+71BpXSpBSb2vlU
+	 5RnID2IWkfxXg==
 Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3DB04CAC5A7;
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5AF45CAC5A8;
 	Sat, 20 Sep 2025 12:03:55 +0000 (UTC)
 From: =?utf-8?q?Andr=C3=A9_Apitzsch_via_B4_Relay?= <devnull+git.apitzsch.eu@kernel.org>
-Date: Sat, 20 Sep 2025 14:03:44 +0200
-Subject: [PATCH v2 5/8] media: i2c: dw9719: Add driver_data matching
+Date: Sat, 20 Sep 2025 14:03:46 +0200
+Subject: [PATCH v2 7/8] media: i2c: dw9719: Update PM last busy time upon
+ close
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
@@ -40,7 +41,7 @@ List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Message-Id: <20250920-dw9719-v2-5-028cdaa156e5@apitzsch.eu>
+Message-Id: <20250920-dw9719-v2-7-028cdaa156e5@apitzsch.eu>
 References: <20250920-dw9719-v2-0-028cdaa156e5@apitzsch.eu>
 In-Reply-To: <20250920-dw9719-v2-0-028cdaa156e5@apitzsch.eu>
 To: Mauro Carvalho Chehab <mchehab@kernel.org>, 
@@ -53,11 +54,11 @@ Cc: ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
  Val Packett <val@packett.cool>, 
  =?utf-8?q?Andr=C3=A9_Apitzsch?= <git@apitzsch.eu>
 X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1758369833; l=1295;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1758369833; l=778;
  i=git@apitzsch.eu; s=20240325; h=from:subject:message-id;
- bh=F4erGTuK3ncXkg+7Bo7QvNLiSQlxWsoxB54j160jl6g=;
- b=G6hjfMlrgllyNAUfxPWtZX+8UmxlFVQ8fAUrduk0zlkU6VEGsKLRlUf63GVX2+sTPGguctB2N
- piXQUsHv5kdAwVAf24lPrVC+L+bWh8+7EYIRM3+MkxQcBqVOsq1rYJr
+ bh=VbfafRxdOY0QSTO5ZHN0pYfZbUgGkIdRhbekGlrCdzU=;
+ b=3eJJI02EOCQhEH1NiwouP1tDE6ONH5nW8FLORTih5gRb/z/IqGU+QhtxL38eIA9vZ6K2D4x/f
+ grSdvIcxAcMDBg32/o157DOYrjdqelerYOGmHNHw06VJ2Dmakqe236P
 X-Developer-Key: i=git@apitzsch.eu; a=ed25519;
  pk=wxovcZRfvNYBMcTw4QFFtNEP4qv39gnBfnfyImXZxiU=
 X-Endpoint-Received: by B4 Relay for git@apitzsch.eu/20240325 with
@@ -67,39 +68,27 @@ Reply-To: git@apitzsch.eu
 
 From: Val Packett <val@packett.cool>
 
-In preparation for adding models with different register sets, start
-assigning the model based on the i2c match data.
+Update the close callback to match other similar drivers like dw9768.
 
 Signed-off-by: Val Packett <val@packett.cool>
 Signed-off-by: André Apitzsch <git@apitzsch.eu>
 ---
- drivers/media/i2c/dw9719.c | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+ drivers/media/i2c/dw9719.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/drivers/media/i2c/dw9719.c b/drivers/media/i2c/dw9719.c
-index d2af2c6fcd670288084e3be2e0fb21bc9bc1ae92..5dc4126909b779aa0ce95015808b625fb21b67bb 100644
+index 5e3a200db3b5df8bf49547fc842c1cfd74322a40..a24594523030df7df7fb60afb5248472b4a8ea13 100644
 --- a/drivers/media/i2c/dw9719.c
 +++ b/drivers/media/i2c/dw9719.c
-@@ -282,6 +282,8 @@ static int dw9719_probe(struct i2c_client *client)
- 	if (!dw9719)
- 		return -ENOMEM;
+@@ -284,7 +284,7 @@ static int dw9719_open(struct v4l2_subdev *sd, struct v4l2_subdev_fh *fh)
  
-+	dw9719->model = (enum dw9719_model)(uintptr_t)i2c_get_match_data(client);
-+
- 	dw9719->regmap = devm_cci_regmap_init_i2c(client, 8);
- 	if (IS_ERR(dw9719->regmap))
- 		return PTR_ERR(dw9719->regmap);
-@@ -361,8 +363,8 @@ static void dw9719_remove(struct i2c_client *client)
+ static int dw9719_close(struct v4l2_subdev *sd, struct v4l2_subdev_fh *fh)
+ {
+-	pm_runtime_put(sd->dev);
++	pm_runtime_put_autosuspend(sd->dev);
+ 
+ 	return 0;
  }
- 
- static const struct of_device_id dw9719_of_table[] = {
--	{ .compatible = "dongwoon,dw9719" },
--	{ .compatible = "dongwoon,dw9761" },
-+	{ .compatible = "dongwoon,dw9719", .data = (const void *)DW9719 },
-+	{ .compatible = "dongwoon,dw9761", .data = (const void *)DW9761 },
- 	{ }
- };
- MODULE_DEVICE_TABLE(of, dw9719_of_table);
 
 -- 
 2.51.0
