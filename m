@@ -1,96 +1,98 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from cstnet.cn (smtp81.cstnet.cn [159.226.251.81])
+	(using TLSv1.2 with cipher DHE-RSA-AES256-SHA (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D1A1D2FFDF5;
-	Sat, 20 Sep 2025 12:03:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C9FB325DD1E;
+	Sat, 20 Sep 2025 13:43:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.226.251.81
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758369835; cv=none; b=KD2OxgF+mD/Ul/4ACTK0KFx7iBZlny9UIpvg3wlJ3dE+ImvCenxPyuGpwbiI5GxB3nCjbcy9wv9sUu/i1lQ9J9QyFBNG12UpLZB+VCsx/iSrlQm+3EyX6GZUbFxHqthIy3PIvcFHZNz3GVVZxCBsOkTdctV5dRKMLGLX5uRrZQs=
+	t=1758375801; cv=none; b=RVKC/ImObPLSf2kI43JfMnzaK4KlScn4TXjgjrXvHFj26HLDpCnGqSIeJyXyrnYwjKQR6Kc8wapcOyRhHMN/8bvUl3kKC5HQXT4iwtFe1Un8EpiM9Kv7M1PLeDKTt1d0OS8NzRziwfEzzAFaI7Lh07czn0gGRa6JIDHSUncezeI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758369835; c=relaxed/simple;
-	bh=cuM0nBe1tiAuXnzV30is7jGUGiFTlfNi+vFVdoJb35E=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=YdBuV5XEMfIRMctKTXnpBY9r7VDJc+kvtGEYOEUaVvdgEcCLtBY0iosOqgp29OsJGMXC4ODLnzlV6uPdOTu4gBtM43bNO9ReFjjq2ZXrZGHBj7NRhy1Plh0rvXr1LMclu41ETnA0iDtiNEqwyPPVIaJsMvaAAT9kfAdSfYWYkDE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=bLgo5Ugy; arc=none smtp.client-ip=10.30.226.201
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="bLgo5Ugy"
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 64EE6C4CEFA;
-	Sat, 20 Sep 2025 12:03:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1758369835;
-	bh=cuM0nBe1tiAuXnzV30is7jGUGiFTlfNi+vFVdoJb35E=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To:From;
-	b=bLgo5UgytKuLJmazghZO14AD5FNIWngXjQvs6yE/qXiZcHIQIWU2jwFZjkhOUBc+T
-	 SsXrY5qCCFjP+PZLMldoM7aQmCYi8z2alqRtXMek6sd++Y6EMfVW7OElPRV0/h1NmD
-	 KcAnCTEPm0eo6q1D+eMfTi5OdWCN2JeB5S3CetR/sR1XBV9gea5h92hWB0hyhc6tVk
-	 y9av3D5/2/T6xBdWQLq3NxyjSj1k4xagQ0SY4ipyUJw27vsgyoaqsmnckNEXCZajqi
-	 mVqmUjkXVysrLm1/0l7ohzsqnf9cB6C+yL4dCJJKo58134BW1Ch+71BpXSpBSb2vlU
-	 5RnID2IWkfxXg==
-Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5AF45CAC5A8;
-	Sat, 20 Sep 2025 12:03:55 +0000 (UTC)
-From: =?utf-8?q?Andr=C3=A9_Apitzsch_via_B4_Relay?= <devnull+git.apitzsch.eu@kernel.org>
-Date: Sat, 20 Sep 2025 14:03:46 +0200
-Subject: [PATCH v2 7/8] media: i2c: dw9719: Update PM last busy time upon
- close
+	s=arc-20240116; t=1758375801; c=relaxed/simple;
+	bh=zbQJHCGgM5Kr8QW7UWc85ZebxI239jbRy3/bx4Z++aI=;
+	h=From:To:Cc:Subject:Date:Message-Id; b=s27/OGtYkXc9IwVCKhzeMeo0lRD5GIwPbHb1qshuiyQSm/90VnNKDPH+srkkTfNvRNxwm5ITDlYiYnrhyxstI0tcd30on6R8WqFWIEwcyrlnqLop+zUfdwr1HRErrU/hnUR4xf0xDpzpXQ5QyMA8ZrRjlk6QR2MhBwgYLCmK/ZM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=iscas.ac.cn; spf=pass smtp.mailfrom=iscas.ac.cn; arc=none smtp.client-ip=159.226.251.81
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=iscas.ac.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iscas.ac.cn
+Received: from localhost.localdomain (unknown [202.112.113.212])
+	by APP-03 (Coremail) with SMTP id rQCowADHEXxer85o_qPvAw--.9226S2;
+	Sat, 20 Sep 2025 21:43:06 +0800 (CST)
+From: Ma Ke <make24@iscas.ac.cn>
+To: sakari.ailus@linux.intel.com,
+	bingbu.cao@intel.com,
+	lixu.zhang@intel.com,
+	stanislaw.gruszka@linux.intel.com,
+	mchehab@kernel.org,
+	wentong.wu@intel.com
+Cc: linux-media@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Ma Ke <make24@iscas.ac.cn>,
+	stable@vger.kernel.org
+Subject: [PATCH] media: pci: intel: ivsc: fix error handling in scan_one_device()
+Date: Sat, 20 Sep 2025 21:42:52 +0800
+Message-Id: <20250920134252.8612-1-make24@iscas.ac.cn>
+X-Mailer: git-send-email 2.17.1
+X-CM-TRANSID:rQCowADHEXxer85o_qPvAw--.9226S2
+X-Coremail-Antispam: 1UD129KBjvJXoW7KFW5CF48Ar15Wry5Kw1fCrg_yoW8GFWfpr
+	W2gFWvkFW5Xr12gryDu3WUuFy5GwnIva9xGFy7Ka1xWan5Zry7tryjqa42kFWjvF92yFyj
+	yr13GrW3Ar4kJw7anT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUPj14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+	rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+	1l84ACjcxK6xIIjxv20xvE14v26r1I6r4UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4j
+	6F4UM28EF7xvwVC2z280aVAFwI0_Cr1j6rxdM28EF7xvwVC2z280aVCY1x0267AKxVW0oV
+	Cq3wAac4AC62xK8xCEY4vEwIxC4wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC
+	0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr
+	1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IE
+	rcIFxwACI402YVCY1x02628vn2kIc2xKxwCY1x0262kKe7AKxVWUtVW8ZwCY02Avz4vE14
+	v_Xr4l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AK
+	xVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIYrx
+	kI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v2
+	6r1j6r4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWUJVW8Jw
+	CI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjfUnFApUUUU
+	U
+X-CM-SenderInfo: ppdnvj2u6l2u1dvotugofq/
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-Message-Id: <20250920-dw9719-v2-7-028cdaa156e5@apitzsch.eu>
-References: <20250920-dw9719-v2-0-028cdaa156e5@apitzsch.eu>
-In-Reply-To: <20250920-dw9719-v2-0-028cdaa156e5@apitzsch.eu>
-To: Mauro Carvalho Chehab <mchehab@kernel.org>, 
- Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
- Conor Dooley <conor+dt@kernel.org>, devicetree@vger.kernel.org, 
- Sakari Ailus <sakari.ailus@linux.intel.com>, 
- Daniel Scally <djrscally@gmail.com>
-Cc: ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org, 
- linux-media@vger.kernel.org, linux-kernel@vger.kernel.org, 
- Val Packett <val@packett.cool>, 
- =?utf-8?q?Andr=C3=A9_Apitzsch?= <git@apitzsch.eu>
-X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1758369833; l=778;
- i=git@apitzsch.eu; s=20240325; h=from:subject:message-id;
- bh=VbfafRxdOY0QSTO5ZHN0pYfZbUgGkIdRhbekGlrCdzU=;
- b=3eJJI02EOCQhEH1NiwouP1tDE6ONH5nW8FLORTih5gRb/z/IqGU+QhtxL38eIA9vZ6K2D4x/f
- grSdvIcxAcMDBg32/o157DOYrjdqelerYOGmHNHw06VJ2Dmakqe236P
-X-Developer-Key: i=git@apitzsch.eu; a=ed25519;
- pk=wxovcZRfvNYBMcTw4QFFtNEP4qv39gnBfnfyImXZxiU=
-X-Endpoint-Received: by B4 Relay for git@apitzsch.eu/20240325 with
- auth_id=142
-X-Original-From: =?utf-8?q?Andr=C3=A9_Apitzsch?= <git@apitzsch.eu>
-Reply-To: git@apitzsch.eu
 
-From: Val Packett <val@packett.cool>
+The mei_ace driver contains a device reference count leak in
+mei_ace_setup_dev_link() where device_find_child_by_name() increases
+the reference count of the found device but this reference is not
+properly decreased in the success path. Add put_device() in
+mei_ace_setup_dev_link() and delete put_device() in mei_ace_remove(),
+which ensures that the reference count of the device is correctly
+managed regardless of whether the probe is successful or fails.
 
-Update the close callback to match other similar drivers like dw9768.
+Found by code review.
 
-Signed-off-by: Val Packett <val@packett.cool>
-Signed-off-by: André Apitzsch <git@apitzsch.eu>
+Cc: stable@vger.kernel.org
+Fixes: 78876f71b3e9 ("media: pci: intel: ivsc: Add ACE submodule")
+Signed-off-by: Ma Ke <make24@iscas.ac.cn>
 ---
- drivers/media/i2c/dw9719.c | 2 +-
+ drivers/media/pci/intel/ivsc/mei_ace.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/media/i2c/dw9719.c b/drivers/media/i2c/dw9719.c
-index 5e3a200db3b5df8bf49547fc842c1cfd74322a40..a24594523030df7df7fb60afb5248472b4a8ea13 100644
---- a/drivers/media/i2c/dw9719.c
-+++ b/drivers/media/i2c/dw9719.c
-@@ -284,7 +284,7 @@ static int dw9719_open(struct v4l2_subdev *sd, struct v4l2_subdev_fh *fh)
+diff --git a/drivers/media/pci/intel/ivsc/mei_ace.c b/drivers/media/pci/intel/ivsc/mei_ace.c
+index 98310b8511b1..261b30788118 100644
+--- a/drivers/media/pci/intel/ivsc/mei_ace.c
++++ b/drivers/media/pci/intel/ivsc/mei_ace.c
+@@ -421,6 +421,7 @@ static int mei_ace_setup_dev_link(struct mei_ace *ace)
+ 	}
  
- static int dw9719_close(struct v4l2_subdev *sd, struct v4l2_subdev_fh *fh)
- {
--	pm_runtime_put(sd->dev);
-+	pm_runtime_put_autosuspend(sd->dev);
+ 	ace->csi_dev = csi_dev;
++	put_device(csi_dev);
  
  	return 0;
- }
-
+ 
+@@ -522,7 +523,6 @@ static void mei_ace_remove(struct mei_cl_device *cldev)
+ 	cancel_work_sync(&ace->work);
+ 
+ 	device_link_del(ace->csi_link);
+-	put_device(ace->csi_dev);
+ 
+ 	pm_runtime_disable(&cldev->dev);
+ 	pm_runtime_set_suspended(&cldev->dev);
 -- 
-2.51.0
-
+2.17.1
 
