@@ -1,37 +1,37 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 925E725783F;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AD72F2820BA;
 	Sat, 20 Sep 2025 12:03:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758369835; cv=none; b=UITOoQxeZJ8IxBKCBG7TQs9sdKp590XsNxzuCCKNjDMFZ7VIakPOBAwCPOZBq9c5DglNwqhFwcrs/wfrntIIZAk3tNva6888WMWZeB+pHYbWbZJnRBgCQoWCjExCg6j9g3DPHxfxFF7neVVTVuSiGaTmLgytbPH/oHm2DP9B33c=
+	t=1758369835; cv=none; b=FPuuCPU5srL/c8//BzBSlAEjsnzr4Rk4stDa60rk8jgGH/CKxJnNv+OJ/sinpdwsSWKpSNeCq+1/7ut6kK41mQuauRdLJR8HUi1tcDhMOm87pjpAe6rqDJgYPAC+e3WqqrLsly0N5v91hLiD1lrS4Ic2U+mzcQbfKBytplarB5Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1758369835; c=relaxed/simple;
-	bh=VFqTSAErN+zt14ci1/07W73qXEQkUe/doU0Hs/VVX2s=;
+	bh=HS7XyElftAvl2ll54BkDgrL2R2rTQhTdmrzcX5KlrDc=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=iXBqnVMNdYnBCc1+Mlep2zI5sk8RfuvXF1uhqai7RQjOD31R27NT7HjpeWNXH8klmAiB+TNjXw7p1cu2krLwtR9jYnUZdjo//oUuWq5JiG+qq2z5+iAm7yH3q1aTYIHuI9SFqAqrf2X2acX9PnkMOpD1p+iy8o3aMQ02+6WWpYs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=JJiJQzO+; arc=none smtp.client-ip=10.30.226.201
+	 In-Reply-To:To:Cc; b=Ax6GnH6PprRbBtS0bjgmL1qBMAHetXQYA93JCKF6U3AomPwIH1ZbRxXhNUiO7WXfoxUdoZlvA6NSA7igoQgT8/zRm+0ev2bwsKzP/bKXmem2bVE8x9G7DdRi1jVGdPzz534xg27T3vyLRcrZLnUudeyqSe3J4gFe93ANdqKCmg0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=EnWeukMp; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="JJiJQzO+"
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 253BEC4CEF7;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="EnWeukMp"
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 3E374C113D0;
 	Sat, 20 Sep 2025 12:03:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1758369835;
-	bh=VFqTSAErN+zt14ci1/07W73qXEQkUe/doU0Hs/VVX2s=;
+	bh=HS7XyElftAvl2ll54BkDgrL2R2rTQhTdmrzcX5KlrDc=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To:From;
-	b=JJiJQzO+cd5cnK0jJr521YieS/WnTdafTdvkBkByoLLw0b6/AN0rggLfOuwPvm26a
-	 TVjdrXV3FzU1VJ5pGDFDcUtcQUgQNLf94THxQWoahajwPENUI9N+0mYveEyIGXayjV
-	 zGSfnovsSzFapPHMsjzvN7XAig5ppNVLvh9DSCy0SjMrKWkn9LR5wv1G6KRadkSMkO
-	 65s/apWGvuRrIglzp7FP/7/Fs4EcIdEBgwbmXGffOUG7A5ON3lkkx+42FxYYRtOH1x
-	 vZXeZM/owV2fTZxthXU8DNoOCqNjpWS5PwabSxEB43/8kbzRwH5j/Xt/tkS3YfFG2x
-	 ADk7ga/7tNPcg==
+	b=EnWeukMpmXncY/g7AqrVSoHFeX/tOY4HLn0syf+kYuatI46hPQSgRbjQzwdohKFzV
+	 FURr0s8D6QTPBPFaElFOr8JiIJghCaihlp71CNBzc2JNCaff9PjxDXGMaXokCyxxtA
+	 mK0lqZSU5JlNKRhU3WJI4Nw40sf50ANSlj7QkS4jV6hb8jO8j7lEmahkkB8t5QsgYK
+	 HJks6O8cigfEax/Ni1nNUPKCbn/XyR23HpWB4ABMc3PtrnCeKE1miEma+QmFT+/vI3
+	 zBaQTEZMCP+GJdIILsUHRgWMidj+aQBIzbewko1iqt6R808jN20h139xuVSxjD0+aO
+	 ibggeesOm/N0A==
 Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 11B86CAC5A8;
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2E658CAC5AC;
 	Sat, 20 Sep 2025 12:03:55 +0000 (UTC)
 From: =?utf-8?q?Andr=C3=A9_Apitzsch_via_B4_Relay?= <devnull+git.apitzsch.eu@kernel.org>
-Date: Sat, 20 Sep 2025 14:03:41 +0200
-Subject: [PATCH v2 2/8] media: i2c: dw9719: Deprecate dongwoon,vcm-freq
+Date: Sat, 20 Sep 2025 14:03:43 +0200
+Subject: [PATCH v2 4/8] media: i2c: dw9719: Add an of_match_table
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
@@ -40,7 +40,7 @@ List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Message-Id: <20250920-dw9719-v2-2-028cdaa156e5@apitzsch.eu>
+Message-Id: <20250920-dw9719-v2-4-028cdaa156e5@apitzsch.eu>
 References: <20250920-dw9719-v2-0-028cdaa156e5@apitzsch.eu>
 In-Reply-To: <20250920-dw9719-v2-0-028cdaa156e5@apitzsch.eu>
 To: Mauro Carvalho Chehab <mchehab@kernel.org>, 
@@ -53,11 +53,11 @@ Cc: ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
  Val Packett <val@packett.cool>, 
  =?utf-8?q?Andr=C3=A9_Apitzsch?= <git@apitzsch.eu>
 X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1758369833; l=1393;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1758369833; l=1144;
  i=git@apitzsch.eu; s=20240325; h=from:subject:message-id;
- bh=IAzlkl9/y7ZEPjP9FcEzM1T6TtpgJTz8PkPbMDCgBe8=;
- b=gjEM7rLw/wEH6ScrAvo6wFfzvqisjK8oB1sN23asixFFyLUrJS4O72PxhPtWGP8TFoPyf2WEu
- vmdVKYSGDWEDQNwztzi3axDLOfYAshNjVibLIkTEGdg84QMv7ycfBwB
+ bh=/9gQhNfUD10W3AaOsw0Ek4CP3GePWbksU9S80RaFESo=;
+ b=d0vECZrY46DMQ3RaA5INTJ2E15xMI7rfJAn58BbR9wnlpoSGPW02TiW2sajrr8kTMi7hvb7XQ
+ /Tvl74uTugkAdz5WO0gOZ8lOMviii/LcdmMGnprLUV770TJDwG9qZ47
 X-Developer-Key: i=git@apitzsch.eu; a=ed25519;
  pk=wxovcZRfvNYBMcTw4QFFtNEP4qv39gnBfnfyImXZxiU=
 X-Endpoint-Received: by B4 Relay for git@apitzsch.eu/20240325 with
@@ -65,44 +65,42 @@ X-Endpoint-Received: by B4 Relay for git@apitzsch.eu/20240325 with
 X-Original-From: =?utf-8?q?Andr=C3=A9_Apitzsch?= <git@apitzsch.eu>
 Reply-To: git@apitzsch.eu
 
-From: André Apitzsch <git@apitzsch.eu>
+From: Val Packett <val@packett.cool>
 
-The name of property "dongwoon,vcm-freq" doesn't match its purpose.
-Change the name of the property to "dongwoon,vcm-prescale" to better
-describe its purpose and deprecate the old one.
+Allow the dw9719 driver to be attached via FDT.
 
+Signed-off-by: Val Packett <val@packett.cool>
 Signed-off-by: André Apitzsch <git@apitzsch.eu>
 ---
- drivers/media/i2c/dw9719.c | 9 ++++++++-
- 1 file changed, 8 insertions(+), 1 deletion(-)
+ drivers/media/i2c/dw9719.c | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
 diff --git a/drivers/media/i2c/dw9719.c b/drivers/media/i2c/dw9719.c
-index 032fbcb981f20f4e93202415e62f67379897a048..5ed0042fce18acd9e6ce9f6cf6c6982e36fed275 100644
+index 8d83e6fb478124d83d65f80d33a50c0aff438a6d..d2af2c6fcd670288084e3be2e0fb21bc9bc1ae92 100644
 --- a/drivers/media/i2c/dw9719.c
 +++ b/drivers/media/i2c/dw9719.c
-@@ -82,6 +82,7 @@ static int dw9719_power_up(struct dw9719_device *dw9719, bool detect)
- {
- 	u64 val;
- 	int ret;
-+	int err;
+@@ -360,6 +360,13 @@ static void dw9719_remove(struct i2c_client *client)
+ 	pm_runtime_set_suspended(&client->dev);
+ }
  
- 	ret = regulator_enable(dw9719->regulator);
- 	if (ret)
-@@ -123,7 +124,13 @@ static int dw9719_power_up(struct dw9719_device *dw9719, bool detect)
- 					 &dw9719->sac_mode);
- 
- 		/* Optional indication of VCM frequency */
--		device_property_read_u32(dw9719->dev, "dongwoon,vcm-freq",
-+		err = device_property_read_u32(dw9719->dev, "dongwoon,vcm-freq",
-+					       &dw9719->vcm_freq);
-+		if (err == 0)
-+			dev_warn(dw9719->dev, "dongwoon,vcm-freq property is deprecated, please use dongwoon,vcm-prescale\n");
++static const struct of_device_id dw9719_of_table[] = {
++	{ .compatible = "dongwoon,dw9719" },
++	{ .compatible = "dongwoon,dw9761" },
++	{ }
++};
++MODULE_DEVICE_TABLE(of, dw9719_of_table);
 +
-+		/* Optional indication of VCM prescale */
-+		device_property_read_u32(dw9719->dev, "dongwoon,vcm-prescale",
- 					 &dw9719->vcm_freq);
- 	}
+ static DEFINE_RUNTIME_DEV_PM_OPS(dw9719_pm_ops, dw9719_suspend, dw9719_resume,
+ 				 NULL);
  
+@@ -367,6 +374,7 @@ static struct i2c_driver dw9719_i2c_driver = {
+ 	.driver = {
+ 		.name = "dw9719",
+ 		.pm = pm_sleep_ptr(&dw9719_pm_ops),
++		.of_match_table = dw9719_of_table,
+ 	},
+ 	.probe = dw9719_probe,
+ 	.remove = dw9719_remove,
 
 -- 
 2.51.0
