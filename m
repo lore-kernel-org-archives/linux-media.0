@@ -1,86 +1,115 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E01531A08B8;
-	Wed, 24 Sep 2025 13:31:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2B51B143C69;
+	Wed, 24 Sep 2025 13:36:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758720706; cv=none; b=ATmcSmtlaafe1+aILIK3FCQrJY4T5p5Yk7X5LZh35Gb+C/gxxgVK48KBaiBCL0PmCHMnSecbikCoyslBgevsIbOO8fBvz3NGPs5Ba1sVpTnkv7gdG+XZNlZfJrwf1OZst/zQbspHHbSnmKxsedDG6/kOIJwhUaNjHuWjilUsAq8=
+	t=1758720987; cv=none; b=rsv+vpRygpK499SlDms7ExlVmzKA0ZqXPNRZ3y+CMTL9a00F8KeCsOEtQBv2y+BDVfGZ+cmBG8KdA5nvnyi9jR00HFMhOFI+EtCb5/V6YyZ/iMV+8LbYvyENaBAMJmkGq+3YdyLf8lu+wn6f8mzu4SuVzFWDNYWSzhSSVZ8Cn/o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758720706; c=relaxed/simple;
-	bh=ZOKnwxpWQh1OHKfDLUV6APqobBrxGUmV8WR/2jnfww0=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=X3BRI70XlG8H1+/UUnCsXCp0UHBAydShcVv0LITNIGLhe6599Vb2CcWg4d2n2kUz+zj9HN77FQFvLFmDRC2QMhRIOkjqVF3KSCD/U1M6Xmp1A5FlFOwlglRrqacuPI4Df7sPnziAVqpMCnmcJXvcpmysGp0j4ngreapGABWlDJ8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=sXEgWnp0; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1758720987; c=relaxed/simple;
+	bh=OIe1RuE43WcLPQslx97SFCWinjb/HwQHW7IH+6ElOMg=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=Huqf0a3MkehHX2IqHL+tH8/QWle1yYnImXHDW6nsoG2PZRkeIeamBb6FwsSh0sas7af16PeezR364bafy/9m/LwE1obXEuHbnUnms8bgpG2V0E3JHtlDcsO4WxyPT14ffEXAvwZK8uQ1c3+ii1zpLX6nvmGstbJDq95LNACNfk4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TtIHGdIn; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="sXEgWnp0"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A41ECC4CEE7;
-	Wed, 24 Sep 2025 13:31:43 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TtIHGdIn"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EAE7EC4CEF0;
+	Wed, 24 Sep 2025 13:36:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1758720705;
-	bh=ZOKnwxpWQh1OHKfDLUV6APqobBrxGUmV8WR/2jnfww0=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=sXEgWnp03n0sHny4dsfOG61hTDEe57yuSuvR2SnfOCrw2ky+ENlA8T5EJ4lJKtkXt
-	 ikP7sP7XjUARxY3oKU3v5zTTereqLu/M9kxEQZufzunMW+xC5S4ZbmyVjITO8wnMMR
-	 dIk44Kzaoi3GPnZm1axzUhW1SPSipEr7IqJj6S1HjaVjcvKZNgKT7YwOTWprPh/8qf
-	 HJDbwVIlsyHqp3e284Y+TUavgOcBk6djOdG2UB6hPNPx0j3uaL3JyILp+tZgpl4aIy
-	 ZjuBxLGbivydSpFkCC1ef4Gq7Leo/Xvd7Z8N36SFfnR+9JwBXWQkvLHbyyRX9UJW+D
-	 2ywj0CoTMBvXA==
-Message-ID: <908fece9-769b-4f44-86bb-04de7c3d510e@kernel.org>
-Date: Wed, 24 Sep 2025 14:31:41 +0100
+	s=k20201202; t=1758720987;
+	bh=OIe1RuE43WcLPQslx97SFCWinjb/HwQHW7IH+6ElOMg=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=TtIHGdInBRc3yBPYTTl8bd6Gw43MVEvPaahxJK4j6raLfkd6fZoluUh4cBWKxzNVp
+	 xLSTQxJe4q+gSiulkb09xEqcVgJS8RVTPhaJR7Z3PTYRJQ79AHbaLZqn3n1HbhEoX8
+	 goXBkui6d/aQ+Plq7E/V42ox3e62lpM73FqVJVw27a5vdZYs2EFN2/72ZmMe4W8XkN
+	 Fv1LAuZeSiq0mhvH1ePZu4iMSH7f5K8MpRhVJCj1QJ3D3KKez9Lr8vshAm7/P4wxI9
+	 iJZugM0vRtSkEfwZkIlNXmY4fAlMPm0JOLlywLHfVJ6q2jAVTw9o83dR9t9PfpSwdC
+	 xeqajp8hQygpA==
+Received: from johan by xi.lan with local (Exim 4.98.2)
+	(envelope-from <johan@kernel.org>)
+	id 1v1PfR-000000007Vo-1fqE;
+	Wed, 24 Sep 2025 15:36:21 +0200
+From: Johan Hovold <johan@kernel.org>
+To: Minghsiu Tsai <minghsiu.tsai@mediatek.com>,
+	Houlong Wei <houlong.wei@mediatek.com>,
+	Andrew-CT Chen <andrew-ct.chen@mediatek.com>,
+	Tiffany Lin <tiffany.lin@mediatek.com>,
+	Yunfei Dong <yunfei.dong@mediatek.com>
+Cc: Mauro Carvalho Chehab <mchehab@kernel.org>,
+	Matthias Brugger <matthias.bgg@gmail.com>,
+	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
+	Hans Verkuil <hans.verkuil@cisco.com>,
+	linux-media@vger.kernel.org,
+	linux-mediatek@lists.infradead.org,
+	linux-kernel@vger.kernel.org,
+	Johan Hovold <johan@kernel.org>,
+	stable@vger.kernel.org
+Subject: [PATCH 2/3] media: mediatek: mdp: fix device leak on probe
+Date: Wed, 24 Sep 2025 15:35:51 +0200
+Message-ID: <20250924133552.28841-3-johan@kernel.org>
+X-Mailer: git-send-email 2.49.1
+In-Reply-To: <20250924133552.28841-1-johan@kernel.org>
+References: <20250924133552.28841-1-johan@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 2/2] media: iris: Add support for QC08C format for encoder
-To: Markus Elfring <Markus.Elfring@web.de>,
- Dikshita Agarwal <dikshita.agarwal@oss.qualcomm.com>,
- linux-media@vger.kernel.org, linux-arm-msm@vger.kernel.org
-Cc: LKML <linux-kernel@vger.kernel.org>,
- Abhinav Kumar <abhinav.kumar@linux.dev>,
- Mauro Carvalho Chehab <mchehab@kernel.org>,
- Vikash Garodia <vikash.garodia@oss.qualcomm.com>
-References: <20250919-video-iris-ubwc-enable-v1-2-000d11edafd8@oss.qualcomm.com>
- <HhukkV5KRQfG3CqKw5RPfKcXmPNHytjLriuOjq8xemsNiQz-Ac6ojfTTZGn5jNTAKnFJsReFXyrrZ0dqa1RmDw==@protonmail.internalid>
- <5c0f6b8e-c3cc-492c-9d94-3b79eaca0628@web.de>
-From: Bryan O'Donoghue <bod@kernel.org>
-Content-Language: en-US
-In-Reply-To: <5c0f6b8e-c3cc-492c-9d94-3b79eaca0628@web.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 
-On 24/09/2025 13:40, Markus Elfring wrote:
-> …
->> +++ b/drivers/media/platform/qcom/iris/iris_buffer.c
->> @@ -171,9 +171,14 @@ static u32 iris_yuv_buffer_size_nv12(struct iris_inst *inst)
->>   static u32 iris_yuv_buffer_size_qc08c(struct iris_inst *inst)
->>   {
->>   	u32 y_plane, uv_plane, y_stride, uv_stride;
->> -	struct v4l2_format *f = inst->fmt_dst;
->>   	u32 uv_meta_stride, uv_meta_plane;
->>   	u32 y_meta_stride, y_meta_plane;
->> +	struct v4l2_format *f = NULL;
->> +
->> +	if (inst->domain == DECODER)
->> +		f = inst->fmt_dst;
->> +	else
->> +		f = inst->fmt_src;
-> …
-> 
-> How do you think about to use a source code variant like the following?
-> 
-> 	struct v4l2_format *f = (inst->domain == DECODER) ? inst->fmt_dst : inst->fmt_src;
-> 
-> 
-> Regards,
-> Markus
+Make sure to drop the reference taken when looking up the VPU firmware
+device during probe on probe failure (e.g. probe deferral) and on driver
+unbind.
 
-My personal preference is for if / else as above.
-
-Trying to encourage the Iris people to move away from ternary operators ...
-
+Fixes: c8eb2d7e8202 ("[media] media: Add Mediatek MDP Driver")
+Cc: stable@vger.kernel.org	# 4.10
+Cc: Minghsiu Tsai <minghsiu.tsai@mediatek.com>
+Signed-off-by: Johan Hovold <johan@kernel.org>
 ---
-bod
+ drivers/media/platform/mediatek/mdp/mtk_mdp_core.c | 7 +++++--
+ 1 file changed, 5 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/media/platform/mediatek/mdp/mtk_mdp_core.c b/drivers/media/platform/mediatek/mdp/mtk_mdp_core.c
+index 80fdc6ff57e0..5c7dcf4090f4 100644
+--- a/drivers/media/platform/mediatek/mdp/mtk_mdp_core.c
++++ b/drivers/media/platform/mediatek/mdp/mtk_mdp_core.c
+@@ -198,7 +198,7 @@ static int mtk_mdp_probe(struct platform_device *pdev)
+ 				  VPU_RST_MDP);
+ 	if (ret) {
+ 		dev_err(&pdev->dev, "Failed to register reset handler\n");
+-		goto err_m2m_register;
++		goto err_put_vpu;
+ 	}
+ 
+ 	platform_set_drvdata(pdev, mdp);
+@@ -206,7 +206,7 @@ static int mtk_mdp_probe(struct platform_device *pdev)
+ 	ret = vb2_dma_contig_set_max_seg_size(&pdev->dev, DMA_BIT_MASK(32));
+ 	if (ret) {
+ 		dev_err(&pdev->dev, "Failed to set vb2 dma mag seg size\n");
+-		goto err_m2m_register;
++		goto err_put_vpu;
+ 	}
+ 
+ 	pm_runtime_enable(dev);
+@@ -214,6 +214,8 @@ static int mtk_mdp_probe(struct platform_device *pdev)
+ 
+ 	return 0;
+ 
++err_put_vpu:
++	put_device(&mdp->vpu_dev->dev);
+ err_m2m_register:
+ 	v4l2_device_unregister(&mdp->v4l2_dev);
+ 
+@@ -241,6 +243,7 @@ static void mtk_mdp_remove(struct platform_device *pdev)
+ 	struct mtk_mdp_comp *comp, *comp_temp;
+ 
+ 	pm_runtime_disable(&pdev->dev);
++	put_device(&mdp->vpu_dev->dev);
+ 	vb2_dma_contig_clear_max_seg_size(&pdev->dev);
+ 	mtk_mdp_unregister_m2m_device(mdp);
+ 	v4l2_device_unregister(&mdp->v4l2_dev);
+-- 
+2.49.1
+
