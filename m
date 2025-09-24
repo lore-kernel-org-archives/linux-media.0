@@ -1,34 +1,33 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3614922069E;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 52F172848B7;
 	Wed, 24 Sep 2025 13:36:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758720987; cv=none; b=Vo4QoZhPX3Pra5JgNkNUAekR9ywOT7JCtyZH0rJ0Tmx3ahwmooqwYI7vKr9u0kTperhoH4jF0Vdy2ORfDYDtFTWCC+rYP4p7AIyuairIzoXqYH1W4QkhVrLzcyqywvjaJe+UEbJthOIndCxLZeyGI9GhmZDqC98duhkGAuK1Y2k=
+	t=1758720987; cv=none; b=eYv+yk2Vy/tckYDGO01RFo9sAkdFoVxoCBmUhfYHaMJ8HwQcddhx9v3RSJpK/CU4Ic3W3tFx3Z/L7/s/S/M/Vrzt+AhOp4Juzjb1uRdCDq3LEISeoSzI5Ylv5aw1PpovEjwcNn/phetGJO5K8kvm0tKnlG4xZFeukS21ue+ulJw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1758720987; c=relaxed/simple;
-	bh=jve90eHMG69ekIGAvr0Md+ax6KbA5syj0SlM96b60/A=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=PCEtozymqAFRHF2qMft4ZHSrx0puKaapvupBHcRrvzUu9xuqKhzD2Ak0NrlTOcK3nSlL1c7QfwJTvfi6WmLvySRmdnBPgTI784oZjZorwqH8rEZdXuTp6DliNluBZjJJHzU7wmSkuBGoxtfVgQUlcnSikFliYqbb96EYQtLN0fY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mi+30k1D; arc=none smtp.client-ip=10.30.226.201
+	bh=0eGbMVZE9ppAw4JKx2/t7b/9Qqfa2SiBgK+5orCgncE=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=B7kxlUJIdryMq/z43+/2GMtEmZ57P2fU04thpJS6IXBm7a8PTUp/gpTkxy8DZUtq0Bdm4hGxySSIz4OP//J5DlEOewNThg5HVcZzdTgWW0iAzZBK4i4huPtdw43BscDzOzhbhbeBrR7LiwsWMwbMqe4V2O3tlCgC2IotAbfO4lQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=W/m9EUBF; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mi+30k1D"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0B3F0C4CEF7;
-	Wed, 24 Sep 2025 13:36:27 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="W/m9EUBF"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EEBE3C4AF0B;
+	Wed, 24 Sep 2025 13:36:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1758720987;
-	bh=jve90eHMG69ekIGAvr0Md+ax6KbA5syj0SlM96b60/A=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=mi+30k1DkGgqBZiZ2g9YAK8lQEYfznZP5K4oDTe9bcqcWdhPf/txdVEcddMKjrS/K
-	 xb6MCF9RClKfZ90EKAGsdjR/BHFj3jdHRlO5UL41+CmHl61yGSCzfL0rzxtLEzGvnM
-	 RNVjj2T+t12wJszTio2LOTkp2t+aTvSO2ay8guk3oryaS8X38Etmov1RCQsVp9AUr8
-	 buJHdb3DVbZ1+EyjoR5bQ/t81eUJy7Z3+xxtWSKcNQ1gTmri6Lgbtz76IPb8/oasUr
-	 Zw1dmf+TMzfFxmP8bt025woGBs/vhhvKK9MebM+OybDu3PBpGE4eldnGYyXccW5/YX
-	 PE/Wr6THzyM/w==
+	bh=0eGbMVZE9ppAw4JKx2/t7b/9Qqfa2SiBgK+5orCgncE=;
+	h=From:To:Cc:Subject:Date:From;
+	b=W/m9EUBFg8e5Wh2gJL64hhHsELJfLetGpxwu6EJmwR/Ja+SrIW8LOusgf4QEmBMn3
+	 r4YWqJJPE2ZfhaS+CG4j5bHfq9UsxH52bMOJ2j280kPwFykwWtJpi9OkRbpOXBsFVZ
+	 sv36yt5kSWrhSNMbhCbtP8zV27nakdpWM20cf2g4RLji34X+ly3NE0noeIZiyjr7kq
+	 CJq2WxlMwrxjR/DiuGzJUf/nv3EnZzvi+62ASdZGI32H3X3dfmqMul1yJkob8vLt9s
+	 nrrw3bbE80b2IJq5f5LmvEK4NGYJej8d4DVdLNULP6J24vnfrwcS+tVSY8wm0W8QTG
+	 XacDnTsp2rj9Q==
 Received: from johan by xi.lan with local (Exim 4.98.2)
 	(envelope-from <johan@kernel.org>)
-	id 1v1PfR-000000007Vq-25q0;
+	id 1v1PfQ-000000007Vk-28ai;
 	Wed, 24 Sep 2025 15:36:21 +0200
 From: Johan Hovold <johan@kernel.org>
 To: Minghsiu Tsai <minghsiu.tsai@mediatek.com>,
@@ -44,12 +43,10 @@ Cc: Mauro Carvalho Chehab <mchehab@kernel.org>,
 	linux-mediatek@lists.infradead.org,
 	linux-kernel@vger.kernel.org,
 	Johan Hovold <johan@kernel.org>
-Subject: [PATCH 3/3] media: mediatek: amend vpu_get_plat_device() documentation
-Date: Wed, 24 Sep 2025 15:35:52 +0200
-Message-ID: <20250924133552.28841-4-johan@kernel.org>
+Subject: [PATCH 0/3] media: mediatek: fix VPU device leaks on probe
+Date: Wed, 24 Sep 2025 15:35:49 +0200
+Message-ID: <20250924133552.28841-1-johan@kernel.org>
 X-Mailer: git-send-email 2.49.1
-In-Reply-To: <20250924133552.28841-1-johan@kernel.org>
-References: <20250924133552.28841-1-johan@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
@@ -58,28 +55,25 @@ List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Add a comment to the vpu_get_plat_device() documentation to make it
-clear that the VPU platform device is returned with an incremented
-reference count (which needs to be dropped after use).
+This series fixes VPU device leaks during probe of the mdp and two codec
+drivers.
 
-Signed-off-by: Johan Hovold <johan@kernel.org>
----
- drivers/media/platform/mediatek/vpu/mtk_vpu.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Included is also a minor documentation update to make it clear that the
+VPU lookup helper returns the device with an incremented refcount.
 
-diff --git a/drivers/media/platform/mediatek/vpu/mtk_vpu.h b/drivers/media/platform/mediatek/vpu/mtk_vpu.h
-index da05f3e74081..5808311d2b15 100644
---- a/drivers/media/platform/mediatek/vpu/mtk_vpu.h
-+++ b/drivers/media/platform/mediatek/vpu/mtk_vpu.h
-@@ -120,7 +120,7 @@ int vpu_ipi_send(struct platform_device *pdev,
-  *		device for using VPU API.
-  *
-  * Return: Return NULL if it is failed.
-- * otherwise it is VPU's platform device
-+ * otherwise it is VPU's platform device with incremented reference count
-  **/
- struct platform_device *vpu_get_plat_device(struct platform_device *pdev);
- 
+Johan
+
+
+Johan Hovold (3):
+  media: mediatek: vcodec: fix device leak on codec init
+  media: mediatek: mdp: fix device leak on probe
+  media: mediatek: amend vpu_get_plat_device() documentation
+
+ drivers/media/platform/mediatek/mdp/mtk_mdp_core.c  |  7 +++++--
+ .../mediatek/vcodec/common/mtk_vcodec_fw_vpu.c      | 13 +++++++++++++
+ drivers/media/platform/mediatek/vpu/mtk_vpu.h       |  2 +-
+ 3 files changed, 19 insertions(+), 3 deletions(-)
+
 -- 
 2.49.1
 
