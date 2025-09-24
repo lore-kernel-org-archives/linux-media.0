@@ -1,56 +1,49 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 52F892DAFBA;
-	Wed, 24 Sep 2025 13:36:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AE636307AFB;
+	Wed, 24 Sep 2025 14:40:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758720987; cv=none; b=FtJh4gCosxmzv9PQ0WELNMmKM/njafXHbqHtKJF82cLdD/re5hDBQWhSuCmEWBq7IDXHT/jraHXdQWo7Q05Tq6CIEFePbBJISDFO3a4SdkuzKN78giwFwu91JxtF8V963vSoxWutmDyASybK3osCRksqIxK/zrCgCzBlXim9ZxA=
+	t=1758724819; cv=none; b=FFOElc8h4/831LIfyHwpDrEgxNYE7YFbejsWrnPs97mOp5zZwCsF4u+Zu2E5bvPAsKnOmXvEgVLLQOcBiVAFmXyc3uaGO1Ycw921fVw1czu3Zc5oltexPDktFKnwSYfv9rlHOAFnEe5DD8724LMKZYB70lOxCEvFkTG7n1yyVVY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758720987; c=relaxed/simple;
-	bh=PP4GlelkN7bqBaOJj/FDhufoJKYKO3ceHzlIc1IQG+0=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=ZwhHmVZpS5QASQQ8PMqOgMNJnB6JqgvYX+ZN8pmNAom4zSeL6l1jqv957ir/bRZgP1f3UruGIgUcsZlgCgCYFoBdRztr4SC0G/NhPtobNbaYPIaJHerO2I4wg3bDXf+SAjlA6BptYt+YcW64mU7FP/FAxU9193UCmLCBhbu+B00=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=A7dkHYzo; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1758724819; c=relaxed/simple;
+	bh=4T26JdYYsM1e+t3tkUnI/PC5m7zquhrZvJn75mxBUl0=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=CRhntqeFm1IdG4WCaYswJfaaCOgudpZ6DjRFtQuptkEvR841TKqgIpebwgrRyLmQoZguTcZGgoAzmb/i/x7v6QGS8lxAh/yQ+cdv+YYArxuk6yTJeVDvqjyEQWCrAB4lme3IEQGq6bfqCREy+bP36LVajpFuqWVuwfx48Iyy2k4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=l7HITxtp; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="A7dkHYzo"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E3E10C4CEE7;
-	Wed, 24 Sep 2025 13:36:26 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="l7HITxtp"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4305FC4CEF4;
+	Wed, 24 Sep 2025 14:40:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1758720987;
-	bh=PP4GlelkN7bqBaOJj/FDhufoJKYKO3ceHzlIc1IQG+0=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=A7dkHYzoc6XWoJzulEj9Zqm2lIm/xcCXfkksBISOkIqPH62biFJApKmw+oxiq+wcs
-	 kK7GpQHOeyRZAcAn2Ld7fJf54/FZrxxXGfXEJ+8+1PnxbH4MLsvT7/HPEPDLOg3cbW
-	 n5ow+8L6xU8bQN7p3iVzYmYJAm+Nq8ixT+Z0lQc4L51uvwM+N6D8yb35xNhQGzfTCF
-	 1jTUdfogbKV7HwYz8J3/o7RWIm0GYo8DJpEVPmcPdW0RFt6lb92moSyH9KeUZpp5GP
-	 YJGfLSqKwwFJf5Wsoe02SrZoSLrl2FuC2n8/sp4bABc0wrp4Blhj3WJIcWEdfMqx4v
-	 Gd0ZBrHYT8vxg==
+	s=k20201202; t=1758724818;
+	bh=4T26JdYYsM1e+t3tkUnI/PC5m7zquhrZvJn75mxBUl0=;
+	h=From:To:Cc:Subject:Date:From;
+	b=l7HITxtpfw5v7AfGaQb2F4B2jNmtn0RMw5nDMlYyZh5CyjHb2YeLlgXAeHLhL6A1/
+	 pCa06CyLgHxfv1Q5OCSyjeI7cyBVwYunS6Y7OQ5eCv1vfqoo0/+TwDreRuNvxlNtc6
+	 JRMn+7PhugLkWlyK8dSlC93FrLVLwlCyInGq2IWS3V9lQ37ulUyuvJuE6X7IDS+1cO
+	 8W0zWgbA6cpW7Non7OA+oc68DJtF0U0S4j7dKuBWIcF/XEE/DfBNwd0A1CaTwmPpAN
+	 K2/7StV3wfKP8Tamry23SHIdYVjkWvelRkNbgZD6w4P1V9dLAD8ednLAprAV/UbP5b
+	 yFYtrMfPTveMA==
 Received: from johan by xi.lan with local (Exim 4.98.2)
 	(envelope-from <johan@kernel.org>)
-	id 1v1PfR-000000007Vm-1LPm;
-	Wed, 24 Sep 2025 15:36:21 +0200
+	id 1v1QfD-000000002vR-2p10;
+	Wed, 24 Sep 2025 16:40:12 +0200
 From: Johan Hovold <johan@kernel.org>
-To: Minghsiu Tsai <minghsiu.tsai@mediatek.com>,
-	Houlong Wei <houlong.wei@mediatek.com>,
-	Andrew-CT Chen <andrew-ct.chen@mediatek.com>,
-	Tiffany Lin <tiffany.lin@mediatek.com>,
-	Yunfei Dong <yunfei.dong@mediatek.com>
-Cc: Mauro Carvalho Chehab <mchehab@kernel.org>,
-	Matthias Brugger <matthias.bgg@gmail.com>,
+To: Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc: Matthias Brugger <matthias.bgg@gmail.com>,
 	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
-	Hans Verkuil <hans.verkuil@cisco.com>,
+	Hans Verkuil <hverkuil@kernel.org>,
 	linux-media@vger.kernel.org,
 	linux-mediatek@lists.infradead.org,
 	linux-kernel@vger.kernel.org,
 	Johan Hovold <johan@kernel.org>,
-	stable@vger.kernel.org
-Subject: [PATCH 1/3] media: mediatek: vcodec: fix device leak on codec init
-Date: Wed, 24 Sep 2025 15:35:50 +0200
-Message-ID: <20250924133552.28841-2-johan@kernel.org>
+	stable@vger.kernel.org,
+	Moudy Ho <moudy.ho@mediatek.com>
+Subject: [PATCH] media: platform: mtk-mdp3: fix device leaks at probe
+Date: Wed, 24 Sep 2025 16:39:19 +0200
+Message-ID: <20250924143919.11183-1-johan@kernel.org>
 X-Mailer: git-send-email 2.49.1
-In-Reply-To: <20250924133552.28841-1-johan@kernel.org>
-References: <20250924133552.28841-1-johan@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
@@ -59,56 +52,67 @@ List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Make sure to drop the reference taken when looking up the VPU firmware
-device during codec init on probe failure (e.g. probe deferral) and on
+Make sure to drop the references taken when looking up the subsys
+devices during probe on probe failure (e.g. probe deferral) and on
 driver unbind.
 
-Fixes: 590577a4e525 ("[media] vcodec: mediatek: Add Mediatek V4L2 Video Decoder Driver")
-Fixes: 4e855a6efa54 ("[media] vcodec: mediatek: Add Mediatek V4L2 Video Encoder Driver")
-Cc: stable@vger.kernel.org	# 4.8
-Cc: Tiffany Lin <tiffany.lin@mediatek.com>
+Similarly, drop the SCP device reference after retrieving its platform
+data during probe to avoid leaking it.
+
+Note that holding a reference to a device does not prevent its driver
+data from going away.
+
+Fixes: 61890ccaefaf ("media: platform: mtk-mdp3: add MediaTek MDP3 driver")
+Cc: stable@vger.kernel.org	# 6.1
+Cc: Moudy Ho <moudy.ho@mediatek.com>
 Signed-off-by: Johan Hovold <johan@kernel.org>
 ---
- .../mediatek/vcodec/common/mtk_vcodec_fw_vpu.c      | 13 +++++++++++++
- 1 file changed, 13 insertions(+)
+ .../media/platform/mediatek/mdp3/mtk-mdp3-core.c   | 14 ++++++++++++++
+ 1 file changed, 14 insertions(+)
 
-diff --git a/drivers/media/platform/mediatek/vcodec/common/mtk_vcodec_fw_vpu.c b/drivers/media/platform/mediatek/vcodec/common/mtk_vcodec_fw_vpu.c
-index d7027d600208..9237738d7632 100644
---- a/drivers/media/platform/mediatek/vcodec/common/mtk_vcodec_fw_vpu.c
-+++ b/drivers/media/platform/mediatek/vcodec/common/mtk_vcodec_fw_vpu.c
-@@ -83,12 +83,20 @@ static const struct mtk_vcodec_fw_ops mtk_vcodec_vpu_msg = {
- 	.release = mtk_vcodec_vpu_release,
- };
+diff --git a/drivers/media/platform/mediatek/mdp3/mtk-mdp3-core.c b/drivers/media/platform/mediatek/mdp3/mtk-mdp3-core.c
+index 8de2c8e4d333..fc117a6a822c 100644
+--- a/drivers/media/platform/mediatek/mdp3/mtk-mdp3-core.c
++++ b/drivers/media/platform/mediatek/mdp3/mtk-mdp3-core.c
+@@ -157,10 +157,18 @@ void mdp_video_device_release(struct video_device *vdev)
+ 	kfree(mdp);
+ }
  
-+static void mtk_vcodec_vpu_put_device(void *_dev)
++static void mdp_put_device(void *_dev)
 +{
 +	struct device *dev = _dev;
 +
 +	put_device(dev);
 +}
 +
- struct mtk_vcodec_fw *mtk_vcodec_fw_vpu_init(void *priv, enum mtk_vcodec_fw_use fw_use)
+ static int mdp_mm_subsys_deploy(struct mdp_dev *mdp, enum mdp_infra_id id)
  {
- 	struct platform_device *fw_pdev;
- 	struct platform_device *plat_dev;
- 	struct mtk_vcodec_fw *fw;
- 	enum rst_id rst_id;
+ 	struct platform_device *mm_pdev = NULL;
+ 	struct device **dev;
 +	int ret;
+ 	int i;
  
- 	if (fw_use == ENCODER) {
- 		struct mtk_vcodec_enc_dev *enc_dev = priv;
-@@ -111,6 +119,11 @@ struct mtk_vcodec_fw *mtk_vcodec_fw_vpu_init(void *priv, enum mtk_vcodec_fw_use
- 		return ERR_PTR(-EINVAL);
+ 	if (!mdp)
+@@ -194,6 +202,11 @@ static int mdp_mm_subsys_deploy(struct mdp_dev *mdp, enum mdp_infra_id id)
+ 		if (WARN_ON(!mm_pdev))
+ 			return -ENODEV;
+ 
++		ret = devm_add_action_or_reset(&mdp->pdev->dev, mdp_put_device,
++					       &mm_pdev->dev);
++		if (ret)
++			return ret;
++
+ 		*dev = &mm_pdev->dev;
  	}
  
-+	ret = devm_add_action_or_reset(&plat_dev->dev, mtk_vcodec_vpu_put_device,
-+				       &fw_pdev->dev);
-+	if (ret)
-+		return ERR_PTR(ret);
-+
- 	if (fw_use == DECODER)
- 		vpu_wdt_reg_handler(fw_pdev, mtk_vcodec_vpu_reset_dec_handler, priv, rst_id);
- 	else
+@@ -279,6 +292,7 @@ static int mdp_probe(struct platform_device *pdev)
+ 			goto err_destroy_clock_wq;
+ 		}
+ 		mdp->scp = platform_get_drvdata(mm_pdev);
++		put_device(&mm_pdev->dev);
+ 	}
+ 
+ 	mdp->rproc_handle = scp_get_rproc(mdp->scp);
 -- 
 2.49.1
 
