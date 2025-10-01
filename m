@@ -1,46 +1,50 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C4759302163;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B8F8630215A;
 	Wed,  1 Oct 2025 14:49:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1759330199; cv=none; b=iyjh4jfHkaIty4ei3X0z3mbUQvYSHlV47l9uYgkyCt+OyplrsWHBnEXa1zq4pz+R6QMB4lZ2dnC/tFSzAabvP4m3l+mn+sX13kQcPDAa/iddN+mqlB9gr3Gxtoa2qtVOVMT4bci1JDasGNosD+5C/sxvydAXXhlow4v29lxmHZA=
+	t=1759330199; cv=none; b=TPSj1gcQzXrILUMzdB3A5pUdM+gkmyQCaDin6fKY0ocZ8K3ynb+6+WT+Ab0Sx/Ar8CxFbv0J7y/++JfIhKn8X4XN2YI65pmEp36f+ZKJOvshlZEVzNclNT6+kD2DAMvzFK8wh5YOS3I8MBJqWsTM3bFzvmvLX24GAK7RunUu4Q0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1759330199; c=relaxed/simple;
-	bh=ryC8RulKkWB40Miwek8Lr0KemhOIqsU1f4WZR3x9IME=;
+	bh=4SMG2xnHWkUrwcb9TUgCCE+356hByF3nNXHaJFswRdM=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=NOfQMwzaikc9Woy9wSVXh1r6w7QctofC1KTi/gpySefxGUBIs0BUkG/qFHODC6gZvV2F3eBN3PBsATyuKWjwnXMDEFGbO7tiwnn2DrvKSw6Wf+lKBdXL9j6u74VEYpYEmnNE4dfTPpkxwCzD45/6AP57BGE+rQErXBhymo7h4K0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jZY55qP6; arc=none smtp.client-ip=10.30.226.201
+	 MIME-Version; b=XtuFUw5jGySgOuITfaru826X2z07WGAgIRvLeOUlwCLXxt1GTdjTLr67QWhMsbfD4Ok45fe3x26BV8d8TCVCyLN3XS3E1Kh3aNAMOSaRGQzH9xEWgZH8cMlKcP+B8dB1Qx1FV1tcA/1PWS+t5l0mZhWQq7rRHNdaO5UHxWUr34E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=DE9TZu76; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jZY55qP6"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 60921C19424;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="DE9TZu76"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 56EBEC2BCF4;
 	Wed,  1 Oct 2025 14:49:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1759330199;
-	bh=ryC8RulKkWB40Miwek8Lr0KemhOIqsU1f4WZR3x9IME=;
+	bh=4SMG2xnHWkUrwcb9TUgCCE+356hByF3nNXHaJFswRdM=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=jZY55qP6ezdCokgfPTWICBwJRibtd/l9u6v6M70CroGrDjiSvj43Bpx7fd5ZP5eBL
-	 PMsCvIlertcHckeSQL7N71Xy/7rvqke0mbnCGrKFOlpelsegR9PJL6P9CwbX4Yi1S4
-	 3h6kdBVu8145lSR+kQKVHTfD17HROSd84I0MxKOnsNdMb83ywWdwQ3AWEXV9/j0A/U
-	 3iqQhMhGml5m3AeyJwI1M52Sd6iBAshMztJLAz71HU8Jk8OeVJ9CKkePg0Zm2eoeFA
-	 jpBpfj7CtbeiS6yg4GQnVVDni9arUxtc5QfvKbCca8s9fipsHughTn3zwCht5P61Vl
-	 yUrOYqp/kbf1w==
+	b=DE9TZu768NvMWMLIikmberUP/hL8Nae1quZpLuxH3KA2lUYvXA5KwG7G0rsy2b6YY
+	 SUqLaDMV1DVNO45cgudFF4FXiN5WFgfj2Eu0IOY6KEB2OWiOGfo1oCc0o3+nxqKoTY
+	 SXwibql4kbmsq6QpELw4j8kvldj4FS25E+L4aAVd7PgABqnyUJWZidMeQj2MLEzfMD
+	 NDR5xbZKxxXE4eVog/dnjRPkLvdPAp1IzLGG31z0t//XrervE5QKJ5EKXtP2n2+8gh
+	 JVwsUdWVnX6yXlS1jUsMF4G++1r4bIXF0L8eUj17xmEAvNetCXwHM1PcHT1klnlKkV
+	 bA1EA1DbwVLgw==
 Received: from mchehab by mail.kernel.org with local (Exim 4.98.2)
 	(envelope-from <mchehab+huawei@kernel.org>)
-	id 1v3y9V-0000000BLJD-2eTv;
+	id 1v3y9V-0000000BLJ5-2Qvb;
 	Wed, 01 Oct 2025 16:49:57 +0200
 From: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 To: "Jonathan Corbet" <corbet@lwn.net>,
 	Linux Doc Mailing List <linux-doc@vger.kernel.org>
 Cc: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
 	"Mauro Carvalho Chehab" <mchehab@kernel.org>,
+	Benjamin Gaignard <benjamin.gaignard@collabora.com>,
 	Hans Verkuil <hverkuil@kernel.org>,
+	Hans de Goede <hansg@kernel.org>,
+	Ricardo Ribalda <ribalda@chromium.org>,
+	Yunke Cao <yunkec@google.com>,
 	linux-kernel@vger.kernel.org,
 	linux-media@vger.kernel.org
-Subject: [PATCH 19/23] docs: cec: cec.h.rst.exceptions: fix broken references from cec.h
-Date: Wed,  1 Oct 2025 16:49:42 +0200
-Message-ID: <dd1270dd5d91538cdfb0b087127c53a9f4ba7885.1759329363.git.mchehab+huawei@kernel.org>
+Subject: [PATCH 17/23] media: docs: videodev2.h.rst.exceptions: ignore struct __kernel_v4l2_timeval
+Date: Wed,  1 Oct 2025 16:49:40 +0200
+Message-ID: <a6a0dc7366b1a5d7184b8f7d4ba27689051a1f6a.1759329363.git.mchehab+huawei@kernel.org>
 X-Mailer: git-send-email 2.51.0
 In-Reply-To: <cover.1759329363.git.mchehab+huawei@kernel.org>
 References: <cover.1759329363.git.mchehab+huawei@kernel.org>
@@ -53,26 +57,26 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 
-All references there belong to CEC namespace.
+This is an ancillary struct used for year-2038 compat logic.
+It is not meant to be used directly on userspace.
 
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 ---
- Documentation/userspace-api/media/cec/cec.h.rst.exceptions | 3 +++
- 1 file changed, 3 insertions(+)
+ Documentation/userspace-api/media/v4l/videodev2.h.rst.exceptions | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/Documentation/userspace-api/media/cec/cec.h.rst.exceptions b/Documentation/userspace-api/media/cec/cec.h.rst.exceptions
-index 15fa1752d4ef..65e8be062bdb 100644
---- a/Documentation/userspace-api/media/cec/cec.h.rst.exceptions
-+++ b/Documentation/userspace-api/media/cec/cec.h.rst.exceptions
-@@ -1,5 +1,8 @@
- # SPDX-License-Identifier: GPL-2.0
+diff --git a/Documentation/userspace-api/media/v4l/videodev2.h.rst.exceptions b/Documentation/userspace-api/media/v4l/videodev2.h.rst.exceptions
+index 9bcb5ae6fbc4..c41693115db6 100644
+--- a/Documentation/userspace-api/media/v4l/videodev2.h.rst.exceptions
++++ b/Documentation/userspace-api/media/v4l/videodev2.h.rst.exceptions
+@@ -18,6 +18,7 @@ ignore define _UAPI__LINUX_VIDEODEV2_H
+ ignore symbol V4L2_BUF_TYPE_PRIVATE
+ ignore symbol V4L2_TUNER_DIGITAL_TV
+ ignore symbol V4L2_COLORSPACE_BT878
++ignore struct __kernel_v4l2_timeval
  
-+# All symbols belong to CEC namespace
-+namespace CEC
-+
- # Ignore header name
- ignore define _CEC_UAPI_H
- 
+ # Documented enum v4l2_field
+ replace symbol V4L2_FIELD_ALTERNATE :c:type:`V4L.v4l2_field`
 -- 
 2.51.0
 
