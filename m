@@ -1,200 +1,173 @@
-Received: from mail-qt1-f179.google.com (mail-qt1-f179.google.com [209.85.160.179])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CD9B32FBE14
-	for <linux-media@vger.kernel.org>; Wed,  1 Oct 2025 13:48:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 304A0275B03;
+	Wed,  1 Oct 2025 14:49:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1759326482; cv=none; b=LF8ERdQpl/+Ai3RseFzV2t+iPELFmcHFn+aNJxEnMzh1O05mpbhK6Ulds1ki+pGwdPwcYIzfVrqt+Y7viSaFHgTBx09crQlkJ3XO1RM9Tp2TVds7O9QWBfm/2YK5bicCYhXR75GlCsAWErk37gNwKgPYqohZZTgimZ95AyAa2Oo=
+	t=1759330199; cv=none; b=kvu3p98+UCMt9r4T/XDG94BRgi7TVsyboAwPzaySuAu5yQULjFQcHr97A513KcBWe4Z7mLgwiIgNyUw0xoeecJwNi9FMl2bJbdNR6X+RjpiwwJkeBdXsdrF7unqInFba5+3Lw4U6ta9H1gt6jny9jlv8hl3fx4G2Isuuo81HPVA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1759326482; c=relaxed/simple;
-	bh=GwWiPxXWApSuBjTieyfbH0uVPyK1qpzobUKX5yWOe8Y=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=UDmmfmK9Tu3bEnn8MZBLntuh626kW5uANrl/AjxXUsCah2UB0JeeD5qH5yQ2ceoh8hhx3ahxA1ltf1sSm/CVkxAj1WWBvqoM3IU7weMiefkVN8kNDFUpHhKNIsEjEiLPwaVX4I5LPUNTPzahRK3h/uy1wN2BtTCPih14fkwbosk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ndufresne.ca; spf=pass smtp.mailfrom=ndufresne.ca; dkim=pass (2048-bit key) header.d=ndufresne-ca.20230601.gappssmtp.com header.i=@ndufresne-ca.20230601.gappssmtp.com header.b=vqC6kgC5; arc=none smtp.client-ip=209.85.160.179
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ndufresne.ca
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ndufresne.ca
+	s=arc-20240116; t=1759330199; c=relaxed/simple;
+	bh=zUpIh7TsawGQocua17V5HvZQPsi7cqtACBD6mHMYWK8=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=PLPOTGdB89DxtES7ngZNIXaudtimy9ZmN2H4SIq/+JXgr5K6zdu7Ooy8uZR2pTXNEA1Jwka/NWFB3e+ZUgLLqAG8iuAbDyFZ7D1/rQtRrSYZcUiwrAxYTilcwpfuE/Zm0JyRzXeR5PGiia0j4Ej1R5fDwUDI1hwYCGYmrzzDIeY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mpNusqsm; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ndufresne-ca.20230601.gappssmtp.com header.i=@ndufresne-ca.20230601.gappssmtp.com header.b="vqC6kgC5"
-Received: by mail-qt1-f179.google.com with SMTP id d75a77b69052e-4de1b5a6b7fso50047381cf.2
-        for <linux-media@vger.kernel.org>; Wed, 01 Oct 2025 06:48:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ndufresne-ca.20230601.gappssmtp.com; s=20230601; t=1759326480; x=1759931280; darn=vger.kernel.org;
-        h=mime-version:user-agent:references:in-reply-to:date:cc:to:from
-         :subject:message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=GwWiPxXWApSuBjTieyfbH0uVPyK1qpzobUKX5yWOe8Y=;
-        b=vqC6kgC5WJx43JKAZUo4OKxI5cD8wS1kM0pPUBM9r6Q7BZOf6e/51l6rEqWVNizAfp
-         Opy/HojCfjeeDcRIu8IepjriyXP8iAPuKv2gyWOWRDHrtUHWd2687Ea/GIKY558i8hxB
-         LMREcOMXyc4IZJPHGcV1/Jvxb69JX6paLieAr6y+qikWD0lCYg9lzR761XOtYCsFom2j
-         zhajVMyuPrlUCqAGr3CfLW9+LwrzSWs6WCKPFf1Cix08AF+y6rI8w8J4z/n3D1YOmZwy
-         eAdG8v40dmI5Lp0MUqMIQ0/iRefgEVLZYRSAi5eAQxYHVxeuGGyhUWd2QbBgDkQ+sd+Q
-         gJmA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1759326480; x=1759931280;
-        h=mime-version:user-agent:references:in-reply-to:date:cc:to:from
-         :subject:message-id:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=GwWiPxXWApSuBjTieyfbH0uVPyK1qpzobUKX5yWOe8Y=;
-        b=gwGaknPniZJkqsZqo8bNKGBFvP9NcRxr/YkGzwSvsKkhTYPidBhfQdDowm6Wy3i0yF
-         X6ykQm6cApV/VdLQUnhE+gt4xtwS/LdWuCLEWxYtkO7W911Yp1z+00BoKzIgMErWouAT
-         Lw2IU73sMunFjuCwRh+MGX+dk2fdkcji1qgYToxDp/NKPKEmO9UnDLzV8o1Zj3RaChH+
-         /55NJdsQwQj3VU8cEkKwe0FXWfJGO12jubBdWf58VmDJ4LeGTtZMQU2zVpKPs1Qf9QkQ
-         5gypTM2a4nNMNNgqqqNffgFh7gbC1r87rvRPi+aBauMRWeP9wfh/k86iSZghmmrefmZD
-         yzvQ==
-X-Gm-Message-State: AOJu0YwikoSYRh+U+5XbFtJZ717kfUh5bI6NJcvpi4ST3rl3YgjT/cnR
-	I3/OY2M4tiVF/KL8kbCQODsns1a3Vl+B3MEV9pM/uNXFoTru+X9KXdkiRPZ9dMbvhPA=
-X-Gm-Gg: ASbGnctJQHdNwEXJOCwzMOv5nPz25qlcXf4GqSQ8SAGnu45pXqbh7t7QOxUvHX+32zK
-	8OOn5zV+gaNfqVFs/Jjc3NJSFlqhKm2iuJvZKPMBORrffCtWOqj3hm1xx641hRkPuXlWq6LisyW
-	mvC/Qrn/GgDVls4nIf4EB9pfq1TgSXWkX2E0Yd3BYQmtvqNxr6Au6M+6R5W26VjiM+POQMxFxjA
-	Z45TxT2qw3WM3GlRJ63srckxnr+ReHDfUckK2/QSaweZ6RUnaRcH9Ac0wtlGkdlISE0PYY84A+n
-	TA/B1i30qraJDoUvL/JVCc8UdqHi0+g/cTJ5pbiJuTgzjHkuAkEO2MJ8kemuKG89TovfLOIxau+
-	nkXnx3ht/NV7jorJThY677yp4BPVsGOa4tf0Rrjq0PzGekTO5jYXW
-X-Google-Smtp-Source: AGHT+IHiblZwtYX3wgFUO/7OpMhacfKleAAxOFFJx1Q7ftMvPB1RMJ+PB8Ib9Ip55aCTEP2Txr59Ow==
-X-Received: by 2002:a05:622a:5c88:b0:4de:1d0e:5cd4 with SMTP id d75a77b69052e-4e41c732f0fmr44326791cf.30.1759326479606;
-        Wed, 01 Oct 2025 06:47:59 -0700 (PDT)
-Received: from ?IPv6:2606:6d00:17:ebd3::5ac? ([2606:6d00:17:ebd3::5ac])
-        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-80167b8b79esm110958756d6.38.2025.10.01.06.47.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 01 Oct 2025 06:47:58 -0700 (PDT)
-Message-ID: <971675c3d0a5f033d9eb68698dd9985a0a122aa9.camel@ndufresne.ca>
-Subject: Re: [PATCH 0/2] Add support for QC08C format in iris driver
-From: Nicolas Dufresne <nicolas@ndufresne.ca>
-To: Neil Armstrong <neil.armstrong@linaro.org>, Dikshita Agarwal	
- <dikshita.agarwal@oss.qualcomm.com>, Vikash Garodia	
- <vikash.garodia@oss.qualcomm.com>, Abhinav Kumar <abhinav.kumar@linux.dev>,
-  Bryan O'Donoghue	 <bod@kernel.org>, Mauro Carvalho Chehab
- <mchehab@kernel.org>
-Cc: linux-media@vger.kernel.org, linux-arm-msm@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
-Date: Wed, 01 Oct 2025 09:47:57 -0400
-In-Reply-To: <b2538934-bda7-45e1-b368-8dc4d2c6f71b@linaro.org>
-References: 
-	<20250919-video-iris-ubwc-enable-v1-0-000d11edafd8@oss.qualcomm.com>
-	 <b2538934-bda7-45e1-b368-8dc4d2c6f71b@linaro.org>
-Content-Type: multipart/signed; micalg="pgp-sha512";
-	protocol="application/pgp-signature"; boundary="=-8im6X2nzMFe6Gk5DQ8ir"
-User-Agent: Evolution 3.56.2 (3.56.2-2.fc42) 
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mpNusqsm"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 02678C4AF0B;
+	Wed,  1 Oct 2025 14:49:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1759330199;
+	bh=zUpIh7TsawGQocua17V5HvZQPsi7cqtACBD6mHMYWK8=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=mpNusqsmJ3KrdxMODuXBevUmUUwGkKQlhSIG1+1ioeqewQzhH1a1LN2446DbVWUcl
+	 uFD2laD7v5yapugZcygArhpkHFMIMlWQdr8ca50HE1N7DBZF7H+rykeYF849KVeI5s
+	 eY2lM1DtRAju2hf6ycCLpCFNe0i+SGBzC9ElGp756XiuOrN+adRdyvnGavpEhSm8DN
+	 BPlINKgHmYk8IWe+RtbTrBnqhodufH3OHP4qW2MADWVPCiCB+7TwcOwyb3TAYgHkxK
+	 He+Q62wNoQJbij4bxoPcFRauytnwHXJZKBcphuuwGO+tQRR/3e52IVAyEVw7quomJw
+	 oMpOOt7yGjn+Q==
+Received: from mchehab by mail.kernel.org with local (Exim 4.98.2)
+	(envelope-from <mchehab+huawei@kernel.org>)
+	id 1v3y9V-0000000BLI7-0i2n;
+	Wed, 01 Oct 2025 16:49:57 +0200
+From: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+To: "Jonathan Corbet" <corbet@lwn.net>,
+	Linux Doc Mailing List <linux-doc@vger.kernel.org>
+Cc: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+	"Mauro Carvalho Chehab" <mchehab@kernel.org>,
+	linux-kernel@vger.kernel.org,
+	linux-media@vger.kernel.org
+Subject: [PATCH 02/23] tools: docs: parse_data_structs.py: output a line number
+Date: Wed,  1 Oct 2025 16:49:25 +0200
+Message-ID: <dcffa6844dede00052f5fb851a857991468f22b5.1759329363.git.mchehab+huawei@kernel.org>
+X-Mailer: git-send-email 2.51.0
+In-Reply-To: <cover.1759329363.git.mchehab+huawei@kernel.org>
+References: <cover.1759329363.git.mchehab+huawei@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+Sender: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 
+Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+---
+ tools/docs/lib/parse_data_structs.py | 29 ++++++++++++++--------------
+ 1 file changed, 15 insertions(+), 14 deletions(-)
 
---=-8im6X2nzMFe6Gk5DQ8ir
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+diff --git a/tools/docs/lib/parse_data_structs.py b/tools/docs/lib/parse_data_structs.py
+index 6c868f84f029..d28471a045f1 100755
+--- a/tools/docs/lib/parse_data_structs.py
++++ b/tools/docs/lib/parse_data_structs.py
+@@ -143,7 +143,7 @@ class ParseDataStructs:
+         for symbol_type in self.DEF_SYMBOL_TYPES:
+             self.symbols[symbol_type] = {}
+ 
+-    def store_type(self, symbol_type: str, symbol: str,
++    def store_type(self, ln, symbol_type: str, symbol: str,
+                    ref_name: str = None, replace_underscores: bool = True):
+         """
+         Stores a new symbol at self.symbols under symbol_type.
+@@ -172,7 +172,7 @@ class ParseDataStructs:
+         else:
+             ref_link = symbol
+ 
+-        self.symbols[symbol_type][symbol] = f"{prefix}{ref_link}{suffix}"
++        self.symbols[symbol_type][symbol] = (f"{prefix}{ref_link}{suffix}", ln)
+ 
+     def store_line(self, line):
+         """Stores a line at self.data, properly indented"""
+@@ -240,20 +240,20 @@ class ParseDataStructs:
+                 if is_enum:
+                     match = re.match(r"^\s*([_\w][\w\d_]+)\s*[\,=]?", line)
+                     if match:
+-                        self.store_type("symbol", match.group(1))
++                        self.store_type(line_no, "symbol", match.group(1))
+                     if "}" in line:
+                         is_enum = False
+                     continue
+ 
+                 match = re.match(r"^\s*#\s*define\s+([\w_]+)\s+_IO", line)
+                 if match:
+-                    self.store_type("ioctl", match.group(1),
++                    self.store_type(line_no, "ioctl", match.group(1),
+                                     replace_underscores=False)
+                     continue
+ 
+                 match = re.match(r"^\s*#\s*define\s+([\w_]+)(\s+|$)", line)
+                 if match:
+-                    self.store_type("define", match.group(1))
++                    self.store_type(line_no, "define", match.group(1))
+                     continue
+ 
+                 match = re.match(r"^\s*typedef\s+([_\w][\w\d_]+)\s+(.*)\s+([_\w][\w\d_]+);",
+@@ -261,20 +261,20 @@ class ParseDataStructs:
+                 if match:
+                     name = match.group(2).strip()
+                     symbol = match.group(3)
+-                    self.store_type("typedef", symbol, ref_name=name)
++                    self.store_type(line_no, "typedef", symbol, ref_name=name)
+                     continue
+ 
+                 for re_enum in self.RE_ENUMS:
+                     match = re_enum.match(line)
+                     if match:
+-                        self.store_type("enum", match.group(1))
++                        self.store_type(line_no, "enum", match.group(1))
+                         is_enum = True
+                         break
+ 
+                 for re_struct in self.RE_STRUCTS:
+                     match = re_struct.match(line)
+                     if match:
+-                        self.store_type("struct", match.group(1))
++                        self.store_type(line_no, "struct", match.group(1))
+                         break
+ 
+     def process_exceptions(self, fname: str):
+@@ -342,7 +342,8 @@ class ParseDataStructs:
+ 
+                 # Change self.symbols to use the replacement rule
+                 if old in self.symbols[c_type]:
+-                    self.symbols[c_type][old] = new_ref
++                    (_, ln) = self.symbols[c_type][old]
++                    self.symbols[c_type][old] = (new_ref, ln)
+                 else:
+                     print(f"{name}:{ln}: Warning: can't find {old} {c_type}")
+ 
+@@ -360,8 +361,8 @@ class ParseDataStructs:
+ 
+             print(f"{c_type}:")
+ 
+-            for symbol, ref in sorted(refs.items()):
+-                print(f"  {symbol} -> {ref}")
++            for symbol, (ref, ln) in sorted(refs.items()):
++                print(f"  #{ln:<5d} {symbol} -> {ref}")
+ 
+             print()
+ 
+@@ -384,7 +385,7 @@ class ParseDataStructs:
+ 
+         # Process all reference types
+         for ref_dict in self.symbols.values():
+-            for symbol, replacement in ref_dict.items():
++            for symbol, (replacement, _) in ref_dict.items():
+                 symbol = re.escape(re.sub(r"([\_\`\*\<\>\&\\\\:\/])", r"\\\1", symbol))
+                 text = re.sub(fr'{start_delim}{symbol}{end_delim}',
+                               fr'\1{replacement}\2', text)
+@@ -420,8 +421,8 @@ class ParseDataStructs:
+             text.append("")
+ 
+             # Sort symbols alphabetically
+-            for symbol, ref in sorted(refs.items()):
+-                text.append(f"* :{ref}:")
++            for symbol, (ref, ln) in sorted(refs.items()):
++                text.append(f"* {ref}: line #{ln}")
+ 
+             text.append("")  # Add empty line between categories
+ 
+-- 
+2.51.0
 
-Hi,
-
-Le mercredi 01 octobre 2025 =C3=A0 10:39 +0200, Neil Armstrong a =C3=A9crit=
-=C2=A0:
-> Hi,
->=20
-> On 9/19/25 17:47, Dikshita Agarwal wrote:
-> > Add support for the QC08C color format in both the encoder and decoder
-> > paths of the iris driver. The changes include:
-> >=20
-> > - Adding QC08C format handling in the driver for both encoding and
-> > decoding.
-> > - Updating format enumeration to properly return supported formats.
-> > - Ensuring the correct HFI format is set for firmware communication.
-> > -Making all related changes required for seamless integration of QC08C
-> > support.
-> >=20
-> > The changes have been validated using v4l2-ctl, compliance, and GStream=
-er
-> > (GST) tests.
-> > Both GST and v4l2-ctl tests were performed using the NV12 format, as
-> > these clients do not support the QCOM-specific QC08C format, and all
-> > tests passed successfully.
->=20
-> Sorry but this means you didn't test the full decoding and encoding with =
-GST
-> and v4l2-ctl using QC08C ?
-> So how did you test ?
-
-We've made addition of V4L2/DRM format mapping trivial lately in GStreamer.=
- So
-trivial, that my colleague Robert Mader made the changes for you, and this
-change is just waiting for someone with the hardware to test.
-
-https://gitlab.freedesktop.org/gstreamer/gstreamer/-/merge_requests/8195
-
-With that you can visually test it by rendering through OpenGL or your disp=
-lay
-controller if supported. This gives option to use glimagesink, waylandsink,=
- and
-possibly kmssink, but not sure for the later.
-
-What would need to work harder would be fluster testing. Going through GL w=
-ill
-mean converting from YUV to RGB back to YUV, which can damage the pictures
-slightly, resulting in different MD5.
-
-regards,
-Nicolas
-
->=20
-> Thanks,
-> Neil
->=20
-> >=20
-> > During v4l2-ctl testing, a regression was observed when using the NV12
-> > color format after adding QC08C support. A fix for this regression has
-> > also been posted [1].
-> >=20
-> > [1]:
-> > https://lore.kernel.org/linux-media/20250918103235.4066441-1-dikshita.a=
-garwal@oss.qualcomm.com/T/#u
-> >=20
-> > Signed-off-by: Dikshita Agarwal <dikshita.agarwal@oss.qualcomm.com>
-> > ---
-> > Dikshita Agarwal (2):
-> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 media: iris: Add support for QC08C=
- format for decoder
-> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 media: iris: Add support for QC08C=
- format for encoder
-> >=20
-> > =C2=A0 drivers/media/platform/qcom/iris/iris_buffer.c=C2=A0=C2=A0=C2=A0=
-=C2=A0 | 17 ++++--
-> > =C2=A0 .../platform/qcom/iris/iris_hfi_gen1_command.c=C2=A0=C2=A0=C2=A0=
-=C2=A0 | 15 ++++--
-> > =C2=A0 .../platform/qcom/iris/iris_hfi_gen2_command.c=C2=A0=C2=A0=C2=A0=
-=C2=A0 | 21 +++++++-
-> > =C2=A0 .../platform/qcom/iris/iris_hfi_gen2_defines.h=C2=A0=C2=A0=C2=A0=
-=C2=A0 |=C2=A0 1 +
-> > =C2=A0 drivers/media/platform/qcom/iris/iris_instance.h=C2=A0=C2=A0 |=
-=C2=A0 7 ++-
-> > =C2=A0 .../media/platform/qcom/iris/iris_platform_gen2.c=C2=A0 |=C2=A0 =
-1 +
-> > =C2=A0 drivers/media/platform/qcom/iris/iris_utils.c=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0 |=C2=A0 3 +-
-> > =C2=A0 drivers/media/platform/qcom/iris/iris_vdec.c=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0 | 61
-> > ++++++++++++++++++----
-> > =C2=A0 drivers/media/platform/qcom/iris/iris_venc.c=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0 | 59 +++++++++++++++++-
-> > ---
-> > =C2=A0 9 files changed, 152 insertions(+), 33 deletions(-)
-> > ---
-> > base-commit: 40b7a19f321e65789612ebaca966472055dab48c
-> > change-id: 20250918-video-iris-ubwc-enable-87eac6f41fa4
-> >=20
-> > Best regards,
->=20
-
---=-8im6X2nzMFe6Gk5DQ8ir
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-Description: This is a digitally signed message part
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQTvDVKBFcTDwhoEbxLZQZRRKWBy9AUCaN0xDQAKCRDZQZRRKWBy
-9MA4AP9Wnbk1p1fA9WS9eZnfnfvuJohBg8nrG8sTKlfaHftc6wEAwGh9enUFIa14
-IZhYzQqBaFqyPDvB4BlNfMDrr5KeSAs=
-=PwN1
------END PGP SIGNATURE-----
-
---=-8im6X2nzMFe6Gk5DQ8ir--
