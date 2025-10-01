@@ -1,34 +1,34 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5C7472EA74D;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 86A4B2FBE13;
 	Wed,  1 Oct 2025 14:49:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1759330199; cv=none; b=WUkdiaplFiyFYtXajxXxAho1SUPPaJUZuwhogqDOZjMqe1La+P7hg8uEPs/5ocWx16jztzjcbjE9PYJ0QZY3H/I+fbll6d8DVEA3TrFD+n/gDd4EQqZj7c1HwZALhojEJBkwyPwlo7n1GBdywIyBMaw455qBc78z0gpgfuTVhKM=
+	t=1759330199; cv=none; b=hZpzKgDAZ4GyQzUUIjOhctJgQdkB7jrXnFoSgTef/vN99pGqxH+L2yS3TAEGRyO5jsOj0hJWNpkUhBoG8a1KmVGhXZQjpgacX+dInZXOPRNCxkmV/V3+JFKklMoubj2FTF1L1PB3N9BCYkAbsUhIw9v8Db56jyXiiG7qI/XjlW4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1759330199; c=relaxed/simple;
-	bh=cpudc7RxxWHkEhpC0NFFpbwb/vOwgTPsZ8i0Bb1r0y4=;
+	bh=BpmyC/Co0NOcMnA6DqxMPq8qTUiM3ZaK0OlRbzpqf08=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=foAIvAzyj0rcD3CgBHeU/Z2g1Mh7g5HS5TFpwJGl26tSd1w85V4F88uGHCJeNJl1gBOXQYBrvNVOIpZbruxoTTKF16M/AZB9nfTLqShWsRrOVa6rHP8PPwhvjzsXm466jy817sfiCZKb4bRLApK4bF4kMW8PZvcOflD4gbxzxGI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=LNTLK0bd; arc=none smtp.client-ip=10.30.226.201
+	 MIME-Version; b=lLkW/ubqxvsXQTTcxZYM4tV3YDKOt/z2sOpCHnBscCmeYXcDuV8iCpuWW4SlxAlUR7MuTGG5yg1F2ZsOcxGhKHOXW6lu7ZEybg43UyyQ5Thzg5UElzR/aSri5FYnfYGfd1CCJTfjlnHeZzf8XS21QwSjgw+FTLOEdU778zRxdtk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=G/YtICIZ; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="LNTLK0bd"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 171EFC4CEFC;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="G/YtICIZ"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 21B64C116D0;
 	Wed,  1 Oct 2025 14:49:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1759330199;
-	bh=cpudc7RxxWHkEhpC0NFFpbwb/vOwgTPsZ8i0Bb1r0y4=;
+	bh=BpmyC/Co0NOcMnA6DqxMPq8qTUiM3ZaK0OlRbzpqf08=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=LNTLK0bdEFGF1PCtKmj9vCgGEdMBQprPG8h3wkc9bzMAMcFUlie4WywkPrWbm1RDX
-	 9qXIvxVQg5LbqTGbS3/BWvcPWO1NiKXSsJmYFRzHAHZUS1Xh53BmNUou8oP4z4rAIo
-	 7pcKOziYZHwHQPN7hLaHFxCyI3YdX2WzCdFQJJjZWZJ4GKur7EqplW8OJ4wFj7F7S8
-	 ljwMIgWaFSZfPMW4X9XL2rKlJJ0EB/Uxd9LZtlxqiQk0WZnjDhd7nk9AhZotjUAFfr
-	 yAInPl7iu3s5Vx+R3GWhs6/YIM/v/+nUoeajugEvuQ1ZiGR+ugoJSFBxu4MFohxa+V
-	 2ZDqaWS0YkWqw==
+	b=G/YtICIZ3cWYb8GuvlOhv4yYvwpKXuGFMAjzzaq2lyZl1ekvmv4frjMa5FuHXAzrc
+	 kc4kwA13PDK0GtzNkce3454+PtNT+E0wEcnRFGyn0Hoy4EnbYrlyTbAvkj5oazg+rU
+	 ID/BMikyxLYHCEce8UWKEbfPbXmAH8RdOwF+jVwKlyakIh/KUkaq3DzX3iO7t1V75O
+	 NSUl9tNAeUxNFAXIMejGGR9zrqwcgdKpxI93Qdb+r9dNHq5eqVm8qcJyvztOSPG9E8
+	 vJbrZyGR2we6bMhr/P7yKS8V3piNWr/nLSCdX7u/1ZbSP/T/OtAxo1Jgk3LD/QxwUB
+	 3PR+g6hD1WGtg==
 Received: from mchehab by mail.kernel.org with local (Exim 4.98.2)
 	(envelope-from <mchehab+huawei@kernel.org>)
-	id 1v3y9V-0000000BLIR-1JUm;
+	id 1v3y9V-0000000BLIZ-1Wkp;
 	Wed, 01 Oct 2025 16:49:57 +0200
 From: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 To: "Jonathan Corbet" <corbet@lwn.net>,
@@ -37,9 +37,9 @@ Cc: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
 	"Mauro Carvalho Chehab" <mchehab@kernel.org>,
 	linux-kernel@vger.kernel.org,
 	linux-media@vger.kernel.org
-Subject: [PATCH 07/23] tools: docs: parse_data_structs.py: add namespace support
-Date: Wed,  1 Oct 2025 16:49:30 +0200
-Message-ID: <cc27ec60ceb3bdac4197fb7266d2df8155edacda.1759329363.git.mchehab+huawei@kernel.org>
+Subject: [PATCH 09/23] docs: media: dvb: use TOC instead of file contents at headers
+Date: Wed,  1 Oct 2025 16:49:32 +0200
+Message-ID: <dbe95d83ae2117ed532fda423fd1c1d9906b7a19.1759329363.git.mchehab+huawei@kernel.org>
 X-Mailer: git-send-email 2.51.0
 In-Reply-To: <cover.1759329363.git.mchehab+huawei@kernel.org>
 References: <cover.1759329363.git.mchehab+huawei@kernel.org>
@@ -52,110 +52,68 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 
-C domain supports a ".. c:namespace::" tag that allows setting a
-symbol namespace. This is used within the kernel to avoid warnings
-about duplicated symbols. This is specially important for syscalls,
-as each subsystem may have their own documentation for them.
-This is specially true for ioctl.
+All we wanted were to have a way to link the comprehensive
+documentation with the actual symbols parsed from the header
+file, as this helps to identify any broken references.
 
-When such tag is used, all C domain symbols have c++ style,
-e.g. they'll become "{namespace}.{reference}".
-
-Allow specifying C namespace at the exception files, avoiding
-the need of override rules for every symbol.
+Use the new :toc: flag for DVB.
 
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 ---
- tools/docs/lib/parse_data_structs.py | 43 +++++++++++++++++++++-------
- 1 file changed, 32 insertions(+), 11 deletions(-)
+ .../userspace-api/media/dvb/headers.rst       | 27 +++++++++++++++----
+ 1 file changed, 22 insertions(+), 5 deletions(-)
 
-diff --git a/tools/docs/lib/parse_data_structs.py b/tools/docs/lib/parse_data_structs.py
-index cbdbf7dfe785..0d537e989ea7 100755
---- a/tools/docs/lib/parse_data_structs.py
-+++ b/tools/docs/lib/parse_data_structs.py
-@@ -53,11 +53,19 @@ class ParseDataStructs:
+diff --git a/Documentation/userspace-api/media/dvb/headers.rst b/Documentation/userspace-api/media/dvb/headers.rst
+index c75f64cf21d5..e78122944a69 100644
+--- a/Documentation/userspace-api/media/dvb/headers.rst
++++ b/Documentation/userspace-api/media/dvb/headers.rst
+@@ -1,25 +1,42 @@
+ .. SPDX-License-Identifier: GFDL-1.1-no-invariants-or-later
  
-         replace <type> <old_symbol> <new_reference>
- 
--    Replaces how old_symbol with a new reference. The new_reference can be:
-+       Replaces how old_symbol with a new reference. The new_reference can be:
+-****************************
+-Digital TV uAPI header files
+-****************************
+-
+-Digital TV uAPI headers
+ ***********************
++Digital TV uAPI symbols
++***********************
 +
-         - A simple symbol name;
-         - A full Sphinx reference.
- 
--    On both cases, <type> can be:
-+    3. Namespace rules
++.. contents:: Table of Contents
++   :depth: 2
++   :local:
 +
-+        namespace <namespace>
++Frontend
++========
+ 
+ .. kernel-include:: include/uapi/linux/dvb/frontend.h
+     :generate-cross-refs:
+     :exception-file: frontend.h.rst.exceptions
++    :toc:
 +
-+       Sets C namespace to be used during cross-reference generation. Can
-+       be overridden by replace rules.
++Demux
++=====
+ 
+ .. kernel-include:: include/uapi/linux/dvb/dmx.h
+     :generate-cross-refs:
+     :exception-file: dmx.h.rst.exceptions
++    :toc:
 +
-+    On ignore and replace rules, <type> can be:
-         - ioctl: for defines that end with _IO*, e.g. ioctl definitions
-         - define: for other defines
-         - symbol: for symbols defined within enums;
-@@ -71,6 +79,8 @@ class ParseDataStructs:
-         ignore ioctl VIDIOC_ENUM_FMT
-         replace ioctl VIDIOC_DQBUF vidioc_qbuf
-         replace define V4L2_EVENT_MD_FL_HAVE_FRAME_SEQ :c:type:`v4l2_event_motion_det`
++Conditional Access
++==================
+ 
+ .. kernel-include:: include/uapi/linux/dvb/ca.h
+     :generate-cross-refs:
+     :exception-file: ca.h.rst.exceptions
++    :toc:
 +
-+        namespace MC
-     """
++Network
++=======
  
-     # Parser regexes with multiple ways to capture enums and structs
-@@ -140,6 +150,7 @@ class ParseDataStructs:
- 
-         self.symbols = {}
- 
-+        self.namespace = None
-         self.ignore = []
-         self.replace = []
- 
-@@ -173,6 +184,11 @@ class ParseDataStructs:
-                                          match.group(3)))
-                     continue
- 
-+                match = re.match(r"^namespace\s+(\S+)", line)
-+                if match:
-+                    self.namespace = match.group(1)
-+                    continue
-+
-                 sys.exit(f"{name}:{ln}: invalid line: {line}")
- 
-     def apply_exceptions(self):
-@@ -237,18 +253,23 @@ class ParseDataStructs:
-         ref_type = defs.get("ref_type")
- 
-         # Determine ref_link based on symbol type
--        if ref_type:
--            if symbol_type == "enum":
--                ref_link = f"{ref_type}:`{symbol}`"
--            else:
--                if not ref_name:
--                    ref_name = symbol.lower()
-+        if ref_type or self.namespace:
-+            if not ref_name:
-+                ref_name = symbol.lower()
- 
--                # c-type references don't support hash
--                if ref_type == ":ref" and replace_underscores:
--                    ref_name = ref_name.replace("_", "-")
-+            # c-type references don't support hash
-+            if ref_type == ":ref" and replace_underscores:
-+                ref_name = ref_name.replace("_", "-")
- 
-+            # C domain references may have namespaces
-+            if ref_type.startswith(":c:"):
-+                if self.namespace:
-+                    ref_name = f"{self.namespace}.{ref_name}"
-+
-+            if ref_type:
-                 ref_link = f"{ref_type}:`{symbol} <{ref_name}>`"
-+            else:
-+                ref_link = f"`{symbol} <{ref_name}>`"
-         else:
-             ref_link = symbol
+ .. kernel-include:: include/uapi/linux/dvb/net.h
+     :generate-cross-refs:
+     :exception-file: net.h.rst.exceptions
++    :toc:
  
 -- 
 2.51.0
