@@ -1,45 +1,46 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 86A4B2FBE13;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 88AE12FD1B4;
 	Wed,  1 Oct 2025 14:49:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1759330199; cv=none; b=hZpzKgDAZ4GyQzUUIjOhctJgQdkB7jrXnFoSgTef/vN99pGqxH+L2yS3TAEGRyO5jsOj0hJWNpkUhBoG8a1KmVGhXZQjpgacX+dInZXOPRNCxkmV/V3+JFKklMoubj2FTF1L1PB3N9BCYkAbsUhIw9v8Db56jyXiiG7qI/XjlW4=
+	t=1759330199; cv=none; b=jcQcWz+zJNKsmWZ9/ked2UKlbxwnBd5mAO3zQtKm41B0JU5Z6zFbeDhdqwIN7rzuD3n2zziKZEllYeOb/t3AksZtozoj22102O1UDiEqvB+B3Xf6vw0HHeadhiH246syILiSNDYdBzJ7ssMxnr/VY1tNbghXbuRPqQ12NQ1LXfc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1759330199; c=relaxed/simple;
-	bh=BpmyC/Co0NOcMnA6DqxMPq8qTUiM3ZaK0OlRbzpqf08=;
+	bh=WG4gx5Qo+/GR9i6asjO9yctRH4XUw9ZpdhzPixKnIo4=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=lLkW/ubqxvsXQTTcxZYM4tV3YDKOt/z2sOpCHnBscCmeYXcDuV8iCpuWW4SlxAlUR7MuTGG5yg1F2ZsOcxGhKHOXW6lu7ZEybg43UyyQ5Thzg5UElzR/aSri5FYnfYGfd1CCJTfjlnHeZzf8XS21QwSjgw+FTLOEdU778zRxdtk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=G/YtICIZ; arc=none smtp.client-ip=10.30.226.201
+	 MIME-Version; b=j/CToQl3FdLjG5Hf77UkpdwmPbGh0qzcykmX1ZS9PjvKMn6ZL4EzTgMHAbT8aYM0x69E16iVuwP3Zj5eHEHfHxpHuRWiL0dZdrYuJYAXtEQeCAbY+E1yqo+TwmsjF91rGx1/GwdTrgIAgNliFCpQrW5eMrb6eNeRilY53dOfkwc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Dfio1jXJ; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="G/YtICIZ"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 21B64C116D0;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Dfio1jXJ"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 21D64C4AF0C;
 	Wed,  1 Oct 2025 14:49:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1759330199;
-	bh=BpmyC/Co0NOcMnA6DqxMPq8qTUiM3ZaK0OlRbzpqf08=;
+	bh=WG4gx5Qo+/GR9i6asjO9yctRH4XUw9ZpdhzPixKnIo4=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=G/YtICIZ3cWYb8GuvlOhv4yYvwpKXuGFMAjzzaq2lyZl1ekvmv4frjMa5FuHXAzrc
-	 kc4kwA13PDK0GtzNkce3454+PtNT+E0wEcnRFGyn0Hoy4EnbYrlyTbAvkj5oazg+rU
-	 ID/BMikyxLYHCEce8UWKEbfPbXmAH8RdOwF+jVwKlyakIh/KUkaq3DzX3iO7t1V75O
-	 NSUl9tNAeUxNFAXIMejGGR9zrqwcgdKpxI93Qdb+r9dNHq5eqVm8qcJyvztOSPG9E8
-	 vJbrZyGR2we6bMhr/P7yKS8V3piNWr/nLSCdX7u/1ZbSP/T/OtAxo1Jgk3LD/QxwUB
-	 3PR+g6hD1WGtg==
+	b=Dfio1jXJn169oci4d38KEYvss9nFLEraDNNYDoCIrF6+cFj1sQMivXpgZfBp9VlkK
+	 Ty/Egds+U5KZPm3h8HrDR/u5MSJgkeiBI7H1O40e3v1il9gG0CLwRFK0+DiSkar5Q5
+	 u6S9r+m8gE+wtkAUOatsEODNnBiS09dZ8JtdlKnO3roPWOCJ320k/cmXkoa3YPWQ5y
+	 qdLcl/tdJd+Hp4zag1uwH7h9z/dwkBIhQ7sICv7UjdeA+pXl0GLfQBoiCaEroxI3TX
+	 kLW4y0QytdbnZMFURizCTgsn5Y5czA68K2w7DloU3IPZu/TRNO/LwjDBQ2xO+XQRo2
+	 8j7h1FkIk3xPw==
 Received: from mchehab by mail.kernel.org with local (Exim 4.98.2)
 	(envelope-from <mchehab+huawei@kernel.org>)
-	id 1v3y9V-0000000BLIZ-1Wkp;
+	id 1v3y9V-0000000BLIh-1kH0;
 	Wed, 01 Oct 2025 16:49:57 +0200
 From: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 To: "Jonathan Corbet" <corbet@lwn.net>,
 	Linux Doc Mailing List <linux-doc@vger.kernel.org>
 Cc: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
 	"Mauro Carvalho Chehab" <mchehab@kernel.org>,
+	Sean Young <sean@mess.org>,
 	linux-kernel@vger.kernel.org,
 	linux-media@vger.kernel.org
-Subject: [PATCH 09/23] docs: media: dvb: use TOC instead of file contents at headers
-Date: Wed,  1 Oct 2025 16:49:32 +0200
-Message-ID: <dbe95d83ae2117ed532fda423fd1c1d9906b7a19.1759329363.git.mchehab+huawei@kernel.org>
+Subject: [PATCH 11/23] docs: media: rc: use TOC instead of file contents for LIRC header
+Date: Wed,  1 Oct 2025 16:49:34 +0200
+Message-ID: <94dc601b4777ca544489ffc6cef9a2da5fe28e0e.1759329363.git.mchehab+huawei@kernel.org>
 X-Mailer: git-send-email 2.51.0
 In-Reply-To: <cover.1759329363.git.mchehab+huawei@kernel.org>
 References: <cover.1759329363.git.mchehab+huawei@kernel.org>
@@ -56,64 +57,39 @@ All we wanted were to have a way to link the comprehensive
 documentation with the actual symbols parsed from the header
 file, as this helps to identify any broken references.
 
-Use the new :toc: flag for DVB.
+Use the new :toc: flag for LIRC and enable warnings.
 
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 ---
- .../userspace-api/media/dvb/headers.rst       | 27 +++++++++++++++----
- 1 file changed, 22 insertions(+), 5 deletions(-)
+ .../userspace-api/media/rc/lirc-header.rst         | 14 +++++++++++---
+ 1 file changed, 11 insertions(+), 3 deletions(-)
 
-diff --git a/Documentation/userspace-api/media/dvb/headers.rst b/Documentation/userspace-api/media/dvb/headers.rst
-index c75f64cf21d5..e78122944a69 100644
---- a/Documentation/userspace-api/media/dvb/headers.rst
-+++ b/Documentation/userspace-api/media/dvb/headers.rst
-@@ -1,25 +1,42 @@
- .. SPDX-License-Identifier: GFDL-1.1-no-invariants-or-later
+diff --git a/Documentation/userspace-api/media/rc/lirc-header.rst b/Documentation/userspace-api/media/rc/lirc-header.rst
+index a53328327847..ba4992625684 100644
+--- a/Documentation/userspace-api/media/rc/lirc-header.rst
++++ b/Documentation/userspace-api/media/rc/lirc-header.rst
+@@ -2,11 +2,19 @@
  
--****************************
--Digital TV uAPI header files
--****************************
--
--Digital TV uAPI headers
- ***********************
-+Digital TV uAPI symbols
-+***********************
+ .. _lirc_header:
+ 
+-****************
+-LIRC Header File
+-****************
++*****************
++LIRC uAPI symbols
++*****************
 +
 +.. contents:: Table of Contents
 +   :depth: 2
 +   :local:
 +
-+Frontend
-+========
- 
- .. kernel-include:: include/uapi/linux/dvb/frontend.h
-     :generate-cross-refs:
-     :exception-file: frontend.h.rst.exceptions
-+    :toc:
 +
-+Demux
-+=====
  
- .. kernel-include:: include/uapi/linux/dvb/dmx.h
+ .. kernel-include:: include/uapi/linux/lirc.h
      :generate-cross-refs:
-     :exception-file: dmx.h.rst.exceptions
+     :exception-file: lirc.h.rst.exceptions
 +    :toc:
-+
-+Conditional Access
-+==================
- 
- .. kernel-include:: include/uapi/linux/dvb/ca.h
-     :generate-cross-refs:
-     :exception-file: ca.h.rst.exceptions
-+    :toc:
-+
-+Network
-+=======
- 
- .. kernel-include:: include/uapi/linux/dvb/net.h
-     :generate-cross-refs:
-     :exception-file: net.h.rst.exceptions
-+    :toc:
++    :warn-broken:
  
 -- 
 2.51.0
