@@ -1,33 +1,67 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f47.google.com (mail-wr1-f47.google.com [209.85.221.47])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A60772494FF;
-	Wed,  1 Oct 2025 08:30:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D22A11E3DCF
+	for <linux-media@vger.kernel.org>; Wed,  1 Oct 2025 08:36:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1759307430; cv=none; b=YYJjJJ+H9FnPFb0FGdmK/R6Wpx9Uma7rHhqYjyGexR7UooKVxawRlzUwbiWQGXyyTJ4kJLTHR7UU9ZABsc6cxlW+KnnM5LqgN4ES9RVXKSwzvbzILZXRei5II3rqKIwzFzPtLBlJ4+usyFHpAcvX5jDjCl11/xecW/ifw9r4mnQ=
+	t=1759307812; cv=none; b=k52FYCNypqXQRE729YWjC0dp8FCCsojyIhYzfcQz180n496EyDC8zFKq4D/QvZk53dVEabQccCS4n9GbdOJRvyrFdDNgTQOM0KcJ7sk99TmOWkcvQiPzSg5/FZ0NVb2ivnZlJes0YecvtNL5G0uwDZp0yC1Yqs9RKQ7syY9sfQ8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1759307430; c=relaxed/simple;
-	bh=yq69KW7/I4s3VGGFUFaHIhOjzAY8rl+qM2R1oR7kSIY=;
-	h=Message-ID:Date:MIME-Version:From:Subject:To:Cc:References:
-	 In-Reply-To:Content-Type; b=qImg61NOItw3H5PLYH9DQSpGLELU3qGfeswbD9+Dpq8uCOr8Hn4YJ8n80ZPjxyQwQsa2mntw1qZYk/xjJ+Thix6sZ/dl5CtGpftNtcQEzIA9fLb5K2dzF1soD4swigWauvo/5rEmUkpe/ntAhVY25N8KNhm0po14mtzqCBg8JA4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Bh+5/yAj; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1759307812; c=relaxed/simple;
+	bh=RynI9bUlJ13dlMFG/7puo6KtS8WS+rD4jC6Vm6YMxZY=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=WIVUez0UDGLQP3SkFWV3sVKRcgYTpBoGEPI2r2F1Fa2VukU80KAs/umOrz9JbkIOTKtc5pkLl8JrjELDUXadNzkBawEbFep2y9edTymfocPlRUxRHV1m1/eH8xp8b2aI6SkaD5eK8kD65ucWQt+sbQHkBJsBPhHmD4im221eHyM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=pEsieVBT; arc=none smtp.client-ip=209.85.221.47
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Bh+5/yAj"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BFB99C4CEF4;
-	Wed,  1 Oct 2025 08:30:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1759307430;
-	bh=yq69KW7/I4s3VGGFUFaHIhOjzAY8rl+qM2R1oR7kSIY=;
-	h=Date:From:Subject:To:Cc:References:In-Reply-To:From;
-	b=Bh+5/yAjx1msIjuVUlqL70TXmUGn1dLuW338KZadxja5cG9HVemiXAQMJhVGVVru8
-	 hsyiX3LJzZeilH9pkxzw27HD6XYAKphJgsDJVUk6CRRuILNubscs66Ehsl8frs9xIz
-	 DXaCadnYAnIjCFvagL7Z0peBFL7RcLKwPG/l/xoweYjrt84SDLMMDqf6TgC7vgVakc
-	 gw7UTbZQeMgIVbRwoiGJj7ZhbRYO2k7v2DWm96b8x4N96if09MGEVLRVv8rpjxHVb3
-	 NYIq87bT7M5A7DVhDqsiGC8JVsRcWxMO9CwOyQFr2/vD4/6Zgw3HSydKaoalXQ/+s1
-	 Lo056SfaVFUeQ==
-Message-ID: <9ad70797-2f2c-406e-ba48-bdf0ddd8a384@kernel.org>
-Date: Wed, 1 Oct 2025 10:30:24 +0200
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="pEsieVBT"
+Received: by mail-wr1-f47.google.com with SMTP id ffacd0b85a97d-3b9edf4cf6cso6243719f8f.3
+        for <linux-media@vger.kernel.org>; Wed, 01 Oct 2025 01:36:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1759307807; x=1759912607; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:organization:autocrypt
+         :content-language:from:references:cc:to:subject:reply-to:user-agent
+         :mime-version:date:message-id:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=r5rfQKnt8PZxCCsf5IwsAfDzra+/k8Dn5E1VERhXE4Q=;
+        b=pEsieVBTDBqRS2jtu626P0v/eIah5Khv3cZ1kS/1VBTcNiy0ib3iDwkSvo8A6dC+2t
+         X9pvxU9VgAWddKJ8wlrA1+z7+iImmPpZa5jAAMMaUdNgdYB2H7pt4EYOxFDPZ+uYGycv
+         +NfIEY9NroBtCONC/XyU0BceEGYIlVHsR9qcLLD1FRjFkpfE6QqmQ3BdQzss1as8ONZ6
+         aPv7zWD83Kiix8PFsIAvS4fmNC30qKq0UhRn6oxwYKZ8+30FQeXMnmDhM0KrKITjbeFR
+         FHGPEWrXSBltgRf16AkyQ7NTTKag6G875IWhVyceFcU6G4szJAqagegtdorQIxia9D5v
+         S0Jw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1759307807; x=1759912607;
+        h=content-transfer-encoding:in-reply-to:organization:autocrypt
+         :content-language:from:references:cc:to:subject:reply-to:user-agent
+         :mime-version:date:message-id:x-gm-message-state:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=r5rfQKnt8PZxCCsf5IwsAfDzra+/k8Dn5E1VERhXE4Q=;
+        b=KGE41In3gJP2hSon3V1XBsT3DxYZ6lVG8hdNahsO4tQc1R4VP2JjFRUM1ndh/PNbqy
+         0broj2rso7EzPC6WVBBNHCPBqho6lCiKcww3WlnoWnozuhNrcvY6GI3cAyhGOstNMBhC
+         R0VKOXmQBA6GHlCH5Q79k8GHq0LncvHc0m/igG6qmmzCme0qc1NDnPr5lTTugA3TZzEn
+         EaVrJNUg1Y5Qvpze8bZCz6eHnyhE/o0y9eno4HpVQYlSwzh7oEAwicQuKfQcL53EujsY
+         djae/oIdITGWiKNiDUV5bfeTxbyR7C15XvNXJaMGNAhAWnnooANgn8WvK5yHdfj/znAx
+         Szrw==
+X-Gm-Message-State: AOJu0Yx/DG58ORfMB51s2VcGw2AGtlYFBfhcS1E3lUcSjbTK5UxmoXC4
+	AazhVWKjvKePKWUkVVF104h2tDIFYUvqKeieu3V683bdZiQRoS8D+9a7SlNpIAPE5+E=
+X-Gm-Gg: ASbGnctko6cWFYhkuzRGrSo+rJlrDeZsgoP3euwezANQfEl9Bt0RVcUkKQVBiOwlGu6
+	g6CvXGOV+FdAWHpL6rWHNrKP4pQ3Xeqd5dgmabKqiAEnydd7pRm2OCa2dtyjodlRU0BIhYf/WGu
+	epfbEb1EV/yIg35Vc8NHQnmQOHqOBi9ei/4ZVChGcWut0QO0ZpSay2BfTPx99VUFmwWr/F7+KkN
+	mw6xalfqM53Y5mRhEfl11Gz4/jto5DD3lPKNqnO3ROQa6ZA9IcltC1oE4DkjLn6PzKoqFJgYhEv
+	w+IVzXhi5Re9nz8R3TTpL24q78RHcosqEP1UN58BgPX1/mrNTl5QuLkq4aTmK4AoY0DpxSkq4V+
+	ChLJXBPS+o23FVxFZ/oPjQ8b4byQisi0I6+IP2S2/8srWS1w45+OCWRELCRA2B+9RlNpHvtR4Va
+	fjo2T1t80x2Fg+FIRaxyK+LXQ=
+X-Google-Smtp-Source: AGHT+IGFS8tI1pJ1m2+L4eOg0pK1nXBcC3wC0cp96dwuhngvZGIsLfMftZ/NkfC1ffuZcYF2gzOImA==
+X-Received: by 2002:a5d:64c8:0:b0:3f9:6657:d05 with SMTP id ffacd0b85a97d-425577ed5demr1897437f8f.12.1759307806742;
+        Wed, 01 Oct 2025 01:36:46 -0700 (PDT)
+Received: from ?IPV6:2a01:e0a:3d9:2080:f45f:c590:9006:d394? ([2a01:e0a:3d9:2080:f45f:c590:9006:d394])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-40fc5603381sm28149581f8f.31.2025.10.01.01.36.45
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 01 Oct 2025 01:36:46 -0700 (PDT)
+Message-ID: <5e7f20ee-7960-4a1b-bbf2-b5f5330e1527@linaro.org>
+Date: Wed, 1 Oct 2025 10:36:45 +0200
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
@@ -35,367 +69,379 @@ List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-From: Hans Verkuil <hverkuil+cisco@kernel.org>
-Subject: Re: [PATCH 00/29] media: codec: add new Samsung Exynos-MFC driver
-To: Himanshu Dewangan <h.dewangan@samsung.com>, mchehab@kernel.org,
- robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org,
- sumit.semwal@linaro.org, christian.koenig@amd.com, alim.akhtar@samsung.com,
- manjun@samsung.com, nagaraju.s@samsung.com, ih0206.lee@samsung.com,
- jehyung.lee@samsung.com, Nicolas Dufresne <nicolas@ndufresne.ca>
-Cc: linux-arm-kernel@lists.infradead.org, linux-media@vger.kernel.org,
- devicetree@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
- linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
- linaro-mm-sig@lists.linaro.org
-References: <CGME20250930035518epcas5p2395afdb6f22d2a6b42f9daaec6bc3c1f@epcas5p2.samsung.com>
- <20250930040348.3702923-1-h.dewangan@samsung.com>
-Content-Language: en-US, nl
-In-Reply-To: <20250930040348.3702923-1-h.dewangan@samsung.com>
-Content-Type: text/plain; charset=UTF-8
+Reply-To: Neil Armstrong <neil.armstrong@linaro.org>
+Subject: Re: [PATCH 1/2] media: iris: Add support for QC08C format for decoder
+To: Bryan O'Donoghue <bod@kernel.org>,
+ Dikshita Agarwal <dikshita.agarwal@oss.qualcomm.com>,
+ Vikash Garodia <vikash.garodia@oss.qualcomm.com>,
+ Abhinav Kumar <abhinav.kumar@linux.dev>,
+ Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc: linux-media@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+References: <20250919-video-iris-ubwc-enable-v1-0-000d11edafd8@oss.qualcomm.com>
+ <OyMR2y907eHs6rnnO6bzy52LY_t8KXKscM-nTPu48x3NCYFU4mza-uz0HqnQlYqPg2JtDB8AhCtGAa26Cbq4PA==@protonmail.internalid>
+ <20250919-video-iris-ubwc-enable-v1-1-000d11edafd8@oss.qualcomm.com>
+ <27e36fdb-3107-4e7b-b402-fd72ea5c4d61@kernel.org>
+From: Neil Armstrong <neil.armstrong@linaro.org>
+Content-Language: en-US, fr
+Autocrypt: addr=neil.armstrong@linaro.org; keydata=
+ xsBNBE1ZBs8BCAD78xVLsXPwV/2qQx2FaO/7mhWL0Qodw8UcQJnkrWmgTFRobtTWxuRx8WWP
+ GTjuhvbleoQ5Cxjr+v+1ARGCH46MxFP5DwauzPekwJUD5QKZlaw/bURTLmS2id5wWi3lqVH4
+ BVF2WzvGyyeV1o4RTCYDnZ9VLLylJ9bneEaIs/7cjCEbipGGFlfIML3sfqnIvMAxIMZrvcl9
+ qPV2k+KQ7q+aXavU5W+yLNn7QtXUB530Zlk/d2ETgzQ5FLYYnUDAaRl+8JUTjc0CNOTpCeik
+ 80TZcE6f8M76Xa6yU8VcNko94Ck7iB4vj70q76P/J7kt98hklrr85/3NU3oti3nrIHmHABEB
+ AAHNKk5laWwgQXJtc3Ryb25nIDxuZWlsLmFybXN0cm9uZ0BsaW5hcm8ub3JnPsLAkQQTAQoA
+ OwIbIwULCQgHAwUVCgkICwUWAgMBAAIeAQIXgBYhBInsPQWERiF0UPIoSBaat7Gkz/iuBQJk
+ Q5wSAhkBAAoJEBaat7Gkz/iuyhMIANiD94qDtUTJRfEW6GwXmtKWwl/mvqQtaTtZID2dos04
+ YqBbshiJbejgVJjy+HODcNUIKBB3PSLaln4ltdsV73SBcwUNdzebfKspAQunCM22Mn6FBIxQ
+ GizsMLcP/0FX4en9NaKGfK6ZdKK6kN1GR9YffMJd2P08EO8mHowmSRe/ExAODhAs9W7XXExw
+ UNCY4pVJyRPpEhv373vvff60bHxc1k/FF9WaPscMt7hlkbFLUs85kHtQAmr8pV5Hy9ezsSRa
+ GzJmiVclkPc2BY592IGBXRDQ38urXeM4nfhhvqA50b/nAEXc6FzqgXqDkEIwR66/Gbp0t3+r
+ yQzpKRyQif3OwE0ETVkGzwEIALyKDN/OGURaHBVzwjgYq+ZtifvekdrSNl8TIDH8g1xicBYp
+ QTbPn6bbSZbdvfeQPNCcD4/EhXZuhQXMcoJsQQQnO4vwVULmPGgtGf8PVc7dxKOeta+qUh6+
+ SRh3vIcAUFHDT3f/Zdspz+e2E0hPV2hiSvICLk11qO6cyJE13zeNFoeY3ggrKY+IzbFomIZY
+ 4yG6xI99NIPEVE9lNBXBKIlewIyVlkOaYvJWSV+p5gdJXOvScNN1epm5YHmf9aE2ZjnqZGoM
+ Mtsyw18YoX9BqMFInxqYQQ3j/HpVgTSvmo5ea5qQDDUaCsaTf8UeDcwYOtgI8iL4oHcsGtUX
+ oUk33HEAEQEAAcLAXwQYAQIACQUCTVkGzwIbDAAKCRAWmrexpM/4rrXiB/sGbkQ6itMrAIfn
+ M7IbRuiSZS1unlySUVYu3SD6YBYnNi3G5EpbwfBNuT3H8//rVvtOFK4OD8cRYkxXRQmTvqa3
+ 3eDIHu/zr1HMKErm+2SD6PO9umRef8V82o2oaCLvf4WeIssFjwB0b6a12opuRP7yo3E3gTCS
+ KmbUuLv1CtxKQF+fUV1cVaTPMyT25Od+RC1K+iOR0F54oUJvJeq7fUzbn/KdlhA8XPGzwGRy
+ 4zcsPWvwnXgfe5tk680fEKZVwOZKIEuJC3v+/yZpQzDvGYJvbyix0lHnrCzq43WefRHI5XTT
+ QbM0WUIBIcGmq38+OgUsMYu4NzLu7uZFAcmp6h8g
+Organization: Linaro
+In-Reply-To: <27e36fdb-3107-4e7b-b402-fd72ea5c4d61@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 
-Hi Himanshu,
-
-On 30/09/2025 06:03, Himanshu Dewangan wrote:
-> Exynos MFC new driver upstream proposal
-> +++++++++++++++++++++++++++++++++++++++
+On 9/24/25 15:28, Bryan O'Donoghue wrote:
+> On 19/09/2025 16:47, Dikshita Agarwal wrote:
+>> Introduce handling for the QC08C format in the decoder.
+>> Update format checks and configuration to enable decoding of QC08C
+>> streams.
 > 
-> The s5p-mfc driver in the kernel is quite outdated and has not kept up with the hardware advances of the MFC IP. 
-> Going forward, we want to provide support for all the later versions of MFC in open source (both mobile and
-> ExynosAuto would be supported by Samsung)
+> Since QC08C is a Qualcomm specific pixel format, you should detail in your commit log exactly what the packing/ordering of pixels is.
 > 
-> We (Samsung) would like to propose a new driver for the latest generation of Samsung MFC (Multi-Format Codec) hardware. 
-> Although the kernel already contains a Samsung MFC driver (drivers/media/platform/s5p-mfc/), the newer hardware 
-> diverges significantly from the previous generations, in features supported, register interface and in system integration. 
-> This has necessitated a new driver, rather than updating the existing one. 
+> In other words tell the reader more about QC08C.
 
-I did some (admittedly limited) comparison between the MFC hardware registers in patch 04/29
-and what is in s5p-mfc and it did look like an incremental update, not a complete register redesign.
+This has been upstreamed 3y ago for venus, which is the same as iris:
+https://lore.kernel.org/all/20220117155559.234026-1-stanimir.varbanov@linaro.org/
 
-So I am not convinced from that that a new driver is needed.
+No need to re-explain it for iris, the format is the same.
 
-In addition, a huge patch bomb like this is unreviewable and so I am just going to give a
-few high-level remarks based on a quick scan of the patches.
-
-1) Clearly you never ran v4l2-compliance with this new driver as it would fail immediately
-   on the VIDIOC_QUERYCAP ioctl. It's a M2M device, so it should use either V4L2_CAP_VIDEO_M2M
-   or V4L2_CAP_VIDEO_M2M_MPLANE, not a mix of output and capture caps. I suspect that
-   v4l2-compliance will fail on many issues.
-
-2) I noticed that there is no VB2_MMAP support. No idea why not, and all drivers with streaming I/O
-   support must support VB2_MMAP.
-
-3) Lots of controls are added, none of them documented or even defined in a public header.
-   It's part of the public API, so that must all be present in include/uapi/linux. Just
-   'git grep' for CID_MPEG_MFC51 to see how it should be done. I suspect that more than a few
-   of these controls are either duplicated of already existing controls or should be promoted
-   from MFC-specific controls to generic controls. But without documentation we can't tell.
-
-4) Since this is a new M2M driver I would expect it to use the v4l2-mem2mem framework, instead
-   it appears to be all homegrown. The only reason the existing s5p-mfc driver doesn't use that
-   framework is because it predates it.
-
-5) It clearly doesn't follow the stateful encoder/decoder interface spec as detailed in the
-   V4L2 spec:
-
-   https://linuxtv.org/downloads/v4l-dvb-apis-new/userspace-api/v4l/dev-mem2mem.html
-
-   Even s5p-mfc does at least attempt to follow that (I'm not sure how complete support is,
-   given that it's an old driver, but it tries).
-
-6) Minor issue: don't set the .wait_prepare/finish vb2_ops callbacks: these callbacks are
-   slated for removal. Instead set the vb2_queue lock field to the mutex &dev->mfc_mutex.
-
-There are probably many other things that need addressing, but I stopped there.
-
-I would need convincing (and based on his reply, Krzysztof as well) that a new driver is the
-right approach. If it is, then start small: just the decoder supporting just one codec.
-Exclude all the fancy features, just start with the basics. The recently merged Qualcomm
-iris driver can serve as inspiration: drivers/media/platform/qcom/iris/
-
-I'll mark this series as Rejected in patchwork. It's always a very bad idea to try to upstream
-a huge driver with zillions of features. If, like this one, it has serious design issues, then
-you did a lot of work for nothing :-(
-
-Apologies for the bad news,
-
-Regards,
-
-	Hans
+Neil
 
 > 
+>>
+>> Signed-off-by: Dikshita Agarwal <dikshita.agarwal@oss.qualcomm.com>
+>> ---
+>>   drivers/media/platform/qcom/iris/iris_buffer.c     |  5 +-
+>>   .../platform/qcom/iris/iris_hfi_gen1_command.c     | 12 +++--
+>>   .../platform/qcom/iris/iris_hfi_gen2_command.c     | 18 ++++++-
+>>   .../platform/qcom/iris/iris_hfi_gen2_defines.h     |  1 +
+>>   drivers/media/platform/qcom/iris/iris_instance.h   |  7 ++-
+>>   .../media/platform/qcom/iris/iris_platform_gen2.c  |  1 +
+>>   drivers/media/platform/qcom/iris/iris_utils.c      |  3 +-
+>>   drivers/media/platform/qcom/iris/iris_vdec.c       | 61 ++++++++++++++++++----
+>>   8 files changed, 89 insertions(+), 19 deletions(-)
+>>
+>> diff --git a/drivers/media/platform/qcom/iris/iris_buffer.c b/drivers/media/platform/qcom/iris/iris_buffer.c
+>> index c0900038e7defccf7de3cb60e17c71e36a0e8ead..83dcf49e57ec1473bc4edd26c48ab0b247d23818 100644
+>> --- a/drivers/media/platform/qcom/iris/iris_buffer.c
+>> +++ b/drivers/media/platform/qcom/iris/iris_buffer.c
+>> @@ -261,7 +261,10 @@ int iris_get_buffer_size(struct iris_inst *inst,
+>>           case BUF_INPUT:
+>>               return iris_dec_bitstream_buffer_size(inst);
+>>           case BUF_OUTPUT:
+>> -            return iris_yuv_buffer_size_nv12(inst);
+>> +            if (inst->fmt_dst->fmt.pix_mp.pixelformat == V4L2_PIX_FMT_QC08C)
 > 
-> Current driver vs targetted driver comparison
-> +++++++++++++++++++++++++++++++++++++++++++++
+> It'd be nice to get a pointer to the final level of indireciton you need generally, instead of these very->long->lists->of.indirections.
 > 
-> Target Feature 
-> Current mainline : Simple V4L2/ VB2 interface based encoder/ decoder
-> New proposed driver: Dual core support, NAL-q support, LLC, Coredump, performance
-> measurement, plugin driver architecture, hardware manager(meerkat), DRM/OTF,
-> Resource manager, bandwidth compression, New Pixel formats (NV12N,  YV12, P010,
-> SBWC,  RGB family), 10 bit support, HDR support, Prio and RR Process Scheduler support, 
+> Please consider getting a final pointer as much as possible especially in functions where you end up writing those long chains over and over again.
 > 
-> Register map	
-> Current mainline : Fixed register layout, compatible across s5p variants
-> New proposed driver: Completely redesigned register set, incompatible with old layout
+>> +                return iris_yuv_buffer_size_qc08c(inst);
+>> +            else
+>> +                return iris_yuv_buffer_size_nv12(inst);
+>>           case BUF_DPB:
+>>               return iris_yuv_buffer_size_qc08c(inst);
+>>           default:
+>> diff --git a/drivers/media/platform/qcom/iris/iris_hfi_gen1_command.c b/drivers/media/platform/qcom/iris/iris_hfi_gen1_command.c
+>> index e1788c266bb1080921f17248fd5ee60156b3143d..e458d3349ce09aadb75d056ae84e3aab95f03078 100644
+>> --- a/drivers/media/platform/qcom/iris/iris_hfi_gen1_command.c
+>> +++ b/drivers/media/platform/qcom/iris/iris_hfi_gen1_command.c
+>> @@ -774,20 +774,21 @@ static int iris_hfi_gen1_set_raw_format(struct iris_inst *inst, u32 plane)
+>>           pixelformat = inst->fmt_dst->fmt.pix_mp.pixelformat;
+>>           if (iris_split_mode_enabled(inst)) {
+>>               fmt.buffer_type = HFI_BUFFER_OUTPUT;
+>> -            fmt.format = pixelformat == V4L2_PIX_FMT_NV12 ?
+>> -                HFI_COLOR_FORMAT_NV12_UBWC : 0;
+>> +            fmt.format = HFI_COLOR_FORMAT_NV12_UBWC;
+>>
+>>               ret = hfi_gen1_set_property(inst, ptype, &fmt, sizeof(fmt));
+>>               if (ret)
+>>                   return ret;
+>>
+>>               fmt.buffer_type = HFI_BUFFER_OUTPUT2;
+>> -            fmt.format = pixelformat == V4L2_PIX_FMT_NV12 ? HFI_COLOR_FORMAT_NV12 : 0;
+>> +            fmt.format = pixelformat == V4L2_PIX_FMT_NV12 ?
+>> +                HFI_COLOR_FORMAT_NV12 : HFI_COLOR_FORMAT_NV12_UBWC;
+>>
+>>               ret = hfi_gen1_set_property(inst, ptype, &fmt, sizeof(fmt));
+>>           } else {
+>>               fmt.buffer_type = HFI_BUFFER_OUTPUT;
+>> -            fmt.format = pixelformat == V4L2_PIX_FMT_NV12 ? HFI_COLOR_FORMAT_NV12 : 0;
+>> +            fmt.format = pixelformat == V4L2_PIX_FMT_NV12 ?
+>> +                HFI_COLOR_FORMAT_NV12 : HFI_COLOR_FORMAT_NV12_UBWC;
+>>
+>>               ret = hfi_gen1_set_property(inst, ptype, &fmt, sizeof(fmt));
+>>           }
+>> @@ -806,6 +807,9 @@ static int iris_hfi_gen1_set_format_constraints(struct iris_inst *inst, u32 plan
+>>       const u32 ptype = HFI_PROPERTY_PARAM_UNCOMPRESSED_PLANE_ACTUAL_CONSTRAINTS_INFO;
+>>       struct hfi_uncompressed_plane_actual_constraints_info pconstraint;
+>>
+>> +    if (inst->fmt_dst->fmt.pix_mp.pixelformat == V4L2_PIX_FMT_QC08C)
+>> +        return 0;
+>> +
+>>       pconstraint.buffer_type = HFI_BUFFER_OUTPUT2;
+>>       pconstraint.num_planes = 2;
+>>       pconstraint.plane_format[0].stride_multiples = 128;
+>> diff --git a/drivers/media/platform/qcom/iris/iris_hfi_gen2_command.c b/drivers/media/platform/qcom/iris/iris_hfi_gen2_command.c
+>> index 4ce71a14250832440099e4cf3835b4aedfb749e8..5ad202d3fcdc57a2b7b43de15763a686ce0f7bd7 100644
+>> --- a/drivers/media/platform/qcom/iris/iris_hfi_gen2_command.c
+>> +++ b/drivers/media/platform/qcom/iris/iris_hfi_gen2_command.c
+>> @@ -422,6 +422,20 @@ static int iris_hfi_gen2_set_level(struct iris_inst *inst, u32 plane)
+>>                             sizeof(u32));
+>>   }
+>>
+>> +static int iris_hfi_gen2_set_opb_enable(struct iris_inst *inst, u32 plane)
+>> +{
+>> +    u32 port = iris_hfi_gen2_get_port(inst, plane);
+>> +    u32 opb_enable = iris_split_mode_enabled(inst);
+>> +
+>> +    return iris_hfi_gen2_session_set_property(inst,
+>> +                          HFI_PROP_OPB_ENABLE,
+>> +                          HFI_HOST_FLAGS_NONE,
+>> +                          port,
+>> +                          HFI_PAYLOAD_U32,
+>> +                          &opb_enable,
+>> +                          sizeof(u32));
+>> +}
+>> +
+>>   static int iris_hfi_gen2_set_colorformat(struct iris_inst *inst, u32 plane)
+>>   {
+>>       u32 port = iris_hfi_gen2_get_port(inst, plane);
+>> @@ -429,7 +443,8 @@ static int iris_hfi_gen2_set_colorformat(struct iris_inst *inst, u32 plane)
+>>
+>>       if (inst->domain == DECODER) {
+>>           pixelformat = inst->fmt_dst->fmt.pix_mp.pixelformat;
+>> -        hfi_colorformat = pixelformat == V4L2_PIX_FMT_NV12 ? HFI_COLOR_FMT_NV12 : 0;
+>> +        hfi_colorformat = pixelformat == V4L2_PIX_FMT_NV12 ?
+>> +            HFI_COLOR_FMT_NV12 : HFI_COLOR_FMT_NV12_UBWC;
+>>       } else {
+>>           pixelformat = inst->fmt_src->fmt.pix_mp.pixelformat;
+>>           hfi_colorformat = pixelformat == V4L2_PIX_FMT_NV12 ? HFI_COLOR_FMT_NV12 : 0;
+>> @@ -527,6 +542,7 @@ static int iris_hfi_gen2_session_set_config_params(struct iris_inst *inst, u32 p
+>>           {HFI_PROP_SIGNAL_COLOR_INFO,          iris_hfi_gen2_set_colorspace             },
+>>           {HFI_PROP_PROFILE,                    iris_hfi_gen2_set_profile                },
+>>           {HFI_PROP_LEVEL,                      iris_hfi_gen2_set_level                  },
+>> +        {HFI_PROP_OPB_ENABLE,                 iris_hfi_gen2_set_opb_enable             },
 > 
-> Command model
-> Current mainline : Mailbox-style command queue
-> New proposed driver: Ring-buffer command queue with different signaling
 > 
-> Memory management
-> Current mainline : CMA-backed contiguous buffers, ION legacy
-> New proposed driver: dma-heap / scatter-gather buffers with strict alignment rules
+> As I read this code I end up asking myself "what does OPB" mean ?
 > 
-> Firmware
-> Current mainline : Supports up to Firmware v12, Legacy binary format, loaded via shared mechanism	
-> New proposed driver: New firmware format, different protocol for control messages. Support Firmware v13 onwards
+> For preference the introduction of OPB would be its own patch with its own commit log that explains OPB as an individual thing.
 > 
-> DT bindings	
-> Current mainline : Single clock + reset, simple PM	
-> New proposed driver: Multiple clocks, reset domains, runtime PM dependencies
-> 
-> Error handling	
-> Current mainline : Simple IRQ error flags
-> New proposed driver: Detailed error codes, recovery sequences required
-> 
-> Code impact
-> Current mainline :~8k LOC, minimal conditionals
-> New proposed driver: ~65KLOC with full features
+> You can enable your QC08C format as an additional step.
 > 
 > 
-> Plan for supporting latest MFC (Best balance between code clarity and long-term kernel health, while still respecting ABI and legacy users.)
-> 1	We propose a new driver (exynos-mfc) for the latest generation of Samsung MFC (Multi-Format Codec) hardware. 
-> 2	MFC FW V6 to V12 will be supported by existing mainline (s5p-mfc) and later versions by Exynos-mfc driver
-> 3	The existing MFC driver will remain available for older SoC’s and will not be broken. The new driver will only bind
-> 	to new compatible strings in DT, avoiding regressions for legacy hardware. Samsung will take responsibility for 
-> 	maintaining both drivers until the old one can be formally marked as “legacy.”
-> 4	Keep it buildable for old SoCs but clearly say new SoCs should use the new driver.
-> 5	VIDEO_SAMSUNG_S5P_MFC and VIDEO_EXYNOS_MFC will both be supported for an agreed time
-> 6	Long term Support for new driver  - commitment from Samsung
-> 7	The hardware has diverged to the point where conditionally supporting both in one codebase is worse for long-term kernel health
-> 8	Splitting keeps the code clean, testable, and reviewable, while ensuring legacy users aren’t broken due to user space ABI  guarantees.
-> 	This seems more clean and easier approach Both can coexist without code spaghetti.
-> 
-> Features and description supported
-> ++++++++++++++++++++++++++++++++++
-> 
-> 1	MFC driver registration	Probe functionality and video nodes registration
-> 2	MFC driver open & close support	MFC firmware loading,  "ls" & "cat" on the video nodes  and udev rules on the video nodes
-> 3	H264 decoding	H264 decoding support - HW supported profiles & levels (YUV420 Semi-Planar, 8-bit, min/max resolution)
-> 4	HEVC decoding	HEVC decoding support - HW supported profiles & levels (YUV420 Semi-Planar, 8-bit, min/max resolution)
-> 5	VP8 decoding	VP8 decoding support - HW supported profiles & levels (YUV420 Semi-Planar, 8-bit, min/max resolution)
-> 6	VP9 decoding	VP9 decoding support - HW supported profiles & levels (YUV420 Semi-Planar, 8-bit, min/max resolution)
-> 7	AV1 decoding	AV1 decoding support - HW supported profiles & levels (YUV420 Semi-Planar, 8-bit, min/max resolution)
-> 8	H264 encoding	H264 encoding support - Basic encoding (YUV420 Semi-Planar, 8-bit, min/max resolution)
-> 9	HEVC encoding	HEVC encoding support - Basic encoding (YUV420 Semi-Planar, 8-bit, min/max resolution)
-> 10	VP8 encoding	VP8 encoding support - Basic encoding (YUV420 Semi-Planar, 8-bit, min/max resolution)
-> 11	VP9 encoding	VP9 encoding support - Basic encoding (YUV420 Semi-Planar, 8-bit, min/max resolution)
-> 12	Debug fs support		Debug fs to control the MFC functionalities
-> 13	Debug log support		Debug logs to get on the dmesg prompt for debug purpose
-> 14	Debug SFR dump support		MFC SFR dumps during failures
-> 15	NAL Queue mode control		NAL Queue mode support
-> 16	Batch mode control		Batch mode support
-> 17	HW supported YUV formats	YUV 420, 422, 444 (planar, semi-planar) formats support as per MFC HW specification
-> 18	HW supported RGB formats	RGB format support as per MFC HW specification
-> 19	Multi instance decoding/encoding	Multi instance decoding/encoding
-> 20	Suspend and resume		Suspend and resume support
-> 21	Runtime suspend and resume	Runtime suspend and resume support
-> 22	Priority decoding (decoders)	Priority decoding support
-> 23	Frame delay configuration (decoders)	Frame delay configuration support
-> 24	Error handling and conceal control (decoders)	HW/Platform limitations should be gracefully exited and,
-> 							bit stream errors should be reported or concealed with warning indication
-> 25	Reference frame control (encoders)	Reference frame control support
-> 26	SPS/PPS control (encoders)	SPS/PPS control support
-> 27	Loop filter control (encoders)	Loop filter control support
-> 28	B frame support (encoders)	B frame support
-> 29	GOP control (encoders)		GOP control support
-> 30	Frame rate control (encoders)	Frame rate control support
-> 
-> Features to be  supported in 2026
-> +++++++++++++++++++++++++++++++++
-> 
-> 31	Bit rate control (encoders)		Bit rate control support
-> 32	QP control (encoders)			QP control support
-> 33	I/IDR control (encoders)		I/IDR control support
-> 34	Scalable control (encoders)		Scalable control support
-> 35	ROI control (encoders)			ROI control support
-> 36	Multi slice control (encoders)		Multi slice control support
-> 37	Profile/Level control (encoders)	Profile/Level control support
-> 38	Padding control (encoders)		Padding control support
-> 39	Aspect ratio control (encoders)		Aspect ratio control support
-> 40	Buffer full handling (encoders)		Buffer full handling support
-> 41	SBWC					SBWC bandwidth compression support
-> 42	10-bit support				10-bit support as per MFC HW specification
-> 43	Secure signed FW support		Security signed FW support
-> 44	Secure playback				DRM content playback for decoders
-> 45	HDR Support (decoders)			HDR metadata support
-> 46	Dynamic resolution change		Dynamic resolution change support
-> 
-> Nagaraju Siddineni (29):
->   dt-bindings: media: mfc: Add Exynos MFC devicetree binding
->   arm64: dts: mfc: Add MFC device tree for Auto V920 SoC
->   media: mfc: Add MFC driver data structures and debugging macros
->   media: mfc: Add full register map and bit definitions for MFC hardware
->   media: mfc: Add MFC driver header files and core utilities
->   media: mfc: Add MFC core hardware register and debugfs APIs
->   media: mfc: Add MFC core command, hwlock, ISR and run functionalities
->   media: mfc: Add Exynos‑MFC driver probe support
->   media: mfc: Add bus‑devfreq, QoS, multi‑view and control
->     infrastructure
->   media: mfc: Add buffer‑queue and IOVMM support
->   media: mfc: Add rate‑calculation framework and memory utilities
->   media: mfc: Introduce QoS support and instance context handling
->   media: mfc: Add decoder core sync functions
->   media: mfc: Add buffer‑control framework
->   media: mfc: Add decoder resource‑management (RM) support and
->     load‑balancing
->   media: mfc: Enhance HW‑lock handling, scheduling and error recovery
->   media: mfc: Add VB2 decoder support
->   media: mfc: Add V4L2 decoder driver
->   media: mfc: Add QoS, Butler workqueue, and priority‑based scheduling
->   media: mfc: Add H264 decoder support
->   media: mfc: Add multi‑codec support & QoS improvements
->   media: mfc: Add H.264 encoder support with buffer and QoS improvements
->   media: mfc: Add encoder parameters, ROI & QoS support
->   media: mfc: Add encoder VB2 support to driver
->   media: mfc: Add encoder v4l2 driver interface
->   media: mfc: Add full encoder support
->   media: mfc: Add H.264 encoder support
->   media: mfc: Add AVC, VP8, VP9, and HEVC encoding support
->   media: mfc: Hardware‑accelerated encoding support
-> 
->  .../bindings/media/samsung,exynos-mfc.yaml    |   77 +
->  MAINTAINERS                                   |   10 +
->  .../dts/exynos/exynosautov920-evt2-mfc.dtsi   |  630 +++
->  .../arm64/boot/dts/exynos/exynosautov920.dtsi |    1 +
->  drivers/media/platform/samsung/Kconfig        |    7 +
->  drivers/media/platform/samsung/Makefile       |    1 +
->  .../media/platform/samsung/exynos-mfc/Kconfig |   34 +
->  .../platform/samsung/exynos-mfc/Makefile      |   26 +
->  .../samsung/exynos-mfc/base/mfc_buf.c         |  765 +++
->  .../samsung/exynos-mfc/base/mfc_buf.h         |   43 +
->  .../samsung/exynos-mfc/base/mfc_common.h      |  444 ++
->  .../samsung/exynos-mfc/base/mfc_data_struct.h | 2014 +++++++
->  .../samsung/exynos-mfc/base/mfc_debug.h       |  247 +
->  .../samsung/exynos-mfc/base/mfc_format.h      |  316 ++
->  .../samsung/exynos-mfc/base/mfc_macros.h      |   95 +
->  .../samsung/exynos-mfc/base/mfc_media.h       |  554 ++
->  .../samsung/exynos-mfc/base/mfc_mem.c         |  995 ++++
->  .../samsung/exynos-mfc/base/mfc_mem.h         |  155 +
->  .../samsung/exynos-mfc/base/mfc_qos.c         | 1070 ++++
->  .../samsung/exynos-mfc/base/mfc_qos.h         |   99 +
->  .../samsung/exynos-mfc/base/mfc_queue.c       |  966 ++++
->  .../samsung/exynos-mfc/base/mfc_queue.h       |  158 +
->  .../exynos-mfc/base/mfc_rate_calculate.c      |  640 +++
->  .../exynos-mfc/base/mfc_rate_calculate.h      |  106 +
->  .../samsung/exynos-mfc/base/mfc_regs.h        |   58 +
->  .../samsung/exynos-mfc/base/mfc_regs_mfc.h    | 1002 ++++
->  .../samsung/exynos-mfc/base/mfc_sched.h       |   30 +
->  .../samsung/exynos-mfc/base/mfc_utils.c       |  401 ++
->  .../samsung/exynos-mfc/base/mfc_utils.h       |  481 ++
->  .../media/platform/samsung/exynos-mfc/mfc.c   | 1366 +++++
->  .../platform/samsung/exynos-mfc/mfc_core.c    |  703 +++
->  .../samsung/exynos-mfc/mfc_core_buf_ctrl.c    |  543 ++
->  .../samsung/exynos-mfc/mfc_core_cmd.c         |  576 ++
->  .../samsung/exynos-mfc/mfc_core_cmd.h         |   41 +
->  .../samsung/exynos-mfc/mfc_core_enc_param.c   | 1463 ++++++
->  .../samsung/exynos-mfc/mfc_core_enc_param.h   |   23 +
->  .../samsung/exynos-mfc/mfc_core_hw_reg_api.c  |  122 +
->  .../samsung/exynos-mfc/mfc_core_hw_reg_api.h  |  144 +
->  .../samsung/exynos-mfc/mfc_core_hwlock.c      |  761 +++
->  .../samsung/exynos-mfc/mfc_core_hwlock.h      |   80 +
->  .../samsung/exynos-mfc/mfc_core_intlock.c     |   98 +
->  .../samsung/exynos-mfc/mfc_core_intlock.h     |   20 +
->  .../samsung/exynos-mfc/mfc_core_isr.c         | 2104 ++++++++
->  .../samsung/exynos-mfc/mfc_core_isr.h         |   25 +
->  .../samsung/exynos-mfc/mfc_core_ops.c         |  813 +++
->  .../samsung/exynos-mfc/mfc_core_ops.h         |   16 +
->  .../platform/samsung/exynos-mfc/mfc_core_pm.c |  209 +
->  .../platform/samsung/exynos-mfc/mfc_core_pm.h |   33 +
->  .../samsung/exynos-mfc/mfc_core_reg_api.c     |  597 +++
->  .../samsung/exynos-mfc/mfc_core_reg_api.h     |  380 ++
->  .../samsung/exynos-mfc/mfc_core_run.c         |  541 ++
->  .../samsung/exynos-mfc/mfc_core_run.h         |   35 +
->  .../samsung/exynos-mfc/mfc_core_sched_prio.c  |  431 ++
->  .../samsung/exynos-mfc/mfc_core_sync.c        |  423 ++
->  .../samsung/exynos-mfc/mfc_core_sync.h        |   34 +
->  .../samsung/exynos-mfc/mfc_ctx_ctrl.c         | 1469 ++++++
->  .../platform/samsung/exynos-mfc/mfc_debugfs.c |  248 +
->  .../platform/samsung/exynos-mfc/mfc_debugfs.h |   20 +
->  .../samsung/exynos-mfc/mfc_dec_v4l2.c         | 1739 +++++++
->  .../samsung/exynos-mfc/mfc_dec_v4l2.h         |   20 +
->  .../platform/samsung/exynos-mfc/mfc_dec_vb2.c |  394 ++
->  .../platform/samsung/exynos-mfc/mfc_dec_vb2.h |   19 +
->  .../samsung/exynos-mfc/mfc_enc_v4l2.c         | 4614 +++++++++++++++++
->  .../samsung/exynos-mfc/mfc_enc_v4l2.h         |   20 +
->  .../platform/samsung/exynos-mfc/mfc_enc_vb2.c |  443 ++
->  .../platform/samsung/exynos-mfc/mfc_enc_vb2.h |   19 +
->  .../platform/samsung/exynos-mfc/mfc_rm.c      | 2652 ++++++++++
->  .../platform/samsung/exynos-mfc/mfc_rm.h      |  110 +
->  68 files changed, 34773 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/media/samsung,exynos-mfc.yaml
->  create mode 100644 arch/arm64/boot/dts/exynos/exynosautov920-evt2-mfc.dtsi
->  create mode 100644 drivers/media/platform/samsung/exynos-mfc/Kconfig
->  create mode 100644 drivers/media/platform/samsung/exynos-mfc/Makefile
->  create mode 100644 drivers/media/platform/samsung/exynos-mfc/base/mfc_buf.c
->  create mode 100644 drivers/media/platform/samsung/exynos-mfc/base/mfc_buf.h
->  create mode 100644 drivers/media/platform/samsung/exynos-mfc/base/mfc_common.h
->  create mode 100644 drivers/media/platform/samsung/exynos-mfc/base/mfc_data_struct.h
->  create mode 100644 drivers/media/platform/samsung/exynos-mfc/base/mfc_debug.h
->  create mode 100644 drivers/media/platform/samsung/exynos-mfc/base/mfc_format.h
->  create mode 100644 drivers/media/platform/samsung/exynos-mfc/base/mfc_macros.h
->  create mode 100644 drivers/media/platform/samsung/exynos-mfc/base/mfc_media.h
->  create mode 100644 drivers/media/platform/samsung/exynos-mfc/base/mfc_mem.c
->  create mode 100644 drivers/media/platform/samsung/exynos-mfc/base/mfc_mem.h
->  create mode 100644 drivers/media/platform/samsung/exynos-mfc/base/mfc_qos.c
->  create mode 100644 drivers/media/platform/samsung/exynos-mfc/base/mfc_qos.h
->  create mode 100644 drivers/media/platform/samsung/exynos-mfc/base/mfc_queue.c
->  create mode 100644 drivers/media/platform/samsung/exynos-mfc/base/mfc_queue.h
->  create mode 100644 drivers/media/platform/samsung/exynos-mfc/base/mfc_rate_calculate.c
->  create mode 100644 drivers/media/platform/samsung/exynos-mfc/base/mfc_rate_calculate.h
->  create mode 100644 drivers/media/platform/samsung/exynos-mfc/base/mfc_regs.h
->  create mode 100644 drivers/media/platform/samsung/exynos-mfc/base/mfc_regs_mfc.h
->  create mode 100644 drivers/media/platform/samsung/exynos-mfc/base/mfc_sched.h
->  create mode 100644 drivers/media/platform/samsung/exynos-mfc/base/mfc_utils.c
->  create mode 100644 drivers/media/platform/samsung/exynos-mfc/base/mfc_utils.h
->  create mode 100644 drivers/media/platform/samsung/exynos-mfc/mfc.c
->  create mode 100644 drivers/media/platform/samsung/exynos-mfc/mfc_core.c
->  create mode 100644 drivers/media/platform/samsung/exynos-mfc/mfc_core_buf_ctrl.c
->  create mode 100644 drivers/media/platform/samsung/exynos-mfc/mfc_core_cmd.c
->  create mode 100644 drivers/media/platform/samsung/exynos-mfc/mfc_core_cmd.h
->  create mode 100644 drivers/media/platform/samsung/exynos-mfc/mfc_core_enc_param.c
->  create mode 100644 drivers/media/platform/samsung/exynos-mfc/mfc_core_enc_param.h
->  create mode 100644 drivers/media/platform/samsung/exynos-mfc/mfc_core_hw_reg_api.c
->  create mode 100644 drivers/media/platform/samsung/exynos-mfc/mfc_core_hw_reg_api.h
->  create mode 100644 drivers/media/platform/samsung/exynos-mfc/mfc_core_hwlock.c
->  create mode 100644 drivers/media/platform/samsung/exynos-mfc/mfc_core_hwlock.h
->  create mode 100644 drivers/media/platform/samsung/exynos-mfc/mfc_core_intlock.c
->  create mode 100644 drivers/media/platform/samsung/exynos-mfc/mfc_core_intlock.h
->  create mode 100644 drivers/media/platform/samsung/exynos-mfc/mfc_core_isr.c
->  create mode 100644 drivers/media/platform/samsung/exynos-mfc/mfc_core_isr.h
->  create mode 100644 drivers/media/platform/samsung/exynos-mfc/mfc_core_ops.c
->  create mode 100644 drivers/media/platform/samsung/exynos-mfc/mfc_core_ops.h
->  create mode 100644 drivers/media/platform/samsung/exynos-mfc/mfc_core_pm.c
->  create mode 100644 drivers/media/platform/samsung/exynos-mfc/mfc_core_pm.h
->  create mode 100644 drivers/media/platform/samsung/exynos-mfc/mfc_core_reg_api.c
->  create mode 100644 drivers/media/platform/samsung/exynos-mfc/mfc_core_reg_api.h
->  create mode 100644 drivers/media/platform/samsung/exynos-mfc/mfc_core_run.c
->  create mode 100644 drivers/media/platform/samsung/exynos-mfc/mfc_core_run.h
->  create mode 100644 drivers/media/platform/samsung/exynos-mfc/mfc_core_sched_prio.c
->  create mode 100644 drivers/media/platform/samsung/exynos-mfc/mfc_core_sync.c
->  create mode 100644 drivers/media/platform/samsung/exynos-mfc/mfc_core_sync.h
->  create mode 100644 drivers/media/platform/samsung/exynos-mfc/mfc_ctx_ctrl.c
->  create mode 100644 drivers/media/platform/samsung/exynos-mfc/mfc_debugfs.c
->  create mode 100644 drivers/media/platform/samsung/exynos-mfc/mfc_debugfs.h
->  create mode 100644 drivers/media/platform/samsung/exynos-mfc/mfc_dec_v4l2.c
->  create mode 100644 drivers/media/platform/samsung/exynos-mfc/mfc_dec_v4l2.h
->  create mode 100644 drivers/media/platform/samsung/exynos-mfc/mfc_dec_vb2.c
->  create mode 100644 drivers/media/platform/samsung/exynos-mfc/mfc_dec_vb2.h
->  create mode 100644 drivers/media/platform/samsung/exynos-mfc/mfc_enc_v4l2.c
->  create mode 100644 drivers/media/platform/samsung/exynos-mfc/mfc_enc_v4l2.h
->  create mode 100644 drivers/media/platform/samsung/exynos-mfc/mfc_enc_vb2.c
->  create mode 100644 drivers/media/platform/samsung/exynos-mfc/mfc_enc_vb2.h
->  create mode 100644 drivers/media/platform/samsung/exynos-mfc/mfc_rm.c
->  create mode 100644 drivers/media/platform/samsung/exynos-mfc/mfc_rm.h
+>>           {HFI_PROP_COLOR_FORMAT,               iris_hfi_gen2_set_colorformat            },
+>>           {HFI_PROP_LINEAR_STRIDE_SCANLINE,     iris_hfi_gen2_set_linear_stride_scanline },
+>>           {HFI_PROP_TIER,                       iris_hfi_gen2_set_tier                   },
+>> diff --git a/drivers/media/platform/qcom/iris/iris_hfi_gen2_defines.h b/drivers/media/platform/qcom/iris/iris_hfi_gen2_defines.h
+>> index aa1f795f5626c1f76a32dd650302633877ce67be..1b6a4dbac828ffea53c1be0d3624a033c283c972 100644
+>> --- a/drivers/media/platform/qcom/iris/iris_hfi_gen2_defines.h
+>> +++ b/drivers/media/platform/qcom/iris/iris_hfi_gen2_defines.h
+>> @@ -91,6 +91,7 @@ enum hfi_seq_header_mode {
+>>   #define HFI_PROP_BUFFER_MARK            0x0300016c
+>>   #define HFI_PROP_RAW_RESOLUTION        0x03000178
+>>   #define HFI_PROP_TOTAL_PEAK_BITRATE        0x0300017C
+>> +#define HFI_PROP_OPB_ENABLE            0x03000184
+>>   #define HFI_PROP_COMV_BUFFER_COUNT        0x03000193
+>>   #define HFI_PROP_END                0x03FFFFFF
+>>
+>> diff --git a/drivers/media/platform/qcom/iris/iris_instance.h b/drivers/media/platform/qcom/iris/iris_instance.h
+>> index 5982d7adefeab80905478b32cddba7bd4651a691..11134f75c26dd1f6c92ba72fbf4e56e41a72de64 100644
+>> --- a/drivers/media/platform/qcom/iris/iris_instance.h
+>> +++ b/drivers/media/platform/qcom/iris/iris_instance.h
+>> @@ -15,12 +15,17 @@
+>>   #define DEFAULT_WIDTH 320
+>>   #define DEFAULT_HEIGHT 240
+>>
+>> -enum iris_fmt_type {
+>> +enum iris_fmt_type_out {
+>>       IRIS_FMT_H264,
+>>       IRIS_FMT_HEVC,
+>>       IRIS_FMT_VP9,
+>>   };
+>>
+>> +enum iris_fmt_type_cap {
+>> +    IRIS_FMT_NV12,
+>> +    IRIS_FMT_UBWC,
+>> +};
+>> +
+>>   struct iris_fmt {
+>>       u32 pixfmt;
+>>       u32 type;
+>> diff --git a/drivers/media/platform/qcom/iris/iris_platform_gen2.c b/drivers/media/platform/qcom/iris/iris_platform_gen2.c
+>> index 36d69cc73986b74534a2912524c8553970fd862e..69c952c68e939f305f25511e2e4763487ec8e0de 100644
+>> --- a/drivers/media/platform/qcom/iris/iris_platform_gen2.c
+>> +++ b/drivers/media/platform/qcom/iris/iris_platform_gen2.c
+>> @@ -691,6 +691,7 @@ static const u32 sm8550_venc_input_config_params[] = {
+>>   };
+>>
+>>   static const u32 sm8550_vdec_output_config_params[] = {
+>> +    HFI_PROP_OPB_ENABLE,
+>>       HFI_PROP_COLOR_FORMAT,
+>>       HFI_PROP_LINEAR_STRIDE_SCANLINE,
+>>   };
+>> diff --git a/drivers/media/platform/qcom/iris/iris_utils.c b/drivers/media/platform/qcom/iris/iris_utils.c
+>> index 85c70a62b1fd2c409fc18b28f64771cb0097a7fd..e2f1131de43128254d8211343771e657e425541e 100644
+>> --- a/drivers/media/platform/qcom/iris/iris_utils.c
+>> +++ b/drivers/media/platform/qcom/iris/iris_utils.c
+>> @@ -34,7 +34,8 @@ int iris_get_mbpf(struct iris_inst *inst)
+>>
+>>   bool iris_split_mode_enabled(struct iris_inst *inst)
+>>   {
+>> -    return inst->fmt_dst->fmt.pix_mp.pixelformat == V4L2_PIX_FMT_NV12;
+>> +    return inst->fmt_dst->fmt.pix_mp.pixelformat == V4L2_PIX_FMT_NV12 ||
+>> +        inst->fmt_dst->fmt.pix_mp.pixelformat == V4L2_PIX_FMT_QC08C;
+>>   }
+>>
+>>   void iris_helper_buffers_done(struct iris_inst *inst, unsigned int type,
+>> diff --git a/drivers/media/platform/qcom/iris/iris_vdec.c b/drivers/media/platform/qcom/iris/iris_vdec.c
+>> index ae13c3e1b426bfd81a7b46dc6c3ff5eb5c4860cb..7fa745c6bf8950d192c2d2fc1770c4b6fd7b8c4c 100644
+>> --- a/drivers/media/platform/qcom/iris/iris_vdec.c
+>> +++ b/drivers/media/platform/qcom/iris/iris_vdec.c
+>> @@ -67,7 +67,7 @@ void iris_vdec_inst_deinit(struct iris_inst *inst)
+>>       kfree(inst->fmt_src);
+>>   }
+>>
+>> -static const struct iris_fmt iris_vdec_formats[] = {
+>> +static const struct iris_fmt iris_vdec_formats_out[] = {
+>>       [IRIS_FMT_H264] = {
+>>           .pixfmt = V4L2_PIX_FMT_H264,
+>>           .type = V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE,
+>> @@ -82,12 +82,35 @@ static const struct iris_fmt iris_vdec_formats[] = {
+>>       },
+>>   };
+>>
+>> +static const struct iris_fmt iris_vdec_formats_cap[] = {
+>> +    [IRIS_FMT_NV12] = {
+>> +        .pixfmt = V4L2_PIX_FMT_NV12,
+>> +        .type = V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE,
+>> +    },
+>> +    [IRIS_FMT_UBWC] = {
+>> +        .pixfmt = V4L2_PIX_FMT_QC08C,
+>> +        .type = V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE,
+>> +    },
+>> +};
+>> +
+>>   static const struct iris_fmt *
+>>   find_format(struct iris_inst *inst, u32 pixfmt, u32 type)
+>>   {
+>> -    unsigned int size = ARRAY_SIZE(iris_vdec_formats);
+>> -    const struct iris_fmt *fmt = iris_vdec_formats;
+>> +    const struct iris_fmt *fmt = NULL;
+>> +    unsigned int size = 0;
+>>       unsigned int i;
+>> +    switch (type) {
+>> +    case V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE:
+>> +        fmt = iris_vdec_formats_out;
+>> +        size = ARRAY_SIZE(iris_vdec_formats_out);
+>> +        break;
+>> +    case V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE:
+>> +        fmt = iris_vdec_formats_cap;
+>> +        size = ARRAY_SIZE(iris_vdec_formats_cap);
+>> +        break;
+>> +    default:
+>> +        return NULL;
+>> +    }
+>>
+>>       for (i = 0; i < size; i++) {
+>>           if (fmt[i].pixfmt == pixfmt)
+>> @@ -103,8 +126,21 @@ find_format(struct iris_inst *inst, u32 pixfmt, u32 type)
+>>   static const struct iris_fmt *
+>>   find_format_by_index(struct iris_inst *inst, u32 index, u32 type)
+>>   {
+>> -    const struct iris_fmt *fmt = iris_vdec_formats;
+>> -    unsigned int size = ARRAY_SIZE(iris_vdec_formats);
+>> +    const struct iris_fmt *fmt = NULL;
+>> +    unsigned int size = 0;
+>> +
+>> +    switch (type) {
+>> +    case V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE:
+>> +        fmt = iris_vdec_formats_out;
+>> +        size = ARRAY_SIZE(iris_vdec_formats_out);
+>> +        break;
+>> +    case V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE:
+>> +        fmt = iris_vdec_formats_cap;
+>> +        size = ARRAY_SIZE(iris_vdec_formats_cap);
+>> +        break;
+>> +    default:
+>> +        return NULL;
+>> +    }
+>>
+>>       if (index >= size || fmt[index].type != type)
+>>           return NULL;
+>> @@ -126,9 +162,10 @@ int iris_vdec_enum_fmt(struct iris_inst *inst, struct v4l2_fmtdesc *f)
+>>           f->flags = V4L2_FMT_FLAG_COMPRESSED | V4L2_FMT_FLAG_DYN_RESOLUTION;
+>>           break;
+>>       case V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE:
+>> -        if (f->index)
+>> +        fmt = find_format_by_index(inst, f->index, f->type);
+>> +        if (!fmt)
+>>               return -EINVAL;
+>> -        f->pixelformat = V4L2_PIX_FMT_NV12;
+>> +        f->pixelformat = fmt->pixfmt;
+>>           break;
+>>       default:
+>>           return -EINVAL;
+>> @@ -157,7 +194,7 @@ int iris_vdec_try_fmt(struct iris_inst *inst, struct v4l2_format *f)
+>>           }
+>>           break;
+>>       case V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE:
+>> -        if (f->fmt.pix_mp.pixelformat != V4L2_PIX_FMT_NV12) {
+>> +        if (!fmt) {
+>>               f_inst = inst->fmt_dst;
+>>               f->fmt.pix_mp.pixelformat = f_inst->fmt.pix_mp.pixelformat;
+>>               f->fmt.pix_mp.width = f_inst->fmt.pix_mp.width;
+>> @@ -238,10 +275,11 @@ int iris_vdec_s_fmt(struct iris_inst *inst, struct v4l2_format *f)
+>>           inst->crop.height = f->fmt.pix_mp.height;
+>>           break;
+>>       case V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE:
+>> +        if (!(find_format(inst, f->fmt.pix_mp.pixelformat, f->type)))
+>> +            return -EINVAL;
+>> +
+>>           fmt = inst->fmt_dst;
+>>           fmt->type = V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE;
+>> -        if (fmt->fmt.pix_mp.pixelformat != V4L2_PIX_FMT_NV12)
+>> -            return -EINVAL;
+>>           fmt->fmt.pix_mp.pixelformat = f->fmt.pix_mp.pixelformat;
+>>           fmt->fmt.pix_mp.width = ALIGN(f->fmt.pix_mp.width, 128);
+>>           fmt->fmt.pix_mp.height = ALIGN(f->fmt.pix_mp.height, 32);
+>> @@ -268,7 +306,8 @@ int iris_vdec_validate_format(struct iris_inst *inst, u32 pixelformat)
+>>   {
+>>       const struct iris_fmt *fmt = NULL;
+>>
+>> -    if (pixelformat != V4L2_PIX_FMT_NV12) {
+>> +    fmt = find_format(inst, pixelformat, V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE);
+>> +    if (!fmt) {
+>>           fmt = find_format(inst, pixelformat, V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE);
+>>           if (!fmt)
+>>               return -EINVAL;
+>>
+>> -- 
+>> 2.34.1
+>>
 > 
 
