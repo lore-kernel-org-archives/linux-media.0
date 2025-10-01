@@ -1,46 +1,45 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B45403019C5;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B444F3019C4;
 	Wed,  1 Oct 2025 14:49:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1759330199; cv=none; b=JwqXeaWgXnZr9djoUI4d6rO7XuV9nBZUjaBdjJ6c6rZCaPzKURvWkRsJwzDVenS3KnIhi53Y0el7U+NKtxvIktwNMt3cLZeDM/y4C/ZnZ2wyOPmFrIb43JD73ptaLJhB5VEVO2zXoF7xK/tEERPO4WFzcavi5E90Fp2vTC0tgMo=
+	t=1759330199; cv=none; b=MPorb5Z2wqAZA2Kq7LRKKY7YTl7WEJP8sE0ylTAcL542G64ZFHUHAG7T9sjP8gGL8Mz7ihLZiR6v9J1sxC6paedgnVjNWZtERT3Kqr6x2Bfc1rfeqq/xWikSiSKUj7XZmhRJWMFnx6o/zmDI2Z3ibt6xaaBVaxWfePoXR6voYQ0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1759330199; c=relaxed/simple;
-	bh=wOiB4fdcRKJl1c/eblFRQcSPxB6yer1N0ORSeW5mvjQ=;
+	bh=5hYRfD9Ktb0lpUHhpM1IvPTtV3P7mHzM9DQlrfcOk14=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=pVTDCXk8agsNR3uroABwpOotv2VC2KEe4bknsUBywY+aaFGQ3Rw86KreMmnV1SmCFTzBCHOeoqgW0INT83sQHUbPeKr1hhToG8EitAvHp1hZEHRvFmo0wC7NF63qmmonusMpQYwvC6dJgBdKVeD94RbIXvqPiWUeDb0KKW23jj8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=F9FWHeWl; arc=none smtp.client-ip=10.30.226.201
+	 MIME-Version; b=ouYbNFFmqzudz0PCHsNC1/cO/fNzDw5/JqR2eH6UezqmqDiaTExBHV90W4ECXsY00q4yBf74S7nOQ5zXquHxWlT2R+6syuA6WJAiP+VesFaS2WO+Pn439In4DJ9lrZjOpN5h5WqbzNIFcmTqYQX8LwHeZGmgXpthQWgeCF5Ecps=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BQkAa7rT; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="F9FWHeWl"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 629A2C2BCF7;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BQkAa7rT"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6EA8AC2BC86;
 	Wed,  1 Oct 2025 14:49:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1759330199;
-	bh=wOiB4fdcRKJl1c/eblFRQcSPxB6yer1N0ORSeW5mvjQ=;
+	bh=5hYRfD9Ktb0lpUHhpM1IvPTtV3P7mHzM9DQlrfcOk14=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=F9FWHeWlxIrEXOoYWUxxTdb4R1DcZuJMYTfMszPWXHiiKux82i8DppxAEia3SW+Bi
-	 NdNm7oJMA1wLFkBh5NGvNbyVszaaMFYQHk+ZspnycotjTHX4IH2bkz2I/FuY4wN62N
-	 xkuyX1NPDJj9e1hmf1wyBRPDB4mp1YMRRlOfeDKj3ehlkeiYjJHuU6Jg50xk67YFTx
-	 80p10awlyZTdXGO/0XG8cvcr5/mQe3+KdwFJD3RVErSYRVhtkRo9iyugSkg8LwmlbY
-	 wp8N/lh1p/nhnxu1UlSRSib+FPDzo5vM3mI9X0esQXk7ZDgCMdXxakOMlT7bcuKTeQ
-	 8HVvfGx7C9i0A==
+	b=BQkAa7rTV9cJmoFcaPy0lQIqv9lfF0zkm7Hq34mIm1s/2rlKOeRoAG4LvYf2jxqPs
+	 HIay3ckQ9e1SJomPyk7BNBNV7xYZ55zDD/s1OGzFCTN0T/LH9zuCvJJr/o5F38KvxA
+	 prmxcZp9hrc2ivuCQs6aecFgDFRNszrydGuIkGah7PnxXGFBSMPejO5bDmPRZxx4w1
+	 CsTqYKoMMaGU6f07+6yi4ei9Kch5pQy1SinROOzJUDKXbfPuszXjWjzjKWHiM2+skl
+	 /OQxm7A/ZD20BRICMPffWRPxBFnGMRQZDfj/yNl51SaVDHmlr0k0IghwvoXLm3fQ+9
+	 YrrsFu1+og5rw==
 Received: from mchehab by mail.kernel.org with local (Exim 4.98.2)
 	(envelope-from <mchehab+huawei@kernel.org>)
-	id 1v3y9V-0000000BLJH-2lK7;
+	id 1v3y9V-0000000BLJP-2yw1;
 	Wed, 01 Oct 2025 16:49:57 +0200
 From: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 To: "Jonathan Corbet" <corbet@lwn.net>,
 	Linux Doc Mailing List <linux-doc@vger.kernel.org>
 Cc: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
 	"Mauro Carvalho Chehab" <mchehab@kernel.org>,
-	Hans Verkuil <hverkuil@kernel.org>,
 	linux-kernel@vger.kernel.org,
 	linux-media@vger.kernel.org
-Subject: [PATCH 20/23] docs: cec: show broken xrefs and show TOC instead of cec.h content
-Date: Wed,  1 Oct 2025 16:49:43 +0200
-Message-ID: <c587872ca3685213d9f8e88277404c9e253633df.1759329363.git.mchehab+huawei@kernel.org>
+Subject: [PATCH 22/23] docs: media: dvb: headers: warn about broken cross references
+Date: Wed,  1 Oct 2025 16:49:45 +0200
+Message-ID: <8f98dde399df8b937dadf09168194bacce682c7d.1759329363.git.mchehab+huawei@kernel.org>
 X-Mailer: git-send-email 2.51.0
 In-Reply-To: <cover.1759329363.git.mchehab+huawei@kernel.org>
 References: <cover.1759329363.git.mchehab+huawei@kernel.org>
@@ -53,35 +52,25 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 
-Enable xref broken warnings. While here, change the output to
-only show cross-references, as there's no need to show the entire cec.h
-header at the docs.
+Enable cross-reference warnings for demux header.
 
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 ---
- Documentation/userspace-api/media/cec/cec-header.rst | 8 +++++---
- 1 file changed, 5 insertions(+), 3 deletions(-)
+ Documentation/userspace-api/media/dvb/headers.rst | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/Documentation/userspace-api/media/cec/cec-header.rst b/Documentation/userspace-api/media/cec/cec-header.rst
-index f67003bb8740..648498bc7d6f 100644
---- a/Documentation/userspace-api/media/cec/cec-header.rst
-+++ b/Documentation/userspace-api/media/cec/cec-header.rst
-@@ -2,10 +2,12 @@
- 
- .. _cec_header:
- 
--***************
--CEC Header File
--***************
-+****************
-+CEC uAPI Symbols
-+****************
- 
- .. kernel-include:: include/uapi/linux/cec.h
+diff --git a/Documentation/userspace-api/media/dvb/headers.rst b/Documentation/userspace-api/media/dvb/headers.rst
+index 3c492ae109ae..6d69622bf1e0 100644
+--- a/Documentation/userspace-api/media/dvb/headers.rst
++++ b/Documentation/userspace-api/media/dvb/headers.rst
+@@ -24,6 +24,7 @@ Demux
      :generate-cross-refs:
-     :exception-file: cec.h.rst.exceptions
-+    :toc:
+     :exception-file: dmx.h.rst.exceptions
+     :toc:
 +    :warn-broken:
+ 
+ Conditional Access
+ ==================
 -- 
 2.51.0
 
