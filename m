@@ -1,34 +1,34 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 304A0275B03;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5A6AC2E54DE;
 	Wed,  1 Oct 2025 14:49:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1759330199; cv=none; b=kvu3p98+UCMt9r4T/XDG94BRgi7TVsyboAwPzaySuAu5yQULjFQcHr97A513KcBWe4Z7mLgwiIgNyUw0xoeecJwNi9FMl2bJbdNR6X+RjpiwwJkeBdXsdrF7unqInFba5+3Lw4U6ta9H1gt6jny9jlv8hl3fx4G2Isuuo81HPVA=
+	t=1759330199; cv=none; b=u3lbz6Ke6k9S6CPNz5lmZjB5izDqfi++fltYbJvjPQS/2enzbn6Q7FykefcvMmqgJu55qNvUWcv1OC4t5jScjGfuUY/fgDQa38uESiKc0wwDIpQbyVXNCbiaBSALr3Gn8CEqzigp1U1sIe4zhRhK4xUfUgrSokWhJRNR9RRlp1Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1759330199; c=relaxed/simple;
-	bh=zUpIh7TsawGQocua17V5HvZQPsi7cqtACBD6mHMYWK8=;
+	bh=3CTScuwxC9ZYFhvKDygUTwinDqi3MU7C1ktyjxp78ZU=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=PLPOTGdB89DxtES7ngZNIXaudtimy9ZmN2H4SIq/+JXgr5K6zdu7Ooy8uZR2pTXNEA1Jwka/NWFB3e+ZUgLLqAG8iuAbDyFZ7D1/rQtRrSYZcUiwrAxYTilcwpfuE/Zm0JyRzXeR5PGiia0j4Ej1R5fDwUDI1hwYCGYmrzzDIeY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mpNusqsm; arc=none smtp.client-ip=10.30.226.201
+	 MIME-Version; b=g0H3kbiGArCxvL6gqGXrto52KV6RsbkucwGvKMlDvkYDrXUxzLpr9DUup2MCe/wFkOoyJOfelXI81Ef712VeHohJMeGaIg2Ku/hrRfzvp/hEIn9yR4P5KxlM1OzWpEbTKG8tVfMANp/SffyAfQKXsx17/nTenJlX5/LbnMLnTgo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=cGx6QR84; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mpNusqsm"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 02678C4AF0B;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="cGx6QR84"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 01FABC4CEFA;
 	Wed,  1 Oct 2025 14:49:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1759330199;
-	bh=zUpIh7TsawGQocua17V5HvZQPsi7cqtACBD6mHMYWK8=;
+	bh=3CTScuwxC9ZYFhvKDygUTwinDqi3MU7C1ktyjxp78ZU=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=mpNusqsmJ3KrdxMODuXBevUmUUwGkKQlhSIG1+1ioeqewQzhH1a1LN2446DbVWUcl
-	 uFD2laD7v5yapugZcygArhpkHFMIMlWQdr8ca50HE1N7DBZF7H+rykeYF849KVeI5s
-	 eY2lM1DtRAju2hf6ycCLpCFNe0i+SGBzC9ElGp756XiuOrN+adRdyvnGavpEhSm8DN
-	 BPlINKgHmYk8IWe+RtbTrBnqhodufH3OHP4qW2MADWVPCiCB+7TwcOwyb3TAYgHkxK
-	 He+Q62wNoQJbij4bxoPcFRauytnwHXJZKBcphuuwGO+tQRR/3e52IVAyEVw7quomJw
-	 oMpOOt7yGjn+Q==
+	b=cGx6QR846NsCLlOPyb53nZiJLHRWcoYy+OtbF50kSnwmLr+Q1R4gmKtqhqVkXRl2F
+	 kcljejHtbGFUjAmSLE9o/FaKuXl5YlzDpOmNOypCktZCtOrCy7zs4B0QUbUC6lnSCm
+	 G1yC3hLO8G4SyJ4d4TIee0yjoNQNolhUcHjXMYVqLdtKSD/TUYUgXBb+29NzhzlY/a
+	 pWH/nr/OKcyRhM4EZ9ylewbmEmJ11wca6z3Kj82slzz5m8IbfTfDypwvhz6L5u2TZP
+	 v9mfZQk3FyCJSf7OGknzMS55DOMr237gMTZHb4vzxDWHcuwJT54wygDDXrCbCmtvHc
+	 H4pq0bWitWY+Q==
 Received: from mchehab by mail.kernel.org with local (Exim 4.98.2)
 	(envelope-from <mchehab+huawei@kernel.org>)
-	id 1v3y9V-0000000BLI7-0i2n;
+	id 1v3y9V-0000000BLIJ-14t7;
 	Wed, 01 Oct 2025 16:49:57 +0200
 From: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 To: "Jonathan Corbet" <corbet@lwn.net>,
@@ -37,9 +37,9 @@ Cc: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
 	"Mauro Carvalho Chehab" <mchehab@kernel.org>,
 	linux-kernel@vger.kernel.org,
 	linux-media@vger.kernel.org
-Subject: [PATCH 02/23] tools: docs: parse_data_structs.py: output a line number
-Date: Wed,  1 Oct 2025 16:49:25 +0200
-Message-ID: <dcffa6844dede00052f5fb851a857991468f22b5.1759329363.git.mchehab+huawei@kernel.org>
+Subject: [PATCH 05/23] tools: docs: parse_data_structs: make process_exceptions two stages
+Date: Wed,  1 Oct 2025 16:49:28 +0200
+Message-ID: <da9ca5f2ce1ffcfb355e32e676ff013607c227e0.1759329363.git.mchehab+huawei@kernel.org>
 X-Mailer: git-send-email 2.51.0
 In-Reply-To: <cover.1759329363.git.mchehab+huawei@kernel.org>
 References: <cover.1759329363.git.mchehab+huawei@kernel.org>
@@ -52,122 +52,177 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 
+Split the logic which parses exceptions on two stages, preparing
+the exceptions file to have rules that will affect xref generation.
+
+For now, preserve the original API.
+
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 ---
- tools/docs/lib/parse_data_structs.py | 29 ++++++++++++++--------------
- 1 file changed, 15 insertions(+), 14 deletions(-)
+ tools/docs/lib/parse_data_structs.py | 125 +++++++++++++++------------
+ 1 file changed, 71 insertions(+), 54 deletions(-)
 
 diff --git a/tools/docs/lib/parse_data_structs.py b/tools/docs/lib/parse_data_structs.py
-index 6c868f84f029..d28471a045f1 100755
+index 9ad621712103..46535a05ea4a 100755
 --- a/tools/docs/lib/parse_data_structs.py
 +++ b/tools/docs/lib/parse_data_structs.py
-@@ -143,7 +143,7 @@ class ParseDataStructs:
+@@ -140,9 +140,41 @@ class ParseDataStructs:
+ 
+         self.symbols = {}
+ 
++        self.ignore = []
++        self.replace = []
++
          for symbol_type in self.DEF_SYMBOL_TYPES:
              self.symbols[symbol_type] = {}
  
--    def store_type(self, symbol_type: str, symbol: str,
-+    def store_type(self, ln, symbol_type: str, symbol: str,
++    def read_exceptions(self, fname: str):
++        if not fname:
++            return
++
++        name = os.path.basename(fname)
++
++        with open(fname, "r", encoding="utf-8", errors="backslashreplace") as f:
++            for ln, line in enumerate(f):
++                ln += 1
++                line = line.strip()
++                if not line or line.startswith("#"):
++                    continue
++
++                # ignore rules
++                match = re.match(r"^ignore\s+(\w+)\s+(\S+)", line)
++
++                if match:
++                    self.ignore.append((ln, match.group(1), match.group(2)))
++                    continue
++
++                # replace rules
++                match = re.match(r"^replace\s+(\S+)\s+(\S+)\s+(\S+)", line)
++                if match:
++                    self.replace.append((ln, match.group(1), match.group(2),
++                                         match.group(3)))
++                    continue
++
++                sys.exit(f"{name}:{ln}: invalid line: {line}")
++
+     def store_type(self, ln, symbol_type: str, symbol: str,
                     ref_name: str = None, replace_underscores: bool = True):
          """
-         Stores a new symbol at self.symbols under symbol_type.
-@@ -172,7 +172,7 @@ class ParseDataStructs:
-         else:
-             ref_link = symbol
- 
--        self.symbols[symbol_type][symbol] = f"{prefix}{ref_link}{suffix}"
-+        self.symbols[symbol_type][symbol] = (f"{prefix}{ref_link}{suffix}", ln)
- 
-     def store_line(self, line):
-         """Stores a line at self.data, properly indented"""
-@@ -240,20 +240,20 @@ class ParseDataStructs:
-                 if is_enum:
-                     match = re.match(r"^\s*([_\w][\w\d_]+)\s*[\,=]?", line)
-                     if match:
--                        self.store_type("symbol", match.group(1))
-+                        self.store_type(line_no, "symbol", match.group(1))
-                     if "}" in line:
-                         is_enum = False
-                     continue
- 
-                 match = re.match(r"^\s*#\s*define\s+([\w_]+)\s+_IO", line)
-                 if match:
--                    self.store_type("ioctl", match.group(1),
-+                    self.store_type(line_no, "ioctl", match.group(1),
-                                     replace_underscores=False)
-                     continue
- 
-                 match = re.match(r"^\s*#\s*define\s+([\w_]+)(\s+|$)", line)
-                 if match:
--                    self.store_type("define", match.group(1))
-+                    self.store_type(line_no, "define", match.group(1))
-                     continue
- 
-                 match = re.match(r"^\s*typedef\s+([_\w][\w\d_]+)\s+(.*)\s+([_\w][\w\d_]+);",
-@@ -261,20 +261,20 @@ class ParseDataStructs:
-                 if match:
-                     name = match.group(2).strip()
-                     symbol = match.group(3)
--                    self.store_type("typedef", symbol, ref_name=name)
-+                    self.store_type(line_no, "typedef", symbol, ref_name=name)
-                     continue
- 
-                 for re_enum in self.RE_ENUMS:
-                     match = re_enum.match(line)
-                     if match:
--                        self.store_type("enum", match.group(1))
-+                        self.store_type(line_no, "enum", match.group(1))
-                         is_enum = True
+@@ -277,75 +309,60 @@ class ParseDataStructs:
+                         self.store_type(line_no, "struct", match.group(1))
                          break
  
-                 for re_struct in self.RE_STRUCTS:
-                     match = re_struct.match(line)
-                     if match:
--                        self.store_type("struct", match.group(1))
-+                        self.store_type(line_no, "struct", match.group(1))
-                         break
+-    def process_exceptions(self, fname: str):
++    def apply_exceptions(self):
+         """
+         Process exceptions file with rules to ignore or replace references.
+         """
+-        if not fname:
+-            return
  
-     def process_exceptions(self, fname: str):
-@@ -342,7 +342,8 @@ class ParseDataStructs:
+-        name = os.path.basename(fname)
++        # Handle ignore rules
++        for ln, c_type, symbol in self.ignore:
++            if c_type not in self.DEF_SYMBOL_TYPES:
++                sys.exit(f"{name}:{ln}: {c_type} is invalid")
  
-                 # Change self.symbols to use the replacement rule
-                 if old in self.symbols[c_type]:
--                    self.symbols[c_type][old] = new_ref
-+                    (_, ln) = self.symbols[c_type][old]
-+                    self.symbols[c_type][old] = (new_ref, ln)
-                 else:
-                     print(f"{name}:{ln}: Warning: can't find {old} {c_type}")
+-        with open(fname, "r", encoding="utf-8", errors="backslashreplace") as f:
+-            for ln, line in enumerate(f):
+-                ln += 1
+-                line = line.strip()
+-                if not line or line.startswith("#"):
+-                    continue
++            d = self.symbols[c_type]
++            if symbol in d:
++                del d[symbol]
  
-@@ -360,8 +361,8 @@ class ParseDataStructs:
+-                # Handle ignore rules
+-                match = re.match(r"^ignore\s+(\w+)\s+(\S+)", line)
+-                if match:
+-                    c_type = match.group(1)
+-                    symbol = match.group(2)
+-
+-                    if c_type not in self.DEF_SYMBOL_TYPES:
+-                        sys.exit(f"{name}:{ln}: {c_type} is invalid")
+-
+-                    d = self.symbols[c_type]
+-                    if symbol in d:
+-                        del d[symbol]
+-
+-                    continue
+-
+-                # Handle replace rules
+-                match = re.match(r"^replace\s+(\S+)\s+(\S+)\s+(\S+)", line)
+-                if not match:
+-                    sys.exit(f"{name}:{ln}: invalid line: {line}")
+-
+-                c_type, old, new = match.groups()
+-
+-                if c_type not in self.DEF_SYMBOL_TYPES:
+-                    sys.exit(f"{name}:{ln}: {c_type} is invalid")
++        # Handle replace rules
++        for ln, c_type, old, new in self.replace:
++            if c_type not in self.DEF_SYMBOL_TYPES:
++                sys.exit(f"{name}:{ln}: {c_type} is invalid")
  
-             print(f"{c_type}:")
+-                reftype = None
++            reftype = None
  
--            for symbol, ref in sorted(refs.items()):
--                print(f"  {symbol} -> {ref}")
-+            for symbol, (ref, ln) in sorted(refs.items()):
-+                print(f"  #{ln:<5d} {symbol} -> {ref}")
+-                # Parse reference type when the type is specified
++            # Parse reference type when the type is specified
  
-             print()
+-                match = re.match(r"^\:c\:(data|func|macro|type)\:\`(.+)\`", new)
++            match = re.match(r"^\:c\:(data|func|macro|type)\:\`(.+)\`", new)
++            if match:
++                reftype = f":c:{match.group(1)}"
++                new = match.group(2)
++            else:
++                match = re.search(r"(\:ref)\:\`(.+)\`", new)
+                 if match:
+-                    reftype = f":c:{match.group(1)}"
++                    reftype = match.group(1)
+                     new = match.group(2)
+-                else:
+-                    match = re.search(r"(\:ref)\:\`(.+)\`", new)
+-                    if match:
+-                        reftype = match.group(1)
+-                        new = match.group(2)
  
-@@ -384,7 +385,7 @@ class ParseDataStructs:
+-                # If the replacement rule doesn't have a type, get default
++            # If the replacement rule doesn't have a type, get default
++            if not reftype:
++                reftype = self.DEF_SYMBOL_TYPES[c_type].get("ref_type")
+                 if not reftype:
+-                    reftype = self.DEF_SYMBOL_TYPES[c_type].get("ref_type")
+-                    if not reftype:
+-                        reftype = self.DEF_SYMBOL_TYPES[c_type].get("real_type")
++                    reftype = self.DEF_SYMBOL_TYPES[c_type].get("real_type")
  
-         # Process all reference types
-         for ref_dict in self.symbols.values():
--            for symbol, replacement in ref_dict.items():
-+            for symbol, (replacement, _) in ref_dict.items():
-                 symbol = re.escape(re.sub(r"([\_\`\*\<\>\&\\\\:\/])", r"\\\1", symbol))
-                 text = re.sub(fr'{start_delim}{symbol}{end_delim}',
-                               fr'\1{replacement}\2', text)
-@@ -420,8 +421,8 @@ class ParseDataStructs:
-             text.append("")
+-                new_ref = f"{reftype}:`{old} <{new}>`"
++            new_ref = f"{reftype}:`{old} <{new}>`"
  
-             # Sort symbols alphabetically
--            for symbol, ref in sorted(refs.items()):
--                text.append(f"* :{ref}:")
-+            for symbol, (ref, ln) in sorted(refs.items()):
-+                text.append(f"* {ref}: line #{ln}")
+-                # Change self.symbols to use the replacement rule
+-                if old in self.symbols[c_type]:
+-                    (_, ln) = self.symbols[c_type][old]
+-                    self.symbols[c_type][old] = (new_ref, ln)
+-                else:
+-                    print(f"{name}:{ln}: Warning: can't find {old} {c_type}")
++            # Change self.symbols to use the replacement rule
++            if old in self.symbols[c_type]:
++                (_, ln) = self.symbols[c_type][old]
++                self.symbols[c_type][old] = (new_ref, ln)
++            else:
++                print(f"{name}:{ln}: Warning: can't find {old} {c_type}")
++
++    def process_exceptions(self, fname: str):
++        """
++        Process exceptions file with rules to ignore or replace references.
++        """
++        self.read_exceptions(fname)
++        self.apply_exceptions()
  
-             text.append("")  # Add empty line between categories
- 
+     def debug_print(self):
+         """
 -- 
 2.51.0
 
