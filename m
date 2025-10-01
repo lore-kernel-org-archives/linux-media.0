@@ -1,169 +1,292 @@
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+Received: from bali.collaboradmins.com (bali.collaboradmins.com [148.251.105.195])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A949D303CAB
-	for <linux-media@vger.kernel.org>; Wed,  1 Oct 2025 19:00:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 58DDA2AD0C;
+	Wed,  1 Oct 2025 19:45:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.251.105.195
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1759345228; cv=none; b=TKSRsvbELDBdIxCrKNaBVFS6tj7RFsEs78IQbvmUqZume2GRbkuWTfPAQDyK5d0PmDqi0W7fCjs2J9KqP33YjvDCC/Vbskn2xpOp/36BiXRtBoeLTbcM5LZOAgpL30xDQ7acEJ82olLhnhzqmW4IouLm+0whTbpW13b1cDUWHls=
+	t=1759347922; cv=none; b=SqP/t50TwsLARUB2FRZsGDtzUfUtfK8swQqtW1jmKwmemuMNiv2XITP7xeQfwWAmozea8c6GCrts8V45nbQ2jsqgptL3sKTmX3ab8sbBRzsCMX59yvTKs3OT40Pm8fSVd3nc5z7gcW7qNvNOTf4UNUzCs+TH1gM5xhkmZsdoxz4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1759345228; c=relaxed/simple;
-	bh=/rm1Y/tRBwPrsxYpaC+lx0uQgFufvlrB5k6kOnop6/c=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=jk1TtJqG3DLzlepqfpEu68kJ/yOrpzsf4yBatrVSNHTHAvwoXKNuhIFz8AYReujIVB2RQlaBuRaBKwtXu+UHCIA0b/bBkM0kxZs6GlernyrsPwiulowZKk1N4N67AJ64hih/KpqOIzCfeq34bhRSnXAIThebHKhZfN/CjziBY/o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=dITpJMdS; arc=none smtp.client-ip=205.220.180.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
+	s=arc-20240116; t=1759347922; c=relaxed/simple;
+	bh=d+32j7mykuQLclysPTsyNlCE3t+aPfRKTi1XybG5tOY=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=uokZXcenIO5nu29m+vDe9/DBOSkn4RFI2p5y5NEV0e82eVFSpiVRPdnn5CQHC7JomucRmcgOKdWjn4ZTIHCyUX9CxlcCoIxivkO0YyWdt1XQr0wsu2L7q1SaAIrfNftRzficaL1AD0GpMlQbeNtmwcbcwtX7m6NwZ6teqkxnZTc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=M28XBKuT; arc=none smtp.client-ip=148.251.105.195
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="dITpJMdS"
-Received: from pps.filterd (m0279868.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 591IcLkX018108
-	for <linux-media@vger.kernel.org>; Wed, 1 Oct 2025 19:00:24 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	UOM6pErh4JXh+pgCFCh1VyiU3BioiWvX5lWpX48wx/M=; b=dITpJMdSXPG1KLvF
-	q8Aq2T4ihnWDcO2QZN7Pv+lDrEqr64Wr/kK0fPhXn7FqgLRSt5ToxbkNIxkm0xO0
-	jBu0Nw2QwJ5htDTZR0eFHwG0mQsxrYxSDacMqv0P9EzWTdb4WG8g9NnMMXdfxQrk
-	Gl1UJ4ySBSYcufajwu87fzFgKxDa3S1ppbmnZE5FnrrfGJO0bXFYVbSE0tCoJA4z
-	E6WLIBFTCdS+MkzQbOCwBBtzOUSYs1rHe4bIokDt11NDd2oa8kJ2PE8VZyAmwOk/
-	+nR8a2wxS4CTImQYIKc3jv6IvDM1JJgr3Bc4Yt/lQ0hHa6b3BfYqWfx30Ud7wl6g
-	f3jMEg==
-Received: from mail-pj1-f69.google.com (mail-pj1-f69.google.com [209.85.216.69])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 49fyrf75hm-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-	for <linux-media@vger.kernel.org>; Wed, 01 Oct 2025 19:00:24 +0000 (GMT)
-Received: by mail-pj1-f69.google.com with SMTP id 98e67ed59e1d1-32ed9dbba55so58179a91.2
-        for <linux-media@vger.kernel.org>; Wed, 01 Oct 2025 12:00:23 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1759345212; x=1759950012;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=UOM6pErh4JXh+pgCFCh1VyiU3BioiWvX5lWpX48wx/M=;
-        b=Yj/5fFrb9uVcwziTuBz8MxSIZZmTkPOOyPwjQ7KyCjcLy2oh6Dwh8d2QAphH34AQL0
-         YcA9+LAZg1skMsZrP8QLOidlrtbuv8Ts2JbWlG25o+L5Lwm4NRZjxbo2yxxbcn/hRF6q
-         aJxTI8hX1awq6pOo0TivHdupqSM9EYqKHMP4L3VnXiQF5gqMguJjHKoyVK5nHPFQaur6
-         ifbY1EBjhgJQY/Hj1hPc0DoFBPfV6B2tjK/RhiGUwszBcl/IA+S0D3wx1r0hiL2yXNEC
-         6mXv8wJ6I3bMVdJd92p4/I3RNZPIyx8lsrnfMwaZJbW34QMPKmuzosgkJpqpz6nSw2k3
-         i1Rg==
-X-Gm-Message-State: AOJu0YyFNWQ4Q4GWWIoJm932UwFSo+slCP3awX8OBMwfBTsGQHxObVkQ
-	7ytlPIZZ7isYVWEsktmj/0h63JZRUYcHMci2bjq+liNhv7bd96HMmxjnOXbWYBXThn0S5fz/AUM
-	ZKhybfQceIXKFzIN0S/u4nugdceVxvyIiPhkfaQiky/e1fxEqJ4LPJqvK0gvGC1Cm7FuUgS+pgQ
-	==
-X-Gm-Gg: ASbGncv/foyhnkqRyCg62qqC+VA53ZpQ/K7ta+twy3tJW6BONiix3d+Qai0xvmC6qZC
-	2dU72LW932kgCtWQ2IgDEJjjy6MajLwNa0QK6+MIDUM800GRiSOBcsCcwnwWO098mARzAUNwU3Q
-	pc0JcIyXi1bKcTBtNGGUPJRw6a06OYXtmXeXjTWIOxXba2TYeiRy7wQjQ+kFwMpy3xd0GLfBPTI
-	CyD5IsROr5EEX5tm2HfJoW5ytn8tDM04UAbsNqCmnyX2FN4arysg0SzH6/iISfs3PG+dN7k+CKT
-	AW91Q4GcZGaajhXKFgZuu/E7+v1Nd7L9n7kbgE00Mvtmuro5siWIe1pz+jnvkeltGrJYawIEZ3u
-	zsVdVcpxrq7fclcQW9xQ5ZqIFEsQQ1A==
-X-Received: by 2002:a17:90b:224c:b0:32e:74b6:4ef9 with SMTP id 98e67ed59e1d1-339a6d425ffmr2697914a91.0.1759345211625;
-        Wed, 01 Oct 2025 12:00:11 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IHOya6qECNpJ/6SMsAf6t/f1E24fDwdtbmQv0sCvjkybfOLZCjjsyzeop/XkBa+HD2orVE21w==
-X-Received: by 2002:a17:90b:224c:b0:32e:74b6:4ef9 with SMTP id 98e67ed59e1d1-339a6d425ffmr2697884a91.0.1759345211040;
-        Wed, 01 Oct 2025 12:00:11 -0700 (PDT)
-Received: from gu-dmadival-lv.qualcomm.com (Global_NAT1.qualcomm.com. [129.46.96.20])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-339a701cbffsm2950074a91.21.2025.10.01.12.00.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 01 Oct 2025 12:00:10 -0700 (PDT)
-From: Deepa Guthyappa Madivalara <deepa.madivalara@oss.qualcomm.com>
-Date: Wed, 01 Oct 2025 12:00:04 -0700
-Subject: [PATCH 1/5] media: uapi: videodev2: Add support for AV1 stateful
- decoder
+	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="M28XBKuT"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+	s=mail; t=1759347918;
+	bh=d+32j7mykuQLclysPTsyNlCE3t+aPfRKTi1XybG5tOY=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=M28XBKuTwKb9b7bD7Wl9dNYQ16Kzdr7LhCjlGuqtZxLOTRTBN5+VVibHU8EvPgl3v
+	 7nJA1Bp8V9OrNKCgBwLVfV+lyaiTBl8b3UYp7ZNOsCjcs0al/cmsbq6xeiVgS3bxUT
+	 thvOMM8KQDEBoGsCaBxBzjccRW3tVhDo6enSwMFcBakNzBlqz5KLALJ/dC6RjNYTj8
+	 h6yfNoYIWWIbYRjvJ0u746dVnMFektmEPwW/qnZKdQs4usFz6uEDG6dzdcCd4K7mXm
+	 b7K9Fs2hTyqvju7BkuIsFqUXYDcstXBw0akqUibWlwitKJlD908B+G+Ir8N1QlM6yp
+	 QskoDPmq2jznA==
+Received: from [10.40.0.100] (185-67-175-126.lampert.tv [185.67.175.126])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: mriesch)
+	by bali.collaboradmins.com (Postfix) with ESMTPSA id 732AC17E12C0;
+	Wed,  1 Oct 2025 21:45:17 +0200 (CEST)
+Message-ID: <9f1dbc4d-d4c7-4c1c-b48a-355a83e18e5c@collabora.com>
+Date: Wed, 1 Oct 2025 21:45:16 +0200
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 03/27] media: media-entity: Introduce
+ media_entity_context
+To: Jacopo Mondi <jacopo.mondi@ideasonboard.com>,
+ Sakari Ailus <sakari.ailus@linux.intel.com>,
+ Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+ Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>,
+ Kieran Bingham <kieran.bingham@ideasonboard.com>,
+ Nicolas Dufresne <nicolas.dufresne@collabora.com>,
+ Mauro Carvalho Chehab <mchehab@kernel.org>, Tomasz Figa
+ <tfiga@chromium.org>, Marek Szyprowski <m.szyprowski@samsung.com>,
+ Raspberry Pi Kernel Maintenance <kernel-list@raspberrypi.com>,
+ Florian Fainelli <florian.fainelli@broadcom.com>,
+ Broadcom internal kernel review list
+ <bcm-kernel-feedback-list@broadcom.com>, Hans Verkuil <hverkuil@kernel.org>
+Cc: linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
+ linux-rpi-kernel@lists.infradead.org, linux-arm-kernel@lists.infradead.org
+References: <20250724-multicontext-mainline-2025-v2-0-c9b316773486@ideasonboard.com>
+ <20250724-multicontext-mainline-2025-v2-3-c9b316773486@ideasonboard.com>
+Content-Language: en-US
+From: Michael Riesch <michael.riesch@collabora.com>
+In-Reply-To: <20250724-multicontext-mainline-2025-v2-3-c9b316773486@ideasonboard.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-Message-Id: <20251001-av1_irisdecoder-v1-1-9fb08f3b96a0@oss.qualcomm.com>
-References: <20251001-av1_irisdecoder-v1-0-9fb08f3b96a0@oss.qualcomm.com>
-In-Reply-To: <20251001-av1_irisdecoder-v1-0-9fb08f3b96a0@oss.qualcomm.com>
-To: Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Vikash Garodia <vikash.garodia@oss.qualcomm.com>,
-        Dikshita Agarwal <dikshita.agarwal@oss.qualcomm.com>,
-        Abhinav Kumar <abhinav.kumar@linux.dev>,
-        Bryan O'Donoghue <bod@kernel.org>
-Cc: linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org,
-        Deepa Guthyappa Madivalara <deepa.madivalara@oss.qualcomm.com>
-X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1759345209; l=2422;
- i=deepa.madivalara@oss.qualcomm.com; s=20250814; h=from:subject:message-id;
- bh=/rm1Y/tRBwPrsxYpaC+lx0uQgFufvlrB5k6kOnop6/c=;
- b=FwUQJyOxBbml7pw9V/Ys5GVnoZdTtkEyEOGQk0Uuq8AhzLh7ZnUQ5p4zFEGKUJILkfwMAb4Lm
- bPdsvL/RRqFBI5PUHQph+15o9hqW8aKW9BXY7qK3FLFXygM3XQpCLrx
-X-Developer-Key: i=deepa.madivalara@oss.qualcomm.com; a=ed25519;
- pk=MOEXgyokievn+bgpHdS6Ixh/KQYyS90z2mqIbQ822FQ=
-X-Proofpoint-ORIG-GUID: 5584ITDGJCnMMrbJ4S4CGgPVbajvOo36
-X-Proofpoint-GUID: 5584ITDGJCnMMrbJ4S4CGgPVbajvOo36
-X-Authority-Analysis: v=2.4 cv=etzSD4pX c=1 sm=1 tr=0 ts=68dd7a48 cx=c_pps
- a=vVfyC5vLCtgYJKYeQD43oA==:117 a=ouPCqIW2jiPt+lZRy3xVPw==:17
- a=IkcTkHD0fZMA:10 a=x6icFKpwvdMA:10 a=EUspDBNiAAAA:8 a=5q8hE9cQKCNJD2usWYQA:9
- a=QEXdDO2ut3YA:10 a=rl5im9kqc5Lf4LNbBjHf:22
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwOTI5MDE3NSBTYWx0ZWRfX02Q+v/UQ+JYc
- ylAhxsvDEXxJJXuuZqIEPtZyLbbztCMsstcaPJI0IF0SLNe+S/M5EiLB8VQxUo8IavJzH6cdSam
- npszzwd0nA/tOj5vddxfcOCPQHCuWeBdwhGZN3+MTQUUUKas2gTCbSX2guEfx1ZEYY3rY6qx7il
- oTk3LA7OoxNEyNINIwYBAlHjNVe23dtlnXekw94yONaztOjYCtH+te9nddC6uz5rUQ32HULBgiL
- fMjUGm1KSaXyoUPSfGN59vTr4M/8RvRXaKQKM7jRPhxqzLvB6AUNmh9/RyMXJv5atAdcI9Nb0Qc
- OcOm629PLBf3udg2XIQeFXaLJWATLMpNJXK7AKhEELl4cXQ9PbXABJZXbjziRXyE2m4wBwyz/ES
- tiDU3d+eojRqoiAYTFiIQlLvcBan5w==
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1117,Hydra:6.1.9,FMLib:17.12.80.40
- definitions=2025-10-01_05,2025-09-29_04,2025-03-28_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- phishscore=0 lowpriorityscore=0 clxscore=1015 suspectscore=0 malwarescore=0
- priorityscore=1501 spamscore=0 impostorscore=0 adultscore=0 bulkscore=0
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.19.0-2509150000 definitions=main-2509290175
 
-Introduce a new pixel format, V4L2_PIX_FMT_AV1, to the
-Video4Linux2(V4L2) API. This format is intended for AV1
-bitstreams in stateful decoding/encoding workflows.
-The fourcc code 'AV10' is used to distinguish
-this format from the existing V4L2_PIX_FMT_AV1_FRAME,
-which is used for stateless AV1 decoder implementation.
+Hi Jacopo,
 
-Signed-off-by: Deepa Guthyappa Madivalara <deepa.madivalara@oss.qualcomm.com>
----
- Documentation/userspace-api/media/v4l/pixfmt-compressed.rst | 8 ++++++++
- include/uapi/linux/videodev2.h                              | 1 +
- 2 files changed, 9 insertions(+)
+Thanks for your patch. Looks good to me, but found a few typos.
 
-diff --git a/Documentation/userspace-api/media/v4l/pixfmt-compressed.rst b/Documentation/userspace-api/media/v4l/pixfmt-compressed.rst
-index 806ed73ac474ce0e6df00f902850db9fd0db240e..043ec57d7d48a36005f2a0121a5bc7b733d06590 100644
---- a/Documentation/userspace-api/media/v4l/pixfmt-compressed.rst
-+++ b/Documentation/userspace-api/media/v4l/pixfmt-compressed.rst
-@@ -274,6 +274,14 @@ Compressed Formats
-         of macroblocks to decode a full corresponding frame to the matching
-         capture buffer.
- 
-+    * .. _V4L2-PIX-FMT-AV1:
-+
-+      - ``V4L2_PIX_FMT_AV1``
-+      - 'AV10'
-+      - AV1 compressed video frame. This format is adapted for implementing AV1
-+        pipeline as stateful video decoder. The decoder expects one Temporal
-+        Unit per buffer from OBU-stream or AnnexB.
-+        The encoder generates one Temporal Unit per buffer.
- .. raw:: latex
- 
-     \normalsize
-diff --git a/include/uapi/linux/videodev2.h b/include/uapi/linux/videodev2.h
-index becd08fdbddb857f8f2bf205d2164dc6e20e80b2..4c07ad6afd45d6a56d19d65fd25f091d81725823 100644
---- a/include/uapi/linux/videodev2.h
-+++ b/include/uapi/linux/videodev2.h
-@@ -775,6 +775,7 @@ struct v4l2_pix_format {
- #define V4L2_PIX_FMT_H264_SLICE v4l2_fourcc('S', '2', '6', '4') /* H264 parsed slices */
- #define V4L2_PIX_FMT_HEVC_SLICE v4l2_fourcc('S', '2', '6', '5') /* HEVC parsed slices */
- #define V4L2_PIX_FMT_AV1_FRAME v4l2_fourcc('A', 'V', '1', 'F') /* AV1 parsed frame */
-+#define V4L2_PIX_FMT_AV1      v4l2_fourcc('A', 'V', '1', '0') /* AV1 (stateful) */
- #define V4L2_PIX_FMT_SPK      v4l2_fourcc('S', 'P', 'K', '0') /* Sorenson Spark */
- #define V4L2_PIX_FMT_RV30     v4l2_fourcc('R', 'V', '3', '0') /* RealVideo 8 */
- #define V4L2_PIX_FMT_RV40     v4l2_fourcc('R', 'V', '4', '0') /* RealVideo 9 & 10 */
+On 7/24/25 16:10, Jacopo Mondi wrote:
+> Introduce the 'struct media_entity_context' type, which serves for
+> reference counting and introduce two new media entity operations to
+> allow drivers to allocate and free a media entity context.
+> 
+> The newly introduced type will be used as a base type for the
+> device context types (video_device_context and v4l2_subdevice_context)
+> that will be introduced in the next patches.
+> 
+> Signed-off-by: Jacopo Mondi <jacopo.mondi@ideasonboard.com>
+> ---
+>  drivers/media/mc/mc-entity.c |  46 ++++++++++++++++++++
+>  include/media/media-entity.h | 101 +++++++++++++++++++++++++++++++++++++++++++
+>  2 files changed, 147 insertions(+)
+> 
+> diff --git a/drivers/media/mc/mc-entity.c b/drivers/media/mc/mc-entity.c
+> index 045590905582054c46656e20463271b1f93fa6b4..b4a9f0a0aa7353d7a3333f20903980956b3df4a7 100644
+> --- a/drivers/media/mc/mc-entity.c
+> +++ b/drivers/media/mc/mc-entity.c
+> @@ -1673,3 +1673,49 @@ struct media_link *__media_entity_next_link(struct media_entity *entity,
+>  	return NULL;
+>  }
+>  EXPORT_SYMBOL_GPL(__media_entity_next_link);
+> +
+> +static void media_entity_release_context(struct kref *refcount)
+> +{
+> +	struct media_entity_context *ctx =
+> +		container_of(refcount, struct media_entity_context, refcount);
+> +
+> +	ctx->entity->ops->destroy_context(ctx);
+> +}
+> +
+> +struct media_entity_context *
+> +media_entity_context_get(struct media_entity_context *ctx)
+> +{
+> +	if (!ctx)
+> +		return ERR_PTR(-EINVAL);
+> +
+> +	kref_get(&ctx->refcount);
+> +
+> +	return ctx;
+> +}
+> +EXPORT_SYMBOL_GPL(media_entity_context_get);
+> +
+> +void media_entity_context_put(struct media_entity_context *ctx)
+> +{
+> +	if (!ctx)
+> +		return;
+> +
+> +	kref_put(&ctx->refcount, media_entity_release_context);
+> +}
+> +EXPORT_SYMBOL_GPL(media_entity_context_put);
+> +
+> +void media_entity_init_context(struct media_entity *entity,
+> +			       struct media_entity_context *ctx)
+> +{
+> +	if (!ctx)
+> +		return;
+> +
+> +	ctx->entity = entity;
+> +	kref_init(&ctx->refcount);
+> +	INIT_LIST_HEAD(&ctx->list);
+> +}
+> +EXPORT_SYMBOL_GPL(media_entity_init_context);
+> +
+> +void media_entity_cleanup_context(struct media_entity_context *ctx)
+> +{
+> +}
+> +EXPORT_SYMBOL_GPL(media_entity_cleanup_context);
+> diff --git a/include/media/media-entity.h b/include/media/media-entity.h
+> index 64cf590b11343f68a456c5870ca2f32917c122f9..32298fe8a18c6ee3c1dbcff9ef869548904417a7 100644
+> --- a/include/media/media-entity.h
+> +++ b/include/media/media-entity.h
+> @@ -15,6 +15,7 @@
+>  #include <linux/bug.h>
+>  #include <linux/container_of.h>
+>  #include <linux/fwnode.h>
+> +#include <linux/kref.h>
+>  #include <linux/list.h>
+>  #include <linux/media.h>
+>  #include <linux/minmax.h>
+> @@ -248,6 +249,37 @@ struct media_pad {
+>  	struct media_pipeline *pipe;
+>  };
+>  
+> +/**
+> + * struct media_entity_context - A media entity execution context
+> + * @mdev_context: The media device context this media entity is bound to.
+> + *		  The field is initialized when the entity is bound to a media
+> + *		  device context.
+> + * @entity: The media entity this context belongs to
+> + * @refcount: The kref reference counter
+> + * list: The list entry to link the entity context in the media device context
+> + *
+> + * This type represent the 'base class' used to implement execution context for
+> + * video device contexts and subdevice contexts. Those types embedds an instance
 
--- 
-2.34.1
+Typo 'embedds' -> 'embed'?
+
+> + * of 'struct media_entity_context' as their first member, allowing the MC core
+> + * to implement type polymorphism and handle video device and subdevice contexts
+> + * transparently.
+> + *
+> + * The main function of this type is to provide reference counting for the
+> + * 'dervived' device context types. The video device and subdevice core
+
+Typo 'dervived' -> 'derived'?
+
+> + * populates the 'context_release' function pointer that implement specific
+> + * clean-up operations, similar to what a 'virtual destructor' would do in C++.
+> + *
+> + * Drivers are not expected to use this type directly, but only the MC core
+> + * will.
+> + */
+> +struct media_device_context;
+> +struct media_entity_context {
+> +	struct media_device_context *mdev_context;
+> +	struct media_entity *entity;
+> +	struct kref refcount;
+> +	struct list_head list;
+> +};
+> +
+>  /**
+>   * struct media_entity_operations - Media entity operations
+>   * @get_fwnode_pad:	Return the pad number based on a fwnode endpoint or
+> @@ -269,6 +301,15 @@ struct media_pad {
+>   *			media_entity_has_pad_interdep().
+>   *			Optional: If the operation isn't implemented all pads
+>   *			will be considered as interdependent.
+> + * @alloc_context:	Allocate a media entity context. Drivers are allowed to
+> + *			sub-class the entity context type by defining a driver
+> + *			specific type that embeds an instance of either a
+> + *			video_device_context or subdevice_context as first
+> + *			member, and allocate the size of a driver-specific type
+> + *			in the implementation of this operation. Returns 0 for
+> + *			success, or an error code < 0 otherwise.
+> + * @destroy_context:	Release a media entity context previously allocated by
+> + *			the driver.
+>   *
+>   * .. note::
+>   *
+> @@ -284,6 +325,9 @@ struct media_entity_operations {
+>  	int (*link_validate)(struct media_link *link);
+>  	bool (*has_pad_interdep)(struct media_entity *entity, unsigned int pad0,
+>  				 unsigned int pad1);
+> +	int (*alloc_context)(struct media_entity *entity,
+> +			     struct media_entity_context **context);
+> +	void (*destroy_context)(struct media_entity_context *context);
+>  };
+>  
+>  /**
+> @@ -1448,3 +1492,60 @@ struct media_link *__media_entity_next_link(struct media_entity *entity,
+>  					     MEDIA_LNK_FL_DATA_LINK))
+>  
+>  #endif
+> +
+> +/**
+> + * media_entity_context_get - Increase the media entity context reference count
+> + *			      and return a reference to it
+> + *
+> + * @ctx: the media entity context
+> + *
+> + * Increase the media entity context reference count. The reference count
+> + * is increased by the V4L2 core when:
+> + *
+> + * * a new context is allocated when bounding a media entity to a media device
+> + *   context (by kref_init())
+> + * * the media pipeline the context is part of starts streaming
+> + *
+> + * The entity context gets automatically decreased by the V4L2 core when:
+> + *
+> + * * a context is unbound
+> + * * the pipeline stops streaming
+> + */
+> +struct media_entity_context *
+> +media_entity_context_get(struct media_entity_context *ctx);
+> +
+> +/**
+> + * media_entity_context_put - Decrease the media entity context reference count
+> + *
+> + * @ctx: the media entity context
+> + *
+> + * Decrease the media entity context reference count. The reference count
+> + * is decreased by the V4L2 core when:
+> + *
+> + * * the file handle the context is associated with is closed
+> + * * the media pipeline the context is part of is stopped
+> + */
+> +void media_entity_context_put(struct media_entity_context *ctx);
+> +
+> +/**
+> + * media_entity_init_context - Initialize the media entity context
+> + *
+> + * @entity: the media entity this context belongs to
+> + * @ctx: the media entity context
+> + *
+> + * Initialize the media entity context by initializing the kref reference
+> + * counter. The intended caller of this function are the video device context
+> + * and subdevic context initialize functions.
+
+Typo "subdevic" -> "subdevice"
+
+> + */
+> +void media_entity_init_context(struct media_entity *entity,
+> +			       struct media_entity_context *ctx);
+> +
+> +/**
+> + * media_entity_cleanup_context - Cleanup the media entity context
+> + *
+> + * @ctx: the media entity context
+> + *
+> + * Cleanup the media entity context. The intended caller of this function are
+> + * the video device and subdevice context cleanup functions.
+> + */
+> +void media_entity_cleanup_context(struct media_entity_context *ctx);
+> 
+
+Best regards,
+Michael
 
