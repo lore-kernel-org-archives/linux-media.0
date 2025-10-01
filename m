@@ -1,34 +1,34 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5A6AC2E54DE;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5A5F82DECDD;
 	Wed,  1 Oct 2025 14:49:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1759330199; cv=none; b=u3lbz6Ke6k9S6CPNz5lmZjB5izDqfi++fltYbJvjPQS/2enzbn6Q7FykefcvMmqgJu55qNvUWcv1OC4t5jScjGfuUY/fgDQa38uESiKc0wwDIpQbyVXNCbiaBSALr3Gn8CEqzigp1U1sIe4zhRhK4xUfUgrSokWhJRNR9RRlp1Y=
+	t=1759330199; cv=none; b=im3kxja3aBFwygxItvDMD2i5BcmqS0s2dNAnpZa+Ibr2+6wWDDyF0tdOhbJPM+YGjx0X5oKvsCpFosf4PjAyHUOLnIKNJcJvmsYs5yLzcaJwHNlNcsg8hBq7tEx2NeMuSM89trc83XLV9we2UN2MsU9DWcswWiIy26BhQVon89U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1759330199; c=relaxed/simple;
-	bh=3CTScuwxC9ZYFhvKDygUTwinDqi3MU7C1ktyjxp78ZU=;
+	bh=qB159IYUOz+MSNR6iulmqvylalzUczQT+mGqT4T/ngs=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=g0H3kbiGArCxvL6gqGXrto52KV6RsbkucwGvKMlDvkYDrXUxzLpr9DUup2MCe/wFkOoyJOfelXI81Ef712VeHohJMeGaIg2Ku/hrRfzvp/hEIn9yR4P5KxlM1OzWpEbTKG8tVfMANp/SffyAfQKXsx17/nTenJlX5/LbnMLnTgo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=cGx6QR84; arc=none smtp.client-ip=10.30.226.201
+	 MIME-Version; b=g6fkISdnrm9aaHUnfg9wLtk3IsjQiGm3Qufn8PjMlQhENFahjZW9MlQmlZvICFwcblUHu61QN1y77OPoqIMJuzYvBodETVjDos3qgdP5gZhqFu9s3hlIfngY3tFqEb4R7nhMt0C0COwtWNS5pBZVOKLXlO1XArPFSsFFz2JzEVE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ppegjNb8; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="cGx6QR84"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 01FABC4CEFA;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ppegjNb8"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 022D0C4AF09;
 	Wed,  1 Oct 2025 14:49:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1759330199;
-	bh=3CTScuwxC9ZYFhvKDygUTwinDqi3MU7C1ktyjxp78ZU=;
+	bh=qB159IYUOz+MSNR6iulmqvylalzUczQT+mGqT4T/ngs=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=cGx6QR846NsCLlOPyb53nZiJLHRWcoYy+OtbF50kSnwmLr+Q1R4gmKtqhqVkXRl2F
-	 kcljejHtbGFUjAmSLE9o/FaKuXl5YlzDpOmNOypCktZCtOrCy7zs4B0QUbUC6lnSCm
-	 G1yC3hLO8G4SyJ4d4TIee0yjoNQNolhUcHjXMYVqLdtKSD/TUYUgXBb+29NzhzlY/a
-	 pWH/nr/OKcyRhM4EZ9ylewbmEmJ11wca6z3Kj82slzz5m8IbfTfDypwvhz6L5u2TZP
-	 v9mfZQk3FyCJSf7OGknzMS55DOMr237gMTZHb4vzxDWHcuwJT54wygDDXrCbCmtvHc
-	 H4pq0bWitWY+Q==
+	b=ppegjNb8B4VJfFLes6+pEWUlE3jpRc5heDj0Do6dQJrxxxJIMoGXbZHeXu/+LEat8
+	 wmtZHYuntupy4g8K3gh/oa2MctkjfR310JQdPEtKAtPcvbgGUEg3XNf7X1+lVKLXeN
+	 KHqjCugHd3JOqENkjmlblzsJqsTPabEhb0CakKhBqe6uGh10tv6p6ogWmlpe+B/rxv
+	 DKc3744YL9kdOis+MN8/K0oV44uqawjKFhbBqveaXV1XYwSWzNSqc3/97e8eAnN4kN
+	 E/t4H5ISHWHeah/2FhhSDHPWZCzUUbzV8ylJatQen9Gf+p0prBeN59HhyVhTzQRw2M
+	 ANBLvK367FVYA==
 Received: from mchehab by mail.kernel.org with local (Exim 4.98.2)
 	(envelope-from <mchehab+huawei@kernel.org>)
-	id 1v3y9V-0000000BLIJ-14t7;
+	id 1v3y9V-0000000BLIB-0pcH;
 	Wed, 01 Oct 2025 16:49:57 +0200
 From: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 To: "Jonathan Corbet" <corbet@lwn.net>,
@@ -37,9 +37,9 @@ Cc: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
 	"Mauro Carvalho Chehab" <mchehab@kernel.org>,
 	linux-kernel@vger.kernel.org,
 	linux-media@vger.kernel.org
-Subject: [PATCH 05/23] tools: docs: parse_data_structs: make process_exceptions two stages
-Date: Wed,  1 Oct 2025 16:49:28 +0200
-Message-ID: <da9ca5f2ce1ffcfb355e32e676ff013607c227e0.1759329363.git.mchehab+huawei@kernel.org>
+Subject: [PATCH 03/23] docs: kernel_include.py: fix line numbers for TOC
+Date: Wed,  1 Oct 2025 16:49:26 +0200
+Message-ID: <74eed96e32f79eaaef7a99ffe7c3224fed369c27.1759329363.git.mchehab+huawei@kernel.org>
 X-Mailer: git-send-email 2.51.0
 In-Reply-To: <cover.1759329363.git.mchehab+huawei@kernel.org>
 References: <cover.1759329363.git.mchehab+huawei@kernel.org>
@@ -52,177 +52,88 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 
-Split the logic which parses exceptions on two stages, preparing
-the exceptions file to have rules that will affect xref generation.
+On TOC output, we need to embeed line numbers with ViewList.
 
-For now, preserve the original API.
+Change the parse class to produce a line-number parsed result,
+and adjust the output accordingly.
 
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 ---
- tools/docs/lib/parse_data_structs.py | 125 +++++++++++++++------------
- 1 file changed, 71 insertions(+), 54 deletions(-)
+ Documentation/sphinx/kernel_include.py | 36 ++++++++++++++++----------
+ tools/docs/lib/parse_data_structs.py   |  2 +-
+ 2 files changed, 24 insertions(+), 14 deletions(-)
 
+diff --git a/Documentation/sphinx/kernel_include.py b/Documentation/sphinx/kernel_include.py
+index f94412cd17c9..ed819e9821c2 100755
+--- a/Documentation/sphinx/kernel_include.py
++++ b/Documentation/sphinx/kernel_include.py
+@@ -104,6 +104,7 @@ logger = logging.getLogger(__name__)
+ 
+ RE_DOMAIN_REF = re.compile(r'\\ :(ref|c:type|c:func):`([^<`]+)(?:<([^>]+)>)?`\\')
+ RE_SIMPLE_REF = re.compile(r'`([^`]+)`')
++RE_LINENO_REF = re.compile(r'^\s*-\s+LINENO_(\d+):\s+(.*)')
+ 
+ def ErrorString(exc):  # Shamelessly stolen from docutils
+     return f'{exc.__class__.__name}: {exc}'
+@@ -242,23 +243,32 @@ class KernelInclude(Directive):
+         # TOC output is a ReST file, not a literal. So, we can add line
+         # numbers
+ 
+-        rawtext = parser.gen_toc()
+-
+-        include_lines = statemachine.string2lines(rawtext, tab_width,
+-                                                  convert_whitespace=True)
+-
+-        # Append line numbers data
+-
+         startline = self.options.get('start-line', None)
++        endline = self.options.get('end-line', None)
++
++        relpath = os.path.relpath(path, srctree)
+ 
+         result = ViewList()
+-        if startline and startline > 0:
+-            offset = startline - 1
+-        else:
+-            offset = 0
++        for line in parser.gen_toc().split("\n"):
++            match = RE_LINENO_REF.match(line)
++            if not match:
++                result.append(line, path)
++                continue
+ 
+-        for ln, line in enumerate(include_lines, start=offset):
+-            result.append(line, path, ln)
++            ln, ref = match.groups()
++            ln = int(ln)
++
++            # Filter line range if needed
++            if startline and (ln < startline):
++                continue
++
++            if endline and (ln > endline):
++                continue
++
++            # Sphinx numerates starting with zero, but text editors
++            # and other tools start from one
++            realln = ln + 1
++            result.append(f"- {ref}: {relpath}#{realln}", path, ln)
+ 
+         self.state_machine.insert_input(result, path)
+ 
 diff --git a/tools/docs/lib/parse_data_structs.py b/tools/docs/lib/parse_data_structs.py
-index 9ad621712103..46535a05ea4a 100755
+index d28471a045f1..9ad621712103 100755
 --- a/tools/docs/lib/parse_data_structs.py
 +++ b/tools/docs/lib/parse_data_structs.py
-@@ -140,9 +140,41 @@ class ParseDataStructs:
+@@ -422,7 +422,7 @@ class ParseDataStructs:
  
-         self.symbols = {}
+             # Sort symbols alphabetically
+             for symbol, (ref, ln) in sorted(refs.items()):
+-                text.append(f"* {ref}: line #{ln}")
++                text.append(f"- LINENO_{ln}: {ref}")
  
-+        self.ignore = []
-+        self.replace = []
-+
-         for symbol_type in self.DEF_SYMBOL_TYPES:
-             self.symbols[symbol_type] = {}
+             text.append("")  # Add empty line between categories
  
-+    def read_exceptions(self, fname: str):
-+        if not fname:
-+            return
-+
-+        name = os.path.basename(fname)
-+
-+        with open(fname, "r", encoding="utf-8", errors="backslashreplace") as f:
-+            for ln, line in enumerate(f):
-+                ln += 1
-+                line = line.strip()
-+                if not line or line.startswith("#"):
-+                    continue
-+
-+                # ignore rules
-+                match = re.match(r"^ignore\s+(\w+)\s+(\S+)", line)
-+
-+                if match:
-+                    self.ignore.append((ln, match.group(1), match.group(2)))
-+                    continue
-+
-+                # replace rules
-+                match = re.match(r"^replace\s+(\S+)\s+(\S+)\s+(\S+)", line)
-+                if match:
-+                    self.replace.append((ln, match.group(1), match.group(2),
-+                                         match.group(3)))
-+                    continue
-+
-+                sys.exit(f"{name}:{ln}: invalid line: {line}")
-+
-     def store_type(self, ln, symbol_type: str, symbol: str,
-                    ref_name: str = None, replace_underscores: bool = True):
-         """
-@@ -277,75 +309,60 @@ class ParseDataStructs:
-                         self.store_type(line_no, "struct", match.group(1))
-                         break
- 
--    def process_exceptions(self, fname: str):
-+    def apply_exceptions(self):
-         """
-         Process exceptions file with rules to ignore or replace references.
-         """
--        if not fname:
--            return
- 
--        name = os.path.basename(fname)
-+        # Handle ignore rules
-+        for ln, c_type, symbol in self.ignore:
-+            if c_type not in self.DEF_SYMBOL_TYPES:
-+                sys.exit(f"{name}:{ln}: {c_type} is invalid")
- 
--        with open(fname, "r", encoding="utf-8", errors="backslashreplace") as f:
--            for ln, line in enumerate(f):
--                ln += 1
--                line = line.strip()
--                if not line or line.startswith("#"):
--                    continue
-+            d = self.symbols[c_type]
-+            if symbol in d:
-+                del d[symbol]
- 
--                # Handle ignore rules
--                match = re.match(r"^ignore\s+(\w+)\s+(\S+)", line)
--                if match:
--                    c_type = match.group(1)
--                    symbol = match.group(2)
--
--                    if c_type not in self.DEF_SYMBOL_TYPES:
--                        sys.exit(f"{name}:{ln}: {c_type} is invalid")
--
--                    d = self.symbols[c_type]
--                    if symbol in d:
--                        del d[symbol]
--
--                    continue
--
--                # Handle replace rules
--                match = re.match(r"^replace\s+(\S+)\s+(\S+)\s+(\S+)", line)
--                if not match:
--                    sys.exit(f"{name}:{ln}: invalid line: {line}")
--
--                c_type, old, new = match.groups()
--
--                if c_type not in self.DEF_SYMBOL_TYPES:
--                    sys.exit(f"{name}:{ln}: {c_type} is invalid")
-+        # Handle replace rules
-+        for ln, c_type, old, new in self.replace:
-+            if c_type not in self.DEF_SYMBOL_TYPES:
-+                sys.exit(f"{name}:{ln}: {c_type} is invalid")
- 
--                reftype = None
-+            reftype = None
- 
--                # Parse reference type when the type is specified
-+            # Parse reference type when the type is specified
- 
--                match = re.match(r"^\:c\:(data|func|macro|type)\:\`(.+)\`", new)
-+            match = re.match(r"^\:c\:(data|func|macro|type)\:\`(.+)\`", new)
-+            if match:
-+                reftype = f":c:{match.group(1)}"
-+                new = match.group(2)
-+            else:
-+                match = re.search(r"(\:ref)\:\`(.+)\`", new)
-                 if match:
--                    reftype = f":c:{match.group(1)}"
-+                    reftype = match.group(1)
-                     new = match.group(2)
--                else:
--                    match = re.search(r"(\:ref)\:\`(.+)\`", new)
--                    if match:
--                        reftype = match.group(1)
--                        new = match.group(2)
- 
--                # If the replacement rule doesn't have a type, get default
-+            # If the replacement rule doesn't have a type, get default
-+            if not reftype:
-+                reftype = self.DEF_SYMBOL_TYPES[c_type].get("ref_type")
-                 if not reftype:
--                    reftype = self.DEF_SYMBOL_TYPES[c_type].get("ref_type")
--                    if not reftype:
--                        reftype = self.DEF_SYMBOL_TYPES[c_type].get("real_type")
-+                    reftype = self.DEF_SYMBOL_TYPES[c_type].get("real_type")
- 
--                new_ref = f"{reftype}:`{old} <{new}>`"
-+            new_ref = f"{reftype}:`{old} <{new}>`"
- 
--                # Change self.symbols to use the replacement rule
--                if old in self.symbols[c_type]:
--                    (_, ln) = self.symbols[c_type][old]
--                    self.symbols[c_type][old] = (new_ref, ln)
--                else:
--                    print(f"{name}:{ln}: Warning: can't find {old} {c_type}")
-+            # Change self.symbols to use the replacement rule
-+            if old in self.symbols[c_type]:
-+                (_, ln) = self.symbols[c_type][old]
-+                self.symbols[c_type][old] = (new_ref, ln)
-+            else:
-+                print(f"{name}:{ln}: Warning: can't find {old} {c_type}")
-+
-+    def process_exceptions(self, fname: str):
-+        """
-+        Process exceptions file with rules to ignore or replace references.
-+        """
-+        self.read_exceptions(fname)
-+        self.apply_exceptions()
- 
-     def debug_print(self):
-         """
 -- 
 2.51.0
 
