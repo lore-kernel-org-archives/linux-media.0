@@ -1,208 +1,260 @@
-Received: from bali.collaboradmins.com (bali.collaboradmins.com [148.251.105.195])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8D74E208CA;
-	Thu,  2 Oct 2025 08:06:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.251.105.195
+Received: from invmail4.hynix.com (exvmail4.skhynix.com [166.125.252.92])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E9DFA2D248A;
+	Thu,  2 Oct 2025 08:13:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=166.125.252.92
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1759392415; cv=none; b=VQ4+dfP7Gj7QyTR8y2Iiov3lwKE9MNzfjOwLSF+Hap05ROywMXo/kp4KvHbqCamvhFVba37WYUbVEyn0zkm2Qv3pY1VOSB2wECzk1zND6as4pD9oZHq+pK84VztGG9VvOFd2cBEzqQV8HIcIvojredNOvQeaWm6vrCLxXPkArlU=
+	t=1759392791; cv=none; b=OlmlhvuHZCw0A175LUM2ovfnZpV0ld0XD2irw3IhId07awyyQ+Yy1f2xcBgp+vWnifNr7yXkYhYnTZkAIGuaNbHQnRXNfbHpCw+fMzCQvUKuOBWZ6WDlAgbTYeHb6DyEwzgp6FrMBNm+OkxGsupZZ6KV8z9Qt8FQWmd708rmkMw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1759392415; c=relaxed/simple;
-	bh=LYBxpvG4GsirP480o2Qg+ZasVLpxAcnoTORF94FBFkY=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=PD3x1FFv4EtZRMRgVFmauEjzibPU7QaaZcZoWV/d404ZI7Aa1zhB2KiKFMZ6CxSO80fZ0+1QCIGd4jEhgnJi05zkDAhvstvq4uNwagcBSt+Zmuf+6U0GgvAUSCQMVw3pTvN/m5Nt+CK9x+UJM7auGjrZCGmiHxRKjoOqAJ2gCao=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=jNA4/TK3; arc=none smtp.client-ip=148.251.105.195
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="jNA4/TK3"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1759392411;
-	bh=LYBxpvG4GsirP480o2Qg+ZasVLpxAcnoTORF94FBFkY=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=jNA4/TK3XbUqcfns14QYCxIrMJl6UClvARaH4rkiiyqAGChoD8O/9NBVTUmRuVEBj
-	 vhZQFqB2y+72V+REWDgsTN1rzCUTVB19xMa5POYYTm9+NOM0nUsObwq4PwPq5HQ9AN
-	 ul6McVeGg135Nuxvnnc3ZTZ3h6GeD3kIVusHn+hRlGbqkU2WYpEznTnU8hLVOlHgzw
-	 w0u/6vtta1FI0sHN+y9o0CUW0rta3YQwgvJIZTlqjPV1hecwL2b5k1FmF4hqn33GaP
-	 b6JWepkWs9EgXJlkI5t5zf2x4RuScMbD0OsF9fjJASRRWKdJJ9yngTqHGge4rPqRgr
-	 6TfHPa5tXluMA==
-Received: from [10.40.0.100] (185-67-175-126.lampert.tv [185.67.175.126])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: mriesch)
-	by bali.collaboradmins.com (Postfix) with ESMTPSA id 018BB17E0C54;
-	Thu,  2 Oct 2025 10:06:50 +0200 (CEST)
-Message-ID: <494d4bed-4357-48a1-9313-2b1b70e8e699@collabora.com>
-Date: Thu, 2 Oct 2025 10:06:50 +0200
+	s=arc-20240116; t=1759392791; c=relaxed/simple;
+	bh=3Zh+zlzRVCm9Hj+K3bqcWocG336nnF7TjoNWNl0DnFE=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References; b=Kz6Qnt9RYqHqvBM3b1MXia5/Ib1c0Jj6fBTKcGD6Hnnkiljj0rnLNlgka2t+yT4Ic7yXZ8kciVezZL34EpaGWIAts/gGxntXVhqrdCD6+Z8ZD1TLMnCS9rxOkBRAFJEzNPc3lJr5h6WNrlQ/G9AN3rDe7sOURDAEFweu9VGtEAE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sk.com; spf=pass smtp.mailfrom=sk.com; arc=none smtp.client-ip=166.125.252.92
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sk.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sk.com
+X-AuditID: a67dfc5b-c2dff70000001609-41-68de340a6dd2
+From: Byungchul Park <byungchul@sk.com>
+To: linux-kernel@vger.kernel.org
+Cc: kernel_team@skhynix.com,
+	torvalds@linux-foundation.org,
+	damien.lemoal@opensource.wdc.com,
+	linux-ide@vger.kernel.org,
+	adilger.kernel@dilger.ca,
+	linux-ext4@vger.kernel.org,
+	mingo@redhat.com,
+	peterz@infradead.org,
+	will@kernel.org,
+	tglx@linutronix.de,
+	rostedt@goodmis.org,
+	joel@joelfernandes.org,
+	sashal@kernel.org,
+	daniel.vetter@ffwll.ch,
+	duyuyang@gmail.com,
+	johannes.berg@intel.com,
+	tj@kernel.org,
+	tytso@mit.edu,
+	willy@infradead.org,
+	david@fromorbit.com,
+	amir73il@gmail.com,
+	gregkh@linuxfoundation.org,
+	kernel-team@lge.com,
+	linux-mm@kvack.org,
+	akpm@linux-foundation.org,
+	mhocko@kernel.org,
+	minchan@kernel.org,
+	hannes@cmpxchg.org,
+	vdavydov.dev@gmail.com,
+	sj@kernel.org,
+	jglisse@redhat.com,
+	dennis@kernel.org,
+	cl@linux.com,
+	penberg@kernel.org,
+	rientjes@google.com,
+	vbabka@suse.cz,
+	ngupta@vflare.org,
+	linux-block@vger.kernel.org,
+	josef@toxicpanda.com,
+	linux-fsdevel@vger.kernel.org,
+	jack@suse.cz,
+	jlayton@kernel.org,
+	dan.j.williams@intel.com,
+	hch@infradead.org,
+	djwong@kernel.org,
+	dri-devel@lists.freedesktop.org,
+	rodrigosiqueiramelo@gmail.com,
+	melissa.srw@gmail.com,
+	hamohammed.sa@gmail.com,
+	harry.yoo@oracle.com,
+	chris.p.wilson@intel.com,
+	gwan-gyeong.mun@intel.com,
+	max.byungchul.park@gmail.com,
+	boqun.feng@gmail.com,
+	longman@redhat.com,
+	yunseong.kim@ericsson.com,
+	ysk@kzalloc.com,
+	yeoreum.yun@arm.com,
+	netdev@vger.kernel.org,
+	matthew.brost@intel.com,
+	her0gyugyu@gmail.com,
+	corbet@lwn.net,
+	catalin.marinas@arm.com,
+	bp@alien8.de,
+	dave.hansen@linux.intel.com,
+	x86@kernel.org,
+	hpa@zytor.com,
+	luto@kernel.org,
+	sumit.semwal@linaro.org,
+	gustavo@padovan.org,
+	christian.koenig@amd.com,
+	andi.shyti@kernel.org,
+	arnd@arndb.de,
+	lorenzo.stoakes@oracle.com,
+	Liam.Howlett@oracle.com,
+	rppt@kernel.org,
+	surenb@google.com,
+	mcgrof@kernel.org,
+	petr.pavlu@suse.com,
+	da.gomez@kernel.org,
+	samitolvanen@google.com,
+	paulmck@kernel.org,
+	frederic@kernel.org,
+	neeraj.upadhyay@kernel.org,
+	joelagnelf@nvidia.com,
+	josh@joshtriplett.org,
+	urezki@gmail.com,
+	mathieu.desnoyers@efficios.com,
+	jiangshanlai@gmail.com,
+	qiang.zhang@linux.dev,
+	juri.lelli@redhat.com,
+	vincent.guittot@linaro.org,
+	dietmar.eggemann@arm.com,
+	bsegall@google.com,
+	mgorman@suse.de,
+	vschneid@redhat.com,
+	chuck.lever@oracle.com,
+	neil@brown.name,
+	okorniev@redhat.com,
+	Dai.Ngo@oracle.com,
+	tom@talpey.com,
+	trondmy@kernel.org,
+	anna@kernel.org,
+	kees@kernel.org,
+	bigeasy@linutronix.de,
+	clrkwllms@kernel.org,
+	mark.rutland@arm.com,
+	ada.coupriediaz@arm.com,
+	kristina.martsenko@arm.com,
+	wangkefeng.wang@huawei.com,
+	broonie@kernel.org,
+	kevin.brodsky@arm.com,
+	dwmw@amazon.co.uk,
+	shakeel.butt@linux.dev,
+	ast@kernel.org,
+	ziy@nvidia.com,
+	yuzhao@google.com,
+	baolin.wang@linux.alibaba.com,
+	usamaarif642@gmail.com,
+	joel.granados@kernel.org,
+	richard.weiyang@gmail.com,
+	geert+renesas@glider.be,
+	tim.c.chen@linux.intel.com,
+	linux@treblig.org,
+	alexander.shishkin@linux.intel.com,
+	lillian@star-ark.net,
+	chenhuacai@kernel.org,
+	francesco@valla.it,
+	guoweikang.kernel@gmail.com,
+	link@vivo.com,
+	jpoimboe@kernel.org,
+	masahiroy@kernel.org,
+	brauner@kernel.org,
+	thomas.weissschuh@linutronix.de,
+	oleg@redhat.com,
+	mjguzik@gmail.com,
+	andrii@kernel.org,
+	wangfushuai@baidu.com,
+	linux-doc@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-media@vger.kernel.org,
+	linaro-mm-sig@lists.linaro.org,
+	linux-i2c@vger.kernel.org,
+	linux-arch@vger.kernel.org,
+	linux-modules@vger.kernel.org,
+	rcu@vger.kernel.org,
+	linux-nfs@vger.kernel.org,
+	linux-rt-devel@lists.linux.dev
+Subject: [PATCH v17 01/47] llist: move llist_{head,node} definition to types.h
+Date: Thu,  2 Oct 2025 17:12:01 +0900
+Message-Id: <20251002081247.51255-2-byungchul@sk.com>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20251002081247.51255-1-byungchul@sk.com>
+References: <20251002081247.51255-1-byungchul@sk.com>
+X-Brightmail-Tracker: H4sIAAAAAAAAAzWSa0xTZxjHfc9539PTSs1J58ZRFi9N0IjOK1sek2UaP2zHxHjZEhLlgx7H
+	iW3kYoqgLFlWHHWdwQ3ZBlnpJlipDbSiLchF3bAoXpDRUqUF5TZEJKWyGFqi0GGB+O33/P//
+	/D49LK3yk6WsNvO4pMsU09WMAitCcRUfLUzu02y0NC6CrvxmDOEJIwZzjZ0Bo/N3Ap7L1Qj6
+	w0YEk1NlNBgaZzBEi1tlUOItpiHY8gpB6Wg+hnFrIYLRO19AqP86gZneEQr8kTEEz5p/QDDV
+	3kFDbWsfguGiOhoehccZCHnNFJT84cTQONAkA29wmoqZGCi5Gg9lpS8o+M1xnYKHlqcYrPpE
+	KGv3EZge3AQz5VlwOdRBoP/uaQL1+gEZOLvvIJh4NEiBvfA5DcamMAbnUBeBmz1roeL0RQw3
+	bt7HYIxOIGht+JcCX5OZgcIrdQT67DME9GWTBDqrPRhqRgIUdDQ5CFT6vRQMDgQIuNof0hD5
+	KQE8584SCBQNI3C8vMBAZ3M5Bfm3LHh7mlDlukYJhs4oI9j/tCNh6k0xEiYqv6cFQ1HsLHCd
+	ECrbxhjhTfgxIzy4wAuNpl6ZUPBXj0wod+YIBbdDRHDZkgTLjVFq74YDik/TpHRtrqTb8Nkh
+	habfXUOOVShOdoZeIz36mz2D5CzPJfNPPLXkHd8NmphZZrjVfCDwmp7lxdwK3nX2+dyG5to+
+	5Lu862b5PW43b+64F8tZFnOJvGFq52ys5D7m+yxuPK9czldfaZ7TyLlPeN9g21yuim0M4wXU
+	/KZUzrtP7ZznJfwtWwAXIWU5WlCFVNrM3AxRm568XpOXqT25/uusDCeKvZv12+nUBvTK85Ub
+	cSxSxyk9ib0aFRFzs/My3IhnafVi5SHbU41KmSbmfSPpsg7qctKlbDdKYLE6Xrk5ciJNxR0R
+	j0tHJemYpHvXUqx8qR5Z20h31gfnLSnq76LLV+n+o3ocjrhw4s9BeTTlSJXN9M+v8Qn+XXrX
+	ly3mYJ5/t/jMZByqt61RRtSHl1lHIhcTfvz/VGoSGa9f2XB07IF46ZdF+z737YPcl6ny/XXw
+	2LBj//tD27a0rOs2LkvduiZlz+bbG5nanLjJtaaVl3TDvoNqnK0RNyXRumzxLYONK9hqAwAA
+X-Brightmail-Tracker: H4sIAAAAAAAAAzWSe0hTcRTH+923q8ltCd4eUA1GEGUFPQ69KIi6PawgSIgil17acj7azDKI
+	NDcSe63BtDYrmzVEV86pkYkli2ZlsubKopy2WGbMOShXrPloK/rn8Dnf75cv54/D4JJWcg6j
+	zCsU1HlylZQSEaLd68qWilYOKJZfGpVBX2knAZGxcgKqG20UlDuuk/D6fgOCwUg5gl8xMw66
+	tikCJgwuGsaiH2mY6nAhqPQYcLC1lGLwwz5JQfDpdwRGf4CCqm+lBIStFxGYhsw0fHu2DUKD
+	7SRM+b5i8O7nCAJrYBKDQOd5BBOVOXDL0kxBrMeNQ5XxNYLbfh8Ow/a42eIaQNBRd46CL/pW
+	HLyBZHgTCVPwwniBgpCnGoNROwU15zpIuGE2ICirbaSg8oaDgLZPj2jwBMcx6K80YNDgSIdB
+	6xAB3XoLFr8vnmpKBXNVGRYfwxgY77VjELXW0/Cqtp8Aa4kMzD1eEj7XmWgY96+AqZp8cDV8
+	pcF3xUjA/ZCb3GRE/C/dZYKvb36A8breCYq33bQhPvbbgPixu2U4r9PH16cjYZzXNp/k73aP
+	UPzvyFuK7/hZQ/AvLRx/tWcp32by0bz28Qd679oDovXZgkpZJKiXbcwUKQadjWTBbdGp3lAU
+	laAnTAVKYjh2JdcVNFEJpthF3Pv3UTzBKewCrvnSEJlgnO2ex/V5liR4Frubq3Y/j+sMQ7Ay
+	ThfbnpDF7CpuoNZJ/KuczzXYO//WJLGrOa+/+68uiWd0YS2mR6IaNK0epSjzinLlStWqNE2O
+	ojhPeSotKz/XgeLPZD0zfvUhGvNucyKWQdIZYo/Mp5CQ8iJNca4TcQwuTRFn1vUrJOJsefFp
+	QZ1/WH1CJWicaC5DSFPFOzKETAl7VF4o5AhCgaD+72JM0pwS1PRFbsGDR1yz9+w7fw3vyjh5
+	KD32JqN3+c5wptuSNb099czz4abrm/dvNejXR2ZOOtL9FX0bqi++NS107Jrh0arMXX5vLAjH
+	PD77g3u9MdXB6M0t2JX6ztQTybKzhsJW8ZrRgkCJ7U5geqjvnWmXJauiJZjSRth1H1l38vFh
+	rZTQKOQrFuNqjfwPFrroz0gDAAA=
+X-CFilter-Loop: Reflected
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 12/27] media: v4l2-subdev: Introduce v4l2 subdev
- context
-To: Anthony McGivern <anthony.mcgivern@arm.com>,
- Nicolas Dufresne <nicolas.dufresne@collabora.com>,
- Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
- Jacopo Mondi <jacopo.mondi@ideasonboard.com>
-Cc: "bcm-kernel-feedback-list@broadcom.com"
- <bcm-kernel-feedback-list@broadcom.com>,
- "florian.fainelli@broadcom.com" <florian.fainelli@broadcom.com>,
- "hverkuil@kernel.org" <hverkuil@kernel.org>,
- "kernel-list@raspberrypi.com" <kernel-list@raspberrypi.com>,
- "Kieran Bingham (kieran.bingham@ideasonboard.com)"
- <kieran.bingham@ideasonboard.com>,
- "linux-arm-kernel@lists.infradead.org"
- <linux-arm-kernel@lists.infradead.org>,
- "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
- "linux-media@vger.kernel.org" <linux-media@vger.kernel.org>,
- "linux-rpi-kernel@lists.infradead.org"
- <linux-rpi-kernel@lists.infradead.org>,
- "m.szyprowski@samsung.com" <m.szyprowski@samsung.com>,
- "mchehab@kernel.org" <mchehab@kernel.org>,
- "sakari.ailus@linux.intel.com" <sakari.ailus@linux.intel.com>,
- "tfiga@chromium.org" <tfiga@chromium.org>,
- "tomi.valkeinen@ideasonboard.com" <tomi.valkeinen@ideasonboard.com>
-References: <DU0PR08MB8836559555E586FCD5AE1CBA811FA@DU0PR08MB8836.eurprd08.prod.outlook.com>
- <pdxsi4fskze6mvgro5foa3jvmrvl3ihmksnzukonoihkb5xum5@kph26jtiayda>
- <20250930101626.GE25784@pendragon.ideasonboard.com>
- <2efcfe19bafd1276e9fc71b72e251443f313d693.camel@collabora.com>
- <413937a1-bf4c-4926-945f-7df39869f215@arm.com>
-Content-Language: en-US
-From: Michael Riesch <michael.riesch@collabora.com>
-In-Reply-To: <413937a1-bf4c-4926-945f-7df39869f215@arm.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
 
-Hi Anthony, hi all,
+llist_head and llist_node can be used by some other header files.  For
+example, dept for tracking dependencies uses llist in its header.  To
+avoid header dependency, move them to types.h.
 
-On 10/2/25 09:42, Anthony McGivern wrote:
-> 
-> Hi all,
-> 
-> On 30/09/2025 13:58, Nicolas Dufresne wrote:
->> Hi Laurent,
->>
->> Le mardi 30 septembre 2025 à 13:16 +0300, Laurent Pinchart a écrit :
->>> On Tue, Sep 30, 2025 at 11:53:39AM +0200, Jacopo Mondi wrote:
->>>> On Thu, Sep 25, 2025 at 09:26:56AM +0000, Anthony McGivern wrote:
->>>>> On Thu, Jul 24, 2025 at 16:10:19 +0200, Jacopo Mondi write:
->>>>>> Introduce a new type in v4l2 subdev that represents a v4l2 subdevice
->>>>>> contex. It extends 'struct media_entity_context' and is intended to be
->>>>>> extended by drivers that can store driver-specific information
->>>>>> in their derived types.
->>>>>>
->>>>>> Signed-off-by: Jacopo Mondi <jacopo.mondi@ideasonboard.com>
->>>>>
->>>>> I am interested in how the sub-device context will handle the
->>>>> Streams API? Looking at the commits the
->>>>> v4l2_subdev_enable/disable_streams functions still appear to operate
->>>>> on the main sub-device only. I take it we would have additional
->>>>> context-aware functions here that can fetch the subdev state from
->>>>> the sub-device context, though I imagine some fields will have to be
->>>>> moved into the context such as s_stream_enabled, or even
->>>>> enabled_pads for non stream-aware drivers?
->>>>
->>>> mmm good question, I admit I might have not considered that part yet.
->>>>
->>>> Streams API should go in a soon as Sakari's long awaited series hits
->>>> mainline, and I will certainly need to rebase soon, so I'll probably
->>>> get back to this.
->>>>
->>>> Have you any idea about how this should be designed ?
-> 
-> Hmm, while I haven't thought of a full implementation I did some testing
-> where I added a v4l2_subdev_context_enable_streams and it's respective
-> disable_streams. These would provide the v4l2_subdev_context so that
-> when the subdev state was fetched it would retrieve it from the context.
-> I think this would work with the streams API, however for drivers that don't
-> support this it will not since the fields such as enabled_pads are located
-> in the v4l2_subdev struct itself. Assuming these fields are only used in the
-> V4L2 core (haven't checked this fully) potentially they could be moved into
-> subdev state?
-> 
-> There were some other areas that I found when trying to implement this
-> in the driver we are working on, for example media_pad_remote_pad_unique()
-> only uses the media_pad struct, meaning multi-context would not work here,
-> atleast in the way I expected. Perhaps this is where we have some differing
-> thoughts on how it would be used. See some details below about the driver we
-> are working on.
-> 
->>>
->>> Multi-context is designed for memory to memory pipelines, as inline
->>> pipelines can't be time-multiplexed (at least not without very specific
->>> hardware designs that I haven't encountered in SoCs so far). In a
->>
->> I probably don't understand what you mean here, since I know you are well aware
->> of the ISP design on RK3588. It has two cores, which allow handling up to 2
->> sensors inline, but once you need more stream, you should have a way to
->> reconfigure the pipeline and use one or both cores in a m2m (multi-context)
->> fashion to extend its capability (balancing the resolutions and rate as usual).
->>
->> Perhaps you mean this specific case is already covered by the stream API
->> combined with other floating proposal ? I think most of us our missing the big
->> picture and just see organic proposals toward goals documented as un-related,
->> but that actually looks related.
->>
->> Nicolas
->>
->>> memory-to-memory pipeline I expect the .enable/disable_streams()
->>> operation to not do much, as the entities in the pipeline operate based
->>> on buffers being queued on the input and output video devices. We may
->>> still need to support this in the multi-context framework, depending on
->>> the needs of drivers.
->>>
->>> Anthony, could you perhaps share some information about the pipeline
->>> you're envisioning and the type of subdev that you think would cause
->>> concerns ?
-> 
-> I am currently working on a driver for the Mali-C720 ISP. See the link
-> below for the developer page relating to this for some details:
-> 
-> https://developer.arm.com/Processors/Mali-C720AE
-> 
-> To summarize, it is capable of supporting up to 16 sensors, either through
-> streaming inputs or memory-to-memory modesn and uses a hardware context manager
-> to schedule each context to be processed. There are four video inputs, each
-> supporting four virtual channels. On the processing side, there are two parallel
-> processing pipelines, one optimized for human vision and the other for computer
-> vision. These feed into numerous output pipelines, including four crop+scaler
-> pipes who can each independently select whether to use the HV or CV pipe as
-> its input.
-> 
-> As such, our driver has a multi-layer topology to facilitate this configurability.
-> With some small changes to Libcamera I have all of the output pipelines implemented
-> and the media graph is correctly configured, but we would like to update the driver
-> to support multi-context.
-> 
-> My understanding intially was each context could have it's own topology configured
-> while using the same sub-devices. For example, context 0 may link our crop+scaler
+Signed-off-by: Byungchul Park <byungchul@sk.com>
+---
+ include/linux/llist.h | 8 --------
+ include/linux/types.h | 8 ++++++++
+ 2 files changed, 8 insertions(+), 8 deletions(-)
 
-+1
-
-I agree that having a notion of topology/graph partition/graph
-configuration in the context will facilitate the support for the vast
-amount of possible configurations and use cases that modern image
-processing pipelines offer.
-
-I had a chat with Jacopo yesterday and (I think) we found that the media
-graph configuration (routing, linking, ...) could be embedded in the
-media context (maybe in the form of a media state).
-
-Best regards,
-Michael
-
-> pipes to human vision, whereas context 1 uses computer vision. Similarly, our input
-> sub-device uses internal routing to route from the desired sensor to it's context.
-> It would by my thoughts that the input sub-device here would be shared across every
-> context but could route the sensor data to the necessary contexts. With the current
-> implementation, we make large use of the streams API and have many links to configure
-> based on the usecase so in our case any multi-context integration would also need
-> to support this.
-> 
-> Anthony
-> 
+diff --git a/include/linux/llist.h b/include/linux/llist.h
+index 607b2360c938..6bcdf378ebd7 100644
+--- a/include/linux/llist.h
++++ b/include/linux/llist.h
+@@ -53,14 +53,6 @@
+ #include <linux/stddef.h>
+ #include <linux/types.h>
+ 
+-struct llist_head {
+-	struct llist_node *first;
+-};
+-
+-struct llist_node {
+-	struct llist_node *next;
+-};
+-
+ #define LLIST_HEAD_INIT(name)	{ NULL }
+ #define LLIST_HEAD(name)	struct llist_head name = LLIST_HEAD_INIT(name)
+ 
+diff --git a/include/linux/types.h b/include/linux/types.h
+index 6dfdb8e8e4c3..58882a3730eb 100644
+--- a/include/linux/types.h
++++ b/include/linux/types.h
+@@ -208,6 +208,14 @@ struct hlist_node {
+ 	struct hlist_node *next, **pprev;
+ };
+ 
++struct llist_head {
++	struct llist_node *first;
++};
++
++struct llist_node {
++	struct llist_node *next;
++};
++
+ struct ustat {
+ 	__kernel_daddr_t	f_tfree;
+ #ifdef CONFIG_ARCH_32BIT_USTAT_F_TINODE
+-- 
+2.17.1
 
