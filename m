@@ -1,34 +1,35 @@
 Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C57763093A7;
-	Thu,  2 Oct 2025 10:18:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 001063093B6;
+	Thu,  2 Oct 2025 10:19:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.167.242.64
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1759400340; cv=none; b=o+79BTuPFHTZoRH1pK6j2y+FX4JmkJGCX/+goPrA2ioCCCQghC2ea8etuovxMquYWb3aBi0IgfNlO+qjqpe6G3itfa5GcjNgi9HGhfcEtSYBNL/HQ9KeVPi1hRX1p+bZQft/uVnfCbLl08dKNBP6vOLI1n1dcc/7hbPON8N50tc=
+	t=1759400343; cv=none; b=eXJEwUqGRYv3xs9VWzwCxbDQXeVybP9JicBtec2YYZeNLUSJHd7MY5KaGm5mu+J/YVHeGOvyCulotoi0CdeGU2UE4YaSg3GkzrBc6ZnkzhNqZxIf/ORhX+T6MkZMteBL87Qay/Z5M+FhVGcwgaZk8EgnduvTn6yOuyuWDr3tcsA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1759400340; c=relaxed/simple;
-	bh=6+WRhuAuC04s0G0OjZmwjxOpPcasgyr6iEkaqZXrOtA=;
+	s=arc-20240116; t=1759400343; c=relaxed/simple;
+	bh=8R7NylMBPxT9GjCIi32tHOA8FH3GuYP7pVFsQWisD/g=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=P7UVk4nMgeCcHDrdFCtTgGJDqyswwvz4xvVoQDABQ18+K3rgHiJFnZxYtrfMajWkoGmzROWJGBqC0YjUuG2WRzVZTNIzchvSZm24ay/47/aDuV1I5lNMa8/3XmbtQNjAzW490/o1PThro0GcXEhvowwnxyGJApzNcftqO93EQ00=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ideasonboard.com; spf=pass smtp.mailfrom=ideasonboard.com; dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b=BvQIHV8c; arc=none smtp.client-ip=213.167.242.64
+	 In-Reply-To:To:Cc; b=uLMhIwfrAyNzkk0R2cgQBvQTchSp3ySTLb6sf7g3Q/ruYu5jFcyTtQ2hAVlHt82hYxK9gTDIbSBqvXStklC8A5/Xg05kEzvqEFGMtuhDZk/mnhSbAGyR2zXa+Jxx4TCd+RKqauI4x5PdtEq/TCgIooeOI9mExFCN/CLh9OAYB5A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ideasonboard.com; spf=pass smtp.mailfrom=ideasonboard.com; dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b=I+F30eJU; arc=none smtp.client-ip=213.167.242.64
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ideasonboard.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ideasonboard.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="BvQIHV8c"
+	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="I+F30eJU"
 Received: from [127.0.1.1] (cpc141996-chfd3-2-0-cust928.12-3.cable.virginm.net [86.13.91.161])
-	by perceval.ideasonboard.com (Postfix) with ESMTPSA id 1572D1E5F;
-	Thu,  2 Oct 2025 12:17:13 +0200 (CEST)
+	by perceval.ideasonboard.com (Postfix) with ESMTPSA id 95C1E1E62;
+	Thu,  2 Oct 2025 12:17:14 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-	s=mail; t=1759400233;
-	bh=6+WRhuAuC04s0G0OjZmwjxOpPcasgyr6iEkaqZXrOtA=;
+	s=mail; t=1759400235;
+	bh=8R7NylMBPxT9GjCIi32tHOA8FH3GuYP7pVFsQWisD/g=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=BvQIHV8c6EytiwmKm/FFXOvWS2zR3SuHLMH0yWfy8aO+1mwiENOUsuq+Ex9JbZOnw
-	 3c23u3EatyCxlDGV66i2GjSzz9gLDAtEI0WdK1OYuYBNcGjgaMHpulcnKH6FeU7hRm
-	 g59lsdEkly7nlyZAMEg1AD2RivAd5WLoV5fnH4X0=
+	b=I+F30eJU0Y1pCSm+JCD+bnA47QeAV2sGVZlJMGKW8xyJ5axBA+UsMZ4RBUwCU+GfY
+	 DEH0M1k3JB8wg23xow8p3EzLSUxD2I8/G53q4SKP7ejddTYVqOI94AGRCVMhSXmJkY
+	 yUbTosmC9aBxaMdldAcjN+wZo+9PUyhZ2r6RIFig=
 From: Daniel Scally <dan.scally@ideasonboard.com>
-Date: Thu, 02 Oct 2025 11:18:28 +0100
-Subject: [PATCH v12 09/15] media: uapi: Add 3a stats buffer for mali-c55
+Date: Thu, 02 Oct 2025 11:18:30 +0100
+Subject: [PATCH v12 11/15] Documentation: mali-c55: Add Statistics
+ documentation
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
@@ -37,7 +38,7 @@ List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20251002-c55-v12-9-3eda2dba9554@ideasonboard.com>
+Message-Id: <20251002-c55-v12-11-3eda2dba9554@ideasonboard.com>
 References: <20251002-c55-v12-0-3eda2dba9554@ideasonboard.com>
 In-Reply-To: <20251002-c55-v12-0-3eda2dba9554@ideasonboard.com>
 To: linux-media@vger.kernel.org, devicetree@vger.kernel.org, 
@@ -49,26 +50,29 @@ Cc: Anthony.McGivern@arm.com, jacopo.mondi@ideasonboard.com,
  laurent.pinchart@ideasonboard.com, dan.scally@ideasonboard.com, 
  Sakari Ailus <sakari.ailus@linux.intel.com>
 X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=9157;
+X-Developer-Signature: v=1; a=openpgp-sha256; l=8028;
  i=dan.scally@ideasonboard.com; h=from:subject:message-id;
- bh=6+WRhuAuC04s0G0OjZmwjxOpPcasgyr6iEkaqZXrOtA=;
- b=owEBbQKS/ZANAwAKAchJV3psRXUyAcsmYgBo3lF5ToeOaZR/lrCeaKXjZzq/u+yjpm2OEgZkx
- kyJMdrwrl2JAjMEAAEKAB0WIQQqyuwyDnZdb+mxmm/ISVd6bEV1MgUCaN5ReQAKCRDISVd6bEV1
- MoN1D/9dgMHuJO/uFTvMZ1RsSTAIzJp5xihcDUZbBxkLgDPva6+oj0IEGlWyPBc4Jo6lzKqNejQ
- lQJJ+/o7KmWhtFXhYFm1Odbm/dbuXZmDKwPfPSLLwOhhFNHwjLGDPKGeuHsWyak1AfdRXIXGfTQ
- +AQSje86M20QsULtD186LyUOFVVmozK0NM9GLi2B0D/X5RBhx5gGmbqCZIJaEgl34i4gGY+zBCx
- RrcsAsZOe2+ThBni74jbENYvN+4LEIoUpDZZ+YL2PxQjf9mAFiU6oNiaZ7cT6VKw4T6rRa/P0Rr
- mOqLK2r7ryDZ4V6oDRtkSctYZTRCZ84Q8wP0kU5T5x5CPxCvAjOeEFVAmB4WXvMkDSPp3I1DRxp
- 1uPzh9X9JTJ9VMqAtg8EsRYLPyUtaxNsxAjVwM8Rzmhd4OgErO6JROFF2K4sYnafdXirN1MwUDD
- D7wxdPNM5UEsikMwsy6b26o1LgtzX7NwoJ7SvOwVSEVq+Ip+DWBRSbxybd011sMAR4i6Fe4E2s4
- o5vFehMgv5hTDZFomkc4XDc0gVmpdg+0SRl77fwuel1sPPIIv23F0dB3SK2w5rxxfE/b2AzxGh0
- P56hO3FIl5r96cCvRjBOAewkDxKsTb5CFsBC8nnR95EIy6KGecOQ+SYAMMcwgwYxLvrdvuBWEYg
- 6ySVbYhY8H2pezg==
+ bh=8R7NylMBPxT9GjCIi32tHOA8FH3GuYP7pVFsQWisD/g=;
+ b=owEBbQKS/ZANAwAKAchJV3psRXUyAcsmYgBo3lF6vQeggPxrTYEXbjzosdktFyLv6pRPHsMqz
+ 6LDXiZzopeJAjMEAAEKAB0WIQQqyuwyDnZdb+mxmm/ISVd6bEV1MgUCaN5RegAKCRDISVd6bEV1
+ MkUgD/0Q4GIKo1BmSBDVepAHUqje8+IVYB4C7xgSQ9N+Wne4433OnyoHroDuro/+oz+g00e03ce
+ 2OcrIzn2B9j3OLykt0vfvTtTAkNF0jXWSh+qq/1HSNyLexc5QN6aNYdDLsIxefCqID88seiOdc5
+ dVQYXYHzbIftzmWtN176kdD0qxiZEXYft93NAxlu+l2pZqYdCzGbXlQn6fEefs+cKmx/FcwaxfD
+ E1u+vvNiuvqy4569qLl9cLtzvNYVSGvmBkFPieF3bTSTfT/rZDALMK3i3b1QNbUPUTSjyQDabSz
+ EgmeM2FCTSWvx3lOTouzgeuzGr188VWjW40qOQ/em5NFCXoauB3Af+AgbS3/4psMK9ddNqW21M6
+ i4ovEQO4fYpnTFIFG7SDNRFGQyKvgUG65AUEsf4FlbLk1iQnPfSdp7uE5a6QXVdA4fr30Yf9A//
+ +n8B9zTsgBMuh80Kjf55JfRSGvnDdx/wdFXi6hR27Ih8f1wVYexNAZzB5oXmuc51y/L7wL5umLU
+ c0cI0ZarZvlxNwqma68AORM8bI3MyMIjcGO25lgF/pes0uFcHEkKtoMLJ2aZL7bJuDJRNlWk7mG
+ 8mENOS+/JPFOp6JFlJozX46jq6+Zjs7rJtFeywM5FGSmDohH07Sk9T9rQSj9WUMht0dRw1WP94F
+ v67kDng0/g98hKQ==
 X-Developer-Key: i=dan.scally@ideasonboard.com; a=openpgp;
  fpr=EEC699ACA1B7CB5D31330C0BBD501C2A3546CCF6
 
-Describe the format of the 3A statistics buffers in the userspace API
-header for the mali-c55 ISP.
+Add documentation explaining the ability to capture statistics from
+the mali-c55 driver's new V4L2 device, as well as the various tap
+points from which those statistics can be drawn in the ISP's
+processing flow. Additionally add a page detailing the new V4L2
+meta format for the mali-c55 statistics.
 
 Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 Acked-by: Nayden Kanchev  <nayden.kanchev@arm.com>
@@ -78,7 +82,7 @@ Signed-off-by: Daniel Scally <dan.scally@ideasonboard.com>
 ---
 Changes in v12:
 
-        - None
+        - Fix reference
 
 Changes in v11:
 
@@ -102,214 +106,158 @@ Changes in v7:
 
 Changes in v6:
 
-	- New patch
+	- None
 
 Changes in v5:
 
 	- New patch
 ---
- MAINTAINERS                                    |   1 +
- include/uapi/linux/media/arm/mali-c55-config.h | 170 +++++++++++++++++++++++++
- 2 files changed, 171 insertions(+)
+ Documentation/admin-guide/media/mali-c55.rst       | 60 +++++++++++++++++++++-
+ .../userspace-api/media/v4l/meta-formats.rst       |  1 +
+ .../media/v4l/metafmt-arm-mali-c55.rst             | 29 +++++++++++
+ MAINTAINERS                                        |  1 +
+ 4 files changed, 90 insertions(+), 1 deletion(-)
 
+diff --git a/Documentation/admin-guide/media/mali-c55.rst b/Documentation/admin-guide/media/mali-c55.rst
+index 72cdded507b3a7918e28d9bd9a1c6f72ddf9e664..03723e0e8e43f17a04ede0032b2ddbfdb859d1e3 100644
+--- a/Documentation/admin-guide/media/mali-c55.rst
++++ b/Documentation/admin-guide/media/mali-c55.rst
+@@ -67,10 +67,11 @@ The driver has 4 V4L2 subdevices:
+ - `mali_c55 resizer fr`: The Full-Resolution pipe resizer
+ - `mali_c55 resizer ds`: The Downscale pipe resizer
+ 
+-The driver has 2 V4L2 video devices:
++The driver has 3 V4L2 video devices:
+ 
+ - `mali-c55 fr`: The full-resolution pipe's capture device
+ - `mali-c55 ds`: The downscale pipe's capture device
++- `mali-c55 3a stats`: The 3A statistics capture device
+ 
+ Frame sequences are synchronised across to two capture devices, meaning if one
+ pipe is started later than the other the sequence numbers returned in its
+@@ -333,6 +334,63 @@ configured, followed by formats in the appropriate places:
+     # Set format on the video device and stream
+     yavta -f RGB565 -s 1920x1080 -c10 /dev/video0
+ 
++.. _mali-c55-3a-stats:
++
++Capturing ISP Statistics
++========================
++
++The ISP is capable of producing statistics for consumption by image processing
++algorithms running in userspace. These statistics can be captured by queueing
++buffers to the `mali-c55 3a stats` V4L2 Device whilst the ISP is streaming. Only
++the :ref:`V4L2_META_FMT_MALI_C55_STATS <v4l2-meta-fmt-mali-c55-stats>`
++format is supported, so no format-setting need be done:
++
++.. code-block:: none
++
++    # We assume the media graph has been configured to support RGB565 capture
++    # from the mali-c55 fr V4L2 Device, which is at /dev/video0. The statistics
++    # V4L2 device is at /dev/video3
++
++    yavta -f RGB565 -s 1920x1080 -c32 /dev/video0 && \
++    yavta -c10 -F /dev/video3
++
++The layout of the buffer is described by :c:type:`mali_c55_stats_buffer`,
++but broadly statistics are generated to support three image processing
++algorithms; AEXP (Auto-Exposure), AWB (Auto-White Balance) and AF (Auto-Focus).
++These stats can be drawn from various places in the Mali C55 ISP pipeline, known
++as "tap points". This high-level block diagram is intended to explain where in
++the processing flow the statistics can be drawn from::
++
++                  +--> AEXP-2            +----> AEXP-1          +--> AF-0
++                  |                      +----> AF-1            |
++                  |                      |                      |
++      +---------+ |   +--------------+   |   +--------------+   |
++      |  Input  +-+-->+ Digital Gain +---+-->+ Black Level  +---+---+
++      +---------+     +--------------+       +--------------+       |
++  +-----------------------------------------------------------------+
++  |
++  |   +--------------+ +---------+       +----------------+
++  +-->| Sinter Noise +-+  White  +--+--->|  Lens Shading  +--+---------------+
++      |   Reduction  | | Balance |  |    |                |  |               |
++      +--------------+ +---------+  |    +----------------+  |               |
++                                    +---> AEXP-0 (A)         +--> AEXP-0 (B) |
++  +--------------------------------------------------------------------------+
++  |
++  |   +----------------+      +--------------+  +----------------+
++  +-->|  Tone mapping  +-+--->| Demosaicing  +->+ Purple Fringe  +-+-----------+
++      |                | |    +--------------+  |   Correction   | |           |
++      +----------------+ +-> AEXP-IRIDIX        +----------------+ +---> AWB-0 |
++  +----------------------------------------------------------------------------+
++  |                    +-------------+        +-------------+
++  +------------------->|   Colour    +---+--->|    Output   |
++                       | Correction  |   |    |  Pipelines  |
++                       +-------------+   |    +-------------+
++                                         +-->  AWB-1
++
++At present all statistics are drawn from the 0th tap point for each algorithm;
++I.E. AEXP statistics from AEXP-0 (A), AWB statistics from AWB-0 and AF
++statistics from AF-0. In the future this will be configurable.
++
+ References
+ ==========
+ .. [1] https://git.linuxtv.org/v4l-utils.git/
+diff --git a/Documentation/userspace-api/media/v4l/meta-formats.rst b/Documentation/userspace-api/media/v4l/meta-formats.rst
+index b900ed6af7bd9ad49baf7b5a9eef9423f8abfbcb..74e7e82510680ce7da1f34a07ddce05ac64bd8a5 100644
+--- a/Documentation/userspace-api/media/v4l/meta-formats.rst
++++ b/Documentation/userspace-api/media/v4l/meta-formats.rst
+@@ -13,6 +13,7 @@ These formats are used for the :ref:`metadata` interface only.
+     :maxdepth: 1
+ 
+     extensible-parameters
++    metafmt-arm-mali-c55
+     metafmt-c3-isp
+     metafmt-d4xx
+     metafmt-generic
+diff --git a/Documentation/userspace-api/media/v4l/metafmt-arm-mali-c55.rst b/Documentation/userspace-api/media/v4l/metafmt-arm-mali-c55.rst
+new file mode 100644
+index 0000000000000000000000000000000000000000..0bda9740a6be20df541ac7cf78e45e510f79ad19
+--- /dev/null
++++ b/Documentation/userspace-api/media/v4l/metafmt-arm-mali-c55.rst
+@@ -0,0 +1,29 @@
++.. SPDX-License-Identifier: GPL-2.0
++
++.. _v4l2-meta-fmt-mali-c55-stats:
++
++*************************************
++V4L2_META_FMT_MALI_C55_STATS ('C55S')
++*************************************
++
++3A Statistics
++=============
++
++The ISP device collects different statistics over an input bayer frame. Those
++statistics can be obtained by userspace from the
++:ref:`mali-c55 3a stats <mali-c55-3a-stats>` metadata capture video node, using
++the :c:type:`v4l2_meta_format` interface. The buffer contains a single instance
++of the C structure :c:type:`mali_c55_stats_buffer` defined in
++``mali-c55-config.h``, so the structure can be obtained from the buffer by:
++
++.. code-block:: C
++
++	struct mali_c55_stats_buffer *stats =
++		(struct mali_c55_stats_buffer *)buf;
++
++For details of the statistics see :c:type:`mali_c55_stats_buffer`.
++
++Arm Mali-C55 uAPI data types
++============================
++
++.. kernel-doc:: include/uapi/linux/media/arm/mali-c55-config.h
 diff --git a/MAINTAINERS b/MAINTAINERS
-index 86a6ec3a629417ace8c79bf89e1868cbeb422b85..b4adf8c0bae063d9e2b25b0f2b2d5482d21ee3f0 100644
+index b4adf8c0bae063d9e2b25b0f2b2d5482d21ee3f0..1f16808feebd979e807ce36f4bd21379b6995f70 100644
 --- a/MAINTAINERS
 +++ b/MAINTAINERS
-@@ -2086,6 +2086,7 @@ F:	Documentation/admin-guide/media/mali-c55.rst
+@@ -2085,6 +2085,7 @@ F:	Documentation/admin-guide/media/mali-c55-graph.dot
+ F:	Documentation/admin-guide/media/mali-c55.rst
  F:	Documentation/devicetree/bindings/media/arm,mali-c55.yaml
  F:	Documentation/userspace-api/media/drivers/mali-c55.rst
++F:	Documentation/userspace-api/media/v4l/metafmt-arm-mali-c55.rst
  F:	drivers/media/platform/arm/mali-c55/
-+F:	include/uapi/linux/media/arm/mali-c55-config.h
+ F:	include/uapi/linux/media/arm/mali-c55-config.h
  
- ARM MALI PANTHOR DRM DRIVER
- M:	Boris Brezillon <boris.brezillon@collabora.com>
-diff --git a/include/uapi/linux/media/arm/mali-c55-config.h b/include/uapi/linux/media/arm/mali-c55-config.h
-index 7fddece54ada9dadc3c76372d496d9395237a41c..e31fb8ffa10a2ad4bbe0f381b9b33dd6ca5bec5e 100644
---- a/include/uapi/linux/media/arm/mali-c55-config.h
-+++ b/include/uapi/linux/media/arm/mali-c55-config.h
-@@ -8,6 +8,7 @@
- #ifndef __UAPI_MALI_C55_CONFIG_H
- #define __UAPI_MALI_C55_CONFIG_H
- 
-+#include <linux/types.h>
- #include <linux/v4l2-controls.h>
- 
- #define V4L2_CID_MALI_C55_CAPABILITIES	(V4L2_CID_USER_MALI_C55_BASE + 0x0)
-@@ -23,4 +24,173 @@
- #define MALI_C55_GPS_FRSCALER		(1U << 9)
- #define MALI_C55_GPS_DS_PIPE		(1U << 10)
- 
-+/*
-+ * Frames are split into zones of almost equal width and height - a zone is a
-+ * rectangular tile of a frame. The metering blocks within the ISP collect
-+ * aggregated statistics per zone. A maximum of 15x15 zones can be configured,
-+ * and so the statistics buffer within the hardware is sized to accommodate
-+ * that.
-+ *
-+ * The utilised number of zones is runtime configurable.
-+ */
-+#define MALI_C55_MAX_ZONES	(15 * 15)
-+
-+/**
-+ * struct mali_c55_ae_1024bin_hist - Auto Exposure 1024-bin histogram statistics
-+ *
-+ * @bins:	1024 element array of 16-bit pixel counts.
-+ *
-+ * The 1024-bin histogram module collects image-global but zone-weighted
-+ * intensity distributions of pixels in fixed-width bins. The modules can be
-+ * configured into different "plane modes" which affect the contents of the
-+ * collected statistics. In plane mode 0, pixel intensities are taken regardless
-+ * of colour plane into a single 1024-bin histogram with a bin width of 4. In
-+ * plane mode 1, four 256-bin histograms with a bin width of 16 are collected -
-+ * one for each CFA colour plane. In plane modes 4, 5, 6 and 7 two 512-bin
-+ * histograms with a bin width of 8 are collected - in each mode one of the
-+ * colour planes is collected into the first histogram and all the others are
-+ * combined into the second. The histograms are stored consecutively in the bins
-+ * array.
-+ *
-+ * The 16-bit pixel counts are stored as a 4-bit exponent in the most
-+ * significant bits followed by a 12-bit mantissa. Conversion to a usable
-+ * format can be done according to the following pseudo-code::
-+ *
-+ *	if (e == 0) {
-+ *		bin = m * 2;
-+ *	} else {
-+ *		bin = (m + 4096) * 2^e
-+ *	}
-+ *
-+ * where
-+ *	e is the exponent value in range 0..15
-+ *	m is the mantissa value in range 0..4095
-+ *
-+ * The pixels used in calculating the statistics can be masked using three
-+ * methods:
-+ *
-+ * 1. Pixels can be skipped in X and Y directions independently.
-+ * 2. Minimum/Maximum intensities can be configured
-+ * 3. Zones can be differentially weighted, including 0 weighted to mask them
-+ *
-+ * The data for this histogram can be collected from different tap points in the
-+ * ISP depending on configuration - after the white balance or digital gain
-+ * blocks, or immediately after the input crossbar.
-+ */
-+struct mali_c55_ae_1024bin_hist {
-+	__u16 bins[1024];
-+} __attribute__((packed));
-+
-+/**
-+ * struct mali_c55_ae_5bin_hist - Auto Exposure 5-bin histogram statistics
-+ *
-+ * @hist0:	16-bit normalised pixel count for the 0th intensity bin
-+ * @hist1:	16-bit normalised pixel count for the 1st intensity bin
-+ * @hist3:	16-bit normalised pixel count for the 3rd intensity bin
-+ * @hist4:	16-bit normalised pixel count for the 4th intensity bin
-+ *
-+ * The ISP generates a 5-bin histogram of normalised pixel counts within bins of
-+ * pixel intensity for each of 225 possible zones within a frame. The centre bin
-+ * of the histogram for each zone is not available from the hardware and must be
-+ * calculated by subtracting the values of hist0, hist1, hist3 and hist4 from
-+ * 0xffff as in the following equation:
-+ *
-+ *	hist2 = 0xffff - (hist0 + hist1 + hist3 + hist4)
-+ */
-+struct mali_c55_ae_5bin_hist {
-+	__u16 hist0;
-+	__u16 hist1;
-+	__u16 hist3;
-+	__u16 hist4;
-+} __attribute__((packed));
-+
-+/**
-+ * struct mali_c55_awb_average_ratios - Auto White Balance colour ratios
-+ *
-+ * @avg_rg_gr:	Average R/G or G/R ratio in Q4.8 format.
-+ * @avg_bg_br:	Average B/G or B/R ratio in Q4.8 format.
-+ * @num_pixels:	The number of pixels used in the AWB calculation
-+ *
-+ * The ISP calculates and collects average colour ratios for each zone in an
-+ * image and stores them in Q4.8 format (the lowest 8 bits are fractional, with
-+ * bits [11:8] representing the integer). The exact ratios collected (either
-+ * R/G, B/G or G/R, B/R) are configurable through the parameters buffer. The
-+ * value of the 4 high bits is undefined.
-+ */
-+struct mali_c55_awb_average_ratios {
-+	__u16 avg_rg_gr;
-+	__u16 avg_bg_br;
-+	__u32 num_pixels;
-+} __attribute__((packed));
-+
-+/**
-+ * struct mali_c55_af_statistics - Auto Focus edge and intensity statistics
-+ *
-+ * @intensity_stats:	Packed mantissa and exponent value for pixel intensity
-+ * @edge_stats:		Packed mantissa and exponent values for edge intensity
-+ *
-+ * The ISP collects the squared sum of pixel intensities for each zone within a
-+ * configurable Region of Interest on the frame. Additionally, the same data are
-+ * collected after being passed through a bandpass filter which removes high and
-+ * low frequency components - these are referred to as the edge statistics.
-+ *
-+ * The intensity and edge statistics for a zone can be used to calculate the
-+ * contrast information for a zone
-+ *
-+ *	C = E2 / I2
-+ *
-+ * Where I2 is the intensity statistic for a zone and E2 is the edge statistic
-+ * for that zone. Optimum focus is reached when C is at its maximum.
-+ *
-+ * The intensity and edge statistics are stored packed into a non-standard 16
-+ * bit floating point format, where the 7 most significant bits represent the
-+ * exponent and the 9 least significant bits the mantissa. This format can be
-+ * unpacked with the following pseudocode::
-+ *
-+ *	if (e == 0) {
-+ *		x = m;
-+ *	} else {
-+ *		x = 2^e-1 * (m + 2^9)
-+ *	}
-+ *
-+ * where
-+ *	e is the exponent value in range 0..127
-+ *	m is the mantissa value in range 0..511
-+ */
-+struct mali_c55_af_statistics {
-+	__u16 intensity_stats;
-+	__u16 edge_stats;
-+} __attribute__((packed));
-+
-+/**
-+ * struct mali_c55_stats_buffer - 3A statistics for the mali-c55 ISP
-+ *
-+ * @ae_1024bin_hist:		1024-bin frame-global pixel intensity histogram
-+ * @iridix_1024bin_hist:	Post-Iridix block 1024-bin histogram
-+ * @ae_5bin_hists:		5-bin pixel intensity histograms for AEC
-+ * @reserved1:			Undefined buffer space
-+ * @awb_ratios:			Color balance ratios for Auto White Balance
-+ * @reserved2:			Undefined buffer space
-+ * @af_statistics:		Pixel intensity statistics for Auto Focus
-+ * @reserved3:			Undefined buffer space
-+ *
-+ * This struct describes the metering statistics space in the Mali-C55 ISP's
-+ * hardware in its entirety. The space between each defined area is marked as
-+ * "unknown" and may not be 0, but should not be used. The @ae_5bin_hists,
-+ * @awb_ratios and @af_statistics members are arrays of statistics per-zone.
-+ * The zones are arranged in the array in raster order starting from the top
-+ * left corner of the image.
-+ */
-+
-+struct mali_c55_stats_buffer {
-+	struct mali_c55_ae_1024bin_hist ae_1024bin_hist;
-+	struct mali_c55_ae_1024bin_hist iridix_1024bin_hist;
-+	struct mali_c55_ae_5bin_hist ae_5bin_hists[MALI_C55_MAX_ZONES];
-+	__u32 reserved1[14];
-+	struct mali_c55_awb_average_ratios awb_ratios[MALI_C55_MAX_ZONES];
-+	__u32 reserved2[14];
-+	struct mali_c55_af_statistics af_statistics[MALI_C55_MAX_ZONES];
-+	__u32 reserved3[15];
-+} __attribute__((packed));
-+
- #endif /* __UAPI_MALI_C55_CONFIG_H */
 
 -- 
 2.43.0
