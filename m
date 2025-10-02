@@ -1,63 +1,63 @@
 Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7471730ACEE
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D7F0430AD14
 	for <linux-media@vger.kernel.org>; Thu,  2 Oct 2025 10:33:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1759401185; cv=none; b=XJEri6Wz5wbM7Hk33YKdZF6QKS5Uqgo5S7vJaNfIHxC7aY1crw9c2iS9aVvpIyUQBH4YxsyYf1/wG2HK5xulNpiwg4KjYGI1KUibGmiejzClq4jCSbCJbzrFH03mjv0YgXem2ie7mwSAplOpFqmluqCs4M78asLFuXZlU+xrX7Y=
+	t=1759401186; cv=none; b=d3VYiLdJXed7YOVAHlchhPMuQhIhn0rWgM2PtWgeoxc6vAXoiNs+Kvw21PSV+1SOTlm74gWszavToA3ZsWLF2tmk1zBqeRQTJkeMi10vB82W00z6nzPATxgWMU1xZCuMChqyOtArHKWZKxUp0I62VYT5xlZcqNUlsn4kYkEeb+E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1759401185; c=relaxed/simple;
-	bh=+uuck3UO91uSNKF4XPrUrIjW01cBYhJHCvbVEc8jxSc=;
+	s=arc-20240116; t=1759401186; c=relaxed/simple;
+	bh=kc5SgDUcVWKZnEP1E0L4IjQ/3VkT91bhxld6yIngHj8=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=tnfIU09odWbuCoDrrmdKTHM/fN8YLnOsb73YBdAlbo+vUbfWAdXaA73FP8XTO74nIxQZ2tod9QY7H+VOoAHo9ujLfz8miyWYfQks2vnlGyD88AugXfwxZqk1Lpkd2KEVxje5QlIpS9vuIKfiv/LJtQ0NNp5u4n9kMYJwUJ9b/5k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Tb9Ea6su; arc=none smtp.client-ip=192.198.163.16
+	 MIME-Version; b=JJQXuqA23PQiijTvIrkR843lsKZiw2wQspJXku+1rEnqUhNwAvlB8ecFXMdZm2HkwFQtM/qKolt87ZAL44Phuu6hUt6JIcy0OQssW7TQcEvflD6SDZqK+MptT6EjgsHi2kN8n3n5olH4aes1PuTO9B6qNo8QCn1QT8C4iLKs9bk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ncompvz6; arc=none smtp.client-ip=192.198.163.16
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Tb9Ea6su"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ncompvz6"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1759401183; x=1790937183;
+  t=1759401184; x=1790937184;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=+uuck3UO91uSNKF4XPrUrIjW01cBYhJHCvbVEc8jxSc=;
-  b=Tb9Ea6sukrqpHqcjOx7GFyhAoQA+93+C9k1x501BarfN3JHBdyBfnwXz
-   K11jGXjrca+m/qf2ZXNFnI3NY0zd8Pzsw8S/IJx2NXYCnNYvOnNqILX5c
-   +LVnI4sHyLfiGIGwPq5aNBD1qXGTiDy2JwdURGhdDiZfGx4MR2WTgROKm
-   GKkrEbm/AY+q97qX4b3G0vI/JE3LBPlLYweGe4l3JDJibPdzIP3z2ERFo
-   bjE3dWpT+1mvLqmxUiOTxcb+bHqgk/sVay6PbLlbkA5nqXtO72qyvScPu
-   cl2FZYTJIe3QPXMlULTCjYojt/6YAyVkJihbY3PMr5Nj+uJPtGzu1IpaL
-   w==;
-X-CSE-ConnectionGUID: spir953OQxOu7kP5HgD79Q==
-X-CSE-MsgGUID: Eh5dKUwWSOi+QAQPEmVRdg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11569"; a="49238079"
+  bh=kc5SgDUcVWKZnEP1E0L4IjQ/3VkT91bhxld6yIngHj8=;
+  b=ncompvz63O/hF3/eRyJiHiq2U1u0NChgRjXyLOuH3LUMTHKZdmsyWx7+
+   fGgNs1gvHaky4LMw02XtNxUpu0JldzveBFoiWESB9upKnSVM/GDNtvLZj
+   kXaoYM0ZiusPT41ypJAhpUy7dULMLkscxvSuDKu2966JCT5WKfKbe/VUP
+   VV6HPUc1uhqL937gXc8OVjNn67OkiSiKNE5vE3cEI/J9wj1Duy2WTFidh
+   cuB547lUgcIj7su+ai7rW7yR1CfwMCDqcFYGkFhk5MfaYeTbhq4u/gIOB
+   LxYbKZG8ncwHSLpcO0lKs71yXtoxD24bCiZAvYcbzwp64m9mGY+4dKHOu
+   g==;
+X-CSE-ConnectionGUID: r7eueuOlSby5qb0hUjz0tw==
+X-CSE-MsgGUID: L6h8nIAdR7ClHome1mI6uQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11569"; a="49238070"
 X-IronPort-AV: E=Sophos;i="6.18,309,1751266800"; 
-   d="scan'208";a="49238079"
+   d="scan'208";a="49238070"
 Received: from fmviesa009.fm.intel.com ([10.60.135.149])
   by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Oct 2025 03:33:00 -0700
-X-CSE-ConnectionGUID: IVhx8Ru3RECAgZkdJQs+1g==
-X-CSE-MsgGUID: +Wk9LDJmRYStdUZz/Iuz7w==
+X-CSE-ConnectionGUID: kBBqdxSoSICFAe1QBi0sXw==
+X-CSE-MsgGUID: NkyWxaZ0Qd2DgX8g6xkKJw==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.18,309,1751266800"; 
-   d="scan'208";a="179457279"
+   d="scan'208";a="179457275"
 Received: from bergbenj-mobl1.ger.corp.intel.com (HELO kekkonen.fi.intel.com) ([10.245.245.175])
   by fmviesa009-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Oct 2025 03:32:59 -0700
 Received: from punajuuri.localdomain (unknown [192.168.240.130])
-	by kekkonen.fi.intel.com (Postfix) with ESMTP id DB494121EE2;
+	by kekkonen.fi.intel.com (Postfix) with ESMTP id DCEF8121EF3;
 	Thu, 02 Oct 2025 13:32:56 +0300 (EEST)
 Received: from sailus by punajuuri.localdomain with local (Exim 4.98.2)
 	(envelope-from <sakari.ailus@linux.intel.com>)
-	id 1v4GcK-00000008jcA-2FBV;
+	id 1v4GcK-00000008jcI-2QPx;
 	Thu, 02 Oct 2025 13:32:56 +0300
 Organization: Intel Finland Oy - BIC 0357606-4 - c/o Alberga Business Park, 6 krs, Bertel Jungin Aukio 5, 02600 Espoo
 From: Sakari Ailus <sakari.ailus@linux.intel.com>
 To: linux-media@vger.kernel.org
 Cc: Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
 	hans@jjverkuil.nl
-Subject: [PATCH 1/3] media: v4l2-subdev: Make media_entity_to_v4l2_subdev() const-aware
-Date: Thu,  2 Oct 2025 13:32:53 +0300
-Message-ID: <20251002103256.2081947-2-sakari.ailus@linux.intel.com>
+Subject: [PATCH 3/3] media: mc: Make macros to obtain containers const-aware
+Date: Thu,  2 Oct 2025 13:32:55 +0300
+Message-ID: <20251002103256.2081947-4-sakari.ailus@linux.intel.com>
 X-Mailer: git-send-email 2.47.3
 In-Reply-To: <20251002103256.2081947-1-sakari.ailus@linux.intel.com>
 References: <20251002103256.2081947-1-sakari.ailus@linux.intel.com>
@@ -69,27 +69,63 @@ List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Retain the constness of the object in media_entity_to_v4l2_subdev(), by
-switching to container_of_const().
+Retain the constness of the graph objects and interfaces in macros to
+obtain their containers, by switching to container_of_const().
 
 Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
 ---
- include/media/v4l2-subdev.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ include/media/media-entity.h | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/include/media/v4l2-subdev.h b/include/media/v4l2-subdev.h
-index e0bb58cb6d04..a37d9a847196 100644
---- a/include/media/v4l2-subdev.h
-+++ b/include/media/v4l2-subdev.h
-@@ -1103,7 +1103,7 @@ struct v4l2_subdev {
- 	typeof(ent) __me_sd_ent = (ent);				\
- 									\
- 	__me_sd_ent ?							\
--		container_of(__me_sd_ent, struct v4l2_subdev, entity) :	\
-+		container_of_const(__me_sd_ent, struct v4l2_subdev, entity) : \
- 		NULL;							\
- })
+diff --git a/include/media/media-entity.h b/include/media/media-entity.h
+index 64cf590b1134..b91ff6f8c3bb 100644
+--- a/include/media/media-entity.h
++++ b/include/media/media-entity.h
+@@ -627,7 +627,7 @@ static inline bool media_entity_enum_intersects(
+  * @gobj: Pointer to the struct &media_gobj graph object
+  */
+ #define gobj_to_entity(gobj) \
+-		container_of(gobj, struct media_entity, graph_obj)
++		container_of_const(gobj, struct media_entity, graph_obj)
  
+ /**
+  * gobj_to_pad - returns the struct &media_pad pointer from the
+@@ -636,7 +636,7 @@ static inline bool media_entity_enum_intersects(
+  * @gobj: Pointer to the struct &media_gobj graph object
+  */
+ #define gobj_to_pad(gobj) \
+-		container_of(gobj, struct media_pad, graph_obj)
++		container_of_const(gobj, struct media_pad, graph_obj)
+ 
+ /**
+  * gobj_to_link - returns the struct &media_link pointer from the
+@@ -645,7 +645,7 @@ static inline bool media_entity_enum_intersects(
+  * @gobj: Pointer to the struct &media_gobj graph object
+  */
+ #define gobj_to_link(gobj) \
+-		container_of(gobj, struct media_link, graph_obj)
++		container_of_const(gobj, struct media_link, graph_obj)
+ 
+ /**
+  * gobj_to_intf - returns the struct &media_interface pointer from the
+@@ -654,7 +654,7 @@ static inline bool media_entity_enum_intersects(
+  * @gobj: Pointer to the struct &media_gobj graph object
+  */
+ #define gobj_to_intf(gobj) \
+-		container_of(gobj, struct media_interface, graph_obj)
++		container_of_const(gobj, struct media_interface, graph_obj)
+ 
+ /**
+  * intf_to_devnode - returns the struct media_intf_devnode pointer from the
+@@ -663,7 +663,7 @@ static inline bool media_entity_enum_intersects(
+  * @intf: Pointer to struct &media_intf_devnode
+  */
+ #define intf_to_devnode(intf) \
+-		container_of(intf, struct media_intf_devnode, intf)
++		container_of_const(intf, struct media_intf_devnode, intf)
+ 
+ /**
+  *  media_gobj_create - Initialize a graph object
 -- 
 2.47.3
 
