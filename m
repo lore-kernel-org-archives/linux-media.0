@@ -1,161 +1,133 @@
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oi1-f179.google.com (mail-oi1-f179.google.com [209.85.167.179])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B2E429CE1
-	for <linux-media@vger.kernel.org>; Thu,  2 Oct 2025 12:45:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ABAAB2E975E
+	for <linux-media@vger.kernel.org>; Thu,  2 Oct 2025 12:57:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1759409157; cv=none; b=i9nSwEnKAdKj7XF4vlRRx9hvLgTEIcCNwMgoxUP/6PxvXUiwyCJsp+X2I74QlMCxWtNBrT6GEZuiVBWuczh/2bgOw8iLKyv0aTaqcTQzi+e0TXdeCWL1YZKNR9r3q1GTJLtPvI+GDKonnAZO6XOAiXAx3U3DjbDYhEIEbS28o00=
+	t=1759409860; cv=none; b=DzZdJTpPYhLtyrl/RU9KGobpgEHbpxuZGx7CPntIQtqeVH5arPrBF95PNfMLB70mAzGUnvipDstGCVZ+wGBA7b5PQzUORzFK0D/MPGXiDjAkvvhiWTuDV8uA2G6zw9xHxlYALZn1YUtjsf+cVH2LQDz6BGIdHZbBbc70SgEkOjg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1759409157; c=relaxed/simple;
-	bh=OzzFAPU7JWZ8TpzU3HuOCxPSNDtVN3f9jsR9IwNrpvo=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=MrGdtVanFs5UeW62vcXHtO/gb2CayJ4R240ZDh/5rxX2B44xu5g7dO6qsYU8oJZ2TC1zhJwh6xFoLHCdGHtCgGTG/w2dNHBF65AwAqWIjcMB6z5zUBX4lfZ40DX3kdWStPpDIBNQ5r8hH93F/8Kg786PxV5o/eyA7LDyAVB4T7o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=EwxJL9PQ; arc=none smtp.client-ip=205.220.168.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
+	s=arc-20240116; t=1759409860; c=relaxed/simple;
+	bh=Tsxz8tTRUdMdIeQsCupgeGS2mcbHuI4dtXzZw96hvdc=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=l9MEJjqTj5TC3xGtvQf7G/o6qNx3rtUcDy/bMFvd+I8TkdI1muvZqK6QqEuPjREL/jwgX2rEgKI/ZpPXritdM5x5IYwHcatgax5TAJG8YNw8usjILFfn1F18KWhOnr/BldxTGdisBUvAPA1j7Zs1i1wWn/DGrhQElQS4AG7k1UM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=GVmdYD5k; arc=none smtp.client-ip=209.85.167.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="EwxJL9PQ"
-Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 5929l6bI031252
-	for <linux-media@vger.kernel.org>; Thu, 2 Oct 2025 12:45:55 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	YY2yji4SSSuA6J/yxS5x4trG7A7YFsSGcBCsY+ncM5o=; b=EwxJL9PQC7aJuoqn
-	LdT9BOUTUxKZRh2dmiDMqqKRZ1wK9Dty8AkT/SPyPw52V+Ty9WWSu7KezbR6s6nP
-	HsNY902d1nePKn1WyA75BO2DOMlvpUl+5scfZNG6LbO4m1G5s66rly/8/iTjfYc7
-	g/Z10GXWozFzm/bMIpTQGwR3RP/S7dmXvqm3yhW2Tjd30Xfct8IOMp7KezoPfADJ
-	PGZY0yBK0YXIbJeG35boExCos6Rs4fgbd+yMAWkWAwi127PvkuPY5SK77/CEtjYF
-	T26fCu3re4msgHrScgex0SE0Fz6Ypa+nalasGcdK64pp3c39dyjZVKZqNOnoEcvR
-	NYdrhg==
-Received: from mail-qt1-f200.google.com (mail-qt1-f200.google.com [209.85.160.200])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 49e6vr7ryb-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-	for <linux-media@vger.kernel.org>; Thu, 02 Oct 2025 12:45:54 +0000 (GMT)
-Received: by mail-qt1-f200.google.com with SMTP id d75a77b69052e-4e231785cc3so4042581cf.1
-        for <linux-media@vger.kernel.org>; Thu, 02 Oct 2025 05:45:54 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="GVmdYD5k"
+Received: by mail-oi1-f179.google.com with SMTP id 5614622812f47-43f912f9738so379130b6e.0
+        for <linux-media@vger.kernel.org>; Thu, 02 Oct 2025 05:57:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1759409858; x=1760014658; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=NZ9DvIz4r5smSG4dSA4CIzbwRw8riJPhilOOGaBUqN0=;
+        b=GVmdYD5kIIs3hYvdnZyu/T/abTrq9O1ZZIQ/EMIf0cZNPDV9I31L0nzruOKEDeQkln
+         N9Vs/JNOrKsnire/MVVDkNcYXSzuZViPfzMZcMtEaZxRnhn5NMxKP1zGGQUJwgXF72Nx
+         XhqJqGrwxw3GxyNaB3pW6d3/3gPF/ShcKGqOxH8RxAyLFnGXpXelxWBYR2gekVUxZRDS
+         Mle9IUy23APekdks7M212DHGgjDxfcSURvCFcgiaU1kUwiOGzT9l/vK6ryaKj7F2p1qv
+         05l1tJJ4m42vndOxEcxp7NvwaB7ymIxUGfdhwIrnVfH9+svAGAW4OdyNoQaNHbqHXHgn
+         qxqA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1759409153; x=1760013953;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=YY2yji4SSSuA6J/yxS5x4trG7A7YFsSGcBCsY+ncM5o=;
-        b=mQ+0i+6sdKqiQXcIBcDS0oMC5D3964EDo6o/xtUKEQ3eI4mp1q6jxAhJzPm8MQ4JYX
-         8WmVGO6DNE1QmyWfhwoNmCOaMGEKcjx9hMqtm/ulhwbYo+Kqz/9ClcZRUQId+l8uCMRH
-         77qenHVow8Nii1rjpFuBBAHZUe1etPN6Ht0PiOgGwMAp507YTFHZGqzsqUgeUztXBiOq
-         Q83A6KWhsItPpllq7sOW+pAjaUE43LoCtx0toJrq4rek6C81CSk9DRPvwVIJBadzsO3F
-         0I71PhgCJE/OLxbKxCgqj1xby1eAmryMtV6XbBuEiAZyRMjfOj2DjgIU9YNdjkpsubv5
-         M36A==
-X-Gm-Message-State: AOJu0Yx9Uo9aN66TgpukRnHtvAFJTrEKoLd6gCavFWS7uiIYpOB9l1Z5
-	dx5BAfONzbkbhFJDwI6YYk/yMLMsTuTkfZ9OYXI0C9ADIyaEjCL5kd6nNPaQpxyCbyBl15rrjvc
-	22KtxmXKCCg7gkMd4GqZtMHtUw6i0rxLadNmYcRmXaTr4INYKnIwltRK0O4lDCc+YgQ==
-X-Gm-Gg: ASbGncu4vHOYA8hsvqbuj/SQor3skYGQbmLfrAC6I3WE4H8Ps7oCiSQN5RBEORjxx7A
-	5mUq17YRw+bdHkfIIqqandxDKCCxs02OoDKwZFikkRjzO3RYlfI2FPV/dPoF+bAVa87RdCOE00l
-	sab1OVicA+8QzzlN9dfV0bPu7XnPtDVIFRuHH35k4UbcFHWUXog0H9MJLOTEBnkswIBXfaW29Qd
-	H29kmNeATBqqhrn9OHy5RGuY7O+Y+A/o/CJQK8XdEL4Ye4FtK5fZvYUF+BuO3ilBxe+b5HL84A9
-	Y5CkgAMyZE/4ctQY32PveMPuVaXOXIDJ9hajbinB+fI5BNTjDjLdMCU8qMw9qKGIy2fMwWUxY5P
-	9ozm6M1FjpJ6N0/+eWgKd5HZTd4k=
-X-Received: by 2002:a05:622a:547:b0:4b7:a9cf:91f with SMTP id d75a77b69052e-4e41db8694cmr60789681cf.8.1759409153129;
-        Thu, 02 Oct 2025 05:45:53 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IGbmbyMEl5laym4ZtpLS7VwZdkHI9TTQtdN0M0ejOF2Wn4yjL/VQhmP9xk0GUaubrnM6JYvaA==
-X-Received: by 2002:a05:622a:547:b0:4b7:a9cf:91f with SMTP id d75a77b69052e-4e41db8694cmr60789321cf.8.1759409152494;
-        Thu, 02 Oct 2025 05:45:52 -0700 (PDT)
-Received: from [192.168.149.223] (078088045245.garwolin.vectranet.pl. [78.88.45.245])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-b4865e7c47fsm203494966b.37.2025.10.02.05.45.50
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 02 Oct 2025 05:45:51 -0700 (PDT)
-Message-ID: <1be80052-3ba5-46de-804a-de995f8db5d4@oss.qualcomm.com>
-Date: Thu, 2 Oct 2025 14:45:49 +0200
+        d=1e100.net; s=20230601; t=1759409858; x=1760014658;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=NZ9DvIz4r5smSG4dSA4CIzbwRw8riJPhilOOGaBUqN0=;
+        b=GZu/CVoOMnZDZBEQuHOynvg/1RwdXEuLJbCGLnlCTVaPRPVczRnI7d/jVFteQnWeia
+         6K40B6ibmiIbaVZsaoCXd83/BOpnHv6V03S1YKPAajRONSkMjTjY/ZZXjFfHxHVmweI4
+         YxiSqBTN1r8fsle5aaceswoVm/7qtvtRE/3oBG4PxBvIXX2dzqM4/0/XT21ffvZErMh1
+         ybyi8VlwSMP8/Xh91Szn68iAUsFxUaz61BryV+R4Qyu0oLGTdjg5NywbyMxH+fyS45V3
+         a6EHvk7q9klPPLcT2oI9hZNp5NikElQptho8ycb4C6p5GFWDa+YOxXP4JosLfB4IMotv
+         EfSw==
+X-Forwarded-Encrypted: i=1; AJvYcCV3NIsMOCEYGe6tkG67IQ/1WIZNegBWMDsGAbv9ln7sdgQZZSPUxjGjax/QSNlaEtjCapJ5v5ktd2jvrg==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy5Ae8FQFVKR5p0qoiWrjGLu/5ra9EiQYGRNmRQ1A4wzBshLQd4
+	fgvRKjpD0eV/juDOp1pllT4h2SX+BPODREW7myf+TZT4RqPgzxH34CtZRRSAzzZNb74GvDOdjt8
+	Slpvj8KLS89YHTHLL6E+SWJSpyQ2XxSak676k6UTgVQ==
+X-Gm-Gg: ASbGnctvvg62kFQsFhyn+SCyRsOHLjPw8VgLuRbXBBqQK0zPhg6IrjHY4s6CXSP7bbo
+	lrEH/n3uxeVfAhKecp9WBMKQLW9PcGqtQYyathlgX6VO89nNQszFOKxtZiiRg7eRB6LdJvqDl0R
+	XGia7JJVypowY2tTO/MVrI3u5AeAOmwYAixBzhaNUcxj/ptPf4PjF+rHR3ZHgD4eKymq1DGZr56
+	KOqjvaY/a9pHcNpiFAe7Gudw0umz/bp6GSf
+X-Google-Smtp-Source: AGHT+IHYX7pg60feCJITkUMOxMprgz6P5nDIrUPJazgK/QAWeqrWOagX4EH5hYzH12fx7NdLiTURGQeRt8nyhXDnw20=
+X-Received: by 2002:a05:6808:2385:b0:438:23ad:5dbc with SMTP id
+ 5614622812f47-43fb15cb75cmr1662193b6e.20.1759409857632; Thu, 02 Oct 2025
+ 05:57:37 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 3/4] arm64: dts: qcom: qcm6490-fairphone-fp5: Enable CCI
- pull-up
-To: Griffin Kroah-Hartman <griffin.kroah@fairphone.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Conor Dooley
- <conor+dt@kernel.org>, devicetree@vger.kernel.org,
-        Daniel Scally <djrscally@gmail.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konradybcio@kernel.org>,
-        =?UTF-8?Q?Andr=C3=A9_Apitzsch?=
- <git@apitzsch.eu>,
-        Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
-        Wolfram Sang <wsa@kernel.org>
-Cc: linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org
-References: <20251002-dw9800-driver-v1-0-c305328e44f0@fairphone.com>
- <20251002-dw9800-driver-v1-3-c305328e44f0@fairphone.com>
-Content-Language: en-US
-From: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
-In-Reply-To: <20251002-dw9800-driver-v1-3-c305328e44f0@fairphone.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Proofpoint-GUID: qyEb8grc6faXezhV1e24gAjGBAZQs4ez
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwOTI3MDAxNyBTYWx0ZWRfX8y1dOSRq56vn
- YFV65v3Z8zzNDW5k5trFLplQcOAaOa9nqiDwoO/U9z2dK56XLU92LkaTyhRCoY7cqWBoDIErsrm
- Dcf7rOIBZNeuo4XhVWoI1pURd2APKHry3pZyYxyE4OU67Ax9L31HMXlFDZdgn4DzJaof9I9aq9t
- IUsmbjLHXDBCYf8FqzVetMT8iZwKJW8B+xgAPA4S8yg1at0TP735y5cJ2CqaxL+bFjtnKjSN8ah
- YpFbGO6D0E1/qkYtJoA/h3frnyqD430xYdx1n3eFUGHiao3uoiwFieg5BHHh0m07SwyiHaTUKWx
- mDqP3CBX5HoFV7Iq/5AVlXmIlJl1tIKjtnj6sb18cOWxB/xuL03P5+thU8Lb4BoBOkgFU3s+Pt2
- hB49Rc8Hk8pelxmNuhiEuIumktXxCA==
-X-Authority-Analysis: v=2.4 cv=IeiKmGqa c=1 sm=1 tr=0 ts=68de7402 cx=c_pps
- a=JbAStetqSzwMeJznSMzCyw==:117 a=FpWmc02/iXfjRdCD7H54yg==:17
- a=IkcTkHD0fZMA:10 a=x6icFKpwvdMA:10 a=6H0WHjuAAAAA:8 a=Q18OPwUwxCoJDF6_gJkA:9
- a=QEXdDO2ut3YA:10 a=uxP6HrT_eTzRwkO_Te1X:22 a=Soq9LBFxuPC4vsCAQt-j:22
-X-Proofpoint-ORIG-GUID: qyEb8grc6faXezhV1e24gAjGBAZQs4ez
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1117,Hydra:6.1.9,FMLib:17.12.80.40
- definitions=2025-10-02_05,2025-10-02_03,2025-03-28_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- lowpriorityscore=0 clxscore=1015 priorityscore=1501 bulkscore=0
- suspectscore=0 spamscore=0 adultscore=0 impostorscore=0 phishscore=0
- malwarescore=0 classifier=typeunknown authscore=0 authtc= authcc=
- route=outbound adjust=0 reason=mlx scancount=1 engine=8.19.0-2509150000
- definitions=main-2509270017
+References: <20250911135007.1275833-1-jens.wiklander@linaro.org>
+ <20250911135007.1275833-4-jens.wiklander@linaro.org> <20251002-sceptical-goose-of-fame-7b33d6@houat>
+In-Reply-To: <20251002-sceptical-goose-of-fame-7b33d6@houat>
+From: Jens Wiklander <jens.wiklander@linaro.org>
+Date: Thu, 2 Oct 2025 14:57:25 +0200
+X-Gm-Features: AS18NWB-MzLg3sZZl_om3Nb3U3T2KFc8NTfBmABGN9BozXUUDdedKeLjWJJE67A
+Message-ID: <CAHUa44H3nGgY9q68YRRp5A7Q6Ku3P_URuv+L7H8chYzLAKd8mQ@mail.gmail.com>
+Subject: Re: [PATCH v12 3/9] tee: implement protected DMA-heap
+To: Maxime Ripard <mripard@redhat.com>
+Cc: linux-kernel@vger.kernel.org, linux-media@vger.kernel.org, 
+	dri-devel@lists.freedesktop.org, linaro-mm-sig@lists.linaro.org, 
+	op-tee@lists.trustedfirmware.org, linux-arm-kernel@lists.infradead.org, 
+	Olivier Masse <olivier.masse@nxp.com>, Thierry Reding <thierry.reding@gmail.com>, 
+	Yong Wu <yong.wu@mediatek.com>, Sumit Semwal <sumit.semwal@linaro.org>, 
+	Benjamin Gaignard <benjamin.gaignard@collabora.com>, Brian Starkey <Brian.Starkey@arm.com>, 
+	John Stultz <jstultz@google.com>, "T . J . Mercier" <tjmercier@google.com>, 
+	=?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>, 
+	Sumit Garg <sumit.garg@kernel.org>, Matthias Brugger <matthias.bgg@gmail.com>, 
+	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>, azarrabi@qti.qualcomm.com, 
+	Simona Vetter <simona.vetter@ffwll.ch>, Daniel Stone <daniel@fooishbar.org>, 
+	Rouven Czerwinski <rouven.czerwinski@linaro.org>, robin.murphy@arm.com, 
+	Sumit Garg <sumit.garg@oss.qualcomm.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 10/2/25 12:15 PM, Griffin Kroah-Hartman wrote:
-> Enable vreg_l6p which is used as a pull-up for the CCI busses, to make
-> sure I2C communication works as expected.
-> 
-> Signed-off-by: Griffin Kroah-Hartman <griffin.kroah@fairphone.com>
-> ---
+Hi,
 
-Makes me wonder if we should maybe extend the CCI definition
-(or maybe the common i2c-bus binding?) to accept an external
-pull-up supply, as this is a common problem.. (+Bryan, Wolfram)
+On Thu, Oct 2, 2025 at 9:54=E2=80=AFAM Maxime Ripard <mripard@redhat.com> w=
+rote:
+>
+> On Thu, Sep 11, 2025 at 03:49:44PM +0200, Jens Wiklander wrote:
+> > +static const char *heap_id_2_name(enum tee_dma_heap_id id)
+> > +{
+> > +     switch (id) {
+> > +     case TEE_DMA_HEAP_SECURE_VIDEO_PLAY:
+> > +             return "protected,secure-video";
+> > +     case TEE_DMA_HEAP_TRUSTED_UI:
+> > +             return "protected,trusted-ui";
+> > +     case TEE_DMA_HEAP_SECURE_VIDEO_RECORD:
+> > +             return "protected,secure-video-record";
+> > +     default:
+> > +             return NULL;
+> > +     }
+> > +}
+>
+> We've recently agreed on a naming guideline (even though it's not merged =
+yet)
+>
+> https://lore.kernel.org/r/20250728-dma-buf-heap-names-doc-v4-1-f73f71cf0d=
+fd@kernel.org
 
-We could then shut down the regulator when cameras are not
-in use, preserving some trace amounts of power.
+I wasn't aware of that (or had forgotten it), but during the revisions
+of this patch set, we changed to use "protected".
 
-Or maybe L6P is already used as a pull-up supply for more things
-onboard and should be always-on either way? Could you please
-check that, Griffin?
+>
+> Secure and trusted should be defined I guess, because secure and
+> protected at least seem redundant to me.
 
-Konrad
+Depending on the use case, the protected buffer is only accessible to
+a specific set of devices. This is typically configured by the TEE
+firmware based on which heap we're using. To distinguish between the
+different heaps, I've simply added the name of the use case after the
+comma. So the name of the heap for the Trusted-UI use case is
+"protected,trusted-ui". What would a heap called "protected,ui"
+represent? Protected buffers for a UI use case? What kind of UI use
+case? If the name of the heap is too generic, it might cover more than
+one use case with conflicting requirements for which devices should be
+able to access the protected memory.
 
->  arch/arm64/boot/dts/qcom/qcm6490-fairphone-fp5.dts | 2 ++
->  1 file changed, 2 insertions(+)
-> 
-> diff --git a/arch/arm64/boot/dts/qcom/qcm6490-fairphone-fp5.dts b/arch/arm64/boot/dts/qcom/qcm6490-fairphone-fp5.dts
-> index e115b6a52b299ef663ccfb614785f8f89091f39d..2dd2c452592aa6b0ac826f19eb9cb1a8b90cee47 100644
-> --- a/arch/arm64/boot/dts/qcom/qcm6490-fairphone-fp5.dts
-> +++ b/arch/arm64/boot/dts/qcom/qcm6490-fairphone-fp5.dts
-> @@ -749,6 +749,8 @@ vreg_l6p: ldo6 {
->  				regulator-name = "vreg_l6p";
->  				regulator-min-microvolt = <1700000>;
->  				regulator-max-microvolt = <1904000>;
-> +				/* Pull-up for CCI I2C busses */
-> +				regulator-always-on;
->  			};
->  
->  			vreg_l7p: ldo7 {
-> 
+Thanks,
+Jens
