@@ -1,160 +1,98 @@
-Received: from mail-ot1-f53.google.com (mail-ot1-f53.google.com [209.85.210.53])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DF5C830F95A
-	for <linux-media@vger.kernel.org>; Thu,  2 Oct 2025 13:02:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3D8DE29ACC5;
+	Thu,  2 Oct 2025 13:12:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1759410150; cv=none; b=ewndqUTQnk3081g39MAGAM+eQDRN0f7uY/pQVuJDm3zalj77bhv8H07RvHubwWigAE72Ot5aVamWRBBaaqT4uEwL5UXi8WSvuT6pLJ9cTxxtCQPACd81RsNMnjxvvKgONhUe0m4Des2fqH+0fDD/ye/5Q0EI30R9qMV0q5bfeVg=
+	t=1759410740; cv=none; b=YHefaHr6Zy5KW5MDtr6c5igYEg3ujLKHz4PjSFR5mTW+pRCnJ9R5KM7gY/9bRw1Hrq/1r5pzsSwCZu8DLcpjt5QEEGgQM+IPhY/dgyZY7iez/egTrmOcdKB9FG0CwISnC7oMp80vxE7Y6rzjA+Pwo8IC6nE6Yo2YQ+AnkGp/+CQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1759410150; c=relaxed/simple;
-	bh=Bzm3UVzy5UmWZcilLMKv+UlC3Okbitce2Is02Gaxtrg=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Zg49vjjKGjFlyHaCE8wRiQuBooUW1j9bNIQidyOhjLydiGl7hwJMuqwlgkQpLSdQCDhWJGXxPtS7uHbmv7a3zbKN6OmavJhCxDnowDTWhy2+gZIm/+AAPo2UZWHE7YTzOi2F2/qUXU/NydSjilupTT9jDNKhUjJ8EskJePNtacc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.210.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ot1-f53.google.com with SMTP id 46e09a7af769-74a61973bedso687099a34.0
-        for <linux-media@vger.kernel.org>; Thu, 02 Oct 2025 06:02:27 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1759410146; x=1760014946;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Ec+ndxQ3jnu1a8VNviNr06HkWUDsCBC6MfDIjOmWDIU=;
-        b=GoPm+9s2hFrMLKXBPfi/2oiXw5HET4aXgG34jIbpu/Fc7eqr8N810DtWILLwSgKQVM
-         cMBOp3opXzbgqKOSnmsr4IahHp4M85SWBJ0qlVwY8AORUjupnxCVWGI93ddN8E3Icm+y
-         SSgCtslnxwYcdvm+NoyAV7jby9vlo9dULwYcXSaFc2rXG4i/hkKilfF7z8DvIVY59OPL
-         uCbQq/dN0e/Hf2xrEJaz266aN1cdVs7Twtx/npf6ld80RODJKeXdslZ2qF5h05bYML4Q
-         Lb3RqNeV4dznj/MLZ1E07bOzuzNapJswYZIXdLr0NVrhxu4zQduj2MYiaRGi4zCqgDV5
-         UbEQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWLC1KKqW4ucWEDcybpQkqz1urqsc/4954LuXZ7snN4PnQNy8+xVUN/HprWd9kQA+x4wfZHnnfwXe8hFA==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy2rRDprwaNAHY6WcvOCJQ0ImsH+u8qWfmzAwEP6+5ENrKmfquR
-	C0H/svzJFyxWTABG5pkdAT72bh71UKVMB2ACUmxbzPkvuYugXDLKVs5Fn0yCZy4+VVhqKw==
-X-Gm-Gg: ASbGnctl/66Ctwl/atANFQFdZVeuOuVdt4HkwJOyhC2BeuR6vWbr0m7X0cNHYlFUkot
-	TcWT6yNII2B0tR8RCB8lpqn9HS5eXgb8wi7dn7kOkJOSlT62dvwSug/k/vsoCaOBYh235gTFeJd
-	Ri5aCoKPaNqYx5IDZBDeSSsN4XtkvDer1iOZ22Y5Lyi6gfoBSELjyMoAWXNXt8tfqB62SD5SdrU
-	6kbKLbzLGFruVtRcE5/tvOX5whsyqP6jTQVZytGTiASzGmXJrsjvf0r4BeTQGexQ3sxcvmhBPPv
-	WxtlEHGwR7iTkJnDii+AtX+4Jgps8Zls9Px3QvMXxuf1i7jHZO2Ts9Wf87at4bWSK1KoYRH2+qQ
-	Ff24+CKpEIukbSb1JBiII1ZRSRqHx1JxEcbPOD11H4s7nVqB22Wok1RpB/YNpLWMDEaPVH/Xd0K
-	3gA1gUdxhtMMtFOqqocCTEHiA=
-X-Google-Smtp-Source: AGHT+IGIOeDEWkTPJlJYoFOPlsDJZicUnJ4c/UkoMyFr41LQw4MHAhw4wh4WakhkfW8ENl7pHf8A6Q==
-X-Received: by 2002:a05:6830:488b:b0:788:d698:a0ad with SMTP id 46e09a7af769-7bddb7ef38amr5805038a34.24.1759410146459;
-        Thu, 02 Oct 2025 06:02:26 -0700 (PDT)
-Received: from mail-qt1-f175.google.com (mail-qt1-f175.google.com. [209.85.160.175])
-        by smtp.gmail.com with ESMTPSA id a1e0cc1a2514c-92eb4f0927csm462397241.18.2025.10.02.06.02.26
-        for <linux-media@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 02 Oct 2025 06:02:26 -0700 (PDT)
-Received: by mail-qt1-f175.google.com with SMTP id d75a77b69052e-4e06163d9e9so9498181cf.3
-        for <linux-media@vger.kernel.org>; Thu, 02 Oct 2025 06:02:26 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCXCtLYf5E5vFVhx9Q6hu/OcN5eJAb7HUlUvLanOzaDUtKMWD574BZJkQf9lYdGHMN4dzfKlcWljqeXI0Q==@vger.kernel.org
-X-Received: by 2002:a67:f74a:0:b0:5d3:fecb:e4e8 with SMTP id
- ada2fe7eead31-5d3fecbe643mr2057033137.5.1759409779799; Thu, 02 Oct 2025
- 05:56:19 -0700 (PDT)
+	s=arc-20240116; t=1759410740; c=relaxed/simple;
+	bh=y7aX4lbkpltMNipgy0YD9zDoYMM8nzuOWLeGW3EjzWw=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=tX7KrsKcPvOqKX/zwqrIre6FYrrXSaHObIjIJ5LDOcXW82D/i1bY6orfbJvWGXm5iFq/4BXmB4H/dQWQaHb5Lcgc05NFo29iHKOr31A/oTS0B6Zuhn7dV3za7ql6T4WkoPr7y92WZGflPrrLMr279dEblINgQzoLWbO51+hRHHY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gsIXbF1e; arc=none smtp.client-ip=10.30.226.201
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gsIXbF1e"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 08D70C4CEF4;
+	Thu,  2 Oct 2025 13:12:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1759410739;
+	bh=y7aX4lbkpltMNipgy0YD9zDoYMM8nzuOWLeGW3EjzWw=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=gsIXbF1eOLut9RdxYVNi775fhNJF0J75KTHW2n4GzILNiJFLQDFo8EN7h0lLm5S6E
+	 yxCEeK2j1aug2hDtD50Ymvu0qq++D6+6BaBGk7HFth0QMCoQYJ3YtD2zB6qrSLOA09
+	 7zMEZKIVALrXBgL376eKdpjGbkMJhkNPqIxFzU7KDpuWq5VzmTBZfPNNEEiZPXtwwE
+	 /SK22wCT950sihegNEhGFqcnfQ/Eu6h8BL6HbQBUOHoMiB1PZ/iNP+/QDnimxNOcUl
+	 GqsrUKVuzUkCibsVx1I7b6STuRmsDgKxZmOBd0iOyF3WDuJB/5vb/8cDBKBmRhgAVZ
+	 GoseV/EOAObmw==
+Message-ID: <96091daa-0868-45c8-b16b-39076862b8ee@kernel.org>
+Date: Thu, 2 Oct 2025 14:12:13 +0100
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20251002081247.51255-1-byungchul@sk.com> <20251002081247.51255-3-byungchul@sk.com>
- <2025100255-tapestry-elite-31b0@gregkh>
-In-Reply-To: <2025100255-tapestry-elite-31b0@gregkh>
-From: Geert Uytterhoeven <geert@linux-m68k.org>
-Date: Thu, 2 Oct 2025 14:56:08 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdWXuXh4SVu-ORghAqsZa7U6_mcW44++id9ioUm5Y4KTLw@mail.gmail.com>
-X-Gm-Features: AS18NWCmqHU8DKNueQjpF6Ifrv2W5fzYfUTjQ8XBBt-1KrFWqeUHHsvmYo_0fpY
-Message-ID: <CAMuHMdWXuXh4SVu-ORghAqsZa7U6_mcW44++id9ioUm5Y4KTLw@mail.gmail.com>
-Subject: Re: [PATCH v17 02/47] dept: implement DEPT(DEPendency Tracker)
-To: Greg KH <gregkh@linuxfoundation.org>
-Cc: Byungchul Park <byungchul@sk.com>, linux-kernel@vger.kernel.org, kernel_team@skhynix.com, 
-	torvalds@linux-foundation.org, damien.lemoal@opensource.wdc.com, 
-	linux-ide@vger.kernel.org, adilger.kernel@dilger.ca, 
-	linux-ext4@vger.kernel.org, mingo@redhat.com, peterz@infradead.org, 
-	will@kernel.org, tglx@linutronix.de, rostedt@goodmis.org, 
-	joel@joelfernandes.org, sashal@kernel.org, daniel.vetter@ffwll.ch, 
-	duyuyang@gmail.com, johannes.berg@intel.com, tj@kernel.org, tytso@mit.edu, 
-	willy@infradead.org, david@fromorbit.com, amir73il@gmail.com, 
-	kernel-team@lge.com, linux-mm@kvack.org, akpm@linux-foundation.org, 
-	mhocko@kernel.org, minchan@kernel.org, hannes@cmpxchg.org, 
-	vdavydov.dev@gmail.com, sj@kernel.org, jglisse@redhat.com, dennis@kernel.org, 
-	cl@linux.com, penberg@kernel.org, rientjes@google.com, vbabka@suse.cz, 
-	ngupta@vflare.org, linux-block@vger.kernel.org, josef@toxicpanda.com, 
-	linux-fsdevel@vger.kernel.org, jack@suse.cz, jlayton@kernel.org, 
-	dan.j.williams@intel.com, hch@infradead.org, djwong@kernel.org, 
-	dri-devel@lists.freedesktop.org, rodrigosiqueiramelo@gmail.com, 
-	melissa.srw@gmail.com, hamohammed.sa@gmail.com, harry.yoo@oracle.com, 
-	chris.p.wilson@intel.com, gwan-gyeong.mun@intel.com, 
-	max.byungchul.park@gmail.com, boqun.feng@gmail.com, longman@redhat.com, 
-	yunseong.kim@ericsson.com, ysk@kzalloc.com, yeoreum.yun@arm.com, 
-	netdev@vger.kernel.org, matthew.brost@intel.com, her0gyugyu@gmail.com, 
-	corbet@lwn.net, catalin.marinas@arm.com, bp@alien8.de, 
-	dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com, luto@kernel.org, 
-	sumit.semwal@linaro.org, gustavo@padovan.org, christian.koenig@amd.com, 
-	andi.shyti@kernel.org, arnd@arndb.de, lorenzo.stoakes@oracle.com, 
-	Liam.Howlett@oracle.com, rppt@kernel.org, surenb@google.com, 
-	mcgrof@kernel.org, petr.pavlu@suse.com, da.gomez@kernel.org, 
-	samitolvanen@google.com, paulmck@kernel.org, frederic@kernel.org, 
-	neeraj.upadhyay@kernel.org, joelagnelf@nvidia.com, josh@joshtriplett.org, 
-	urezki@gmail.com, mathieu.desnoyers@efficios.com, jiangshanlai@gmail.com, 
-	qiang.zhang@linux.dev, juri.lelli@redhat.com, vincent.guittot@linaro.org, 
-	dietmar.eggemann@arm.com, bsegall@google.com, mgorman@suse.de, 
-	vschneid@redhat.com, chuck.lever@oracle.com, neil@brown.name, 
-	okorniev@redhat.com, Dai.Ngo@oracle.com, tom@talpey.com, trondmy@kernel.org, 
-	anna@kernel.org, kees@kernel.org, bigeasy@linutronix.de, clrkwllms@kernel.org, 
-	mark.rutland@arm.com, ada.coupriediaz@arm.com, kristina.martsenko@arm.com, 
-	wangkefeng.wang@huawei.com, broonie@kernel.org, kevin.brodsky@arm.com, 
-	dwmw@amazon.co.uk, shakeel.butt@linux.dev, ast@kernel.org, ziy@nvidia.com, 
-	yuzhao@google.com, baolin.wang@linux.alibaba.com, usamaarif642@gmail.com, 
-	joel.granados@kernel.org, richard.weiyang@gmail.com, geert+renesas@glider.be, 
-	tim.c.chen@linux.intel.com, linux@treblig.org, 
-	alexander.shishkin@linux.intel.com, lillian@star-ark.net, 
-	chenhuacai@kernel.org, francesco@valla.it, guoweikang.kernel@gmail.com, 
-	link@vivo.com, jpoimboe@kernel.org, masahiroy@kernel.org, brauner@kernel.org, 
-	thomas.weissschuh@linutronix.de, oleg@redhat.com, mjguzik@gmail.com, 
-	andrii@kernel.org, wangfushuai@baidu.com, linux-doc@vger.kernel.org, 
-	linux-arm-kernel@lists.infradead.org, linux-media@vger.kernel.org, 
-	linaro-mm-sig@lists.linaro.org, linux-i2c@vger.kernel.org, 
-	linux-arch@vger.kernel.org, linux-modules@vger.kernel.org, 
-	rcu@vger.kernel.org, linux-nfs@vger.kernel.org, 
-	linux-rt-devel@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 3/4] arm64: dts: qcom: qcm6490-fairphone-fp5: Enable CCI
+ pull-up
+To: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>,
+ Griffin Kroah-Hartman <griffin.kroah@fairphone.com>,
+ Mauro Carvalho Chehab <mchehab@kernel.org>, Rob Herring <robh@kernel.org>,
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
+ <conor+dt@kernel.org>, devicetree@vger.kernel.org,
+ Daniel Scally <djrscally@gmail.com>,
+ Sakari Ailus <sakari.ailus@linux.intel.com>,
+ Bjorn Andersson <andersson@kernel.org>,
+ Konrad Dybcio <konradybcio@kernel.org>, =?UTF-8?Q?Andr=C3=A9_Apitzsch?=
+ <git@apitzsch.eu>, Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
+ Wolfram Sang <wsa@kernel.org>
+Cc: linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-arm-msm@vger.kernel.org
+References: <20251002-dw9800-driver-v1-0-c305328e44f0@fairphone.com>
+ <20251002-dw9800-driver-v1-3-c305328e44f0@fairphone.com>
+ <H1UBvTPPR7Tu-lzvNcSjkBkAs8KXmTnMGOywmOMU19jtFgF0aChDEfnEcTarceYFIPulLRbHW3ar30_uNW2HjA==@protonmail.internalid>
+ <1be80052-3ba5-46de-804a-de995f8db5d4@oss.qualcomm.com>
+From: Bryan O'Donoghue <bod@kernel.org>
+Content-Language: en-US
+In-Reply-To: <1be80052-3ba5-46de-804a-de995f8db5d4@oss.qualcomm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-Hi Greg,
+On 02/10/2025 13:45, Konrad Dybcio wrote:
+> On 10/2/25 12:15 PM, Griffin Kroah-Hartman wrote:
+>> Enable vreg_l6p which is used as a pull-up for the CCI busses, to make
+>> sure I2C communication works as expected.
 
-On Thu, 2 Oct 2025 at 10:25, Greg KH <gregkh@linuxfoundation.org> wrote:
-> > @@ -0,0 +1,446 @@
-> > +/* SPDX-License-Identifier: GPL-2.0 */
-> > +/*
-> > + * DEPT(DEPendency Tracker) - runtime dependency tracker
-> > + *
-> > + * Started by Byungchul Park <max.byungchul.park@gmail.com>:
-> > + *
-> > + *  Copyright (c) 2020 LG Electronics, Inc., Byungchul Park
-> > + *  Copyright (c) 2024 SK hynix, Inc., Byungchul Park
->
-> Nit, it's now 2025 :)
+"vreg_l6p is the voltage source for the pull-up resistor"
 
-The last non-trivial change to this file was between the last version
-posted in 2024 (v14) and the first version posted in 2025 (v15),
-so 2024 doesn't sound that off to me.
-You are not supposed to bump the copyright year when republishing
-without any actual changes.  It is meant to be the work=E2=80=99s first yea=
-r
-of publication.
+>>
+>> Signed-off-by: Griffin Kroah-Hartman<griffin.kroah@fairphone.com>
+>> ---
+> Makes me wonder if we should maybe extend the CCI definition
+> (or maybe the common i2c-bus binding?) to accept an external
+> pull-up supply, as this is a common problem.. (+Bryan, Wolfram)
 
-Gr{oetje,eeting}s,
 
-                        Geert
+always-on is up to the platform - i.e. do you care about the 
+floating-state of the i2c bus in power-collapse anyway ? Feels like 
+something up to the platform designers.
+> We could then shut down the regulator when cameras are not
+> in use, preserving some trace amounts of power.> Or maybe L6P is already used as a pull-up supply for more things
+> onboard and should be always-on either way? Could you please
+> check that, Griffin?
 
---=20
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k=
-.org
+If we drop always-on and introduce a "pullup-supply" to the CCI bindings 
+then, it would be up the CCI driver to enable/disable the bus pullups 
+and then we can optionally do the power-rail disable when entering 
+power-collapse.
 
-In personal conversations with technical people, I call myself a hacker. Bu=
-t
-when I'm talking to journalists I just say "programmer" or something like t=
-hat.
-                                -- Linus Torvalds
+That'd be nice.
+
+As-is though I personally am fine with the patch as-is with the updated 
+commit text above - consider the CCI change as extra homework ;)
+
+Assuming the commit log is tweaked.
+
+Reviewed-by: Bryan O'Donoghue <bod@kernel.org>
