@@ -1,274 +1,129 @@
-Received: from invmail4.hynix.com (exvmail4.skhynix.com [166.125.252.92])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8087C313D50;
-	Thu,  2 Oct 2025 08:14:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=166.125.252.92
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5F48E2E62D1;
+	Thu,  2 Oct 2025 08:17:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1759392858; cv=none; b=P9CvJ44qWZ0KTK2gQ7MUITS1XIryLxMnPkefZKSavMqnw/EPgAfzxnvaE2/BLd/ltu5Qu/mkYHs1y19k43BwLgVd2gQlqC+smXu49CRUo3WiEge1WgrvAKxGtX7j5IUT99V0iWKHFOalJyoucNi30NESpShLqzo2CekIw04PsqM=
+	t=1759393032; cv=none; b=OnXlrUw/jG1Dv4LZXAjWgQG5D5xr1FuCygCOy+Wxb0yuLuVNbEGjZspLDhHKtwBX+7PZW4QdruXkKQjpoXjq0Z7lUH9O4LUFOJX8W18DACjL1V3T3/YZF39vXev+lm0Zy2D4AzUbcdMjnScDtiHsXuLW+d899i4XNRahw2LRvqE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1759392858; c=relaxed/simple;
-	bh=jhmrpwTM08yBA9ZoPplcfQMQcK3SVeR5SdyXR0h1+Bo=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=R/Pg+6hKCBwAa1M/EPzCTwZoZsdqimf0DjmssInqvLY8fqwod9gLRyXhhfr45CE3p9OcwxAtd5cKk6JbT1ylPkpKXRZ4fdmVZvfipEsV9xhT4OTUNN4ra7ydzj5Qdis9ibGZ1cevSUWSv8QlM3S/kP7DTp8Mcq567OfSu6PlzyQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sk.com; spf=pass smtp.mailfrom=sk.com; arc=none smtp.client-ip=166.125.252.92
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sk.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sk.com
-X-AuditID: a67dfc5b-c2dff70000001609-13-68de3419e02b
-From: Byungchul Park <byungchul@sk.com>
-To: linux-kernel@vger.kernel.org
-Cc: kernel_team@skhynix.com,
-	torvalds@linux-foundation.org,
-	damien.lemoal@opensource.wdc.com,
-	linux-ide@vger.kernel.org,
-	adilger.kernel@dilger.ca,
-	linux-ext4@vger.kernel.org,
-	mingo@redhat.com,
-	peterz@infradead.org,
-	will@kernel.org,
-	tglx@linutronix.de,
-	rostedt@goodmis.org,
-	joel@joelfernandes.org,
-	sashal@kernel.org,
-	daniel.vetter@ffwll.ch,
-	duyuyang@gmail.com,
-	johannes.berg@intel.com,
-	tj@kernel.org,
-	tytso@mit.edu,
-	willy@infradead.org,
-	david@fromorbit.com,
-	amir73il@gmail.com,
-	gregkh@linuxfoundation.org,
-	kernel-team@lge.com,
-	linux-mm@kvack.org,
-	akpm@linux-foundation.org,
-	mhocko@kernel.org,
-	minchan@kernel.org,
-	hannes@cmpxchg.org,
-	vdavydov.dev@gmail.com,
-	sj@kernel.org,
-	jglisse@redhat.com,
-	dennis@kernel.org,
-	cl@linux.com,
-	penberg@kernel.org,
-	rientjes@google.com,
-	vbabka@suse.cz,
-	ngupta@vflare.org,
-	linux-block@vger.kernel.org,
-	josef@toxicpanda.com,
-	linux-fsdevel@vger.kernel.org,
-	jack@suse.cz,
-	jlayton@kernel.org,
-	dan.j.williams@intel.com,
-	hch@infradead.org,
-	djwong@kernel.org,
-	dri-devel@lists.freedesktop.org,
-	rodrigosiqueiramelo@gmail.com,
-	melissa.srw@gmail.com,
-	hamohammed.sa@gmail.com,
-	harry.yoo@oracle.com,
-	chris.p.wilson@intel.com,
-	gwan-gyeong.mun@intel.com,
-	max.byungchul.park@gmail.com,
-	boqun.feng@gmail.com,
-	longman@redhat.com,
-	yunseong.kim@ericsson.com,
-	ysk@kzalloc.com,
-	yeoreum.yun@arm.com,
-	netdev@vger.kernel.org,
-	matthew.brost@intel.com,
-	her0gyugyu@gmail.com,
-	corbet@lwn.net,
-	catalin.marinas@arm.com,
-	bp@alien8.de,
-	dave.hansen@linux.intel.com,
-	x86@kernel.org,
-	hpa@zytor.com,
-	luto@kernel.org,
-	sumit.semwal@linaro.org,
-	gustavo@padovan.org,
-	christian.koenig@amd.com,
-	andi.shyti@kernel.org,
-	arnd@arndb.de,
-	lorenzo.stoakes@oracle.com,
-	Liam.Howlett@oracle.com,
-	rppt@kernel.org,
-	surenb@google.com,
-	mcgrof@kernel.org,
-	petr.pavlu@suse.com,
-	da.gomez@kernel.org,
-	samitolvanen@google.com,
-	paulmck@kernel.org,
-	frederic@kernel.org,
-	neeraj.upadhyay@kernel.org,
-	joelagnelf@nvidia.com,
-	josh@joshtriplett.org,
-	urezki@gmail.com,
-	mathieu.desnoyers@efficios.com,
-	jiangshanlai@gmail.com,
-	qiang.zhang@linux.dev,
-	juri.lelli@redhat.com,
-	vincent.guittot@linaro.org,
-	dietmar.eggemann@arm.com,
-	bsegall@google.com,
-	mgorman@suse.de,
-	vschneid@redhat.com,
-	chuck.lever@oracle.com,
-	neil@brown.name,
-	okorniev@redhat.com,
-	Dai.Ngo@oracle.com,
-	tom@talpey.com,
-	trondmy@kernel.org,
-	anna@kernel.org,
-	kees@kernel.org,
-	bigeasy@linutronix.de,
-	clrkwllms@kernel.org,
-	mark.rutland@arm.com,
-	ada.coupriediaz@arm.com,
-	kristina.martsenko@arm.com,
-	wangkefeng.wang@huawei.com,
-	broonie@kernel.org,
-	kevin.brodsky@arm.com,
-	dwmw@amazon.co.uk,
-	shakeel.butt@linux.dev,
-	ast@kernel.org,
-	ziy@nvidia.com,
-	yuzhao@google.com,
-	baolin.wang@linux.alibaba.com,
-	usamaarif642@gmail.com,
-	joel.granados@kernel.org,
-	richard.weiyang@gmail.com,
-	geert+renesas@glider.be,
-	tim.c.chen@linux.intel.com,
-	linux@treblig.org,
-	alexander.shishkin@linux.intel.com,
-	lillian@star-ark.net,
-	chenhuacai@kernel.org,
-	francesco@valla.it,
-	guoweikang.kernel@gmail.com,
-	link@vivo.com,
-	jpoimboe@kernel.org,
-	masahiroy@kernel.org,
-	brauner@kernel.org,
-	thomas.weissschuh@linutronix.de,
-	oleg@redhat.com,
-	mjguzik@gmail.com,
-	andrii@kernel.org,
-	wangfushuai@baidu.com,
-	linux-doc@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-media@vger.kernel.org,
-	linaro-mm-sig@lists.linaro.org,
-	linux-i2c@vger.kernel.org,
-	linux-arch@vger.kernel.org,
-	linux-modules@vger.kernel.org,
-	rcu@vger.kernel.org,
-	linux-nfs@vger.kernel.org,
-	linux-rt-devel@lists.linux.dev
-Subject: [PATCH v17 46/47] SUNRPC: relocate struct rcu_head to the first field of struct rpc_xprt
-Date: Thu,  2 Oct 2025 17:12:46 +0900
-Message-Id: <20251002081247.51255-47-byungchul@sk.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20251002081247.51255-1-byungchul@sk.com>
-References: <20251002081247.51255-1-byungchul@sk.com>
+	s=arc-20240116; t=1759393032; c=relaxed/simple;
+	bh=qhPCv+hvtTaEhLSvWRtO8cEw6fW/dZWLWErQIn5N/xI=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=IeQ5WDdr+s/ZxTERLn5eAoyZYYHGz0JzW5VK7o3RQs0W6pV9Te8jQXla3069C6On7TxYqEDn1cM0pk8STDM1a4OgiZ597JlbkRYN84/PrBt2pbaAfn63KcCFjyHKR3wUrIF6pz1SLgUcKzZq8RR+mLW+47cFtaWhtxMdiFfS5SY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=bHvHi6Tf; arc=none smtp.client-ip=192.198.163.16
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="bHvHi6Tf"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1759393030; x=1790929030;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=qhPCv+hvtTaEhLSvWRtO8cEw6fW/dZWLWErQIn5N/xI=;
+  b=bHvHi6Tf6x/xkfHLwjuXJvMxI5kMnbD1oPi4oBtxQPGxng5MJuc8AsWk
+   K3EtIDSVLomCinLwwiFsdP6DEif/5gUgC5DKTu3WgDv94CL7Qzp619hrp
+   mXJo/01MjlQ4WBDetvbx0ZUgqSN2xiSqH6ZUMn+CEWOupKGYLDo3cGzUg
+   l0VWa1Uj6aC5Wa+PYFOaKFKpOMU+X4O6q9fcZrf0UcwFk9rr7miTItBSl
+   rWq//aTKHW/UplK76bGwS//usY7Vkle0Agdhgf4K2vIEzMZVSbuFr/Wef
+   l8WkSaSCajNqjWJVNkySxHhMaVYYkRENr44hcrAWu6flRlpDx8C+F4N7I
+   w==;
+X-CSE-ConnectionGUID: vecdJEyBR8+IG0unCgVxRQ==
+X-CSE-MsgGUID: ROiODXKeSXC5jFxFfy0O7w==
+X-IronPort-AV: E=McAfee;i="6800,10657,11569"; a="49230498"
+X-IronPort-AV: E=Sophos;i="6.18,309,1751266800"; 
+   d="scan'208";a="49230498"
+Received: from orviesa007.jf.intel.com ([10.64.159.147])
+  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Oct 2025 01:17:09 -0700
+X-CSE-ConnectionGUID: 6YX8BcraQ+aqUY/Jr4ihHw==
+X-CSE-MsgGUID: BdxfyJimRBuNrjmbXHg0HA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.18,309,1751266800"; 
+   d="scan'208";a="178797283"
+Received: from bergbenj-mobl1.ger.corp.intel.com (HELO kekkonen.fi.intel.com) ([10.245.245.175])
+  by orviesa007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Oct 2025 01:17:07 -0700
+Received: from kekkonen.localdomain (localhost [IPv6:::1])
+	by kekkonen.fi.intel.com (Postfix) with SMTP id 7333A121EC3;
+	Thu, 02 Oct 2025 11:17:03 +0300 (EEST)
+Date: Thu, 2 Oct 2025 11:17:03 +0300
+Organization: Intel Finland Oy - BIC 0357606-4 - c/o Alberga Business Park, 6 krs, Bertel Jungin Aukio 5, 02600 Espoo
+From: Sakari Ailus <sakari.ailus@linux.intel.com>
+To: Jacopo Mondi <jacopo.mondi@ideasonboard.com>
+Cc: Dafna Hirschfeld <dafna@fastmail.com>,
+	Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+	Keke Li <keke.li@amlogic.com>,
+	Mauro Carvalho Chehab <mchehab@kernel.org>,
+	Heiko Stuebner <heiko@sntech.de>,
+	Dan Scally <dan.scally@ideasonboard.com>,
+	Antoine Bouyer <antoine.bouyer@nxp.com>,
+	linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
+	linux-rockchip@lists.infradead.org,
+	linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH v5 0/8] media: Introduce V4L2 generic ISP support
+Message-ID: <aN40_78P5TaUuglA@kekkonen.localdomain>
+References: <20250915-extensible-parameters-validation-v5-0-e6db94468af3@ideasonboard.com>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Brightmail-Tracker: H4sIAAAAAAAAA02SbUxTZxTH89z73NuX0OXSmXgBHUsXYlYUh0NytjmzLVv2fFmyxA9bNIqd
-	NLQTKCsKdi8JCGSNCsMu4NpuWCCQulbLWslEKSINzSoQituwYy0vDiEEkAVoGVrKWskyv/3y
-	P+f/O1+OkJYa2VShuviUUlusKJSxYixeTGrek5IzrnqluR9gtLIXQ3hVj+F7h50FvdPIwERY
-	j2DtiZmG1fU/BdA4YqDBfr2SgpWOGAvznmUEl+YqMZhmzAKY638fFiduMbAZmqXgfmQBQft0
-	jILp3q8RbDSehMstLhaeDA3TcKnBj6B5KkTDde84Arf1LAsP6ztp8DWcZ+FRBwuWs24GfjAb
-	EFS1OlgINhoosDk/gIn2GQyNP22HwdYghuhUNmxaNOC1zQrg2uIwA84/+hHYL8zQoL8ZxuD8
-	a5QB91gmGJuCLHS7fRj0G6sIvDceUHCho5OBCvMaA/dsfgyO2QAFA95fMPhMVzAM37zKQNv9
-	EQqmJgMMuIYGaYjUpYH/Yi0DgfqHCK4+amHfyidrNXWY1NzbYIm9yY7IalsVTTwLSzSpdpWT
-	toEFljwO/84Sd8SCyd0Wnlwc2kO6TCEBqe4ZExCL8zRxWeWktXuO+lB+WHwgX1moLlNq9x48
-	LlYNXnm7xJ18ptpwtAItSc4hoZDncnhLDJ1DoqfYY/ubSjDL7eIDgXU6wdu4F3lX7QyTYJob
-	2MGPjuxO8POcgl/xhOiEBnMZ/PI/HydiCZfLW6u+Y7aU6byto/epRhTPf50awAmWcvv5mqVq
-	ams/mfcZp3FCQ8fPOpqkW5fS+apOc7wqjms8Ij7ycxe15Uzh71gDuB5xpmfqpv/rpmfqFkT/
-	iKTq4rIihbowJ0ulK1afyTqhKXKi+MO2fxU9cgMt+w/1IU6IZEkSf0ZIJWUUZaW6oj7EC2nZ
-	Nslxa1AlleQrdJ8rtZo87elCZWkfShNi2XbJvkh5vpQrUJxSnlQqS5Ta/6aUUJRagXbKr2V5
-	b3ftk1TUsmMZm7sJPf4Cdbcn1/JeQcbLj+eXSgp2JNWaWhw7v4iSL30rk8a8396YP+SNHdBp
-	+t58Tf2SJk+08FnUcDvlo2D9/k/r5N++Pvnqu5kN+Hzq+sFjk6rcd2J3Uk4cfpDpCX0STg57
-	e57Tmcqj8+Zuqyg7ffabtMsyXKpSZMtpbaniX2jl8TOsAwAA
-X-Brightmail-Tracker: H4sIAAAAAAAAA02Sa0hTYRjHec9d6cRxGZ3Ksgaj6GIXsh4qulDhIejyrQgqVx7amDe2spQC
-	bY6krGwxV1upKQ3bTE0rMlkMJSt11LQb6dLlskJtYpp5XWdJ1JeX3/s8P/7P8+FhcNkIOYdR
-	Jx8XtcnKRDkVToTv3qBfPnvNR9VKZ/kMeJvlImBoMIeAGxVlFORUXSfhVbkDQcdQDoLhMSsO
-	hpogARPGBhoGR9poCDobEOR7jDiU3c/C4EflJAU99QMITD4/BeZvWQQEbLkILN1WGr49jYO+
-	jloSgt4vGLz72YvA5p/EwO86h2AiXwOFxdUUjLlf4mA2vUJwy+fF4Wul1Lzf8BGBs/QsBZ/z
-	HuDQ6p8Or4cCFLwwXaCgz3MDg++VFBSddZJw02pEoC+poCD/ZhUBNZ2PafD0jGPQnm/EwFG1
-	Czps3QQ05RVj0n6SdW8WWM16THq+YmC6W4vBiM1OQ3NJOwG2TAVY3a0kfCq10DDuWwXBohRo
-	cHyhwXvZREB530tyiwkJw4ZLhGCvfogJhpYJSigrKEPC2KgRCYO39bhgyJO+9b0BXMiuPinc
-	buqlhNGhN5Tg/FlECI3FvHDFvVyosXhpIfvJB3rv+gPhGxPERHWaqF2xKT5c1Xxna6oz4lS2
-	8WAmCrDnURjDc2v4J45+LMQUt4h//34ED3Ekt4CvvthNhhjnmqL4t55lIZ7BKfkf9V7JYRiC
-	U/ADv/aHyiy3li/VXyOnIqN5R6XrT0yYVG/1NREhlnGxvCGQjU35EfyL634iFINLYysKZFOT
-	onn9Ayueh1jLf5bln2X5zypCuB1FqpPTkpTqxNgYnUaVnqw+FXM0JakKSQdpOzN+5REabI2r
-	QxyD5NNYj8KrkpHKNF16Uh3iGVweycaXtqtkbIIyPUPUphzWnkgUdXVoLkPIZ7E794nxMu6Y
-	8rioEcVUUfu3izFhczLRh8aWPRBVeFCh3fbZ3bgO254rX9072XNu4Xx3f+PchKhJfdy8q5u2
-	bC5xm8/bYtpcW2MWz+zqYjtrT7ZohI0F9tPajOd7I7b7Tmc034L2nK5n9wotbOehpbFO89Xh
-	w/1ZrsVc3xFFbYV5x1qHnW8zTUtN0oRFu9riBsbujAZzV8gJnUq5agmu1Sl/A2JfrD6MAwAA
-X-CFilter-Loop: Reflected
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250915-extensible-parameters-validation-v5-0-e6db94468af3@ideasonboard.com>
 
-While compiling Linux kernel with DEPT on, the following error was
-observed:
+Hi Jacopo,
 
-   ./include/linux/rcupdate.h:1084:17: note: in expansion of macro
-   ‘BUILD_BUG_ON’
-   1084 | BUILD_BUG_ON(offsetof(typeof(*(ptr)), rhf) >= 4096);	\
-        | ^~~~~~~~~~~~
-   ./include/linux/rcupdate.h:1047:29: note: in expansion of macro
-   'kvfree_rcu_arg_2'
-   1047 | #define kfree_rcu(ptr, rhf) kvfree_rcu_arg_2(ptr, rhf)
-        |                             ^~~~~~~~~~~~~~~~
-   net/sunrpc/xprt.c:1856:9: note: in expansion of macro 'kfree_rcu'
-   1856 | kfree_rcu(xprt, rcu);
-        | ^~~~~~~~~
-    CC net/kcm/kcmproc.o
-   make[4]: *** [scripts/Makefile.build:203: net/sunrpc/xprt.o] Error 1
+On Mon, Sep 15, 2025 at 07:18:09PM +0200, Jacopo Mondi wrote:
+> Extensible parameters meta formats have been introduced in the Linux
+> kernel v6.12 initially to support different revision of the RkISP1 ISP
+> implemented in different SoC. In order to avoid breaking userspace
+> everytime an ISP configuration block is added or modified in the uAPI
+> these new formats, which are versionated and extensible by their
+> definition have been introduced.
+> 
+> See for reference:
+> e9d05e9d5db1 ("media: uapi: rkisp1-config: Add extensible params format")
+> 6c53a7b68c5d ("media: rkisp1: Implement extensible params support")
+> 
+> The Amlogic C3 ISP driver followed shortly, introducing an extensible
+> format for the ISP configuration:
+> 
+> 6d406187ebc0 ("media: uapi: Add stats info and parameters buffer for C3 ISP")
+> 
+> with a very similar, if not identical, implementation of the routines to
+> validate and handle the ISP configuration in the ISP driver in the
+> c3-isp-params.c file.
+> 
+> fb2e135208f3 ("media: platform: Add C3 ISP driver")
+> 
+> With the recent upstreaming attempt of the Mali C55 ISP driver from Dan,
+> a third user of extensible parameters is going to be itroduced in the
+> kernel, duplicating again in the driver the procedure for validating and
+> handling the ISP configuration blocks
+> 
+> https://patchwork.linuxtv.org/project/linux-media/patch/20250624-c55-v10-15-54f3d4196990@ideasonboard.com/
+> 
+> To avoid duplicating again the validation routines and common types
+> definition, this series introduces v4l2-isp.c/.h for the kAPI
+> and v4l2-isp.h for the uAPI and re-organize the RkISP1
+> and Amlogic C3 drivers to use the common types and the helper validation
+> routines.
+> 
+> The v4l2-isp abstraction will be augmented to support statistcs as well.
+> 
+> If the here proposed approach is accepted, I propose to rebase the Mali
+> C55 driver on top of this series, to use the new common types and
+> helpers.
+> 
+> I have been able to test this on RkISP1 but not on C3.
 
-Since kfree_rcu() assumes 'offset of struct rcu_head in a rcu-managed
-struct < 4096', the offest of struct rcu_head in struct rpc_xprt should
-not exceed 4096 but does, due to the debug information added by DEPT.
+Thank you for working on this.
 
-Relocate struct rcu_head to the first field of struct rpc_xprt from an
-arbitrary location to avoid the issue and meet the assumption.
+Acked-by: Sakari Ailus <sakari.ailus@linux.intel.com>
 
-Reported-by: Yunseong Kim <ysk@kzalloc.com>
-Signed-off-by: Byungchul Park <byungchul@sk.com>
----
- include/linux/sunrpc/xprt.h | 9 ++++++++-
- 1 file changed, 8 insertions(+), 1 deletion(-)
-
-diff --git a/include/linux/sunrpc/xprt.h b/include/linux/sunrpc/xprt.h
-index f46d1fb8f71a..666e42a17a31 100644
---- a/include/linux/sunrpc/xprt.h
-+++ b/include/linux/sunrpc/xprt.h
-@@ -211,6 +211,14 @@ enum xprt_transports {
- 
- struct rpc_sysfs_xprt;
- struct rpc_xprt {
-+	/*
-+	 * Place struct rcu_head within the first 4096 bytes of struct
-+	 * rpc_xprt if sizeof(struct rpc_xprt) > 4096, so that
-+	 * kfree_rcu() can simply work assuming that.  See the comment
-+	 * in kfree_rcu().
-+	 */
-+	struct rcu_head		rcu;
-+
- 	struct kref		kref;		/* Reference count */
- 	const struct rpc_xprt_ops *ops;		/* transport methods */
- 	unsigned int		id;		/* transport id */
-@@ -317,7 +325,6 @@ struct rpc_xprt {
- #if IS_ENABLED(CONFIG_SUNRPC_DEBUG)
- 	struct dentry		*debugfs;		/* debugfs directory */
- #endif
--	struct rcu_head		rcu;
- 	const struct xprt_class	*xprt_class;
- 	struct rpc_sysfs_xprt	*xprt_sysfs;
- 	bool			main; /*mark if this is the 1st transport */
 -- 
-2.17.1
+Kind regards,
 
+Sakari Ailus
