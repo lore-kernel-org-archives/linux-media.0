@@ -1,180 +1,106 @@
-Received: from fra-out-013.esa.eu-central-1.outbound.mail-perimeter.amazon.com (fra-out-013.esa.eu-central-1.outbound.mail-perimeter.amazon.com [63.178.132.221])
+Received: from mx.treblig.org (mx.treblig.org [46.235.229.95])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BE2C522157B;
-	Thu,  2 Oct 2025 20:50:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=63.178.132.221
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 683FE1C4A10;
+	Thu,  2 Oct 2025 20:50:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.235.229.95
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1759438216; cv=none; b=g7Olb8+aVnWsma9jDo3PDpAhWDmAEKDw1kIrJX3nF97M3VXGwmhp5TSHGLigPOf5PaKmsPFSGxOZDtT/qI1UR1byYfS2emZ6bPcToERQjrHyaE0r1PzuqgoGe800GNgMQ2vV8tXb3tR0dbr6e7O8JmnSWzCwzQW1elA2X26BiHI=
+	t=1759438236; cv=none; b=ITxyFni55KTlgngHdwXXLhd5wTInMV/p70VeHlWPhcFqd+IdmQiSk7WlomW4lLxFAAW1YobwJ8faL0o1ckbk2AldosRt8/EuoPczaH3jHD62t2mrRxoVixBbrTrtHBRO2VWHD+OxxswLbF2oqFDN1g23yIaq8vhi4GgGHKFMJRs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1759438216; c=relaxed/simple;
-	bh=pN6xHynU3dxSSOEd6+/U7k0fkrp3twy3S4zrtKuGEN4=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=scsYC24g4R60TLiK860G05QNMMuGkLbmyn817N8u52O2JcFSYh6Y2XkORXeXa6CVH5nmuhlPNbSr0c4nqfNNLlr2XGo+M54h+TmK/srqc120xLcE8EA7ev8xDiynMGi9Q/QIbDug4gkb71/WSynKp7zp3mrZWFN/2rAGwS/sbns=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com; spf=pass smtp.mailfrom=amazon.com; dkim=pass (2048-bit key) header.d=amazon.com header.i=@amazon.com header.b=QwLX9jLb; arc=none smtp.client-ip=63.178.132.221
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=amazon.com
+	s=arc-20240116; t=1759438236; c=relaxed/simple;
+	bh=UTpRTPC7u6vNzbnK8EDdA8HMy/2iR/0ZlTpwgM8uRGM=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=emOKOdhfCyPwwti3QAox9u0qg3q6ZK57QE8f6dXZzFXlTj3+a6DM7Z549eWfKcn6Vx2iNiWqmrWSYaojUpGDrm/2967zj2tv0u2DI3zgOx+UPlLk14AApi8uG6jgO2zPjOeScLoKQ/HuHIRXti6Kj/zG5+FsxqJ3vInLjMwocNc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=treblig.org; spf=pass smtp.mailfrom=treblig.org; dkim=pass (2048-bit key) header.d=treblig.org header.i=@treblig.org header.b=C69Ah66b; arc=none smtp.client-ip=46.235.229.95
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=treblig.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=treblig.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=amazon.com header.i=@amazon.com header.b="QwLX9jLb"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazoncorp2;
-  t=1759438214; x=1790974214;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=4vb6NSqQR6ex3kWRbhDvcIC1XoiVTA7hMRv6Rl9gJRM=;
-  b=QwLX9jLbfx/n+QsS65JgElmHaL78Oa0mwt571Zc0AjUD66UEf05ycfJu
-   Xe3UcJpKiEDA6CIn4Uxx3yC2njK+YbBtuq2y536NxNyRXl9fpY6q6H7LT
-   mPt/V4WNLzg35XSiBnLgDUBDV81rv74AcmciAr5B2iIWUJcq2Vsu8atdD
-   7IFMYPlVZWF5HED4B7IvSa9AJOYOGulRGJ2WQPehdDq52upM+gyyDw/Rf
-   5fVpuEne75t6yxHyR2iMi724DYQR40zCY19vTkWotmWZHBTImrwBwcIDb
-   glVDFEoMRuSorgqTRt9zZBQlWudg5ihtXxRvmIgDF/oC6yN5rSRb/8EZi
-   g==;
-X-CSE-ConnectionGUID: utlCpslsQsGOylyVYCd5AQ==
-X-CSE-MsgGUID: aB51SxZXRUu7bS1JkwJF5A==
-X-IronPort-AV: E=Sophos;i="6.18,310,1751241600"; 
-   d="scan'208";a="2929237"
-Received: from ip-10-6-3-216.eu-central-1.compute.internal (HELO smtpout.naws.eu-central-1.prod.farcaster.email.amazon.dev) ([10.6.3.216])
-  by internal-fra-out-013.esa.eu-central-1.outbound.mail-perimeter.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Oct 2025 20:50:01 +0000
-Received: from EX19MTAEUC002.ant.amazon.com [54.240.197.228:7396]
- by smtpin.naws.eu-central-1.prod.farcaster.email.amazon.dev [10.0.3.52:2525] with esmtp (Farcaster)
- id c3bf194d-31fd-4dcf-beaf-1d9e157b04ba; Thu, 2 Oct 2025 20:50:00 +0000 (UTC)
-X-Farcaster-Flow-ID: c3bf194d-31fd-4dcf-beaf-1d9e157b04ba
-Received: from EX19D018EUA004.ant.amazon.com (10.252.50.85) by
- EX19MTAEUC002.ant.amazon.com (10.252.51.181) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.2562.20;
- Thu, 2 Oct 2025 20:50:00 +0000
-Received: from dev-dsk-farbere-1a-46ecabed.eu-west-1.amazon.com
- (172.19.116.181) by EX19D018EUA004.ant.amazon.com (10.252.50.85) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.2562.20; Thu, 2 Oct 2025
- 20:49:35 +0000
-From: Eliav Farber <farbere@amazon.com>
-To: <gregkh@linuxfoundation.org>, <jdike@addtoit.com>, <richard@nod.at>,
-	<anton.ivanov@cambridgegreys.com>, <dave.hansen@linux.intel.com>,
-	<luto@kernel.org>, <peterz@infradead.org>, <tglx@linutronix.de>,
-	<mingo@redhat.com>, <bp@alien8.de>, <x86@kernel.org>, <hpa@zytor.com>,
-	<tony.luck@intel.com>, <qiuxu.zhuo@intel.com>, <james.morse@arm.com>,
-	<rric@kernel.org>, <airlied@linux.ie>, <daniel@ffwll.ch>,
-	<maarten.lankhorst@linux.intel.com>, <mripard@kernel.org>,
-	<tzimmermann@suse.de>, <robdclark@gmail.com>, <sean@poorly.run>,
-	<jdelvare@suse.com>, <linux@roeck-us.net>, <linus.walleij@linaro.org>,
-	<dmitry.torokhov@gmail.com>, <maz@kernel.org>, <wens@csie.org>,
-	<jernej.skrabec@gmail.com>, <agk@redhat.com>, <snitzer@redhat.com>,
-	<dm-devel@redhat.com>, <davem@davemloft.net>, <kuba@kernel.org>,
-	<mcoquelin.stm32@gmail.com>, <krzysztof.kozlowski@canonical.com>,
-	<malattia@linux.it>, <hdegoede@redhat.com>, <mgross@linux.intel.com>,
-	<jejb@linux.ibm.com>, <martin.petersen@oracle.com>,
-	<sakari.ailus@linux.intel.com>, <clm@fb.com>, <josef@toxicpanda.com>,
-	<dsterba@suse.com>, <jack@suse.com>, <tytso@mit.edu>,
-	<adilger.kernel@dilger.ca>, <dushistov@mail.ru>,
-	<luc.vanoostenryck@gmail.com>, <rostedt@goodmis.org>, <pmladek@suse.com>,
-	<senozhatsky@chromium.org>, <andriy.shevchenko@linux.intel.com>,
-	<linux@rasmusvillemoes.dk>, <minchan@kernel.org>, <ngupta@vflare.org>,
-	<akpm@linux-foundation.org>, <yoshfuji@linux-ipv6.org>, <dsahern@kernel.org>,
-	<pablo@netfilter.org>, <kadlec@netfilter.org>, <fw@strlen.de>,
-	<jmaloy@redhat.com>, <ying.xue@windriver.com>, <shuah@kernel.org>,
-	<willy@infradead.org>, <farbere@amazon.com>, <sashal@kernel.org>,
-	<quic_akhilpo@quicinc.com>, <ruanjinjie@huawei.com>,
-	<David.Laight@ACULAB.COM>, <herve.codina@bootlin.com>,
-	<linux-arm-kernel@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
-	<linux-um@lists.infradead.org>, <linux-edac@vger.kernel.org>,
-	<amd-gfx@lists.freedesktop.org>, <dri-devel@lists.freedesktop.org>,
-	<linux-arm-msm@vger.kernel.org>, <freedreno@lists.freedesktop.org>,
-	<linux-hwmon@vger.kernel.org>, <linux-input@vger.kernel.org>,
-	<linux-sunxi@lists.linux.dev>, <linux-media@vger.kernel.org>,
-	<netdev@vger.kernel.org>, <linux-stm32@st-md-mailman.stormreply.com>,
-	<platform-driver-x86@vger.kernel.org>, <linux-scsi@vger.kernel.org>,
-	<linux-staging@lists.linux.dev>, <linux-btrfs@vger.kernel.org>,
-	<linux-ext4@vger.kernel.org>, <linux-sparse@vger.kernel.org>,
-	<linux-mm@kvack.org>, <netfilter-devel@vger.kernel.org>,
-	<coreteam@netfilter.org>, <tipc-discussion@lists.sourceforge.net>,
-	<linux-kselftest@vger.kernel.org>, <stable@vger.kernel.org>
-CC: Christoph Hellwig <hch@infradead.org>, "Jason A. Donenfeld"
-	<Jason@zx2c4.com>, Linus Torvalds <torvalds@linux-foundation.org>
-Subject: [PATCH 04/19 5.15.y] minmax: fix indentation of __cmp_once() and __clamp_once()
-Date: Thu, 2 Oct 2025 20:47:18 +0000
-Message-ID: <20251002204733.35652-5-farbere@amazon.com>
-X-Mailer: git-send-email 2.47.3
-In-Reply-To: <20251002204733.35652-1-farbere@amazon.com>
-References: <20251002204733.35652-1-farbere@amazon.com>
+	dkim=pass (2048-bit key) header.d=treblig.org header.i=@treblig.org header.b="C69Ah66b"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=treblig.org
+	; s=bytemarkmx; h=Content-Type:MIME-Version:Message-ID:Subject:From:Date:From
+	:Subject; bh=EXs6IZ4idy9yeg4n6KxHIZ/ibHP7AdPo7DYQz33da8g=; b=C69Ah66b9sLO6yz0
+	8KLv6iEanfRNtaIYZzZLAZzLbmpPYjXZhWNRoZv3Xb43w6X60+D0SHCUm1MjJjiHoEJh2F6CheAvk
+	3HQDZ17dKoLKqxWN2sTDEc5a2UzLESuxy5AnFmDmX95noFpZxSonhY8zYpofp4fpn9lSTb7uxQkzP
+	q8lqCL18VOvQv5Cv0XtPwwbewKKu0NWUQPb67VuKNwCu9HEe5dktLlqQ9eONu2sneZcmk1ueykqF6
+	kqHeFWXt2+dnvcck/0wccCQWTjXMHJFhsJKZxfHUSerrWJui8SpUHxMiqFOtG610Duuz9q23Fzoit
+	VR82hsYZnE51ny5GhA==;
+Received: from dg by mx.treblig.org with local (Exim 4.96)
+	(envelope-from <dg@treblig.org>)
+	id 1v4PyJ-00Ebda-1f;
+	Thu, 02 Oct 2025 20:32:15 +0000
+Date: Thu, 2 Oct 2025 20:32:15 +0000
+From: "Dr. David Alan Gilbert" <linux@treblig.org>
+To: Lee Jones <lee@kernel.org>
+Cc: Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+	Mark Brown <broonie@kernel.org>, arnd@arndb.de, mchehab@kernel.org,
+	lgirdwood@gmail.com, perex@perex.cz, tiwai@suse.com,
+	linux-media@vger.kernel.org, linux-sound@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 0/4] Remove the wl1273 FM Radio
+Message-ID: <aN7hT_59V6KcOxTe@gallifrey>
+References: <20250625133258.78133-1-linux@treblig.org>
+ <20250808154903.GB23187@pendragon.ideasonboard.com>
+ <20250902103249.GG2163762@google.com>
+ <20250902113527.GB1694@pendragon.ideasonboard.com>
+ <88042d72-b428-442e-ba3c-b15e587e12a7@sirena.org.uk>
+ <20250902121015.GI13448@pendragon.ideasonboard.com>
+ <aLcuHnj_h3Xf7DiK@gallifrey>
+ <20250903072301.GZ2163762@google.com>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: EX19D035UWA001.ant.amazon.com (10.13.139.101) To
- EX19D018EUA004.ant.amazon.com (10.252.50.85)
+In-Reply-To: <20250903072301.GZ2163762@google.com>
+X-Chocolate: 70 percent or better cocoa solids preferably
+X-Operating-System: Linux/6.1.0-34-amd64 (x86_64)
+X-Uptime: 20:29:51 up 158 days,  4:43,  1 user,  load average: 0.05, 0.01,
+ 0.00
+User-Agent: Mutt/2.2.12 (2023-09-09)
 
-From: David Laight <David.Laight@ACULAB.COM>
+* Lee Jones (lee@kernel.org) wrote:
+> On Tue, 02 Sep 2025, Dr. David Alan Gilbert wrote:
+> 
+> > * Laurent Pinchart (laurent.pinchart@ideasonboard.com) wrote:
+> > > On Tue, Sep 02, 2025 at 12:47:39PM +0100, Mark Brown wrote:
+> > > > On Tue, Sep 02, 2025 at 01:35:27PM +0200, Laurent Pinchart wrote:
+> > > > 
+> > > > > Patch 1/4 has been queued in the media tree and should be in linux-next
+> > > > > as commit 103b0cfc9ab6. It is based straight on v6.17-rc1. Patch 2/4 is
+> > > > > also in linux-next, but is based on other ALSA patches. The simplest
+> > > > > course of action would be for you to merge 3/4 for v6.18, and 4/4 for
+> > > > > v6.19.
+> > > > 
+> > > > Or given that it's a driver removal we could just get a rebase of the
+> > > > series against the meda tree applied?  The conflicts with ASoC should be
+> > > > trivial to resolve.
+> > > 
+> > > I don't mind either way. I know Linus doesn't like having the same patch
+> > > merged with different commit IDs, but I don't know how strict the rule
+> > > is, especially when git should be able to resolve the conflict
+> > > transparently.
+> > 
+> > I still think the easiest thing is to leave 1/4 and 2/4 as you currently
+> > have them; and let Lee take 3/4 and 4/4 next time around.
+> 
+> It's more disjointed than I like.  But it's okay.  Remind me later.
 
-[ Upstream commit f4b84b2ff851f01d0fac619eadef47eb41648534 ]
+Hi Lee,
+  1 and 2 of this series just got merged into Linus' tree.
+Thanks all!
+3 and 4 can go in at your convenience.
 
-Remove the extra indentation and align continuation markers.
+Dave
 
-Link: https://lkml.kernel.org/r/bed41317a05c498ea0209eafbcab45a5@AcuMS.aculab.com
-Signed-off-by: David Laight <david.laight@aculab.com>
-Cc: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc: Christoph Hellwig <hch@infradead.org>
-Cc: Jason A. Donenfeld <Jason@zx2c4.com>
-Cc: Linus Torvalds <torvalds@linux-foundation.org>
-Cc: Matthew Wilcox (Oracle) <willy@infradead.org>
-Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
-Signed-off-by: Eliav Farber <farbere@amazon.com>
----
- include/linux/minmax.h | 30 +++++++++++++++---------------
- 1 file changed, 15 insertions(+), 15 deletions(-)
-
-diff --git a/include/linux/minmax.h b/include/linux/minmax.h
-index 62b0c0a3cf30..2ec559284a9f 100644
---- a/include/linux/minmax.h
-+++ b/include/linux/minmax.h
-@@ -46,11 +46,11 @@
- #define __cmp(op, x, y)	((x) __cmp_op_##op (y) ? (x) : (y))
- 
- #define __cmp_once(op, x, y, unique_x, unique_y) ({	\
--		typeof(x) unique_x = (x);		\
--		typeof(y) unique_y = (y);		\
--		static_assert(__types_ok(x, y),		\
--			#op "(" #x ", " #y ") signedness error, fix types or consider u" #op "() before " #op "_t()"); \
--		__cmp(op, unique_x, unique_y); })
-+	typeof(x) unique_x = (x);			\
-+	typeof(y) unique_y = (y);			\
-+	static_assert(__types_ok(x, y),			\
-+		#op "(" #x ", " #y ") signedness error, fix types or consider u" #op "() before " #op "_t()"); \
-+	__cmp(op, unique_x, unique_y); })
- 
- #define __careful_cmp(op, x, y)					\
- 	__builtin_choose_expr(__is_constexpr((x) - (y)),	\
-@@ -60,16 +60,16 @@
- #define __clamp(val, lo, hi)	\
- 	((val) >= (hi) ? (hi) : ((val) <= (lo) ? (lo) : (val)))
- 
--#define __clamp_once(val, lo, hi, unique_val, unique_lo, unique_hi) ({	\
--		typeof(val) unique_val = (val);				\
--		typeof(lo) unique_lo = (lo);				\
--		typeof(hi) unique_hi = (hi);				\
--		static_assert(__builtin_choose_expr(__is_constexpr((lo) > (hi)), 	\
--				(lo) <= (hi), true),					\
--			"clamp() low limit " #lo " greater than high limit " #hi);	\
--		static_assert(__types_ok(val, lo), "clamp() 'lo' signedness error");	\
--		static_assert(__types_ok(val, hi), "clamp() 'hi' signedness error");	\
--		__clamp(unique_val, unique_lo, unique_hi); })
-+#define __clamp_once(val, lo, hi, unique_val, unique_lo, unique_hi) ({		\
-+	typeof(val) unique_val = (val);						\
-+	typeof(lo) unique_lo = (lo);						\
-+	typeof(hi) unique_hi = (hi);						\
-+	static_assert(__builtin_choose_expr(__is_constexpr((lo) > (hi)), 	\
-+			(lo) <= (hi), true),					\
-+		"clamp() low limit " #lo " greater than high limit " #hi);	\
-+	static_assert(__types_ok(val, lo), "clamp() 'lo' signedness error");	\
-+	static_assert(__types_ok(val, hi), "clamp() 'hi' signedness error");	\
-+	__clamp(unique_val, unique_lo, unique_hi); })
- 
- #define __careful_clamp(val, lo, hi) ({					\
- 	__builtin_choose_expr(__is_constexpr((val) - (lo) + (hi)),	\
+> -- 
+> Lee Jones [李琼斯]
+> 
 -- 
-2.47.3
-
+ -----Open up your eyes, open up your mind, open up your code -------   
+/ Dr. David Alan Gilbert    |       Running GNU/Linux       | Happy  \ 
+\        dave @ treblig.org |                               | In Hex /
+ \ _________________________|_____ http://www.treblig.org   |_______/
