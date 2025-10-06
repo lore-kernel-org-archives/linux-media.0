@@ -1,101 +1,130 @@
-Received: from smtp-190e.mail.infomaniak.ch (smtp-190e.mail.infomaniak.ch [185.125.25.14])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 071E2223DED
-	for <linux-media@vger.kernel.org>; Mon,  6 Oct 2025 12:04:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.125.25.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9230E1FBC92
+	for <linux-media@vger.kernel.org>; Mon,  6 Oct 2025 12:19:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1759752283; cv=none; b=JKEMDdaD81XdzfYQoi1qmVLXuN7X+7VTbmZ6913INjFrrVvsLbj81wr4qTHA9ctoVLUjFWRzZBz5KrqinqctjZfEondg4FZhq08GECLJf2C84YnelVJoWiKUIoan54Q/6jNoyCbPP73ZYjAu6JPFMO/rCsYhFaBNidNN1CZTSpQ=
+	t=1759753150; cv=none; b=f2pgR6yx3qp1Oj2xttI7wx4kaz9s2OaIDI5aMNQ+hLLvskWNEpx1lS+LHvIeHWPe59vNrsinwX42mpvzZCfGY5aND5bVQhq4JZm1G1nUcB7uO3lZNysBTR5Y95sO/EvFTO5kIyVnO/HvGRQGWs2ao3K749kMLbjZ+zKzNpbDL7Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1759752283; c=relaxed/simple;
-	bh=09prn4YDz0tI7nPzbl1d9yvyu27bDW08Th6McNpbjYU=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=QTQ8sBnsPxOrouTj3mQLRMfwncp0H65jUSi9qp7k4JAEjtND8ohdrMnbU8j4t3Uzll29Oc/MecLDqn8Xlo8B8Xhspk6a4DPXMWjTy69iw6p8op+ZDriQ4YlaLFMKu4JhkdSsnrKl+vpRXcf1Ukk4kwfzCog13NB3Rd7x5uCeMLE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=0leil.net; spf=pass smtp.mailfrom=0leil.net; arc=none smtp.client-ip=185.125.25.14
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=0leil.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=0leil.net
-Received: from smtp-3-0000.mail.infomaniak.ch (smtp-3-0000.mail.infomaniak.ch [10.4.36.107])
-	by smtp-3-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4cgH6m2VHHzPNl;
-	Mon,  6 Oct 2025 13:27:12 +0200 (CEST)
-Received: from unknown by smtp-3-0000.mail.infomaniak.ch (Postfix) with ESMTPA id 4cgH6l3KlpzYkd;
-	Mon,  6 Oct 2025 13:27:11 +0200 (CEST)
-From: Quentin Schulz <foss+kernel@0leil.net>
-Date: Mon, 06 Oct 2025 13:27:00 +0200
-Subject: [PATCH v4l-utils v2] README.md: couple of typo fixes
+	s=arc-20240116; t=1759753150; c=relaxed/simple;
+	bh=IRPy7n8fi908AXqycEr8w5KbgC+TXqNXXaWQDAjoxaU=;
+	h=Message-ID:Date:MIME-Version:From:Subject:To:References:
+	 In-Reply-To:Content-Type; b=LZ4oYbKM7aiX9QuH+MHtA0aSKB7HLgvYzNWsB2dDGT0HsVbX1/ELz+4SUdksTVbpjX2W8n6ofJ38SpDlQf4pwOY0/vgAzKfPYBKU9eAPFBge0dpxoQJmHIHMqxuUEwC9D+9e+S5RqMowOsLn5PkQ3XNGdLY4RIugjfpOqXYhp30=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VGXr+mhv; arc=none smtp.client-ip=10.30.226.201
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VGXr+mhv"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A269CC4CEF5;
+	Mon,  6 Oct 2025 12:19:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1759753150;
+	bh=IRPy7n8fi908AXqycEr8w5KbgC+TXqNXXaWQDAjoxaU=;
+	h=Date:From:Subject:To:References:In-Reply-To:From;
+	b=VGXr+mhvr/cP8TL54e+knYbwcPWtaUAg+UJk0gFDVGNO73VntNR4q6Jn9FqSsuIjU
+	 vfQvdK7Rf3dxfx6SpTAIk+uwvc7dQFbYMX8kUaZezo/BBJEbEp8GEl7Lnm2flZAVal
+	 Qf8hY2g4z3yMUWVuzUxZhCGjME5+6mVCVkKVQxfyM54v3IzP/dVTQiEvdOI6wHstyg
+	 Yla4oJRwKU8LUJiRiD6z73mtu0JoCbM0sW/z2JcuY71mnWS35fBd52Qr2LjzrBD2K5
+	 r+6LSQxrm7CtuLi5lpgv3bze7Jy4f4NYPiieaE3bUK4pPK6Bmdgrac2CEC2CW1YjFU
+	 gR3M5MgfGKufA==
+Message-ID: <7f204b8d-c2bd-4d81-b8de-b1fa50c6f091@kernel.org>
+Date: Mon, 6 Oct 2025 14:19:07 +0200
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla Thunderbird
+From: Hans Verkuil <hverkuil+cisco@kernel.org>
+Subject: Re: [PATCH 0/3] v4l2-ctl/rds-ctl: support optional ioctl and migrate
+ some code to it
+To: Quentin Schulz <quentin.schulz@cherry.de>,
+ Quentin Schulz <foss+kernel@0leil.net>, linux-media@vger.kernel.org
+References: <20250905-opt-ioctl-v1-0-4b3ae770fc4b@cherry.de>
+ <f5a942fd-478c-4a5d-bf68-d53191d543f5@kernel.org>
+ <5734ec94-ec46-47b6-993b-5a1ac1e41767@cherry.de>
+Content-Language: en-US, nl
+In-Reply-To: <5734ec94-ec46-47b6-993b-5a1ac1e41767@cherry.de>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-Message-Id: <20251006-readme-typo-v2-1-490d8fa7a4d3@cherry.de>
-X-B4-Tracking: v=1; b=H4sIAIOn42gC/22NwQqDMBBEf0X23C1JMIo99T+Kh5Bs64JV2dhQk
- fx7Q849PmbmzQmRhCnCrTlBKHHkdSlgLg34yS0vQg6FwShj1aAsCrnwJtyPbUU9BN8722vnLJT
- FJvTkb7U9ILUzfnaeI4wlmjjuqxz1J+la+KtMGhW2pjOhdT501t/9RCLHNRCMOecf6kO4KrEAA
- AA=
-X-Change-ID: 20250905-readme-typo-19dc7a571aa5
-To: linux-media@vger.kernel.org
-Cc: Quentin Schulz <quentin.schulz@cherry.de>
-X-Mailer: b4 0.14.2
-X-Infomaniak-Routing: alpha
 
-From: Quentin Schulz <quentin.schulz@cherry.de>
+On 06/10/2025 13:37, Quentin Schulz wrote:
+> Hi Hans,
+> 
+> On 10/1/25 11:17 AM, Hans Verkuil wrote:
+>> [You don't often get email from hverkuil+cisco@kernel.org. Learn why this is important at https://aka.ms/LearnAboutSenderIdentification ]
+>>
+>> On 05/09/2025 14:19, Quentin Schulz wrote:
+>>> Some ioctls are optional and the logic around it handle it nicely,
+>>> except that doioctl (via doioctl_name) sets app_result static variable
+>>> to -1 if the ioctl fails.
+>>>
+>>> However, both rds-ctl and v4l2-ctl exit code is from app_result. So it
+>>> is possible to have those tools perform the expected task (albeit
+>>> failing to use an optional ioctl) and still report to the user that it
+>>> failed to do so.
+>>>
+>>> Let's add a new function doioctl_opt which allows to NOT set the
+>>> app_result variable when the ioctl fails.
+>>>
+>>> This migrates two ioctl VIDIOC_SUBDEV_S_CLIENT_CAP and
+>>> VIDIOC_SUBDEV_QUERYCAP to be optional ioctls.
+>>
+>> Actually, those ioctls must be present, unless you run an old kernel, but
+>> they've been around since kernel 6.4.
+>>
+> 
+> Yes, I am using a 6.1 kernel, which is supported until Dec. 2027, c.f. 
+> https://www.kernel.org/releases.html
+> 
+> 5.10 is also supported until Dec. 2026.
+> 
+>> I'm dropping this series as this isn't quite the way to do this.
+>>
+> 
+> Could you explain what is the issue with those patches so I can suggest 
+> something else?
+> 
+>> Perhaps you should explain the problem you encounter first (and mention
+>> the kernel version you are using)?
+>>
+> 
+> Run v4l-utils on an older kernel (6.1 for example) and it'll try to use 
+> the ioctl that isn't supported. Since it's optional (the return code 
+> isn't checked directly) it'll happily actually do what's expected from 
+> it but the program will end with a non-zero exit code, thus failing my 
+> CI tests while still actually performing what it is requested to do. 
+> This is due to the failing ioctl setting app_result global variable but 
+> the failing calls not actually being checked right after in the calling 
+> function so the program continues as if everything went well but the 
+> last line of the main function (std::exit(options[OptAll] ? 0 : 
+> app_result);) actually returns the exit code matching app_result value, 
+> which is set when the (deemed optional) ioctl fails.
+> 
+> I use v4l2-ctl to set a test pattern on a camera and now my CI simply 
+> doesn't pass anymore on Trixie because of that. For now, I ignore the 
+> exit code of v4l2-ctl -c test_pattern=1 and validate it actually was run 
+> by running v4l2-ctl -C test_pattern afterwards (but still not checking 
+> the exit code of this command as it's still returning that it failed).
+> 
+> Kernel is 6.1.
 
-- Should be "mailing list" instead.
-- Derivated isn't appropriate here and we should be saying derivative
-  instead, c.f. https://www.debian.org/derivatives/.
-- requiried has one too many i.
+Isn't debian trixie on 6.12? Why are you on 6.1?
 
-Signed-off-by: Quentin Schulz <quentin.schulz@cherry.de>
----
-Changes in v2:
-- squashed all patches into one,
-- Link to v1: https://lore.kernel.org/r/20250905-readme-typo-v1-0-4262d4acd65c@cherry.de
----
- README.md | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+Honest question, I just want to better understand why you are on that old kernel.
 
-diff --git a/README.md b/README.md
-index 358960a78bcde62599fa572c33891d4a50a1dbcd..ccf286c2f0d75472990ca7a8fac17a0a828e1a55 100644
---- a/README.md
-+++ b/README.md
-@@ -9,9 +9,9 @@ You can always find the latest development v4l-utils in the git repo:
- Those utilities follow the latest Linux Kernel media API, as documented at:
- [http://linuxtv.org/downloads/v4l-dvb-apis/](http://linuxtv.org/downloads/v4l-dvb-apis/).
- 
--Any questions/remarks/patches can be sent to the linux-media mailinglist. See
-+Any questions/remarks/patches can be sent to the linux-media mailing list. See
- [https://linuxtv.org/lists.php](https://linuxtv.org/lists.php) for more
--information about the mailinglist.
-+information about the mailing list.
- 
- There is also a wiki page for the v4l-utils:
- [https://linuxtv.org/wiki/index.php/V4l-utils](https://linuxtv.org/wiki/index.php/V4l-utils).
-@@ -23,7 +23,7 @@ v4l-utils uses the meson build system.
- A number of packages is required to fully build v4l-utils. The first step is to
- install those packages. The package names are different on each distro.
- 
--On Debian and derivated distributions, you need to install the following
-+On Debian and derivative distributions, you need to install the following
- packages with `apt-get` or `aptitude`:
- 
- ```
-@@ -38,7 +38,7 @@ On Fedora, the package list for a minimal install with `dnf` or `yum` is:
- gcc gcc-c++ gettext-devel git meson perl which
- ```
- 
--(git is only requiried if you're cloning from the main git repository at
-+(git is only required if you're cloning from the main git repository at
- linuxtv.org).
- 
- And, to be able to compile it with all usual functionality with qt5, you'll need
+Anyway, the application result is of limited use: it is never tested by me and
+failing on non-existing ioctls is probably not a good idea anyway. v4l2-ctl calls
+lots of ioctls: if present, then do A, if not, then do B (or nothing). And each
+time an ioctl fails fails with ENOTTY app_result would be set.
 
----
-base-commit: c12c89c5bd709c5340361ee76f7c3e37754dfe15
-change-id: 20250905-readme-typo-19dc7a571aa5
+Going through the v4l2-ctl code and checking all places where an ioctl can be
+optional would be a substantial amount of work and is probably hard to get right.
 
-Best regards,
--- 
-Quentin Schulz <quentin.schulz@cherry.de>
+It might be better to only set app_result if the ioctl result is < 0 && errno != ENOTTY.
+I.e. missing ioctls are just ignored as being 'normal' behavior. I think that's
+reasonable.
 
+Regards,
+
+	Hans
