@@ -1,26 +1,26 @@
 Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AAF382D94BF
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 110032D979C
 	for <linux-media@vger.kernel.org>; Tue,  7 Oct 2025 08:33:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1759825983; cv=none; b=agEf25CLJMTStn+uZ0MnntaM/cNm+LHVzJsZkRQ71S8/618Z6/ggAYZ+yHedhtA6NaWlrWe9Otjoxqo8br4EuTJkM5BuDOjp+7LaItQmOSXiJy8nc+5GDGU3SQaICpKp3xBI2+Ja1EF2LMTae64gXRGim/fkE3nsQoLb4RiEr/Q=
+	t=1759825985; cv=none; b=R5WGjyQQy1GdilNfyg3qdZJWxEtzC8bjPvw7R7D/Q8LN5p9MSe8UFqTTgwrLjttzwrwSv4mwvJW9GXU+4yZgrh1vh69Xkbx1gpk2U4zlS3hHoafMh8Yj4UqpPalMD+fyYcGtF+feTWZ2s5bwenjDleFVbx3x3WkXcZTvWv9BLmg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1759825983; c=relaxed/simple;
-	bh=vuBdnzuaH7X5m646CgvtenVd8ZAWVRzO2D8qxSRPKXQ=;
-	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=mERr4E6t3E0l208jDG5FZ/VrEO2GCx77U2Upps4GiVh6BtlWg+QqK09uIt0FUvYmZnSH9T1uXVcHOdYTVqBwHhBWolDOXhDaOzMhDwLgIT8AiDs7LJDovi+gl1NMSBx6isA3a/Ov07TdaTvYckNsJTj19uMmKlvdaIRgUfMx6Ps=
+	s=arc-20240116; t=1759825985; c=relaxed/simple;
+	bh=KVsgiZyiRmT5EtwxVArjMCYkxEe7fYqEDI4m3XHEGAU=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=MjuIlJl8CUqUdV/uhE+73iHEqe3gXEAqV5k8qj1wvNfaxKyi85sIA1rjkY6wp47uY7fI0B834qZ+mzjxckjR9+fMerb0NnJJd/UEGlgolCH/QKRSjonzvcbxO8nc0To7rtIm/Ap9gtLzSgn/K1Zrw0RHAOXNRnTmFLY/T0m0Jsc=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
 Received: from ptz.office.stw.pengutronix.de ([2a0a:edc0:0:900:1d::77] helo=peter.mobile.pengutronix.de)
 	by metis.whiteo.stw.pengutronix.de with esmtp (Exim 4.92)
 	(envelope-from <s.pueschel@pengutronix.de>)
-	id 1v637o-0002Hb-2P; Tue, 07 Oct 2025 10:32:48 +0200
+	id 1v637q-0002Hb-C9; Tue, 07 Oct 2025 10:32:50 +0200
 From: =?utf-8?q?Sven_P=C3=BCschel?= <s.pueschel@pengutronix.de>
-Subject: [PATCH 00/16] media: platform: rga: Add RGA3 support
-Date: Tue, 07 Oct 2025 10:31:53 +0200
-Message-Id: <20251007-spu-rga3-v1-0-36ad85570402@pengutronix.de>
+Date: Tue, 07 Oct 2025 10:31:56 +0200
+Subject: [PATCH 03/16] media: rockchip: rga: align stride to 16 bytes
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
@@ -29,10 +29,9 @@ List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-B4-Tracking: v=1; b=H4sIAPnP5GgC/6tWKk4tykwtVrJSqFYqSi3LLM7MzwNyDHUUlJIzE
- vPSU3UzU4B8JSMDI1NDAwND3eKCUt2i9ERjXYtEA4NUA0OLJEMjAyWg8oKi1LTMCrBR0bG1tQA
- JWi1/WgAAAA==
-X-Change-ID: 20251001-spu-rga3-8a00e018b120
+Message-Id: <20251007-spu-rga3-v1-3-36ad85570402@pengutronix.de>
+References: <20251007-spu-rga3-v1-0-36ad85570402@pengutronix.de>
+In-Reply-To: <20251007-spu-rga3-v1-0-36ad85570402@pengutronix.de>
 To: Jacob Chen <jacob-chen@iotwrt.com>, 
  Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>, 
  Mauro Carvalho Chehab <mchehab@kernel.org>, 
@@ -49,92 +48,69 @@ X-SA-Exim-Mail-From: s.pueschel@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
 X-PTX-Original-Recipient: linux-media@vger.kernel.org
 
-This series adds support for the Raster Graphic Acceleration 3 (RGA3)
-peripheral, which is included in the RK3588 SoC. Unlike the RGA2 it
-can use the existing rockchip-iommu-v2 driver to handle iommu mappings.
-Also the RK3588 contains two independent RGA3 cores.
+Align the stride to a multiple of 16 according to the RGA3 requirements
+mentioned in the datasheet. This also ensures that the stride of the RGA2
+is aligned to 4 bytes, as it needs to divide the value by 4 (one word)
+before storing it in the register.
 
-Only scaling and format conversions between common 8bit RGB/YUV formats
-are implemented. Also the color space conversion is fixed to BT601F.
-This already allows a practical usage of the RGA3.
-
-This was tested on a Radxa Rock 5T. With the increased clock speeds in
-the devicetree around 160 fps were measured when scaling and converting
-from RGBA 480x360 to NV12 3840x2160. Without the clock speed scaling a
-default clock division factor of 2 is used and only around 80 fps are
-reached with one core. The v4l2-compliance tests only complain about
-the already failing colorspace propagation:
-
-  v4l2-compliance 1.28.1, 64 bits, 64-bit time_t
-  ...
-  		fail: v4l2-test-formats.cpp(923): fmt_cap.g_colorspace() != col
-  	test VIDIOC_S_FMT: FAIL
-  ...
-  Total for rockchip-rga device /dev/video0: 47, Succeeded: 46, Failed: 1, Warnings: 0
-
-  v4l2-compliance 1.28.1, 64 bits, 64-bit time_t
-  ...
-  		fail: v4l2-test-formats.cpp(923): fmt_cap.g_colorspace() != col
-  	test VIDIOC_S_FMT: FAIL
-  ...
-  Total for rockchip-rga device /dev/video1: 47, Succeeded: 46, Failed: 1, Warnings: 0
-
-  v4l2-compliance 1.28.1, 64 bits, 64-bit time_t
-  ...
-  		fail: v4l2-test-formats.cpp(923): fmt_cap.g_colorspace() != col
-  	test VIDIOC_S_FMT: FAIL
-  ...
-  Total for rockchip-rga device /dev/video2: 47, Succeeded: 46, Failed: 1, Warnings: 0
-
-Each RGA core is a separate /dev/video device. To distinguish the RGA2
-core from the RGA3 cores the Card type is set accordingly. Combining all
-cores into a single device and scheduling tasks to the best core might
-be a future improvement, if it is desired by upstream to handle the
-scheduling and selection in kernel space.
-
-Patch 1-2 are general cleanups
-Patch 3-12 prepare the rga driver for the RGA3
-Patch 13 documments the RGA3 compatible value
-Patch 14 adds the RGA3 cores to the rk3588 dtsi
-Patch 15 increases the RGA3 core clock speeds
-Patch 16 adds RGA3 support to the rga driver
+Increasing the stride for the alignment also requires to increase the
+sizeimage value. This is usually handled by v4l2_fill_pixfmt_mp, but
+it doesn't allow to set a stride alignment. Therefore use the generated
+values to calculate the total number of lines to properly update the
+sizeimage value after the bytesperline has been aligned.
 
 Signed-off-by: Sven Püschel <s.pueschel@pengutronix.de>
 ---
-Sven Püschel (16):
-      media: rockchip: rga: use clk_bulk api
-      media: rockchip: rga: use stride for offset calculation
-      media: rockchip: rga: align stride to 16 bytes
-      media: rockchip: rga: move hw specific parts to a dedicated struct
-      media: rockchip: rga: use card type to specify rga type
-      media: rockchip: rga: change offset to dma_addresses
-      media: rockchip: rga: support external iommus
-      media: rockchip: rga: remove size from rga_frame
-      media: rockchip: rga: remove stride from rga_frame
-      media: rockchip: rga: move rga_fmt to rga-hw.h
-      media: rockchip: rga: add iommu restore function
-      media: rockchip: rga: handle error interrupt
-      media: dt-bindings: media: rockchip-rga: add rockchip,rk3588-rga3
-      arm64: dts: rockchip: add rga3 dt nodes
-      arm64: dts: rockchip: increase rga3 clock speed
-      media: rockchip: rga: add rga3 support
+ drivers/media/platform/rockchip/rga/rga.c | 21 +++++++++++++++++++++
+ 1 file changed, 21 insertions(+)
 
- .../devicetree/bindings/media/rockchip-rga.yaml    |   1 +
- arch/arm64/boot/dts/rockchip/rk3588-base.dtsi      |  50 +++
- drivers/media/platform/rockchip/rga/Makefile       |   2 +-
- drivers/media/platform/rockchip/rga/rga-buf.c      |  78 ++--
- drivers/media/platform/rockchip/rga/rga-hw.c       | 356 ++++++++++++---
- drivers/media/platform/rockchip/rga/rga-hw.h       |  15 +-
- drivers/media/platform/rockchip/rga/rga.c          | 404 ++++++-----------
- drivers/media/platform/rockchip/rga/rga.h          |  74 ++--
- drivers/media/platform/rockchip/rga/rga3-hw.c      | 490 +++++++++++++++++++++
- drivers/media/platform/rockchip/rga/rga3-hw.h      | 186 ++++++++
- 10 files changed, 1246 insertions(+), 410 deletions(-)
----
-base-commit: afb100a5ea7a13d7e6937dcd3b36b19dc6cc9328
-change-id: 20251001-spu-rga3-8a00e018b120
+diff --git a/drivers/media/platform/rockchip/rga/rga.c b/drivers/media/platform/rockchip/rga/rga.c
+index 6438119a6c7aeff1e89e7aa95dcd5d2921fefa08..3cb7ce470c47e39d694e8176875a75fad2717f96 100644
+--- a/drivers/media/platform/rockchip/rga/rga.c
++++ b/drivers/media/platform/rockchip/rga/rga.c
+@@ -459,6 +459,25 @@ static int vidioc_enum_fmt(struct file *file, void *priv, struct v4l2_fmtdesc *f
+ 	return 0;
+ }
+ 
++static void align_pixfmt(struct v4l2_pix_format_mplane *pix_fmt)
++{
++	int lines;
++	struct v4l2_plane_pix_format *fmt;
++
++	/*
++	 * Align stride to 16 for the RGA3 (based on the datasheet)
++	 * To not dismiss the v4l2_fill_pixfmt_mp helper
++	 * (and manually write it again), we're approximating the new sizeimage
++	 */
++	for (fmt = pix_fmt->plane_fmt;
++	     fmt < pix_fmt->plane_fmt + pix_fmt->num_planes;
++	     fmt++) {
++		lines = DIV_ROUND_UP(fmt->sizeimage, fmt->bytesperline);
++		fmt->bytesperline = (fmt->bytesperline + 0xf) & ~0xf;
++		fmt->sizeimage = fmt->bytesperline * lines;
++	}
++}
++
+ static int vidioc_g_fmt(struct file *file, void *priv, struct v4l2_format *f)
+ {
+ 	struct v4l2_pix_format_mplane *pix_fmt = &f->fmt.pix_mp;
+@@ -474,6 +493,7 @@ static int vidioc_g_fmt(struct file *file, void *priv, struct v4l2_format *f)
+ 		return PTR_ERR(frm);
+ 
+ 	v4l2_fill_pixfmt_mp(pix_fmt, frm->fmt->fourcc, frm->width, frm->height);
++	align_pixfmt(pix_fmt);
+ 
+ 	pix_fmt->field = V4L2_FIELD_NONE;
+ 	pix_fmt->colorspace = frm->colorspace;
+@@ -496,6 +516,7 @@ static int vidioc_try_fmt(struct file *file, void *priv, struct v4l2_format *f)
+ 				(u32)MIN_HEIGHT, (u32)MAX_HEIGHT);
+ 
+ 	v4l2_fill_pixfmt_mp(pix_fmt, fmt->fourcc, pix_fmt->width, pix_fmt->height);
++	align_pixfmt(pix_fmt);
+ 	pix_fmt->field = V4L2_FIELD_NONE;
+ 
+ 	return 0;
 
-Best regards,
 -- 
-Sven Püschel <s.pueschel@pengutronix.de>
+2.51.0
 
