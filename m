@@ -1,27 +1,27 @@
 Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CE22C2DA76A
-	for <linux-media@vger.kernel.org>; Tue,  7 Oct 2025 08:33:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 000162D5A0C
+	for <linux-media@vger.kernel.org>; Tue,  7 Oct 2025 08:33:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1759825987; cv=none; b=G0iUifgCgDw6wiJJNcdwcV7rC2fQjR+abh51l+FffdnrZ40IH75YxRaOuKsJSZYOOqEPngvhD5aT7CpY9utZrOD814zsnMgCriyyIVcvHsXT/2NPZAVn9N4nwi/C7GNtED0Bd37LcsfV9jSkE8GbxPfS7Eqs823/sa/Tsh2gVH4=
+	t=1759825990; cv=none; b=jFGcmJkjSiU4bO715Wtfpmhb2Q8ITNEzMTuK0mr7cNJqYBVD5h38EopecPVkk1WDRtMnNezv5DnjSzJizAvWdBYowe+kY1nHrOqdvl5F7B1b8/+61Vow1u3PGRu3eucX1S9Sw/7iOS1PEqZITSJs8OA1LH33oyKbJdZ2mUZbh3o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1759825987; c=relaxed/simple;
-	bh=Bz5OwsUHnjn3p4WpBdtld1xIHeD+7KZpfsp68vDecvg=;
+	s=arc-20240116; t=1759825990; c=relaxed/simple;
+	bh=FE/v7WPfFFkRfOu5bkbgFlAf0Iqzl95j48vKzQ3Ftvw=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=DLLwXIcp1kNCLKWxLtHuHBXspDcvxG8WTvRnv53GPirHIzv4aGmIWDO7Dn3vausUTuEECjOUdKVanhsOaVae3oi1hS6ce5QqYMcl6HekXr6XEXSlX3tOLJZfsPdPTynrOklu8sLtNJesEvVkMrMH5skI2NUdljTwe34dYQFhVjE=
+	 In-Reply-To:To:Cc; b=lXCy5Jb9q4Ie16OLTOKPcl4JtjuAhcKv1lEuOsKujGR2Cew62Z1BZ5hXWL9B8SCgokS69qz0ZpPhkEVyX95Ft2coQD4Ci+cB/J+EQYCciitYVFXlv+2s9LwdW1NoCPNRY30wXl5mcn55VkGzC+RyWsDP6EmVL9IpMrsASXHVSWQ=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
 Received: from ptz.office.stw.pengutronix.de ([2a0a:edc0:0:900:1d::77] helo=peter.mobile.pengutronix.de)
 	by metis.whiteo.stw.pengutronix.de with esmtp (Exim 4.92)
 	(envelope-from <s.pueschel@pengutronix.de>)
-	id 1v637p-0002Hb-J6; Tue, 07 Oct 2025 10:32:49 +0200
+	id 1v637r-0002Hb-Ur; Tue, 07 Oct 2025 10:32:52 +0200
 From: =?utf-8?q?Sven_P=C3=BCschel?= <s.pueschel@pengutronix.de>
-Date: Tue, 07 Oct 2025 10:31:55 +0200
-Subject: [PATCH 02/16] media: rockchip: rga: use stride for offset
- calculation
+Date: Tue, 07 Oct 2025 10:31:58 +0200
+Subject: [PATCH 05/16] media: rockchip: rga: use card type to specify rga
+ type
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
@@ -30,7 +30,7 @@ List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Message-Id: <20251007-spu-rga3-v1-2-36ad85570402@pengutronix.de>
+Message-Id: <20251007-spu-rga3-v1-5-36ad85570402@pengutronix.de>
 References: <20251007-spu-rga3-v1-0-36ad85570402@pengutronix.de>
 In-Reply-To: <20251007-spu-rga3-v1-0-36ad85570402@pengutronix.de>
 To: Jacob Chen <jacob-chen@iotwrt.com>, 
@@ -49,63 +49,57 @@ X-SA-Exim-Mail-From: s.pueschel@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
 X-PTX-Original-Recipient: linux-media@vger.kernel.org
 
-Use the stride instead of the width for the offset calculation. This
-ensures that the bytesperline value doesn't need to match the width
-value of the image.
-
-Furthermore this patch removes the dependency on the uv_factor property
-and instead reuses the v4l2_format_info to determine the correct
-division factor.
+In preparation of the RGA3 support add a filed to the rga_hw struct
+to specify the desired card type value. This allows the user to
+differentiate the RGA2 and RGA3 video device nodes.
 
 Signed-off-by: Sven Püschel <s.pueschel@pengutronix.de>
 ---
- drivers/media/platform/rockchip/rga/rga-buf.c | 14 +++++++++-----
- 1 file changed, 9 insertions(+), 5 deletions(-)
+ drivers/media/platform/rockchip/rga/rga-hw.c | 1 +
+ drivers/media/platform/rockchip/rga/rga.c    | 4 +++-
+ drivers/media/platform/rockchip/rga/rga.h    | 1 +
+ 3 files changed, 5 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/media/platform/rockchip/rga/rga-buf.c b/drivers/media/platform/rockchip/rga/rga-buf.c
-index 730bdf98565a55704cef92345ccf9f486b99b06e..b5e6b1b527ca81721c64d96d984d5e981449c237 100644
---- a/drivers/media/platform/rockchip/rga/rga-buf.c
-+++ b/drivers/media/platform/rockchip/rga/rga-buf.c
-@@ -14,7 +14,6 @@
- #include <media/videobuf2-dma-sg.h>
- #include <media/videobuf2-v4l2.h>
+diff --git a/drivers/media/platform/rockchip/rga/rga-hw.c b/drivers/media/platform/rockchip/rga/rga-hw.c
+index 871fe8c787c8d8dbd55c111c3fba3953d4debf02..a44befe4054d19e3b921c0827af4d36cf077e61f 100644
+--- a/drivers/media/platform/rockchip/rga/rga-hw.c
++++ b/drivers/media/platform/rockchip/rga/rga-hw.c
+@@ -619,6 +619,7 @@ static struct rga_fmt formats[] = {
+ };
  
--#include "rga-hw.h"
- #include "rga.h"
- 
- static ssize_t fill_descriptors(struct rga_dma_desc *desc, size_t max_desc,
-@@ -92,14 +91,19 @@ static int rga_buf_init(struct vb2_buffer *vb)
- 	return 0;
- }
- 
--static int get_plane_offset(struct rga_frame *f, int plane)
-+static int get_plane_offset(struct rga_frame *f,
-+			    const struct v4l2_format_info *info,
-+			    int plane)
+ const struct rga_hw rga2_hw = {
++	.card_type = "rga2",
+ 	.formats = formats,
+ 	.num_formats = ARRAY_SIZE(formats),
+ 	.cmdbuf_size = RGA_CMDBUF_SIZE,
+diff --git a/drivers/media/platform/rockchip/rga/rga.c b/drivers/media/platform/rockchip/rga/rga.c
+index 32d24cdf17e9db38541d2b1615c6337def9362c6..ce55b48ef9fa8fbb2b265455cc559a4216609d4f 100644
+--- a/drivers/media/platform/rockchip/rga/rga.c
++++ b/drivers/media/platform/rockchip/rga/rga.c
+@@ -286,8 +286,10 @@ static const struct v4l2_file_operations rga_fops = {
+ static int
+ vidioc_querycap(struct file *file, void *priv, struct v4l2_capability *cap)
  {
-+	u32 stride = f->pix.plane_fmt[0].bytesperline;
++	struct rockchip_rga *rga = video_drvdata(file);
 +
- 	if (plane == 0)
- 		return 0;
- 	if (plane == 1)
--		return f->width * f->height;
-+		return stride * f->height;
- 	if (plane == 2)
--		return f->width * f->height + (f->width * f->height / f->fmt->uv_factor);
-+		return stride * f->height +
-+		       (stride * f->height / info->hdiv / info->vdiv);
+ 	strscpy(cap->driver, RGA_NAME, sizeof(cap->driver));
+-	strscpy(cap->card, "rockchip-rga", sizeof(cap->card));
++	strscpy(cap->card, rga->hw->card_type, sizeof(cap->card));
+ 	strscpy(cap->bus_info, "platform:rga", sizeof(cap->bus_info));
  
- 	return -EINVAL;
- }
-@@ -145,7 +149,7 @@ static int rga_buf_prepare(struct vb2_buffer *vb)
- 	/* Fill the remaining planes */
- 	info = v4l2_format_info(f->fmt->fourcc);
- 	for (i = info->mem_planes; i < info->comp_planes; i++)
--		offsets[i] = get_plane_offset(f, i);
-+		offsets[i] = get_plane_offset(f, info, i);
+ 	return 0;
+diff --git a/drivers/media/platform/rockchip/rga/rga.h b/drivers/media/platform/rockchip/rga/rga.h
+index 61a00f56ce9b31968881e22bef873612b62e21d9..257267738d5d179d9ec4fcb5c8729783c9b713de 100644
+--- a/drivers/media/platform/rockchip/rga/rga.h
++++ b/drivers/media/platform/rockchip/rga/rga.h
+@@ -151,6 +151,7 @@ static inline void rga_mod(struct rockchip_rga *rga, u32 reg, u32 val, u32 mask)
+ };
  
- 	rbuf->offset.y_off = offsets[0];
- 	rbuf->offset.u_off = offsets[1];
+ struct rga_hw {
++	const char *card_type;
+ 	struct rga_fmt *formats;
+ 	u32 num_formats;
+ 	size_t cmdbuf_size;
 
 -- 
 2.51.0
