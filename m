@@ -1,82 +1,87 @@
-Received: from smtp-bc0a.mail.infomaniak.ch (smtp-bc0a.mail.infomaniak.ch [45.157.188.10])
+Received: from sender4-pp-f112.zoho.com (sender4-pp-f112.zoho.com [136.143.188.112])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A484DEACD
-	for <linux-media@vger.kernel.org>; Tue,  7 Oct 2025 13:49:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.157.188.10
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1759844984; cv=none; b=Pux6UA7lPQCe3qVdAssPZf8/uxBzF+NcdudpHTe9+bSIYhRJcwSBy1tRSsZtDliaBLj6bPwsamXR/FwHshE/lxPvFP9tdYcUGH3ajIJ430Tfra5rvT5lKZe16sf4XNLRevruX5xNrK6Y/Z/xRkErxjo+3eRSq2dEQcQHf9Fw3wY=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1759844984; c=relaxed/simple;
-	bh=CJazJCOnbw9ev7/eM5JfEemRwziGt/8334yzw9wrYjI=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To; b=AM1CIE/jEeI/RqK7BfJDRaA9VWnfewGhdULZPU16q29xt5ITTfbQsPwDwVCqS0+g+i9SdnJjeZNfYBoInrVnxC5XbkH8cOyAO9P5HG21RYf8xxtBERuc2Uf2Fw/csnEJYeU0VLSM/C7fhFroSXECciuP0D57wxf/4GBbZjvoIJY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=0leil.net; spf=pass smtp.mailfrom=0leil.net; arc=none smtp.client-ip=45.157.188.10
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=0leil.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=0leil.net
-Received: from smtp-3-0000.mail.infomaniak.ch (smtp-3-0000.mail.infomaniak.ch [10.4.36.107])
-	by smtp-3-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4cgy2F2r8GzgLM;
-	Tue,  7 Oct 2025 15:40:37 +0200 (CEST)
-Received: from unknown by smtp-3-0000.mail.infomaniak.ch (Postfix) with ESMTPA id 4cgy2D7299zLGK;
-	Tue,  7 Oct 2025 15:40:36 +0200 (CEST)
-From: Quentin Schulz <foss+kernel@0leil.net>
-Date: Tue, 07 Oct 2025 15:40:03 +0200
-Subject: [PATCH v4l-utils v2 1/2] v4l2-ctl: do not fail on kernel not
- implementing VIDIOC_SUBDEV_S_CLIENT_CAP
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1CFB7EACD;
+	Tue,  7 Oct 2025 13:50:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.112
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1759845023; cv=pass; b=WDCl6CFHBvWuvO9pkcAJUfHGZFTFZ5wF4U2FO34Fh6Qxm+0vkxROkFZVpBray9tBsdkb8X+pn9dL9nJEDZDn4cZe7XPw42pAs6N6FB+zYyXgzA99OPVoEnnOWeB7S4hLxgCkas4m7iKZFAeFv+3dR7KJRN9wcVkssUeeW4omkbc=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1759845023; c=relaxed/simple;
+	bh=OkNFH/nqsePn3oGUhalsEdhdzNYGtezdFARJ7qWpmiQ=;
+	h=Content-Type:Mime-Version:Subject:From:In-Reply-To:Date:Cc:
+	 Message-Id:References:To; b=Y88g5f56grwKWeUy2OygdgIFJeBvXE0rshMiL6XyxbEB70Ix9fFfZ3SZm096YMy75kqEBbqV8E10/6sdRRZ3dK/VlQq/aplW8khoQU5lEdTE9LkpsyieGzV4IDMwdsNMk8jJ4Yxnn8ujahD6yjfaYTWogru6fmtdGSNIZ28rWtI=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (1024-bit key) header.d=collabora.com header.i=daniel.almeida@collabora.com header.b=TLH71oMD; arc=pass smtp.client-ip=136.143.188.112
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=collabora.com header.i=daniel.almeida@collabora.com header.b="TLH71oMD"
+ARC-Seal: i=1; a=rsa-sha256; t=1759845006; cv=none; 
+	d=zohomail.com; s=zohoarc; 
+	b=YUAk5pH7fqHpxxZPWCDbJNvNzDA7XFQeFI/B4fv9FdnyxN2TBfjsDClJDsk0Aumdn8yQbUNx6dLDBIAZJv/zBzUQXdKYrAldYK/ob/AUhs7WeZJYw0TFWlJ9h2Xau+bV3eE1F16vby14Lbu1JFkQWle1Sc4E9Uw+qZ4TzGYXpjY=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
+	t=1759845006; h=Content-Type:Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To; 
+	bh=OkNFH/nqsePn3oGUhalsEdhdzNYGtezdFARJ7qWpmiQ=; 
+	b=fkCRkfrvrCSOl+AEdfr1ON8F9LFSY8mAJtVAjrQX8goSr1qp85RyFaKHPIA/zc4GIk2Q5Dj5v4O4KU7GiD0dYqLx+lNQFApmwvTJRAfD13ypO5e27BOKUtlp30/67E9mpGH1xXVvicI1lGGDfVSM82zFNmoSuMXrVPk4X+HUAbI=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+	dkim=pass  header.i=collabora.com;
+	spf=pass  smtp.mailfrom=daniel.almeida@collabora.com;
+	dmarc=pass header.from=<daniel.almeida@collabora.com>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1759845006;
+	s=zohomail; d=collabora.com; i=daniel.almeida@collabora.com;
+	h=Content-Type:Mime-Version:Subject:Subject:From:From:In-Reply-To:Date:Date:Cc:Cc:Content-Transfer-Encoding:Message-Id:Message-Id:References:To:To:Reply-To;
+	bh=OkNFH/nqsePn3oGUhalsEdhdzNYGtezdFARJ7qWpmiQ=;
+	b=TLH71oMDqOA/C8JhxPCRufR2o//Y3Dzy4vyHemzX+egJeX/F/aE79yVoSSg1a3Rp
+	Bvvoz6NIZEo3LVLr7WvtfyZzo30OenQKr5yOdnS7Q0e0dTJhAEhDIdD65P16GvGWzH1
+	sckq5Hfp/rGCrLfC+wJmazo11c4GeuBVIM0+Ur0c=
+Received: by mx.zohomail.com with SMTPS id 1759845003566468.8128170090872;
+	Tue, 7 Oct 2025 06:50:03 -0700 (PDT)
+Content-Type: text/plain;
+	charset=utf-8
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20251007-opt-ioctl-v2-1-6482dbb4be08@cherry.de>
-References: <20251007-opt-ioctl-v2-0-6482dbb4be08@cherry.de>
-In-Reply-To: <20251007-opt-ioctl-v2-0-6482dbb4be08@cherry.de>
-To: Quentin Schulz <quentin.schulz@cherry.de>, linux-media@vger.kernel.org
-X-Mailer: b4 0.14.3
-X-Infomaniak-Routing: alpha
+Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3826.700.81\))
+Subject: Re: [PATCH v3] media: v4l2-ctrls: add full AV1 profile validation in
+ validate_av1_sequence()
+From: Daniel Almeida <daniel.almeida@collabora.com>
+In-Reply-To: <CAKPKb88VHwGp-iLMa=zZy3Czq8S8wUd9Zzkicvd4er9OiLg6UQ@mail.gmail.com>
+Date: Tue, 7 Oct 2025 10:49:45 -0300
+Cc: mchehab@kernel.org,
+ hverkuil@kernel.org,
+ ribalda@chromium.org,
+ laurent.pinchart@ideasonboard.com,
+ yunkec@google.com,
+ sakari.ailus@linux.intel.com,
+ james.cowgill@blaize.com,
+ hansg@kernel.org,
+ linux-kernel@vger.kernel.org,
+ linux-media@vger.kernel.org
+Content-Transfer-Encoding: quoted-printable
+Message-Id: <8AB96B5A-1A80-4A8F-AE8B-787FF71C5A75@collabora.com>
+References: <20250913105252.26886-1-opensource206@gmail.com>
+ <CAKPKb882DgYB2fZXRDU_y1Xqz6GtFEErvzzET9eOAm=db0ns1g@mail.gmail.com>
+ <873C85C5-2BCB-4631-BA18-919CE448A7CE@collabora.com>
+ <CAKPKb88VHwGp-iLMa=zZy3Czq8S8wUd9Zzkicvd4er9OiLg6UQ@mail.gmail.com>
+To: opensource india <opensource206@gmail.com>
+X-Mailer: Apple Mail (2.3826.700.81)
+X-ZohoMailClient: External
 
-From: Quentin Schulz <quentin.schulz@cherry.de>
 
-VIDIOC_SUBDEV_S_CLIENT_CAP is only available in kernels 6.4 and later.
 
-The current logic has a fallback in case the ioctl fails by simply
-stating there's no capabilities available for the subdev.
+> On 7 Oct 2025, at 07:50, opensource india <opensource206@gmail.com> =
+wrote:
+>=20
+> On Sat, Sep 27, 2025 at 2:27=E2=80=AFPM Daniel Almeida
+> <daniel.almeida@collabora.com> wrote:
+>>=20
+>> Hi, I=E2=80=99ll review this in the coming weeks.
+>=20
+> Hi Daneil, did you get a chance to review this?
+>=20
 
-However, doioctl sets app_result on any ioctl fail (regardless of errno,
-which is set to ENOIOCTLCMD when this ioctl doesn't exist). Considering
-app_result is used as the exit code of the program, ignoring the return
-value of doioctl function is not enough to make this ioctl truly
-optional.
+Not yet.
 
-Let's handle this ioctl as optional to avoid kernels lacking it making
-v4l2-ctl command fail (but still doing what it's been asked to do) by
-calling test_ioctl directly.
-
-Fixes: 2b2ba7e0e86c ("v4l2-ctl/compliance: read and show the subdev client capabilities")
-Signed-off-by: Quentin Schulz <quentin.schulz@cherry.de>
----
- utils/v4l2-ctl/v4l2-ctl.cpp | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
-
-diff --git a/utils/v4l2-ctl/v4l2-ctl.cpp b/utils/v4l2-ctl/v4l2-ctl.cpp
-index 30a6db69..17c262fc 100644
---- a/utils/v4l2-ctl/v4l2-ctl.cpp
-+++ b/utils/v4l2-ctl/v4l2-ctl.cpp
-@@ -1371,7 +1371,9 @@ int main(int argc, char **argv)
- 		// exit if this ioctl returns an error.
- 		doioctl(fd, VIDIOC_SUBDEV_QUERYCAP, &subdevcap);
- 		subdevclientcap.capabilities = ~0ULL;
--		if (doioctl(fd, VIDIOC_SUBDEV_S_CLIENT_CAP, &subdevclientcap))
-+		// This ioctl was introduced in kernel 6.4, so don't
-+		// exit if this ioctl returns an error.
-+		if (test_ioctl(fd, VIDIOC_SUBDEV_S_CLIENT_CAP, &subdevclientcap))
- 			subdevclientcap.capabilities = 0ULL;
- 	}
- 	if (!is_subdev) {
-
--- 
-2.51.0
-
+=E2=80=94 Daniel=
