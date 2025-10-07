@@ -1,26 +1,26 @@
 Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A15782E040E
-	for <linux-media@vger.kernel.org>; Tue,  7 Oct 2025 08:33:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1303D2E093F
+	for <linux-media@vger.kernel.org>; Tue,  7 Oct 2025 08:33:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1759826007; cv=none; b=AaouP6UCF08SmP4vtXK+CB5ZfP3vTIznYiHZ7pjJg24h4D4Xvzg26cl6f20ctRwb0gqdqJBzTFeKBFp5oM9Nf9QF2pzw9tDBMr2yui1awN5NXBu1hVJSr34c8DyQsLU77nBcertZZMSdYKo2x7q6MbPcn3Er0Oi1Ihu9+aq8P/Q=
+	t=1759826015; cv=none; b=tElkM7D7pfqF7/ni1MWzOjnpJmr9D1CijMKZJAwE/Y23ttfdJPYbHo2jXzsSu6WQKdnAjYWPh3odzLLqqZFl3KIWapazagwD3PY67wE4bAxwjBl26EW5B965plrAARIPm7hkkgVbpeD2fUjjZDOcb56EOQNL/7F3Z0AP3jmyvTg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1759826007; c=relaxed/simple;
-	bh=X5Lt3l+WINFRGiLQX6Vknkj6+gN4g3rjIVOPtgONkFM=;
+	s=arc-20240116; t=1759826015; c=relaxed/simple;
+	bh=5M5LW6dv+wRQCks/SvizwnLcQgLbqI0XgSF6No+wUPc=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=bw2BunGKyIMdNC1d0+0BINZQWNr7Hsxn055uKyBi99Gqh2AblcEcxkNv9L/ws5Ex+SjQyRUkahztM1m6D4iQDtab6WC7UlPpd9dBabfUOz2qAD5K5Srn++CPez9VsHIijI9LEItVDOP5tdIGCwdOS9xwuALmZbuEyzoivafo09Q=
+	 In-Reply-To:To:Cc; b=aR8uups4LmapAU7MSptetq5QBRHq/HGzSrRPSIhJbjJcX6q+Xa8qr2tuq+LKfgu63Vduo3itIpFwoiSbJxRmwFvjfsnaU0myBkf15itotlts+ZhiD/sgiMZQiIAuRtPG3T0eSIkPluXuPnf/9jM3sgucBp50lwiaDYDDVgi0EMs=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
 Received: from ptz.office.stw.pengutronix.de ([2a0a:edc0:0:900:1d::77] helo=peter.mobile.pengutronix.de)
 	by metis.whiteo.stw.pengutronix.de with esmtp (Exim 4.92)
 	(envelope-from <s.pueschel@pengutronix.de>)
-	id 1v637w-0002Hb-3K; Tue, 07 Oct 2025 10:32:56 +0200
+	id 1v6380-0002Hb-Op; Tue, 07 Oct 2025 10:33:00 +0200
 From: =?utf-8?q?Sven_P=C3=BCschel?= <s.pueschel@pengutronix.de>
-Date: Tue, 07 Oct 2025 10:32:03 +0200
-Subject: [PATCH 10/16] media: rockchip: rga: move rga_fmt to rga-hw.h
+Date: Tue, 07 Oct 2025 10:32:09 +0200
+Subject: [PATCH 16/16] media: rockchip: rga: add rga3 support
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
@@ -29,7 +29,7 @@ List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Message-Id: <20251007-spu-rga3-v1-10-36ad85570402@pengutronix.de>
+Message-Id: <20251007-spu-rga3-v1-16-36ad85570402@pengutronix.de>
 References: <20251007-spu-rga3-v1-0-36ad85570402@pengutronix.de>
 In-Reply-To: <20251007-spu-rga3-v1-0-36ad85570402@pengutronix.de>
 To: Jacob Chen <jacob-chen@iotwrt.com>, 
@@ -48,358 +48,750 @@ X-SA-Exim-Mail-From: s.pueschel@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
 X-PTX-Original-Recipient: linux-media@vger.kernel.org
 
-Move rga_fmt to rga-hw in preparation of the RGA3 addition, as the struct
-contains many RGA2 specific values. They are used to write the correct
-register values quickly based on the chosen format. Therefore the
-pointer to the rga_fmt struct is kept but changed to an opaque void
-pointer outside of the rga-hw.h.
+Add support for the RGA3 unit contained in the RK3588.
 
-To enumerate and set the correct formats, two helper functions need to
-be exposed in the rga_hw struct:
+Only a basic feature set consisting of scaling and color conversion is
+implemented. Advanced features like rotation and cropping will just be
+ignored. Also the BT601F color space conversion is currently hard coded.
 
-enum_format just get's the vidioc_enum_fmt format and it's return value
-is also returned from vidioc_enum_fmt. This is a simple pass-through,
-as the implementation is very simple.
-
-try_format is a simple abstraction around the previous rga_find_format.
-But unlike rga_find_format, it always returns a valid format.
-Therefore the passed fourcc value is also a pointer to update it in case
-the passed fourcc value is not supported by the hardware.
-Due to the RGA3 supporting different formats on the capture and output
-side, an additional parameter is_capture has been added to support
-this use-case.
+The register address defines were copied from the
+vendor Rockchip kernel sources and slightly adjusted to not start at 0
+again for the cmd registers.
 
 Signed-off-by: Sven Püschel <s.pueschel@pengutronix.de>
 ---
- drivers/media/platform/rockchip/rga/rga-buf.c |  2 +-
- drivers/media/platform/rockchip/rga/rga-hw.c  | 52 ++++++++++++++++++++-------
- drivers/media/platform/rockchip/rga/rga-hw.h  | 12 +++++++
- drivers/media/platform/rockchip/rga/rga.c     | 45 ++++++++---------------
- drivers/media/platform/rockchip/rga/rga.h     | 16 ++-------
- 5 files changed, 71 insertions(+), 56 deletions(-)
+ drivers/media/platform/rockchip/rga/Makefile  |   2 +-
+ drivers/media/platform/rockchip/rga/rga.c     |   4 +
+ drivers/media/platform/rockchip/rga/rga.h     |   2 +-
+ drivers/media/platform/rockchip/rga/rga3-hw.c | 490 ++++++++++++++++++++++++++
+ drivers/media/platform/rockchip/rga/rga3-hw.h | 186 ++++++++++
+ 5 files changed, 682 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/media/platform/rockchip/rga/rga-buf.c b/drivers/media/platform/rockchip/rga/rga-buf.c
-index e44fe870fb9e34aa93404b7a60022fe441adf8f9..ad660d3c8cc737b9f3f41770a14ac13973bc7fea 100644
---- a/drivers/media/platform/rockchip/rga/rga-buf.c
-+++ b/drivers/media/platform/rockchip/rga/rga-buf.c
-@@ -158,7 +158,7 @@ static int rga_buf_prepare(struct vb2_buffer *vb)
- 	}
+diff --git a/drivers/media/platform/rockchip/rga/Makefile b/drivers/media/platform/rockchip/rga/Makefile
+index 1bbecdc3d8df2ce286652f5544c4a3b52a6d28cf..7326a548f3dc7618403e98974b8c60d45f556fef 100644
+--- a/drivers/media/platform/rockchip/rga/Makefile
++++ b/drivers/media/platform/rockchip/rga/Makefile
+@@ -1,4 +1,4 @@
+ # SPDX-License-Identifier: GPL-2.0-only
+-rockchip-rga-objs := rga.o rga-hw.o rga-buf.o
++rockchip-rga-objs := rga.o rga-hw.o rga3-hw.o rga-buf.o
  
- 	/* Fill the remaining planes */
--	info = v4l2_format_info(f->fmt->fourcc);
-+	info = v4l2_format_info(f->pix.pixelformat);
- 	for (i = info->mem_planes; i < info->comp_planes; i++)
- 		dma_addrs[i] = dma_addrs[0] + get_plane_offset(f, info, i);
- 
-diff --git a/drivers/media/platform/rockchip/rga/rga-hw.c b/drivers/media/platform/rockchip/rga/rga-hw.c
-index 66b23c4a4cf1488ce42a7ab1901daaaa55b28fe0..d54183d224b3e9c42d5503acf172257f2e736f7b 100644
---- a/drivers/media/platform/rockchip/rga/rga-hw.c
-+++ b/drivers/media/platform/rockchip/rga/rga-hw.c
-@@ -44,14 +44,15 @@ rga_get_corner_addrs(struct rga_frame *frm, struct rga_addrs *addrs,
- 	struct rga_addrs *lt, *lb, *rt, *rb;
- 	unsigned int x_div = 0,
- 		     y_div = 0, y_stride = 0, uv_stride = 0, pixel_width = 0;
-+	struct rga_fmt *fmt = frm->fmt;
- 
- 	lt = &corner_addrs.left_top;
- 	lb = &corner_addrs.left_bottom;
- 	rt = &corner_addrs.right_top;
- 	rb = &corner_addrs.right_bottom;
- 
--	x_div = frm->fmt->x_div;
--	y_div = frm->fmt->y_div;
-+	x_div = fmt->x_div;
-+	y_div = fmt->y_div;
- 	y_stride = frm->pix.plane_fmt[0].bytesperline;
- 	uv_stride = y_stride / x_div;
- 	pixel_width = y_stride / frm->width;
-@@ -165,6 +166,8 @@ static void rga_cmd_set_trans_info(struct rga_ctx *ctx)
- 	union rga_dst_vir_info dst_vir_info;
- 	union rga_dst_act_info dst_act_info;
- 	u32 in_stride, out_stride;
-+	struct rga_fmt *in_fmt = ctx->in.fmt;
-+	struct rga_fmt *out_fmt = ctx->out.fmt;
- 
- 	src_h = ctx->in.crop.height;
- 	src_w = ctx->in.crop.width;
-@@ -180,18 +183,18 @@ static void rga_cmd_set_trans_info(struct rga_ctx *ctx)
- 	dst_vir_info.val = dest[(RGA_DST_VIR_INFO - RGA_MODE_BASE_REG) >> 2];
- 	dst_act_info.val = dest[(RGA_DST_ACT_INFO - RGA_MODE_BASE_REG) >> 2];
- 
--	src_info.data.format = ctx->in.fmt->hw_format;
--	src_info.data.swap = ctx->in.fmt->color_swap;
--	dst_info.data.format = ctx->out.fmt->hw_format;
--	dst_info.data.swap = ctx->out.fmt->color_swap;
-+	src_info.data.format = in_fmt->hw_format;
-+	src_info.data.swap = in_fmt->color_swap;
-+	dst_info.data.format = out_fmt->hw_format;
-+	dst_info.data.swap = out_fmt->color_swap;
- 
- 	/*
- 	 * CSC mode must only be set when the colorspace families differ between
- 	 * input and output. It must remain unset (zeroed) if both are the same.
- 	 */
- 
--	if (RGA_COLOR_FMT_IS_YUV(ctx->in.fmt->hw_format) &&
--	    RGA_COLOR_FMT_IS_RGB(ctx->out.fmt->hw_format)) {
-+	if (RGA_COLOR_FMT_IS_YUV(in_fmt->hw_format) &&
-+	    RGA_COLOR_FMT_IS_RGB(out_fmt->hw_format)) {
- 		switch (ctx->in.colorspace) {
- 		case V4L2_COLORSPACE_REC709:
- 			src_info.data.csc_mode = RGA_SRC_CSC_MODE_BT709_R0;
-@@ -202,8 +205,8 @@ static void rga_cmd_set_trans_info(struct rga_ctx *ctx)
- 		}
- 	}
- 
--	if (RGA_COLOR_FMT_IS_RGB(ctx->in.fmt->hw_format) &&
--	    RGA_COLOR_FMT_IS_YUV(ctx->out.fmt->hw_format)) {
-+	if (RGA_COLOR_FMT_IS_RGB(in_fmt->hw_format) &&
-+	    RGA_COLOR_FMT_IS_YUV(out_fmt->hw_format)) {
- 		switch (ctx->out.colorspace) {
- 		case V4L2_COLORSPACE_REC709:
- 			dst_info.data.csc_mode = RGA_SRC_CSC_MODE_BT709_R0;
-@@ -621,11 +624,34 @@ static struct rga_fmt formats[] = {
+ obj-$(CONFIG_VIDEO_ROCKCHIP_RGA) += rockchip-rga.o
+diff --git a/drivers/media/platform/rockchip/rga/rga.c b/drivers/media/platform/rockchip/rga/rga.c
+index 3b5d2eb8e109f44af76dd2240a239b1fa8a78cee..9d15104fcc1a45553af33bfd637bba0a86329c17 100644
+--- a/drivers/media/platform/rockchip/rga/rga.c
++++ b/drivers/media/platform/rockchip/rga/rga.c
+@@ -805,6 +805,10 @@ static const struct of_device_id rockchip_rga_match[] = {
+ 		.compatible = "rockchip,rk3399-rga",
+ 		.data = &rga2_hw,
  	},
++	{
++		.compatible = "rockchip,rk3588-rga3",
++		.data = &rga3_hw,
++	},
+ 	{},
  };
  
-+static void *rga_try_format(u32 *fourcc, bool is_output)
+diff --git a/drivers/media/platform/rockchip/rga/rga.h b/drivers/media/platform/rockchip/rga/rga.h
+index dc4bb85707d12f5378c4891098cd7ea4a4d75e2d..350a4e07cb2ee237fc3676d594e1e7298a028afb 100644
+--- a/drivers/media/platform/rockchip/rga/rga.h
++++ b/drivers/media/platform/rockchip/rga/rga.h
+@@ -169,6 +169,6 @@ static inline bool rga_has_internal_iommu(const struct rockchip_rga *rga)
+ 	return rga->hw->has_internal_iommu;
+ }
+ 
+-extern const struct rga_hw rga2_hw;
++extern const struct rga_hw rga2_hw, rga3_hw;
+ 
+ #endif
+diff --git a/drivers/media/platform/rockchip/rga/rga3-hw.c b/drivers/media/platform/rockchip/rga/rga3-hw.c
+new file mode 100644
+index 0000000000000000000000000000000000000000..6e4cd2f96cf866880316c75924f7a4c339851448
+--- /dev/null
++++ b/drivers/media/platform/rockchip/rga/rga3-hw.c
+@@ -0,0 +1,490 @@
++// SPDX-License-Identifier: GPL-2.0-only
++/*
++ * Copyright (C) Pengutronix e.K.
++ * Author: Sven Püschel <s.pueschel@pengutronix.de>
++ */
++
++#include <linux/pm_runtime.h>
++#include <linux/bitfield.h>
++#include <linux/delay.h>
++#include <linux/printk.h>
++
++#include <media/v4l2-common.h>
++
++#include "rga3-hw.h"
++#include "rga.h"
++
++static unsigned int rga3_get_scaling(unsigned int src, unsigned int dst)
++{
++	if (dst > src) {
++		if (((src - 1) << 16) % (dst - 1) == 0)
++			return ((src - 1) << 16) / (dst - 1) - 1;
++		else
++			return ((src - 1) << 16) / (dst - 1);
++	} else {
++		return ((dst - 1) << 16) / (src - 1) + 1;
++	}
++}
++
++static bool rga3_has_alpha(const struct rga3_fmt *fmt)
++{
++	return fmt->hw_format >= RGA3_COLOR_FMT_FIRST_HAS_ALPHA &&
++	       fmt->fourcc != V4L2_PIX_FMT_BGRX32 &&
++	       fmt->fourcc != V4L2_PIX_FMT_XBGR32 &&
++	       fmt->fourcc != V4L2_PIX_FMT_RGBX32 &&
++	       fmt->fourcc != V4L2_PIX_FMT_XRGB32;
++}
++
++static bool rga3_can_capture(const struct rga3_fmt *fmt)
++{
++	return fmt->hw_format <= RGA3_COLOR_FMT_LAST_OUTPUT;
++}
++
++static void rga3_cmd_set_trans_info(struct rga_ctx *ctx)
++{
++	struct rockchip_rga *rga = ctx->rga;
++	u32 *cmd = rga->cmdbuf_virt;
++	unsigned int src_h, src_w, dst_h, dst_w;
++	unsigned int reg;
++	u16 hor_scl_fac, ver_scl_fac;
++
++	src_h = ctx->in.crop.height;
++	src_w = ctx->in.crop.width;
++	dst_h = ctx->out.crop.height;
++	dst_w = ctx->out.crop.width;
++
++	reg = RGA3_WIN0_RD_CTRL - RGA3_FIRST_CMD_REG;
++	cmd[reg >> 2] |= FIELD_PREP(RGA3_WIN_SCALE_HOR_UP, dst_w > src_w)
++		      |  FIELD_PREP(RGA3_WIN_SCALE_HOR_BYPASS, dst_w == src_w)
++		      |  FIELD_PREP(RGA3_WIN_SCALE_VER_UP, dst_h > src_h)
++		      |  FIELD_PREP(RGA3_WIN_SCALE_VER_BYPASS, dst_h == src_h);
++
++	/* stride needs to be in words */
++	reg = RGA3_WIN0_VIR_STRIDE - RGA3_FIRST_CMD_REG;
++	cmd[reg >> 2] = ctx->in.pix.plane_fmt[0].bytesperline >> 2;
++	reg = RGA3_WIN0_UV_VIR_STRIDE - RGA3_FIRST_CMD_REG;
++	if (ctx->in.pix.num_planes >= 2)
++		cmd[reg >> 2] = ctx->in.pix.plane_fmt[1].bytesperline >> 2;
++	else
++		cmd[reg >> 2] = ctx->in.pix.plane_fmt[0].bytesperline >> 2;
++	reg = RGA3_WR_VIR_STRIDE - RGA3_FIRST_CMD_REG;
++	cmd[reg >> 2] = ctx->out.pix.plane_fmt[0].bytesperline >> 2;
++	reg = RGA3_WR_PL_VIR_STRIDE - RGA3_FIRST_CMD_REG;
++	if (ctx->out.pix.num_planes >= 2)
++		cmd[reg >> 2] = ctx->out.pix.plane_fmt[1].bytesperline >> 2;
++	else
++		cmd[reg >> 2] = ctx->out.pix.plane_fmt[0].bytesperline >> 2;
++
++	reg = RGA3_WIN0_ACT_SIZE - RGA3_FIRST_CMD_REG;
++	cmd[reg >> 2] = FIELD_PREP(RGA3_WIDTH, src_w)
++		      | FIELD_PREP(RGA3_HEIGHT, src_h);
++	reg = RGA3_WIN0_SRC_SIZE - RGA3_FIRST_CMD_REG;
++	cmd[reg >> 2] = FIELD_PREP(RGA3_WIDTH, src_w)
++		      | FIELD_PREP(RGA3_HEIGHT, src_h);
++
++	reg = RGA3_WIN0_DST_SIZE - RGA3_FIRST_CMD_REG;
++	cmd[reg >> 2] = FIELD_PREP(RGA3_WIDTH, dst_w)
++		      | FIELD_PREP(RGA3_HEIGHT, dst_h);
++
++	hor_scl_fac = rga3_get_scaling(src_w, dst_w);
++	ver_scl_fac = rga3_get_scaling(src_h, dst_h);
++	reg = RGA3_WIN0_SCL_FAC - RGA3_FIRST_CMD_REG;
++	cmd[reg >> 2] = FIELD_PREP(RGA3_SCALE_HOR_FAC, hor_scl_fac)
++		      | FIELD_PREP(RGA3_SCALE_VER_FAC, ver_scl_fac);
++
++	if (rga3_has_alpha(ctx->in.fmt)) {
++		/* copy alpha from input */
++		reg = RGA3_OVLP_TOP_ALPHA - RGA3_FIRST_CMD_REG;
++		cmd[reg >> 2] = FIELD_PREP(RGA3_ALPHA_SELECT_MODE, 1)
++			      | FIELD_PREP(RGA3_ALPHA_BLEND_MODE, 1);
++		reg = RGA3_OVLP_BOT_ALPHA - RGA3_FIRST_CMD_REG;
++		cmd[reg >> 2] = FIELD_PREP(RGA3_ALPHA_SELECT_MODE, 1)
++			      | FIELD_PREP(RGA3_ALPHA_BLEND_MODE, 1);
++	} else {
++		/* just use a 255 alpha value */
++		reg = RGA3_OVLP_TOP_CTRL - RGA3_FIRST_CMD_REG;
++		cmd[reg >> 2] = FIELD_PREP(RGA3_OVLP_GLOBAL_ALPHA, 0xff)
++			      | FIELD_PREP(RGA3_OVLP_COLOR_MODE, 1);
++		reg = RGA3_OVLP_BOT_CTRL - RGA3_FIRST_CMD_REG;
++		cmd[reg >> 2] = FIELD_PREP(RGA3_OVLP_GLOBAL_ALPHA, 0xff)
++			      | FIELD_PREP(RGA3_OVLP_COLOR_MODE, 1);
++	}
++}
++
++static void rga3_cmd_set_win0_addr(struct rga_ctx *ctx,
++				   const struct rga_addrs *addrs)
++{
++	u32 *cmd = ctx->rga->cmdbuf_virt;
++	unsigned int reg;
++
++	reg = RGA3_WIN0_Y_BASE - RGA3_FIRST_CMD_REG;
++	cmd[reg >> 2] = addrs->y_addr;
++	reg = RGA3_WIN0_U_BASE - RGA3_FIRST_CMD_REG;
++	cmd[reg >> 2] = addrs->u_addr;
++}
++
++static void rga3_cmd_set_wr_addr(struct rga_ctx *ctx,
++				 const struct rga_addrs *addrs)
++{
++	u32 *cmd = ctx->rga->cmdbuf_virt;
++	unsigned int reg;
++
++	reg = RGA3_WR_Y_BASE - RGA3_FIRST_CMD_REG;
++	cmd[reg >> 2] = addrs->y_addr;
++	reg = RGA3_WR_U_BASE - RGA3_FIRST_CMD_REG;
++	cmd[reg >> 2] = addrs->u_addr;
++}
++
++static void rga3_cmd_set_win0_format(struct rga_ctx *ctx)
++{
++	u32 *cmd = ctx->rga->cmdbuf_virt;
++	const struct rga3_fmt *in = ctx->in.fmt;
++	const struct rga3_fmt *out = ctx->out.fmt;
++	const struct v4l2_format_info *in_fmt, *out_fmt;
++	unsigned int src_h, src_w, dst_h, dst_w;
++	bool r2y, y2r;
++	u8 rd_format;
++	unsigned int reg;
++
++	src_h = ctx->in.crop.height;
++	src_w = ctx->in.crop.width;
++	dst_h = ctx->out.crop.height;
++	dst_w = ctx->out.crop.width;
++
++	in_fmt = v4l2_format_info(in->fourcc);
++	out_fmt = v4l2_format_info(out->fourcc);
++	r2y = v4l2_is_format_rgb(in_fmt) && v4l2_is_format_yuv(out_fmt);
++	y2r = v4l2_is_format_yuv(in_fmt) && v4l2_is_format_rgb(out_fmt);
++
++	if (in->semi_planar)
++		rd_format = RGA3_RDWR_FORMAT_SEMI_PLANAR;
++	else
++		rd_format = RGA3_RDWR_FORMAT_INTERLEAVED;
++
++	reg = RGA3_WIN0_RD_CTRL - RGA3_FIRST_CMD_REG;
++	cmd[reg >> 2] |= FIELD_PREP(RGA3_WIN_PIC_FORMAT, in->hw_format)
++		      |  FIELD_PREP(RGA3_WIN_YC_SWAP, in->yc_swap)
++		      |  FIELD_PREP(RGA3_WIN_RBUV_SWAP, in->rbuv_swap)
++		      |  FIELD_PREP(RGA3_WIN_RD_FORMAT, rd_format)
++		      |  FIELD_PREP(RGA3_WIN_R2Y, r2y)
++		      |  FIELD_PREP(RGA3_WIN_Y2R, y2r)
++		      |  FIELD_PREP(RGA3_WIN_CSC_MODE, RGA3_WIN_CSC_MODE_BT601_F);
++}
++
++static void rga3_cmd_enable_win0(struct rga_ctx *ctx)
++{
++	u32 *cmd = ctx->rga->cmdbuf_virt;
++	unsigned int reg;
++
++	reg = RGA3_WIN0_RD_CTRL - RGA3_FIRST_CMD_REG;
++	cmd[reg >> 2] |= FIELD_PREP(RGA3_WIN_ENABLE, 1);
++}
++
++static void rga3_cmd_set_wr_format(struct rga_ctx *ctx)
++{
++	u32 *cmd = ctx->rga->cmdbuf_virt;
++	const struct rga3_fmt *out = ctx->out.fmt;
++	u8 wr_format;
++	unsigned int reg;
++
++	if (out->semi_planar)
++		wr_format = RGA3_RDWR_FORMAT_SEMI_PLANAR;
++	else
++		wr_format = RGA3_RDWR_FORMAT_INTERLEAVED;
++
++	reg = RGA3_WR_CTRL - RGA3_FIRST_CMD_REG;
++	cmd[reg >> 2] |= FIELD_PREP(RGA3_WR_PIC_FORMAT, out->hw_format)
++		      |  FIELD_PREP(RGA3_WR_YC_SWAP, out->yc_swap)
++		      |  FIELD_PREP(RGA3_WR_RBUV_SWAP, out->rbuv_swap)
++		      |  FIELD_PREP(RGA3_WR_FORMAT, wr_format);
++}
++
++static void rga3_cmd_disable_wr_limitation(struct rga_ctx *ctx)
++{
++	u32 *cmd = ctx->rga->cmdbuf_virt;
++	unsigned int reg;
++
++	/* Use the max value to avoid limiting the write speed */
++	reg = RGA3_WR_CTRL - RGA3_FIRST_CMD_REG;
++	cmd[reg >> 2] |= FIELD_PREP(RGA3_WR_SW_OUTSTANDING_MAX, 63);
++}
++
++static void rga3_cmd_set(struct rga_ctx *ctx,
++			 struct rga_vb_buffer *src, struct rga_vb_buffer *dst)
++{
++	struct rockchip_rga *rga = ctx->rga;
++
++	memset(rga->cmdbuf_virt, 0, RGA3_CMDBUF_SIZE * 4);
++
++	rga3_cmd_set_win0_addr(ctx, &src->dma_addrs);
++	rga3_cmd_set_wr_addr(ctx, &dst->dma_addrs);
++
++	rga3_cmd_set_win0_format(ctx);
++	rga3_cmd_enable_win0(ctx);
++	rga3_cmd_set_trans_info(ctx);
++	rga3_cmd_set_wr_format(ctx);
++	rga3_cmd_disable_wr_limitation(ctx);
++
++	rga_write(rga, RGA3_CMD_ADDR, rga->cmdbuf_phy);
++
++	/* sync CMD buf for RGA */
++	dma_sync_single_for_device(rga->dev, rga->cmdbuf_phy,
++				   PAGE_SIZE, DMA_BIDIRECTIONAL);
++}
++
++static void rga3_hw_start(struct rockchip_rga *rga,
++			  struct rga_vb_buffer *src, struct rga_vb_buffer *dst)
++{
++	struct rga_ctx *ctx = rga->curr;
++
++	rga3_cmd_set(ctx, src, dst);
++
++	/* set to master mode and start the conversion */
++	rga_write(rga, RGA3_SYS_CTRL,
++		  FIELD_PREP(RGA3_CMD_MODE, RGA3_CMD_MODE_MASTER));
++	rga_write(rga, RGA3_INT_EN,
++		  FIELD_PREP(RGA3_INT_FRM_DONE, 1) |
++		  FIELD_PREP(RGA3_INT_DMA_READ_BUS_ERR, 1) |
++		  FIELD_PREP(RGA3_INT_WIN0_FBC_DEC_ERR, 1) |
++		  FIELD_PREP(RGA3_INT_WIN0_HOR_ERR, 1) |
++		  FIELD_PREP(RGA3_INT_WIN0_VER_ERR, 1) |
++		  FIELD_PREP(RGA3_INT_WR_VER_ERR, 1) |
++		  FIELD_PREP(RGA3_INT_WR_HOR_ERR, 1) |
++		  FIELD_PREP(RGA3_INT_WR_BUS_ERR, 1) |
++		  FIELD_PREP(RGA3_INT_WIN0_IN_FIFO_WR_ERR, 1) |
++		  FIELD_PREP(RGA3_INT_WIN0_IN_FIFO_RD_ERR, 1) |
++		  FIELD_PREP(RGA3_INT_WIN0_HOR_FIFO_WR_ERR, 1) |
++		  FIELD_PREP(RGA3_INT_WIN0_HOR_FIFO_RD_ERR, 1) |
++		  FIELD_PREP(RGA3_INT_WIN0_VER_FIFO_WR_ERR, 1) |
++		  FIELD_PREP(RGA3_INT_WIN0_VER_FIFO_RD_ERR, 1));
++	rga_write(rga, RGA3_CMD_CTRL,
++		  FIELD_PREP(RGA3_CMD_LINE_START_PULSE, 1));
++}
++
++static void rga3_soft_reset(struct rockchip_rga *rga)
++{
++	u32 i;
++
++	rga_write(rga, RGA3_SYS_CTRL,
++		  FIELD_PREP(RGA3_CCLK_SRESET, 1) |
++		  FIELD_PREP(RGA3_ACLK_SRESET, 1));
++
++	for (i = 0; i < RGA3_RESET_TIMEOUT; i++) {
++		if (FIELD_GET(RGA3_RO_SRST_DONE, rga_read(rga, RGA3_RO_SRST)))
++			break;
++
++		udelay(1);
++	}
++
++	if (i == RGA3_RESET_TIMEOUT)
++		pr_err("Timeout of %d usec reached while waiting for an rga3 soft reset\n", i);
++
++	rga_write(rga, RGA3_SYS_CTRL, 0);
++	rga_iommu_restore(rga);
++}
++
++static enum rga_irq_result rga3_handle_irq(struct rockchip_rga *rga)
++{
++	u32 intr;
++
++	intr = rga_read(rga, RGA3_INT_RAW);
++	/* clear all interrupts */
++	rga_write(rga, RGA3_INT_CLR, intr);
++
++	if (FIELD_GET(RGA3_INT_FRM_DONE, intr))
++		return RGA_IRQ_DONE;
++	if (FIELD_GET(RGA3_INT_DMA_READ_BUS_ERR, intr) ||
++	    FIELD_GET(RGA3_INT_WIN0_FBC_DEC_ERR, intr) ||
++	    FIELD_GET(RGA3_INT_WIN0_HOR_ERR, intr) ||
++	    FIELD_GET(RGA3_INT_WIN0_VER_ERR, intr) ||
++	    FIELD_GET(RGA3_INT_WR_VER_ERR, intr) ||
++	    FIELD_GET(RGA3_INT_WR_HOR_ERR, intr) ||
++	    FIELD_GET(RGA3_INT_WR_BUS_ERR, intr) ||
++	    FIELD_GET(RGA3_INT_WIN0_IN_FIFO_WR_ERR, intr) ||
++	    FIELD_GET(RGA3_INT_WIN0_IN_FIFO_RD_ERR, intr) ||
++	    FIELD_GET(RGA3_INT_WIN0_HOR_FIFO_WR_ERR, intr) ||
++	    FIELD_GET(RGA3_INT_WIN0_HOR_FIFO_RD_ERR, intr) ||
++	    FIELD_GET(RGA3_INT_WIN0_VER_FIFO_WR_ERR, intr) ||
++	    FIELD_GET(RGA3_INT_WIN0_VER_FIFO_RD_ERR, intr)) {
++		rga3_soft_reset(rga);
++		return RGA_IRQ_ERROR;
++	}
++
++	return RGA_IRQ_IGNORE;
++}
++
++static void rga3_get_version(struct rockchip_rga *rga)
++{
++	u32 version = rga_read(rga, RGA3_VERSION_NUM);
++
++	rga->version.major = FIELD_GET(RGA3_VERSION_NUM_MAJOR, version);
++	rga->version.minor = FIELD_GET(RGA3_VERSION_NUM_MINOR, version);
++}
++
++static struct rga3_fmt rga3_formats[] = {
++	{
++		.fourcc = V4L2_PIX_FMT_RGB24,
++		.hw_format = RGA3_COLOR_FMT_BGR888,
++		.rbuv_swap = 1,
++	},
++	{
++		.fourcc = V4L2_PIX_FMT_BGR24,
++		.hw_format = RGA3_COLOR_FMT_BGR888,
++	},
++	{
++		.fourcc = V4L2_PIX_FMT_ABGR32,
++		.hw_format = RGA3_COLOR_FMT_BGRA8888,
++	},
++	{
++		.fourcc = V4L2_PIX_FMT_RGBA32,
++		.hw_format = RGA3_COLOR_FMT_BGRA8888,
++		.rbuv_swap = 1,
++	},
++	{
++		.fourcc = V4L2_PIX_FMT_XBGR32,
++		.hw_format = RGA3_COLOR_FMT_BGRA8888,
++	},
++	{
++		.fourcc = V4L2_PIX_FMT_RGBX32,
++		.hw_format = RGA3_COLOR_FMT_BGRA8888,
++		.rbuv_swap = 1,
++	},
++	{
++		.fourcc = V4L2_PIX_FMT_RGB565,
++		.hw_format = RGA3_COLOR_FMT_BGR565,
++		.rbuv_swap = 1,
++	},
++	{
++		.fourcc = V4L2_PIX_FMT_NV12M,
++		.hw_format = RGA3_COLOR_FMT_YUV420,
++		.semi_planar = 1,
++	},
++	{
++		.fourcc = V4L2_PIX_FMT_NV12,
++		.hw_format = RGA3_COLOR_FMT_YUV420,
++		.semi_planar = 1,
++	},
++	{
++		.fourcc = V4L2_PIX_FMT_NV21M,
++		.hw_format = RGA3_COLOR_FMT_YUV420,
++		.rbuv_swap = 1,
++		.semi_planar = 1,
++	},
++	{
++		.fourcc = V4L2_PIX_FMT_NV21,
++		.hw_format = RGA3_COLOR_FMT_YUV420,
++		.rbuv_swap = 1,
++		.semi_planar = 1,
++	},
++	{
++		.fourcc = V4L2_PIX_FMT_NV16M,
++		.hw_format = RGA3_COLOR_FMT_YUV422,
++		.semi_planar = 1,
++	},
++	{
++		.fourcc = V4L2_PIX_FMT_NV16,
++		.hw_format = RGA3_COLOR_FMT_YUV422,
++		.semi_planar = 1,
++	},
++	{
++		.fourcc = V4L2_PIX_FMT_NV61M,
++		.hw_format = RGA3_COLOR_FMT_YUV422,
++		.rbuv_swap = 1,
++		.semi_planar = 1,
++	},
++	{
++		.fourcc = V4L2_PIX_FMT_NV61,
++		.hw_format = RGA3_COLOR_FMT_YUV422,
++		.rbuv_swap = 1,
++		.semi_planar = 1,
++	},
++	{
++		.fourcc = V4L2_PIX_FMT_YUYV,
++		.hw_format = RGA3_COLOR_FMT_YUV422,
++		.yc_swap = 1,
++	},
++	{
++		.fourcc = V4L2_PIX_FMT_YVYU,
++		.hw_format = RGA3_COLOR_FMT_YUV422,
++		.yc_swap = 1,
++		.rbuv_swap = 1,
++	},
++	{
++		.fourcc = V4L2_PIX_FMT_UYVY,
++		.hw_format = RGA3_COLOR_FMT_YUV422,
++	},
++	{
++		.fourcc = V4L2_PIX_FMT_VYUY,
++		.hw_format = RGA3_COLOR_FMT_YUV422,
++		.rbuv_swap = 1,
++	},
++	/* Input only formats last to keep rga3_enum_format simple */
++	{
++		.fourcc = V4L2_PIX_FMT_ARGB32,
++		.hw_format = RGA3_COLOR_FMT_ABGR8888,
++		.rbuv_swap = 1,
++	},
++	{
++		.fourcc = V4L2_PIX_FMT_BGRA32,
++		.hw_format = RGA3_COLOR_FMT_ABGR8888,
++	},
++	{
++		.fourcc = V4L2_PIX_FMT_XRGB32,
++		.hw_format = RGA3_COLOR_FMT_ABGR8888,
++		.rbuv_swap = 1,
++	},
++	{
++		.fourcc = V4L2_PIX_FMT_BGRX32,
++		.hw_format = RGA3_COLOR_FMT_ABGR8888,
++	},
++};
++
++static int rga3_enum_format(struct v4l2_fmtdesc *f)
++{
++	struct rga3_fmt *fmt;
++
++	if (f->index >= ARRAY_SIZE(rga3_formats))
++		return -EINVAL;
++
++	fmt = &rga3_formats[f->index];
++	if (V4L2_TYPE_IS_CAPTURE(f->type) && !rga3_can_capture(fmt))
++		return -EINVAL;
++
++	f->pixelformat = fmt->fourcc;
++	return 0;
++}
++
++static void *rga3_try_format(u32 *fourcc, bool is_output)
 +{
 +	unsigned int i;
 +
 +	if (!fourcc)
-+		return &formats[0];
++		return &rga3_formats[0];
 +
-+	for (i = 0; i < ARRAY_SIZE(formats); i++) {
-+		if (formats[i].fourcc == *fourcc)
-+			return &formats[i];
++	for (i = 0; i < ARRAY_SIZE(rga3_formats); i++) {
++		if (!is_output && !rga3_can_capture(&rga3_formats[i]))
++			continue;
++
++		if (rga3_formats[i].fourcc == *fourcc)
++			return &rga3_formats[i];
 +	}
 +
-+	*fourcc = formats[0].fourcc;
-+	return &formats[0];
++	*fourcc = rga3_formats[0].fourcc;
++	return &rga3_formats[0];
 +}
 +
-+static int rga_enum_format(struct v4l2_fmtdesc *f)
-+{
-+	if (f->index >= ARRAY_SIZE(formats))
-+		return -EINVAL;
++const struct rga_hw rga3_hw = {
++	.card_type = "rga3",
++	.has_internal_iommu = false,
++	.cmdbuf_size = RGA3_CMDBUF_SIZE,
++	.min_width = RGA3_MIN_WIDTH,
++	.min_height = RGA3_MIN_HEIGHT,
++	.max_width = RGA3_MAX_INPUT_WIDTH,
++	.max_height = RGA3_MAX_INPUT_HEIGHT,
 +
-+	f->pixelformat = formats[f->index].fourcc;
-+	return 0;
-+}
++	.start = rga3_hw_start,
++	.handle_irq = rga3_handle_irq,
++	.get_version = rga3_get_version,
++	.enum_format = rga3_enum_format,
++	.try_format = rga3_try_format,
++};
+diff --git a/drivers/media/platform/rockchip/rga/rga3-hw.h b/drivers/media/platform/rockchip/rga/rga3-hw.h
+new file mode 100644
+index 0000000000000000000000000000000000000000..3829469e310706c11ecc52f40d3d1eb43a61d9c2
+--- /dev/null
++++ b/drivers/media/platform/rockchip/rga/rga3-hw.h
+@@ -0,0 +1,186 @@
++/* SPDX-License-Identifier: GPL-2.0-only */
++/*
++ * Copyright (C) Pengutronix e.K.
++ * Author: Sven Püschel <s.pueschel@pengutronix.de>
++ */
++#ifndef __RGA3_HW_H__
++#define __RGA3_HW_H__
 +
- const struct rga_hw rga2_hw = {
- 	.card_type = "rga2",
- 	.has_internal_iommu = true,
--	.formats = formats,
--	.num_formats = ARRAY_SIZE(formats),
- 	.cmdbuf_size = RGA_CMDBUF_SIZE,
- 	.min_width = MIN_WIDTH,
- 	.max_width = MAX_WIDTH,
-@@ -635,4 +661,6 @@ const struct rga_hw rga2_hw = {
- 	.start = rga_hw_start,
- 	.handle_irq = rga_handle_irq,
- 	.get_version = rga_get_version,
-+	.try_format = rga_try_format,
-+	.enum_format = rga_enum_format,
- };
-diff --git a/drivers/media/platform/rockchip/rga/rga-hw.h b/drivers/media/platform/rockchip/rga/rga-hw.h
-index 1f52fbfad5fb3b8b773f7f03be0603170c5189f6..0ac3a05c0e0cfd8ed64277cd67e5936fbd52d28f 100644
---- a/drivers/media/platform/rockchip/rga/rga-hw.h
-+++ b/drivers/media/platform/rockchip/rga/rga-hw.h
-@@ -6,6 +6,8 @@
- #ifndef __RGA_HW_H__
- #define __RGA_HW_H__
- 
 +#include <linux/types.h>
 +
- #define RGA_CMDBUF_SIZE 0x20
- 
- /* Hardware limits */
-@@ -428,4 +430,14 @@ union rga_pat_con {
- 	} data;
- };
- 
-+struct rga_fmt {
++#define RGA3_CMDBUF_SIZE 0x2e
++
++#define RGA3_MIN_WIDTH 128
++#define RGA3_MIN_HEIGHT 128
++#define RGA3_MAX_INPUT_WIDTH (8192 - 16)
++#define RGA3_MAX_INPUT_HEIGHT (8192 - 16)
++#define RGA3_RESET_TIMEOUT 1000
++
++/* Registers address */
++/* sys reg */
++#define RGA3_SYS_CTRL				0x000
++#define RGA3_CMD_CTRL				0x004
++#define RGA3_CMD_ADDR				0x008
++#define RGA3_MI_GROUP_CTRL			0x00c
++#define RGA3_ARQOS_CTRL				0x010
++#define RGA3_VERSION_NUM			0x018
++#define RGA3_VERSION_TIM			0x01c
++#define RGA3_INT_EN				0x020
++#define RGA3_INT_RAW				0x024
++#define RGA3_INT_MSK				0x028
++#define RGA3_INT_CLR				0x02c
++#define RGA3_RO_SRST				0x030
++#define RGA3_STATUS0				0x034
++#define RGA3_SCAN_CNT				0x038
++#define RGA3_CMD_STATE				0x040
++
++/* cmd reg */
++#define RGA3_WIN0_RD_CTRL			0x100
++#define RGA3_FIRST_CMD_REG			RGA3_WIN0_RD_CTRL
++#define RGA3_WIN0_Y_BASE			0x110
++#define RGA3_WIN0_U_BASE			0x114
++#define RGA3_WIN0_V_BASE			0x118
++#define RGA3_WIN0_VIR_STRIDE			0x11c
++#define RGA3_WIN0_FBC_OFF			0x120
++#define RGA3_WIN0_SRC_SIZE			0x124
++#define RGA3_WIN0_ACT_OFF			0x128
++#define RGA3_WIN0_ACT_SIZE			0x12c
++#define RGA3_WIN0_DST_SIZE			0x130
++#define RGA3_WIN0_SCL_FAC			0x134
++#define RGA3_WIN0_UV_VIR_STRIDE			0x138
++#define RGA3_WIN1_RD_CTRL			0x140
++#define RGA3_WIN1_Y_BASE			0x150
++#define RGA3_WIN1_U_BASE			0x154
++#define RGA3_WIN1_V_BASE			0x158
++#define RGA3_WIN1_VIR_STRIDE			0x15c
++#define RGA3_WIN1_FBC_OFF			0x160
++#define RGA3_WIN1_SRC_SIZE			0x164
++#define RGA3_WIN1_ACT_OFF			0x168
++#define RGA3_WIN1_ACT_SIZE			0x16c
++#define RGA3_WIN1_DST_SIZE			0x170
++#define RGA3_WIN1_SCL_FAC			0x174
++#define RGA3_WIN1_UV_VIR_STRIDE			0x178
++#define RGA3_OVLP_CTRL				0x180
++#define RGA3_OVLP_OFF				0x184
++#define RGA3_OVLP_TOP_KEY_MIN			0x188
++#define RGA3_OVLP_TOP_KEY_MAX			0x18c
++#define RGA3_OVLP_TOP_CTRL			0x190
++#define RGA3_OVLP_BOT_CTRL			0x194
++#define RGA3_OVLP_TOP_ALPHA			0x198
++#define RGA3_OVLP_BOT_ALPHA			0x19c
++#define RGA3_WR_CTRL				0x1a0
++#define RGA3_WR_FBCE_CTRL			0x1a4
++#define RGA3_WR_VIR_STRIDE			0x1a8
++#define RGA3_WR_PL_VIR_STRIDE			0x1ac
++#define RGA3_WR_Y_BASE				0x1b0
++#define RGA3_WR_U_BASE				0x1b4
++#define RGA3_WR_V_BASE				0x1b8
++
++/* Registers value */
++#define RGA3_COLOR_FMT_YUV420		0x0
++#define RGA3_COLOR_FMT_YUV422		0x1
++#define RGA3_COLOR_FMT_YUV420_10B	0x2
++#define RGA3_COLOR_FMT_YUV422_10B	0x3
++/*
++ * Use memory ordering names
++ * instead of the datasheet naming RGB formats in big endian order
++ */
++#define RGA3_COLOR_FMT_BGR565		0x4
++#define RGA3_COLOR_FMT_BGR888		0x5
++#define RGA3_COLOR_FMT_FIRST_HAS_ALPHA	RGA3_COLOR_FMT_BGRA8888
++#define RGA3_COLOR_FMT_BGRA8888		0x6
++#define RGA3_COLOR_FMT_LAST_OUTPUT	RGA3_COLOR_FMT_BGRA8888
++/* the following are only supported as inputs */
++#define RGA3_COLOR_FMT_ABGR8888		0x7
++/*
++ * the following seem to be unnecessary,
++ * as they can be achieved with RB swaps
++ */
++#define RGA3_COLOR_FMT_RGBA8888		0x8
++#define RGA3_COLOR_FMT_ARGB8888		0x9
++
++#define RGA3_RDWR_FORMAT_SEMI_PLANAR	0x1
++#define RGA3_RDWR_FORMAT_INTERLEAVED	0x2
++
++#define RGA3_CMD_MODE_MASTER 0x1
++
++#define RGA3_WIN_CSC_MODE_BT601_F 0x2
++
++/* RGA masks */
++/* SYS_CTRL */
++#define RGA3_CCLK_SRESET BIT(4)
++#define RGA3_ACLK_SRESET BIT(3)
++#define RGA3_CMD_MODE BIT(1)
++
++/* CMD_CTRL */
++#define RGA3_CMD_LINE_START_PULSE BIT(0)
++
++/* VERSION_NUM */
++#define RGA3_VERSION_NUM_MAJOR GENMASK(31, 28)
++#define RGA3_VERSION_NUM_MINOR GENMASK(27, 20)
++
++/* INT_* */
++#define RGA3_INT_FRM_DONE BIT(0)
++#define RGA3_INT_DMA_READ_BUS_ERR BIT(2)
++#define RGA3_INT_WIN0_FBC_DEC_ERR BIT(5)
++#define RGA3_INT_WIN0_HOR_ERR BIT(6)
++#define RGA3_INT_WIN0_VER_ERR BIT(7)
++#define RGA3_INT_WR_VER_ERR BIT(13)
++#define RGA3_INT_WR_HOR_ERR BIT(14)
++#define RGA3_INT_WR_BUS_ERR BIT(15)
++#define RGA3_INT_WIN0_IN_FIFO_WR_ERR BIT(16)
++#define RGA3_INT_WIN0_IN_FIFO_RD_ERR BIT(17)
++#define RGA3_INT_WIN0_HOR_FIFO_WR_ERR BIT(18)
++#define RGA3_INT_WIN0_HOR_FIFO_RD_ERR BIT(19)
++#define RGA3_INT_WIN0_VER_FIFO_WR_ERR BIT(20)
++#define RGA3_INT_WIN0_VER_FIFO_RD_ERR BIT(21)
++
++/* RO_SRST */
++#define RGA3_RO_SRST_DONE GENMASK(5, 0)
++
++/* *_SIZE */
++#define RGA3_HEIGHT GENMASK(28, 16)
++#define RGA3_WIDTH GENMASK(12, 0)
++
++/* SCL_FAC */
++#define RGA3_SCALE_VER_FAC GENMASK(31, 16)
++#define RGA3_SCALE_HOR_FAC GENMASK(15, 0)
++
++/* WINx_CTRL */
++#define RGA3_WIN_CSC_MODE GENMASK(27, 26)
++#define RGA3_WIN_R2Y BIT(25)
++#define RGA3_WIN_Y2R BIT(24)
++#define RGA3_WIN_SCALE_VER_UP BIT(23)
++#define RGA3_WIN_SCALE_VER_BYPASS BIT(22)
++#define RGA3_WIN_SCALE_HOR_UP BIT(21)
++#define RGA3_WIN_SCALE_HOR_BYPASS BIT(20)
++#define RGA3_WIN_YC_SWAP BIT(13)
++#define RGA3_WIN_RBUV_SWAP BIT(12)
++#define RGA3_WIN_RD_FORMAT GENMASK(9, 8)
++#define RGA3_WIN_PIC_FORMAT GENMASK(7, 4)
++#define RGA3_WIN_ENABLE BIT(0)
++
++/* COLOR_CTRL */
++#define RGA3_OVLP_GLOBAL_ALPHA GENMASK(23, 16)
++#define RGA3_OVLP_COLOR_MODE BIT(0)
++
++/* ALPHA_CTRL */
++#define RGA3_ALPHA_SELECT_MODE BIT(4)
++#define RGA3_ALPHA_BLEND_MODE GENMASK(3, 2)
++
++/* WR_CTRL */
++#define RGA3_WR_YC_SWAP BIT(20)
++#define RGA3_WR_SW_OUTSTANDING_MAX GENMASK(18, 13)
++#define RGA3_WR_RBUV_SWAP BIT(12)
++#define RGA3_WR_FORMAT GENMASK(9, 8)
++#define RGA3_WR_PIC_FORMAT GENMASK(7, 4)
++
++struct rga3_fmt {
 +	u32 fourcc;
-+	int depth;
-+	u8 uv_factor;
-+	u8 y_div;
-+	u8 x_div;
-+	u8 color_swap;
 +	u8 hw_format;
++	bool rbuv_swap;
++	bool yc_swap;
++	bool semi_planar;
 +};
 +
- #endif
-diff --git a/drivers/media/platform/rockchip/rga/rga.c b/drivers/media/platform/rockchip/rga/rga.c
-index 6e1a4a6dc6309a6d6d9a3aac0fe982e7200c96de..cd4da01645611e5fb51ed94e09b5f1463dad72c5 100644
---- a/drivers/media/platform/rockchip/rga/rga.c
-+++ b/drivers/media/platform/rockchip/rga/rga.c
-@@ -185,17 +185,6 @@ static int rga_setup_ctrls(struct rga_ctx *ctx)
- 	return 0;
- }
- 
--static struct rga_fmt *rga_fmt_find(struct rockchip_rga *rga, u32 pixelformat)
--{
--	unsigned int i;
--
--	for (i = 0; i < rga->hw->num_formats; i++) {
--		if (rga->hw->formats[i].fourcc == pixelformat)
--			return &rga->hw->formats[i];
--	}
--	return NULL;
--}
--
- struct rga_frame *rga_get_frame(struct rga_ctx *ctx, enum v4l2_buf_type type)
- {
- 	if (V4L2_TYPE_IS_OUTPUT(type))
-@@ -210,6 +199,7 @@ static int rga_open(struct file *file)
- 	struct rockchip_rga *rga = video_drvdata(file);
- 	struct rga_ctx *ctx = NULL;
- 	int ret = 0;
-+	u32 fourcc;
- 	struct rga_frame def_frame = {
- 		.width = clamp(DEFAULT_WIDTH, rga->hw->min_width, rga->hw->max_width),
- 		.height = clamp(DEFAULT_HEIGHT, rga->hw->min_height, rga->hw->max_height),
-@@ -218,7 +208,6 @@ static int rga_open(struct file *file)
- 		.crop.top = 0,
- 		.crop.width = clamp(DEFAULT_WIDTH, rga->hw->min_width, rga->hw->max_width),
- 		.crop.height = clamp(DEFAULT_HEIGHT, rga->hw->min_height, rga->hw->max_height),
--		.fmt = &rga->hw->formats[0],
- 	};
- 
- 	ctx = kzalloc(sizeof(*ctx), GFP_KERNEL);
-@@ -229,10 +218,14 @@ static int rga_open(struct file *file)
- 	ctx->in = def_frame;
- 	ctx->out = def_frame;
- 
-+	fourcc = 0;
-+	ctx->in.fmt = rga->hw->try_format(&fourcc, true);
- 	v4l2_fill_pixfmt_mp(&ctx->in.pix,
--			    ctx->in.fmt->fourcc, ctx->out.width, ctx->out.height);
-+			    fourcc, ctx->out.width, ctx->out.height);
-+	fourcc = 0;
-+	ctx->out.fmt = rga->hw->try_format(&fourcc, false);
- 	v4l2_fill_pixfmt_mp(&ctx->out.pix,
--			    ctx->out.fmt->fourcc, ctx->out.width, ctx->out.height);
-+			    fourcc, ctx->out.width, ctx->out.height);
- 
- 	if (mutex_lock_interruptible(&rga->mutex)) {
- 		kfree(ctx);
-@@ -302,15 +295,8 @@ vidioc_querycap(struct file *file, void *priv, struct v4l2_capability *cap)
- static int vidioc_enum_fmt(struct file *file, void *priv, struct v4l2_fmtdesc *f)
- {
- 	struct rockchip_rga *rga = video_drvdata(file);
--	struct rga_fmt *fmt;
- 
--	if (f->index >= rga->hw->num_formats)
--		return -EINVAL;
--
--	fmt = &rga->hw->formats[f->index];
--	f->pixelformat = fmt->fourcc;
--
--	return 0;
-+	return rga->hw->enum_format(f);
- }
- 
- static void align_pixfmt(struct v4l2_pix_format_mplane *pix_fmt)
-@@ -346,7 +332,7 @@ static int vidioc_g_fmt(struct file *file, void *priv, struct v4l2_format *f)
- 	if (IS_ERR(frm))
- 		return PTR_ERR(frm);
- 
--	v4l2_fill_pixfmt_mp(pix_fmt, frm->fmt->fourcc, frm->width, frm->height);
-+	v4l2_fill_pixfmt_mp(pix_fmt, frm->pix.pixelformat, frm->width, frm->height);
- 	align_pixfmt(pix_fmt);
- 
- 	pix_fmt->field = V4L2_FIELD_NONE;
-@@ -360,18 +346,16 @@ static int vidioc_try_fmt(struct file *file, void *priv, struct v4l2_format *f)
- 	struct v4l2_pix_format_mplane *pix_fmt = &f->fmt.pix_mp;
- 	struct rockchip_rga *rga = video_drvdata(file);
- 	const struct rga_hw *hw = rga->hw;
--	struct rga_fmt *fmt;
- 
--	fmt = rga_fmt_find(rga, pix_fmt->pixelformat);
--	if (!fmt)
--		fmt = &hw->formats[0];
-+	hw->try_format(&pix_fmt->pixelformat,
-+		       V4L2_TYPE_IS_OUTPUT(f->type));
- 
- 	pix_fmt->width = clamp(pix_fmt->width,
- 			       hw->min_width, hw->max_width);
- 	pix_fmt->height = clamp(pix_fmt->height,
- 				hw->min_height, hw->max_height);
- 
--	v4l2_fill_pixfmt_mp(pix_fmt, fmt->fourcc, pix_fmt->width, pix_fmt->height);
-+	v4l2_fill_pixfmt_mp(pix_fmt, pix_fmt->pixelformat, pix_fmt->width, pix_fmt->height);
- 	align_pixfmt(pix_fmt);
- 	pix_fmt->field = V4L2_FIELD_NONE;
- 
-@@ -404,7 +388,8 @@ static int vidioc_s_fmt(struct file *file, void *priv, struct v4l2_format *f)
- 		return PTR_ERR(frm);
- 	frm->width = pix_fmt->width;
- 	frm->height = pix_fmt->height;
--	frm->fmt = rga_fmt_find(rga, pix_fmt->pixelformat);
-+	frm->fmt = rga->hw->try_format(&pix_fmt->pixelformat,
-+				       V4L2_TYPE_IS_OUTPUT(f->type));
- 	frm->colorspace = pix_fmt->colorspace;
- 
- 	/* Reset crop settings */
-@@ -418,7 +403,7 @@ static int vidioc_s_fmt(struct file *file, void *priv, struct v4l2_format *f)
- 	v4l2_dbg(debug, 1, &rga->v4l2_dev,
- 		 "[%s] fmt - %p4cc %dx%d (stride %d)\n",
- 		  V4L2_TYPE_IS_OUTPUT(f->type) ? "OUTPUT" : "CAPTURE",
--		  &frm->fmt->fourcc, frm->width, frm->height,
-+		  &pix_fmt->pixelformat, frm->width, frm->height,
- 		  pix_fmt->plane_fmt[0].bytesperline);
- 
- 	for (i = 0; i < pix_fmt->num_planes; i++) {
-diff --git a/drivers/media/platform/rockchip/rga/rga.h b/drivers/media/platform/rockchip/rga/rga.h
-index d5ec873adc280bc2238b227d2f0c649ca345b836..fc4805ba4e8ef7fb311f780a198ba6ba4d3aff17 100644
---- a/drivers/media/platform/rockchip/rga/rga.h
-+++ b/drivers/media/platform/rockchip/rga/rga.h
-@@ -17,16 +17,6 @@
- #define DEFAULT_WIDTH 100
- #define DEFAULT_HEIGHT 100
- 
--struct rga_fmt {
--	u32 fourcc;
--	int depth;
--	u8 uv_factor;
--	u8 y_div;
--	u8 x_div;
--	u8 color_swap;
--	u8 hw_format;
--};
--
- struct rga_frame {
- 	/* Original dimensions */
- 	u32 width;
-@@ -37,7 +27,7 @@ struct rga_frame {
- 	struct v4l2_rect crop;
- 
- 	/* Image format */
--	struct rga_fmt *fmt;
-+	void *fmt;
- 	struct v4l2_pix_format_mplane pix;
- };
- 
-@@ -149,8 +139,6 @@ static inline void rga_mod(struct rockchip_rga *rga, u32 reg, u32 val, u32 mask)
- struct rga_hw {
- 	const char *card_type;
- 	bool has_internal_iommu;
--	struct rga_fmt *formats;
--	u32 num_formats;
- 	size_t cmdbuf_size;
- 	u32 min_width, min_height;
- 	u32 max_width, max_height;
-@@ -159,6 +147,8 @@ struct rga_hw {
- 		      struct rga_vb_buffer *src, struct rga_vb_buffer *dst);
- 	bool (*handle_irq)(struct rockchip_rga *rga);
- 	void (*get_version)(struct rockchip_rga *rga);
-+	void *(*try_format)(u32 *fourcc, bool is_output);
-+	int (*enum_format)(struct v4l2_fmtdesc *f);
- };
- 
- static inline bool rga_has_internal_iommu(const struct rockchip_rga *rga)
++#endif
 
 -- 
 2.51.0
