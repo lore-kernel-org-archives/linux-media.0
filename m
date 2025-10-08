@@ -1,44 +1,43 @@
 Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4E2C12C08B2
-	for <linux-media@vger.kernel.org>; Wed,  8 Oct 2025 17:51:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 492DD2C0F93
+	for <linux-media@vger.kernel.org>; Wed,  8 Oct 2025 17:51:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.167.242.64
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1759945884; cv=none; b=Ftp/FI+GF0WcrIG+L59j0BO6/4s0TecWQgWrp8xs1RiKnCTONNqq/Jo6DfuV1T0B2gbx0lZ86GSZtesCUGkcQi3Z2517xNANBN+yFi2U3IvzNn9y9yi0umR24D+HeAXqi9UrECIMN8VqjOvKgTOAq8eK8AeChnYETZDMXAlonmE=
+	t=1759945886; cv=none; b=SRGCt3LywZiwwAlAPbQ8ExIkgMLoUiK1EBmXZbKHIBjKhbGZnFYKt1MLMQKP9aKVwRXtJAsJK5uNHh9+LSAhHMVRi3uU8utd10z3+PDd/roLRjtm+/TrioU+DX3etDUHaiKtGEbcl//7eFyE/LXu6cJK1FQ6I4mMJFQvfo5Ot5s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1759945884; c=relaxed/simple;
-	bh=UFX+dEUBdcw4TCv0Sa2aSXJbi5QNte0jSA97Pgn18e0=;
+	s=arc-20240116; t=1759945886; c=relaxed/simple;
+	bh=Ei1TQpJJM/k/5T/OWbAHNDniKCCdLMm92oIiguShVJY=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=pxZzskh+VADo2bexIpAmJHx8+tt5QqKaxBptpBE13J+uXjo0X4wshu1EwKN73xyQIjy4k7kSddBnk4sG+yfwTmFVtJiZHht+A0/OG+X+OpaOjNDrY6wv37uwG1ClNbQg+2X8qQHn5Y46XziCzgkWG2dhmNybCo7/gbjJqeJNuFU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ideasonboard.com; spf=pass smtp.mailfrom=ideasonboard.com; dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b=iuL3VnMG; arc=none smtp.client-ip=213.167.242.64
+	 MIME-Version; b=p/2HoXQ6g9w/0FPlPuDR+INU09mib8VwwtaoIDrwUsbq+KpySWEL/s2rHJ+gwQP2KvXlsei4iYrfHq5Hmn/kcanMr3Ha/Gdxzw7LxQ/sqe6XzKVdhfHYRDe6/Pq4noZYS1wBqHbNtoEBkzMDg8Q25FTbIqcgU3rsGXtvlpuykbk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ideasonboard.com; spf=pass smtp.mailfrom=ideasonboard.com; dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b=dJHG4+tv; arc=none smtp.client-ip=213.167.242.64
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ideasonboard.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ideasonboard.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="iuL3VnMG"
+	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="dJHG4+tv"
 Received: from pendragon.ideasonboard.com (82-203-166-19.bb.dnainternet.fi [82.203.166.19])
-	by perceval.ideasonboard.com (Postfix) with UTF8SMTPSA id 878E01E3A;
-	Wed,  8 Oct 2025 19:49:44 +0200 (CEST)
+	by perceval.ideasonboard.com (Postfix) with UTF8SMTPSA id ADB5AEFE;
+	Wed,  8 Oct 2025 19:49:47 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-	s=mail; t=1759945784;
-	bh=UFX+dEUBdcw4TCv0Sa2aSXJbi5QNte0jSA97Pgn18e0=;
+	s=mail; t=1759945787;
+	bh=Ei1TQpJJM/k/5T/OWbAHNDniKCCdLMm92oIiguShVJY=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=iuL3VnMG7XN4+GOsEc9Hz/mq0luIqZmgWuM9bTRlAl2uo6W5kALNKsSLFh9AOJRXE
-	 Pm+WcgXpGOEsGFD5rgWpsAcnrupgmaxkkJ6M+u86P1zqKs5SeJzNuDQAzyWNRrQtAM
-	 ORCD6eHMFp+HGBN11YZWgeeStthLnuoDa30hHDAc=
+	b=dJHG4+tvNQJvBhrjQmPVPUsWIq4TeUBmgqOlalawALPQKYC+8nt5H3ril0Ou9t0Ft
+	 Q5X0vzjjnssAATqFk8LxRr5A8G4y+4W8K4M9DhtmeFELXSBoMAz2JUYSCkfqDWUWRN
+	 oIjAealv12ovyd38X0KTlzh/DkwLBklhRPeYCkGY=
 From: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 To: linux-media@vger.kernel.org,
 	imx@lists.linux.dev,
 	linux-arm-kernel@lists.infradead.org
 Cc: Nicolas Dufresne <nicolas.dufresne@collabora.com>,
-	Mirela Rabulea <mirela.rabulea@nxp.com>,
 	Shawn Guo <shawnguo@kernel.org>,
 	Sascha Hauer <s.hauer@pengutronix.de>,
 	Pengutronix Kernel Team <kernel@pengutronix.de>,
 	Fabio Estevam <festevam@gmail.com>
-Subject: [PATCH 11/25] media: imx-jpeg: Drop unneeded v4l2_m2m_get_vq() NULL check
-Date: Wed,  8 Oct 2025 20:50:38 +0300
-Message-ID: <20251008175052.19925-12-laurent.pinchart@ideasonboard.com>
+Subject: [PATCH 13/25] media: nxp: imx8-isi: Drop unneeded v4l2_m2m_get_vq() NULL check
+Date: Wed,  8 Oct 2025 20:50:40 +0300
+Message-ID: <20251008175052.19925-14-laurent.pinchart@ideasonboard.com>
 X-Mailer: git-send-email 2.49.1
 In-Reply-To: <20251008175052.19925-1-laurent.pinchart@ideasonboard.com>
 References: <20251008175052.19925-1-laurent.pinchart@ideasonboard.com>
@@ -58,31 +57,22 @@ return value check.
 
 Signed-off-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 ---
- drivers/media/platform/nxp/imx-jpeg/mxc-jpeg.c | 4 ----
- 1 file changed, 4 deletions(-)
+ drivers/media/platform/nxp/imx8-isi/imx8-isi-m2m.c | 2 --
+ 1 file changed, 2 deletions(-)
 
-diff --git a/drivers/media/platform/nxp/imx-jpeg/mxc-jpeg.c b/drivers/media/platform/nxp/imx-jpeg/mxc-jpeg.c
-index 8681dd193033..37e0670f98c5 100644
---- a/drivers/media/platform/nxp/imx-jpeg/mxc-jpeg.c
-+++ b/drivers/media/platform/nxp/imx-jpeg/mxc-jpeg.c
-@@ -2492,8 +2492,6 @@ static int mxc_jpeg_s_fmt(struct mxc_jpeg_ctx *ctx,
- 	struct mxc_jpeg_dev *jpeg = ctx->mxc_jpeg;
+diff --git a/drivers/media/platform/nxp/imx8-isi/imx8-isi-m2m.c b/drivers/media/platform/nxp/imx8-isi/imx8-isi-m2m.c
+index 6822c2f7fc69..675f1d2b65d9 100644
+--- a/drivers/media/platform/nxp/imx8-isi/imx8-isi-m2m.c
++++ b/drivers/media/platform/nxp/imx8-isi/imx8-isi-m2m.c
+@@ -554,8 +554,6 @@ static int mxc_isi_m2m_s_fmt_vid(struct file *file, void *fh,
+ 	struct vb2_queue *vq;
  
  	vq = v4l2_m2m_get_vq(ctx->fh.m2m_ctx, f->type);
 -	if (!vq)
 -		return -EINVAL;
  
- 	if (vb2_is_busy(vq)) {
- 		v4l2_err(&jpeg->v4l2_dev, "queue busy\n");
-@@ -2529,8 +2527,6 @@ static int mxc_jpeg_s_fmt_vid_out(struct file *file, void *priv,
- 		return 0;
- 
- 	dst_vq = v4l2_m2m_get_vq(ctx->fh.m2m_ctx, cap_type);
--	if (!dst_vq)
--		return -EINVAL;
- 
- 	if (vb2_is_busy(dst_vq))
- 		return 0;
+ 	if (vb2_is_busy(vq))
+ 		return -EBUSY;
 -- 
 Regards,
 
