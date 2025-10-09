@@ -1,66 +1,67 @@
 Received: from mail-ed1-f44.google.com (mail-ed1-f44.google.com [209.85.208.44])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 676972C0266
-	for <linux-media@vger.kernel.org>; Thu,  9 Oct 2025 12:23:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 16AA22DF152
+	for <linux-media@vger.kernel.org>; Thu,  9 Oct 2025 12:23:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760012632; cv=none; b=H8L2DVt+4TUJAqfJOCxDYDect1SZQup0alfJiAGuuQmc2v0v41UbvxVeAc9MDNsvzOO9auAH0UFfcYSLlbuCrlLo7QLt3zKMgoh56Vs7iH6WvItrRK3n52akmwPmMk+5ZuP6rRKX5z8dHFLaYxUNvAwAuDCaxWTu9Sok9Sb+3WI=
+	t=1760012633; cv=none; b=eFI3kJ/1bdrg6q39Xex8x+QRl0QXWiBEPoVm9XrgWv3wGVaZOym+gW546tDsspeqmA2Gx+hNqhFlIPtxLrREnmutriEUp8ZexkVmewH39uWrW7KNQU45E6/j+KSzcfNGtXta7wr6hcKiaxiX+SUIjyyxg5wXPCtXxBoNud04HEo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760012632; c=relaxed/simple;
-	bh=NKYwbSuoZ7KUdj7otYEtY2P0sntuXVy4h1xZozLcbWQ=;
-	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=QXa6UGPZ7239TaTlCgPGu4K7qQBJi2WmVDxB6K9EUAeViqHBfdAOTPkKBB7sCA8uILJ3bieQh52oTWlAibAmFdXIFFJ59/D32MMYJhIuYPmYxMflew/NrkEPZQZxdRaM9OEYawES9JsWcCUGa2c3Ct8hdwXpFheS2XtHTwwb/w0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=fairphone.com; spf=pass smtp.mailfrom=fairphone.com; dkim=pass (2048-bit key) header.d=fairphone.com header.i=@fairphone.com header.b=Gp+ctcNA; arc=none smtp.client-ip=209.85.208.44
+	s=arc-20240116; t=1760012633; c=relaxed/simple;
+	bh=8gVlk9smM1PELBfkVeRiLfq5UVjtyIkKz5m4vaScY0Q=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=gpJ9fe8Amz2OZEKczzcnHM8y+2ugSIkJGEgAjOfak/IOLaUSGIgri9E7j1NBRlp9RXJv8sgbMf7JKN3HzKY3gj9Afja0qm9kjH2p4K2Td3Q4cBi/cfYqhlVcCnBhLok0vHWq9GcfVFMNDZMYjIjE0vd6o2JAw8s8aSfLiLr0ddw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=fairphone.com; spf=pass smtp.mailfrom=fairphone.com; dkim=pass (2048-bit key) header.d=fairphone.com header.i=@fairphone.com header.b=Smgk941Z; arc=none smtp.client-ip=209.85.208.44
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=fairphone.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=fairphone.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=fairphone.com header.i=@fairphone.com header.b="Gp+ctcNA"
-Received: by mail-ed1-f44.google.com with SMTP id 4fb4d7f45d1cf-637e74e9104so1209435a12.1
-        for <linux-media@vger.kernel.org>; Thu, 09 Oct 2025 05:23:50 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=fairphone.com header.i=@fairphone.com header.b="Smgk941Z"
+Received: by mail-ed1-f44.google.com with SMTP id 4fb4d7f45d1cf-639e34ffa69so1289797a12.3
+        for <linux-media@vger.kernel.org>; Thu, 09 Oct 2025 05:23:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=fairphone.com; s=fair; t=1760012629; x=1760617429; darn=vger.kernel.org;
-        h=cc:to:content-transfer-encoding:mime-version:message-id:date
-         :subject:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=tHySYeGJ1ieMTpnCcwu2cfiHKzDSjdVN2CuFIzAgi+Y=;
-        b=Gp+ctcNAXQVtTo4EyNVw0Jje0zFymioIy6QAJcQelXjUpxtCi8o0wH7ihgAoJt7yon
-         DtJn2lDZCkruacpp8k8ndaZYbRER0IAOnEc/DGyihN3Ma7UEZDsZpW7LNOSiG3aeiDJq
-         eFVbXzft8WovxXH3ozl8G1CYPJA7Juji5ugWgCWpkndhnzHecN4cWmoji0suWhT1kPs5
-         shVxasnAredQmiXH60Uatdjg+uzky/NWEW91zcvCJ4oXevdV7Hcg7g4pLet24/lAIEJ2
-         NRpZva5d6MU7YDgSb30BYkz/Xt22uultBF0RjqhaiXu5a0PWdju1m/WMI52CM8GNxbc3
-         bKVQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1760012629; x=1760617429;
-        h=cc:to:content-transfer-encoding:mime-version:message-id:date
-         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
+        d=fairphone.com; s=fair; t=1760012630; x=1760617430; darn=vger.kernel.org;
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=tHySYeGJ1ieMTpnCcwu2cfiHKzDSjdVN2CuFIzAgi+Y=;
-        b=gXgHv7iGH7CUNXYz17vlJ9eXNsnfJ+cPGCqPwExuNii/XQg4QLVJYFtjdELHHvOdvk
-         81zkED34fL/eaHM78a9ZP2g/CVrlrjbpYDZHerQjfZOUea/GNu7LUyuy9/JFkW9HEi6q
-         gJiQset14oQ478xdT74VJ93US9E5bbqLuuhrj3QE+mpgVE9KzvjxVLpY0LdSlWeREnRf
-         i598JlKRO/TvMnEsFxL2IY+BXSvwRR0SpMkqWOix5YouOMRvjRaMg8ZH/pOQVLLO5VR0
-         IEsRq7/6E4N/1jk+si58ZkMpa3xj2a1w3KeejqoV/yrGTv+X+4t4z/JbAya4UUcxCsb2
-         /MTg==
-X-Forwarded-Encrypted: i=1; AJvYcCX9y6L9lugLpxN7nQf2BE9rGQGdjObh+y+9jWEql49cEdlkvu4ZIsfgoLp4fUsMwoVOaICaDju5Vfz1Jg==@vger.kernel.org
-X-Gm-Message-State: AOJu0YyMZhSW4/050ICmcSdHQK/qk7OKHiAD0KOUyFQfE9oGb8xYTF7+
-	6mc4G+9UHoUfCRhfEgwKOFphyKggtJV07kH7DJ/1og1Qjcjfp6fTF81hnEQT5Bd7pbE=
-X-Gm-Gg: ASbGncuFkqiCy5+Y6er7/KOJJPfL6CSFb+mg6jNgGL42XxzchufVqCWKaGkJmKv2YNw
-	pAj3mR5WPa5RVmchdJlvVEF7yYP7+AFmitN1gM/+ptkfUIb3dm6n4QGl4kYSSAesYuOIGFKQHc6
-	4fjMYZ+nFlS+TA4rwttV7wI7yeAHqk8OO9GiglyrqSd0vP9m8Bc+xf2r10aCkgVhM2CycjhDRal
-	1HOHdbcgiVKmyWgP8yHVGHF2bZvnUy/Awg0AMKSwMRazV9pSab4RHVUVEkOp+c3diM4jxG3yoOl
-	CJyj8yOWnZhBRUHTmPx+YrWTnOicvpvgs6l0rgyWipEplBqNNRgHe3XzU1qmb+AxKy4uuLOiaPp
-	s9vPvmhAAS6TahUJ4lKoijv89pRC9cVl3sbjxawrSJwfGVrfA6As9vx5zYAZULPvTAPsEq1AlKZ
-	4FUxpTXK0G6vzNWBuLQ9S4yEbm9I1A/jU5OAhQjsE=
-X-Google-Smtp-Source: AGHT+IHHln953x+ocb683fbtunM4jGpgYY7ccluW48jSBvEHmWWg41yNKdtcVem28NTFOpr1Aiy6yA==
-X-Received: by 2002:a05:6402:520b:b0:61c:9852:bb9f with SMTP id 4fb4d7f45d1cf-639d5b57922mr6410311a12.1.1760012628801;
-        Thu, 09 Oct 2025 05:23:48 -0700 (PDT)
+        bh=F3uxa4fRuVyUqOKym+dPyw2hVfaKQnFjx/vC0g8hIx8=;
+        b=Smgk941Zt4hIB0FwtYk/08i0MC9Vfw/+BryAmlNGnlfTolID15/3ap25UUaDtkc8gO
+         0pUMqSE9gOzWy0oPqaesRpOC8AQAvFIE05dhidQGmMk1ctj9KnxQGE5vbIsL5fvS+r7m
+         thgR/omuXRXpIMfckk5E34PhI0jvkjcAP9FZpCePGiyygr5LqwLjKOv/6d6d1iozYoy7
+         WlrA7erdR9D/50gV3YOFW0PgSI7z45XK2e62S6S/7hOUuD0L7RnGzq74Dt5b2a9lh4aA
+         GPJlCv1eitoKXt7Dm4HDpOPnpTYZq/yl9h0wlyn/x4QHxF4gB/XR8WKpokhZpIYb+sH8
+         EpvQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1760012630; x=1760617430;
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=F3uxa4fRuVyUqOKym+dPyw2hVfaKQnFjx/vC0g8hIx8=;
+        b=F7ctZ5r84x0qviVOorYs8Mst/aIJJNfo/SNeITV779B0TxpEKoswFo+aiCSq8gYZcD
+         yvydNqhT1jEnNbUPv1XtcZxOgqPqNOAOXHL1hkKjiSOsGg/rA747HAJjgcRalz1xXJb8
+         5dwP5xzQ65wVEm1gZv2xu7ILTRq4HXTgEx8evYNiTs1keLDe5MrEo1whnFgI1sTKSPrx
+         IJTzwCSioYsUb7vBMWRwUbILAlqj+1BlDO59mHxFtvCTcgQQRnIZphpZ5Lkxie6sHmgf
+         xBr4NRmVLGfVp1WmJJR77UtHwV6mQG4LrnLM2chYxhRSfe5LoKrs9yFarWxVPvxlGgaa
+         9aHg==
+X-Forwarded-Encrypted: i=1; AJvYcCWhPxtyUfjloTwF0MCQhwIP4YVEP5caCGZ+u7X/+IXjOUA/AxqmbgIbL6LHInHrO/LB6fVvpSaghG72Tw==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy3EaLx1KjV1fa9gyUDs4JhMSnUC8ReE+o4PmBZ4gB+C8owvjIX
+	xSrPYFWLh4sEbsyarBAV61szXfArcirDDNGHSYUow0CobGo3i8Lx1Dl7nwxLeG+bXM0=
+X-Gm-Gg: ASbGncsTERq4waqAx4TlursCMaNQdGT448IeL8lfIUXihMkxAF42hYDtOOSmBC8G9N7
+	on6Zz0OZBp29OmxrF+rM8TE/pjF9EtehkKbJPdItk2M2v5blGQssrmyzbIi2rLIb/genNMOehvI
+	qg6ZR2hYdD1al1WfFDGH2kJ9wibJu1LYV6I7oLSYm3ybWWG9hP5bk4eCVV6SY0K3HAmpU0HKIfx
+	+vUFfBirxoKpdkYLT87+9oHngmjb5fe02AbH8CCyHgTYbxu/+o2j8aRKHPDM/qiBUD00MUR+ng2
+	ceoxrd4+HDuURYJGd2XH20XdJPcwo0FNqVGKyG+V1Tocm4XdZyXaf1Ny+tS9O7/8snkJfjVPyHC
+	d1BmdmKzy5s1/WtO3NOctNm2YlXDP62SCa8ZG/6595Mr2WxLHmZvhg3yCHOfbccO0RBejtn/jZs
+	Nnp978VrLMr+81xsObkv5nxp9sd/m3
+X-Google-Smtp-Source: AGHT+IGxgMccbKlgi4yylAk4wudj96kX48auY6/u1zqpqttH1xWg8MxYaDDcu2sseBENbhoMxyZF5w==
+X-Received: by 2002:a05:6402:518c:b0:62f:67e0:55 with SMTP id 4fb4d7f45d1cf-639d5c371demr6511994a12.24.1760012630426;
+        Thu, 09 Oct 2025 05:23:50 -0700 (PDT)
 Received: from [172.16.220.227] (144-178-202-139.static.ef-service.nl. [144.178.202.139])
-        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-639f3d09b92sm2231273a12.30.2025.10.09.05.23.48
+        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-639f3d09b92sm2231273a12.30.2025.10.09.05.23.49
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 09 Oct 2025 05:23:48 -0700 (PDT)
+        Thu, 09 Oct 2025 05:23:49 -0700 (PDT)
 From: Griffin Kroah-Hartman <griffin.kroah@fairphone.com>
-Subject: [PATCH RFC 0/3] Add support for Asahi Kasei AK7377 driver
-Date: Thu, 09 Oct 2025 14:23:37 +0200
-Message-Id: <20251009-ak7377-driver-v1-0-29e4f6e16ed3@fairphone.com>
+Date: Thu, 09 Oct 2025 14:23:39 +0200
+Subject: [PATCH RFC 2/3] media: i2c: ak7375: Add support for ak7377
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
@@ -69,10 +70,9 @@ List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-B4-Tracking: v=1; b=H4sIAEmp52gC/6tWKk4tykwtVrJSqFYqSi3LLM7MzwNyDHUUlJIzE
- vPSU3UzU4B8JSMDI1NDAwNL3cRsc2Nzc92Uosyy1CJdCzNjC8M0I0tzM9MkJaCegqLUtMwKsHn
- RSkFuzkqxtbUA4DpR2GQAAAA=
-X-Change-ID: 20251009-ak7377-driver-86381f29765b
+Message-Id: <20251009-ak7377-driver-v1-2-29e4f6e16ed3@fairphone.com>
+References: <20251009-ak7377-driver-v1-0-29e4f6e16ed3@fairphone.com>
+In-Reply-To: <20251009-ak7377-driver-v1-0-29e4f6e16ed3@fairphone.com>
 To: Bjorn Andersson <andersson@kernel.org>, 
  Konrad Dybcio <konradybcio@kernel.org>, Rob Herring <robh@kernel.org>, 
  Krzysztof Kozlowski <krzk+dt@kernel.org>, 
@@ -85,40 +85,58 @@ Cc: linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
  linux-kernel@vger.kernel.org, linux-media@vger.kernel.org, 
  Griffin Kroah-Hartman <griffin.kroah@fairphone.com>
 X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1760012628; l=1154;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1760012628; l=1584;
  i=griffin.kroah@fairphone.com; s=20250804; h=from:subject:message-id;
- bh=NKYwbSuoZ7KUdj7otYEtY2P0sntuXVy4h1xZozLcbWQ=;
- b=+mBeh2zVh4IEuQ1wv5ncOtyoapeQ/seSYFdezBTttdLSr5A5HdBUQ5/+Rl23YaFQySt8PmHTk
- ZaZY62dL0V0BQ0C8GwuNMvZWkYHpWkU5koSyUD3jX1Pno5WCl/AhfBZ
+ bh=8gVlk9smM1PELBfkVeRiLfq5UVjtyIkKz5m4vaScY0Q=;
+ b=D8BY0D0RkszxDBWlHYL6eM+A3qSf46i00GaDK8zQzyYjkdJb+CxhfoA4ySmtSYqDSWnTnpvai
+ v1ivVB9v0rIAdZAH4kk12Ezgjw4MJuwJFNk4hE2g6H2rqkAk4fh0fjJ
 X-Developer-Key: i=griffin.kroah@fairphone.com; a=ed25519;
  pk=drSBvqKFiR+xucmLWONHSq/wGrW+YvcVtBXFYnYzn8U=
 
-Add devicetree bindings and driver support for the AK7377 VCM driver.
+Add support for AK7377 VCM, which is a similar chip to the AK7375.
+It has no known standby register setting.
 
-The driver code is added to the preexistent ak7375 driver, which appears
-to have similar function order. 
-
-Some values of this driver were reverse-engineered from the existing
-drivers due to the lack of a datasheet for the AK7377, The driver moves
-the lens but could not be fully tested due to lack of camera sensor support,
-that's why this is marked RFC.
+Some values were reverse-engineered from the other chip's code,
+so the driver may not currently be reaching its full potential.
 
 Signed-off-by: Griffin Kroah-Hartman <griffin.kroah@fairphone.com>
 ---
-Griffin Kroah-Hartman (3):
-      dt-bindings: media: i2c: ak7375: Document AK7377
-      media: i2c: ak7375: Add support for ak7377
-      arm64: dts: qcom: qcm6490-fairphone-fp5: Add cam actuator
+ drivers/media/i2c/ak7375.c | 14 ++++++++++++++
+ 1 file changed, 14 insertions(+)
 
- .../devicetree/bindings/media/i2c/asahi-kasei,ak7375.yaml  |  1 +
- arch/arm64/boot/dts/qcom/qcm6490-fairphone-fp5.dts         |  7 +++++++
- drivers/media/i2c/ak7375.c                                 | 14 ++++++++++++++
- 3 files changed, 22 insertions(+)
----
-base-commit: e5f0a698b34ed76002dc5cff3804a61c80233a7a
-change-id: 20251009-ak7377-driver-86381f29765b
+diff --git a/drivers/media/i2c/ak7375.c b/drivers/media/i2c/ak7375.c
+index 9a2432cea3fff9f0ff41796f97236449792dccfc..47f9d14d9a65d43e5a8e5d6966e8f330c99865f8 100644
+--- a/drivers/media/i2c/ak7375.c
++++ b/drivers/media/i2c/ak7375.c
+@@ -65,6 +65,19 @@ static const struct ak73xx_chipdef ak7375_cdef = {
+ 	.power_delay_us	= 10000,
+ };
+ 
++static const struct ak73xx_chipdef ak7377_cdef = {
++	.reg_position	= 0x0,
++	.reg_cont	= 0x2,
++	.shift_pos	= 4,	/* 12 bits position values, need to << 4 */
++	.mode_active	= 0x0,
++	.has_standby	= false,
++	.focus_pos_max	= 1024,
++	.focus_steps	= 1,
++	.ctrl_steps	= 32,
++	.ctrl_delay_us	= 1000,
++	.power_delay_us	= 10000,
++};
++
+ static const char * const ak7375_supply_names[] = {
+ 	"vdd",
+ 	"vio",
+@@ -331,6 +344,7 @@ static int __maybe_unused ak7375_vcm_resume(struct device *dev)
+ static const struct of_device_id ak7375_of_table[] = {
+ 	{ .compatible = "asahi-kasei,ak7345", .data = &ak7345_cdef, },
+ 	{ .compatible = "asahi-kasei,ak7375", .data = &ak7375_cdef, },
++	{ .compatible = "asahi-kasei,ak7377", .data = &ak7377_cdef, },
+ 	{ /* sentinel */ }
+ };
+ MODULE_DEVICE_TABLE(of, ak7375_of_table);
 
-Best regards,
 -- 
-Griffin Kroah-Hartman <griffin.kroah@fairphone.com>
+2.43.0
 
