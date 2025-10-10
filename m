@@ -1,118 +1,133 @@
-Received: from out162-62-57-252.mail.qq.com (out162-62-57-252.mail.qq.com [162.62.57.252])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 407A226A087;
-	Fri, 10 Oct 2025 15:27:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=162.62.57.252
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EA25D213236
+	for <linux-media@vger.kernel.org>; Fri, 10 Oct 2025 19:30:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760110025; cv=none; b=TDcm2farymX+a0SQhGOeyr0hIQFj37PhqTnIok0rfWwQce4BW1Z7ipEpsRG0nTMtKyCgTeiu66BPpoQMJ+bidwQaDkfxmNwQg0iKxcUIngQ+X0Qt9EbH2mqt/BTUKSTRDqQtB1gkoFQuc9SS4xQSLx32ioZaUtHqadaVPULAtcs=
+	t=1760124638; cv=none; b=agR0xdxzWVDXOfzPC+oI+evqhl6PCxhIN0orGF3HPy+v2Ozf13wuJewoWjq6lcuGSOONJBuAXbbW0yDVLaAASB6MsbNdmgIqM+FIScRGwI7xAKloRTz8zLnUlJxK00yHEAV/0pLDdHPJNdJaGcPRngiBLSQ6fj6qObpuwb5VQGc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760110025; c=relaxed/simple;
-	bh=FoqhnH0aoPYtJFp9JGtXoN+k6yFcXvixrQP3VmDh8ys=;
-	h=Message-ID:From:To:Cc:Subject:Date:In-Reply-To:References:
-	 MIME-Version; b=pPcOBi0yoJJpBVedYQ4SfUT5JLQbijOPEL1Z81JyT2NiI9/kBy7eQISONFLtoOtIraCpzN8k7Y9Wym3B2kbBsRnKE0D+xiaefwkSJJx0de1MYQEexnwyaK5QOibqn9rp1EkLn4+peER0T2G0EsYcNc1y9OhzSW4EQkvdPZyAZbY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=qq.com; spf=pass smtp.mailfrom=qq.com; dkim=pass (1024-bit key) header.d=qq.com header.i=@qq.com header.b=kQf++FDe; arc=none smtp.client-ip=162.62.57.252
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=qq.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=qq.com
+	s=arc-20240116; t=1760124638; c=relaxed/simple;
+	bh=UO7tWaC1D06ILgslhIE6Vp+GGNOSccu5h6NsvDEB6bI=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=sXLxM6PEwee44JPOmPjv2bGknBxL4J2OVbdFL1GOGnRT94+Hp1sdqT+t4rUVfEBSMBPn1H0w9jU52gxQYJw90TZCOZTeUBLvvn39YTl0R01mh1OZVtz/U/IdcKDe7rOoeXSOMQ1GgUqmna0Bc094uM5MW7VyPRK6TTkPjln99k4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=RkNCtU8Q; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=qq.com header.i=@qq.com header.b="kQf++FDe"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qq.com; s=s201512;
-	t=1760109710; bh=Or25gIiKy8boPBkk79EZPJZ6wSZGAllmnA2wLhBp+uQ=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=kQf++FDej6cmeAzlzrizBzCQRx8fBbQ79Sg4AKWl/fDPA1DII2n/zAtxpPPyP6ZIO
-	 HpyFhn09GH2RJ1XFk7977G+wodpgWk5nTjb6HqT7XaTBHw61BCcKOFkI3Qaj0TaHV8
-	 cxBNKbLU9vhrs5thmPep5NFdRUbsAC7qPobDeRuw=
-Received: from pek-lxu-l1.corp.ad.wrs.com ([111.198.230.220])
-	by newxmesmtplogicsvrszb20-0.qq.com (NewEsmtp) with SMTP
-	id 56FA1A4E; Fri, 10 Oct 2025 23:21:47 +0800
-X-QQ-mid: xmsmtpt1760109707tibdhsrd0
-Message-ID: <tencent_303296E836864A7674D377A966003C7D3709@qq.com>
-X-QQ-XMAILINFO: NVJ0hJNx7N5SiqtozZbheU49yv/RiquKVrW2qkWLlsO5mGucU4DBndxbIYERFB
-	 AJFz7rnm5pENdTHXM3Ht5VqTX0xEpfhLlA2xPzNX+/PiRR/zAGJFAosJlM762NSrFEf5R67So77g
-	 1xrLVahRJWPBNZyFxZORLquNJP2DPw10rb41eiGGOMYr9gWeeqpqOJs7t5pCDNWx2eDCe2Ms2622
-	 9zn/Muluqr9jAlIkh/P8A4qlh3KQYeHnS1U6aQbKnCTk6oUTp8FahBkscUnMniRemc+IKnSrlILq
-	 MZLgqpqP8odA0h5vbmf/bcfItOqjfBeqtatdNVAT8ibOiKkv3JjrHRkHSuYojg5N/+MmmCvA3hoc
-	 3lp4dmH3pqJ06HMnQARug9yrPZJeYJ4IsX05QpLsx/QTXVH0g0F3GMORDoD5EP43SS/XT+a3kL3Q
-	 bDPENylRj+TtKGmG+lg13Bs60m61wRacEDhdQ9A7xNdVHoQPyxDbpyCSVDWKzPylyjg9MghJBAG3
-	 JkW9cl+E/tQec3x+rxxu/I/AuFzdRqPCR+Qr+kS+rhFQ0rDlCjCletGR/sAnBzmxW7vCm9G24z3g
-	 JrkGdZ+/4zTyVdxXbTQKUXVQQwycHPx3iXM4Wcvvl8FKlIJc1PxwTHRZcbpbN6F190f8HoSvG7DN
-	 FlYGiz9QcI5KS3aOvL/WZGI/t2y54M8ZTvMB2hMVa/BNh+TYwhuAtennf2vPYFpBMIhvtD9nCSZA
-	 dtIjmcqv8PlzLF+MDFi2VaUdgzokwf/cST5IqdRtg62VJ30pRwfbT0wZwZa5fq3jgRwuR+16H82a
-	 4tfO4s8hba/D/ZqNxcrUP/n3M8nXs0OuNRzwRoGA0zrNbd8ise7QuveqQCzZr4XDJn5LR5y2QXek
-	 bjLej5S7Z20sh0xzacS+QPhSwwO0JhN0S5KZs4iF80HWd0AamEFxylQmLM5SHPtaMkZ0WMJtKtlt
-	 CEnVQ9L2E10Sdd+5jxgFwDn6CExXsIwrUv9UrFb7seTm2xi2lfw62qsdg/HMBI
-X-QQ-XMRINFO: NI4Ajvh11aEj8Xl/2s1/T8w=
-From: Edward Adam Davis <eadavis@qq.com>
-To: syzbot+480edd2cadb85ddb4bbe@syzkaller.appspotmail.com
-Cc: linux-kernel@vger.kernel.org,
-	linux-media@vger.kernel.org,
-	mchehab@kernel.org,
-	syzkaller-bugs@googlegroups.com
-Subject: [PATCH] meida: dvb-usb: Optimizing err() output
-Date: Fri, 10 Oct 2025 23:21:48 +0800
-X-OQ-MSGID: <20251010152147.2167496-2-eadavis@qq.com>
-X-Mailer: git-send-email 2.50.1
-In-Reply-To: <68e8894e.050a0220.91a22.0056.GAE@google.com>
-References: <68e8894e.050a0220.91a22.0056.GAE@google.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="RkNCtU8Q"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8CC98C4AF09
+	for <linux-media@vger.kernel.org>; Fri, 10 Oct 2025 19:30:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1760124637;
+	bh=UO7tWaC1D06ILgslhIE6Vp+GGNOSccu5h6NsvDEB6bI=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=RkNCtU8QTeCBdWpLHhNr8JvrU3SuLc+1RKV/B5DWkkchSXpVbewLPEGu9PteSIC59
+	 3QdUV0p1QZHp+XhVjKliK0wvXSdB1RU5a+CyZxjimdAkkEp5C2xHmsIcspGs72E0Lk
+	 cyObdDJQL2lwFThzP/75aTtYq1Rg+WwTXzxuf5I/WZflCtsZ6JwrjI1V1vO6mFvs05
+	 WXMcevad9JypeFhT7/uwXWjFcL+u+BZQ80FRHRXSyCarsMyxQ97kXJWkBlv02hVeDW
+	 nUw04T6EMyGqqoQYGxSvUHP+TG9k6oSLAKGh4+rIvWYp5GUXc/FJOhGX6qNXxLvulc
+	 NRaGMKALZ1/8g==
+Received: by mail-ej1-f42.google.com with SMTP id a640c23a62f3a-b3d196b7eeeso392772566b.0
+        for <linux-media@vger.kernel.org>; Fri, 10 Oct 2025 12:30:37 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCWprCWA9PKQb5t8+nv0hc2ReacGIEznXUWZsMbHjE20yTOouDSse8h3embk2CUVy9jVPHHCoYGKUhl65A==@vger.kernel.org
+X-Gm-Message-State: AOJu0YyONl43dmuFRC70wYYqzzblruCQ761a8qyFzFz86LcOk0SmvQEj
+	um5XnWGWmeqSjtkG8U8EwfT2D/ta8SbIK+Qa+gZ8eYQBXnOcg+w0PRMKGKgMVbAZq0ogP/uZzut
+	c+5uKE5ywcTsKZd+Y3GK5p0qdjoJHZA==
+X-Google-Smtp-Source: AGHT+IFrGZS8VdfbsjL7y3HXA+QaopPkTmxI0XGy8rPLFJbEh/CBDAxBRtvMMLAceU+RXRafaXg83rsGiK6CrH/c2zI=
+X-Received: by 2002:a17:907:3e8c:b0:b48:4966:91a5 with SMTP id
+ a640c23a62f3a-b50aba9e585mr1400916466b.30.1760124635939; Fri, 10 Oct 2025
+ 12:30:35 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20250926-ethos-v3-0-6bd24373e4f5@kernel.org> <20250926-ethos-v3-1-6bd24373e4f5@kernel.org>
+ <aNrVwn1ibQmB/rKJ@lizhi-Precision-Tower-5810>
+In-Reply-To: <aNrVwn1ibQmB/rKJ@lizhi-Precision-Tower-5810>
+From: Rob Herring <robh@kernel.org>
+Date: Fri, 10 Oct 2025 14:30:24 -0500
+X-Gmail-Original-Message-ID: <CAL_JsqJkOVOVNvnePGE5G0HmbxxXPK1a=1qjOEk-G4ZZ3wf6Ew@mail.gmail.com>
+X-Gm-Features: AS18NWBBQSTOplEO26OgX73Pts2y8G-I5Seb0FzonJgu4d7oZEgcPiz1tLe4anM
+Message-ID: <CAL_JsqJkOVOVNvnePGE5G0HmbxxXPK1a=1qjOEk-G4ZZ3wf6Ew@mail.gmail.com>
+Subject: Re: [PATCH v3 1/2] dt-bindings: npu: Add Arm Ethos-U65/U85
+To: Frank Li <Frank.li@nxp.com>
+Cc: Tomeu Vizoso <tomeu@tomeuvizoso.net>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+	Conor Dooley <conor+dt@kernel.org>, Oded Gabbay <ogabbay@kernel.org>, 
+	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, Maxime Ripard <mripard@kernel.org>, 
+	Thomas Zimmermann <tzimmermann@suse.de>, David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>, 
+	Sumit Semwal <sumit.semwal@linaro.org>, =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>, 
+	Robin Murphy <robin.murphy@arm.com>, Steven Price <steven.price@arm.com>, 
+	Daniel Stone <daniel@fooishbar.org>, devicetree@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org, 
+	linux-media@vger.kernel.org, linaro-mm-sig@lists.linaro.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-syzbot reported a uninit-value in pctv452e_i2c_msg. [1]
+On Mon, Sep 29, 2025 at 1:54=E2=80=AFPM Frank Li <Frank.li@nxp.com> wrote:
+>
+> On Fri, Sep 26, 2025 at 03:00:48PM -0500, Rob Herring (Arm) wrote:
+> > Add a binding schema for Arm Ethos-U65/U85 NPU. The Arm Ethos-U NPUs ar=
+e
+> > designed for edge AI inference applications.
+> >
+> > Signed-off-by: Rob Herring (Arm) <robh@kernel.org>
+> > ---
+> >  .../devicetree/bindings/npu/arm,ethos.yaml         | 79 ++++++++++++++=
+++++++++
+> >  1 file changed, 79 insertions(+)
+> >
+> > diff --git a/Documentation/devicetree/bindings/npu/arm,ethos.yaml b/Doc=
+umentation/devicetree/bindings/npu/arm,ethos.yaml
+> > new file mode 100644
+> > index 000000000000..716c4997f976
+> > --- /dev/null
+> > +++ b/Documentation/devicetree/bindings/npu/arm,ethos.yaml
+> > @@ -0,0 +1,79 @@
+> > +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
+> > +%YAML 1.2
+> > +---
+> > +$id: http://devicetree.org/schemas/npu/arm,ethos.yaml#
+> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> > +
+> > +title: Arm Ethos U65/U85
+> > +
+> > +maintainers:
+> > +  - Rob Herring <robh@kernel.org>
+> > +
+> > +description: >
+> > +  The Arm Ethos-U NPUs are designed for IoT inference applications. Th=
+e NPUs
+> > +  can accelerate 8-bit and 16-bit integer quantized networks:
+> > +
+> > +    Transformer networks (U85 only)
+> > +    Convolutional Neural Networks (CNN)
+> > +    Recurrent Neural Networks (RNN)
+> > +
+> > +  Further documentation is available here:
+> > +
+> > +    U65 TRM: https://developer.arm.com/documentation/102023/
+> > +    U85 TRM: https://developer.arm.com/documentation/102685/
+> > +
+> > +properties:
+> > +  compatible:
+> > +    oneOf:
+> > +      - items:
+> > +          - enum:
+> > +              - fsl,imx93-npu
+> > +          - const: arm,ethos-u65
+> > +      - items:
+> > +          - {}
+>
+> what's means {} here ?, just not allow arm,ethos-u85 alone?
 
-When the snd_len or rcv_len check fails and jumps to failed, buf is
-uninitialized, triggering the uninit-value issue.
+Yes, u85 support is currently on a FVP model. The naming for it isn't
+really clear yet nor is it clear if it ever will be. So really just a
+placeholder until there is a chip using it. It keeps folks from using
+just the fallback.
 
-Setting the err() output buf byte count to 0 before jumping to failed
-before initializing buf and setting it to 7 after initializing buf avoids
-this warning.
+>
+> Reviewed-by: Frank Li <Frank.Li@nxp.com>
 
-[1]
-BUG: KMSAN: uninit-value in hex_string+0x681/0x740 lib/vsprintf.c:1220
- pctv452e_i2c_msg+0x82a/0x8f0 drivers/media/usb/dvb-usb/pctv452e.c:467
- pctv452e_i2c_xfer+0x2e6/0x4c0 drivers/media/usb/dvb-usb/pctv452e.c:502
-
-Reported-by: syzbot+480edd2cadb85ddb4bbe@syzkaller.appspotmail.com
-Closes: https://syzkaller.appspot.com/bug?extid=480edd2cadb85ddb4bbe
-Signed-off-by: Edward Adam Davis <eadavis@qq.com>
----
- drivers/media/usb/dvb-usb/pctv452e.c | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/media/usb/dvb-usb/pctv452e.c b/drivers/media/usb/dvb-usb/pctv452e.c
-index 5094de9a312e..3b6e86a8e9ff 100644
---- a/drivers/media/usb/dvb-usb/pctv452e.c
-+++ b/drivers/media/usb/dvb-usb/pctv452e.c
-@@ -420,7 +420,7 @@ static int pctv452e_i2c_msg(struct dvb_usb_device *d, u8 addr,
- 	struct pctv452e_state *state = d->priv;
- 	u8 *buf;
- 	u8 id;
--	int ret;
-+	int ret, plen = 0;
- 
- 	buf = kmalloc(64, GFP_KERNEL);
- 	if (!buf)
-@@ -432,6 +432,7 @@ static int pctv452e_i2c_msg(struct dvb_usb_device *d, u8 addr,
- 	if (snd_len > 64 - 7 || rcv_len > 64 - 7)
- 		goto failed;
- 
-+	plen = 7;
- 	buf[0] = SYNC_BYTE_OUT;
- 	buf[1] = id;
- 	buf[2] = PCTV_CMD_I2C;
-@@ -466,7 +467,7 @@ static int pctv452e_i2c_msg(struct dvb_usb_device *d, u8 addr,
- failed:
- 	err("I2C error %d; %02X %02X  %02X %02X %02X -> %*ph",
- 	     ret, SYNC_BYTE_OUT, id, addr << 1, snd_len, rcv_len,
--	     7, buf);
-+	     plen, buf);
- 
- 	kfree(buf);
- 	return ret;
--- 
-2.43.0
-
+Thanks,
+Rob
