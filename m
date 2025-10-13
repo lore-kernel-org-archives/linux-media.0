@@ -1,121 +1,114 @@
-Received: from mail-qk1-f182.google.com (mail-qk1-f182.google.com [209.85.222.182])
+Received: from mail-lj1-f174.google.com (mail-lj1-f174.google.com [209.85.208.174])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AE1A71F91E3
-	for <linux-media@vger.kernel.org>; Mon, 13 Oct 2025 14:50:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 06EE3309F0A
+	for <linux-media@vger.kernel.org>; Mon, 13 Oct 2025 14:52:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760367048; cv=none; b=kjGXB60ORMapaAyy+9CYu1gxGAvhDrGGjHSxxNLd7Acp2qgD1RlDtAX12blX7s4hnnDHaB0x56rtRykYm716oqYeVTzJWLbR6idethktNmpnWd2g8quwqWefx0BlczmCzS7MC6MBo4r0bNaMYxOTScUPG/MhZSdpRneG5zUtOMw=
+	t=1760367151; cv=none; b=QH0QVK5VpR84euT8xlEv3u4sdMgGE2e0r3vGuzBw0FNvg8i7q9vnMNa2jLtKAUDLL3Xofu+ZbluYtGwptlv0PXy2od0tKH2UrrejQGuljL31xgmJ6BX7rULpl8z4SqRnKDgsZlD/5HNOWInBWK6xPykEKrn6aUqUQzsouRE+I98=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760367048; c=relaxed/simple;
-	bh=a8rzeaiQ54tOFcMOe+sIUa8tfmcif5r7xjlXNM2RFaU=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=ILGdmjGFGknhY0Mp4dEK0zMQrNTitD6U2Y4jHWtwrk4K7MmJ2CXIe+dVLoSaa33T4ZiV9G4/hE2Ir5TOUJj6pZxTg/qvLkJyeleDOkZrirLDYPfB7akros54TB5eBy/gVn6EPgxeCXFgzMfW5MaZ2sKX19H8K9Jr8aZ+ASd97VE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.222.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-qk1-f182.google.com with SMTP id af79cd13be357-86278558cdeso583009685a.1
-        for <linux-media@vger.kernel.org>; Mon, 13 Oct 2025 07:50:46 -0700 (PDT)
+	s=arc-20240116; t=1760367151; c=relaxed/simple;
+	bh=ehKGfZgSjS6V9yj3+PS5sl4s+AURZPsv7Zg5nNIPtno=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=Br1At1VnGXZylPQFxFmZ9/XL/IQgovf2/17UGh2wdqGlCDSwZzx9W2cTZNaAXbHRw7YCMrdV7PPWNPk4Q3jxnDwEBMNF01J4J55JAgVY8gy+IRI86rO5ChHg9I8Ib2qCo/8a6dpbmSv3MkiOYFjCoZQSrlhpArHzpVBllwA5ScM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=Q0nJDQEe; arc=none smtp.client-ip=209.85.208.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="Q0nJDQEe"
+Received: by mail-lj1-f174.google.com with SMTP id 38308e7fff4ca-375ff2b3ba4so42739721fa.0
+        for <linux-media@vger.kernel.org>; Mon, 13 Oct 2025 07:52:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1760367148; x=1760971948; darn=vger.kernel.org;
+        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+         :date:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=ndqybwsxO2QFLLjTy3qgkVgt9RREczDl4RIa/Rwx+w0=;
+        b=Q0nJDQEel5gc99GmRnr8ploVEESfqJQ8OACKI6pmhh95YW+rTgf3oaTt8WDzcuB0wd
+         WoounIzesA/9JcCYQsiZunWfi4RCBklLo7Oy1ptedEccHc7vmA2OzUFRvbJTw/GggbFK
+         1lUNjWqiMY/3XtfytAeKviMsm3mgHZWSO3Dlo=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1760367045; x=1760971845;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+        d=1e100.net; s=20230601; t=1760367148; x=1760971948;
+        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+         :date:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=8BF1nvJKgerbunlxq6rI58NsjqwKmmQvTj5E3RRtPIQ=;
-        b=ZGGchRfofUqSJ30Y3nThhVuohV7eYS0AORyRXE10YgqG8ZpmGdioD7+7cb9HS5/M/l
-         7gaoybSV0tHlfIuYsP0f1qM6HRWz6kZu6vTwdVw6XK/tWDI02kor8FRp+7hFg/ptkHln
-         DfmuRxB8gK4CoOwFMLqqkFn3t0ocGucNIi22RFWVS7ARzjxKygkix7HKWgbQY+EbiwdF
-         Db9y2oG8fgdV9yR4FEK3lerQISc0KJyn6GCsWAzL05khNRS2Raxs+XVNtjI2KuOilhT3
-         zqLn4KxHC/AC7MYr1UpY0M5Babb6qy51VmAtOS0v2rQQ3SQOhKspPcHgCRVJI5cUwclg
-         illg==
-X-Forwarded-Encrypted: i=1; AJvYcCUCgVQPVCyPuVxkeVspKtQC5d5csK8DSlxyzOxY1MR1PoVHEiQLjIMvFAvSc3Fa1MkOoGabTXqRlXdrbg==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx58BAYxCoUzb9+/M8/KoIAKMVHyShKv6JY6iQ63J5kSnr39En1
-	u1QIPJIJgI9neXROK3pZEQ/vRB2wjdcDI+iiJwC1jDgc+gA70VesDQCR8Fb/+BZ/
-X-Gm-Gg: ASbGnctlSWVPQaiv5zse+W8CVktBK/HUPFiHx0o9JofhnGB/V7VXAywca5f2FOTCqCu
-	VNHwQbbPwhI0jX+ME/10tbIrZa+I/d5mAQfqFVeFwfz9yZvfULK0FzcrtxKvw5VtKvBl09eVP8U
-	j/CTG/uFnbrzbwAZ1h0D/f+ETOGl+WzRQgXPCgdCkHvnQVuFAECyH8arukkQGfQ3Z2DtLz9lIc+
-	LvE545OhxjEFSVxL/ekJpOQZ+f8XzHmCSRereGzIW0eRJsTYSZsQGG5nkupSNIXVOkZQCgIkEyl
-	R0OZa9hnFExCcbhrQ8UVucS6JeJ5ss/2ti6hL2fhJld5aD5tbj9/BLrynFSVW9qvAO3inc3JBTT
-	JXEJlfqvf5rxKXf2J9PhUFiOF9G4N+jBge+FSVQfb0WUOTJQY5gyMoJ7nlOzddYMcQSNmB23W4w
-	iqQbs=
-X-Google-Smtp-Source: AGHT+IEVIsLcKEjCPiZ4WyWVrBQJQszolIeA68FVpbISeX/AZJ5AcdYJiWn90fDFl5PIlKlfs3UagA==
-X-Received: by 2002:a05:622a:1341:b0:4b7:a308:b5b9 with SMTP id d75a77b69052e-4e6ead76899mr309695461cf.46.1760367045460;
-        Mon, 13 Oct 2025 07:50:45 -0700 (PDT)
-Received: from mail-qv1-f50.google.com (mail-qv1-f50.google.com. [209.85.219.50])
-        by smtp.gmail.com with ESMTPSA id d75a77b69052e-4e70d134a3csm67478241cf.9.2025.10.13.07.50.45
-        for <linux-media@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 13 Oct 2025 07:50:45 -0700 (PDT)
-Received: by mail-qv1-f50.google.com with SMTP id 6a1803df08f44-80ff41475cdso88455906d6.2
-        for <linux-media@vger.kernel.org>; Mon, 13 Oct 2025 07:50:45 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCX6XVCYCEeZ4ftX+iWaIlFJkC96PE6nAdU6euYX3WjFWjtwsy1mHIUN78+m+pOvKmQDywS0qbXUCbuMxw==@vger.kernel.org
-X-Received: by 2002:a05:6102:598b:b0:521:57e7:3b19 with SMTP id
- ada2fe7eead31-5d5e23ad946mr7466194137.25.1760366582403; Mon, 13 Oct 2025
- 07:43:02 -0700 (PDT)
+        bh=ndqybwsxO2QFLLjTy3qgkVgt9RREczDl4RIa/Rwx+w0=;
+        b=cJnkmWv9ADf491CfiwnEnHlhWE2Zpl3MH9sYpQV978e5wEGNvv1zh02HTt/D0lTfPB
+         GYGlT6RQVqbDSzp2ZZIXXZv5SZBy/uU/8daiJX49TlEr7r0YejbR5k2HreHjjQCsr7yb
+         GId0530Ug0Ut/sHAOCDv7g+3KxslxbmairGY5gzu1xMN0NwY1NgJqGwoXjrPFPMZIcgp
+         xhM1iVqnAPKaU7bycHqzFSuteZJp0FQX+EsB9AedE8BMYtqULs+0pcHgwAV1ID5N9gxl
+         /OQiCWDJSOTkiFtTM1a1a8iCYk12qvNXB9z1g/1c3b79z+BZ/HjZrcHc5/NczE/9KlA0
+         CN1Q==
+X-Gm-Message-State: AOJu0YzxJDkM1Ks4xz0KU8g2Y1lXr5dhREdBCqncg3zu3/UuX3lJyv30
+	MrRT76qf8Z3WQOoAZO/Hy1mffK6qwNbSMTxEbmVZ1/H7oiLg6JFQNTZ3hAzjaz4TDw==
+X-Gm-Gg: ASbGncuSpbw+MhLf+7pwdQM9rD0WNAbs6bkujSIegP5+DSoBmpbAY08twKTjBNpB/LD
+	RirpcgxacBqaddxHE5g/RFP3hyy2lMFlvrXKM3UIJU96/wmJQVezovXY2xa35Mu55CIjivZOcoT
+	DEFgAVHZSJB2wEb3wvv/2zJ/HH8nMiEjp9kNgAL5ZbUowxmBRiU+MJBaVHIMXHfSbcOkLbpXKCg
+	rFBxo/ZtY3Qr5iJdbBjQLdd6erousU2d6Jtpw3Q9Ifhkdd7BjCvKwpdwXcehgF32BGL2UNpaHHN
+	+aIq3VGR4RLdMkg8ll/c6b1FRHnFtCYSRCjUDrk1FiXIjQqIj+H/3KcChKQIoq/+5iZE8Nv15ZS
+	QDpksOIeePzVsvkeR7NS0sQB6obAqK6KKwlz7rteqMheQJ7BI+H/ejYwiXMpVJCSY0muh1jwifv
+	Cfs6Bbx7cxS71nzRg/GA==
+X-Google-Smtp-Source: AGHT+IHv11J/UiQuXRPc53mXWiSRrpkDd1UzSDOJ4DL+ON/DEt7ZP7ZjRbXESDq57CD/XFRcpXXCtA==
+X-Received: by 2002:a2e:a582:0:b0:372:9bf0:aed6 with SMTP id 38308e7fff4ca-37609e64b6bmr49929971fa.25.1760367147927;
+        Mon, 13 Oct 2025 07:52:27 -0700 (PDT)
+Received: from ribalda.c.googlers.com (56.213.88.34.bc.googleusercontent.com. [34.88.213.56])
+        by smtp.gmail.com with ESMTPSA id 38308e7fff4ca-3762e77b8a6sm31980121fa.10.2025.10.13.07.52.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 13 Oct 2025 07:52:27 -0700 (PDT)
+From: Ricardo Ribalda <ribalda@chromium.org>
+Date: Mon, 13 Oct 2025 14:52:20 +0000
+Subject: [PATCH] dt-bindings: media: fsl,imx6q-vdoa: Remove redundant quote
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20251013-ptr_err-v1-0-2c5efbd82952@chromium.org> <20251013-ptr_err-v1-27-2c5efbd82952@chromium.org>
-In-Reply-To: <20251013-ptr_err-v1-27-2c5efbd82952@chromium.org>
-From: Geert Uytterhoeven <geert@linux-m68k.org>
-Date: Mon, 13 Oct 2025 16:42:51 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdUw4x4GxxZ+m+108rp+_uiuiNFHO4Vtrd3vftb_LwmCLQ@mail.gmail.com>
-X-Gm-Features: AS18NWDbEQGWUFg0r_aGxPQP6vUjubUz4v9cHDpfk8kXxZq-lj2695LEwK7MQ10
-Message-ID: <CAMuHMdUw4x4GxxZ+m+108rp+_uiuiNFHO4Vtrd3vftb_LwmCLQ@mail.gmail.com>
-Subject: Re: [PATCH 27/32] media: renesas: vsp1: Use %pe format specifier
-To: Ricardo Ribalda <ribalda@chromium.org>
-Cc: Linus Walleij <linus.walleij@linaro.org>, Dmitry Torokhov <dmitry.torokhov@gmail.com>, 
-	Mauro Carvalho Chehab <mchehab@kernel.org>, Hans Verkuil <hverkuil@kernel.org>, 
-	Sakari Ailus <sakari.ailus@linux.intel.com>, =?UTF-8?Q?Krzysztof_Ha=C5=82asa?= <khalasa@piap.pl>, 
-	Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>, Leon Luo <leonl@leopardimaging.com>, 
-	Kieran Bingham <kieran.bingham@ideasonboard.com>, Jacopo Mondi <jacopo+renesas@jmondi.org>, 
-	Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>, 
-	Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>, 
-	=?UTF-8?Q?Niklas_S=C3=B6derlund?= <niklas.soderlund+renesas@ragnatech.se>, 
-	Julien Massot <julien.massot@collabora.com>, Jacopo Mondi <jacopo@jmondi.org>, 
-	Daniel Scally <djrscally@gmail.com>, Dave Stevenson <dave.stevenson@raspberrypi.com>, 
-	Benjamin Mugnier <benjamin.mugnier@foss.st.com>, 
-	Sylvain Petinot <sylvain.petinot@foss.st.com>, Yong Zhi <yong.zhi@intel.com>, 
-	Bingbu Cao <bingbu.cao@intel.com>, Tianshu Qiu <tian.shu.qiu@intel.com>, 
-	Tiffany Lin <tiffany.lin@mediatek.com>, Andrew-CT Chen <andrew-ct.chen@mediatek.com>, 
-	Yunfei Dong <yunfei.dong@mediatek.com>, Matthias Brugger <matthias.bgg@gmail.com>, 
-	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>, 
-	Rui Miguel Silva <rmfrfs@gmail.com>, Laurent Pinchart <laurent.pinchart@ideasonboard.com>, 
-	Martin Kepplinger <martink@posteo.de>, Purism Kernel Team <kernel@puri.sm>, Shawn Guo <shawnguo@kernel.org>, 
-	Sascha Hauer <s.hauer@pengutronix.de>, Pengutronix Kernel Team <kernel@pengutronix.de>, 
-	Fabio Estevam <festevam@gmail.com>, Dafna Hirschfeld <dafna@fastmail.com>, 
-	Heiko Stuebner <heiko@sntech.de>, Sylwester Nawrocki <s.nawrocki@samsung.com>, 
-	Krzysztof Kozlowski <krzk@kernel.org>, Alim Akhtar <alim.akhtar@samsung.com>, 
-	Yemike Abhilash Chandra <y-abhilashchandra@ti.com>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
-	linux-input@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-media@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
-	linux-mediatek@lists.infradead.org, imx@lists.linux.dev, 
-	linux-renesas-soc@vger.kernel.org, linux-rockchip@lists.infradead.org, 
-	linux-samsung-soc@vger.kernel.org, linux-staging@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20251013-dts-v1-1-5731ed92684a@chromium.org>
+X-B4-Tracking: v=1; b=H4sIACMS7WgC/6tWKk4tykwtVrJSqFYqSi3LLM7MzwNyDHUUlJIzE
+ vPSU3UzU4B8JSMDI1NDA0Nj3ZSSYl0L4+RU8zTzJMtUUxMloMqCotS0zAqwKdGxtbUAwYGFfFU
+ AAAA=
+X-Change-ID: 20251013-dts-83ce7f7b9e54
+To: Mauro Carvalho Chehab <mchehab@kernel.org>, 
+ Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+ Conor Dooley <conor+dt@kernel.org>, Shawn Guo <shawnguo@kernel.org>, 
+ Sascha Hauer <s.hauer@pengutronix.de>, 
+ Pengutronix Kernel Team <kernel@pengutronix.de>, 
+ Fabio Estevam <festevam@gmail.com>, Frank Li <Frank.Li@nxp.com>
+Cc: linux-media@vger.kernel.org, devicetree@vger.kernel.org, 
+ imx@lists.linux.dev, linux-arm-kernel@lists.infradead.org, 
+ linux-kernel@vger.kernel.org, Ricardo Ribalda <ribalda@chromium.org>
+X-Mailer: b4 0.14.2
 
-On Mon, 13 Oct 2025 at 16:24, Ricardo Ribalda <ribalda@chromium.org> wrote:
-> The %pe format specifier is designed to print error pointers. It prints
-> a symbolic error name (eg. -EINVAL) and it makes the code simpler by
-> omitting PTR_ERR().
->
-> This patch fixes this cocci report:
-> ./platform/renesas/vsp1/vsp1_drv.c:958:4-11: WARNING: Consider using %pe to print PTR_ERR()
->
-> Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
+Latest dts-ci complains about this:
+./Documentation/devicetree/bindings/media/fsl,imx6q-vdoa.yaml:19:12: [error] string value is redundantly quoted with any quotes (quoted-strings)
 
-Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+Fix it to make our CI happy.
 
-Gr{oetje,eeting}s,
+Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
+---
+ Documentation/devicetree/bindings/media/fsl,imx6q-vdoa.yaml | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-                        Geert
+diff --git a/Documentation/devicetree/bindings/media/fsl,imx6q-vdoa.yaml b/Documentation/devicetree/bindings/media/fsl,imx6q-vdoa.yaml
+index 511ac0d67a7f2360afe22b81d76644575081089b..988a5b3a62bdebeda6b922a986b9ac93d0933e51 100644
+--- a/Documentation/devicetree/bindings/media/fsl,imx6q-vdoa.yaml
++++ b/Documentation/devicetree/bindings/media/fsl,imx6q-vdoa.yaml
+@@ -16,7 +16,7 @@ maintainers:
+ 
+ properties:
+   compatible:
+-    const: "fsl,imx6q-vdoa"
++    const: fsl,imx6q-vdoa
+ 
+   reg:
+     maxItems: 1
 
+---
+base-commit: 3a8660878839faadb4f1a6dd72c3179c1df56787
+change-id: 20251013-dts-83ce7f7b9e54
+
+Best regards,
 -- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+Ricardo Ribalda <ribalda@chromium.org>
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
