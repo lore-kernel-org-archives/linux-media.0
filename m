@@ -1,64 +1,64 @@
 Received: from mail-lf1-f43.google.com (mail-lf1-f43.google.com [209.85.167.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 05FF1309EED
-	for <linux-media@vger.kernel.org>; Mon, 13 Oct 2025 14:15:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8D7AE30AAB7
+	for <linux-media@vger.kernel.org>; Mon, 13 Oct 2025 14:15:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760364926; cv=none; b=VkWyX8t6ErknAJrnZ1j9x0TkpUskk+oTiKISd3/xF6zFJru6Zyh50H7JTX1MPoVOXSz3/9vDTUsyA4rJo29+nOPRFSbsY2asJJk/hie+EsMKB788QKNDQlIxojUVuhOnoDds2igo0K2a5Qwy1+QOGBPBu7SBUqEri7lWTTRcmCQ=
+	t=1760364930; cv=none; b=l2dHsKoFwNZMGcCOvOEQUT21UZGTIrLXzgDPz+upsyvlgRZFhhP5Qo/PstM2zi6izChmD+D2hwn5QVG8Sh8HLDl2A/RevGSHZlY4Dk4k+tl0dLw55jZSMLM14FBaE8SLJ2XAjxOcRf0XWb9Ln9ScqqEbhaaHwqWBH7zghHPme0Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760364926; c=relaxed/simple;
-	bh=13OLz3ayUSOskJ/koG5Yo/gq8bsy35PH0jrjBKE+QnI=;
+	s=arc-20240116; t=1760364930; c=relaxed/simple;
+	bh=5KNyjJbgRQNGFLo6ZpLtI2lNcxP1iC+T2TtMMI7Vg6Y=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=Ibb7F4r7vjgRpKbUUqAs0iPIlyRLeR42mYp5PUifV2/ExKri5Ebg9EXM8wM+KYRz9D2Jv2aE74dVVl88quy2oV2TCbrK6X61yHbkvyOZYsPTeufYJMZmj6etvjVBKh42xPzWOHXwE1XVfLQmhR4Wm8ByWLHaknP6c536oK+WnwA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=CWFXNHcu; arc=none smtp.client-ip=209.85.167.43
+	 In-Reply-To:To:Cc; b=IJR2AjunCZ8qsT9RUIW/QtpWGtACBsrd06YyxGfn6Aw/k1KuQ6K5kTNvnACRdR/z3hETXSFUSK1yQbLP3GS++mqY9ZGkEqhG5layui39wRIHdQD1rj0+4pVmLc1uEjm24A9UjMJ75h9lfx3Z1oSp0V17Sao8qMDtu56mlzH0EFA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=VUGcie5S; arc=none smtp.client-ip=209.85.167.43
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="CWFXNHcu"
-Received: by mail-lf1-f43.google.com with SMTP id 2adb3069b0e04-586883eb9fbso5711856e87.1
-        for <linux-media@vger.kernel.org>; Mon, 13 Oct 2025 07:15:11 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="VUGcie5S"
+Received: by mail-lf1-f43.google.com with SMTP id 2adb3069b0e04-586883eb9fbso5711897e87.1
+        for <linux-media@vger.kernel.org>; Mon, 13 Oct 2025 07:15:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1760364907; x=1760969707; darn=vger.kernel.org;
+        d=chromium.org; s=google; t=1760364908; x=1760969708; darn=vger.kernel.org;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=5P2qDb2fF8LDzF+Q7SobVA0m4pVGtYbfI8YlHA3qkzo=;
-        b=CWFXNHcueXVWOwcAoVQJ8klxj+nMfw1192cgAlKmEj1N2WvAGAM0ofXrCDOLJv8fKU
-         7dEm4tqJk5clyD9k3btKHvw2aKJ8ZDJ3UJAOmMQNTKmtokguSPbxcMO4p04YaaEC11hk
-         KQgRH3AZrgSFg8NKTN87vBD8y4VNvhJ/vd0IM=
+        bh=LGG/+lvAfLoFYTFsHBbdKee0g975J4ynYIjn3miRvz8=;
+        b=VUGcie5S1susvs9eOKhoLdi24WXIQZAs74cSlLLObj/4B0VDJ7J255jCsK/xzGZS78
+         7y5FTc+nM1JS6L31w1D+yU4Uoa7NbxZyV+5ypjCnFK/CL5GdhWO+2O5RmFAep9xFciTn
+         O8yUSJ0NtB2k6PrjDzwY1S5fXvWXqNrB8weac=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1760364907; x=1760969707;
+        d=1e100.net; s=20230601; t=1760364908; x=1760969708;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=5P2qDb2fF8LDzF+Q7SobVA0m4pVGtYbfI8YlHA3qkzo=;
-        b=w08e+y40yT7mPKm7tbDePXTxV5eQ/9Q6og944+T9aM/TjoJPDemjUvA89r3pcSW5uR
-         Sr80npvky8lNIfusKaAHhc53Bgsv/ybzrw3xHeEksaQnkaPL0K3iNU2GDvM3GQmbYmqR
-         en0a7b5iR150rIN0gmtzQ1628mFFCpDho8Xr+BQn0SZaoIFRRI+fOl3q0znc2w3UUG+N
-         c3MKbv+/Nnw2mE015jpJTDK8ltXiwXww6/NRk6P98Wb5+/uwjzcfEMuYQfjDP8AEoNSr
-         LKR/drgZhnQmETZWS3jujJvhpPIr3+aKVQN4otQM+mKRJq8+KmAd39eXFwThje1OF6Bx
-         KZEw==
-X-Forwarded-Encrypted: i=1; AJvYcCU5fXYtOBNIefpDc0Iy/pSf2Par0zWHJX7IoqMc+kkXdgla7uhVB2asRpIoSsOri/5IrfMroaydJbeCQw==@vger.kernel.org
-X-Gm-Message-State: AOJu0YwMXZRyFrWYfM8lJKuEqU68cwbTJ5uRWWiyV8MDHB5BIE7Wzjjs
-	dtkBSbCWsTy8yqSP0Ltra0R3ojvE2IZSTDAuOSEOEGxcEY92+5EWPr4cvdkFCeuqZA==
-X-Gm-Gg: ASbGncuBRkhyDuzsNVzDL+Kioh0LlTNiIQesKgLsNrR1FfArmyMmNmVaksm+CdW1EBy
-	fUmG/vz5aiYrXeshyl+UvgGASNhxbF6dj5csF/xswUWbyQlT/cMK96PC+6PTWvqCAM35nY8G3Hw
-	kFgCyNC8+m4snsxnyKDoHGthuB6lfu91/5UOUzpZTkvCv2YP+MLeqlOh5/WMyx9YNgGLVA0Mx9e
-	9xyGNkWeo2nHSVyaN++3Yi/0/SleGPoQmzNWV36vVv6QtA2pMddSFPxKIY/V4hwWCcIn+PAZ/sC
-	hUTFx389JBiY2dJ09wo16vINWtbm66c4Ku3upaswwKqYzQkl2cXy2AvCKMW6h3+bZc0VCfpEs6b
-	jLLC1rNo8kjQKK05PfGFOYnBSwxfca/hD1OLzi5xg3IS6PAq8dGfkUDpPOHjUFfk8LsDn+LXrNh
-	M1BNL92nQZKM8VsUwUCg==
-X-Google-Smtp-Source: AGHT+IEQsTtyBvH7wA40gxhWBW3oPtbImGl+YQPk0oKm5qusk9oOE9kCkc6erWew+lMrb0jYwU0vow==
-X-Received: by 2002:a05:6512:b19:b0:579:8bbb:d61b with SMTP id 2adb3069b0e04-5906dae8e6amr5727710e87.46.1760364907237;
-        Mon, 13 Oct 2025 07:15:07 -0700 (PDT)
+        bh=LGG/+lvAfLoFYTFsHBbdKee0g975J4ynYIjn3miRvz8=;
+        b=AO3KKhE8fhbMpL4kFzmp0TDBQFO3WJImCLssWJ62cuTKmO630xjob+WqXDaGK+djFP
+         Y/seUkS+XhBm1hEDX99CIgztX192JbZlosyOFqQ9SozQdHEM9jSQqu1GO8QBUIh+OFv3
+         Y+triTqWiVEzys8J/pib7UsGJZs28M5/8qogUM0GkKnCvYlPao3zM50EGjrw/W41SAPC
+         asE8WjjBR9KFyuaNT0DsLRPgfxuvrZV46gqy9t8QIdzWjOAkfcWR6Afvekec2m5z+od0
+         bKraBpXG739A3unS7HMhvUoAtJ5s1ZwxdoINW7g/B7Y6KnFIbDq5du57AP2aw8GDxdme
+         3Xlg==
+X-Forwarded-Encrypted: i=1; AJvYcCXbTNehhcrkRjaJlJBtBnpixdaXaE4cQGp8l3ymynG7vWbHq4gbXcQSUFcchNdckWe0xOHTf/Vk4p6XzA==@vger.kernel.org
+X-Gm-Message-State: AOJu0YwOVhOJc1ZA2YH6PpBivn5oM8zLDee0hhdT1c4Hivuzut6kINzI
+	kH/WkQ+k++ITR/FZLZ2ADYA2f+42EggxMdT07zaqFQ9jBPWPCHQo0/GQnjw0grS+xQ==
+X-Gm-Gg: ASbGnctrH+wcV3+U+bq+ImHSrfBoKM7OhY+USzXlaRGV16R8HjNXZCLwlB4tPWanrsh
+	dsE9ZwOz8SbJKUvaI9u4lgfgqMEMgt2YmDwPSPvPRilo7GLyLu1nQ0JdcF6j43zpipxXoaNfFzJ
+	3UJ4odH2e8zZV8C8wuBb3VvhmIUKGxLFWlYpPXA/ChnO0uhhU8gGSo7aaYXew3C15/QXineEPF5
+	P0Gq1PgI/fi15QuuG84L8I/yxFe9IL0TZdM8uOrt+7wrNAP6UGCj09SVyaGAT8lN1wOfSkhBYrO
+	E7Vfv6T/Olq/aGwph5yzYpVYHzFri7Knp5OteV2kS16GhtqwQjR/huYuFhjtP1a87cJbixkChA6
+	T3IjkkbPryHVtnGgVjZU5vZNizVdI9vsA/f9IW929r/ZbNazkbjAAsSPt9zUnbCv6qA1PbkmqOX
+	bmanEQ9CuGnKRET0WEkBp5xS6awhnmjxhtjqWf27E=
+X-Google-Smtp-Source: AGHT+IHonGCa8by4IRlUhFwqne0G+xChLaB77A4Elu7KHX/ytkwCKxhNDSfo6zsqaOoV+Q8fGGx9SA==
+X-Received: by 2002:a05:6512:1093:b0:587:a4fa:1e50 with SMTP id 2adb3069b0e04-5906dae5b56mr5886844e87.41.1760364908274;
+        Mon, 13 Oct 2025 07:15:08 -0700 (PDT)
 Received: from ribalda.c.googlers.com (56.213.88.34.bc.googleusercontent.com. [34.88.213.56])
-        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-590881e4e58sm4165256e87.25.2025.10.13.07.15.06
+        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-590881e4e58sm4165256e87.25.2025.10.13.07.15.07
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 13 Oct 2025 07:15:06 -0700 (PDT)
+        Mon, 13 Oct 2025 07:15:07 -0700 (PDT)
 From: Ricardo Ribalda <ribalda@chromium.org>
-Date: Mon, 13 Oct 2025 14:15:10 +0000
-Subject: [PATCH 30/32] media: ti: cal Use %pe format specifier
+Date: Mon, 13 Oct 2025 14:15:12 +0000
+Subject: [PATCH 32/32] media: staging/ipu7: Use %pe format specifier
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
@@ -67,7 +67,7 @@ List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20251013-ptr_err-v1-30-2c5efbd82952@chromium.org>
+Message-Id: <20251013-ptr_err-v1-32-2c5efbd82952@chromium.org>
 References: <20251013-ptr_err-v1-0-2c5efbd82952@chromium.org>
 In-Reply-To: <20251013-ptr_err-v1-0-2c5efbd82952@chromium.org>
 To: Linus Walleij <linus.walleij@linaro.org>, 
@@ -120,27 +120,45 @@ a symbolic error name (eg. -EINVAL) and it makes the code simpler by
 omitting PTR_ERR().
 
 This patch fixes this cocci report:
-./platform/ti/cal/cal.c:1111:3-10: WARNING: Consider using %pe to print PTR_ERR()
+./ipu7/ipu7-isys-csi-phy.c:311:23-30: WARNING: Consider using %pe to print PTR_ERR()
+./ipu7/ipu7-isys-csi2.c:59:22-29: WARNING: Consider using %pe to print PTR_ERR()
 
 Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
 ---
- drivers/media/platform/ti/cal/cal.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+ drivers/staging/media/ipu7/ipu7-isys-csi-phy.c | 4 ++--
+ drivers/staging/media/ipu7/ipu7-isys-csi2.c    | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/media/platform/ti/cal/cal.c b/drivers/media/platform/ti/cal/cal.c
-index b644ed890412104887ce3ec32b5024a02a9676c8..3e25ce0c3c3bdce3434d19c416481bd8d8b838f5 100644
---- a/drivers/media/platform/ti/cal/cal.c
-+++ b/drivers/media/platform/ti/cal/cal.c
-@@ -1107,8 +1107,7 @@ static int cal_init_camerarx_regmap(struct cal_dev *cal)
- 		return 0;
+diff --git a/drivers/staging/media/ipu7/ipu7-isys-csi-phy.c b/drivers/staging/media/ipu7/ipu7-isys-csi-phy.c
+index b8c5db7ae3009e16264d7aaca6d4d237c1402ab7..2d57178835188a44b002b38712437cbd551751a5 100644
+--- a/drivers/staging/media/ipu7/ipu7-isys-csi-phy.c
++++ b/drivers/staging/media/ipu7/ipu7-isys-csi-phy.c
+@@ -307,8 +307,8 @@ static int ipu7_isys_csi_ctrl_dids_config(struct ipu7_isys_csi2 *csi2, u32 id)
+ 
+ 	pad = media_entity_remote_source_pad_unique(&csi2->asd.sd.entity);
+ 	if (IS_ERR(pad)) {
+-		dev_warn(dev, "can't get remote source pad of %s (%ld)\n",
+-			 csi2->asd.sd.name, PTR_ERR(pad));
++		dev_warn(dev, "can't get remote source pad of %s (%pe)\n",
++			 csi2->asd.sd.name, pad);
+ 		return PTR_ERR(pad);
  	}
  
--	dev_warn(cal->dev, "failed to get ti,camerrx-control: %ld\n",
--		 PTR_ERR(syscon));
-+	dev_warn(cal->dev, "failed to get ti,camerrx-control: %pe\n", syscon);
+diff --git a/drivers/staging/media/ipu7/ipu7-isys-csi2.c b/drivers/staging/media/ipu7/ipu7-isys-csi2.c
+index 4023db4a6466dd57f0ac007847bdd74bcdf394f7..f34eabfe8a985f29fa48b4a8896a058fde2f2b2f 100644
+--- a/drivers/staging/media/ipu7/ipu7-isys-csi2.c
++++ b/drivers/staging/media/ipu7/ipu7-isys-csi2.c
+@@ -55,8 +55,8 @@ s64 ipu7_isys_csi2_get_link_freq(struct ipu7_isys_csi2 *csi2)
+ 	src_pad = media_entity_remote_source_pad_unique(&csi2->asd.sd.entity);
+ 	if (IS_ERR(src_pad)) {
+ 		dev_err(&csi2->isys->adev->auxdev.dev,
+-			"can't get source pad of %s (%ld)\n",
+-			csi2->asd.sd.name, PTR_ERR(src_pad));
++			"can't get source pad of %s (%pe)\n",
++			csi2->asd.sd.name, src_pad);
+ 		return PTR_ERR(src_pad);
+ 	}
  
- 	/*
- 	 * Backward DTS compatibility. If syscon entry is not present then
 
 -- 
 2.51.0.760.g7b8bcc2412-goog
