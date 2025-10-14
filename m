@@ -1,40 +1,33 @@
-Received: from bali.collaboradmins.com (bali.collaboradmins.com [148.251.105.195])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 52B922E8E04;
-	Tue, 14 Oct 2025 09:42:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.251.105.195
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D98552EA464;
+	Tue, 14 Oct 2025 09:51:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760434954; cv=none; b=iafkMQBatzPnLwTsjts5swlXOMuIs/kEfQsHx/5HfYqdT5AVBD7lbTPGp2Qe3+Bh+1R4tl0xd/Zmuhfa1JL68pyUP8y8PwDMLW3oxFAQWR/TikSBLiSI9baXDL7bTeCPHCXmHSuF1NHlYjxQbuVjw6DAKkOhbI43H1XISlvbvbw=
+	t=1760435510; cv=none; b=Y6TFZ4nir22F9CwgaZLM/f/Rx6tuGrjOgdtg0fpkyslc6sq+SASf5jQWCjaSpbiUa1/xXvBjE2/Wn6g3h+x/p7pIq/XXBu3SUJEn13Ikh4IfFttu5o0VldcuE4teWexMvWfiGHshzRGUY6+x1AH6shFjQQW1sQ51YJ1/JGpb3jg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760434954; c=relaxed/simple;
-	bh=fyvsiAplX9W/n9nhtuP7G9+XkvoehypKI7yt/ohUwZw=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=kKX6lfbDhdpefoWWor74NrxOYbHA6e/MOUbjEjtcoUPZsA5cTZGUfTQ4zywEgjcrkgK0YluuomNrKPKXR/OOlEiBLSavz3NZiEWd1apJLMpezJXv7DL/6KtV79rTPvXtHSvdknlE78vbPChQHr9aoiDO6Nv+aX7V3lmJ4ML+maQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=aWHwgHox; arc=none smtp.client-ip=148.251.105.195
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
+	s=arc-20240116; t=1760435510; c=relaxed/simple;
+	bh=WqW5ZbUmABmzx1qaIZI77c81KCOJrnUC11x+N+bX780=;
+	h=Message-ID:Date:MIME-Version:From:Subject:To:Cc:References:
+	 In-Reply-To:Content-Type; b=lqupn1KoPdLforn6mjI4V4YdJ6IXohIKrH751DK9pWnoufFp04MsCK4ZA8ZdUEpGdMOflitI2k0dU2e5mgTeLiNAkgHG40UW3jssCRxVgtaRxlcKGRxoSf7V5wB6aRxQgahNpVzkrksqyRtEjCRawpLndyyqr4189jZ9kKG7yk8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=WzlsX3EB; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="aWHwgHox"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1760434950;
-	bh=fyvsiAplX9W/n9nhtuP7G9+XkvoehypKI7yt/ohUwZw=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=aWHwgHoxpOOHTADIbwZAPiqXMEHzCSX0jMxP+GwmabX6ehKRbFBkszUVRpwe9kIGe
-	 SEMPr93gS1UOX6deodcJSGBaftl/M2EGulmjX5WV6y51J29p//Ew9DxVchaP3jVzOx
-	 rLcKPQPBsEiBEfw96ML/oAik1RTN3fuSHxZHSoc3VZIcnsgWtKrgPYrqLM6tGXuXBI
-	 mUr740mZplpK5n816s4UYs0nLmBiwmg/hmlRH6bYH8EYHKHve6U45HHAbh0yw4pFKZ
-	 W7jwLyTqSZwikBG8ijce57sjVjqDVWQSTUJSxjUNvphqJvKLGZ3flrspcAAMRHf8+K
-	 3Ae0WhwNvi5ZQ==
-Received: from [10.40.0.100] (185-67-175-126.lampert.tv [185.67.175.126])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: mriesch)
-	by bali.collaboradmins.com (Postfix) with ESMTPSA id 8678B17E055D;
-	Tue, 14 Oct 2025 11:42:29 +0200 (CEST)
-Message-ID: <b0a802b0-e6b8-4a6f-a65c-ad2d11a7c1f6@collabora.com>
-Date: Tue, 14 Oct 2025 11:42:28 +0200
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="WzlsX3EB"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3FAFEC4CEE7;
+	Tue, 14 Oct 2025 09:51:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1760435509;
+	bh=WqW5ZbUmABmzx1qaIZI77c81KCOJrnUC11x+N+bX780=;
+	h=Date:From:Subject:To:Cc:References:In-Reply-To:From;
+	b=WzlsX3EB+aY7QkdPLCjs0OjWUaQ9Xzbb/RCHrJ6usJdqe8nxX4j2dnJNhQmIogf8J
+	 SEEZXbhiZP/ECyE8ZKvaJkUdoyEVkkAg+r8h6tsVje5jKlzRhvO9f0x7uJGGgBXOVS
+	 F5CW7/+shHPOV/7YjyXIQheKeU8nmauAm1Q0clD0TEv8hrdxGVv80eFKNqFsPekGf9
+	 uWv8f6xC0O4LlOBhjVA90USRuArWlmVa7MnXUXqMKJz168dGuX7UMOBUHUtC05AE4u
+	 VxT1z8YRmYXgcCUOG0HsAOade3xRu+GiKFIjYud4dVZIbic0GOnUxtsIttReo8FtGG
+	 xComsdIi+Fz3g==
+Message-ID: <aa78a288-0a1e-4851-a2a5-4378e96da305@kernel.org>
+Date: Tue, 14 Oct 2025 11:51:45 +0200
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
@@ -42,185 +35,106 @@ List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v7 1/8] media: uapi: Introduce V4L2 generic ISP types
-To: Jacopo Mondi <jacopo.mondi@ideasonboard.com>,
- Dafna Hirschfeld <dafna@fastmail.com>,
- Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
- Keke Li <keke.li@amlogic.com>, Mauro Carvalho Chehab <mchehab@kernel.org>,
- Heiko Stuebner <heiko@sntech.de>, Dan Scally <dan.scally@ideasonboard.com>,
- Sakari Ailus <sakari.ailus@linux.intel.com>,
- Antoine Bouyer <antoine.bouyer@nxp.com>
-Cc: linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
- linux-rockchip@lists.infradead.org, linux-arm-kernel@lists.infradead.org,
- Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>
-References: <20251014-extensible-parameters-validation-v7-0-6628bed5ca98@ideasonboard.com>
- <20251014-extensible-parameters-validation-v7-1-6628bed5ca98@ideasonboard.com>
-Content-Language: en-US
-From: Michael Riesch <michael.riesch@collabora.com>
-In-Reply-To: <20251014-extensible-parameters-validation-v7-1-6628bed5ca98@ideasonboard.com>
+From: Hans Verkuil <hverkuil+cisco@kernel.org>
+Subject: Re: [PATCH v2 RESEND] media: hackrf: fix to not free memory after the
+ device is registered in hackrf_probe()
+To: Jeongjun Park <aha310510@gmail.com>, mchehab@kernel.org,
+ hverkuil@kernel.org
+Cc: laurent.pinchart+renesas@ideasonboard.com, crope@iki.fi,
+ linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+ stable@vger.kernel.org,
+ syzbot+6ffd76b5405c006a46b7@syzkaller.appspotmail.com,
+ syzbot+f1b20958f93d2d250727@syzkaller.appspotmail.com
+References: <20250904054232.3848637-1-aha310510@gmail.com>
+Content-Language: en-US, nl
+In-Reply-To: <20250904054232.3848637-1-aha310510@gmail.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-Hi Jacopo,
+Hi Jeongjun Park,
 
-Thanks for your efforts!
-
-On 10/14/25 10:00, Jacopo Mondi wrote:
-> Introduce v4l2-isp.h in the Linux kernel uAPI.
+On 04/09/2025 07:42, Jeongjun Park wrote:
+> In hackrf driver, the following race condition occurs:
+> ```
+> 		CPU0						CPU1
+> hackrf_probe()
+>   kzalloc(); // alloc hackrf_dev
+>   ....
+>   v4l2_device_register();
+>   ....
+> 						open("/path/to/dev"); // open hackrf dev
+> 						....
+>   v4l2_device_unregister();
+>   ....
+>   kfree(); // free hackrf_dev
+>   ....
+> 						ioctl(fd, ...);
+> 						  v4l2_ioctl();
+> 						    video_is_registered() // UAF!!
+> 						....
+> 						close(fd);
+> 						  v4l2_release() // UAF!!
+> 						    hackrf_video_release()
+> 						      kfree(); // DFB!!
+> ```
 > 
-> The header includes types for generic ISP configuration parameters
-> and will be extended in the future with support for generic ISP statistics
-> formats.
+> When a V4L2 or video device is unregistered, the device node is removed so
+> new open() calls are blocked.
 > 
-> Generic ISP parameters support is provided by introducing two new
-> types that represent an extensible and versioned buffer of ISP
-> configuration parameters.
+> However, file descriptors that are already open-and any in-flight I/O-do
+> not terminate immediately; they remain valid until the last reference is
+> dropped and the driver's release() is invoked.
 > 
-> The v4l2_params_buffer represents the container for the ISP
-> configuration data block. The generic type is defined with a 0-sized
-> data member that the ISP driver implementations shall properly size
-> according to their capabilities. The v4l2_params_block_header structure
-> represents the header to be prepend to each ISP configuration block.
+> Therefore, freeing device memory on the error path after hackrf_probe()
+> has registered dev it will lead to a race to use-after-free vuln, since
+> those already-open handles haven't been released yet.
 > 
-> Signed-off-by: Daniel Scally <dan.scally@ideasonboard.com>
-> Reviewed-by: Daniel Scally <dan.scally@ideasonboard.com>
-> Signed-off-by: Jacopo Mondi <jacopo.mondi@ideasonboard.com>
-> Reviewed-by: Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>
-
-Reviewed-by: Michael Riesch <michael.riesch@collabora.com>
-
-Thanks and best regards,
-Michael
-
+> And since release() free memory too, race to use-after-free and 
+> double-free vuln occur.
+> 
+> To prevent this, if device is registered from probe(), it should be
+> modified to free memory only through release() rather than calling
+> kfree() directly.
+> 
+> Cc: <stable@vger.kernel.org>
+> Reported-by: syzbot+6ffd76b5405c006a46b7@syzkaller.appspotmail.com
+> Closes: https://syzkaller.appspot.com/bug?extid=6ffd76b5405c006a46b7
+> Reported-by: syzbot+f1b20958f93d2d250727@syzkaller.appspotmail.com
+> Closes: https://syzkaller.appspot.com/bug?extid=f1b20958f93d2d250727
+> Fixes: 8bc4a9ed8504 ("[media] hackrf: add support for transmitter")
+> Signed-off-by: Jeongjun Park <aha310510@gmail.com>
 > ---
->  MAINTAINERS                         |   6 +++
->  include/uapi/linux/media/v4l2-isp.h | 102 ++++++++++++++++++++++++++++++++++++
->  2 files changed, 108 insertions(+)
+> v2: Fix incorrect patch description style and CC stable mailing list
+> - Link to v1: https://lore.kernel.org/all/20250822142729.1156816-1-aha310510@gmail.com/
+> ---
+>  drivers/media/usb/hackrf/hackrf.c | 2 ++
+>  1 file changed, 2 insertions(+)
 > 
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index 46126ce2f968e4f9260263f1574ee29f5ff0de1c..e9ac834d212f88222437e8d806800b2516d44f01 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -26853,6 +26853,12 @@ F:	drivers/media/i2c/vd55g1.c
->  F:	drivers/media/i2c/vd56g3.c
->  F:	drivers/media/i2c/vgxy61.c
->  
-> +V4L2 GENERIC ISP PARAMETERS AND STATISTIC FORMATS
-> +M:	Jacopo Mondi <jacopo.mondi@ideasonboard.com>
-> +L:	linux-media@vger.kernel.org
-> +S:	Maintained
-> +F:	include/uapi/linux/media/v4l2-isp.h
-> +
->  VF610 NAND DRIVER
->  M:	Stefan Agner <stefan@agner.ch>
->  L:	linux-mtd@lists.infradead.org
-> diff --git a/include/uapi/linux/media/v4l2-isp.h b/include/uapi/linux/media/v4l2-isp.h
-> new file mode 100644
-> index 0000000000000000000000000000000000000000..779168f9058e3bcf6451f681e247d34d95676cc0
-> --- /dev/null
-> +++ b/include/uapi/linux/media/v4l2-isp.h
-> @@ -0,0 +1,102 @@
-> +/* SPDX-License-Identifier: GPL-2.0 WITH Linux-syscall-note */
-> +/*
-> + * Video4Linux2 generic ISP parameters and statistics support
-> + *
-> + * Copyright (C) 2025 Ideas On Board Oy
-> + * Author: Jacopo Mondi <jacopo.mondi@ideasonboard.com>
-> + */
-> +
-> +#ifndef _UAPI_V4L2_ISP_H_
-> +#define _UAPI_V4L2_ISP_H_
-> +
-> +#include <linux/stddef.h>
-> +#include <linux/types.h>
-> +
-> +/**
-> + * enum v4l2_isp_params_version - V4L2 ISP parameters versioning
-> + *
-> + * @V4L2_ISP_PARAMS_VERSION_V0: First version of the V4L2 ISP parameters format
-> + *				(for compatibility)
-> + * @V4L2_ISP_PARAMS_VERSION_V1: First version of the V4L2 ISP parameters format
-> + *
-> + * V0 and V1 are identical in order to support drivers compatible with the V4L2
-> + * ISP parameters format already upstreamed which use either 0 or 1 as their
-> + * versioning identifier. Both V0 and V1 refers to the first version of the
-> + * V4L2 ISP parameters format.
-> + *
-> + * Future revisions of the V4L2 ISP parameters format should start from the
-> + * value of 2.
-> + */
-> +enum v4l2_isp_params_version {
-> +	V4L2_ISP_PARAMS_VERSION_V0 = 0,
-> +	V4L2_ISP_PARAMS_VERSION_V1
-> +};
-> +
-> +#define V4L2_ISP_PARAMS_FL_BLOCK_DISABLE	(1U << 0)
-> +#define V4L2_ISP_PARAMS_FL_BLOCK_ENABLE		(1U << 1)
-> +
-> +/*
-> + * Reserve the first 8 bits for V4L2_ISP_PARAMS_FL_* flag.
-> + *
-> + * Driver-specific flags should be defined as:
-> + * #define DRIVER_SPECIFIC_FLAG0     ((1U << V4L2_ISP_PARAMS_FL_DRIVER_FLAGS(0))
-> + * #define DRIVER_SPECIFIC_FLAG1     ((1U << V4L2_ISP_PARAMS_FL_DRIVER_FLAGS(1))
-> + */
-> +#define V4L2_ISP_PARAMS_FL_DRIVER_FLAGS(n)       ((n) + 8)
-> +
-> +/**
-> + * struct v4l2_isp_params_block_header - V4L2 extensible parameters block header
-> + * @type: The parameters block type (driver-specific)
-> + * @flags: A bitmask of block flags (driver-specific)
-> + * @size: Size (in bytes) of the parameters block, including this header
-> + *
-> + * This structure represents the common part of all the ISP configuration
-> + * blocks. Each parameters block shall embed an instance of this structure type
-> + * as its first member, followed by the block-specific configuration data.
-> + *
-> + * The @type field is an ISP driver-specific value that identifies the block
-> + * type. The @size field specifies the size of the parameters block.
-> + *
-> + * The @flags field is a bitmask of per-block flags V4L2_PARAMS_ISP_FL_* and
-> + * driver-specific flags specified by the driver header.
-> + */
-> +struct v4l2_isp_params_block_header {
-> +	__u16 type;
-> +	__u16 flags;
-> +	__u32 size;
-> +} __attribute__((aligned(8)));
-> +
-> +/**
-> + * struct v4l2_isp_params_buffer - V4L2 extensible parameters configuration
-> + * @version: The parameters buffer version (driver-specific)
-> + * @data_size: The configuration data effective size, excluding this header
-> + * @data: The configuration data
-> + *
-> + * This structure contains the configuration parameters of the ISP algorithms,
-> + * serialized by userspace into a data buffer. Each configuration parameter
-> + * block is represented by a block-specific structure which contains a
-> + * :c:type:`v4l2_isp_params_block_header` entry as first member. Userspace
-> + * populates the @data buffer with configuration parameters for the blocks that
-> + * it intends to configure. As a consequence, the data buffer effective size
-> + * changes according to the number of ISP blocks that userspace intends to
-> + * configure and is set by userspace in the @data_size field.
-> + *
-> + * The parameters buffer is versioned by the @version field to allow modifying
-> + * and extending its definition. Userspace shall populate the @version field to
-> + * inform the driver about the version it intends to use. The driver will parse
-> + * and handle the @data buffer according to the data layout specific to the
-> + * indicated version and return an error if the desired version is not
-> + * supported.
-> + *
-> + * For each ISP block that userspace wants to configure, a block-specific
-> + * structure is appended to the @data buffer, one after the other without gaps
-> + * in between. Userspace shall populate the @data_size field with the effective
-> + * size, in bytes, of the @data buffer.
-> + */
-> +struct v4l2_isp_params_buffer {
-> +	__u32 version;
-> +	__u32 data_size;
-> +	__u8 data[] __counted_by(data_size);
-> +};
-> +
-> +#endif /* _UAPI_V4L2_ISP_H_ */
+> diff --git a/drivers/media/usb/hackrf/hackrf.c b/drivers/media/usb/hackrf/hackrf.c
+> index 0b50de8775a3..d7a84422193d 100644
+> --- a/drivers/media/usb/hackrf/hackrf.c
+> +++ b/drivers/media/usb/hackrf/hackrf.c
+> @@ -1515,6 +1515,8 @@ static int hackrf_probe(struct usb_interface *intf,
+>  	video_unregister_device(&dev->rx_vdev);
+>  err_v4l2_device_unregister:
+>  	v4l2_device_unregister(&dev->v4l2_dev);
+
+Instead of v4l2_device_unregister() this should call v4l2_device_put().
+Otherwise the memory will never be freed since the v4l2_device refcount
+will never reach 0.
+
+> +	dev_dbg(&intf->dev, "failed=%d\n", ret);
+
+Drop this line, it doesn't add anything.
+
+Regards,
+
+	Hans
+
+> +	return ret;
+>  err_v4l2_ctrl_handler_free_tx:
+>  	v4l2_ctrl_handler_free(&dev->tx_ctrl_handler);
+>  err_v4l2_ctrl_handler_free_rx:
+> --
 > 
 
