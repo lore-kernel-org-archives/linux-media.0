@@ -1,222 +1,135 @@
-Received: from lelvem-ot02.ext.ti.com (lelvem-ot02.ext.ti.com [198.47.23.235])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f54.google.com (mail-lf1-f54.google.com [209.85.167.54])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D2B6030C36F;
-	Tue, 14 Oct 2025 10:57:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.47.23.235
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C7A3E2877F2
+	for <linux-media@vger.kernel.org>; Tue, 14 Oct 2025 11:00:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760439437; cv=none; b=VcdWRN9Ga/v2FkIlnL7sGzeZwwsCJZXlGicTGptRz1L6J6phcOWTXXYRKRTutjbqHAMkcZ4sSAll5+x0ce3gNM+SNlhKNrgdj4JCknj5xGC7gnkrkexgItAOnr2GKKt1NQVmUUdSZwrQEgO86w31CYp4fEbZ9nL53RaDawluumg=
+	t=1760439631; cv=none; b=t4IMJcuX4YjB42HRihEqoYs8UGvFBWfIrMv2zNF00pKg5qC1r08eFxh3XllvtvZsbdfW2rCIjDZDzWNbGFRwuExF5tIXv7Ju+mEdPlMTucEN3qbOtk1ONNb5kEmaVnjS8r/6w2QzBTNtO074WEEdefv3k5mN6/7q0MFOm6nppfo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760439437; c=relaxed/simple;
-	bh=BTcqGG3yhxOnS6ejwicuqThYGfBp/Y/RvJeLELJoDOE=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=gxCuLdX42lRQSiOg20YQh9IlhOZVTSy05CY0HWhWnt0/SC6FxzdXuNVhk8PsbGwNMAj0HG8kfi/P2zjw2vHWQrN/qODsYfaLb9r+vBhwUcXFq9TT5fFtwkfyItGJzY9OWPxxctAkjXR3pCA0aK4aC9pq8hdwZbYuv+ruTc32Mik=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com; spf=pass smtp.mailfrom=ti.com; dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b=MzNf5KuD; arc=none smtp.client-ip=198.47.23.235
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ti.com
+	s=arc-20240116; t=1760439631; c=relaxed/simple;
+	bh=xcEHefptRm3q+B/7MsjmtDUbajTynS8kek98wtLXEzc=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=TI+tCEfn1ZgjoS7YZs7oYpBAF1fY917cznVJuB9R4bo+QlTmrP1znRhK7RjS23niFG2q4EtMqFalfpzaLLcovqq05u0N+lxgS/SsIu+WA4dG2NDb4/4pGo9BVxYvcnlPA/lEaFRy1Bmw0focBnGCWv3MA8VoP+69ZI0vXEIvWdI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=mf9AQlgT; arc=none smtp.client-ip=209.85.167.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="MzNf5KuD"
-Received: from fllvem-sh03.itg.ti.com ([10.64.41.86])
-	by lelvem-ot02.ext.ti.com (8.15.2/8.15.2) with ESMTP id 59EAuVW81574224;
-	Tue, 14 Oct 2025 05:56:31 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-	s=ti-com-17Q1; t=1760439391;
-	bh=eefmzOzDRguFWe58LmJOHPY5HHwFLQ8o9LWD18ibBRM=;
-	h=From:To:CC:Subject:Date:In-Reply-To:References;
-	b=MzNf5KuDeeWOsbfC01VLTCjrnVz3dxyyJQMbIN1M1c6njvA0008KHHxCpVPE9vaSH
-	 pEdatVXz4V7JSQ8gF7FMIw4yaC/y/GGDnYqFR5Qw+SAEkX62NafPFJjqCqzSdEXQci
-	 ApcvlLZoVmAUoKwVHkarx2rCMZtM+W/e0QwLBejs=
-Received: from DLEE212.ent.ti.com (dlee212.ent.ti.com [157.170.170.114])
-	by fllvem-sh03.itg.ti.com (8.18.1/8.18.1) with ESMTPS id 59EAuVeD1005239
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
-	Tue, 14 Oct 2025 05:56:31 -0500
-Received: from DLEE206.ent.ti.com (157.170.170.90) by DLEE212.ent.ti.com
- (157.170.170.114) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.20; Tue, 14 Oct
- 2025 05:56:30 -0500
-Received: from fllvem-mr07.itg.ti.com (10.64.41.89) by DLEE206.ent.ti.com
- (157.170.170.90) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.20 via Frontend
- Transport; Tue, 14 Oct 2025 05:56:30 -0500
-Received: from lelv0854.itg.ti.com (lelv0854.itg.ti.com [10.181.64.140])
-	by fllvem-mr07.itg.ti.com (8.18.1/8.18.1) with ESMTP id 59EAuUPQ2934595;
-	Tue, 14 Oct 2025 05:56:30 -0500
-Received: from localhost (meghana-pc.dhcp.ti.com [10.24.69.13] (may be forged))
-	by lelv0854.itg.ti.com (8.14.7/8.14.7) with ESMTP id 59EAuTRI010682;
-	Tue, 14 Oct 2025 05:56:30 -0500
-From: Meghana Malladi <m-malladi@ti.com>
-To: <horms@kernel.org>, <namcao@linutronix.de>, <jacob.e.keller@intel.com>,
-        <m-malladi@ti.com>, <christian.koenig@amd.com>,
-        <sumit.semwal@linaro.org>, <sdf@fomichev.me>,
-        <john.fastabend@gmail.com>, <hawk@kernel.org>, <daniel@iogearbox.net>,
-        <ast@kernel.org>, <pabeni@redhat.com>, <kuba@kernel.org>,
-        <edumazet@google.com>, <davem@davemloft.net>, <andrew+netdev@lunn.ch>
-CC: <linaro-mm-sig@lists.linaro.org>, <dri-devel@lists.freedesktop.org>,
-        <linux-media@vger.kernel.org>, <bpf@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <netdev@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>, <srk@ti.com>,
-        Vignesh Raghavendra
-	<vigneshr@ti.com>,
-        Roger Quadros <rogerq@kernel.org>, <danishanwar@ti.com>
-Subject: [PATCH net-next v3 4/6] net: ti: icssg-prueth: Make emac_run_xdp function independent of page
-Date: Tue, 14 Oct 2025 16:26:10 +0530
-Message-ID: <20251014105613.2808674-5-m-malladi@ti.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20251014105613.2808674-1-m-malladi@ti.com>
-References: <20251014105613.2808674-1-m-malladi@ti.com>
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="mf9AQlgT"
+Received: by mail-lf1-f54.google.com with SMTP id 2adb3069b0e04-59070c9111eso6343298e87.3
+        for <linux-media@vger.kernel.org>; Tue, 14 Oct 2025 04:00:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1760439626; x=1761044426; darn=vger.kernel.org;
+        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+         :date:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=jjAPjhv4d448Try5P0FP2VsI1UmiEtL4eWhCUt/f9q8=;
+        b=mf9AQlgTA4U5NsEiNUucZFru0M7YYsnkzqo5Pz3G2gxIpBuWwJ3eWvXNvUYowOQ/P8
+         3Oe/CUenCD8YilSHzT1EIaSrJieK4XT9SPWVEdgY1b1+7YAg0KSCu/oTVCuUtQI+215H
+         x2AXSG1teaKrW51tZsBbFbNAeyWvDpUPuAjSs=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1760439626; x=1761044426;
+        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+         :date:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=jjAPjhv4d448Try5P0FP2VsI1UmiEtL4eWhCUt/f9q8=;
+        b=qU3ZruZVwdU6DedHGICKqdH/wNcaY+J1FQnkimUt9IEJxU216rSB+UI1r0K3pekyYu
+         pUjnDDPporvxc7y+Z6RzbwXHmxIxELhL9kmkG3VjwYcxGYuhs/WsKMNmyiVrqmvT5keI
+         yc383IGM2Jy2hEoPkvTv3qrogQSvGpiECIjaBr1ZG3Amr7OygFPujT/n9vA6wu1M5vVZ
+         SbIYCksRMAUuvMqEehCnVELPBE2kx6T+B/6FVtImdzO5E9PwhJ+etXo5EgvAzRdXZimG
+         65vC2doTHpRqD0w06Qe6sLdH3pXfImzL0dfyskx3m8fVSt+A2zZAJmLakuFBQ4w4rjHz
+         l5Ug==
+X-Gm-Message-State: AOJu0YxoR5L4rBEpX4cqTvKWjHfaDDvD1EJIyce/7i+bwasmDkCknKr5
+	/xh5KoHhFNEWcyaQHdgOUBTRNNrMZDF7bfQ0DF1hAkxv9A4CliME1LqnJef8dF08O62D47NHoO3
+	sVamd90eD
+X-Gm-Gg: ASbGncuoGlqH+ZHYz0LakK0XuuHgbZHpmcbcX3kYFLoAxCIZ19tlR2twuDewPwqdF2l
+	7wi9oya+foOmKDKSpfHsF3zuXQ0AzkHrsZfboPwL+nXmRUyOLlOFBhFqD7C/9kNQeoU0hG8psmw
+	7O0rsqBZFME9IxQf1cnaaWXGf2IkwFVhvIOvQWGgVP1R56XVRL2yX2J0gB9YTImFyYjCG1jjOrB
+	mtuk5kHH/GMTMmz44k/S64AcgCY8OcIIG40ltcw/qSn4FbeuxmYKJPBTnOsJdVE9cOIUP1FGx9N
+	6mPsOFIrYrav0rfHO8CFI1L0ekxRI+Nd1qIFx+iAnrf9EHzBmYFYWtGJPwkJSFoetYzCLRU9IoZ
+	mtVTuL7mSdujuuKVEAl9nj8iUpbxCXe9+4J2/gOwIl1HGmFkpchaLsbcLNkk35Z561bGrH1uzF+
+	UE0PzYpb0vfNnVDcYsx+1H
+X-Google-Smtp-Source: AGHT+IFGWJThrVzinUTUKLlvxn1wPB2/v9XNcpskq+s3lKiZ/x5AJ/mF4Gm9gftYdVHKyFf+eUCPIw==
+X-Received: by 2002:a2e:beab:0:b0:36e:4481:9e89 with SMTP id 38308e7fff4ca-37609cf6b00mr66565701fa.11.1760439625479;
+        Tue, 14 Oct 2025 04:00:25 -0700 (PDT)
+Received: from ribalda.c.googlers.com (166.141.88.34.bc.googleusercontent.com. [34.88.141.166])
+        by smtp.gmail.com with ESMTPSA id 38308e7fff4ca-3762e77c9f9sm39153191fa.5.2025.10.14.04.00.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 14 Oct 2025 04:00:25 -0700 (PDT)
+From: Ricardo Ribalda <ribalda@chromium.org>
+Date: Tue, 14 Oct 2025 11:00:17 +0000
+Subject: [PATCH v2] media: i2c: imx214: Exit early on control init errors
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-C2ProcessedOrg: 333ef613-75bf-4e12-a4b1-8e3623f5dcea
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20251014-imx214-smatch-v2-1-04218043086d@chromium.org>
+X-B4-Tracking: v=1; b=H4sIAEAt7mgC/3WMwQ7CIBAFf6XZs5iyBUVP/ofpoQIte6A0UElNw
+ 7+LvZt3mpfM7JBsJJvg3uwQbaZEYa6Apwa0G+bJMjKVAVuUrcIbI78hFyz5YdWOaWHqrgKVkVC
+ dJdqRtqP37Cs7SmuInyOf+e/9V8qccTZ2hl9k9xLKiod2MXh6+3OIE/SllC9kAj1orQAAAA==
+X-Change-ID: 20250829-imx214-smatch-c4d4d47428d5
+To: Ricardo Ribalda <ribalda@kernel.org>, 
+ Hans Verkuil <hverkuil+cisco@kernel.org>
+Cc: linux-media@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ Ricardo Ribalda <ribalda@chromium.org>
+X-Mailer: b4 0.14.2
 
-emac_run_xdp function runs xdp program, at a given hook point
-in the Rx path of the driver in NAPI context and returns
-XDP return codes. In zero copy mode the driver receives
-packets using UMEM frames instead of pages (native XDP).
-Decouple the usage of page in this function.
+Now we try to initialize all the controls and at the very end check
+ctrl_hdlr->error to check if one of them has failed.
 
-Signed-off-by: Meghana Malladi <m-malladi@ti.com>
+This confuses smatch, who do not know how to track the state of
+imx214->link_freq.
+
+drivers/media/i2c/imx214.c:1109 imx214_ctrls_init() error: we previously assumed 'imx214->link_freq' could be null (see line 1017)
+
+Fix this by exiting early on control initialization errors.
+
+Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
 ---
- drivers/net/ethernet/ti/icssg/icssg_common.c | 26 ++++++++++++--------
- drivers/net/ethernet/ti/icssg/icssg_prueth.c |  3 ++-
- drivers/net/ethernet/ti/icssg/icssg_prueth.h |  9 +++++--
- 3 files changed, 25 insertions(+), 13 deletions(-)
+Right now we are handling this with a quirk in media-ci, if Dan cannot
+fix smatch in a kernel cycle we should merge this patch.
+---
+Changes in v2:
+- Fix typo in commit message commit
+- Move error tag where it belongs (Thanks Hans!)
+- Link to v1: https://lore.kernel.org/r/20250829-imx214-smatch-v1-1-f3d1653b48e4@chromium.org
+---
+ drivers/media/i2c/imx214.c | 7 +++++--
+ 1 file changed, 5 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/net/ethernet/ti/icssg/icssg_common.c b/drivers/net/ethernet/ti/icssg/icssg_common.c
-index b526f246ecb9..bc6dc7bf3f6a 100644
---- a/drivers/net/ethernet/ti/icssg/icssg_common.c
-+++ b/drivers/net/ethernet/ti/icssg/icssg_common.c
-@@ -647,15 +647,15 @@ void emac_rx_timestamp(struct prueth_emac *emac,
-  * emac_xmit_xdp_frame - transmits an XDP frame
-  * @emac: emac device
-  * @xdpf: data to transmit
-- * @page: page from page pool if already DMA mapped
-  * @q_idx: queue id
-+ * @buff_type: Type of buffer to be transmitted
-  *
-  * Return: XDP state
-  */
- u32 emac_xmit_xdp_frame(struct prueth_emac *emac,
- 			struct xdp_frame *xdpf,
--			struct page *page,
--			unsigned int q_idx)
-+			unsigned int q_idx,
-+			enum prueth_tx_buff_type buff_type)
- {
- 	struct cppi5_host_desc_t *first_desc;
- 	struct net_device *ndev = emac->ndev;
-@@ -663,6 +663,7 @@ u32 emac_xmit_xdp_frame(struct prueth_emac *emac,
- 	struct prueth_tx_chn *tx_chn;
- 	dma_addr_t desc_dma, buf_dma;
- 	struct prueth_swdata *swdata;
-+	struct page *page;
- 	u32 *epib;
- 	int ret;
- 
-@@ -679,7 +680,12 @@ u32 emac_xmit_xdp_frame(struct prueth_emac *emac,
- 		return ICSSG_XDP_CONSUMED;	/* drop */
- 	}
- 
--	if (page) { /* already DMA mapped by page_pool */
-+	if (buff_type == PRUETH_TX_BUFF_TYPE_XDP_TX) { /* already DMA mapped by page_pool */
-+		page = virt_to_head_page(xdpf->data);
-+		if (unlikely(!page)) {
-+			netdev_err(ndev, "xdp tx: failed to get page from xdpf\n");
-+			goto drop_free_descs;
-+		}
- 		buf_dma = page_pool_get_dma_addr(page);
- 		buf_dma += xdpf->headroom + sizeof(struct xdp_frame);
- 	} else { /* Map the linear buffer */
-@@ -734,13 +740,11 @@ EXPORT_SYMBOL_GPL(emac_xmit_xdp_frame);
-  * emac_run_xdp - run an XDP program
-  * @emac: emac device
-  * @xdp: XDP buffer containing the frame
-- * @page: page with RX data if already DMA mapped
-  * @len: Rx descriptor packet length
-  *
-  * Return: XDP state
-  */
--static u32 emac_run_xdp(struct prueth_emac *emac, struct xdp_buff *xdp,
--			struct page *page, u32 *len)
-+static u32 emac_run_xdp(struct prueth_emac *emac, struct xdp_buff *xdp, u32 *len)
- {
- 	struct net_device *ndev = emac->ndev;
- 	struct netdev_queue *netif_txq;
-@@ -767,7 +771,8 @@ static u32 emac_run_xdp(struct prueth_emac *emac, struct xdp_buff *xdp,
- 		q_idx = cpu % emac->tx_ch_num;
- 		netif_txq = netdev_get_tx_queue(ndev, q_idx);
- 		__netif_tx_lock(netif_txq, cpu);
--		result = emac_xmit_xdp_frame(emac, xdpf, page, q_idx);
-+		result = emac_xmit_xdp_frame(emac, xdpf, q_idx,
-+					     PRUETH_TX_BUFF_TYPE_XDP_TX);
- 		__netif_tx_unlock(netif_txq);
- 		if (result == ICSSG_XDP_CONSUMED) {
- 			ndev->stats.tx_dropped++;
-@@ -792,7 +797,8 @@ static u32 emac_run_xdp(struct prueth_emac *emac, struct xdp_buff *xdp,
- 		fallthrough; /* handle aborts by dropping packet */
- 	case XDP_DROP:
- 		ndev->stats.rx_dropped++;
--		page_pool_recycle_direct(emac->rx_chns.pg_pool, page);
-+		page_pool_recycle_direct(emac->rx_chns.pg_pool,
-+					 virt_to_head_page(xdp->data));
- 		return ICSSG_XDP_CONSUMED;
- 	}
- }
-@@ -861,7 +867,7 @@ static int emac_rx_packet(struct prueth_emac *emac, u32 flow_id, u32 *xdp_state)
- 		xdp_init_buff(&xdp, PAGE_SIZE, &rx_chn->xdp_rxq);
- 		xdp_prepare_buff(&xdp, pa, PRUETH_HEADROOM, pkt_len, false);
- 
--		*xdp_state = emac_run_xdp(emac, &xdp, page, &pkt_len);
-+		*xdp_state = emac_run_xdp(emac, &xdp, &pkt_len);
- 		if (*xdp_state != ICSSG_XDP_PASS)
- 			goto requeue;
- 		headroom = xdp.data - xdp.data_hard_start;
-diff --git a/drivers/net/ethernet/ti/icssg/icssg_prueth.c b/drivers/net/ethernet/ti/icssg/icssg_prueth.c
-index 78778f0e8f4a..296034ab6c67 100644
---- a/drivers/net/ethernet/ti/icssg/icssg_prueth.c
-+++ b/drivers/net/ethernet/ti/icssg/icssg_prueth.c
-@@ -1177,7 +1177,8 @@ static int emac_xdp_xmit(struct net_device *dev, int n, struct xdp_frame **frame
- 	__netif_tx_lock(netif_txq, cpu);
- 	for (i = 0; i < n; i++) {
- 		xdpf = frames[i];
--		err = emac_xmit_xdp_frame(emac, xdpf, NULL, q_idx);
-+		err = emac_xmit_xdp_frame(emac, xdpf, q_idx,
-+					  PRUETH_TX_BUFF_TYPE_XDP_NDO);
- 		if (err != ICSSG_XDP_TX) {
- 			ndev->stats.tx_dropped++;
- 			break;
-diff --git a/drivers/net/ethernet/ti/icssg/icssg_prueth.h b/drivers/net/ethernet/ti/icssg/icssg_prueth.h
-index 90b3e9c9e148..74a0e5ed2a47 100644
---- a/drivers/net/ethernet/ti/icssg/icssg_prueth.h
-+++ b/drivers/net/ethernet/ti/icssg/icssg_prueth.h
-@@ -154,6 +154,11 @@ enum prueth_swdata_type {
- 	PRUETH_SWDATA_XSK,
- };
- 
-+enum prueth_tx_buff_type {
-+	PRUETH_TX_BUFF_TYPE_XDP_TX,
-+	PRUETH_TX_BUFF_TYPE_XDP_NDO,
-+};
+diff --git a/drivers/media/i2c/imx214.c b/drivers/media/i2c/imx214.c
+index 94ebe625c9e6ee0fb67fe1d89b48b2f1bf58ffc6..c66f0e18726c3fc15df91c37888a797bcea82134 100644
+--- a/drivers/media/i2c/imx214.c
++++ b/drivers/media/i2c/imx214.c
+@@ -1014,8 +1014,10 @@ static int imx214_ctrls_init(struct imx214 *imx214)
+ 						   V4L2_CID_LINK_FREQ,
+ 						   imx214->bus_cfg.nr_of_link_frequencies - 1,
+ 						   0, imx214->bus_cfg.link_frequencies);
+-	if (imx214->link_freq)
+-		imx214->link_freq->flags |= V4L2_CTRL_FLAG_READ_ONLY;
++	if (!imx214->link_freq)
++		goto err_init_ctrl;
 +
- struct prueth_swdata {
- 	enum prueth_swdata_type type;
- 	union prueth_data {
-@@ -502,8 +507,8 @@ void prueth_put_cores(struct prueth *prueth, int slice);
- u64 icssg_ts_to_ns(u32 hi_sw, u32 hi, u32 lo, u32 cycle_time_ns);
- u32 emac_xmit_xdp_frame(struct prueth_emac *emac,
- 			struct xdp_frame *xdpf,
--			struct page *page,
--			unsigned int q_idx);
-+			unsigned int q_idx,
-+			enum prueth_tx_buff_type buff_type);
- void prueth_rx_cleanup(void *data, dma_addr_t desc_dma);
- void prueth_tx_cleanup(void *data, dma_addr_t desc_dma);
- int prueth_xsk_wakeup(struct net_device *ndev, u32 qid, u32 flags);
++	imx214->link_freq->flags |= V4L2_CTRL_FLAG_READ_ONLY;
+ 
+ 	/*
+ 	 * WARNING!
+@@ -1099,6 +1101,7 @@ static int imx214_ctrls_init(struct imx214 *imx214)
+ 
+ 	v4l2_ctrl_new_fwnode_properties(ctrl_hdlr, &imx214_ctrl_ops, &props);
+ 
++err_init_ctrl:
+ 	ret = ctrl_hdlr->error;
+ 	if (ret) {
+ 		v4l2_ctrl_handler_free(ctrl_hdlr);
+
+---
+base-commit: 3a8660878839faadb4f1a6dd72c3179c1df56787
+change-id: 20250829-imx214-smatch-c4d4d47428d5
+
+Best regards,
 -- 
-2.43.0
+Ricardo Ribalda <ribalda@chromium.org>
 
