@@ -1,39 +1,39 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 28308280025
-	for <linux-media@vger.kernel.org>; Tue, 14 Oct 2025 17:41:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C2E973019DF
+	for <linux-media@vger.kernel.org>; Tue, 14 Oct 2025 17:41:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760463668; cv=none; b=XFTVBCxp0X/zAYPXWWP2lCvIIiwnbDj0EPfI/ZenRMHazOyykGYA5Aj5vyF1QVxGURRi7rsiYwNRFkl2S06fqkZYkrp9Ed3GQ+SC6OQncEMDizkhqLdzvRoweqcspaRHpITHXZWRGfD6fBwkB1fwrBJWI2Z8Mbrb2FURR9vTgV0=
+	t=1760463669; cv=none; b=PQ0T1OdbmaMtNU1UYU564S6EZERUoGTkdwAnDfKj4JFF9orNVTim2va/YpSKvDVOwV/+nTfJAn9xfgSr8UHoh8WFcD5Vn13ajAW9tZNj1YG2DQLITXiGMt9iSJEqHNBPjnMNTGQYMz50Eq/UpY+ZNJRTpCIIuwsu5dCnYGO4i5A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760463668; c=relaxed/simple;
-	bh=0bnlDyRb+yHw36YBU5Q5kFj5S/M032PtYadoJNv98HY=;
+	s=arc-20240116; t=1760463669; c=relaxed/simple;
+	bh=uQQfjzEYY3qGt32NpNMk407m0tDRx4Rzj5nlU1c3vNM=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=TuHl0pN4I6vAMIyo5S3ZNFPhqTh563VZkQfC4YJ0K65N2742fbyKb9FYfoX87vnosBY3ZhdJPTo9t7oyOstNLleSYNl403y2mtksAwRO8yvYYekUCVHcNImhkQ2DlteTCP0SwAxlwRTKEY2NnLAlTJa43VoNo2X4/2DMSWbkaqU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=sOOwTlnt; arc=none smtp.client-ip=10.30.226.201
+	 MIME-Version; b=bygrnu5A9FyR8UHdgQOKqB12lsqJMgejOT322oENiFMXfE8AAaac+5wiFEwjkn/y+iKwPChHZbMkyr0OGt3aSrSkYlvQSQAbdOdSsztBsoLBUlwXuiX/nZ/bBgTs1vxMiRiWwGfay84fB9KbLSZWjSuEbWIp4ea9BuyrXt8b3tQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=QjtggNmN; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="sOOwTlnt"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 63213C4CEE7;
-	Tue, 14 Oct 2025 17:41:03 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="QjtggNmN"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 17128C4CEF9;
+	Tue, 14 Oct 2025 17:41:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1760463664;
-	bh=0bnlDyRb+yHw36YBU5Q5kFj5S/M032PtYadoJNv98HY=;
+	s=k20201202; t=1760463668;
+	bh=uQQfjzEYY3qGt32NpNMk407m0tDRx4Rzj5nlU1c3vNM=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=sOOwTlnty3FcXYtluBWiqHMi3MYDEozZpJ2ebdN+7o0DeRFKIjacXDpi+cIDuHXco
-	 JG+j+LoOUMak5xtlTxpNeG3RLpJnKf8u0ge2amG9DDNGlpoC5nNiADo4/u8X4uzV62
-	 qGhjhTplsxkV3dzH/JTuWUcEPK9rJUhfQgewQOgDDpIGDfboWkOYu8V7hxZ19XMGGh
-	 JIkxxDd7u5jbcnT5ZdbOo+kuVqLmhZ6TDET733wo4IGH453hGF6SJODIFavyAvy2Pj
-	 7KeVDDWd3B6yxssOTQzHE2hOOtgceaYLWEh/H9SiB93Fam5TncycMOdWhigcCbEqsL
-	 WMIgYB0uhUGbA==
+	b=QjtggNmNyL2cPktJwNGterntdztLmvWUS/tfEFSdoEucUdHq0TZ+mnnZ7skVg/boi
+	 FGdobhYq7WMxpdyMlX7QL5PDOI5CrRIj2kGdefYypKpLYP6Gcid3KHH0rJeLmcEdYt
+	 C+K6IfTiXA6cx/i9hoKX2kxVteYA2b+790NkOZ6tk9zpM2H6QWvOWGxtsCEGOQimOA
+	 Jk+uWUunH3ZRxUJsI7M9xu7IdR2AWcjI32izgH5jLjiRN7PLwnvI1pN52tdWY+5FNl
+	 JTBtgeMAu9el3lfgkRHJfGndqhX4XOqdewA0k7qHRVDsAG7nuAKf2q5dMhZGVnyLX2
+	 suDyvI807W7wA==
 From: Hans de Goede <hansg@kernel.org>
 To: Bingbu Cao <bingbu.cao@intel.com>,
 	Sakari Ailus <sakari.ailus@linux.intel.com>
 Cc: Hans de Goede <hansg@kernel.org>,
 	linux-media@vger.kernel.org
-Subject: [PATCH 15/25] media: i2c: ov01a10: Use native and default for pixel-array size names
-Date: Tue, 14 Oct 2025 19:40:23 +0200
-Message-ID: <20251014174033.20534-16-hansg@kernel.org>
+Subject: [PATCH 17/25] media: i2c: ov01a10: Remove struct ov01a10_reg_list
+Date: Tue, 14 Oct 2025 19:40:25 +0200
+Message-ID: <20251014174033.20534-18-hansg@kernel.org>
 X-Mailer: git-send-email 2.51.0
 In-Reply-To: <20251014174033.20534-1-hansg@kernel.org>
 References: <20251014174033.20534-1-hansg@kernel.org>
@@ -45,89 +45,67 @@ List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-According to the OV01A10 product-brief PDF the OV01A10 has an active pixel
-array size of 1296x816. In otherwords the native and active sizes are
-the same.
+After the conversion to the CCI register access helpers, struct
+ov01a10_reg_list is only used inside struct ov01a10_link_freq_config.
 
-Replace the (misspelled) ACTIVE defines for the default resolution of
-1280x800 with DEFAULT to avoid giving the impression that the active pixel
-array size is only 1280x800.
-
-And replace PIXEL_ARRAY with NATIVE to make clear this is the native pixel
-array size / to match the V4L2_SEL_TGT_NATIVE_SIZE naming.
+Simplify things by embedding the ov01a10_reg_list members directly into
+struct ov01a10_link_freq_config.
 
 Signed-off-by: Hans de Goede <hansg@kernel.org>
 ---
- drivers/media/i2c/ov01a10.c | 32 ++++++++++++++++----------------
- 1 file changed, 16 insertions(+), 16 deletions(-)
+ drivers/media/i2c/ov01a10.c | 22 ++++++++--------------
+ 1 file changed, 8 insertions(+), 14 deletions(-)
 
 diff --git a/drivers/media/i2c/ov01a10.c b/drivers/media/i2c/ov01a10.c
-index d0153e606c9a..f3bcb61c88dd 100644
+index e8ccb295fdc9..805ed42d86f9 100644
 --- a/drivers/media/i2c/ov01a10.c
 +++ b/drivers/media/i2c/ov01a10.c
-@@ -34,10 +34,10 @@
- #define OV01A10_MODE_STREAMING		0x01
+@@ -98,13 +98,9 @@
+ #define OV01A10_MEDIA_BUS_FMT		MEDIA_BUS_FMT_SBGGR10_1X10
+ #define OV01A10_BAYER_PATTERN_SIZE	2 /* 2x2 */
  
- /* pixel array */
--#define OV01A10_PIXEL_ARRAY_WIDTH	1296
--#define OV01A10_PIXEL_ARRAY_HEIGHT	816
--#define OV01A10_ACITVE_WIDTH		1280
--#define OV01A10_ACITVE_HEIGHT		800
-+#define OV01A10_NATIVE_WIDTH		1296
-+#define OV01A10_NATIVE_HEIGHT		816
-+#define OV01A10_DEFAULT_WIDTH		1280
-+#define OV01A10_DEFAULT_HEIGHT		800
+-struct ov01a10_reg_list {
+-	u32 num_of_regs;
+-	const struct reg_sequence *regs;
+-};
+-
+ struct ov01a10_link_freq_config {
+-	const struct ov01a10_reg_list reg_list;
++	const struct reg_sequence *regs;
++	int regs_len;
+ };
  
- /* vertical and horizontal timings */
- #define OV01A10_REG_VTS			CCI_REG16(0x380e)
-@@ -271,8 +271,8 @@ static const struct ov01a10_link_freq_config link_freq_configs[] = {
+ static const struct reg_sequence mipi_data_rate_720mbps[] = {
+@@ -238,10 +234,8 @@ static const s64 link_freq_menu_items[] = {
  
- static const struct ov01a10_mode supported_modes[] = {
+ static const struct ov01a10_link_freq_config link_freq_configs[] = {
  	{
--		.width = OV01A10_ACITVE_WIDTH,
--		.height = OV01A10_ACITVE_HEIGHT,
-+		.width = OV01A10_DEFAULT_WIDTH,
-+		.height = OV01A10_DEFAULT_HEIGHT,
- 		.hts = OV01A10_HTS_DEF,
- 		.vts_def = OV01A10_VTS_DEF,
- 		.vts_min = OV01A10_VTS_MIN,
-@@ -643,8 +643,8 @@ static int ov01a10_init_state(struct v4l2_subdev *sd,
- 	struct v4l2_subdev_format fmt = {
- 		.which = V4L2_SUBDEV_FORMAT_TRY,
- 		.format = {
--			.width = OV01A10_ACITVE_WIDTH,
--			.height = OV01A10_ACITVE_HEIGHT,
-+			.width = OV01A10_DEFAULT_WIDTH,
-+			.height = OV01A10_DEFAULT_HEIGHT,
- 		},
- 	};
+-		.reg_list = {
+-			.num_of_regs = ARRAY_SIZE(mipi_data_rate_720mbps),
+-			.regs = mipi_data_rate_720mbps,
+-		}
++		.regs = mipi_data_rate_720mbps,
++		.regs_len = ARRAY_SIZE(mipi_data_rate_720mbps),
+ 	},
+ };
  
-@@ -693,17 +693,17 @@ static int ov01a10_get_selection(struct v4l2_subdev *sd,
- 	case V4L2_SEL_TGT_CROP_BOUNDS:
- 		sel->r.top = 0;
- 		sel->r.left = 0;
--		sel->r.width = OV01A10_PIXEL_ARRAY_WIDTH;
--		sel->r.height = OV01A10_PIXEL_ARRAY_HEIGHT;
-+		sel->r.width = OV01A10_NATIVE_WIDTH;
-+		sel->r.height = OV01A10_NATIVE_HEIGHT;
- 		return 0;
- 	case V4L2_SEL_TGT_CROP:
- 	case V4L2_SEL_TGT_CROP_DEFAULT:
--		sel->r.top = (OV01A10_PIXEL_ARRAY_HEIGHT -
--			      OV01A10_ACITVE_HEIGHT) / 2;
--		sel->r.left = (OV01A10_PIXEL_ARRAY_WIDTH -
--			       OV01A10_ACITVE_WIDTH) / 2;
--		sel->r.width = OV01A10_ACITVE_WIDTH;
--		sel->r.height = OV01A10_ACITVE_HEIGHT;
-+		sel->r.top = (OV01A10_NATIVE_HEIGHT -
-+			      OV01A10_DEFAULT_HEIGHT) / 2;
-+		sel->r.left = (OV01A10_NATIVE_WIDTH -
-+			       OV01A10_DEFAULT_WIDTH) / 2;
-+		sel->r.width = OV01A10_DEFAULT_WIDTH;
-+		sel->r.height = OV01A10_DEFAULT_HEIGHT;
- 		return 0;
- 	}
+@@ -551,12 +545,12 @@ static int ov01a10_set_mode(struct ov01a10 *ov01a10)
  
+ static int ov01a10_start_streaming(struct ov01a10 *ov01a10)
+ {
+-	const struct ov01a10_reg_list *reg_list;
++	const struct ov01a10_link_freq_config *freq_cfg;
+ 	int ret;
+ 
+-	reg_list = &link_freq_configs[ov01a10->link_freq_index].reg_list;
+-	ret = regmap_multi_reg_write(ov01a10->regmap, reg_list->regs,
+-				     reg_list->num_of_regs);
++	freq_cfg = &link_freq_configs[ov01a10->link_freq_index];
++	ret = regmap_multi_reg_write(ov01a10->regmap, freq_cfg->regs,
++				     freq_cfg->regs_len);
+ 	if (ret) {
+ 		dev_err(ov01a10->dev, "failed to set plls\n");
+ 		return ret;
 -- 
 2.51.0
 
