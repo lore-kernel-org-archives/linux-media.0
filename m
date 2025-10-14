@@ -1,62 +1,57 @@
 Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5945130DEBD
-	for <linux-media@vger.kernel.org>; Tue, 14 Oct 2025 07:14:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8E73D30E0C0
+	for <linux-media@vger.kernel.org>; Tue, 14 Oct 2025 07:14:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760426043; cv=none; b=lP7+dpRURHEr4I7G5+F2Em1lRCYobsm7O3kzYzrhXiIKQClqDNc1UEvOvNl8gXtQpY3Pg5ae+e9jYbdUQ3qgXTYr1uBU9kX/3q9LhNkLK32aZvZ8Um2qHVJTFPwL6FU7q/vComZ9mZ5A8UC8TE3r5CFT9jLZP7DDHt6vzPibAAk=
+	t=1760426044; cv=none; b=R0KGd8in/FdEvquqqMuZdJTEqIUbqUBh2gxP+4g70v2Te9dsxVPaPhYOlqoG7MHxeyRE2ttM9UtQrvnwvrg+1nIFcqH4kTlDUgQNKOoaA7tOX7ql/Ji3KuVkdV96rYi7n7x57UNDB1WBZx4eOHT2HHQEMLmDYxQRNLFtu589c+A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760426043; c=relaxed/simple;
-	bh=5ieEvSJqbDmNfjTwrrLAWK98z4h+TuffhyYkWmricG8=;
+	s=arc-20240116; t=1760426044; c=relaxed/simple;
+	bh=El6NYrXPZJg2JthYHW5V9bH56p5bvPHuTCM1ObR1r+c=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=fJt+t4szT+ewRTMAJ7gabpwVoQhqbCYYd7Gg2RO8rX90j7TDmqx2rHUYFXJAND3Jw8dSoIk0krOBljYKW3/v/0vM0JCY80DZ0ICrLS46G5ni2nIEX2pO6L4Osm4BcD/z2H8Fyb3tkEI9tMpFr2aqXEGlg1jyYShxKg6eqexni2g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=e6deUxwb; arc=none smtp.client-ip=192.198.163.9
+	 MIME-Version; b=awplYNdB2foo5JFE9o3XsL/v61DW+6c3Ysv8pmv8TShR7AroQhgNmtvA00pe05w3kK57QryS+uGVIjkVaHfJabB9O2Kxtm+n1x5uiL/rFRvhYnSQ5wQjiiNHaoxtsnDdkFW7v0j21ND0cvZ1FEmfZuL6fzS3rCePbcrYCCpO2U4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=AXh0Q3NL; arc=none smtp.client-ip=192.198.163.9
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="e6deUxwb"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="AXh0Q3NL"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1760426041; x=1791962041;
+  t=1760426042; x=1791962042;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=5ieEvSJqbDmNfjTwrrLAWK98z4h+TuffhyYkWmricG8=;
-  b=e6deUxwbg5nBpCj38PfPxKN+66ACuI7txDUMvPXYZEGLqzW25M+nVedN
-   0JhM4TQOP7fcPQMDWBg8dvX/XG4bzWFcx/PVT3POmCmPbY4h4ZB+z/0yh
-   LreQbycQ05KqJI7WiuTUXIVHpEjy4+XDfr4U2TU6tu7e6kj4ujAwOO4dz
-   lqbBuUUxLEBM6RT3FdF22Xs/XQFSc4bfBGTo3xXgv3opua4HzJUx2sTwr
-   OrFNPiFhm7fBJ62t/f1IHVH7NFq3FT9L+VxLLb5clhX4UyFegrJRIMzvE
-   GLeU/BYd5N4glrSVw8orsn6h11indctwq8YCDBXqo1mExNIXfN6WI7sf3
-   g==;
-X-CSE-ConnectionGUID: g7s2kq9/QC62t0JGv9RtdA==
-X-CSE-MsgGUID: WLLBCE7fT5WgydowYzIOtQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11581"; a="73257142"
+  bh=El6NYrXPZJg2JthYHW5V9bH56p5bvPHuTCM1ObR1r+c=;
+  b=AXh0Q3NL5gOTisMSvtEE9OnlSx5RHr98+Hcr3WKDYDFZ9PHoQ5HEPE+k
+   8hpg+zDWu2yS5QsjYCBYorOVsp+0N2rv8JaBypeRWTN2/NR/k9XvttKbn
+   BIaigfywKU9rs6lG8JEQGOEtCjR0ilEbKiVLpRmTi1JxCV09eFFnjDVBt
+   /fGnKSUu+JH5uxupLvZGAsUD+9kN1HgjGhrSMSjp29a/I1wZklLfGlvTy
+   uksNxxDbuqDI80IWwiEuC3L6ZpFawGkpeiV1Qd/tz1rV7QV/c5c6s+ImK
+   BfwW3r5r1PJw1Sjt9Q3ScRcGnyshqdYxjt71FonWpGIVyG/X76e8Rb+ee
+   A==;
+X-CSE-ConnectionGUID: SyK2tocUQMisHN44+hUp6Q==
+X-CSE-MsgGUID: T+GdpYpCQRiW91B0jSNrkw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11581"; a="73257152"
 X-IronPort-AV: E=Sophos;i="6.19,227,1754982000"; 
-   d="scan'208";a="73257142"
+   d="scan'208";a="73257152"
 Received: from orviesa009.jf.intel.com ([10.64.159.149])
-  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Oct 2025 00:13:58 -0700
-X-CSE-ConnectionGUID: xnweO6cwRoGzNDVsuvCsww==
-X-CSE-MsgGUID: lSI1OuOZTWyCtTPEuj01Bw==
+  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Oct 2025 00:13:59 -0700
+X-CSE-ConnectionGUID: QuIWljbRRoa26hMH3wExPA==
+X-CSE-MsgGUID: 6uDrOax0QDiuA8AXvcj37w==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.19,227,1754982000"; 
-   d="scan'208";a="181369859"
+   d="scan'208";a="181369878"
 Received: from vkasired-desk2.fm.intel.com ([10.105.128.132])
-  by orviesa009-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Oct 2025 00:13:57 -0700
+  by orviesa009-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Oct 2025 00:13:58 -0700
 From: Vivek Kasireddy <vivek.kasireddy@intel.com>
 To: dri-devel@lists.freedesktop.org,
 	intel-xe@lists.freedesktop.org,
 	linux-media@vger.kernel.org,
 	linaro-mm-sig@lists.linaro.org
-Cc: Vivek Kasireddy <vivek.kasireddy@intel.com>,
-	Jason Gunthorpe <jgg@nvidia.com>,
-	Christian Koenig <christian.koenig@amd.com>,
-	Sumit Semwal <sumit.semwal@linaro.org>,
-	=?UTF-8?q?Thomas=20Hellstr=C3=B6m?= <thomas.hellstrom@linux.intel.com>,
-	Simona Vetter <simona.vetter@ffwll.ch>
-Subject: [RFC 3/8] dma-buf: Add support for IOV interconnect
-Date: Tue, 14 Oct 2025 00:08:53 -0700
-Message-ID: <20251014071243.811884-4-vivek.kasireddy@intel.com>
+Cc: Vivek Kasireddy <vivek.kasireddy@intel.com>
+Subject: [RFC 8/8] drm/xe/pt: Add an additional check for dmabuf BOs while doing bind
+Date: Tue, 14 Oct 2025 00:08:58 -0700
+Message-ID: <20251014071243.811884-9-vivek.kasireddy@intel.com>
 X-Mailer: git-send-email 2.50.1
 In-Reply-To: <20251014071243.811884-1-vivek.kasireddy@intel.com>
 References: <20251014071243.811884-1-vivek.kasireddy@intel.com>
@@ -66,67 +61,51 @@ List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-The IOV interconnect is a virtual interconnect between an SRIOV
-physical function (PF) and its virtual functions (VFs). In order
-for negotiation (or match) to succeed, the exporter is expected
-to be a VF while the importer is expected to be the PF.
+If a BO's is_devmem_external flag is set, it means that it is an
+imported dmabuf BO that has a backing store in VRAM. Therefore, in
+this case, need to iterate over its dma_addr array.
 
-Cc: Jason Gunthorpe <jgg@nvidia.com>
-Cc: Christian Koenig <christian.koenig@amd.com>
-Cc: Sumit Semwal <sumit.semwal@linaro.org>
-Cc: Thomas Hellström <thomas.hellstrom@linux.intel.com>
-Cc: Simona Vetter <simona.vetter@ffwll.ch>
+v2:
+- Use a cursor to iterate over the entries in the dma_addr array
+  instead of relying on SG iterator (Matt)
+
+v3:
+- Since XE_PPGTT_PTE_DM is added to the PTE flags in all cases,
+  remove the bo->is_devmem_external check added in v2
+
 Signed-off-by: Vivek Kasireddy <vivek.kasireddy@intel.com>
 ---
- include/linux/dma-buf-interconnect.h | 16 ++++++++++++++++
- 1 file changed, 16 insertions(+)
+ drivers/gpu/drm/xe/xe_pt.c | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
-diff --git a/include/linux/dma-buf-interconnect.h b/include/linux/dma-buf-interconnect.h
-index a72f65ed4806..b569dcab86ce 100644
---- a/include/linux/dma-buf-interconnect.h
-+++ b/include/linux/dma-buf-interconnect.h
-@@ -3,8 +3,17 @@
- #ifndef __DMA_BUF_INTERCONNECT_H__
- #define __DMA_BUF_INTERCONNECT_H__
+diff --git a/drivers/gpu/drm/xe/xe_pt.c b/drivers/gpu/drm/xe/xe_pt.c
+index a1c88f9a6c76..5cc3775a3a12 100644
+--- a/drivers/gpu/drm/xe/xe_pt.c
++++ b/drivers/gpu/drm/xe/xe_pt.c
+@@ -759,6 +759,10 @@ xe_pt_stage_bind(struct xe_tile *tile, struct xe_vma *vma,
  
-+#include <linux/pci.h>
- #include <linux/xarray.h>
- 
-+#define CREATE_IOV_INTERCONNECT(pdev, bar) {		\
-+	&(const struct dma_buf_iov_interconnect) {	\
-+		.base.type = DMA_BUF_INTERCONNECT_IOV,	\
-+		.pdev = (pdev),				\
-+		.bar = (bar),				\
-+	}.base						\
-+}
+ 	xe_walk.default_vram_pte |= XE_PPGTT_PTE_DM;
+ 	xe_walk.dma_offset = bo ? vram_region_gpu_offset(bo->ttm.resource) : 0;
 +
- struct dma_buf_attachment;
- 
- struct dma_buf_ranges {
-@@ -14,6 +23,7 @@ struct dma_buf_ranges {
- 
- enum dma_buf_interconnect_type {
- 	DMA_BUF_INTERCONNECT_NONE = 0,
-+	DMA_BUF_INTERCONNECT_IOV,
- };
- 
- struct dma_buf_interconnect {
-@@ -24,6 +34,12 @@ struct dma_buf_interconnect_match {
- 	const struct dma_buf_interconnect *interconnect;
- };
- 
-+struct dma_buf_iov_interconnect {
-+	struct dma_buf_interconnect base;
-+	struct pci_dev *pdev;
-+	unsigned int bar;
-+};
++	if (bo && bo->is_devmem_external)
++		xe_walk.dma_offset = 0;
 +
- struct dma_buf_interconnect_ops {
- 	int (*map_interconnect)(struct dma_buf_attachment *attach,
- 				struct dma_buf_ranges *ranges);
+ 	if (!range)
+ 		xe_bo_assert_held(bo);
+ 
+@@ -769,6 +773,10 @@ xe_pt_stage_bind(struct xe_tile *tile, struct xe_vma *vma,
+ 		else if (xe_bo_is_vram(bo) || xe_bo_is_stolen(bo))
+ 			xe_res_first(bo->ttm.resource, xe_vma_bo_offset(vma),
+ 				     xe_vma_size(vma), &curs);
++		else if (bo && bo->is_devmem_external)
++			xe_res_first_dma(bo->dma_data.dma_addr,
++					 xe_vma_bo_offset(vma),
++					 xe_vma_size(vma), &curs);
+ 		else
+ 			xe_res_first_sg(xe_bo_sg(bo), xe_vma_bo_offset(vma),
+ 					xe_vma_size(vma), &curs);
 -- 
 2.50.1
 
