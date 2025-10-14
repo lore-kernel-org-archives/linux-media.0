@@ -1,226 +1,251 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B09F719F135;
-	Tue, 14 Oct 2025 12:53:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2F79B1AA7A6;
+	Tue, 14 Oct 2025 13:02:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760446384; cv=none; b=TVnDAcXOTmhQPZqzcz9ctNsQONX5+yveTUn94w5n1pTL7xQyDOVrJfpAkC7PwpTlNQOiFr/K7AJGztBirNfdQzzFnoA8EM25QJOj11NPDiQpfyelLm/Qv6ouRL9Hc8q+lC5QR8N9hvC7fwbepIRoAJ5jYtFtUTtUOQCuTarux2Y=
+	t=1760446966; cv=none; b=SFUS2/yOgxABT5VeCZc3PAi2cvpJWy+MdUsNkJmP+ukC4mRnb865k1iDJwv7VAFEWdeRelW75QMNCEdIK+6PeHf5ySDvHq281+dfzpznOc4joQmupprKFoA8758FLoCvqjYpVV7SWsS69lsbiWKBRnjq1E5MjvHVS0ArsPD5nCE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760446384; c=relaxed/simple;
-	bh=3GR/5lTiZpzFVFt2Z1xJkc1y4Tls8IQavDcFRWUvTRc=;
-	h=Message-ID:Date:MIME-Version:From:Subject:To:Cc:References:
-	 In-Reply-To:Content-Type; b=byg8ZJNcKWbthBLII1PFc/886M3lH5WbNaqhwqFMP4zDSIE2DPHcJLjJ10hOYYcSbq3iYRCWRzLWgi4jltY3MhU/TrGiWjjTjLvZ0eA9dd2mKWKpAjnYwkfjL2Tmr7xwbZ/ZG9QPmaUU/uqW1XhaRD9lFcGQV5CVuutRcC7e9ok=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PhVslwbw; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1760446966; c=relaxed/simple;
+	bh=hXryTLF8q4y9elXCJ9ilK+iRM0tSIZ+XhIIktNp3FKA=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=SpCoaMWhd9BXx49FxGH+HVluw89k4VpcBqHK1FydT9QP8zLQwwkSYeK7OhkKjxUgBAaonxZpu/xCGoBsdWQ8PBZhu7vTt4/OPHhYauNyeoOPw3D/8zVrJoGnSQ6yr9GuEgTBDBe7yBgIZfwE4OeM71YM3pCqDmy64TUB9/4PudE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=QP+jxGCT; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PhVslwbw"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DA73DC4CEE7;
-	Tue, 14 Oct 2025 12:53:02 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="QP+jxGCT"
+Received: by smtp.kernel.org (Postfix) with ESMTPS id BF32BC113D0;
+	Tue, 14 Oct 2025 13:02:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1760446384;
-	bh=3GR/5lTiZpzFVFt2Z1xJkc1y4Tls8IQavDcFRWUvTRc=;
-	h=Date:From:Subject:To:Cc:References:In-Reply-To:From;
-	b=PhVslwbwgYifj4TIVXipJqxqzCyBnRxQoMTQEtIrZNOMTYC5cYVPAp09chqJHy8Hw
-	 bWPh7v/B0uN9wjnh5pbl97WEpIiuDOfEU/dZJivv6Im3lUEHYygQIdShsu1H8jQSz5
-	 hxpvviXxGu2hP/YOuJwMTsaIZQimcBjeXJeu+2MepaJwWMuqi61xt8ID0eN/qrYvan
-	 SPpVWHBNbITy0pwyzLHRIjhTeNvtM+TGa8bkUVd/OCVeHT5426N4DRJTITqWWvt4aX
-	 vCb9GTfxcW1oDcRGI6PSeGbFF5CgrbTWGWU7iXXh/VYJjhiHvJm7mQRu3nFPepM1Lm
-	 ZTLCaE97Vd1SQ==
-Message-ID: <54a970ec-6c06-4544-babb-7ad30a011ad9@kernel.org>
-Date: Tue, 14 Oct 2025 14:53:01 +0200
+	s=k20201202; t=1760446965;
+	bh=hXryTLF8q4y9elXCJ9ilK+iRM0tSIZ+XhIIktNp3FKA=;
+	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To:From;
+	b=QP+jxGCTf6NNkMd/LvINqkSbT8hKmKDbSTdEaqX/Cub2N1BRRQ0hko+J4YqqmIlYu
+	 0TYXeKMrAmlW0tVHkiYJRVKrYJhE2Xes1KQea4KyAGRxlSmH/QSBquOmN9RFS92zRV
+	 DGrkqwntQxCFLMWAQdkq/N95XwbIhdbYZF7+pNxgXhdrEg11HFfih0JLV7MBmlefb6
+	 Xw5MLmZqhTePYsDMa/6yteGvjwPdPjhDjFyEVUBM4VFTl+LBu5vmNdtEkCHQoz3CGR
+	 D/juyEFJVJG+Gz2sKunUeweE3Yzqf+6LsDkg64Q3RHdp6w4X8Uhtx7obKvKvtIai5k
+	 LZDE3btdAzh+Q==
+Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A9F8DCCD184;
+	Tue, 14 Oct 2025 13:02:45 +0000 (UTC)
+From: Michael Riesch via B4 Relay <devnull+michael.riesch.collabora.com@kernel.org>
+Date: Tue, 14 Oct 2025 15:01:47 +0200
+Subject: [PATCH v12 01/18] Documentation: admin-guide: media: add rockchip
+ camera interface
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-From: Hans Verkuil <hverkuil+cisco@kernel.org>
-Subject: Re: [PATCH v4 1/2] media: cx18: Fix invalid access to file *
-To: Jacopo Mondi <jacopo.mondi@ideasonboard.com>,
- Andy Walls <awalls@md.metrocast.net>,
- Mauro Carvalho Chehab <mchehab@kernel.org>,
- Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>
-Cc: Dan Carpenter <dan.carpenter@linaro.org>, stable@vger.kernel.org,
- linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20250819-cx18-v4l2-fh-v4-0-9db1635d6787@ideasonboard.com>
- <20250819-cx18-v4l2-fh-v4-1-9db1635d6787@ideasonboard.com>
-Content-Language: en-US, nl
-In-Reply-To: <20250819-cx18-v4l2-fh-v4-1-9db1635d6787@ideasonboard.com>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
+Message-Id: <20240220-rk3568-vicap-v12-1-c6dbece6bb98@collabora.com>
+References: <20240220-rk3568-vicap-v12-0-c6dbece6bb98@collabora.com>
+In-Reply-To: <20240220-rk3568-vicap-v12-0-c6dbece6bb98@collabora.com>
+To: Mehdi Djait <mehdi.djait@linux.intel.com>, 
+ Maxime Chevallier <maxime.chevallier@bootlin.com>, 
+ =?utf-8?q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>, 
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>, 
+ Gerald Loacker <gerald.loacker@wolfvision.net>, 
+ Bryan O'Donoghue <bryan.odonoghue@linaro.org>, 
+ Markus Elfring <Markus.Elfring@web.de>, 
+ Laurent Pinchart <laurent.pinchart@ideasonboard.com>, 
+ Mauro Carvalho Chehab <mchehab@kernel.org>, 
+ Rob Herring <robh+dt@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+ Conor Dooley <conor+dt@kernel.org>, Heiko Stuebner <heiko@sntech.de>, 
+ Kever Yang <kever.yang@rock-chips.com>, 
+ Nicolas Dufresne <nicolas.dufresne@collabora.com>, 
+ Sebastian Reichel <sebastian.reichel@collabora.com>, 
+ Collabora Kernel Team <kernel@collabora.com>, 
+ Paul Kocialkowski <paulk@sys-base.io>, 
+ Alexander Shiyan <eagle.alexander923@gmail.com>, 
+ Val Packett <val@packett.cool>, Rob Herring <robh@kernel.org>, 
+ Philipp Zabel <p.zabel@pengutronix.de>, 
+ Sakari Ailus <sakari.ailus@linux.intel.com>
+Cc: linux-media@vger.kernel.org, devicetree@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+ linux-rockchip@lists.infradead.org, 
+ Michael Riesch <michael.riesch@collabora.com>, 
+ Michael Riesch <michael.riesch@collabora.com>
+X-Mailer: b4 0.12.0
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1760446963; l=7244;
+ i=michael.riesch@collabora.com; s=20250410; h=from:subject:message-id;
+ bh=weR2XLDhr0Y9vmX8tmMM8NPOkUIjnZIPDkW5+rbOIus=;
+ b=SQymRTY9qGJzRFmie2nzw36zEd9j23TQaMJdtzmKbIg8wbiTNYFLYiXj1YbvgCmnQdvq95Sp2
+ Wz+dkf+GTiFDtCykOLGKonPa22st46+b2g4al6j8goEldcGPd7FhiS8
+X-Developer-Key: i=michael.riesch@collabora.com; a=ed25519;
+ pk=+MWX1fffLFZtTPG/I6XdYm/+OSvpRE8D9evQaWbiN04=
+X-Endpoint-Received: by B4 Relay for michael.riesch@collabora.com/20250410
+ with auth_id=371
+X-Original-From: Michael Riesch <michael.riesch@collabora.com>
+Reply-To: michael.riesch@collabora.com
 
-On 19/08/2025 09:07, Jacopo Mondi wrote:
-> Sice commit 7b9eb53e8591 ("media: cx18: Access v4l2_fh from file")
-> all ioctl handlers have been ported to operate on the file * first
-> function argument.
-> 
-> The cx18 DVB layer calls cx18_init_on_first_open() when the driver needs
-> to start streaming. This function calls the s_input(), s_std() and
-> s_frequency() ioctl handlers directly, but being called from the driver
-> context, it doesn't have a valid file * to pass them. This causes
-> the ioctl handlers to deference an invalid pointer.
-> 
-> Fix this by moving the implementation of those ioctls to functions that
-> take a cx18 pointer instead of a file pointer, and turn the V4L2 ioctl
-> handlers into wrappers that get the cx18 from the file. When calling
-> from cx18_init_on_first_open(), pass the cx18 pointer directly. This
-> allows removing the fake fh in cx18_init_on_first_open().
-> 
-> The bug has been reported by Smatch:
-> 
-> --> 1223         cx18_s_input(NULL, &fh, video_input);
-> The patch adds a new dereference of "file" but some of the callers pass a
-> NULL pointer.
-> 
-> Reported-by: Dan Carpenter <dan.carpenter@linaro.org>
-> Closes: https://lore.kernel.org/all/aKL4OMWsESUdX8KQ@stanley.mountain/
-> Fixes: 7b9eb53e8591 ("media: cx18: Access v4l2_fh from file")
-> Cc: stable@vger.kernel.org
-> Link: https://lore.kernel.org/stable/20250818-cx18-v4l2-fh-v1-1-6fe153760bce%40ideasonboard.com
-> Reviewed-by: Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>
-> Signed-off-by: Jacopo Mondi <jacopo.mondi@ideasonboard.com>
+From: Michael Riesch <michael.riesch@collabora.com>
 
-Tested-by: Hans Verkuil <hverkuil+cisco@kernel.org>
+Add a document that describes the different variants of the Rockchip
+Camera Interface (CIF), their hardware layout, as well as their
+representation in the media controller centric rkcif device driver,
+which is located under drivers/media/platform/rockchip/rkcif.
 
-Regards,
+Reviewed-by: Heiko Stuebner <heiko@sntech.de>
+Signed-off-by: Michael Riesch <michael.riesch@collabora.com>
+---
+ .../admin-guide/media/rkcif-rk3568-vicap.dot       | 21 ++++++
+ Documentation/admin-guide/media/rkcif.rst          | 83 ++++++++++++++++++++++
+ Documentation/admin-guide/media/v4l-drivers.rst    |  1 +
+ MAINTAINERS                                        |  7 ++
+ 4 files changed, 112 insertions(+)
 
-	Hans
+diff --git a/Documentation/admin-guide/media/rkcif-rk3568-vicap.dot b/Documentation/admin-guide/media/rkcif-rk3568-vicap.dot
+new file mode 100644
+index 000000000000..02340135a2ac
+--- /dev/null
++++ b/Documentation/admin-guide/media/rkcif-rk3568-vicap.dot
+@@ -0,0 +1,21 @@
++digraph board {
++        rankdir=TB
++        n00000001 [label="{{<port0> 0} | rkcif-dvp0\n/dev/v4l-subdev0 | {<port1> 1}}", shape=Mrecord, style=filled, fillcolor=green]
++        n00000001:port1 -> n00000004
++        n00000004 [label="rkcif-dvp0-id0\n/dev/video0", shape=box, style=filled, fillcolor=yellow]
++        n0000000a [label="{{<port0> 0} | rkcif-mipi0\n/dev/v4l-subdev1 | {<port1> 1}}", shape=Mrecord, style=filled, fillcolor=green]
++        n0000000a:port1 -> n0000000d
++        n0000000a:port1 -> n00000013 [style=dashed]
++        n0000000a:port1 -> n00000019 [style=dashed]
++        n0000000a:port1 -> n0000001f [style=dashed]
++        n0000000d [label="rkcif-mipi0-id0\n/dev/video1", shape=box, style=filled, fillcolor=yellow]
++        n00000013 [label="rkcif-mipi0-id1\n/dev/video2", shape=box, style=filled, fillcolor=yellow]
++        n00000019 [label="rkcif-mipi0-id2\n/dev/video3", shape=box, style=filled, fillcolor=yellow]
++        n0000001f [label="rkcif-mipi0-id3\n/dev/video4", shape=box, style=filled, fillcolor=yellow]
++        n00000025 [label="{{} | it6801 2-0048\n/dev/v4l-subdev2 | {<port0> 0}}", shape=Mrecord, style=filled, fillcolor=green]
++        n00000025:port0 -> n00000001:port0
++        n00000029 [label="{{<port0> 0} | rockchip-mipi-csi fdfb0000.csi\n/dev/v4l-subdev3 | {<port1> 1}}", shape=Mrecord, style=filled, fillcolor=green]
++        n00000029:port1 -> n0000000a:port0
++        n0000002e [label="{{} | imx415 4-001a\n/dev/v4l-subdev4 | {<port0> 0}}", shape=Mrecord, style=filled, fillcolor=green]
++        n0000002e:port0 -> n00000029:port0
++}
+diff --git a/Documentation/admin-guide/media/rkcif.rst b/Documentation/admin-guide/media/rkcif.rst
+new file mode 100644
+index 000000000000..f35f644a54a0
+--- /dev/null
++++ b/Documentation/admin-guide/media/rkcif.rst
+@@ -0,0 +1,83 @@
++.. SPDX-License-Identifier: GPL-2.0
++
++=========================================
++Rockchip Camera Interface (CIF)
++=========================================
++
++Introduction
++============
++
++The Rockchip Camera Interface (CIF) is featured in many Rockchip SoCs in
++different variants.
++The different variants are combinations of common building blocks, such as
++
++* INTERFACE blocks of different types, namely
++
++  * the Digital Video Port (DVP, a parallel data interface)
++  * the interface block for the MIPI CSI-2 receiver
++
++* CROP units
++
++* MIPI CSI-2 receiver (not available on all variants): This unit is referred
++  to as MIPI CSI HOST in the Rockchip documentation.
++  Technically, it is a separate hardware block, but it is strongly coupled to
++  the CIF and therefore included here.
++
++* MUX units (not available on all variants) that pass the video data to an
++  image signal processor (ISP)
++
++* SCALE units (not available on all variants)
++
++* DMA engines that transfer video data into system memory using a
++  double-buffering mechanism called ping-pong mode
++
++* Support for four streams per INTERFACE block (not available on all
++  variants), e.g., for MIPI CSI-2 Virtual Channels (VCs)
++
++This document describes the different variants of the CIF, their hardware
++layout, as well as their representation in the media controller centric rkcif
++device driver, which is located under drivers/media/platform/rockchip/rkcif.
++
++Variants
++========
++
++Rockchip PX30 Video Input Processor (VIP)
++-----------------------------------------
++
++The PX30 Video Input Processor (VIP) features a digital video port that accepts
++parallel video data or BT.656.
++Since these protocols do not feature multiple streams, the VIP has one DMA
++engine that transfers the input video data into system memory.
++
++The rkcif driver represents this hardware variant by exposing one V4L2 subdevice
++(the DVP INTERFACE/CROP block) and one V4L2 device (the DVP DMA engine).
++
++Rockchip RK3568 Video Capture (VICAP)
++-------------------------------------
++
++The RK3568 Video Capture (VICAP) unit features a digital video port and a MIPI
++CSI-2 receiver that can receive video data independently.
++The DVP accepts parallel video data, BT.656 and BT.1120.
++Since the BT.1120 protocol may feature more than one stream, the RK3568 VICAP
++DVP features four DMA engines that can capture different streams.
++Similarly, the RK3568 VICAP MIPI CSI-2 receiver features four DMA engines to
++handle different Virtual Channels (VCs).
++
++The rkcif driver represents this hardware variant by exposing up to three V4L2
++subdevices:
++
++* rkcif-dvp0: INTERFACE/CROP block for the DVP
++* rockchip-mipi-csi fdfb0000.csi: MIPI CSI-2 receiver
++* rkcif-mipi0: INTERFACE/CROP block for the MIPI CSI-2 receiver
++
++and up to five V4L2 devices:
++
++* rkcif-dvp0-id0: The support for multiple streams on the DVP is not yet
++  implemented, as it is hard to find test hardware. Thus, this video device
++  represents the first DMA engine of the RK3568 DVP.
++* rkcif-mipi0-id[0...3]: The four DMA engines of the RK3568 MIPI CSI-2
++  receiver. Each DMA engine can capture a certain MIPI CSI-2 Virtual Channel.
++
++.. kernel-figure:: rkcif-rk3568-vicap.dot
++    :alt:   Topology of the RK3568 Video Capture (VICAP) unit
++    :align: center
+diff --git a/Documentation/admin-guide/media/v4l-drivers.rst b/Documentation/admin-guide/media/v4l-drivers.rst
+index 3bac5165b134..694fad685ff5 100644
+--- a/Documentation/admin-guide/media/v4l-drivers.rst
++++ b/Documentation/admin-guide/media/v4l-drivers.rst
+@@ -25,6 +25,7 @@ Video4Linux (V4L) driver-specific documentation
+ 	qcom_camss
+ 	raspberrypi-pisp-be
+ 	rcar-fdp1
++	rkcif
+ 	rkisp1
+ 	raspberrypi-rp1-cfe
+ 	saa7134
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 46126ce2f968..3f9fbb5d73da 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -22210,6 +22210,13 @@ S:	Maintained
+ F:	Documentation/devicetree/bindings/net/can/rockchip,rk3568v2-canfd.yaml
+ F:	drivers/net/can/rockchip/
+ 
++ROCKCHIP CAMERA INTERFACE (RKCIF) DRIVER
++M:	Mehdi Djait <mehdi.djait@linux.intel.com>
++M:	Michael Riesch <michael.riesch@collabora.com>
++L:	linux-media@vger.kernel.org
++S:	Maintained
++F:	Documentation/admin-guide/media/rkcif*
++
+ ROCKCHIP CRYPTO DRIVERS
+ M:	Corentin Labbe <clabbe@baylibre.com>
+ L:	linux-crypto@vger.kernel.org
 
-> ---
->  drivers/media/pci/cx18/cx18-driver.c |  9 +++------
->  drivers/media/pci/cx18/cx18-ioctl.c  | 30 +++++++++++++++++++-----------
->  drivers/media/pci/cx18/cx18-ioctl.h  |  8 +++++---
->  3 files changed, 27 insertions(+), 20 deletions(-)
-> 
-> diff --git a/drivers/media/pci/cx18/cx18-driver.c b/drivers/media/pci/cx18/cx18-driver.c
-> index 743fcc9613744bfc1edeffc51e908fe88520405a..cd84dfcefcf971a7adb9aac2bafb9089dbe0f33f 100644
-> --- a/drivers/media/pci/cx18/cx18-driver.c
-> +++ b/drivers/media/pci/cx18/cx18-driver.c
-> @@ -1136,11 +1136,8 @@ int cx18_init_on_first_open(struct cx18 *cx)
->  	int video_input;
->  	int fw_retry_count = 3;
->  	struct v4l2_frequency vf;
-> -	struct cx18_open_id fh;
->  	v4l2_std_id std;
->  
-> -	fh.cx = cx;
-> -
->  	if (test_bit(CX18_F_I_FAILED, &cx->i_flags))
->  		return -ENXIO;
->  
-> @@ -1220,14 +1217,14 @@ int cx18_init_on_first_open(struct cx18 *cx)
->  
->  	video_input = cx->active_input;
->  	cx->active_input++;	/* Force update of input */
-> -	cx18_s_input(NULL, &fh, video_input);
-> +	cx18_do_s_input(cx, video_input);
->  
->  	/* Let the VIDIOC_S_STD ioctl do all the work, keeps the code
->  	   in one place. */
->  	cx->std++;		/* Force full standard initialization */
->  	std = (cx->tuner_std == V4L2_STD_ALL) ? V4L2_STD_NTSC_M : cx->tuner_std;
-> -	cx18_s_std(NULL, &fh, std);
-> -	cx18_s_frequency(NULL, &fh, &vf);
-> +	cx18_do_s_std(cx, std);
-> +	cx18_do_s_frequency(cx, &vf);
->  	return 0;
->  }
->  
-> diff --git a/drivers/media/pci/cx18/cx18-ioctl.c b/drivers/media/pci/cx18/cx18-ioctl.c
-> index bf16d36448f888d9326b5f4a8f9c8f0e13d0c3a1..6e869c43cbd520feb720a71d8eb2dd60c05b0ae9 100644
-> --- a/drivers/media/pci/cx18/cx18-ioctl.c
-> +++ b/drivers/media/pci/cx18/cx18-ioctl.c
-> @@ -521,10 +521,8 @@ static int cx18_g_input(struct file *file, void *fh, unsigned int *i)
->  	return 0;
->  }
->  
-> -int cx18_s_input(struct file *file, void *fh, unsigned int inp)
-> +int cx18_do_s_input(struct cx18 *cx, unsigned int inp)
->  {
-> -	struct cx18_open_id *id = file2id(file);
-> -	struct cx18 *cx = id->cx;
->  	v4l2_std_id std = V4L2_STD_ALL;
->  	const struct cx18_card_video_input *card_input =
->  				cx->card->video_inputs + inp;
-> @@ -558,6 +556,11 @@ int cx18_s_input(struct file *file, void *fh, unsigned int inp)
->  	return 0;
->  }
->  
-> +static int cx18_s_input(struct file *file, void *fh, unsigned int inp)
-> +{
-> +	return cx18_do_s_input(file2id(file)->cx, inp);
-> +}
-> +
->  static int cx18_g_frequency(struct file *file, void *fh,
->  				struct v4l2_frequency *vf)
->  {
-> @@ -570,11 +573,8 @@ static int cx18_g_frequency(struct file *file, void *fh,
->  	return 0;
->  }
->  
-> -int cx18_s_frequency(struct file *file, void *fh, const struct v4l2_frequency *vf)
-> +int cx18_do_s_frequency(struct cx18 *cx, const struct v4l2_frequency *vf)
->  {
-> -	struct cx18_open_id *id = file2id(file);
-> -	struct cx18 *cx = id->cx;
-> -
->  	if (vf->tuner != 0)
->  		return -EINVAL;
->  
-> @@ -585,6 +585,12 @@ int cx18_s_frequency(struct file *file, void *fh, const struct v4l2_frequency *v
->  	return 0;
->  }
->  
-> +static int cx18_s_frequency(struct file *file, void *fh,
-> +			    const struct v4l2_frequency *vf)
-> +{
-> +	return cx18_do_s_frequency(file2id(file)->cx, vf);
-> +}
-> +
->  static int cx18_g_std(struct file *file, void *fh, v4l2_std_id *std)
->  {
->  	struct cx18 *cx = file2id(file)->cx;
-> @@ -593,11 +599,8 @@ static int cx18_g_std(struct file *file, void *fh, v4l2_std_id *std)
->  	return 0;
->  }
->  
-> -int cx18_s_std(struct file *file, void *fh, v4l2_std_id std)
-> +int cx18_do_s_std(struct cx18 *cx, v4l2_std_id std)
->  {
-> -	struct cx18_open_id *id = file2id(file);
-> -	struct cx18 *cx = id->cx;
-> -
->  	if ((std & V4L2_STD_ALL) == 0)
->  		return -EINVAL;
->  
-> @@ -642,6 +645,11 @@ int cx18_s_std(struct file *file, void *fh, v4l2_std_id std)
->  	return 0;
->  }
->  
-> +static int cx18_s_std(struct file *file, void *fh, v4l2_std_id std)
-> +{
-> +	return cx18_do_s_std(file2id(file)->cx, std);
-> +}
-> +
->  static int cx18_s_tuner(struct file *file, void *fh, const struct v4l2_tuner *vt)
->  {
->  	struct cx18_open_id *id = file2id(file);
-> diff --git a/drivers/media/pci/cx18/cx18-ioctl.h b/drivers/media/pci/cx18/cx18-ioctl.h
-> index 221e2400fb3e2d817eaff7515fa89eb94f2d7f8a..7a42ac99312ab6502e1abe4f3d5c88c9c7f144f3 100644
-> --- a/drivers/media/pci/cx18/cx18-ioctl.h
-> +++ b/drivers/media/pci/cx18/cx18-ioctl.h
-> @@ -12,6 +12,8 @@ u16 cx18_service2vbi(int type);
->  void cx18_expand_service_set(struct v4l2_sliced_vbi_format *fmt, int is_pal);
->  u16 cx18_get_service_set(struct v4l2_sliced_vbi_format *fmt);
->  void cx18_set_funcs(struct video_device *vdev);
-> -int cx18_s_std(struct file *file, void *fh, v4l2_std_id std);
-> -int cx18_s_frequency(struct file *file, void *fh, const struct v4l2_frequency *vf);
-> -int cx18_s_input(struct file *file, void *fh, unsigned int inp);
-> +
-> +struct cx18;
-> +int cx18_do_s_std(struct cx18 *cx, v4l2_std_id std);
-> +int cx18_do_s_frequency(struct cx18 *cx, const struct v4l2_frequency *vf);
-> +int cx18_do_s_input(struct cx18 *cx, unsigned int inp);
-> 
+-- 
+2.39.5
+
 
