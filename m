@@ -1,38 +1,37 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 02DD82DCBF1;
-	Wed, 15 Oct 2025 14:56:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F1A5D2DC786;
+	Wed, 15 Oct 2025 14:56:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760540189; cv=none; b=XvsS31sD90murZvE2VXS50myK0lzLtfBkB3cCF+uGnO6sPRqWtj2XMlbuPGaz/nIumJZGHTGlq/twNN1TFU+0vmJar3ZU4WjfV3iGAk3a9ZzOcPTstkWtpaJymSLlzGXk2DIvD17DjKwByiDVAtbX4sHbYEMs/oEc+E67hKy/Lk=
+	t=1760540189; cv=none; b=Dzue2V1YhOndpfZ6nfa4pEh4zz2hzM8N/OJRuEz12ylwasyCi82ssr3IhEstVaszsdlU69mIJ2Q84mieWn2llHc+jVoCY6uzJ39CYzD60GHW4S7od6yaLDWAWaXWnhhLQwzvmq9Nj4ONpblsP8pyUJE2EfhQUsoHSrccODf2Qt4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1760540189; c=relaxed/simple;
-	bh=Zl4Mel46TcR7AjpUnvtEjIgKxbaBwJflcYSmq34rCyA=;
+	bh=vLqmAyKjYnSxPuih1KbKHGxXfnvwRJyOtYPRYAVnluo=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=Qvi4viTZwJluHFQpbvV+2TkFvyzmw07UmHdArysiVFHOZ5Xq/KJPW+UdZ1iVpfJLxr3kHuwsnx71TR3lJueuVVuagmbSNnnpBMlpvKTrdJyPFnywC4jPD4qiRxt+JJpyaByj4Z2GtcMPsmp7FoTnGx8FgUA/6suo/esaHtRoYnE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=sIl5nM2b; arc=none smtp.client-ip=10.30.226.201
+	 In-Reply-To:To:Cc; b=NlpYx8FdBbIhGG/CcUeiZuSgD8Tg7nSg+3z9+dN0LjmiX+fLNQ2QyP0Qh5ZUVLk1hgCfE3MXs6er6NweJIaR3Q2kQIuvL1SCi5x+mWhlpe5NLn4ZqI/3NVfHvgWDob1C1hIb1+6MGE2E1s6tU1nNub00he40WTahOl0qtxZojwo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=iKwCRtTj; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="sIl5nM2b"
-Received: by smtp.kernel.org (Postfix) with ESMTPS id B5306C4DDE2;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="iKwCRtTj"
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 846AFC4AF16;
 	Wed, 15 Oct 2025 14:56:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1760540188;
-	bh=Zl4Mel46TcR7AjpUnvtEjIgKxbaBwJflcYSmq34rCyA=;
+	bh=vLqmAyKjYnSxPuih1KbKHGxXfnvwRJyOtYPRYAVnluo=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To:From;
-	b=sIl5nM2bvFE3k9vXW/3Utnz7ESxpyUbR46hQbDfckOVVmAg/pbXEgVzqXWrQmeoHJ
-	 I2eBT9Rl3R+X9BOyDrmG09YV6z3r53bJxIMV7JuasgBXd//HM4EbbJUP64zOmJ9QPo
-	 O6+DEsHmoG8JChZoDevBBnVuRTxEmV/OL5+L63Iz7Gjtak/Sa8+sIM3UrMv/LhpgfC
-	 vnPF7g6YSxolildhwmox6mv0v8vkMmowl+uBkxUxOceWWu7CPzoAhYf5aXYncKIBIA
-	 xFeroin9g0Uo/RaNH2vkr/t8SyClag/Sk1hL53Q0uZiyb5nUhp2UKk/SjvIuL+Qj5P
-	 0yMpGewiGQg6w==
+	b=iKwCRtTj3sYZ1jkgZby+sFYy8oszevXIWE72MQQIM/PkDN6TLEBaF7Mgxj7zMekm2
+	 +foAY9SLYs59uPUF2Jag6aQw+KgCDG+CyHADCU/6RJpUV5IIp4W1yHKwWPBnEUkXV5
+	 cfx1JY2i/PIgnAP05w3SxwgMBESAtfcAvRf8Y9zN0Rarm2EuCU7mpmAhrgQFT9rsEl
+	 PN+AaeXDIktx9iCBCv+urQihL7iDbWVYmCwGLIgPkzNv1N3ZOa/vhQmmsaqzB+igMy
+	 bgocEGxvO52J/H4ohwGJ2eI/SkDOv5v9YSMJwEHXvRXyQ7wpqfdnN1gLI8iMDGLpRy
+	 4wUzgYabshPEg==
 Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 96C4ECCD185;
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 68D5ACCD19B;
 	Wed, 15 Oct 2025 14:56:28 +0000 (UTC)
 From: Michael Riesch via B4 Relay <devnull+michael.riesch.collabora.com@kernel.org>
-Date: Wed, 15 Oct 2025 16:56:40 +0200
-Subject: [PATCH v13 17/18] arm64: dts: rockchip: enable vicap dvp on
- wolfvision pf5 io expander
+Date: Wed, 15 Oct 2025 16:56:38 +0200
+Subject: [PATCH v13 15/18] arm64: dts: rockchip: add vicap node to rk356x
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
@@ -41,7 +40,7 @@ List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20240220-rk3568-vicap-v13-17-da164b4918fe@collabora.com>
+Message-Id: <20240220-rk3568-vicap-v13-15-da164b4918fe@collabora.com>
 References: <20240220-rk3568-vicap-v13-0-da164b4918fe@collabora.com>
 In-Reply-To: <20240220-rk3568-vicap-v13-0-da164b4918fe@collabora.com>
 To: Mehdi Djait <mehdi.djait@linux.intel.com>, 
@@ -70,11 +69,11 @@ Cc: linux-media@vger.kernel.org, devicetree@vger.kernel.org,
  Michael Riesch <michael.riesch@collabora.com>, 
  Michael Riesch <michael.riesch@collabora.com>
 X-Mailer: b4 0.12.0
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1760540185; l=1721;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1760540185; l=2110;
  i=michael.riesch@collabora.com; s=20250410; h=from:subject:message-id;
- bh=0H9SWagLsWuudSJ0hjW87B9xG48FbT9CuvPeqAKM5fI=;
- b=kDk1Dhq5Tb8DcEUcG68xEmaT925yDwQqPcyUnRYnByNUmniDP/B7UvfljdgxxGUNZPieFnqzi
- RlrsZ60wFwmBIM1je3xM2ekkUD4yNA6Set5FXM2yh8aNLyiLDM+UBll
+ bh=XnBnweWDPvohHeSHcTLfE0vYknd29lIqeTB/2ETOjTQ=;
+ b=C4t4D1BX2O6irrHc85CU3VWktONgXsbJ8F/h7AnGGb/8B0JYbBcIINeJ1KnTIL8YycWyux//1
+ 7MC+RDGX2QfCNISyUiRSiw8hHXpt2Jkq7OZSnMKa8XRFbRYh7Tb54UX
 X-Developer-Key: i=michael.riesch@collabora.com; a=ed25519;
  pk=+MWX1fffLFZtTPG/I6XdYm/+OSvpRE8D9evQaWbiN04=
 X-Endpoint-Received: by B4 Relay for michael.riesch@collabora.com/20250410
@@ -84,55 +83,70 @@ Reply-To: michael.riesch@collabora.com
 
 From: Michael Riesch <michael.riesch@collabora.com>
 
-The Digital Video Port (DVP, the 16-bit variant) of the RK3568 VICAP
-is broken out to the PF5 mainboard expansion header.
-Enable it in the device tree overlay for the WolfVision PF5 IO
-Expander board.
+Add the device tree node for the RK356x Video Capture (VICAP) unit.
 
 Signed-off-by: Michael Riesch <michael.riesch@wolfvision.net>
-Reviewed-by: Gerald Loacker <gerald.loacker@wolfvision.net>
-Tested-by: Gerald Loacker <gerald.loacker@wolfvision.net>
 Reviewed-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
 Signed-off-by: Michael Riesch <michael.riesch@collabora.com>
 ---
- .../rockchip/rk3568-wolfvision-pf5-io-expander.dtso  | 20 ++++++++++++++++++++
- 1 file changed, 20 insertions(+)
+ arch/arm64/boot/dts/rockchip/rk356x-base.dtsi | 44 +++++++++++++++++++++++++++
+ 1 file changed, 44 insertions(+)
 
-diff --git a/arch/arm64/boot/dts/rockchip/rk3568-wolfvision-pf5-io-expander.dtso b/arch/arm64/boot/dts/rockchip/rk3568-wolfvision-pf5-io-expander.dtso
-index 048933de2943..8cfce71dd318 100644
---- a/arch/arm64/boot/dts/rockchip/rk3568-wolfvision-pf5-io-expander.dtso
-+++ b/arch/arm64/boot/dts/rockchip/rk3568-wolfvision-pf5-io-expander.dtso
-@@ -11,6 +11,7 @@
- #include <dt-bindings/clock/rk3568-cru.h>
- #include <dt-bindings/gpio/gpio.h>
- #include <dt-bindings/interrupt-controller/irq.h>
-+#include <dt-bindings/media/video-interfaces.h>
- #include <dt-bindings/pinctrl/rockchip.h>
+diff --git a/arch/arm64/boot/dts/rockchip/rk356x-base.dtsi b/arch/arm64/boot/dts/rockchip/rk356x-base.dtsi
+index fd2214b6fad4..e0e4dc85a3a9 100644
+--- a/arch/arm64/boot/dts/rockchip/rk356x-base.dtsi
++++ b/arch/arm64/boot/dts/rockchip/rk356x-base.dtsi
+@@ -564,6 +564,50 @@ gpu: gpu@fde60000 {
+ 		status = "disabled";
+ 	};
  
- &{/} {
-@@ -134,3 +135,22 @@ &usb2phy0_host {
- 	phy-supply = <&usb_host_vbus>;
- 	status = "okay";
- };
++	vicap: video-capture@fdfe0000 {
++		compatible = "rockchip,rk3568-vicap";
++		reg = <0x0 0xfdfe0000 0x0 0x200>;
++		interrupts = <GIC_SPI 146 IRQ_TYPE_LEVEL_HIGH>;
++		assigned-clocks = <&cru DCLK_VICAP>;
++		assigned-clock-rates = <300000000>;
++		clocks = <&cru ACLK_VICAP>, <&cru HCLK_VICAP>,
++			 <&cru DCLK_VICAP>, <&cru ICLK_VICAP_G>;
++		clock-names = "aclk", "hclk", "dclk", "iclk";
++		iommus = <&vicap_mmu>;
++		power-domains = <&power RK3568_PD_VI>;
++		resets = <&cru SRST_A_VICAP>, <&cru SRST_H_VICAP>,
++			 <&cru SRST_D_VICAP>, <&cru SRST_P_VICAP>,
++			 <&cru SRST_I_VICAP>;
++		reset-names = "arst", "hrst", "drst", "prst", "irst";
++		rockchip,grf = <&grf>;
++		status = "disabled";
 +
-+&vicap {
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&cif_clk &cif_dvp_clk &cif_dvp_bus16>;
-+	status = "okay";
-+};
++		ports {
++			#address-cells = <1>;
++			#size-cells = <0>;
 +
-+&vicap_dvp {
-+	vicap_dvp_input: endpoint {
-+		bus-type = <MEDIA_BUS_TYPE_BT656>;
-+		bus-width = <16>;
-+		pclk-sample = <MEDIA_PCLK_SAMPLE_DUAL_EDGE>;
-+		rockchip,dvp-clk-delay = <10>;
++			vicap_dvp: port@0 {
++				reg = <0>;
++			};
++
++			vicap_mipi: port@1 {
++				reg = <1>;
++			};
++		};
 +	};
-+};
 +
-+&vicap_mmu {
-+	status = "okay";
-+};
++	vicap_mmu: iommu@fdfe0800 {
++		compatible = "rockchip,rk3568-iommu";
++		reg = <0x0 0xfdfe0800 0x0 0x100>;
++		interrupts = <GIC_SPI 146 IRQ_TYPE_LEVEL_HIGH>;
++		clocks = <&cru ACLK_VICAP>, <&cru HCLK_VICAP>;
++		clock-names = "aclk", "iface";
++		#iommu-cells = <0>;
++		power-domains = <&power RK3568_PD_VI>;
++		rockchip,disable-mmu-reset;
++		status = "disabled";
++	};
++
+ 	vpu: video-codec@fdea0400 {
+ 		compatible = "rockchip,rk3568-vpu";
+ 		reg = <0x0 0xfdea0000 0x0 0x800>;
 
 -- 
 2.39.5
