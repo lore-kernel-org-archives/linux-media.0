@@ -1,236 +1,138 @@
-Received: from mail-ej1-f50.google.com (mail-ej1-f50.google.com [209.85.218.50])
+Received: from mail-ej1-f41.google.com (mail-ej1-f41.google.com [209.85.218.41])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D6D902E040B
-	for <linux-media@vger.kernel.org>; Wed, 15 Oct 2025 08:23:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DD4822DA743
+	for <linux-media@vger.kernel.org>; Wed, 15 Oct 2025 08:24:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760516636; cv=none; b=pMoy4r9TiFdj4w+olpwa4t6hFPuJLWfMhPmCLcMCoqOqA5RScrempX7CZck2Z0SNPe0e8D6W9A/2/uCUyY0LxFVGhAmHe1qRe0mJBiEuFoWcC6AuLVRKibBjultHqmK0h7pkSM5BJlbCdZ/cPdy6VxH102rSp94reyTWetIqWOg=
+	t=1760516667; cv=none; b=cmHSqdT6VogW3E+78W7z/eJ8oMvfBFft3EwXxlfcYpdPW1ffWP1WtK5l8epi618rBczNuxlzZEOxCzhovpqFsB9FdgLkXSmPL/fALjTGE9/4UW6j3j8PWMzE0Sonak6ZLm4/cJda9S5g7spUAcPpQDWlgLfUiNNZyfuB93W6fmw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760516636; c=relaxed/simple;
-	bh=L4v+wbz2Zpp087ZFicCGoOduYIcUD7gEgZ+FObJmfG0=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=oeUaprMZlMHQv/OrV8VFLXwYeobNtIqQJsh1zzEyLtimp3g7y8Q1x/kQpCUaaOWZ8XPwvkEB6mSRODQT3H5jEFp5JconCuRcRawXcjE0gcieKjwFZeyQlxG0Gz9otdeXVhzbFWWlaaRYWLpOowkN9p819Z4BFRp5mP3md0zag0c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=tPOndvGx; arc=none smtp.client-ip=209.85.218.50
+	s=arc-20240116; t=1760516667; c=relaxed/simple;
+	bh=KxWKmiu9Rjq1K6P3jRxYwsFZIUByeyZ59tHsbEg2yjE=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=hfZrYurkliYEEI4eHU2/65qliXTzgvHS+TN8dGiYHeu/hOOTg+QWE92wuv/B9yMjTtOcmFoH1HOzV8OqB9KOtaTSQswVlps4gIELseGJGyPx+FshJy9PtV/VhIJzMocdHJ3IshXF3hzFieIZgHNdBhLfzL4Jy/HqNmxehuo9wK8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=UWrYX04b; arc=none smtp.client-ip=209.85.218.41
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="tPOndvGx"
-Received: by mail-ej1-f50.google.com with SMTP id a640c23a62f3a-b48d8deafaeso1299349266b.1
-        for <linux-media@vger.kernel.org>; Wed, 15 Oct 2025 01:23:54 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="UWrYX04b"
+Received: by mail-ej1-f41.google.com with SMTP id a640c23a62f3a-b4f323cf89bso1124731666b.2
+        for <linux-media@vger.kernel.org>; Wed, 15 Oct 2025 01:24:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1760516633; x=1761121433; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=UxCnKzSY0s+V96p4DaVIhmKltF/rpU8DxvPCKFc7GWY=;
-        b=tPOndvGxk5RqaHiJZ5As/3Sb10NWYC6HFSo9NpaOwcO9Rvr2yWzfSIsorh/RVEP0AA
-         sDaFRQ+hvprUVI/aPjJyI0FzGztGmMc2GqN4KFIjmwDtrKkp6O7yh3zPmD3TbWtWA14n
-         ROmHGcARrXIusHPFMX5KHEIlbJtwp3iQJTtInJZF3cgpRqCN2t5YePs2R77t28oC6/58
-         i4F+iT5hBP2MUX1XmzSMYjBmUIVMPfbtxwodtn5c3+Y4w+QUPLw6V9DG7ESEvMuvQ7Di
-         tsD6DJ1bua0dshFrujD6cj84ic2slrlld144jUAopjtvKK31KZgD7Aa3sc8upFa1qZNL
-         +y5g==
+        d=linaro.org; s=google; t=1760516663; x=1761121463; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:content-language:from
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=TtE/vZEnFRO/O0aDzTmOM5exa4aoLNDYIYIf8N0xWSo=;
+        b=UWrYX04bzyITFxVRkRV21xGHmLGQ9ozgyijXXGsaZ6q9eOYagkQovXkZTCq+qrlyI1
+         DAD2pPpF7WHyPX/GVm4q4QBf0MR9/P0zu574oi+fzy5mUHsCVpahBeOYfalCftNgoS5S
+         7NvUxDi3jJcRQTOlLizX/1W+oQZn9G+qVLztGr6JN4CtpZrqQVsG7gEi67C6m5cw2f4X
+         Hp/CgEV8kYdOpFrx2ppjhh718rFr3x4F4J4cNBq+WEGYQ7WCF3Q0lRahC/QvnpD95NEn
+         0DJlPXYNUAiUpv/+hVN2zyurfYqaC0FwuKZAJdpKqKSARiFSk4r3ooV0UejoN//fIwSo
+         QqAA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1760516633; x=1761121433;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=UxCnKzSY0s+V96p4DaVIhmKltF/rpU8DxvPCKFc7GWY=;
-        b=ZOrL6mUbSzKT3VUHHBat6jlQhE5P5SvJNxw3cEYImpLF0JrMG+RM6n8dE7U4lfmGNa
-         EjIA+16Tf8EhZhAZlC33qOGLvVzNwPeWLXiVbMtB6/RpT8a/qqi+gm11O8NhA75lOrH5
-         mczLrZJdXSjnMnU9vxvRb7+WZ8zeIkFlHD/z2kbjoQ5QxF21wBW5zTlpgcHxHI9UjNjU
-         WYJdjUQu+rzHAgYW9rdEADaV7Ed1jC9yc829VJu9jPqHhARFEeThnd3bnDJ00e5umTDh
-         6B7sHT8erPj00x//QTKxs7Cy07QlRBklOLr/+sn64yZ+Xs00zqyAmwXrswnSPatIv9SL
-         JeHQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUf/9jPdYak5PgN2uctkxT9omISHxszKWcsgtKDSsFr/7wOrTghxUbDuQ+mUvaKyGq/aSqeHwvtVfE+kg==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yyt14OOD1sjdRkHL2VjLd2ZTOp4npYmghS3onPhajP1cO3mgpej
-	vwDhCAyszO2i6szLrxe6abgsmuPO2vF9bwhqefWUsrX+qeZxz0P54eUcNkkE91wpR350uGcaoAm
-	mZWiLnWkwKB8pK5s1XIxAr0K+1WGJOuOYuwwKviL46A==
-X-Gm-Gg: ASbGncvN9SbaYdeU/RtiVqdvP9CvDa01v6F1ktJiD2KiKEgQ2ELjKZrw3YONUr8XSkD
-	+ZnPqMJu5tqIkFY1lO/fXGNtg2VJGGqVu0EfyAJdrVXN6YFUrbm3cLZvDq2DkChdxt30185x9O0
-	VtrPuzjYFtNZJlO+HYLCJmsKQg0LwBnAVD5bMd42A8VGhcoE49bHaWuZG2TcgHx0fIkorVZSUgM
-	FZ7Brz/i4TeLbLA995JmzgCYCSFDEi/pxUsXnNoT/k1RgUHL8wPG6kKhByV02xZ
-X-Google-Smtp-Source: AGHT+IF6fAVbXX5F8RGBoYgvm1Rcu+YjAOh+2j+dceV3zwu5sKBKQXJ/9P1xM6qaFTcMjvhyJod16WrMFs6xq1ISgV0=
-X-Received: by 2002:a17:907:3cc9:b0:b2a:5fe5:87c7 with SMTP id
- a640c23a62f3a-b50aa48d5f8mr3002756066b.12.1760516633022; Wed, 15 Oct 2025
- 01:23:53 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1760516663; x=1761121463;
+        h=content-transfer-encoding:in-reply-to:content-language:from
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=TtE/vZEnFRO/O0aDzTmOM5exa4aoLNDYIYIf8N0xWSo=;
+        b=pC4afdstXxN9eTMxxYO54w116OYA3C9HmwtGNOF5cF0wXQELgGkUiv3eg9XiMQmnCD
+         Vr3ifkSKr66wkxQxPt4AqCsLt0T4pmdtn7c0qCurxg+mRqafA9J7/QvDUODy10u5kBop
+         9CBPnSA6p5XrPUkNCCMhBdM4r0II/EERkmR04UTk0Rr5Atuzu6M3WAddmZvcT4YK4ljV
+         4fg+OIpP16h0HnDd7WyMzcxFH0mA1sFh22tCgG6BW1sjCr+yas404VIl/tH+HWgV/lgr
+         paJP8VLKnQGm/x3/ElYbozaKvTBeQ2k7OwHOU4Z+iECybGYtL5Fr0NgaCkkgLgPIbkPn
+         mDGg==
+X-Forwarded-Encrypted: i=1; AJvYcCWTcJKggR1fVHErkxZEcOZnZsULLw1nk6yj7iP0+NO+w8A7+ECTnukjkQd1YvV0uiVkVrcLIRTKg7T84A==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx+O1Ti95D4YgPfWOe7yLLjlKvYx/KAaXDBj4vNOhX0vunb3ph5
+	CH5l+zOPH47RPhQQ0nI2QWp1htE+G0kZ4ogZFZ58T5oEK53qGED/6OqZTM5JBQCsOWQ=
+X-Gm-Gg: ASbGnct1w8U8PW2WrP5Uo9rdUHGwcO4bG21ld3+pwqzbW7hHUcFdLC5rGmrSZBBATo0
+	AACC8gMeuwsCnnk8ccRIY+0mPoznxcfnqrt8KnH7YIDQ9or+NDPbwiYxd6DsiaiE2ifAlI4/YcP
+	caJfGtd8nQgdl4UU25Aa+Cin2iybVdZHteHCiWwCs0k6OIkmg0GQYyDSfAT/fyVzmrrz2/noCdC
+	/nr5jR4pNkbsKlEomMMo0vqJjLqYAZUX9/dY+phEr0ZIU66ZWaD5CCmBwZdUeIO9NyecrPSuEK0
+	WXvjyLGA+IGmeKpJRsKEracmfvFe/p21hOdbt+yhzOXYYWElJeASXRC3etaJNF9NndNSPjQwRP3
+	L9fXQ5tG5zDp2W3CKkaeaDSP1wB0eTJosA57N83gFRSMeIMVhDjCXKO2JDszewJwZ0pFoijTvqy
+	eSpPnIZulBokMTzwoh173x/A==
+X-Google-Smtp-Source: AGHT+IGevrv/qqYOxvgpm3B6QvO6hWcybEKVbjZIiQDfLWE4gSlzL7mBitr4uu2g2PmlFXgFdhalWg==
+X-Received: by 2002:a17:907:934d:b0:b32:8943:7884 with SMTP id a640c23a62f3a-b50abfd6a1fmr2836258966b.45.1760516663245;
+        Wed, 15 Oct 2025 01:24:23 -0700 (PDT)
+Received: from [192.168.0.19] (188-141-3-146.dynamic.upc.ie. [188.141.3.146])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-b5cb9e813acsm169952566b.27.2025.10.15.01.24.22
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 15 Oct 2025 01:24:22 -0700 (PDT)
+Message-ID: <06043c1b-b261-4469-b897-66e8173588ab@linaro.org>
+Date: Wed, 15 Oct 2025 09:24:21 +0100
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20251013-dma-buf-ecc-heap-v8-0-04ce150ea3d9@kernel.org>
-In-Reply-To: <20251013-dma-buf-ecc-heap-v8-0-04ce150ea3d9@kernel.org>
-From: Sumit Semwal <sumit.semwal@linaro.org>
-Date: Wed, 15 Oct 2025 13:53:41 +0530
-X-Gm-Features: AS18NWAaxKRo-h7l2MFnUyuTRslFKXoRyt0fRoMbHV7S75RfcyEniVSpQAqfMSo
-Message-ID: <CAO_48GGD8sCoQt_qWKqcbg6v7Cyi5U9QsxsvNOcqfkLRqHS7_w@mail.gmail.com>
-Subject: Re: [PATCH v8 0/5] dma-buf: heaps: Create a CMA heap for each CMA
- reserved region
-To: Maxime Ripard <mripard@kernel.org>
-Cc: Benjamin Gaignard <benjamin.gaignard@collabora.com>, Brian Starkey <Brian.Starkey@arm.com>, 
-	John Stultz <jstultz@google.com>, "T.J. Mercier" <tjmercier@google.com>, 
-	Jonathan Corbet <corbet@lwn.net>, =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>, 
-	Marek Szyprowski <m.szyprowski@samsung.com>, Robin Murphy <robin.murphy@arm.com>, 
-	Andrew Davis <afd@ti.com>, Jared Kangas <jkangas@redhat.com>, 
-	Mattijs Korpershoek <mkorpershoek@kernel.org>, linux-media@vger.kernel.org, 
-	dri-devel@lists.freedesktop.org, linaro-mm-sig@lists.linaro.org, 
-	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	iommu@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] media: qcom: camss: Use a macro to specify the initial
+ buffer count
+To: Hangxiang Ma <hangxiang.ma@oss.qualcomm.com>,
+ Loic Poulain <loic.poulain@oss.qualcomm.com>, Robert Foss
+ <rfoss@kernel.org>, Andi Shyti <andi.shyti@kernel.org>,
+ Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
+ Conor Dooley <conor+dt@kernel.org>, Todor Tomov <todor.too@gmail.com>,
+ Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>,
+ Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc: linux-i2c@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-media@vger.kernel.org
+References: <20251014-use-marco-to-denote-image-buffer-number-v1-1-f782e4cc622d@oss.qualcomm.com>
+From: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+Content-Language: en-US
+In-Reply-To: <20251014-use-marco-to-denote-image-buffer-number-v1-1-f782e4cc622d@oss.qualcomm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-Hi Maxime,
-
-On Mon, 13 Oct 2025 at 14:05, Maxime Ripard <mripard@kernel.org> wrote:
->
-> Hi,
->
-> Here's another attempt at supporting user-space allocations from a
-> specific carved-out reserved memory region.
-
-
-Thank you for the series - I think it looks pretty decent, and with
-Marek's Acked-by for the cma patch [1], I'm inclined to merge it.
-
-I'll wait till today evening, in case there are any more comments, and
-then go ahead and merge it.
-
-Best,
-Sumit.
-
->
-> The initial problem we were discussing was that I'm currently working on
-> a platform which has a memory layout with ECC enabled. However, enabling
-> the ECC has a number of drawbacks on that platform: lower performance,
-> increased memory usage, etc. So for things like framebuffers, the
-> trade-off isn't great and thus there's a memory region with ECC disabled
-> to allocate from for such use cases.
->
-> After a suggestion from John, I chose to first start using heap
-> allocations flags to allow for userspace to ask for a particular ECC
-> setup. This is then backed by a new heap type that runs from reserved
-> memory chunks flagged as such, and the existing DT properties to specify
-> the ECC properties.
->
-> After further discussion, it was considered that flags were not the
-> right solution, and relying on the names of the heaps would be enough to
-> let userspace know the kind of buffer it deals with.
->
-> Thus, even though the uAPI part of it had been dropped in this second
-> version, we still needed a driver to create heaps out of carved-out memor=
-y
-> regions. In addition to the original usecase, a similar driver can be
-> found in BSPs from most vendors, so I believe it would be a useful
-> addition to the kernel.
->
-> Some extra discussion with Rob Herring [1] came to the conclusion that
-> some specific compatible for this is not great either, and as such an
-> new driver probably isn't called for either.
->
-> Some other discussions we had with John [2] also dropped some hints that
-> multiple CMA heaps might be a good idea, and some vendors seem to do
-> that too.
->
-> So here's another attempt that doesn't affect the device tree at all and
-> will just create a heap for every CMA reserved memory region.
->
-> It also falls nicely into the current plan we have to support cgroups in
-> DRM/KMS and v4l2, which is an additional benefit.
->
-> Let me know what you think,
-> Maxime
->
-> 1: https://lore.kernel.org/all/20250707-cobalt-dingo-of-serenity-dbf92c@h=
-ouat/
-> 2: https://lore.kernel.org/all/CANDhNCroe6ZBtN_o=3Dc71kzFFaWK-fF5rCdnr9P5=
-h1sgPOWSGSw@mail.gmail.com/
->
-> Let me know what you think,
-> Maxime
->
-> Signed-off-by: Maxime Ripard <mripard@kernel.org>
+On 15/10/2025 03:42, Hangxiang Ma wrote:
+> Replace the hardcoded buffer count value with a macro to enable
+> operating on these buffers elsewhere in the CAMSS driver based on this
+> count. Some of the hardware architectures require deferring the AUP and
+> REG update until after the CSID configuration and this macro is expected
+> to be useful in such scenarios.
+> 
+> Signed-off-by: Hangxiang Ma <hangxiang.ma@oss.qualcomm.com>
 > ---
-> Changes in v8:
-> - Rebased on top of 6.18-rc1
-> - Added TJ R-b
-> - Link to v7: https://lore.kernel.org/r/20250721-dma-buf-ecc-heap-v7-0-03=
-1836e1a942@kernel.org
->
-> Changes in v7:
-> - Invert the logic and register CMA heap from the reserved memory /
->   dma contiguous code, instead of iterating over them from the CMA heap.
-> - Link to v6: https://lore.kernel.org/r/20250709-dma-buf-ecc-heap-v6-0-da=
-c9bf80f35d@kernel.org
->
-> Changes in v6:
-> - Drop the new driver and allocate a CMA heap for each region now
-> - Dropped the binding
-> - Rebased on 6.16-rc5
-> - Link to v5: https://lore.kernel.org/r/20250617-dma-buf-ecc-heap-v5-0-0a=
-bdc5863a4f@kernel.org
->
-> Changes in v5:
-> - Rebased on 6.16-rc2
-> - Switch from property to dedicated binding
-> - Link to v4: https://lore.kernel.org/r/20250520-dma-buf-ecc-heap-v4-1-bd=
-2e1f1bb42c@kernel.org
->
-> Changes in v4:
-> - Rebased on 6.15-rc7
-> - Map buffers only when map is actually called, not at allocation time
-> - Deal with restricted-dma-pool and shared-dma-pool
-> - Reword Kconfig options
-> - Properly report dma_map_sgtable failures
-> - Link to v3: https://lore.kernel.org/r/20250407-dma-buf-ecc-heap-v3-0-97=
-cdd36a5f29@kernel.org
->
-> Changes in v3:
-> - Reworked global variable patch
-> - Link to v2: https://lore.kernel.org/r/20250401-dma-buf-ecc-heap-v2-0-04=
-3fd006a1af@kernel.org
->
-> Changes in v2:
-> - Add vmap/vunmap operations
-> - Drop ECC flags uapi
-> - Rebase on top of 6.14
-> - Link to v1: https://lore.kernel.org/r/20240515-dma-buf-ecc-heap-v1-0-54=
-cbbd049511@kernel.org
->
+> This change use a global macro to specify the initial buffer count. It
+> meets the requirement that some hardware architectures need to defer the
+> AUP and REG update to CSID configuration stage.
 > ---
-> Maxime Ripard (5):
->       doc: dma-buf: List the heaps by name
->       dma-buf: heaps: cma: Register list of CMA regions at boot
->       dma: contiguous: Register reusable CMA regions at boot
->       dma: contiguous: Reserve default CMA heap
->       dma-buf: heaps: cma: Create CMA heap for each CMA reserved region
->
->  Documentation/userspace-api/dma-buf-heaps.rst | 24 ++++++++------
->  MAINTAINERS                                   |  1 +
->  drivers/dma-buf/heaps/Kconfig                 | 10 ------
->  drivers/dma-buf/heaps/cma_heap.c              | 47 +++++++++++++++++----=
-------
->  include/linux/dma-buf/heaps/cma.h             | 16 +++++++++
->  kernel/dma/contiguous.c                       | 11 +++++++
->  6 files changed, 72 insertions(+), 37 deletions(-)
+>   drivers/media/platform/qcom/camss/camss-vfe.c | 2 +-
+>   drivers/media/platform/qcom/camss/camss.h     | 1 +
+>   2 files changed, 2 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/media/platform/qcom/camss/camss-vfe.c b/drivers/media/platform/qcom/camss/camss-vfe.c
+> index 09b29ba383f1..2753c2bb6c04 100644
+> --- a/drivers/media/platform/qcom/camss/camss-vfe.c
+> +++ b/drivers/media/platform/qcom/camss/camss-vfe.c
+> @@ -541,7 +541,7 @@ int vfe_enable_output_v2(struct vfe_line *line)
+>   
+>   	ops->vfe_wm_start(vfe, output->wm_idx[0], line);
+>   
+> -	for (i = 0; i < 2; i++) {
+> +	for (i = 0; i < CAMSS_INIT_BUF_COUNT; i++) {
+>   		output->buf[i] = vfe_buf_get_pending(output);
+>   		if (!output->buf[i])
+>   			break;
+> diff --git a/drivers/media/platform/qcom/camss/camss.h b/drivers/media/platform/qcom/camss/camss.h
+> index a70fbc78ccc3..901f84efaf7d 100644
+> --- a/drivers/media/platform/qcom/camss/camss.h
+> +++ b/drivers/media/platform/qcom/camss/camss.h
+> @@ -41,6 +41,7 @@
+>   	(to_camss_index(ptr_module, index)->dev)
+>   
+>   #define CAMSS_RES_MAX 17
+> +#define CAMSS_INIT_BUF_COUNT 2
+>   
+>   struct camss_subdev_resources {
+>   	char *regulators[CAMSS_RES_MAX];
+> 
 > ---
-> base-commit: 47633099a672fc7bfe604ef454e4f116e2c954b1
-> change-id: 20240515-dma-buf-ecc-heap-28a311d2c94e
-> prerequisite-message-id: <20250610131231.1724627-1-jkangas@redhat.com>
-> prerequisite-patch-id: bc44be5968feb187f2bc1b8074af7209462b18e7
-> prerequisite-patch-id: f02a91b723e5ec01fbfedf3c3905218b43d432da
-> prerequisite-patch-id: e944d0a3e22f2cdf4d3b3906e5603af934696deb
->
+> base-commit: 59a69ef338920ca6a5bca3ec0e13ce32809cea23
+> change-id: 20251012-use-marco-to-denote-image-buffer-number-cbec071b8436
+> 
 > Best regards,
-> --
-> Maxime Ripard <mripard@kernel.org>
->
-
-
---=20
-Thanks and regards,
-
-Sumit Semwal (he / him)
-Senior Tech Lead - Android, Platforms and Virtualisation
-Linaro.org =E2=94=82 Arm Solutions at Light Speed
+Reviewed-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
