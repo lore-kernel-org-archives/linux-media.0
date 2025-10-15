@@ -1,160 +1,120 @@
-Received: from mail-lf1-f54.google.com (mail-lf1-f54.google.com [209.85.167.54])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 88544311966
-	for <linux-media@vger.kernel.org>; Wed, 15 Oct 2025 07:33:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9F5F82FB96C
+	for <linux-media@vger.kernel.org>; Wed, 15 Oct 2025 07:54:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.167.242.64
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760513638; cv=none; b=eH7FqGhvWmTWF6xTpLrJNccmXk8BXHsDlSPSfudmZoo1ALNUhwgDaRvG+3YuFUxLuu3YvRpRqIA9rSmc/StMCa/QUhDhwY8ejkCTDa1sOSoVz/9kB1NPkNoGnkA2LBBhJGtliSEeaxVN6HCX0BHmPe1wDGNwbZ4c/KtBpzbNdRA=
+	t=1760514848; cv=none; b=Nx4iNpmj+J3eRmO5pSSj+VrasApZSG1mWQkgttf0X/LQrnPh3uzSlmCRYYaubUw9HXb2ByBxO/JvToaJTPfzDa3UMMYu1/5nu3BNAWqJJd9ooEB0Qdpx1Nb7w+m+SZRpoChy+2VnTkqrWy6BozgmPmyeFoPRxy+mHeL4P+QHiUU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760513638; c=relaxed/simple;
-	bh=45HM6drHPjeXjt/LBUhL9wMbf/mH4ryZx0ziOuqJeMc=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=j/vjw7kQSkkrT6jjZ6nThznU05deCrihMd6GqwLd0igYMvB6a4y2s3gcQhuFa/l73qjtNl5Z1+CqYTnsbFEGnX4hJJ8Yp5cv1uVY1Aa67SlQg/1rneHXfX4b4hBKJXMmYOZ+C9ka2EjVJAvvaxtUhgI3t/LV7U45G2KVO+cvow4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=WRAp6xul; arc=none smtp.client-ip=209.85.167.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
+	s=arc-20240116; t=1760514848; c=relaxed/simple;
+	bh=adv2d8j1P/13SwqApWE47e+BYEQ/LhazFFvathXS5o0=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=K1535CTOCKVmVNvQvZp0j/lG7JRVgMn74gpfkNCZQui1P2qybz/3ySb0STyt7W5KAtMFKk2Xg6Z0Yrl1i7inxueti0vxojaqrqNvOczXcNR/nG2vCOLmGdBUAP7P/28Xipd/TmBYNWiH672xya8fSOqE/XG3044RXxKnP+AWhr4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ideasonboard.com; spf=pass smtp.mailfrom=ideasonboard.com; dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b=PbceIz7k; arc=none smtp.client-ip=213.167.242.64
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ideasonboard.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ideasonboard.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="WRAp6xul"
-Received: by mail-lf1-f54.google.com with SMTP id 2adb3069b0e04-57a960fe78fso7028099e87.2
-        for <linux-media@vger.kernel.org>; Wed, 15 Oct 2025 00:33:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1760513634; x=1761118434; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=Q3jdoENbhx6SecniHkE8uMx2hK2+MI3awNH17hg+n4I=;
-        b=WRAp6xul1jPItWAjoiLUD+OYczrUfiIVsGu4QWWAJyCzYzCIGXkOzW/g2nYo/UhujN
-         EVpkcPIuwXuB4l5LvhPTgX2nPXOBkkBdOBWOiJvS5CbWsrjo4hM6IEhNxPCV3cHz4gRc
-         uHSoJI2rx4e3tblQr+PzTpv1Dmkk2FcadL4IE=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1760513634; x=1761118434;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Q3jdoENbhx6SecniHkE8uMx2hK2+MI3awNH17hg+n4I=;
-        b=PFlJ1TLItxriHPhwQNUE9fs7QBXB36MgSVENr/3pebOKrhvq9Ub83jPuSlVRC4cxkV
-         ThhP97iQEGX4udHz5ukxgC9wlshtSqtPNHLe44nKhS66vIe4Gs+nDuxQEKgpPDFTKivw
-         a4/gg2XLXe22nseOcm8CQGWwGJ2ztTVg91k/BrpWpPbg1OGQtjh5Kro3/zfiA8EK6OW4
-         0ToMI0KXZWLwPy5q+LtHP0IDw9yM6pNjufv6y50Z37dCV/F15PP+jTrTMqQAwYUqXzJf
-         7LEH/8xWao+HlYu3eQ+wQC1eLMVd98JJ6jN9GndE9wbsy9CKI694PlG/iU4f6ntGyjN+
-         /V7A==
-X-Gm-Message-State: AOJu0YzfelSI+tmXzEbpuXXXIKoetXTkB3hHcOTygP+uAQk95x29zzWL
-	L0nN/USvyCIB5BhjQ2NeuiDQTsRqCa+SvSUYZ/RDPzRGvLw8Apd/1i4+MJMCOch0b4p9wIZ7Ihn
-	CeKI=
-X-Gm-Gg: ASbGnct2z1vpJ6zZgf61VNTcQRF6KicKNWuN5Zsz9n3cUc19lePcB31T61VrmrX35e8
-	2NMfOwcchf/anK+LouLpdVxfHTDlmYduKIXnfMKlw44Bq3LtpxW/hhpkfh9RXVuqTpBBjtyJNDM
-	sNPuN7NQjdvwfhN6dKvU+heTiWnZHzYr8iCXPOk8bmpiBOy+ute7N40c00fgR28++BssUsn4fqt
-	pFcZ9mDtKjtVUIQZjfC3wTMD9TbOhlJb456HXIUxL2duhiqqoMtqV5Uk7nBshdNiUHuR4AOO7xf
-	HkREXqeA8SNYMaq8WGwHKM0eufWV2IXPYgjJjODfwhN2sf7PmohFH571QREfFX0440A14AmAuEd
-	edzyqWcnvCPxVqWXOFC95zpXnUOOMAx0lWSaqElrbVmGHLfDCaS+UWuSMqD2K8Eohgmqyelj0Fs
-	Tn67lWSO7o3YLsuw==
-X-Google-Smtp-Source: AGHT+IGhb/gQZHU2jFBBJgrklD0+z0LOH1xKN7HHi0wGFpYK4zNTL7wmtFgqn0TgoM0YQGEIiHoHwA==
-X-Received: by 2002:a05:6512:3ba0:b0:579:f0fc:46f7 with SMTP id 2adb3069b0e04-5906de89a6bmr8064519e87.56.1760513634308;
-        Wed, 15 Oct 2025 00:33:54 -0700 (PDT)
-Received: from mail-lf1-f48.google.com (mail-lf1-f48.google.com. [209.85.167.48])
-        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-590880631e3sm5989565e87.0.2025.10.15.00.33.53
-        for <linux-media@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 15 Oct 2025 00:33:53 -0700 (PDT)
-Received: by mail-lf1-f48.google.com with SMTP id 2adb3069b0e04-591c98ebe90so479678e87.3
-        for <linux-media@vger.kernel.org>; Wed, 15 Oct 2025 00:33:53 -0700 (PDT)
-X-Received: by 2002:a05:6512:e93:b0:58b:8f:2cf3 with SMTP id
- 2adb3069b0e04-5906dc2dab5mr7726527e87.21.1760513633325; Wed, 15 Oct 2025
- 00:33:53 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="PbceIz7k"
+Received: from pendragon.ideasonboard.com (87-94-110-32.bb.dnainternet.fi [87.94.110.32])
+	by perceval.ideasonboard.com (Postfix) with UTF8SMTPSA id 909B4EB7;
+	Wed, 15 Oct 2025 09:52:24 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+	s=mail; t=1760514744;
+	bh=adv2d8j1P/13SwqApWE47e+BYEQ/LhazFFvathXS5o0=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=PbceIz7kGRTxRE+jG+VCFvCXyPbkK1tUMvE5SNcqr2XFeE+ooeuCVSNtQvizM35qr
+	 oXwRofxe9N6eo7SWhH7xz6jryEZt23NWJyJnj+Oru8BI4z4mMvOSau1RESjLuiWqWE
+	 6ogxNeTL5eK6i793MgwT6a3BlvMAJ4IK9HdoYbkY=
+From: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To: linux-media@vger.kernel.org
+Cc: Nicolas Dufresne <nicolas.dufresne@collabora.com>,
+	Hans Verkuil <hverkuil+cisco@kernel.org>,
+	Stefan Klug <stefan.klug@ideasonboard.com>
+Subject: [PATCH v2 01/25] media: v4l2-mem2mem: Document that v4l2_m2m_get_vq() never returns NULL
+Date: Wed, 15 Oct 2025 10:53:24 +0300
+Message-ID: <20251015075353.22625-2-laurent.pinchart@ideasonboard.com>
+X-Mailer: git-send-email 2.51.0
+In-Reply-To: <20251015075353.22625-1-laurent.pinchart@ideasonboard.com>
+References: <20251015075353.22625-1-laurent.pinchart@ideasonboard.com>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20251010030348.it.784-kees@kernel.org> <68ed624c.050a0220.3ba739.64ea@mx.google.com>
- <D1CBCBE2-3A54-410A-B15C-F1C621F9F56B@kernel.org> <CANiDSCu6xZAuSF5_M-4BMRc52hbSh_1QfDQqaeGR4iD5fdQjQg@mail.gmail.com>
- <202510141344.E0ABCD2C7@keescook>
-In-Reply-To: <202510141344.E0ABCD2C7@keescook>
-From: Ricardo Ribalda <ribalda@chromium.org>
-Date: Wed, 15 Oct 2025 09:33:40 +0200
-X-Gmail-Original-Message-ID: <CANiDSCsBAq3Yx4ybarUb_1NkQ-bvfXvWqb-DfqXatkiYJFZWiQ@mail.gmail.com>
-X-Gm-Features: AS18NWABMkXk00VBzGEAB6Lz910Tnzxu4PyT1r-8UGsY14p9fZu3iRa4oasfK50
-Message-ID: <CANiDSCsBAq3Yx4ybarUb_1NkQ-bvfXvWqb-DfqXatkiYJFZWiQ@mail.gmail.com>
-Subject: Re: [v2,0/3] module: Add compile-time check for embedded NUL characters
-To: Kees Cook <kees@kernel.org>, Dan Carpenter <dan.carpenter@linaro.org>
-Cc: linux-media@vger.kernel.org, 
-	Patchwork Integration <patchwork@media-ci.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 
-Hi Dan
+The v4l2_m2m_get_vq() never returns a NULL pointer, as the internal
+get_queue_ctx() helper always returns a non-NULL pointer. Many drivers
+check the return value against NULL, due to a combination of old code
+and cargo-cult programming. Even v4l2-mem2mem.c contains unneeded NULL
+checks.
 
-On Tue, 14 Oct 2025 at 22:45, Kees Cook <kees@kernel.org> wrote:
->
-> On Tue, Oct 14, 2025 at 08:24:00AM +0200, Ricardo Ribalda wrote:
-> > Hi Kees
-> >
-> > Thanks for the report.
-> >
-> >
-> > On Tue, 14 Oct 2025 at 07:41, Kees Cook <kees@kernel.org> wrote:
-> > >
-> > >
-> > >
-> > > On October 13, 2025 1:34:20 PM PDT, Patchwork Integration <patchwork@media-ci.org> wrote:
-> > > >Dear Kees Cook:
-> > > >
-> > > >Thanks for your patches! Unfortunately the Media CI robot detected some
-> > > >issues:
-> > > >
-> > > ># Test static:test-smatch
-> > > >
-> > > >drivers/media/usb/usbtv/usbtv-core.c:157:1: error: bad constant expression
-> > >
-> > > Where can I find what this test actually does?
-> > >
-> > > >For more details, check the full report at:
-> > > >https://linux-media.pages.freedesktop.org/-/users/patchwork/-/jobs/85913402/artifacts/report.htm .
-> > >
-> > > This webserver appears to be misconfigured to send compressed output without the right headers? I can't actually view this URL.
-> >
-> > I will follow-up with fdo maintainers to figure out what happened.
-> > there. On the meantime you can use these url that seems to work:
-> > https://linux-media.pages.freedesktop.org/-/users/patchwork/-/jobs/85913402/artifacts/report.txt
-> > https://gitlab.freedesktop.org/linux-media/users/patchwork/-/jobs/85913398
-> >
-> > Basically sparse/smatch do not seem to understand the constant.
->
-> Yeah, I managed to find the actual scripts that are run for the
-> static-sparse/smatch tests. It looks like those tools aren't correctly
-> handling string literals for __builtin_strlen(), which is a constant for
-> constant arguments.
->
-> So, that's a C parsing bug in those tools (GCC and Clang are fine).
+Clarify the API by documenting explicitly that a NULL check is not
+needed, and simplify the code by removing the unneeded NULL checks from
+v4l2-mem2mem.c.
 
-Could you take a look at this patch:
-https://patchwork.linuxtv.org/project/linux-media/patch/20251010030610.3032147-3-kees@kernel.org/
+Signed-off-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Reviewed-by: Stefan Klug <stefan.klug@ideasonboard.com>
+---
+ drivers/media/v4l2-core/v4l2-mem2mem.c | 12 +-----------
+ include/media/v4l2-mem2mem.h           |  3 +++
+ 2 files changed, 4 insertions(+), 11 deletions(-)
 
-Seems that sparse/smatch are not very happy about __builtin_strlen()
-
-Could you fix support for __builtin_strlen() in your tool?
-
-Once Kees lands his patch it will break all the CIs using
-sparse/smatch, including media-ci.
-
-Eg:
-
-drivers/media/pci/zoran/zr36060.c:33:1: error: bad constant expression
-drivers/media/usb/pvrusb2/pvrusb2-dvb.c:19:1: error: bad constant expression
-drivers/media/usb/pvrusb2/pvrusb2-dvb.c:19:1: error: bad constant expression
-
-
-
-Thanks :)
-
-
->
-> -Kees
->
-> --
-> Kees Cook
-
-
-
+diff --git a/drivers/media/v4l2-core/v4l2-mem2mem.c b/drivers/media/v4l2-core/v4l2-mem2mem.c
+index 21acd9bc8607..9fa8833e445f 100644
+--- a/drivers/media/v4l2-core/v4l2-mem2mem.c
++++ b/drivers/media/v4l2-core/v4l2-mem2mem.c
+@@ -123,13 +123,7 @@ static struct v4l2_m2m_queue_ctx *get_queue_ctx(struct v4l2_m2m_ctx *m2m_ctx,
+ struct vb2_queue *v4l2_m2m_get_vq(struct v4l2_m2m_ctx *m2m_ctx,
+ 				       enum v4l2_buf_type type)
+ {
+-	struct v4l2_m2m_queue_ctx *q_ctx;
+-
+-	q_ctx = get_queue_ctx(m2m_ctx, type);
+-	if (!q_ctx)
+-		return NULL;
+-
+-	return &q_ctx->q;
++	return &get_queue_ctx(m2m_ctx, type)->q;
+ }
+ EXPORT_SYMBOL(v4l2_m2m_get_vq);
+ 
+@@ -1285,8 +1279,6 @@ void v4l2_m2m_buf_queue(struct v4l2_m2m_ctx *m2m_ctx,
+ 	unsigned long flags;
+ 
+ 	q_ctx = get_queue_ctx(m2m_ctx, vbuf->vb2_buf.vb2_queue->type);
+-	if (!q_ctx)
+-		return;
+ 
+ 	spin_lock_irqsave(&q_ctx->rdy_spinlock, flags);
+ 	list_add_tail(&b->list, &q_ctx->rdy_queue);
+@@ -1388,8 +1380,6 @@ int v4l2_m2m_ioctl_remove_bufs(struct file *file, void *priv,
+ 	struct v4l2_fh *fh = file_to_v4l2_fh(file);
+ 	struct vb2_queue *q = v4l2_m2m_get_vq(fh->m2m_ctx, remove->type);
+ 
+-	if (!q)
+-		return -EINVAL;
+ 	if (q->type != remove->type)
+ 		return -EINVAL;
+ 
+diff --git a/include/media/v4l2-mem2mem.h b/include/media/v4l2-mem2mem.h
+index 500f81f399df..c82445929c68 100644
+--- a/include/media/v4l2-mem2mem.h
++++ b/include/media/v4l2-mem2mem.h
+@@ -153,6 +153,9 @@ void *v4l2_m2m_get_curr_priv(struct v4l2_m2m_dev *m2m_dev);
+  *
+  * @m2m_ctx: m2m context assigned to the instance given by struct &v4l2_m2m_ctx
+  * @type: type of the V4L2 buffer, as defined by enum &v4l2_buf_type
++ *
++ * This function returns the capture queue when @type is a capture type, and the
++ * output queue otherwise. It never returns a NULL pointer.
+  */
+ struct vb2_queue *v4l2_m2m_get_vq(struct v4l2_m2m_ctx *m2m_ctx,
+ 				       enum v4l2_buf_type type);
 -- 
-Ricardo Ribalda
+Regards,
+
+Laurent Pinchart
+
