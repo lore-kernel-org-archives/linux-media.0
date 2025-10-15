@@ -1,41 +1,42 @@
 Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 15797314A6D;
-	Wed, 15 Oct 2025 07:54:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C27E8314D0A
+	for <linux-media@vger.kernel.org>; Wed, 15 Oct 2025 07:54:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.167.242.64
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760514877; cv=none; b=InsmSOCSBq2zEG5H8CIPRgUEbtgVCBSrxPgKpknwEZnnTG72/iOWL5Pn78qKEMYOQLzqBUaiP+Oey9MMziIEDSYs6kJX+inUBGEQShwios9Xo2DJYH4n+OJhGoh6/nSCXVIgWP4zgEgfQe/9OhBtznmshq76D67WxfMiu3Cm134=
+	t=1760514879; cv=none; b=Ntukd/wX2EtqidRrE7It1i/a+VT9IY+Zb8jErhSZ5sdydpoD3wF7J3OS0H/jmRLFsLpDFnqiTT+44M38xrpII7Kdn1tUK43KQob2AbUH0pSBMmq6vg7R5+tFYBccZOAO9kWc+Z/x8QGjemvLr8BWxuqZ3tyy8Got234TMnLur+0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760514877; c=relaxed/simple;
-	bh=nKiyKhCg0+ZQsYzKxYtjhjqufWHToDMAELf6fiemlfc=;
+	s=arc-20240116; t=1760514879; c=relaxed/simple;
+	bh=APf+o1EB+8Y+xNYzSvnwoyhc4elOahLrs0+JLOUypAA=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=lUabebLXRR83tct0f8sKA3IulrARvdUl2tWnIx3J07g1OzNmVuw01CjJ9okdslbMb5JtqDl/+/oX7jw1G2V+v8WaoeZa15ExU3HsAhFxLOBwtTf2yCiux5EsJjdraJ8IAQ/kEScFw9MegwJzMiaG4pjgDZe5dTVmc9iwllXFzXU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ideasonboard.com; spf=pass smtp.mailfrom=ideasonboard.com; dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b=mEkyUNuH; arc=none smtp.client-ip=213.167.242.64
+	 MIME-Version; b=jQ7d0C29FA7NGxMDMwrkAzVKh2dYMPf5kJ9eQ7aDnKQFaGmG6McFy5I3bAcIqe9qFRWkwaRjEZZ3xJmQhBzF12dMhm0aVDpgHPLumQo7/kaHcqXZL9+8nU8NT391mSXNbHpmqH2aeUitnrboT6WklSg2Q8TIzZH/jqFhj0Yr9oA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ideasonboard.com; spf=pass smtp.mailfrom=ideasonboard.com; dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b=m86t6wiQ; arc=none smtp.client-ip=213.167.242.64
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ideasonboard.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ideasonboard.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="mEkyUNuH"
+	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="m86t6wiQ"
 Received: from pendragon.ideasonboard.com (87-94-110-32.bb.dnainternet.fi [87.94.110.32])
-	by perceval.ideasonboard.com (Postfix) with UTF8SMTPSA id B3D65EB7;
-	Wed, 15 Oct 2025 09:52:55 +0200 (CEST)
+	by perceval.ideasonboard.com (Postfix) with UTF8SMTPSA id 91491190D;
+	Wed, 15 Oct 2025 09:52:57 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-	s=mail; t=1760514776;
-	bh=nKiyKhCg0+ZQsYzKxYtjhjqufWHToDMAELf6fiemlfc=;
+	s=mail; t=1760514777;
+	bh=APf+o1EB+8Y+xNYzSvnwoyhc4elOahLrs0+JLOUypAA=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=mEkyUNuHbwalJpslTfqxCNaMUMvhozjydNqFE0S6b3vj0NdWiHseN0G8BXpZ6tJs4
-	 2snuPA9vcUC3TdtUh9M3GLPhYEqVdZQM4Q8WtXrs3Fdpxk4JhyKNBA9L9wio3DvlM6
-	 f2msyb5eRfGMvRkedSdoOVHPJzexTn0y07pH08AI=
+	b=m86t6wiQLdIms3WRcFe8sPhq/JDAxlQhZJaFtri0x8oxLz8rjyREdhbjRHdlV6PyW
+	 RJ8QEaKcNARsRryIFZHPWAA6wrNpVXRi/czuXu99dWqibZmetsd4FmsyQtydOYWFN3
+	 0E9jDG/T7ns/Kq8QvZ4KOVDRfsMvXN/kHtjJW76I=
 From: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 To: linux-media@vger.kernel.org,
-	linux-renesas-soc@vger.kernel.org
+	linux-rockchip@lists.infradead.org,
+	linux-arm-kernel@lists.infradead.org
 Cc: Nicolas Dufresne <nicolas.dufresne@collabora.com>,
-	Nikita Yushchenko <nikita.yoush@cogentembedded.com>,
-	Geert Uytterhoeven <geert+renesas@glider.be>,
-	Magnus Damm <magnus.damm@gmail.com>
-Subject: [PATCH v2 18/25] media: rcar_jpu: Drop unneeded v4l2_m2m_get_vq() NULL check
-Date: Wed, 15 Oct 2025 10:53:41 +0300
-Message-ID: <20251015075353.22625-19-laurent.pinchart@ideasonboard.com>
+	Jacob Chen <jacob-chen@iotwrt.com>,
+	Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
+	Heiko Stuebner <heiko@sntech.de>
+Subject: [PATCH v2 19/25] media: platform: rga: Drop unneeded v4l2_m2m_get_vq() NULL check
+Date: Wed, 15 Oct 2025 10:53:42 +0300
+Message-ID: <20251015075353.22625-20-laurent.pinchart@ideasonboard.com>
 X-Mailer: git-send-email 2.51.0
 In-Reply-To: <20251015075353.22625-1-laurent.pinchart@ideasonboard.com>
 References: <20251015075353.22625-1-laurent.pinchart@ideasonboard.com>
@@ -47,59 +48,35 @@ List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-The v4l2_m2m_get_vq() function never returns NULL.
-
-In the set format handler, the check may have been intended to catch
-invalid format types, but that's not needed as the V4L2 core picks the
-appropriate VIDIOC_S_FMT ioctl handler based on the format type, so the
-type can't be incorrect.
-
-In the get and try format handlers, the return value is not used for any
-purpose other than the NULL check, which was therefore probably intended
-to catch invalid format types. That's not needed for the same reason as
-in the set format handler.
-
-Drop the unneeded return value check and, as the function has no side
-effect, the unneeded function calls as well.
+The v4l2_m2m_get_vq() function never returns NULL. The check was
+probably intended to catch invalid format types, but that's not needed
+as the V4L2 core picks the appropriate VIDIOC_G_FMT ioctl handler based
+on the format type, so the type can't be incorrect. Drop the unneeded
+return value check and, as the return value is not used for other
+purposes and the function has no side effect, the function call as well.
 
 Signed-off-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 ---
- drivers/media/platform/renesas/rcar_jpu.c | 8 --------
- 1 file changed, 8 deletions(-)
+ drivers/media/platform/rockchip/rga/rga.c | 4 ----
+ 1 file changed, 4 deletions(-)
 
-diff --git a/drivers/media/platform/renesas/rcar_jpu.c b/drivers/media/platform/renesas/rcar_jpu.c
-index 46ea259a2bb9..3d714fec4fad 100644
---- a/drivers/media/platform/renesas/rcar_jpu.c
-+++ b/drivers/media/platform/renesas/rcar_jpu.c
-@@ -825,9 +825,6 @@ static int jpu_try_fmt(struct file *file, void *priv, struct v4l2_format *f)
+diff --git a/drivers/media/platform/rockchip/rga/rga.c b/drivers/media/platform/rockchip/rga/rga.c
+index 776046de979a..eb9c556a105c 100644
+--- a/drivers/media/platform/rockchip/rga/rga.c
++++ b/drivers/media/platform/rockchip/rga/rga.c
+@@ -463,12 +463,8 @@ static int vidioc_g_fmt(struct file *file, void *priv, struct v4l2_format *f)
  {
- 	struct jpu_ctx *ctx = file_to_ctx(file);
+ 	struct v4l2_pix_format_mplane *pix_fmt = &f->fmt.pix_mp;
+ 	struct rga_ctx *ctx = file_to_rga_ctx(file);
+-	struct vb2_queue *vq;
+ 	struct rga_frame *frm;
  
--	if (!v4l2_m2m_get_vq(ctx->fh.m2m_ctx, f->type))
--		return -EINVAL;
--
- 	return __jpu_try_fmt(ctx, NULL, &f->fmt.pix_mp, f->type);
- }
- 
-@@ -841,8 +838,6 @@ static int jpu_s_fmt(struct file *file, void *priv, struct v4l2_format *f)
- 	int ret;
- 
- 	vq = v4l2_m2m_get_vq(m2m_ctx, f->type);
+-	vq = v4l2_m2m_get_vq(ctx->fh.m2m_ctx, f->type);
 -	if (!vq)
 -		return -EINVAL;
- 
- 	if (vb2_is_busy(vq)) {
- 		v4l2_err(&ctx->jpu->v4l2_dev, "%s queue busy\n", __func__);
-@@ -866,9 +861,6 @@ static int jpu_g_fmt(struct file *file, void *priv, struct v4l2_format *f)
- 	struct jpu_ctx *ctx = file_to_ctx(file);
- 	struct jpu_q_data *q_data;
- 
--	if (!v4l2_m2m_get_vq(ctx->fh.m2m_ctx, f->type))
--		return -EINVAL;
--
- 	q_data = jpu_get_q_data(ctx, f->type);
- 	f->fmt.pix_mp = q_data->format;
- 
+ 	frm = rga_get_frame(ctx, f->type);
+ 	if (IS_ERR(frm))
+ 		return PTR_ERR(frm);
 -- 
 Regards,
 
