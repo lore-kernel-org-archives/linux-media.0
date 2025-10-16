@@ -1,144 +1,179 @@
-Received: from mail-qk1-f171.google.com (mail-qk1-f171.google.com [209.85.222.171])
+Received: from mail-lf1-f41.google.com (mail-lf1-f41.google.com [209.85.167.41])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B882B2641D8
-	for <linux-media@vger.kernel.org>; Thu, 16 Oct 2025 08:03:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 43BE82FE569
+	for <linux-media@vger.kernel.org>; Thu, 16 Oct 2025 08:03:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760601785; cv=none; b=uMcSWJ5+tSOwNyYaf8rWPzAwQ7wrFQa63HM9CbiRYQ2hOb25rkmFijVoItZ9mH5LSyqK6tgGS7hMmfOU4y0My4im/wGPzyXYHfaa2rEHrhqFyt3CUBt/oN7gBJPXHuFb0e8KDrOHkidiQmJoHEQvRibYSleMoSWSFVIs2qpcB7A=
+	t=1760601828; cv=none; b=JOMT3g1bbkxQnnofweE0N9PfPoKJQzD0tmjZ4h/HuFJ42SGJGu4OmncRwT2gFTSoD0WHZp2s73PzEs/ykOZ5B/UH94sTpjh4Ugxr/FByPLklgdnjfXOn0yoSygDhqj7suaNyOx1I3wDIlIxwleoPcQ+aRprfH+Te2S0z8MfoZJU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760601785; c=relaxed/simple;
-	bh=1eGQTAnWNGY3mGah0Neq02H/T5/f9gtIvSd+fn8FW2g=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=qJVzU1CFTKpTIVmlta/R+aS8zCtZD3xqjImCK7dN3HSMy6Nk08Y201ZRm2xpUQgMVUDoJyMeFqMD3NATaRc6FGGaVJPyTAfZ9hwlFNH+piAL0hYhUQ5+u+TGQLsno4tifjttgnVSfI5kWA0jvePLF0LrcKh7IQbrLmjSMD0QtDo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.222.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-qk1-f171.google.com with SMTP id af79cd13be357-85e76e886a0so62329185a.1
-        for <linux-media@vger.kernel.org>; Thu, 16 Oct 2025 01:03:03 -0700 (PDT)
+	s=arc-20240116; t=1760601828; c=relaxed/simple;
+	bh=Upf+vZPf5FtAc5nFbo/GsuIEVrSiRNpKkQuMnHoDkKY=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=ChEHVvqUwlTYySByL73yTwBzQKr/FFSeSTryoJdkR3iNzba/voDAChC6l3ZeITlIiWvEx38dId/s4oLPwXRULajvz4/Y+nKkRgdPWuQl/GWcXuS2yNvvGcsheAqxHB8B2awZ609aGrAt6Z54ovHPqP0m8f8+CBd2DWIVa3tJleU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=gWlGH7Os; arc=none smtp.client-ip=209.85.167.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="gWlGH7Os"
+Received: by mail-lf1-f41.google.com with SMTP id 2adb3069b0e04-591c7a913afso56812e87.3
+        for <linux-media@vger.kernel.org>; Thu, 16 Oct 2025 01:03:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1760601824; x=1761206624; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
+         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=SI3iJaG6AehsZaDVHen+J6EpKqRu7s9HPBybFYzEdgw=;
+        b=gWlGH7Os+/ZnhKC7HSZP/PbQmY20AL8hDGE96MbwYi57o/couwbx84q3/gZyYBA4dJ
+         optOTlN5VLfwO+ZaAjT7MX8446a/jfp0CBtJO0LTADsCzz7PvIS3bitSYM6vAviYn8OX
+         SfxXF0zzCqCLrbD3/ARobYWmVM0NU02IqvP2bb87vWi4soAfHwHhHu9c/5ifAkhgnuXg
+         WJI0miFxLcfCFGkMKPQFIJWWIbgluWUPyS34r/wStU7eyf4fvT4Sd4zOg7rSxAiHp7Ah
+         ZZq6EYUUocgvij1x3Vq3SX9KOnTzFSOEfU6Vm3Q1lEEhcqCHaosbJSoJoXM8oy16AYsg
+         mbhg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1760601782; x=1761206582;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Kd9DhXGFTz7VluvF3CXaOYryMfT47ujx56ubcyYXsIw=;
-        b=uN4qQlzwvlsKZcQEZIxHGsETiDWr550qoiv6HpxkVP2c3k4gCsnst+jWmp+4PEwMD4
-         kscoFPqUAjXr/BPS7mKDAkLfAAIcjpG86XlC35aAFqnaKj5C53cvOnBwU+ACee4vcYK4
-         62fzar2vBkrfz7NVUkhun1FEuof8kIu4dEL2mvNSCDMsO8ZFfIx5F6xDf5TopDYGymQA
-         OgthBwg4t1wWLEhxOcFm1G2l+lQAvsxBgor/F7OEvIT8JUds2gnDOEQZeyltV46p/UYX
-         iPcZnsQjWuQ4CyOH3BA1fSeHnCFxEM4QgTd4mSo4UZkDldUqAJ6j4ofcxI/6QO/GkHy0
-         9szw==
-X-Forwarded-Encrypted: i=1; AJvYcCX21q0TrgWGtsE1h/2u20lgZBDwMRiJBXLca7KMqic0AExpHKGO6ZA5pla6Bj1xrH3KTEvzNYH4c4hB8Q==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw77A5LNLPir0jBtiy482GRYP/IbZeh8OL/vdaCh/S0rAJsf6Fk
-	fIoRBJAzIyybCgAWQ29NS3Jueik3aXZE/RQRndtUv1xoSQYrIOmeuLTBepaKY2hA
-X-Gm-Gg: ASbGncv8elbiMdY4YTJ2I0IidEK6fgTxA5XHxT0NbUsgwVxevUQmCYst4EXXupeLjh4
-	gRSSqZfY2UuEVW2+a2fNFbISjrpSEFZLRv2U52WM0rVp1naoDPiVOmcZ5oJ1TRGmnDr2FLWb9/Q
-	9wxVXgcFRgo3pvCZ9zEFWts1bjW20Kplstx/aaEVcFzKFdIhwM0Rc2tJMnX7NjoX+1ReWCOAL2d
-	uIuP9MrGDze2mgDiRZYA2CV300X1nTz3ltixwEZmaClLh+rE2Ot4n6TsaPF/JspWQErPaaEHK0t
-	ISQBoVaYmAZ+d0ILbWYSV8gwrte5CeKYZG8pvjSRHm2IePwEEmHn5rB6gdA2Uwz+oEry0eFsc3s
-	UbMJ07fjxCkZs+9xW38BwAzNJSvSOsuN4eVJ9B7xGdIVAtxNKZECOJ+NiUGJhYhY9m+6FGrbowb
-	0wmh3MEMeXGpPrD0/ya5VbHmcMvRb/bXxymzcvsKL9ezIo2svB
-X-Google-Smtp-Source: AGHT+IHFVZ2URcPq6T3Ey3oh1e3NtLa+x7J08WEUjjK5OUjqNsTF2ivGp+XwXAEs13gu1jFQACUtFA==
-X-Received: by 2002:a05:622a:4ce:b0:4b9:d7c2:756a with SMTP id d75a77b69052e-4e6ead709e5mr446509531cf.77.1760601782515;
-        Thu, 16 Oct 2025 01:03:02 -0700 (PDT)
-Received: from mail-qv1-f44.google.com (mail-qv1-f44.google.com. [209.85.219.44])
-        by smtp.gmail.com with ESMTPSA id af79cd13be357-88f37e50ebasm146822985a.31.2025.10.16.01.03.02
-        for <linux-media@vger.kernel.org>
+        d=1e100.net; s=20230601; t=1760601824; x=1761206624;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
+         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=SI3iJaG6AehsZaDVHen+J6EpKqRu7s9HPBybFYzEdgw=;
+        b=rn3AHwHJwNkvdezw1D1mhxaiMKC46L0meZxJzXH4OGRlFkDcAIGzqGBVXZ+EX1dbbp
+         IQb2G5V2eM6PUkQXspK2FOAqA0r1PyzEZboChIKzXOyUekUO4sYdS+n9l1oAdPTMGIem
+         6ZyJBQcXhGZDDUmfze+wnN8lJnN8nGfL/aj7zEG9Bwc9j4+Oe5QHTckGVHo8LBQxzbjg
+         KvUW+1rhZUSqWUTlOiApiCsSmJsHBqVBRhw2p0CNHdE5cTpOSz0HvwBseOXyYE/URNzl
+         h1+4JEPTSHQiw4Cc58jjiyNNCXnofZrmCX6I9yDVSf11mzoaiWwsSvECPw3/WA4ggpDc
+         kJWA==
+X-Forwarded-Encrypted: i=1; AJvYcCVqfRc/liQa2x01y1IVGoNlRWmAjZZLts2yDcFvRhfItn8LoSn3jKhJQ6U3yoCmGjUL7JYnH+08p9BU7g==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy3mBeT5Rdnls1A8ZPE7uHQy7h4xcIu8DsayfqJdThpZU9urY51
+	GGmTlbFEc2QnOd8a4h8aHNzLKhiEDRSKHpg8Fcehx3XneRYhkw07R8QsVxnvbrvkf4k=
+X-Gm-Gg: ASbGncupATWWAHzyFKL8mcQ++jRDc8W4yOuo0n96ABB4P1a+HMLdYRuzHR7AkdcUrvK
+	ulwaRWPOt5BWXDH60DFIrHhgNrZyObckfR06Hjn/2bW2161ZxoaxSs9v/XUX6FLbi9JJVsDpvX+
+	CiAajiqGBO8DMbHQbIwBuhYrvcyrfhwLY7KVo1vSvk33hSqvbB+Crzz7AGpAsy3MICR0H367KLx
+	pT2WuK7XPhrxB3ArWKg0Er+Zhv4e+XA/XfPbwj821GQlGrb7qrNTjl3XI8QBaZiX5mg3VmxR7jQ
+	/0OXFS9Rs73AABmrdIkA9GOoCB4dmRLcDkO4GaFYRTTDyF1yRvJ5rNphiJNSTBzVeCXnr8B5Fod
+	9cGhHjXv3U+TviPO+EhFVce0Zye5o+cy0OW0U0LdW26y8iaHLbtxY4ARFKyo3yUfLg1SCoIq3mQ
+	ZF8le3uLzP5xpD2h34cp7P2sm80u61I2GD3LduNCSqxXT/X3oofK04+e4A1TeT6VtkIJmf9Q==
+X-Google-Smtp-Source: AGHT+IHcAxdLhGzdW1NI2UBF0IVQHMl6HFpUd/jJYBtOzICKf88GKwgE5spfrmYtn/8eULnHs4lGZg==
+X-Received: by 2002:a05:6512:3dac:b0:57a:8ae1:6a8e with SMTP id 2adb3069b0e04-5906d8ec20bmr5447249e87.6.1760601824219;
+        Thu, 16 Oct 2025 01:03:44 -0700 (PDT)
+Received: from [192.168.1.100] (91-159-24-186.elisa-laajakaista.fi. [91.159.24.186])
+        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-590881f88ddsm6922497e87.31.2025.10.16.01.03.43
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 16 Oct 2025 01:03:02 -0700 (PDT)
-Received: by mail-qv1-f44.google.com with SMTP id 6a1803df08f44-78e4056623fso6720896d6.2
-        for <linux-media@vger.kernel.org>; Thu, 16 Oct 2025 01:03:02 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCWJ8slZE54/NaOctwm0sakd2AA9HygYFqS+8K1l/4dDEcP5tzn70uudWUa8uQOQop1ttlhF5pUmSDZHSA==@vger.kernel.org
-X-Received: by 2002:a05:6102:512a:b0:519:534a:6c20 with SMTP id
- ada2fe7eead31-5d5e23afcd1mr10705349137.30.1760601430958; Thu, 16 Oct 2025
- 00:57:10 -0700 (PDT)
+        Thu, 16 Oct 2025 01:03:43 -0700 (PDT)
+Message-ID: <3202275a-25ec-435a-93ff-80a7ff8a8153@linaro.org>
+Date: Thu, 16 Oct 2025 11:03:42 +0300
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20251015232015.846282-1-robh@kernel.org>
-In-Reply-To: <20251015232015.846282-1-robh@kernel.org>
-From: Geert Uytterhoeven <geert@linux-m68k.org>
-Date: Thu, 16 Oct 2025 09:56:59 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdVBDN8-gWVs1f=1E2NgD6Dp4=ZFUnyzqHaQj9JWPpZepw@mail.gmail.com>
-X-Gm-Features: AS18NWDjBoTWi0arzS-uHQaIyzTZ8PYUb4ECqZaEUF0sSO-4JEe-m7M7qjhxsvY
-Message-ID: <CAMuHMdVBDN8-gWVs1f=1E2NgD6Dp4=ZFUnyzqHaQj9JWPpZepw@mail.gmail.com>
-Subject: Re: [PATCH] dt-bindings: Fix inconsistent quoting
-To: "Rob Herring (Arm)" <robh@kernel.org>
-Cc: Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Stephen Boyd <sboyd@kernel.org>, Thierry Reding <thierry.reding@gmail.com>, 
-	Linus Walleij <linus.walleij@linaro.org>, Bartosz Golaszewski <brgl@bgdev.pl>, 
-	Shawn Guo <shawnguo@kernel.org>, Fabio Estevam <festevam@gmail.com>, 
-	=?UTF-8?B?TnVubyBTw6E=?= <nuno.sa@analog.com>, 
-	Lars-Peter Clausen <lars@metafoo.de>, Michael Hennerich <Michael.Hennerich@analog.com>, 
-	Jonathan Cameron <jic23@kernel.org>, Andy Shevchenko <andy@kernel.org>, 
-	Jassi Brar <jassisinghbrar@gmail.com>, Mauro Carvalho Chehab <mchehab@kernel.org>, 
-	Lee Jones <lee@kernel.org>, Joel Stanley <joel@jms.id.au>, 
-	Andrew Jeffery <andrew@codeconstruct.com.au>, Andrew Lunn <andrew@lunn.ch>, 
-	Vladimir Oltean <olteanv@gmail.com>, "David S. Miller" <davem@davemloft.net>, 
-	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
-	Daire McNamara <daire.mcnamara@microchip.com>, Lorenzo Pieralisi <lpieralisi@kernel.org>, 
-	=?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kwilczynski@kernel.org>, 
-	Manivannan Sadhasivam <mani@kernel.org>, Bjorn Helgaas <bhelgaas@google.com>, Vinod Koul <vkoul@kernel.org>, 
-	Kishon Vijay Abraham I <kishon@kernel.org>, Bjorn Andersson <andersson@kernel.org>, 
-	Geert Uytterhoeven <geert+renesas@glider.be>, Nicolas Ferre <nicolas.ferre@microchip.com>, 
-	Alexandre Belloni <alexandre.belloni@bootlin.com>, Claudiu Beznea <claudiu.beznea@tuxon.dev>, 
-	Florian Fainelli <f.fainelli@gmail.com>, Tony Lindgren <tony@atomide.com>, devicetree@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org, 
-	linux-gpio@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
-	linux-iio@vger.kernel.org, linux-media@vger.kernel.org, 
-	netdev@vger.kernel.org, linux-pci@vger.kernel.org, 
-	linux-phy@lists.infradead.org
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 2/6] dt-bindings: media: camss: Add
+ qcom,kaanapali-camss binding
+To: Vijay Kumar Tumati <vijay.tumati@oss.qualcomm.com>,
+ Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
+ Hangxiang Ma <hangxiang.ma@oss.qualcomm.com>,
+ Loic Poulain <loic.poulain@oss.qualcomm.com>, Robert Foss
+ <rfoss@kernel.org>, Andi Shyti <andi.shyti@kernel.org>,
+ Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
+ Conor Dooley <conor+dt@kernel.org>, Todor Tomov <todor.too@gmail.com>,
+ Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc: linux-i2c@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-media@vger.kernel.org, aiqun.yu@oss.qualcomm.com,
+ tingwei.zhang@oss.qualcomm.com, trilok.soni@oss.qualcomm.com,
+ yijie.yang@oss.qualcomm.com, Jingyi Wang <jingyi.wang@oss.qualcomm.com>,
+ Atiya Kailany <atiya.kailany@oss.qualcomm.com>
+References: <20251014-add-support-for-camss-on-kaanapali-v2-0-f5745ba2dff9@oss.qualcomm.com>
+ <20251014-add-support-for-camss-on-kaanapali-v2-2-f5745ba2dff9@oss.qualcomm.com>
+ <dce1018c-6165-407c-8f3d-40859cb36b11@linaro.org>
+ <0b6c157a-3d8d-4251-a704-31f8369f6a4e@linaro.org>
+ <a0d9389b-67a5-458a-858b-ffdd95f7ccc6@linaro.org>
+ <62a3f09b-50d6-4ace-8229-d71585378ae1@oss.qualcomm.com>
+From: Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>
+In-Reply-To: <62a3f09b-50d6-4ace-8229-d71585378ae1@oss.qualcomm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-Hi Rob,
+On 10/16/25 06:46, Vijay Kumar Tumati wrote:
+> 
+> On 10/15/2025 4:32 PM, Vladimir Zapolskiy wrote:
+>> On 10/16/25 00:43, Bryan O'Donoghue wrote:
+>>> On 15/10/2025 20:45, Vladimir Zapolskiy wrote:
+>>>>> +  power-domains:
+>>>>> +    items:
+>>>>> +      - description:
+>>>>> +          TFE0 GDSC - Thin Front End, Global Distributed Switch
+>>>>> Controller.
+>>>>> +      - description:
+>>>>> +          TFE1 GDSC - Thin Front End, Global Distributed Switch
+>>>>> Controller.
+>>>>> +      - description:
+>>>>> +          TFE2 GDSC - Thin Front End, Global Distributed Switch
+>>>>> Controller.
+>>>>> +      - description:
+>>>>> +          Titan GDSC - Titan ISP Block Global Distributed Switch
+>>>>> Controller.
+>>>>> +
+>>>>> +  power-domain-names:
+>>>>> +    items:
+>>>>> +      - const: tfe0
+>>>>> +      - const: tfe1
+>>>>> +      - const: tfe2
+>>>>
+>>>> Please remove all 'tfeX' power domains, they are not going to be
+>>>> utilized
+>>>> any time soon.
+>>>>
+>>>> When 'power-domains' list is just a single Titan GDSC,
+>>>> 'power-domain-names'
+>>>> property is not needed.
+>>>
+>>> Each one of these TFEs powers an individually power-collapsible TFEs.
+>>>
+>>> This is also so with the other xFE power-domains on previous SoC
+>>> generations.
+>>
+>> This is false, for instance there is no management of SFEx power domains
+>> in SM8550 or X1E80100 CAMSS in the upstrem, neither there is no
+>> management
+>> of SBI, IPE, BPS, CPP and so on GDSC power domans given by CAMCCs.
+>>
+>> TFEx is no more special, if it's unused, then it should not be added.
+> I agree with Bryan, if I understood the original comment correctly. This
+> is no different to the IFE0/1/2 GDSCs on SM8550. All the other modules
+> listed above (SFE, IPE, BPS etc.) are not supported by the CAMSS driver
+> and hence there is no management. However, we need to manage the TOP and
+> TFE0/1/2 GDSCs for the real time RDI paths.
 
-On Thu, 16 Oct 2025 at 01:20, Rob Herring (Arm) <robh@kernel.org> wrote:
-> yamllint has gained a new check which checks for inconsistent quoting
-> (mixed " and ' quotes within a file). Fix all the cases yamllint found
-> so we can enable the check (once the check is in a release). Use
-> whichever quoting is dominate in the file.
->
-> Signed-off-by: Rob Herring (Arm) <robh@kernel.org>
+Agreed, at first glance I didn't find the management of the TFE power domains
+in the driver's change 3/6 from this series, however now I see it was added
+along with the 6/6 change.
 
-Thanks for your patch!
+This my comment is answered, thank you.
 
-Since you are mentioning mixed quotes, is one or the other preferred?
-Shouldn't we try to be consistent across all files?
-
-> --- a/Documentation/devicetree/bindings/pinctrl/renesas,pfc.yaml
-> +++ b/Documentation/devicetree/bindings/pinctrl/renesas,pfc.yaml
-> @@ -129,7 +129,7 @@ additionalProperties:
->
->      - type: object
->        additionalProperties:
-> -        $ref: "#/additionalProperties/anyOf/0"
-> +        $ref: '#/additionalProperties/anyOf/0'
->
->  examples:
->    - |
-> @@ -190,7 +190,7 @@ examples:
->
->              sdhi0_pins: sd0 {
->                      groups = "sdhi0_data4", "sdhi0_ctrl";
-> -                    function = "sdhi0";
-> +                    function = "sdhi0';
-
-Huh?
-
->                      power-source = <3300>;
->              };
->      };
-
-Gr{oetje,eeting}s,
-
-                        Geert
+>>
+>>>
+>>> You'll need the TFEx power-domain to process any data on TFEx with the
+>>> 'lite' versions being tied to the TOP GDSC.
+>>
+>> When it is needed, the documentation will be updated accordingly,
+>> right now
+>> it is unknown what a data processing on TFEx looks like, it might happen
+>> that there will be separate device tree nodes for TFEx.
+>>
+>> TFEx power domains shall be removed right now, unti; a usecase in the
+>> upstream
+>> CAMSS appears to use them, I haven't seen such code at the moment.
+>>
+> We attach these power power domains by name in the corresponding driver.
+> For instance, the VFE driver attaches the TFE power domains mentioned
+> here and are exercised from vfe_set_power() -> vfe_get()
+> ->vfe_pm_domain_on(). You can also see the related codes with '.has_pd'
+> and '.pd_name' properties in the CAMSS subdev resource structures. Hope
+> this clarifies.
+> 
 
 -- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+Best wishes,
+Vladimir
