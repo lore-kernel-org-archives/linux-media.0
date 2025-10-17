@@ -1,34 +1,34 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A2B222128D
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A31923EA9B
 	for <linux-media@vger.kernel.org>; Fri, 17 Oct 2025 06:01:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760680873; cv=none; b=G14UHF5UYPuqEipeU1kIuDgGMPaBFhOGYQWFWZDMX/r+2Gk91cqotDnnPVGoT9TmMUZHeN7zp0xh2sLvPVJlv1T6kTasL9DFAWyRkGfbRpCp7/SsA79NcIn7SlXtlr30i2BYSmsHON15J6Zq0m/7u1iuH6VG+XwBv4A28aigs7s=
+	t=1760680873; cv=none; b=bwknTi4rYmfdLOb1YfSA6OLGYz9oOZhUjHAzl5pXyqa65pSSejPJUpghGIOWeGhEYOcja4I6vPUJkurVvQDHcTwvE/CKSLbVWRighg+93jGZbgJRoZ/qC2qxlcHE1+W+W3G24HRceUpzMcJTdunEyCIMAYacsIS6oIQi0jQ/KMg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1760680873; c=relaxed/simple;
-	bh=WZbDY+K8miRSugWtquglgJcWtS5kllg8beeuhZrQBf0=;
+	bh=aXIG2PE7S0TOPEDHAG6amHWiC4IOps44S5c5kBb9pPc=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=JKpo9rHUPP+DfWbtLPXZZvDXkaFl9qe9x3oBxJdtuDOWf5lmmiy/j69WSgscSzot2b2CSalgJ2WQ23Ph+/MQXU2q/b3PQNmMjjsatF74SKnzOuIxjJzCDnclsq/YcgZsE6w/QRKzUMF+D2r3Y2unUSeCTg8SB0GU20zhhsymfmE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=J5GSKqGK; arc=none smtp.client-ip=10.30.226.201
+	 MIME-Version; b=aQ0tzwBH+6BYARl/VaZGSDXLGbghkik2QY0EZfL7jVVc4G7EfNNEEuYZCsj+Hc31iJItbrcFAIu9YD9I4EAV4s++jNRqnzf1Y+rbskyBz5L47ZgFPFzxkjci2440S9Vd/TmCOrY2DPhoSzZELuWvwj6Mmm0C0uWq1usnzDlS9hI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=LjSHN5Yk; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="J5GSKqGK"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A9F7DC116C6;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="LjSHN5Yk"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9BA66C116B1;
 	Fri, 17 Oct 2025 06:01:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1760680872;
-	bh=WZbDY+K8miRSugWtquglgJcWtS5kllg8beeuhZrQBf0=;
+	bh=aXIG2PE7S0TOPEDHAG6amHWiC4IOps44S5c5kBb9pPc=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=J5GSKqGKH6F/JVLDq7duogF6QGWZirZbHi0rADW2khCn3EasHMUi9vHwchD8bxC6e
-	 N9n78ho+LfU8hTAnP4RjxD5qZ9fKTHRC+vFaXpkVpTMOyus/9pik6enAtuRvGfvIMh
-	 XN192SoCjWbKolYShjKb6mCpoehBCsdCfUeg3UfQFY/SggM80wjkmRoT8NwPQu9WHe
-	 XqaIUKL5EPfg2frgnt3iJK5FHAC8Zy8ct5LV31kkGIF/z9D1rEnBelFU8t4e3yNDE8
-	 4OAfjxZWRGUfS1aAT1ahSkkwJS2yFzQbHuz5RaNW/6YGKJ6N7YGmH80xQNncKTYPRH
-	 6TgXNN27J3yZw==
+	b=LjSHN5YkdVk2r4hPk+SkCBXwwSQ8enJ44rHVoJgAM4uilx7VvbQiPd5nMft4OSzEd
+	 5AWVyEVsN0hqjV/sv8XTfxQ4p3wFE6CprCwXVWeYF6N+SGPQwhHyY80gkPgYH0qvsD
+	 xHbvB8W43QaD0i86u4k26BYNX0D/mEuwEyNsxHpKozPfgfvN8iHwPEkY3SjvR9CL6c
+	 0XK/i7rNhXP7wKyrEwzubnD8so+CsY2JWhOdF3MDzq0WKNxieO2xevoobGBd1Wmh7k
+	 pa2bQyt2aduC4BEKbTy343mUSYiwLmrTKLW5h4AUSZn/8ZEtFyAIcOFdkzTxAWpdSQ
+	 h2Cr4q1mRhZDw==
 Received: from johan by xi.lan with local (Exim 4.98.2)
 	(envelope-from <johan@kernel.org>)
-	id 1v9dWd-0000000029G-1Mox;
+	id 1v9dWd-0000000029E-12TE;
 	Fri, 17 Oct 2025 08:01:15 +0200
 From: Johan Hovold <johan@kernel.org>
 To: Rui Miguel Silva <rmfrfs@gmail.com>,
@@ -38,9 +38,9 @@ Cc: Purism Kernel Team <kernel@puri.sm>,
 	Mauro Carvalho Chehab <mchehab@kernel.org>,
 	linux-media@vger.kernel.org,
 	Johan Hovold <johan@kernel.org>
-Subject: [PATCH 3/3] media: imx8mq-mipi-csi2: drop unused module alias
-Date: Fri, 17 Oct 2025 08:00:51 +0200
-Message-ID: <20251017060051.8204-3-johan@kernel.org>
+Subject: [PATCH 2/3] media: imx7-media-csi: drop unused module alias
+Date: Fri, 17 Oct 2025 08:00:50 +0200
+Message-ID: <20251017060051.8204-2-johan@kernel.org>
 X-Mailer: git-send-email 2.49.1
 In-Reply-To: <20251017060051.8204-1-johan@kernel.org>
 References: <20251017060051.8204-1-johan@kernel.org>
@@ -57,18 +57,18 @@ unused platform module alias.
 
 Signed-off-by: Johan Hovold <johan@kernel.org>
 ---
- drivers/media/platform/nxp/imx8mq-mipi-csi2.c | 1 -
+ drivers/media/platform/nxp/imx7-media-csi.c | 1 -
  1 file changed, 1 deletion(-)
 
-diff --git a/drivers/media/platform/nxp/imx8mq-mipi-csi2.c b/drivers/media/platform/nxp/imx8mq-mipi-csi2.c
-index 3a4645f59a44..5a5934ce1f84 100644
---- a/drivers/media/platform/nxp/imx8mq-mipi-csi2.c
-+++ b/drivers/media/platform/nxp/imx8mq-mipi-csi2.c
-@@ -1114,4 +1114,3 @@ module_platform_driver(imx8mq_mipi_csi_driver);
- MODULE_DESCRIPTION("i.MX8MQ MIPI CSI-2 receiver driver");
- MODULE_AUTHOR("Martin Kepplinger <martin.kepplinger@puri.sm>");
+diff --git a/drivers/media/platform/nxp/imx7-media-csi.c b/drivers/media/platform/nxp/imx7-media-csi.c
+index 34a92642bbfe..933a5f39f9f4 100644
+--- a/drivers/media/platform/nxp/imx7-media-csi.c
++++ b/drivers/media/platform/nxp/imx7-media-csi.c
+@@ -2290,4 +2290,3 @@ module_platform_driver(imx7_csi_driver);
+ MODULE_DESCRIPTION("i.MX7 CSI subdev driver");
+ MODULE_AUTHOR("Rui Miguel Silva <rui.silva@linaro.org>");
  MODULE_LICENSE("GPL v2");
--MODULE_ALIAS("platform:imx8mq-mipi-csi2");
+-MODULE_ALIAS("platform:imx7-csi");
 -- 
 2.49.1
 
