@@ -1,277 +1,192 @@
-Received: from mout-p-101.mailbox.org (mout-p-101.mailbox.org [80.241.56.151])
+Received: from SA9PR02CU001.outbound.protection.outlook.com (mail-southcentralusazon11013067.outbound.protection.outlook.com [40.93.196.67])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8ED032F12B8
-	for <linux-media@vger.kernel.org>; Fri, 17 Oct 2025 15:59:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=80.241.56.151
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760716782; cv=none; b=tPxgf9gzSVpc2mhtNK5a76okcU25065yyBsREuM3xoomxQEGGGbCFwrA5j/9b61kZ22MHY3TRtO/JWQZPg0IzvaibAj9AXDQZCrojuu+sXtqKa16I7SzTIPRO3INOAHrsnBXLcSMC8JEiqavIwcfjPq8aN6sAXxkxHA4S/Z0XCI=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760716782; c=relaxed/simple;
-	bh=Nd8mAWkxW5amWFcLoMF+waaGuZMATpYYv3s8hI0Nfpg=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=T6ZveqKkbgQ00wK8B5FNqK8mxEFHa+wJhW5rsBWHqH+CiGMIRx/1T+i4EVV70SfxDdu+DUU5I0gHXrRY4QklTnwXH+Y3aNVGp7tH1BkWkwfeCUVRo/0P2Wa6doLWuhn8KMEF7lMpOYkKoZidRjHB6sHRgo9n8SCqLKuX/2lcziI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=mailbox.org; spf=pass smtp.mailfrom=mailbox.org; dkim=pass (2048-bit key) header.d=mailbox.org header.i=@mailbox.org header.b=IE3inkyh; dkim=pass (2048-bit key) header.d=mailbox.org header.i=@mailbox.org header.b=FhUeDa/s; arc=none smtp.client-ip=80.241.56.151
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=mailbox.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mailbox.org
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7814B26E6EA;
+	Fri, 17 Oct 2025 16:01:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.93.196.67
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1760716869; cv=fail; b=NPFwjSq2mFgaE4KPMn8SdGnPX+anf0rZjk3RKy0XjQngQTaEVH+bxscR96cW8gl8z/Z3Rw8SQ2HkXufTrwsXxQmbc7jdfCryn08B7dotCEJBl1Y0rqCxIekX83sXFRCmDMJAtah5FnmhfZcTVJ8W2+4hpUQ4leK8bmh/5juWJbA=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1760716869; c=relaxed/simple;
+	bh=GakEOaYFf1LH4iIydkZYUTvtk97EUfutGNLKdHDPghI=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
+	 Content-Disposition:In-Reply-To:MIME-Version; b=hrzgm/q+JqrNu1H3A+yCRILLk4bWO+MFEtgIh1/9isYq8ZnLOm8uFg4up595tlOiNomjuK5yrpskqUcbFsw8PPx9/XtFC62o2rIOfeF8rR0CqjjZCEzmXnlYk/oVcc9Fm5Fc61KCqb+MYx7KjWyhspZIxh4zlPEMTF2SjUFi+3Y=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=sEhuEtYy; arc=fail smtp.client-ip=40.93.196.67
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=mailbox.org header.i=@mailbox.org header.b="IE3inkyh";
-	dkim=pass (2048-bit key) header.d=mailbox.org header.i=@mailbox.org header.b="FhUeDa/s"
-Received: from smtp202.mailbox.org (smtp202.mailbox.org [IPv6:2001:67c:2050:b231:465::202])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mout-p-101.mailbox.org (Postfix) with ESMTPS id 4cp8f04jmrz9t8p;
-	Fri, 17 Oct 2025 17:59:36 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mailbox.org; s=mail20150812;
-	t=1760716776;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=f0pYqwJVWWzsYVFSkRioR45/eTDyY3UH5KaD3QRb1/M=;
-	b=IE3inkyhV0nDnClnOUMb99gUxryTt+AyRrT2nRrS8DGom8Impg/8C7ERrNHF6wHI7kbKO1
-	ZEsK9IPb2bYHBYtFI8nvIfz1pkDJgpZKlGIaR+YQlgVIDit0R3wDwSqAIkR/1YbjyabSl7
-	j5pFxZ5MRTVfjfwE/9SsL77uGn7wkT5xa/9TghLakWg6T4vKZIyOnOVcKsmryONCXsGRS+
-	MKn1aH+D3nzlTHJlSV4zHdgQzsEXSvNkUULw9+w4wT/p9kcaHVELwQftJBpPGgByhIoxbQ
-	5acHsR/V+tN8tbPWeALHd+/Gnpp0ehC/D7PoXnw9xg9J9G6KiWsjtX0b5STE0Q==
-Authentication-Results: outgoing_mbo_mout;
-	dkim=pass header.d=mailbox.org header.s=mail20150812 header.b="FhUeDa/s";
-	spf=pass (outgoing_mbo_mout: domain of marek.vasut@mailbox.org designates 2001:67c:2050:b231:465::202 as permitted sender) smtp.mailfrom=marek.vasut@mailbox.org
-From: Marek Vasut <marek.vasut@mailbox.org>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mailbox.org; s=mail20150812;
-	t=1760716774;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=f0pYqwJVWWzsYVFSkRioR45/eTDyY3UH5KaD3QRb1/M=;
-	b=FhUeDa/shTlWXd24SYP+fPccCuFqupxVYwGHW3XFF/6t3auI4lK3bjUVLYFeP569jqBeSc
-	DJ0TFZu0r9y0buD4IwUizPZXQEiYRQ9GBihGgzYj83uW7ODvWCD0qpvUN2IuTVGIYeuEa9
-	Y49JCMIxJaj2lDn6R/e0jhxTeStDwfgcHn5WkG6mytAPgCrVZO4XK06z57LhClX22Z61Vp
-	Fkn6zuBpW7oT5WYUnUrkNaLKqbIzYJDlzLxjdFYW/aEDvLivbhrJEoR1Dmq9CLspMN+Qzd
-	jJyhmZOTNiu99d0XbCB4IIWYCHzoqbbvhJygth9lbM0B+s8wYEptNuRfamSMcQ==
-To: linux-media@vger.kernel.org
-Cc: Marek Vasut <marek.vasut@mailbox.org>,
-	Ming Qian <ming.qian@oss.nxp.com>,
-	Fabio Estevam <festevam@gmail.com>,
-	Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-	Mauro Carvalho Chehab <mchehab@kernel.org>,
-	Mirela Rabulea <mirela.rabulea@nxp.com>,
-	Nicolas Dufresne <nicolas.dufresne@collabora.com>,
-	Pengutronix Kernel Team <kernel@pengutronix.de>,
-	Sascha Hauer <s.hauer@pengutronix.de>,
-	Shawn Guo <shawnguo@kernel.org>,
-	imx@lists.linux.dev,
-	linux-arm-kernel@lists.infradead.org
-Subject: [PATCH v3 2/2] media: imx-jpeg: Add support for descriptor allocation from SRAM
-Date: Fri, 17 Oct 2025 17:58:38 +0200
-Message-ID: <20251017155912.109454-2-marek.vasut@mailbox.org>
-In-Reply-To: <20251017155912.109454-1-marek.vasut@mailbox.org>
-References: <20251017155912.109454-1-marek.vasut@mailbox.org>
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="sEhuEtYy"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=m3jFsuGPVx0bitpaVgd9TTjdTV8XKZ+9Ww3d7fiJK9TnOmtsHhk4HbX9aB6E3H/qpBTCnGb1CIrNpgbo46p8Ytz4AwH8xEOAd3dy4Vx2NoMDWKBib3iomOEnKj++g07/b9J+LdK/pt6yMgpufXuEPT14P81KPR9sMV02UaakL9T1i9Z7y6tNGl5BB3VitTVl3AbwWdKCdqJx+NGzcdiDY6s0X6GGxi+TJLsrWqEhwe5idh8MeWJWB1V3MHqgKh+35GIm62A9IpqvQFQMQA1exJ1fsl3w7JuYMSS+S7JpROER7fn89L94bmcPvy2qjhUp0o9rkVeZBmHATP/kwtEnVg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=y82xXlZCCoWv3AoNxPuBst7fTgDKzhDGPAn+Kop7zYo=;
+ b=axukzX1XduhM2fAflbh4qt9SSQoQ2umhUlxZBP89bOmboD6VM/wVvOG+KoazJmGS/0wZDrkFtvspxCPdKmnaelIcKAq69T7Aw8A2CJIK0xrpfqLZc0RubuIvaZEeZdhSAjF8ZkBqojaH9a0Y1HimU14fMApAGmXbrruWZ6HavTSCXa9+AWitoPwv1Cx4BsbOivcDFLqUIvAZ8+Fq1cRFFDn5Ekda+TB21+Uw+M+nspSTv+EqSHflvGx7Vz2/DqIDzqRoUSZbkvKBGGwuo8pYbvxkdcjiKJieyP5Bbe0Bk7co6CQ9MTQPCrxkS+kuUlNn5/23R8ueqHR2YYhR0hRHUg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=y82xXlZCCoWv3AoNxPuBst7fTgDKzhDGPAn+Kop7zYo=;
+ b=sEhuEtYyzNwULX5+Nc/c6rJPVRbjxiVIF9Q3713xNNVhu7hzqCmnM2njJPC9wKh1lLo/sB0q/PpI+g55uMSGzUdOzDUi4Z0eo6CqdnIKKbgs2DquI2zujWzcEy57He5FYsaJtW5waoXmjq+J1M6f/96n2gTbYKAjlzKNHGvIlrMHc3UW2OQ/GrFkHPt/Iqy5xHtPCpr1pNu0GRfOGzhtCfppV2QcxG40K75oIkGszeBawVLbJGUcXrasY1PQ63qPKMbfpc4cYvqcqHh87W49uPqH5/YscghEq1m1KREni8D1Gs266eLNq/EBjl//7Fboo9jrQ4DVfnAny3uy5DMWTw==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from MN2PR12MB3613.namprd12.prod.outlook.com (2603:10b6:208:c1::17)
+ by MW4PR12MB7237.namprd12.prod.outlook.com (2603:10b6:303:22a::6) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9228.12; Fri, 17 Oct
+ 2025 16:01:03 +0000
+Received: from MN2PR12MB3613.namprd12.prod.outlook.com
+ ([fe80::1b3b:64f5:9211:608b]) by MN2PR12MB3613.namprd12.prod.outlook.com
+ ([fe80::1b3b:64f5:9211:608b%4]) with mapi id 15.20.9228.010; Fri, 17 Oct 2025
+ 16:01:03 +0000
+Date: Fri, 17 Oct 2025 13:01:01 -0300
+From: Jason Gunthorpe <jgg@nvidia.com>
+To: Leon Romanovsky <leon@kernel.org>
+Cc: Alex Williamson <alex.williamson@redhat.com>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Bjorn Helgaas <bhelgaas@google.com>,
+	Christian =?utf-8?B?S8O2bmln?= <christian.koenig@amd.com>,
+	dri-devel@lists.freedesktop.org, iommu@lists.linux.dev,
+	Jens Axboe <axboe@kernel.dk>, Joerg Roedel <joro@8bytes.org>,
+	kvm@vger.kernel.org, linaro-mm-sig@lists.linaro.org,
+	linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-media@vger.kernel.org, linux-mm@kvack.org,
+	linux-pci@vger.kernel.org, Logan Gunthorpe <logang@deltatee.com>,
+	Marek Szyprowski <m.szyprowski@samsung.com>,
+	Robin Murphy <robin.murphy@arm.com>,
+	Sumit Semwal <sumit.semwal@linaro.org>,
+	Vivek Kasireddy <vivek.kasireddy@intel.com>,
+	Will Deacon <will@kernel.org>
+Subject: Re: [PATCH v5 9/9] vfio/pci: Add dma-buf export support for MMIO
+ regions
+Message-ID: <20251017160101.GO3901471@nvidia.com>
+References: <cover.1760368250.git.leon@kernel.org>
+ <72ecaa13864ca346797e342d23a7929562788148.1760368250.git.leon@kernel.org>
+ <20251016235332.GA265079@nvidia.com>
+ <20251017054007.GB6199@unreal>
+ <20251017155850.GN3901471@nvidia.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20251017155850.GN3901471@nvidia.com>
+X-ClientProxiedBy: SN6PR2101CA0014.namprd21.prod.outlook.com
+ (2603:10b6:805:106::24) To MN2PR12MB3613.namprd12.prod.outlook.com
+ (2603:10b6:208:c1::17)
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-MBO-RS-ID: 0de76c55d45f1b8f442
-X-MBO-RS-META: fcu4qcop6hfbnxiuqwbde37fppkdzmxn
-X-Rspamd-Queue-Id: 4cp8f04jmrz9t8p
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: MN2PR12MB3613:EE_|MW4PR12MB7237:EE_
+X-MS-Office365-Filtering-Correlation-Id: 4155e212-d03a-4d0f-841c-08de0d965f8a
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;ARA:13230040|1800799024|366016|376014|7416014;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?lH1mN6ye+aIC3KjEo2L2o6rOhp96eiRtLcFlMlpCyUnfvCUeJa4qHEhYdcZf?=
+ =?us-ascii?Q?y331eYoRRMw3g2HbwlNrGnskKwVC4RHKODe2yU8X1GeGhwmVv1HH5vr0IrEo?=
+ =?us-ascii?Q?6BNO2QewT00Nf2UaZPwb/OaLBdc+xUAOmL3JZEgbYdSi1OTGxs7U+C4OStaB?=
+ =?us-ascii?Q?GrUQEaQpxOKffZg7G9uiBoPQ3SUa6wjFdTQcJFd6oB64n7qIuQg9mO7Xl6Il?=
+ =?us-ascii?Q?FOwkXkzPjZyQXUK445u2GK0ajbZMvKkS7pBBazk7WPftW7l8PUS6sgllOmzg?=
+ =?us-ascii?Q?KUsX2oFjaPanRBR983xvL4U30YlycrIeRUeNB/wN0gpCXZnXPxkk7aoQkZO0?=
+ =?us-ascii?Q?ajTxGmlhMJ/5l/ThJlZ+BOxT6u64ddze56TRAFexgDZINPXPkEBKve2PS1BB?=
+ =?us-ascii?Q?CM0+dLqxKaEyUDQXmecHM757sTSI1iis4USqYs5owqWnjO87j0Q3VXdYEQch?=
+ =?us-ascii?Q?HwhPphELrhLCWxU0pIPp2AbTuVLJQUS71cEpVjFA0DzT46urv66ToD5ogi68?=
+ =?us-ascii?Q?+IdqPRITVrhX+2UCATkiP1GX4eaJ1qyvSRXe6lmVUEx053ihW0mmwQsUJxrQ?=
+ =?us-ascii?Q?19LHWhWZb4PXktIU3ZBuRbIxlPZ4+JINnCfYULDybw0fNQb4HQV6OmLUGsm9?=
+ =?us-ascii?Q?yRPDAERTbR7oLQAAY040tdfMK9HrrCkvBSS9ERZVqZfhAoPyHL8o+SDYM4s2?=
+ =?us-ascii?Q?KpLOivo8xeupZzRKYlT4qTWNNPtOqi18R631O5SLwtTbbE09GqNXO68CvVp+?=
+ =?us-ascii?Q?SoXPhF1fs7/0fFuqMlo7dFd6zZ7s34pZEeFaQa7n1XgY7FkytSctBsXmp31K?=
+ =?us-ascii?Q?yKcA2kns02b4EKRsHpEV8EAo2MsxjKL1a5Xi9GmzONn/6W7ldHl8rcSDYBlr?=
+ =?us-ascii?Q?AbMj0twZQkE2Uu90FQeRuPgKRAZQIcSimOlb1WGA3eX958NyPKPYSn7lyWl/?=
+ =?us-ascii?Q?yov0owrMWbgjSwuSBGEmCBR0OU7EHGNDjQftL/VRes7rzU80vkpPnko+9l6C?=
+ =?us-ascii?Q?JqvCFOrGOYpo6bty3Xt9IgYRm/NgjR20Xrs+aqgH845irXaJW1AKdaZOPVUn?=
+ =?us-ascii?Q?/0H5NjysFNpSjwuw/kUk6B7P2RaKTTlqXYu2Fa3kDzCulvu0jtX+FZB47eXz?=
+ =?us-ascii?Q?I4P9JuIMUCHuIV4Z9cr+4S4Wo0qiORzgZHeoiqlp9ulumQwGBN/ifeEHUZrQ?=
+ =?us-ascii?Q?1KWSSWl8YQmeHMRVPMw09IrWql+3BiG5OyWdmhsOkabpxremEg2KH+2c5CA9?=
+ =?us-ascii?Q?2M/gsYYmncZqGC0qlS+69aNScatx7JHmnf2DHT1hgNlFUFND8qOABGQNzO2Y?=
+ =?us-ascii?Q?B4v88iqQD8nju7I0ja3BzXFLdfcanei6MdOieycYrePZkMO71AMW4p0TPsI6?=
+ =?us-ascii?Q?3Cj6p9sVAqpOzfUOORriKPTi1FnDH7UsswLMOdi0RHF2Rex2oVqrBs5HIggH?=
+ =?us-ascii?Q?dNhU+sBnVlSg3k9XR87rqZmqVAUZoXej?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN2PR12MB3613.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(366016)(376014)(7416014);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?kBu9N7hZGGARp37UosIoW//cgPBrRqdAZA+mqc+l5/94XwDqWRqpo4/POhX6?=
+ =?us-ascii?Q?ZZ9824nQntoxhlAmeYlWBWMiN49uw+YpAtwVqziJ4XgDaRpl363/7vytMIn+?=
+ =?us-ascii?Q?7tXVk53dPXpXYfS56vPTMf2iKSCY2qeQH6AXkn3W2zcXofZd4nyuS2YXO9if?=
+ =?us-ascii?Q?mtOVScR33LaWhwIRdXwuULx+HR+WD6HnqGpilDVUYna9ZYYiALGrr61gLeKt?=
+ =?us-ascii?Q?PK62+xyEKaiWAGP6iTiWSpZZT1PCdbbHkP7LRwPEGJWq8soytl8kMR7oQ2Bz?=
+ =?us-ascii?Q?NVz/gA/kP52BCDE4ieAMLpbA4U7+PlYO2YVZtipqvR0+NxrotWzxTY2Fr2DF?=
+ =?us-ascii?Q?ze9kjcIcsXrEAqtNOw4bDfnk/PXVCFQFuH1B/6feR1NvrfzgkK0wJNjhuLUR?=
+ =?us-ascii?Q?GnKsrJfT8b2mx+AgxLqDTfbOIVYS2SVug+HWH1O4oM7FSFkDIf7SSEYc7NSI?=
+ =?us-ascii?Q?MicdlyB2kLQzoK13fTKSztcPmVAbPAj2Xogsggb0FGRMdX5DC3YheBL3yUSp?=
+ =?us-ascii?Q?iuERtwhWKPTDXRvFTOOw6o+/FhQkBLLfQcKUdz4I5tm18GbZpbtdueS5bGZc?=
+ =?us-ascii?Q?XyxLcPsI8Y4Oh8bJp5d+bqkqLWV7kD5UZ6SnxJJYF28AKOPd0BnC4zEoBo5u?=
+ =?us-ascii?Q?u3igsTttS14LBJYdzi1OI2i6WUpfcgPQucQei1vozXYjcjMdTJcprTswYUeD?=
+ =?us-ascii?Q?51LdXJqurdOVvWn6gix8i3w49t/ZE00viBs/p5uq4Yp+n8IGkq5BKMNsJAie?=
+ =?us-ascii?Q?1UQx2BiETHkUncI22lYKhx3SxRIJBq8rLZhF/4nhM1qp1Vt0eDmnFkjxp+hJ?=
+ =?us-ascii?Q?cQR7A2DhYfzVDiHzHiwM4AKfU2XLYIZh1J94D2K4c58KUsGqO7rNpCtlh6wR?=
+ =?us-ascii?Q?T90e66/hWenRUf6FZWg8YMW3E+U9i11vI43P8EoQ8D1DtZOat3y84s8ezf1o?=
+ =?us-ascii?Q?vi6eV7LSUTvimz9eCJ5yAN8FviJOnl4pdRA5MsZ9KfZPat9w3r3nD6D/NUWe?=
+ =?us-ascii?Q?B49wmSRynmwxOxfVgR9QlYFDL5hSq/B4BkAK2VAkzc9qrq5L4fDsZeoiQGG1?=
+ =?us-ascii?Q?4rW+AwmlD+UJEQdfJTavha48z1pS/mORBALUcEZuw2/JDD9ZcjCUy+2shyQM?=
+ =?us-ascii?Q?K/wGTPgAr4bZeRJHg0RRAbfLCnT36BfYLl857WOCJ87ukgftkSslk4AzYLzz?=
+ =?us-ascii?Q?nYINUwtGLXnsHauByAvtxJnGa2h2mfwHEvo73seue55UseO6rprfGwGiyRwt?=
+ =?us-ascii?Q?glEO6GII+SaUZL+vMy9T5S8v46Mn4zy40upCQwxQrC9NMEs7Ri6sXB7scg9l?=
+ =?us-ascii?Q?qp4Q4hCA1d5Bv4auG2H74kXDOZwZMeNS0okh+CvLPABJVzoQjIFJkjbbf2TE?=
+ =?us-ascii?Q?V8CaAz3OJMEPSkdU22Cb4qbldxDBi/q9KUrxxy+XODloTiQ4MkC2fCdl4TMD?=
+ =?us-ascii?Q?aQoxrhWNpgHI+TUb97/YP4pCvY7EaUp7yefBEZkIU43grZHC3qJOz7rrnkY7?=
+ =?us-ascii?Q?xwSSVAxTxLTqD2NaqfbGkSdatDfwhwaLrHYiU7cRBFh3YYeWUMYUFObbL5qh?=
+ =?us-ascii?Q?cb4+9B0IaDFLxqXN+BGNIUFIQBsY4yzhUuVPM8AQ?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 4155e212-d03a-4d0f-841c-08de0d965f8a
+X-MS-Exchange-CrossTenant-AuthSource: MN2PR12MB3613.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Oct 2025 16:01:03.3858
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: ePKq45QTNlb4TNCVnqQR7loqjURQiQSxnhbuExu1lF6dfCbBR5wDwPyM6le85jcH
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW4PR12MB7237
 
-Add support for optional allocation of bitstream descriptors from SRAM
-instead of DRAM. In case the encoder/decoder DT node contains 'sram'
-property which points to 'mmio-sram', the driver will attempt to use
-the SRAM instead of DRAM for descriptor allocation, which might improve
-performance.
+On Fri, Oct 17, 2025 at 12:58:50PM -0300, Jason Gunthorpe wrote:
+> On Fri, Oct 17, 2025 at 08:40:07AM +0300, Leon Romanovsky wrote:
+> > > > +static void vfio_pci_dma_buf_detach(struct dma_buf *dmabuf,
+> > > > +				    struct dma_buf_attachment *attachment)
+> > > > +{
+> > > > +	kfree(attachment->priv);
+> > > > +}
+> > > 
+> > > If the caller fails to call map then it leaks the iova.
+> > 
+> > I'm relying on dmabuf code and documentation:
+> > 
+> >    926 /**
+> >    927  * dma_buf_dynamic_attach - Add the device to dma_buf's attachments list
+> > ...   
+> >    932  *
+> >    933  * Returns struct dma_buf_attachment pointer for this attachment. Attachments
+> >    934  * must be cleaned up by calling dma_buf_detach().
+> > 
+> > Successful call to vfio_pci_dma_buf_attach() MUST be accompanied by call
+> > to vfio_pci_dma_buf_detach(), so as far as dmabuf implementation follows
+> > it, there is no leak.
+> 
+> It leaks the ivoa because there is no dma_iova_destroy() unless you
+> call unmap. detach is not unmap and unmap is not mandatory to call.
 
-This also helps on i.MX95 rev.A with sporadic SLOTn_STATUS IMG_RD_ERR
-bit 11 being triggered during JPEG encoding, which is caused by a bug
-fixed on later SoC revisions. The bug occurs less often when using the
-SRAM for descriptor storage, but is not entirely mitigated. The following
-pipeline triggers the bug when descriptors get allocated from DRAM, the
-pipeline often hangs after a few seconds and the encoder driver indicates
-"timeout, cancel it":
+Though putting iova free in detach is problematic for the hot-unplug
+case. In that instance we need to ensure the iova is cleaned up prior
+to returning from vfio's remove(). detached is called on the importers
+timeline but unmap is required to be called in move_notify..
 
-gst-launch-1.0 videotestsrc ! \
-               video/x-raw,width=256,height=256,format=YUY2 ! \
-               queue ! v4l2jpegenc ! queue ! fakesink
+So I guess some kind of flag to trigger the unmap after cleanup to
+free the iova?
 
-Tested-by: Ming Qian <ming.qian@oss.nxp.com>
-Signed-off-by: Marek Vasut <marek.vasut@mailbox.org>
----
-Cc: Fabio Estevam <festevam@gmail.com>
-Cc: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Cc: Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc: Ming Qian <ming.qian@oss.nxp.com>
-Cc: Mirela Rabulea <mirela.rabulea@nxp.com>
-Cc: Nicolas Dufresne <nicolas.dufresne@collabora.com>
-Cc: Pengutronix Kernel Team <kernel@pengutronix.de>
-Cc: Sascha Hauer <s.hauer@pengutronix.de>
-Cc: Shawn Guo <shawnguo@kernel.org>
-Cc: imx@lists.linux.dev
-Cc: linux-arm-kernel@lists.infradead.org
-Cc: linux-media@vger.kernel.org
----
-V2: - Wrap lines to 100
-    - Update commit message
-V3: Add TB from Ming
----
- .../media/platform/nxp/imx-jpeg/mxc-jpeg.c    | 70 +++++++++++--------
- .../media/platform/nxp/imx-jpeg/mxc-jpeg.h    |  1 +
- 2 files changed, 43 insertions(+), 28 deletions(-)
-
-diff --git a/drivers/media/platform/nxp/imx-jpeg/mxc-jpeg.c b/drivers/media/platform/nxp/imx-jpeg/mxc-jpeg.c
-index df3ccdf767baf..a1e9878ec517f 100644
---- a/drivers/media/platform/nxp/imx-jpeg/mxc-jpeg.c
-+++ b/drivers/media/platform/nxp/imx-jpeg/mxc-jpeg.c
-@@ -44,6 +44,7 @@
- #include <linux/module.h>
- #include <linux/io.h>
- #include <linux/clk.h>
-+#include <linux/genalloc.h>
- #include <linux/of_platform.h>
- #include <linux/platform_device.h>
- #include <linux/slab.h>
-@@ -783,32 +784,40 @@ static int mxc_get_free_slot(struct mxc_jpeg_slot_data *slot_data)
- 	return -1;
- }
- 
-+static void mxc_jpeg_free(struct mxc_jpeg_dev *jpeg, size_t size, void *addr, dma_addr_t handle)
-+{
-+	if (jpeg->sram_pool)
-+		gen_pool_free(jpeg->sram_pool, (unsigned long)addr, size);
-+	else
-+		dma_free_coherent(jpeg->dev, size, addr, handle);
-+}
-+
- static void mxc_jpeg_free_slot_data(struct mxc_jpeg_dev *jpeg)
- {
- 	/* free descriptor for decoding/encoding phase */
--	dma_free_coherent(jpeg->dev, sizeof(struct mxc_jpeg_desc),
--			  jpeg->slot_data.desc,
--			  jpeg->slot_data.desc_handle);
-+	mxc_jpeg_free(jpeg, sizeof(struct mxc_jpeg_desc),
-+		      jpeg->slot_data.desc,
-+		      jpeg->slot_data.desc_handle);
- 	jpeg->slot_data.desc = NULL;
- 	jpeg->slot_data.desc_handle = 0;
- 
- 	/* free descriptor for encoder configuration phase / decoder DHT */
--	dma_free_coherent(jpeg->dev, sizeof(struct mxc_jpeg_desc),
--			  jpeg->slot_data.cfg_desc,
--			  jpeg->slot_data.cfg_desc_handle);
-+	mxc_jpeg_free(jpeg, sizeof(struct mxc_jpeg_desc),
-+		      jpeg->slot_data.cfg_desc,
-+		      jpeg->slot_data.cfg_desc_handle);
- 	jpeg->slot_data.cfg_desc_handle = 0;
- 	jpeg->slot_data.cfg_desc = NULL;
- 
- 	/* free configuration stream */
--	dma_free_coherent(jpeg->dev, MXC_JPEG_MAX_CFG_STREAM,
--			  jpeg->slot_data.cfg_stream_vaddr,
--			  jpeg->slot_data.cfg_stream_handle);
-+	mxc_jpeg_free(jpeg, MXC_JPEG_MAX_CFG_STREAM,
-+		      jpeg->slot_data.cfg_stream_vaddr,
-+		      jpeg->slot_data.cfg_stream_handle);
- 	jpeg->slot_data.cfg_stream_vaddr = NULL;
- 	jpeg->slot_data.cfg_stream_handle = 0;
- 
--	dma_free_coherent(jpeg->dev, jpeg->slot_data.cfg_dec_size,
--			  jpeg->slot_data.cfg_dec_vaddr,
--			  jpeg->slot_data.cfg_dec_daddr);
-+	mxc_jpeg_free(jpeg, jpeg->slot_data.cfg_dec_size,
-+		      jpeg->slot_data.cfg_dec_vaddr,
-+		      jpeg->slot_data.cfg_dec_daddr);
- 	jpeg->slot_data.cfg_dec_size = 0;
- 	jpeg->slot_data.cfg_dec_vaddr = NULL;
- 	jpeg->slot_data.cfg_dec_daddr = 0;
-@@ -816,6 +825,15 @@ static void mxc_jpeg_free_slot_data(struct mxc_jpeg_dev *jpeg)
- 	jpeg->slot_data.used = false;
- }
- 
-+static struct mxc_jpeg_desc *mxc_jpeg_alloc(struct mxc_jpeg_dev *jpeg, size_t size,
-+					    dma_addr_t *handle)
-+{
-+	if (jpeg->sram_pool)
-+		return gen_pool_dma_zalloc(jpeg->sram_pool, size, handle);
-+	else
-+		return dma_alloc_coherent(jpeg->dev, size, handle, GFP_ATOMIC);
-+}
-+
- static bool mxc_jpeg_alloc_slot_data(struct mxc_jpeg_dev *jpeg)
- {
- 	struct mxc_jpeg_desc *desc;
-@@ -826,37 +844,29 @@ static bool mxc_jpeg_alloc_slot_data(struct mxc_jpeg_dev *jpeg)
- 		goto skip_alloc; /* already allocated, reuse it */
- 
- 	/* allocate descriptor for decoding/encoding phase */
--	desc = dma_alloc_coherent(jpeg->dev,
--				  sizeof(struct mxc_jpeg_desc),
--				  &jpeg->slot_data.desc_handle,
--				  GFP_ATOMIC);
-+	desc = mxc_jpeg_alloc(jpeg, sizeof(struct mxc_jpeg_desc),
-+			      &jpeg->slot_data.desc_handle);
- 	if (!desc)
- 		goto err;
- 	jpeg->slot_data.desc = desc;
- 
- 	/* allocate descriptor for configuration phase (encoder only) */
--	cfg_desc = dma_alloc_coherent(jpeg->dev,
--				      sizeof(struct mxc_jpeg_desc),
--				      &jpeg->slot_data.cfg_desc_handle,
--				      GFP_ATOMIC);
-+	cfg_desc = mxc_jpeg_alloc(jpeg, sizeof(struct mxc_jpeg_desc),
-+				  &jpeg->slot_data.cfg_desc_handle);
- 	if (!cfg_desc)
- 		goto err;
- 	jpeg->slot_data.cfg_desc = cfg_desc;
- 
- 	/* allocate configuration stream */
--	cfg_stm = dma_alloc_coherent(jpeg->dev,
--				     MXC_JPEG_MAX_CFG_STREAM,
--				     &jpeg->slot_data.cfg_stream_handle,
--				     GFP_ATOMIC);
-+	cfg_stm = mxc_jpeg_alloc(jpeg, MXC_JPEG_MAX_CFG_STREAM,
-+				 &jpeg->slot_data.cfg_stream_handle);
- 	if (!cfg_stm)
- 		goto err;
- 	jpeg->slot_data.cfg_stream_vaddr = cfg_stm;
- 
- 	jpeg->slot_data.cfg_dec_size = MXC_JPEG_PATTERN_WIDTH * MXC_JPEG_PATTERN_HEIGHT * 2;
--	jpeg->slot_data.cfg_dec_vaddr = dma_alloc_coherent(jpeg->dev,
--							   jpeg->slot_data.cfg_dec_size,
--							   &jpeg->slot_data.cfg_dec_daddr,
--							   GFP_ATOMIC);
-+	jpeg->slot_data.cfg_dec_vaddr = mxc_jpeg_alloc(jpeg, jpeg->slot_data.cfg_dec_size,
-+						       &jpeg->slot_data.cfg_dec_daddr);
- 	if (!jpeg->slot_data.cfg_dec_vaddr)
- 		goto err;
- 
-@@ -2888,6 +2898,10 @@ static int mxc_jpeg_probe(struct platform_device *pdev)
- 	jpeg->dev = dev;
- 	jpeg->mode = mode;
- 
-+	/* SRAM pool is optional */
-+	jpeg->sram_pool = of_gen_pool_get(pdev->dev.of_node, "sram", 0);
-+	dev_info(dev, "Using DMA descriptor pool in %cRAM\n", jpeg->sram_pool ? 'S' : 'D');
-+
- 	/* Get clocks */
- 	ret = devm_clk_bulk_get_all(&pdev->dev, &jpeg->clks);
- 	if (ret < 0) {
-diff --git a/drivers/media/platform/nxp/imx-jpeg/mxc-jpeg.h b/drivers/media/platform/nxp/imx-jpeg/mxc-jpeg.h
-index 44e46face6d1d..9c5b4f053deda 100644
---- a/drivers/media/platform/nxp/imx-jpeg/mxc-jpeg.h
-+++ b/drivers/media/platform/nxp/imx-jpeg/mxc-jpeg.h
-@@ -141,6 +141,7 @@ struct mxc_jpeg_dev {
- 	int				num_domains;
- 	struct device			**pd_dev;
- 	struct device_link		**pd_link;
-+	struct gen_pool			*sram_pool;
- };
- 
- /**
--- 
-2.51.0
-
+Jason
