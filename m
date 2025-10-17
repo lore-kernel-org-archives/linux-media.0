@@ -1,49 +1,44 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A31923EA9B
-	for <linux-media@vger.kernel.org>; Fri, 17 Oct 2025 06:01:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B3AE334689;
+	Fri, 17 Oct 2025 06:02:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760680873; cv=none; b=bwknTi4rYmfdLOb1YfSA6OLGYz9oOZhUjHAzl5pXyqa65pSSejPJUpghGIOWeGhEYOcja4I6vPUJkurVvQDHcTwvE/CKSLbVWRighg+93jGZbgJRoZ/qC2qxlcHE1+W+W3G24HRceUpzMcJTdunEyCIMAYacsIS6oIQi0jQ/KMg=
+	t=1760680974; cv=none; b=XQv4efTXsrs4PxzaABiHkq5C+e2w1YYdrtsEfUwinX1tqgZSZHFVpjEk+UhWXvCc3WskkxL30N2evI5bMo6zb7117NAH6JJpYbvJaE/9nNYTev0F6o1D3AWNMmC0uYO1qZ24R3sz5kyFOEhszOmPzyuAyEgBkr+gad4AUs7sm4E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760680873; c=relaxed/simple;
-	bh=aXIG2PE7S0TOPEDHAG6amHWiC4IOps44S5c5kBb9pPc=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=aQ0tzwBH+6BYARl/VaZGSDXLGbghkik2QY0EZfL7jVVc4G7EfNNEEuYZCsj+Hc31iJItbrcFAIu9YD9I4EAV4s++jNRqnzf1Y+rbskyBz5L47ZgFPFzxkjci2440S9Vd/TmCOrY2DPhoSzZELuWvwj6Mmm0C0uWq1usnzDlS9hI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=LjSHN5Yk; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1760680974; c=relaxed/simple;
+	bh=Suu2arU749TuyLoGK6wvdQH3+cKUABV0OD8sFc0jGns=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=QHN2exa9fPq3SejobhhVCA4Izrj4sd4QXRW2wiqK2lWrnZ2rgzHDxWkVh1xJVIFtwpO8EQPkT+TppMlD9Ak7GBMTFNdHzexRd+0xOAwnSRv9SO8bb7cPOl6kNkf564R9mbvkkey4RXHkK83aP1Y/R42+qlhqFJ/FIsC5vi0CNXY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=P1dIOSRv; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="LjSHN5Yk"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9BA66C116B1;
-	Fri, 17 Oct 2025 06:01:12 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="P1dIOSRv"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 169CAC4CEE7;
+	Fri, 17 Oct 2025 06:02:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1760680872;
-	bh=aXIG2PE7S0TOPEDHAG6amHWiC4IOps44S5c5kBb9pPc=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=LjSHN5YkdVk2r4hPk+SkCBXwwSQ8enJ44rHVoJgAM4uilx7VvbQiPd5nMft4OSzEd
-	 5AWVyEVsN0hqjV/sv8XTfxQ4p3wFE6CprCwXVWeYF6N+SGPQwhHyY80gkPgYH0qvsD
-	 xHbvB8W43QaD0i86u4k26BYNX0D/mEuwEyNsxHpKozPfgfvN8iHwPEkY3SjvR9CL6c
-	 0XK/i7rNhXP7wKyrEwzubnD8so+CsY2JWhOdF3MDzq0WKNxieO2xevoobGBd1Wmh7k
-	 pa2bQyt2aduC4BEKbTy343mUSYiwLmrTKLW5h4AUSZn/8ZEtFyAIcOFdkzTxAWpdSQ
-	 h2Cr4q1mRhZDw==
+	s=k20201202; t=1760680974;
+	bh=Suu2arU749TuyLoGK6wvdQH3+cKUABV0OD8sFc0jGns=;
+	h=From:To:Cc:Subject:Date:From;
+	b=P1dIOSRv0B3FYrQQTSCymFl7CdCnjnqvc62NguVkKL9+fx+9bViNCcaxnzva0EAD7
+	 T9wstWY4T5Gb98atLqcx+t5leKkGQSybfqZ5VMKKoYWDoeKAT4cqg1xDfHq9jFIg3H
+	 0RpGfrsw31ooz/spFrVc8HudCSksreh19dB0CLymGw9FybEkl/x020CTT2KcdDajxh
+	 uFZrbDHtePreD0/qcEyUFUzfpQCN/TwKdc7Lip9viayff7cdkVI3ckwlxcGT5SJFGg
+	 wFrcBRaZ4GnPFrLytzTxx2iFaJDBI1gjPQcA6e9PCX64HsYE9g3Z4q8RdK/KuU1tPd
+	 RAospn6EW7P3g==
 Received: from johan by xi.lan with local (Exim 4.98.2)
 	(envelope-from <johan@kernel.org>)
-	id 1v9dWd-0000000029E-12TE;
-	Fri, 17 Oct 2025 08:01:15 +0200
+	id 1v9dYG-000000002BZ-3f1N;
+	Fri, 17 Oct 2025 08:02:56 +0200
 From: Johan Hovold <johan@kernel.org>
-To: Rui Miguel Silva <rmfrfs@gmail.com>,
-	Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-	Martin Kepplinger <martink@posteo.de>
-Cc: Purism Kernel Team <kernel@puri.sm>,
-	Mauro Carvalho Chehab <mchehab@kernel.org>,
+To: Sylwester Nawrocki <s.nawrocki@samsung.com>
+Cc: Mauro Carvalho Chehab <mchehab@kernel.org>,
 	linux-media@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
 	Johan Hovold <johan@kernel.org>
-Subject: [PATCH 2/3] media: imx7-media-csi: drop unused module alias
-Date: Fri, 17 Oct 2025 08:00:50 +0200
-Message-ID: <20251017060051.8204-2-johan@kernel.org>
+Subject: [PATCH 1/2] media: exynos4-is: fimc-is: drop unused module alias
+Date: Fri, 17 Oct 2025 08:02:48 +0200
+Message-ID: <20251017060249.8386-1-johan@kernel.org>
 X-Mailer: git-send-email 2.49.1
-In-Reply-To: <20251017060051.8204-1-johan@kernel.org>
-References: <20251017060051.8204-1-johan@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
@@ -57,18 +52,21 @@ unused platform module alias.
 
 Signed-off-by: Johan Hovold <johan@kernel.org>
 ---
- drivers/media/platform/nxp/imx7-media-csi.c | 1 -
+ drivers/media/platform/samsung/exynos4-is/fimc-is.c | 1 -
  1 file changed, 1 deletion(-)
 
-diff --git a/drivers/media/platform/nxp/imx7-media-csi.c b/drivers/media/platform/nxp/imx7-media-csi.c
-index 34a92642bbfe..933a5f39f9f4 100644
---- a/drivers/media/platform/nxp/imx7-media-csi.c
-+++ b/drivers/media/platform/nxp/imx7-media-csi.c
-@@ -2290,4 +2290,3 @@ module_platform_driver(imx7_csi_driver);
- MODULE_DESCRIPTION("i.MX7 CSI subdev driver");
- MODULE_AUTHOR("Rui Miguel Silva <rui.silva@linaro.org>");
- MODULE_LICENSE("GPL v2");
--MODULE_ALIAS("platform:imx7-csi");
+diff --git a/drivers/media/platform/samsung/exynos4-is/fimc-is.c b/drivers/media/platform/samsung/exynos4-is/fimc-is.c
+index ed7b7ca16f71..0827fdaf455a 100644
+--- a/drivers/media/platform/samsung/exynos4-is/fimc-is.c
++++ b/drivers/media/platform/samsung/exynos4-is/fimc-is.c
+@@ -996,7 +996,6 @@ static void fimc_is_module_exit(void)
+ module_init(fimc_is_module_init);
+ module_exit(fimc_is_module_exit);
+ 
+-MODULE_ALIAS("platform:" FIMC_IS_DRV_NAME);
+ MODULE_AUTHOR("Younghwan Joo <yhwan.joo@samsung.com>");
+ MODULE_AUTHOR("Sylwester Nawrocki <s.nawrocki@samsung.com>");
+ MODULE_DESCRIPTION("Samsung EXYNOS4x12 FIMC-IS (Imaging Subsystem) driver");
 -- 
 2.49.1
 
