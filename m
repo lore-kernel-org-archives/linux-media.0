@@ -1,66 +1,66 @@
-Received: from mail-lf1-f54.google.com (mail-lf1-f54.google.com [209.85.167.54])
+Received: from mail-wm1-f49.google.com (mail-wm1-f49.google.com [209.85.128.49])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3057E2DAFD7
-	for <linux-media@vger.kernel.org>; Fri, 17 Oct 2025 09:56:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5736E328635
+	for <linux-media@vger.kernel.org>; Fri, 17 Oct 2025 10:55:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760695005; cv=none; b=Z5mSK1OZaB/ZZdjpQZs6Xlx1AP543UiQV03XsaQ78cKlloB06JWo4Y8GlHi0DK8aHCG5sWE984ZL5H3Ej1tdS7pyoNM57luJwYsUfd8caqFPe5u/BxrRzndlxBWgHaVDYYMr7QcO8SuH4yHjSwhII15oOBgjvk1wPj8ZNDBHSog=
+	t=1760698559; cv=none; b=UkDYKRxRw70iJu6NkFY/txc4xmnLbmTj8ve01C4fkIi9pWEt6zXYnW0Cf/vZB7cnD4Y83LnbX+slvnmBuVWhOeSeELPRzSGqM6eP0MqiLgwkO8p7YX3f7jOLqdScV+SSUmFWpsJWc3jXw46KzV014E4dsaiwPjIxJFTEJc0lvqI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760695005; c=relaxed/simple;
-	bh=6qR0NuRYQ+bd1nXrohwHgTHeB2izojcTE3yTCQT3Hh8=;
+	s=arc-20240116; t=1760698559; c=relaxed/simple;
+	bh=QhbR/JjQWPtQ/x1b2TheNvaNWi3shmk+1FrIu7SH6pQ=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=A+N6ElMy6iC5ADM1ABj8Jwt6s364SRhxoTkZjAi9uNgQmeZLLhMOA1x29B+M3sNdE9/O2HIaM2wOeiEEj2UpHC5ClrsnDRj6TkvCorPBnQNkm0TgDzTc8I0A3HSpgRu46R5D1ySPD+Ke3cmActbEtqm/DF0L3TZZmTW7stcC9qw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=y+psuXfM; arc=none smtp.client-ip=209.85.167.54
+	 In-Reply-To:Content-Type; b=OdPhFsXwFYaoD2fuRJZZil3H8H14SYaaoTm/4dpN8LByVzJTp51bfLApVcd08ZpwpH6d3qwbxT5ZPvl/SlCI1fRUV1S1QyA0VnYa8+vW8nxyZLcbuXwIsv1zTES54WoWi6VuraCvXO8pjBt3UXVffRhQ7ZkwbX8/8qlB5jRj/Os=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=tRBDPW4E; arc=none smtp.client-ip=209.85.128.49
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="y+psuXfM"
-Received: by mail-lf1-f54.google.com with SMTP id 2adb3069b0e04-57a8b00108fso372313e87.3
-        for <linux-media@vger.kernel.org>; Fri, 17 Oct 2025 02:56:43 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="tRBDPW4E"
+Received: by mail-wm1-f49.google.com with SMTP id 5b1f17b1804b1-47109187c32so9181155e9.2
+        for <linux-media@vger.kernel.org>; Fri, 17 Oct 2025 03:55:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1760695002; x=1761299802; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
-         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=2GXi6Ax4xUuc/O76MAiPOqKbogCxizNvxptAHOFcxUM=;
-        b=y+psuXfMNZTy3F5P5tY/hqQD0JdwzSa3bFPkHJlXsbGGwMxd/LSgb6moP8kPn2DpnS
-         BrZQWjpoGsmKKBmeh1e03d4YByuK6VcnQPqCq2MpA0cHRL62u7d6Z6qy1Ly9NwgenjY4
-         viW8d15p4wQP1LdyX4VfAs01j0kUyA9xOThB8tYisZpWsvsYGeTeQF6LGDyn6jR3LhvE
-         eG3LeC9eDLA1ujeHLDM29LmqDudiBeKm60XxXlB5FEDCmkBF3StH6kqXh5FbipJb3BY+
-         3OTTYYNtE1fcIRcQKqGtPFROhjcnVabzyQ2Os3URfwePpKaFIwga89L+Vc6iK8kw/o1H
-         bbYw==
+        d=linaro.org; s=google; t=1760698556; x=1761303356; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:content-language:from
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Zm39IA4ufngTEzNdFDfCyY58vQQ04XFQ+LhrxSHjP0I=;
+        b=tRBDPW4EERC3ojOuyQ5T8K/1L45lexggVloFbUqgO06yZ401Xs06SpJMqixS3LRM4i
+         gphbPrhJ+9zVz4EgwfEVpqybJA9/cHXvvzqNyyFsCguSX8UHoqZB17fQAYPLfpJJNVmL
+         UaBl3Clpq7TjAKZMsjBEZ7Vrgz6I4jDSDHg8uyIIgpoaI1zK1ZhyVAQ/vy8PMveQgKJi
+         oYKIdtAScOaIfg5oJl6ZNkbQEWWWBfWd3TWyeYjMb8xLbwIank8aZTlfTTxlHiBA2+/c
+         HOMDKTfarZ8GA2wi3oBv3Y3AO6lFWUAF1od4DrhyKE08SITcm40ZG75LewmzMRxxHYux
+         SnNw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1760695002; x=1761299802;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
-         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=2GXi6Ax4xUuc/O76MAiPOqKbogCxizNvxptAHOFcxUM=;
-        b=sJvTbgnkQUOnULkVDFz3K19GN2jdC80P/myzEv1nHQAmqLmcAnt4R1Uf/1np/cqH3J
-         fvxXWQQiljL9gyKdpd0NMUc97qDq/CPG2TT0R2iwu96jxm0azoldhXkmMMLCOoXWsQ1R
-         RKmrnNpk91EZEKFVL1F1HhhVGC/ngLJ1SWK2QTwNgFVmhaOJtVz3wXAqJvItNWa9LQ6c
-         Sx4CGQYGbmONdRuMiS+tpPeCxqb/vUOeutfZJuwiFFTohjGotKoGREKnnypuNrxR1rR5
-         mdBreu72cHsfmDV12+fxnK/hp0PHhog39gCRj/Ar0hR/AQ/7dMGlGPJtk9jZh6VR5PXd
-         SVEA==
-X-Forwarded-Encrypted: i=1; AJvYcCWb8a6llmRzy/Wk3BipHsOrDh/fK90cuZLYv0TGfwDeIJvcj7/uYrgv9vyohNkcMMpt2ykkhzq3Jk3UYw==@vger.kernel.org
-X-Gm-Message-State: AOJu0YxD+dGHeqI6BfjeXmEj0q6xber41our7k2gf40mKqdYo+p0qNxL
-	Jeayu6Rmd4JWFuG+uh60aU9pJuRFKjH1Yg2hOxXsWYmF/6bcDYSNXVokGm+99Ha/1Zw=
-X-Gm-Gg: ASbGncs4f6SxINy8qGtlwEgqEgCf3wWM2/Xmb1mXO7Wlp24EIO6yeSSeM4asXiUUBLb
-	shHY8fA+2u9jgQoSrK8lcBD5jZYbyzCAi30Lhdpz5lhSwdhvsDt3UMn3kTrKKtHT4P1Oj7rBl3u
-	EFVoA+OxvN3U3MZWEOzV1SRhsviDjb9huKilu3dP6d3bN7F+n9gcR2gZfm8jZ4uZnmT1nZhcrs/
-	1JFBzdgF5Sp529iLsN6U2X6xEetwCzi9r6ji0XtWzO4lvsFrdJ5X3iqcz9imrvLrAODbqr0CVXQ
-	CD3MIbPZb9IJ+m81OtdhaJy9rJ3G1NKwx1U2zDPeAQ7P7K/pRZHQ75wEfIwwiwuvp/lsFxJ0X/W
-	si6M6AKDvPz7Uv9yE/1A/jI6ssZlXMtnX9aFPqYeigP4E3A1uK86VQKf4VJjwARUT51vdC/cndQ
-	PkN1OZjPtIBHGpSKTE5GaIHVzz3cs9Edat9cqYXLPDy28tMI/WlH6rWjc=
-X-Google-Smtp-Source: AGHT+IGAZ5CYugbUgk6P/NUNsSpjV1iSJD9ABIKrrzr/2GQtBVeEEAoj0LM3E1ItWcJjo0+VtHVCpA==
-X-Received: by 2002:a05:6512:684:b0:585:805b:e3b0 with SMTP id 2adb3069b0e04-591d85ae86fmr686720e87.9.1760695002167;
-        Fri, 17 Oct 2025 02:56:42 -0700 (PDT)
-Received: from [192.168.1.100] (91-159-24-186.elisa-laajakaista.fi. [91.159.24.186])
-        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-590881e688dsm7747393e87.13.2025.10.17.02.56.40
+        d=1e100.net; s=20230601; t=1760698556; x=1761303356;
+        h=content-transfer-encoding:in-reply-to:content-language:from
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Zm39IA4ufngTEzNdFDfCyY58vQQ04XFQ+LhrxSHjP0I=;
+        b=EcVN5YxYiNG+zsA5z53ktj8b05jFNx/S8ZyYTOeaSxfUaZtM6WRxG8TaZTzstYutUe
+         8d/tLSZm2MGSgpxWUMsuSEhYB2J6V+6W/8qBLe5rSE88T+O5Dl/QiY1q/1jd3YL2kRIv
+         1bDMFhIPpPqsdCwLgYZicIVIeqXMzAXlxkZikDFC6cOE2zKTUvjDjbuiyJ8r4oWEzJ+P
+         7Ksx4PKM/85AevLfRyWExTBRQWBvvhW+12mVwHKCiw/73qBJ1C31hHCZg4zSTatRcXr9
+         cHauwpjc/VlUuPDOmkKBTLL6Yc0AjaN8nHJNQVpFz7PoM46vkQ/J6k1rMGyNV3ASBn5X
+         keVA==
+X-Forwarded-Encrypted: i=1; AJvYcCXq427Xyy9Ni0+n62t3sH49VY0boFypJIA6dUHrZVDEJE2cDc+SMTb1ii/h8N2qxR8/In+PrwK7LtsxSA==@vger.kernel.org
+X-Gm-Message-State: AOJu0YxmOGgZFcTfVZFcGDzIanFUJg1TdW8vitcn8VmljL1M7EjWQDpy
+	aCfmmfShAFsYwHlaXuiwFeEe0d1qvPL5UAgy9Sm8eEqoIWUFWg18Rgm72h8H0VLDQLE=
+X-Gm-Gg: ASbGncuo7gEjzxGxJM2kVTV8A9RRjdRw7IKopsrs08+g0OQwqis16Oy6d7LuWK7yz4v
+	xAjYE1ssD4iCTUcz2TAuwf5ip5KNfzEwJ05cXJmUyuhLHmawmbYGS2r7vdimBuL87JsP/b24IJw
+	lMGGMGrTP00OOSUeiY1IFPA4YSfNe+HAJyYGE/C3alZTGd6/pyC0Nhc/183GUhZF2Rww0Rhrn+0
+	LlFl7zLgXRycdKpblsGRaPokw/juKHQmKkKYo06u5MR2PWh+drJRxIcnJ5jU42dw8u+sJ4s4+fz
+	kLOgwcdOAn5kuG95zX2LWLrMueZIpzEdtFIJ1tdire6RjbfNjwon+dWPumJqko3/GxOYcM57i9C
+	30Hc6I2TFOM3mvwQiNqZa0tLOU6to5gOWRfaF3uqRwInW2/yjGVxdBmARhP86kT4Ft896mn2NZB
+	z/dAuoKIZ69VkICT6tlGKpqRMl5b0IY2V/dfaxWS/xUtQyc/Lj5BwB
+X-Google-Smtp-Source: AGHT+IF8gPde+0trw5hh+B8v1QbyRWDt3jn/AE9oBYuoF3drrlJJjQtos2JhgYi0PkWXHZD9B2bx/g==
+X-Received: by 2002:a05:600c:6290:b0:46e:2cfe:971c with SMTP id 5b1f17b1804b1-471177c0f91mr24694175e9.0.1760698555593;
+        Fri, 17 Oct 2025 03:55:55 -0700 (PDT)
+Received: from [192.168.0.19] (188-141-3-146.dynamic.upc.ie. [188.141.3.146])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-47114429679sm73229585e9.8.2025.10.17.03.55.54
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 17 Oct 2025 02:56:40 -0700 (PDT)
-Message-ID: <5cd4ad76-8aa1-42f8-81f7-e5fcc895f693@linaro.org>
-Date: Fri, 17 Oct 2025 12:56:33 +0300
+        Fri, 17 Oct 2025 03:55:55 -0700 (PDT)
+Message-ID: <19a59be0-9b5f-4a93-bdd6-0592f291dca7@linaro.org>
+Date: Fri, 17 Oct 2025 11:55:52 +0100
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
@@ -68,42 +68,57 @@ List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] media: qcom: camss: drop unused module alias
-To: Johan Hovold <johan@kernel.org>, Robert Foss <rfoss@kernel.org>,
- Todor Tomov <todor.too@gmail.com>,
- Bryan ODonoghue <bryan.odonoghue@linaro.org>
-Cc: Mauro Carvalho Chehab <mchehab@kernel.org>, linux-media@vger.kernel.org,
- linux-kernel@vger.kernel.org
-References: <20251017060435.8524-1-johan@kernel.org>
-From: Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>
-In-Reply-To: <20251017060435.8524-1-johan@kernel.org>
+Subject: Re: [PATCH v2 4/6] media: qcom: camss: csiphy: Add support for v2.4.0
+ two-phase CSIPHY
+To: Vijay Kumar Tumati <vijay.tumati@oss.qualcomm.com>,
+ Hangxiang Ma <hangxiang.ma@oss.qualcomm.com>,
+ Loic Poulain <loic.poulain@oss.qualcomm.com>, Robert Foss
+ <rfoss@kernel.org>, Andi Shyti <andi.shyti@kernel.org>,
+ Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
+ Conor Dooley <conor+dt@kernel.org>, Todor Tomov <todor.too@gmail.com>,
+ Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>,
+ Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc: linux-i2c@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-media@vger.kernel.org, aiqun.yu@oss.qualcomm.com,
+ tingwei.zhang@oss.qualcomm.com, trilok.soni@oss.qualcomm.com,
+ yijie.yang@oss.qualcomm.com, Jingyi Wang <jingyi.wang@oss.qualcomm.com>,
+ Atiya Kailany <atiya.kailany@oss.qualcomm.com>
+References: <20251014-add-support-for-camss-on-kaanapali-v2-0-f5745ba2dff9@oss.qualcomm.com>
+ <20251014-add-support-for-camss-on-kaanapali-v2-4-f5745ba2dff9@oss.qualcomm.com>
+ <059a2e7b-f399-44d9-9f32-cd01e573d954@linaro.org>
+ <eb7992e4-f0a8-4266-ac4a-3de7694ac582@oss.qualcomm.com>
+From: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+Content-Language: en-US
+In-Reply-To: <eb7992e4-f0a8-4266-ac4a-3de7694ac582@oss.qualcomm.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On 10/17/25 09:04, Johan Hovold wrote:
-> The driver has never supported anything but OF probing so drop the
-> unused platform module alias.
+On 17/10/2025 00:10, Vijay Kumar Tumati wrote:
 > 
-> Signed-off-by: Johan Hovold <johan@kernel.org>
-> ---
->   drivers/media/platform/qcom/camss/camss.c | 1 -
->   1 file changed, 1 deletion(-)
+> There are three offsets in the picture here wrt the CSIPHY instance base 
+> address
 > 
-> diff --git a/drivers/media/platform/qcom/camss/camss.c b/drivers/media/platform/qcom/camss/camss.c
-> index d9d770e5e7c6..c93aeeb5ab20 100644
-> --- a/drivers/media/platform/qcom/camss/camss.c
-> +++ b/drivers/media/platform/qcom/camss/camss.c
-> @@ -4545,7 +4545,6 @@ static struct platform_driver qcom_camss_driver = {
->   
->   module_platform_driver(qcom_camss_driver);
->   
-> -MODULE_ALIAS("platform:qcom-camss");
->   MODULE_DESCRIPTION("Qualcomm Camera Subsystem driver");
->   MODULE_AUTHOR("Todor Tomov <todor.tomov@linaro.org>");
->   MODULE_LICENSE("GPL v2");
+> 1. First offset to the common registers of the PHY, 'regs->offset' (that 
+> follows the lane registers)
+> 
+> 2. Second offset to the status registers within the common registers . 
+> This has been historically the same and hard coded 
+> in 'CSIPHY_3PH_CMN_CSI_COMMON_STATUSn' to 0xb0 but this is now changing 
+> on Kaanapali.
+> 
+> 3. Third set of offsets (12, 13, 14 and 15) are to the version registers 
+> within the status registers.
+> 
+> This change merely generalizes the CSIPHY_3PH_CMN_CSI_COMMON_STATUSn 
+> macro for chip sets with different second offset using "regs- 
+>  >common_status_offset". There should not be any impact to the other 
+> chip sets, for which it is set to the same 0xb0 in csiphy_init().
+> 
+> Please advise if you still think it requires a patch series for itself 
+> and we can do that. Thanks.
 
-Reviewed-by: Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>
+This should be a separate patch yes.
 
--- 
-Best wishes,
-Vladimir
+---
+bod
