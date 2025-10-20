@@ -1,84 +1,126 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 374F21EDA0B;
-	Mon, 20 Oct 2025 18:18:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9036819049B
+	for <linux-media@vger.kernel.org>; Mon, 20 Oct 2025 18:29:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760984332; cv=none; b=Di0GtsdwFCz71ytmgadLIdEd/h4F8WDPrTHIxhj5GEvcYDHs6oekEoKDTJ7P2y4JZGL9h66gWsz6ouKoaabM9N55b97Mx+jpBCypXmeIS7OQcm56iM1OjGl2CRzD/eiFPiUPqZt3/p3184RddSyh7BtzvGMPbP6VBAPfzK2upyo=
+	t=1760984945; cv=none; b=hd7pA7sElStu0262xmo2AmTxGhA9/1aKss5sfgAMTWMAE3s8dC34FWIQX69XWNSJjLNkUUn2ZSLl+xpr5UvbqcqZYR7BnkO+ToeL18pHtLS0eQlgCAY6pk+F4rwyPCdj0VXS8wgr8Y1rPQn013/aNpW7mvWUlLrypIyEO/x4YNI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760984332; c=relaxed/simple;
-	bh=l7Jix1FBerg64A7Lg5AG+fwNbq6vaC7vvRzcp2jzx/A=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=VCZjuOMxOhlGOm1pfUhUx6zhcNx+GPEfyTKKJiUVnZd5C76qqqivk+oP3IxenZ4XUs84pFSwm4PQHIClsF7yIrBItROrE622Dilh6S1EolvHeswP13JDdTH6zfY/yq3yhMpc2yIMsHWnfgi1+HenKwOLQz72CCAhF4TOhK2Vpyc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=iwxVORL7; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1760984945; c=relaxed/simple;
+	bh=MplEzXjvnfYSG0KpAgx9yKbMlR0FNFDM5DFdd0WDKfA=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=CzGgbEsoj6k8JVH9QGq/GJnXVARNHlmQnk43969h77YqlYyfLmsgfKOUvrxYFHCu5JjbeFq6UYyJaQx8O1cLISQ9gVuepqyfBlHb/erqBkb7Rv7qJKK2ZZUbdEw2TKaDObXWypG+TO4NJ3ElGFqKGHXE1zMo+7J9Pb0n7NQsjUA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=M8rWl5kN; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="iwxVORL7"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7822BC113D0;
-	Mon, 20 Oct 2025 18:18:46 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="M8rWl5kN"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0E574C116D0;
+	Mon, 20 Oct 2025 18:29:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1760984330;
-	bh=l7Jix1FBerg64A7Lg5AG+fwNbq6vaC7vvRzcp2jzx/A=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=iwxVORL7CJrF3NyWiqB1l68YNoiTfKSOhQVKZDvsKI131gQkui/hBBrh/+F8Ay44J
-	 FKrm14wL5SC+C3U3xY7JWjZ8gy3BRWwBRRDvKREq1H1hi8YDgOHX+t+pzao2hEtcke
-	 0HNYKIRSg6ERXKtBwf+eM1ZHRF6nombrIuoRaYWczk5LHVbrievniUoMJjbZ5hdSX8
-	 PBBl2OdKq/rbSRWiFNw/3eybQNCGoX5kGud35zkwkgG3FQb5H+x092VYQQDEp/93Hl
-	 cvkhAtcmQbvF8QOyJa0rIoflvbBbNfKDoFyWkjLjD7ou+I1y257AKtin8iyl8+Clek
-	 qp0fqZRp5ruDQ==
-Message-ID: <d4b70cc9-8d37-4249-875f-b0d80256c9e6@kernel.org>
-Date: Mon, 20 Oct 2025 19:18:44 +0100
+	s=k20201202; t=1760984945;
+	bh=MplEzXjvnfYSG0KpAgx9yKbMlR0FNFDM5DFdd0WDKfA=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=M8rWl5kNPGfjtjVo7K7RGDo2NsJVHLMxJvhn/C6isY2ietkHfn2zucqMxm/dTCvN8
+	 a7ATWPS8GVbXKTOMfJe6lkpE2EoIHWq1Cv4t8CJh/tMjvGc6WTg6bZ7Wpikv4HiL33
+	 LXrx1C7HLS+jwxaOLxXZ/U39r4m5UcdGzg4C35T/H/4uk9arwA1Am3WPwILmNITM7E
+	 A0Of36QMkZgPrCQ3WikDfydUlIgs46uQd7rWpGh0x138KJt/ZSnqU23TlJvzTxzx75
+	 a+3RnvpWUPoeElCr5FZQk0D6XQW3AJrp67T3oAZ4GlkPET7Y7STD0pD+Z21Wh0ckXF
+	 KfxREe5IgPFwA==
+Date: Mon, 20 Oct 2025 11:29:04 -0700
+From: Kees Cook <kees@kernel.org>
+To: Ricardo Ribalda <ribalda@chromium.org>
+Cc: Dan Carpenter <dan.carpenter@linaro.org>, linux-media@vger.kernel.org,
+	Patchwork Integration <patchwork@media-ci.org>
+Subject: Re: [v2,0/3] module: Add compile-time check for embedded NUL
+ characters
+Message-ID: <202510201127.D97BCF2@keescook>
+References: <20251010030348.it.784-kees@kernel.org>
+ <68ed624c.050a0220.3ba739.64ea@mx.google.com>
+ <D1CBCBE2-3A54-410A-B15C-F1C621F9F56B@kernel.org>
+ <CANiDSCu6xZAuSF5_M-4BMRc52hbSh_1QfDQqaeGR4iD5fdQjQg@mail.gmail.com>
+ <202510141344.E0ABCD2C7@keescook>
+ <CANiDSCsBAq3Yx4ybarUb_1NkQ-bvfXvWqb-DfqXatkiYJFZWiQ@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 3/6] media: qcom: camss: Add Kaanapali compatible camss
- driver
-To: Vijay Kumar Tumati <vijay.tumati@oss.qualcomm.com>,
- Hangxiang Ma <hangxiang.ma@oss.qualcomm.com>,
- Loic Poulain <loic.poulain@oss.qualcomm.com>, Robert Foss
- <rfoss@kernel.org>, Andi Shyti <andi.shyti@kernel.org>,
- Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
- Conor Dooley <conor+dt@kernel.org>, Todor Tomov <todor.too@gmail.com>,
- Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>,
- Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc: linux-i2c@vger.kernel.org, linux-arm-msm@vger.kernel.org,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-media@vger.kernel.org, aiqun.yu@oss.qualcomm.com,
- tingwei.zhang@oss.qualcomm.com, trilok.soni@oss.qualcomm.com,
- yijie.yang@oss.qualcomm.com, Jingyi Wang <jingyi.wang@oss.qualcomm.com>,
- Atiya Kailany <atiya.kailany@oss.qualcomm.com>
-References: <20251014-add-support-for-camss-on-kaanapali-v2-0-f5745ba2dff9@oss.qualcomm.com>
- <20251014-add-support-for-camss-on-kaanapali-v2-3-f5745ba2dff9@oss.qualcomm.com>
- <0fe25ca8-8dd4-42c7-a818-a803a256f42f@linaro.org>
- <8ba56bfe-d0cc-4f9a-93c8-0c361d5c59c8@oss.qualcomm.com>
- <e6830a20-7c58-4799-ab38-53c1276cccb4@oss.qualcomm.com>
-From: Bryan O'Donoghue <bod@kernel.org>
-Content-Language: en-US
-In-Reply-To: <e6830a20-7c58-4799-ab38-53c1276cccb4@oss.qualcomm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CANiDSCsBAq3Yx4ybarUb_1NkQ-bvfXvWqb-DfqXatkiYJFZWiQ@mail.gmail.com>
 
-On 20/10/2025 14:38, Vijay Kumar Tumati wrote:
->>
->> Ack. Thanks.
-> Just adding my thoughts on this, as you know the peak/avg bandwidth 
-> should primarily depends on the sensor data rate and additionally, the 
-> average BW vote should depend on the buffer sizes in the NIUs/NOCs and 
-> (although irrelevant here) whether it's an RT or NRT module (file system 
-> reads/writes from the NRT modules can be averaged and controlled 
-> better). Fundamentally, the votes from all modules go into the 
-> calculation of the DDR clock. The current driver does not take into 
-> account anything. So either way, it is not ideal I think. We can discuss 
-> and come up with a cleaner approach in a different patch series covering 
-> all chip sets. Thanks.
+On Wed, Oct 15, 2025 at 09:33:40AM +0200, Ricardo Ribalda wrote:
+> Hi Dan
+> 
+> On Tue, 14 Oct 2025 at 22:45, Kees Cook <kees@kernel.org> wrote:
+> >
+> > On Tue, Oct 14, 2025 at 08:24:00AM +0200, Ricardo Ribalda wrote:
+> > > Hi Kees
+> > >
+> > > Thanks for the report.
+> > >
+> > >
+> > > On Tue, 14 Oct 2025 at 07:41, Kees Cook <kees@kernel.org> wrote:
+> > > >
+> > > >
+> > > >
+> > > > On October 13, 2025 1:34:20 PM PDT, Patchwork Integration <patchwork@media-ci.org> wrote:
+> > > > >Dear Kees Cook:
+> > > > >
+> > > > >Thanks for your patches! Unfortunately the Media CI robot detected some
+> > > > >issues:
+> > > > >
+> > > > ># Test static:test-smatch
+> > > > >
+> > > > >drivers/media/usb/usbtv/usbtv-core.c:157:1: error: bad constant expression
+> > > >
+> > > > Where can I find what this test actually does?
+> > > >
+> > > > >For more details, check the full report at:
+> > > > >https://linux-media.pages.freedesktop.org/-/users/patchwork/-/jobs/85913402/artifacts/report.htm .
+> > > >
+> > > > This webserver appears to be misconfigured to send compressed output without the right headers? I can't actually view this URL.
+> > >
+> > > I will follow-up with fdo maintainers to figure out what happened.
+> > > there. On the meantime you can use these url that seems to work:
+> > > https://linux-media.pages.freedesktop.org/-/users/patchwork/-/jobs/85913402/artifacts/report.txt
+> > > https://gitlab.freedesktop.org/linux-media/users/patchwork/-/jobs/85913398
+> > >
+> > > Basically sparse/smatch do not seem to understand the constant.
+> >
+> > Yeah, I managed to find the actual scripts that are run for the
+> > static-sparse/smatch tests. It looks like those tools aren't correctly
+> > handling string literals for __builtin_strlen(), which is a constant for
+> > constant arguments.
+> >
+> > So, that's a C parsing bug in those tools (GCC and Clang are fine).
+> 
+> Could you take a look at this patch:
+> https://patchwork.linuxtv.org/project/linux-media/patch/20251010030610.3032147-3-kees@kernel.org/
+> 
+> Seems that sparse/smatch are not very happy about __builtin_strlen()
+> 
+> Could you fix support for __builtin_strlen() in your tool?
+> 
+> Once Kees lands his patch it will break all the CIs using
+> sparse/smatch, including media-ci.
+> 
+> Eg:
+> 
+> drivers/media/pci/zoran/zr36060.c:33:1: error: bad constant expression
+> drivers/media/usb/pvrusb2/pvrusb2-dvb.c:19:1: error: bad constant expression
+> drivers/media/usb/pvrusb2/pvrusb2-dvb.c:19:1: error: bad constant expression
 
-Yeah we can.
+We've waited a decade to get the embedded-NUL check into the modinfo
+macros, so I'm happy to wait until we can get the CI tooling updated.
 
-But please put something more sensible in for v3.
+Please keep me posted on when the sparse and smatch have been updated
+and I'll re-send the modinfo patch.
 
----
-bod
+Thanks!
+
+-Kees
+
+-- 
+Kees Cook
