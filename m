@@ -1,146 +1,185 @@
-Received: from lahtoruutu.iki.fi (lahtoruutu.iki.fi [185.185.170.37])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lj1-f176.google.com (mail-lj1-f176.google.com [209.85.208.176])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 562C627B345;
-	Mon, 20 Oct 2025 18:29:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=185.185.170.37
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760984946; cv=pass; b=lmdD1tjB7Fbvw1t2QFgQDpoef2rTzYGbNn0toyHPlRjAriCIj5agsFSIvDijunpydaK54Perzqwpi157xk4GzSPJDb/7CG7mhjSlourgrCz35l45XqbKMTdekU7FevM2GdXsI5TKCvTDAYU8USs0bUSAyeWq6+OP44zKE2oi/Rk=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760984946; c=relaxed/simple;
-	bh=C4Q5V6tBRB3IMyf1AeACx4S8uv7NjMA3quCujeqqqZ4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=n44dg2oIiyvWcVAMgB+7qrv+OlkMVzh2AtpuGF741OkXPMNpv7l3IuMkbrbQ5DESUw9hVAcJJuiIenPDDpl2aZKBRQ66bszRjDbdKMKcgtAXAhz/ADSn6fa/tTMe6XQPtfAG2AAkH1dEDaWiuany5KfAxR7dhB5AWieGwCbaHeE=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=iki.fi; spf=pass smtp.mailfrom=iki.fi; dkim=pass (2048-bit key) header.d=iki.fi header.i=@iki.fi header.b=FCfovOsZ; arc=pass smtp.client-ip=185.185.170.37
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=iki.fi
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iki.fi
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 38797A926
+	for <linux-media@vger.kernel.org>; Mon, 20 Oct 2025 18:36:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.176
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1760985371; cv=none; b=AHBnuZQ2BPgpICpDQqFxdSkHu5pUihicKATJkP3Ru51ScLjMPKXqpXrrE2lU81QgmKgcHO2mWAfoJOUkY4OpUhCf5Qn4O0bYyEyaa+kRqcA8mjt8Mifv6ZnrgsVzsaUS+s8vXah+VtE1Y8WaGtOuhLbSERBosEdw6G4+/5SPzmA=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1760985371; c=relaxed/simple;
+	bh=0/AVc8dyviWOP9aStkksVfSHILg73Le+KW3RZ9mknZs=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=f3fgRSkRG3qJ1SCdKkHo4hWXlpqiJJ4x4e6iYBjeHomSyvjqFTIELKh+SlmBZ9eHP+9p8d7f8/NUbSBp//bEdD+hgiGRUUmTloqbcAQ3nDCR8J3g1Eko7ovmGM6xFsudK/qbN5iPlJVF9GNQX2AthFVSTFD+FFJrr0lB5ltLmZ0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=avomBbiu; arc=none smtp.client-ip=209.85.208.176
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=iki.fi header.i=@iki.fi header.b="FCfovOsZ"
-Received: from hillosipuli.retiisi.eu (91-158-51-183.elisa-laajakaista.fi [91.158.51.183])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: sailus)
-	by lahtoruutu.iki.fi (Postfix) with ESMTPSA id 4cr3pp30Nnz49Pv9;
-	Mon, 20 Oct 2025 21:28:50 +0300 (EEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi; s=lahtoruutu;
-	t=1760984930;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=p0qqzZHHz/0r7H8SMWr8rylCvjrXud3IqxroUD42/J0=;
-	b=FCfovOsZq4B1TX5f6aM5jtfBh9Iyxy12lDbaY9dFc0gkTl5dtXw8ji5+RgyHRZrxzSsLwG
-	aJ1Fo0OqVpgcmTwyrZCB1ixGNhxrCvUv7PLV4N5ASOEGNaI0jKrQCUkd+JratuEOWgV1ef
-	CsO+nFkUIHKi4emyolGEJ2+wdHngufzBEIczqwqBwcD0+/fPvNdwcZO0/akocQwvqRyEL6
-	ZZmwqfMCu7SIj0hYa91wpBSglbNd/4SbNbtYKOggvmnBytXyKajnY/++dgzlZ0n7rIyrQd
-	F37DJGaeXDPb/Hj+I/37hKI+wf4HC9/2KwJ6AacBbx3l526eNo6XpuHfqkCM2Q==
-ARC-Seal: i=1; s=lahtoruutu; d=iki.fi; t=1760984930; a=rsa-sha256;
-	cv=none;
-	b=l498ZiT4N5HGKaNBBURODcs07DNMh2BIfQK4Mb6lcmBITJRZE620+yAi+ZGl+dxV6ZkaoA
-	bibweS6mtaXMqMz3BBEuvo19VBDjefg+2KUKgblWKGq4FixGhz9u2HiDFkruZlOvMkFniP
-	GbED5y8jf8pFeLGAeLnM4fnRQhg9KxLWv9QPYa4QSCKa750+aJwojy0zsZKl4zRUZpnVu0
-	js7ovhhXxW+CRJCaXkUBmhy6QgNWhhp2h4a1iVGZbgKo+rKHrfj4yyeu3+P7W7IfBUGDTl
-	LJBj1vj0JMtFcn+Qxyr2bjOwYlaLnUZ0U0N4KGYZcxCD/RDMhE0SIKPfBZZWmw==
-ARC-Authentication-Results: i=1;
-	ORIGINATING;
-	auth=pass smtp.auth=sailus smtp.mailfrom=sakari.ailus@iki.fi
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi;
-	s=lahtoruutu; t=1760984930;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=p0qqzZHHz/0r7H8SMWr8rylCvjrXud3IqxroUD42/J0=;
-	b=EE9Syeoxhls1mtOm6JGqTLhcjAdgymKXsXCY623S/rb80ExBijc2l/I4mchGpqlS+0C5Q9
-	cbFZJQubQWDC2DervNV7XFwm2dzoGNfrwA2w40RZQ5qt18SFOyCqWNsp6HZ2UqdmfjWKEJ
-	JLlsUaZDyXneodvi3Whf/70JZG0deGPg/GsDMSDY4+zw6h3M48Bfi5bi5p4C27LRBtPQ39
-	P6X565p+2dBVCf8d2x+QMQmu0UtdLuezKNhtZS8+y/dkfRBDN3mpyK37t0FpLKuQOqLrVE
-	0dmKBLGeckMqdyaPLpjv6UaWHhPqCLmCm0iaWwAhht/roFJcjKdew/4mQCMqUQ==
-Received: from valkosipuli.retiisi.eu (valkosipuli.local [192.168.4.2])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange secp256r1 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by hillosipuli.retiisi.eu (Postfix) with ESMTPS id CBFAD634C50;
-	Mon, 20 Oct 2025 21:28:49 +0300 (EEST)
-Date: Mon, 20 Oct 2025 21:28:49 +0300
-From: Sakari Ailus <sakari.ailus@iki.fi>
-To: Ricardo Ribalda <ribalda@chromium.org>
-Cc: Ricardo Ribalda <ribalda@kernel.org>,
-	Hans Verkuil <hverkuil+cisco@kernel.org>,
-	linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] media: i2c: imx214: Exit early on control init errors
-Message-ID: <aPZ_YRwpDNPFjePX@valkosipuli.retiisi.eu>
-References: <20251014-imx214-smatch-v2-1-04218043086d@chromium.org>
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="avomBbiu"
+Received: by mail-lj1-f176.google.com with SMTP id 38308e7fff4ca-36a6a397477so47983731fa.3
+        for <linux-media@vger.kernel.org>; Mon, 20 Oct 2025 11:36:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1760985367; x=1761590167; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=AJPDwplFeSk8txr/JVZT1GTqUUhaxVYkPrM3fufocfc=;
+        b=avomBbiuj0msbzU8yz+kiyLhiFCyVVu+NHkQBbRd4uND2gqnkSAsDDRKy17lBExXW4
+         ElilWI9XWdx0bJEJsCc3+VEfYsRL6wHNlCXBqlmI5SeUi97Wwu/De/Ug3iSU/6wzqVsp
+         5vyLdEgBkqknmfVJ6jvidv9JHHuWQcif4Eh5s=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1760985367; x=1761590167;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=AJPDwplFeSk8txr/JVZT1GTqUUhaxVYkPrM3fufocfc=;
+        b=UAml40WyJ6SqDDW4QGWsvH2doY+F+ltss3N+qO0dWXyAW9POM6HwjrSOAYEEp6diZk
+         46+4fWxf4iqnOaehvGYfFideyOgbRwQHU1+RvmbfIEwr38RafgqGCG+Lb7W0I9Hevcwg
+         MGAHae/Hk3Ch06y6eCAU106is2Q7kAhNPv+n85n3/NcVUzZjfCatsmuXXMFuQhdZVy1L
+         iDeXN5/iT05/QmbTO10dy0m7cqcnpJVQcG0M9TovEq7yz5zA5WsnLD7q38aX9moGHA4I
+         RlUIxxHgcsBzDLBylw29wNmNUK1obp7OIWxFeQdfahxWLc0ztUBd02+XbjpsArsn9KFH
+         s6zw==
+X-Forwarded-Encrypted: i=1; AJvYcCUQM3VFnwNwVp1m6aNeOkinfvPKwUJLiyDuOgHDq8srsgaoITlseSLbWVNdne64fvgQDg1gs9lGAYgCNw==@vger.kernel.org
+X-Gm-Message-State: AOJu0YwBiuT8Qkp0UTpJWpioqDBJqM2IdBonZ1MVZoEd31btQEpebuLU
+	h4+T5orCsFhs5nJZwdkyycjqXMI4N37oAuRz9TCUr6+g1DMrwADay0fBj6UkGWDHEJbNHQOCTIR
+	7zts=
+X-Gm-Gg: ASbGnctt6Q+Gb36yED875PTU0fMfRAbAkHYVQPppkY5xUwrmNDF4uPQU7BatSQXmHuo
+	QOVumunXgED5btWYeSwyncKFJdYnZNlccareEd3n42kWy2GSiYvGfPVvtl9ntsKAVEyPy3BKWQj
+	E0Y2shxgan7Va2LYg5vfwuDjLr5aZF/bfZy5gbXuPT9MJrBdvTDBYVBs9v84mkrz0JfwUs1yZ7a
+	n2ivxWn8IWzeGV0/o+kFCViUisVE6lGPUiLZIRU29LGkVc+KWKhHS8/IrZlTdydBK+yRBNQt7JN
+	72K6y4bsVW8NjjB4eSraJgX3EPr/huWWYKL6bHhv6X2empkbhV+VBxbA6ioQ0WwBuxrJqwhNh5U
+	E0MEIRp91N5ZuTDreb219DgC2PaTUbK0zHT5mSUXOKzozof4/JWdVe5e8kDgFALjiqgkj8L2FGV
+	Vwavmk2KY0nIX6nZnPkHNlmJ12K7/uDPZwah3xEJFptyqGBceC
+X-Google-Smtp-Source: AGHT+IHc6lgZfbA7fC+NFYqMltDafM7DrSpWNhba5a2hu84a8ZU7f6xlon5rtXN1IcXuXE/zj5UAEA==
+X-Received: by 2002:a2e:b8c1:0:b0:376:39eb:21d8 with SMTP id 38308e7fff4ca-3779789b7a5mr41736221fa.15.1760985366969;
+        Mon, 20 Oct 2025 11:36:06 -0700 (PDT)
+Received: from mail-lf1-f44.google.com (mail-lf1-f44.google.com. [209.85.167.44])
+        by smtp.gmail.com with ESMTPSA id 38308e7fff4ca-377a9674e68sm22905561fa.57.2025.10.20.11.36.06
+        for <linux-media@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 20 Oct 2025 11:36:06 -0700 (PDT)
+Received: by mail-lf1-f44.google.com with SMTP id 2adb3069b0e04-57bd04f2e84so5547577e87.1
+        for <linux-media@vger.kernel.org>; Mon, 20 Oct 2025 11:36:06 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCXYIiSL0Ny0sMxcrBn/dQUsylQDgzGF65TxHO90hCUSd/WkI+qsZhxqM89OSTR+fN8LXURNk7ZghOmsuA==@vger.kernel.org
+X-Received: by 2002:a05:6512:3e04:b0:58a:f865:d7a6 with SMTP id
+ 2adb3069b0e04-591d857844bmr4431396e87.48.1760985365864; Mon, 20 Oct 2025
+ 11:36:05 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20251014-imx214-smatch-v2-1-04218043086d@chromium.org>
+References: <20251010030348.it.784-kees@kernel.org> <68ed624c.050a0220.3ba739.64ea@mx.google.com>
+ <D1CBCBE2-3A54-410A-B15C-F1C621F9F56B@kernel.org> <CANiDSCu6xZAuSF5_M-4BMRc52hbSh_1QfDQqaeGR4iD5fdQjQg@mail.gmail.com>
+ <202510141344.E0ABCD2C7@keescook> <CANiDSCsBAq3Yx4ybarUb_1NkQ-bvfXvWqb-DfqXatkiYJFZWiQ@mail.gmail.com>
+ <202510201127.D97BCF2@keescook>
+In-Reply-To: <202510201127.D97BCF2@keescook>
+From: Ricardo Ribalda <ribalda@chromium.org>
+Date: Mon, 20 Oct 2025 20:35:53 +0200
+X-Gmail-Original-Message-ID: <CANiDSCtbrM4Fg_p56EdV09ts_j8HnMCc1hGH31-BZvv03Z0DjQ@mail.gmail.com>
+X-Gm-Features: AS18NWDey1sqFu2xz3u2ZIcGnzmT-sAit71ah5vb53sUxvrTvQTFzPL0UMIGIwI
+Message-ID: <CANiDSCtbrM4Fg_p56EdV09ts_j8HnMCc1hGH31-BZvv03Z0DjQ@mail.gmail.com>
+Subject: Re: [v2,0/3] module: Add compile-time check for embedded NUL characters
+To: Kees Cook <kees@kernel.org>
+Cc: Dan Carpenter <dan.carpenter@linaro.org>, linux-media@vger.kernel.org, 
+	Patchwork Integration <patchwork@media-ci.org>
+Content-Type: text/plain; charset="UTF-8"
 
-Hi Ricardo,
+Hi Kees
 
-On Tue, Oct 14, 2025 at 11:00:17AM +0000, Ricardo Ribalda wrote:
-> Now we try to initialize all the controls and at the very end check
-> ctrl_hdlr->error to check if one of them has failed.
-> 
-> This confuses smatch, who do not know how to track the state of
-> imx214->link_freq.
-> 
-> drivers/media/i2c/imx214.c:1109 imx214_ctrls_init() error: we previously assumed 'imx214->link_freq' could be null (see line 1017)
-> 
-> Fix this by exiting early on control initialization errors.
-> 
-> Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
-> ---
-> Right now we are handling this with a quirk in media-ci, if Dan cannot
-> fix smatch in a kernel cycle we should merge this patch.
-> ---
-> Changes in v2:
-> - Fix typo in commit message commit
-> - Move error tag where it belongs (Thanks Hans!)
-> - Link to v1: https://lore.kernel.org/r/20250829-imx214-smatch-v1-1-f3d1653b48e4@chromium.org
-> ---
->  drivers/media/i2c/imx214.c | 7 +++++--
->  1 file changed, 5 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/media/i2c/imx214.c b/drivers/media/i2c/imx214.c
-> index 94ebe625c9e6ee0fb67fe1d89b48b2f1bf58ffc6..c66f0e18726c3fc15df91c37888a797bcea82134 100644
-> --- a/drivers/media/i2c/imx214.c
-> +++ b/drivers/media/i2c/imx214.c
-> @@ -1014,8 +1014,10 @@ static int imx214_ctrls_init(struct imx214 *imx214)
->  						   V4L2_CID_LINK_FREQ,
->  						   imx214->bus_cfg.nr_of_link_frequencies - 1,
->  						   0, imx214->bus_cfg.link_frequencies);
-> -	if (imx214->link_freq)
-> -		imx214->link_freq->flags |= V4L2_CTRL_FLAG_READ_ONLY;
-> +	if (!imx214->link_freq)
-> +		goto err_init_ctrl;
-> +
-> +	imx214->link_freq->flags |= V4L2_CTRL_FLAG_READ_ONLY;
+On Mon, 20 Oct 2025 at 20:29, Kees Cook <kees@kernel.org> wrote:
+>
+> On Wed, Oct 15, 2025 at 09:33:40AM +0200, Ricardo Ribalda wrote:
+> > Hi Dan
+> >
+> > On Tue, 14 Oct 2025 at 22:45, Kees Cook <kees@kernel.org> wrote:
+> > >
+> > > On Tue, Oct 14, 2025 at 08:24:00AM +0200, Ricardo Ribalda wrote:
+> > > > Hi Kees
+> > > >
+> > > > Thanks for the report.
+> > > >
+> > > >
+> > > > On Tue, 14 Oct 2025 at 07:41, Kees Cook <kees@kernel.org> wrote:
+> > > > >
+> > > > >
+> > > > >
+> > > > > On October 13, 2025 1:34:20 PM PDT, Patchwork Integration <patchwork@media-ci.org> wrote:
+> > > > > >Dear Kees Cook:
+> > > > > >
+> > > > > >Thanks for your patches! Unfortunately the Media CI robot detected some
+> > > > > >issues:
+> > > > > >
+> > > > > ># Test static:test-smatch
+> > > > > >
+> > > > > >drivers/media/usb/usbtv/usbtv-core.c:157:1: error: bad constant expression
+> > > > >
+> > > > > Where can I find what this test actually does?
+> > > > >
+> > > > > >For more details, check the full report at:
+> > > > > >https://linux-media.pages.freedesktop.org/-/users/patchwork/-/jobs/85913402/artifacts/report.htm .
+> > > > >
+> > > > > This webserver appears to be misconfigured to send compressed output without the right headers? I can't actually view this URL.
+> > > >
+> > > > I will follow-up with fdo maintainers to figure out what happened.
+> > > > there. On the meantime you can use these url that seems to work:
+> > > > https://linux-media.pages.freedesktop.org/-/users/patchwork/-/jobs/85913402/artifacts/report.txt
+> > > > https://gitlab.freedesktop.org/linux-media/users/patchwork/-/jobs/85913398
+> > > >
+> > > > Basically sparse/smatch do not seem to understand the constant.
+> > >
+> > > Yeah, I managed to find the actual scripts that are run for the
+> > > static-sparse/smatch tests. It looks like those tools aren't correctly
+> > > handling string literals for __builtin_strlen(), which is a constant for
+> > > constant arguments.
+> > >
+> > > So, that's a C parsing bug in those tools (GCC and Clang are fine).
+> >
+> > Could you take a look at this patch:
+> > https://patchwork.linuxtv.org/project/linux-media/patch/20251010030610.3032147-3-kees@kernel.org/
+> >
+> > Seems that sparse/smatch are not very happy about __builtin_strlen()
+> >
+> > Could you fix support for __builtin_strlen() in your tool?
+> >
+> > Once Kees lands his patch it will break all the CIs using
+> > sparse/smatch, including media-ci.
+> >
+> > Eg:
+> >
+> > drivers/media/pci/zoran/zr36060.c:33:1: error: bad constant expression
+> > drivers/media/usb/pvrusb2/pvrusb2-dvb.c:19:1: error: bad constant expression
+> > drivers/media/usb/pvrusb2/pvrusb2-dvb.c:19:1: error: bad constant expression
+>
+> We've waited a decade to get the embedded-NUL check into the modinfo
+> macros, so I'm happy to wait until we can get the CI tooling updated.
 
-You could do this cleaner by simply moving the assignment after the handler
-error check. Some drivers do that already.
+For media-ci. It will probably be after 6.19rc1
 
-I wonder why this seems to be a problem for smatch in the imx214 driver as
-the pattern is widely used across the sensor drivers.
+Basically, when
+https://lore.kernel.org/linux-sparse/CACePvbVG2KrGQq4cNKV=wbO5h=jp3M0RO1SdfX8kV4OukjPG8A@mail.gmail.com/T/#t
+lands in media-committers.
 
->  
->  	/*
->  	 * WARNING!
-> @@ -1099,6 +1101,7 @@ static int imx214_ctrls_init(struct imx214 *imx214)
->  
->  	v4l2_ctrl_new_fwnode_properties(ctrl_hdlr, &imx214_ctrl_ops, &props);
->  
-> +err_init_ctrl:
->  	ret = ctrl_hdlr->error;
->  	if (ret) {
->  		v4l2_ctrl_handler_free(ctrl_hdlr);
-> 
+How did you plan to land this series? via which tree?
+
+if Chris have not landed his fix yet, maybe you can include that patch
+in your series as 1/X.... That will make every ci happy
+
+Regards!
+
+
+>
+> Please keep me posted on when the sparse and smatch have been updated
+> and I'll re-send the modinfo patch.
+>
+> Thanks!
+>
+> -Kees
+>
+> --
+> Kees Cook
+
+
 
 -- 
-Kind regards,
-
-Sakari Ailus
+Ricardo Ribalda
