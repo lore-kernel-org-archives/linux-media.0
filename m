@@ -1,146 +1,158 @@
-Received: from smtp2-g21.free.fr (smtp2-g21.free.fr [212.27.42.2])
+Received: from www637.your-server.de (www637.your-server.de [168.119.26.117])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B4DA0240611
-	for <linux-media@vger.kernel.org>; Mon, 20 Oct 2025 20:46:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.27.42.2
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9B2D0333737;
+	Mon, 20 Oct 2025 20:56:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=168.119.26.117
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760993168; cv=none; b=SucNYjE/M/AxAIIII53xvWJ/0DkIVtpDmigj7JTfsoVv6UoOCIYxpQcZwjho3eacTON6hU4mf6edrHeBziHorLQ6JtmEzsmSo5inxFfOiiZfMuR7RyrKOgX7U/S9i1D3O84HdwMA1swx1JenBYNA+tJnzLYWNfPcB25BUyOrH3Y=
+	t=1760993817; cv=none; b=tuzEaq86M0n529LTpd534IK+lLVzrWKahFAdTBZIbzGCXPC6rFPmR+hL3JiVrosFAnHirldMJRUhiAcosLOIpJ45z254dB/iQ1m+CNrX96nnCxtjew3d6wys9w7qtsX9M/q3cxS9UwDM/XUmC+BjFmuq4Bijuc4Blx12dFi0zi8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760993168; c=relaxed/simple;
-	bh=8pB0QMKS36W0Fgitz8BzS3uo1jF+YxWQ0txxOlFL7fk=;
-	h=From:Content-Type:Mime-Version:Subject:Message-Id:Date:To; b=locvIWfPwYBI+xv9CiO7r15NIjCjmGZzm3BDsAi/nAjZsW8sx8DUeIHatTgk1TZWX9aFThA5TBIJdu+ye+vqvYNuW1KEPtLU2WBk11B7aXt+8ULL0kbVS1URd488NdQVnIFyzm9aaYhJwmU4fGs5+OyG5KPZwbSkJROU0EZU6GQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=free.fr; spf=pass smtp.mailfrom=free.fr; dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr header.b=R4U7Al+R; arc=none smtp.client-ip=212.27.42.2
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=free.fr
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=free.fr
+	s=arc-20240116; t=1760993817; c=relaxed/simple;
+	bh=McGfNh7ciF5ksFu2NwbJt5zEbKC5VtUeVzsub6mNoyU=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=gXMC0IAwoeVHCCS5IxInCcPMrRqjTZrQA6VS750WH6AVBoovJDFHTKSefm1ryiBicfVnW/78jg/GF6GARLGaNQvMx8W6PeNo0OiiFM2McPHXvRGkvKzBlmlGFplBCoUdnX6JuHlh8LUWhRkiRj2bwgXpUVsUj65cwqPvycAJ2uo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=apitzsch.eu; spf=pass smtp.mailfrom=apitzsch.eu; dkim=pass (2048-bit key) header.d=apitzsch.eu header.i=@apitzsch.eu header.b=duFjPyBH; arc=none smtp.client-ip=168.119.26.117
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=apitzsch.eu
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=apitzsch.eu
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr header.b="R4U7Al+R"
-Received: from smtpclient.apple (unknown [46.193.65.132])
-	(Authenticated sender: perenono@free.fr)
-	by smtp2-g21.free.fr (Postfix) with ESMTPA id 0DEDB2003A4
-	for <linux-media@vger.kernel.org>; Mon, 20 Oct 2025 22:46:01 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=free.fr;
-	s=smtp-20201208; t=1760993162;
-	bh=8pB0QMKS36W0Fgitz8BzS3uo1jF+YxWQ0txxOlFL7fk=;
-	h=From:Subject:Date:To:From;
-	b=R4U7Al+RyLNnkoS+gbxHTXlxI3ecqJRKjE4DLpB0DzEH/QTn3Rrq9NlSqXz0htdZ/
-	 ewVi1g0L09XIVGKsfaVYZXgqm3mswTPdQ+EFbng7rltzwfvDxPjEjawVYRcvRZ8DnL
-	 q2KKLzfhNfPD7NJLsamLjMe3eqFjayvN2zhbuJRsijhEmUTGHsvkdy9UmsUaTUMw1u
-	 FhFjiOpW84OBf/v/t7JzKpcdx6JiAIRa1HU3UiisAU+LQ0drtcXGD/lMO68KdU48xG
-	 J6wcNtH1ih5XYKVl40LC2wL8DTtMxcF2NQHIGpF1wpo8ACdiqpl+hvQWq8zzv2VECW
-	 pvSbel4Gmmttg==
-From: =?utf-8?Q?Jean-Baptiste_No=C3=ABl?= <perenono@free.fr>
-Content-Type: multipart/mixed;
-	boundary="Apple-Mail=_6BDE62C8-C2CB-4A25-AAF6-B626C40201EB"
+	dkim=pass (2048-bit key) header.d=apitzsch.eu header.i=@apitzsch.eu header.b="duFjPyBH"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=apitzsch.eu
+	; s=default2410; h=MIME-Version:Content-Transfer-Encoding:Content-Type:
+	References:In-Reply-To:Date:Cc:To:From:Subject:Message-ID:Sender:Reply-To:
+	Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+	Resent-To:Resent-Cc:Resent-Message-ID;
+	bh=McGfNh7ciF5ksFu2NwbJt5zEbKC5VtUeVzsub6mNoyU=; b=duFjPyBHVlXnmjSb8UEBUN7+2l
+	bkrdtG+JT+oOjh8Xzk25DYAspxQv78pdrBh1Gkl2gkaIhBhJ+iK31Bk7il7KE9kG/O7BfGjjOkzl+
+	8NuF5z+l+/ByATShiQb9q6Yo1XmGuNrQa+wkfWjN+9mmqCzPhz10pUXWEkFyT81L1WQSqsLEgoRmy
+	CBjre/IRiEXvBuTG9FbbwRokxeWZVYenV6c3NcZnvvsqBgRPx0+QGZg9qShsL4gi1o/7bjhtnPFgi
+	N8gjzLWl6oNx0VOYxGWeb9Z76g/H+ODQyvS9gfI+TLF+cQBYP60sTs3Lab7Ro3f/YTZob2Zm66a6h
+	+ZYGoVRA==;
+Received: from sslproxy03.your-server.de ([88.198.220.132])
+	by www637.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+	(Exim 4.96.2)
+	(envelope-from <git@apitzsch.eu>)
+	id 1vAwgZ-0008mw-0b;
+	Mon, 20 Oct 2025 22:40:55 +0200
+Received: from localhost ([127.0.0.1])
+	by sslproxy03.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+	(Exim 4.96)
+	(envelope-from <git@apitzsch.eu>)
+	id 1vAwgY-00021J-2E;
+	Mon, 20 Oct 2025 22:40:54 +0200
+Message-ID: <790fd7d05fa03f788f0a628a99b2e127db824207.camel@apitzsch.eu>
+Subject: Re: [PATCH v2 0/8] media: i2c: dw9719: add DT compatible and
+ DW9718S support
+From: =?ISO-8859-1?Q?Andr=E9?= Apitzsch <git@apitzsch.eu>
+To: Mauro Carvalho Chehab <mchehab@kernel.org>, Rob Herring
+ <robh@kernel.org>,  Krzysztof Kozlowski	 <krzk+dt@kernel.org>, Conor Dooley
+ <conor+dt@kernel.org>, 	devicetree@vger.kernel.org, Sakari Ailus
+ <sakari.ailus@linux.intel.com>,  Daniel Scally <djrscally@gmail.com>
+Cc: ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org, 
+	linux-media@vger.kernel.org, linux-kernel@vger.kernel.org, Val Packett
+	 <val@packett.cool>
+Date: Mon, 20 Oct 2025 22:40:53 +0200
+In-Reply-To: <20250920-dw9719-v2-0-028cdaa156e5@apitzsch.eu>
+References: <20250920-dw9719-v2-0-028cdaa156e5@apitzsch.eu>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.58.1 
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3826.700.81\))
-Subject: dtv-scan-tables: update for dvb-t/fr-Paris
-Message-Id: <C4F80D0E-8609-444E-BED5-29718B9F76A3@free.fr>
-Date: Mon, 20 Oct 2025 22:45:51 +0200
-To: linux-media@vger.kernel.org
-X-Mailer: Apple Mail (2.3826.700.81)
+MIME-Version: 1.0
+X-Virus-Scanned: Clear (ClamAV 1.0.9/27798/Mon Oct 20 11:37:28 2025)
 
+Hi,
 
---Apple-Mail=_6BDE62C8-C2CB-4A25-AAF6-B626C40201EB
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain;
-	charset=us-ascii
+Am Samstag, dem 20.09.2025 um 14:03 +0200 schrieb Andr=C3=A9 Apitzsch via B=
+4
+Relay:
+> The DW9718S voice coil motor is found on various smartphones like
+> motorola-nora that are currently being worked on in the postmarketOS
+> community. Since the way it operates is very similar to DW9719, this
+> patch series adds support for it to the existing dw9719 driver.
+> Because
+> that driver did not yet support DT, we also add DT bindings and the
+> dongwoon,dw9719 ofw compatible. With DW9718S, the driver was
+> tested fully, including runtime PM.
+>=20
+> This is a follow-up of [1] and [2].
+>=20
+> Changes compared to previous submission:
+> * Deprecate dongwoon,vcm-freq in favor of dongwoon,vcm-prescale
+> * Instead of per-device config struct use model ID to handle cases
+>=20
+> [1]
+> https://lore.kernel.org/linux-media/20250210082035.8670-1-val@packett.coo=
+l/
+> [2]
+> https://lore.kernel.org/linux-media/20250209-dw9761dts-v3-0-14d3f00f0585@=
+apitzsch.eu/
+>=20
+> Signed-off-by: Andr=C3=A9 Apitzsch <git@apitzsch.eu>
+> ---
+> Changes in v2:
+> - Add patch (3) which removes i2c device table
+> - Restructure patches because of that
+> =C2=A0 - keep patches 1 and 2
+> =C2=A0 - add patch 3
+> =C2=A0 - patch 6 becomes patch 4
+> =C2=A0 - patch 3 becomes patch 5
+> =C2=A0 - patch 4 becomes patch 6
+> =C2=A0 - patch 5 becomes patch 7
+> =C2=A0 - patch 7 becomes patch 8
+> - Patch 1 (bindings)
+> =C2=A0 - Remove unneeded 'minimum: 0'
+> =C2=A0 - Remove if/then that handles 'default' to reduce complexity
+> =C2=A0 - Add myself as maintainer
+> - Patch 5
+> =C2=A0 - Fix void-pointer-to-enum-cast warning
+> - Patch 7
+> =C2=A0 - Drop pm_runtime_mark_last_busy(); it is already called by
+> =C2=A0=C2=A0=C2=A0 pm_runtime_put_autosuspend()
+> - Patch 8
+> =C2=A0 - Remove extra parentheses
+> =C2=A0 - Print error if writing to power register fails
+> =C2=A0 - Add reason for doubled waiting time during power up to comment
+> =C2=A0 - Pass NULL instead of unused 'ret' to cci_write()
+> - Link to v1:
+> https://lore.kernel.org/r/20250817-dw9719-v1-0-426f46c69a5a@apitzsch.eu
+>=20
+> ---
+> Andr=C3=A9 Apitzsch (3):
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 dt-bindings: media: i2c: Add DW9718S, DW97=
+19 and DW9761 VCM
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 media: i2c: dw9719: Deprecate dongwoon,vcm=
+-freq
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 media: i2c: dw9719: Remove unused i2c devi=
+ce id table
+>=20
+> Val Packett (5):
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 media: i2c: dw9719: Add an of_match_table
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 media: i2c: dw9719: Add driver_data matchi=
+ng
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 media: i2c: dw9719: Add DW9718S support
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 media: i2c: dw9719: Update PM last busy ti=
+me upon close
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 media: i2c: dw9719: Fix power on/off seque=
+nce
+>=20
+> =C2=A0.../bindings/media/i2c/dongwoon,dw9719.yaml=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0 |=C2=A0 88
+> +++++++++++++++++
+> =C2=A0drivers/media/i2c/dw9719.c=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 | 110
+> +++++++++++++++++----
+> =C2=A02 files changed, 178 insertions(+), 20 deletions(-)
+> ---
+> base-commit: 846bd2225ec3cfa8be046655e02b9457ed41973e
+> change-id: 20250709-dw9719-8a8822efc1b1
+>=20
 
-Hello,
+Gentle ping.
 
-This is an update for Paris Eiffel Tower DVB-T transmitters at =
-https://git.linuxtv.org/dtv-scan-tables.git/tree/dvb-t/fr-Paris.
-Attached is the updated config scan file for Paris Eiffel Tower =
-transmitters in dvbv5 format.
-
---Apple-Mail=_6BDE62C8-C2CB-4A25-AAF6-B626C40201EB
-Content-Disposition: attachment;
-	filename=fr-Paris
-Content-Type: application/octet-stream;
-	x-unix-mode=0644;
-	name="fr-Paris"
-Content-Transfer-Encoding: quoted-printable
-
-#=20en=20:=20Paris=20-=20France=20-=20various=20DVB-T=20transmitters=0A#=20=
-fr=20:=20Paris=20-=20France=20-=20differents=20emetteurs=20DVB-T=20de=20=
-la=20Tour=20Eiffel=0A#=20Latest=20update=20for=20the=20data=20/=20=
-derniere=20mise=20a=20jour=20des=20donnees=20:=202025-10-10=0A#=0A#=20=
-City=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20Multiplex=20=
-number=20:=20R1=20R2=20R4=20R6=20R7=20R9=20R15=0A#=20Paris=20-=20Eiffel=20=
-Tower=20-=20Channel=20number=20=20=20:=2035=2025=2030=2032=2042=2024=20=
-28=0A#=0A#=20Note=20:=0A#=20R8=20-=20Is=20no=20longer=20used=20since=20=
-the=2005/04/2016=20-=20Channel=2058=20is=20no=20longer=20used=0A#=20R5=20=
--=20Is=20no=20longer=20used=20since=20the=2005/04/2016=20-=20Channel=20=
-28=20Re-assigned=20for=20R15=0A#=20R3=20-=20Is=20no=20longer=20used=20=
-since=20the=2006/06/2025=20-=20Channel=2022=20is=20no=20longer=20used=0A=
-#=0A=0A#=20R1=20-=20Channel/Canal=2035=20-=20=20Groupe=20GR1=20A=20=
-(France=202,=20France=204,=20franceinfo:),=20Groupe=20GR=201=20(France=20=
-3-Paris=20Ile=20de=20France)=0A[CHANNEL=2035]=0A=09DELIVERY_SYSTEM=20=3D=20=
-DVBT=0A=09FREQUENCY=20=3D=20586166000=0A=09BANDWIDTH_HZ=20=3D=208000000=0A=
-=09CODE_RATE_HP=20=3D=203/4=0A=09CODE_RATE_LP=20=3D=20NONE=0A=09=
-MODULATION=20=3D=20QAM/64=0A=09TRANSMISSION_MODE=20=3D=208K=0A=09=
-GUARD_INTERVAL=20=3D=201/8=0A=09HIERARCHY=20=3D=20NONE=0A=09INVERSION=20=
-=3D=20AUTO=0A=0A#=20R2=20-=20Channel/Canal=2025=20-=20Groupe=20NTN=20=
-(BFM=20TV,=20CNEWS,=20CSTAR,=20Gulli,=20T18,=20NOVO19)=0A[CHANNEL=2025]=0A=
-=09DELIVERY_SYSTEM=20=3D=20DVBT=0A=09FREQUENCY=20=3D=20506166000=0A=09=
-BANDWIDTH_HZ=20=3D=208000000=0A=09CODE_RATE_HP=20=3D=203/4=0A=09=
-CODE_RATE_LP=20=3D=20NONE=0A=09MODULATION=20=3D=20QAM/64=0A=09=
-TRANSMISSION_MODE=20=3D=208K=0A=09GUARD_INTERVAL=20=3D=201/8=0A=09=
-HIERARCHY=20=3D=20NONE=0A=09INVERSION=20=3D=20AUTO=0A=0A#=20R4=20-=20=
-Channel/Canal=2030=20-=20Groupe=20Multi4=20(M6,=20W9,=20Arte,=20France5,=20=
-6ter,=20PARIS=20PREMIERE)=0A[CHANNEL=2030]=0A=09DELIVERY_SYSTEM=20=3D=20=
-DVBT=0A=09FREQUENCY=20=3D=20546166000=0A=09BANDWIDTH_HZ=20=3D=208000000=0A=
-=09CODE_RATE_HP=20=3D=203/4=0A=09CODE_RATE_LP=20=3D=20NONE=0A=09=
-MODULATION=20=3D=20QAM/64=0A=09TRANSMISSION_MODE=20=3D=208K=0A=09=
-GUARD_INTERVAL=20=3D=201/8=0A=09HIERARCHY=20=3D=20NONE=0A=09INVERSION=20=
-=3D=20AUTO=0A=0A#=20R6=20-=20Channel/Canal=2032=20-=20Groupe=20SMR6=20=
-(TF1,=20TMC,=20TFX,=20LCP,=20LCI)=0A[CHANNEL=2032]=0A=09DELIVERY_SYSTEM=20=
-=3D=20DVBT=0A=09FREQUENCY=20=3D=20562166000=0A=09BANDWIDTH_HZ=20=3D=20=
-8000000=0A=09CODE_RATE_HP=20=3D=203/4=0A=09CODE_RATE_LP=20=3D=20NONE=0A=09=
-MODULATION=20=3D=20QAM/64=0A=09TRANSMISSION_MODE=20=3D=208K=0A=09=
-GUARD_INTERVAL=20=3D=201/8=0A=09HIERARCHY=20=3D=20NONE=0A=09INVERSION=20=
-=3D=20AUTO=0A=0A#=20R7=20-=20Channel/Canal=2042=20-=20Groupe=20MHD7=20=
-(TF1=20S=C3=A9ries=20Films,=20L'Equipe=2021,=20RMC=20LIFE,=20RMC=20=
-D=C3=A9couverte,=20RMC=20Story)=0A[CHANNEL=2042]=0A=09DELIVERY_SYSTEM=20=
-=3D=20DVBT=0A=09FREQUENCY=20=3D=20642166000=0A=09BANDWIDTH_HZ=20=3D=20=
-8000000=0A=09CODE_RATE_HP=20=3D=203/4=0A=09CODE_RATE_LP=20=3D=20NONE=0A=09=
-MODULATION=20=3D=20QAM/64=0A=09TRANSMISSION_MODE=20=3D=208K=0A=09=
-GUARD_INTERVAL=20=3D=201/8=0A=09HIERARCHY=20=3D=20NONE=0A=09INVERSION=20=
-=3D=20AUTO=0A=0A#=20R9=20-=20Channel/Canal=2024=20-=20Groupe=20GR9A=20=
-(France=202=20UHD,=20test=20UHD)=0A[CHANNEL=2024]=0A=09DELIVERY_SYSTEM=20=
-=3D=20DVBT2=0A=09FREQUENCY=20=3D=20498166000=0A=09BANDWIDTH_HZ=20=3D=20=
-8000000=0A=09CODE_RATE_HP=20=3D=203/5=0A=09CODE_RATE_LP=20=3D=20NONE=0A=09=
-MODULATION=20=3D=20QAM/256=0A=09TRANSMISSION_MODE=20=3D=2032K=0A=09=
-GUARD_INTERVAL=20=3D=201/32=0A=09HIERARCHY=20=3D=20NONE=0A=09INVERSION=20=
-=3D=20AUTO=0A=0A#=20R15=20-=20Channel/Canal=2028=20-=20local=20channels=20=
-only=20on=20Paris=20-=20Eiffel=20tower=20transmitter=0A#=20Group=20=
-Multi-7=20(Canal=2031,=2020=20minutes=20TV,=20Le=20Figaro=20TV=20IDF)=0A=
-[CHANNEL=2028]=0A=09DELIVERY_SYSTEM=20=3D=20DVBT=0A=09FREQUENCY=20=3D=20=
-530166000=0A=09BANDWIDTH_HZ=20=3D=208000000=0A=09CODE_RATE_HP=20=3D=20=
-2/3=0A=09CODE_RATE_LP=20=3D=20NONE=0A=09MODULATION=20=3D=20QAM/16=0A=09=
-TRANSMISSION_MODE=20=3D=208K=0A=09GUARD_INTERVAL=20=3D=201/32=0A=09=
-HIERARCHY=20=3D=20NONE=0A=09INVERSION=20=3D=20AUTO=0A=
-
---Apple-Mail=_6BDE62C8-C2CB-4A25-AAF6-B626C40201EB
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain;
-	charset=utf-8
-
-
-Could you please ensure that this new file is committed into the =
-repository https://git.linuxtv.org/dtv-scan-tables.git/ ?
-
-I also submitted a pull request for the TvHeadEnd project but they =
-don=E2=80=99t seem to update their dev-scan-tables fork quite often !
-Feel free to cherry-pick my 3 commits to get a more detailed git =
-history: https://github.com/tvheadend/dtv-scan-tables/pull/161
-
-Thank you. Best regards,
-
-Jean-Baptiste NO=C3=8BL=
-
---Apple-Mail=_6BDE62C8-C2CB-4A25-AAF6-B626C40201EB--
+Best regards,
+Andr=C3=A9
