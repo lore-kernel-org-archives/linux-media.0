@@ -1,227 +1,116 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BA60D19CC28
-	for <linux-media@vger.kernel.org>; Tue, 21 Oct 2025 08:18:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9167230F53E;
+	Tue, 21 Oct 2025 08:33:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761034704; cv=none; b=rOvxW1aEkdKlbcy5S53drJ4cDQfSpeLj2yLrSvE3bFwZ929DRCjF/MibqpC0shQP5ZxNb2EnkVE2kBxgIMQvpWZ7ysJupfZJ+49KTbvmMm50TdY3jKNBvcTqijYmbi2ZYW5ThVR0KBLa5K2i+5mHZwkmRCGzoaTd0CmPfXwzZxc=
+	t=1761035639; cv=none; b=Hr/4sCTUPghxZvnHV4Uqjn24m8W3Z8WzLtZGS7yrrQ5pQ1taCzZuQIB6CXTXPIlIpO9frmn3PKf4QIYL+uDMrSDDCZvXCvh0JJH6iqkkZE4xtjtE9JAQIVEuZtPmm3/UdbGapzpTy9QcPfcZSWBlg1tb86LRUw/NAD3NaQBxS9k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761034704; c=relaxed/simple;
-	bh=h/am4B0L0K0hiTzsSR+YlpyjkwkA9TtvuM6ncJ897vc=;
-	h=Subject:To:Cc:References:From:Message-ID:Date:MIME-Version:
-	 In-Reply-To:Content-Type; b=BmLK7KgyFH1k/qKTh62Zkry5wpDcqWukJEkIFxAPv9AVLz+fr9pKs03Shv/hu188soTKmsdJbrnMolWgzIfVPkooSUp5G2ADawooFW3RD8NrTsqPc+9KxAsrlGq4XOtODJa1wv/FRjgBEj6BuEZ815RXVTeA6Vlgi4NJfrVrdHQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=E6rfIdlH; arc=none smtp.client-ip=192.198.163.14
+	s=arc-20240116; t=1761035639; c=relaxed/simple;
+	bh=7AAkSbpCo8jTHoVHtc7747VTNL+ybmCSlgJI6u1AuBQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=IzphZDSrbaqa75aANuza83C8D7+lqw8if4MEneQ8mIaS/+9X1JUE0dNu8O3FRHWQRH1ZEYB0rV9VlGJeC67YWiuE9mi6xbX7+7OKJAHgFYsty4oxo/MwMwe0NPXjxPmBCwiYGqdZEkGeaBFa0uz4jrq4lL+VLSKvpTDhfHpi3VM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=aNCX0qbs; arc=none smtp.client-ip=192.198.163.16
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="E6rfIdlH"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="aNCX0qbs"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1761034702; x=1792570702;
-  h=subject:to:cc:references:from:message-id:date:
-   mime-version:in-reply-to:content-transfer-encoding;
-  bh=h/am4B0L0K0hiTzsSR+YlpyjkwkA9TtvuM6ncJ897vc=;
-  b=E6rfIdlHvER5DPHMukU7SCx3s2u5YrR6iDxMZw2S8vy5QlttNlJDcSYZ
-   Lk/hr0cmBLbfQr/QTLU+LOB/MJ1YDWqzeUomf0C/taN/wzaT/jtMrZWXk
-   9gxCyVWl/nXHcQ2PC+flYhPmZ8uvNIVHNcCrLsaxr4BCt8R1j85jHYhbv
-   KGhxBWC0MzKo3MKzQeGlbHStrjnzGWz2NIqZHkrdwjqYbndAwuf2Ghyf2
-   H7WVsPsyaxyQjbKLtn6go35PBZ13FPrySv9x2NvEAxunvaX9p+OqazvK4
-   DkxNPDi+DCzvzDi2mB6hFsUaNHer20Dxr8CSJEUsQWDTXm0y5pKu76xYG
+  t=1761035638; x=1792571638;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=7AAkSbpCo8jTHoVHtc7747VTNL+ybmCSlgJI6u1AuBQ=;
+  b=aNCX0qbs1lZFMiiDk0UutogmUkbKIqZug6/2ODluJiXGNNxzFwPZe7sf
+   LmXdIMt7hZb3SzUFzdNJ3cCVgQzUNxRKmOJqY8dBNBMgK4Whi4lnSvGwc
+   OonLoqMazQFDj9y4LRkwIpMMIvLa7KLjW+Hy8z7pSiDvWuHx31mmItVm8
+   QiFZF9geuFny4Yx/Uh+U5zMQVr+aSaJdlNyuMDRY1Y2xIailnJo7zL8xt
+   ynhpvi6V/bOZTxrCxpoyqxo+xvuzubF+vDlwSKoufMiV9LNbjPvzJJBdG
+   IS12JBV2hpCLR807QQlGaDftLLvhRiC6CtzeJsJcgbLp6rHGLu3uuK6nF
    Q==;
-X-CSE-ConnectionGUID: lZdmKxcDSSe/zYJ8gBBikA==
-X-CSE-MsgGUID: kUQBW36mQES+jWvquEUfxQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11586"; a="63196420"
+X-CSE-ConnectionGUID: M2ISxljRTqWyE6OGhfl+Ug==
+X-CSE-MsgGUID: bcZURwu9RcOTORoe1KVo6A==
+X-IronPort-AV: E=McAfee;i="6800,10657,11586"; a="50731106"
 X-IronPort-AV: E=Sophos;i="6.19,244,1754982000"; 
-   d="scan'208";a="63196420"
-Received: from orviesa007.jf.intel.com ([10.64.159.147])
-  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Oct 2025 01:18:22 -0700
-X-CSE-ConnectionGUID: XKTLglWZRtK8MoVgO3q2Ag==
-X-CSE-MsgGUID: 0im5U1MgQbCCnpeC343d5Q==
+   d="scan'208";a="50731106"
+Received: from fmviesa007.fm.intel.com ([10.60.135.147])
+  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Oct 2025 01:33:57 -0700
+X-CSE-ConnectionGUID: ut0RFvqtQrKQBfNNscBISg==
+X-CSE-MsgGUID: BakoZdPnQzmbK4b1wYotHQ==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.19,244,1754982000"; 
-   d="scan'208";a="183389933"
-Received: from ipu5-build.bj.intel.com (HELO [10.238.153.130]) ([10.238.153.130])
-  by orviesa007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Oct 2025 01:18:21 -0700
-Subject: Re: [PATCH] media: ipu6: isys: Add support for monochrome media bus
- formats
-To: Hans de Goede <hansg@kernel.org>,
- Sakari Ailus <sakari.ailus@linux.intel.com>,
- Bingbu Cao <bingbu.cao@intel.com>, Tianshu Qiu <tian.shu.qiu@intel.com>
-Cc: linux-media@vger.kernel.org
-References: <20251020153741.55404-1-hansg@kernel.org>
-From: Bingbu Cao <bingbu.cao@linux.intel.com>
-Message-ID: <0d13a805-fc50-b8dc-4f5f-b4c9d24ea77a@linux.intel.com>
-Date: Tue, 21 Oct 2025 16:10:19 +0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+   d="scan'208";a="183242308"
+Received: from egrumbac-mobl6.ger.corp.intel.com (HELO kekkonen.fi.intel.com) ([10.245.245.134])
+  by fmviesa007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Oct 2025 01:33:55 -0700
+Received: from kekkonen.localdomain (localhost [IPv6:::1])
+	by kekkonen.fi.intel.com (Postfix) with SMTP id 20BC71202B5;
+	Tue, 21 Oct 2025 11:33:52 +0300 (EEST)
+Date: Tue, 21 Oct 2025 11:33:52 +0300
+Organization: Intel Finland Oy - BIC 0357606-4 - c/o Alberga Business Park, 6 krs, Bertel Jungin Aukio 5, 02600 Espoo
+From: Sakari Ailus <sakari.ailus@linux.intel.com>
+To: Frank Li <Frank.Li@nxp.com>
+Cc: Mauro Carvalho Chehab <mchehab@kernel.org>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Hans Verkuil <hverkuil@kernel.org>,
+	Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+	David Heidelberg <david@ixit.cz>,
+	"open list:MEDIA INPUT INFRASTRUCTURE (V4L/DVB)" <linux-media@vger.kernel.org>,
+	"open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" <devicetree@vger.kernel.org>,
+	open list <linux-kernel@vger.kernel.org>, imx@lists.linux.dev
+Subject: Re: [PATCH 1/1] dt-bindings: media: Convert ti,tvp5150.txt to yaml
+ format.
+Message-ID: <aPdFcGvX5p3RQPt2@kekkonen.localdomain>
+References: <20251014185515.2354668-1-Frank.Li@nxp.com>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-In-Reply-To: <20251020153741.55404-1-hansg@kernel.org>
-Content-Type: text/plain; charset=windows-1252
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20251014185515.2354668-1-Frank.Li@nxp.com>
 
-
-Hans,
+Hi Frank,
 
 Thanks for the patch.
 
-On 10/20/25 11:37 PM, Hans de Goede wrote:
-> Add support for monochrome media bus formats, for use with monochrome/IR
-> camera sensors.
-> 
-> This has been tested on a Dell XPS 13 9320 with OV1A1B IR sensor.
-> 
-> Signed-off-by: Hans de Goede <hansg@kernel.org>
-> ---
->  drivers/media/pci/intel/ipu6/ipu6-isys-csi2.c |  4 +++
->  .../media/pci/intel/ipu6/ipu6-isys-subdev.c   | 34 ++++++++++++++-----
->  .../media/pci/intel/ipu6/ipu6-isys-video.c    | 14 ++++++++
->  3 files changed, 43 insertions(+), 9 deletions(-)
-> 
-> diff --git a/drivers/media/pci/intel/ipu6/ipu6-isys-csi2.c b/drivers/media/pci/intel/ipu6/ipu6-isys-csi2.c
-> index d1fece6210ab..daec6b865bda 100644
-> --- a/drivers/media/pci/intel/ipu6/ipu6-isys-csi2.c
-> +++ b/drivers/media/pci/intel/ipu6/ipu6-isys-csi2.c
-> @@ -42,6 +42,10 @@ static const u32 csi2_supported_codes[] = {
->  	MEDIA_BUS_FMT_SGBRG8_1X8,
->  	MEDIA_BUS_FMT_SGRBG8_1X8,
->  	MEDIA_BUS_FMT_SRGGB8_1X8,
-> +	MEDIA_BUS_FMT_Y8_1X8,
-> +	MEDIA_BUS_FMT_Y10_1X10,
-> +	MEDIA_BUS_FMT_Y12_1X12,
-> +	MEDIA_BUS_FMT_Y16_1X16,
->  	MEDIA_BUS_FMT_META_8,
->  	MEDIA_BUS_FMT_META_10,
->  	MEDIA_BUS_FMT_META_12,
-> diff --git a/drivers/media/pci/intel/ipu6/ipu6-isys-subdev.c b/drivers/media/pci/intel/ipu6/ipu6-isys-subdev.c
-> index 463a0adf9e13..869e7d4ba572 100644
-> --- a/drivers/media/pci/intel/ipu6/ipu6-isys-subdev.c
-> +++ b/drivers/media/pci/intel/ipu6/ipu6-isys-subdev.c
-> @@ -25,24 +25,28 @@ unsigned int ipu6_isys_mbus_code_to_bpp(u32 code)
->  	case MEDIA_BUS_FMT_RGB565_1X16:
->  	case MEDIA_BUS_FMT_UYVY8_1X16:
->  	case MEDIA_BUS_FMT_YUYV8_1X16:
-> +	case MEDIA_BUS_FMT_Y16_1X16:
->  	case MEDIA_BUS_FMT_META_16:
->  		return 16;
->  	case MEDIA_BUS_FMT_SBGGR12_1X12:
->  	case MEDIA_BUS_FMT_SGBRG12_1X12:
->  	case MEDIA_BUS_FMT_SGRBG12_1X12:
->  	case MEDIA_BUS_FMT_SRGGB12_1X12:
-> +	case MEDIA_BUS_FMT_Y12_1X12:
->  	case MEDIA_BUS_FMT_META_12:
->  		return 12;
->  	case MEDIA_BUS_FMT_SBGGR10_1X10:
->  	case MEDIA_BUS_FMT_SGBRG10_1X10:
->  	case MEDIA_BUS_FMT_SGRBG10_1X10:
->  	case MEDIA_BUS_FMT_SRGGB10_1X10:
-> +	case MEDIA_BUS_FMT_Y10_1X10:
->  	case MEDIA_BUS_FMT_META_10:
->  		return 10;
->  	case MEDIA_BUS_FMT_SBGGR8_1X8:
->  	case MEDIA_BUS_FMT_SGBRG8_1X8:
->  	case MEDIA_BUS_FMT_SGRBG8_1X8:
->  	case MEDIA_BUS_FMT_SRGGB8_1X8:
-> +	case MEDIA_BUS_FMT_Y8_1X8:
->  	case MEDIA_BUS_FMT_META_8:
->  		return 8;
->  	default:
-> @@ -65,21 +69,25 @@ unsigned int ipu6_isys_mbus_code_to_mipi(u32 code)
->  	case MEDIA_BUS_FMT_SGBRG16_1X16:
->  	case MEDIA_BUS_FMT_SGRBG16_1X16:
->  	case MEDIA_BUS_FMT_SRGGB16_1X16:
-> +	case MEDIA_BUS_FMT_Y16_1X16:
->  		return MIPI_CSI2_DT_RAW16;
->  	case MEDIA_BUS_FMT_SBGGR12_1X12:
->  	case MEDIA_BUS_FMT_SGBRG12_1X12:
->  	case MEDIA_BUS_FMT_SGRBG12_1X12:
->  	case MEDIA_BUS_FMT_SRGGB12_1X12:
-> +	case MEDIA_BUS_FMT_Y12_1X12:
->  		return MIPI_CSI2_DT_RAW12;
->  	case MEDIA_BUS_FMT_SBGGR10_1X10:
->  	case MEDIA_BUS_FMT_SGBRG10_1X10:
->  	case MEDIA_BUS_FMT_SGRBG10_1X10:
->  	case MEDIA_BUS_FMT_SRGGB10_1X10:
-> +	case MEDIA_BUS_FMT_Y10_1X10:
->  		return MIPI_CSI2_DT_RAW10;
->  	case MEDIA_BUS_FMT_SBGGR8_1X8:
->  	case MEDIA_BUS_FMT_SGBRG8_1X8:
->  	case MEDIA_BUS_FMT_SGRBG8_1X8:
->  	case MEDIA_BUS_FMT_SRGGB8_1X8:
-> +	case MEDIA_BUS_FMT_Y8_1X8:
->  		return MIPI_CSI2_DT_RAW8;
->  	case MEDIA_BUS_FMT_META_8:
->  	case MEDIA_BUS_FMT_META_10:
-> @@ -96,15 +104,23 @@ unsigned int ipu6_isys_mbus_code_to_mipi(u32 code)
->  
->  bool ipu6_isys_is_bayer_format(u32 code)
->  {
-> -	switch (ipu6_isys_mbus_code_to_mipi(code)) {
-> -	case MIPI_CSI2_DT_RAW8:
-> -	case MIPI_CSI2_DT_RAW10:
-> -	case MIPI_CSI2_DT_RAW12:
-> -	case MIPI_CSI2_DT_RAW14:
-> -	case MIPI_CSI2_DT_RAW16:
-> -	case MIPI_CSI2_DT_RAW20:
-> -	case MIPI_CSI2_DT_RAW24:
-> -	case MIPI_CSI2_DT_RAW28:
-> +	switch (code) {
-> +	case MEDIA_BUS_FMT_SBGGR8_1X8:
-> +	case MEDIA_BUS_FMT_SGBRG8_1X8:
-> +	case MEDIA_BUS_FMT_SGRBG8_1X8:
-> +	case MEDIA_BUS_FMT_SRGGB8_1X8:
-> +	case MEDIA_BUS_FMT_SBGGR10_1X10:
-> +	case MEDIA_BUS_FMT_SGBRG10_1X10:
-> +	case MEDIA_BUS_FMT_SGRBG10_1X10:
-> +	case MEDIA_BUS_FMT_SRGGB10_1X10:
-> +	case MEDIA_BUS_FMT_SBGGR12_1X12:
-> +	case MEDIA_BUS_FMT_SGBRG12_1X12:
-> +	case MEDIA_BUS_FMT_SGRBG12_1X12:
-> +	case MEDIA_BUS_FMT_SRGGB12_1X12:
-> +	case MEDIA_BUS_FMT_SRGGB16_1X16:
-> +	case MEDIA_BUS_FMT_SGRBG16_1X16:
-> +	case MEDIA_BUS_FMT_SGBRG16_1X16:
-> +	case MEDIA_BUS_FMT_SBGGR16_1X16:
->  		return true;
->  	default:
->  		return false;
-> diff --git a/drivers/media/pci/intel/ipu6/ipu6-isys-video.c b/drivers/media/pci/intel/ipu6/ipu6-isys-video.c
-> index f3f3bc0615e5..dec8f5ffcfa5 100644
-> --- a/drivers/media/pci/intel/ipu6/ipu6-isys-video.c
-> +++ b/drivers/media/pci/intel/ipu6/ipu6-isys-video.c
-> @@ -77,6 +77,20 @@ const struct ipu6_isys_pixelformat ipu6_isys_pfmts[] = {
->  	  IPU6_FW_ISYS_FRAME_FORMAT_RAW10 },
->  	{ V4L2_PIX_FMT_SRGGB10P, 10, 10, MEDIA_BUS_FMT_SRGGB10_1X10,
->  	  IPU6_FW_ISYS_FRAME_FORMAT_RAW10 },
+On Tue, Oct 14, 2025 at 02:55:09PM -0400, Frank Li wrote:
+> +examples:
+> +  - |
+> +    #include <dt-bindings/display/sdtv-standards.h>
+> +    #include <dt-bindings/gpio/gpio.h>
 > +
-> +	{ V4L2_PIX_FMT_GREY, 8, 8, MEDIA_BUS_FMT_Y8_1X8,
-> +	  IPU6_FW_ISYS_FRAME_FORMAT_RAW8 },
-> +	{ V4L2_PIX_FMT_Y10, 16, 10, MEDIA_BUS_FMT_Y10_1X10,
-> +	  IPU6_FW_ISYS_FRAME_FORMAT_RAW16 },
-> +	{ V4L2_PIX_FMT_Y12, 16, 12, MEDIA_BUS_FMT_Y12_1X12,
-> +	  IPU6_FW_ISYS_FRAME_FORMAT_RAW16 },
-> +	{ V4L2_PIX_FMT_Y16, 16, 16, MEDIA_BUS_FMT_Y16_1X16,
-> +	  IPU6_FW_ISYS_FRAME_FORMAT_RAW16 },
-> +	{ V4L2_PIX_FMT_Y10P, 10, 10, MEDIA_BUS_FMT_Y10_1X10,
-> +	  IPU6_FW_ISYS_FRAME_FORMAT_RAW10 },
-> +	{ V4L2_PIX_FMT_Y12P, 12, 12, MEDIA_BUS_FMT_Y12_1X12,
-> +	  IPU6_FW_ISYS_FRAME_FORMAT_RAW12 },
-
-The code looks fine for me. I am wondering which sensor to test these
-packed format for IPU6.
-
+> +    i2c {
+> +        #address-cells = <1>;
+> +        #size-cells = <0>;
 > +
->  	{ V4L2_PIX_FMT_UYVY, 16, 16, MEDIA_BUS_FMT_UYVY8_1X16,
->  	  IPU6_FW_ISYS_FRAME_FORMAT_UYVY},
->  	{ V4L2_PIX_FMT_YUYV, 16, 16, MEDIA_BUS_FMT_YUYV8_1X16,
-> 
+> +        bridge@5c {
+> +            compatible = "ti,tvp5150";
+> +            reg = <0x5c>;
+> +            pdn-gpios = <&gpio4 30 GPIO_ACTIVE_LOW>;
+> +            reset-gpios = <&gpio6 7 GPIO_ACTIVE_LOW>;
+> +            #address-cells = <1>;
+> +            #size-cells = <0>;
+> +
+> +            port@0 {
+> +                #address-cells = <1>;
+> +                #size-cells = <0>;
+> +                reg = <0>;
+> +
+> +                endpoint@0 {
+> +                    reg = <0>;
+> +                     remote-endpoint = <&composite0_to_tvp5150>;
+> +                };
+> +
+> +                endpoint@1 {
+> +                   reg = <1>;
+> +                   remote-endpoint = <&svideo_luma_to_tvp5150>;
+
+I aligned these while applying the patch.
 
 -- 
-Best regards,
-Bingbu Cao
+Sakari Ailus
