@@ -1,48 +1,61 @@
-Received: from gwf2.litvpn.com (gwf2.litvpn.com [216.244.76.190])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.16])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 13E1932E6B4;
-	Tue, 21 Oct 2025 14:54:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=216.244.76.190
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 64E6433FE34;
+	Tue, 21 Oct 2025 14:54:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761058461; cv=none; b=WGH94bjzDQXDvfDyBIkEuh1YeYsBfvpzkF1c9KtHr+uGFp1FlfOJmxxJI4AKJ7jIERLMm6akb83dD7P97IsN9/JS8tVR4GgI46qPQFhNOZWuDjgv3vrOy4+DaRMYKZS1bUCSsMskxgn1fx2ouMWaaGap36UEqkjQoV4rRV+La40=
+	t=1761058497; cv=none; b=smkzzFewihHBFVi8dROlBeses9iMtLBEZ8qCe6CtUmKguf7loMpYJi+yDzBW8fHFooEoX2W2P/upceB2wCClaLEDhAv50m84mIMwg44Ujarj7WUY2a1WaQHVNBSpsfBD/zoFnClmGVQ2JFvwCxEs4h7juiSU6YQhjPts2SgUgg0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761058461; c=relaxed/simple;
-	bh=kjXzDlWgb9eThwmH9F3G/KyoVnumA55hC58shjQvoPE=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=Xfe4A5zrS19JDDlKDz8gxZ6VK/rvnAZgHxVvzKXEYAm7XK5Rh8OdqZagzO16Tv63zVcbpKhKdefMGNS7baIAcAhIgaHCq8HZMuLAUDUT4wFeIv+p1ku22D8VHT6oPMkDtaQ6Rt6JdAnfW6fqhUcHO5e7sBP86WUtxO145lUvC5o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=syptech.net; spf=pass smtp.mailfrom=syptech.net; dkim=pass (1024-bit key) header.d=syptech.net header.i=@syptech.net header.b=ADcVACyK; arc=none smtp.client-ip=216.244.76.190
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=syptech.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=syptech.net
+	s=arc-20240116; t=1761058497; c=relaxed/simple;
+	bh=hoXu6hDYfmK8hrzVctyo5LRaf2v5vgtsKH1MRy9WksA=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=NzI8iBpjQgdxOMTQfIso+bDdqDA+R7WMKXwr8COtQuqWw7tZnmjgf6ZQ0BMqZb+ZL5RrjfUeBYesCDc7BJyDR/PyIUS/qokM4dI6OKTDTalrFSHsd76EUrpvYfT+N48xgRQlGqfHXUX7L6XEQBGIrtSYdxi3yq1bXr1DqvSGpGw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=c/8yKnDr; arc=none smtp.client-ip=198.175.65.16
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=syptech.net header.i=@syptech.net header.b="ADcVACyK"
-Received: from gw2.cammew.com (gw2 [64.182.209.149])
-	(using TLSv1.2 with cipher ADH-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by gwf2.litvpn.com (Postfix) with ESMTPS id 35516185C914;
-	Tue, 21 Oct 2025 10:44:25 -0400 (EDT)
-Received: from syptech.net (unknown [24.236.176.167])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by gw2.cammew.com (Postfix) with ESMTPSA id 852F3EE8FD;
-	Tue, 21 Oct 2025 10:44:18 -0400 (EDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 gw2.cammew.com 852F3EE8FD
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=syptech.net;
-	s=relay; t=1761057858;
-	bh=4aiSc+CL9FZ65eMtNDmHHoElR3Dgy8bynX4TCf5YXW0=;
-	h=Date:From:To:Cc:Subject:From;
-	b=ADcVACyKVUNyoJgnlnEBaEEdRFdL9SBM6pqbG9jp8zHY0qjEkwDGSGiu7yWpYAOb2
-	 0V9DpTRHnNfvE/jjHUm5eQNZc47xiGsBqVA+MEKOGCAVPrHLKKLLY06nqWjtJ0C2q7
-	 QwkrUq/fBXm89NKaU9FyBOZQlQarEwtrMwyxp2DU=
-Date: Tue, 21 Oct 2025 10:44:05 -0400
-From: "Adam J. Sypniewski" <ajsyp@syptech.net>
-To: Sakari Ailus <sakari.ailus@linux.intel.com>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="c/8yKnDr"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1761058495; x=1792594495;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=hoXu6hDYfmK8hrzVctyo5LRaf2v5vgtsKH1MRy9WksA=;
+  b=c/8yKnDrIyOpgV/tflHR+fBgX3YleZ1uH1gC20tWVeEeYdlv5q7q7V1S
+   ct8T32Pbfs4cRFCxGjmn6k7bvdGr+2biGYGTTs6IA/k0pXjUKL+db7nPu
+   fwriESs+CA+7PqiImdN2P4mAxgZYaVdxNMPj5fgscqIKukjYep96yJxSM
+   XiIoiO1iCSEvYg6oueBFUpyTNIIalDen8OCd+LW5O0vxv35ZlebzWZB53
+   TWuXWovdMypL3x9LyROzEV8W4Fwra/Nj8o8U/hvGH1F+1PHhFbjmGLOsZ
+   NUdRIh9PeOMbODdpfVb254rP8WXA8em7Rk7N7rtwMnaAbyDND8djuMIys
+   Q==;
+X-CSE-ConnectionGUID: /ZKFQjhuScKp3w4E20WEuQ==
+X-CSE-MsgGUID: CsqX5LFfQA6WS5eTI2FWBw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11586"; a="63334212"
+X-IronPort-AV: E=Sophos;i="6.19,245,1754982000"; 
+   d="scan'208";a="63334212"
+Received: from orviesa008.jf.intel.com ([10.64.159.148])
+  by orvoesa108.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Oct 2025 07:54:54 -0700
+X-CSE-ConnectionGUID: wRs9ju7gQiKBsaWs2surtA==
+X-CSE-MsgGUID: ecpBD4xgSlmLUmyuIjSBDA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.19,245,1754982000"; 
+   d="scan'208";a="183640360"
+Received: from pgcooper-mobl3.ger.corp.intel.com (HELO kekkonen.fi.intel.com) ([10.245.245.215])
+  by orviesa008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Oct 2025 07:54:52 -0700
+Received: from kekkonen.localdomain (localhost [IPv6:::1])
+	by kekkonen.fi.intel.com (Postfix) with SMTP id 009CD121E5D;
+	Tue, 21 Oct 2025 17:54:49 +0300 (EEST)
+Date: Tue, 21 Oct 2025 17:54:49 +0300
+Organization: Intel Finland Oy - BIC 0357606-4 - c/o Alberga Business Park, 6 krs, Bertel Jungin Aukio 5, 02600 Espoo
+From: Sakari Ailus <sakari.ailus@linux.intel.com>
+To: "Adam J. Sypniewski" <ajsyp@syptech.net>
 Cc: Arec Kao <arec.kao@intel.com>,
 	Mauro Carvalho Chehab <mchehab@kernel.org>,
 	linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] media: ov13b10: Add ACPI ID for ASUS Z13 Flow laptop
-Message-ID: <aPecNTw6RHzprJ6e@garrus>
+Subject: Re: [PATCH] media: ov13b10: Add ACPI ID for ASUS Z13 Flow laptop
+Message-ID: <aPeeuSdxRL_JXfE9@kekkonen.localdomain>
+References: <aPecNTw6RHzprJ6e@garrus>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
@@ -51,32 +64,41 @@ List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <aPecNTw6RHzprJ6e@garrus>
 
-The ASUS ROG Flow Z13 2025 (GZ302) laptop uses an OV13B10 sensor with a
-non-standard ACPI ID of OMNI13B1 instead of the expected OVTI13B1.
+Hi Adam,
 
-Add this ACPI ID to the driver to make the front-facing camera work on
-these laptops.
+On Tue, Oct 21, 2025 at 10:44:05AM -0400, Adam J. Sypniewski wrote:
+> The ASUS ROG Flow Z13 2025 (GZ302) laptop uses an OV13B10 sensor with a
+> non-standard ACPI ID of OMNI13B1 instead of the expected OVTI13B1.
+> 
+> Add this ACPI ID to the driver to make the front-facing camera work on
+> these laptops.
+> 
+> Signed-off-by: Adam J. Sypniewski <ajsyp@syptech.net>
+> ---
+>  drivers/media/i2c/ov13b10.c | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/drivers/media/i2c/ov13b10.c b/drivers/media/i2c/ov13b10.c
+> index 869bc78ed792..6ecd77d02b78 100644
+> --- a/drivers/media/i2c/ov13b10.c
+> +++ b/drivers/media/i2c/ov13b10.c
+> @@ -1693,6 +1693,7 @@ static DEFINE_RUNTIME_DEV_PM_OPS(ov13b10_pm_ops, ov13b10_suspend,
+>  static const struct acpi_device_id ov13b10_acpi_ids[] = {
+>  	{"OVTIDB10"},
+>  	{"OVTI13B1"},
+> +	{"OMNI13B1"},
 
-Signed-off-by: Adam J. Sypniewski <ajsyp@syptech.net>
----
- drivers/media/i2c/ov13b10.c | 1 +
- 1 file changed, 1 insertion(+)
+Can you include a comment for this line, explaining why this ID is here?
 
-diff --git a/drivers/media/i2c/ov13b10.c b/drivers/media/i2c/ov13b10.c
-index 869bc78ed792..6ecd77d02b78 100644
---- a/drivers/media/i2c/ov13b10.c
-+++ b/drivers/media/i2c/ov13b10.c
-@@ -1693,6 +1693,7 @@ static DEFINE_RUNTIME_DEV_PM_OPS(ov13b10_pm_ops, ov13b10_suspend,
- static const struct acpi_device_id ov13b10_acpi_ids[] = {
- 	{"OVTIDB10"},
- 	{"OVTI13B1"},
-+	{"OMNI13B1"},
- 	{ /* sentinel */ }
- };
- 
+>  	{ /* sentinel */ }
+>  };
+>  
+> 
+> base-commit: 1fdb55ed40fa5ebe6934bd6b93036c714ebb5ef8
 
-base-commit: 1fdb55ed40fa5ebe6934bd6b93036c714ebb5ef8
 -- 
-2.50.1
+Regards,
 
+Sakari Ailus
