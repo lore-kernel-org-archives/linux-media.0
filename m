@@ -1,63 +1,62 @@
-Received: from mail-wr1-f46.google.com (mail-wr1-f46.google.com [209.85.221.46])
+Received: from mail-wm1-f51.google.com (mail-wm1-f51.google.com [209.85.128.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 646D8350D7A
-	for <linux-media@vger.kernel.org>; Wed, 22 Oct 2025 14:22:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 601AD35BDAE
+	for <linux-media@vger.kernel.org>; Wed, 22 Oct 2025 14:49:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761142926; cv=none; b=DQiJHQI2xMb4wrVdW/H4mXudI+eungeYliENwujJTGkwe/9lc6fia7JhMjnEMdgvbTd2MTNsGIsdJIMFpmI1b0ELbkA56V7A2Pk3myKpu34ApPWgyLgJBkTZ8xtHBMC8rtOdPqUN+VoUogS+lj2fd9EOZI4i2TPyfLTkVaZLTyk=
+	t=1761144582; cv=none; b=LesQRhQiBi3d3U2z+0BrhHcoG+MTzaA4gHGZ+tPc7UJeAdAXnSXqceyw+v3BcNYsqHL8PEWgC9N+iXEihyTWppSuy+I4jZqWv0bjL9bbnZFX9It2PYjf+9z+j7sQNcdjIco1EWcN7VAm3xp+Zq8DxLVxU5WcooBw+OVdDy+aNxQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761142926; c=relaxed/simple;
-	bh=HgP9VExlthvNBigzlv7uekYUM102sO9tWVmQkT6CmuA=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=spfIU/l9JRglgrPzKu1n3+CvAROn8D7/Guuwl6XfCwxNtM0o3C4W/acWq8NyKEtc23MdFDuzZ8Yjy3s9BCdtV/CJeDpl87YPRpeAc8UXF42IHBS3Q5O8Bt3BnSC1W7sMQTVYMDERhr62pJgbHRowQI1nnmbc6B43w60HYPfsmTE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=bmjLBf9h; arc=none smtp.client-ip=209.85.221.46
+	s=arc-20240116; t=1761144582; c=relaxed/simple;
+	bh=UxRv2Dj1eWAwuBaqoEAma5UyiLaBLfeYj5gZy8jzJSM=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=LbgfLuhWHkg7dZ0miIonSX/mqJt3duo4BPm3dnmABAqUEYD5E4PjuhWyET/CXjSga4pl8dHulfMLERaz94kuj8vFfqiwbKra8IClF3NuvMwwc1Bsnpyrah4cJvXhI/N3TPlaMcQD2DtGTu0avkoXvF6VHkaqeP461LqEJv+GGUU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=mD0VQm4X; arc=none smtp.client-ip=209.85.128.51
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="bmjLBf9h"
-Received: by mail-wr1-f46.google.com with SMTP id ffacd0b85a97d-4270a3464bcso3803248f8f.2
-        for <linux-media@vger.kernel.org>; Wed, 22 Oct 2025 07:22:00 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="mD0VQm4X"
+Received: by mail-wm1-f51.google.com with SMTP id 5b1f17b1804b1-4711b95226dso58993125e9.0
+        for <linux-media@vger.kernel.org>; Wed, 22 Oct 2025 07:49:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1761142917; x=1761747717; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Z9Z7JUaghezQ8iAuA7uRKlyBeeVsFfzYhFmFiduOSBE=;
-        b=bmjLBf9hiPvAuwU5ddSZJ8xDKsES0sSh9uilv9ZV41XtijUNp2D8ETmE0eKW9OpGuz
-         JXxYO49F7ePNJ6NFbeQ0Fegw+rkFo9xPWxwtSvN/6MkgE2I4y/Fo706S0yRK7aY4CO31
-         QA8DLaA/YCoojU9N5ZGIXT2iGqUF6pHJMEMtATyc7GknMR+NJl9P7AWjziKHE1mZ3X6Y
-         UJQVa6V/ZigqZo6DhnAbFAS5PW38l8NdgjuohYN0d0rh6Zz3ljhBXxrXvyHXmIDUkiHr
-         BwZ+W64FXCnxnzU7UaD1uRvcUwrtJmI/q8piM7pMxTIKuL9OfJxS7jSNAJop9A5BsoaW
-         /vPg==
+        d=gmail.com; s=20230601; t=1761144579; x=1761749379; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=OeVW7KIs34xjHHALn+sD+JnpOfHDngShiO+k3xh4Ufc=;
+        b=mD0VQm4XuASkoXtSYmRwMPsBeeCi23yjyFL3lfzV5nhh0p1pXZIvUnT82oz0GBeg6F
+         kFxebY0r2xzPOT9vPQkwEm0pM6prkKehs4fTuh6acGL59xvI5PAZqsVgEQUA9CmNrXGI
+         cQp/AvRvwbZQNKOfGV7UQLZCRlhXgs+pqGbuEJ8CnGSfX8aXywuD0Grl6O6RqA5XLrL4
+         KfO+20oVqVgJf//k1DTgJltRhznPfqxHfdTkbo28DICeCN64kjbJSqK6Yp516FIPsdi4
+         nehFIdRbUDDyaWYkZVH22OS0XWFQmK7z0qqETO4Sedbf9X24IZ3+ldASTH7meqGJ2NLt
+         zpcQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1761142917; x=1761747717;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Z9Z7JUaghezQ8iAuA7uRKlyBeeVsFfzYhFmFiduOSBE=;
-        b=SKnfKQR+6t//m+zIBmykfNWSVnFD0HxBL6xMK7ABEVhpfGAkue2A+q3E43OKuk1BQl
-         DTLOicUwPMwBos1OzDkcxA4LE6po6gy/bTL+sMmbkq34vraf1WuH9z5iqvcLbYhGJGoQ
-         SVWnnD7OQJAT/0XFb4olo00/Y6ZKc1XYmbjpApVAsRF3JLAWsbj/Wv3gWLuMYPLWi+nS
-         FeGtSDPvAf7+dVufzJBwtFuGTpvnld3hYO1UWecCEdN6bFm8/Jwn7PD2y1IxiV8xwfSa
-         ECltJIJegq2Pv4PtBsQWK82iPgRf7VxSHIkbRRES+oyuKtWuUxTMPuPEVpC9PJBc9+Nm
-         s9XQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWrJ0RF31ip11c5nQisz8CO6xXkRIZ9s/6A9RYDWrc6pbUBWnb0gpPWZ9fskkr2RSCxZWrfDvjUzfivFQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0YwyRRSbbEJOw6R7uXu6KDJPCbhjqJja06ZVjtBIfkik0oh7KOD9
-	mfsw0RRPtxHH4EwDWl5zo+RQZHNoUAbay4ELE2t/x3ADgWg3eJMl8GkG
-X-Gm-Gg: ASbGncs3EYyDqTPTS0dO/DsI9zCNLv7e7DDOpDUzvTRqdbs90hf/hHqj6etC7RMieSP
-	IVOpjD0tkQURovUQIBedSofkbuYpBTR6QDTbdfmLr2DoDbzNG3VCblhbmVs2qkvAtsGByego+ib
-	85BvbnZ1pa6gs0+/VxGnAb3RtV4w83BtguYsYmlFBgbHCHnAUsoDByuX2VhvpdVWy/jjwxCRT/i
-	SCr1b6t/3qG2fz+ye3iqZVBr/yf2RH+bjN+NGcIjcaV4tWTdMr6oDMgBgb7wCpmfEK9RwBaNf0m
-	g14uMehmZAvRWZGepopOX2X0WK/+LXHBdBe5Ziqh4x3Y14BP3qbGznpGKgZtiFt+4HR/CFyUnpa
-	gXsCmxWQIdPfBKpVGL1Kevy2vLh47COztwXbdTMlPLQ2VUHd4Pd7dXs4s2k4lLdRVUg8=
-X-Google-Smtp-Source: AGHT+IHmpX8C5GwwN840U1BRTmU2Ck9ZgwySDSvkE0UdWgQieuzkLZOsrvn9s/zYLJBdiD8e4LeWyQ==
-X-Received: by 2002:a05:6000:1ac5:b0:3ee:141a:ede5 with SMTP id ffacd0b85a97d-42704dc6d3cmr12760428f8f.57.1761142917015;
-        Wed, 22 Oct 2025 07:21:57 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1761144579; x=1761749379;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=OeVW7KIs34xjHHALn+sD+JnpOfHDngShiO+k3xh4Ufc=;
+        b=Wpjyg0xE4nHbPatIN0dv4fPwk3Gg9F11cn9hX10wNB3dPUS5RiJbR/5aYpO41yIr8Z
+         aLR8tIA7O3U1/dXDo/ocGgTiXjdSBi2UPqOO433GrWbatsI2BQxPGqMvy/mWz3fantDu
+         OI/a12TDPArY03pUJtjUOXxse4WShWmQ86/QChrn3RDy4B8D60pjAEqH2hdpqmDeyyP3
+         TjFf37cigM4XNO/elzD4ugwWoR/sSYMev1DUYLAgHd9gPOnBV+pewkMMzL6yxVNOe9IL
+         kd+Py4NVdP3ixv4ZUNwzI8OnTr5uuuCxpeTLLwHywS7UqhXtFOMrYNvX/oq56dasfoDX
+         GE6A==
+X-Forwarded-Encrypted: i=1; AJvYcCW0XS4o4vP82/7XALghayAVBge3zzQZxqjXAdpHzR2mub6SuJ5qgmqKGtnmsofY0WEDc0T8sTyCy2jd/g==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz1wA1IU1VtbGUgIt3i6hPYPYE+I6JBrZBA0az1oqrZ/a3fpMpm
+	HS2VHiprVMDA1fskmNP2g13VffhpDTfnIzfFQjvx28dFUxEx6L94l2kM
+X-Gm-Gg: ASbGncs5SJazdl8COeB5xb0Tr/I0srjO/5ZD6GKakoRxwtAUh2trTz2TiVJdoqBdw+G
+	aJ5gxvGtGKBwC2MXBj6o5ws7msFxffuNA+AN09Z5uTUl+1nUoiAj7FTrDumUHRoYgaM+cRXn7WU
+	3G31rmnhbqUEie358/sR3n+fuXt5v52Cw30bI5r4XR4yJHa4L1Zuy+QOO+erf7HRlOiuBzWc4VU
+	4C8DTFZTmOb7Vps5gD73zEb7bO9lGM+29ti4i30Lst1R2VVWcpj9gw8TqgfCf5Rxh6FCDzTJTLV
+	oCfA6itGKOPocuy4/GnhNj03CvvxvnKdSGnbV/S103Z2yXjBotMf/TnAJvEF6mr+XMMbTzI2Z8h
+	jK1g/QpKrJBXHw3bfX7HOmndjGEoD3VffGhq0JrviV8H8WXhKzV1xTopcZ/5OKRobJ8C62OprvG
+	qTGQ==
+X-Google-Smtp-Source: AGHT+IHr6Ob93t9v00uJwuP7yAAMfu4kGsf18j4jl3QNK0VUxssU6icvlb5KeKOe4fTOZz3h10i/+g==
+X-Received: by 2002:a05:600c:3e0b:b0:459:db7b:988e with SMTP id 5b1f17b1804b1-471178a3faamr101708965e9.13.1761144578447;
+        Wed, 22 Oct 2025 07:49:38 -0700 (PDT)
 Received: from xeon.. ([188.163.112.61])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-427ea5b3d4csm24803518f8f.19.2025.10.22.07.21.55
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-475c427f77bsm49956525e9.3.2025.10.22.07.49.36
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 22 Oct 2025 07:21:56 -0700 (PDT)
+        Wed, 22 Oct 2025 07:49:37 -0700 (PDT)
 From: Svyatoslav Ryhel <clamor95@gmail.com>
 To: Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
 	Maxime Ripard <mripard@kernel.org>,
@@ -91,12 +90,10 @@ Cc: dri-devel@lists.freedesktop.org,
 	linux-media@vger.kernel.org,
 	linux-clk@vger.kernel.org,
 	linux-staging@lists.linux.dev
-Subject: [PATCH v5 19/23] staging: media: tegra-video: tegra20: expand format support with RAW8/10 and YUV422/YUV420p 1X16
-Date: Wed, 22 Oct 2025 17:20:47 +0300
-Message-ID: <20251022142051.70400-20-clamor95@gmail.com>
+Subject: [PATCH v5 21/23] dt-bindings: display: tegra: document Tegra20 and Tegra30 CSI
+Date: Wed, 22 Oct 2025 17:49:28 +0300
+Message-ID: <20251022144930.73272-1-clamor95@gmail.com>
 X-Mailer: git-send-email 2.48.1
-In-Reply-To: <20251022142051.70400-1-clamor95@gmail.com>
-References: <20251022142051.70400-1-clamor95@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
@@ -105,152 +102,165 @@ List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Add support for Bayer formats (RAW8 and RAW10) and YUV422/420p 1X16
-versions of existing YUV422/YUV420p 2X8.
+Document CSI HW block found in Tegra20 and Tegra30 SoC.
+
+The #nvidia,mipi-calibrate-cells is not an introduction of property, such
+property already exists in nvidia,tegra114-mipi.yaml and is used in
+multiple device trees. In case of Tegra30 and Tegra20 CSI block combines
+mipi calibration function and CSI function, in Tegra114+ mipi calibration
+got a dedicated hardware block which is already supported. This property
+here is used to align with mipi-calibration logic used by Tegra114+.
 
 Signed-off-by: Svyatoslav Ryhel <clamor95@gmail.com>
-Reviewed-by: Mikko Perttunen <mperttunen@nvidia.com>
 ---
- drivers/staging/media/tegra-video/tegra20.c | 74 ++++++++++++++++++++-
- 1 file changed, 71 insertions(+), 3 deletions(-)
+ .../display/tegra/nvidia,tegra20-csi.yaml     | 138 ++++++++++++++++++
+ 1 file changed, 138 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/display/tegra/nvidia,tegra20-csi.yaml
 
-diff --git a/drivers/staging/media/tegra-video/tegra20.c b/drivers/staging/media/tegra-video/tegra20.c
-index 149386a15176..0457209b789a 100644
---- a/drivers/staging/media/tegra-video/tegra20.c
-+++ b/drivers/staging/media/tegra-video/tegra20.c
-@@ -187,6 +187,18 @@ static void tegra20_vi_get_input_formats(struct tegra_vi_channel *chan,
- 	case MEDIA_BUS_FMT_YVYU8_2X8:
- 		(*yuv_input_format) = VI_INPUT_YUV_INPUT_FORMAT_YVYU;
- 		break;
-+	/* RAW8 */
-+	case MEDIA_BUS_FMT_SBGGR8_1X8:
-+	case MEDIA_BUS_FMT_SGBRG8_1X8:
-+	case MEDIA_BUS_FMT_SGRBG8_1X8:
-+	case MEDIA_BUS_FMT_SRGGB8_1X8:
-+	/* RAW10 */
-+	case MEDIA_BUS_FMT_SBGGR10_1X10:
-+	case MEDIA_BUS_FMT_SGBRG10_1X10:
-+	case MEDIA_BUS_FMT_SGRBG10_1X10:
-+	case MEDIA_BUS_FMT_SRGGB10_1X10:
-+		(*main_input_format) = VI_INPUT_INPUT_FORMAT_BAYER;
-+		break;
- 	}
- }
- 
-@@ -221,6 +233,18 @@ static void tegra20_vi_get_output_formats(struct tegra_vi_channel *chan,
- 	case V4L2_PIX_FMT_YVU420:
- 		(*main_output_format) = VI_OUTPUT_OUTPUT_FORMAT_YUV420PLANAR;
- 		break;
-+	/* RAW8 */
-+	case V4L2_PIX_FMT_SBGGR8:
-+	case V4L2_PIX_FMT_SGBRG8:
-+	case V4L2_PIX_FMT_SGRBG8:
-+	case V4L2_PIX_FMT_SRGGB8:
-+	/* RAW10 */
-+	case V4L2_PIX_FMT_SBGGR10:
-+	case V4L2_PIX_FMT_SGBRG10:
-+	case V4L2_PIX_FMT_SGRBG10:
-+	case V4L2_PIX_FMT_SRGGB10:
-+		(*main_output_format) = VI_OUTPUT_OUTPUT_FORMAT_VIP_BAYER_DIRECT;
-+		break;
- 	}
- }
- 
-@@ -308,6 +332,16 @@ static void tegra20_channel_queue_setup(struct tegra_vi_channel *chan)
- 	case V4L2_PIX_FMT_VYUY:
- 	case V4L2_PIX_FMT_YUYV:
- 	case V4L2_PIX_FMT_YVYU:
-+	/* RAW8 */
-+	case V4L2_PIX_FMT_SRGGB8:
-+	case V4L2_PIX_FMT_SGRBG8:
-+	case V4L2_PIX_FMT_SGBRG8:
-+	case V4L2_PIX_FMT_SBGGR8:
-+	/* RAW10 */
-+	case V4L2_PIX_FMT_SRGGB10:
-+	case V4L2_PIX_FMT_SGRBG10:
-+	case V4L2_PIX_FMT_SGBRG10:
-+	case V4L2_PIX_FMT_SBGGR10:
- 		if (chan->vflip)
- 			chan->start_offset += stride * (height - 1);
- 		if (chan->hflip)
-@@ -373,6 +407,19 @@ static void tegra20_channel_vi_buffer_setup(struct tegra_vi_channel *chan,
- 		tegra20_vi_write(chan, TEGRA_VI_VB0_BASE_ADDRESS(TEGRA_VI_OUT_1),  base);
- 		tegra20_vi_write(chan, TEGRA_VI_VB0_START_ADDRESS(TEGRA_VI_OUT_1), base + chan->start_offset);
- 		break;
-+	/* RAW8 */
-+	case V4L2_PIX_FMT_SRGGB8:
-+	case V4L2_PIX_FMT_SGRBG8:
-+	case V4L2_PIX_FMT_SGBRG8:
-+	case V4L2_PIX_FMT_SBGGR8:
-+	/* RAW10 */
-+	case V4L2_PIX_FMT_SRGGB10:
-+	case V4L2_PIX_FMT_SGRBG10:
-+	case V4L2_PIX_FMT_SGBRG10:
-+	case V4L2_PIX_FMT_SBGGR10:
-+		tegra20_vi_write(chan, TEGRA_VI_VB0_BASE_ADDRESS(TEGRA_VI_OUT_2),  base);
-+		tegra20_vi_write(chan, TEGRA_VI_VB0_START_ADDRESS(TEGRA_VI_OUT_2), base + chan->start_offset);
-+		break;
- 	}
- }
- 
-@@ -454,12 +501,15 @@ static int tegra20_chan_capture_kthread_start(void *data)
- static void tegra20_camera_capture_setup(struct tegra_vi_channel *chan)
- {
- 	u32 output_fourcc = chan->format.pixelformat;
-+	u32 data_type = chan->fmtinfo->img_dt;
- 	int width  = chan->format.width;
- 	int height = chan->format.height;
- 	int stride_l = chan->format.bytesperline;
- 	int stride_c = (output_fourcc == V4L2_PIX_FMT_YUV420 ||
- 			output_fourcc == V4L2_PIX_FMT_YVU420) ? 1 : 0;
--	enum tegra_vi_out output_channel = TEGRA_VI_OUT_1;
-+	enum tegra_vi_out output_channel = (data_type == TEGRA_IMAGE_DT_RAW8 ||
-+					    data_type == TEGRA_IMAGE_DT_RAW10) ?
-+					    TEGRA_VI_OUT_2 : TEGRA_VI_OUT_1;
- 	int main_output_format;
- 	int yuv_output_format;
- 
-@@ -586,9 +636,25 @@ static const struct tegra_video_format tegra20_video_formats[] = {
- 	TEGRA20_VIDEO_FMT(YUV422_8, 16, VYUY8_2X8, 2, VYUY),
- 	TEGRA20_VIDEO_FMT(YUV422_8, 16, YUYV8_2X8, 2, YUYV),
- 	TEGRA20_VIDEO_FMT(YUV422_8, 16, YVYU8_2X8, 2, YVYU),
-+	TEGRA20_VIDEO_FMT(YUV422_8, 16, UYVY8_1X16, 2, UYVY),
-+	TEGRA20_VIDEO_FMT(YUV422_8, 16, VYUY8_1X16, 2, VYUY),
-+	TEGRA20_VIDEO_FMT(YUV422_8, 16, YUYV8_1X16, 2, YUYV),
-+	TEGRA20_VIDEO_FMT(YUV422_8, 16, YVYU8_1X16, 2, YVYU),
- 	/* YUV420P */
- 	TEGRA20_VIDEO_FMT(YUV422_8, 16, UYVY8_2X8, 1, YUV420),
- 	TEGRA20_VIDEO_FMT(YUV422_8, 16, UYVY8_2X8, 1, YVU420),
-+	TEGRA20_VIDEO_FMT(YUV422_8, 16, UYVY8_1X16, 1, YUV420),
-+	TEGRA20_VIDEO_FMT(YUV422_8, 16, UYVY8_1X16, 1, YVU420),
-+	/* RAW 8 */
-+	TEGRA20_VIDEO_FMT(RAW8, 8, SRGGB8_1X8, 2, SRGGB8),
-+	TEGRA20_VIDEO_FMT(RAW8, 8, SGRBG8_1X8, 2, SGRBG8),
-+	TEGRA20_VIDEO_FMT(RAW8, 8, SGBRG8_1X8, 2, SGBRG8),
-+	TEGRA20_VIDEO_FMT(RAW8, 8, SBGGR8_1X8, 2, SBGGR8),
-+	/* RAW 10 */
-+	TEGRA20_VIDEO_FMT(RAW10, 10, SRGGB10_1X10, 2, SRGGB10),
-+	TEGRA20_VIDEO_FMT(RAW10, 10, SGRBG10_1X10, 2, SGRBG10),
-+	TEGRA20_VIDEO_FMT(RAW10, 10, SGBRG10_1X10, 2, SGBRG10),
-+	TEGRA20_VIDEO_FMT(RAW10, 10, SBGGR10_1X10, 2, SBGGR10),
- };
- 
- const struct tegra_vi_soc tegra20_vi_soc = {
-@@ -615,10 +681,12 @@ const struct tegra_vi_soc tegra20_vi_soc = {
- static int tegra20_vip_start_streaming(struct tegra_vip_channel *vip_chan)
- {
- 	struct tegra_vi_channel *vi_chan = v4l2_get_subdev_hostdata(&vip_chan->subdev);
-+	u32 data_type = vi_chan->fmtinfo->img_dt;
- 	int width  = vi_chan->format.width;
- 	int height = vi_chan->format.height;
--	enum tegra_vi_out output_channel = TEGRA_VI_OUT_1;
--
-+	enum tegra_vi_out output_channel = (data_type == TEGRA_IMAGE_DT_RAW8 ||
-+					    data_type == TEGRA_IMAGE_DT_RAW10) ?
-+					    TEGRA_VI_OUT_2 : TEGRA_VI_OUT_1;
- 	unsigned int main_input_format;
- 	unsigned int yuv_input_format;
- 
+diff --git a/Documentation/devicetree/bindings/display/tegra/nvidia,tegra20-csi.yaml b/Documentation/devicetree/bindings/display/tegra/nvidia,tegra20-csi.yaml
+new file mode 100644
+index 000000000000..a1aea9590769
+--- /dev/null
++++ b/Documentation/devicetree/bindings/display/tegra/nvidia,tegra20-csi.yaml
+@@ -0,0 +1,138 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/display/tegra/nvidia,tegra20-csi.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: NVIDIA Tegra20 CSI controller
++
++maintainers:
++  - Svyatoslav Ryhel <clamor95@gmail.com>
++
++properties:
++  compatible:
++    enum:
++      - nvidia,tegra20-csi
++      - nvidia,tegra30-csi
++
++  reg:
++    maxItems: 1
++
++  clocks:
++    minItems: 1
++    items:
++      - description: module clock
++      - description: PAD A clock
++      - description: PAD B clock
++
++  clock-names:
++    items:
++      - const: csi
++      - const: csia-pad
++      - const: csib-pad
++
++  avdd-dsi-csi-supply:
++    description: DSI/CSI power supply. Must supply 1.2 V.
++
++  power-domains:
++    maxItems: 1
++
++  "#nvidia,mipi-calibrate-cells":
++    description:
++      The number of cells in a MIPI calibration specifier. Should be 1.
++      The single cell specifies an id of the pad that need to be
++      calibrated for a given device. Valid pad ids for receiver would be
++      0 for CSI-A; 1 for CSI-B; 2 for DSI-A and 3 for DSI-B.
++    $ref: /schemas/types.yaml#/definitions/uint32
++    const: 1
++
++  "#address-cells":
++    const: 1
++
++  "#size-cells":
++    const: 0
++
++patternProperties:
++  "^channel@[0-1]$":
++    type: object
++    description: channel 0 represents CSI-A and 1 represents CSI-B
++    additionalProperties: false
++
++    properties:
++      reg:
++        maximum: 1
++
++      nvidia,mipi-calibrate:
++        description: Should contain a phandle and a specifier specifying
++          which pad is used by this CSI channel and needs to be calibrated.
++        $ref: /schemas/types.yaml#/definitions/phandle-array
++
++      "#address-cells":
++        const: 1
++
++      "#size-cells":
++        const: 0
++
++      port@0:
++        $ref: /schemas/graph.yaml#/$defs/port-base
++        unevaluatedProperties: false
++        description: port receiving the video stream from the sensor
++
++        properties:
++          endpoint:
++            $ref: /schemas/media/video-interfaces.yaml#
++            unevaluatedProperties: false
++
++            required:
++              - data-lanes
++
++      port@1:
++        $ref: /schemas/graph.yaml#/properties/port
++        description: port sending the video stream to the VI
++
++    required:
++      - reg
++      - "#address-cells"
++      - "#size-cells"
++      - port@0
++      - port@1
++
++allOf:
++  - if:
++      properties:
++        compatible:
++          contains:
++            enum:
++              - nvidia,tegra20-csi
++    then:
++      properties:
++        clocks:
++          maxItems: 1
++
++        clock-names: false
++
++  - if:
++      properties:
++        compatible:
++          contains:
++            enum:
++              - nvidia,tegra30-csi
++    then:
++      properties:
++        clocks:
++          minItems: 3
++
++        clock-names:
++          minItems: 3
++
++additionalProperties: false
++
++required:
++  - compatible
++  - reg
++  - clocks
++  - power-domains
++  - "#address-cells"
++  - "#size-cells"
++
++# see nvidia,tegra20-vi.yaml for an example
 -- 
 2.48.1
 
