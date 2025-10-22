@@ -1,37 +1,38 @@
 Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C97C122A817;
-	Wed, 22 Oct 2025 03:20:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E81B4233707;
+	Wed, 22 Oct 2025 03:20:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=124.126.103.232
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761103256; cv=none; b=L7y+59HgxEl7Z7WAD6ul6X+S4kTAJtrDRq2AjS+LMlYJPF96iOIFOFis43olTewXog0QeTAg2uo3YiTnqaLue6+qrX4A19X213u2zpOX2YyPwqvPOKXDwkIlh5P4cNN6HJPGLrGh9Nejee0iWnGhHvpoIu0OVj7f+AZrSXAvmLw=
+	t=1761103257; cv=none; b=aMB1aeD7L94GTgeyGGLQaSrwIgcQCMmaIZ2+iEsBBol7NhAncUFhmu4x1cSTiNxq8FcWqH1bd2eP+H7x48wQfSdvSlpGw3uYFqgAr+NFHMK7G4mEaNlkUT/A1YuXNLeZfbONHNIh3f3dLE4YF+OQc8R4vFRsTLSEKDd5l12XL9c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761103256; c=relaxed/simple;
-	bh=FPdXW0ghOR4CnNm4XC879LqbgFOVyr7E6xChvWxq2JI=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=R168rX7zURrySkeS/jgV949xG+egtjNlFDwu5uS1CnBZk1Zw22JIm02lOR+kOYWAwtmUiyg80sFPBN777TrIhaisf09JBC/zTgh+vH3iJ56QtoOT+BF5K1/pM10oh68FEpxpmv66IUcHLYDBnejQjocOf1oGsQUCoEe2V0bd0ow=
+	s=arc-20240116; t=1761103257; c=relaxed/simple;
+	bh=7MM8TdXw/dlfEzZoJVWDWbl/KtQYs/xHAkKTtJILTe0=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=YurB2BtZQfWe0tdLs96EVhpRJErxRsIGivOrxvt2PcAwN1U7m4U504LilCBFQ/uU1ZZSDzeNULrkyOm68RwCugHrngzccJbP6DsMHPqVVRpU5TPOr7zd7K48R7OoCiWqcjmUbb+Gta8FfE3fF292hTgNjw6vNipQtjJ7rlxR/L0=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=kylinos.cn; arc=none smtp.client-ip=124.126.103.232
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kylinos.cn
-X-UUID: 191cef70aef611f0a38c85956e01ac42-20251022
+X-UUID: 1b0b7040aef611f0a38c85956e01ac42-20251022
 X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.3.6,REQID:016c4977-7923-4297-b1ef-c0136f3b1293,IP:0,UR
+X-CID-O-INFO: VERSION:1.3.6,REQID:6a4af70e-f909-4562-a161-433921a45577,IP:0,UR
 	L:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:r
 	elease,TS:0
-X-CID-META: VersionHash:a9d874c,CLOUDID:b063af826a2b3763aae4f392c633be88,BulkI
-	D:nil,BulkQuantity:0,Recheck:0,SF:102|850,TC:nil,Content:0|50,EDM:-3,IP:ni
-	l,URL:99|1,File:nil,RT:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0,
-	LES:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0,ARC:0
+X-CID-META: VersionHash:a9d874c,CLOUDID:f27cc5a1c2155e78c2ea9cddbf3cd6c4,BulkI
+	D:nil,BulkQuantity:0,Recheck:0,SF:81|82|102|850,TC:nil,Content:0|50,EDM:-3
+	,IP:nil,URL:0,File:nil,RT:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV
+	:0,LES:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0,ARC:0
 X-CID-BVR: 2,SSN|SDN
 X-CID-BAS: 2,SSN|SDN,0,_
-X-CID-FACTOR: TF_CID_SPAM_SNR,TF_CID_SPAM_ULS
+X-CID-FACTOR: TF_CID_SPAM_SNR
 X-CID-RHF: D41D8CD98F00B204E9800998ECF8427E
-X-UUID: 191cef70aef611f0a38c85956e01ac42-20251022
+X-UUID: 1b0b7040aef611f0a38c85956e01ac42-20251022
 X-User: tanze@kylinos.cn
 Received: from localhost.localdomain [(10.44.16.150)] by mailgw.kylinos.cn
 	(envelope-from <tanze@kylinos.cn>)
 	(Generic MTA with TLSv1.3 TLS_AES_256_GCM_SHA384 256/256)
-	with ESMTP id 320240730; Wed, 22 Oct 2025 11:20:45 +0800
+	with ESMTP id 187806986; Wed, 22 Oct 2025 11:20:48 +0800
 From: tanze <tanze@kylinos.cn>
 To: mchehab@kernel.org,
 	mingo@kernel.org,
@@ -40,10 +41,12 @@ To: mchehab@kernel.org,
 Cc: linux-media@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	tanze <tanze@kylinos.cn>
-Subject: [PATCH v2 0/3] media: Optimize the code using vmalloc_array
-Date: Wed, 22 Oct 2025 11:20:35 +0800
-Message-Id: <20251022032038.422230-1-tanze@kylinos.cn>
+Subject: [PATCH v2 3/3] media: pt1: Optimize the code using vmalloc_array
+Date: Wed, 22 Oct 2025 11:20:38 +0800
+Message-Id: <20251022032038.422230-4-tanze@kylinos.cn>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20251022032038.422230-1-tanze@kylinos.cn>
+References: <20251022032038.422230-1-tanze@kylinos.cn>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
@@ -55,21 +58,24 @@ Content-Transfer-Encoding: 8bit
 Change array_size() to vmalloc_array(), Due to vmalloc_array() is optimized better,
 uses fewer instructions, and handles overflow more concisely
 
-v1->v2: Update patch #02 #03 due to typos CI robot detected some issues
+Signed-off-by: tanze <tanze@kylinos.cn>
+---
+ drivers/media/pci/pt1/pt1.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-v1:https://lore.kernel.org/all/20251021143122.268730-1-tanze@kylinos.cn/
-
-tanze (3):
-  media: dvb-core: Optimize the code using vmalloc_array
-  media: vivid: Optimize the code using vmalloc_array
-  media: pt1: Optimize the code using vmalloc_array
-
- drivers/media/dvb-core/dmxdev.c               | 4 ++--
- drivers/media/dvb-core/dvb_demux.c            | 9 +++++----
- drivers/media/pci/pt1/pt1.c                   | 2 +-
- drivers/media/test-drivers/vivid/vivid-core.c | 2 +-
- 4 files changed, 9 insertions(+), 8 deletions(-)
-
+diff --git a/drivers/media/pci/pt1/pt1.c b/drivers/media/pci/pt1/pt1.c
+index 121a4a92ea10..1ced093583ac 100644
+--- a/drivers/media/pci/pt1/pt1.c
++++ b/drivers/media/pci/pt1/pt1.c
+@@ -639,7 +639,7 @@ static int pt1_init_tables(struct pt1 *pt1)
+ 	if (!pt1_nr_tables)
+ 		return 0;
+ 
+-	tables = vmalloc(array_size(pt1_nr_tables, sizeof(struct pt1_table)));
++	tables = vmalloc_array(pt1_nr_tables, sizeof(struct pt1_table));
+ 	if (tables == NULL)
+ 		return -ENOMEM;
+ 
 -- 
 2.25.1
 
