@@ -1,38 +1,38 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8833A257846;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 938C62580E2;
 	Fri, 24 Oct 2025 05:49:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761284991; cv=none; b=WbImH7cOHmzLNYLuJLIx4wQ7orPkhQ+CKfEDujGWv8GJFrM6UYOYiagn71rIKQGAOU7yP7Eubcuow8deG6Ye39wC/p5gPpA4XWfhxg2MfWkQaXpEzEYBrbaGKLTuHZyCRBv4F8Q+6n3XG17NxoOxyWXD5sgyFoO4PhMWUTdaZBo=
+	t=1761284991; cv=none; b=mmjQOqGnqcrEhCztIW4fq1SKsLrRxM4ize6nTNn8crQAlsYe1vPWwzKxW7jLSeDeNCklJMnn6HxJcoKArYlbNkQKZ52wbS0mMGOJ4VlsYa01eAVsQS8Io1Moc4WuLv5EfBUEiJq9odU5JOuCdqHlx5Vsr/Cy7YeNU974STPgD8Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1761284991; c=relaxed/simple;
-	bh=1WfFvzYHcSDCH+B4HhPvJNCEBqTW4nPE8Kyf9KkINlQ=;
-	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=B7ZqOcCmHmZcIh0gQCP2mm/CeAb+PpPM7kbC1LVUEr+JubLyQD7n4rk7s075JR44NbL3pcpE3MABG26RLUB7/HBVJb8ErvA1zn56uzm3vTF8g50H/s+DSD8GvHQbbPdWPQA5Euv93OQ52idDZeYJaK7Dz8JwRj1YjJMuFQzrqU4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=iX7MkurQ; arc=none smtp.client-ip=10.30.226.201
+	bh=EdM/sy/5aeQUf8n/j4msd8ao+SjyIxXH6M1/eotnrXw=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=HUVC6hdwM05zfrJhyO3j4IG6mR7o59AOKn/gd1i4KFISI9uC4EB5m1AuUC0U8CHZwz0yoX9HuXwNRe32oBUQOoQYdeqFxv2u1FoYiYG2twSbft0jqKFcEePbcHI0rGlJbrdPSdCZkfgxbPg4CWNGXWbChLQZKXVC2RtteaeWXXk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=e2F6OmVA; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="iX7MkurQ"
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 23E8BC4CEFB;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="e2F6OmVA"
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 457B4C116C6;
 	Fri, 24 Oct 2025 05:49:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1761284991;
-	bh=1WfFvzYHcSDCH+B4HhPvJNCEBqTW4nPE8Kyf9KkINlQ=;
-	h=From:Subject:Date:To:Cc:Reply-To:From;
-	b=iX7MkurQJ9AIz+dZEo4Whq+NfqOsWYsvXgGSMFoGCn84kX6FrhN0aRFeYPxRCIqsP
-	 6njWxy1yhWSQ1pfqdTCkb8yT6mzSgBqrus9Ota7lwcHlJ3TAIH9v4EF628HifZoiXv
-	 o2fiRDIwdfiic+yd0Twjigc3NFgduCEJkGNSHdGZf2JulVIT2aN1+iWmtZzIT8X+7g
-	 RkhqHCynYhDhD1GlO1eggLpHST4gBQz4GhR7GvnicTHExqs6H+GA4oECp1HJrIJr+I
-	 rYwtYwBBRakUNXvag3lXgby6uO1xbG64qAB6eU93YkVZGLCBhhe72D9TNyantA32Db
-	 ms/Vpn1gTOzXw==
+	bh=EdM/sy/5aeQUf8n/j4msd8ao+SjyIxXH6M1/eotnrXw=;
+	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To:From;
+	b=e2F6OmVAchIur0e0rmSI6BHgSOF6OJSqBGZ/E6hsQxHha6gewcCqQiUdeeiuHOeEc
+	 uHHI1f+DnOktOERk8++gOvsm6VOxhM9PZEhWw6v/fslDtstMWk3D/PiMziEZv8woX4
+	 wTuDBmR4NEfmMf3LkdsPPuqJeEF4TpVfzP73UtheneDgLlaEBG3q21YSsLXoDNilKc
+	 G0qLD9BF87dpN18RljVIZhX/9vvMaVaWc13RG9G7ytcRI9VVXqFNe5IsMTvfwoh9WX
+	 vRWHpkGhRoYVHwmZ07nUZ+Arc1Nafwab/gOvogA3uuUY2k/BT5lkQpKewgy7LOLDv+
+	 BCwPKp855arMg==
 Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 15AC6CCD1BF;
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3B0DCCCF9E9;
 	Fri, 24 Oct 2025 05:49:51 +0000 (UTC)
-From: ymodlin via B4 Relay <devnull+yogev.modlin.realsenseai.com@kernel.org>
-Subject: [PATCH v3 0/3] Since Realsense has been spin-off Intel, the
- comment should be change.
-Date: Fri, 24 Oct 2025 08:49:45 +0300
-Message-Id: <20251024-fix-uvc-v3-0-b7f83c012ca7@realsenseai.com>
+From: Yogev Modlin via B4 Relay <devnull+yogev.modlin.realsenseai.com@kernel.org>
+Date: Fri, 24 Oct 2025 08:49:48 +0300
+Subject: [PATCH v3 3/3] media: uvc: Add D436 and D555 cameras metadata
+ support
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
@@ -41,58 +41,73 @@ List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-B4-Tracking: v=1; b=H4sIAHkT+2gC/2WMMQ7CMAxFr1JlxiixSUuZuAdiCI6hkaBFCUSgq
- ncn7QIS47P/e6NKEoMktatGFSWHFIa+AK0qxZ3rLwLBF1ao0RqNCOfwgmdmwJYafyLDriVV1vc
- o5bWUDsfCXUiPIb6XcDbz9b+RDRiQDXtNta4bsvso7pqkT+LCmoebmksZf2362ggaDLe0tYS28
- fxvT9P0AT6nBRXiAAAA
+Message-Id: <20251024-fix-uvc-v3-3-b7f83c012ca7@realsenseai.com>
+References: <20251024-fix-uvc-v3-0-b7f83c012ca7@realsenseai.com>
+In-Reply-To: <20251024-fix-uvc-v3-0-b7f83c012ca7@realsenseai.com>
 To: Laurent Pinchart <laurent.pinchart@ideasonboard.com>, 
  Hans de Goede <hansg@kernel.org>, 
  Mauro Carvalho Chehab <mchehab@kernel.org>
 Cc: linux-media@vger.kernel.org, linux-kernel@vger.kernel.org, 
  ymodlin <yogev.modlin@realsenseai.com>
 X-Mailer: b4 0.13.0
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1761284988; l=1124;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1761284988; l=1832;
  i=yogev.modlin@realsenseai.com; s=20251022; h=from:subject:message-id;
- bh=1WfFvzYHcSDCH+B4HhPvJNCEBqTW4nPE8Kyf9KkINlQ=;
- b=1Zx2wW+eD4XJ3ZaGki86OeNxnYyV7T4kL1wmAS3vBtcEI4vsuwSfZ+FJYtfQLDn/5ZAk57JiF
- S6rqnwGByFkAUTVednIvUFZTR2TjS91ZLubkm8LdFa2fEZd5SJMKhpc
+ bh=iyrLXXvX6649ccACpjDB81ZR69kmGOLUpxdAJ8yQQ8w=;
+ b=CpS2m7QQ8wrOXNVjTwBxqDseIklATOaiom16pdXFTEhbtfQCSLaUAcqmSVK4USMa2GmUtPq6f
+ Q29L/XfaV0SCYrw6YzeliA/jSjwfNVqVUE3DpK/ncLSL7bBL4+fMQXR
 X-Developer-Key: i=yogev.modlin@realsenseai.com; a=ed25519;
  pk=V3EENbzJJO6YkqjrHtGmN67ulKS2b5TU7Ze0hVi1G1o=
 X-Endpoint-Received: by B4 Relay for yogev.modlin@realsenseai.com/20251022
  with auth_id=549
-X-Original-From: ymodlin <yogev.modlin@realsenseai.com>
+X-Original-From: Yogev Modlin <yogev.modlin@realsenseai.com>
 Reply-To: yogev.modlin@realsenseai.com
 
-Signed-off-by: ymodlin <yogev.modlin@realsenseai.com>
+From: Yogev Modlin <yogev.modlin@realsenseai.com>
+
+Add support for Intel RealSense D436 and D555 depth cameras metadata.
+These cameras use the D4XX metadata format for transmitting depth and
+sensor information.
+
+The D555 camera uses UVC protocol version 1.5, while the D436 uses
+an undefined protocol version. Both cameras require the D4XX metadata
+format flag to properly handle their metadata streams.
+
+Signed-off-by: Yogev Modlin <yogev.modlin@realsenseai.com>
 ---
-Changes in v3:
-- Add metadata support for D436 and D555 cameras.
-- Realsense D555 has been released to the market earlier this year.
-- Realsense D436 will soon be official it's currenly being supplied to
-  beta users.
-- Link to v2: https://lore.kernel.org/r/20251023-fix-uvc-v2-0-1c93853257dc@realsenseai.com
+ drivers/media/usb/uvc/uvc_driver.c | 18 ++++++++++++++++++
+ 1 file changed, 18 insertions(+)
 
-Changes in v2:
-- Fixed commit message formatting
-- Write 'Intel RealSense' for D400 family of depth camera comments
-- Link to v1: https://lore.kernel.org/r/20251022-fix-uvc-v1-1-e4cd03606735@realsenseai.com
+diff --git a/drivers/media/usb/uvc/uvc_driver.c b/drivers/media/usb/uvc/uvc_driver.c
+index dbdacc64ea6b..6f0053a78123 100644
+--- a/drivers/media/usb/uvc/uvc_driver.c
++++ b/drivers/media/usb/uvc/uvc_driver.c
+@@ -3223,6 +3223,24 @@ static const struct usb_device_id uvc_ids[] = {
+ 	  .bInterfaceSubClass	= 1,
+ 	  .bInterfaceProtocol	= 0,
+ 	  .driver_info		= UVC_INFO_META(V4L2_META_FMT_D4XX) },
++	/* Intel Realsense D555 Depth Camera */
++	{ .match_flags		= USB_DEVICE_ID_MATCH_DEVICE
++				| USB_DEVICE_ID_MATCH_INT_INFO,
++	  .idVendor		= 0x8086,
++	  .idProduct		= 0x0b56,
++	  .bInterfaceClass	= USB_CLASS_VIDEO,
++	  .bInterfaceSubClass	= 1,
++	  .bInterfaceProtocol	= UVC_PC_PROTOCOL_15,
++	  .driver_info		= UVC_INFO_META(V4L2_META_FMT_D4XX) },
++	/* Intel Realsense D436 Camera */
++	{ .match_flags		= USB_DEVICE_ID_MATCH_DEVICE
++				| USB_DEVICE_ID_MATCH_INT_INFO,
++	  .idVendor		= 0x8086,
++	  .idProduct		= 0x1156,
++	  .bInterfaceClass	= USB_CLASS_VIDEO,
++	  .bInterfaceSubClass	= 1,
++	  .bInterfaceProtocol	= UVC_PC_PROTOCOL_UNDEFINED,
++	  .driver_info		= UVC_INFO_META(V4L2_META_FMT_D4XX) },
+ 	/* Generic USB Video Class */
+ 	{ USB_INTERFACE_INFO(USB_CLASS_VIDEO, 1, UVC_PC_PROTOCOL_UNDEFINED) },
+ 	{ USB_INTERFACE_INFO(USB_CLASS_VIDEO, 1, UVC_PC_PROTOCOL_15) },
 
----
-Yogev Modlin (1):
-      media: uvc: Add D436 and D555 cameras metadata support
-
-ymodlin (2):
-      change: drop 'Intel' from RealSense camera comments
-      media: uvc: Add RealSense vendor prefix to Intel camera comments
-
- drivers/media/usb/uvc/uvc_driver.c | 36 +++++++++++++++++++++++++++---------
- 1 file changed, 27 insertions(+), 9 deletions(-)
----
-base-commit: 552c50713f273b494ac6c77052032a49bc9255e2
-change-id: 20251022-fix-uvc-2937db31ca93
-
-Best regards,
 -- 
-Yogev Modlin <yogev.modlin@realsenseai.com>
+2.43.0
 
 
