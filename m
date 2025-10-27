@@ -1,76 +1,102 @@
-Received: from BN1PR04CU002.outbound.protection.outlook.com (mail-eastus2azon11010016.outbound.protection.outlook.com [52.101.56.16])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5CF623164DB;
-	Mon, 27 Oct 2025 17:33:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.56.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6466E1A5B8B;
+	Mon, 27 Oct 2025 17:40:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=198.175.65.19
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761586419; cv=fail; b=gLvSlEgywQgrOSUSsBXn0tGaDdbE75bmaOzBQNXY/kMbqj3+o+XRD1DryFvJj9mjSjMpll15mIAP9oDJ7YHihq0z1KRz2VGcagv4JVT0xf6dZTF/SrIgLZQiFDAjvPU9pgih3uhdu0Dmdzfqn3gcvUluv8eNgs5w+KhwzrIGktk=
+	t=1761586805; cv=fail; b=Sqp8+Y+pzJD8Rnvf58bN8VQdlPtaPd7Wi4+g16mW04LUafPU4ty7WqiAaTtRhGyo57+1jOsG39By2Dk7PKTQrYoDpMBwH++gdhn1N66RCjhxkc4NTCWFJUl8T6NEGQjaekfineyTknB4ADgm4X+ZTRcjIoJBLmLUzlnkM5Busa0=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761586419; c=relaxed/simple;
-	bh=Ph5WA8Xxx5eR+ZWZAEPYF4KblHFBH9Zn4VPimvdfxeg=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=dDD16qMeDI76tUTK+sU8+6iXjVp0G7XayR29Cn/V0mj58MLB/JMYvp8cIV2bTvcSia98g1e/zSc4+B8ODC6hrrw8V7WSbg6PeMds7tRCGfMsmv7jHtLDx+JpBRMOjStGEJts9j6ZIJFB5ijtZMep1p7BUvwPnlVse3LKbbWra88=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=QHXJ8Y51; arc=fail smtp.client-ip=52.101.56.16
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
+	s=arc-20240116; t=1761586805; c=relaxed/simple;
+	bh=i5K/9PEtQC+cT14BFRoPUWaIgu6orl5iqg5qLyHA+G4=;
+	h=Date:From:To:CC:Subject:Message-ID:References:Content-Type:
+	 Content-Disposition:In-Reply-To:MIME-Version; b=AKOT5aGDQr2vAPJ+g4O5JZWlUvZ7Uo+4gggN2tOO7eKwLDV6kUhkjR9pIR+E5FYI1Y2YIir5lypOdAZWtoxtk+3B281UmBLFMx28NrJVGTOJ2+XUBWGdmomj4PMLTbT94tqGiuinCkVtcyt03ZqIgayCJXNUKWGyuUqT0503T6k=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=RMMpqyJX; arc=fail smtp.client-ip=198.175.65.19
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="QHXJ8Y51"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="RMMpqyJX"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1761586804; x=1793122804;
+  h=date:from:to:cc:subject:message-id:references:
+   content-transfer-encoding:in-reply-to:mime-version;
+  bh=i5K/9PEtQC+cT14BFRoPUWaIgu6orl5iqg5qLyHA+G4=;
+  b=RMMpqyJXNwIFLPwSZ5SZiLjprn92wsowI0iDxQqpfJxMhJ4QejsWxk1T
+   y/zmX0/cveXRqZKMNO10plmKlJbDvF943b+gmDLOYmu4jTUielyIccTGf
+   EIKtLqL1Y+7QZpLRKO5Jswp1Zea+dBrecs5yYl+nS4NTDd7S6yieASCQK
+   iDcTZtzqjqtqq2YM9y6Efw7XJQ3gFEWgAGptpCYuxnUR0F1/JmUu7tzAK
+   1HgWGuguOCPaD4nXR43ATaYO7koWP0FYZp/DY5Orn1yKLNr43iBhee7jK
+   qDCA8odnWsPJq0pvgfV1mCwgvUKis0m8SL5pJO08iRfpQC2tcMNnu4Gqd
+   w==;
+X-CSE-ConnectionGUID: eQGp4NQ1SK6rZ6Co2YcAEw==
+X-CSE-MsgGUID: rIYNFfTxQbO7S2d45MiUKQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11586"; a="63564854"
+X-IronPort-AV: E=Sophos;i="6.19,259,1754982000"; 
+   d="scan'208";a="63564854"
+Received: from fmviesa005.fm.intel.com ([10.60.135.145])
+  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Oct 2025 10:40:03 -0700
+X-CSE-ConnectionGUID: W1lZZstZRKi05MuePID2VA==
+X-CSE-MsgGUID: l9e7SG2YSEeCrZDJrfqrJg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.19,259,1754982000"; 
+   d="scan'208";a="189481789"
+Received: from orsmsx901.amr.corp.intel.com ([10.22.229.23])
+  by fmviesa005.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Oct 2025 10:40:02 -0700
+Received: from ORSMSX902.amr.corp.intel.com (10.22.229.24) by
+ ORSMSX901.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.2562.27; Mon, 27 Oct 2025 10:40:01 -0700
+Received: from ORSEDG901.ED.cps.intel.com (10.7.248.11) by
+ ORSMSX902.amr.corp.intel.com (10.22.229.24) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.2562.27 via Frontend Transport; Mon, 27 Oct 2025 10:40:01 -0700
+Received: from SJ2PR03CU001.outbound.protection.outlook.com (52.101.43.36) by
+ edgegateway.intel.com (134.134.137.111) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.2562.27; Mon, 27 Oct 2025 10:40:01 -0700
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=MnMFvGOjou+3YyYTEUFEdDvgcDBNamUAOeX2NfGtZOdnNqM8GI9I2tLmUNcUHMDM/iyG9UIH4Tx/dn1XBe78me4HW1sk4PDKtKQ8/8Fpxe+G0DjA6grvZLRPt5RtGvYJ/JVr8qz0aJ3sGFB5MGliM/cmephzKRtQb9kXqX+Mrz7jphgD8iYD4YNUmU/0ojoJKJSn6f9wWyh6Paf62ibsY3Gf52EgrM0QbqEv7rM1pn2MqTjDjGZWw3T9BvQguGTfqUMQ002RTeJMU0BNKH11nXAbv37ySantyDAcknMC1T14MX4tfv6lJSWoNCsZWdOBAu/uT2c6NyQZCl3duhxBFQ==
+ b=u8I4EZivXBjbEEwhHvmB05l3gqRGKjqxIH74WaBmG7ioQj2iCh2o/SF+JIjP5POkaOmmTjhIYWqSckqU/ggi+6+5gV1fCNFzqEum7puWt3b6FMBRdqBCbDccGnbWkQZ8n/AwbFNvlZdGYc34NZ2/ThCatXjJRC12M/FZTzttU6X9/RAU06ImGgQxOtzfz6jsuJjxAfoI6lcRLEmrmY6rTHDsgB4y5oa8UmS9jMxpY3AXg1HbWLaJ1P5gj2p+2PRvJinnd1oj/K4FRgUmj9xTuRWbt7l1ylZMdCffgRWyQMyJ+15Sy4987sw5aTAlVFJxF6Fqz5Pd0RO1cGJuet8G4g==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=rA6i5WZZ0vXvPBXwavi9FHzIV2TK/4LE5bCeCvaNrlg=;
- b=XdV/yjttHZhafZxZ9FZgOAPRtDoygpscS+/JHx6Y72Ft9WQsSPPKUjQ0tU0TkK5wabh4YpdIMxfKe7Fx6xymBowyhXAbeCOAuopnwm9b+2Um7KlKDwhPH90s3ZP4S5O+D1ebp/nrXiRGF3mDRKzjUFs/V8Qy/7L3ColS+hoAFm26oabvkeh9DRNscnHP9x7JAHnITmBDTyLEJc/k8/51HkMDmL8BMldeABJDLqnLbdt3EiJe4Noe2Rangklx8zdFWfw4pP096Q4oKlMsrrHDktUSQS3llyquz4rX3br0Ybk3esQXKVYLF3d7pubTQMRDZFw3cQE9+Ij65Ql5HjhSYQ==
+ bh=a0bNXuE32dbgUdfRI2KyYA4RasKZZlVnyfMehjBwnBQ=;
+ b=Zo0za5FVmVEEpJw4ntcKMECBXuQqyssobaNp/9iK2H+RCbwYRlEbdeYbaCLmVmMQh4q5c0yT8nWtPGhZJ/BP0mT7dppS2A+DD1GlqaV01gTSpLUAGu9CKNc7IJVShcbbBiK6N+oYcOReYwBShxIiaTT8d9cjAt/7tVFJu+d0niPgIZNzAiAfrQco+gOmi/bvi67serBrHsivWDzRz/6RZsYypiWK44Lm+k85tcbq90Ki7vImBLUftsuGkhpF3XzCiXyLW8kTttLKTaabf955LNRIGyNzxPHs4sCsfP2mmMlmO7AkxHvl9IQSu3JUJFagqXrsGjPiRalKLO74oLdyhA==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=rA6i5WZZ0vXvPBXwavi9FHzIV2TK/4LE5bCeCvaNrlg=;
- b=QHXJ8Y51odBzlVEiN9j2MCeZkH7ja063djoid4aK0CGf52A2wmIsRqkoakiGz0ne5uxy/2KvilB949fELhLKaJn/kZFSIHuDvkxismiWyLX4jtdIOS+xpZAXGlKfAd2hLCtD6pA6S8K+lgL4B3KOJgOwl+dmo6FyovAc7TxOZ3gpmWi/loUYfx9XhqVKvzOq3VEHYoVZrk0xRHnyBj2474aCB+S+8hn0W8BiitRw/NFG0O3QNhuV0LbWlkoqj6e0GEkcldAG3DzHW5izMKRtQ9Nm/KJdmMo9zx20BUFcdE5Ex/bg3n1m559jzvpzKy2IQOdfh1PV94aALZqeTxn8+g==
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
 Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from MN2PR12MB3613.namprd12.prod.outlook.com (2603:10b6:208:c1::17)
- by BN5PR12MB9539.namprd12.prod.outlook.com (2603:10b6:408:2aa::10) with
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from PH7PR11MB6522.namprd11.prod.outlook.com (2603:10b6:510:212::12)
+ by BY1PR11MB8008.namprd11.prod.outlook.com (2603:10b6:a03:534::5) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9253.18; Mon, 27 Oct
- 2025 17:33:31 +0000
-Received: from MN2PR12MB3613.namprd12.prod.outlook.com
- ([fe80::1b3b:64f5:9211:608b]) by MN2PR12MB3613.namprd12.prod.outlook.com
- ([fe80::1b3b:64f5:9211:608b%4]) with mapi id 15.20.9253.017; Mon, 27 Oct 2025
- 17:33:31 +0000
-From: Jason Gunthorpe <jgg@nvidia.com>
-To: =?utf-8?q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
-	dri-devel@lists.freedesktop.org,
-	iommu@lists.linux.dev,
-	Joerg Roedel <joro@8bytes.org>,
-	Kevin Tian <kevin.tian@intel.com>,
-	linaro-mm-sig@lists.linaro.org,
-	linux-kselftest@vger.kernel.org,
-	linux-media@vger.kernel.org,
-	Robin Murphy <robin.murphy@arm.com>,
-	Shuah Khan <shuah@kernel.org>,
-	Sumit Semwal <sumit.semwal@linaro.org>,
-	Will Deacon <will@kernel.org>
-Cc: Leon Romanovsky <leon@kernel.org>,
-	Nicolin Chen <nicolinc@nvidia.com>,
-	patches@lists.linux.dev,
-	Simona Vetter <simona.vetter@ffwll.ch>,
-	Vivek Kasireddy <vivek.kasireddy@intel.com>,
-	Xu Yilun <yilun.xu@linux.intel.com>
-Subject: [PATCH 3/8] iommufd: Allow a DMABUF to be revoked
-Date: Mon, 27 Oct 2025 14:31:02 -0300
-Message-ID: <3-v1-64bed2430cdb+31b-iommufd_dmabuf_jgg@nvidia.com>
-In-Reply-To: <0-v1-64bed2430cdb+31b-iommufd_dmabuf_jgg@nvidia.com>
-References:
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9253.19; Mon, 27 Oct
+ 2025 17:40:00 +0000
+Received: from PH7PR11MB6522.namprd11.prod.outlook.com
+ ([fe80::9e94:e21f:e11a:332]) by PH7PR11MB6522.namprd11.prod.outlook.com
+ ([fe80::9e94:e21f:e11a:332%3]) with mapi id 15.20.9253.017; Mon, 27 Oct 2025
+ 17:40:00 +0000
+Date: Mon, 27 Oct 2025 10:39:57 -0700
+From: Matthew Brost <matthew.brost@intel.com>
+To: Philipp Stanner <pstanner@redhat.com>
+CC: Philipp Stanner <phasta@kernel.org>, Danilo Krummrich <dakr@kernel.org>,
+	Christian =?iso-8859-1?Q?K=F6nig?= <ckoenig.leichtzumerken@gmail.com>, "David
+ Airlie" <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>, Tvrtko Ursulin
+	<tvrtko.ursulin@igalia.com>, <dri-devel@lists.freedesktop.org>,
+	<linux-kernel@vger.kernel.org>, <linux-media@vger.kernel.org>, Christian
+ =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>
+Subject: Re: [PATCH v2] drm/sched: Extend and update documentation
+Message-ID: <aP+ubU1/W5KIEUCY@lstrano-desk.jf.intel.com>
+References: <20251023143803.150978-2-phasta@kernel.org>
+ <aPqdr98ANKN53GKm@lstrano-desk.jf.intel.com>
+ <bd2fda6dc370432e5478c891514bce5d8a0d8b76.camel@redhat.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: BL0PR02CA0054.namprd02.prod.outlook.com
- (2603:10b6:207:3d::31) To MN2PR12MB3613.namprd12.prod.outlook.com
- (2603:10b6:208:c1::17)
+In-Reply-To: <bd2fda6dc370432e5478c891514bce5d8a0d8b76.camel@redhat.com>
+X-ClientProxiedBy: MW4P222CA0023.NAMP222.PROD.OUTLOOK.COM
+ (2603:10b6:303:114::28) To PH7PR11MB6522.namprd11.prod.outlook.com
+ (2603:10b6:510:212::12)
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
@@ -78,359 +104,424 @@ List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: MN2PR12MB3613:EE_|BN5PR12MB9539:EE_
-X-MS-Office365-Filtering-Correlation-Id: 8e854b77-0c16-4560-ac86-08de157ef281
+X-MS-TrafficTypeDiagnostic: PH7PR11MB6522:EE_|BY1PR11MB8008:EE_
+X-MS-Office365-Filtering-Correlation-Id: 8ed6476d-4643-42c4-3522-08de157fda61
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|376014|7416014|1800799024|366016|921020;
-X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?G4fVqDtoIjq5mRSCf7haBVcBdnT50/G5r35ULPFnJS7zdaPZ6c9oCRzcPU4J?=
- =?us-ascii?Q?xwv/U2xdqXpX1q1HEunNd5BiXEx/0F62SufHIo/pzxpd4+SDUENLeKmpGnFu?=
- =?us-ascii?Q?mG6dim8XTJKqGXy0x4xt+84AABuZRmpVReWnsYpOEW4le5GwVYDap0qDLvcE?=
- =?us-ascii?Q?Jw7uhDEkysS7T0u4warnd2un9ab8Pm6LyY6tPYyUvTK6q77kDjfA9V1wpuuv?=
- =?us-ascii?Q?7yfyVlB/huiUz9jS8IkR5wFecJi/1CL3/CXd3787ZAKLX6Bx+tio3qX9aEOM?=
- =?us-ascii?Q?Qx8bNbOMCyFdKAIFXfFFZxqnyIGPPvKyQ6UAmqg//8WzWv/OAab4UAcaAcWO?=
- =?us-ascii?Q?L435Mkfy2KBlaTHJjpoVj+o1NBY6BzfJSlNfYE5XtBdRKSB0zvTGaD36M3fR?=
- =?us-ascii?Q?XZTDs2RqGsPC7SK1hLjlOO2RnYeZl9Syax32iUZimUiINI23xJT7VwErU/sh?=
- =?us-ascii?Q?0ioqV/EBzlbaODx2j/cvoj/GB1gBVQm/I5j9VDgzEW0x2Ri9J4lGZIuJRA+H?=
- =?us-ascii?Q?hy4go/gWF/KSu014ZRt4k4IfCZBaebvwp50ykZ/JZtRsG1kTleB9GMIDtz1/?=
- =?us-ascii?Q?syxLeIHBNes/lB/W6kM9YvrUWKyE0On9W/jFWfd/BiMUXgG7Ns4ZchIYDQkx?=
- =?us-ascii?Q?Wc1RArRYM+OJ0wmJ5BEqb3bcoP5b0AiuMzu31HHv9A6Jd1UVh7WyqMujJMZj?=
- =?us-ascii?Q?WZ0PnHvIjgrWx41WGdIMh6jbUQSqVwSH6urFjiBGsyFzJS5CPln4guzDEI7T?=
- =?us-ascii?Q?mwb3BGRrV4h7Qcf5W6WtjH+ekI6LZanRZeK0t6ZCVdk1AQZKh84n0dfd7tmo?=
- =?us-ascii?Q?h6mrgy/8fTqMBf5P8khruLmRqF0S/8pfbPsPxFEXbh4SQQUv5NDInQCi0024?=
- =?us-ascii?Q?9dVPy20lqHl8DRutcL8S4mC1x0E6ZRpTiKd9YiuEoTewk++m3fClwHabvtri?=
- =?us-ascii?Q?dI8nP6U8gupLmK5nFfQB9iTZhbtO5QR3Du5HONWFBVSeGvj5nn+OrXe7dp1Y?=
- =?us-ascii?Q?j7Yazu6SqvUsoNb5r4Vkz9kBjCiRoSV1U6tj7pmTghecbevbKfGGI6ItI2Ci?=
- =?us-ascii?Q?xjXxosEnJ0m90lmejbXsLaM1rKJpJDiKjVEZUHWJ0R9ydH/V3rrpwRQ+1BVz?=
- =?us-ascii?Q?3a42kMfrIo32Jh7aC/abdzFr+57wZKsgPSckR4Agrh9h50syOMf02u5W11ks?=
- =?us-ascii?Q?r3txTJ3z9dm546Era2BMkeKR310GRGzOR8zAj+d4oL0GrffnO9dr/mX27/80?=
- =?us-ascii?Q?E4qPJnKmtlvw9qDPxxJuZ+XU5Q6GN65vbnPDA+za3qw12ndbK2+snxxxBI/3?=
- =?us-ascii?Q?nKK6GyrK3ZkJ9i0TIubz8v/azdaY3zvrGlvkZI6Mcq5mlLsTxoS13G7B5d0Q?=
- =?us-ascii?Q?ez8T5yjTswTikBQ9t5gkqpcL9bpWbYgn5HwAd/A6a4+UFLa3fvP2KInQJWfo?=
- =?us-ascii?Q?wolsWNEwCSmNrAhBDmdMYfK/12rYEhdcqWd/xpM4vwKiaMCB+F2rRyvCELsy?=
- =?us-ascii?Q?a/agItmF2OHC9WE=3D?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN2PR12MB3613.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(7416014)(1800799024)(366016)(921020);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam: BCL:0;ARA:13230040|366016|1800799024|7416014|376014|7053199007;
+X-Microsoft-Antispam-Message-Info: =?utf-8?B?aytWbnl5aDUzakFEOVdmOGZaWUM4aE9sTFRPMmg3RjhmN0VFQkhWVFU1NVJ3?=
+ =?utf-8?B?YVM0cGJ5RVBOK1dlYkZ6Wit0TzBBcDdrRlBxclNZN1ZUVUsrdWd2MThySlE3?=
+ =?utf-8?B?RmVoYlEya3pEMVo4Mms4NzBEY1dvS3ZvWXVjUnYvK2RCUSttbmo3S0Q3a3Nv?=
+ =?utf-8?B?M3hFQzBzYjZCR3lLVjhjeDE0Q2xHNFg5NmIwcE5nL2J4dk1wVHJCOVRWR0VQ?=
+ =?utf-8?B?ZXZpUHBaQW1sbWV3eStCMHBqenlJYXkwa2RvdkFzbVBRY0s2WFVRYlJqU21N?=
+ =?utf-8?B?Tm80eTBjdXZUNkVoUWROQTN2OU9FMlo1T1g1KzlEdjQwL1FENmZrRkVBRXZC?=
+ =?utf-8?B?anhQeU50ZElxaWFnRlMyN0NHdEYybDJnc2VKdHJHRWhOUUp5TDJGSFdyVktL?=
+ =?utf-8?B?Yjkzam5vTzNZbXRqU29CcTBZaDEvbncyeG1rekFrRkxSMVpGYXdQc04zc2I5?=
+ =?utf-8?B?M2Z4b0hhMWVVWXBwM05xY0cwNzNVYWJsZVdRZVBTNEFhaXZmRGdCdzRESk9F?=
+ =?utf-8?B?SmpBYWR5aHlGc05zNEFpYXdqeDhpajhyL3ZZdzF6cnZLbDBIVk1EQkJROWg2?=
+ =?utf-8?B?dVc5L2ZFQktIR3k5ZXlwa2s0S052MnZLcDUwYm5rdzZaaFFoZVdpOFN3eEM1?=
+ =?utf-8?B?ZU5JcnNyd3RuNmRINkpxK2RnOEhWNG1aTGFaN0hRQkZzWHJxN08zY0d1eWty?=
+ =?utf-8?B?amZRV2VnekUxNWgvWjJTVnJHWnczU21QbmNvc1A1R2NwclhmT0Uvd2FZa1hZ?=
+ =?utf-8?B?WmVQVnhDcm13dCt1SElsSURUL3NKWW9ZWFhCZnlGTEN3MWJ3UHdzM0VnZmY0?=
+ =?utf-8?B?MnBuM2pjZHI3QXNxWGhsOW1JZXRRSEZtUys5YjZUZlJEUHM3ZE1hOWplRDNQ?=
+ =?utf-8?B?NE5jblF5bzV3cmd5NWp0Y1UxOGR4WEcrOFhMR00yNXRydFBQRngxZ0NHeWI3?=
+ =?utf-8?B?RmZ5TldudTh4S0RqWVh1bVpLUmtZSEhPUE9RcVd2azZ6NEFRTlg2OXdPaFcx?=
+ =?utf-8?B?anBFTFI0Rnl0dFd1MHBOcVFkSjhCZURkeWFyWnAwNHcxLzFmVFQvZzk0OFVl?=
+ =?utf-8?B?cHZXbldzUy9SbWtobmxYQnhxeHVFS2JOWXYrZHlqdk16Q3ZhU0ZtUCtWQnJv?=
+ =?utf-8?B?ZHVMSlJZcG9xUmZSVVMrN2l5ZzdTZkRmNlpMK3BHMHUwWFVKZCtjUHZxZUQ1?=
+ =?utf-8?B?akxudEV1QWpYOFMzWFJHemc1b21OZTRiS3hFbGRSZVF6aEhsR1VXU08zR3Bv?=
+ =?utf-8?B?MFBUNTBydnpNRmEzc3R1TGlkcjNlRnlHRjVKa09uMWRldGYvUUMxYmhLNEN4?=
+ =?utf-8?B?MExFM29zTlBlenU3NEl3eklNcHBYZ0p0cWVqcDlmSXJ5MEFsRy9OQ1NzcWdB?=
+ =?utf-8?B?ZGo1dTAvQzF2VUdtUnkrQXFlcm1JS0NHRHJrQ2NZTEQ1cTNKRFFqWVZBbERB?=
+ =?utf-8?B?V09VdlZXY0dlZzBZY0VYR2ZmTzRidVd2aWVxU1EyS1M5M3VtNjJHU05nZ0Rv?=
+ =?utf-8?B?UkUwQzkzMW9JY3piUGE5Y2xOL2NFbVZrMWRBMFZQME5GRHNMZGEwQkU2ZSs3?=
+ =?utf-8?B?djZHZDI5ZUs5djEwd1F1N3lYYmZwaTVuSjBHWkhXaXZXZy81ZElha2JyNUtY?=
+ =?utf-8?B?aVpXY2tVaUtFOTdOMHR6aTVjUzhnRHRXc281YWFSb1JWdjFzVjVBckpIcTlV?=
+ =?utf-8?B?SHRSRVduTnpoMXJOODFmWi9Sb2x1NERxMVcxbTlVWG96aEJqZnlvT2ZjSk1P?=
+ =?utf-8?B?VFE2NGt2NXFnUWl4c1JYMVVRVHpkdFRCZEdFVzNMZ21XalVjaHg3TnBBZjVh?=
+ =?utf-8?B?cVBZVXdVZmVWTEhqU1AvTTIrUXIzaVVQWmFnL0dLRHE0dGdvWjdyUldlbTZi?=
+ =?utf-8?B?ckpEUU9HY2ZqL1gxQlBVaE1pa3JEYkU5MXBOdU1iNGwvb2c9PQ==?=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH7PR11MB6522.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(1800799024)(7416014)(376014)(7053199007);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?sEBk4Klpk7ZPdVKnGUNJffXGJwWcnUHZRlWG2/QeAWcB7ooAv5bnbdhM0VJ5?=
- =?us-ascii?Q?soJHqg//4KHwrpFPZHCFVh9z3c1uKaahuHE+kXThj0WvWjeUjftzRrGvw0K+?=
- =?us-ascii?Q?u2fV4EV1uN6jvZt8kd/mKMXhKCd7pzjL9GtWAdQjpsKziT44jvNwejm/PNJJ?=
- =?us-ascii?Q?74jWtSi5kuYQzpGYVm3US3QjSdeScmeeuvIgpTu6o/CbDaLR2kqoo9izM4jD?=
- =?us-ascii?Q?WZBjajsO0cz9qBBGyomsQm6NcXhg/kq/7xuoQI3Pdehu6ykX2UYcwZJ//0l9?=
- =?us-ascii?Q?zKwkcfCZD5as89YIwDyUDCTeE/tepbbun43bDPrUdKZT1lU0SqUhRXg7edTC?=
- =?us-ascii?Q?yo3q94qQzY9qKQX7aQ1awfIvHms98fPsaX+Xdtv+2cciEcvaFAlfsfbmx15w?=
- =?us-ascii?Q?ZxL+xoSCPE8TzHYDQKteCW2N6J7uKGHNGSaHNCw4f+BCb13MzamObhHX3h86?=
- =?us-ascii?Q?vhH5vJXDx400OMqIitohylfvCrlbzr/B4tpiE+4V4QAsH7g7PQg+ym9IZRjp?=
- =?us-ascii?Q?PlO1HD+svtJt9KfFhMJfqdGsfq7xHuia3lSZiQIemhzNq4yV1oeIRlyLBY9D?=
- =?us-ascii?Q?8kYgLAcWKE5fFsFxFuWcmFr7tFY9TqJfo+/BKztSFSXhDlYTt5I/ot3vwW+3?=
- =?us-ascii?Q?FBXy0kgiilU2fxXhKyQR5sjDiYqddVIhupv7l/YuUeMIbV29s/Eq8uToxdvO?=
- =?us-ascii?Q?MFZ8EyjzJpAXZYMm0RyivwtBxOgRTI0691GeGoc4vgXbVXf+erUKeaTLyA/4?=
- =?us-ascii?Q?jCNrpun4Vv+RpK88cKmwTsvK911cMCnkFzrg2cwcPzPGONYivQKqqZAn0dC2?=
- =?us-ascii?Q?kfd0nnu2WlhkTOT95YaplaVrINwYdEAOUB9Ow+gcWWjzkVbkTWQsFZ938H3t?=
- =?us-ascii?Q?0FLM2h95Heo3A7tJ915FFZfZDu6GhkE4UBJZBtjcYyEG/+z9DcdRxCwk8Z4r?=
- =?us-ascii?Q?ijuljHeiua/jlGAemRcDKyOm/L0GQqM+CdeyDJiow3ud38l+RQ0EoVQJKkDj?=
- =?us-ascii?Q?DrEs/ieWrJvpyA1FZrK7nwoWYQLGbrNRKLHZZI1F3rxX+y4QiN+icAUHpgd2?=
- =?us-ascii?Q?7/4pPbo2Z2S2N/4I8qEqcBBJCl21nM+rOGku40nyo+kX789qkVUbHQqhz0jB?=
- =?us-ascii?Q?PpA1PcGPPhNyd2RJzpgIV6y/VkvkumYdpiHRSF4u6/8WAN3OMkoQXeXcXdRP?=
- =?us-ascii?Q?/jP3v9y3QCN896l7g7ZSmZWmaHU+HAXVaa7VVU0YeOXGLCQuU0v/MgIPkHab?=
- =?us-ascii?Q?MZnCDEJdxXGb/pp/+0DcXywQoWYXW5Yt6kbpMNg6JrsAsXnZLTvFnsHNSHU6?=
- =?us-ascii?Q?JjO0FDRojeJVfTeIVrPZAM7Wg3HlT3izWQFVi/UBAtDghBxirNOSN1fOjqrg?=
- =?us-ascii?Q?AO5NOt4r3VnI0jsTVfmddnePB/Yh6MTw7+ewCKc9moU4lGV1W3MkJI3OmP2l?=
- =?us-ascii?Q?ZmUajFxo3A8LHkUQKcI+0VEOTOzr81G31H88kZYTolDuoIDtYSM6qD09Y/M4?=
- =?us-ascii?Q?JSC5fCyrkLF5QbQY5fw4WCATmS4y35VLLd5RIUVeDBnPk9gwMo3EZS9JhbJe?=
- =?us-ascii?Q?kNvw7WwoXBDc1LQU4Jw=3D?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 8e854b77-0c16-4560-ac86-08de157ef281
-X-MS-Exchange-CrossTenant-AuthSource: MN2PR12MB3613.namprd12.prod.outlook.com
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?djd4cDk0WDhUdG1PdGZ6a0VNUm9md3B4Yjg3UzdMVWVmdzRhRU4vbzZ0bDZG?=
+ =?utf-8?B?S3ljWEsvWjJ3WUx0NUI4aFNrNVlGOU56STIwQ2kvQS9xRXlDRzFyTTNOZlRQ?=
+ =?utf-8?B?NnZ5YUt0dGFoWmNMMXFqdUZVSlNaMW1WNy8rSm02Z1hvUkFnRy9FaDJlWERZ?=
+ =?utf-8?B?dmQ2a2g4azdmT24vRGh3TFRvR3JINCtWU0NkWDBkMHlwQm5XNHplNll1Uzh1?=
+ =?utf-8?B?WFptLzRsaHQ3TGgvRWQ3Z3JSaG16RXJnK0pnTGpLeXo3a1NTcGhaa2hCeGox?=
+ =?utf-8?B?bjRRendIT0cyMC9mQ29wWkt2aDc2MnRSR1RSVm5yMVBCRzJZNFJySFB4c0ww?=
+ =?utf-8?B?aC92UVg2WkRIemNWbGljVXR6OFo1bFYvMGZrU2F1a3dSdlpDMXRVSTNlRDZC?=
+ =?utf-8?B?K3BtWmhmbVRSaVcxQ2F0YTNYajUvM0NTYTNmczhMdGJpemZLZFVZQmN1V3I2?=
+ =?utf-8?B?enJWaVc3bkh2Znlyc2M0UkVveXBqK0FHMVMrL084QzNBU3VHL1BQaCtuTGxV?=
+ =?utf-8?B?TjNhbEhDbmlwNUxzL2tBVXBITEhCblNJQUpPRGp2RG15NHRuaFdQaXM0TXRx?=
+ =?utf-8?B?NDVVdG43RERtMWZrbmVPYzI2M0dUd0VFZ0JSSGxSenhwTlM3Vkw0ZGpra1JU?=
+ =?utf-8?B?aDJDNlN0ZlVEMG5Qb1pWblhqUDF3dGhJcE5YU05FMDdaT3l2SkwxU3A3RDZv?=
+ =?utf-8?B?MVFHVHp3NmcrNStXK2RmTDdPeDFXUlNHcW5nemxOTFlSZGNDU2VYZHN1MEZs?=
+ =?utf-8?B?RDdUMzhvcUNLd1ltRWN3V1RlTlZhMHk5U1N3a3M0VHFpZEExN01MZks1MU9w?=
+ =?utf-8?B?VG5pSnlKdzJaWGdxVzcrRmZZN2hwOVJPL1lGTjJyd0FrTDVuZTRNTFVkREgx?=
+ =?utf-8?B?bEZqZmJ2NnBKcUEzckQxcWJyK3ArdHYwazFmK2k3bFBOWE93a3VlK3FiZTJv?=
+ =?utf-8?B?ZUNVNkZja0ZsaVVIbXk5aklnMTZaeE5oRE9OWHNQbFpMMEEzaTgvODBXVmpR?=
+ =?utf-8?B?SDlFd3laWWpiMUo0VDM0TmxRelJhUjBEZUtYWHRrMUN5NU41dW5mSzEvdm8z?=
+ =?utf-8?B?OStNNVNsc1NSTzhpQ3BweEFFVjdPRXpBTit1Z0Q4NVlydGVxdVVVUUYzR3Jh?=
+ =?utf-8?B?c3JaZkhkRW9YS2FQYURiMkQrQTNzNDMrNUluWW0xWHFOS205UHpEdzNpVnUx?=
+ =?utf-8?B?Si91WTQ0eWRCTHBUdXZyOEp5Tml6QnJDSTFoKzhqbjA4TnNWa255eGwvNHoz?=
+ =?utf-8?B?eWFwdk1ERTk1QmlTamxxRDZYanU5dHVJTTlZeFR2T2g5Q0c5eU4ySEp5bDJt?=
+ =?utf-8?B?Tk5XREQ3WFd0RmxNS2R4M1NXV0pJbjVaZXU5UytFOVBvWkl0dEtMTGN3ZlJt?=
+ =?utf-8?B?VnRxMjNvdzl3TmZIblFzWVZjdWo2YzZCVWo5Q2dYTGg3VlhhRkl6U2lhWTRX?=
+ =?utf-8?B?dkhDNDlxdXJKL2tXMEFDZ2x3OUxqem44Y29jQWxhakR6U3l4dERTbXp0a2V3?=
+ =?utf-8?B?WTNybEo3eW1FbWtwNmVlVVZXMGl1Z2ZkM1VuU0M1ZDhzNy83a2swaklhMUk1?=
+ =?utf-8?B?cVByWCszOEhMOHExUGxTMnFFbTcyTXZtejE5SVBkWDZTRHJhd2ovRWkzM0li?=
+ =?utf-8?B?cktiMkxFeTM4eWt6d0ZYeGdpQ1ZadzJxUzkvclJuZWUyK1lrRXFMdWZ5ZEZE?=
+ =?utf-8?B?VytqVUpGSlRNT0h5S1BpazczRkxCT0pTR2JOYk5uZ2lNNjhuR3JkNEp0SWh6?=
+ =?utf-8?B?TzJXTVZHQ0pBdC8wbWkyeVNXdXJVMk9wQ3hIWmJZc0s4bWFqT0d3L2xhemMw?=
+ =?utf-8?B?T1BKRUJ1SkJmLzZnUmFUeDRSalM2a2I1WFZUcERJUkdOV3plQnhMNlN3QzYr?=
+ =?utf-8?B?NjdwQVBhbGZ2bVJ3WE9aMjNGci93T015NndQY1BlN0VzMStrSExlb3ZDYk5M?=
+ =?utf-8?B?VVI5d3FxT250VDczYWtUWm41Y0U1K3BQZzdUZEtDQ28zbmFEOGZ2Q2UxRTRx?=
+ =?utf-8?B?UGRhR1lKUTM2NCtMWkVVNlZxSVNGU0EwdU1jaFRyQi9QN2hqNlY4UndMdHhl?=
+ =?utf-8?B?R0xMR1JYdUdVRjdmeW5PczVoRlY1MmNGQ1NiVVdyMjJpeTlKVVBGVlNZVWt3?=
+ =?utf-8?B?NmxxLzBFcExySjdTVHVGV0tYU0dlNmZuamJ5dnRpUW5JVUdESXlkMVk5MmJi?=
+ =?utf-8?B?cmc9PQ==?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: 8ed6476d-4643-42c4-3522-08de157fda61
+X-MS-Exchange-CrossTenant-AuthSource: PH7PR11MB6522.namprd11.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Oct 2025 17:33:31.5932
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Oct 2025 17:40:00.3481
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: az7PFpUrwaEUDvK6vLTKX6QSOKxilYBHUeh1T/BrRE+N40dUVSN5VFztvTTIctp6
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN5PR12MB9539
+X-MS-Exchange-CrossTenant-UserPrincipalName: 3LMT8l0W26PBR6Hs/iyiT2g6qnDeSc2/fZuKcyxeKseL0FZZN/GFOvaY890eaBFXlrw5DCmkvofF0mEgogBp9Q==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BY1PR11MB8008
+X-OriginatorOrg: intel.com
 
-When connected to VFIO, the only DMABUF exporter that is accepted, the
-move_notify callback will be made when VFIO wants to remove access to the
-MMIO. This is being called revoke.
+On Fri, Oct 24, 2025 at 11:12:40AM +0200, Philipp Stanner wrote:
+> On Thu, 2025-10-23 at 14:27 -0700, Matthew Brost wrote:
+> > On Thu, Oct 23, 2025 at 04:38:04PM +0200, Philipp Stanner wrote:
+> > > From: Philipp Stanner <pstanner@redhat.com>
+> > > 
+> > > The various objects and their memory lifetime used by the GPU scheduler
+> > > are currently not fully documented.
+> > > 
+> > > Add documentation describing the scheduler's objects. Improve the
+> > > general documentation at a few other places.
+> > > 
+> > > Co-developed-by: Christian König <christian.koenig@amd.com>
+> > > Signed-off-by: Christian König <christian.koenig@amd.com>
+> > > Signed-off-by: Philipp Stanner <pstanner@redhat.com>
+> > 
+> > This is great documentation—thanks for writing it up. It clarifies
+> > several bugs I've noticed in multiple NPU drivers over the past year
+> > related to reclaim, making it clear that these behaviors are not
+> > allowed. 
+> > 
+> 
+> Good to hear that we're in line here.
+> 
+> > Also, check out [1], which enforces some of the reclaim rules
+> > outlined here.
+> 
+> Will take a look hopefully next week.
+> 
+> > 
+> > A couple of minor nits below, but I'm inclined to RB.
+> > 
+> > [1] https://patchwork.freedesktop.org/series/156284/
+> > 
+> > > ---
+> > > Changes in v2:
+> > >   - Fix some typos. (Bagas Sanjava)
+> > > ---
+> > >  Documentation/gpu/drm-mm.rst           |  36 ++++
+> > >  drivers/gpu/drm/scheduler/sched_main.c | 229 ++++++++++++++++++++++---
+> > >  include/drm/gpu_scheduler.h            |   5 +-
+> > >  3 files changed, 239 insertions(+), 31 deletions(-)
+> > > 
+> > > diff --git a/Documentation/gpu/drm-mm.rst b/Documentation/gpu/drm-mm.rst
+> > > index d55751cad67c..95ee95fd987a 100644
+> > > --- a/Documentation/gpu/drm-mm.rst
+> > > +++ b/Documentation/gpu/drm-mm.rst
+> > > @@ -556,12 +556,48 @@ Overview
+> > >  .. kernel-doc:: drivers/gpu/drm/scheduler/sched_main.c
+> > >     :doc: Overview
+> > > 
+> > > 
+> 
+> […]
+> 
+> > >  
+> > > +
+> > > +/**
+> > > + * DOC: Entity Object
+> > > + *
+> > > + * The entity object (&struct drm_sched_entity) is a container for jobs which
+> > > + * should execute sequentially. Drivers should create an entity for each
+> > > + * individual context they maintain for command submissions which can run in
+> > > + * parallel.
+> > > + *
+> > > + * The lifetime of the entity *should not* exceed the lifetime of the
+> > > + * userspace process it was created for and drivers should call the
+> > > + * drm_sched_entity_flush() function from their file_operations.flush()
+> > > + * callback. It is possible that an entity object is not alive anymore
+> > > + * while jobs previously fetched from it are still running on the hardware.
+> > 
+> > This is not how Xe has implemented it. Instead, on FD close (or queue
+> > close, for that matter), we trigger our entity through a GPU command and
+> > immediately timeout all jobs,
+> > 
+> 
+> How can Xe "timeout all jobs"? Are you interfering with the scheduler's
+> timeout work item?
+> 
 
-Wire up revoke to go through all the iommu_domain's that have mapped the
-DMABUF and unmap them.
+We set TDR to zero and it naturally removes queues from the hardware,
+signals all fences, queue ref goes to zero once free_job() is called on
+every job, and finally queue (entity) is freed.
 
-The locking here is unpleasant, since the existing locking scheme was
-designed to come from the iopt through the area to the pages we cannot use
-pages as starting point for the locking. There is no way to obtain the
-domains_rwsem before obtaining the pages mutex to reliably use the
-existing domains_itree.
+> Anyways, the docu just says "It is possible", not that it's typical. So
+> the docu is fine here, agreed?
 
-Solve this problem by adding a new tracking structure just for DMABUF
-revoke. Record a linked list of areas and domains inside the pages
-mutex. Clean the entries on the list during revoke. The map/unmaps are now
-all done under a pages mutex while updating the tracking linked list so
-nothing can get out of sync. Only one lock is required for revoke
-processing.
+Sure, I just don't want to get into situation were designs like Xe's are
+viewed as incorrect as this works rather well.
 
-Signed-off-by: Jason Gunthorpe <jgg@nvidia.com>
----
- drivers/iommu/iommufd/io_pagetable.c |  12 +++
- drivers/iommu/iommufd/io_pagetable.h |  17 +++++
- drivers/iommu/iommufd/pages.c        | 106 ++++++++++++++++++++++++++-
- 3 files changed, 134 insertions(+), 1 deletion(-)
+> 
+> >  signaling them accordingly. Technically,
+> > the object entity can outlive the FD, but the effects of the FD close
+> > are externally visible. The complete teardown process can outlive the FD
+> > as well, since it involves multiple ping-pong steps with our firmware. I
+> > believe this approach is also valid.
+> > 
+> > > + *
+> > > + * This is done because all results of a command submission should become
+> > > + * visible externally even after a process exits. This is normal POSIX
+> > > + * behavior for I/O operations.
+> > > + *
+> > > + * The problem with this approach is that GPU submissions contain executable
+> > > + * shaders enabling processes to evade their termination by offloading work to
+> > > + * the GPU. So when a process is terminated with a SIGKILL the entity object
+> > > + * makes sure that jobs are freed without running them while still maintaining
+> > > + * correct sequential order for signaling fences.
+> > > + *
+> > > + * All entities associated with a scheduler have to be torn down before that
+> > > + * scheduler.
+> > > + */
+> > > +
+> > > +/**
+> > > + * DOC: Hardware Fence Object
+> > > + *
+> > > + * The hardware fence object is a dma_fence provided by the driver through
+> > > + * &struct drm_sched_backend_ops.run_job. The driver signals this fence once the
+> > > + * hardware has completed the associated job.
+> > > + *
+> > > + * Drivers need to make sure that the normal dma_fence semantics are followed
+> > > + * for this object. It's important to note that the memory for this object can
+> > > + * *not* be allocated in &struct drm_sched_backend_ops.run_job since that would
+> > > + * violate the requirements for the dma_fence implementation. The scheduler
+> > > + * maintains a timeout handler which triggers if this fence doesn't signal
+> > > + * within a configurable amount of time.
+> > > + *
+> > > + * The lifetime of this object follows dma_fence refcounting rules. The
+> > > + * scheduler takes ownership of the reference returned by the driver and
+> > > + * drops it when it's not needed any more.
+> > > + *
+> > > + * See &struct drm_sched_backend_ops.run_job for precise refcounting rules.
+> > > + */
+> > > +
+> > > +/**
+> > > + * DOC: Scheduler Fence Object
+> > > + *
+> > > + * The scheduler fence object (&struct drm_sched_fence) encapsulates the whole
+> > > + * time from pushing the job into the scheduler until the hardware has finished
+> > > + * processing it. It is managed by the scheduler. The implementation provides
+> > > + * dma_fence interfaces for signaling both scheduling of a command submission
+> > > + * as well as finishing of processing. &struct drm_sched_fence.finished is the
+> > > + * fence typically used to synchronize userspace, e.g., in a &struct drm_syncobj.
+> > 
+> > Is it ever not the finished fence? Early in Xe, I originally used the
+> > hardware fence, and it caused all sorts of trouble. One reason the DRM
+> > scheduler is a well-designed system is that the finished fence can be
+> > installed universally.
+> 
+> Agreed, we can say that it's always the finished fence.
+>
 
-diff --git a/drivers/iommu/iommufd/io_pagetable.c b/drivers/iommu/iommufd/io_pagetable.c
-index 38c5fdc6c82128..d0539bbd6771ea 100644
---- a/drivers/iommu/iommufd/io_pagetable.c
-+++ b/drivers/iommu/iommufd/io_pagetable.c
-@@ -973,6 +973,7 @@ static void iopt_unfill_domain(struct io_pagetable *iopt,
- 			if (iopt_is_dmabuf(pages)) {
- 				if (!iopt_dmabuf_revoked(pages))
- 					iopt_area_unmap_domain(area, domain);
-+				iopt_dmabuf_untrack_domain(pages, area, domain);
- 			}
- 			mutex_unlock(&pages->mutex);
++1
  
-@@ -994,6 +995,8 @@ static void iopt_unfill_domain(struct io_pagetable *iopt,
- 		WARN_ON(area->storage_domain != domain);
- 		area->storage_domain = NULL;
- 		iopt_area_unfill_domain(area, pages, domain);
-+		if (iopt_is_dmabuf(pages))
-+			iopt_dmabuf_untrack_domain(pages, area, domain);
- 		mutex_unlock(&pages->mutex);
- 	}
- }
-@@ -1024,8 +1027,15 @@ static int iopt_fill_domain(struct io_pagetable *iopt,
- 			continue;
- 
- 		mutex_lock(&pages->mutex);
-+		if (iopt_is_dmabuf(pages)) {
-+			rc = iopt_dmabuf_track_domain(pages, area, domain);
-+			if (rc)
-+				goto out_unfill;
-+		}
- 		rc = iopt_area_fill_domain(area, domain);
- 		if (rc) {
-+			if (iopt_is_dmabuf(pages))
-+				iopt_dmabuf_untrack_domain(pages, area, domain);
- 			mutex_unlock(&pages->mutex);
- 			goto out_unfill;
- 		}
-@@ -1056,6 +1066,8 @@ static int iopt_fill_domain(struct io_pagetable *iopt,
- 			area->storage_domain = NULL;
- 		}
- 		iopt_area_unfill_domain(area, pages, domain);
-+		if (iopt_is_dmabuf(pages))
-+			iopt_dmabuf_untrack_domain(pages, area, domain);
- 		mutex_unlock(&pages->mutex);
- 	}
- 	return rc;
-diff --git a/drivers/iommu/iommufd/io_pagetable.h b/drivers/iommu/iommufd/io_pagetable.h
-index 759ebf66265df5..2d5b8778735a56 100644
---- a/drivers/iommu/iommufd/io_pagetable.h
-+++ b/drivers/iommu/iommufd/io_pagetable.h
-@@ -70,6 +70,16 @@ void iopt_area_unfill_domain(struct iopt_area *area, struct iopt_pages *pages,
- void iopt_area_unmap_domain(struct iopt_area *area,
- 			    struct iommu_domain *domain);
- 
-+int iopt_dmabuf_track_domain(struct iopt_pages *pages, struct iopt_area *area,
-+			     struct iommu_domain *domain);
-+void iopt_dmabuf_untrack_domain(struct iopt_pages *pages,
-+				struct iopt_area *area,
-+				struct iommu_domain *domain);
-+int iopt_dmabuf_track_all_domains(struct iopt_area *area,
-+				  struct iopt_pages *pages);
-+void iopt_dmabuf_untrack_all_domains(struct iopt_area *area,
-+				     struct iopt_pages *pages);
-+
- static inline unsigned long iopt_area_index(struct iopt_area *area)
- {
- 	return area->pages_node.start;
-@@ -184,10 +194,17 @@ enum iopt_address_type {
- 	IOPT_ADDRESS_DMABUF,
- };
- 
-+struct iopt_pages_dmabuf_track {
-+	struct iommu_domain *domain;
-+	struct iopt_area *area;
-+	struct list_head elm;
-+};
-+
- struct iopt_pages_dmabuf {
- 	struct dma_buf_attachment *attach;
- 	struct phys_vec phys;
- 	unsigned long start;
-+	struct list_head tracker;
- };
- 
- /*
-diff --git a/drivers/iommu/iommufd/pages.c b/drivers/iommu/iommufd/pages.c
-index ca27ad3a3168e5..463d6340de1dcb 100644
---- a/drivers/iommu/iommufd/pages.c
-+++ b/drivers/iommu/iommufd/pages.c
-@@ -1366,8 +1366,19 @@ struct iopt_pages *iopt_alloc_file_pages(struct file *file, unsigned long start,
- static void iopt_revoke_notify(struct dma_buf_attachment *attach)
- {
- 	struct iopt_pages *pages = attach->importer_priv;
-+	struct iopt_pages_dmabuf_track *track;
- 
- 	guard(mutex)(&pages->mutex);
-+	if (iopt_dmabuf_revoked(pages))
-+		return;
-+
-+	list_for_each_entry(track, &pages->dmabuf.tracker, elm) {
-+		struct iopt_area *area = track->area;
-+
-+		iopt_area_unmap_domain_range(area, track->domain,
-+					     iopt_area_index(area),
-+					     iopt_area_last_index(area));
-+	}
- 	pages->dmabuf.phys.len = 0;
- }
- 
-@@ -1468,6 +1479,7 @@ struct iopt_pages *iopt_alloc_dmabuf_pages(struct iommufd_ctx *ictx,
- 	pages->account_mode = IOPT_PAGES_ACCOUNT_NONE;
- 	pages->type = IOPT_ADDRESS_DMABUF;
- 	pages->dmabuf.start = start - start_byte;
-+	INIT_LIST_HEAD(&pages->dmabuf.tracker);
- 
- 	rc = iopt_map_dmabuf(ictx, pages, dmabuf);
- 	if (rc) {
-@@ -1478,6 +1490,86 @@ struct iopt_pages *iopt_alloc_dmabuf_pages(struct iommufd_ctx *ictx,
- 	return pages;
- }
- 
-+int iopt_dmabuf_track_domain(struct iopt_pages *pages, struct iopt_area *area,
-+			     struct iommu_domain *domain)
-+{
-+	struct iopt_pages_dmabuf_track *track;
-+
-+	lockdep_assert_held(&pages->mutex);
-+	if (WARN_ON(!iopt_is_dmabuf(pages)))
-+		return -EINVAL;
-+
-+	list_for_each_entry(track, &pages->dmabuf.tracker, elm)
-+		if (WARN_ON(track->domain == domain && track->area == area))
-+			return -EINVAL;
-+
-+	track = kzalloc(sizeof(*track), GFP_KERNEL);
-+	if (!track)
-+		return -ENOMEM;
-+	track->domain = domain;
-+	track->area = area;
-+	list_add_tail(&track->elm, &pages->dmabuf.tracker);
-+
-+	return 0;
-+}
-+
-+void iopt_dmabuf_untrack_domain(struct iopt_pages *pages,
-+				struct iopt_area *area,
-+				struct iommu_domain *domain)
-+{
-+	struct iopt_pages_dmabuf_track *track;
-+
-+	lockdep_assert_held(&pages->mutex);
-+	WARN_ON(!iopt_is_dmabuf(pages));
-+
-+	list_for_each_entry(track, &pages->dmabuf.tracker, elm) {
-+		if (track->domain == domain && track->area == area) {
-+			list_del(&track->elm);
-+			kfree(track);
-+			return;
-+		}
-+	}
-+	WARN_ON(true);
-+}
-+
-+int iopt_dmabuf_track_all_domains(struct iopt_area *area,
-+				  struct iopt_pages *pages)
-+{
-+	struct iopt_pages_dmabuf_track *track;
-+	struct iommu_domain *domain;
-+	unsigned long index;
-+	int rc;
-+
-+	list_for_each_entry(track, &pages->dmabuf.tracker, elm)
-+		if (WARN_ON(track->area == area))
-+			return -EINVAL;
-+
-+	xa_for_each(&area->iopt->domains, index, domain) {
-+		rc = iopt_dmabuf_track_domain(pages, area, domain);
-+		if (rc)
-+			goto err_untrack;
-+	}
-+	return 0;
-+err_untrack:
-+	iopt_dmabuf_untrack_all_domains(area, pages);
-+	return rc;
-+}
-+
-+void iopt_dmabuf_untrack_all_domains(struct iopt_area *area,
-+				     struct iopt_pages *pages)
-+{
-+	struct iopt_pages_dmabuf_track *track;
-+	struct iopt_pages_dmabuf_track *tmp;
-+
-+	list_for_each_entry_safe(track, tmp, &pages->dmabuf.tracker,
-+				 elm) {
-+		if (track->area == area) {
-+			list_del(&track->elm);
-+			kfree(track);
-+		}
-+	}
-+}
-+
- void iopt_release_pages(struct kref *kref)
- {
- 	struct iopt_pages *pages = container_of(kref, struct iopt_pages, kref);
-@@ -1495,6 +1587,7 @@ void iopt_release_pages(struct kref *kref)
- 
- 		dma_buf_detach(dmabuf, pages->dmabuf.attach);
- 		dma_buf_put(dmabuf);
-+		WARN_ON(!list_empty(&pages->dmabuf.tracker));
- 	} else if (pages->type == IOPT_ADDRESS_FILE) {
- 		fput(pages->file);
- 	}
-@@ -1735,11 +1828,17 @@ int iopt_area_fill_domains(struct iopt_area *area, struct iopt_pages *pages)
- 		return 0;
- 
- 	mutex_lock(&pages->mutex);
-+	if (iopt_is_dmabuf(pages)) {
-+		rc = iopt_dmabuf_track_all_domains(area, pages);
-+		if (rc)
-+			goto out_unlock;
-+	}
-+
- 	if (!iopt_dmabuf_revoked(pages)) {
- 		rc = pfn_reader_first(&pfns, pages, iopt_area_index(area),
- 				      iopt_area_last_index(area));
- 		if (rc)
--			goto out_unlock;
-+			goto out_untrack;
- 
- 		while (!pfn_reader_done(&pfns)) {
- 			done_first_end_index = pfns.batch_end_index;
-@@ -1794,6 +1893,9 @@ int iopt_area_fill_domains(struct iopt_area *area, struct iopt_pages *pages)
- 		}
- 	}
- 	pfn_reader_destroy(&pfns);
-+out_untrack:
-+	if (iopt_is_dmabuf(pages))
-+		iopt_dmabuf_untrack_all_domains(area, pages);
- out_unlock:
- 	mutex_unlock(&pages->mutex);
- 	return rc;
-@@ -1833,6 +1935,8 @@ void iopt_area_unfill_domains(struct iopt_area *area, struct iopt_pages *pages)
- 		WARN_ON(RB_EMPTY_NODE(&area->pages_node.rb));
- 	interval_tree_remove(&area->pages_node, &pages->domains_itree);
- 	iopt_area_unfill_domain(area, pages, area->storage_domain);
-+	if (iopt_is_dmabuf(pages))
-+		iopt_dmabuf_untrack_all_domains(area, pages);
- 	area->storage_domain = NULL;
- out_unlock:
- 	mutex_unlock(&pages->mutex);
--- 
-2.43.0
+> (you should never call the GPU scheduler a "well-designed system",
+> though xD)
+> 
 
+Well if you worked on driver which invented its own scheduling (i915)
+you might have different view... The GPU scheduler has its problems but
+it really does work quite well.
+
+> > 
+> > I also suggest we add a wrapper to access the finished fence, so drivers
+> > don’t need to dig deep into scheduler objects to retrieve it.
+> 
+> Yes, ACK. I actually once had a patch somewhere which adds such a
+> wrapper and uses it in Nouveau. I can digg for it; but feel free to
+> provide one if you have some cycles.
+> 
+
++1. Maybe I'll wrap this into my series cleaning Xe's layering
+violations.
+
+> > 
+> > > + *
+> > > + * The lifetime of this object also follows normal dma_fence refcounting rules.
+> > > + */
+> > > +
+> > > +/**
+> > > + * DOC: Scheduler and Run Queue Objects
+> > > + *
+> > > + * The scheduler object itself (&struct drm_gpu_scheduler) does the actual
+> > > + * scheduling: it picks the next entity to run a job from and pushes that job
+> > > + * onto the hardware. Both FIFO and RR selection algorithms are supported, with
+> > > + * FIFO being the default and the recommended one.
+> > > + *
+> > > + * The lifetime of the scheduler is managed by the driver using it. Before
+> > > + * destroying the scheduler the driver must ensure that all hardware processing
+> > > + * involving this scheduler object has finished by calling for example
+> > > + * disable_irq(). It is *not* sufficient to wait for the hardware fence here
+> > > + * since this doesn't guarantee that all callback processing has finished.
+> > > + *
+> > > + * The run queue object (&struct drm_sched_rq) is a container for entities of a
+> > > + * certain priority level. This object is internally managed by the scheduler
+> > > + * and drivers must not touch it directly. The lifetime of a run queue is bound
+> > > + * to the scheduler's lifetime.
+> > > + *
+> > > + * All entities associated with a scheduler must be torn down before it. Drivers
+> > > + * should implement &struct drm_sched_backend_ops.cancel_job to avoid pending
+> > > + * jobs (those that were pulled from an entity into the scheduler, but have not
+> > > + * been completed by the hardware yet) from leaking.
+> > >   */
+> > >  
+> > >  /**
+> > >   * DOC: Flow Control
+> > >   *
+> > >   * The DRM GPU scheduler provides a flow control mechanism to regulate the rate
+> > > - * in which the jobs fetched from scheduler entities are executed.
+> > > + * at which jobs fetched from scheduler entities are executed.
+> > >   *
+> > > - * In this context the &drm_gpu_scheduler keeps track of a driver specified
+> > > - * credit limit representing the capacity of this scheduler and a credit count;
+> > > - * every &drm_sched_job carries a driver specified number of credits.
+> > > + * In this context the &struct drm_gpu_scheduler keeps track of a driver
+> > > + * specified credit limit representing the capacity of this scheduler and a
+> > > + * credit count; every &struct drm_sched_job carries a driver-specified number
+> > > + * of credits.
+> > >   *
+> > > - * Once a job is executed (but not yet finished), the job's credits contribute
+> > > - * to the scheduler's credit count until the job is finished. If by executing
+> > > - * one more job the scheduler's credit count would exceed the scheduler's
+> > > - * credit limit, the job won't be executed. Instead, the scheduler will wait
+> > > - * until the credit count has decreased enough to not overflow its credit limit.
+> > > - * This implies waiting for previously executed jobs.
+> > > + * Once a job is being executed, the job's credits contribute to the
+> > > + * scheduler's credit count until the job is finished. If by executing one more
+> > > + * job the scheduler's credit count would exceed the scheduler's credit limit,
+> > > + * the job won't be executed. Instead, the scheduler will wait until the credit
+> > > + * count has decreased enough to not overflow its credit limit. This implies
+> > > + * waiting for previously executed jobs.
+> > >   */
+> > >  
+> > > +/**
+> > > + * DOC: Error and Timeout handling
+> > > + *
+> > 
+> > Should this section mention DRM_GPU_SCHED_STAT_NO_HANG usage?
+> 
+> Yes, it should.
+> 
+> > 
+> > > + * Errors are signaled by using dma_fence_set_error() on the hardware fence
+> > > + * object before signaling it with dma_fence_signal(). Errors are then bubbled
+> > > + * up from the hardware fence to the scheduler fence.
+> > > + *
+> > > + * The entity allows querying errors on the last run submission using the
+> > > + * drm_sched_entity_error() function which can be used to cancel queued
+> > > + * submissions in &struct drm_sched_backend_ops.run_job as well as preventing
+> > > + * pushing further ones into the entity in the driver's submission function.
+> > > + *
+> > > + * When the hardware fence doesn't signal within a configurable amount of time
+> > > + * &struct drm_sched_backend_ops.timedout_job gets invoked. The driver should
+> > > + * then follow the procedure described in that callback's documentation.
+> > > + *
+> > > + * (TODO: The timeout handler should probably switch to using the hardware
+> > > + * fence as parameter instead of the job. Otherwise the handling will always
+> > > + * race between timing out and signaling the fence).
+> > > + *
+> > 
+> > This might be a bit invasive, and honestly, I'm not sure if the
+> > subsystem can handle it. I'd leave out this TODO for now. We can't
+> > predict the future, so it's probably best not to try in the
+> > documentation.
+> 
+> Yes. I think that TODO is actually surplus now that we have NO_HANG.
+>
+
+My concern with replacing the job list for resubmission is that some job
+state information is required. If I recall correctly, in Xe, this
+includes the job's batch address(es) and its position in the hardware
+ring where it was originally programmed. Of course, we could shuffle our
+data structures around a bit but a little invasive.
+
+The use case for resubmission in Xe that is absolutely required is VF
+migration - it doesn't work without resubmission.
+
+I also suspect rewriting every drivers TDR to use fence based interface
+rather than job will be non-trivial. Or jobs disappearing immediately
+after run job will break a bunch of drivers in non-trival ways.
+
+Matt
+
+> 
+> P.
+> 
+> > 
+> > Matt
+> > 
+> > > + * The scheduler also used to provided functionality for re-submitting jobs
+> > > + * and, thereby, replaced the hardware fence during reset handling. This
+> > > + * functionality is now deprecated. This has proven to be fundamentally racy
+> > > + * and not compatible with dma_fence rules and shouldn't be used in new code.
+> > > + *
+> > > + * Additionally, there is the function drm_sched_increase_karma() which tries
+> > > + * to find the entity which submitted a job and increases its 'karma' atomic
+> > > + * variable to prevent resubmitting jobs from this entity. This has quite some
+> > > + * overhead and resubmitting jobs is now marked as deprecated. Thus, using this
+> > > + * function is discouraged.
+> > > + *
+> > > + * Drivers can still recreate the GPU state in case it should be lost during
+> > > + * timeout handling *if* they can guarantee that forward progress will be made
+> > > + * and this doesn't cause another timeout. But this is strongly hardware
+> > > + * specific and out of the scope of the general GPU scheduler.
+> > > + */
+> > >  #include <linux/export.h>
+> > >  #include <linux/wait.h>
+> > >  #include <linux/sched.h>
+> > > diff --git a/include/drm/gpu_scheduler.h b/include/drm/gpu_scheduler.h
+> > > index fb88301b3c45..a97351435d9e 100644
+> > > --- a/include/drm/gpu_scheduler.h
+> > > +++ b/include/drm/gpu_scheduler.h
+> > > @@ -458,8 +458,8 @@ struct drm_sched_backend_ops {
+> > >  	struct dma_fence *(*run_job)(struct drm_sched_job *sched_job);
+> > >  
+> > >  	/**
+> > > -	 * @timedout_job: Called when a job has taken too long to execute,
+> > > -	 * to trigger GPU recovery.
+> > > +	 * @timedout_job: Called when a hardware fence didn't signal within a
+> > > +	 * configurable amount of time. Triggers GPU recovery.
+> > >  	 *
+> > >  	 * @sched_job: The job that has timed out
+> > >  	 *
+> > > @@ -506,7 +506,6 @@ struct drm_sched_backend_ops {
+> > >  	 * that timeout handlers are executed sequentially.
+> > >  	 *
+> > >  	 * Return: The scheduler's status, defined by &enum drm_gpu_sched_stat
+> > > -	 *
+> > >  	 */
+> > >  	enum drm_gpu_sched_stat (*timedout_job)(struct drm_sched_job *sched_job);
+> > >  
+> > > -- 
+> > > 2.49.0
+> > > 
+> 
