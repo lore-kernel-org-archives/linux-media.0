@@ -1,67 +1,96 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B9F2923BF9F;
-	Mon, 27 Oct 2025 13:37:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E03CC236A70
+	for <linux-media@vger.kernel.org>; Mon, 27 Oct 2025 13:51:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761572250; cv=none; b=h2aIHl3wUXxNk6CrEQPZF8ZYMoriuWTnyRj5bz++lkgS70rGMG981zbQvJVa9VCUHPcCDvIoOtpd9Z3GjXJXHb2iOHM4Qkb2zuD2REwScdBTktE0/izdGr8TZoQPd5oTfO4OjFZHIWSWiPxYfuhzOHbgq7U7wME4ewCWyoptL4I=
+	t=1761573094; cv=none; b=Fd7WacI0fvpF/lfD8kXDWYdYqdb8Yd0Jjc6rKHhJfQ8k55ZbPQG3ir9Cv+ca1pSVcAQI3FUgE7BYFfcM4SUO1cH9uFSaom60vHp+qnWx5D6VdhVuKsELc/FLHIhTCQfGZNH0Rw0JBJlhJg0V4K36PQd2WCC5OhncRweM77byc/k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761572250; c=relaxed/simple;
-	bh=sDzyF2CI4Ve7jNRefYb/GwI6Wxad7x3z6YmDoIi8foo=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=GqnItdSFBjNHyaRu/PKR99QKImjqtjzpEDcv2ere5PL9PDZEiHsimt9eBnej07o19CUAbWi8VtLuMp8qg/wSF+OQf7ftILJyB3WT8R+PPgt3U7p/Dj8kNlwjCTWKix5d2iYge66fo6Y3wAvXc6NdwRjN0IkRkK0SGOFKk3xGD2A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=oRs8YjiL; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1761573094; c=relaxed/simple;
+	bh=sefvxqrKFmegZe01RiXa4C75hWl3Eg3to1YMe6HlL1E=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=f4tQjsMNltfFappc2LM5rOjspRIqudw6rw9YSQczeq07wRkgtuX9w/VnWnkI3FO+PTHqQlTPC/nhcdn8NYxwulzjO90OW8ggqSIwDKWY5t0BXutjgnwRa+i47TcZ+M//tm7128oKgcWO2rKbVpirREWfMfbVXa+FSVrbESd94es=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ObWpbPOS; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="oRs8YjiL"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E43E0C4CEF1;
-	Mon, 27 Oct 2025 13:37:29 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ObWpbPOS"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6C969C4CEF1;
+	Mon, 27 Oct 2025 13:51:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1761572250;
-	bh=sDzyF2CI4Ve7jNRefYb/GwI6Wxad7x3z6YmDoIi8foo=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=oRs8YjiL/vupq7FSOVRNEacfhBQcf1T9IF239ohLVyns22THLQIQ9BXfdWQCcNKSr
-	 0GB6ETuVxjbeBGQbf4RpFbrrhoB9kk7PRCvKnSDFb6lN2zyATw6bGBB4vRYVXE0IGK
-	 ALOpRiHpDyPi1N/kZoShILXepKHMBlA/enKdVhyZfT2VKyKkUqmJWBsNAHsf6UWJYk
-	 2pL43uvQsT1HO/AI1dL8fhiRRPXun2lTqRven8udzlAyxhKpNS6eIgP3Xgx2gZ2lK1
-	 Kkzau+qsaMFg4AjcJxlq0Qe6mr5iphzHUfNZWPKWiyvHtQtq+MtdXodtRc7WRfwfP9
-	 2Uq2br7Mufr+Q==
-Received: from johan by xi.lan with local (Exim 4.98.2)
-	(envelope-from <johan@kernel.org>)
-	id 1vDNPh-000000000Jg-2TyV;
-	Mon, 27 Oct 2025 14:37:33 +0100
-Date: Mon, 27 Oct 2025 14:37:33 +0100
-From: Johan Hovold <johan@kernel.org>
-To: Minghsiu Tsai <minghsiu.tsai@mediatek.com>,
-	Houlong Wei <houlong.wei@mediatek.com>,
-	Andrew-CT Chen <andrew-ct.chen@mediatek.com>,
-	Tiffany Lin <tiffany.lin@mediatek.com>,
-	Yunfei Dong <yunfei.dong@mediatek.com>
-Cc: Mauro Carvalho Chehab <mchehab@kernel.org>,
-	Matthias Brugger <matthias.bgg@gmail.com>,
-	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
-	Hans Verkuil <hans.verkuil@cisco.com>, linux-media@vger.kernel.org,
-	linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 0/3] media: mediatek: fix VPU device leaks on probe
-Message-ID: <aP91nfnpShIhXcVQ@hovoldconsulting.com>
-References: <20250924133552.28841-1-johan@kernel.org>
+	s=k20201202; t=1761573092;
+	bh=sefvxqrKFmegZe01RiXa4C75hWl3Eg3to1YMe6HlL1E=;
+	h=From:To:Cc:Subject:Date:From;
+	b=ObWpbPOSNw7RMt8TmCLyRGIGNlDw1zenzitNtX+GZeWCcg5xlW4aijZwhX7iTHAcJ
+	 T7KUh7hyI7xjfWapzTksZQb/fpxxxD2Wntkx/7EFiekAAOX+4IsbnRGAcL64NTsOCz
+	 guX9DiCg4OQKyA7E6RQGCDPU+Otvz7EpX4eW+Oo/s8C0NIgkGyVhVZq0eqKstVRyFV
+	 pXjEqmMKdeC6pfRr0bIrKl8X6NWIUNlsUbU1LWTXJ8T3+G6VFoU8UHT0v7Oe7QThiz
+	 3lqlEy+LKgtRWO8QMtslnN79hYEN0d6B/ozbcUXMdpIFyAKXn92AeIKeJh8k4i1wjb
+	 ILGxxfkSN47nw==
+From: Hans Verkuil <hverkuil+cisco@kernel.org>
+To: linux-media@vger.kernel.org
+Cc: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+	Sakari Ailus <sakari.ailus@linux.intel.com>,
+	Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+	Sean Young <sean@mess.org>,
+	Nicolas Dufresne <nicolas.dufresne@collabora.com>,
+	Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+Subject: [PATCHv6 0/3] docs: media: multicommitters model documentation
+Date: Mon, 27 Oct 2025 14:28:30 +0100
+Message-ID: <cover.1761571713.git.hverkuil+cisco@kernel.org>
+X-Mailer: git-send-email 2.51.0
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250924133552.28841-1-johan@kernel.org>
+Content-Transfer-Encoding: 8bit
 
-On Wed, Sep 24, 2025 at 03:35:49PM +0200, Johan Hovold wrote:
-> This series fixes VPU device leaks during probe of the mdp and two codec
-> drivers.
-> 
-> Included is also a minor documentation update to make it clear that the
-> VPU lookup helper returns the device with an incremented refcount.
+I finally had time to continue Mauro's work on documenting the
+multicommitter model.
 
-Can these be picked up for 6.19?
+It is a fairly big overhaul of v5. The most significant change is
+that I extended the maintainer profile substantially. A lot of
+the committer requirements from the v5 of media-committer.rst were
+actually maintainer requirements, so I moved those over to the
+maintainer profile.
 
-Johan
+Patch 1/3 updates maintainer-entry-profile.rst: it introduces the
+three Media maintainer levels (Media Maintainer, Media Core Maintainer
+and Media Subsystem Maintainer) and what the responsibilities are.
+
+Patch 2/3 adds media-committer.rst: that focusses on the additional
+commit rights that can be granted to a Media Maintainer.
+
+Patch 3/3 adds back and updates the list of Media Maintainers that
+disappeared in patch 1/3. Please verify this whether the email
+addresses are the correct ones, and verify that the areas of responsibility
+are correct and that nothing is missing.
+
+It feels much more consistent to me, I'm looking forward to the
+review comments.
+
+I have uploaded the documentation with these patches here:
+
+https://hverkuil.home.xs4all.nl/spec/driver-api/maintainer-entry-profile.html
+https://hverkuil.home.xs4all.nl/spec/driver-api/media-committer.html
+
+Regards,
+
+	Hans
+
+Hans Verkuil (1):
+  docs: media: document Media Maintainers
+
+Mauro Carvalho Chehab (2):
+  docs: media: update maintainer-entry-profile for multi-committers
+  docs: media: document media multi-committers rules and process
+
+ Documentation/driver-api/media/index.rst      |   1 +
+ .../media/maintainer-entry-profile.rst        | 407 +++++++++++++++---
+ .../driver-api/media/media-committer.rst      | 196 +++++++++
+ 3 files changed, 548 insertions(+), 56 deletions(-)
+ create mode 100644 Documentation/driver-api/media/media-committer.rst
+
+-- 
+2.51.0
+
