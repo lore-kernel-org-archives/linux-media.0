@@ -1,57 +1,62 @@
 Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 84A4F274B59
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 40B5D246773
 	for <linux-media@vger.kernel.org>; Mon, 27 Oct 2025 04:48:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.17
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761540523; cv=none; b=hgyBRlvMPPgPwLyRrqDsw7p+7PIVyhJr9dro7p4uG8iX0i5kfXJUJ5zLHr0/srZV5D9HOQ/IapEgYkSZjH9YCS+YivQxazXmZwDD4A20i1jd1RZIHR6i8BTFaZNZAmJGtA/chzrZ3DRj1ZSyFTHGe/9lDLAdtwLcKpJwvdGecuo=
+	t=1761540524; cv=none; b=k1C4C/bQX0iVJs31oCZWPUZBjwhGQ32/fMfBGp08SPsYaBUlV3ypb679lk9PHWNuqhRH6KxZCaVTIfw+SCvHM47eQZ3e9sVDVBFM5y4CrSC1gwYng9G2oa1FvKV8eSETTnD7wfVuuJ8sJvSOoVu6AH8GbQ8SgZrxO4YaG9Hvosk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761540523; c=relaxed/simple;
-	bh=MY2fLmxjj0+IXtVwTx8EQEka44NV8taZsq9/RrkuNEQ=;
+	s=arc-20240116; t=1761540524; c=relaxed/simple;
+	bh=9XPUo/or/wWYUUgDlarwL5bwrrn6O9Mbf/FnsnaqSdo=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Xp8tRuhh4qhN1bF6nMvO7jYvesQd9jUz4cmTqqTcpCHKHgSn7zsgMNRGrFqEZUIHTLuRpjdOqJcT7ia6uOJH5sfbaGhr1EjzDvBHzhl1fzrFloGxG/jtA53Z+LzABZsO7Kqsh/2+2KM7i31x6Wle6tFiDGlLx9EX9j7cb81QEuo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ZBQnTI/V; arc=none smtp.client-ip=192.198.163.17
+	 MIME-Version:Content-Type; b=GA6NGleR4KAuV9dJuodpaz5F79rz+KX7JNmYKQwni1U9Ppc0j/9HEKEhxLQj0unrNje07t0TJoaUXpKaQWJiHXniQznhJjXrREFJI8gX4WNswSQADkpwj030wq2GczaCXRMHCRkB9FE+r0DLfPinb5lDJu9dnKdqwHbbPSIcDHo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ieYmB6BV; arc=none smtp.client-ip=192.198.163.17
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ZBQnTI/V"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ieYmB6BV"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
   t=1761540521; x=1793076521;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=MY2fLmxjj0+IXtVwTx8EQEka44NV8taZsq9/RrkuNEQ=;
-  b=ZBQnTI/VKtO/9rveH99/NTqyb6Zw6169FMwIn/SJXACQ42OGv5QXVJw6
-   l/WhgByP6tvJVKVcCkO74M00H0ReM0sLpWAvbW6qwkyOMaVi68YfVdagU
-   THtT+hnVSZVqmEo/hbIf5VTRrPcKb+dmTW5LW9EouQeOefU81FuXm2boM
-   r8HSTeqYDxGFgiocdsvQaHmVhkSm7EPNlnol/nzxnnxMUelmah3FJYK1z
-   Z2IwRWC+Mr5iDTFSvjCF7KBI39SRZ+YPEgtIUMGsKFplNFQG5wB4ypm5e
-   VhTUNvbnzT9lmSySfE2di9cZ6vTqW4+wICAsENKu35sluSZQyEOd205RV
-   A==;
-X-CSE-ConnectionGUID: ZdXQY0PDSUu4A7JNuxIsVQ==
-X-CSE-MsgGUID: qEVNdD5zQZqooeZhRJRHcQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11586"; a="63521071"
+  bh=9XPUo/or/wWYUUgDlarwL5bwrrn6O9Mbf/FnsnaqSdo=;
+  b=ieYmB6BV6JPvoXuXQflvvjLUbIYlLbpdTqa/G6FPDJqjFzJ/Llgvd+Ms
+   S/F2XWZJDdAx0u1IM2sdLbhU3DZTa9JGd7f5sO6Awiku8iD3NKgWrV2PA
+   piQehjXZXUAMvQYePJTfL5KLgMuPCrMAAV/Ne+y9n0NUShjWjUT8r2ChB
+   Oikd0Y/Z234wXM6gt45TPK5/E4mWFfJ1TQhMm+wYkDH88vk2kpeF5mUUk
+   sLknjuaiunF9vdYWV+4ihqkpno70a7oKgMd4bV0wSrdguzqx7ao86zXBL
+   8aIoGqbuQ5M3iW9Mcnk6+PZLcICDVe6Z6VquCvcvHvHwjTgOGagcmL1zC
+   g==;
+X-CSE-ConnectionGUID: /Rvo2YnhQkyQ3VIeXD4Enw==
+X-CSE-MsgGUID: J2SS+JwRSGK66+ptHR4i9w==
+X-IronPort-AV: E=McAfee;i="6800,10657,11586"; a="63521069"
 X-IronPort-AV: E=Sophos;i="6.19,258,1754982000"; 
-   d="scan'208";a="63521071"
+   d="scan'208";a="63521069"
 Received: from orviesa003.jf.intel.com ([10.64.159.143])
   by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Oct 2025 21:48:37 -0700
-X-CSE-ConnectionGUID: RLdqt1RDQS69UsDQU8chBg==
-X-CSE-MsgGUID: 8o8rQyF1QmS1jRYIxKdJSg==
+X-CSE-ConnectionGUID: eiiU/X5rQSioWtN2oBB1Eg==
+X-CSE-MsgGUID: 32PQDhRyRxm78RV5fbMtOw==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.19,258,1754982000"; 
-   d="scan'208";a="188992992"
+   d="scan'208";a="188992985"
 Received: from vkasired-desk2.fm.intel.com ([10.105.128.132])
-  by ORVIESA003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Oct 2025 21:48:38 -0700
+  by ORVIESA003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Oct 2025 21:48:37 -0700
 From: Vivek Kasireddy <vivek.kasireddy@intel.com>
 To: dri-devel@lists.freedesktop.org,
 	intel-xe@lists.freedesktop.org,
 	linux-media@vger.kernel.org,
 	linaro-mm-sig@lists.linaro.org
-Cc: Vivek Kasireddy <vivek.kasireddy@intel.com>
-Subject: [RFC v2 6/8] drm/xe/pf: Add a helper function to get a VF's backing object in LMEM
-Date: Sun, 26 Oct 2025 21:44:18 -0700
-Message-ID: <20251027044712.1676175-7-vivek.kasireddy@intel.com>
+Cc: Vivek Kasireddy <vivek.kasireddy@intel.com>,
+	Jason Gunthorpe <jgg@nvidia.com>,
+	Christian Koenig <christian.koenig@amd.com>,
+	Sumit Semwal <sumit.semwal@linaro.org>,
+	=?UTF-8?q?Thomas=20Hellstr=C3=B6m?= <thomas.hellstrom@linux.intel.com>,
+	Simona Vetter <simona.vetter@ffwll.ch>
+Subject: [RFC v2 4/8] vfio/pci/dmabuf: Add support for IOV interconnect
+Date: Sun, 26 Oct 2025 21:44:16 -0700
+Message-ID: <20251027044712.1676175-5-vivek.kasireddy@intel.com>
 X-Mailer: git-send-email 2.50.1
 In-Reply-To: <20251027044712.1676175-1-vivek.kasireddy@intel.com>
 References: <20251027044712.1676175-1-vivek.kasireddy@intel.com>
@@ -61,75 +66,230 @@ List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-To properly import a dmabuf that is associated with a VF (or that
-originates in a Guest VM that includes a VF), we need to know where
-in LMEM the VF's allocated regions exist. Therefore, introduce a
-new helper to return the object that backs the VF's regions in LMEM.
+Add support for IOV interconnect by provding ops for map/unmap and
+match interconnect. Note that the xarray is populated with entries
+of type struct range. The range type contains the start and end
+addresses of the memory region.
 
-v2:
-- Make the helper return the LMEM object instead of the start address
-
-v3:
-- Move the declaration of the helper under other lmem helpers (Michal)
-
-v4:
-- Take a ref on the LMEM obj while holding the PF master mutex (Matt)
-
+Cc: Jason Gunthorpe <jgg@nvidia.com>
+Cc: Christian Koenig <christian.koenig@amd.com>
+Cc: Sumit Semwal <sumit.semwal@linaro.org>
+Cc: Thomas Hellström <thomas.hellstrom@linux.intel.com>
+Cc: Simona Vetter <simona.vetter@ffwll.ch>
 Signed-off-by: Vivek Kasireddy <vivek.kasireddy@intel.com>
 ---
- drivers/gpu/drm/xe/xe_gt_sriov_pf_config.c | 24 ++++++++++++++++++++++
- drivers/gpu/drm/xe/xe_gt_sriov_pf_config.h |  1 +
- 2 files changed, 25 insertions(+)
+ drivers/vfio/pci/vfio_pci_dmabuf.c | 135 ++++++++++++++++++++++++++++-
+ 1 file changed, 134 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/gpu/drm/xe/xe_gt_sriov_pf_config.c b/drivers/gpu/drm/xe/xe_gt_sriov_pf_config.c
-index 6344b5205c08..2f09b67438fc 100644
---- a/drivers/gpu/drm/xe/xe_gt_sriov_pf_config.c
-+++ b/drivers/gpu/drm/xe/xe_gt_sriov_pf_config.c
-@@ -1535,6 +1535,30 @@ u64 xe_gt_sriov_pf_config_get_lmem(struct xe_gt *gt, unsigned int vfid)
- 	return size;
- }
+diff --git a/drivers/vfio/pci/vfio_pci_dmabuf.c b/drivers/vfio/pci/vfio_pci_dmabuf.c
+index eaba010777f3..d2b7b5410e5a 100644
+--- a/drivers/vfio/pci/vfio_pci_dmabuf.c
++++ b/drivers/vfio/pci/vfio_pci_dmabuf.c
+@@ -4,6 +4,7 @@
+ #include <linux/dma-buf.h>
+ #include <linux/pci-p2pdma.h>
+ #include <linux/dma-resv.h>
++#include <linux/range.h>
  
-+/**
-+ * xe_gt_sriov_pf_config_get_lmem_obj - Get VF's LMEM BO.
-+ * @gt: the &xe_gt
-+ * @vfid: the VF identifier
-+ *
-+ * This function can only be called on PF.
-+ *
-+ * Return: BO that is backing VF's quota in LMEM.
-+ */
-+struct xe_bo *xe_gt_sriov_pf_config_get_lmem_obj(struct xe_gt *gt,
-+						 unsigned int vfid)
+ #include "vfio_pci_priv.h"
+ 
+@@ -16,15 +17,132 @@ struct vfio_pci_dma_buf {
+ 	size_t size;
+ 	struct phys_vec *phys_vec;
+ 	struct p2pdma_provider *provider;
++	struct dma_buf_interconnect_match *ic_match;
+ 	u32 nr_ranges;
+ 	u8 revoked : 1;
+ };
+ 
++static int
++vfio_pci_create_match(struct vfio_pci_dma_buf *priv,
++			  struct vfio_device_feature_dma_buf *dma_buf)
 +{
-+	struct xe_gt_sriov_config *config;
-+	struct xe_bo *lmem_obj;
++	struct dma_buf_interconnect_match *ic_match;
 +
-+	mutex_lock(xe_gt_sriov_pf_master_mutex(gt));
-+	config = pf_pick_vf_config(gt, vfid);
-+	lmem_obj = config->lmem_obj;
-+	xe_bo_get(lmem_obj);
-+	mutex_unlock(xe_gt_sriov_pf_master_mutex(gt));
++	ic_match = kzalloc(sizeof(*ic_match), GFP_KERNEL);
++	if (!ic_match)
++		return -ENOMEM;
 +
-+	return lmem_obj;
++	ic_match->dev = &priv->vdev->pdev->dev;
++	ic_match->bar = dma_buf->region_index;
++
++	priv->ic_match = ic_match;
++	return 0;
 +}
 +
- /**
-  * xe_gt_sriov_pf_config_set_lmem - Provision VF with LMEM.
-  * @gt: the &xe_gt (can't be media)
-diff --git a/drivers/gpu/drm/xe/xe_gt_sriov_pf_config.h b/drivers/gpu/drm/xe/xe_gt_sriov_pf_config.h
-index 513e6512a575..bbc5c238cbf6 100644
---- a/drivers/gpu/drm/xe/xe_gt_sriov_pf_config.h
-+++ b/drivers/gpu/drm/xe/xe_gt_sriov_pf_config.h
-@@ -36,6 +36,7 @@ int xe_gt_sriov_pf_config_set_lmem(struct xe_gt *gt, unsigned int vfid, u64 size
- int xe_gt_sriov_pf_config_set_fair_lmem(struct xe_gt *gt, unsigned int vfid, unsigned int num_vfs);
- int xe_gt_sriov_pf_config_bulk_set_lmem(struct xe_gt *gt, unsigned int vfid, unsigned int num_vfs,
- 					u64 size);
-+struct xe_bo *xe_gt_sriov_pf_config_get_lmem_obj(struct xe_gt *gt, unsigned int vfid);
++static int vfio_pci_map_iov_interconnect(struct vfio_pci_dma_buf *priv,
++					 struct xarray *ranges)
++{
++	struct phys_vec *phys_vec = priv->phys_vec;
++	struct range *range;
++	unsigned long i;
++	void *entry;
++	int ret;
++
++	range = kmalloc_array(priv->nr_ranges, sizeof(*range), GFP_KERNEL);
++	if (!range)
++		return -ENOMEM;
++
++	for (i = 0; i < priv->nr_ranges; i++) {
++		entry = &range[i];
++		range[i].start = phys_vec[i].paddr;
++		range[i].end = phys_vec[i].paddr + phys_vec[i].len - 1;
++
++		entry = xa_store(ranges, i, entry, GFP_KERNEL);
++		if (xa_is_err(entry)) {
++			ret = xa_err(entry);
++			goto err_free_range;
++		}
++	}
++	return 0;
++
++err_free_range:
++	kfree(range);
++	return ret;
++}
++
++static int vfio_pci_map_interconnect(struct dma_buf_attachment *attachment,
++				     struct dma_buf_ranges *ranges)
++{
++	const struct dma_buf_interconnect *ic = attachment->ic_match->type;
++	struct vfio_pci_dma_buf *priv = attachment->dmabuf->priv;
++	int ret = -EINVAL;
++
++	ranges->nranges = priv->nr_ranges;
++
++	if (ic == iov_interconnect)
++		ret = vfio_pci_map_iov_interconnect(priv, &ranges->ranges);
++
++	return ret;
++}
++
++static void vfio_pci_unmap_interconnect(struct dma_buf_attachment *attachment,
++					struct dma_buf_ranges *ranges)
++{
++	void *entry;
++
++	entry = xa_load(&ranges->ranges, 0);
++	kfree(entry);
++}
++
++static bool
++vfio_pci_match_iov_interconnect(const struct dma_buf_interconnect_match *exp,
++				const struct dma_buf_interconnect_match *imp)
++{
++	struct pci_dev *exp_pdev = to_pci_dev(exp->dev);
++	struct pci_dev *imp_pdev = to_pci_dev(imp->dev);
++
++	return imp_pdev == pci_physfn(exp_pdev) && imp->bar == exp->bar;
++}
++
++static bool
++vfio_pci_match_interconnect(const struct dma_buf_interconnect_match *exp,
++			    const struct dma_buf_interconnect_match *imp)
++{
++	const struct dma_buf_interconnect *ic = exp->type;
++
++	if (ic == iov_interconnect)
++		return vfio_pci_match_iov_interconnect(exp, imp);
++
++	return false;
++}
++
++static bool
++vfio_pci_match_interconnects(struct vfio_pci_dma_buf *priv,
++			     struct dma_buf_attachment *attachment)
++{
++	const struct dma_buf_attach_ops *aops = attachment->importer_ops;
++	const struct dma_buf_interconnect_match supports_ics[] = {
++		MATCH_INTERCONNECT(iov_interconnect,
++				   priv->ic_match->dev, priv->ic_match->bar),
++	};
++
++	if (attachment->allow_ic) {
++		if (aops->supports_interconnects(attachment, supports_ics,
++						 ARRAY_SIZE(supports_ics)))
++			return true;
++	}
++	return false;
++}
++
+ static int vfio_pci_dma_buf_attach(struct dma_buf *dmabuf,
+ 				   struct dma_buf_attachment *attachment)
+ {
+ 	struct vfio_pci_dma_buf *priv = dmabuf->priv;
  
- u32 xe_gt_sriov_pf_config_get_exec_quantum(struct xe_gt *gt, unsigned int vfid);
- int xe_gt_sriov_pf_config_set_exec_quantum(struct xe_gt *gt, unsigned int vfid, u32 exec_quantum);
++	if (vfio_pci_match_interconnects(priv, attachment)) {
++		return 0;
++	}
++
+ 	if (!attachment->peer2peer)
+ 		return -EOPNOTSUPP;
+ 
+@@ -189,6 +307,7 @@ vfio_pci_dma_buf_map(struct dma_buf_attachment *attachment,
+ 	return ERR_PTR(ret);
+ }
+ 
++
+ static void vfio_pci_dma_buf_unmap(struct dma_buf_attachment *attachment,
+ 				   struct sg_table *sgt,
+ 				   enum dma_data_direction dir)
+@@ -228,15 +347,23 @@ static void vfio_pci_dma_buf_release(struct dma_buf *dmabuf)
+ 		vfio_device_put_registration(&priv->vdev->vdev);
+ 	}
+ 	kfree(priv->phys_vec);
++	kfree(priv->ic_match);
+ 	kfree(priv);
+ }
+ 
++static const struct dma_buf_interconnect_ops vfio_pci_interconnect_ops = {
++	.match_interconnect = vfio_pci_match_interconnect,
++	.map_interconnect = vfio_pci_map_interconnect,
++	.unmap_interconnect = vfio_pci_unmap_interconnect,
++};
++
+ static const struct dma_buf_ops vfio_pci_dmabuf_ops = {
+ 	.attach = vfio_pci_dma_buf_attach,
+ 	.detach = vfio_pci_dma_buf_detach,
+ 	.map_dma_buf = vfio_pci_dma_buf_map,
+ 	.release = vfio_pci_dma_buf_release,
+ 	.unmap_dma_buf = vfio_pci_dma_buf_unmap,
++	.interconnect_ops = &vfio_pci_interconnect_ops,
+ };
+ 
+ static void dma_ranges_to_p2p_phys(struct vfio_pci_dma_buf *priv,
+@@ -365,6 +492,10 @@ int vfio_pci_core_feature_dma_buf(struct vfio_pci_core_device *vdev, u32 flags,
+ 		goto err_free_phys;
+ 	}
+ 
++	ret = vfio_pci_create_match(priv, &get_dma_buf);
++	if (ret)
++		goto err_dev_put;
++
+ 	exp_info.ops = &vfio_pci_dmabuf_ops;
+ 	exp_info.size = priv->size;
+ 	exp_info.flags = get_dma_buf.open_flags;
+@@ -373,7 +504,7 @@ int vfio_pci_core_feature_dma_buf(struct vfio_pci_core_device *vdev, u32 flags,
+ 	priv->dmabuf = dma_buf_export(&exp_info);
+ 	if (IS_ERR(priv->dmabuf)) {
+ 		ret = PTR_ERR(priv->dmabuf);
+-		goto err_dev_put;
++		goto err_free_iov;
+ 	}
+ 
+ 	/* dma_buf_put() now frees priv */
+@@ -391,6 +522,8 @@ int vfio_pci_core_feature_dma_buf(struct vfio_pci_core_device *vdev, u32 flags,
+ 	 */
+ 	return dma_buf_fd(priv->dmabuf, get_dma_buf.open_flags);
+ 
++err_free_iov:
++	kfree(priv->ic_match);
+ err_dev_put:
+ 	vfio_device_put_registration(&vdev->vdev);
+ err_free_phys:
 -- 
 2.50.1
 
