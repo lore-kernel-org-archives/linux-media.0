@@ -1,213 +1,126 @@
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7491E29C33F;
-	Mon, 27 Oct 2025 01:45:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.167.242.64
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0BC9418C02E;
+	Mon, 27 Oct 2025 01:50:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761529507; cv=none; b=U8Rfz7slB5GLY/pquifyly5S19TOxcCpB1QzjNKve0LFvacx4Nfr0XSYyijsT7lmt5PkIxvsPrByOUHluGY1qkitRxq0cSb+OKWau4pxJVvTDhqUBonS5oJq02FM0PZrpnlrNHauPny4CrE1ECMnxTEx5QO5okn9nsvJqfyFM4Q=
+	t=1761529826; cv=none; b=kuP22l7rSYTek7b3rcovEYjQNtlD53apUojadl4r4UyC01Gg5dCUMB47Pn6GHwNq3xirgID/EJw+iXuYPFzhit8VzdF5tvgfO4LhsNwfhnSoXd80IIzEwbSH6Fl5Lg5YsrK1PpUV68NkHBTc6WRukPH+wqDEeoAwffuhK3X1BzA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761529507; c=relaxed/simple;
-	bh=Hk/Cv0JH4I2/bc25Mtk3P330bEAkbyQwBrU4iJ+LcR0=;
+	s=arc-20240116; t=1761529826; c=relaxed/simple;
+	bh=T3pkaI/GJuOsGFoVg5/R4SNriMbvV6bNB454qQaWZQ8=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=bG4e0RfLhTKNFYTIqGlUj50rZn6H/epUuLJYUSbdnxBp2iHc0U8m857k/FYz7ptYbjbXBln/UzIOD+wqRdT2yPeV7vbo9U1f2r5s3t16kaPKWKFxW65/5HOA34Dx2UPH9pwh5IC4qlzHn64IwII6zAYrnUYQn40COzlLQDPI+Bs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ideasonboard.com; spf=pass smtp.mailfrom=ideasonboard.com; dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b=DmTIN/95; arc=none smtp.client-ip=213.167.242.64
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ideasonboard.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ideasonboard.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=LQAtezO5/4R5PaFcURhdb+93yXLU+udan6DUbahneHDgX/tNmJex+Mke+1RBYEhRPCdTQtpFYVYGW3k9xfSjG6MMT3IG2qPcZH8u8Y5hYyWMc4lpOmj2P73Rc39u6BD9t3mIJRCkwzeaPMTfrHZTzOfKeXirCwGEodO4oyF1bIU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=SFY3HsTq; arc=none smtp.client-ip=198.175.65.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="DmTIN/95"
-Received: from pendragon.ideasonboard.com (82-203-161-16.bb.dnainternet.fi [82.203.161.16])
-	by perceval.ideasonboard.com (Postfix) with UTF8SMTPSA id A6FF01661;
-	Mon, 27 Oct 2025 02:43:14 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-	s=mail; t=1761529394;
-	bh=Hk/Cv0JH4I2/bc25Mtk3P330bEAkbyQwBrU4iJ+LcR0=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=DmTIN/959mBfIT+SM6ajcFq7f1gtKFOU1XBpuVR9S5nMNJAfTME+ec9eVlp/IrWpZ
-	 jnhQpBCdBl3dBL2OQsmBcFjLIrAAgHT11G0ROsI9kpfcxBJ+5LGmQv5Ksyhy9cRwGw
-	 ldoeuI7N0ZfgwF0zLYsD1QT3Cmqwr3+/+ocVbQlc=
-Date: Mon, 27 Oct 2025 03:44:48 +0200
-From: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To: Frank Li <Frank.Li@nxp.com>
-Cc: Rui Miguel Silva <rmfrfs@gmail.com>,
-	Martin Kepplinger <martink@posteo.de>,
-	Purism Kernel Team <kernel@puri.sm>,
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="SFY3HsTq"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1761529825; x=1793065825;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=T3pkaI/GJuOsGFoVg5/R4SNriMbvV6bNB454qQaWZQ8=;
+  b=SFY3HsTqY2Ry2NQd3zO0yKdoJsln+nTLaiUb4zzF60W8D3fRq3fTXODw
+   vIBdycM9zJwvlhYvqOcGxcNv44Wqhmf9fou4m9uCosnAOkm6KckOTJUSi
+   nkN927iyFhYV3TRCynZEFAVQPkqrYSO/6TtlB7mDEjtvQ1U9lSgvnIdzd
+   XwnRRWL2OjwRSPQ87xHjhLVEbaRdYK45rUr66pRQNTdKsHayxukAQ/5wc
+   dIM67bUNf8kclm4K6Kwww5CDKvMH3gHlYXHgnPehlNFFU8HvWh+phtlbm
+   QuCapYO8U12dwTIYM86QRSxqOuwZLqOC3cCInr5Mx/LWbufk48meZkVPf
+   w==;
+X-CSE-ConnectionGUID: 6YWLrCLOQ/Gu/IAQzfBJ+Q==
+X-CSE-MsgGUID: UMt8ChPkQUa81pml1bmMLQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11586"; a="75050337"
+X-IronPort-AV: E=Sophos;i="6.19,257,1754982000"; 
+   d="scan'208";a="75050337"
+Received: from orviesa003.jf.intel.com ([10.64.159.143])
+  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Oct 2025 18:50:24 -0700
+X-CSE-ConnectionGUID: RqD3PVgcSpO3hdFc8HdBsw==
+X-CSE-MsgGUID: bAZX7S5kQLGkCNKy4yStdQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.19,257,1754982000"; 
+   d="scan'208";a="188967609"
+Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.165])
+  by orviesa003.jf.intel.com with ESMTP; 26 Oct 2025 18:50:09 -0700
+Date: Mon, 27 Oct 2025 09:36:28 +0800
+From: Xu Yilun <yilun.xu@linux.intel.com>
+To: "Rob Herring (Arm)" <robh@kernel.org>
+Cc: Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>, Stephen Boyd <sboyd@kernel.org>,
+	David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
+	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+	Thomas Zimmermann <tzimmermann@suse.de>,
+	Andrzej Hajda <andrzej.hajda@intel.com>,
+	Robert Foss <rfoss@kernel.org>, Vinod Koul <vkoul@kernel.org>,
+	Moritz Fischer <mdf@kernel.org>, Xu Yilun <yilun.xu@intel.com>,
+	Bartosz Golaszewski <brgl@bgdev.pl>,
+	Guenter Roeck <linux@roeck-us.net>,
+	Andi Shyti <andi.shyti@kernel.org>,
+	Jonathan Cameron <jic23@kernel.org>,
+	Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+	Georgi Djakov <djakov@kernel.org>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Joerg Roedel <joro@8bytes.org>,
+	Jassi Brar <jassisinghbrar@gmail.com>,
 	Mauro Carvalho Chehab <mchehab@kernel.org>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Eugen Hristev <eugen.hristev@linaro.org>,
-	Shawn Guo <shawnguo@kernel.org>,
-	Sascha Hauer <s.hauer@pengutronix.de>,
-	Pengutronix Kernel Team <kernel@pengutronix.de>,
-	Fabio Estevam <festevam@gmail.com>, Peng Fan <peng.fan@nxp.com>,
-	Alice Yuan <alice.yuan@nxp.com>, Vinod Koul <vkoul@kernel.org>,
+	Lee Jones <lee@kernel.org>,
+	Miquel Raynal <miquel.raynal@bootlin.com>,
+	Richard Weinberger <richard@nod.at>,
+	Vignesh Raghavendra <vigneshr@ti.com>,
+	Andrew Lunn <andrew+netdev@lunn.ch>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Johannes Berg <johannes@sipsolutions.net>,
+	Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kwilczynski@kernel.org>,
+	Manivannan Sadhasivam <mani@kernel.org>,
+	Bjorn Helgaas <bhelgaas@google.com>,
 	Kishon Vijay Abraham I <kishon@kernel.org>,
+	Sebastian Reichel <sre@kernel.org>,
+	Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <ukleinek@kernel.org>,
+	Mark Brown <broonie@kernel.org>,
+	Mathieu Poirier <mathieu.poirier@linaro.org>,
 	Philipp Zabel <p.zabel@pengutronix.de>,
-	Steve Longerbeam <slongerbeam@gmail.com>,
+	Olivia Mackall <olivia@selenic.com>,
+	Herbert Xu <herbert@gondor.apana.org.au>,
+	Daniel Lezcano <daniel.lezcano@linaro.org>,
 	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	linux-media@vger.kernel.org, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org, imx@lists.linux.dev,
-	linux-arm-kernel@lists.infradead.org, linux-phy@lists.infradead.org,
-	linux-staging@lists.linux.dev
-Subject: Re: [PATCH v3 12/31] media: staging: media: imx6-mipi-csi2: move sd
- imx6's specific initialization into imx6-sci2.c
-Message-ID: <20251027014448.GV13023@pendragon.ideasonboard.com>
-References: <20250821-95_cam-v3-0-c9286fbb34b9@nxp.com>
- <20250821-95_cam-v3-12-c9286fbb34b9@nxp.com>
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-clk@vger.kernel.org, dri-devel@lists.freedesktop.org,
+	linux-fbdev@vger.kernel.org, dmaengine@vger.kernel.org,
+	linux-fpga@vger.kernel.org, linux-gpio@vger.kernel.org,
+	linux-hwmon@vger.kernel.org, linux-i2c@vger.kernel.org,
+	linux-iio@vger.kernel.org, linux-input@vger.kernel.org,
+	linux-pm@vger.kernel.org, iommu@lists.linux.dev,
+	linux-media@vger.kernel.org, linux-mtd@lists.infradead.org,
+	netdev@vger.kernel.org, linux-wireless@vger.kernel.org,
+	linux-pci@vger.kernel.org, linux-phy@lists.infradead.org,
+	linux-pwm@vger.kernel.org, linux-remoteproc@vger.kernel.org,
+	linux-crypto@vger.kernel.org, linux-sound@vger.kernel.org,
+	linux-usb@vger.kernel.org
+Subject: Re: [PATCH] dt-bindings: Remove extra blank lines
+Message-ID: <aP7MnJ8mIlZhT//S@yilunxu-OptiPlex-7050>
+References: <20251023143957.2899600-1-robh@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250821-95_cam-v3-12-c9286fbb34b9@nxp.com>
+In-Reply-To: <20251023143957.2899600-1-robh@kernel.org>
 
-On Thu, Aug 21, 2025 at 04:15:47PM -0400, Frank Li wrote:
-> Move imx6's specific sd's owner, name, csi2_internal_ops, grp_id into
-
-grp_id needs to go. It's specific to the i.MX6 IPUv3 framework, and is
-the main part hindering splitting the CSI-2 receiver driver from the
-rest of the code.
-
-> imx6-sci2.c.
+On Thu, Oct 23, 2025 at 09:37:56AM -0500, Rob Herring (Arm) wrote:
+> Generally at most 1 blank line is the standard style for DT schema
+> files. Remove the few cases with more than 1 so that the yamllint check
+> for this can be enabled.
 > 
-> Signed-off-by: Frank Li <Frank.Li@nxp.com>
-> ---
->  drivers/staging/media/imx/imx6-csi2.c      | 23 +++++++++++++++++++++++
->  drivers/staging/media/imx/imx6-mipi-csi2.c | 29 ++++++-----------------------
->  include/media/dw-mipi-csi2.h               |  4 ++++
->  3 files changed, 33 insertions(+), 23 deletions(-)
-> 
-> diff --git a/drivers/staging/media/imx/imx6-csi2.c b/drivers/staging/media/imx/imx6-csi2.c
-> index 72eff685fad99b3def46cf2866565191b7de9a8b..66274d8d73b67b35682bb82a9eb745bb24da7ae4 100644
-> --- a/drivers/staging/media/imx/imx6-csi2.c
-> +++ b/drivers/staging/media/imx/imx6-csi2.c
-> @@ -19,6 +19,29 @@ struct imx6_csi2 {
->  	struct dw_mipi_csi2_dev dw;
->  };
->  
-> +static int csi2_registered(struct v4l2_subdev *sd)
-> +{
-> +	struct dw_mipi_csi2_dev *csi2 = sd_to_dw_mipi_csi2_dev(sd);
-> +
-> +	/* set a default mbus format  */
-> +	return imx_media_init_mbus_fmt(&csi2->format_mbus,
-> +				      IMX_MEDIA_DEF_PIX_WIDTH,
-> +				      IMX_MEDIA_DEF_PIX_HEIGHT, 0,
-> +				      V4L2_FIELD_NONE, NULL);
-> +}
-> +
-> +static const struct v4l2_subdev_internal_ops csi2_internal_ops = {
-> +	.init_state = imx_media_init_state,
-> +	.registered = csi2_registered,
-> +};
-> +
-> +static const struct dw_mipi_csi2_config imx6_config = {
-> +	.module = THIS_MODULE,
-> +	.name = "imx6-mipi-csi2",
-> +	.internal_ops = &csi2_internal_ops,
-> +	.grp_id = IMX_MEDIA_GRP_ID_CSI2,
-> +};
-> +
->  static int csi2_probe(struct platform_device *pdev)
->  {
->  	struct imx6_csi2 *csi2;
-> diff --git a/drivers/staging/media/imx/imx6-mipi-csi2.c b/drivers/staging/media/imx/imx6-mipi-csi2.c
-> index b5911a37972be868e10c115ada1910fa04b2765c..ff06a739b957b305625d145c04c06999d0c13cae 100644
-> --- a/drivers/staging/media/imx/imx6-mipi-csi2.c
-> +++ b/drivers/staging/media/imx/imx6-mipi-csi2.c
-> @@ -15,11 +15,11 @@
->  #include <linux/platform_device.h>
->  #include <media/dw-mipi-csi2.h>
->  #include <media/v4l2-common.h>
-> +#include <media/v4l2-ctrls.h>
->  #include <media/v4l2-device.h>
->  #include <media/v4l2-fwnode.h>
->  #include <media/v4l2-mc.h>
->  #include <media/v4l2-subdev.h>
-> -#include "imx-media.h"
->  
->  /*
->   * The default maximum bit-rate per lane in Mbps, if the
-> @@ -44,8 +44,6 @@ struct dw_csi2_regs {
->  	u32	phy_tst_ctrl1;
->  };
->  
-> -#define DEVICE_NAME "imx6-mipi-csi2"
-> -
->  /* Help check wrong access unexisted register at difference IP version */
->  #define DW_REG_EXIST		0x80000000
->  #define DW_REG(x)		(DW_REG_EXIST | (x))
-> @@ -544,17 +542,6 @@ static int csi2_set_fmt(struct v4l2_subdev *sd,
->  	return 0;
->  }
->  
-> -static int csi2_registered(struct v4l2_subdev *sd)
-> -{
-> -	struct dw_mipi_csi2_dev *csi2 = sd_to_dev(sd);
-> -
-> -	/* set a default mbus format  */
-> -	return imx_media_init_mbus_fmt(&csi2->format_mbus,
-> -				      IMX_MEDIA_DEF_PIX_WIDTH,
-> -				      IMX_MEDIA_DEF_PIX_HEIGHT, 0,
-> -				      V4L2_FIELD_NONE, NULL);
-> -}
-> -
->  /* --------------- CORE OPS --------------- */
->  
->  static int csi2_log_status(struct v4l2_subdev *sd)
-> @@ -605,11 +592,6 @@ static const struct v4l2_subdev_ops csi2_subdev_ops = {
->  	.pad = &csi2_pad_ops,
->  };
->  
-> -static const struct v4l2_subdev_internal_ops csi2_internal_ops = {
-> -	.init_state = imx_media_init_state,
-> -	.registered = csi2_registered,
-> -};
-> -
->  static int csi2_notify_bound(struct v4l2_async_notifier *notifier,
->  			     struct v4l2_subdev *sd,
->  			     struct v4l2_async_connection *asd)
-> @@ -709,14 +691,15 @@ int dw_mipi_csi2_init(struct platform_device *pdev, struct dw_mipi_csi2_dev *csi
->  	csi2->regs = &dw_csi2_v0;
->  	v4l2_subdev_init(&csi2->sd, &csi2_subdev_ops);
->  	v4l2_set_subdevdata(&csi2->sd, &pdev->dev);
-> -	csi2->sd.internal_ops = &csi2_internal_ops;
->  	csi2->sd.entity.ops = &csi2_entity_ops;
->  	csi2->sd.dev = &pdev->dev;
-> -	csi2->sd.owner = THIS_MODULE;
->  	csi2->sd.flags = V4L2_SUBDEV_FL_HAS_DEVNODE;
-> -	strscpy(csi2->sd.name, DEVICE_NAME, sizeof(csi2->sd.name));
->  	csi2->sd.entity.function = MEDIA_ENT_F_VID_IF_BRIDGE;
-> -	csi2->sd.grp_id = IMX_MEDIA_GRP_ID_CSI2;
-> +
-> +	csi2->sd.owner = config->module;
-> +	strscpy(csi2->sd.name, config->name, sizeof(csi2->sd.name));
-> +	csi2->sd.internal_ops = config->internal_ops;
-> +	csi2->sd.grp_id = config->grp_id;
->  
->  	for (i = 0; i < CSI2_NUM_PADS; i++) {
->  		csi2->pad[i].flags = (i == CSI2_SINK_PAD) ?
-> diff --git a/include/media/dw-mipi-csi2.h b/include/media/dw-mipi-csi2.h
-> index 4e656f09c81db9dc9f232ed061f70803a5478c85..dfd25e23ea93fd53b064471b6a9557ef9c070fe7 100644
-> --- a/include/media/dw-mipi-csi2.h
-> +++ b/include/media/dw-mipi-csi2.h
-> @@ -10,6 +10,10 @@
->  #include <media/v4l2-subdev.h>
->  
->  struct dw_mipi_csi2_config {
-> +	struct module *module;
-> +	const char *name;
-> +	int grp_id;
-> +	const struct v4l2_subdev_internal_ops *internal_ops;
->  };
->  
->  /*
+> Signed-off-by: Rob Herring (Arm) <robh@kernel.org>
 
--- 
-Regards,
+[...]
 
-Laurent Pinchart
+>  Documentation/devicetree/bindings/fpga/fpga-region.yaml      | 5 -----
+
+Acked-by: Xu Yilun <yilun.xu@intel.com>
