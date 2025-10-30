@@ -1,438 +1,324 @@
-Received: from PNZPR01CU001.outbound.protection.outlook.com (mail-centralindiaazon11021119.outbound.protection.outlook.com [40.107.51.119])
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7442337A3D9;
-	Thu, 30 Oct 2025 06:52:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.51.119
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761807173; cv=fail; b=aK7qnlOlJQpw2TcMxQfo5MCUFJcNyXFLetUKE9Y/tmGnpuytF4NeWokMvCQDGB1xZ4whW5tVQ9rYW7Onyr8TARupYsd0LfEMQ7Iyonn+usNwlF4cWncLUHVn4dPMAESlRWesq18cQMF+6R6NkjPRROYgzzYfkPaIZJ14NbkiSe8=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761807173; c=relaxed/simple;
-	bh=KorEsefGxCWlbntk9UmUKQkyS8SmGZ1XDu3v3ndU1dk=;
-	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
-	 Content-Type:MIME-Version; b=U2nivh0dFBkbo3soTWm9sbjarQwNxD9UgpwfsFSRNtesTGHKJHckVKgX/tow7lnG+L+9Ne45CgbWIp/pzj9yI4ia1rj+jjUgl/3fvP8lsjfPr0Dn6ytqNSDFMXpcHy8dADiaatMQ8OXGexwPC9Rt6Kp/aF9vi/964glVgtSB9Z4=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=siliconsignals.io; spf=fail smtp.mailfrom=siliconsignals.io; arc=fail smtp.client-ip=40.107.51.119
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=siliconsignals.io
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=siliconsignals.io
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=LWMJxdGJr9bAeqqJ1iStzgimkyhISgqcp214y091esmr+iF72gNSb55mXOC/8UG3C2uspcnOXjB+Vz41t/YzFexK5QlSyFFbZtn32lfRDV/GbgufzUdMSxzVgVDk3Cq74i0OWfl0NI5OPFky7mW6OMZHxzWmE3OmJpcLPpiMcKlAL9KY7bzZtFn5jLqji5qFQEC+TiHFRzcO3H8Vla0qs6MJPjJTYNe7cg0gsGQiH/INyfX6zMlv+3JHh5ihGj6NMt1H6j5GamJBW7bp0uDC95Zqx0oqQR0I8K1dmyVGJvmsxzFbk2eje7ytOFlzc8vPfR40dRg8cngQprQuv31khw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=M6H3qBIK/Mz3kxQ2FhPtx3PvZQBAYTy7IpBJIbWPSTQ=;
- b=UoscpNHkcPZnVOK7LRCHUboxEBUrb6eemjmjIq9lAu9kR5UsHuXdrqMqztYzP0iV6CZ6G2kDLZjGHk+aWjhWiObxSMAGhsRW1UF4vwayxrH5XpdXbVjx5UsqG5F8Lo0CxiBLPvJ7XxewEJItHn1dEiQupLA5YDY0LbOgUevgp72aaRdrF7hlLMNmS5vYHKYg3k1j1O4r7JkFcOilBxs6874qXl/qqWLYFKqQQHep2wCXsSFaoItZBWqTnuLlHVdZIyUsGfz37t5EuCDPQoiqyv1EnguXyYZOsYYV4w0bn0KpZ4NIwZHKnSZ3xXOglrBorjzgJke4eKTQsLnOkcaLgw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=siliconsignals.io; dmarc=pass action=none
- header.from=siliconsignals.io; dkim=pass header.d=siliconsignals.io; arc=none
-Received: from PN3P287MB1829.INDP287.PROD.OUTLOOK.COM (2603:1096:c01:199::7)
- by PN3P287MB1701.INDP287.PROD.OUTLOOK.COM (2603:1096:c01:19c::8) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9275.14; Thu, 30 Oct
- 2025 06:52:43 +0000
-Received: from PN3P287MB1829.INDP287.PROD.OUTLOOK.COM
- ([fe80::58ec:81a0:9454:689f]) by PN3P287MB1829.INDP287.PROD.OUTLOOK.COM
- ([fe80::58ec:81a0:9454:689f%4]) with mapi id 15.20.9275.013; Thu, 30 Oct 2025
- 06:52:43 +0000
-From: Tarang Raval <tarang.raval@siliconsignals.io>
-To: Svyatoslav Ryhel <clamor95@gmail.com>
-CC: Sakari Ailus <sakari.ailus@linux.intel.com>, Mauro Carvalho Chehab
-	<mchehab@kernel.org>, Rob Herring <robh@kernel.org>, Krzysztof Kozlowski
-	<krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, Hans Verkuil
-	<hverkuil@xs4all.nl>, Hans de Goede <hansg@kernel.org>, Arnd Bergmann
-	<arnd@arndb.de>, Dongcheng Yan <dongcheng.yan@intel.com>,
-	=?Windows-1252?Q?Andr=E9_Apitzsch?= <git@apitzsch.eu>, Sylvain Petinot
-	<sylvain.petinot@foss.st.com>, Benjamin Mugnier
-	<benjamin.mugnier@foss.st.com>, Heimir Thor Sverrisson
-	<heimir.sverrisson@gmail.com>, "linux-media@vger.kernel.org"
-	<linux-media@vger.kernel.org>, "devicetree@vger.kernel.org"
-	<devicetree@vger.kernel.org>, "linux-kernel@vger.kernel.org"
-	<linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2 2/2 RESEND] media: i2c: add Sony IMX111 CMOS camera
- sensor driver
-Thread-Topic: [PATCH v2 2/2 RESEND] media: i2c: add Sony IMX111 CMOS camera
- sensor driver
-Thread-Index: AQHcR+0Fayu+hKxvfky9xbTbKg+987TX2SMAgAAQdoCAAUP1BoAAE+UAgAD+8eU=
-Date: Thu, 30 Oct 2025 06:52:42 +0000
-Message-ID:
- <PN3P287MB18291DD344424C8F45790FC18BFBA@PN3P287MB1829.INDP287.PROD.OUTLOOK.COM>
-References: <20251028092200.7003-1-clamor95@gmail.com>
- <20251028092200.7003-3-clamor95@gmail.com>
- <aQEEUpgW8nmZ3ZCl@kekkonen.localdomain>
- <CAPVz0n2SuOcoDn4KZ_zb4NCuaes6nppHRgffWC4yTHmOsbe1vw@mail.gmail.com>
- <PN3P287MB18291BB4CCC68C8BA1260A628BFAA@PN3P287MB1829.INDP287.PROD.OUTLOOK.COM>
- <CAPVz0n2ELC-Lc7-kO5DV-8pabBueMnXe3YY9-k+zoaxracASKQ@mail.gmail.com>
-In-Reply-To:
- <CAPVz0n2ELC-Lc7-kO5DV-8pabBueMnXe3YY9-k+zoaxracASKQ@mail.gmail.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-msip_labels:
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=siliconsignals.io;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: PN3P287MB1829:EE_|PN3P287MB1701:EE_
-x-ms-office365-filtering-correlation-id: 9ca695d5-9cbe-444a-0903-08de1780ecd4
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam:
- BCL:0;ARA:13230040|366016|7416014|1800799024|376014|38070700021;
-x-microsoft-antispam-message-info:
- =?Windows-1252?Q?TUji06Kud4JA47l/u/Yi2Hf89SqOWH2EngBDSDdBsHP2L7hkr3F3iexR?=
- =?Windows-1252?Q?12DhnPfop3O/H5xka3qjkdKyOiT+NTacDp+UAWTOSQ+h8xBNOPf5pxJj?=
- =?Windows-1252?Q?olnRiwv/2gaHg+oQ/UPeR/FogJLCOj8puweG0+hfXFiVJx1iGn4yvfX4?=
- =?Windows-1252?Q?udSQkzCufLK41IkL97YSDsrd3NVqTjrbtqsBrqD/xenQRmMzW/Hl8EeZ?=
- =?Windows-1252?Q?9Eb1jyJg+xiJotEIpDDH6Ioh11R0ZxYqplllWXAe4Jgn8VzimWoo6l/M?=
- =?Windows-1252?Q?L3yeQGFlHj+rLXrgzYMEdxu2m9oR680gGeVzpzSY02+dR6Htsu6GwOXH?=
- =?Windows-1252?Q?6/B1tNtoaK0tDtoVZJlqiAe+pLnXx5ECdj6vsu4AAmXIPgHUtitaMT48?=
- =?Windows-1252?Q?ajSmqjqBhpaY3hw6SXXFH+NzbtfEiLYWdsEiZCZH98kwKW6OC6uQLZSF?=
- =?Windows-1252?Q?VhVTye1Ak7AvWdWY8ZmuFih4+fxf6dcODymMv0ypmX2cIZ80QWqsD4eo?=
- =?Windows-1252?Q?ipe+sE93O1yqg6NMtB2nQ1L1hb+IzCB2ftiWYFQjLlDFVlKKlaVVPwTX?=
- =?Windows-1252?Q?yfpvk3BP3YJQEaYMMncv37Tnh7pRSxlPjeay2SzvN2ghYr80Uivd0dqo?=
- =?Windows-1252?Q?519qB1SZxjZaV33jYnTduA9j6aG8eQI3iAYDSZ/KfX1gasHwv6xCfXfh?=
- =?Windows-1252?Q?zPVoOhh1PGs+/T4O2vrRk7vyfNH85iASJvmnoCo40tZhmGDYEHmhkese?=
- =?Windows-1252?Q?4+I4VNkam1kBkHpwD/Z/XAfNtrQ1QwIvQpMPm4TbayO0HBTqxJ6CaT0f?=
- =?Windows-1252?Q?KDPHmhC4YAceo+cfpm19KklEx70h08KsKlGzJOMar8TWk4t0H31d9+Dh?=
- =?Windows-1252?Q?MZ6qBzxeEw+ejHnEnOrwLF9fVWZHaJk+uOMrnUn7zQ+4f/MKxiYt3lPQ?=
- =?Windows-1252?Q?SgzntTbxlVQUseaqri6zixBvsp2T5BmGykhCbcDhpOYifQv3yVLq2Mj3?=
- =?Windows-1252?Q?Bmgyzd35NQ9NDE5eruOzJqLnqoxDYCrAcGs8B+hGA4qTfnPNfsraqqio?=
- =?Windows-1252?Q?iS9bwjcJ+cMInT0QRhHtSwvlyRVpZNeUiBbt4Idu7wCNII79RG/cxruX?=
- =?Windows-1252?Q?ICR9HYBNwkvlKMZCvzFatJash+TpMqP40jTPd60oBNBvV+f7w0SYewz8?=
- =?Windows-1252?Q?4CMMNoNVfgc2Y01KNmgMypPRQNiUGa/9siaU0v2IGrADjw92nuV4AjL8?=
- =?Windows-1252?Q?N0n94ZkoIwnn5XsgTPk9ZJvU56wj7BiOkuvXjLpEIdjWTcAta6KtFveX?=
- =?Windows-1252?Q?Ro4odWjo4kQlORVUX3F7tm23KbnODApF33I7Ft3pO7fHFYFYFamgKwR4?=
- =?Windows-1252?Q?OFR7kdTUUh99CdIsxmf8CV+8brhcDkV+YdQaD6w1smc4AwVd3OMtqmMA?=
- =?Windows-1252?Q?2AAt4pexh1ebLwJHwQiH8zk/9M4qGQdqZHwLq9GdH/3e+BtwvuOUckaK?=
- =?Windows-1252?Q?RlrjjzQZ82aWIqO6ZvfyzevqPpfPsZ+VsZU7nSPsOqDcnB8YeLQUozM0?=
- =?Windows-1252?Q?Wp1Mu7DzNvqbIhieDfEvvt+QCLtyu3hzv8Lz+blEmN3sxQ7mxNuyb/sP?=
- =?Windows-1252?Q?ycYAXF/SEZ80NiYQ70V1uCJK?=
-x-forefront-antispam-report:
- CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PN3P287MB1829.INDP287.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230040)(366016)(7416014)(1800799024)(376014)(38070700021);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0:
- =?Windows-1252?Q?5O8wLgKAeojXEce0kz6o30l8IyjqliidjrGz3sZiwAAkglv5WEfR8tlK?=
- =?Windows-1252?Q?3TwdunR5199wFC6k/QlBNvFC97aymOSqN01YfmKaHIa532i+7NuL1wVs?=
- =?Windows-1252?Q?tJum7HVLCBKMqlED+NXqPfWtp+V+5IKXvuIjcP+NTLptkI90HG9QhMGa?=
- =?Windows-1252?Q?p1tT150z/8d8/Rcjdj9ObSNgaPidCfdLlSt0o6n0ttLWjf327JwLYG0U?=
- =?Windows-1252?Q?JuSEnQhTGVOPoJLQPBNNAJBWpwCnfP5xHnr4M0Jpn3yJUOcrUEWDNNyE?=
- =?Windows-1252?Q?1ogTageiNLhyF9xX8J7VT7y9gGJV5ej6/unB1TtPoyPI2FHrAvvXparp?=
- =?Windows-1252?Q?rKd9omQSWTQpRK1KzXeVTXCo2wyw9YrVpAp6/Y/cCgcHvkSAMKtYfbry?=
- =?Windows-1252?Q?4hgdV1dHLvZOFmCa2J7L4eDrCnRuXJGwxjnqFQLQr8iyjhyBcgZxQnME?=
- =?Windows-1252?Q?dGmUSPdrrXV2JZHYu2TA+hHx7FEGx6/3ZJbl34s5Ous9GtdwjIX4/u2u?=
- =?Windows-1252?Q?RSgj2FgDQcLRhS14AKK9PH1t5Y+1cGjicijxQXdjyeCf3GTe1OjeVKdC?=
- =?Windows-1252?Q?cZVbQtEJ37gJKo3TwjNy0wXG/lshxQQLZyHDA4LTZk8x5yhktuWaBnYZ?=
- =?Windows-1252?Q?7c8+3cSqznc3IlW68gKyczZ2PiWfY+YLeFsqOjSN4arL6cllQo2unVBe?=
- =?Windows-1252?Q?8hvMv8+cD5nZB55N3xxoHAzk5rGBGAG4R5XD4hqkQ5TRSMXG5m+uS3FO?=
- =?Windows-1252?Q?0GpFA6SGKkJEnkULYQSchB8Vvxf9tzcbUppFTY719sZaMR38M0/Ss+v7?=
- =?Windows-1252?Q?jHc2xtSrRLaY+mlV6NIkQ4R074/h/wgDtyr+RGSP+s0DAtX3HAPz23bT?=
- =?Windows-1252?Q?d7EgwFIYiFD3usnbX9/0m5+CicDQsQ0LZIcdpWCE+2UBtKrBtMLi257I?=
- =?Windows-1252?Q?VwqWuYh3c3lyjOUdXccfrJHdBYkXoUwAbH+2+MuhKuY6+GyoyPhK7riX?=
- =?Windows-1252?Q?E1ETFFWOK186N015bLdhmhQ9qsCDuXpCIw7Z3eNCp/8kYxkB3e48lF3W?=
- =?Windows-1252?Q?5B8HzL3/wcyKoW93r3tbNZKqFr3qCkrXBdS/Z0FiD1DS8rET5XDRKXhB?=
- =?Windows-1252?Q?o8HMcwzKK5T058e8vxhdVKqvkxAsay1EHvv4XIMOC7fppqxB7ayp7DjT?=
- =?Windows-1252?Q?VRFyTINcrTVYYv/kyy8bU89XtbcU2jiFXKKM5OLoFirxhEAesD1AoROM?=
- =?Windows-1252?Q?poIQYRbQmG66XTVtzhnKrwSgHHgqsnucUi9gnQZz0RMkYdnSy7GMz3Br?=
- =?Windows-1252?Q?QFy9o2tEJjfVADDF3TNlACA8PDsfdZp1ZMP/cIyZWjruifT3ojIuEhKs?=
- =?Windows-1252?Q?bzUXT+9IP+1uvYefheRD9ade1LAXGiU/Bsv9UuTt3VlOuMX34oLBtqs6?=
- =?Windows-1252?Q?fz4RTIPUtye3iV3wAbKMeZiDukQGodpvr2JBwfQmeMHH8ITnLiGsOy3H?=
- =?Windows-1252?Q?QLiDD16ISdhjkMY5f9jU7G8HuU4tZ8cLQ3ry4KylW1vB6FseWUD4eDvu?=
- =?Windows-1252?Q?PjWaNglmYK/17oyspDSuDgzwO/dx2V5Bf/0x/1H2dK2piWCsm4DIMUF9?=
- =?Windows-1252?Q?GwAejrLKweaDASZ822pnE6IX4oDAqqutDodCUJXizW8O5Jd8LUK+OKC6?=
- =?Windows-1252?Q?lWyzQqdjpXEAsUsAFlZ5XIBUltwiRuQBDkhvGDX60MebynsiaZkUtQ?=
- =?Windows-1252?Q?=3D=3D?=
-Content-Type: text/plain; charset="Windows-1252"
-Content-Transfer-Encoding: quoted-printable
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4AA27325710
+	for <linux-media@vger.kernel.org>; Thu, 30 Oct 2025 07:00:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1761807638; cv=none; b=g6s49+zMDMPMDM+pD0r1D3Bk9B51XNFHUej3OSf660hkt1IvJeYB/GCL1bHDv0KsSjfmGw3GdCtkHoxEL172cmUbFp/GaOpKlTqVpZO7IDFJMugc51N51zfCpJmICxGMBtkVWaRjvw03XEvNg8yhGpshE/VnnNuYSOzoZw/OWxk=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1761807638; c=relaxed/simple;
+	bh=Omy9/5Kj5+LGcB63VdSV5IrNWZc52iR3S5f9i+4vMDk=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=CYVWRqgxjwU7VNgpbWk67cVYN/geakxyImkSYNb9CbbReISwGjKU8ZPxG6hQMMKBJ+ICIjC3h2t7y2rI5Nr5evu/jBGXyq7XQjZFHZHwJbz7G/22zrJt8behF6BW2aXGhQnBq2Nmm866B0QetrYqLp8YprxA+vfYRAuZ9BrKv6k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=RJQo5wNJ; dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b=fuwoDFmj; arc=none smtp.client-ip=205.220.168.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="RJQo5wNJ";
+	dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b="fuwoDFmj"
+Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 59TLLieo1697828
+	for <linux-media@vger.kernel.org>; Thu, 30 Oct 2025 07:00:28 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
+	cc:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
+	9aEYgGnoa8+wDA4pf8vlt50KnEXKhYPRJM+YzaCPurw=; b=RJQo5wNJPfxiaI61
+	D/q+FtQa27m4nxsIQwBrIw+gzxlSyG/HWQ2kMQDNj8k2dJIv0mkBhmjWOY+ifdme
+	vW+dhi/HfND4zmDkuc/TcT7Uiqpqt3hzZDgqku54GYKYnttaYzjdiXspK9bb2EHX
+	RNuMWibZJ/h+mvkOStTATcmBX9sYLcxRNqxIr7QJezqNsJkQOw2+CwUrggYltF1g
+	sWpCqS8xfwaxNwBlGaBuA8dPMj81h8Zr84VrZBjSjuHpLeG51I61FlWFXh+nUdJo
+	WsEjjDP+ayhlSw8djwNHcWVCV2M7c8qtZw6sNndbBGfDhnG03bpyC72amu6PpKGQ
+	hEmOVw==
+Received: from mail-pl1-f197.google.com (mail-pl1-f197.google.com [209.85.214.197])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4a3trv1byn-1
+	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
+	for <linux-media@vger.kernel.org>; Thu, 30 Oct 2025 07:00:28 +0000 (GMT)
+Received: by mail-pl1-f197.google.com with SMTP id d9443c01a7336-290950e7b1bso170125ad.1
+        for <linux-media@vger.kernel.org>; Thu, 30 Oct 2025 00:00:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=oss.qualcomm.com; s=google; t=1761807628; x=1762412428; darn=vger.kernel.org;
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=9aEYgGnoa8+wDA4pf8vlt50KnEXKhYPRJM+YzaCPurw=;
+        b=fuwoDFmjfotVJOtwNnBcqEjuYSasJo7lyL1pDWHDv3uVthMiJePp8bjIpSWBsWQiQ+
+         fLua2NdTtY9PJ8tr7MRjFh9dHO6ujterDX1r/tkwJ+6EW5lDRLRiQKn2G6/g0XJr6Qwb
+         lOa8EBhMPZ4e+xQbE6bjBTcUJP4HE/Vbtp/tQlAlHl2V34HOAD64pbA1jhXWfKJzz+RX
+         ombc0IUa4Y9yNLETg9PKPBda9Dqbo66rPv9wRoL/iUAVS/F4YfhvdWuCiO21wPzbdtBK
+         yvyQ4MAtlRj6lGr46kgdFfzFiwOE0yGF8aTVtMXHAEAfRUHMB2bO1YTNvpkORDbaN1o+
+         HQDg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1761807628; x=1762412428;
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=9aEYgGnoa8+wDA4pf8vlt50KnEXKhYPRJM+YzaCPurw=;
+        b=sThpD9w8y7H4s0RdY3yLoElpCWlk3Q74ii7AjFH3LNVMUEBALSGdMCuHhZCydNQUes
+         ZOxDsnHby/RJ5VWoEbVe6tkJ5Ufv9nmqkSsWLY+6PTU6rsVC33sz8Pdei2YQC6x3NrUQ
+         B0R5TVwRRMxhWYCI30CDfKdA4sUCCyPbuoz/h+ghlVM62K7/QkjAVHCgrR39Z9q42l4p
+         A5SvFabPBizD9r7z6kIhpk8C5FwElQHn+tgTKDjFW39J1BnByFVn21asfgScPqCnheuI
+         0pCM5597QkYB4tNUG4cEhNumcVS4hYcovHZSjpr+GjdpVxHW4yy01hP33LWZz97jPbQn
+         s/AQ==
+X-Gm-Message-State: AOJu0YzfWm3XsAU9Nv+6Rr5Drd9w3a4yp1V2IlcYFnih1Apjs2/j3QlZ
+	nY9EF6KqXuttk8lbvu2Xip9n66l445qGrZyteMMi2zCxzEAqkh9UEv1IuxOoHsZPPP+I8iN6EXc
+	7Gtwa74utPnPJqCWH4d420a+xiYHojmtESqnLA4EVR2TbcLX47dN67AYy7P/Vkoa++A==
+X-Gm-Gg: ASbGncu4jbU3ezl1v6vBcrkrm2H76jC6O5r0uHK1DfcF6uzeNLHwM/4xI444TOG88Xp
+	RnHxCQ8dF+vUfApr7oDMsm078IqzPXs5MMls9DRxhFWEHPnJFyz+12hDj2lgHVaIXvNUZG5hrBI
+	wlVKq1nKsgelvsGnf2QhCQ3orw7XWL8oojmnnZTdk609piEngQsH51FUaRyz2AhZrDpkmVQ6Cax
+	TEu9onfGGmZYqSMMyWF6FdVYPcElTAeEaGB+d7CGdZWD/A9sCK7V8OiZGJLOXZtTXCxdhAzepOT
+	W2iAACLl+u669ImiJbi1vkPN/JVs4AqsApDrajI0lCAqN4aRgk/Wy+VQZNba00aW6XaZC3jI7Kh
+	jjAmKdb8ZERyGDOnVDw2cr4lw/qBOK7a62/gKPF7XkvGbghsGaXDxJPSaThI=
+X-Received: by 2002:a17:902:d482:b0:25c:9c28:b425 with SMTP id d9443c01a7336-294def6bbb9mr35451295ad.11.1761807627687;
+        Thu, 30 Oct 2025 00:00:27 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IEG8R7h8zgk4FjFeM9aFJwiHi2Od2OFr+FuXKb3m2xgKie7li64a92q9+yh6fGoHKl7yvkzyQ==
+X-Received: by 2002:a17:902:d482:b0:25c:9c28:b425 with SMTP id d9443c01a7336-294def6bbb9mr35450935ad.11.1761807627055;
+        Thu, 30 Oct 2025 00:00:27 -0700 (PDT)
+Received: from gu-dmadival-lv.qualcomm.com (Global_NAT1.qualcomm.com. [129.46.96.20])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-29498d40a73sm177671325ad.74.2025.10.30.00.00.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 30 Oct 2025 00:00:26 -0700 (PDT)
+From: Deepa Guthyappa Madivalara <deepa.madivalara@oss.qualcomm.com>
+Date: Thu, 30 Oct 2025 00:00:08 -0700
+Subject: [PATCH v3 3/5] media: iris: Add support for AV1 format in iris
+ decoder
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-OriginatorOrg: siliconsignals.io
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: PN3P287MB1829.INDP287.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-Network-Message-Id: 9ca695d5-9cbe-444a-0903-08de1780ecd4
-X-MS-Exchange-CrossTenant-originalarrivaltime: 30 Oct 2025 06:52:42.9249
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 7ec5089e-a433-4bd1-a638-82ee62e21d37
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: iZzhYox5Olb+tjjPeGKLQAnYVqewWC91e5VMeUZ1E1C8xDs56CZtAa0GhSWneehTYl2Ug6Iadi2QkUOiSMyrYoINrk4sFNqgPzbmTt/gpNY=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PN3P287MB1701
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20251030-av1d_stateful_v3-v3-3-a1184de52fc4@oss.qualcomm.com>
+References: <20251030-av1d_stateful_v3-v3-0-a1184de52fc4@oss.qualcomm.com>
+In-Reply-To: <20251030-av1d_stateful_v3-v3-0-a1184de52fc4@oss.qualcomm.com>
+To: Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Vikash Garodia <vikash.garodia@oss.qualcomm.com>,
+        Dikshita Agarwal <dikshita.agarwal@oss.qualcomm.com>,
+        Abhinav Kumar <abhinav.kumar@linux.dev>,
+        Bryan O'Donoghue <bod@kernel.org>
+Cc: linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, kernel test robot <lkp@intel.com>,
+        Deepa Guthyappa Madivalara <deepa.madivalara@oss.qualcomm.com>,
+        Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+X-Mailer: b4 0.14.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1761807623; l=7589;
+ i=deepa.madivalara@oss.qualcomm.com; s=20250814; h=from:subject:message-id;
+ bh=Omy9/5Kj5+LGcB63VdSV5IrNWZc52iR3S5f9i+4vMDk=;
+ b=gDYAUoskczFHkGZqeuOQ4tyXSmb6fwaFM2Mbwpp2OzyoLoobd/7JEwOCX0eMkkZlYL5jfgAc/
+ i7pmO/TQSIPDAtAE7SGm7RW+DLEOn0M9ouB+Y6h0XBo4w2zh+NQHY+4
+X-Developer-Key: i=deepa.madivalara@oss.qualcomm.com; a=ed25519;
+ pk=MOEXgyokievn+bgpHdS6Ixh/KQYyS90z2mqIbQ822FQ=
+X-Proofpoint-GUID: YoiDQAHEsp6df0FpExyrjf3od16sNJqx
+X-Authority-Analysis: v=2.4 cv=D+ZK6/Rj c=1 sm=1 tr=0 ts=69030d0c cx=c_pps
+ a=cmESyDAEBpBGqyK7t0alAg==:117 a=ouPCqIW2jiPt+lZRy3xVPw==:17
+ a=IkcTkHD0fZMA:10 a=x6icFKpwvdMA:10 a=s4-Qcg_JpJYA:10
+ a=VkNPw1HP01LnGYTKEx00:22 a=KKAkSRfTAAAA:8 a=EUspDBNiAAAA:8
+ a=Dfn2-qcXI_AzomQv4o8A:9 a=QEXdDO2ut3YA:10 a=1OuFwYUASf3TG4hYMiVC:22
+ a=cvBusfyB2V15izCimMoJ:22
+X-Proofpoint-ORIG-GUID: YoiDQAHEsp6df0FpExyrjf3od16sNJqx
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUxMDMwMDA1NSBTYWx0ZWRfXx8Q0H5ISvs8j
+ pZdDo/sFNMaRqH67x3BRSG8rJbf7Q8uk/OaVSqS43JoZTYina4hD9LOqkqaiDgJqLs0DOY7Lggd
+ ROUll6HC5sslLMw3nmX1o2SDvapRVs24NR+i9pI4BIiLdkFKpFifIjK0ChQhxCVENGAVjDfpTRd
+ hFJzXFIkMSVs9+HUu4TujfbTSiNsfHXz3UPrF5NzLoEmSt/JLts02VV/pHXSfohdVoijLlbeNaZ
+ cH6/MMlILQQ9LDDQ8kLdhDh3naeOPwK6eWWvM+OUTAvUzpFrC2FtQ1rOmdNoV684b9NogDNsC8d
+ UGFVAy+10pdehSGyTPb1p6J6TwVfv+RHfEgjpkHlLj9xLRLN23VffGQ3ezy3JoF0nfVqLeHPwMv
+ 4rDw1q7gkpWN/kEFLlDqpEDavBYtFw==
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.9,FMLib:17.12.100.49
+ definitions=2025-10-30_01,2025-10-29_03,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ bulkscore=0 suspectscore=0 malwarescore=0 phishscore=0 lowpriorityscore=0
+ priorityscore=1501 adultscore=0 clxscore=1015 impostorscore=0 spamscore=0
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.22.0-2510240001 definitions=main-2510300055
 
-Hi Svyatoslav,=0A=
-=0A=
-> > > > On Tue, Oct 28, 2025 at 11:22:00AM +0200, Svyatoslav=A0Ryhel wrote:=
-=0A=
-> > > > > Add a v4l2 sub-device driver for the Sony IMX111 image sensor. Th=
-is is a=0A=
-> > > > > camera sensor using the i2c bus for control and the csi-2 bus for=
- data.=0A=
-> > > > >=0A=
-> > > > > The following features are supported:=0A=
-> > > > > - manual exposure, digital and analog gain control support=0A=
-> > > > > - pixel rate/link freq control support=0A=
-> > > > > - supported resolution up to 3280x2464 for single shot capture=0A=
-> > > > > - supported resolution up to 1920x1080 @ 30fps for video=0A=
-> > > > > - supported bayer order output SGBRG10 and SGBRG8=0A=
-> > > > >=0A=
-> > > > > Camera module seems to be partially compatible with Nokia SMIA bu=
-t it=0A=
-> > > > > lacks a few registers required for clock calculations and has dif=
-ferent=0A=
-> > > > > vendor-specific per-mode configurations which makes it incompatib=
-le with=0A=
-> > > > > existing CCS driver.=0A=
-> > > > >=0A=
-> > > > > Signed-off-by: Svyatoslav Ryhel <clamor95@gmail.com>=0A=
-> >=0A=
-> > ...=0A=
-> >=0A=
-> > > > > +#include <linux/clk.h>=0A=
-> > > > > +#include <linux/delay.h>=0A=
-> > > > > +#include <linux/gpio/consumer.h>=0A=
-> > > > > +#include <linux/i2c.h>=0A=
-> > > > > +#include <linux/kernel.h>=0A=
-> > > > > +#include <linux/media.h>=0A=
-> > > > > +#include <linux/module.h>=0A=
-> > > > > +#include <linux/pm_runtime.h>=0A=
-> > > > > +#include <linux/ratelimit.h>=0A=
-> > > > > +#include <linux/regmap.h>=0A=
-> > > > > +#include <linux/regulator/consumer.h>=0A=
-> > > > > +#include <linux/slab.h>=0A=
-> > > > > +#include <linux/string.h>=0A=
-> > > > > +#include <linux/types.h>=0A=
-> > > > > +#include <linux/videodev2.h>=0A=
-> > > > > +#include <linux/units.h>=0A=
-> > > > > +=0A=
-> > > > > +#include <media/media-entity.h>=0A=
-> > > > > +#include <media/v4l2-async.h>=0A=
-> > > > > +#include <media/v4l2-cci.h>=0A=
-> > > > > +#include <media/v4l2-ctrls.h>=0A=
-> > > > > +#include <media/v4l2-device.h>=0A=
-> > > > > +#include <media/v4l2-fwnode.h>=0A=
-> > > > > +#include <media/v4l2-event.h>=0A=
-> > > > > +#include <media/v4l2-image-sizes.h>=0A=
-> > > > > +#include <media/v4l2-subdev.h>=0A=
-> > > > > +#include <media/v4l2-mediabus.h>=0A=
-> >=0A=
-> > A few of those headers seem to be unused and can be removed=0A=
-> >=0A=
-> > Like:=0A=
-> >=0A=
-> > #include <linux/ratelimit.h>=0A=
-> > #include <linux/slab.h>=0A=
-> > #include <linux/string.h>=0A=
-> > #include <media/v4l2-event.h>=0A=
-> > #include <media/v4l2-image-sizes.h>=0A=
-> >=0A=
-> > ...=0A=
-> >=0A=
-> > > > > +/* product information registers */=0A=
-> > > > > +#define IMX111_PRODUCT_ID=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=
-=A0=A0=A0=A0=A0=A0 CCI_REG16(0x0000)=0A=
-> > > > > +#define=A0=A0 IMX111_CHIP_ID=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=
-=A0=A0=A0=A0=A0=A0=A0=A0 0x111=0A=
-> > > > > +#define IMX111_REVISION=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=
-=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 CCI_REG8(0x0002)=0A=
-> > > > > +#define IMX111_MANUFACTURER_ID=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=
-=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 CCI_REG8(0x0003)=0A=
-> > > > > +#define IMX111_SMIA_VER=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=
-=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 CCI_REG8(0x0004)=0A=
-> > > > > +#define IMX111_FRAME_COUNTER=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=
-=A0=A0=A0=A0 CCI_REG8(0x0005)=0A=
-> > > > > +#define IMX111_PIXEL_ORDER=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=
-=A0=A0=A0=A0=A0=A0 CCI_REG8(0x0006)=0A=
-> > > > > +=0A=
-> > > > > +/* general configuration registers */=0A=
-> > > > > +#define IMX111_STREAMING_MODE=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=
-=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 CCI_REG8(0x0100)=0A=
-> > > > > +#define=A0=A0 IMX111_MODE_STANDBY=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=
-=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 0=0A=
-> > > > > +#define=A0=A0 IMX111_MODE_STREAMING=A0=A0=A0=A0=A0=A0=A0=A0=A0=
-=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 1=0A=
-> > > > > +#define IMX111_IMAGE_ORIENTATION=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=
-=A0=A0 CCI_REG8(0x0101)=0A=
-> > > > > +#define=A0=A0 IMX111_IMAGE_HFLIP=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=
-=A0=A0=A0=A0=A0=A0 BIT(0)=0A=
-> > > > > +#define=A0=A0 IMX111_IMAGE_VFLIP=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=
-=A0=A0=A0=A0=A0=A0 BIT(1)=0A=
-> > > > > +#define IMX111_SOFTWARE_RESET=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=
-=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 CCI_REG8(0x0103)=0A=
-> > > > > +#define=A0=A0 IMX111_RESET_ON=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=
-=A0=A0=A0=A0=A0=A0=A0=A0 1=0A=
-> > > > > +#define IMX111_GROUP_WRITE=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=
-=A0=A0=A0=A0=A0=A0 CCI_REG8(0x0104)=0A=
-> > > > > +#define=A0=A0 IMX111_GROUP_WRITE_ON=A0=A0=A0=A0=A0=A0=A0=A0=A0=
-=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 1=0A=
-> > > > > +#define IMX111_FRAME_DROP=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=
-=A0=A0=A0=A0=A0=A0 CCI_REG8(0x0105)=0A=
-> > > > > +#define=A0=A0 IMX111_FRAME_DROP_ON=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=
-=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 1=0A=
-> > > > > +#define IMX111_CHANNEL_ID=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=
-=A0=A0=A0=A0=A0=A0 CCI_REG8(0x0110)=0A=
-> > > > > +#define IMX111_SIGNALLING_MODE=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=
-=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 CCI_REG8(0x0111)=0A=
-> > > > > +#define IMX111_DATA_DEPTH=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=
-=A0=A0=A0=A0=A0=A0 CCI_REG16(0x0112)=0A=
-> > > > > +#define=A0=A0 IMX111_DATA_DEPTH_RAW8=A0=A0=A0=A0=A0=A0=A0=A0=A0=
-=A0=A0=A0 0x08=0A=
-> > > > > +#define=A0=A0 IMX111_DATA_DEPTH_RAW10=A0=A0=A0=A0=A0=A0=A0=A0=A0=
-=A0=A0 0x0a=0A=
-> > > > > +=0A=
-> > > > > +/* integration time registers */=0A=
-> > > > > +#define IMX111_INTEGRATION_TIME=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=
-=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 CCI_REG16(0x0202)=0A=
-> > > > > +#define IMX111_INTEGRATION_TIME_MIN=A0=A0=A0=A0=A0=A0=A0=A0=A0 0=
-x1=0A=
-> > > > > +#define IMX111_INTEGRATION_TIME_MAX=A0=A0=A0=A0=A0=A0=A0=A0=A0 0=
-xffff=0A=
-> > > > > +#define IMX111_INTEGRATION_TIME_STEP=A0=A0=A0=A0=A0=A0=A0=A0 1=
-=0A=
-> > > > > +=0A=
-> > > > > +/* analog gain control */=0A=
-> > > > > +#define IMX111_REG_ANALOG_GAIN=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=
-=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 CCI_REG8(0x0205)=0A=
-> > > > > +#define IMX111_ANA_GAIN_MIN=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=
-=A0=A0=A0=A0=A0 0=0A=
-> > > > > +#define IMX111_ANA_GAIN_MAX=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=
-=A0=A0=A0=A0=A0 240=0A=
-> > > > > +#define IMX111_ANA_GAIN_STEP=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=
-=A0=A0=A0=A0 1=0A=
-> > > > > +#define IMX111_ANA_GAIN_DEFAULT=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=
-=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 0=0A=
-> > > > > +=0A=
-> > > > > +/* digital gain control */=0A=
-> > > > > +#define IMX111_REG_DIG_GAIN_GREENR=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=
- CCI_REG16(0x020e)=0A=
-> > > > > +#define IMX111_REG_DIG_GAIN_RED=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=
-=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 CCI_REG16(0x0210)=0A=
-> > > > > +#define IMX111_REG_DIG_GAIN_BLUE=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=
-=A0=A0 CCI_REG16(0x0212)=0A=
-> > > > > +#define IMX111_REG_DIG_GAIN_GREENB=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=
- CCI_REG16(0x0214)=0A=
-> > > > > +#define IMX111_DGTL_GAIN_MIN=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=
-=A0=A0=A0=A0 0x0100=0A=
-> > > > > +#define IMX111_DGTL_GAIN_MAX=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=
-=A0=A0=A0=A0 0x0fff=0A=
-> > > > > +#define IMX111_DGTL_GAIN_DEFAULT=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=
-=A0=A0 0x0100=0A=
-> > > > > +#define IMX111_DGTL_GAIN_STEP=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=
-=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 1=0A=
-> > > > > +=0A=
-> > > > > +/* clock configuration registers */=0A=
-> > > > > +#define IMX111_PIXEL_CLK_DIVIDER_PLL1=A0=A0=A0=A0=A0=A0=A0=A0=A0=
-=A0=A0=A0=A0=A0=A0 CCI_REG8(0x0301) /* fixed to 10 */=0A=
-> > > > > +#define IMX111_SYSTEM_CLK_DIVIDER_PLL1=A0=A0=A0=A0=A0=A0=A0=A0=
-=A0=A0=A0=A0=A0=A0 CCI_REG8(0x0303) /* fixed to 1 */=0A=
-> > > > > +#define IMX111_PRE_PLL_CLK_DIVIDER_PLL1=A0=A0=A0=A0=A0=A0=A0=A0=
-=A0=A0=A0=A0=A0 CCI_REG8(0x0305)=0A=
-> > > > > +#define IMX111_PLL_MULTIPLIER_PLL1=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=
- CCI_REG8(0x0307)=0A=
-> > > > > +#define IMX111_PLL_SETTLING_TIME=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=
-=A0=A0 CCI_REG8(0x303c)=0A=
-> > > > > +#define=A0=A0 IMX111_PLL_SETTLING_TIME_DEFAULT=A0=A0 200=0A=
-> > > > > +#define IMX111_POST_DIVIDER=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=
-=A0=A0=A0=A0=A0 CCI_REG8(0x30a4)=0A=
-> > > > > +#define=A0=A0 IMX111_POST_DIVIDER_DIV1=A0=A0=A0=A0=A0=A0=A0=A0=
-=A0=A0 2=0A=
-> > > > > +#define=A0=A0 IMX111_POST_DIVIDER_DIV2=A0=A0=A0=A0=A0=A0=A0=A0=
-=A0=A0 0=0A=
-> > > > > +#define=A0=A0 IMX111_POST_DIVIDER_DIV4=A0=A0=A0=A0=A0=A0=A0=A0=
-=A0=A0 1=0A=
-> > > > > +=0A=
-> > > > > +/* frame timing registers */=0A=
-> > > > > +#define IMX111_VERTICAL_TOTAL_LENGTH=A0=A0=A0=A0=A0=A0=A0=A0 CCI=
-_REG16(0x0340)=0A=
-> > > > > +#define IMX111_HORIZONTAL_TOTAL_LENGTH=A0=A0=A0=A0=A0=A0=A0=A0=
-=A0=A0=A0=A0=A0=A0 CCI_REG16(0x0342)=0A=
-> > > > > +=0A=
-> > > > > +/* image size registers */=0A=
-> > > > > +#define IMX111_HORIZONTAL_START=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=
-=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 CCI_REG16(0x0344)=0A=
-> > > > > +#define IMX111_VERTICAL_START=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=
-=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 CCI_REG16(0x0346)=0A=
-> > > > > +#define IMX111_HORIZONTAL_END=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=
-=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 CCI_REG16(0x0348)=0A=
-> > > > > +#define IMX111_VERTICAL_END=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=
-=A0=A0=A0=A0=A0 CCI_REG16(0x034a)=0A=
-> > > > > +#define IMX111_IMAGE_WIDTH=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=
-=A0=A0=A0=A0=A0=A0 CCI_REG16(0x034c)=0A=
-> > > > > +#define IMX111_IMAGE_HEIGHT=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=
-=A0=A0=A0=A0=A0 CCI_REG16(0x034e)=0A=
-> >=0A=
-> > In the mode register settings, you can use the above macros.=0A=
-> >=0A=
-> > > > > +static const struct cci_reg_sequence mode_820x614[] =3D {=0A=
-> > > > > +=A0=A0=A0=A0 { CCI_REG8(0x0340), 0x04 },=A0=A0=A0=A0 { CCI_REG8(=
-0x0341), 0xec },=0A=
-> > > > > +=A0=A0=A0=A0 { CCI_REG8(0x0342), 0x0d },=A0=A0=A0=A0 { CCI_REG8(=
-0x0343), 0xd0 },=0A=
-> > > > > +=A0=A0=A0=A0 { CCI_REG8(0x0344), 0x00 },=A0=A0=A0=A0 { CCI_REG8(=
-0x0345), 0x08 },=0A=
-> > > > > +=A0=A0=A0=A0 { CCI_REG8(0x0346), 0x00 },=A0=A0=A0=A0 { CCI_REG8(=
-0x0347), 0x34 },=0A=
-> > > > > +=A0=A0=A0=A0 { CCI_REG8(0x0348), 0x0c },=A0=A0=A0=A0 { CCI_REG8(=
-0x0349), 0xd7 },=0A=
-> > > > > +=A0=A0=A0=A0 { CCI_REG8(0x034a), 0x09 },=A0=A0=A0=A0 { CCI_REG8(=
-0x034b), 0xcb },=0A=
-> > > > > +=A0=A0=A0=A0 { CCI_REG8(0x034c), 0x03 },=A0=A0=A0=A0 { CCI_REG8(=
-0x034d), 0x34 },=0A=
-> > > > > +=A0=A0=A0=A0 { CCI_REG8(0x034e), 0x02 },=A0=A0=A0=A0 { CCI_REG8(=
-0x034f), 0x66 },=0A=
-> >=0A=
-> > Here, you can use those macros.=0A=
-> >=0A=
-> > Likewise, in every mode.=0A=
-> >=0A=
-> =0A=
-> This is not as simple as a substitution, imx111 requires group write=0A=
-> in order to write 16bit values to registers. I will see what I can do=0A=
-> about this.=0A=
-=0A=
-It is straightforward, even if group writes are present. =0A=
-=0A=
-static const struct cci_reg_sequence mode_820x614[] =3D {=0A=
-=0A=
-	// group hold ON Register Write  =0A=
-=0A=
-	{ IMX111_VERTICAL_TOTAL_LENGTH, 0x04ec },=0A=
-	.=0A=
- 	.=0A=
-	.=0A=
-	{ IMX111_IMAGE_HEIGHT,		0x0266 },=0A=
-=0A=
-	// group hold OFF  Register write=0A=
-};=0A=
-=0A=
-However, in your register settings, I do not find any group hold ON or OFF=
-=0A=
-register before or after these image size=96related registers. This appears=
- =0A=
-to be a simple substitution.=0A=
-=0A=
-If I have misunderstood something, please let me know.=0A=
-=0A=
-One more suggestion: you can create a helper function for group writes=0A=
-It is up to you, if you want, you can make this change.=0A=
-=0A=
-static int imx111_group_write(struct imx111 *sensor, bool enable)=0A=
-{=0A=
-	int ret;=0A=
-	=0A=
-	if (enable)=0A=
-		cci_update_bits(sensor->regmap, IMX111_GROUP_WRITE, =0A=
-				IMX111_GROUP_WRITE_ON, IMX111_GROUP_WRITE_ON, =0A=
-				&ret); =0A=
-	else=0A=
-		cci_update_bits(sensor->regmap, IMX111_GROUP_WRITE, =0A=
-				IMX111_GROUP_WRITE_ON, 0, &ret);=0A=
-	 =0A=
-	return ret;=0A=
-}=0A=
-=0A=
-It removes the repeated cci_update_bits(... GROUP_WRITE ...) boilerplate.=
-=0A=
-	=0A=
-Best Regards,=0A=
-Tarang=
+Extend iris decoder driver to support format V4L2_PIX_FMT_AV1.
+This change updates the format enumeration (VIDIOC_ENUM_FMT)
+and allows setting AV1 format via VIDIOC_S_FMT for gen2 and beyond.
+Gen1 iris hardware decoder does not support AV1 format.
+
+Reviewed-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+Signed-off-by: Deepa Guthyappa Madivalara <deepa.madivalara@oss.qualcomm.com>
+---
+ .../platform/qcom/iris/iris_hfi_gen2_defines.h     |  1 +
+ drivers/media/platform/qcom/iris/iris_instance.h   |  1 +
+ .../platform/qcom/iris/iris_platform_common.h      |  2 ++
+ .../media/platform/qcom/iris/iris_platform_gen2.c  | 23 ++++++++++++++++++++++
+ .../platform/qcom/iris/iris_platform_sm8250.c      | 17 ++++++++++++++++
+ drivers/media/platform/qcom/iris/iris_vdec.c       | 23 ++++------------------
+ 6 files changed, 48 insertions(+), 19 deletions(-)
+
+diff --git a/drivers/media/platform/qcom/iris/iris_hfi_gen2_defines.h b/drivers/media/platform/qcom/iris/iris_hfi_gen2_defines.h
+index 1b6a4dbac828ffea53c1be0d3624a033c283c972..3d56f257bc5620aacec2bb7e11253dc7c83b7db9 100644
+--- a/drivers/media/platform/qcom/iris/iris_hfi_gen2_defines.h
++++ b/drivers/media/platform/qcom/iris/iris_hfi_gen2_defines.h
+@@ -139,6 +139,7 @@ enum hfi_codec_type {
+ 	HFI_CODEC_DECODE_HEVC			= 3,
+ 	HFI_CODEC_ENCODE_HEVC			= 4,
+ 	HFI_CODEC_DECODE_VP9			= 5,
++	HFI_CODEC_DECODE_AV1			= 7,
+ };
+ 
+ enum hfi_picture_type {
+diff --git a/drivers/media/platform/qcom/iris/iris_instance.h b/drivers/media/platform/qcom/iris/iris_instance.h
+index 62fbb30691ff967212022308fa53ff221fa24ce9..7e4f5f1dd8921c57db039fbd4bc2f321891348db 100644
+--- a/drivers/media/platform/qcom/iris/iris_instance.h
++++ b/drivers/media/platform/qcom/iris/iris_instance.h
+@@ -19,6 +19,7 @@ enum iris_fmt_type_out {
+ 	IRIS_FMT_H264,
+ 	IRIS_FMT_HEVC,
+ 	IRIS_FMT_VP9,
++	IRIS_FMT_AV1,
+ };
+ 
+ enum iris_fmt_type_cap {
+diff --git a/drivers/media/platform/qcom/iris/iris_platform_common.h b/drivers/media/platform/qcom/iris/iris_platform_common.h
+index 58d05e0a112eed25faea027a34c719c89d6c3897..9aca70b4c0690f0d8d799e2a9976bd20d6bb8c94 100644
+--- a/drivers/media/platform/qcom/iris/iris_platform_common.h
++++ b/drivers/media/platform/qcom/iris/iris_platform_common.h
+@@ -214,6 +214,8 @@ struct iris_platform_data {
+ 	u64 dma_mask;
+ 	const char *fwname;
+ 	u32 pas_id;
++	struct iris_fmt *inst_iris_fmts;
++	u32 inst_iris_fmts_size;
+ 	struct platform_inst_caps *inst_caps;
+ 	struct platform_inst_fw_cap *inst_fw_caps_dec;
+ 	u32 inst_fw_caps_dec_size;
+diff --git a/drivers/media/platform/qcom/iris/iris_platform_gen2.c b/drivers/media/platform/qcom/iris/iris_platform_gen2.c
+index 69c952c68e939f305f25511e2e4763487ec8e0de..3b61723dbf27e9ba8d427686e44cf048a0ab7c5b 100644
+--- a/drivers/media/platform/qcom/iris/iris_platform_gen2.c
++++ b/drivers/media/platform/qcom/iris/iris_platform_gen2.c
+@@ -19,6 +19,25 @@
+ #define VIDEO_ARCH_LX 1
+ #define BITRATE_MAX				245000000
+ 
++static struct iris_fmt platform_fmts_sm8550_dec[] = {
++	[IRIS_FMT_H264] = {
++		.pixfmt = V4L2_PIX_FMT_H264,
++		.type = V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE,
++	},
++	[IRIS_FMT_HEVC] = {
++		.pixfmt = V4L2_PIX_FMT_HEVC,
++		.type = V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE,
++	},
++	[IRIS_FMT_VP9] = {
++		.pixfmt = V4L2_PIX_FMT_VP9,
++		.type = V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE,
++	},
++	[IRIS_FMT_AV1] = {
++		.pixfmt = V4L2_PIX_FMT_AV1,
++		.type = V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE,
++	},
++};
++
+ static struct platform_inst_fw_cap inst_fw_cap_sm8550_dec[] = {
+ 	{
+ 		.cap_id = PROFILE_H264,
+@@ -761,6 +780,8 @@ struct iris_platform_data sm8550_data = {
+ 	.dma_mask = 0xe0000000 - 1,
+ 	.fwname = "qcom/vpu/vpu30_p4.mbn",
+ 	.pas_id = IRIS_PAS_ID,
++	.inst_iris_fmts = platform_fmts_sm8550_dec,
++	.inst_iris_fmts_size = ARRAY_SIZE(platform_fmts_sm8550_dec),
+ 	.inst_caps = &platform_inst_cap_sm8550,
+ 	.inst_fw_caps_dec = inst_fw_cap_sm8550_dec,
+ 	.inst_fw_caps_dec_size = ARRAY_SIZE(inst_fw_cap_sm8550_dec),
+@@ -853,6 +874,8 @@ struct iris_platform_data sm8650_data = {
+ 	.dma_mask = 0xe0000000 - 1,
+ 	.fwname = "qcom/vpu/vpu33_p4.mbn",
+ 	.pas_id = IRIS_PAS_ID,
++	.inst_iris_fmts = platform_fmts_sm8550_dec,
++	.inst_iris_fmts_size = ARRAY_SIZE(platform_fmts_sm8550_dec),
+ 	.inst_caps = &platform_inst_cap_sm8550,
+ 	.inst_fw_caps_dec = inst_fw_cap_sm8550_dec,
+ 	.inst_fw_caps_dec_size = ARRAY_SIZE(inst_fw_cap_sm8550_dec),
+diff --git a/drivers/media/platform/qcom/iris/iris_platform_sm8250.c b/drivers/media/platform/qcom/iris/iris_platform_sm8250.c
+index 16486284f8acccf6a95a27f6003e885226e28f4d..8342a0b6f825b385192baedfc67c50bba7661470 100644
+--- a/drivers/media/platform/qcom/iris/iris_platform_sm8250.c
++++ b/drivers/media/platform/qcom/iris/iris_platform_sm8250.c
+@@ -17,6 +17,21 @@
+ #define BITRATE_PEAK_DEFAULT	(BITRATE_DEFAULT * 2)
+ #define BITRATE_STEP		100
+ 
++static struct iris_fmt platform_fmts_sm8250_dec[] = {
++	[IRIS_FMT_H264] = {
++		.pixfmt = V4L2_PIX_FMT_H264,
++		.type = V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE,
++	},
++	[IRIS_FMT_HEVC] = {
++		.pixfmt = V4L2_PIX_FMT_HEVC,
++		.type = V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE,
++	},
++	[IRIS_FMT_VP9] = {
++		.pixfmt = V4L2_PIX_FMT_VP9,
++		.type = V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE,
++	},
++};
++
+ static struct platform_inst_fw_cap inst_fw_cap_sm8250_dec[] = {
+ 	{
+ 		.cap_id = PIPE,
+@@ -337,6 +352,8 @@ struct iris_platform_data sm8250_data = {
+ 	.dma_mask = 0xe0000000 - 1,
+ 	.fwname = "qcom/vpu-1.0/venus.mbn",
+ 	.pas_id = IRIS_PAS_ID,
++	.inst_iris_fmts = platform_fmts_sm8250_dec,
++	.inst_iris_fmts_size = ARRAY_SIZE(platform_fmts_sm8250_dec),
+ 	.inst_caps = &platform_inst_cap_sm8250,
+ 	.inst_fw_caps_dec = inst_fw_cap_sm8250_dec,
+ 	.inst_fw_caps_dec_size = ARRAY_SIZE(inst_fw_cap_sm8250_dec),
+diff --git a/drivers/media/platform/qcom/iris/iris_vdec.c b/drivers/media/platform/qcom/iris/iris_vdec.c
+index 69ffe52590d3acf8d595f856fb1dbd81f3073721..bf7b9c621cb7255367c06f144c03c3faa69372e0 100644
+--- a/drivers/media/platform/qcom/iris/iris_vdec.c
++++ b/drivers/media/platform/qcom/iris/iris_vdec.c
+@@ -67,21 +67,6 @@ void iris_vdec_inst_deinit(struct iris_inst *inst)
+ 	kfree(inst->fmt_src);
+ }
+ 
+-static const struct iris_fmt iris_vdec_formats_out[] = {
+-	[IRIS_FMT_H264] = {
+-		.pixfmt = V4L2_PIX_FMT_H264,
+-		.type = V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE,
+-	},
+-	[IRIS_FMT_HEVC] = {
+-		.pixfmt = V4L2_PIX_FMT_HEVC,
+-		.type = V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE,
+-	},
+-	[IRIS_FMT_VP9] = {
+-		.pixfmt = V4L2_PIX_FMT_VP9,
+-		.type = V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE,
+-	},
+-};
+-
+ static const struct iris_fmt iris_vdec_formats_cap[] = {
+ 	[IRIS_FMT_NV12] = {
+ 		.pixfmt = V4L2_PIX_FMT_NV12,
+@@ -101,8 +86,8 @@ find_format(struct iris_inst *inst, u32 pixfmt, u32 type)
+ 	unsigned int i;
+ 	switch (type) {
+ 	case V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE:
+-		fmt = iris_vdec_formats_out;
+-		size = ARRAY_SIZE(iris_vdec_formats_out);
++		fmt = inst->core->iris_platform_data->inst_iris_fmts;
++		size = inst->core->iris_platform_data->inst_iris_fmts_size;
+ 		break;
+ 	case V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE:
+ 		fmt = iris_vdec_formats_cap;
+@@ -131,8 +116,8 @@ find_format_by_index(struct iris_inst *inst, u32 index, u32 type)
+ 
+ 	switch (type) {
+ 	case V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE:
+-		fmt = iris_vdec_formats_out;
+-		size = ARRAY_SIZE(iris_vdec_formats_out);
++		fmt = inst->core->iris_platform_data->inst_iris_fmts;
++		size = inst->core->iris_platform_data->inst_iris_fmts_size;
+ 		break;
+ 	case V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE:
+ 		fmt = iris_vdec_formats_cap;
+
+-- 
+2.34.1
+
