@@ -1,71 +1,75 @@
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f195.google.com (mail-pf1-f195.google.com [209.85.210.195])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3D7512F7AAF;
-	Fri, 31 Oct 2025 16:10:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=60.244.123.138
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 24BF52FD684
+	for <linux-media@vger.kernel.org>; Fri, 31 Oct 2025 16:56:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.195
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761927009; cv=none; b=ESL2kpd0YxcRmy7EE+xSCook9vd3K5kEawhA7c3tqEJZALQ41063M4UNK/p6dAKhKxdQXTfD5rOVpW3j7FqIdEyZNc71sgCtuniF4tbv5GDEmt3HAR+dXsb3bAKcDhqq3kEM07jSEC1XTSiexVGwIp7o9odWQ0sVpOiThexJjGY=
+	t=1761929819; cv=none; b=cQjpaIP/LjRm2qz5i5YHEmRUWu4Kmq20tc5Krsw2naudrkAm8DhkLrXWhzGacD4JqKOuNiGQfyArwaBbJZvoWpNdURKliFYTdqe+6G00QTsh38SXV78h4tSCNq5Sp5Gi7Ll2I5miI0gnz8FlXRwyNJ+4t/P8X6DcavD6kP0G6NA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761927009; c=relaxed/simple;
-	bh=omrbcTZsbcZ+3XDZEifpcad7bGjMuBZ2NvPTKJ451zM=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=ouO7ei831WW2BJG8sdHExh3NFu6wgQ5u+VGfctnfUZKfxGYUXY5GivBlp9xH0um/asuVZDoNmj9G1vHOlYl4H7CzKUdB08WCM33AtKQw/wFBITxSXwdLFr/WzSqN8ddGWi7Vst67UTLDjluGQP1ulsXH/uWl6dMo/cTy58VRLzA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mediatek.com; spf=pass smtp.mailfrom=mediatek.com; dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b=GzA8vSCB; arc=none smtp.client-ip=60.244.123.138
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mediatek.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mediatek.com
+	s=arc-20240116; t=1761929819; c=relaxed/simple;
+	bh=WWnQxq9MvOz5vophT5mh709wnc18gU/QGh7BlY7BU44=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=rWhXg1K9V6+K/zDUNWGS6WMYhUg61lVZ4s/eshaJJ76JxGOVAdh2+8Xqtznl7Q9KOEcizplfdIz/Q+ZJMKx0OSOA2zhQP4YN2vg9hHLSucgPjy3UG644ncD/0dEBSMVrasBhj+6MfhRuS+4IxOhr1Ow6y6REEm3Ikb1hKC14+So=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=FqR3OA6F; arc=none smtp.client-ip=209.85.210.195
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b="GzA8vSCB"
-X-UUID: 0c502b24b67411f0ae1e63ff8927bad3-20251101
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-	h=Content-Type:Content-Transfer-Encoding:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=SkGI+/0cRLUu5eq/hf8igmUnbrx2BqqNxFulUFHBUGM=;
-	b=GzA8vSCBrZ7wAIk2JUU3uPONu0TwxJNq6dhfmvzgG27lttFzKj16Utr7OOuGuglRvBiPf+ke0tfPad2jqDqYK5OBG/rffCqsoHhqYy8CYtcZe4cD9hgHCc0RmEBxsTUcGPWOcqZzKVKeetyBfAI3v4+xsQGB+ZflN39LVlagfPk=;
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.3.6,REQID:d31ae6b7-561c-4e3a-b7da-647d9ef5807a,IP:0,UR
-	L:0,TC:0,Content:40,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
-	release,TS:40
-X-CID-META: VersionHash:a9d874c,CLOUDID:a452c818-3399-4579-97ab-008f994989ea,B
-	ulkID:nil,BulkQuantity:0,Recheck:0,SF:81|82|102|836|888|898,TC:-5,Content:
-	4|15|50,EDM:-3,IP:nil,URL:0,File:130,RT:0,Bulk:nil,QS:nil,BEC:nil,COL:0,OS
-	I:0,OSA:0,AV:0,LES:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0,ARC:0
-X-CID-BVR: 2,SSN|SDN
-X-CID-BAS: 2,SSN|SDN,0,_
-X-CID-FACTOR: TF_CID_SPAM_SNR
-X-CID-RHF: D41D8CD98F00B204E9800998ECF8427E
-X-UUID: 0c502b24b67411f0ae1e63ff8927bad3-20251101
-Received: from mtkmbs10n1.mediatek.inc [(172.21.101.34)] by mailgw01.mediatek.com
-	(envelope-from <jason-jh.lin@mediatek.com>)
-	(Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-	with ESMTP id 1394765135; Sat, 01 Nov 2025 00:09:58 +0800
-Received: from mtkmbs13n2.mediatek.inc (172.21.101.108) by
- mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1748.26; Sat, 1 Nov 2025 00:09:56 +0800
-Received: from mtksitap99.mediatek.inc (10.233.130.16) by
- mtkmbs13n2.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
- 15.2.1748.26 via Frontend Transport; Sat, 1 Nov 2025 00:09:56 +0800
-From: Jason-JH Lin <jason-jh.lin@mediatek.com>
-To: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>, Jassi Brar <jassisinghbrar@gmail.com>,
-	Chun-Kuang Hu <chunkuang.hu@kernel.org>, AngeloGioacchino Del Regno
-	<angelogioacchino.delregno@collabora.com>, Mauro Carvalho Chehab
-	<mchehab@kernel.org>
-CC: Matthias Brugger <matthias.bgg@gmail.com>, Nicolas Dufresne
-	<nicolas@ndufresne.ca>, Jason-JH Lin <jason-jh.lin@mediatek.com>, Nancy Lin
-	<nancy.lin@mediatek.com>, Singo Chang <singo.chang@mediatek.com>, "Paul-PL
- Chen" <paul-pl.chen@mediatek.com>, Moudy Ho <moudy.ho@mediatek.com>,
-	"Xiandong Wang" <xiandong.wang@mediatek.com>, Sirius Wang
-	<sirius.wang@mediatek.com>, Fei Shao <fshao@chromium.org>, Chen-yu Tsai
-	<wenst@chromium.org>, <Project_Global_Chrome_Upstream_Group@mediatek.com>,
-	<devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-	<dri-devel@lists.freedesktop.org>, <linux-mediatek@lists.infradead.org>,
-	<linux-arm-kernel@lists.infradead.org>, <linux-media@vger.kernel.org>
-Subject: [PATCH 2/3] soc: mediatek: mtk-cmdq: Remove cmdq_pkt_write() and cmdq_pkt_write_mask()
-Date: Sat, 1 Nov 2025 00:09:33 +0800
-Message-ID: <20251031160955.1659524-3-jason-jh.lin@mediatek.com>
-X-Mailer: git-send-email 2.45.2
-In-Reply-To: <20251031160955.1659524-1-jason-jh.lin@mediatek.com>
-References: <20251031160955.1659524-1-jason-jh.lin@mediatek.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="FqR3OA6F"
+Received: by mail-pf1-f195.google.com with SMTP id d2e1a72fcca58-7a28226dd13so2517186b3a.3
+        for <linux-media@vger.kernel.org>; Fri, 31 Oct 2025 09:56:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1761929817; x=1762534617; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=75H06cNN6UuN6pp1+AJHS92a14vydasjYoMYY7ki7eY=;
+        b=FqR3OA6FfwdQNbQxzim1e1vH5+6Xs3MKk/QQCmJz9jzfhCUIZBT3Sw1+V14sG9xifS
+         kirJtJsoTLMPsTL8iY/Zv5LBeoLsqvhOUtNpweK533m34iUNItowDZw9ud7Ob0OLVOyB
+         Vfh2cc3qwPn0l9s8zrudPUmUC4GgzdMelqfgrplnmqlMGKW6Zjfi8sxcc8TpL2fHbrhe
+         vMtoSWCl4z9zTtxB9AR515W0faQ3FOk4HEvY5DJhmwlb3GWLsvfiKRFw89/nXqKSzrvW
+         xLKMcx5ov+uai1DhePx32Sq32pq6Vf6O5ZcMpDf625O1YQ9rgONLhDCyRRyOrY5Y421y
+         uKHw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1761929817; x=1762534617;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=75H06cNN6UuN6pp1+AJHS92a14vydasjYoMYY7ki7eY=;
+        b=VkU+nMFqxeUIjMp8XFFk+3FuNxjlawSqsNYNBLsUFvss6tQsgCsMjV0MxqDjCEz/yA
+         dozPe6jlCby2VcPfyqnUG+WWgyikyCvuEG4DRjIBrZYOIz5Q09V2W2IdCnEPzgxTSA0M
+         ZoW5fCh90nbLqW5+8DyiS4F4jVFlESfaRWNTqECfq81nAQlijtwcUT6oQDYUzynmubae
+         ecuZ3n5UxDcUbWeOIh7iRmeF10gZ30jCe7PI1blFRLHCP71TVbrJ/Cu/quNIOVuVs0MT
+         ImU61EhS8/Ze6Ek/qGWkyUutgzLX/3lVc7FrZ6inkq0OTU1T6sxRoMiR2z2BN2UmideM
+         2xNg==
+X-Forwarded-Encrypted: i=1; AJvYcCUfCzvYSvVtql6z2cEcUS11II3gS8fGq+srKtU4IAU/pHlyCLMTrEr+RswdZaRb+rStdQ/Vo0HnhUw8QA==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx36f6QmB5+KZ16rhJ1N/9KQ076nO8YK5w05aInDH3Cxuheuy7n
+	TVJMdLeybNeb47GsnOCJdfMRkOWYcN+ztOc3dCwLZP9HUvGSyuA3nhde
+X-Gm-Gg: ASbGncv1lk2Wa7FFHvYltSd7gXrh7Kz3xNnGwj0XVj47vHtd74iyLg9+vijFfWdom1H
+	RBuY1jNJMZKiULobZ5P2+/IRnV6Lf28E5kPcNHO+Z2dRan8GJN3Ld5LoPvWrq4tkPAsvTDwoamL
+	3D9iNN0RU/2Qg868rk0udp8cLcI6KG8rCK5SP6xHCkY6FELJ9eDMiw+13Cgf87RPNbHbC4KN1N/
+	AH37+0/H6G5GRjtEoNrUCxzOiB63UUO470Xl7SLNC3AEQft2jAEpxuTsk6gmOgTdHHKGyxmLzuB
+	6c+uuUXzlFA+xac6vGkIPtGRQ42jRuiAy3WXphTfiL+2abzR/UhavHGmY3owHLQpsQixCyNgD8c
+	kgE31R/P9QhhCZ8w8BjVyTupu1V2/8o54ydFoJhVH/AyYJntvHtPdE2YiGbJuW1KFeG0BoaIbLQ
+	2qGLs=
+X-Google-Smtp-Source: AGHT+IEn9mRaFriZ4w42iWzEpFpTJw3pAZ5gIf/TLvCs2205ZF0F+XXD+dUdH9vCvuvbHC5KOkO2jw==
+X-Received: by 2002:a05:6a00:3e24:b0:781:24ec:c8f4 with SMTP id d2e1a72fcca58-7a776d97ed2mr4632190b3a.3.1761929817335;
+        Fri, 31 Oct 2025 09:56:57 -0700 (PDT)
+Received: from Ubuntu24.. ([103.187.64.30])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-7a7dbc5aa56sm2745572b3a.68.2025.10.31.09.56.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 31 Oct 2025 09:56:56 -0700 (PDT)
+From: Shrikant Raskar <raskar.shree97@gmail.com>
+To: hverkuil@kernel.org,
+	mchehab@kernel.org
+Cc: skhan@linuxfoundation.org,
+	david.hunter.linux@gmail.com,
+	linux-media@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-kernel-mentees@lists.linux.dev,
+	Shrikant Raskar <raskar.shree97@gmail.com>
+Subject: [RFC PATCH v3] media: saa6588: Remove dprintk macro and use v4l2_info()
+Date: Fri, 31 Oct 2025 22:26:45 +0530
+Message-ID: <20251031165645.6217-1-raskar.shree97@gmail.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
@@ -73,167 +77,127 @@ List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-MTK: N
 
-The original cmdq_pkt_write() and cmdq_pkt_write_mask() only supported
-generating GCE instructions with subsys ID. They have been replaced by
-cmdq_pkt_write_pa(), cmdq_pkt_write_subsys(), cmdq_pkt_write_mask_pa()
-and cmdq_pkt_write_mask_subsys().
+The existing 'dprintk' macro used an unwrapped 'if' statement which was
+flagged by checkpatch, but instead of wrapping it, the debug handling
+can be simplified.
 
-These 2 functions can now be removed as they are no longer in use.
+This patch removes the 'dprintk' macro entirely and replaces all its
+usages with v4l2_info() helper. The unused 'PREFIX' macro is also
+removed.
 
-Signed-off-by: Jason-JH Lin <jason-jh.lin@mediatek.com>
-Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+Signed-off-by: Shrikant Raskar <raskar.shree97@gmail.com>
 ---
- drivers/soc/mediatek/mtk-cmdq-helper.c | 49 ++++++++++----------------
- include/linux/soc/mediatek/mtk-cmdq.h  | 35 ------------------
- 2 files changed, 18 insertions(+), 66 deletions(-)
+Changelog:
+Changes since v2:
+- Fixed indentation issue reported by media CI robot.
 
-diff --git a/drivers/soc/mediatek/mtk-cmdq-helper.c b/drivers/soc/mediatek/mtk-cmdq-helper.c
-index a266cd9efcdb..b816f3a76ccd 100644
---- a/drivers/soc/mediatek/mtk-cmdq-helper.c
-+++ b/drivers/soc/mediatek/mtk-cmdq-helper.c
-@@ -215,18 +215,6 @@ static int cmdq_pkt_mask(struct cmdq_pkt *pkt, u32 mask)
- 	return cmdq_pkt_append_command(pkt, inst);
+Link to v2:
+https://lore.kernel.org/all/20251025124107.4921-1-raskar.shree97@gmail.com/
+---
+ drivers/media/i2c/saa6588.c | 27 +++++++++++++--------------
+ 1 file changed, 13 insertions(+), 14 deletions(-)
+
+diff --git a/drivers/media/i2c/saa6588.c b/drivers/media/i2c/saa6588.c
+index fb09e4560d8a..90ae4121a68a 100644
+--- a/drivers/media/i2c/saa6588.c
++++ b/drivers/media/i2c/saa6588.c
+@@ -49,8 +49,6 @@ MODULE_LICENSE("GPL");
+ /* ---------------------------------------------------------------------- */
+ 
+ #define UNSET       (-1U)
+-#define PREFIX      "saa6588: "
+-#define dprintk     if (debug) printk
+ 
+ struct saa6588 {
+ 	struct v4l2_subdev sd;
+@@ -144,14 +142,14 @@ static bool block_from_buf(struct saa6588 *s, unsigned char *buf)
+ 
+ 	if (s->rd_index == s->wr_index) {
+ 		if (debug > 2)
+-			dprintk(PREFIX "Read: buffer empty.\n");
++			v4l2_info(&s->sd, "Read: buffer empty.\n");
+ 		return false;
+ 	}
+ 
+ 	if (debug > 2) {
+-		dprintk(PREFIX "Read: ");
++		v4l2_info(&s->sd, "Read: ");
+ 		for (i = s->rd_index; i < s->rd_index + 3; i++)
+-			dprintk("0x%02x ", s->buffer[i]);
++			v4l2_info(&s->sd, "0x%02x ", s->buffer[i]);
+ 	}
+ 
+ 	memcpy(buf, &s->buffer[s->rd_index], 3);
+@@ -162,7 +160,7 @@ static bool block_from_buf(struct saa6588 *s, unsigned char *buf)
+ 	s->block_count--;
+ 
+ 	if (debug > 2)
+-		dprintk("%d blocks total.\n", s->block_count);
++		v4l2_info(&s->sd, "%d blocks total.\n", s->block_count);
+ 
+ 	return true;
+ }
+@@ -222,11 +220,11 @@ static void block_to_buf(struct saa6588 *s, unsigned char *blockbuf)
+ 	unsigned int i;
+ 
+ 	if (debug > 3)
+-		dprintk(PREFIX "New block: ");
++		v4l2_info(&s->sd, "New block: ");
+ 
+ 	for (i = 0; i < 3; ++i) {
+ 		if (debug > 3)
+-			dprintk("0x%02x ", blockbuf[i]);
++			v4l2_info(&s->sd, "0x%02x ", blockbuf[i]);
+ 		s->buffer[s->wr_index] = blockbuf[i];
+ 		s->wr_index++;
+ 	}
+@@ -242,7 +240,7 @@ static void block_to_buf(struct saa6588 *s, unsigned char *blockbuf)
+ 		s->block_count++;
+ 
+ 	if (debug > 3)
+-		dprintk("%d blocks total.\n", s->block_count);
++		v4l2_info(&s->sd, "%d blocks total.\n", s->block_count);
  }
  
--int cmdq_pkt_write(struct cmdq_pkt *pkt, u8 subsys, u16 offset, u32 value)
--{
--	struct cmdq_instruction inst = {
--		.op = CMDQ_CODE_WRITE,
--		.value = value,
--		.offset = offset,
--		.subsys = subsys
--	};
--	return cmdq_pkt_append_command(pkt, inst);
--}
--EXPORT_SYMBOL(cmdq_pkt_write);
--
- int cmdq_pkt_write_pa(struct cmdq_pkt *pkt, u8 subsys /*unused*/, u32 pa_base,
- 		      u16 offset, u32 value)
- {
-@@ -243,27 +231,16 @@ EXPORT_SYMBOL(cmdq_pkt_write_pa);
- int cmdq_pkt_write_subsys(struct cmdq_pkt *pkt, u8 subsys, u32 pa_base /*unused*/,
- 			  u16 offset, u32 value)
- {
--	return cmdq_pkt_write(pkt, subsys, offset, value);
-+	struct cmdq_instruction inst = {
-+		.op = CMDQ_CODE_WRITE,
-+		.value = value,
-+		.offset = offset,
-+		.subsys = subsys
-+	};
-+	return cmdq_pkt_append_command(pkt, inst);
- }
- EXPORT_SYMBOL(cmdq_pkt_write_subsys);
+ static void saa6588_i2c_poll(struct saa6588 *s)
+@@ -257,7 +255,7 @@ static void saa6588_i2c_poll(struct saa6588 *s)
+ 	   SAA6588 returns garbage otherwise. */
+ 	if (6 != i2c_master_recv(client, &tmpbuf[0], 6)) {
+ 		if (debug > 1)
+-			dprintk(PREFIX "read error!\n");
++			v4l2_info(&s->sd, "read error!\n");
+ 		return;
+ 	}
  
--int cmdq_pkt_write_mask(struct cmdq_pkt *pkt, u8 subsys,
--			u16 offset, u32 value, u32 mask)
--{
--	u16 offset_mask = offset;
--	int err;
--
--	if (mask != GENMASK(31, 0)) {
--		err = cmdq_pkt_mask(pkt, mask);
--		if (err < 0)
--			return err;
--
--		offset_mask |= CMDQ_WRITE_ENABLE_MASK;
--	}
--	return cmdq_pkt_write(pkt, subsys, offset_mask, value);
--}
--EXPORT_SYMBOL(cmdq_pkt_write_mask);
--
- int cmdq_pkt_write_mask_pa(struct cmdq_pkt *pkt, u8 subsys /*unused*/, u32 pa_base,
- 			   u16 offset, u32 value, u32 mask)
- {
-@@ -281,7 +258,17 @@ EXPORT_SYMBOL(cmdq_pkt_write_mask_pa);
- int cmdq_pkt_write_mask_subsys(struct cmdq_pkt *pkt, u8 subsys, u32 pa_base /*unused*/,
- 			       u16 offset, u32 value, u32 mask)
- {
--	return cmdq_pkt_write_mask(pkt, subsys, offset, value, mask);
-+	u16 offset_mask = offset;
-+	int err;
-+
-+	if (mask != GENMASK(31, 0)) {
-+		err = cmdq_pkt_mask(pkt, mask);
-+		if (err < 0)
-+			return err;
-+
-+		offset_mask |= CMDQ_WRITE_ENABLE_MASK;
-+	}
-+	return cmdq_pkt_write_subsys(pkt, subsys, pa_base, offset_mask, value);
- }
- EXPORT_SYMBOL(cmdq_pkt_write_mask_subsys);
+@@ -267,7 +265,7 @@ static void saa6588_i2c_poll(struct saa6588 *s)
+ 	blocknum = tmpbuf[0] >> 5;
+ 	if (blocknum == s->last_blocknum) {
+ 		if (debug > 3)
+-			dprintk("Saw block %d again.\n", blocknum);
++			v4l2_info(&s->sd, "Saw block %d again.\n", blocknum);
+ 		return;
+ 	}
  
-diff --git a/include/linux/soc/mediatek/mtk-cmdq.h b/include/linux/soc/mediatek/mtk-cmdq.h
-index be67bee043ce..0e8fb4743d18 100644
---- a/include/linux/soc/mediatek/mtk-cmdq.h
-+++ b/include/linux/soc/mediatek/mtk-cmdq.h
-@@ -124,17 +124,6 @@ int cmdq_pkt_create(struct cmdq_client *client, struct cmdq_pkt *pkt, size_t siz
-  */
- void cmdq_pkt_destroy(struct cmdq_client *client, struct cmdq_pkt *pkt);
+@@ -370,12 +368,13 @@ static void saa6588_configure(struct saa6588 *s)
+ 		break;
+ 	}
  
--/**
-- * cmdq_pkt_write() - append write command to the CMDQ packet
-- * @pkt:	the CMDQ packet
-- * @subsys:	the CMDQ sub system code
-- * @offset:	register offset from CMDQ sub system
-- * @value:	the specified target register value
-- *
-- * Return: 0 for success; else the error code is returned
-- */
--int cmdq_pkt_write(struct cmdq_pkt *pkt, u8 subsys, u16 offset, u32 value);
--
- /**
-  * cmdq_pkt_write_pa() - append write command to the CMDQ packet with pa_base
-  * @pkt:	the CMDQ packet
-@@ -161,19 +150,6 @@ int cmdq_pkt_write_pa(struct cmdq_pkt *pkt, u8 subsys /*unused*/,
- int cmdq_pkt_write_subsys(struct cmdq_pkt *pkt, u8 subsys,
- 			  u32 pa_base /*unused*/, u16 offset, u32 value);
+-	dprintk(PREFIX "writing: 0w=0x%02x 1w=0x%02x 2w=0x%02x\n",
+-		buf[0], buf[1], buf[2]);
++	if (debug)
++		v4l2_info(&s->sd, "writing: 0w=0x%02x 1w=0x%02x 2w=0x%02x\n",
++			  buf[0], buf[1], buf[2]);
  
--/**
-- * cmdq_pkt_write_mask() - append write command with mask to the CMDQ packet
-- * @pkt:	the CMDQ packet
-- * @subsys:	the CMDQ sub system code
-- * @offset:	register offset from CMDQ sub system
-- * @value:	the specified target register value
-- * @mask:	the specified target register mask
-- *
-- * Return: 0 for success; else the error code is returned
-- */
--int cmdq_pkt_write_mask(struct cmdq_pkt *pkt, u8 subsys,
--			u16 offset, u32 value, u32 mask);
--
- /**
-  * cmdq_pkt_write_mask_pa() - append write command with mask to the CMDQ packet with pa
-  * @pkt:	the CMDQ packet
-@@ -471,11 +447,6 @@ static inline int cmdq_pkt_create(struct cmdq_client *client, struct cmdq_pkt *p
- 
- static inline void cmdq_pkt_destroy(struct cmdq_client *client, struct cmdq_pkt *pkt) { }
- 
--static inline int cmdq_pkt_write(struct cmdq_pkt *pkt, u8 subsys, u16 offset, u32 value)
--{
--	return -ENOENT;
--}
--
- static inline int cmdq_pkt_write_pa(struct cmdq_pkt *pkt, u8 subsys /*unused*/,
- 				    u32 pa_base, u16 offset, u32 value)
- {
-@@ -488,12 +459,6 @@ static inline int cmdq_pkt_write_subsys(struct cmdq_pkt *pkt, u8 subsys,
- 	return -ENOENT;
+ 	rc = i2c_master_send(client, buf, 3);
+ 	if (rc != 3)
+-		printk(PREFIX "i2c i/o error: rc == %d (should be 3)\n", rc);
++		v4l2_info(&s->sd, "i2c i/o error: rc == %d (should be 3)\n", rc);
  }
  
--static inline int cmdq_pkt_write_mask(struct cmdq_pkt *pkt, u8 subsys,
--				      u16 offset, u32 value, u32 mask)
--{
--	return -ENOENT;
--}
--
- static inline int cmdq_pkt_write_mask_pa(struct cmdq_pkt *pkt, u8 subsys /*unused*/,
- 					 u32 pa_base, u16 offset, u32 value, u32 mask)
- {
+ /* ---------------------------------------------------------------------- */
+
+base-commit: 6fab32bb6508abbb8b7b1c5498e44f0c32320ed5
 -- 
 2.43.0
 
