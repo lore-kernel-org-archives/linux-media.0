@@ -1,49 +1,49 @@
 Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B36B82ED86F;
-	Fri, 31 Oct 2025 16:10:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9A5EF2F659C;
+	Fri, 31 Oct 2025 16:10:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=210.61.82.184
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761927004; cv=none; b=hxAP1fUxsD5L2h9JRbPkiByztHYzusjZoyYvDEZeg1wMYt1Kzm1+simqYy5C1h6dYZOTCWxK9f4VJQtSuUCZMNiLze8gb105OMxp7jzhw0hi9Ofsky2gJJFrFuDtjh4s9jVpF46v+DiCoqcVf1G0MJA9UDEesQRGCi3M0ywDH/s=
+	t=1761927007; cv=none; b=OrSejWrzFi3fWGngnrN7RHPq+y2Uh6lJfD/NzSzRIjUe8oTsiiaWQhxIeKqpi7V1DZ52ei9uPg9c1NnFk7Ej7EAFM9cyKflYzDwaFfc/dTwLmiRbFyA0Qcp4ZolFyT7Xc1MyWfxuXZPb3KNjSoAuo+B//f6Zh/AoLMm6sCVLNxA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761927004; c=relaxed/simple;
-	bh=q4K6DmiYG9BhAg14/84SvF6SxZ+12Je3AHQfOc88CL8=;
+	s=arc-20240116; t=1761927007; c=relaxed/simple;
+	bh=A3rqAuAxdeRtyDtwAihmVNFwgU7wBauiyIL11nD/RaI=;
 	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=VwhM7Y5q3wC1ME/1hcZyRFhLPb3m8hceidnRZX88TGl2WyxAUndHifDBwTEzV6CxN0m1BHy8o7VTkvFi6DEZqVAIEM+4rImYoUcoQJFnQGr3gBpVQJrKmLJs9EfihKnG6ILv1ud1i2uDCVLoWOvflB5xHTpr8BEeIGkS98581Tk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mediatek.com; spf=pass smtp.mailfrom=mediatek.com; dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b=ZnPyPZNa; arc=none smtp.client-ip=210.61.82.184
+	 MIME-Version:Content-Type; b=QJqYhLaELZNutovWEhY6jLVOxA38DIOrN7tyjPLsesVESz8Mvdp3JjEHfa7R09rSVClpV7IqsjGa0EWNodyc3/2aT9KMJA16TudLFflw7Cx/hTe9Yn4nL45GqVk3/dXmD7m6gVXQvIwrWpZ+DYXXpMea1P2vQKFgVLG9ZtuyyCc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mediatek.com; spf=pass smtp.mailfrom=mediatek.com; dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b=SEWxPrbI; arc=none smtp.client-ip=210.61.82.184
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mediatek.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mediatek.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b="ZnPyPZNa"
-X-UUID: 0c2f5b9cb67411f0b33aeb1e7f16c2b6-20251101
+	dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b="SEWxPrbI"
+X-UUID: 0c2b5e52b67411f0b33aeb1e7f16c2b6-20251101
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-	h=Content-Type:Content-Transfer-Encoding:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=pQ7Y6ikIfmTL4OiHioZhpeLNoYrylE0Dm3P0nx4WjG0=;
-	b=ZnPyPZNaO6nnN5VmxCL9MFP7zkwUa096CrCfWBD5sTEhswsXfIz9lr9sL7RYFBh/Ql5GepWy2Bu++WVNAlwAr81HvIat58slmkPVt4gQCFxBxxYbbHPJf1gRJbfpJn3fd1qLKqDLpCZywLVX9ESonVRJw58A3Kt7GEbbWUE7SQY=;
+	h=Content-Type:Content-Transfer-Encoding:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=AGdOb9ndH7EwkcNKXpVTS7SZsi+kqajw1+zn6cxMlPw=;
+	b=SEWxPrbIcsZIetQ+krnamAZTqGlhIy1m9jygzU3dpL/kmw+uPO+9J3DJo3J50Z1xCTJu141nOtigpjvn145Rh1pqusrjJAWSZ9IBa5Zk1AEDC2kxuJ7GwFx4Nq/KmBLaLLzq7A0XQ3gN3db+BD4Y1J5TWnacK14HKVZTp1YAQqQ=;
 X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.3.6,REQID:bce2dfdb-92ac-46db-9863-8a24cdde6e36,IP:0,UR
-	L:0,TC:0,Content:100,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION
-	:release,TS:100
-X-CID-META: VersionHash:a9d874c,CLOUDID:9c52c818-3399-4579-97ab-008f994989ea,B
+X-CID-O-INFO: VERSION:1.3.6,REQID:f4ab1d0a-9f3b-42f7-aee0-42415e61725a,IP:0,UR
+	L:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:r
+	elease,TS:0
+X-CID-META: VersionHash:a9d874c,CLOUDID:1b057a26-cfd6-4a1d-a1a8-72ac3fdb69c4,B
 	ulkID:nil,BulkQuantity:0,Recheck:0,SF:81|82|102|836|888|898,TC:-5,Content:
-	3|15|50,EDM:-3,IP:nil,URL:0,File:130,RT:0,Bulk:nil,QS:nil,BEC:nil,COL:0,OS
+	0|15|50,EDM:-3,IP:nil,URL:0,File:130,RT:0,Bulk:nil,QS:nil,BEC:nil,COL:0,OS
 	I:0,OSA:0,AV:0,LES:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0,ARC:0
 X-CID-BVR: 2,SSN|SDN
 X-CID-BAS: 2,SSN|SDN,0,_
 X-CID-FACTOR: TF_CID_SPAM_SNR
 X-CID-RHF: D41D8CD98F00B204E9800998ECF8427E
-X-UUID: 0c2f5b9cb67411f0b33aeb1e7f16c2b6-20251101
+X-UUID: 0c2b5e52b67411f0b33aeb1e7f16c2b6-20251101
 Received: from mtkmbs14n2.mediatek.inc [(172.21.101.76)] by mailgw02.mediatek.com
 	(envelope-from <jason-jh.lin@mediatek.com>)
 	(Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-	with ESMTP id 1890367973; Sat, 01 Nov 2025 00:09:58 +0800
+	with ESMTP id 2082745232; Sat, 01 Nov 2025 00:09:58 +0800
 Received: from mtkmbs13n2.mediatek.inc (172.21.101.108) by
  MTKMBS09N1.mediatek.inc (172.21.101.35) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1748.26; Sat, 1 Nov 2025 00:09:57 +0800
+ 15.2.1748.26; Sat, 1 Nov 2025 00:09:56 +0800
 Received: from mtksitap99.mediatek.inc (10.233.130.16) by
  mtkmbs13n2.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
- 15.2.1748.26 via Frontend Transport; Sat, 1 Nov 2025 00:09:57 +0800
+ 15.2.1748.26 via Frontend Transport; Sat, 1 Nov 2025 00:09:56 +0800
 From: Jason-JH Lin <jason-jh.lin@mediatek.com>
 To: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
 	Conor Dooley <conor+dt@kernel.org>, Jassi Brar <jassisinghbrar@gmail.com>,
@@ -60,9 +60,9 @@ CC: Matthias Brugger <matthias.bgg@gmail.com>, Nicolas Dufresne
 	<devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
 	<dri-devel@lists.freedesktop.org>, <linux-mediatek@lists.infradead.org>,
 	<linux-arm-kernel@lists.infradead.org>, <linux-media@vger.kernel.org>
-Subject: [PATCH 3/3] mailbox: mtk-cmdq: Remove unsued cmdq_get_shift_pa()
-Date: Sat, 1 Nov 2025 00:09:34 +0800
-Message-ID: <20251031160955.1659524-4-jason-jh.lin@mediatek.com>
+Subject: [PATCH 1/3] soc: mediatek: mtk-cmdq: Remove cmdq_pkt_jump() and cmdq_pkt_jump_rel_temp()
+Date: Sat, 1 Nov 2025 00:09:32 +0800
+Message-ID: <20251031160955.1659524-2-jason-jh.lin@mediatek.com>
 X-Mailer: git-send-email 2.45.2
 In-Reply-To: <20251031160955.1659524-1-jason-jh.lin@mediatek.com>
 References: <20251031160955.1659524-1-jason-jh.lin@mediatek.com>
@@ -76,57 +76,71 @@ Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
 X-MTK: N
 
-Since the mailbox driver data can be obtained using cmdq_get_mbox_priv()
-and all CMDQ users have transitioned to cmdq_get_mbox_priv(),
-cmdq_get_shift_pa() can be removed.
+Since all users have migrated to the new cmdq_pkt_jump* APIs without
+shift_pa, the wrapper APIs cmdq_pkt_jump() and cmdq_pkt_jump_rel_temp()
+can be removed.
 
 Signed-off-by: Jason-JH Lin <jason-jh.lin@mediatek.com>
 Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 ---
- drivers/mailbox/mtk-cmdq-mailbox.c       |  8 --------
- include/linux/mailbox/mtk-cmdq-mailbox.h | 12 ------------
- 2 files changed, 20 deletions(-)
+ include/linux/soc/mediatek/mtk-cmdq.h | 30 ---------------------------
+ 1 file changed, 30 deletions(-)
 
-diff --git a/drivers/mailbox/mtk-cmdq-mailbox.c b/drivers/mailbox/mtk-cmdq-mailbox.c
-index 1bf6984948ef..81cd98fc9664 100644
---- a/drivers/mailbox/mtk-cmdq-mailbox.c
-+++ b/drivers/mailbox/mtk-cmdq-mailbox.c
-@@ -123,14 +123,6 @@ void cmdq_get_mbox_priv(struct mbox_chan *chan, struct cmdq_mbox_priv *priv)
- }
- EXPORT_SYMBOL(cmdq_get_mbox_priv);
- 
--u8 cmdq_get_shift_pa(struct mbox_chan *chan)
--{
--	struct cmdq *cmdq = container_of(chan->mbox, struct cmdq, mbox);
--
--	return cmdq->pdata->shift;
--}
--EXPORT_SYMBOL(cmdq_get_shift_pa);
--
- static void cmdq_vm_init(struct cmdq *cmdq)
- {
- 	int i;
-diff --git a/include/linux/mailbox/mtk-cmdq-mailbox.h b/include/linux/mailbox/mtk-cmdq-mailbox.h
-index 07c1bfbdb8c4..a42b44d5fd49 100644
---- a/include/linux/mailbox/mtk-cmdq-mailbox.h
-+++ b/include/linux/mailbox/mtk-cmdq-mailbox.h
-@@ -96,16 +96,4 @@ struct cmdq_pkt {
+diff --git a/include/linux/soc/mediatek/mtk-cmdq.h b/include/linux/soc/mediatek/mtk-cmdq.h
+index 056f726d118b..be67bee043ce 100644
+--- a/include/linux/soc/mediatek/mtk-cmdq.h
++++ b/include/linux/soc/mediatek/mtk-cmdq.h
+@@ -423,12 +423,6 @@ int cmdq_pkt_poll_addr(struct cmdq_pkt *pkt, dma_addr_t addr, u32 value, u32 mas
   */
- void cmdq_get_mbox_priv(struct mbox_chan *chan, struct cmdq_mbox_priv *priv);
+ int cmdq_pkt_jump_abs(struct cmdq_pkt *pkt, dma_addr_t addr);
+ 
+-/* This wrapper has to be removed after all users migrated to jump_abs */
+-static inline int cmdq_pkt_jump(struct cmdq_pkt *pkt, dma_addr_t addr)
+-{
+-	return cmdq_pkt_jump_abs(pkt, addr);
+-}
+-
+ /**
+  * cmdq_pkt_jump_rel() - Append jump command to the CMDQ packet, ask GCE
+  *			 to execute an instruction that change current thread
+@@ -441,24 +435,6 @@ static inline int cmdq_pkt_jump(struct cmdq_pkt *pkt, dma_addr_t addr)
+  */
+ int cmdq_pkt_jump_rel(struct cmdq_pkt *pkt, s32 offset);
  
 -/**
-- * cmdq_get_shift_pa() - get the shift bits of physical address
-- * @chan: mailbox channel
+- * cmdq_pkt_jump_rel_temp() - Temporary wrapper for new CMDQ helper API
+- * @pkt:	the CMDQ packet
+- * @offset:	relative offset of target instruction buffer from current PC.
+- * @shift_pa:	[DEPRECATED] shift bits of physical address in CMDQ instruction.
+- *		This value is got by cmdq_get_shift_pa().
 - *
-- * GCE can only fetch the command buffer address from a 32-bit register.
-- * Some SOCs support more than 32-bit command buffer address for GCE, which
-- * requires some shift bits to make the address fit into the 32-bit register.
+- * This function is a temporary wrapper that was introduced only for ease of
+- * migration of the many users of the CMDQ API located in multiple kernel
+- * subsystems.
 - *
-- * Return: the shift bits of physical address
+- * This has to be removed after all users are migrated to the newer CMDQ API.
 - */
--u8 cmdq_get_shift_pa(struct mbox_chan *chan);
+-static inline int cmdq_pkt_jump_rel_temp(struct cmdq_pkt *pkt, s32 offset, u8 shift_pa)
+-{
+-	return cmdq_pkt_jump_rel(pkt, offset);
+-}
 -
- #endif /* __MTK_CMDQ_MAILBOX_H__ */
+ /**
+  * cmdq_pkt_eoc() - Append EOC and ask GCE to generate an IRQ at end of execution
+  * @pkt:	The CMDQ packet
+@@ -613,12 +589,6 @@ static inline int cmdq_pkt_jump_rel(struct cmdq_pkt *pkt, s32 offset)
+ 	return -EINVAL;
+ }
+ 
+-/* This wrapper has to be removed after all users migrated to jump_rel */
+-static inline int cmdq_pkt_jump_rel_temp(struct cmdq_pkt *pkt, s32 offset, u8 shift_pa)
+-{
+-	return -EIMVAL;
+-}
+-
+ static inline int cmdq_pkt_eoc(struct cmdq_pkt *pkt)
+ {
+ 	return -EINVAL;
 -- 
 2.43.0
 
