@@ -1,43 +1,44 @@
 Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1AFAD2E8894;
-	Fri, 31 Oct 2025 15:58:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 41DE62E8E00;
+	Fri, 31 Oct 2025 15:58:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=210.61.82.184
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761926332; cv=none; b=niGqkgHPUxj0AtKeGSkYyWemTUUZIWZTeRdisW0vzjWuUsBQ6d345PWzRvX5t1ovbArUTu98yWO7EYXABUFZkB4BugIGbnL6OA1spik5mx2gzmcO+6Ue73W69j5Rl8ImVdevEseE3sKjBGKHQjiC5wPw9bH3PWfdutFtw4npa8c=
+	t=1761926333; cv=none; b=p3xvC4lf3oYq7C1eDy9cWPveCzmij7+caq/noEcJ9IfNIZY3Jc2/KuyPwsUcuFBL05f6cDySlsyH7+8n6ldUTqjcjUuvm8Wl/w0bLaH7CMjV+tdB6kYOoOQpWYaVahVCbKYCrQoZQvIYyZEmC/y0lGUYFVYytZsrkWdQZePVJC8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761926332; c=relaxed/simple;
-	bh=7ZocrOdZoOe8U0HbdKT4/kjrzm5YzPGNjP4XkVa5BWs=;
-	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=L4UHYiQrmTWXy8QdtVexeyt8foonA8+vGxBZ5YihTDvHBKrwdjiIYXa8jLqnPMJojvlTdCICxui2rGa5iXylIvJi0jTdD1igipigFs7vkUs0R7bJNa+MI0MI8Gae4FamGEas9bMnr76uY9zP9C+E2/c1/r8O4VZqaNC5FxbVZj4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mediatek.com; spf=pass smtp.mailfrom=mediatek.com; dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b=duhoxMid; arc=none smtp.client-ip=210.61.82.184
+	s=arc-20240116; t=1761926333; c=relaxed/simple;
+	bh=h5RNEtSgJvdNhhPPdnuyMjpTlIVDbsIa91V+GhBJDKQ=;
+	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=kbddm8j9+3ouB2vSClBquerEA3OzSvRk7mxmBEdOuzwaQ5Tzj57bE6O/XyEKa2NIsBc6EvZ3XnUAN5hnP9+ovSx95l4RIVT6tGZYPBM8Mg8H1xWUcgAi2uFU8Ni3p9jcU/qbVJ/ZaDySFwhi6VBW8jzCLcDSSEzuBRCKcItxl/k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mediatek.com; spf=pass smtp.mailfrom=mediatek.com; dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b=BxwJrSrB; arc=none smtp.client-ip=210.61.82.184
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mediatek.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mediatek.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b="duhoxMid"
-X-UUID: 787881f4b67211f0b33aeb1e7f16c2b6-20251031
+	dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b="BxwJrSrB"
+X-UUID: 78ce0958b67211f0b33aeb1e7f16c2b6-20251031
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-	h=Content-Type:Content-Transfer-Encoding:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=bov98rlRxQkhC4GLJxADuB3XDxqpYat/vql3Q23B3/o=;
-	b=duhoxMidtH5SSxYzqL5w5+blGJJ2NumIp1jIV4xwe3YQ75SVVWR1NbdsjTBx8+t773mbJqK+kFORVve9CW9X4kFOyN4R7F7KdNr7xfULE2Vuomeqb+dAO2ffYTZsbSTbAM4d6OzIBUcj39u901QBc1GJmc+Dnm3MoTvIFxzLXqo=;
+	h=Content-Type:Content-Transfer-Encoding:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=N+s08UDkslV26YtK+gc8ujVOn5d//WSt9TAVmnZFWOI=;
+	b=BxwJrSrBZMnrt5kqq64GC6uglkURE/FzCQyO6C1UcgeHLLbQGCsoFtvw5/IYmHSfPXyU+byh1jWGyg6vM+Tfvi+2ZBTBqdaE3zIyj4G5fWUd5uT865Hur0dwsMnTB0kX+4GJ88o8XX/QkX4XWlnnOYNJuMMuHDFstJ47d4OS4yQ=;
 X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.3.6,REQID:76af375b-8c22-495a-9007-4ab11db5d6a8,IP:0,UR
+X-CID-O-INFO: VERSION:1.3.6,REQID:915f67b8-71c2-4b63-ad2a-fbf7e727e25f,IP:0,UR
 	L:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:r
 	elease,TS:0
-X-CID-META: VersionHash:a9d874c,CLOUDID:4413e76a-d4bd-4ab9-8221-0049857cc502,B
-	ulkID:nil,BulkQuantity:0,Recheck:0,SF:102|836|888|898,TC:-5,Content:0|15|5
-	0,EDM:-3,IP:nil,URL:99|1,File:130,RT:0,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0
-	,OSA:0,AV:0,LES:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0,ARC:0
+X-CID-META: VersionHash:a9d874c,CLOUDID:3640c818-3399-4579-97ab-008f994989ea,B
+	ulkID:nil,BulkQuantity:0,Recheck:0,SF:81|82|102|836|888|898,TC:-5,Content:
+	0|15|50,EDM:-3,IP:nil,URL:0,File:130,RT:0,Bulk:nil,QS:nil,BEC:nil,COL:0,OS
+	I:0,OSA:0,AV:0,LES:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0,ARC:0
 X-CID-BVR: 2,SSN|SDN
 X-CID-BAS: 2,SSN|SDN,0,_
-X-CID-FACTOR: TF_CID_SPAM_SNR,TF_CID_SPAM_ULS
+X-CID-FACTOR: TF_CID_SPAM_SNR
 X-CID-RHF: D41D8CD98F00B204E9800998ECF8427E
-X-UUID: 787881f4b67211f0b33aeb1e7f16c2b6-20251031
-Received: from mtkmbs09n1.mediatek.inc [(172.21.101.35)] by mailgw02.mediatek.com
+X-UUID: 78ce0958b67211f0b33aeb1e7f16c2b6-20251031
+Received: from mtkmbs10n1.mediatek.inc [(172.21.101.34)] by mailgw02.mediatek.com
 	(envelope-from <jason-jh.lin@mediatek.com>)
 	(Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-	with ESMTP id 561415047; Fri, 31 Oct 2025 23:58:41 +0800
+	with ESMTP id 1817838301; Fri, 31 Oct 2025 23:58:41 +0800
 Received: from mtkmbs13n1.mediatek.inc (172.21.101.193) by
- mtkmbs13n2.mediatek.inc (172.21.101.108) with Microsoft SMTP Server
+ MTKMBS09N2.mediatek.inc (172.21.101.94) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
  15.2.1748.26; Fri, 31 Oct 2025 23:58:39 +0800
 Received: from mtksitap99.mediatek.inc (10.233.130.16) by
@@ -58,12 +59,13 @@ CC: Matthias Brugger <matthias.bgg@gmail.com>, Nicolas Dufresne
 	<Project_Global_Chrome_Upstream_Group@mediatek.com>,
 	<devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
 	<dri-devel@lists.freedesktop.org>, <linux-mediatek@lists.infradead.org>,
-	<linux-arm-kernel@lists.infradead.org>, <linux-media@vger.kernel.org>,
-	Jason-jh Lin <jason-jh.lin@mediatek.corp-partner.google.com>
-Subject: [PATCH 0/9] Add GCE support for MT8196 (series 1/4)
-Date: Fri, 31 Oct 2025 23:56:28 +0800
-Message-ID: <20251031155838.1650833-1-jason-jh.lin@mediatek.com>
+	<linux-arm-kernel@lists.infradead.org>, <linux-media@vger.kernel.org>
+Subject: [PATCH 3/9] mailbox: mtk-cmdq: Add GCE hardware virtualization configuration
+Date: Fri, 31 Oct 2025 23:56:31 +0800
+Message-ID: <20251031155838.1650833-4-jason-jh.lin@mediatek.com>
 X-Mailer: git-send-email 2.45.2
+In-Reply-To: <20251031155838.1650833-1-jason-jh.lin@mediatek.com>
+References: <20251031155838.1650833-1-jason-jh.lin@mediatek.com>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
@@ -74,48 +76,118 @@ Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
 X-MTK: N
 
-From: Jason-jh Lin <jason-jh.lin@mediatek.corp-partner.google.com>
+The GCE hardware virtualization configuration supports the isolation of
+GCE hardware resources across different OS environments. Each OS is
+treated as a virtual machine (VM) for GCE purposes.
+There are 6 VMs and 1 host VM. The host VM has main control over the
+GCE virtualization settings for all VMs.
 
-This series adds initial support for the MediaTek MT8196 GCE in the CMDQ
-driver, including related API changes for new hardware requirements.
+To properly access the GCE thread registers, it is necessary to
+configure access permissions for specific GCE threads assigned to
+different VMs.
+Currently, since only the host VM is being used, it is required to
+enable access permissions for all GCE threads for the host VM.
 
-Series application order:
-  1. [Fixes] Refine DMA address handling for the command buffer
-  - https://lore.kernel.org/all/20251022171847.379470-1-jason-jh.lin@mediatek.com/
-  2. [Series 1/4] Add GCE support for MT8196 and update CMDQ APIs (this series)
-  3. [Series 2/4] Migrate subsystems to new CMDQ APIs
-  4. [Series 3/4] Remove shift_pa from CMDQ jump functions
-  5. [Series 4/4] Remove deprecated CMDQ APIs
+There are 2 VM configurations:
+1. VM_ID_MAP
+There are 4 registers to allocate 32 GCE threads across different VMs:
+VM_ID_MAP0 for threads 0-9, VM_ID_MAP1 for threads 10-19,
+VM_ID_MAP2 for threads 20-29, and VM_ID_MAP3 for threads 30-31.
+Each thread has a 3-bit configuration, where setting all bits to 1
+configures the thread for the host VM.
 
-Please apply this series after the DMA address handling Fixes patch[1],
-and before the following series.
+2. VM_CPR_GSIZE
+It is used to allocate the CPR SRAM size to each VM. Each VM has 4-bit
+configuration, where setting bit 0-3 to configures the size of host VM.
+This setting must be configured before the VM configuration to prevent
+resource leakage.
 
+Signed-off-by: Jason-JH Lin <jason-jh.lin@mediatek.com>
+Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 ---
+ drivers/mailbox/mtk-cmdq-mailbox.c | 48 ++++++++++++++++++++++++++++++
+ 1 file changed, 48 insertions(+)
 
-Jason-JH Lin (9):
-  arm64: dts: mediatek: Add GCE header for MT8196
-  mailbox: mtk-cmdq: Add cmdq private data to cmdq_pkt for generating
-    instruction
-  mailbox: mtk-cmdq: Add GCE hardware virtualization configuration
-  mailbox: mtk-cmdq: Add mminfra_offset configuration for DRAM
-    transaction
-  mailbox: mtk-cmdq: Add driver data to support for MT8196
-  soc: mediatek: mtk-cmdq: Add cmdq_get_mbox_priv() in cmdq_pkt_create()
-  soc: mediatek: mtk-cmdq: Add pa_base parsing for hardware without
-    subsys ID support
-  soc: mediatek: mtk-cmdq: Extend cmdq_pkt_write API for SoCs without
-    subsys ID
-  soc: mediatek: mtk-cmdq: Add mminfra_offset adjustment for DRAM
-    addresses
-
- arch/arm64/boot/dts/mediatek/mt8196-gce.h | 612 ++++++++++++++++++++++
- drivers/mailbox/mtk-cmdq-mailbox.c        |  74 ++-
- drivers/soc/mediatek/mtk-cmdq-helper.c    |  77 ++-
- include/linux/mailbox/mtk-cmdq-mailbox.h  |  19 +
- include/linux/soc/mediatek/mtk-cmdq.h     |  93 ++++
- 5 files changed, 869 insertions(+), 6 deletions(-)
- create mode 100644 arch/arm64/boot/dts/mediatek/mt8196-gce.h
-
+diff --git a/drivers/mailbox/mtk-cmdq-mailbox.c b/drivers/mailbox/mtk-cmdq-mailbox.c
+index 95e8a5331b7c..a544108ddae7 100644
+--- a/drivers/mailbox/mtk-cmdq-mailbox.c
++++ b/drivers/mailbox/mtk-cmdq-mailbox.c
+@@ -43,6 +43,13 @@
+ #define GCE_CTRL_BY_SW				GENMASK(2, 0)
+ #define GCE_DDR_EN				GENMASK(18, 16)
+ 
++#define GCE_VM_ID_MAP(n)		(0x5018 + (n) / 10 * 4)
++#define GCE_VM_ID_MAP_THR_FLD_SHIFT(n)		((n) % 10 * 3)
++#define GCE_VM_ID_MAP_HOST_VM			GENMASK(2, 0)
++#define GCE_VM_CPR_GSIZE		0x50c4
++#define GCE_VM_CPR_GSIZE_FLD_SHIFT(vm_id)	((vm_id) * 4)
++#define GCE_VM_CPR_GSIZE_MAX			GENMASK(3, 0)
++
+ #define CMDQ_THR_ACTIVE_SLOT_CYCLES	0x3200
+ #define CMDQ_THR_ENABLED		0x1
+ #define CMDQ_THR_DISABLED		0x0
+@@ -89,6 +96,7 @@ struct gce_plat {
+ 	u8 shift;
+ 	bool control_by_sw;
+ 	bool sw_ddr_en;
++	bool gce_vm;
+ 	u32 gce_num;
+ };
+ 
+@@ -120,6 +128,45 @@ u8 cmdq_get_shift_pa(struct mbox_chan *chan)
+ }
+ EXPORT_SYMBOL(cmdq_get_shift_pa);
+ 
++static void cmdq_vm_init(struct cmdq *cmdq)
++{
++	int i;
++	u32 vm_cpr_gsize = 0, vm_id_map = 0;
++	u32 *vm_map = NULL;
++
++	if (!cmdq->pdata->gce_vm)
++		return;
++
++	vm_map = kcalloc(cmdq->pdata->thread_nr, sizeof(*vm_map), GFP_KERNEL);
++	if (!vm_map)
++		return;
++
++	/* only configure the max CPR SRAM size to host vm (vm_id = 0) currently */
++	vm_cpr_gsize = GCE_VM_CPR_GSIZE_MAX << GCE_VM_CPR_GSIZE_FLD_SHIFT(0);
++
++	/* set all thread mapping to host vm currently */
++	for (i = 0; i < cmdq->pdata->thread_nr; i++)
++		vm_map[i] = GCE_VM_ID_MAP_HOST_VM << GCE_VM_ID_MAP_THR_FLD_SHIFT(i);
++
++	/* set the amount of CPR SRAM to allocate to each VM */
++	writel(vm_cpr_gsize, cmdq->base + GCE_VM_CPR_GSIZE);
++
++	/* config CPR_GSIZE before setting VM_ID_MAP to avoid data leakage */
++	for (i = 0; i < cmdq->pdata->thread_nr; i++) {
++		vm_id_map |= vm_map[i];
++		/* config every 10 threads, e.g., thread id=0~9, 10~19, ..., into one register */
++		if ((i + 1) % 10 == 0) {
++			writel(vm_id_map, cmdq->base + GCE_VM_ID_MAP(i));
++			vm_id_map = 0;
++		}
++	}
++	/* config remaining threads settings */
++	if (cmdq->pdata->thread_nr % 10 != 0)
++		writel(vm_id_map, cmdq->base + GCE_VM_ID_MAP(cmdq->pdata->thread_nr - 1));
++
++	kfree(vm_map);
++}
++
+ static void cmdq_gctl_value_toggle(struct cmdq *cmdq, bool ddr_enable)
+ {
+ 	u32 val = cmdq->pdata->control_by_sw ? GCE_CTRL_BY_SW : 0;
+@@ -164,6 +211,7 @@ static void cmdq_init(struct cmdq *cmdq)
+ 
+ 	WARN_ON(clk_bulk_enable(cmdq->pdata->gce_num, cmdq->clocks));
+ 
++	cmdq_vm_init(cmdq);
+ 	cmdq_gctl_value_toggle(cmdq, true);
+ 
+ 	writel(CMDQ_THR_ACTIVE_SLOT_CYCLES, cmdq->base + CMDQ_THR_SLOT_CYCLES);
 -- 
 2.43.0
 
