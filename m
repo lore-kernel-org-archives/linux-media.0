@@ -1,121 +1,155 @@
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1AE691DC198;
-	Fri, 31 Oct 2025 15:08:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.167.242.64
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E1EF2F28FC;
+	Fri, 31 Oct 2025 15:58:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=210.61.82.184
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761923315; cv=none; b=IFo2qF6Bb083wrbP56xEP+RSJ1ohe3OHvR6j+gSY5U54xwaHRca3kbzdsz4EwJyJk3EqJ2CUSNP7ZwFdjg3ExrQwGxffbplw82cwJo9M1BjhLQaC1GKkQUPSeHHL543sZQPxt8I/HY1tyrmJFCALKRvt3Zhe3DV8Wj8tgO0P3ik=
+	t=1761926331; cv=none; b=DV1fT5LYlJgRMVvd2CJSbboilKj0kE2hGCa09Nof0zKsD+1dgCoh/832MwYRrZZxwidRRng3AtZN7IlU7uG5xZinA4nUey+AJmZ697vVke1NTriHGp2CB6uyKMdjvLNBWc+06O6LveHDU36vpM1y3DdG5w+K9/OcujVjv4lOeFk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761923315; c=relaxed/simple;
-	bh=+0fVAVV8CjLZmynXrrG3nwndOiUEsEKbv4bJrqEDm4Q=;
-	h=Content-Type:MIME-Version:In-Reply-To:References:Subject:From:Cc:
-	 To:Date:Message-ID; b=B1tNHHOULvNW1kr98THuBNlteUlZrYsm7/Pe2hMJ5yOTEPWxWasBd7pLUls7krQFxJpCSDWkjUvodRe5vp4D6ElnZcdQUY+F5doVEA22KkiV64+2uWv8KUlzauo7yALGPHGtdp1VchtAN6dG2xLV7KU4hkOefHQkU8Z31YWwklQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ideasonboard.com; spf=pass smtp.mailfrom=ideasonboard.com; dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b=FVPrdUHS; arc=none smtp.client-ip=213.167.242.64
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ideasonboard.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ideasonboard.com
+	s=arc-20240116; t=1761926331; c=relaxed/simple;
+	bh=nRYrlHNcqMld2wA10+Tg+UzlqDcMWKJ+kKwk9BF6M74=;
+	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=IHuwnYxYNngFAHUq/cd3Gy3dkQBbfWrhSLR/YohRD3fgSRiOe3M4+W28/cZfmVvPXM1vi+00WyOaTrWD2wKJ7zwj3XOb3D+g8mJuT+i03LFIalaex8Qt1JWCacNyHzwFlZey7DUQhUyCY3JRL0+yHxb9RftvA3NLkaz106BXU58=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mediatek.com; spf=pass smtp.mailfrom=mediatek.com; dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b=p8lu8T2K; arc=none smtp.client-ip=210.61.82.184
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mediatek.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mediatek.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="FVPrdUHS"
-Received: from pendragon.ideasonboard.com (cpc89244-aztw30-2-0-cust6594.18-1.cable.virginm.net [86.31.185.195])
-	by perceval.ideasonboard.com (Postfix) with ESMTPSA id 77EB1520;
-	Fri, 31 Oct 2025 16:06:39 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-	s=mail; t=1761923199;
-	bh=+0fVAVV8CjLZmynXrrG3nwndOiUEsEKbv4bJrqEDm4Q=;
-	h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
-	b=FVPrdUHSPwpG9UHeAD08omvYfUTMtQpZCwfs1dunml3+sBPsCr3t/RH49saIRs9iu
-	 u/5VuvXYYl3yOzoDRoPCVHOq3OZ/gn57+POohG8KrZILVsoOQ8UvhwZlV68syJ+uPs
-	 wYoen17Wx0DGXoPT0DFcCDIH7B5E7C9o7q85awz8=
-Content-Type: text/plain; charset="utf-8"
+	dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b="p8lu8T2K"
+X-UUID: 78c939f0b67211f0b33aeb1e7f16c2b6-20251031
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+	h=Content-Type:Content-Transfer-Encoding:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=65dhcBTBumYdQfa285ync0lrxRIAn0zEtdaBrmq/jYw=;
+	b=p8lu8T2KCwa6aqGuyEMLkqXOGmJcq84YOo2L/d2Vi77DsZIit7Q6/9qJxuk1BMatKoLXpr+IO8vQKFs/yil+WOGF/xF8vdPnBaLrhmaVbySpRZJ0kb+R8H1UWYkLBCYcHBZ9/GR2hEMPqqqscQnqG8vMUXRRC1HChda55iwFR0E=;
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.3.6,REQID:e3406224-899d-496d-a771-274e46357e33,IP:0,UR
+	L:0,TC:0,Content:100,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION
+	:release,TS:100
+X-CID-META: VersionHash:a9d874c,CLOUDID:3540c818-3399-4579-97ab-008f994989ea,B
+	ulkID:nil,BulkQuantity:0,Recheck:0,SF:81|82|102|836|888|898,TC:-5,Content:
+	3|15|50,EDM:-3,IP:nil,URL:0,File:130,RT:0,Bulk:nil,QS:nil,BEC:nil,COL:0,OS
+	I:0,OSA:0,AV:0,LES:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0,ARC:0
+X-CID-BVR: 2,SSN|SDN
+X-CID-BAS: 2,SSN|SDN,0,_
+X-CID-FACTOR: TF_CID_SPAM_SNR
+X-CID-RHF: D41D8CD98F00B204E9800998ECF8427E
+X-UUID: 78c939f0b67211f0b33aeb1e7f16c2b6-20251031
+Received: from mtkmbs10n1.mediatek.inc [(172.21.101.34)] by mailgw02.mediatek.com
+	(envelope-from <jason-jh.lin@mediatek.com>)
+	(Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+	with ESMTP id 549800630; Fri, 31 Oct 2025 23:58:41 +0800
+Received: from mtkmbs13n1.mediatek.inc (172.21.101.193) by
+ MTKMBS14N1.mediatek.inc (172.21.101.75) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1748.26; Fri, 31 Oct 2025 23:58:39 +0800
+Received: from mtksitap99.mediatek.inc (10.233.130.16) by
+ mtkmbs13n1.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
+ 15.2.1748.26 via Frontend Transport; Fri, 31 Oct 2025 23:58:39 +0800
+From: Jason-JH Lin <jason-jh.lin@mediatek.com>
+To: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>, Jassi Brar <jassisinghbrar@gmail.com>,
+	Chun-Kuang Hu <chunkuang.hu@kernel.org>, AngeloGioacchino Del Regno
+	<angelogioacchino.delregno@collabora.com>, Mauro Carvalho Chehab
+	<mchehab@kernel.org>
+CC: Matthias Brugger <matthias.bgg@gmail.com>, Nicolas Dufresne
+	<nicolas@ndufresne.ca>, Jason-JH Lin <jason-jh.lin@mediatek.com>, Nancy Lin
+	<nancy.lin@mediatek.com>, Singo Chang <singo.chang@mediatek.com>, Paul-PL
+ Chen <paul-pl.chen@mediatek.com>, Moudy Ho <moudy.ho@mediatek.com>, Xiandong
+ Wang <xiandong.wang@mediatek.com>, Sirius Wang <sirius.wang@mediatek.com>,
+	Fei Shao <fshao@chromium.org>, Chen-yu Tsai <wenst@chromium.org>,
+	<Project_Global_Chrome_Upstream_Group@mediatek.com>,
+	<devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+	<dri-devel@lists.freedesktop.org>, <linux-mediatek@lists.infradead.org>,
+	<linux-arm-kernel@lists.infradead.org>, <linux-media@vger.kernel.org>
+Subject: [PATCH 2/9] mailbox: mtk-cmdq: Add cmdq private data to cmdq_pkt for generating instruction
+Date: Fri, 31 Oct 2025 23:56:30 +0800
+Message-ID: <20251031155838.1650833-3-jason-jh.lin@mediatek.com>
+X-Mailer: git-send-email 2.45.2
+In-Reply-To: <20251031155838.1650833-1-jason-jh.lin@mediatek.com>
+References: <20251031155838.1650833-1-jason-jh.lin@mediatek.com>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <20251031114835.113026-3-tarang.raval@siliconsignals.io>
-References: <20251031114835.113026-1-tarang.raval@siliconsignals.io> <20251031114835.113026-3-tarang.raval@siliconsignals.io>
-Subject: Re: [PATCH v1 2/2] media: i2c: imx219: Replace exposure magic value with named constant
-From: Kieran Bingham <kieran.bingham@ideasonboard.com>
-Cc: Tarang Raval <tarang.raval@siliconsignals.io>, Dave Stevenson <dave.stevenson@raspberrypi.com>, Mauro Carvalho Chehab <mchehab@kernel.org>, linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
-To: Tarang Raval <tarang.raval@siliconsignals.io>, sakari.ailus@linux.intel.com
-Date: Fri, 31 Oct 2025 15:08:27 +0000
-Message-ID: <176192330798.567526.14611830953271874355@ping.linuxembedded.co.uk>
-User-Agent: alot/0.9.1
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-MTK: N
 
-Quoting Tarang Raval (2025-10-31 11:48:35)
-> Introduce IMX219_EXPOSURE_OFFSET (4) and use it instead of the literal
-> '4' when computing the maximum coarse exposure. The IMX219 datasheet
-> specifies the maximum storage time as frame_length_lines - 4.
-> (Ref: Datasheet section 5-7-1)
->=20
-> Also fix one indentation issue for consistency.
+Add the cmdq_mbox_priv structure to store the private data of GCE,
+such as the shift bits of the physical address. Then, include the
+cmdq_mbox_priv structure within the cmdq_pkt structure.
 
+This allows CMDQ users to utilize the private data in cmdq_pkt to
+generate GCE instructions when needed. Additionally, having
+cmdq_mbox_priv makes it easier to expand and reference other GCE
+private data in the future.
 
-Reviewed-by: Kieran Bingham <kieran.bingham@ideasonboard.com>
+Add cmdq_get_mbox_priv() for CMDQ users to get all the private data
+into the cmdq_mbox_priv of the cmdq_pkt.
 
->=20
-> Signed-off-by: Tarang Raval <tarang.raval@siliconsignals.io>
-> ---
->  drivers/media/i2c/imx219.c | 13 +++++++------
->  1 file changed, 7 insertions(+), 6 deletions(-)
->=20
-> diff --git a/drivers/media/i2c/imx219.c b/drivers/media/i2c/imx219.c
-> index 40693635c0c3..e87d5a18fe87 100644
-> --- a/drivers/media/i2c/imx219.c
-> +++ b/drivers/media/i2c/imx219.c
-> @@ -68,6 +68,7 @@
->  #define IMX219_EXPOSURE_STEP           1
->  #define IMX219_EXPOSURE_DEFAULT                0x640
->  #define IMX219_EXPOSURE_MAX            65535
-> +#define IMX219_EXPOSURE_OFFSET                 4
-> =20
->  /* V_TIMING internal */
->  #define IMX219_REG_FRM_LENGTH_A                CCI_REG16(0x0160)
-> @@ -450,9 +451,9 @@ static int imx219_set_ctrl(struct v4l2_ctrl *ctrl)
->                 int exposure_max, exposure_def;
-> =20
->                 /* Update max exposure while meeting expected vblanking */
-> -               exposure_max =3D format->height + ctrl->val - 4;
-> +               exposure_max =3D format->height + ctrl->val - IMX219_EXPO=
-SURE_OFFSET;
->                 exposure_def =3D (exposure_max < IMX219_EXPOSURE_DEFAULT)=
- ?
-> -                       exposure_max : IMX219_EXPOSURE_DEFAULT;
-> +                               exposure_max : IMX219_EXPOSURE_DEFAULT;
->                 ret =3D __v4l2_ctrl_modify_range(imx219->exposure,
->                                                imx219->exposure->minimum,
->                                                exposure_max,
-> @@ -579,9 +580,9 @@ static int imx219_init_controls(struct imx219 *imx219)
->                                            IMX219_LLP_MIN - mode->width,
->                                            IMX219_LLP_MAX - mode->width, =
-1,
->                                            IMX219_LLP_MIN - mode->width);
-> -       exposure_max =3D mode->fll_def - 4;
-> +       exposure_max =3D mode->fll_def - IMX219_EXPOSURE_OFFSET;
->         exposure_def =3D (exposure_max < IMX219_EXPOSURE_DEFAULT) ?
-> -               exposure_max : IMX219_EXPOSURE_DEFAULT;
-> +                       exposure_max : IMX219_EXPOSURE_DEFAULT;
->         imx219->exposure =3D v4l2_ctrl_new_std(ctrl_hdlr, &imx219_ctrl_op=
-s,
->                                              V4L2_CID_EXPOSURE,
->                                              IMX219_EXPOSURE_MIN, exposur=
-e_max,
-> @@ -900,9 +901,9 @@ static int imx219_set_pad_format(struct v4l2_subdev *=
-sd,
->                         return ret;
-> =20
->                 /* Update max exposure while meeting expected vblanking */
-> -               exposure_max =3D mode->fll_def - 4;
-> +               exposure_max =3D mode->fll_def - IMX219_EXPOSURE_OFFSET;
->                 exposure_def =3D (exposure_max < IMX219_EXPOSURE_DEFAULT)=
- ?
-> -                       exposure_max : IMX219_EXPOSURE_DEFAULT;
-> +                               exposure_max : IMX219_EXPOSURE_DEFAULT;
->                 ret =3D __v4l2_ctrl_modify_range(imx219->exposure,
->                                                imx219->exposure->minimum,
->                                                exposure_max,
-> --=20
-> 2.34.1
->
+Signed-off-by: Jason-JH Lin <jason-jh.lin@mediatek.com>
+Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+---
+ drivers/mailbox/mtk-cmdq-mailbox.c       |  8 ++++++++
+ include/linux/mailbox/mtk-cmdq-mailbox.h | 18 ++++++++++++++++++
+ 2 files changed, 26 insertions(+)
+
+diff --git a/drivers/mailbox/mtk-cmdq-mailbox.c b/drivers/mailbox/mtk-cmdq-mailbox.c
+index 5791f80f995a..95e8a5331b7c 100644
+--- a/drivers/mailbox/mtk-cmdq-mailbox.c
++++ b/drivers/mailbox/mtk-cmdq-mailbox.c
+@@ -104,6 +104,14 @@ static inline dma_addr_t cmdq_revert_gce_addr(u32 addr, const struct gce_plat *p
+ 	return (dma_addr_t)addr << pdata->shift;
+ }
+ 
++void cmdq_get_mbox_priv(struct mbox_chan *chan, struct cmdq_mbox_priv *priv)
++{
++	struct cmdq *cmdq = container_of(chan->mbox, struct cmdq, mbox);
++
++	priv->shift_pa = cmdq->pdata->shift;
++}
++EXPORT_SYMBOL(cmdq_get_mbox_priv);
++
+ u8 cmdq_get_shift_pa(struct mbox_chan *chan)
+ {
+ 	struct cmdq *cmdq = container_of(chan->mbox, struct cmdq, mbox);
+diff --git a/include/linux/mailbox/mtk-cmdq-mailbox.h b/include/linux/mailbox/mtk-cmdq-mailbox.h
+index e1555e06e7e5..73b70be4a8a7 100644
+--- a/include/linux/mailbox/mtk-cmdq-mailbox.h
++++ b/include/linux/mailbox/mtk-cmdq-mailbox.h
+@@ -70,13 +70,31 @@ struct cmdq_cb_data {
+ 	struct cmdq_pkt		*pkt;
+ };
+ 
++struct cmdq_mbox_priv {
++	u8 shift_pa;
++};
++
+ struct cmdq_pkt {
+ 	void			*va_base;
+ 	dma_addr_t		pa_base;
+ 	size_t			cmd_buf_size; /* command occupied size */
+ 	size_t			buf_size; /* real buffer size */
++	struct cmdq_mbox_priv	priv; /* for generating instruction */
+ };
+ 
++/**
++ * cmdq_get_mbox_priv() - get the private data of mailbox channel
++ * @chan: mailbox channel
++ * @priv: pointer to store the private data of mailbox channel
++ *
++ * While generating the GCE instruction to command buffer, the private data
++ * of GCE hardware may need to be referenced, such as the shift bits of
++ * physical address.
++ *
++ * This function should be called before generating the GCE instruction.
++ */
++void cmdq_get_mbox_priv(struct mbox_chan *chan, struct cmdq_mbox_priv *priv);
++
+ /**
+  * cmdq_get_shift_pa() - get the shift bits of physical address
+  * @chan: mailbox channel
+-- 
+2.43.0
+
