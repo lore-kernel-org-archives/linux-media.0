@@ -1,150 +1,129 @@
-Received: from mail-ed1-f53.google.com (mail-ed1-f53.google.com [209.85.208.53])
+Received: from mail-ej1-f41.google.com (mail-ej1-f41.google.com [209.85.218.41])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CA6F72D323F
-	for <linux-media@vger.kernel.org>; Tue,  4 Nov 2025 10:23:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6C2102367B8
+	for <linux-media@vger.kernel.org>; Tue,  4 Nov 2025 10:28:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762251793; cv=none; b=JFwuxEuoPxcsMi5vBpHQfGivDbdY6/zcJ4xu5A4iNqhvqOLe+VzF1rRjytp5AVGI0yHvHePhBz1lMKu1AT5QMO4XO/qK/OnAPmdpLDCvqNvVvw+8Xogn5IlZuj8SMALWkzwUJxCyBzs6tGuJPL577sVEeeRZ8VIHu8CXSQg3lvs=
+	t=1762252105; cv=none; b=gOcU+6pkR8rT3o46rCxdL3jOIOHDzvDpSgS/hP5pNXy0h5RyfrddDRe7Q0GfxPMgyOofUgNJEq7yP46q6TQn1VsN1GRNi0HorSiI9nicOphmVGGysEDI0+283EC13x7T057PTgXOlGtTAb9VnRQjjlUYJwVjiaz2AbP6aCXBUkM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762251793; c=relaxed/simple;
-	bh=JiN5zRSgS7hbKTfA+TE3fwE94DEPB8B1lvln54KOk/Y=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=OlsX+2OKXlCOyKZ6OFYPT1lwF3lc3WzpidqpYswT8Oa5+rnBh0Z2HyY4JL3VjDizMGuvjRDmnEEv8glI04eFYFZywgn7yi+iU/5HsVujcP7Hxsc4LPVg6D4wjByvzgwA3ddMbyWHipGDrMReF47SoRkcWSRS0MwS2Rhb2zl3M/k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=aTz7eAqE; arc=none smtp.client-ip=209.85.208.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+	s=arc-20240116; t=1762252105; c=relaxed/simple;
+	bh=dXrnCp77lEEwVPS7xJBOY3p2Qrw1d2xRt7jXYb4Flbw=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
+	 References:In-Reply-To; b=UyqvHuIcE/Lnwg9hP6djKos8u5uKBvC7gRy6maXOR3twcgrHGk0Ag82z/KUaS95l/28oN5wV1QGs+QHQQBCuqzapb8pg49GJnfbMjea5jRWYSXouUBleozywookG9MAolMVYDHN2CDP/N+PUgA1TKiYItekmnYqvCmRn1ktatN8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=fairphone.com; spf=pass smtp.mailfrom=fairphone.com; dkim=pass (2048-bit key) header.d=fairphone.com header.i=@fairphone.com header.b=DR0YQXAj; arc=none smtp.client-ip=209.85.218.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=fairphone.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=fairphone.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="aTz7eAqE"
-Received: by mail-ed1-f53.google.com with SMTP id 4fb4d7f45d1cf-6408f9cb1dcso5129181a12.3
-        for <linux-media@vger.kernel.org>; Tue, 04 Nov 2025 02:23:11 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=fairphone.com header.i=@fairphone.com header.b="DR0YQXAj"
+Received: by mail-ej1-f41.google.com with SMTP id a640c23a62f3a-b7200568b13so160254466b.1
+        for <linux-media@vger.kernel.org>; Tue, 04 Nov 2025 02:28:23 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1762251790; x=1762856590; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=F5ReZ2sO1ifGE2LFSUDiqxuLt2EAfiZIaMd88MSsMsc=;
-        b=aTz7eAqEWfzl9AKSpDDtvTg1znmgo2fvrtH2yogM/NdyMQz578VFLAP6Dx+VlUUyq7
-         bEsiCBGE7WPbpwu7AJWNbTk4CtrZEd97lnt5R2lVYDGnwX/4cbrTDZ5Ft+N1v8n7UGYD
-         p2zc6cmw2W/+RPGRyeZEpfRgOrEW/TW2HZfWoV36wXCehJU3Ffog0ytV0c+0K/LX53LA
-         h8amw2apds5oUmDkLnO9QHBgnnUx22OwSIiRmCeQ1PP0xNQ3gkmbn16ag+fEhvHUn+O0
-         fyn99o30QVH6Wu7sr1AZw+56yDTOTfOad1XNspAT265zb81/M56mVu3pBaNp+1vK/yeL
-         MdFw==
+        d=fairphone.com; s=fair; t=1762252102; x=1762856902; darn=vger.kernel.org;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-transfer-encoding:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=U5/EbeH1R+anz78ARaNJQqvThpFPGMZ6F7qJDbuymSk=;
+        b=DR0YQXAj2TjsRf3a2UcAB5QdoZ0OyvyrWw5CAceT/3o2mZjv0BwOtTTjd5so4la5zU
+         ZYUDlGS+91n17PQOJPC7ezBWvsWOcjZ+rUgC8v7aoO+YUXCp7SKo6eourkLB9lZsJ8r6
+         qa6EWlyiAwZwDti2ckxWKsyAfYo67falVaBhKdzkhMqTsF/Wwri+VNuFGEAbx4QGGeqB
+         l5UMCftT1pysAwtoSRZ9vyxjawx+bj30idnb7pAHyBquv5FBU+QetxYCt/LWD3rtd5iI
+         hj8mqqlxxzFOSDUOVQ2s6jI4otf1LLYqHYIdc9i8Iu9xUU7BPXIiGxnu1CEhditYfKJ8
+         Atgg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1762251790; x=1762856590;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=F5ReZ2sO1ifGE2LFSUDiqxuLt2EAfiZIaMd88MSsMsc=;
-        b=jl42PxF0p5cZvw3oWDsI23pevCCM9mlcTEx8fdf2i+AoTHG5UQHJU2iN+on8JhFx5/
-         iFxYiCAx4NwKnlGGpC/Tcmdu6N2Glfe/nItVNxf24UF2A1c3++mAHemHNYkoxPS9zrxj
-         9Nl+mwpNhvjPwsU0sbgj+a1GhWdsHVF6iVN+X5PLxNIa6dxBQkcDRmXS5MiuGdE+aeoJ
-         ynkmwMNp6AjV3RhGqHEExya0FfRyntcbhD77HW7x9QbKw9rElIGEh+JgRl63NdPbwtlr
-         z69T0woZ8ia/B4iMWMLWKkbVGN5qLpc8ENVZntXa+cLmIkVd0YS8arrimxMXiZiYq1lD
-         TjXA==
-X-Forwarded-Encrypted: i=1; AJvYcCXEBgZgVhQjfViaXf0LK2bdiVVLbo19OZ4Vg52oS8goYyUSSNwaWuFAoNxzVl56o0S7i1FRNUcOKkjg/Q==@vger.kernel.org
-X-Gm-Message-State: AOJu0YwU0SlcUrZfdrLSDW6m0G3MZ/FMywdWkgoTl9oZ2RXVJCb+y9XC
-	OpNArghQVDf/s3/2vjRNAvI2VOXJMt6FNpZgbOj7bGm5K1gox7kNncJw09+XAYPCFPU=
-X-Gm-Gg: ASbGncsv7x9uj0wiVfj3usFeHZfrlYJuSfNUMu1AOKKHopCSvKGJDnd0Eeax4SC1lAp
-	dEGMxEg4oMwDG9OVVUpE+PpkHDNq3g/vADuChqv1srA3Q64yPQz99iXnoYnYyW+Ra8IiLHVwId+
-	k7FDYYoT8tnKnJ5+AJz0c8M+W7dVK+0eqf7Xp8PaBaDbSsjzfhm0NP2BPzstOAOUxKwL9eVG+ZR
-	s88Ek8eGeXVG3ZiytkpJka6jOlqIKZ+n1j6hJ3TAXQTlUtvTaLp7dTDEicZzSyLFNJ5veXPCVyB
-	0wPUXqlcGzAS5oB40Sgx2lsFhDdHBzfwFF3AK0GjCeVAVrDOBxrBQ0p2xaVrO5/z7ZRLnKTxQv1
-	xAs8NbNKC8VKea7Cg9LGlT6ChThdiXBQPyjBKfYi1h1HNHa+ItI0u6w21eO9ZiRfpPv+mZQ2rsg
-	+ChfI=
-X-Google-Smtp-Source: AGHT+IGWDLrkGQTycS37vVNtt8N0T7C7MlaRLG8MWxJRzk8Dyu5UYLqwpV2UGQDLweeSm5p96/Ae9Q==
-X-Received: by 2002:a17:907:94d5:b0:b70:cfe3:aae2 with SMTP id a640c23a62f3a-b70cfe3ac57mr612722666b.8.1762251790139;
-        Tue, 04 Nov 2025 02:23:10 -0800 (PST)
-Received: from linux ([2a00:6d43:105:c401:e307:1a37:2e76:ce91])
-        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-640e6805da3sm1753752a12.15.2025.11.04.02.23.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 04 Nov 2025 02:23:09 -0800 (PST)
-From: Marco Crivellari <marco.crivellari@suse.com>
-To: linux-kernel@vger.kernel.org,
-	linux-media@vger.kernel.org,
-	kernel@collabora.com
-Cc: Tejun Heo <tj@kernel.org>,
-	Lai Jiangshan <jiangshanlai@gmail.com>,
-	Frederic Weisbecker <frederic@kernel.org>,
-	Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-	Marco Crivellari <marco.crivellari@suse.com>,
-	Michal Hocko <mhocko@suse.com>,
-	Shreeya Patel <shreeya.patel@collabora.com>,
-	Mauro Carvalho Chehab <mchehab@kernel.org>
-Subject: [PATCH] media: synopsys: hdmirx: replace use of system_unbound_wq with system_dfl_wq
-Date: Tue,  4 Nov 2025 11:20:48 +0100
-Message-ID: <20251104102048.79374-1-marco.crivellari@suse.com>
-X-Mailer: git-send-email 2.51.1
+        d=1e100.net; s=20230601; t=1762252102; x=1762856902;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-transfer-encoding:mime-version:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=U5/EbeH1R+anz78ARaNJQqvThpFPGMZ6F7qJDbuymSk=;
+        b=uMMzlhr/0mxFvCkR3M5/KWBkiP4gW2JLLyotOrOWK2/1xQv1ygRmP/Uz32wdECImcI
+         pmwJg/8dWIvz+p5H9rfsRE9vNFikx4ytslZK8ecK6yCEjZQSjO7+/WGj0DqB3DQ04rNd
+         0OtrJmoKyiVJv3A9++Yu2H+7r+y3d7ON09ux6QO4Be4Y2lM545PDfl/wMegA3Am4Kk+G
+         y7YvNAVBoibV6m/TXgsQedsn3g8ZdqA09Iywd+glr12I2LaLI1Dx4f+0rtoBIuQ3xJ8b
+         TkLTfih0lTtaxXgsawwoa7mzgs2s6nDuYTeJu2D0x67vO4zIicTV3O40CS4kLAbfMhoY
+         PO6Q==
+X-Forwarded-Encrypted: i=1; AJvYcCVwtNg/GkGxDTyztnaml1l8Lg6A/50nsrPoo8UF1Ff59J/6KINRyg5rAkvI4aef9zPdwAh2z/DDGjl1/A==@vger.kernel.org
+X-Gm-Message-State: AOJu0YwTi4bT0TFTHbbDL0pf1siYs1gG/0c8yT1RVU5JFcGK+nSajv6U
+	uu5CCKPLeURw8l3bXiFX2EGyue+Gei6H+E61bVwm2LKB0W2W6m3UkgvtsD5T+p0p7yc=
+X-Gm-Gg: ASbGnctdkMIudmt13SHTLn3mVJiTrQDRvxPBJRHllMqu8y7gSkVGofjvsF4dupeuMVp
+	gKj0GhIrFyK5AFCMSHmZ9EFZTqeVdaDQ61P8P+7b6OglD9eK5D3ncL3lEn5764n3/5Ynuab0rQ1
+	eKp0yGHY9H3Z7BsAVMsz+IkEqFUsTvt3E+58iHD3sv/TJTAVekbLGIvcNoQFOuGm+BpnE3K5WyY
+	nmMuAKu5SBaIJjVAHafOA084zFxzw7Iqq/7rTrkvMHX6vv4vP3RDzs4y5xHUouE1Z6L4Xcopy0T
+	Mh/fx5uuiQdTejJSgJP4YwMnqWcfkqNaQA5Px5LfRiRJa9bK4Cqrr8XUrT9XmU7mvhSqQohHNyF
+	+c5C82PcTUO4+snt503aV06RRrwBgU+TdUJBrG/0ctuZTAnA5C29e/n0pskvPZ+qDyU8scPzTuW
+	HGZMA56wa5pPXFhww5b7txhD+n+Qogy2lHjSiRQnNRTxuDqjz+Qb4U9XrI
+X-Google-Smtp-Source: AGHT+IHgqponPgTAGgPIt8PB3FXhF/2XBzC1NR6OhRgxCVT/ehcYTXZUudxOnw/HboJub9JT9xd/ZA==
+X-Received: by 2002:a17:907:5ce:b0:b6d:5c4e:b0b8 with SMTP id a640c23a62f3a-b70700ad41dmr1516769366b.8.1762252101633;
+        Tue, 04 Nov 2025 02:28:21 -0800 (PST)
+Received: from localhost (144-178-202-139.static.ef-service.nl. [144.178.202.139])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-b723fe37cb9sm171335166b.61.2025.11.04.02.28.20
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 04 Nov 2025 02:28:21 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Tue, 04 Nov 2025 11:28:19 +0100
+Message-Id: <DDZU8E8EBAMW.3J9K3YJ94V2B4@fairphone.com>
+Cc: "Rob Herring" <robh@kernel.org>, "Krzysztof Kozlowski"
+ <krzk+dt@kernel.org>, "Conor Dooley" <conor+dt@kernel.org>,
+ <linux-media@vger.kernel.org>, <devicetree@vger.kernel.org>
+Subject: Re: [PATCH v3 2/2] media: i2c: add Samsung S5KJN1 image sensor
+ device driver
+From: "Luca Weiss" <luca.weiss@fairphone.com>
+To: "Vladimir Zapolskiy" <vladimir.zapolskiy@linaro.org>, "Mauro Carvalho
+ Chehab" <mchehab@kernel.org>, "Sakari Ailus"
+ <sakari.ailus@linux.intel.com>, "Hans Verkuil" <hverkuil@kernel.org>, "Hans
+ de Goede" <hansg@kernel.org>
+X-Mailer: aerc 0.21.0-0-g5549850facc2
+References: <20251023025356.2421327-1-vladimir.zapolskiy@linaro.org>
+ <20251023025356.2421327-3-vladimir.zapolskiy@linaro.org>
+In-Reply-To: <20251023025356.2421327-3-vladimir.zapolskiy@linaro.org>
 
-Currently if a user enqueue a work item using schedule_delayed_work() the
-used wq is "system_wq" (per-cpu wq) while queue_delayed_work() use
-WORK_CPU_UNBOUND (used when a cpu is not specified). The same applies to
-schedule_work() that is using system_wq and queue_work(), that makes use
-again of WORK_CPU_UNBOUND.
+Hi Vladimir,
 
-This lack of consistency cannot be addressed without refactoring the API.
+On Thu Oct 23, 2025 at 4:53 AM CEST, Vladimir Zapolskiy wrote:
+> Samsung S5KJN1 is a 50MP image sensor, it produces Bayer GRBG (2x2)
+> frames in RAW10 output format, the maximum supported output resolution
+> is 8160x6144 at 10 frames per second rate.
+>
+> Signed-off-by: Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>
+> ---
+>  MAINTAINERS                |    8 +
+>  drivers/media/i2c/Kconfig  |   10 +
+>  drivers/media/i2c/Makefile |    1 +
+>  drivers/media/i2c/s5kjn1.c | 1407 ++++++++++++++++++++++++++++++++++++
+>  4 files changed, 1426 insertions(+)
+>  create mode 100644 drivers/media/i2c/s5kjn1.c
+>
+> diff --git a/drivers/media/i2c/s5kjn1.c b/drivers/media/i2c/s5kjn1.c
+> new file mode 100644
+> index 000000000000..9e2ac3d695ae
+> --- /dev/null
+> +++ b/drivers/media/i2c/s5kjn1.c
 
-This patch continues the effort to refactor worqueue APIs, which has begun
-with the change introducing new workqueues:
+<snip>
 
-commit 128ea9f6ccfb ("workqueue: Add system_percpu_wq and system_dfl_wq")
+> +static const char * const s5kjn1_supply_names[] =3D {
+> +	"afvdd",	/* Autofocus power */
+> +	"avdd",		/* Analog power */
+> +	"dovdd",	/* Digital I/O power */
+> +	"dvdd",		/* Digital core power */
 
-system_dfl_wq should be the default workqueue so as not to enforce
-locality constraints for random work whenever it's not required.
+My comments from the dt-bindings patch apply here as well of course.
 
-The old system_unbound_wq will be kept for a few release cycles.
+Also my datasheet mentions that VDDD should be powered up before VDDA,
+and there should be a minimum time of 1 us between them.
 
-Suggested-by: Tejun Heo <tj@kernel.org>
-Signed-off-by: Marco Crivellari <marco.crivellari@suse.com>
----
- drivers/media/platform/synopsys/hdmirx/snps_hdmirx.c | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+And power down first VDDA then VDDD, again with 1 us minimum time
+between the two.
 
-diff --git a/drivers/media/platform/synopsys/hdmirx/snps_hdmirx.c b/drivers/media/platform/synopsys/hdmirx/snps_hdmirx.c
-index b7d278b3889f..da6a725e4fbe 100644
---- a/drivers/media/platform/synopsys/hdmirx/snps_hdmirx.c
-+++ b/drivers/media/platform/synopsys/hdmirx/snps_hdmirx.c
-@@ -1735,7 +1735,7 @@ static void process_signal_change(struct snps_hdmirx_dev *hdmirx_dev)
- 			   FIFO_UNDERFLOW_INT_EN |
- 			   HDMIRX_AXI_ERROR_INT_EN, 0);
- 	hdmirx_reset_dma(hdmirx_dev);
--	queue_delayed_work(system_unbound_wq,
-+	queue_delayed_work(system_dfl_wq,
- 			   &hdmirx_dev->delayed_work_res_change,
- 			   msecs_to_jiffies(50));
- }
-@@ -2190,7 +2190,7 @@ static void hdmirx_delayed_work_res_change(struct work_struct *work)
- 
- 		if (hdmirx_wait_signal_lock(hdmirx_dev)) {
- 			hdmirx_plugout(hdmirx_dev);
--			queue_delayed_work(system_unbound_wq,
-+			queue_delayed_work(system_dfl_wq,
- 					   &hdmirx_dev->delayed_work_hotplug,
- 					   msecs_to_jiffies(200));
- 		} else {
-@@ -2209,7 +2209,7 @@ static irqreturn_t hdmirx_5v_det_irq_handler(int irq, void *dev_id)
- 	val = gpiod_get_value(hdmirx_dev->detect_5v_gpio);
- 	v4l2_dbg(3, debug, &hdmirx_dev->v4l2_dev, "%s: 5v:%d\n", __func__, val);
- 
--	queue_delayed_work(system_unbound_wq,
-+	queue_delayed_work(system_dfl_wq,
- 			   &hdmirx_dev->delayed_work_hotplug,
- 			   msecs_to_jiffies(10));
- 
-@@ -2441,7 +2441,7 @@ static void hdmirx_enable_irq(struct device *dev)
- 	enable_irq(hdmirx_dev->dma_irq);
- 	enable_irq(hdmirx_dev->det_irq);
- 
--	queue_delayed_work(system_unbound_wq,
-+	queue_delayed_work(system_dfl_wq,
- 			   &hdmirx_dev->delayed_work_hotplug,
- 			   msecs_to_jiffies(110));
- }
--- 
-2.51.1
+Can't say much more about the rest of the driver, great to see this
+being worked on!
 
+Regards
+Luca
