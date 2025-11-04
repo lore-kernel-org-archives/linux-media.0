@@ -1,81 +1,75 @@
-Received: from mail-qk1-f181.google.com (mail-qk1-f181.google.com [209.85.222.181])
+Received: from mail-qv1-f50.google.com (mail-qv1-f50.google.com [209.85.219.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7739C313538
-	for <linux-media@vger.kernel.org>; Tue,  4 Nov 2025 16:13:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0B104332EA3
+	for <linux-media@vger.kernel.org>; Tue,  4 Nov 2025 16:22:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762272786; cv=none; b=Pv8u4wgrZAf67zFz2+4GVzQLze8weu8I/qui69H0YArMG9jsynsRa8NQeEn5fp04la1hQYKLeupufY2fN1a9cVwo4rS1hZgyNsWliyjYF6fgfD7tXT+Zo9yvtwXLwl9p831J1h2m+lfFqQEpG60kZlyOztUwqCNo1Mkgtu6S0po=
+	t=1762273350; cv=none; b=cV+eTEyuVK8FOPPsqo5ME3LFb1iy0Qit1hmxcrwCW3zRaEhfrk7rK4TT1FpbRpUJspdwg2qr49PeMfpMuJ51T/VN/wXl39lZZESfnTJNUGbxtHD+Z0bah3niOcV0pNOQRbvHXWzGR1fUyqutEqDm9DAhIQ8d68VbFAB7auM/SCg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762272786; c=relaxed/simple;
-	bh=EhPNKWXcOC4wz99nX7zOq9HMTheZCFEjaub0QmjufR4=;
+	s=arc-20240116; t=1762273350; c=relaxed/simple;
+	bh=hdCT5TXMVwZ43iLPpU8lJqSTQs6Rvih8gdvxvVscQFA=;
 	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=fZAYHaeh9JtpEWP76wbT1nlq9MyJjaV5E6c8lalu+uU07n+w3H0ndESY9eTPXfFQ8coGsdZcC8Xxvlu2gCXx/Qz3wZ8ovCkW36u+nXhzcsdh/7fB6X5+6Owdaim80yBG8gzDYI4epGJCuFeHlqzYYYB602BhrL4VenOEfFsAgZc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ndufresne.ca; spf=pass smtp.mailfrom=ndufresne.ca; dkim=pass (2048-bit key) header.d=ndufresne-ca.20230601.gappssmtp.com header.i=@ndufresne-ca.20230601.gappssmtp.com header.b=BeAqfUtd; arc=none smtp.client-ip=209.85.222.181
+	 Content-Type:MIME-Version; b=fSN4wBFcA/E9l2yFdQwxvJI3wIhA5L6gEcrBTBkXs5/M024QexHNfKu4v2qeGosL+l+KP3DKq5id/1wzcVDt9qOLuE5R3tZQ03ivR7DjR3u/eyrE5Ytlq/xM9hkeqs4empULNBcBrVu+n1ylVazb80phoWJIrTwENkf1GtNjZq4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ndufresne.ca; spf=pass smtp.mailfrom=ndufresne.ca; dkim=pass (2048-bit key) header.d=ndufresne-ca.20230601.gappssmtp.com header.i=@ndufresne-ca.20230601.gappssmtp.com header.b=c9KaCtvm; arc=none smtp.client-ip=209.85.219.50
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ndufresne.ca
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ndufresne.ca
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ndufresne-ca.20230601.gappssmtp.com header.i=@ndufresne-ca.20230601.gappssmtp.com header.b="BeAqfUtd"
-Received: by mail-qk1-f181.google.com with SMTP id af79cd13be357-8b2148ca40eso45943985a.1
-        for <linux-media@vger.kernel.org>; Tue, 04 Nov 2025 08:13:04 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=ndufresne-ca.20230601.gappssmtp.com header.i=@ndufresne-ca.20230601.gappssmtp.com header.b="c9KaCtvm"
+Received: by mail-qv1-f50.google.com with SMTP id 6a1803df08f44-795be3a3644so36614596d6.0
+        for <linux-media@vger.kernel.org>; Tue, 04 Nov 2025 08:22:28 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ndufresne-ca.20230601.gappssmtp.com; s=20230601; t=1762272783; x=1762877583; darn=vger.kernel.org;
+        d=ndufresne-ca.20230601.gappssmtp.com; s=20230601; t=1762273348; x=1762878148; darn=vger.kernel.org;
         h=mime-version:user-agent:references:in-reply-to:date:cc:to:from
          :subject:message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=EhPNKWXcOC4wz99nX7zOq9HMTheZCFEjaub0QmjufR4=;
-        b=BeAqfUtdB1UulzkJ+Y1YQzsc3D0PmjgBNpuEk49hvPM7yYWrM0orjBN70f/as5eqaC
-         Ao0NdOy5mYyYHg3vzY/QXXSoiSha7Fn8w6YQIZRQ2dXEoLNpod0CJv9/X0a2pgbX32WY
-         /7CW1AakNTM5hNa4BehpGmsaTJW4R+nZBx2tyvV+I/QXt8DMJcdpiwmWDCLemacnO9Md
-         F0j+0KPjqXCEbPA5F5CyoQaWzQHUozcaNXXj/LP0v8NlUPMedPtgNbJ5fS6biwQziO+7
-         zlulWyy2/Qg9B2L7IfGUee0LjfDVRlGgxRgae/TloJUTa1AlFU6lAkoqhJ2TLtTfgEAX
-         cWug==
+        bh=hdCT5TXMVwZ43iLPpU8lJqSTQs6Rvih8gdvxvVscQFA=;
+        b=c9KaCtvmA8iJ1kw9RrljOmi/BITtd8GvF1MbHxJxttfKz1k4iapUA/ML+pKyqoWyf4
+         p2fQp1OItm82ymZz/sSFhvO5WEFftofwdYOtFY9f8IhdV6ng+wwzPNEexx2KWvCF1zL+
+         t0H+/GVz9in8Sg9OclY/vi6+n0RnbPLdQj6Qpn4eXUh9bvtY47+fC8xEDmBnzmMVmU3y
+         WkVZKzw9LFsQ3WGrcO2gaLddHVyYy2LrsD98mMt2BEBtUYE4JvkGg7b5EZ87svtjAXW7
+         9TBQ/rYriynJFTMSSfOIK0N7U87q1A/DI8qZ8YbpML2kSv+oT5W6W62ZDHgIZOG+okj2
+         hD1Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1762272783; x=1762877583;
+        d=1e100.net; s=20230601; t=1762273348; x=1762878148;
         h=mime-version:user-agent:references:in-reply-to:date:cc:to:from
          :subject:message-id:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=EhPNKWXcOC4wz99nX7zOq9HMTheZCFEjaub0QmjufR4=;
-        b=NJ0mGlbmqEMHcK4Yw9groczpZtZlsxoP5t28QjcesP+XcVGbSdwL32qpFb5bXfk3X1
-         P7uuYYyORGg2iqGG/4f+KG3iWCaDp0+yXbCfVG0XE6HQbtaMYXdJZ/mF8bEXN7G05L6Q
-         8PxxpQJsI46WInNvCfQo3f0K5tL9Up2WGkgl6/WkVzpLwAEflgijjyYmZ7SIq684PaHB
-         3QJAwUcKBGiAlzaVqsvhuiS+WsfgBZJXCthrb8RGRB2btVLXJcbhnFKmjUNr2YFEmLfZ
-         bh1I/u3MnlnzMDoV5JL80bBbL8HOd0yGOO7qYkyWBU7RTIBg1N7yOqmO5ddva6qQfzJr
-         zyWg==
-X-Gm-Message-State: AOJu0YxJ9CtmmX12r8eQb8BdiUPSBEYtKvvRmQDMFOWGD6MLic14MABx
-	Q0RGgEGxji6FJzCzoClGzWIU78l6f3PxazxSMZ5ULYocrZHlYQrs06CpZ8qPs4sVGzo=
-X-Gm-Gg: ASbGnctARluP7X4snUPikjMJszQJcIZ+Jy8wOTKK7iXXS6HOYmRl+hYaAcDRU0yQ936
-	qnsKSgJ6Rv68LqRUSDIbgYkzXbj2aqwmNVBuXZeOKgpZOZ6Ja0tQ3wyjDISzvHw2h88mdXVNo1A
-	myARz/ZCsVdmMR9Ot1INJmo9e36TbBjjpUS/GbRNc7OmREc/lt4iEUPHvWdilXTd+MMNTXVrxts
-	+kFQHu/x5ati75yUJxmkVsRt/B5hoGwTmGHnDkNjf+dpaBbi1IVc7NYxDoPPaMj3yOZ9W+M6ANv
-	KKB37EWp3GdifZ80Zt5PitdHm2c3lRUeA/8gnt3X5SNShJNhRDatA0xBSZ8JCRqryzwlZv45sgS
-	/yXQRkZYFUc4V2u3g4XVxThgIcoZIckiGJxd10YgD+KuT0YoSpDzxUF9JhbEd+cK7A2xHs88Bcx
-	/zktFbJNnJdVW0CEVe
-X-Google-Smtp-Source: AGHT+IHJNxRdepwmA70rIxH7CleHW+ih2OcQNUmhfvzupPYK5yYekte9k/E/acCX6TG/uH9ZccgQuw==
-X-Received: by 2002:a05:620a:d8b:b0:8a1:eac9:a84d with SMTP id af79cd13be357-8b220b7f57dmr20914885a.44.1762272782998;
-        Tue, 04 Nov 2025 08:13:02 -0800 (PST)
+        bh=hdCT5TXMVwZ43iLPpU8lJqSTQs6Rvih8gdvxvVscQFA=;
+        b=aMWlvE6nkR1VYsttyYwW9ki/jdmdzgn78HSlzIzaVf+CFQRlCVthGnecYAiMCPMu14
+         eNNlnEwfGgN4rqAzaZMe1H1CMOP0DFid4FpjdBDE/6NNrtWQiH3vQOtbscg+QAZ97ir9
+         rKstbeFhpNlF+cQYtT6AESn1tUEWOrHC6rwm/2leRGYjHWMqOa+4kREdKVQd38WipQaq
+         bYn9IrqShUYTfR/y86yJnTdS1wv96ujpPfjKr3aSt9qyKarGjEQ5q3A72xsPZHLAqrWI
+         cUzY1KOalGWSRpMZPuVInIPsjdjkE/YUnDdKuvnNWjlXMzKRgGVBXGIaXCV3BbyMcMYh
+         WQYA==
+X-Gm-Message-State: AOJu0Yy04lFgbML0iznT92dDBZdH7UHvY6ni9GUWk1NfD9cWduughogU
+	+DhfsUZE7yrrI3sF3T3nFfTFAnpJT21FfOSB3nffoTnm2iQSHq7In2RV1D4Y7dvfdWnN3gG5KO7
+	Ramhy
+X-Gm-Gg: ASbGncsLdD+1EH7fFrsse/0VQcllhDvUnSy51lloIII72RV392cdHzILRtxRwfM12hb
+	e41WqRhibO4TNCdIer5x82vACRIyvH2ezH9aH7RgQCGMpLmnbzc5NnHWZdJhlGrSrdXaCjDA8Vg
+	gKcfrcu7mOfqNzkaHa1wbvyjGi/qzIT5O3UIyLe1OfuL+zWy3gtX8NgBryrkz5YsNRvDGVypmpD
+	0kWtnJC95IAphzOzifTffxpQWWo4235TmKG23apri/qBRyWMv2Cd08XZyc14Uwezfk/c2ZbDtoL
+	VS4e2J2sh/SWpy9Qn4M2tyEbmcIgPucDMUMGww2RtoZj1kPAeWAMzxUripildSnwJI74NuNnPov
+	PhTOy6BIGdDIeTJ36D7ZQfpZj6P/k6ucA/CGSbL8u/08d3T9cD1ei+euh1wyzrrw3UIpsq2KQl2
+	qXBSo1Tg==
+X-Google-Smtp-Source: AGHT+IGB1DARU+d+HVVT2IF+mZGJFO3yC7h+M8Yx4vf5VJANWGaEs2TUU/dzb+PGPA4vuknu6uI7tA==
+X-Received: by 2002:ad4:4ea3:0:b0:785:aa57:b5bb with SMTP id 6a1803df08f44-880711850d5mr2889446d6.43.1762273347663;
+        Tue, 04 Nov 2025 08:22:27 -0800 (PST)
 Received: from ?IPv6:2606:6d00:17:ebd3::5ac? ([2606:6d00:17:ebd3::5ac])
-        by smtp.gmail.com with ESMTPSA id af79cd13be357-8b0f51ecd3fsm216022085a.11.2025.11.04.08.13.01
+        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-88060e90058sm22714486d6.46.2025.11.04.08.22.26
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 04 Nov 2025 08:13:02 -0800 (PST)
-Message-ID: <b6e6881197dc4c83e43ef5eb1f20c2bf1887d395.camel@ndufresne.ca>
-Subject: Re: [PATCH 0/3] Add Amlogic stateless H.264 video decoder for S4
+        Tue, 04 Nov 2025 08:22:26 -0800 (PST)
+Message-ID: <1cb18a0bbf503db78caff09042283df560dc7b07.camel@ndufresne.ca>
+Subject: Re: i.MX8MP Hantro G2 HEVC decoding problems
 From: Nicolas Dufresne <nicolas@ndufresne.ca>
-To: Zhentao Guo <zhentao.guo@amlogic.com>, Neil Armstrong	
- <neil.armstrong@linaro.org>, Mauro Carvalho Chehab <mchehab@kernel.org>,
- Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
- Conor Dooley	 <conor+dt@kernel.org>, Kevin Hilman <khilman@baylibre.com>,
- Jerome Brunet	 <jbrunet@baylibre.com>, Martin Blumenstingl
- <martin.blumenstingl@googlemail.com>
-Cc: linux-media@vger.kernel.org, devicetree@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
-	linux-amlogic@lists.infradead.org
-Date: Tue, 04 Nov 2025 11:13:01 -0500
-In-Reply-To: <540d98ea-114c-43bc-94c0-e944b5613d74@amlogic.com>
-References: <20251027-b4-s4-vdec-upstream-v1-0-620401813b5d@amlogic.com>
-	 <b976b442-7d07-4fef-b851-ccd14661a233@linaro.org>
-	 <540d98ea-114c-43bc-94c0-e944b5613d74@amlogic.com>
+To: Krzysztof =?UTF-8?Q?Ha=C5=82asa?= <khalasa@piap.pl>
+Cc: linux-media <linux-media@vger.kernel.org>
+Date: Tue, 04 Nov 2025 11:22:26 -0500
+In-Reply-To: <m3seeunrlg.fsf@t19.piap.pl>
+References: <m31pmfp6j3.fsf@t19.piap.pl>
+		<382e94e1b932938fffd92ead86cf057b4623417c.camel@ndufresne.ca>
+	 <m3seeunrlg.fsf@t19.piap.pl>
 Content-Type: multipart/signed; micalg="pgp-sha512";
-	protocol="application/pgp-signature"; boundary="=-kJqvtTvIehm+17QzwcKF"
+	protocol="application/pgp-signature"; boundary="=-Rq3bZvANQpAejUmCgceM"
 User-Agent: Evolution 3.56.2 (3.56.2-2.fc42) 
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
@@ -85,42 +79,99 @@ List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 
 
---=-kJqvtTvIehm+17QzwcKF
+--=-Rq3bZvANQpAejUmCgceM
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-Hi,
+Hi Krzysztof,
 
-Le mardi 28 octobre 2025 =C3=A0 19:47 +0800, Zhentao Guo a =C3=A9crit=C2=A0=
-:
-> Ran 54/135 tests successfully
+Le mardi 04 novembre 2025 =C3=A0 09:12 +0100, Krzysztof Ha=C5=82asa a =C3=
+=A9crit=C2=A0:
+> Hi Nicolas,
 >=20
-> - 52 test vectors failed due to interlaced or mbaff clips: The Amlogic=
-=20
-> stateless
-> =C2=A0=C2=A0 decoder driver only support bitstreams with frame_mbs_only_f=
-lags =3D=3D 1.
-> =C2=A0=C2=A0 Test Vectors:
+> > In queue for the next kernel release, we have a rewrite of the IRQ hand=
+ler:
+> >=20
+> > https://gitlab.freedesktop.org/linux-media/media-committers/-/commit/19=
+c286b755072a22a063052f530a6b1fac8a1f63
+> >=20
+> > The important take away for this chip is that it does not always stop o=
+n
+> > errors.
+> > It can also raise a dry IRQ (I don't have explanation, only happen on I=
+MX8
+> > boards). The new handler properly check if the hardware is still runnin=
+g,
+> > which
+> > avoid programming over a live IP. The G2 has fancy internal clock gatin=
+g, so
+> > doing so can lead to CPU hang if the register you set is hooked to a ga=
+ted
+> > portion of the IP. At least this is my mental model of it.
+>=20
+> Right. This patch seems to fix the crashes. The (possibly badly
+> transformed by GStreamer?) HEVC stream isn't displayed correctly yet,
+> though a direct HEVC 1080p RTP from camera is now ok (certain rate of
+> packet loss is possible here). Then:
+>=20
+> > And there is an important bug fix for missing references, without that,=
+ you
+> > get
+> > thousands of error IRQs while the IP is fetch from address 0x0 and its
+> > surrounding. This large burst of IRQ, combine with multiple memory rela=
+ted
+> > erratas of IMX8 boards cause random other things to fall appart.
+> >=20
+> > https://gitlab.freedesktop.org/linux-media/media-committers/-/commit/47=
+825b1646a6a9eca0f90baa3d4f98947c2add96
+>=20
+> After applying the above, the stream from GStreamer is fixed, too. It
+> seems it all works fine now.
+>=20
+> From time to time I'm getting:
+> hantro_g2_irq: 0x80100 masked 0x0
+> hantro-vpu 38310000.video-codec: not all macroblocks were decoded.
+>=20
+> But I guess it's due to my network setup.
+>=20
+>=20
+> Thank you very much for your help. You have saved me a lot of work -
+> a work with an uncertain outcome.
 
-Is there plan to support it ? Most of the legacy content, and why users wan=
-ts
-H.264 around is to handle interlaced content. Its also not really optional =
-in
-the ITU conformance spec.
+Glad my recent fixes helped. These fixes took me several weeks to find and =
+fix,
+now be ware that the IRQ coding pattern needs to be extended to all other h=
+antro
+cores type, its in my todo, but not has urgent as it does not break as badl=
+y.
 
-regards,
+As for the remaining error, it matches my observation. Though, I strongly
+believe its yet another hidden problem in the driver. More research needed,=
+ that
+hard part is being able to isolate the bitstream that triggers it. I have v=
+ery
+little information about this specific error, most of the time, there is no
+evident visual artifacts (so its not really broken for the users).
+
+On another IMX8, the MQ, we often see the display controller fails at the s=
+ame
+time we get this error. Though, the MP have a bit less problems, I believe =
+the
+memory QoS is working and the that interconnect does a smoother job at load
+balancing the bandwidth.
+
 Nicolas
 
---=-kJqvtTvIehm+17QzwcKF
+--=-Rq3bZvANQpAejUmCgceM
 Content-Type: application/pgp-signature; name="signature.asc"
 Content-Description: This is a digitally signed message part
 
 -----BEGIN PGP SIGNATURE-----
 
-iHUEABYKAB0WIQTvDVKBFcTDwhoEbxLZQZRRKWBy9AUCaQomDQAKCRDZQZRRKWBy
-9G86AP9s4PfT2ZOEc7H8CSULI0fPz0RdFYmemyQn3wCh76IcygD6A5aq+z1GM0Eb
-LOyvHiMpTuu/yzDSHPEMnVL2wN653Qc=
-=yfQW
+iHUEABYKAB0WIQTvDVKBFcTDwhoEbxLZQZRRKWBy9AUCaQooQgAKCRDZQZRRKWBy
+9MhnAP9AvvnmOGZU0XWU3NDRP+uEN04awDa31A1sSw2ZE6toAwD/ZchOaRso3TCF
+tN7iDNcdfM6BJTmA5324FoOHPCxahAY=
+=m0qD
 -----END PGP SIGNATURE-----
 
---=-kJqvtTvIehm+17QzwcKF--
+--=-Rq3bZvANQpAejUmCgceM--
