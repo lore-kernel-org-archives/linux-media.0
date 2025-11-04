@@ -1,190 +1,264 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from lx20.hoststar.hosting (lx20.hoststar.hosting [168.119.41.54])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 57D6527E04C;
-	Tue,  4 Nov 2025 10:39:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EC5278634F;
+	Tue,  4 Nov 2025 10:47:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=168.119.41.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762252794; cv=none; b=UGZfcRROW5h4kDe6Al9rA8eUPPT64W8J28hvtRSNWNwSAqq3U8utCTRpzwS82ekJtXYI5ImCnR0pGZ2fbfBPGHpBmE0AObcHqkgsiOQqWKP2CFMs5KRKXnBFpwCWNQlmdO2NgNtabFEMskoQtfs4Gi2wbbzgA8zSU8BXNJM0qZo=
+	t=1762253250; cv=none; b=uRy73DkparEDfUhETKpeZ2Tcsfu7EZ2bljTqtv4gWq8LnqIj7QnyFTOGFC9aeGv6LlegH/KBQHBPd1ISpFDJstozbUbi/Xuxsb0ysIAMsvzh7q3X9aiPbENID9twK66RlRu97CLm9h2PTmCU/pUai/Api/dnSF7xVEu1DHZlq7U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762252794; c=relaxed/simple;
-	bh=bVSOpVrl2E+aD2iwJShLNXwchdC6N4vvdH0xbq0Wv7Q=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=pHnstrxNg9yS17ADWxmx1s9gfBvrCfTsubepi5uSg9zSLUcpJJ8DUmAq6YxaEc3OyDHvBxN7XJe3PA7c4JRkVvF85U7UabNrcAMR6NsLrA+52/S/eWfyDdRnZV6Xw3DgEp2PkrsFCgevBXj8qf0GUGHN0ix/zN6QrtFHJJ/Lb7c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=SlNk83dt; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1762253250; c=relaxed/simple;
+	bh=zAvpQDYT3gBOhMimULXSBoUlTdL0y0JtzeZxnkRy160=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=n2VpxiKFp1vZ/PUGAHTRfsvc7c8V5igtMi3DxBFpjxmRat9ZNCB7e9jvPwJF0XWwU4mawoB13NgjklDfbDcaGKFprhCFcmQYN85xMiIrCbK79yAcKHjXunK11gSFuw7EoHPKppKnwKazqyHK26G6gZokpbyA2VceYegrCli5/rw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=emfend.at; spf=pass smtp.mailfrom=emfend.at; dkim=pass (1024-bit key) header.d=emfend.at header.i=@emfend.at header.b=cIrREXhj; arc=none smtp.client-ip=168.119.41.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=emfend.at
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=emfend.at
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="SlNk83dt"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E4DC6C116B1;
-	Tue,  4 Nov 2025 10:39:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1762252794;
-	bh=bVSOpVrl2E+aD2iwJShLNXwchdC6N4vvdH0xbq0Wv7Q=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=SlNk83dt1Smbc3hLuSAOFwWkfmmmmga4QZ2/iN/3hvrii36ah911xR1PZR6CrIzMW
-	 bZw4faGQ5Y7SCpkJqDpd5uAX1CHrdxz7S5+rPLO3U6mHZy06WdlubrhGRZIXF8WJrD
-	 7RHzF3sRp7Iez191RHjK0bMbNeIKDsYy0CaroJe1tyQvGL6Qc1/PNYmSE6BGlkjdfl
-	 lkycl49PkuqE5g7LvXy4gZC10Vy2odMekVQYQOk/17egZGcFZxQB9IK6WqNYNbO9sz
-	 FmLc0IesnZ3Yr3DHYFgYF9BHORkyuY/hKO6esZwjP5rJWFmz2pIhYx175Z1C9RAVf1
-	 Jl1MhdXrOJ2BQ==
-Message-ID: <0735f540-8085-440c-9c0f-7ac23b52b838@kernel.org>
-Date: Tue, 4 Nov 2025 10:39:50 +0000
+	dkim=pass (1024-bit key) header.d=emfend.at header.i=@emfend.at header.b="cIrREXhj"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=emfend.at;
+	 s=mail; h=Cc:To:In-Reply-To:References:Message-Id:Content-Transfer-Encoding:
+	Content-Type:MIME-Version:Subject:Date:From:Sender:Reply-To:Content-ID:
+	Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+	:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+	List-Post:List-Owner:List-Archive;
+	bh=gtw1W9J5NWCrI9/uSMoQmIpsKFXfXsWLs8Wq1IUI8rQ=; b=cIrREXhjCw19tRvKUDnQ+tI/Dd
+	tUrs2zc/1yh7hOxUPfi/hSDmsZCu4lbT9czA+bbR4d0wImhMipXitvPxjEdLjNd1NmBIZ7NvMwxZx
+	B8weZXEO8wuvX9YtsRRgKr3pJbnlv9AH8RXjKrhT8tS5U3G0Ol+26BJSWa6ec56NI/Og=;
+Received: from 194-208-208-245.tele.net ([194.208.208.245]:50685 helo=[127.0.1.1])
+	by lx20.hoststar.hosting with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.93)
+	(envelope-from <matthias.fend@emfend.at>)
+	id 1vGEKG-004xbr-3p; Tue, 04 Nov 2025 11:31:45 +0100
+From: Matthias Fend <matthias.fend@emfend.at>
+Date: Tue, 04 Nov 2025 11:31:33 +0100
+Subject: [PATCH v5 1/2] media: dt-bindings: i2c: add Himax HM1246 image
+ sensor
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 1/5] media: qcom: iris: Improve format alignment for
- encoder
-To: Wangao Wang <wangao.wang@oss.qualcomm.com>,
- Vikash Garodia <vikash.garodia@oss.qualcomm.com>,
- Dikshita Agarwal <dikshita.agarwal@oss.qualcomm.com>,
- Abhinav Kumar <abhinav.kumar@linux.dev>,
- Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc: linux-media@vger.kernel.org, linux-arm-msm@vger.kernel.org,
- linux-kernel@vger.kernel.org, Neil Armstrong <neil.armstrong@linaro.org>,
- quic_qiweil@quicinc.com, quic_renjiang@quicinc.com
-References: <20251104-iris_encoder_enhancements-v3-0-63b0c431b4d0@oss.qualcomm.com>
- <k3umzf0z69-Hbh7jbT-Gjp4pyquNAYVC3VfIXQcdVZstI5FTtcGU_NEgb8l796Z3Cr6Dz0DQ0BoVQQPd4fr6sQ==@protonmail.internalid>
- <20251104-iris_encoder_enhancements-v3-1-63b0c431b4d0@oss.qualcomm.com>
-From: Bryan O'Donoghue <bod@kernel.org>
-Content-Language: en-US
-In-Reply-To: <20251104-iris_encoder_enhancements-v3-1-63b0c431b4d0@oss.qualcomm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
+Message-Id: <20251104-hm1246-v5-1-97c8f25b5419@emfend.at>
+References: <20251104-hm1246-v5-0-97c8f25b5419@emfend.at>
+In-Reply-To: <20251104-hm1246-v5-0-97c8f25b5419@emfend.at>
+To: Mauro Carvalho Chehab <mchehab@kernel.org>, 
+ Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+ Conor Dooley <conor+dt@kernel.org>, Hans Verkuil <hverkuil@kernel.org>, 
+ Sakari Ailus <sakari.ailus@linux.intel.com>, 
+ Hans de Goede <hansg@kernel.org>, Ricardo Ribalda <ribalda@chromium.org>, 
+ =?utf-8?q?Andr=C3=A9_Apitzsch?= <git@apitzsch.eu>, 
+ Tarang Raval <tarang.raval@siliconsignals.io>, 
+ Andy Shevchenko <andriy.shevchenko@linux.intel.com>, 
+ Benjamin Mugnier <benjamin.mugnier@foss.st.com>, 
+ Sylvain Petinot <sylvain.petinot@foss.st.com>, 
+ Dongcheng Yan <dongcheng.yan@intel.com>, 
+ Bryan O'Donoghue <bryan.odonoghue@linaro.org>, 
+ Alan Stern <stern@rowland.harvard.edu>, 
+ Jingjing Xiong <jingjing.xiong@intel.com>, 
+ Heimir Thor Sverrisson <heimir.sverrisson@gmail.com>, 
+ Mehdi Djait <mehdi.djait@linux.intel.com>, 
+ Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>, 
+ Laurent Pinchart <laurent.pinchart@ideasonboard.com>, 
+ Hardevsinh Palaniya <hardevsinh.palaniya@siliconsignals.io>
+Cc: linux-media@vger.kernel.org, devicetree@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, Hao Yao <hao.yao@intel.com>, 
+ Matthias Fend <matthias.fend@emfend.at>, 
+ bsp-development.geo@leica-geosystems.com
+X-Mailer: b4 0.14.2
+X-Spam-Score: -1.0
+X-Spam-Bar: -
+X-Spam-Report: Spam detection software, running on the system "lx20.hoststar.hosting",
+ has NOT identified this incoming email as spam.  The original
+ message has been attached to this so you can view it or label
+ similar future email.  If you have any questions, see
+ the administrator of that system for details.
+ 
+ Content preview:  Hello, this series adds support for the Himax HM1246 image
+    sensor. The Himax HM1246-AWD is a 1/3.7-Inch CMOS image sensor SoC with an
+    active array size of 1296 x 976. Currently, only the native RAW mode is s
+    [...] 
+ 
+ Content analysis details:   (-1.0 points, 5.0 required)
+ 
+  pts rule name              description
+ ---- ---------------------- --------------------------------------------------
+  0.0 URIBL_BLOCKED          ADMINISTRATOR NOTICE: The query to URIBL was
+                             blocked.  See
+                             http://wiki.apache.org/spamassassin/DnsBlocklists#dnsbl-block
+                              for more information.
+                             [URIs: himax.com.tw]
+  0.0 URIBL_DBL_BLOCKED_OPENDNS ADMINISTRATOR NOTICE: The query to
+                             dbl.spamhaus.org was blocked due to usage
+                             of an open resolver. See
+                             https://www.spamhaus.org/returnc/pub/
+                             [URIs: himax.com.tw]
+  0.0 URIBL_ZEN_BLOCKED_OPENDNS ADMINISTRATOR NOTICE: The query to
+                             zen.spamhaus.org was blocked due to usage
+                             of an open resolver. See
+                             https://www.spamhaus.org/returnc/pub/
+                             [URIs: himax.com.tw]
+ -1.0 ALL_TRUSTED            Passed through trusted hosts only via SMTP
+  0.0 TVD_RCVD_IP            Message was received from an IP address
+  0.0 KAM_DMARC_STATUS       Test Rule for DKIM or SPF Failure with Strict
+                             Alignment (older systems)
+  0.0 Local_hs_NotFromHoststar Sender is NOT hoststar.(ch|at|com)
+  0.0 Local_hs_NotToHoststar Recipient is NOT hoststar.(ch|at|com)
 
-On 04/11/2025 08:11, Wangao Wang wrote:
-> Add members enc_raw_width, enc_raw_height to the struct iris_inst to
-> support codec alignment requirements.
-> 
-> HFI_PROP_CROP_OFFSETS is used to inform the firmware of the region
-> of interest, rather than indicating that the codec supports crop.
-> Therefore, the crop handling has been corrected accordingly.
-> 
-> Tested-by: Neil Armstrong <neil.armstrong@linaro.org> # on SM8650-HDK
-> Signed-off-by: Wangao Wang <wangao.wang@oss.qualcomm.com>
-> ---
->   .../platform/qcom/iris/iris_hfi_gen2_command.c     | 23 ++++++++++++++++------
->   drivers/media/platform/qcom/iris/iris_instance.h   |  4 ++++
->   drivers/media/platform/qcom/iris/iris_venc.c       | 10 ++++++++--
->   3 files changed, 29 insertions(+), 8 deletions(-)
-> 
-> diff --git a/drivers/media/platform/qcom/iris/iris_hfi_gen2_command.c b/drivers/media/platform/qcom/iris/iris_hfi_gen2_command.c
-> index 4ce71a14250832440099e4cf3835b4aedfb749e8..2469e027706fb6c9c0b95be11109c3cd0f8d70ce 100644
-> --- a/drivers/media/platform/qcom/iris/iris_hfi_gen2_command.c
-> +++ b/drivers/media/platform/qcom/iris/iris_hfi_gen2_command.c
-> @@ -168,8 +168,7 @@ static int iris_hfi_gen2_session_set_property(struct iris_inst *inst, u32 packet
-> 
->   static int iris_hfi_gen2_set_raw_resolution(struct iris_inst *inst, u32 plane)
->   {
-> -	u32 resolution = inst->fmt_src->fmt.pix_mp.width << 16 |
-> -		inst->fmt_src->fmt.pix_mp.height;
-> +	u32 resolution = inst->enc_raw_width << 16 | inst->enc_raw_height;
->   	u32 port = iris_hfi_gen2_get_port(inst, plane);
-> 
->   	return iris_hfi_gen2_session_set_property(inst,
-> @@ -216,8 +215,11 @@ static int iris_hfi_gen2_set_crop_offsets(struct iris_inst *inst, u32 plane)
->   	u32 port = iris_hfi_gen2_get_port(inst, plane);
->   	u32 bottom_offset, right_offset;
->   	u32 left_offset, top_offset;
-> +	u32 codec_align;
->   	u32 payload[2];
-> 
-> +	codec_align = inst->codec == V4L2_PIX_FMT_HEVC ? 32 : 16;
-> +
->   	if (inst->domain == DECODER) {
->   		if (V4L2_TYPE_IS_OUTPUT(plane)) {
->   			bottom_offset = (inst->fmt_src->fmt.pix_mp.height - inst->crop.height);
-> @@ -231,10 +233,19 @@ static int iris_hfi_gen2_set_crop_offsets(struct iris_inst *inst, u32 plane)
->   			top_offset = inst->compose.top;
->   		}
->   	} else {
-> -		bottom_offset = (inst->fmt_src->fmt.pix_mp.height - inst->crop.height);
-> -		right_offset = (inst->fmt_src->fmt.pix_mp.width - inst->crop.width);
-> -		left_offset = inst->crop.left;
-> -		top_offset = inst->crop.top;
-> +		if (V4L2_TYPE_IS_OUTPUT(plane)) {
-> +			bottom_offset = (inst->enc_raw_height - inst->crop.height);
-> +			right_offset = (inst->enc_raw_width - inst->crop.width);
-> +			left_offset = inst->crop.left;
-> +			top_offset = inst->crop.top;
-> +		} else {
-> +			bottom_offset = (ALIGN(inst->enc_raw_height, codec_align) -
-> +					inst->enc_raw_height);
-> +			right_offset = (ALIGN(inst->enc_raw_width, codec_align) -
-> +					inst->enc_raw_width);
-> +			left_offset = 0;
-> +			top_offset = 0;
-> +		}
->   	}
-> 
->   	payload[0] = FIELD_PREP(GENMASK(31, 16), left_offset) | top_offset;
-> diff --git a/drivers/media/platform/qcom/iris/iris_instance.h b/drivers/media/platform/qcom/iris/iris_instance.h
-> index 5982d7adefeab80905478b32cddba7bd4651a691..fbae1662947df73bb3d10b7892839fa1076b7e61 100644
-> --- a/drivers/media/platform/qcom/iris/iris_instance.h
-> +++ b/drivers/media/platform/qcom/iris/iris_instance.h
-> @@ -64,6 +64,8 @@ struct iris_fmt {
->    * @frame_rate: frame rate of current instance
->    * @operating_rate: operating rate of current instance
->    * @hfi_rc_type: rate control type
-> + * @enc_raw_width: raw image width for encoder instance
-> + * @enc_raw_height: raw image height for encoder instance
->    */
-> 
->   struct iris_inst {
-> @@ -102,6 +104,8 @@ struct iris_inst {
->   	u32				frame_rate;
->   	u32				operating_rate;
->   	u32				hfi_rc_type;
-> +	u32				enc_raw_width;
-> +	u32				enc_raw_height;
->   };
-> 
->   #endif
-> diff --git a/drivers/media/platform/qcom/iris/iris_venc.c b/drivers/media/platform/qcom/iris/iris_venc.c
-> index 099bd5ed4ae0294725860305254c4cad1ec88d7e..7ad747d2272f029e69a56572a188a032f898a3fb 100644
-> --- a/drivers/media/platform/qcom/iris/iris_venc.c
-> +++ b/drivers/media/platform/qcom/iris/iris_venc.c
-> @@ -62,12 +62,15 @@ int iris_venc_inst_init(struct iris_inst *inst)
-> 
->   	inst->crop.left = 0;
->   	inst->crop.top = 0;
-> -	inst->crop.width = f->fmt.pix_mp.width;
-> -	inst->crop.height = f->fmt.pix_mp.height;
-> +	inst->crop.width = DEFAULT_WIDTH;
-> +	inst->crop.height = DEFAULT_HEIGHT;
-> 
->   	inst->operating_rate = DEFAULT_FPS;
->   	inst->frame_rate = DEFAULT_FPS;
-> 
-> +	inst->enc_raw_width = DEFAULT_WIDTH;
-> +	inst->enc_raw_height = DEFAULT_HEIGHT;
-> +
->   	memcpy(&inst->fw_caps[0], &core->inst_fw_caps_enc[0],
->   	       INST_FW_CAP_MAX * sizeof(struct platform_inst_fw_cap));
-> 
-> @@ -249,6 +252,9 @@ static int iris_venc_s_fmt_input(struct iris_inst *inst, struct v4l2_format *f)
->   	inst->buffers[BUF_INPUT].min_count = iris_vpu_buf_count(inst, BUF_INPUT);
->   	inst->buffers[BUF_INPUT].size = fmt->fmt.pix_mp.plane_fmt[0].sizeimage;
-> 
-> +	inst->enc_raw_width = f->fmt.pix_mp.width;
-> +	inst->enc_raw_height = f->fmt.pix_mp.height;
-> +
->   	if (f->fmt.pix_mp.width != inst->crop.width ||
->   	    f->fmt.pix_mp.height != inst->crop.height) {
->   		inst->crop.top = 0;
-> 
-> --
-> 2.43.0
-> 
+Add YAML device tree binding for Himax HM1246 image sensor.
 
-To me reading this patch you seem to have three or four different 
-alignment changed bunched into one.
-
-I would prefer to see more granular and specific patches for each change.
-
-Please break this up into more bite size chunks.
-
+Reviewed-by: Rob Herring (Arm) <robh@kernel.org>
+Signed-off-by: Matthias Fend <matthias.fend@emfend.at>
 ---
-bod
+ .../bindings/media/i2c/himax,hm1246.yaml           | 117 +++++++++++++++++++++
+ MAINTAINERS                                        |   7 ++
+ 2 files changed, 124 insertions(+)
+
+diff --git a/Documentation/devicetree/bindings/media/i2c/himax,hm1246.yaml b/Documentation/devicetree/bindings/media/i2c/himax,hm1246.yaml
+new file mode 100644
+index 0000000000000000000000000000000000000000..5ab748259294fc46d7e71e783cf36a64639154f2
+--- /dev/null
++++ b/Documentation/devicetree/bindings/media/i2c/himax,hm1246.yaml
+@@ -0,0 +1,117 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++# Copyright 2025 Matthias Fend <matthias.fend@emfend.at>
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/media/i2c/himax,hm1246.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Himax HM1246-AWD 1/3.7-Inch megapixel SoC image sensor
++
++maintainers:
++  - Matthias Fend <matthias.fend@emfend.at>
++
++description:
++  The Himax HM1246-AWD is a 1/3.7-Inch CMOS image sensor SoC with an active
++  array size of 1296 x 976. It is programmable through an I2C interface and
++  connected via parallel bus.
++
++allOf:
++  - $ref: /schemas/media/video-interface-devices.yaml#
++
++properties:
++  compatible:
++    const: himax,hm1246
++
++  reg:
++    maxItems: 1
++
++  clocks:
++    description: Input reference clock (6 - 27 MHz)
++    maxItems: 1
++
++  reset-gpios:
++    description: Active low XSHUTDOWN pin
++    maxItems: 1
++
++  avdd-supply:
++    description: Power for analog circuit (3.0 - 3.6 V)
++
++  iovdd-supply:
++    description: Power for I/O circuit (1.7 - 3.6 V)
++
++  dvdd-supply:
++    description: Power for digital circuit (1.5 / 1.8 V)
++
++  port:
++    $ref: /schemas/graph.yaml#/$defs/port-base
++    additionalProperties: false
++    description: Parallel video output port
++
++    properties:
++      endpoint:
++        $ref: /schemas/media/video-interfaces.yaml#
++        unevaluatedProperties: false
++
++        properties:
++          hsync-active:
++            default: 1
++
++          vsync-active:
++            default: 1
++
++          pclk-sample:
++            default: 0
++
++        required:
++          - link-frequencies
++
++    required:
++      - endpoint
++
++required:
++  - compatible
++  - reg
++  - clocks
++  - avdd-supply
++  - iovdd-supply
++  - dvdd-supply
++  - port
++
++unevaluatedProperties: false
++
++examples:
++  - |
++    #include <dt-bindings/gpio/gpio.h>
++    #include <dt-bindings/media/video-interfaces.h>
++
++    i2c {
++        #address-cells = <1>;
++        #size-cells = <0>;
++
++        sensor@24 {
++            compatible =  "himax,hm1246";
++            reg = <0x24>;
++
++            clocks = <&hm1246_clk>;
++
++            reset-gpios = <&gpio0 0 GPIO_ACTIVE_LOW>;
++
++            avdd-supply = <&hm1246_avdd>;
++            iovdd-supply = <&hm1246_iovdd>;
++            dvdd-supply = <&hm1246_dvdd>;
++
++            orientation = <2>;
++            rotation = <0>;
++
++            port {
++                endpoint {
++                    remote-endpoint = <&isp_par_in>;
++                    bus-width = <10>;
++                    hsync-active = <1>; /* active high */
++                    vsync-active = <1>; /* active high */
++                    pclk-sample = <1>; /* sample on rising edge */
++                    link-frequencies = /bits/ 64 <42174000>;
++                };
++            };
++        };
++    };
+diff --git a/MAINTAINERS b/MAINTAINERS
+index f7351fced572eff0a18038095ec1724047890b55..e415ebb3204472ccc41cfdaa52af000b7cb15771 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -11162,6 +11162,13 @@ L:	linux-kernel@vger.kernel.org
+ S:	Maintained
+ F:	drivers/misc/hisi_hikey_usb.c
+ 
++HIMAX HM1246 SENSOR DRIVER
++M:	Matthias Fend <matthias.fend@emfend.at>
++L:	linux-media@vger.kernel.org
++S:	Maintained
++T:	git git://linuxtv.org/media_tree.git
++F:	Documentation/devicetree/bindings/media/i2c/himax,hm1246.yaml
++
+ HIMAX HX83112B TOUCHSCREEN SUPPORT
+ M:	Job Noorman <job@noorman.info>
+ L:	linux-input@vger.kernel.org
+
+-- 
+2.34.1
+
