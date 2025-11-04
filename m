@@ -1,186 +1,124 @@
-Received: from jeth.damsy.net (jeth.damsy.net [51.159.152.102])
+Received: from mout-p-201.mailbox.org (mout-p-201.mailbox.org [80.241.56.171])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6BADF215F42;
-	Tue,  4 Nov 2025 15:24:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=51.159.152.102
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3F39A269D06;
+	Tue,  4 Nov 2025 15:30:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=80.241.56.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762269889; cv=none; b=YQzwduRyIGu8x3u3jr4GLTIx8qvY0jiiSSCkNOXT4rAnvZbBG0rFkX8XoqQZknL90H8/bsFin24Iw1JqjGB6EiPsWxaiHlaQORGiAk79ZMstxJxHn6uICrfuHOYlghrL9C5qiNhC8pUkhYEToHVGP3LH26MW69rLjM0dqvxVhwM=
+	t=1762270245; cv=none; b=pf9mvG5TaDwrz4msw9UmCqzoLPDYWE3iAImgh7L2qo7l/Xf55lKoA+THLI2JM0hnLya7F7BYIHxnxkvAmrDW96w+6Jwr5vXnZFvMIuvsXcWvdzqWsMwTgooFYvJvv62MOLCNlMnyQF3nze5MuMcEQLeZNTj19bLIWqEIDM1kcPI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762269889; c=relaxed/simple;
-	bh=h/sQ5sjkpNGwHLN8MFhWgxjYYkMM9SNpSbQY9pfKcL8=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=cKUVaeQjR5R3IAgr/NCIP6iNgcj5wUi/VeYiI14iqPz8wiTAAstWH1zhjoqJLt63zNFYtK1Exz2Lr+jLr//6fe+244ua6P5dblrtpyGQPXhZBoloFy9TrgL5V2fqLQKGQR3URwn4mnAzlLdCllqwO9qkk0ySOGhqMAreKgNm8Q8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=damsy.net; spf=pass smtp.mailfrom=damsy.net; dkim=pass (2048-bit key) header.d=damsy.net header.i=@damsy.net header.b=fbMo2WAo; dkim=permerror (0-bit key) header.d=damsy.net header.i=@damsy.net header.b=B/j8Nngl; arc=none smtp.client-ip=51.159.152.102
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=damsy.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=damsy.net
+	s=arc-20240116; t=1762270245; c=relaxed/simple;
+	bh=7LgTVs0vVnyj5RQK2XpeZ4a55ijlPbDWWeN0aI5fO6w=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=aS4tvrFKhkYw+U6wPZxMARI/FfcE3zp3T6KfK9TbEOLi9zXFTlSUWfXF6FyrsRbM3MGnNni4QGU2oVzPYlk00/tODR+stsPD9E8oRWah57BPrSykPYztdEXjRI2M3JfRT4Mr6HbdmSEldIq1jJ6RoTRSBloYM0iURGT+2/jVnO4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=mailbox.org; spf=pass smtp.mailfrom=mailbox.org; dkim=pass (2048-bit key) header.d=mailbox.org header.i=@mailbox.org header.b=IwxMFQXU; arc=none smtp.client-ip=80.241.56.171
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=mailbox.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mailbox.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=damsy.net header.i=@damsy.net header.b="fbMo2WAo";
-	dkim=permerror (0-bit key) header.d=damsy.net header.i=@damsy.net header.b="B/j8Nngl"
-DKIM-Signature: v=1; a=rsa-sha256; s=202408r; d=damsy.net; c=relaxed/relaxed;
-	h=From:To:Subject:Date:Message-ID; t=1762269846; bh=Md3JXufxJqYTYDD+0LVVo5S
-	jqxZHasmKDqpehjHw5dk=; b=fbMo2WAoOTSO/uU6bDOvUwhinhZTOHOaW/et4qJ8N6hq9rRgKL
-	jJFDT46tFLjhEuxBQefWD+yVfJ8T2nwnZ5+kxPrEg6FNsfeHcIpdgM7x2BJNnHD/42lusVxeiEN
-	xzGmoE1VirB7YKn19rKchyDTu9lM91XLEXwrQeSZ0h/NT3WDluxtwO3/guL+CkqFHfEIDXFnG85
-	fqAZgqiIKq+Hv+NlhrT9O7zY+wLq9XeqetWUWps4gswIkMutfeQHhPr7TI0KQwA2NcEi2hQ/kNz
-	dIk1iZ8DXibbbYdYKwMIBUjz9MhaW8Ir7/SopS/NOzc1LfzDpjn7bTCvfsMLfYcjjHg==;
-DKIM-Signature: v=1; a=ed25519-sha256; s=202408e; d=damsy.net; c=relaxed/relaxed;
-	h=From:To:Subject:Date:Message-ID; t=1762269846; bh=Md3JXufxJqYTYDD+0LVVo5S
-	jqxZHasmKDqpehjHw5dk=; b=B/j8NnglB5dEWa4XIPmntCOh5fE1cR/Z/+Peyo/fB/Qv9AQ3+r
-	Nb544jcRoJoMx3GlaVRGbghxkz3rY8QrQ8AQ==;
-Message-ID: <c1da66b4-3b71-4d83-8e8e-56151030b691@damsy.net>
-Date: Tue, 4 Nov 2025 16:24:05 +0100
+	dkim=pass (2048-bit key) header.d=mailbox.org header.i=@mailbox.org header.b="IwxMFQXU"
+Received: from smtp102.mailbox.org (smtp102.mailbox.org [10.196.197.102])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mout-p-201.mailbox.org (Postfix) with ESMTPS id 4d1C8H2BNPz9v76;
+	Tue,  4 Nov 2025 16:30:39 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mailbox.org; s=mail20150812;
+	t=1762270239; h=from:from:reply-to:reply-to:subject:subject:date:date:
+	 message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+	 content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=jXw6kCFBo5eidUV/wPgMY2T8iMEfPQj0hALJrToc0oY=;
+	b=IwxMFQXUcI3TdafSuVoVPXSCtxouMMSjDnqn11sgXym8XEDiCOrOK2HYxs3xK6TIFEliG1
+	+McIE9KGm4i0lmPhaP+r5zGI5rFZR8pF36F+rQBxmuleWOq6m38Io9WpUsxAsjaTOtq7Zo
+	/iZw2c4a/qDmf6Oobue+Tt3Izlq84WpXqHLCN7FE9JFuM1tqEZowZ6f9kuBrkQ5GZ4bdK5
+	FLJMW+hhEXRpCYU8cARrrGyWKOYX7oq4IJMJVNwBKfnGJBEGlQ9936FYheUYxlgCJFxEO9
+	KMDqjzSnYCSepWseYXsC+GyJ3jCLyKuHlIrRXA+n3B4OPvmoKI4JrpJVw18kog==
+Message-ID: <85e573fa81913b4afe274f27142f526062f184f4.camel@mailbox.org>
+Subject: Re: [PATCH v3] drm/sched: Fix deadlock in
+ drm_sched_entity_kill_jobs_cb
+From: Philipp Stanner <phasta@mailbox.org>
+Reply-To: phasta@kernel.org
+To: Pierre-Eric Pelloux-Prayer <pierre-eric@damsy.net>, phasta@kernel.org, 
+ Pierre-Eric Pelloux-Prayer <pierre-eric.pelloux-prayer@amd.com>, Matthew
+ Brost <matthew.brost@intel.com>, Danilo Krummrich <dakr@kernel.org>,
+ Christian =?ISO-8859-1?Q?K=F6nig?= <ckoenig.leichtzumerken@gmail.com>,
+ Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, Maxime Ripard
+ <mripard@kernel.org>,  Thomas Zimmermann <tzimmermann@suse.de>, David
+ Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>, Sumit Semwal
+ <sumit.semwal@linaro.org>, Luben Tuikov <luben.tuikov@amd.com>
+Cc: Mikhail Gavrilov <mikhail.v.gavrilov@gmail.com>, Christian
+ =?ISO-8859-1?Q?K=F6nig?=
+	 <christian.koenig@amd.com>, dri-devel@lists.freedesktop.org, 
+	linux-kernel@vger.kernel.org, linux-media@vger.kernel.org, 
+	linaro-mm-sig@lists.linaro.org
+Date: Tue, 04 Nov 2025 16:30:24 +0100
+In-Reply-To: <c1da66b4-3b71-4d83-8e8e-56151030b691@damsy.net>
+References: <20251104095358.15092-1-pierre-eric.pelloux-prayer@amd.com>
+	 <628cdf3a0c5b783c09fe2a40aca4a4a48c614e66.camel@mailbox.org>
+	 <c1da66b4-3b71-4d83-8e8e-56151030b691@damsy.net>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3] drm/sched: Fix deadlock in
- drm_sched_entity_kill_jobs_cb
-To: phasta@kernel.org,
- Pierre-Eric Pelloux-Prayer <pierre-eric.pelloux-prayer@amd.com>,
- Matthew Brost <matthew.brost@intel.com>, Danilo Krummrich <dakr@kernel.org>,
- =?UTF-8?Q?Christian_K=C3=B6nig?= <ckoenig.leichtzumerken@gmail.com>,
- Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
- Maxime Ripard <mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>,
- David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
- Sumit Semwal <sumit.semwal@linaro.org>, Luben Tuikov <luben.tuikov@amd.com>
-Cc: Mikhail Gavrilov <mikhail.v.gavrilov@gmail.com>,
- =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
- dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
- linux-media@vger.kernel.org, linaro-mm-sig@lists.linaro.org
-References: <20251104095358.15092-1-pierre-eric.pelloux-prayer@amd.com>
- <628cdf3a0c5b783c09fe2a40aca4a4a48c614e66.camel@mailbox.org>
-Content-Language: en-US
-From: Pierre-Eric Pelloux-Prayer <pierre-eric@damsy.net>
-In-Reply-To: <628cdf3a0c5b783c09fe2a40aca4a4a48c614e66.camel@mailbox.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+X-MBO-RS-META: b7zmj93dted6cq4japbk7tzm6j7j7tmc
+X-MBO-RS-ID: ce66c1907a5c42a4b78
+
+On Tue, 2025-11-04 at 16:24 +0100, Pierre-Eric Pelloux-Prayer wrote:
+>=20
+>=20
+> Le 04/11/2025 =C3=A0 13:43, Philipp Stanner a =C3=A9crit=C2=A0:
+>=20
+> >=20
+> > Some things I have unfortunately overlooked below.
+> >=20
+> > >=20
+> > > Fixes: 2fdb8a8f07c2 ("drm/scheduler: rework entity flush, kill and fi=
+ni")
+> >=20
+> > We should +Cc stable. It's a deadlock after all.
+>=20
+> OK.
+>=20
+> >=20
+> > > Link: https://gitlab.freedesktop.org/mesa/mesa/-/issues/13908
+> > > Reported-by: Mikhail Gavrilov <mikhail.v.gavrilov@gmail.com>
+> > > Suggested-by: Christian K=C3=B6nig <christian.koenig@amd.com>
+> > > Reviewed-by: Christian K=C3=B6nig <christian.koenig@amd.com>
+> > > Signed-off-by: Pierre-Eric Pelloux-Prayer <pierre-eric.pelloux-prayer=
+@amd.com>
+> > > ---
+> > > =C2=A0=C2=A0drivers/gpu/drm/scheduler/sched_entity.c | 34 +++++++++++=
+++-----------
+> > > =C2=A0=C2=A01 file changed, 19 insertions(+), 15 deletions(-)
+> > >=20
+> > > diff --git a/drivers/gpu/drm/scheduler/sched_entity.c b/drivers/gpu/d=
+rm/scheduler/sched_entity.c
+> > > index c8e949f4a568..fe174a4857be 100644
+> > > --- a/drivers/gpu/drm/scheduler/sched_entity.c
+> > > +++ b/drivers/gpu/drm/scheduler/sched_entity.c
+> > > @@ -173,26 +173,15 @@ int drm_sched_entity_error(struct drm_sched_ent=
+ity *entity)
+> > > =C2=A0=C2=A0}
+> > > =C2=A0=C2=A0EXPORT_SYMBOL(drm_sched_entity_error);
+> > > =C2=A0=20
+> > > +static void drm_sched_entity_kill_jobs_cb(struct dma_fence *f,
+> > > +					=C2=A0 struct dma_fence_cb *cb);
+> >=20
+> > It's far better to move the function up instead. Can you do that?
+>=20
+> Since drm_sched_entity_kill_jobs_cb uses drm_sched_entity_kill_jobs and v=
+ice=20
+> versa, I'll have to forward declare one of the 2 functions anyway.
+
+Ah, right.
+OK then.
+
+I can push this and +Cc stable in the commit message if you want.
 
 
-
-Le 04/11/2025 à 13:43, Philipp Stanner a écrit :
-> On Tue, 2025-11-04 at 10:53 +0100, Pierre-Eric Pelloux-Prayer wrote:
->> The Mesa issue referenced below pointed out a possible deadlock:
->>
->> [ 1231.611031]  Possible interrupt unsafe locking scenario:
->>
->> [ 1231.611033]        CPU0                    CPU1
->> [ 1231.611034]        ----                    ----
->> [ 1231.611035]   lock(&xa->xa_lock#17);
->> [ 1231.611038]                                local_irq_disable();
->> [ 1231.611039]                                lock(&fence->lock);
->> [ 1231.611041]                                lock(&xa->xa_lock#17);
->> [ 1231.611044]   <Interrupt>
->> [ 1231.611045]     lock(&fence->lock);
->> [ 1231.611047]
->>                  *** DEADLOCK ***
->>
->> In this example, CPU0 would be any function accessing job->dependencies
->> through the xa_* functions that doesn't disable interrupts (eg:
->> drm_sched_job_add_dependency, drm_sched_entity_kill_jobs_cb).
->>
->> CPU1 is executing drm_sched_entity_kill_jobs_cb as a fence signalling
->> callback so in an interrupt context. It will deadlock when trying to
->> grab the xa_lock which is already held by CPU0.
->>
->> Replacing all xa_* usage by their xa_*_irq counterparts would fix
->> this issue, but Christian pointed out another issue: dma_fence_signal
->> takes fence.lock and so does dma_fence_add_callback.
->>
->>    dma_fence_signal() // locks f1.lock
->>    -> drm_sched_entity_kill_jobs_cb()
->>    -> foreach dependencies
->>       -> dma_fence_add_callback() // locks f2.lock
->>
->> This will deadlock if f1 and f2 share the same spinlock.
->>
->> To fix both issues, the code iterating on dependencies and re-arming them
->> is moved out to drm_sched_entity_kill_jobs_work.
->>
->> v2: reworded commit message (Philipp)
->> v3: added Fixes tag (Philipp)
-> 
-> Thx for the update.
-> In the future please put the changelog below between a pair of '---'
-> 
-> ---
-> v2: …
-> v3: …
-> ---
-
-OK.
-
-> 
-> Some things I have unfortunately overlooked below.
-> 
->>
->> Fixes: 2fdb8a8f07c2 ("drm/scheduler: rework entity flush, kill and fini")
-> 
-> We should +Cc stable. It's a deadlock after all.
-
-OK.
-
-> 
->> Link: https://gitlab.freedesktop.org/mesa/mesa/-/issues/13908
->> Reported-by: Mikhail Gavrilov <mikhail.v.gavrilov@gmail.com>
->> Suggested-by: Christian König <christian.koenig@amd.com>
->> Reviewed-by: Christian König <christian.koenig@amd.com>
->> Signed-off-by: Pierre-Eric Pelloux-Prayer <pierre-eric.pelloux-prayer@amd.com>
->> ---
->>   drivers/gpu/drm/scheduler/sched_entity.c | 34 +++++++++++++-----------
->>   1 file changed, 19 insertions(+), 15 deletions(-)
->>
->> diff --git a/drivers/gpu/drm/scheduler/sched_entity.c b/drivers/gpu/drm/scheduler/sched_entity.c
->> index c8e949f4a568..fe174a4857be 100644
->> --- a/drivers/gpu/drm/scheduler/sched_entity.c
->> +++ b/drivers/gpu/drm/scheduler/sched_entity.c
->> @@ -173,26 +173,15 @@ int drm_sched_entity_error(struct drm_sched_entity *entity)
->>   }
->>   EXPORT_SYMBOL(drm_sched_entity_error);
->>   
->> +static void drm_sched_entity_kill_jobs_cb(struct dma_fence *f,
->> +					  struct dma_fence_cb *cb);
-> 
-> It's far better to move the function up instead. Can you do that?
-
-Since drm_sched_entity_kill_jobs_cb uses drm_sched_entity_kill_jobs and vice 
-versa, I'll have to forward declare one of the 2 functions anyway.
-
-
-> 
->> +
->>
-> 
-> […]
-> 
->> +/* Signal the scheduler finished fence when the entity in question is killed. */
->> +static void drm_sched_entity_kill_jobs_cb(struct dma_fence *f,
->> +					  struct dma_fence_cb *cb)
->> +{
->> +	struct drm_sched_job *job = container_of(cb, struct drm_sched_job,
->> +						 finish_cb);
->> +
->> +	dma_fence_put(f);
-> 
-> It would be great if we knew what fence is being dropped here and why.
-> I know you're just moving the pre-existing code, but if you should
-> know, informing about that via comment would be great.
-> 
-
-As discussed offline, "f" is simply the fence being signaled, I'm not sure it 
-warrants a comment.
-
-Regards,
-Pierre-Eric
-
-> Optional.
-> 
-> 
-> Rest of the code looks good. No further objections.
-> 
-> 
-> P.
-
+P.
