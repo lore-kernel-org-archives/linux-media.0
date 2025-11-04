@@ -1,194 +1,203 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 953A11946DF
-	for <linux-media@vger.kernel.org>; Tue,  4 Nov 2025 15:11:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4C0C424888A;
+	Tue,  4 Nov 2025 15:21:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.167.242.64
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762269064; cv=none; b=fQdiAW8T4qQzOQJwZTlIwpDonkiRUKSlIjyp9ONd0USY7L9NyU94MOP+iRc1ZC8GkpjDrVkc/eqILdoCB/1Iu3Qm2M7YymxXCvhc+t9DQN3KfSG7GoDy2SFOvs/3siahq3RUUgJ25DeC5Hnk9eOTozisIxwM17Mj6fVlUrBIMMI=
+	t=1762269712; cv=none; b=D1IUnzeBGUXkjeSSvYTV876q2jD6Obe6TKzAeLMESejPaHNCRS+j6GCpxSnd6xVgmQVMAqy8q7CV0iEC8GbFrglH8gb0QP4JZcSn3NnEgW3jp0j+CsbFpLoDYwWMq3zocDxWMBBp7fLkiWorXyNOWZFiZRUv6Igi3z6lIS/i4G4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762269064; c=relaxed/simple;
-	bh=3fqZEaB4mb+GkWEyY8C/VfcBCrbLwS5C9rQsb8THtvs=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=FIbP+D/ASjmi1EgoZ/PrTvCEssZdA2Y6HlGn/owNgSSA/OQXxaxHSwhyDCz0ZVJLvcJowSvv0nkDPUPDS+CSsSoDBlFOJodO7Tz/5ftEM0FR2+mxQ04j0wvksb+Sn9gTKOLgmMQh8e3VticWTfHAqUqJNa/ahtEvoQDgVYlkMKA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=aYgIygnp; arc=none smtp.client-ip=198.175.65.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1762269712; c=relaxed/simple;
+	bh=6LXznxR2BwU8Z9YC9RYhzfAgtDIv5B8KIKF2ao3iAY4=;
+	h=Content-Type:MIME-Version:In-Reply-To:References:Subject:From:Cc:
+	 To:Date:Message-ID; b=fWwW8ROagH8RZoB5tEYgrBdnnihoEF4j0N12Ss0frO4Wt79Abc/rG7/Sgx1rgLfNz/T7+eRI+PE1L5w5mFf/IWLoRuq0dy0b1tlWiRxOuNZpaRJXiOpSQYyz5T7hmwWNGxePbexivNwyAGezCA9s+/l28dg5x6AuGuTCtxqvDUs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ideasonboard.com; spf=pass smtp.mailfrom=ideasonboard.com; dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b=B1mtm+bD; arc=none smtp.client-ip=213.167.242.64
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ideasonboard.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ideasonboard.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="aYgIygnp"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1762269062; x=1793805062;
-  h=date:from:to:cc:subject:message-id;
-  bh=3fqZEaB4mb+GkWEyY8C/VfcBCrbLwS5C9rQsb8THtvs=;
-  b=aYgIygnpeP4D2s4UBAkoKLxMDS1OBmQNtzYB8kCNS61SSlna0Z8jjayn
-   BK5C8WxjmxVxHCf3hY05t4ppS06O8aoh6tkOkuFZ/FOyEvi3xULfDtxqP
-   lA24SiJPs8G8E84LpJXdBJgD3USUdUHRtvW+IcSb5Fwfj1a2eQSMo7eKo
-   zMczLnM+9Yd+wPnMTmwuf47Oj06Wn7Sp1dkSep1wy4gSwKFGT7vmzvXEE
-   3f/8NFi00jhlJYAC6MOH6OOSV7Ci4o3EblUOTfcu7DPVL8blUMiCN2nIK
-   vSySjtF1I8tFidIQARbN2uVG/GyxCswKnogH8CxfI9s2M0LbSBuDJP4eR
-   Q==;
-X-CSE-ConnectionGUID: GtI11N/DSO6gE/jU7xLfxg==
-X-CSE-MsgGUID: 95jPW0V9RuSBGrIUF3RCWw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11602"; a="75815563"
-X-IronPort-AV: E=Sophos;i="6.19,279,1754982000"; 
-   d="scan'208";a="75815563"
-Received: from orviesa002.jf.intel.com ([10.64.159.142])
-  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Nov 2025 07:11:02 -0800
-X-CSE-ConnectionGUID: H8Y+TKbhRli5d3PsCRSNog==
-X-CSE-MsgGUID: OzK7z/uVTFOTYy6F4MZXeg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.19,279,1754982000"; 
-   d="scan'208";a="217827859"
-Received: from lkp-server02.sh.intel.com (HELO 66d7546c76b2) ([10.239.97.151])
-  by orviesa002.jf.intel.com with ESMTP; 04 Nov 2025 07:11:01 -0800
-Received: from kbuild by 66d7546c76b2 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1vGIgU-000RWw-36;
-	Tue, 04 Nov 2025 15:10:59 +0000
-Date: Tue, 04 Nov 2025 23:01:07 +0800
-From: kernel test robot <lkp@intel.com>
-To: Sakari Ailus <sakari.ailus@linux.intel.com>
-Cc: linux-media@vger.kernel.org
-Subject: [sailus-media-tree:cleanup] BUILD SUCCESS
- 719cde9fc071cfc633387510d0f84d9078bcb678
-Message-ID: <202511042301.grNDIeUk-lkp@intel.com>
-User-Agent: s-nail v14.9.25
+	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="B1mtm+bD"
+Received: from thinkpad.ideasonboard.com (cpc89244-aztw30-2-0-cust6594.18-1.cable.virginm.net [86.31.185.195])
+	by perceval.ideasonboard.com (Postfix) with ESMTPSA id 055C422A;
+	Tue,  4 Nov 2025 16:19:53 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+	s=mail; t=1762269594;
+	bh=6LXznxR2BwU8Z9YC9RYhzfAgtDIv5B8KIKF2ao3iAY4=;
+	h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
+	b=B1mtm+bDKyrhASTQJIaOWjxUmG6QUZK32rkt3W6xXzxLosPVRgd5KhZKELIlwRJ/1
+	 VTjLFdWBOoCyXd57WR0OmkeDP+15uiJrEX4lCnlQYnKx7oXK7EABc2vZkA9TeJkeCz
+	 9n6rN3QkJkUQM/8IE9ILGfLuyGl0P0ORGvtLRYwA=
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20251031114835.113026-2-tarang.raval@siliconsignals.io>
+References: <20251031114835.113026-1-tarang.raval@siliconsignals.io> <20251031114835.113026-2-tarang.raval@siliconsignals.io>
+Subject: Re: [PATCH v1 1/2] media: i2c: imx219: Propagate errors from control range updates
+From: Isaac Scott <isaac.scott@ideasonboard.com>
+Cc: Tarang Raval <tarang.raval@siliconsignals.io>, Dave Stevenson <dave.stevenson@raspberrypi.com>, Mauro Carvalho Chehab <mchehab@kernel.org>, linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
+To: Tarang Raval <tarang.raval@siliconsignals.io>, sakari.ailus@linux.intel.com
+Date: Tue, 04 Nov 2025 15:21:44 +0000
+Message-ID: <176226970472.106261.8875678531563586397@isaac-ThinkPad-T16-Gen-2>
+User-Agent: alot/0.10
 
-tree/branch: git://linuxtv.org/sailus/media_tree.git cleanup
-branch HEAD: 719cde9fc071cfc633387510d0f84d9078bcb678  media: imx-mipi-csis: Support active data lanes differing from maximum
+Hi Tarang,
 
-elapsed time: 1475m
+Thank you for the patch!
 
-configs tested: 117
-configs skipped: 4
+Quoting Tarang Raval (2025-10-31 11:48:34)
+> Propagate return values from __v4l2_ctrl_modify_range() and
+> __v4l2_ctrl_s_ctrl() in imx219_set_ctrl() and imx219_set_pad_format().
+> This ensures proper error handling instead of ignoring possible
+> failures. Also return the result of imx219_set_pad_format() from
+> imx219_init_state().
+>=20
+> Signed-off-by: Tarang Raval <tarang.raval@siliconsignals.io>
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+Reviewed-by: Isaac Scott <isaac.scott@ideasonboard.com>
 
-tested configs:
-alpha                             allnoconfig    gcc-15.1.0
-arc                               allnoconfig    gcc-15.1.0
-arc                          axs101_defconfig    gcc-15.1.0
-arc                   randconfig-001-20251104    gcc-12.5.0
-arc                   randconfig-002-20251104    gcc-9.5.0
-arm                               allnoconfig    clang-22
-arm                         lpc18xx_defconfig    clang-22
-arm                   randconfig-001-20251104    gcc-14.3.0
-arm                   randconfig-002-20251104    gcc-10.5.0
-arm                   randconfig-003-20251104    clang-22
-arm                   randconfig-004-20251104    gcc-8.5.0
-arm                           spitz_defconfig    gcc-15.1.0
-arm                         vf610m4_defconfig    gcc-15.1.0
-arm                         wpcm450_defconfig    gcc-15.1.0
-arm64                             allnoconfig    gcc-15.1.0
-csky                             allmodconfig    gcc-15.1.0
-csky                              allnoconfig    gcc-15.1.0
-csky                             allyesconfig    gcc-15.1.0
-csky                  randconfig-001-20251104    gcc-10.5.0
-csky                  randconfig-002-20251104    gcc-15.1.0
-hexagon                           allnoconfig    clang-22
-hexagon               randconfig-001-20251104    clang-22
-hexagon               randconfig-002-20251104    clang-16
-i386                              allnoconfig    gcc-14
-i386        buildonly-randconfig-001-20251104    gcc-14
-i386        buildonly-randconfig-002-20251104    clang-20
-i386        buildonly-randconfig-003-20251104    gcc-12
-i386        buildonly-randconfig-004-20251104    gcc-14
-i386        buildonly-randconfig-005-20251104    gcc-12
-i386        buildonly-randconfig-006-20251104    gcc-14
-i386                  randconfig-001-20251104    gcc-12
-i386                  randconfig-002-20251104    gcc-14
-i386                  randconfig-003-20251104    clang-20
-i386                  randconfig-004-20251104    gcc-14
-i386                  randconfig-005-20251104    gcc-14
-i386                  randconfig-006-20251104    gcc-14
-i386                  randconfig-007-20251104    gcc-14
-i386                  randconfig-011-20251104    gcc-13
-i386                  randconfig-012-20251104    clang-20
-i386                  randconfig-013-20251104    gcc-14
-i386                  randconfig-014-20251104    clang-20
-i386                  randconfig-015-20251104    gcc-14
-i386                  randconfig-016-20251104    clang-20
-i386                  randconfig-017-20251104    clang-20
-loongarch                        allmodconfig    clang-19
-loongarch                         allnoconfig    clang-22
-loongarch                           defconfig    clang-19
-loongarch             randconfig-001-20251104    gcc-15.1.0
-loongarch             randconfig-002-20251104    clang-22
-m68k                             allmodconfig    gcc-15.1.0
-m68k                              allnoconfig    gcc-15.1.0
-m68k                             allyesconfig    gcc-15.1.0
-m68k                                defconfig    gcc-15.1.0
-microblaze                       allmodconfig    gcc-15.1.0
-microblaze                        allnoconfig    gcc-15.1.0
-microblaze                       allyesconfig    gcc-15.1.0
-microblaze                          defconfig    gcc-15.1.0
-mips                              allnoconfig    gcc-15.1.0
-nios2                             allnoconfig    gcc-11.5.0
-nios2                               defconfig    gcc-11.5.0
-nios2                 randconfig-001-20251104    gcc-8.5.0
-nios2                 randconfig-002-20251104    gcc-11.5.0
-openrisc                          allnoconfig    gcc-15.1.0
-parisc                            allnoconfig    gcc-15.1.0
-parisc                randconfig-001-20251104    gcc-8.5.0
-parisc                randconfig-002-20251104    gcc-15.1.0
-parisc64                            defconfig    gcc-15.1.0
-powerpc                           allnoconfig    gcc-15.1.0
-powerpc                     mpc512x_defconfig    clang-22
-powerpc               randconfig-001-20251104    gcc-15.1.0
-powerpc               randconfig-002-20251104    clang-22
-powerpc64             randconfig-001-20251104    clang-22
-riscv                             allnoconfig    gcc-15.1.0
-riscv                 randconfig-001-20251104    gcc-8.5.0
-riscv                 randconfig-002-20251104    gcc-8.5.0
-s390                             allmodconfig    clang-18
-s390                              allnoconfig    clang-22
-s390                             allyesconfig    gcc-15.1.0
-s390                  randconfig-001-20251104    clang-22
-s390                  randconfig-002-20251104    clang-22
-sh                               allmodconfig    gcc-15.1.0
-sh                                allnoconfig    gcc-15.1.0
-sh                               allyesconfig    gcc-15.1.0
-sh                         ap325rxa_defconfig    gcc-15.1.0
-sh                                  defconfig    gcc-15.1.0
-sh                    randconfig-001-20251104    gcc-13.4.0
-sh                    randconfig-002-20251104    gcc-11.5.0
-sparc                            allmodconfig    gcc-15.1.0
-sparc                             allnoconfig    gcc-15.1.0
-sparc                 randconfig-001-20251104    gcc-13.4.0
-sparc                 randconfig-002-20251104    gcc-12.5.0
-sparc64                             defconfig    clang-20
-sparc64               randconfig-001-20251104    gcc-8.5.0
-sparc64               randconfig-002-20251104    clang-22
-um                                allnoconfig    clang-22
-um                                  defconfig    clang-22
-um                             i386_defconfig    gcc-14
-um                    randconfig-001-20251104    clang-22
-um                    randconfig-002-20251104    clang-22
-um                           x86_64_defconfig    clang-22
-x86_64                            allnoconfig    clang-20
-x86_64      buildonly-randconfig-001-20251104    clang-20
-x86_64      buildonly-randconfig-002-20251104    gcc-12
-x86_64      buildonly-randconfig-003-20251104    gcc-14
-x86_64      buildonly-randconfig-004-20251104    gcc-14
-x86_64      buildonly-randconfig-005-20251104    gcc-12
-x86_64      buildonly-randconfig-006-20251104    clang-20
-x86_64                              defconfig    gcc-14
-x86_64                randconfig-011-20251104    gcc-14
-x86_64                randconfig-012-20251104    gcc-14
-x86_64                randconfig-013-20251104    clang-20
-x86_64                randconfig-014-20251104    clang-20
-x86_64                randconfig-015-20251104    gcc-14
-x86_64                randconfig-016-20251104    clang-20
-xtensa                            allnoconfig    gcc-15.1.0
-xtensa                randconfig-001-20251104    gcc-13.4.0
-xtensa                randconfig-002-20251104    gcc-11.5.0
-
---
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+> ---
+>  drivers/media/i2c/imx219.c | 61 +++++++++++++++++++++++++-------------
+>  1 file changed, 40 insertions(+), 21 deletions(-)
+>=20
+> diff --git a/drivers/media/i2c/imx219.c b/drivers/media/i2c/imx219.c
+> index 48efdcd2a8f9..40693635c0c3 100644
+> --- a/drivers/media/i2c/imx219.c
+> +++ b/drivers/media/i2c/imx219.c
+> @@ -453,10 +453,14 @@ static int imx219_set_ctrl(struct v4l2_ctrl *ctrl)
+>                 exposure_max =3D format->height + ctrl->val - 4;
+>                 exposure_def =3D (exposure_max < IMX219_EXPOSURE_DEFAULT)=
+ ?
+>                         exposure_max : IMX219_EXPOSURE_DEFAULT;
+> -               __v4l2_ctrl_modify_range(imx219->exposure,
+> -                                        imx219->exposure->minimum,
+> -                                        exposure_max, imx219->exposure->=
+step,
+> -                                        exposure_def);
+> +               ret =3D __v4l2_ctrl_modify_range(imx219->exposure,
+> +                                              imx219->exposure->minimum,
+> +                                              exposure_max,
+> +                                              imx219->exposure->step,
+> +                                              exposure_def);
+> +               if (ret)
+> +                       return ret;
+> +
+>         }
+> =20
+>         /*
+> @@ -848,6 +852,7 @@ static int imx219_set_pad_format(struct v4l2_subdev *=
+sd,
+>         struct v4l2_rect *crop;
+>         u8 bin_h, bin_v, binning;
+>         u32 prev_line_len;
+> +       int ret;
+> =20
+>         format =3D v4l2_subdev_state_get_format(state, 0);
+>         prev_line_len =3D format->width + imx219->hblank->val;
+> @@ -883,19 +888,28 @@ static int imx219_set_pad_format(struct v4l2_subdev=
+ *sd,
+>                 int pixel_rate;
+> =20
+>                 /* Update limits and set FPS to default */
+> -               __v4l2_ctrl_modify_range(imx219->vblank, IMX219_VBLANK_MI=
+N,
+> -                                        IMX219_FLL_MAX - mode->height, 1,
+> +               ret =3D __v4l2_ctrl_modify_range(imx219->vblank, IMX219_V=
+BLANK_MIN,
+> +                                              IMX219_FLL_MAX - mode->hei=
+ght, 1,
+> +                                              mode->fll_def - mode->heig=
+ht);
+> +               if (ret)
+> +                       return ret;
+> +
+> +               ret =3D __v4l2_ctrl_s_ctrl(imx219->vblank,
+>                                          mode->fll_def - mode->height);
+> -               __v4l2_ctrl_s_ctrl(imx219->vblank,
+> -                                  mode->fll_def - mode->height);
+> +               if (ret)
+> +                       return ret;
+> +
+>                 /* Update max exposure while meeting expected vblanking */
+>                 exposure_max =3D mode->fll_def - 4;
+>                 exposure_def =3D (exposure_max < IMX219_EXPOSURE_DEFAULT)=
+ ?
+>                         exposure_max : IMX219_EXPOSURE_DEFAULT;
+> -               __v4l2_ctrl_modify_range(imx219->exposure,
+> -                                        imx219->exposure->minimum,
+> -                                        exposure_max, imx219->exposure->=
+step,
+> -                                        exposure_def);
+> +               ret =3D __v4l2_ctrl_modify_range(imx219->exposure,
+> +                                              imx219->exposure->minimum,
+> +                                              exposure_max,
+> +                                              imx219->exposure->step,
+> +                                              exposure_def);
+> +               if (ret)
+> +                       return ret;
+> =20
+>                 /*
+>                  * With analog binning the default minimum line length of=
+ 3448
+> @@ -906,9 +920,12 @@ static int imx219_set_pad_format(struct v4l2_subdev =
+*sd,
+>                 imx219_get_binning(state, &bin_h, &bin_v);
+>                 llp_min =3D (bin_h & bin_v) =3D=3D IMX219_BINNING_X2_ANAL=
+OG ?
+>                                   IMX219_BINNED_LLP_MIN : IMX219_LLP_MIN;
+> -               __v4l2_ctrl_modify_range(imx219->hblank, llp_min - mode->=
+width,
+> -                                        IMX219_LLP_MAX - mode->width, 1,
+> -                                        llp_min - mode->width);
+> +               ret =3D __v4l2_ctrl_modify_range(imx219->hblank,
+> +                                              llp_min - mode->width,
+> +                                              IMX219_LLP_MAX - mode->wid=
+th, 1,
+> +                                              llp_min - mode->width);
+> +               if (ret)
+> +                       return ret;
+>                 /*
+>                  * Retain PPL setting from previous mode so that the
+>                  * line time does not change on a mode change.
+> @@ -917,13 +934,17 @@ static int imx219_set_pad_format(struct v4l2_subdev=
+ *sd,
+>                  * mode width subtracted.
+>                  */
+>                 hblank =3D prev_line_len - mode->width;
+> -               __v4l2_ctrl_s_ctrl(imx219->hblank, hblank);
+> +               ret =3D __v4l2_ctrl_s_ctrl(imx219->hblank, hblank);
+> +               if (ret)
+> +                       return ret;
+> =20
+>                 /* Scale the pixel rate based on the mode specific factor=
+ */
+>                 pixel_rate =3D imx219_get_pixel_rate(imx219) *
+>                              imx219_get_rate_factor(state);
+> -               __v4l2_ctrl_modify_range(imx219->pixel_rate, pixel_rate,
+> -                                        pixel_rate, 1, pixel_rate);
+> +               ret =3D __v4l2_ctrl_modify_range(imx219->pixel_rate, pixe=
+l_rate,
+> +                                              pixel_rate, 1, pixel_rate);
+> +               if (ret)
+> +                       return ret;
+>         }
+> =20
+>         return 0;
+> @@ -972,9 +993,7 @@ static int imx219_init_state(struct v4l2_subdev *sd,
+>                 },
+>         };
+> =20
+> -       imx219_set_pad_format(sd, state, &fmt);
+> -
+> -       return 0;
+> +       return imx219_set_pad_format(sd, state, &fmt);
+>  }
+> =20
+>  static const struct v4l2_subdev_video_ops imx219_video_ops =3D {
+> --=20
+> 2.34.1
+>=20
+>
