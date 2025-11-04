@@ -1,203 +1,186 @@
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
+Received: from jeth.damsy.net (jeth.damsy.net [51.159.152.102])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4C0C424888A;
-	Tue,  4 Nov 2025 15:21:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.167.242.64
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6BADF215F42;
+	Tue,  4 Nov 2025 15:24:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=51.159.152.102
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762269712; cv=none; b=D1IUnzeBGUXkjeSSvYTV876q2jD6Obe6TKzAeLMESejPaHNCRS+j6GCpxSnd6xVgmQVMAqy8q7CV0iEC8GbFrglH8gb0QP4JZcSn3NnEgW3jp0j+CsbFpLoDYwWMq3zocDxWMBBp7fLkiWorXyNOWZFiZRUv6Igi3z6lIS/i4G4=
+	t=1762269889; cv=none; b=YQzwduRyIGu8x3u3jr4GLTIx8qvY0jiiSSCkNOXT4rAnvZbBG0rFkX8XoqQZknL90H8/bsFin24Iw1JqjGB6EiPsWxaiHlaQORGiAk79ZMstxJxHn6uICrfuHOYlghrL9C5qiNhC8pUkhYEToHVGP3LH26MW69rLjM0dqvxVhwM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762269712; c=relaxed/simple;
-	bh=6LXznxR2BwU8Z9YC9RYhzfAgtDIv5B8KIKF2ao3iAY4=;
-	h=Content-Type:MIME-Version:In-Reply-To:References:Subject:From:Cc:
-	 To:Date:Message-ID; b=fWwW8ROagH8RZoB5tEYgrBdnnihoEF4j0N12Ss0frO4Wt79Abc/rG7/Sgx1rgLfNz/T7+eRI+PE1L5w5mFf/IWLoRuq0dy0b1tlWiRxOuNZpaRJXiOpSQYyz5T7hmwWNGxePbexivNwyAGezCA9s+/l28dg5x6AuGuTCtxqvDUs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ideasonboard.com; spf=pass smtp.mailfrom=ideasonboard.com; dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b=B1mtm+bD; arc=none smtp.client-ip=213.167.242.64
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ideasonboard.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ideasonboard.com
+	s=arc-20240116; t=1762269889; c=relaxed/simple;
+	bh=h/sQ5sjkpNGwHLN8MFhWgxjYYkMM9SNpSbQY9pfKcL8=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=cKUVaeQjR5R3IAgr/NCIP6iNgcj5wUi/VeYiI14iqPz8wiTAAstWH1zhjoqJLt63zNFYtK1Exz2Lr+jLr//6fe+244ua6P5dblrtpyGQPXhZBoloFy9TrgL5V2fqLQKGQR3URwn4mnAzlLdCllqwO9qkk0ySOGhqMAreKgNm8Q8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=damsy.net; spf=pass smtp.mailfrom=damsy.net; dkim=pass (2048-bit key) header.d=damsy.net header.i=@damsy.net header.b=fbMo2WAo; dkim=permerror (0-bit key) header.d=damsy.net header.i=@damsy.net header.b=B/j8Nngl; arc=none smtp.client-ip=51.159.152.102
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=damsy.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=damsy.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="B1mtm+bD"
-Received: from thinkpad.ideasonboard.com (cpc89244-aztw30-2-0-cust6594.18-1.cable.virginm.net [86.31.185.195])
-	by perceval.ideasonboard.com (Postfix) with ESMTPSA id 055C422A;
-	Tue,  4 Nov 2025 16:19:53 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-	s=mail; t=1762269594;
-	bh=6LXznxR2BwU8Z9YC9RYhzfAgtDIv5B8KIKF2ao3iAY4=;
-	h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
-	b=B1mtm+bDKyrhASTQJIaOWjxUmG6QUZK32rkt3W6xXzxLosPVRgd5KhZKELIlwRJ/1
-	 VTjLFdWBOoCyXd57WR0OmkeDP+15uiJrEX4lCnlQYnKx7oXK7EABc2vZkA9TeJkeCz
-	 9n6rN3QkJkUQM/8IE9ILGfLuyGl0P0ORGvtLRYwA=
-Content-Type: text/plain; charset="utf-8"
+	dkim=pass (2048-bit key) header.d=damsy.net header.i=@damsy.net header.b="fbMo2WAo";
+	dkim=permerror (0-bit key) header.d=damsy.net header.i=@damsy.net header.b="B/j8Nngl"
+DKIM-Signature: v=1; a=rsa-sha256; s=202408r; d=damsy.net; c=relaxed/relaxed;
+	h=From:To:Subject:Date:Message-ID; t=1762269846; bh=Md3JXufxJqYTYDD+0LVVo5S
+	jqxZHasmKDqpehjHw5dk=; b=fbMo2WAoOTSO/uU6bDOvUwhinhZTOHOaW/et4qJ8N6hq9rRgKL
+	jJFDT46tFLjhEuxBQefWD+yVfJ8T2nwnZ5+kxPrEg6FNsfeHcIpdgM7x2BJNnHD/42lusVxeiEN
+	xzGmoE1VirB7YKn19rKchyDTu9lM91XLEXwrQeSZ0h/NT3WDluxtwO3/guL+CkqFHfEIDXFnG85
+	fqAZgqiIKq+Hv+NlhrT9O7zY+wLq9XeqetWUWps4gswIkMutfeQHhPr7TI0KQwA2NcEi2hQ/kNz
+	dIk1iZ8DXibbbYdYKwMIBUjz9MhaW8Ir7/SopS/NOzc1LfzDpjn7bTCvfsMLfYcjjHg==;
+DKIM-Signature: v=1; a=ed25519-sha256; s=202408e; d=damsy.net; c=relaxed/relaxed;
+	h=From:To:Subject:Date:Message-ID; t=1762269846; bh=Md3JXufxJqYTYDD+0LVVo5S
+	jqxZHasmKDqpehjHw5dk=; b=B/j8NnglB5dEWa4XIPmntCOh5fE1cR/Z/+Peyo/fB/Qv9AQ3+r
+	Nb544jcRoJoMx3GlaVRGbghxkz3rY8QrQ8AQ==;
+Message-ID: <c1da66b4-3b71-4d83-8e8e-56151030b691@damsy.net>
+Date: Tue, 4 Nov 2025 16:24:05 +0100
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <20251031114835.113026-2-tarang.raval@siliconsignals.io>
-References: <20251031114835.113026-1-tarang.raval@siliconsignals.io> <20251031114835.113026-2-tarang.raval@siliconsignals.io>
-Subject: Re: [PATCH v1 1/2] media: i2c: imx219: Propagate errors from control range updates
-From: Isaac Scott <isaac.scott@ideasonboard.com>
-Cc: Tarang Raval <tarang.raval@siliconsignals.io>, Dave Stevenson <dave.stevenson@raspberrypi.com>, Mauro Carvalho Chehab <mchehab@kernel.org>, linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
-To: Tarang Raval <tarang.raval@siliconsignals.io>, sakari.ailus@linux.intel.com
-Date: Tue, 04 Nov 2025 15:21:44 +0000
-Message-ID: <176226970472.106261.8875678531563586397@isaac-ThinkPad-T16-Gen-2>
-User-Agent: alot/0.10
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3] drm/sched: Fix deadlock in
+ drm_sched_entity_kill_jobs_cb
+To: phasta@kernel.org,
+ Pierre-Eric Pelloux-Prayer <pierre-eric.pelloux-prayer@amd.com>,
+ Matthew Brost <matthew.brost@intel.com>, Danilo Krummrich <dakr@kernel.org>,
+ =?UTF-8?Q?Christian_K=C3=B6nig?= <ckoenig.leichtzumerken@gmail.com>,
+ Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+ Maxime Ripard <mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>,
+ David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
+ Sumit Semwal <sumit.semwal@linaro.org>, Luben Tuikov <luben.tuikov@amd.com>
+Cc: Mikhail Gavrilov <mikhail.v.gavrilov@gmail.com>,
+ =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
+ dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+ linux-media@vger.kernel.org, linaro-mm-sig@lists.linaro.org
+References: <20251104095358.15092-1-pierre-eric.pelloux-prayer@amd.com>
+ <628cdf3a0c5b783c09fe2a40aca4a4a48c614e66.camel@mailbox.org>
+Content-Language: en-US
+From: Pierre-Eric Pelloux-Prayer <pierre-eric@damsy.net>
+In-Reply-To: <628cdf3a0c5b783c09fe2a40aca4a4a48c614e66.camel@mailbox.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-Hi Tarang,
 
-Thank you for the patch!
 
-Quoting Tarang Raval (2025-10-31 11:48:34)
-> Propagate return values from __v4l2_ctrl_modify_range() and
-> __v4l2_ctrl_s_ctrl() in imx219_set_ctrl() and imx219_set_pad_format().
-> This ensures proper error handling instead of ignoring possible
-> failures. Also return the result of imx219_set_pad_format() from
-> imx219_init_state().
->=20
-> Signed-off-by: Tarang Raval <tarang.raval@siliconsignals.io>
-
-Reviewed-by: Isaac Scott <isaac.scott@ideasonboard.com>
-
+Le 04/11/2025 à 13:43, Philipp Stanner a écrit :
+> On Tue, 2025-11-04 at 10:53 +0100, Pierre-Eric Pelloux-Prayer wrote:
+>> The Mesa issue referenced below pointed out a possible deadlock:
+>>
+>> [ 1231.611031]  Possible interrupt unsafe locking scenario:
+>>
+>> [ 1231.611033]        CPU0                    CPU1
+>> [ 1231.611034]        ----                    ----
+>> [ 1231.611035]   lock(&xa->xa_lock#17);
+>> [ 1231.611038]                                local_irq_disable();
+>> [ 1231.611039]                                lock(&fence->lock);
+>> [ 1231.611041]                                lock(&xa->xa_lock#17);
+>> [ 1231.611044]   <Interrupt>
+>> [ 1231.611045]     lock(&fence->lock);
+>> [ 1231.611047]
+>>                  *** DEADLOCK ***
+>>
+>> In this example, CPU0 would be any function accessing job->dependencies
+>> through the xa_* functions that doesn't disable interrupts (eg:
+>> drm_sched_job_add_dependency, drm_sched_entity_kill_jobs_cb).
+>>
+>> CPU1 is executing drm_sched_entity_kill_jobs_cb as a fence signalling
+>> callback so in an interrupt context. It will deadlock when trying to
+>> grab the xa_lock which is already held by CPU0.
+>>
+>> Replacing all xa_* usage by their xa_*_irq counterparts would fix
+>> this issue, but Christian pointed out another issue: dma_fence_signal
+>> takes fence.lock and so does dma_fence_add_callback.
+>>
+>>    dma_fence_signal() // locks f1.lock
+>>    -> drm_sched_entity_kill_jobs_cb()
+>>    -> foreach dependencies
+>>       -> dma_fence_add_callback() // locks f2.lock
+>>
+>> This will deadlock if f1 and f2 share the same spinlock.
+>>
+>> To fix both issues, the code iterating on dependencies and re-arming them
+>> is moved out to drm_sched_entity_kill_jobs_work.
+>>
+>> v2: reworded commit message (Philipp)
+>> v3: added Fixes tag (Philipp)
+> 
+> Thx for the update.
+> In the future please put the changelog below between a pair of '---'
+> 
 > ---
->  drivers/media/i2c/imx219.c | 61 +++++++++++++++++++++++++-------------
->  1 file changed, 40 insertions(+), 21 deletions(-)
->=20
-> diff --git a/drivers/media/i2c/imx219.c b/drivers/media/i2c/imx219.c
-> index 48efdcd2a8f9..40693635c0c3 100644
-> --- a/drivers/media/i2c/imx219.c
-> +++ b/drivers/media/i2c/imx219.c
-> @@ -453,10 +453,14 @@ static int imx219_set_ctrl(struct v4l2_ctrl *ctrl)
->                 exposure_max =3D format->height + ctrl->val - 4;
->                 exposure_def =3D (exposure_max < IMX219_EXPOSURE_DEFAULT)=
- ?
->                         exposure_max : IMX219_EXPOSURE_DEFAULT;
-> -               __v4l2_ctrl_modify_range(imx219->exposure,
-> -                                        imx219->exposure->minimum,
-> -                                        exposure_max, imx219->exposure->=
-step,
-> -                                        exposure_def);
-> +               ret =3D __v4l2_ctrl_modify_range(imx219->exposure,
-> +                                              imx219->exposure->minimum,
-> +                                              exposure_max,
-> +                                              imx219->exposure->step,
-> +                                              exposure_def);
-> +               if (ret)
-> +                       return ret;
-> +
->         }
-> =20
->         /*
-> @@ -848,6 +852,7 @@ static int imx219_set_pad_format(struct v4l2_subdev *=
-sd,
->         struct v4l2_rect *crop;
->         u8 bin_h, bin_v, binning;
->         u32 prev_line_len;
-> +       int ret;
-> =20
->         format =3D v4l2_subdev_state_get_format(state, 0);
->         prev_line_len =3D format->width + imx219->hblank->val;
-> @@ -883,19 +888,28 @@ static int imx219_set_pad_format(struct v4l2_subdev=
- *sd,
->                 int pixel_rate;
-> =20
->                 /* Update limits and set FPS to default */
-> -               __v4l2_ctrl_modify_range(imx219->vblank, IMX219_VBLANK_MI=
-N,
-> -                                        IMX219_FLL_MAX - mode->height, 1,
-> +               ret =3D __v4l2_ctrl_modify_range(imx219->vblank, IMX219_V=
-BLANK_MIN,
-> +                                              IMX219_FLL_MAX - mode->hei=
-ght, 1,
-> +                                              mode->fll_def - mode->heig=
-ht);
-> +               if (ret)
-> +                       return ret;
-> +
-> +               ret =3D __v4l2_ctrl_s_ctrl(imx219->vblank,
->                                          mode->fll_def - mode->height);
-> -               __v4l2_ctrl_s_ctrl(imx219->vblank,
-> -                                  mode->fll_def - mode->height);
-> +               if (ret)
-> +                       return ret;
-> +
->                 /* Update max exposure while meeting expected vblanking */
->                 exposure_max =3D mode->fll_def - 4;
->                 exposure_def =3D (exposure_max < IMX219_EXPOSURE_DEFAULT)=
- ?
->                         exposure_max : IMX219_EXPOSURE_DEFAULT;
-> -               __v4l2_ctrl_modify_range(imx219->exposure,
-> -                                        imx219->exposure->minimum,
-> -                                        exposure_max, imx219->exposure->=
-step,
-> -                                        exposure_def);
-> +               ret =3D __v4l2_ctrl_modify_range(imx219->exposure,
-> +                                              imx219->exposure->minimum,
-> +                                              exposure_max,
-> +                                              imx219->exposure->step,
-> +                                              exposure_def);
-> +               if (ret)
-> +                       return ret;
-> =20
->                 /*
->                  * With analog binning the default minimum line length of=
- 3448
-> @@ -906,9 +920,12 @@ static int imx219_set_pad_format(struct v4l2_subdev =
-*sd,
->                 imx219_get_binning(state, &bin_h, &bin_v);
->                 llp_min =3D (bin_h & bin_v) =3D=3D IMX219_BINNING_X2_ANAL=
-OG ?
->                                   IMX219_BINNED_LLP_MIN : IMX219_LLP_MIN;
-> -               __v4l2_ctrl_modify_range(imx219->hblank, llp_min - mode->=
-width,
-> -                                        IMX219_LLP_MAX - mode->width, 1,
-> -                                        llp_min - mode->width);
-> +               ret =3D __v4l2_ctrl_modify_range(imx219->hblank,
-> +                                              llp_min - mode->width,
-> +                                              IMX219_LLP_MAX - mode->wid=
-th, 1,
-> +                                              llp_min - mode->width);
-> +               if (ret)
-> +                       return ret;
->                 /*
->                  * Retain PPL setting from previous mode so that the
->                  * line time does not change on a mode change.
-> @@ -917,13 +934,17 @@ static int imx219_set_pad_format(struct v4l2_subdev=
- *sd,
->                  * mode width subtracted.
->                  */
->                 hblank =3D prev_line_len - mode->width;
-> -               __v4l2_ctrl_s_ctrl(imx219->hblank, hblank);
-> +               ret =3D __v4l2_ctrl_s_ctrl(imx219->hblank, hblank);
-> +               if (ret)
-> +                       return ret;
-> =20
->                 /* Scale the pixel rate based on the mode specific factor=
- */
->                 pixel_rate =3D imx219_get_pixel_rate(imx219) *
->                              imx219_get_rate_factor(state);
-> -               __v4l2_ctrl_modify_range(imx219->pixel_rate, pixel_rate,
-> -                                        pixel_rate, 1, pixel_rate);
-> +               ret =3D __v4l2_ctrl_modify_range(imx219->pixel_rate, pixe=
-l_rate,
-> +                                              pixel_rate, 1, pixel_rate);
-> +               if (ret)
-> +                       return ret;
->         }
-> =20
->         return 0;
-> @@ -972,9 +993,7 @@ static int imx219_init_state(struct v4l2_subdev *sd,
->                 },
->         };
-> =20
-> -       imx219_set_pad_format(sd, state, &fmt);
-> -
-> -       return 0;
-> +       return imx219_set_pad_format(sd, state, &fmt);
->  }
-> =20
->  static const struct v4l2_subdev_video_ops imx219_video_ops =3D {
-> --=20
-> 2.34.1
->=20
->
+> v2: …
+> v3: …
+> ---
+
+OK.
+
+> 
+> Some things I have unfortunately overlooked below.
+> 
+>>
+>> Fixes: 2fdb8a8f07c2 ("drm/scheduler: rework entity flush, kill and fini")
+> 
+> We should +Cc stable. It's a deadlock after all.
+
+OK.
+
+> 
+>> Link: https://gitlab.freedesktop.org/mesa/mesa/-/issues/13908
+>> Reported-by: Mikhail Gavrilov <mikhail.v.gavrilov@gmail.com>
+>> Suggested-by: Christian König <christian.koenig@amd.com>
+>> Reviewed-by: Christian König <christian.koenig@amd.com>
+>> Signed-off-by: Pierre-Eric Pelloux-Prayer <pierre-eric.pelloux-prayer@amd.com>
+>> ---
+>>   drivers/gpu/drm/scheduler/sched_entity.c | 34 +++++++++++++-----------
+>>   1 file changed, 19 insertions(+), 15 deletions(-)
+>>
+>> diff --git a/drivers/gpu/drm/scheduler/sched_entity.c b/drivers/gpu/drm/scheduler/sched_entity.c
+>> index c8e949f4a568..fe174a4857be 100644
+>> --- a/drivers/gpu/drm/scheduler/sched_entity.c
+>> +++ b/drivers/gpu/drm/scheduler/sched_entity.c
+>> @@ -173,26 +173,15 @@ int drm_sched_entity_error(struct drm_sched_entity *entity)
+>>   }
+>>   EXPORT_SYMBOL(drm_sched_entity_error);
+>>   
+>> +static void drm_sched_entity_kill_jobs_cb(struct dma_fence *f,
+>> +					  struct dma_fence_cb *cb);
+> 
+> It's far better to move the function up instead. Can you do that?
+
+Since drm_sched_entity_kill_jobs_cb uses drm_sched_entity_kill_jobs and vice 
+versa, I'll have to forward declare one of the 2 functions anyway.
+
+
+> 
+>> +
+>>
+> 
+> […]
+> 
+>> +/* Signal the scheduler finished fence when the entity in question is killed. */
+>> +static void drm_sched_entity_kill_jobs_cb(struct dma_fence *f,
+>> +					  struct dma_fence_cb *cb)
+>> +{
+>> +	struct drm_sched_job *job = container_of(cb, struct drm_sched_job,
+>> +						 finish_cb);
+>> +
+>> +	dma_fence_put(f);
+> 
+> It would be great if we knew what fence is being dropped here and why.
+> I know you're just moving the pre-existing code, but if you should
+> know, informing about that via comment would be great.
+> 
+
+As discussed offline, "f" is simply the fence being signaled, I'm not sure it 
+warrants a comment.
+
+Regards,
+Pierre-Eric
+
+> Optional.
+> 
+> 
+> Rest of the code looks good. No further objections.
+> 
+> 
+> P.
+
