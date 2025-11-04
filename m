@@ -1,96 +1,85 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from out-177.mta0.migadu.com (out-177.mta0.migadu.com [91.218.175.177])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D0ADD72605;
-	Tue,  4 Nov 2025 23:48:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5C07F34B1BF
+	for <linux-media@vger.kernel.org>; Tue,  4 Nov 2025 23:50:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762300110; cv=none; b=GhKBSGsVuka/ALU8sZIbsb+/jDt2ZuBH0rgepxpE2g8dE920BRgMZdvqtDF6Wa70AXyh/1+hv7fyGannMBcAAnZ0vDe//IB+oSDxKD4oxxzeCBGgv6kCVfkVtbCJNXgycZ4HpaapK3X6jVuedck0p9TDVvmDvZ2XvWD0IFGBsuQ=
+	t=1762300244; cv=none; b=VAwEvyeDGGxLnFNKL3JHPlduHzxl6dxzg8vCktACGtEoKiJNrpypRbnLgtFIJSGCEubSQdCaXKjUaofzfcvAaD++BkQtUaD88ZnJL9s7SSYigDJps+blUYLV9reI7RxsR48h4HsAfYF4W20vaJZFZY3p0K7FL7J8A12RYdyDlnI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762300110; c=relaxed/simple;
-	bh=Q2/QncbSe1650Y8pwvQWHnA5DpeavIeF6BYxviBnp1I=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=rCmLp9Tp2VcwcTiNfZJpNoclkIiZumNc8nNLaC1eLyXdkm8FiSRdW8/Y5mcVbpibeiiOi5IP9xpU2qbOh4GLVhW46jlDk0r/1KnMotLNqaChARZuqTnZGpBKtYY4/f7Iqy6En65S91+LAu0wtxILXHgo8owm4xYjJ67Oz9Vt5WU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=NitVMveQ; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1762300244; c=relaxed/simple;
+	bh=yrp3V8F5KFfG2cdn3D4XyDIqmTPco+SmEUrqRPdrkCk=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=bgr1cIDjrUSjzPrNckDqmD9J5KWBm7RE8XXBdGC1Rs4chgcRVCxadjGO7TMK78TzRNTHGWY7wJI6N2f/9a7U1lQISCi2kNDwOBZa+u8cIteB8qEtyLiDiNTLpofq71J8KHZS3Uke04Tpn5YzknMh/CZyPWMCX/K1vNKJ9z1aYtY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=packett.cool; spf=pass smtp.mailfrom=packett.cool; dkim=pass (2048-bit key) header.d=packett.cool header.i=@packett.cool header.b=Yrs/ysbr; arc=none smtp.client-ip=91.218.175.177
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=packett.cool
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=packett.cool
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NitVMveQ"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 75E23C4CEF7;
-	Tue,  4 Nov 2025 23:48:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1762300110;
-	bh=Q2/QncbSe1650Y8pwvQWHnA5DpeavIeF6BYxviBnp1I=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=NitVMveQvbt1i533gsvJWGVaHAnqN/0sBwsYa/Uj4lT1tXlWsD+c9rFs04/3twCP6
-	 hZiAPAEqAx1dsVqmhmLijeiZidxoJv5WKRme4Qbe5uRKVjpPlLhiLdHatBcnqX9CZB
-	 kUjOfrDt5nZ/Z0GrQRC9cEePN8uSu2ae7AsOmk2o1ZcHcsNoMu/kJH0jpEQpzHd9zn
-	 iSYE+Or3T3HRGVUm/YyU/YgeUs2nfFRKJYdDSVXolI8tOf5+H0OEfZ1iTQ3kdV46Ch
-	 rpZfegPYodVRzcnAva0IC6+e8QXTnGqMr+xVEHPg4ZezsNQbQhSrohuqPqC9hubz5u
-	 24ZSXGiVLaOXA==
-Date: Tue, 4 Nov 2025 15:48:28 -0800
-From: Jakub Kicinski <kuba@kernel.org>
-To: Meghana Malladi <m-malladi@ti.com>
-Cc: Paolo Abeni <pabeni@redhat.com>, <horms@kernel.org>,
- <namcao@linutronix.de>, <vadim.fedorenko@linux.dev>,
- <jacob.e.keller@intel.com>, <christian.koenig@amd.com>,
- <sumit.semwal@linaro.org>, <sdf@fomichev.me>, <john.fastabend@gmail.com>,
- <hawk@kernel.org>, <daniel@iogearbox.net>, <ast@kernel.org>,
- <edumazet@google.com>, <davem@davemloft.net>, <andrew+netdev@lunn.ch>,
- <linaro-mm-sig@lists.linaro.org>, <dri-devel@lists.freedesktop.org>,
- <linux-media@vger.kernel.org>, <bpf@vger.kernel.org>,
- <linux-kernel@vger.kernel.org>, <netdev@vger.kernel.org>,
- <linux-arm-kernel@lists.infradead.org>, <srk@ti.com>, Vignesh Raghavendra
- <vigneshr@ti.com>, Roger Quadros <rogerq@kernel.org>, <danishanwar@ti.com>
-Subject: Re: [EXTERNAL] Re: [PATCH net-next v4 2/6] net: ti: icssg-prueth:
- Add XSK pool helpers
-Message-ID: <20251104154828.7aa20642@kernel.org>
-In-Reply-To: <c792f4da-3385-4c14-a625-e31b09675c32@ti.com>
-References: <20251023093927.1878411-1-m-malladi@ti.com>
-	<20251023093927.1878411-3-m-malladi@ti.com>
-	<05efdc9a-8704-476e-8179-1a9fc0ada749@redhat.com>
-	<ba1b48dc-b544-4c4b-be8a-d39b104cda21@ti.com>
-	<c792f4da-3385-4c14-a625-e31b09675c32@ti.com>
+	dkim=pass (2048-bit key) header.d=packett.cool header.i=@packett.cool header.b="Yrs/ysbr"
+Message-ID: <7d26e4e9-e298-4991-883f-ceb60f240394@packett.cool>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=packett.cool;
+	s=key1; t=1762300230;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=wa38TozYLzaYiqdoQXWeYcZaoruV3Zdpfxo7PyItnNM=;
+	b=Yrs/ysbrG26Ed0ngsAd3+u8pbekgXo+zrGKYb8WZiXkD4c+TmhRCiDBgaLMZXuqFp/OPtQ
+	WaBSVGmKRIRXT57JDb3Z1o9R7MPWWr/OmVWlRkKfExwLpweL2yuY3nd3zMbb/6plJ31nXD
+	m+vZ7nhQPc58GUGLyUXoKliVVdD+M3KVvTnqA5AmXOnKIQhwDh0QyUHjyV3/B4rX574ONP
+	8XxOvw/Y2EfrSKAmmeDqXZCrkDhBbXppzUPmyMb5SrcLixWJ6ElZOM0jHsUJNqL2jQiSUX
+	jJXPePQSShR9aK6ovX11/rBLYJwDoFHhRHdmFLh820rYza1KGrVUjNtDLlmljw==
+Date: Tue, 4 Nov 2025 20:50:20 -0300
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+Subject: Re: [PATCH v2] media: iris: Refine internal buffer reconfiguration
+ logic for resolution change
+To: Dikshita Agarwal <dikshita.agarwal@oss.qualcomm.com>,
+ Vikash Garodia <vikash.garodia@oss.qualcomm.com>,
+ Abhinav Kumar <abhinav.kumar@linux.dev>, Bryan O'Donoghue <bod@kernel.org>,
+ Mauro Carvalho Chehab <mchehab@kernel.org>,
+ Hans Verkuil <hverkuil@kernel.org>,
+ Stefan Schmidt <stefan.schmidt@linaro.org>
+Cc: linux-media@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+References: <20251104-iris-seek-fix-v2-1-c9dace39b43d@oss.qualcomm.com>
+Content-Language: en-US
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Val Packett <val@packett.cool>
+In-Reply-To: <20251104-iris-seek-fix-v2-1-c9dace39b43d@oss.qualcomm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
+X-Migadu-Flow: FLOW_OUT
 
-On Tue, 4 Nov 2025 14:23:24 +0530 Meghana Malladi wrote:
-> > I tried honoring Jakub's comment to avoid freeing the rx memory wherever 
-> > necessary.
-> > 
-> > "In case of icssg driver, freeing the rx memory is necessary as the
-> > rx descriptor memory is owned by the cppi dma controller and can be
-> > mapped to a single memory model (pages/xdp buffers) at a given time.
-> > In order to remap it, the memory needs to be freed and reallocated."
-> 
-> Just to make sure we are on the same page, does the above explanation 
-> make sense to you or do you want me to make any changes in this series 
-> for v5 ?
 
-No. Based on your reply below you seem to understand what is being
-asked, so you're expected to do it.
+On 11/4/25 2:11 AM, Dikshita Agarwal wrote:
+> [..]
+> --- a/drivers/media/platform/qcom/iris/iris_common.c
+> +++ b/drivers/media/platform/qcom/iris/iris_common.c
+> @@ -91,12 +91,13 @@ int iris_process_streamon_input(struct iris_inst *inst)
+>   int iris_process_streamon_output(struct iris_inst *inst)
+>   {
+>   	const struct iris_hfi_command_ops *hfi_ops = inst->core->hfi_ops;
+> -	bool drain_active = false, drc_active = false;
+>   	enum iris_inst_sub_state clear_sub_state = 0;
+>   	int ret = 0;
+>
+> [..]
 
-> >> I think you should:
-> >> - stop the H/W from processing incoming packets,
-> >> - spool all the pending packets
-> >> - attach/detach the xsk_pool
-> >> - refill the ring
-> >> - re-enable the H/W
-> > 
-> > Current implementation follows the same sequence:
-> > 1. Does a channel teardown -> stop incoming traffic
-> > 2. free the rx descriptors from free queue and completion queue -> spool 
-> > all pending packets/descriptors
-> > 3. attach/detach the xsk pool
-> > 4. allocate rx descriptors and fill the freeq after mapping them to the 
-> > correct memory buffers -> refill the ring
-> > 5. restart the NAPI - re-enable the H/W to recv the traffic
-> > 
-> > I am still working on skipping 2 and 4 steps but this will be a long 
-> > shot. Need to make sure all corner cases are getting covered. If this 
-> > approach looks doable without causing any regressions I might post it as 
-> > a followup patch later in the future.
+Somehow, you have lost the + edited line that declares the bools.. Hence 
+the CI failure reported for v1, and the kernel test robot message from 
+just a couple minutes ago.
+
+But with `bool first_ipsc = false, drain_active = false, drc_active = 
+false;` filled in,
+
+Tested-by: Val Packett <val@packett.cool>
+
+finally the decoder is actually usable \o/
+
+~val
+
