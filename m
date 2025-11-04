@@ -1,64 +1,69 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.19])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4135172605;
-	Tue,  4 Nov 2025 23:15:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.19
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0216034B186;
+	Tue,  4 Nov 2025 23:47:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762298139; cv=none; b=szbLvaDcrSvHPmUAPAhO1a6qmkDxUv5kCUqsAMMpZ5esVkQOT3ZZ2TGY61ygWYddaFDokrQf/rsv6iGeYB1s1XDe0PtvL19xDLZ5oJ6axghPBexHPPESRy2nv0kiOXomq3dl4KSmR1kLbUlOMC8aiD3KjpCCvlV3YZNEBK+LJiM=
+	t=1762300064; cv=none; b=bQozw2JFf/rokqv3IE37LW8ttjUs1LHsCt1AgHN95cznSr4jqbH7xVCnc+fuBkR7BYB50n8qo8fMl1z6hO5fFpNUfixg3EDu2o+HzNz1TWFR50+pwxSuImvT978TKLZwO0rwhGFOSww5y8yLt+YVLcYrBuRU32lJ/9RlRPYVOX0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762298139; c=relaxed/simple;
-	bh=5FzMxmsnnMI6iEWbGWYMjpuof9Q20uo2BdQ1iMH4P6U=;
+	s=arc-20240116; t=1762300064; c=relaxed/simple;
+	bh=q8Yf8/7HLuXQG0Z7K5FKnH461+e+Cvderu2RfpjgDQw=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=tWPIKZwAkyNTSlRpY6zcAwsoNGQ3N8TLvldQcnbpsfCYhWtZeYDpr8e8oG9J+OGiMUYG+yE+nJ1uxPFlHHnVGaabq9jmKWcAaQ7uDiHwXzgeqc/1OyTl1HQFTWUDD44wnIjlVl62joP9ecx25m6Nqlcsc791sFujB0ooMV4aEVU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=EFIAyBeO; arc=none smtp.client-ip=192.198.163.19
+	 Content-Type:Content-Disposition:In-Reply-To; b=Ehf9L3KMGOdXW46zRT3dA7PplItC/UujqieS3HWvYzJhJU/nsrqg/oHCIkGdYEBmAiToT7T3d2S/Bzhnrxk3jU4/LUnzptBp4PAsmxWYdr2wT4QPA3SDd/zJioqZJ6ztfHwD2DxDcUeLbM7GTvx3GBDngpq3FydeUnXRbjnfkq0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ZJAzV/Iu; arc=none smtp.client-ip=198.175.65.13
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="EFIAyBeO"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ZJAzV/Iu"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1762298137; x=1793834137;
+  t=1762300064; x=1793836064;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=5FzMxmsnnMI6iEWbGWYMjpuof9Q20uo2BdQ1iMH4P6U=;
-  b=EFIAyBeOrKxRAWH/QVK4kqWDIcAZkzErlf6jtjEvyo7Haa4Z1nbrOGTV
-   nvVyT/UDDSoitKuFcSfzEhk3bQUzl357PImOAj8uPv8oZDJvtERaxSrLe
-   HLfA+5QMJzAoOXQZUb6lmjheIsREJqHKdWlbLX3fk8nS7TQKu7U3t6BXD
-   Gm7p/uI2u4i5oAwdqUZox/75xmWc6vThbf3rUsMzVrde60oM2PiIcDlXp
-   8NawwMtvYKt6BBa1lJO8MjRknGK/nT9IaU8C0dcynsw4gYf7s+Rt4MX4d
-   bFimhE89nOdAhMCjij9VXTRnNrBEQ+U6eGD6Z9wAwyBirAG1myOT4vPaT
-   A==;
-X-CSE-ConnectionGUID: A1MSccoVTjGg4HUnFO5lbw==
-X-CSE-MsgGUID: AQqraXF5QWWhY2PLxIGRmw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11603"; a="63414893"
+  bh=q8Yf8/7HLuXQG0Z7K5FKnH461+e+Cvderu2RfpjgDQw=;
+  b=ZJAzV/IujyZL2QrDw86+vUK47lhjAsOqAHEqFTmgsUZMtlcp97oDTdxT
+   4hNMe9AYsDJO+EzzowDTNWdRgahET/ovg+oF8fKttvyswfCZ4gyMKPYE3
+   pwij+3ryVDU3iRmcKUUrmysIOackKLaZFPUptu35SKkJCYE6Rs2d6PFzZ
+   43+jXroD7QgbgKj40qff21+bZFeHj1uRwehWGLFMsFudmwzkCFLLh4z15
+   4qg4L9CbWwcfyWbDkSrKx+4aPaabaDa6Sjnx/cY4CHFO9t09ZpyXQWlU2
+   WaqjpMVGqjKLuBK6Rp9Nxynn4aht1SY/89Fm+D+iBi+Ly7EtqbyZNZ4YX
+   g==;
+X-CSE-ConnectionGUID: odFTKybCSd+9RAMQtDUU9A==
+X-CSE-MsgGUID: TG103etjQfCkg/GXJkSd8w==
+X-IronPort-AV: E=McAfee;i="6800,10657,11603"; a="75517356"
 X-IronPort-AV: E=Sophos;i="6.19,280,1754982000"; 
-   d="scan'208";a="63414893"
-Received: from fmviesa007.fm.intel.com ([10.60.135.147])
-  by fmvoesa113.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Nov 2025 15:15:36 -0800
-X-CSE-ConnectionGUID: wjt6xLDaT+uGk/zSP4IGlw==
-X-CSE-MsgGUID: PMp4CIS+S3mJaVfp3g4bRw==
+   d="scan'208";a="75517356"
+Received: from fmviesa004.fm.intel.com ([10.60.135.144])
+  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Nov 2025 15:47:43 -0800
+X-CSE-ConnectionGUID: hTt4v9M+THmoCh//MpN9YQ==
+X-CSE-MsgGUID: jtjy4XN6T/2HSjrKEIqwQg==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.19,280,1754982000"; 
-   d="scan'208";a="186963412"
+   d="scan'208";a="192375649"
 Received: from lkp-server02.sh.intel.com (HELO 66d7546c76b2) ([10.239.97.151])
-  by fmviesa007.fm.intel.com with ESMTP; 04 Nov 2025 15:15:35 -0800
+  by fmviesa004.fm.intel.com with ESMTP; 04 Nov 2025 15:47:40 -0800
 Received: from kbuild by 66d7546c76b2 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1vGQFR-000RvO-0F;
-	Tue, 04 Nov 2025 23:15:33 +0000
-Date: Wed, 5 Nov 2025 07:14:58 +0800
+	id 1vGQjl-000Rwm-1Y;
+	Tue, 04 Nov 2025 23:47:04 +0000
+Date: Wed, 5 Nov 2025 07:46:03 +0800
 From: kernel test robot <lkp@intel.com>
-To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-	Jonathan Corbet <corbet@lwn.net>,
+To: Dikshita Agarwal <dikshita.agarwal@oss.qualcomm.com>,
+	Vikash Garodia <vikash.garodia@oss.qualcomm.com>,
+	Abhinav Kumar <abhinav.kumar@linux.dev>,
+	Bryan O'Donoghue <bod@kernel.org>,
 	Mauro Carvalho Chehab <mchehab@kernel.org>,
-	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
+	Hans Verkuil <hverkuil@xs4all.nl>,
+	Stefan Schmidt <stefan.schmidt@linaro.org>
 Cc: oe-kbuild-all@lists.linux.dev, linux-media@vger.kernel.org,
-	Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Subject: Re: [PATCH v1 1/1] kernel-doc: Issue warnings that were silently
- discarded
-Message-ID: <202511050706.NIxJwZER-lkp@intel.com>
-References: <20251104215502.1049817-1-andriy.shevchenko@linux.intel.com>
+	linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+	Val Packett <val@packett.cool>,
+	Dikshita Agarwal <dikshita.agarwal@oss.qualcomm.com>
+Subject: Re: [PATCH v2] media: iris: Refine internal buffer reconfiguration
+ logic for resolution change
+Message-ID: <202511050737.07EKKlnk-lkp@intel.com>
+References: <20251104-iris-seek-fix-v2-1-c9dace39b43d@oss.qualcomm.com>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
@@ -67,41 +72,113 @@ List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20251104215502.1049817-1-andriy.shevchenko@linux.intel.com>
+In-Reply-To: <20251104-iris-seek-fix-v2-1-c9dace39b43d@oss.qualcomm.com>
 
-Hi Andy,
+Hi Dikshita,
 
-kernel test robot noticed the following build warnings:
+kernel test robot noticed the following build errors:
 
-[auto build test WARNING on lwn/docs-next]
-[also build test WARNING on next-20251104]
-[cannot apply to linus/master v6.18-rc4]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+[auto build test ERROR on 163917839c0eea3bdfe3620f27f617a55fd76302]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Andy-Shevchenko/kernel-doc-Issue-warnings-that-were-silently-discarded/20251105-055629
-base:   git://git.lwn.net/linux.git docs-next
-patch link:    https://lore.kernel.org/r/20251104215502.1049817-1-andriy.shevchenko%40linux.intel.com
-patch subject: [PATCH v1 1/1] kernel-doc: Issue warnings that were silently discarded
-config: sh-allnoconfig (https://download.01.org/0day-ci/archive/20251105/202511050706.NIxJwZER-lkp@intel.com/config)
-compiler: sh4-linux-gcc (GCC) 15.1.0
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251105/202511050706.NIxJwZER-lkp@intel.com/reproduce)
+url:    https://github.com/intel-lab-lkp/linux/commits/Dikshita-Agarwal/media-iris-Refine-internal-buffer-reconfiguration-logic-for-resolution-change/20251104-131307
+base:   163917839c0eea3bdfe3620f27f617a55fd76302
+patch link:    https://lore.kernel.org/r/20251104-iris-seek-fix-v2-1-c9dace39b43d%40oss.qualcomm.com
+patch subject: [PATCH v2] media: iris: Refine internal buffer reconfiguration logic for resolution change
+config: m68k-allmodconfig (https://download.01.org/0day-ci/archive/20251105/202511050737.07EKKlnk-lkp@intel.com/config)
+compiler: m68k-linux-gcc (GCC) 15.1.0
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251105/202511050737.07EKKlnk-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202511050706.NIxJwZER-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202511050737.07EKKlnk-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
->> Warning: drivers/sh/intc/irqdomain.c:29 function parameter 'd' not described in 'intc_evt_xlate'
->> Warning: drivers/sh/intc/irqdomain.c:29 function parameter 'ctrlr' not described in 'intc_evt_xlate'
->> Warning: drivers/sh/intc/irqdomain.c:29 function parameter 'intspec' not described in 'intc_evt_xlate'
->> Warning: drivers/sh/intc/irqdomain.c:29 function parameter 'intsize' not described in 'intc_evt_xlate'
->> Warning: drivers/sh/intc/irqdomain.c:29 function parameter 'out_hwirq' not described in 'intc_evt_xlate'
->> Warning: drivers/sh/intc/irqdomain.c:29 function parameter 'out_type' not described in 'intc_evt_xlate'
->> Warning: drivers/sh/intc/irqdomain.c:29 expecting prototype for intc_irq_domain_evt_xlate(). Prototype was for intc_evt_xlate() instead
+   drivers/media/platform/qcom/iris/iris_common.c: In function 'iris_process_streamon_output':
+>> drivers/media/platform/qcom/iris/iris_common.c:99:9: error: 'first_ipsc' undeclared (first use in this function)
+      99 |         first_ipsc = inst->sub_state & IRIS_INST_SUB_FIRST_IPSC;
+         |         ^~~~~~~~~~
+   drivers/media/platform/qcom/iris/iris_common.c:99:9: note: each undeclared identifier is reported only once for each function it appears in
+>> drivers/media/platform/qcom/iris/iris_common.c:101:9: error: 'drain_active' undeclared (first use in this function); did you mean 'swait_active'?
+     101 |         drain_active = inst->sub_state & IRIS_INST_SUB_DRAIN &&
+         |         ^~~~~~~~~~~~
+         |         swait_active
+>> drivers/media/platform/qcom/iris/iris_common.c:104:9: error: 'drc_active' undeclared (first use in this function); did you mean 'PG_active'?
+     104 |         drc_active = inst->sub_state & IRIS_INST_SUB_DRC &&
+         |         ^~~~~~~~~~
+         |         PG_active
+
+
+vim +/first_ipsc +99 drivers/media/platform/qcom/iris/iris_common.c
+
+    90	
+    91	int iris_process_streamon_output(struct iris_inst *inst)
+    92	{
+    93		const struct iris_hfi_command_ops *hfi_ops = inst->core->hfi_ops;
+    94		enum iris_inst_sub_state clear_sub_state = 0;
+    95		int ret = 0;
+    96	
+    97		iris_scale_power(inst);
+    98	
+  > 99		first_ipsc = inst->sub_state & IRIS_INST_SUB_FIRST_IPSC;
+   100	
+ > 101		drain_active = inst->sub_state & IRIS_INST_SUB_DRAIN &&
+   102			inst->sub_state & IRIS_INST_SUB_DRAIN_LAST;
+   103	
+ > 104		drc_active = inst->sub_state & IRIS_INST_SUB_DRC &&
+   105			inst->sub_state & IRIS_INST_SUB_DRC_LAST;
+   106	
+   107		if (drc_active)
+   108			clear_sub_state = IRIS_INST_SUB_DRC | IRIS_INST_SUB_DRC_LAST;
+   109		else if (drain_active)
+   110			clear_sub_state = IRIS_INST_SUB_DRAIN | IRIS_INST_SUB_DRAIN_LAST;
+   111	
+   112		/* Input internal buffer reconfiguration required in case of resolution change */
+   113		if (first_ipsc || drc_active) {
+   114			ret = iris_alloc_and_queue_input_int_bufs(inst);
+   115			if (ret)
+   116				return ret;
+   117			ret = iris_set_stage(inst, STAGE);
+   118			if (ret)
+   119				return ret;
+   120			ret = iris_set_pipe(inst, PIPE);
+   121			if (ret)
+   122				return ret;
+   123		}
+   124	
+   125		if (inst->state == IRIS_INST_INPUT_STREAMING &&
+   126		    inst->sub_state & IRIS_INST_SUB_INPUT_PAUSE) {
+   127			if (!drain_active)
+   128				ret = hfi_ops->session_resume_drc(inst,
+   129								  V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE);
+   130			else if (hfi_ops->session_resume_drain)
+   131				ret = hfi_ops->session_resume_drain(inst,
+   132								    V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE);
+   133			if (ret)
+   134				return ret;
+   135			clear_sub_state |= IRIS_INST_SUB_INPUT_PAUSE;
+   136		}
+   137	
+   138		if (inst->sub_state & IRIS_INST_SUB_FIRST_IPSC)
+   139			clear_sub_state |= IRIS_INST_SUB_FIRST_IPSC;
+   140	
+   141		ret = hfi_ops->session_start(inst, V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE);
+   142		if (ret)
+   143			return ret;
+   144	
+   145		if (inst->sub_state & IRIS_INST_SUB_OUTPUT_PAUSE)
+   146			clear_sub_state |= IRIS_INST_SUB_OUTPUT_PAUSE;
+   147	
+   148		ret = iris_inst_state_change_streamon(inst, V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE);
+   149		if (ret)
+   150			return ret;
+   151	
+   152		inst->last_buffer_dequeued = false;
+   153	
+   154		return iris_inst_change_sub_state(inst, clear_sub_state, 0);
+   155	}
+   156	
 
 -- 
 0-DAY CI Kernel Test Service
