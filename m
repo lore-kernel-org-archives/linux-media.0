@@ -1,246 +1,175 @@
-Received: from jeth.damsy.net (jeth.damsy.net [51.159.152.102])
+Received: from mailbnc203.isp.belgacom.be (mailbnc203.isp.belgacom.be [195.238.22.237])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 404E33019B5;
-	Wed,  5 Nov 2025 10:39:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=51.159.152.102
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 39D152FAC18
+	for <linux-media@vger.kernel.org>; Wed,  5 Nov 2025 10:53:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.238.22.237
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762339179; cv=none; b=kdYYbaU5QapsXd3p/egMSoqTCC8y7XZEEf5Yr8jhnyLikIg3FzTemsWQUBx1oV2iBzOa8Nmn77c58n9AOuOeL1FnxlwyoYovNmD/+IYOsbB70S/K/Cp0sNyZpGKJ15mgEJ1HAGZTxnOaDnSh8KAC8zrTKrS5L3kca+cbshm/xro=
+	t=1762340042; cv=none; b=YijMUxdBLJ19hpB0ld22AXP5SXGVMWWGpXIQkvNDaCS7J+iwCH0siqDJXx+rZ+PFmYlXSDgFmeA9cWMkSpBBeIRQ5B1Bbh1X0HmHJKNrwOd0mycRFNfy4bVUEh+RqmloPTcS6Ge7Y8VoRn4cqKlswUxMkbSvCqui/K8piafTNA0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762339179; c=relaxed/simple;
-	bh=+TVPzp2BB26Go6WOLBi4H9o7FoCJp7pva6R/0WcIFVU=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=VN0FanUoRSGrjkmlKwN4ItHO3o8CFpweQC8slw7lu3KdMVMUgW3+/9NZuSTHb1mKP3ehbegnlsq28p/sTugeIRunDhxoITJsSKe4CAqLxOmixQy7FbYWmAxhVl6XHGdGnzva9pR6Km4xgVCpdhUcMouedtNdZAVuVvn5I5WKAOk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=damsy.net; spf=pass smtp.mailfrom=damsy.net; dkim=pass (2048-bit key) header.d=damsy.net header.i=@damsy.net header.b=hp8agkev; dkim=permerror (0-bit key) header.d=damsy.net header.i=@damsy.net header.b=h4lfObt8; arc=none smtp.client-ip=51.159.152.102
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=damsy.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=damsy.net
+	s=arc-20240116; t=1762340042; c=relaxed/simple;
+	bh=RPE9Bn3/BFqh3RQbnDcQETUu5sum5fwvQLo7RFTDAbU=;
+	h=Date:From:To:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=U0eMU5rg2ZujQMlTflqKw9xdMlR/fe23Riftnb3pkzv19n+4t2w5lW+eXUH6mH8p0IxfBjOIyWHsC3bKx6OhtfrtnpR4B0lnS2xLo+103/W+2sQCLRA/jt6BdxaNy8WIylX9OBpluhXePCtpmo6hHT7uoywIRW5GUJFqggFWuG4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=skynet.be; spf=pass smtp.mailfrom=skynet.be; dkim=pass (2048-bit key) header.d=skynet.be header.i=@skynet.be header.b=e8iTWxs2; arc=none smtp.client-ip=195.238.22.237
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=skynet.be
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=skynet.be
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=damsy.net header.i=@damsy.net header.b="hp8agkev";
-	dkim=permerror (0-bit key) header.d=damsy.net header.i=@damsy.net header.b="h4lfObt8"
-DKIM-Signature: v=1; a=rsa-sha256; s=202408r; d=damsy.net; c=relaxed/relaxed;
-	h=From:To:Subject:Date:Message-ID; t=1762339165; bh=HynmbuF0tAM8tAN2lSgPkC7
-	JF426wpJcLDfO5uTi/hw=; b=hp8agkevPjedr1AzyG9EXs7Pj4KLzVByaNj3R3PtuEItpEKsCD
-	1lUxDH1tWGRSNN1dRBkubGhuvktSa7YcSS0lqgq9SfcjSr93KBXdgXkugXiUSE4f9I7URLEKjou
-	Rvf810BMrjKZpA0A3IXzmuTwGkTTbeHHz03OdUaU2TfvkPLVix9EaEESb6z57zoSwxBUoiUjo+j
-	np+OsypheZS1C14Bx7DPyx0ERm8XTjhqcWy0+1o+GcAv6KcDE26oQjI4oNDoWqFlXE0bOBo+DOz
-	OrXWvYB7ySf3hDduNc4Beef/+eeeHHZjVaby+8XvHgc/Pmgf/6Ky2A07rxU2r6APm5Q==;
-DKIM-Signature: v=1; a=ed25519-sha256; s=202408e; d=damsy.net; c=relaxed/relaxed;
-	h=From:To:Subject:Date:Message-ID; t=1762339165; bh=HynmbuF0tAM8tAN2lSgPkC7
-	JF426wpJcLDfO5uTi/hw=; b=h4lfObt87YD+sXiVRU4gpbddW33IRV3aJ5rc5zxRTD2bGFF1dU
-	qlI2txGneITbjhiq4+1tBFIRmL+IciImWpAA==;
-Message-ID: <7395bf47-68fd-4af6-8720-e51dc75253bc@damsy.net>
-Date: Wed, 5 Nov 2025 11:39:24 +0100
+	dkim=pass (2048-bit key) header.d=skynet.be header.i=@skynet.be header.b="e8iTWxs2"
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=skynet.be; i=@skynet.be; q=dns/txt; s=rmail2;
+  t=1762340039; x=1793876039;
+  h=date:from:to:subject:message-id:reply-to:mime-version:
+   content-transfer-encoding;
+  bh=RPE9Bn3/BFqh3RQbnDcQETUu5sum5fwvQLo7RFTDAbU=;
+  b=e8iTWxs2cJgPKsfTju7JkkyQGMYWVdPTaTsdn+hOPau3jxkqnKZuqlL6
+   93vRLdUYQlLyjCT76lnjEPqX4MCHVcqMStRWls/s7VAfSVB1ZB+Zn+ryQ
+   oOwwcAqnC83JLEHvNfPQA6E8bGEWeaWjugGxxuRV7hVKCq6stc7HRdJKB
+   /EanJMEjHtuxxQ6aFTszu0qd3Qy0MqbMaQSpXB8Vuo+TiAwG/BepqOAfw
+   cZzFS6vOzBCe5lE/jzPLiEYfvqtoPP7Bqu/uySKNYPT16oHYhCe16xaFK
+   WXVN7fc5tNF2iYXHuVvi5OYB7FvVKq8WUEGZzkQtLeB9o30qF98e76Cjg
+   w==;
+X-CSE-ConnectionGUID: fTGT8hKITT2YlbZXGQTg9A==
+X-CSE-MsgGUID: BUKUUqGITDCTRZlODNum6A==
+X-ExtLoop: 1
+X-IPAS-Result: =?us-ascii?q?A2ESCQBsKwtp/47PEblaHgENLwwOCwkJgUmCFoEqgWkDl?=
+ =?us-ascii?q?HwBAQEBAQEGgSEdhDGHRpI6DIFfDwEBAQEBAQEBAQk9FAQBAQMEhVERi3knO?=
+ =?us-ascii?q?BMBAgQBAQEBAwIDAQEBAQEBAQEBAQELAQEBBQEBAQEBAQYEAQICgR2GCUYNS?=
+ =?us-ascii?q?QEQAYMsgSYBAQEBAQEBAQEBAQEdAg2BNgE1gQJfFIIWWYJzFLNygTSBAYRkG?=
+ =?us-ascii?q?Nk9gW2BSohTAYVuhHhCfYEQgyCBXYQOARIBhmUEgiKBDoYngm+BOI5JBwdhW?=
+ =?us-ascii?q?xwDWSwBVRMXCwcFgWMDUjluMh03bUEYcYEUg0khaA8GgRKDUQqJHQ+BB4I9a?=
+ =?us-ascii?q?IEFgjg8gUYJAwttPTcIDBsGRUIdEpNmF4MXQyQJGAQeTx8BSTk3KwWTKZ10l?=
+ =?us-ascii?q?ReEJowelVMzhASNE4ZJkwuZBoslgXhrmzmBf4EPcE0gGBqBYhhaATMJSRkPV?=
+ =?us-ascii?q?gGWXccHdxAsAgcBCgEBAwmIb4p6AQE?=
+IronPort-Data: A9a23:xoBCDayn0rk48Z0IWUh6t+dHxyrEfRIJ4+MujC+fZmUNrF6WrkVUz
+ DcdUW+CPaqDYmr2e40lOY/ioE4PsZPUzoU1QQFsry00HyNBpOP7XtnIdU2Y0wF+jyHgZBs5s
+ JpBMICeRCwQZiaE/n9B55C78CEUOZmgH+S6UKicfHgsGWeIcQ954Tp7gek1n4V0ttawBgKJq
+ LvartbWULOf82cc3lk8teTa+XuDgNyo4GlF5wVmOKgS1LPjvyB94Kw3dPnZw0TQH9E88t6SH
+ 47r0Ly/92XFyBYhYvvNuqr7aEADXonJNgGIjHdMM4D66vSVjnVvukqTHKN0hXZ/011lrfgoo
+ Dl+ncXYpTMSA0H5sL91vy9wSn8hYvIcoeGvzU+X6qR/x2WeG5flLm4H4EseZeX08c4vaY1CG
+ GBxxJngoXlvisrvqI9XRNWAiewtEObXbIM8m01clwDdB8QWbqn/TPTjsIowMDcY3qiiHN7XY
+ 8AUcyYpaB3GC/FNEg5HVdRnw6Hy3ia5KmECwL6WjfNfD2z7yA17zpD2M8vTd8DMT8g9ckOw9
+ j2dpT+gXE9y2Nq34wemz0+1qc7zsQjHYrAWM5Ge6/s0qQjGroAUIFhMPbehmtG9i0ijS5daJ
+ kAV8wIwoqUosk+mVN/wW1u/unHsg/IHc9NeD/d/sVHQj/OLplzBWS1dEmQHZM0gvco3Tnov0
+ FKV2tTvAT1pvfuZRBpx64upkN97AgBNRUdqWMPOZVFtDwXLyG34sv4DohuP3kJ4Yh0Z1AwcG
+ wy3kRU=
+IronPort-HdrOrdr: A9a23:aowtzKOjspFnn8BcT9P255DYdb4zR+YMi2TDiHoddfUFSKalfp
+ 6V98jzjSWE8Ar5K0tQ4uxoWZPwDE80kKQY3WB/B8bHYOCLggqVxcRZnPLfKl7bamHDH4xmpM
+ BdmsFFYbWeY2SSz/yKhjVQeOxQo+VvhZrY4Ns2uE0dLz2CBZsB0y5JTiKgVmFmTghPApQ0UL
+ CG4NBcmjamcXMLKuymG3gsRYH41pP2vaOjRSRDKw8s6QGIgz/twqX9CQKk0hAXVC4K6as+8F
+ LCjxfy6syYwrCGI17npi/uBqZt6ZncI+h4dYmxYw8uW3HRYzOTFcdcsnu5zXcISa+UmRAXeZ
+ L30m0d1oxImg7slyeO0FTQMkDboUgTwm6nw1mUjWb8p4jyQTI3DNdahYxfegbE8EZlvNZn3L
+ lX02/xjespMTrQ2C766tTUSRdyjUy/rWA5neN7tQ0ibaIOLLBWtoAR50VTDdMJGz/78pkuFK
+ 10ANjb/+s+SyLTU5n1hBgY/DWXZAV7Ij6WBkwZ/sCF2Tlfm350i0Me2cwEh38FsJYwUYNN6e
+ jIOrlh0OgmdL5dUYttQOMaBcenAG3ERhzBdGqUPFT8DakCf3bAsYT+7rk57PyjPJYI0Jwxkp
+ LcV04wjx94R2v+TcmVmJFb+BHER2uwGTzr18FF/pB8/qbxQbL6WBfzP2zHuKOb0oQi6w3gKo
+ KOEYMTB+WmIXrlGI5P0QG7QZhbMnUSVMUUv908ShaUpN7XKorlvuLWd+uWPaHqGzo/QG/za0
+ FzKQQbCP8wnHxDAEWI8CQ5c0mdCXDCwQ==
+X-Talos-CUID: 9a23:mx/JOWGjImAZGWoRqmJpyGEoSsAGU0HhlkbUKX2IJl9VR+y8HAo=
+X-Talos-MUID: 9a23:+kMwSQtHY+F/IAagLc2nrgxBCfpxzIWSJGsxq6cCnOWiKCkuEmLI
+X-IronPort-Anti-Spam-Filtered: true
+Received: from aftr-185-17-207-142.dynamic.mnet-online.de (HELO albert.lan) ([185.17.207.142])
+  by relay.proximus.be with ESMTP/TLS/TLS_AES_256_GCM_SHA384; 05 Nov 2025 11:52:48 +0100
+Received: from libv by albert.lan with local (Exim 4.94.2)
+	(envelope-from <libv@skynet.be>)
+	id 1vGb8C-000U0p-24
+	for linux-media@vger.kernel.org; Wed, 05 Nov 2025 11:52:48 +0100
+Date: Wed, 5 Nov 2025 11:52:48 +0100
+From: Luc Verhaegen <libv@skynet.be>
+To: linux-media@vger.kernel.org
+Subject: Graphics DevRoom 26: Cfp.
+Message-ID: <aQssgMr9zdKfqryI@skynet.be>
+Reply-To: graphics-devroom-manager@fosdem.org
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v1 11/20] drm/amdgpu: use multiple entities in
- amdgpu_fill_buffer
-To: =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
- Pierre-Eric Pelloux-Prayer <pierre-eric.pelloux-prayer@amd.com>,
- Alex Deucher <alexander.deucher@amd.com>, David Airlie <airlied@gmail.com>,
- Simona Vetter <simona@ffwll.ch>, Sumit Semwal <sumit.semwal@linaro.org>
-Cc: amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
- linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
- linaro-mm-sig@lists.linaro.org
-References: <20251104083605.13677-1-pierre-eric.pelloux-prayer@amd.com>
- <20251104083605.13677-12-pierre-eric.pelloux-prayer@amd.com>
- <0f9aa878-46c4-48d6-9ad5-774a0927b291@amd.com>
-Content-Language: en-US
-From: Pierre-Eric Pelloux-Prayer <pierre-eric@damsy.net>
-In-Reply-To: <0f9aa878-46c4-48d6-9ad5-774a0927b291@amd.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
 
+20 years after the first X.org DevRoom at FOSDEM 2006, there will be the 
+16th Graphics DevRoom at FOSDEM on Sunday the 1st of February 2026.
 
+The talk topics of the graphics devroom encompass:
+* graphics drivers: display, 2d engines, 3d engines, at bootloader, 
+kernel and userspace levels.
+* media/video drivers: camera/capture engines, hardware media encoders 
+and decoders on all levels.
+* input drivers for bootloaders, kernels and userspace.
+* windowing systems (X, wayland, surfaceflinger, others) and window 
+managers.
+* graphics toolkits (QT, GTK, others).
+* 3D and Compute APIs (OpenGL, Vulkan, DirectX, others), and 3d and game 
+engines.
+* Virtual reality hardware and toolkits.
+* Artificial Intelligence HW acceleration.
+* Media encode and decode applications.
+And the tools needed to help configure and run the above.
 
-Le 04/11/2025 à 17:40, Christian König a écrit :
-> On 11/4/25 09:35, Pierre-Eric Pelloux-Prayer wrote:
->> The benefits of using multiple entities is that multiple fill jobs
->> can run in parallel. Otherwise, even if the entity has access
->> to multiple engines, a burst of N independent jobs will all
->> run on the same engine because an entity guarantees the ordering
->> of execution matches the ordering of the submission.
->>
->> Callers can opt-out of this behavior by passing the entity they
->> want to use (see amdgpu_move_blit).
-> 
-> That still sounds like a really bad idea to me.
-> 
-> First of all we can't reserve so many fence slots in the release handler, previously we basically just relied on the fact that the BO will most likely be mostly idle.
-> 
-> I think we should just use a single SDMA engine for each clear and distribute clearing different BOs over multiple engines.
+Submission deadline is the 7th of december, but do not count on this 
+date, once the schedule has filled with enough solid talks, we will 
+accept no more. Also, the best slots (afternoon) will be handed out on a 
+first-come-first-serve basis.
 
-So N clear entities, each one having access to a single engine. And all jobs to 
-clear a single BO go to the same entity?
+You can submit your talk here: https://fosdem.org/submit
 
-Is that what you mean?
+Since this an open source community event, please refrain from turning 
+in a talk that is a pure corporate or product commercial. Also, this is 
+a highly technical devroom on a conference aimed at developers and 
+advanced users, so please only submit talks on a subject you actually 
+worked on.
 
-Pierre-Eric
+If you are unsure on whether you can come or not, perhaps you are unsure 
+about corporate sponsorship of your travels (this is FOSDEM, why are you 
+not there anyway?), wait with submitting your talk until you are certain 
+that you can be present.
 
-> 
-> Regards,
-> Christian.
-> 
->>
->> Signed-off-by: Pierre-Eric Pelloux-Prayer <pierre-eric.pelloux-prayer@amd.com>
->> ---
->>   drivers/gpu/drm/amd/amdgpu/amdgpu_ttm.c | 84 ++++++++++++++++++-------
->>   drivers/gpu/drm/amd/amdgpu/amdgpu_ttm.h |  1 +
->>   2 files changed, 64 insertions(+), 21 deletions(-)
->>
->> diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_ttm.c b/drivers/gpu/drm/amd/amdgpu/amdgpu_ttm.c
->> index c357a6d9763a..839ea8c7f6be 100644
->> --- a/drivers/gpu/drm/amd/amdgpu/amdgpu_ttm.c
->> +++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_ttm.c
->> @@ -2224,6 +2224,7 @@ u32 amdgpu_ttm_set_buffer_funcs_status(struct amdgpu_device *adev, bool enable)
->>   		adev->mman.clear_entities = kcalloc(num_clear_entities,
->>   						    sizeof(struct amdgpu_ttm_entity),
->>   						    GFP_KERNEL);
->> +		atomic_set(&adev->mman.next_clear_entity, 0);
->>   		if (!adev->mman.clear_entities)
->>   			goto error_free_entity;
->>   
->> @@ -2498,10 +2499,12 @@ int amdgpu_fill_buffer(struct amdgpu_ttm_entity *entity,
->>   {
->>   	struct amdgpu_device *adev = amdgpu_ttm_adev(bo->tbo.bdev);
->>   	struct amdgpu_ring *ring = adev->mman.buffer_funcs_ring;
->> +	struct dma_fence *fences[TTM_FENCES_MAX_SLOT_COUNT] = {};
->>   	struct dma_fence *fence = NULL;
->>   	struct dma_resv *resv = NULL;
->>   	struct amdgpu_res_cursor dst;
->> -	int r;
->> +	uint64_t cur_size, to;
->> +	int r, e, n_fences;
->>   
->>   	/* The fences will be either added to the resv object or the last fence
->>   	 * will be returned to the caller. In the latter case, all fill jobs will
->> @@ -2515,53 +2518,92 @@ int amdgpu_fill_buffer(struct amdgpu_ttm_entity *entity,
->>   	}
->>   
->>   	if (!entity) {
->> -		entity = &adev->mman.clear_entities[0];
->>   		resv = &bo->tbo.base._resv;
->> -		r = dma_resv_reserve_fences(resv, 1);
->> +
->> +		/* Determine how much fences we're going to add to the
->> +		 * resv object.
->> +		 */
->> +		n_fences = 0;
->> +		amdgpu_res_first(bo->tbo.resource, 0, amdgpu_bo_size(bo), &dst);
->> +		while (dst.remaining) {
->> +			cur_size = min(dst.size, 256ULL << 20);
->> +
->> +			n_fences += 1;
->> +			amdgpu_res_next(&dst, cur_size);
->> +		}
->> +		if (n_fences == 0)
->> +			return 0;
->> +
->> +		/* One slot per entity at most. */
->> +		n_fences = MIN(n_fences, adev->mman.num_clear_entities);
->> +
->> +		r = dma_resv_reserve_fences(resv, n_fences);
->>   		if (r)
->>   			return r;
->> +	} else {
->> +		mutex_lock(&entity->gart_window_lock);
->>   	}
->>   
->>   	amdgpu_res_first(bo->tbo.resource, 0, amdgpu_bo_size(bo), &dst);
->>   
->> -	mutex_lock(&entity->gart_window_lock);
->>   	while (dst.remaining) {
->> -		struct dma_fence *next;
->> -		uint64_t cur_size, to;
->> -
->>   		/* Never fill more than 256MiB at once to avoid timeouts */
->>   		cur_size = min(dst.size, 256ULL << 20);
->>   
->> +		if (resv) {
->> +			/* Pick a new entity for each partial clear so they can
->> +			 * execute in parallel.
->> +			 */
->> +			e = atomic_inc_return(&adev->mman.next_clear_entity) %
->> +				adev->mman.num_clear_entities;
->> +			entity = &adev->mman.clear_entities[e];
->> +			mutex_lock(&entity->gart_window_lock);
->> +		}
->> +
->>   		r = amdgpu_ttm_map_buffer(&entity->base,
->>   					  &bo->tbo, bo->tbo.resource, &dst,
->>   					  entity->gart_window_id1, ring, false,
->>   					  &cur_size, &to,
->>   					  dependency,
->>   					  resv);
->> -		if (r)
->> +		if (r) {
->> +			mutex_unlock(&entity->gart_window_lock);
->>   			goto error;
->> +		}
->>   
->>   		r = amdgpu_ttm_fill_mem(ring, &entity->base,
->>   					src_data, to, cur_size, resv,
->> -					&next, true, k_job_id);
->> -		if (r)
->> +					&fence, true, k_job_id);
->> +		if (r) {
->> +			mutex_unlock(&entity->gart_window_lock);
->>   			goto error;
->> -
->> -		if (resv) {
->> -			dma_resv_add_fence(resv, next, DMA_RESV_USAGE_KERNEL);
->> -			dma_fence_put(next);
->> -		} else {
->> -			dma_fence_put(fence);
->> -			fence = next;
->>   		}
->>   
->>   		amdgpu_res_next(&dst, cur_size);
->> +
->> +		if (resv) {
->> +			/* Delay the addition of the fences to resv, otherwise the next partial
->> +			 * clears will depend on this one.
->> +			 */
->> +			fences[e] = fence;
->> +			mutex_unlock(&entity->gart_window_lock);
->> +		} else {
->> +			dma_fence_put(*f);
->> +			*f = fence;
->> +		}
->>   	}
->>   error:
->> -	mutex_unlock(&entity->gart_window_lock);
->> -	if (f)
->> -		*f = dma_fence_get(fence);
->> -	dma_fence_put(fence);
->> +	if (resv) {
->> +		for (e = 0; e < adev->mman.num_clear_entities; e++) {
->> +			if (fences[e]) {
->> +				dma_resv_add_fence(resv, fences[e], DMA_RESV_USAGE_KERNEL);
->> +				dma_fence_put(fences[e]);
->> +			}
->> +		}
->> +	} else {
->> +		mutex_unlock(&entity->gart_window_lock);
->> +	}
->> +
->>   	return r;
->>   }
->>   
->> diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_ttm.h b/drivers/gpu/drm/amd/amdgpu/amdgpu_ttm.h
->> index 38df2b5b4bc7..3fc31c7c6bfe 100644
->> --- a/drivers/gpu/drm/amd/amdgpu/amdgpu_ttm.h
->> +++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_ttm.h
->> @@ -73,6 +73,7 @@ struct amdgpu_mman {
->>   
->>   	struct amdgpu_ttm_entity default_entity; /* has no gart windows */
->>   	struct amdgpu_ttm_entity *clear_entities;
->> +	atomic_t next_clear_entity;
->>   	u32 num_clear_entities;
->>   	struct amdgpu_ttm_entity move_entities[TTM_FENCES_MAX_SLOT_COUNT];
->>   	u32 num_move_entities;
+Please put some time and effort in your talk proposal, especially in the 
+title and at least abstract, and your own background. While there is no 
+more printed schedule, your description is what will get people to watch 
+your talk, and will remain online forever next to the recording of your 
+talk.
+
+We have a full day at our disposal, which runs from from 9:00 til 17:00, 
+so we can fit anywhere between 8 and 16 talks. With 5 minutes for setup 
+time, and 5 minutes of Q&A, full hour talks are actually 50 minutes, and 
+half hour talks are 20 minutes. Depending on the amount of proposals, we 
+might need to switch to 20 minute talks for everyone.
+
+All talks will be recorded and made available as CC-By-Sa or CC-By. The 
+FOSDEM CoC will have to be agreed as well 
+(https://fosdem.org/2026/practical/conduct/).
+
+Submission tips:
+
+When submitting at https://fosdem.org/submit, you can ignore the "You 
+can enter proposals until 2025-11-16 22:00 (Europe/Brussels), 2 weeks 
+from now." statement, as that is for Main track talks only, and not 
+relevant for DevRooms.
+
+Please put some time and effort in your talk proposal, especially in the 
+title and at least abstract, and your own background. While there is no 
+more printed schedule, your description is what will get people to watch 
+your talk, and will remain online forever next to the recording of your 
+talk.
+
+On the first page, for track, select "Graphics". Please write your 
+preferred slot length (20 or 50) in the submission notes. On page 2 you 
+also need to provide a code license, this is a free-form field, so write 
+what is appropriate.
+
+If there are any issues, just email graphics-devroom-manager@fosdem.org, 
+where you can reach the team of graphics devroom managers, Arek Hiler, 
+Timur Krist�f and myself, who will also schedule and review your talk 
+submissions.
+
+We will be keeping a keen eye on submissions and scheduling, and hope to 
+see you all at FOSDEM.
+
+Thanks!
+
+Luc Verhaegen.
 
