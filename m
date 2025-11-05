@@ -1,245 +1,128 @@
-Received: from mail-wr1-f43.google.com (mail-wr1-f43.google.com [209.85.221.43])
+Received: from mail-qk1-f169.google.com (mail-qk1-f169.google.com [209.85.222.169])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 866FE311C3B
-	for <linux-media@vger.kernel.org>; Wed,  5 Nov 2025 13:36:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DA1F6316919
+	for <linux-media@vger.kernel.org>; Wed,  5 Nov 2025 13:51:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762349789; cv=none; b=uSwbuNcUL3SZLRK9Mr2cqbZv4ZAKIP3OQXfJOJucnzyCRrIQGg9YjCSH6WkdACsZxwFIQYoJVR18UQGYZQKzUE8F/vUg17p4IjFqIcJmr58bBf5tsbNomoGlkYIDzBum8ArDEhPgZ2YuCVXc6lu8BbsodovQTT3lRaFgckM1h3Q=
+	t=1762350689; cv=none; b=mElJ5C1mEQtUXfjVEMRQMKizfCGOp0V6sjLYZoMgtbz8dK+HKCJru1BYHLEO+oErHBV9zTpfLv1A5BZKvdS2INvZR7zLdWj7zdTKzoUHBdxDZCh2dshL//XxR1EhIR75gjzXVjxtJ9c0w/FWIe52dDAi21xAlpD60HsfLFhks78=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762349789; c=relaxed/simple;
-	bh=N3LAI2VKe6lufJcVbjoPrMgXDFUHRU7jaI2Qd1R+9YY=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=bVll3MEhO/3LS4epGskh3b03EOH1K2sUo2YMWp5SgxGK18xNSBbqETaN+V0c6M2P7JVdkvHWhHgw18eRmicXfF0bJ1l7p81QcCxoV1yhiCbuftetcsJJ94E462eV1yxfQRs1HVCca/AWwMLUlW9fhp7DVhBZC4WXDoi10Ffx+8Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=dD3NYHnC; arc=none smtp.client-ip=209.85.221.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1762350689; c=relaxed/simple;
+	bh=zP41Rmpn5mMZPXrAIAfE+G59N4Vqeo9bSbuVW5Vwl9E=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=eZQUc+o2Nhc+CHJDPgSXebghkn7nvR8VrqUc9K3GEHdtmyoTT3C/w3PTQk3MV1/gqNbMPJNSrUHyCa+U3H1qosSrtF6rSvUcWjr6wHbt4txKp7nh+Ndd/Sxoq1ZSDxJ2yA1aKEDb7cmrwrTf9Ynesu31S8P449mcvVQ4CAfju7k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ndufresne.ca; spf=pass smtp.mailfrom=ndufresne.ca; dkim=pass (2048-bit key) header.d=ndufresne-ca.20230601.gappssmtp.com header.i=@ndufresne-ca.20230601.gappssmtp.com header.b=XJqh+z8A; arc=none smtp.client-ip=209.85.222.169
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ndufresne.ca
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ndufresne.ca
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="dD3NYHnC"
-Received: by mail-wr1-f43.google.com with SMTP id ffacd0b85a97d-429b7ba208eso4221168f8f.1
-        for <linux-media@vger.kernel.org>; Wed, 05 Nov 2025 05:36:27 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=ndufresne-ca.20230601.gappssmtp.com header.i=@ndufresne-ca.20230601.gappssmtp.com header.b="XJqh+z8A"
+Received: by mail-qk1-f169.google.com with SMTP id af79cd13be357-88e51cf965dso982088485a.2
+        for <linux-media@vger.kernel.org>; Wed, 05 Nov 2025 05:51:27 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1762349786; x=1762954586; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=iL8OVjWdHUzrhq3ZN/d9whcVawdUbvhGs+dukUNE9D4=;
-        b=dD3NYHnCuevkcLyFTCGKmf+TDHzNV68dYko3xhMX/EobSI1OFNx4C/Vu2pYLBvxdrP
-         NBWmNUtqkwrwM2PMduHJZsM6hH5Plo7OY5aXc71F3SuGPo00dzQKZCpdD8GpStTurRW0
-         12NlJb9/J5msPLiVDpXfuC3SgwQrVeyMi1Pk12Qo9D2Xs6OFWvh07OROGOvNc6ZGkXPS
-         wLSuKCKdvzAFsmlfGsSBKiHmt6z0uNc/JNtye0D/o0preNGGis+nnk+dArIeWfI72HKJ
-         q4k5/thyAryJZR0cw/VlNmHGoZwTB3A8ZEqG9QpuGGtZdlD+tAt6lvQuzrdDTZqD5uD/
-         Da0A==
+        d=ndufresne-ca.20230601.gappssmtp.com; s=20230601; t=1762350687; x=1762955487; darn=vger.kernel.org;
+        h=mime-version:user-agent:references:in-reply-to:date:cc:to:from
+         :subject:message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=zP41Rmpn5mMZPXrAIAfE+G59N4Vqeo9bSbuVW5Vwl9E=;
+        b=XJqh+z8AprQdeWWVaS5BDhVHZbvRwsTpw2yaxVcGPy6Lszbpc/xb9PpgQcV6iRzHmh
+         fC8gQDMzQ4cEyFcyhWYriJVTBDdTPRbvgKVQNFDzKQohrK2TBn1VBBTN803zsn89uYuk
+         FEJq7AEiiNoyyMLmTpVUonDMasiPOSsAvhSLc1obGNu90ZmZIizzy7pto1qPB3hW5ASv
+         9DLMewKqSwaXHbdVzAY5FyMiECtdNuY0O9b5WqkrSmG3LPa9oo+MayM5XsBKi1q/EgWk
+         0CVSlnEDGJIl5l9FOnQG3CYHsz5pm5t3GiQTZqlFcEJKUUri+hb6FwETuhL8/1JuGLT3
+         pXdQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1762349786; x=1762954586;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=iL8OVjWdHUzrhq3ZN/d9whcVawdUbvhGs+dukUNE9D4=;
-        b=pFXc1FDi2+3sww4IF+IULUs4OiH9yzIxwk3wVjs2vNTRzxXoZGPLeFsu7unmZJpgsi
-         ZX3QZ1Jj8mLDRJ550l/foyZscONDFEkaxUc2zFyzdPI/kR6SOHeYTnU2m1i463T0TzY6
-         IyqNF3rAd6C4yBDcZGvSQviZMVRiOe4eOLlSA7bt4dBB8W8Eatefq4hpA+bXfODixZpi
-         cfvPG5QoYoTAf8SHITq0daMQQPYbwAu5cMtNwxJmrq1tFZRTNoBYO0DPXW4NxS2To0kJ
-         WX8WhCLaI3FDBF+ounWLVaqNfWe33EHzNmZXnmhS2nvVDQSaj7/WPv/hC9hsyGLv7aX/
-         NNrA==
-X-Gm-Message-State: AOJu0YylPgcKvKIWPu3AKmd9OgwkljKoNrC9UIV3Ya0TZcPC+134zxlp
-	lDvabb78dKtNL38PSBvj0KWRuKf+/z3KHli2DTAxgwouAnuc1HoicRjic0cMnK+IXm7xeTGpzmJ
-	VD0ZMDb6YXJyfses/hCnHkiGAUoOIwzk=
-X-Gm-Gg: ASbGncvyzGgSheQM0dyBMgdSnpWRciBuXoklTY5nLjxj0Y5thkoTI08bUU4XNc7Iqtz
-	a+pROrKfXfqPy6s6WZjBaTz6p6UCMtPT21zmf0iVxpVD6qWebeF7PYwfM/ken2UxS556WQjj3+k
-	vloOQG2wtEk8YRnk7NaIBHc7Ca0HlaBaUO9nrImA2FEjNviU83F+yM7iaOn3arc3h1tcHFCUnHy
-	Yh93NfbEHgIGmUc81X6kPMNtfQviQM0bHVRrhgIiXzi4zR7QAxNEnq3x+qKnGNGEQBj6wg=
-X-Google-Smtp-Source: AGHT+IEFGUCq5pOwZYnXFWPhWJEW8IG4enihXYQYe3+bMQEFYIeVw6QpuN6H25Eqsp92tVyTuPD9IkJCxAS5BCgQOew=
-X-Received: by 2002:a05:6000:22ca:b0:3e9:3b91:e846 with SMTP id
- ffacd0b85a97d-429e32c8357mr2860369f8f.10.1762349785766; Wed, 05 Nov 2025
- 05:36:25 -0800 (PST)
+        d=1e100.net; s=20230601; t=1762350687; x=1762955487;
+        h=mime-version:user-agent:references:in-reply-to:date:cc:to:from
+         :subject:message-id:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=zP41Rmpn5mMZPXrAIAfE+G59N4Vqeo9bSbuVW5Vwl9E=;
+        b=b0H/4LSV0Jq+wgCo8w8aQGC8lQjJm7SBbJv/XYmpnKCGfZk27PrlOjt8F0B1B88skW
+         +7Fy4nL/asBQfgwoHpB6j4WC/v9Gd5ccUMlVWE9Gh93ORRMzCCsrYIL0hovied8Y5OsB
+         ZkC7Oy7Oo0GPYtr7tF4NbNSvNggu0XQTz6Jw7DARqHcqjCdGlNKL+0nHvcz/OkLvViP9
+         UbFZZbkwLCWhZ0GnMuS0tl8kdv5yFh79Cc+sXn8uUvIICrSLfg4x6LJxmPvu1IHS1EvF
+         jRMc0Qyv9J+H/28D8a078VTfZLYs+Qd4E09TjOMI2C8wl6JSmLc3axBpKzlhC6bf0Cj+
+         HMoQ==
+X-Gm-Message-State: AOJu0YyAAOhOaVU8LS2f7fyw9k8QrLUaSwhtGNrQxCNxT8ArlD+4Cd7E
+	vK+QKgnHrsIq/ldpRvn7IKuLbd8RZsl3F4iAxt0Ei35jRslGDxYa6jtLVJDoSIcuddiNmSwGC/h
+	MDtrl
+X-Gm-Gg: ASbGnctw9Z9q7JX+qFPabOcGJdPJj1a4zKuf46081f/96ygsoGDka9l/C1vAlwWczwg
+	TfyRsTmHYRSGT/NcHH+gx8VyQWW9r6f5NP0/l4VA4QfIYwOXwOMXk0hspZdHjjYGa5wJ/7Bzjvi
+	s7hla8BOHlWDa2mX5wzSrM/HCFh0my9f5+V2DrDzZdNx93/LQpHCm7uOtAaBagHfCSLgDzU2GyD
+	1mXjIj0ndIFOudBA+AeOWx8M0I+IfIYkVxmkmwTm14Sob+9fQh8hdfZXJbP0hGnrok7RnrH6T1J
+	KhrEIcjhOfvOTC+0vVXXtyTCNY1pLExoxfXhwYw2x+pHWREYi1+nhIl6k8PgvWY3sZxVudfl1HA
+	i6bxrk00j4AkHIN1BC6Bo9nIztwrpflm+kxHniwt1D0PgpcnXqgbxQ0UbDfzEvFZaj25T7xPdFS
+	HiqoO6lQ==
+X-Google-Smtp-Source: AGHT+IHjDb17WJE5ovnji+ZuOA/1CxRvnHlgllSFFQ/L3BHsKI5wbhqVXzK9pnt8K5pFCIhkgw4W3A==
+X-Received: by 2002:a05:620a:4045:b0:8b0:f8c4:a5fe with SMTP id af79cd13be357-8b220c001f8mr430100785a.89.1762350686452;
+        Wed, 05 Nov 2025 05:51:26 -0800 (PST)
+Received: from ?IPv6:2606:6d00:11:ef24::c41? ([2606:6d00:11:ef24::c41])
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-8b0f5413f43sm432543785a.8.2025.11.05.05.51.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 05 Nov 2025 05:51:25 -0800 (PST)
+Message-ID: <6d046cef20dcef4eb14aba6fa89e30d303f6a1b5.camel@ndufresne.ca>
+Subject: Re: [PATCH 0/3] Add Amlogic stateless H.264 video decoder for S4
+From: Nicolas Dufresne <nicolas@ndufresne.ca>
+To: Zhentao Guo <zhentao.guo@amlogic.com>, Neil Armstrong	
+ <neil.armstrong@linaro.org>, Mauro Carvalho Chehab <mchehab@kernel.org>,
+ Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
+ Conor Dooley	 <conor+dt@kernel.org>, Kevin Hilman <khilman@baylibre.com>,
+ Jerome Brunet	 <jbrunet@baylibre.com>, Martin Blumenstingl
+ <martin.blumenstingl@googlemail.com>
+Cc: linux-media@vger.kernel.org, devicetree@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+	linux-amlogic@lists.infradead.org
+Date: Wed, 05 Nov 2025 08:51:23 -0500
+In-Reply-To: <174ef722-99f0-440d-8eee-5dca086e13f0@amlogic.com>
+References: <20251027-b4-s4-vdec-upstream-v1-0-620401813b5d@amlogic.com>
+	 <b976b442-7d07-4fef-b851-ccd14661a233@linaro.org>
+	 <540d98ea-114c-43bc-94c0-e944b5613d74@amlogic.com>
+	 <b6e6881197dc4c83e43ef5eb1f20c2bf1887d395.camel@ndufresne.ca>
+	 <174ef722-99f0-440d-8eee-5dca086e13f0@amlogic.com>
+Content-Type: multipart/signed; micalg="pgp-sha512";
+	protocol="application/pgp-signature"; boundary="=-2cG765y6sSQkAAGLj2Ko"
+User-Agent: Evolution 3.56.2 (3.56.2-2.fc42) 
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20251002-c55-v12-0-3eda2dba9554@ideasonboard.com>
- <20251002-c55-v12-3-3eda2dba9554@ideasonboard.com> <CA+V-a8sg4c697WTS=wXoWvgc_UCFM3+Qjh1br=rMm4F84NVw-Q@mail.gmail.com>
- <8c5a4c68-8299-4d8f-96b2-8db232df70fe@ideasonboard.com>
-In-Reply-To: <8c5a4c68-8299-4d8f-96b2-8db232df70fe@ideasonboard.com>
-From: "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
-Date: Wed, 5 Nov 2025 13:35:59 +0000
-X-Gm-Features: AWmQ_bkQ07gnEJ1TplADVmVgYPnAor3xF3-AhJKu46RGz6HGiG28aqTfQRb9Z0M
-Message-ID: <CA+V-a8vey1y0QAxk7vYNHzPHrOrQ4uTpjf4LCb9wSRRCT3v3Qg@mail.gmail.com>
-Subject: Re: [PATCH v12 03/15] dt-bindings: media: Add bindings for ARM mali-c55
-To: Dan Scally <dan.scally@ideasonboard.com>
-Cc: linux-media@vger.kernel.org, devicetree@vger.kernel.org, 
-	linux-arm-kernel@lists.infradead.org, Anthony.McGivern@arm.com, 
-	jacopo.mondi@ideasonboard.com, nayden.kanchev@arm.com, robh+dt@kernel.org, 
-	mchehab@kernel.org, krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org, 
-	jerome.forissier@linaro.org, kieran.bingham@ideasonboard.com, 
-	laurent.pinchart@ideasonboard.com, 
-	Sakari Ailus <sakari.ailus@linux.intel.com>, 
-	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+
+
+--=-2cG765y6sSQkAAGLj2Ko
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-Hi Dan,
+Hi,
 
-On Mon, Nov 3, 2025 at 4:17=E2=80=AFPM Dan Scally <dan.scally@ideasonboard.=
-com> wrote:
->
-> Hi Prabhakar
->
-> On 28/10/2025 18:23, Lad, Prabhakar wrote:
-> > Hi Daniel,
-> >
-> > Thank you for the patch.
-> >
-> > On Thu, Oct 2, 2025 at 11:19=E2=80=AFAM Daniel Scally
-> > <dan.scally@ideasonboard.com> wrote:
-> >>
-> >> Add the yaml binding for ARM's Mali-C55 Image Signal Processor.
-> >>
-> >> Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-> >> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> >> Acked-by: Nayden Kanchev <nayden.kanchev@arm.com>
-> >> Co-developed-by: Jacopo Mondi <jacopo.mondi@ideasonboard.com>
-> >> Signed-off-by: Jacopo Mondi <jacopo.mondi@ideasonboard.com>
-> >> Signed-off-by: Daniel Scally <dan.scally@ideasonboard.com>
-> >> ---
-> >> Changes in v12:
-> >>
-> >>          - _Actually_ dropped the arm,inline property mode, having for=
-gotten to
-> >>            do so in v11.
-> >>
-> >> Changes in v11:
-> >>
-> >>          - Dropped in arm,inline_mode property. This is now identical =
-to the
-> >>            reviewed version 8, so I have kept the tags on there.
-> >>
-> >> Changes in v10:
-> >>
-> >>          - None
-> >>
-> >> Changes in v9:
-> >>
-> >>          - Added the arm,inline_mode property to differentiate between=
- inline and
-> >>            memory input configurations
-> >>
-> >> Changes in v8:
-> >>
-> >>          - Added the video clock back in. Now that we have actual hard=
-ware it's
-> >>            clear that it's necessary.
-> >>          - Added reset lines
-> >>          - Dropped R-bs
-> >>
-> >> Changes in v7:
-> >>
-> >>          - None
-> >>
-> >> Changes in v6:
-> >>
-> >>          - None
-> >>
-> >> Changes in v5:
-> >>
-> >>          - None
-> >>
-> >> Changes in v4:
-> >>
-> >>          - Switched to port instead of ports
-> >>
-> >> Changes in v3:
-> >>
-> >>          - Dropped the video clock as suggested by Laurent. I didn't r=
-etain it
-> >>          for the purposes of the refcount since this driver will call =
-.s_stream()
-> >>          for the sensor driver which will refcount the clock anyway.
-> >>          - Clarified that the port is a parallel input port rather (Sa=
-kari)
-> >>
-> >> Changes in v2:
-> >>
-> >>          - Added clocks information
-> >>          - Fixed the warnings raised by Rob
-> >> ---
-> >>   .../devicetree/bindings/media/arm,mali-c55.yaml    | 82 ++++++++++++=
-++++++++++
-> >>   1 file changed, 82 insertions(+)
-> >>
-> >> diff --git a/Documentation/devicetree/bindings/media/arm,mali-c55.yaml=
- b/Documentation/devicetree/bindings/media/arm,mali-c55.yaml
-> >> new file mode 100644
-> >> index 0000000000000000000000000000000000000000..efc88fd2c447e98dd82a1f=
-c1bae234147eb967a8
-> >> --- /dev/null
-> >> +++ b/Documentation/devicetree/bindings/media/arm,mali-c55.yaml
-> >> @@ -0,0 +1,82 @@
-> >> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> >> +%YAML 1.2
-> >> +---
-> >> +$id: http://devicetree.org/schemas/media/arm,mali-c55.yaml#
-> >> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> >> +
-> >> +title: ARM Mali-C55 Image Signal Processor
-> >> +
-> >> +maintainers:
-> >> +  - Daniel Scally <dan.scally@ideasonboard.com>
-> >> +  - Jacopo Mondi <jacopo.mondi@ideasonboard.com>
-> >> +
-> >> +properties:
-> >> +  compatible:
-> >> +    const: arm,mali-c55
-> >> +
-> >> +  reg:
-> >> +    maxItems: 1
-> >> +
-> >> +  interrupts:
-> >> +    maxItems: 1
-> >> +
-> >> +  clocks:
-> >> +    items:
-> >> +      - description: ISP Video Clock
-> >> +      - description: ISP AXI clock
-> >> +      - description: ISP AHB-lite clock
-> > As per RZ/V2H HW manual we have reg clock looking at the driver code
-> > it does have readl. IVC has reg clock if IVC driver fails are you
-> > still able to read/write regs from ISP driver?
->  >
->  > I think we do need to pass reg clock too.
->
-> Yes - but I should clarify that the names are from the arm documentation =
-that we had when we
-> originally developed the ISP driver. The RZ/V2H documentation treats the =
-ISP and IVC as one block
-> that shares 4 clocks and resets, but when we originally developed the ISP=
- driver the platform we
-> used had the ISP implemented as an inline configuration (taking data dire=
-ctly from a csi-2 receiver
-> without an IVC equivalent), and the documentation detailed just the three=
- clocks and resets. The
-> dtsi changes for the RZ/V2H(P) [1] assign clocks 226, 228 and 229 to the =
-ISP which are named
-> reg_aclk, vin_aclk and isp_sclk in the renesas documentation.
->
-> The IVC gets pclk, vin_aclk and isp_sclk.
->
-> [1] https://lore.kernel.org/linux-renesas-soc/20251010-kakip_dts-v1-1-64f=
-798ad43c9@ideasonboard.com/
->
-Thanks for the info.
+Le mercredi 05 novembre 2025 =C3=A0 17:26 +0800, Zhentao Guo a =C3=A9crit=
+=C2=A0:
+>=20
+> =E5=9C=A8 2025/11/5 0:13, Nicolas Dufresne =E5=86=99=E9=81=93:
+> > [You don't often get email from nicolas@ndufresne.ca. Learn why this is
+> > important at https://aka.ms/LearnAboutSenderIdentification=C2=A0]
+> >=20
+> > [ EXTERNAL EMAIL ]
+>=20
+> Yes, we plan to support the interlaced and mbaff streams in the=20
+> following stages. The decoder hardware can support interlaced/mbaff.
 
-> > Also for IVC we do have a main clock (which is a system clock).  Can
-> > you please educate me on what is the purpose of it. Just curious as we
-> > pass to IVC and not ISP.
->
-> The IVC uniquely gets the one called "pclk" in renesas documentation, wit=
-h the description "Input
-> Video Control block register access APB clock".
->
-Got you.
+Perfect, let's focus on the core for now then, I have additional feedback f=
+or
+you on top of Neil's review, hopefully I can get these ready this week.
 
-Cheers,
-Prabhakar
+regards,
+Nicolas
+
+--=-2cG765y6sSQkAAGLj2Ko
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-Description: This is a digitally signed message part
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQTvDVKBFcTDwhoEbxLZQZRRKWBy9AUCaQtWXAAKCRDZQZRRKWBy
+9C7bAP9Qs1rNKbRgDkazxpbW2p5TVrPLZK8wjWZLZUY+/CCltwD+LgR3cm+8x2UQ
+D82jlWcSVIKc5R+xySP7dgFgB+WISQU=
+=2auc
+-----END PGP SIGNATURE-----
+
+--=-2cG765y6sSQkAAGLj2Ko--
