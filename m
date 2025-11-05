@@ -1,32 +1,32 @@
 Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AFCDD334C25;
-	Wed,  5 Nov 2025 17:27:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C827D238D5A;
+	Wed,  5 Nov 2025 17:28:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.167.242.64
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762363631; cv=none; b=n0w/ALlS72SrfmvTI1UDlMJf4po6NdOHbYxixgSo59q0U1XRaOcGvNq44OlDpVobA+Ku8GlfvR73ty6VkkleljM1+39W53JjBbUQh3h0AwDlA6eE1hnqEQEgPgwW3LJPPKT3aY71QIZztVbnolkUAv/sAMq0tRyR2IYeeuxMzUE=
+	t=1762363690; cv=none; b=u2fovLkmc5oxe6T3M2L/GfTAsNM+kG1zV8DunqH00CS+PkCL4KrpiSfMgVWNMbZ1KR0rGHRAzaG+Ui++Pb2Xm8wzRI3bAmU8axh2562Xvq2716N3p9snpuV8DWVPdcAVzPDtor+DJytWuUxJUIQS9j5DXqtfFvnuBkTZTZJoJ4I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762363631; c=relaxed/simple;
-	bh=0zh7mU6+Q2DgrXPwAM6Mbt58/5XP2Rm18IkdrvGTcKQ=;
+	s=arc-20240116; t=1762363690; c=relaxed/simple;
+	bh=A9meDTqC5tJJ9U1Z7d2WJ+ZnrwYNX1upajzsMqtt0GA=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=YmYzVSNXeua2QIWU6mjIL4+/dBAxi0265Jjbng/OrttpaNYA0QvLQqGkCqn6DIavs51p477vHowaGU6JquTF4fIn8SpXtXLW9cEwCPCh6jyrCHGnUaontLrB8NiIk3EZDIFluiWjOaK3Sw3Y+bWyte/gZaZ8xH+CsGSD9YULcTQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ideasonboard.com; spf=pass smtp.mailfrom=ideasonboard.com; dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b=e9Q2i3qm; arc=none smtp.client-ip=213.167.242.64
+	 Content-Type:Content-Disposition:In-Reply-To; b=tESJeHkDohGpgfdkibCa5nuYMad7uWNm6HmsUJed1cvOdJc1af5trJZ2HaEeJabqZoHfx+uUCsCrZTG6bRnVb5ZdM9VyZBTCXFiqpYg6qS1t4DtGnd+yjOZH4UKkiJcGOZaJmscRK960poJW0RR6FjqfVMIxewS2u2YvemIp3G4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ideasonboard.com; spf=pass smtp.mailfrom=ideasonboard.com; dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b=IVu3H3vk; arc=none smtp.client-ip=213.167.242.64
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ideasonboard.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ideasonboard.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="e9Q2i3qm"
+	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="IVu3H3vk"
 Received: from pendragon.ideasonboard.com (82-203-161-95.bb.dnainternet.fi [82.203.161.95])
-	by perceval.ideasonboard.com (Postfix) with UTF8SMTPSA id 0F214B5;
-	Wed,  5 Nov 2025 18:25:12 +0100 (CET)
+	by perceval.ideasonboard.com (Postfix) with UTF8SMTPSA id 91ED17E0;
+	Wed,  5 Nov 2025 18:26:12 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-	s=mail; t=1762363513;
-	bh=0zh7mU6+Q2DgrXPwAM6Mbt58/5XP2Rm18IkdrvGTcKQ=;
+	s=mail; t=1762363573;
+	bh=A9meDTqC5tJJ9U1Z7d2WJ+ZnrwYNX1upajzsMqtt0GA=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=e9Q2i3qmyZ20IOL7SdDM+WwB9D19VYgM5hqbItih+ttfImYlnN/blGMLwogAQtYPB
-	 bsrjefm/q4T1d3In/NUbRQrX4xYlYUtZu3BoGa5DzLIpv61oBNlzJkkAah0NPR1Mvr
-	 4geXc6/x8mJ2K/8w8L8Bl8RkgGyZi8B5hpa7hh4k=
-Date: Wed, 5 Nov 2025 19:27:03 +0200
+	b=IVu3H3vkW9ImWiDmVZWXQk25mP1UZAc5e0AIFNxJj8bJ+jylfadg6y1p31lKqCBdJ
+	 DkKyukRbSJQyviLKV0480hplT/mE0jZ1CX7PSmqg13Op9pJtuOSy27QUe6d0nNeLd4
+	 /G2ArQYKft0dqux/Xct+HTMnxAkqwbdvmcWrEXa0=
+Date: Wed, 5 Nov 2025 19:28:03 +0200
 From: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 To: Guoniu Zhou <guoniu.zhou@oss.nxp.com>
 Cc: Mauro Carvalho Chehab <mchehab@kernel.org>,
@@ -39,11 +39,10 @@ Cc: Mauro Carvalho Chehab <mchehab@kernel.org>,
 	linux-media@vger.kernel.org, devicetree@vger.kernel.org,
 	imx@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
 	linux-kernel@vger.kernel.org, Guoniu Zhou <guoniu.zhou@nxp.com>
-Subject: Re: [PATCH v3 1/3] media: dt-bindings: nxp,imx8-isi: Add i.MX95 ISI
- compatible string
-Message-ID: <20251105172703.GC6046@pendragon.ideasonboard.com>
+Subject: Re: [PATCH v3 3/3] media: nxp: imx8-isi: Add ISI support for i.MX95
+Message-ID: <20251105172803.GD6046@pendragon.ideasonboard.com>
 References: <20251105-isi_imx95-v3-0-3987533cca1c@nxp.com>
- <20251105-isi_imx95-v3-1-3987533cca1c@nxp.com>
+ <20251105-isi_imx95-v3-3-3987533cca1c@nxp.com>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
@@ -52,86 +51,72 @@ List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20251105-isi_imx95-v3-1-3987533cca1c@nxp.com>
+In-Reply-To: <20251105-isi_imx95-v3-3-3987533cca1c@nxp.com>
 
-Hi Guoniu,
-
-Thank you for the patch.
-
-On Wed, Nov 05, 2025 at 01:55:10PM +0800, Guoniu Zhou wrote:
+On Wed, Nov 05, 2025 at 01:55:12PM +0800, Guoniu Zhou wrote:
 > From: Guoniu Zhou <guoniu.zhou@nxp.com>
 > 
 > The ISI module on i.MX95 supports up to eight channels and four link
 > sources to obtain the image data for processing in its pipelines. It
 > can process up to eight image sources at the same time.
 > 
+> Add ISI basic functions support for i.MX95.
+> 
+> Reviewed-by: Frank Li <Frank.Li@nxp.com>
 > Signed-off-by: Guoniu Zhou <guoniu.zhou@nxp.com>
 
 Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 
+I will take this series in my tree and include it in my next pull
+request.
+
 > ---
->  .../devicetree/bindings/media/nxp,imx8-isi.yaml    | 27 +++++++++++++++++++++-
->  1 file changed, 26 insertions(+), 1 deletion(-)
+>  drivers/media/platform/nxp/imx8-isi/imx8-isi-core.c | 12 ++++++++++++
+>  drivers/media/platform/nxp/imx8-isi/imx8-isi-core.h |  1 +
+>  2 files changed, 13 insertions(+)
 > 
-> diff --git a/Documentation/devicetree/bindings/media/nxp,imx8-isi.yaml b/Documentation/devicetree/bindings/media/nxp,imx8-isi.yaml
-> index f43b91984f0152fbbcf80db3b3bbad7e8ad6c11e..c5cf4a9787ee7f31273bd097d2200402fb346773 100644
-> --- a/Documentation/devicetree/bindings/media/nxp,imx8-isi.yaml
-> +++ b/Documentation/devicetree/bindings/media/nxp,imx8-isi.yaml
-> @@ -23,6 +23,7 @@ properties:
->        - fsl,imx8mp-isi
->        - fsl,imx8ulp-isi
->        - fsl,imx93-isi
-> +      - fsl,imx95-isi
+> diff --git a/drivers/media/platform/nxp/imx8-isi/imx8-isi-core.c b/drivers/media/platform/nxp/imx8-isi/imx8-isi-core.c
+> index adc8d9960bf0df87d4e475661a3439beaf5ce9f6..cf609320f19e91c9c0f57634fabd62e0ff65123b 100644
+> --- a/drivers/media/platform/nxp/imx8-isi/imx8-isi-core.c
+> +++ b/drivers/media/platform/nxp/imx8-isi/imx8-isi-core.c
+> @@ -337,6 +337,17 @@ static const struct mxc_isi_plat_data mxc_imx93_data = {
+>  	.has_36bit_dma		= false,
+>  };
 >  
->    reg:
->      maxItems: 1
-> @@ -49,7 +50,7 @@ properties:
->    interrupts:
->      description: Processing pipeline interrupts, one per pipeline
->      minItems: 1
-> -    maxItems: 2
-> +    maxItems: 8
->  
->    power-domains:
->      maxItems: 1
-> @@ -98,6 +99,7 @@ allOf:
->      then:
->        properties:
->          interrupts:
-> +          minItems: 2
->            maxItems: 2
->          ports:
->            properties:
-> @@ -109,6 +111,29 @@ allOf:
->              - port@0
->              - port@1
->  
-> +  - if:
-> +      properties:
-> +        compatible:
-> +          contains:
-> +            const: fsl,imx95-isi
-> +    then:
-> +      properties:
-> +        interrupts:
-> +          minItems: 8
-> +        ports:
-> +          properties:
-> +            port@0:
-> +              description: Pixel Link Slave 0
-> +            port@1:
-> +              description: Pixel Link Slave 1
-> +            port@2:
-> +              description: MIPI CSI-2 RX 0
-> +            port@3:
-> +              description: MIPI CSI-2 RX 1
-> +          required:
-> +            - port@2
-> +            - port@3
+> +static const struct mxc_isi_plat_data mxc_imx95_data = {
+> +	.model			= MXC_ISI_IMX95,
+> +	.num_ports		= 4,
+> +	.num_channels		= 8,
+> +	.reg_offset		= 0x10000,
+> +	.ier_reg		= &mxc_imx8_isi_ier_v2,
+> +	.set_thd		= &mxc_imx8_isi_thd_v1,
+> +	.buf_active_reverse	= true,
+> +	.has_36bit_dma		= true,
+> +};
 > +
->  additionalProperties: false
+>  static const struct mxc_isi_plat_data mxc_imx8qm_data = {
+>  	.model			= MXC_ISI_IMX8QM,
+>  	.num_ports		= 5,
+> @@ -548,6 +559,7 @@ static const struct of_device_id mxc_isi_of_match[] = {
+>  	{ .compatible = "fsl,imx8qxp-isi", .data = &mxc_imx8qxp_data },
+>  	{ .compatible = "fsl,imx8ulp-isi", .data = &mxc_imx8ulp_data },
+>  	{ .compatible = "fsl,imx93-isi", .data = &mxc_imx93_data },
+> +	{ .compatible = "fsl,imx95-isi", .data = &mxc_imx95_data },
+>  	{ /* sentinel */ },
+>  };
+>  MODULE_DEVICE_TABLE(of, mxc_isi_of_match);
+> diff --git a/drivers/media/platform/nxp/imx8-isi/imx8-isi-core.h b/drivers/media/platform/nxp/imx8-isi/imx8-isi-core.h
+> index e84af5127e4e7938e55e31b7063bee5e2cd4cb11..e52c7fc334b0f5624ade600914c275e7539290b4 100644
+> --- a/drivers/media/platform/nxp/imx8-isi/imx8-isi-core.h
+> +++ b/drivers/media/platform/nxp/imx8-isi/imx8-isi-core.h
+> @@ -161,6 +161,7 @@ enum model {
+>  	MXC_ISI_IMX8QXP,
+>  	MXC_ISI_IMX8ULP,
+>  	MXC_ISI_IMX93,
+> +	MXC_ISI_IMX95,
+>  };
 >  
->  examples:
+>  struct mxc_isi_plat_data {
 
 -- 
 Regards,
