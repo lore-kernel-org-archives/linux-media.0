@@ -1,48 +1,85 @@
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C827D238D5A;
-	Wed,  5 Nov 2025 17:28:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.167.242.64
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 12DBC338912;
+	Wed,  5 Nov 2025 17:56:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762363690; cv=none; b=u2fovLkmc5oxe6T3M2L/GfTAsNM+kG1zV8DunqH00CS+PkCL4KrpiSfMgVWNMbZ1KR0rGHRAzaG+Ui++Pb2Xm8wzRI3bAmU8axh2562Xvq2716N3p9snpuV8DWVPdcAVzPDtor+DJytWuUxJUIQS9j5DXqtfFvnuBkTZTZJoJ4I=
+	t=1762365417; cv=none; b=c33kW1CurMvLDU023In3NwSLf6KwZ3slC3memIqag8XcxKoaGQ2fbsCGj/q9b/Xh71uSLRzajc64r2SNPq+SXApn/w6sPFJ3ryQSEPh28tVNe6uNoaLEufPVNHItzxC4O1swlFqFV9+frnNWxFH7ZFJk1S0cvkk0TV/KCf5Ifa0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762363690; c=relaxed/simple;
-	bh=A9meDTqC5tJJ9U1Z7d2WJ+ZnrwYNX1upajzsMqtt0GA=;
+	s=arc-20240116; t=1762365417; c=relaxed/simple;
+	bh=mdjCpaLHOnfBMY0V32LZXfaf4sqf252MebKl/iKpt3A=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=tESJeHkDohGpgfdkibCa5nuYMad7uWNm6HmsUJed1cvOdJc1af5trJZ2HaEeJabqZoHfx+uUCsCrZTG6bRnVb5ZdM9VyZBTCXFiqpYg6qS1t4DtGnd+yjOZH4UKkiJcGOZaJmscRK960poJW0RR6FjqfVMIxewS2u2YvemIp3G4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ideasonboard.com; spf=pass smtp.mailfrom=ideasonboard.com; dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b=IVu3H3vk; arc=none smtp.client-ip=213.167.242.64
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ideasonboard.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ideasonboard.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=LrYXzun+7E4X65vfvvEeNYIH7F3A/e/WtsNQUPi7rvcmwAb/mbEmQ6aNOihVh3G/gRsbX3NoY5KLduxB4tFi22ezhAuTCq26Y+kkmIfmG/iS9kM1xyY/9CH6q/NuLBHH1cZrimzJICb+mENTxxpTLGJZC+ueMk1l3l+zVvY/tZA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=fXQohAJU; arc=none smtp.client-ip=192.198.163.14
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="IVu3H3vk"
-Received: from pendragon.ideasonboard.com (82-203-161-95.bb.dnainternet.fi [82.203.161.95])
-	by perceval.ideasonboard.com (Postfix) with UTF8SMTPSA id 91ED17E0;
-	Wed,  5 Nov 2025 18:26:12 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-	s=mail; t=1762363573;
-	bh=A9meDTqC5tJJ9U1Z7d2WJ+ZnrwYNX1upajzsMqtt0GA=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=IVu3H3vkW9ImWiDmVZWXQk25mP1UZAc5e0AIFNxJj8bJ+jylfadg6y1p31lKqCBdJ
-	 DkKyukRbSJQyviLKV0480hplT/mE0jZ1CX7PSmqg13Op9pJtuOSy27QUe6d0nNeLd4
-	 /G2ArQYKft0dqux/Xct+HTMnxAkqwbdvmcWrEXa0=
-Date: Wed, 5 Nov 2025 19:28:03 +0200
-From: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To: Guoniu Zhou <guoniu.zhou@oss.nxp.com>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="fXQohAJU"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1762365414; x=1793901414;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=mdjCpaLHOnfBMY0V32LZXfaf4sqf252MebKl/iKpt3A=;
+  b=fXQohAJUD045szFOgS66ibiSKxYR/NgKcfS7RdvFV7+kMBd4y2KLFT66
+   JLtp2jGx4VetLY7CLeWdUXNcxBSdWFjVal6ChFLUXG2opHiqmKqeetSOJ
+   kru/PPlF+d8QKTQs2lAPAoCQOMrPSSECS+Rqb/oQT6u7wXiNyIyP+dGDC
+   UeB1S/kitrdhNwWeoT02/yzLMovZae8UhlZ0mt/iE9GxwEG2vZykRzXr1
+   I9t2JD364V5dQqVL8E5meDTTcP21y+j1w61thhXn5GKAplEPORtiPEuVh
+   dEkviyl/hHaLuiAAgoiUSkdanNrnIsGZykgLi8pL6X5LXuQUJUr8t2vdY
+   w==;
+X-CSE-ConnectionGUID: oXz+8R0cQIOtZmLlRkhxKA==
+X-CSE-MsgGUID: yR4iMjLBR4StekwoSPXaxw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11604"; a="64523530"
+X-IronPort-AV: E=Sophos;i="6.19,282,1754982000"; 
+   d="scan'208";a="64523530"
+Received: from fmviesa007.fm.intel.com ([10.60.135.147])
+  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Nov 2025 09:56:52 -0800
+X-CSE-ConnectionGUID: RflwgjiTRRCjkUs4o6QVow==
+X-CSE-MsgGUID: a2Dr2VHfSdydemmugokb7g==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.19,282,1754982000"; 
+   d="scan'208";a="187187998"
+Received: from ldmartin-desk2.corp.intel.com (HELO ashevche-desk.local) ([10.124.221.135])
+  by fmviesa007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Nov 2025 09:56:47 -0800
+Received: from andy by ashevche-desk.local with local (Exim 4.98.2)
+	(envelope-from <andriy.shevchenko@linux.intel.com>)
+	id 1vGhkN-00000005rTL-39rZ;
+	Wed, 05 Nov 2025 19:56:39 +0200
+Date: Wed, 5 Nov 2025 19:56:38 +0200
+From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To: Matthias Fend <matthias.fend@emfend.at>
 Cc: Mauro Carvalho Chehab <mchehab@kernel.org>,
 	Rob Herring <robh@kernel.org>,
 	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>, Shawn Guo <shawnguo@kernel.org>,
-	Sascha Hauer <s.hauer@pengutronix.de>,
-	Pengutronix Kernel Team <kernel@pengutronix.de>,
-	Fabio Estevam <festevam@gmail.com>, Frank Li <Frank.Li@nxp.com>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Hans Verkuil <hverkuil@kernel.org>,
+	Sakari Ailus <sakari.ailus@linux.intel.com>,
+	Hans de Goede <hansg@kernel.org>,
+	Ricardo Ribalda <ribalda@chromium.org>,
+	=?iso-8859-1?Q?Andr=E9?= Apitzsch <git@apitzsch.eu>,
+	Tarang Raval <tarang.raval@siliconsignals.io>,
+	Benjamin Mugnier <benjamin.mugnier@foss.st.com>,
+	Sylvain Petinot <sylvain.petinot@foss.st.com>,
+	Dongcheng Yan <dongcheng.yan@intel.com>,
+	Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
+	Alan Stern <stern@rowland.harvard.edu>,
+	Jingjing Xiong <jingjing.xiong@intel.com>,
+	Heimir Thor Sverrisson <heimir.sverrisson@gmail.com>,
+	Mehdi Djait <mehdi.djait@linux.intel.com>,
+	Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>,
+	Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+	Hardevsinh Palaniya <hardevsinh.palaniya@siliconsignals.io>,
 	linux-media@vger.kernel.org, devicetree@vger.kernel.org,
-	imx@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
-	linux-kernel@vger.kernel.org, Guoniu Zhou <guoniu.zhou@nxp.com>
-Subject: Re: [PATCH v3 3/3] media: nxp: imx8-isi: Add ISI support for i.MX95
-Message-ID: <20251105172803.GD6046@pendragon.ideasonboard.com>
-References: <20251105-isi_imx95-v3-0-3987533cca1c@nxp.com>
- <20251105-isi_imx95-v3-3-3987533cca1c@nxp.com>
+	linux-kernel@vger.kernel.org, Hao Yao <hao.yao@intel.com>,
+	bsp-development.geo@leica-geosystems.com
+Subject: Re: [PATCH v5 2/2] media: i2c: add Himax HM1246 image sensor driver
+Message-ID: <aQuP1uNRP7vOiYKT@smile.fi.intel.com>
+References: <20251104-hm1246-v5-0-97c8f25b5419@emfend.at>
+ <20251104-hm1246-v5-2-97c8f25b5419@emfend.at>
+ <aQn_lguAdP-ZwCzK@smile.fi.intel.com>
+ <69d3396a-98a4-4f19-b2c9-de66a6b29b1d@emfend.at>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
@@ -51,74 +88,188 @@ List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20251105-isi_imx95-v3-3-3987533cca1c@nxp.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <69d3396a-98a4-4f19-b2c9-de66a6b29b1d@emfend.at>
+Organization: Intel Finland Oy - BIC 0357606-4 - c/o Alberga Business Park, 6
+ krs, Bertel Jungin Aukio 5, 02600 Espoo
 
-On Wed, Nov 05, 2025 at 01:55:12PM +0800, Guoniu Zhou wrote:
-> From: Guoniu Zhou <guoniu.zhou@nxp.com>
-> 
-> The ISI module on i.MX95 supports up to eight channels and four link
-> sources to obtain the image data for processing in its pipelines. It
-> can process up to eight image sources at the same time.
-> 
-> Add ISI basic functions support for i.MX95.
-> 
-> Reviewed-by: Frank Li <Frank.Li@nxp.com>
-> Signed-off-by: Guoniu Zhou <guoniu.zhou@nxp.com>
+On Wed, Nov 05, 2025 at 05:59:20PM +0100, Matthias Fend wrote:
+> Am 04.11.2025 um 14:28 schrieb Andy Shevchenko:
+> > On Tue, Nov 04, 2025 at 11:31:34AM +0100, Matthias Fend wrote:
 
-Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+...
 
-I will take this series in my tree and include it in my next pull
-request.
-
-> ---
->  drivers/media/platform/nxp/imx8-isi/imx8-isi-core.c | 12 ++++++++++++
->  drivers/media/platform/nxp/imx8-isi/imx8-isi-core.h |  1 +
->  2 files changed, 13 insertions(+)
+> > > +#include <linux/clk.h>
+> > > +#include <linux/delay.h>
+> > > +#include <linux/gpio.h>
+> > > +#include <linux/i2c.h>
+> > > +#include <linux/module.h>
+> > > +#include <linux/pm_runtime.h>
+> > > +#include <linux/units.h>
+> > 
+> > This block is semi-random.
+> > First of all, no new code must use gpio.h, use the proper one.
+> > Second, many are missing, e.g., bits.h, regmap.h, types.h.
+> > Please, follow IWYU principle (Include What You Use).
 > 
-> diff --git a/drivers/media/platform/nxp/imx8-isi/imx8-isi-core.c b/drivers/media/platform/nxp/imx8-isi/imx8-isi-core.c
-> index adc8d9960bf0df87d4e475661a3439beaf5ce9f6..cf609320f19e91c9c0f57634fabd62e0ff65123b 100644
-> --- a/drivers/media/platform/nxp/imx8-isi/imx8-isi-core.c
-> +++ b/drivers/media/platform/nxp/imx8-isi/imx8-isi-core.c
-> @@ -337,6 +337,17 @@ static const struct mxc_isi_plat_data mxc_imx93_data = {
->  	.has_36bit_dma		= false,
->  };
->  
-> +static const struct mxc_isi_plat_data mxc_imx95_data = {
-> +	.model			= MXC_ISI_IMX95,
-> +	.num_ports		= 4,
-> +	.num_channels		= 8,
-> +	.reg_offset		= 0x10000,
-> +	.ier_reg		= &mxc_imx8_isi_ier_v2,
-> +	.set_thd		= &mxc_imx8_isi_thd_v1,
-> +	.buf_active_reverse	= true,
-> +	.has_36bit_dma		= true,
-> +};
-> +
->  static const struct mxc_isi_plat_data mxc_imx8qm_data = {
->  	.model			= MXC_ISI_IMX8QM,
->  	.num_ports		= 5,
-> @@ -548,6 +559,7 @@ static const struct of_device_id mxc_isi_of_match[] = {
->  	{ .compatible = "fsl,imx8qxp-isi", .data = &mxc_imx8qxp_data },
->  	{ .compatible = "fsl,imx8ulp-isi", .data = &mxc_imx8ulp_data },
->  	{ .compatible = "fsl,imx93-isi", .data = &mxc_imx93_data },
-> +	{ .compatible = "fsl,imx95-isi", .data = &mxc_imx95_data },
->  	{ /* sentinel */ },
->  };
->  MODULE_DEVICE_TABLE(of, mxc_isi_of_match);
-> diff --git a/drivers/media/platform/nxp/imx8-isi/imx8-isi-core.h b/drivers/media/platform/nxp/imx8-isi/imx8-isi-core.h
-> index e84af5127e4e7938e55e31b7063bee5e2cd4cb11..e52c7fc334b0f5624ade600914c275e7539290b4 100644
-> --- a/drivers/media/platform/nxp/imx8-isi/imx8-isi-core.h
-> +++ b/drivers/media/platform/nxp/imx8-isi/imx8-isi-core.h
-> @@ -161,6 +161,7 @@ enum model {
->  	MXC_ISI_IMX8QXP,
->  	MXC_ISI_IMX8ULP,
->  	MXC_ISI_IMX93,
-> +	MXC_ISI_IMX95,
->  };
->  
->  struct mxc_isi_plat_data {
+> I've noticed that you've already modified the include statements in many
+> source files. I assume you've automated this somehow. May I ask how you did
+> that, or is there a reliable process for verifying the include statements?
+
+No automation is available so far (the iwyu tool needs a lot of tuning for
+Linux kernel). I did it by simply reading the code. Since you are the author
+you should know how to fill the inclusions much better than me.
+
+...
+
+> > > +	const struct cci_reg_sequence pll_regs[] = {
+> > 
+> > static ?
+> > 
+> > > +		{ HM1246_PLL1CFG_REG, pll1 },
+> > > +		{ HM1246_PLL2CFG_REG, pll2 },
+> > > +		{ HM1246_PLL3CFG_REG, pll3 },
+> > > +		{ HM1246_SBC_CTRL_REG, HM1246_SBC_CTRL_PLL_EN },
+> > > +	};
+> > 
+> > I would even move it outside the function. Note, static const maybe located in
+> > ro memory while w/o static it's just a guarantee that compiler doesn't change
+> > the values. Hence there is no guarantee it will be in ro memory.
+> 
+> The sequence is initialized with values ​​from the arguments, which are not
+> constant. Therefore, the sequence cannot be put into a `ro` section.
+
+Ah, indeed, you are right. It can, but it will be an intermediate (unnecessary)
+step.
+
+...
+
+> > > +static int hm1246_pll_check_locked(struct hm1246 *hm1246)
+> > > +{
+> > > +	u64 boot_ref2;
+> > > +	int ret;
+> > > +
+> > > +	ret = cci_read(hm1246->regmap, HM1246_SBC_BOOT_REF2_REG, &boot_ref2,
+> > > +		       NULL);
+> > 
+> > Despite being longer 80 I still would put it on one line. It will increase readability.
+> > 
+> > 	ret = cci_read(hm1246->regmap, HM1246_SBC_BOOT_REF2_REG, &boot_ref2, NULL);
+> > 
+> > Another option is to define local regmap:
+> > 
+> > 	struct regmap *map = hm1246->regmap;
+> > 	...
+> > 	ret = cci_read(map, HM1246_SBC_BOOT_REF2_REG, &boot_ref2, NULL);
+> > 
+> > which will be most readable and satisfy 80 limit.
+> 
+> Doing things differently is kind of a dilemma.
+> Compliance with the 80-line limit is required, and local variables that are
+> only used once are also undesirable.
+
+Why? If it increases readability than it _is_ desirable change.
+
+> The unsightly line break seems to be the most acceptable option, right?
+> Or rename the local variable to 'bref2'.
+
+Making variable cryptic wouldn't help readability.
+
+> > > +	if (ret)
+> > > +		return ret;
+> > > +
+> > > +	return (boot_ref2 & HM1246_SBC_BOOT_REF2_PLL_LOCK) ? 0 : -EIO;
+> > 
+> > Think about similar improvements elsewhere in this driver.
+> > 
+> > > +}
+
+...
+
+> > > +	/* PLL lock time: tpll typ. 100us */
+> > 
+> > It's not a variable name, use proper English.
+> 
+> I think you refer to "tpll typ."? I intentionally wanted to use the same
+> symbols as in the datasheet. I also used them for the other delays:
+> 
+> /*
+>  * XSHUTDOWN to crystal clock oscillation:  tcrystal typ.  650us
+>  * Sample bootstrap pin:                    tsample  max. 2000us
+>  * Built in self test:                      tbist    max. 3000us
+>  */
+> 
+> Is this acceptable from this perspective?
+
+This is unfortunate. When it goes with max/min is much more understandable than
+standalone. Try to find a compromise. Datasheet is not a golden standard, it's
+just good to have something close enough to it, but it doesn't mean we have to
+follow it _literally_.
+
+> > > +	fsleep(200);
+
+...
+
+> > > +	const u16 RGBMIN = 0x0, RGBMAX = 0x3ff;
+> > 
+> > 0 is enough (no need 0x).
+> > 
+> > So, the MAX is 10-bit, Can we use rather (BIT(10) - 1) to show this?
+> 
+> Sure, I can write it that way too, even though the hexadecimal number seems
+> easier for me to read.
+
+The hexadecimal sometimes too abstract and writing the same in a slightly
+different form may give a useful additional information.
+
+...
+
+> > > +	if (!pm_runtime_get_if_active(hm1246->dev))
+> > > +		return 0;
+> > 
+> > Use ACQUIRE() and return directly where it makes sense.
+> 
+> That would indeed be a great solution. However, I haven't found any guard
+> definitions for pm_runtime_get_if_active and therefore don't know how to
+> adapt this functionality (increase usage only if already enabled) to use
+> ACQUIRE.
+> Any clue on this?
+
+Add a patch to add this conditional guard to pm_runtime.h.
+
+...
+
+> > > +static int hm1246_identify_module(struct hm1246 *hm1246)
+> > 
+> > This is a singleton function, right?
+> > 
+> > Check what once.h (or even once_lite.h) provides for you for such a case,
+> > and drop unneeded "identified" variable.
+> 
+> As I understand it, the ONCE macros create a static variable in the driver
+> module. This means the function would only be called once in total, but the
+> function should be called once per device.
+> Therefore, I don't think that's an option here.
+
+Good point.
+
+...
+
+> > > +static int __maybe_unused hm1246_g_register(struct v4l2_subdev *sd,
+> > > +					    struct v4l2_dbg_register *reg)
+> > 
+> > If v4l2.h doesn't provide a ptr_*() macro for these cases, I recommend to add and drop these __maybe_unused.
+> 
+> I'm not aware of anything like that.
+> Currently, it's common practice to use '#ifdef CONFIG_VIDEO_ADV_DEBUG', and
+> a macro that would simplify that would probably be worthwhile.
+> But I think that's for something outside the scope of this patch.
+
+This one may be out of scope, so up to you. But just note that using
+__maybe_unused is discouraged.
 
 -- 
-Regards,
+With Best Regards,
+Andy Shevchenko
 
-Laurent Pinchart
+
