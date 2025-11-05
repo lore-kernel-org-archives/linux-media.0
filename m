@@ -1,103 +1,180 @@
-Received: from mail-io1-f42.google.com (mail-io1-f42.google.com [209.85.166.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5B09B314A93
-	for <linux-media@vger.kernel.org>; Wed,  5 Nov 2025 17:13:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8A51831353C;
+	Wed,  5 Nov 2025 17:19:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.167.242.64
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762362812; cv=none; b=h/kD0fUJYFGdt5R6EODV4DnPhVWQ8rOJaSHPm8a96TVlQDDj9FA0gH5D0NEm9+jJDy2gb81faSJQLTWq3Je8l/b80wVxnHX2Q6N3n3eqCGj5MPoV+zbFspt2a3HucJLErHNsFRTgJQ81N50D6526UVTkF093zigtLwAdaDCScFE=
+	t=1762363183; cv=none; b=Gy6TfMMdoFL3U0peHx54jsKsb2KqypCOZUM5zAkPBQ7JP+0MhaP+m24ESzl8EO9XXvmID1iURfoh4GJL4gyHZc9O44nfx27Z2ftO8dm30Dg5b0VDphH4Wqs2X8pIOjZ6sX58Z/SRsBT5Iy/SA0wRQVl2kf02JQs2nnJSJge07qs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762362812; c=relaxed/simple;
-	bh=fJ1j5M4Uzh7dF9QWtRSTcy7soZzpyFOdthif8hR356s=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=rNV9/e9SNgKAj316iRqDsA/xonk3u4jfN7TyQl1di6lSwjaFkVLqePUq4TkpNGxgIFp+FIr/yVzGIxJazGempQDBj6h9s5iEDf+yU1RZ7isUXcX1B7VkwPz+DzkP5Pb2bayZqZfd21Eg42yY6eU000URFNaYBorwTh7rUmj6Zik=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=SKjBZKV8; arc=none smtp.client-ip=209.85.166.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
+	s=arc-20240116; t=1762363183; c=relaxed/simple;
+	bh=nUw06SpualPBrUCbreEZukSxYJFldjGiyXLqJA/+W/A=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=sTSF/C3SZHYJW08z18HuZIwjBE4AEq7oaVxtD4pvFZdVdrsNuFr/i0ywEfoXIdIMuNDse30+YypHYTcCeDu92AiMIEQVj2EhBZ4bU/34ei+y4mbtny4LEm0AmDdqmoMqiFRCBbF/kU+taQdBgSzq5yHmzpG9ju9vwSX5JFJpIiQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ideasonboard.com; spf=pass smtp.mailfrom=ideasonboard.com; dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b=GYE5iFNC; arc=none smtp.client-ip=213.167.242.64
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ideasonboard.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ideasonboard.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="SKjBZKV8"
-Received: by mail-io1-f42.google.com with SMTP id ca18e2360f4ac-940dbb1e343so43845039f.0
-        for <linux-media@vger.kernel.org>; Wed, 05 Nov 2025 09:13:30 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google; t=1762362809; x=1762967609; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Krh+lHfAiaYuFIm9yjGcUPl8AxxSVocyBSJOh5XMOss=;
-        b=SKjBZKV8jJCix6HNRd0gx2gA3yhE39IyELIHgTZW9LO/4mQFAvpge6IdMoXTygKsrS
-         X0TkenbBo60SlHst5d6GCl+C9rxASyeT53H1Qn4xlJUIIGqswXN09DXcFZv+R/LJ5gNH
-         E9GPwXB5PfEAUCr4aMPDeeCGnKFwEGQUli/Wk=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1762362809; x=1762967609;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Krh+lHfAiaYuFIm9yjGcUPl8AxxSVocyBSJOh5XMOss=;
-        b=ijljq+m5cAfLTrfhCYyhamKgWN6FXCsPKFzuyBcgQmZBPqKg6nk7JmcQXn14B63BfU
-         haVmVN7ervKhkqX+AkQitf+OGUDr8WVe2TLYFRI3WAeCV7SPX7dUxtTfNu1ghemeRmHG
-         J7IHiQJ+DOF00b+mwf4ml4nAcdFeEWiaVSP++HRKqL9C/2aNNyU8Wkw5M4mzQ6x4Q5LI
-         ERIVK21N87pOiXwTu/9fHc/32Qz5p+llGbMeBrrbgABCOKr7FoBANr3Rn3KgWziAJzCP
-         ijGOhzhQSXjMVBosU/5anHwwhFZPdO9jLC3fACDM3N/GqAxPffBRr839sTQC94cfMsGF
-         5c7g==
-X-Gm-Message-State: AOJu0YyP1UBkuSyows243cHW1HnGsq7zHLA7Yu/vSRJjeqA0Nj0pGwku
-	HkKEhR2lImsTZgbZo0GC+Jx7qzZejUFCKO2MKlNK/YLEGEhSxO1eMXNHJxmYoCKMFSXvzGwQUic
-	Uv9N/
-X-Gm-Gg: ASbGncuYOpugDG/1Kcd+nj26Ao4fMADNKecbsHADmYzNb3KPpHWkdwHip48J462Ly+k
-	HPYtMUrHHN1AvQHOALb6wt0L9ybztPVD3JEHKOGU4j6Yt/8vUNMsx8uF7YK+Ox7wUemSMmaKhCs
-	l2cQPAa32ABpMJD3BhtaJ2SseOjch9jnAIAXoP4o8ar+W2mnqsjLOe93hjoPZvoKZnX0+0yKYof
-	U0YY8J6IXRgOXJ7mwijtoX/Sfrhldoa/LnqVbbwIPa8gRjEcUeU9Zrtf8iOCkjqIZ6sT+S8GKWl
-	89bsRUXLFlrApCBYMWceFg1V8ThHyvYF5Zcn37PKJEs3ca8kMWOC8XGNgqHLGarr/AC5R7LM5k2
-	KB52mRB7yrLYDBnKdrmxPrq8Pbt5ldfUmhL1STGpzAKWYFxCIIypXPFEh/GOGxAs+gd1FEPP8Nq
-	AQi+3DTnCAcVqu
-X-Google-Smtp-Source: AGHT+IEnWfjpMUpFTXcYKkaNwF3Yr8kygQ3Z8/qPeVCdcw+B5jrsWpOIkGJ2g0TLDrdKnsnMYU/Nxw==
-X-Received: by 2002:a05:6e02:3cc9:b0:430:da51:95f3 with SMTP id e9e14a558f8ab-4334ee1fca4mr3032785ab.3.1762362809273;
-        Wed, 05 Nov 2025 09:13:29 -0800 (PST)
-Received: from [192.168.1.14] ([38.175.187.108])
-        by smtp.gmail.com with ESMTPSA id 8926c6da1cb9f-5b73e5f4021sm464454173.53.2025.11.05.09.13.28
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 05 Nov 2025 09:13:28 -0800 (PST)
-Message-ID: <959ac74b-a8b7-4d4e-9d34-3b3d971f9f8a@linuxfoundation.org>
-Date: Wed, 5 Nov 2025 10:13:27 -0700
+	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="GYE5iFNC"
+Received: from pendragon.ideasonboard.com (82-203-161-95.bb.dnainternet.fi [82.203.161.95])
+	by perceval.ideasonboard.com (Postfix) with UTF8SMTPSA id 810CA7E0;
+	Wed,  5 Nov 2025 18:17:37 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+	s=mail; t=1762363057;
+	bh=nUw06SpualPBrUCbreEZukSxYJFldjGiyXLqJA/+W/A=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=GYE5iFNCFro4v8Mks7/CnxXPWRfIDY59DAKVU5nZwniLh25QUunrqQI754SbS/+vw
+	 jvFGZY9x0IhNlWsrVWlR7qqo3oo34033+O32uKPTlENQT/f8sN0OUsVZ+nZgMnEbfL
+	 i+VY0epv5jVCDJRTGD+us3Z7UAercYn7Wa+lfrko=
+Date: Wed, 5 Nov 2025 19:19:28 +0200
+From: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To: Frank Li <Frank.li@nxp.com>
+Cc: Mauro Carvalho Chehab <mchehab@kernel.org>,
+	Shawn Guo <shawnguo@kernel.org>,
+	Sascha Hauer <s.hauer@pengutronix.de>,
+	Pengutronix Kernel Team <kernel@pengutronix.de>,
+	Fabio Estevam <festevam@gmail.com>,
+	Rui Miguel Silva <rmfrfs@gmail.com>,
+	Martin Kepplinger <martink@posteo.de>,
+	Purism Kernel Team <kernel@puri.sm>, Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Philipp Zabel <p.zabel@pengutronix.de>, linux-media@vger.kernel.org,
+	imx@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
+	linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+	Alice Yuan <alice.yuan@nxp.com>,
+	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+	Robert Chiras <robert.chiras@nxp.com>,
+	Zhipeng Wang <zhipeng.wang_1@nxp.com>,
+	Hans Verkuil <hans@jjverkuil.nl>,
+	Sakari Ailus <sakari.ailus@iki.fi>,
+	Kieran Bingham <kieran.bingham@ideasonboard.com>
+Subject: Re: [PATCH v4 0/5] media: imx8qxp: add parallel camera support
+Message-ID: <20251105171928.GB6046@pendragon.ideasonboard.com>
+References: <20250729-imx8qxp_pcam-v4-0-4dfca4ed2f87@nxp.com>
+ <20250805010822.GC24627@pendragon.ideasonboard.com>
+ <aLbcpEZXm5G1Onq7@lizhi-Precision-Tower-5810>
+ <20250902123920.GM13448@pendragon.ideasonboard.com>
+ <aLhJDXnz9HPGrWcp@lizhi-Precision-Tower-5810>
+ <aQuDSROHLGHIhtlh@lizhi-Precision-Tower-5810>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] media: vimc: add RGB/YUV input entity implementation
-To: Pavan Bobba <opensource206@gmail.com>, kieran.bingham@ideasonboard.com,
- mchehab@kernel.org
-Cc: linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
- Shuah Khan <skhan@linuxfoundation.org>
-References: <20251101052651.6197-1-opensource206@gmail.com>
-Content-Language: en-US
-From: Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <20251101052651.6197-1-opensource206@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <aQuDSROHLGHIhtlh@lizhi-Precision-Tower-5810>
 
-On 10/31/25 23:26, Pavan Bobba wrote:
-> Introduce a new vimc-input entity to simulate a color frame source in the
-> Virtual Media Controller (VIMC) pipeline. This entity outputs RGB888 frames
-> and allows testing of pipelines that start from a pre-processed RGB/YUV
-> source instead of a raw Bayer sensor.
-> 
-> The patch adds vimc-input.c with basic pad operations for format
-> enumeration, get/set, and stream enable/disable handlers. The entity is
-> registered in the VIMC core configuration, replacing the previous temporary
-> use of vimc-sensor. Frame generation is not yet implemented and remains a
-> TODO for future work.
-> 
-> This change enables link validation and format negotiation for the
-> RGB/YUV input path, paving the way for software frame injection and
-> test-pattern generation.
-> 
-> Signed-off-by: Pavan Bobba <opensource206@gmail.com>
+Hi Frank,
 
-I see 4 patches - are they dependent then gerenrate a sries
-with cover letter explaining the changes you are making.
+On Wed, Nov 05, 2025 at 12:03:05PM -0500, Frank Li wrote:
+> On Wed, Sep 03, 2025 at 09:56:29AM -0400, Frank Li wrote:
+> > On Tue, Sep 02, 2025 at 02:39:20PM +0200, Laurent Pinchart wrote:
+> > > On Tue, Sep 02, 2025 at 08:01:40AM -0400, Frank Li wrote:
+> > > > On Tue, Aug 05, 2025 at 04:08:22AM +0300, Laurent Pinchart wrote:
+> > > > > Hi Frank,
+> > > > >
+> > > > > Thank you for the patches.
+> > > > >
+> > > > > I've quite busy these days, and I don't believe I will have time to
+> > > > > review this series before coming back from OSS Europe at the beginning
+> > > > > of September. Let's see if anyone on CC could volunteer.
+> > > >
+> > > > Laurent Pincha
+> > > > 	I hope you have good time at OSS.
+> > > >
+> > > > 	Do you have chance to review this patch?
+> > >
+> > > I'm going through my mail backlog, which is really big at the moment.
+> >
+> > Understand.
+> >
+> > > I'd like someone else to volunteer to review this series. It won't scale
+> > > if I have to review all NXP media patches in my spare time :-/
+> >
+> > Yes, but none volunteer review this in passed months. Expecially key
+> > reviewer. I am reviewing i3c patches. but Not familiar v4l system yet. It
+> > need scalable solution. I can help filter some common and simple problem
+> > from beginning.
+> 
+> Laurent Pinchart:
+> 
+> 	Do you have chance to check this serise? this one should be related simple.
+> 	This one sent at 7/29. Still not any volunteer to review it.
 
-thanks,
--- Shuah
+I'm afraid I won't have time to review this for the time being. My spare
+time is already exhausted by all the other drivers I maintain upstream. 
+
+> 	How do we move forward?
+
+I think this is a question for the subsystem maintainers. Hans, Mauro ?
+
+> > > > > On Tue, Jul 29, 2025 at 12:06:21PM -0400, Frank Li wrote:
+> > > > > > Add parallel camera support for i.MX8 chips.
+> > > > > >
+> > > > > > The below patch to add new format support to test ov5640 sensor
+> > > > > >    media: nxp: isi: add support for UYVY8_2X8 and YUYV8_2X8 bus codes
+> > > > > >
+> > > > > > The bindings and driver for parallel CSI
+> > > > > >    dt-bindings: media: add i.MX parallel csi support
+> > > > > >    media: nxp: add V4L2 subdev driver for parallel CSI
+> > > > > >
+> > > > > > DTS part need depend on previous MIPI CSI patches.
+> > > > > >   https://lore.kernel.org/imx/20250522-8qxp_camera-v5-13-d4be869fdb7e@nxp.com/
+> > > > > >
+> > > > > >   arm64: dts: imx8: add parellel csi nodes
+> > > > > >   arm64: dts: imx8qxp-mek: add parallel ov5640 camera support
+> > > > > >
+> > > > > > Signed-off-by: Frank Li <Frank.Li@nxp.com>
+> > > > > > ---
+> > > > > > Changes in v4:
+> > > > > > - remove imx93 driver support since have not camera sensor module to do test now.
+> > > > > >   Add it later
+> > > > > > - Add new patch
+> > > > > >   media: v4l2-common: Add helper function v4l_get_required_align_by_bpp()
+> > > > > > - See each patche's change log for detail.
+> > > > > > - Link to v3: https://lore.kernel.org/r/20250708-imx8qxp_pcam-v3-0-c8533e405df1@nxp.com
+> > > > > >
+> > > > > > Changes in v3:
+> > > > > > - replace CSI with CPI.
+> > > > > > - detail change see each patch's change logs
+> > > > > > - Link to v2: https://lore.kernel.org/r/20250703-imx8qxp_pcam-v2-0-188be85f06f1@nxp.com
+> > > > > >
+> > > > > > Changes in v2:
+> > > > > > - remove patch media: nxp: isi: add support for UYVY8_2X8 and YUYV8_2X8 bus codes
+> > > > > >   because pcif controller convert 2x8 to 1x16 to match isi's input
+> > > > > > - rename comaptible string to fsl,imx8qxp-pcif
+> > > > > > - See each patches's change log for detail
+> > > > > > - Link to v1: https://lore.kernel.org/r/20250630-imx8qxp_pcam-v1-0-eccd38d99201@nxp.com
+> > > > > >
+> > > > > > ---
+> > > > > > Alice Yuan (2):
+> > > > > >       dt-bindings: media: add i.MX parallel CPI support
+> > > > > >       media: nxp: add V4L2 subdev driver for camera parallel interface (CPI)
+> > > > > >
+> > > > > > Frank Li (3):
+> > > > > >       media: v4l2-common: Add helper function v4l_get_required_align_by_bpp()
+> > > > > >       arm64: dts: imx8: add camera parallel interface (CPI) node
+> > > > > >       arm64: dts: imx8qxp-mek: add parallel ov5640 camera support
+> > > > > >
+> > > > > >  .../devicetree/bindings/media/fsl,imx93-pcif.yaml  | 126 ++++
+> > > > > >  MAINTAINERS                                        |   2 +
+> > > > > >  arch/arm64/boot/dts/freescale/Makefile             |   3 +
+> > > > > >  arch/arm64/boot/dts/freescale/imx8-ss-img.dtsi     |  13 +
+> > > > > >  .../boot/dts/freescale/imx8qxp-mek-ov5640-cpi.dtso |  83 +++
+> > > > > >  arch/arm64/boot/dts/freescale/imx8qxp-ss-img.dtsi  |  27 +
+> > > > > >  drivers/media/platform/nxp/Kconfig                 |  11 +
+> > > > > >  drivers/media/platform/nxp/Makefile                |   1 +
+> > > > > >  drivers/media/platform/nxp/imx-parallel-cpi.c      | 728 +++++++++++++++++++++
+> > > > > >  include/media/v4l2-common.h                        |  30 +
+> > > > > >  10 files changed, 1024 insertions(+)
+> > > > > > ---
+> > > > > > base-commit: 37a294c6211bea9deb14bedd2dcce498935cbd4e
+> > > > > > change-id: 20250626-imx8qxp_pcam-d851238343c3
+
+-- 
+Regards,
+
+Laurent Pinchart
