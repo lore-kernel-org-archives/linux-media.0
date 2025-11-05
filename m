@@ -1,196 +1,86 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
+Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CEB79330B03
-	for <linux-media@vger.kernel.org>; Wed,  5 Nov 2025 14:39:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9E27F21CC55
+	for <linux-media@vger.kernel.org>; Wed,  5 Nov 2025 15:19:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762353544; cv=none; b=IJHoq6iM671j3AzRH0hAvPiGfuyQWXAeQORRwgOcwrb44L+3wfPzqA0c42hfA/kFA1pfpAd8k3giulU1h4T7ZcHYLoeNafwuETPDKlQzBrEeReStKN6rSI1b+ucutA2ax7dR6N6C4yvc09rcb14LyCo51+6MPtSOPrPP6WBDALM=
+	t=1762355961; cv=none; b=U9pev12HydVomY3ek21bbZa8h738uxE2EYsiFszgU5fZWnXdNlZ2L42ho1koqOa7hp4BfmJT6Y86ydujsSjUVz5bUJYUVQUc8VXjZvFWB6pyS6G0uvRHqEqNSRX47kOnIMAzz4kmIvlcIZ8kcOLTgGu40mX6ueYkVxhDDpm48ds=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762353544; c=relaxed/simple;
-	bh=kz+amfQJzWqXmh8qF8sY02iN5OVxKhBFXxVGMTdYZdo=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=Pn4eD6dmu4j844QlAfJ3CAg8nud9zs0SdDLFicFQ8EMGePl9g+QA8zjgZHA4K9uKVoGhfRFMApi3bG0bahLVLxIPv160beV+UAwTDNeOoNR/JYVtf0ybxMDcjhMu6f9xWNYfuil5PMvXcyEwkZmdzMa/CEtU8N0x/tQtcl5Vi5Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=JQUIk28E; arc=none smtp.client-ip=192.198.163.13
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="JQUIk28E"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1762353543; x=1793889543;
-  h=date:from:to:cc:subject:message-id;
-  bh=kz+amfQJzWqXmh8qF8sY02iN5OVxKhBFXxVGMTdYZdo=;
-  b=JQUIk28E6XXNj/mN6oYhtyenNosllFeClssCszbBccICbmvybLI7jLyq
-   HjMF1sTy/F9pUellMQ841Wp1xXFC27w6ufxZ9Qd/qPyTBrUVFnaM467Er
-   ZRHS7iUuBChLI1gdfo4gb6Jpu5DHx8C227PiIjI/FpqmpCHmnepzhBIZG
-   Mrbj8tdmBHbYuNBUy1dB6HvAk5SXGqmyOAnJBAjcgROtK3ABQDK7YTvTS
-   IVNmJ/7oRvC4vrhHZgJ1GHfHywLGKVw0VJ5RzZnHr+krTLBAOtwpNoaSY
-   N36k3DszhYyf9pQ/dYnOXE6qO1JXDM1UzXo+8BWc5LLSF9VRRuq7IIfv4
-   g==;
-X-CSE-ConnectionGUID: f7qAmnhHT0qfr8CAN4w05w==
-X-CSE-MsgGUID: L0/38OeaRASpjVKh1Lklgw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11603"; a="67084766"
-X-IronPort-AV: E=Sophos;i="6.19,282,1754982000"; 
-   d="scan'208";a="67084766"
-Received: from orviesa005.jf.intel.com ([10.64.159.145])
-  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Nov 2025 06:39:02 -0800
-X-CSE-ConnectionGUID: fcD0QYWQSmuVISAZmNZEgg==
-X-CSE-MsgGUID: iEx07YVHRd6vlj2j3tOcAw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.19,282,1754982000"; 
-   d="scan'208";a="192638939"
-Received: from lkp-server02.sh.intel.com (HELO 66d7546c76b2) ([10.239.97.151])
-  by orviesa005.jf.intel.com with ESMTP; 05 Nov 2025 06:39:01 -0800
-Received: from kbuild by 66d7546c76b2 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1vGef4-000ShK-1e;
-	Wed, 05 Nov 2025 14:38:58 +0000
-Date: Wed, 05 Nov 2025 22:35:48 +0800
-From: kernel test robot <lkp@intel.com>
-To: Hans Verkuil <hverkuil@xs4all.nl>
-Cc: linux-media@vger.kernel.org
-Subject: [linuxtv-media-pending:next] BUILD SUCCESS
- 1a31cb2782104969e48c7ce7e4fc06e403fcb5cf
-Message-ID: <202511052242.S6TiAi5D-lkp@intel.com>
-User-Agent: s-nail v14.9.25
+	s=arc-20240116; t=1762355961; c=relaxed/simple;
+	bh=ZgWPGx7mIkJ8YYrX3sMPKx3tm3HlevoxY+b8FqsxBXM=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=sn9v5tFst47asUvpopdzBKBQveT41bNLtYxJHQMvrZtCYzp0ZBAR11pJ7MOBDmO+eLcW1sAX6g/tEARaFN5Op0SAUQKwSwS7Fe/HcmeKTOPu61B39aaNj3BO8qqA1zGFF95ZE8mTj7Nokm6MU70D4I3S/0J8CACQr9GvU/XOh3I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
+Received: from dude05.red.stw.pengutronix.de ([2a0a:edc0:0:1101:1d::54])
+	by metis.whiteo.stw.pengutronix.de with esmtp (Exim 4.92)
+	(envelope-from <m.tretter@pengutronix.de>)
+	id 1vGfHy-0002IK-1b; Wed, 05 Nov 2025 16:19:10 +0100
+From: Michael Tretter <m.tretter@pengutronix.de>
+Subject: [PATCH 0/2] media: staging: imx: fix multiple video input
+Date: Wed, 05 Nov 2025 16:18:48 +0100
+Message-Id: <20251105-media-imx-fixes-v1-0-99e48b4f5cbc@pengutronix.de>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIANhqC2kC/x3LQQqAIBBA0avIrBtQQYSuEi1Mx5qFFgohiHdPW
+ j4+v0OlwlRhFR0KvVz5zhNqEeAvl09CDtOgpTZKSYOJAjvk1DByo4rOU7TW28MpDfN6Cv1hTts
+ +xge4w6S6YQAAAA==
+X-Change-ID: 20251105-media-imx-fixes-acef77c7ba12
+To: Steve Longerbeam <slongerbeam@gmail.com>, 
+ Philipp Zabel <p.zabel@pengutronix.de>, 
+ Mauro Carvalho Chehab <mchehab@kernel.org>, 
+ Pengutronix Kernel Team <kernel@pengutronix.de>, 
+ Fabio Estevam <festevam@gmail.com>, Hans Verkuil <hans.verkuil@cisco.com>
+Cc: linux-media@vger.kernel.org, imx@lists.linux.dev, 
+ linux-arm-kernel@lists.infradead.org, stable@vger.kernel.org, 
+ Michael Tretter <michael.tretter@pengutronix.de>, 
+ Michael Tretter <m.tretter@pengutronix.de>
+X-Mailer: b4 0.14.3
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:1101:1d::54
+X-SA-Exim-Mail-From: m.tretter@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-media@vger.kernel.org
 
-tree/branch: https://git.linuxtv.org/media-ci/media-pending.git next
-branch HEAD: 1a31cb2782104969e48c7ce7e4fc06e403fcb5cf  media: dvb-usb: pctv452e: move snd/rcv len check before kmalloc
+If the IMX media pipeline is configured to receive multiple video
+inputs, the second input stream may be broken on start. This happens if
+the IMX CSI hardware has to be reconfigured for the second stream, while
+the first stream is already running.
 
-elapsed time: 1477m
+The IMX CSI driver configures the IMX CSI in the link_validate callback.
+The media pipeline is only validated on the first start. Thus, any later
+start of the media pipeline skips the validation and directly starts
+streaming. This may leave the hardware in an inconsistent state compared
+to the driver configuration. Moving the hardware configuration to the
+stream start to make sure that the hardware is configured correctly.
 
-configs tested: 119
-configs skipped: 2
+Patch 1 removes the caching of the upstream mbus_config in
+csi_link_validate and explicitly request the mbus_config in csi_start,
+to get rid of this implicit dependency.
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+Patch 2 actually moves the hardware register setting from
+csi_link_validate to csi_start to fix the skipped hardware
+reconfiguration.
 
-tested configs:
-alpha                             allnoconfig    gcc-15.1.0
-alpha                            allyesconfig    gcc-15.1.0
-arc                              alldefconfig    gcc-15.1.0
-arc                               allnoconfig    gcc-15.1.0
-arc                        nsim_700_defconfig    gcc-15.1.0
-arc                   randconfig-001-20251105    gcc-8.5.0
-arc                   randconfig-002-20251105    gcc-13.4.0
-arm                               allnoconfig    clang-22
-arm                   randconfig-001-20251105    clang-22
-arm                   randconfig-002-20251105    clang-22
-arm                   randconfig-003-20251105    clang-22
-arm                   randconfig-004-20251105    gcc-12.5.0
-arm                           stm32_defconfig    gcc-15.1.0
-arm64                             allnoconfig    gcc-15.1.0
-arm64                            allyesconfig    clang-22
-arm64                 randconfig-001-20251105    clang-17
-arm64                 randconfig-002-20251105    gcc-13.4.0
-arm64                 randconfig-003-20251105    gcc-8.5.0
-arm64                 randconfig-004-20251105    clang-17
-csky                             allmodconfig    gcc-15.1.0
-csky                              allnoconfig    gcc-15.1.0
-csky                             allyesconfig    gcc-15.1.0
-csky                  randconfig-001-20251105    gcc-15.1.0
-csky                  randconfig-002-20251105    gcc-15.1.0
-hexagon                          allmodconfig    clang-17
-hexagon                           allnoconfig    clang-22
-hexagon                          allyesconfig    clang-22
-hexagon               randconfig-001-20251105    clang-22
-hexagon               randconfig-002-20251105    clang-20
-i386                              allnoconfig    gcc-14
-i386        buildonly-randconfig-001-20251105    gcc-14
-i386        buildonly-randconfig-002-20251105    gcc-14
-i386        buildonly-randconfig-003-20251105    clang-20
-i386        buildonly-randconfig-004-20251105    gcc-14
-i386        buildonly-randconfig-005-20251105    gcc-14
-i386        buildonly-randconfig-006-20251105    clang-20
-loongarch                        allmodconfig    clang-19
-loongarch                         allnoconfig    clang-22
-loongarch                        allyesconfig    clang-22
-loongarch                           defconfig    clang-19
-loongarch             randconfig-001-20251105    clang-18
-loongarch             randconfig-002-20251105    clang-20
-m68k                             allmodconfig    gcc-15.1.0
-m68k                              allnoconfig    gcc-15.1.0
-m68k                             allyesconfig    gcc-15.1.0
-m68k                                defconfig    gcc-15.1.0
-microblaze                       allmodconfig    gcc-15.1.0
-microblaze                        allnoconfig    gcc-15.1.0
-microblaze                       allyesconfig    gcc-15.1.0
-microblaze                          defconfig    gcc-15.1.0
-mips                             allmodconfig    gcc-15.1.0
-mips                              allnoconfig    gcc-15.1.0
-mips                             allyesconfig    gcc-15.1.0
-nios2                         3c120_defconfig    gcc-11.5.0
-nios2                             allnoconfig    gcc-11.5.0
-nios2                            allyesconfig    gcc-11.5.0
-nios2                               defconfig    gcc-11.5.0
-nios2                 randconfig-001-20251105    gcc-9.5.0
-nios2                 randconfig-002-20251105    gcc-8.5.0
-openrisc                          allnoconfig    gcc-15.1.0
-openrisc                         allyesconfig    gcc-15.1.0
-parisc                            allnoconfig    gcc-15.1.0
-parisc                randconfig-001-20251105    gcc-12.5.0
-parisc                randconfig-002-20251105    gcc-10.5.0
-parisc64                            defconfig    gcc-15.1.0
-powerpc                           allnoconfig    gcc-15.1.0
-powerpc                        cell_defconfig    gcc-15.1.0
-powerpc                   currituck_defconfig    clang-22
-powerpc               randconfig-001-20251105    gcc-14.3.0
-powerpc               randconfig-002-20251105    gcc-12.5.0
-powerpc64             randconfig-001-20251105    clang-22
-powerpc64             randconfig-002-20251105    clang-22
-riscv                             allnoconfig    gcc-15.1.0
-riscv             nommu_k210_sdcard_defconfig    gcc-15.1.0
-riscv                 randconfig-001-20251105    gcc-8.5.0
-riscv                 randconfig-002-20251105    clang-18
-s390                             allmodconfig    clang-18
-s390                              allnoconfig    clang-22
-s390                             allyesconfig    gcc-15.1.0
-s390                  randconfig-001-20251105    gcc-8.5.0
-s390                  randconfig-002-20251105    gcc-14.3.0
-sh                               allmodconfig    gcc-15.1.0
-sh                                allnoconfig    gcc-15.1.0
-sh                               allyesconfig    gcc-15.1.0
-sh                                  defconfig    gcc-15.1.0
-sh                    randconfig-001-20251105    gcc-10.5.0
-sh                    randconfig-002-20251105    gcc-11.5.0
-sparc                            allmodconfig    gcc-15.1.0
-sparc                             allnoconfig    gcc-15.1.0
-sparc                 randconfig-001-20251105    gcc-12.5.0
-sparc                 randconfig-002-20251105    gcc-15.1.0
-sparc64                             defconfig    clang-20
-sparc64               randconfig-001-20251105    clang-22
-sparc64               randconfig-002-20251105    gcc-10.5.0
-um                               allmodconfig    clang-19
-um                                allnoconfig    clang-22
-um                                  defconfig    clang-22
-um                             i386_defconfig    gcc-14
-um                    randconfig-001-20251105    clang-22
-um                    randconfig-002-20251105    gcc-14
-um                           x86_64_defconfig    clang-22
-x86_64                            allnoconfig    clang-20
-x86_64      buildonly-randconfig-001-20251105    clang-20
-x86_64      buildonly-randconfig-002-20251105    gcc-13
-x86_64      buildonly-randconfig-003-20251105    gcc-14
-x86_64      buildonly-randconfig-004-20251105    gcc-13
-x86_64      buildonly-randconfig-005-20251105    gcc-14
-x86_64      buildonly-randconfig-006-20251105    gcc-13
-x86_64                              defconfig    gcc-14
-x86_64                randconfig-011-20251105    clang-20
-x86_64                randconfig-012-20251105    clang-20
-x86_64                randconfig-013-20251105    clang-20
-x86_64                randconfig-014-20251105    gcc-14
-x86_64                randconfig-015-20251105    clang-20
-x86_64                randconfig-016-20251105    gcc-14
-xtensa                            allnoconfig    gcc-15.1.0
-xtensa                generic_kc705_defconfig    gcc-15.1.0
-xtensa                randconfig-001-20251105    gcc-11.5.0
-xtensa                randconfig-002-20251105    gcc-8.5.0
+Signed-off-by: Michael Tretter <michael.tretter@pengutronix.de>
+---
+Michael Tretter (2):
+      media: staging: imx: request mbus_config in csi_start
+      media: staging: imx: configure src_mux in csi_start
 
---
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+ drivers/staging/media/imx/imx-media-csi.c | 84 ++++++++++++++++++-------------
+ 1 file changed, 48 insertions(+), 36 deletions(-)
+---
+base-commit: 27afd6e066cfd80ddbe22a4a11b99174ac89cced
+change-id: 20251105-media-imx-fixes-acef77c7ba12
+
+Best regards,
+-- 
+Michael Tretter <m.tretter@pengutronix.de>
+
