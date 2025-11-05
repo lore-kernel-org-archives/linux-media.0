@@ -1,70 +1,85 @@
-Received: from ni.piap.pl (ni.piap.pl [195.187.100.5])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 653F5208AD
-	for <linux-media@vger.kernel.org>; Wed,  5 Nov 2025 05:25:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.187.100.5
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 69392263C8A;
+	Wed,  5 Nov 2025 05:26:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762320325; cv=none; b=jEZ1I3Y5Z4HIMNYixOZnMyufYxMvZ22fCoLwoY/T+IUylO2Rw7jIkkVI+8CrLqnJDQT8t4+6x32yGi1wLcB6DSTJ2A8M/fE8/DEheiRO3cNe6MyycPgHFH2pzJSIh+eWGKbBHbj2tUFxjYVzw7ROvkVGjr31BIe4kQVSe37uRvg=
+	t=1762320421; cv=none; b=YBv4ugUMF6SMgOapMVjY864A+hLtexJjxQg2DRriaWcqqOSFPt24DbIb53QIsfKXY3RYWkpu/Vc1+8qXa6Zp1i/E6uR5Z+AKMmozAejri4kvC8MRvhsF2pDy1HyOyOuu7FWKyMtaUepIp5bEbaUsRxypy7UmhNumKBdMJ1mdX6Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762320325; c=relaxed/simple;
-	bh=nRMwFMEWMHAhXv22jHJnc40mE6Yhluo1ZmkZgMNgnNU=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=NDnJ4bDXHW27myjbqOmvNT77QWZaMqdsF01649thHXxzF/SIWUA6emJ7EB/flx7VtZ2YZlJ9jH2BTjKsS2RM8neyPu4a8eShtfbKFACD3oRbWVAM+YswNOGywYfuEj6mUm1Vh9UBy/Pat8CawF9fN5B47zl65TxkMWz85LkHokI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=piap.pl; spf=pass smtp.mailfrom=piap.pl; arc=none smtp.client-ip=195.187.100.5
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=piap.pl
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=piap.pl
-Received: from t19.piap.pl (OSB1819.piap.pl [10.0.9.19])
-	by ni.piap.pl (Postfix) with ESMTPS id 9C594C3EEAC9;
-	Wed,  5 Nov 2025 06:25:11 +0100 (CET)
-DKIM-Filter: OpenDKIM Filter v2.11.0 ni.piap.pl 9C594C3EEAC9
-From: =?utf-8?Q?Krzysztof_Ha=C5=82asa?= <khalasa@piap.pl>
-To: Nicolas Dufresne <nicolas@ndufresne.ca>
-Cc: linux-media <linux-media@vger.kernel.org>
-Subject: Re: i.MX8MP Hantro G2 HEVC decoding problems
-In-Reply-To: <1cb18a0bbf503db78caff09042283df560dc7b07.camel@ndufresne.ca>
-	(Nicolas Dufresne's message of "Tue, 04 Nov 2025 11:22:26 -0500")
-References: <m31pmfp6j3.fsf@t19.piap.pl>
-	<382e94e1b932938fffd92ead86cf057b4623417c.camel@ndufresne.ca>
-	<m3seeunrlg.fsf@t19.piap.pl>
-	<1cb18a0bbf503db78caff09042283df560dc7b07.camel@ndufresne.ca>
-Sender: khalasa@piap.pl
-Date: Wed, 05 Nov 2025 06:25:11 +0100
-Message-ID: <m3pl9xrqyw.fsf@t19.piap.pl>
+	s=arc-20240116; t=1762320421; c=relaxed/simple;
+	bh=VFDrT7v9nzeQc0ET3dcKyt9fXBWzIXludixrYjczo8Y=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=mrP1549WCU7NbW+hrJg18k8ha0N/0UYDCM6nHIiFpgpOAKd3sveVlGuzE+7r5WrdNh4qQbU2Vei25uVsOVOMaxW4pP2j84c3aRRxlvswOx6zslk6OW0wA+BPvnkC4RD+h6KjRZR9g/W6bNKkDwgbYnrczPT8kDezENvrdKPDXXA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Ttig9jM+; arc=none smtp.client-ip=192.198.163.15
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Ttig9jM+"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1762320419; x=1793856419;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=VFDrT7v9nzeQc0ET3dcKyt9fXBWzIXludixrYjczo8Y=;
+  b=Ttig9jM+cJOO8NQOhojGb4BSPm/Z5IfWkD/eTvnua7L5PF097SKsOBim
+   K68RfKSA58dsMzJmJk8lslopouZrd23w4SOkrXZbB/HG0yQI3rgl1GmnT
+   5alrn7M1EU+lPDWs6u42lHvcC0WAarp3+5PuRvFU6Medq8k8xxaTSrvHe
+   L5SobP2jdcD49gjGcdCk5MhlDhITgc+0MSu8BhCKQR1zNFy7UZEuUjr45
+   cKeI3irofZGTObkFL22d7Upw/HxWahhl5B23QS76uQrF+GjZE6+JMS5zD
+   fSV0GKVkTqT8hU7l8ovMouCjyP18odAu39JfuP2Q1kf5OhwBUZ38H7P/I
+   w==;
+X-CSE-ConnectionGUID: WzTRIPbnRDyQ82Kb4M3REw==
+X-CSE-MsgGUID: m6+BZhjcR4aJz9NSI5ZmaQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11603"; a="64525532"
+X-IronPort-AV: E=Sophos;i="6.19,281,1754982000"; 
+   d="scan'208";a="64525532"
+Received: from fmviesa008.fm.intel.com ([10.60.135.148])
+  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Nov 2025 21:26:40 -0800
+X-CSE-ConnectionGUID: OXlpr7hMSQOGDq2+tKgeiw==
+X-CSE-MsgGUID: /Dik2WviQ4q6fl6ZlucOYw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.19,281,1754982000"; 
+   d="scan'208";a="187656381"
+Received: from ldmartin-desk2.corp.intel.com (HELO ashevche-desk.local) ([10.124.221.135])
+  by fmviesa008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Nov 2025 21:26:38 -0800
+Received: from andy by ashevche-desk.local with local (Exim 4.98.2)
+	(envelope-from <andriy.shevchenko@linux.intel.com>)
+	id 1vGW2T-00000005g1S-2rVY;
+	Wed, 05 Nov 2025 07:26:33 +0200
+Date: Wed, 5 Nov 2025 07:26:32 +0200
+From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To: kernel test robot <lkp@intel.com>, Randy Dunlap <rdunlap@infradead.org>
+Cc: Jonathan Corbet <corbet@lwn.net>,
+	Mauro Carvalho Chehab <mchehab@kernel.org>,
+	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+	oe-kbuild-all@lists.linux.dev, linux-media@vger.kernel.org
+Subject: Re: [PATCH v1 1/1] kernel-doc: Issue warnings that were silently
+ discarded
+Message-ID: <aQrgCBm1QQxIJZyK@smile.fi.intel.com>
+References: <20251104215502.1049817-1-andriy.shevchenko@linux.intel.com>
+ <202511050720.nJ9ccENC-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <202511050720.nJ9ccENC-lkp@intel.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - c/o Alberga Business Park, 6
+ krs, Bertel Jungin Aukio 5, 02600 Espoo
 
-Hi Nicolas,
+On Wed, Nov 05, 2025 at 07:14:57AM +0800, kernel test robot wrote:
+> Hi Andy,
+> 
+> kernel test robot noticed the following build warnings:
 
-Nicolas Dufresne <nicolas@ndufresne.ca> writes:
+Right, the change restores the check, so these should be fixed separately.
 
->> From time to time I'm getting:
->> hantro_g2_irq: 0x80100 masked 0x0
->> hantro-vpu 38310000.video-codec: not all macroblocks were decoded.
+-- 
+With Best Regards,
+Andy Shevchenko
 
-> As for the remaining error, it matches my observation. Though, I strongly
-> believe its yet another hidden problem in the driver. More research neede=
-d, that
-> hard part is being able to isolate the bitstream that triggers it. I have=
- very
-> little information about this specific error, most of the time, there is =
-no
-> evident visual artifacts (so its not really broken for the users).
 
-I see. I don't know if the above IRQ status comes with artifacts or not.
-What I have is a printk() in the logs from time to time. I'll let you
-know if I have a stream reliably triggering it.
-
-Thanks again,
---=20
-Krzysztof "Chris" Ha=C5=82asa
-
-Sie=C4=87 Badawcza =C5=81ukasiewicz
-Przemys=C5=82owy Instytut Automatyki i Pomiar=C3=B3w PIAP
-Al. Jerozolimskie 202, 02-486 Warszawa
