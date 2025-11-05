@@ -1,51 +1,64 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7D43919D093;
-	Wed,  5 Nov 2025 08:07:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6D32F72618;
+	Wed,  5 Nov 2025 08:16:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762330030; cv=none; b=Xz497IU79gVt/LVGCXKgV0EKXHhtrFh9wWkz/FfvI12EZTSFQqv0a24zWg+/QUPWyWY69II5xJW2gPS6OnQsxhyPSzLTlJXcCeEJKkVEkCy+tk3o9/0uDCD5ESzG6s/ZQTu3U1DGRks2Miky9bRUIxcB/q6RZGKjfYmvlibXb+k=
+	t=1762330575; cv=none; b=syqY1ZwWiCHZUeqeY2vNCbop4LDhD+riNHOuxH4uJIFuMyICxS5pX1YOddRC+1V0MeIbeJ/a/m7VVkA2Hea4IzTI2dw2lH/INvG+E/QIoaJB5cx3ZTAQQCiaLoT00zcmGoT6Q4lxQqZXbGF69Fu4InCrs5Ms0susf6DctZfePl8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762330030; c=relaxed/simple;
-	bh=ysdaCTaAgAss4/GsTrN52AKA2BxvM2SH97zvlE6w+YU=;
+	s=arc-20240116; t=1762330575; c=relaxed/simple;
+	bh=udr6mKWYM6gsMhi6l+HmrtMsrAYtMveuKFz9q/uMFUA=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=alEvkj/0IGfg96Yi5iChFnB61W/KMiCFBRW6TIOGwNwK1sgnBUEjBePRCUeIYPDejrn2BsPNAGG3opT3lURcGc98+yaQl0Xw1ovk9GFFDikQFOo9MI5lvJHZL+oRIFY63ch4+scwUjtb+AUMigY2IOfBBre9eW9+519HpguNhNw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=eZGq89TI; arc=none smtp.client-ip=10.30.226.201
+	 Content-Type:Content-Disposition:In-Reply-To; b=soszqWEdRUwirp8G3oUyi6L8EvHVOpBxgDEiBIpmjYO0QDBQ+qkD1W7/wYcG58K6l4Au4E1vVBeTiU2Cv0LhBerx2+kVl4LucFbAZ4cTx6kUCvppGGyTM+eThCPWhKtSjmeZWVxKeqavheLBveMP0Wu4nCMHtfql3fJrTU1W94k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Snx30Fxc; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="eZGq89TI"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 10C75C4CEF8;
-	Wed,  5 Nov 2025 08:07:10 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Snx30Fxc"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6264CC4CEF8;
+	Wed,  5 Nov 2025 08:16:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1762330030;
-	bh=ysdaCTaAgAss4/GsTrN52AKA2BxvM2SH97zvlE6w+YU=;
+	s=k20201202; t=1762330575;
+	bh=udr6mKWYM6gsMhi6l+HmrtMsrAYtMveuKFz9q/uMFUA=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=eZGq89TIXF5jVACh67jprFUvkT789XJgr1728AnIv90SRnE2erOC2+GS9k1mZ2Cqr
-	 /5TwLpSx4Q674iV1MyRjTUJ6F4jPzIKRj0BEZLUMr5yfpitbHJOsbINCrIekDDJX0Q
-	 wlHyVZOvixujHbaGsjty6L7ia/9IxcasojcgwQxZyRLKQedsBbPaBawTfqnq8Zqb6T
-	 YrS31qjL8Nz0LvZPAQpd1UCheROL+7XFDlelNj5fueMnsdWCZMnZDP+qZCuaLUAMa/
-	 T8XMdwMG/mCBz0u2MzIpteeAY1ggDejkTzeqa7orL8/gvZk3pq4o0PtADInXMU2xDR
-	 3lJI04UaXoZZA==
-Received: from johan by xi.lan with local (Exim 4.98.2)
-	(envelope-from <johan@kernel.org>)
-	id 1vGYXv-000000004tG-1gIA;
-	Wed, 05 Nov 2025 09:07:11 +0100
-Date: Wed, 5 Nov 2025 09:07:11 +0100
-From: Johan Hovold <johan@kernel.org>
-To: Minghsiu Tsai <minghsiu.tsai@mediatek.com>,
-	Houlong Wei <houlong.wei@mediatek.com>,
-	Andrew-CT Chen <andrew-ct.chen@mediatek.com>
-Cc: Mauro Carvalho Chehab <mchehab@kernel.org>,
-	Matthias Brugger <matthias.bgg@gmail.com>,
-	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
-	Tiffany Lin <tiffany.lin@mediatek.com>,
-	Yunfei Dong <yunfei.dong@mediatek.com>,
-	Nicolas Dufresne <nicolas@ndufresne.ca>,
-	linux-media@vger.kernel.org, linux-mediatek@lists.infradead.org,
-	linux-kernel@vger.kernel.org, Chen-Yu Tsai <wenst@chromium.org>
-Subject: Re: [PATCH v2 0/2] media: mediatek: fix VPU device leaks on probe
-Message-ID: <aQsFrx_wHor7CAPD@hovoldconsulting.com>
-References: <20251028100454.4086-1-johan@kernel.org>
+	b=Snx30FxcGRCf73Ui5tRrgwEAD2Zywqm32IJNeGhhqcKAbrPqP6nqCFttnO2dDSOm4
+	 3qR6wpowVnsvjN0rwPIcLCShDuoZ5jSJWmC7CGsP6fpxjY9i+SYJqWP6IoqWRVLYgf
+	 e4bq4qsJHj5tESPoXkPb0y8ytBDZ651wLfxCDqqJ9jA7XEK+WyuSgYvwy/Vm7Wwx/r
+	 zDkGgwhiDkELDGQgAB6nFzEU8HLSdIepIq4qHMlwOlYKVPQ+8SSA7rk1T7llt7a4zh
+	 qq/vaQ03kHbDoE7Sm1LenUPP2wbTMl4R8vo6i0BKl/7ynTmFOtTjZ+2cneXSjREyQ0
+	 hXQ5dtAYUVrzw==
+Date: Wed, 5 Nov 2025 10:16:09 +0200
+From: Leon Romanovsky <leon@kernel.org>
+To: Alex Mastro <amastro@fb.com>
+Cc: Bjorn Helgaas <bhelgaas@google.com>,
+	Logan Gunthorpe <logang@deltatee.com>, Jens Axboe <axboe@kernel.dk>,
+	Robin Murphy <robin.murphy@arm.com>, Joerg Roedel <joro@8bytes.org>,
+	Will Deacon <will@kernel.org>,
+	Marek Szyprowski <m.szyprowski@samsung.com>,
+	Jason Gunthorpe <jgg@ziepe.ca>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Sumit Semwal <sumit.semwal@linaro.org>,
+	Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
+	Alex Williamson <alex.williamson@redhat.com>,
+	Kees Cook <kees@kernel.org>,
+	"Gustavo A. R. Silva" <gustavoars@kernel.org>,
+	Ankit Agrawal <ankita@nvidia.com>,
+	Yishai Hadas <yishaih@nvidia.com>,
+	Shameer Kolothum <skolothumtho@nvidia.com>,
+	Kevin Tian <kevin.tian@intel.com>,
+	Krishnakant Jaju <kjaju@nvidia.com>, Matt Ochs <mochs@nvidia.com>,
+	linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-block@vger.kernel.org, iommu@lists.linux.dev,
+	linux-mm@kvack.org, linux-doc@vger.kernel.org,
+	linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
+	linaro-mm-sig@lists.linaro.org, kvm@vger.kernel.org,
+	linux-hardening@vger.kernel.org,
+	Vivek Kasireddy <vivek.kasireddy@intel.com>
+Subject: Re: [PATCH v6 00/11] vfio/pci: Allow MMIO regions to be exported
+ through dma-buf
+Message-ID: <20251105081609.GA16832@unreal>
+References: <20251102-dmabuf-vfio-v6-0-d773cff0db9f@nvidia.com>
+ <aQkLcAxEn4qmF3c4@devgpu015.cco6.facebook.com>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
@@ -54,27 +67,28 @@ List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20251028100454.4086-1-johan@kernel.org>
+In-Reply-To: <aQkLcAxEn4qmF3c4@devgpu015.cco6.facebook.com>
 
-On Tue, Oct 28, 2025 at 11:04:52AM +0100, Johan Hovold wrote:
-> This series fixes VPU device leaks during probe of the mdp driver.
+On Mon, Nov 03, 2025 at 12:07:12PM -0800, Alex Mastro wrote:
+> On Sun, Nov 02, 2025 at 10:00:48AM +0200, Leon Romanovsky wrote:
+> > Changelog:
+> > v6:
+> >  * Fixed wrong error check from pcim_p2pdma_init().
+> >  * Documented pcim_p2pdma_provider() function.
+> >  * Improved commit messages.
+> >  * Added VFIO DMA-BUF selftest.
+> >  * Added __counted_by(nr_ranges) annotation to struct vfio_device_feature_dma_buf.
+> >  * Fixed error unwind when dma_buf_fd() fails.
+> >  * Document latest changes to p2pmem.
+> >  * Removed EXPORT_SYMBOL_GPL from pci_p2pdma_map_type.
+> >  * Moved DMA mapping logic to DMA-BUF.
+> >  * Removed types patch to avoid dependencies between subsystems.
+> >  * Moved vfio_pci_dma_buf_move() in err_undo block.
+> >  * Added nvgrace patch.
 > 
-> Included is also a minor documentation update to make it clear that the
-> VPU lookup helper returns the device with an incremented refcount.
-> 
-> Johan
-> 
-> 
-> Changes in v2
->  - drop incorrect vcodec patch since that reference leak has already
->    been fixed by commit bf1d556ad4e0 ("media: mtk-vcodec: abstract
->    firmware interface") which added the codec release callback
-> 
-> 
-> Johan Hovold (2):
->   media: mediatek: mdp: fix device leak on probe
->   media: mediatek: amend vpu_get_plat_device() documentation
+> Thanks Leon. Attaching a toy program which sanity tests the dma-buf export UAPI
+> by feeding the allocated dma-buf into an dma-buf importer (libibverbs + CX-7).
+>  
+> Tested-by: Alex Mastro <amastro@fb.com>
 
-Looks like I forgot to add Chen-Yu's reviewed-by when respinning:
-
-Reviewed-by: Chen-Yu Tsai <wenst@chromium.org>
+Thanks a lot.
