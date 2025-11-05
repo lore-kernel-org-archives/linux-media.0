@@ -1,62 +1,49 @@
 Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8A51831353C;
-	Wed,  5 Nov 2025 17:19:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AFCDD334C25;
+	Wed,  5 Nov 2025 17:27:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.167.242.64
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762363183; cv=none; b=Gy6TfMMdoFL3U0peHx54jsKsb2KqypCOZUM5zAkPBQ7JP+0MhaP+m24ESzl8EO9XXvmID1iURfoh4GJL4gyHZc9O44nfx27Z2ftO8dm30Dg5b0VDphH4Wqs2X8pIOjZ6sX58Z/SRsBT5Iy/SA0wRQVl2kf02JQs2nnJSJge07qs=
+	t=1762363631; cv=none; b=n0w/ALlS72SrfmvTI1UDlMJf4po6NdOHbYxixgSo59q0U1XRaOcGvNq44OlDpVobA+Ku8GlfvR73ty6VkkleljM1+39W53JjBbUQh3h0AwDlA6eE1hnqEQEgPgwW3LJPPKT3aY71QIZztVbnolkUAv/sAMq0tRyR2IYeeuxMzUE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762363183; c=relaxed/simple;
-	bh=nUw06SpualPBrUCbreEZukSxYJFldjGiyXLqJA/+W/A=;
+	s=arc-20240116; t=1762363631; c=relaxed/simple;
+	bh=0zh7mU6+Q2DgrXPwAM6Mbt58/5XP2Rm18IkdrvGTcKQ=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=sTSF/C3SZHYJW08z18HuZIwjBE4AEq7oaVxtD4pvFZdVdrsNuFr/i0ywEfoXIdIMuNDse30+YypHYTcCeDu92AiMIEQVj2EhBZ4bU/34ei+y4mbtny4LEm0AmDdqmoMqiFRCBbF/kU+taQdBgSzq5yHmzpG9ju9vwSX5JFJpIiQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ideasonboard.com; spf=pass smtp.mailfrom=ideasonboard.com; dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b=GYE5iFNC; arc=none smtp.client-ip=213.167.242.64
+	 Content-Type:Content-Disposition:In-Reply-To; b=YmYzVSNXeua2QIWU6mjIL4+/dBAxi0265Jjbng/OrttpaNYA0QvLQqGkCqn6DIavs51p477vHowaGU6JquTF4fIn8SpXtXLW9cEwCPCh6jyrCHGnUaontLrB8NiIk3EZDIFluiWjOaK3Sw3Y+bWyte/gZaZ8xH+CsGSD9YULcTQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ideasonboard.com; spf=pass smtp.mailfrom=ideasonboard.com; dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b=e9Q2i3qm; arc=none smtp.client-ip=213.167.242.64
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ideasonboard.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ideasonboard.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="GYE5iFNC"
+	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="e9Q2i3qm"
 Received: from pendragon.ideasonboard.com (82-203-161-95.bb.dnainternet.fi [82.203.161.95])
-	by perceval.ideasonboard.com (Postfix) with UTF8SMTPSA id 810CA7E0;
-	Wed,  5 Nov 2025 18:17:37 +0100 (CET)
+	by perceval.ideasonboard.com (Postfix) with UTF8SMTPSA id 0F214B5;
+	Wed,  5 Nov 2025 18:25:12 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-	s=mail; t=1762363057;
-	bh=nUw06SpualPBrUCbreEZukSxYJFldjGiyXLqJA/+W/A=;
+	s=mail; t=1762363513;
+	bh=0zh7mU6+Q2DgrXPwAM6Mbt58/5XP2Rm18IkdrvGTcKQ=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=GYE5iFNCFro4v8Mks7/CnxXPWRfIDY59DAKVU5nZwniLh25QUunrqQI754SbS/+vw
-	 jvFGZY9x0IhNlWsrVWlR7qqo3oo34033+O32uKPTlENQT/f8sN0OUsVZ+nZgMnEbfL
-	 i+VY0epv5jVCDJRTGD+us3Z7UAercYn7Wa+lfrko=
-Date: Wed, 5 Nov 2025 19:19:28 +0200
+	b=e9Q2i3qmyZ20IOL7SdDM+WwB9D19VYgM5hqbItih+ttfImYlnN/blGMLwogAQtYPB
+	 bsrjefm/q4T1d3In/NUbRQrX4xYlYUtZu3BoGa5DzLIpv61oBNlzJkkAah0NPR1Mvr
+	 4geXc6/x8mJ2K/8w8L8Bl8RkgGyZi8B5hpa7hh4k=
+Date: Wed, 5 Nov 2025 19:27:03 +0200
 From: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To: Frank Li <Frank.li@nxp.com>
+To: Guoniu Zhou <guoniu.zhou@oss.nxp.com>
 Cc: Mauro Carvalho Chehab <mchehab@kernel.org>,
-	Shawn Guo <shawnguo@kernel.org>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>, Shawn Guo <shawnguo@kernel.org>,
 	Sascha Hauer <s.hauer@pengutronix.de>,
 	Pengutronix Kernel Team <kernel@pengutronix.de>,
-	Fabio Estevam <festevam@gmail.com>,
-	Rui Miguel Silva <rmfrfs@gmail.com>,
-	Martin Kepplinger <martink@posteo.de>,
-	Purism Kernel Team <kernel@puri.sm>, Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Philipp Zabel <p.zabel@pengutronix.de>, linux-media@vger.kernel.org,
+	Fabio Estevam <festevam@gmail.com>, Frank Li <Frank.Li@nxp.com>,
+	linux-media@vger.kernel.org, devicetree@vger.kernel.org,
 	imx@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
-	linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-	Alice Yuan <alice.yuan@nxp.com>,
-	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-	Robert Chiras <robert.chiras@nxp.com>,
-	Zhipeng Wang <zhipeng.wang_1@nxp.com>,
-	Hans Verkuil <hans@jjverkuil.nl>,
-	Sakari Ailus <sakari.ailus@iki.fi>,
-	Kieran Bingham <kieran.bingham@ideasonboard.com>
-Subject: Re: [PATCH v4 0/5] media: imx8qxp: add parallel camera support
-Message-ID: <20251105171928.GB6046@pendragon.ideasonboard.com>
-References: <20250729-imx8qxp_pcam-v4-0-4dfca4ed2f87@nxp.com>
- <20250805010822.GC24627@pendragon.ideasonboard.com>
- <aLbcpEZXm5G1Onq7@lizhi-Precision-Tower-5810>
- <20250902123920.GM13448@pendragon.ideasonboard.com>
- <aLhJDXnz9HPGrWcp@lizhi-Precision-Tower-5810>
- <aQuDSROHLGHIhtlh@lizhi-Precision-Tower-5810>
+	linux-kernel@vger.kernel.org, Guoniu Zhou <guoniu.zhou@nxp.com>
+Subject: Re: [PATCH v3 1/3] media: dt-bindings: nxp,imx8-isi: Add i.MX95 ISI
+ compatible string
+Message-ID: <20251105172703.GC6046@pendragon.ideasonboard.com>
+References: <20251105-isi_imx95-v3-0-3987533cca1c@nxp.com>
+ <20251105-isi_imx95-v3-1-3987533cca1c@nxp.com>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
@@ -65,114 +52,86 @@ List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <aQuDSROHLGHIhtlh@lizhi-Precision-Tower-5810>
+In-Reply-To: <20251105-isi_imx95-v3-1-3987533cca1c@nxp.com>
 
-Hi Frank,
+Hi Guoniu,
 
-On Wed, Nov 05, 2025 at 12:03:05PM -0500, Frank Li wrote:
-> On Wed, Sep 03, 2025 at 09:56:29AM -0400, Frank Li wrote:
-> > On Tue, Sep 02, 2025 at 02:39:20PM +0200, Laurent Pinchart wrote:
-> > > On Tue, Sep 02, 2025 at 08:01:40AM -0400, Frank Li wrote:
-> > > > On Tue, Aug 05, 2025 at 04:08:22AM +0300, Laurent Pinchart wrote:
-> > > > > Hi Frank,
-> > > > >
-> > > > > Thank you for the patches.
-> > > > >
-> > > > > I've quite busy these days, and I don't believe I will have time to
-> > > > > review this series before coming back from OSS Europe at the beginning
-> > > > > of September. Let's see if anyone on CC could volunteer.
-> > > >
-> > > > Laurent Pincha
-> > > > 	I hope you have good time at OSS.
-> > > >
-> > > > 	Do you have chance to review this patch?
-> > >
-> > > I'm going through my mail backlog, which is really big at the moment.
-> >
-> > Understand.
-> >
-> > > I'd like someone else to volunteer to review this series. It won't scale
-> > > if I have to review all NXP media patches in my spare time :-/
-> >
-> > Yes, but none volunteer review this in passed months. Expecially key
-> > reviewer. I am reviewing i3c patches. but Not familiar v4l system yet. It
-> > need scalable solution. I can help filter some common and simple problem
-> > from beginning.
+Thank you for the patch.
+
+On Wed, Nov 05, 2025 at 01:55:10PM +0800, Guoniu Zhou wrote:
+> From: Guoniu Zhou <guoniu.zhou@nxp.com>
 > 
-> Laurent Pinchart:
+> The ISI module on i.MX95 supports up to eight channels and four link
+> sources to obtain the image data for processing in its pipelines. It
+> can process up to eight image sources at the same time.
 > 
-> 	Do you have chance to check this serise? this one should be related simple.
-> 	This one sent at 7/29. Still not any volunteer to review it.
+> Signed-off-by: Guoniu Zhou <guoniu.zhou@nxp.com>
 
-I'm afraid I won't have time to review this for the time being. My spare
-time is already exhausted by all the other drivers I maintain upstream. 
+Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 
-> 	How do we move forward?
-
-I think this is a question for the subsystem maintainers. Hans, Mauro ?
-
-> > > > > On Tue, Jul 29, 2025 at 12:06:21PM -0400, Frank Li wrote:
-> > > > > > Add parallel camera support for i.MX8 chips.
-> > > > > >
-> > > > > > The below patch to add new format support to test ov5640 sensor
-> > > > > >    media: nxp: isi: add support for UYVY8_2X8 and YUYV8_2X8 bus codes
-> > > > > >
-> > > > > > The bindings and driver for parallel CSI
-> > > > > >    dt-bindings: media: add i.MX parallel csi support
-> > > > > >    media: nxp: add V4L2 subdev driver for parallel CSI
-> > > > > >
-> > > > > > DTS part need depend on previous MIPI CSI patches.
-> > > > > >   https://lore.kernel.org/imx/20250522-8qxp_camera-v5-13-d4be869fdb7e@nxp.com/
-> > > > > >
-> > > > > >   arm64: dts: imx8: add parellel csi nodes
-> > > > > >   arm64: dts: imx8qxp-mek: add parallel ov5640 camera support
-> > > > > >
-> > > > > > Signed-off-by: Frank Li <Frank.Li@nxp.com>
-> > > > > > ---
-> > > > > > Changes in v4:
-> > > > > > - remove imx93 driver support since have not camera sensor module to do test now.
-> > > > > >   Add it later
-> > > > > > - Add new patch
-> > > > > >   media: v4l2-common: Add helper function v4l_get_required_align_by_bpp()
-> > > > > > - See each patche's change log for detail.
-> > > > > > - Link to v3: https://lore.kernel.org/r/20250708-imx8qxp_pcam-v3-0-c8533e405df1@nxp.com
-> > > > > >
-> > > > > > Changes in v3:
-> > > > > > - replace CSI with CPI.
-> > > > > > - detail change see each patch's change logs
-> > > > > > - Link to v2: https://lore.kernel.org/r/20250703-imx8qxp_pcam-v2-0-188be85f06f1@nxp.com
-> > > > > >
-> > > > > > Changes in v2:
-> > > > > > - remove patch media: nxp: isi: add support for UYVY8_2X8 and YUYV8_2X8 bus codes
-> > > > > >   because pcif controller convert 2x8 to 1x16 to match isi's input
-> > > > > > - rename comaptible string to fsl,imx8qxp-pcif
-> > > > > > - See each patches's change log for detail
-> > > > > > - Link to v1: https://lore.kernel.org/r/20250630-imx8qxp_pcam-v1-0-eccd38d99201@nxp.com
-> > > > > >
-> > > > > > ---
-> > > > > > Alice Yuan (2):
-> > > > > >       dt-bindings: media: add i.MX parallel CPI support
-> > > > > >       media: nxp: add V4L2 subdev driver for camera parallel interface (CPI)
-> > > > > >
-> > > > > > Frank Li (3):
-> > > > > >       media: v4l2-common: Add helper function v4l_get_required_align_by_bpp()
-> > > > > >       arm64: dts: imx8: add camera parallel interface (CPI) node
-> > > > > >       arm64: dts: imx8qxp-mek: add parallel ov5640 camera support
-> > > > > >
-> > > > > >  .../devicetree/bindings/media/fsl,imx93-pcif.yaml  | 126 ++++
-> > > > > >  MAINTAINERS                                        |   2 +
-> > > > > >  arch/arm64/boot/dts/freescale/Makefile             |   3 +
-> > > > > >  arch/arm64/boot/dts/freescale/imx8-ss-img.dtsi     |  13 +
-> > > > > >  .../boot/dts/freescale/imx8qxp-mek-ov5640-cpi.dtso |  83 +++
-> > > > > >  arch/arm64/boot/dts/freescale/imx8qxp-ss-img.dtsi  |  27 +
-> > > > > >  drivers/media/platform/nxp/Kconfig                 |  11 +
-> > > > > >  drivers/media/platform/nxp/Makefile                |   1 +
-> > > > > >  drivers/media/platform/nxp/imx-parallel-cpi.c      | 728 +++++++++++++++++++++
-> > > > > >  include/media/v4l2-common.h                        |  30 +
-> > > > > >  10 files changed, 1024 insertions(+)
-> > > > > > ---
-> > > > > > base-commit: 37a294c6211bea9deb14bedd2dcce498935cbd4e
-> > > > > > change-id: 20250626-imx8qxp_pcam-d851238343c3
+> ---
+>  .../devicetree/bindings/media/nxp,imx8-isi.yaml    | 27 +++++++++++++++++++++-
+>  1 file changed, 26 insertions(+), 1 deletion(-)
+> 
+> diff --git a/Documentation/devicetree/bindings/media/nxp,imx8-isi.yaml b/Documentation/devicetree/bindings/media/nxp,imx8-isi.yaml
+> index f43b91984f0152fbbcf80db3b3bbad7e8ad6c11e..c5cf4a9787ee7f31273bd097d2200402fb346773 100644
+> --- a/Documentation/devicetree/bindings/media/nxp,imx8-isi.yaml
+> +++ b/Documentation/devicetree/bindings/media/nxp,imx8-isi.yaml
+> @@ -23,6 +23,7 @@ properties:
+>        - fsl,imx8mp-isi
+>        - fsl,imx8ulp-isi
+>        - fsl,imx93-isi
+> +      - fsl,imx95-isi
+>  
+>    reg:
+>      maxItems: 1
+> @@ -49,7 +50,7 @@ properties:
+>    interrupts:
+>      description: Processing pipeline interrupts, one per pipeline
+>      minItems: 1
+> -    maxItems: 2
+> +    maxItems: 8
+>  
+>    power-domains:
+>      maxItems: 1
+> @@ -98,6 +99,7 @@ allOf:
+>      then:
+>        properties:
+>          interrupts:
+> +          minItems: 2
+>            maxItems: 2
+>          ports:
+>            properties:
+> @@ -109,6 +111,29 @@ allOf:
+>              - port@0
+>              - port@1
+>  
+> +  - if:
+> +      properties:
+> +        compatible:
+> +          contains:
+> +            const: fsl,imx95-isi
+> +    then:
+> +      properties:
+> +        interrupts:
+> +          minItems: 8
+> +        ports:
+> +          properties:
+> +            port@0:
+> +              description: Pixel Link Slave 0
+> +            port@1:
+> +              description: Pixel Link Slave 1
+> +            port@2:
+> +              description: MIPI CSI-2 RX 0
+> +            port@3:
+> +              description: MIPI CSI-2 RX 1
+> +          required:
+> +            - port@2
+> +            - port@3
+> +
+>  additionalProperties: false
+>  
+>  examples:
 
 -- 
 Regards,
