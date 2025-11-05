@@ -1,26 +1,26 @@
 Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 77B0B32ED23
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1685732E14C
 	for <linux-media@vger.kernel.org>; Wed,  5 Nov 2025 15:19:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762355962; cv=none; b=soP1nZnxUKn2qtIq+8gYRa1LnZvVPccj5Wzj61TAscmHQyptMBVRLBIu/NG2lanJB5NXX/7ekUYi0b7ByMtQ69LYSpiy1CkIwSu0avvU8VbpIY2JVnyhwSZZ4PeiptIee8pgn0pcXeUw8ERRKAWnyurA5UYzAp2qqmlPLD2pUD4=
+	t=1762355962; cv=none; b=LFjcWP+y4OElypm17OGD1XW4ee7r+tCOgIbN2Iqk6CMXKyd8ehR24zXahDlHgw2LP3zD5fdF/lFojnU22CH+9w6C1MYvrklymfA4wOfbPR+9ipVNvf4hHW8TFM8uUz4DZ5N/i8BDLXC+UUL4zmDrrzLOXXnGhKkKxg64CftAsxQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1762355962; c=relaxed/simple;
-	bh=yPdcMxsJZjicYk3JWV46vgQDLgnx86bTAcnHqYLQtVo=;
+	bh=aDtRd1YbDn4OZAWtUGQbZix7GE3spO38WtrKr1DsKRM=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=WMBqhj77cGaBXKxB8si1JGFOkkmksuTWndQ0x9DSTvM3MCwfc962lJkaOYdjNlssQAjP2IjmyaG4xziyxN2JHu2aKYc5XXzKi08KB/T3i7K56JzFCuP2IwRrh6xQdCADHWyBlCtPXOrIhjpqnN5eODxtUm1M3qJ9b44RhHtkFK0=
+	 In-Reply-To:To:Cc; b=SZsVmluthZGXo7zEO4zxVBEafDj3zlqbrEZZXdFWfRYfLzJJuRzyJY4Tt5vNUg6eZQfapVjgdEiBmqydJ7JB01EGhDIYS4dDJjpAXMi63j1G0bgzNOkdnFT8f9l8UZlPZVDGgo/0hlQ27UVWLZXDcHzgGl8beC8xgMUg7ogBp24=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
 Received: from dude05.red.stw.pengutronix.de ([2a0a:edc0:0:1101:1d::54])
 	by metis.whiteo.stw.pengutronix.de with esmtp (Exim 4.92)
 	(envelope-from <m.tretter@pengutronix.de>)
-	id 1vGfHy-0002IK-4f; Wed, 05 Nov 2025 16:19:10 +0100
+	id 1vGfHy-0002IK-3E; Wed, 05 Nov 2025 16:19:10 +0100
 From: Michael Tretter <m.tretter@pengutronix.de>
-Date: Wed, 05 Nov 2025 16:18:50 +0100
-Subject: [PATCH 2/2] media: staging: imx: configure src_mux in csi_start
+Date: Wed, 05 Nov 2025 16:18:49 +0100
+Subject: [PATCH 1/2] media: staging: imx: request mbus_config in csi_start
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
@@ -29,7 +29,7 @@ List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20251105-media-imx-fixes-v1-2-99e48b4f5cbc@pengutronix.de>
+Message-Id: <20251105-media-imx-fixes-v1-1-99e48b4f5cbc@pengutronix.de>
 References: <20251105-media-imx-fixes-v1-0-99e48b4f5cbc@pengutronix.de>
 In-Reply-To: <20251105-media-imx-fixes-v1-0-99e48b4f5cbc@pengutronix.de>
 To: Steve Longerbeam <slongerbeam@gmail.com>, 
@@ -47,110 +47,164 @@ X-SA-Exim-Mail-From: m.tretter@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
 X-PTX-Original-Recipient: linux-media@vger.kernel.org
 
-After media_pipeline_start() was called, the media graph is assumed to
-be validated. It won't be validated again if a second stream starts.
+Request the upstream mbus_config in csi_start, which starts the stream,
+instead of caching it in link_validate.
 
-The imx-media-csi driver, however, changes hardware configuration in the
-link_validate() callback. This can result in started streams with
-misconfigured hardware.
-
-In the concrete example, the ipu2_csi1_mux is driven by a parallel video
-input. After the media pipeline has been started with this
-configuration, a second stream is configured to use ipu1_csi0 with
-MIPI-CSI input from imx6-mipi-csi2. This may require the reconfiguration
-of ipu1_csi0 with ipu_set_csi_src_mux(). Since the media pipeline is
-already running, link_validate won't be called, and the ipu1_csi0 won't
-be reconfigured. The resulting video is broken, because the
-ipu1_csi0_mux is misconfigured, but no error is reported.
-
-Move ipu_set_csi_src_mux from csi_link_validate to csi_start to ensure
-that input to ipu1_csi0 is configured correctly when starting the
-stream. This is a local reconfiguration in ipu1_csi0 and is possible
-while the media pipeline is running.
+This allows to get rid of the mbus_cfg field in the struct csi_priv and
+avoids state in the driver.
 
 Signed-off-by: Michael Tretter <m.tretter@pengutronix.de>
 Fixes: 4a34ec8e470c ("[media] media: imx: Add CSI subdev driver")
 Cc: stable@vger.kernel.org
 ---
- drivers/staging/media/imx/imx-media-csi.c | 44 +++++++++++++++++--------------
- 1 file changed, 24 insertions(+), 20 deletions(-)
+ drivers/staging/media/imx/imx-media-csi.c | 40 ++++++++++++++++++-------------
+ 1 file changed, 24 insertions(+), 16 deletions(-)
 
 diff --git a/drivers/staging/media/imx/imx-media-csi.c b/drivers/staging/media/imx/imx-media-csi.c
-index 55a7d8f38465..1bc644f73a9d 100644
+index fd7e37d803e7..55a7d8f38465 100644
 --- a/drivers/staging/media/imx/imx-media-csi.c
 +++ b/drivers/staging/media/imx/imx-media-csi.c
-@@ -744,6 +744,28 @@ static int csi_setup(struct csi_priv *priv,
+@@ -97,9 +97,6 @@ struct csi_priv {
+ 	/* the mipi virtual channel number at link validate */
+ 	int vc_num;
+ 
+-	/* media bus config of the upstream subdevice CSI is receiving from */
+-	struct v4l2_mbus_config mbus_cfg;
+-
+ 	spinlock_t irqlock; /* protect eof_irq handler */
+ 	struct timer_list eof_timeout_timer;
+ 	int eof_irq;
+@@ -403,7 +400,8 @@ static void csi_idmac_unsetup_vb2_buf(struct csi_priv *priv,
+ }
+ 
+ /* init the SMFC IDMAC channel */
+-static int csi_idmac_setup_channel(struct csi_priv *priv)
++static int csi_idmac_setup_channel(struct csi_priv *priv,
++				   struct v4l2_mbus_config *mbus_cfg)
+ {
+ 	struct imx_media_video_dev *vdev = priv->vdev;
+ 	const struct imx_media_pixfmt *incc;
+@@ -432,7 +430,7 @@ static int csi_idmac_setup_channel(struct csi_priv *priv)
+ 	image.phys0 = phys[0];
+ 	image.phys1 = phys[1];
+ 
+-	passthrough = requires_passthrough(&priv->mbus_cfg, infmt, incc);
++	passthrough = requires_passthrough(mbus_cfg, infmt, incc);
+ 	passthrough_cycles = 1;
+ 
+ 	/*
+@@ -572,11 +570,12 @@ static void csi_idmac_unsetup(struct csi_priv *priv,
+ 	csi_idmac_unsetup_vb2_buf(priv, state);
+ }
+ 
+-static int csi_idmac_setup(struct csi_priv *priv)
++static int csi_idmac_setup(struct csi_priv *priv,
++			   struct v4l2_mbus_config *mbus_cfg)
+ {
+ 	int ret;
+ 
+-	ret = csi_idmac_setup_channel(priv);
++	ret = csi_idmac_setup_channel(priv, mbus_cfg);
+ 	if (ret)
+ 		return ret;
+ 
+@@ -595,7 +594,8 @@ static int csi_idmac_setup(struct csi_priv *priv)
  	return 0;
  }
  
-+static void csi_set_src(struct csi_priv *priv,
-+			struct v4l2_mbus_config *mbus_cfg)
-+{
-+	bool is_csi2;
-+
-+	is_csi2 = !is_parallel_bus(mbus_cfg);
-+	if (is_csi2) {
-+		/*
-+		 * NOTE! It seems the virtual channels from the mipi csi-2
-+		 * receiver are used only for routing by the video mux's,
-+		 * or for hard-wired routing to the CSI's. Once the stream
-+		 * enters the CSI's however, they are treated internally
-+		 * in the IPU as virtual channel 0.
-+		 */
-+		ipu_csi_set_mipi_datatype(priv->csi, 0,
-+					  &priv->format_mbus[CSI_SINK_PAD]);
-+	}
-+
-+	/* select either parallel or MIPI-CSI2 as input to CSI */
-+	ipu_set_csi_src_mux(priv->ipu, priv->csi_id, is_csi2);
-+}
-+
+-static int csi_idmac_start(struct csi_priv *priv)
++static int csi_idmac_start(struct csi_priv *priv,
++			   struct v4l2_mbus_config *mbus_cfg)
+ {
+ 	struct imx_media_video_dev *vdev = priv->vdev;
+ 	int ret;
+@@ -619,7 +619,7 @@ static int csi_idmac_start(struct csi_priv *priv)
+ 	priv->last_eof = false;
+ 	priv->nfb4eof = false;
+ 
+-	ret = csi_idmac_setup(priv);
++	ret = csi_idmac_setup(priv, mbus_cfg);
+ 	if (ret) {
+ 		v4l2_err(&priv->sd, "csi_idmac_setup failed: %d\n", ret);
+ 		goto out_free_dma_buf;
+@@ -701,7 +701,8 @@ static void csi_idmac_stop(struct csi_priv *priv)
+ }
+ 
+ /* Update the CSI whole sensor and active windows */
+-static int csi_setup(struct csi_priv *priv)
++static int csi_setup(struct csi_priv *priv,
++		     struct v4l2_mbus_config *mbus_cfg)
+ {
+ 	struct v4l2_mbus_framefmt *infmt, *outfmt;
+ 	const struct imx_media_pixfmt *incc;
+@@ -719,7 +720,7 @@ static int csi_setup(struct csi_priv *priv)
+ 	 * if cycles is set, we need to handle this over multiple cycles as
+ 	 * generic/bayer data
+ 	 */
+-	if (is_parallel_bus(&priv->mbus_cfg) && incc->cycles) {
++	if (is_parallel_bus(mbus_cfg) && incc->cycles) {
+ 		if_fmt.width *= incc->cycles;
+ 		crop.width *= incc->cycles;
+ 	}
+@@ -730,7 +731,7 @@ static int csi_setup(struct csi_priv *priv)
+ 			     priv->crop.width == 2 * priv->compose.width,
+ 			     priv->crop.height == 2 * priv->compose.height);
+ 
+-	ipu_csi_init_interface(priv->csi, &priv->mbus_cfg, &if_fmt, outfmt);
++	ipu_csi_init_interface(priv->csi, mbus_cfg, &if_fmt, outfmt);
+ 
+ 	ipu_csi_set_dest(priv->csi, priv->dest);
+ 
+@@ -745,9 +746,17 @@ static int csi_setup(struct csi_priv *priv)
+ 
  static int csi_start(struct csi_priv *priv)
  {
- 	struct v4l2_mbus_config mbus_cfg = { .type = 0 };
-@@ -760,6 +782,8 @@ static int csi_start(struct csi_priv *priv)
++	struct v4l2_mbus_config mbus_cfg = { .type = 0 };
+ 	struct v4l2_fract *input_fi, *output_fi;
+ 	int ret;
+ 
++	ret = csi_get_upstream_mbus_config(priv, &mbus_cfg);
++	if (ret) {
++		v4l2_err(&priv->sd,
++			 "failed to get upstream media bus configuration\n");
++		return ret;
++	}
++
  	input_fi = &priv->frame_interval[CSI_SINK_PAD];
  	output_fi = &priv->frame_interval[priv->active_output_pad];
  
-+	csi_set_src(priv, &mbus_cfg);
-+
- 	/* start upstream */
- 	ret = v4l2_subdev_call(priv->src_sd, video, s_stream, 1);
- 	ret = (ret && ret != -ENOIOCTLCMD) ? ret : 0;
-@@ -1130,7 +1154,6 @@ static int csi_link_validate(struct v4l2_subdev *sd,
- {
- 	struct csi_priv *priv = v4l2_get_subdevdata(sd);
- 	struct v4l2_mbus_config mbus_cfg = { .type = 0 };
--	bool is_csi2;
- 	int ret;
- 
- 	ret = v4l2_subdev_link_validate_default(sd, link,
-@@ -1145,25 +1168,6 @@ static int csi_link_validate(struct v4l2_subdev *sd,
+@@ -758,7 +767,7 @@ static int csi_start(struct csi_priv *priv)
  		return ret;
+ 
+ 	/* Skip first few frames from a BT.656 source */
+-	if (priv->mbus_cfg.type == V4L2_MBUS_BT656) {
++	if (mbus_cfg.type == V4L2_MBUS_BT656) {
+ 		u32 delay_usec, bad_frames = 20;
+ 
+ 		delay_usec = DIV_ROUND_UP_ULL((u64)USEC_PER_SEC *
+@@ -769,12 +778,12 @@ static int csi_start(struct csi_priv *priv)
  	}
  
--	mutex_lock(&priv->lock);
--
--	is_csi2 = !is_parallel_bus(&mbus_cfg);
--	if (is_csi2) {
--		/*
--		 * NOTE! It seems the virtual channels from the mipi csi-2
--		 * receiver are used only for routing by the video mux's,
--		 * or for hard-wired routing to the CSI's. Once the stream
--		 * enters the CSI's however, they are treated internally
--		 * in the IPU as virtual channel 0.
--		 */
--		ipu_csi_set_mipi_datatype(priv->csi, 0,
--					  &priv->format_mbus[CSI_SINK_PAD]);
--	}
--
--	/* select either parallel or MIPI-CSI2 as input to CSI */
--	ipu_set_csi_src_mux(priv->ipu, priv->csi_id, is_csi2);
--
--	mutex_unlock(&priv->lock);
- 	return ret;
- }
+ 	if (priv->dest == IPU_CSI_DEST_IDMAC) {
+-		ret = csi_idmac_start(priv);
++		ret = csi_idmac_start(priv, &mbus_cfg);
+ 		if (ret)
+ 			goto stop_upstream;
+ 	}
  
+-	ret = csi_setup(priv);
++	ret = csi_setup(priv, &mbus_cfg);
+ 	if (ret)
+ 		goto idmac_stop;
+ 
+@@ -1138,7 +1147,6 @@ static int csi_link_validate(struct v4l2_subdev *sd,
+ 
+ 	mutex_lock(&priv->lock);
+ 
+-	priv->mbus_cfg = mbus_cfg;
+ 	is_csi2 = !is_parallel_bus(&mbus_cfg);
+ 	if (is_csi2) {
+ 		/*
 
 -- 
 2.47.3
