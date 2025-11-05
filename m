@@ -1,97 +1,68 @@
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F3541EEB3
-	for <linux-media@vger.kernel.org>; Wed,  5 Nov 2025 00:46:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5095A27462;
+	Wed,  5 Nov 2025 01:09:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762303572; cv=none; b=V4aZv9Om+AykMVkQbGK2kiRlLOWAgqIPCfhAtzKFFOaDfRPd3loecCCi+Ijqt7+4s9QBMdW4B9lSAeUnthEMA14NW771JvP4bSthx8cLxgWAxVmkvhXmkpnm8gnygeOoYrUO90mdwO8+iJadg7gev0BnH+wW87x8Tg4bKj8/DII=
+	t=1762304993; cv=none; b=fz3RDNE7O03W/2CRkZguYdGRPkL6bUgOcTjidUGvDjVvkYBZtV4DWqv4y+DqRfTO6bTcEPn6XG4hlsZgqMov5Msp/2jtAXbzCFI5Gr9lZZfZRtsD7pz9WhCcWZ4UR3GkumA47GbXqKZ4Wm9jdfqskjKeYf/NHNN2Bm0arQyyFDY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762303572; c=relaxed/simple;
-	bh=7T7aL22RX9GpDnYaiiUc+H26sq7SXpfu7cYU+xDC4hg=;
+	s=arc-20240116; t=1762304993; c=relaxed/simple;
+	bh=FFfDIqSM/9x7BMOCDpR60+XjPYyWl3N8kflVm4dcMck=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=sOmWqnd6VUurvOhncCrDIQ9xBn3OENijrs4M2kOPcCLR1JnT3XMNFEhfMBiEcSMEDI4yRJZMewlVut7klvOgLQdvszKIm81NrVsjxkUOPJv6LfXvXCrW4BaULseAQAQnGAZtjYvIKPSWjmzyFV//b40cK7twDFS4I2ZRopsjYb0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=OoXws1Wc; dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b=C7XbrWaF; arc=none smtp.client-ip=205.220.180.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=dLw3KVvrnFSixe775KWJSitWK5dl9EMu/uR8aOVPCpfttwiOHsMHX/hyDF9gnmuT9avU3AanPhkV4QRU8vZI+wvuh+Dz5mw2M9J/EZxm26yLbUuPG0kmgTUm4xO+mKXE715+4Aw/B+eWVvBVcNe8tblUEZkCKEyWpFtU2O6Si1M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=mMt7z2f9; arc=none smtp.client-ip=198.175.65.9
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="OoXws1Wc";
-	dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b="C7XbrWaF"
-Received: from pps.filterd (m0279868.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 5A4KgdA83035061
-	for <linux-media@vger.kernel.org>; Wed, 5 Nov 2025 00:46:10 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
-	cc:content-type:date:from:in-reply-to:message-id:mime-version
-	:references:subject:to; s=qcppdkim1; bh=aLWcO0d8F+Y82Vhk0yQ9jtdy
-	rVhv/PJ9LgP07EI36wY=; b=OoXws1WcQz6JBL2b2LlgGyszwyq4a9PQh3HirPpU
-	h7+cjnRd1YJj8mYx6GA3fZA3McP3GSw03CzdwEs7jX1eOAf/p8/hIFCF1h/Jw+aR
-	N8KQJNdYjRtpyACbHoRXfek0Y+1cySZrplO9CTAdB+hpgaQExTdwUbgLEDVFyosv
-	9nVUhCW5DSMkXJJZWlSC7xEjNn3q5JUvcjeKIITjWPuJS86OJvYCl5p/BxzqglXW
-	Dg8//C62uzUmJTRE/mCEa4F1AFD7KYIU/NSmBmKfgXHxn+OBxOSItHsU368gWwNm
-	TjMuSo5nG8eothkCwxL5Kx+KnbIWvmyW45qsPVoyzrvGTA==
-Received: from mail-qt1-f199.google.com (mail-qt1-f199.google.com [209.85.160.199])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4a7fgrjfek-1
-	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
-	for <linux-media@vger.kernel.org>; Wed, 05 Nov 2025 00:46:09 +0000 (GMT)
-Received: by mail-qt1-f199.google.com with SMTP id d75a77b69052e-4ed6ff3de05so17172611cf.3
-        for <linux-media@vger.kernel.org>; Tue, 04 Nov 2025 16:46:09 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=oss.qualcomm.com; s=google; t=1762303569; x=1762908369; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=aLWcO0d8F+Y82Vhk0yQ9jtdyrVhv/PJ9LgP07EI36wY=;
-        b=C7XbrWaF7Q9A3gPfgdphqr9Z+bqcFxldUvtp35ogcX8GmFNqEsPdDWu7Vx+EAUNBcN
-         avyCzjYxR9dWhJBOPQNPKcucj9cigkEbQMkspLdLpYIFoI9C0WmuplX1SbmF5n3YVFKb
-         D9UJRghB6z4sdXRvshZk3Gz5U37XSYhSaCyZ1hlLOR9grN9bZYyx2BFM3GJwRbWt3DRA
-         VIaOEaGmORAzCfu1FxESKTxxYfjOBntuoEliNUgJs5qN9QAOMBsd+5XNCYMjcPvBZesC
-         CZW880C0tMhWiN5rVPzAlKLB/JADrPCs4UsJTYAlWUoZXtwfATnFKrdeC8ehnGn52OmC
-         DDsw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1762303569; x=1762908369;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=aLWcO0d8F+Y82Vhk0yQ9jtdyrVhv/PJ9LgP07EI36wY=;
-        b=nf4ttNVTk29dz8kPes3SP1u2vC+1h1Mk1tfUcdndW2MAaXFvlcpFX7aBt6CD557wZW
-         VxS5OXZ89+bVd+s4Wf30SSYJI822opfi55/F6IjybhNfVQ4ixh4wTSBSWFpoZDBdfOda
-         9gHPEGLIvU5cSVG2fJ3v0XG9f9J/j5zYxjEvMHT3i3/oXOScXXUC9q0KraCEq0mta862
-         eof5Sq8TVN2G6tWVIPAlDHiYTPhWCsZQbwzuUmQZispsJRxra9juc7gjyGFXril/lsmB
-         07zyfVgPQKEp03i5KZyuKev29lxw0tsUQLn9i9XB/SOIWNAtDEkeK9m5wqxSzDs8oMf1
-         OSTA==
-X-Forwarded-Encrypted: i=1; AJvYcCX1HEcgAeJTWBR/f/UWW24MMsEfrh7c58w38RIA0n9dUGCRT1aXUtp9DwsM6mR1/lIHFlSRP+2BegBLVA==@vger.kernel.org
-X-Gm-Message-State: AOJu0YzJfRKLXm4MdUoOiZT0I24J+wak/vvvTRiCuRmkHtI5Po8GDgRA
-	PqqZgXHa8/1c5snwg59309SJvdzMz4SnW6R6R/okbvXDBKVQcZylHn5Q1kWIfJOO4tcMXfDetRZ
-	IRj2n+gl4iX6q5zTbneGfGmdrrqbKl6G6CnCmp5HsdKdi3ge3qCzQ3QdwDKe9o6uoAQ==
-X-Gm-Gg: ASbGncvBJnNWobg3RCOo2dP/4AJCGhZeGEHijis1/f/NXnd5bFXnpVTQBiW5vn85gwP
-	ehUo6xnSAdo4eUXY8wFwe64GpMIHFtfpA4Lj2Jm89TEFU0P8WR3gUkT9m9LF74BTMvam1EDo9eB
-	T0u0l5bE4//0CgMLoF3hHYez5Fy0D1Vv8JNY3xsMma8S6B7QYQxxuT/NJ5YX+fbNtuS85a0KZa1
-	rpKQbnCI4Rwc8i4W8CUBspcyL07jV5Py6HELFeVPk1MFyn3YnZ5Xh1imrWktwszBwktNXEO84xV
-	VuvpGv7pMJhyDk96tfGWQUEUohCdSUtzVNO+f1/SLG6yEN1xAvXBIat0JzzSGvBogqkw/YGq8iE
-	XSzkiSuxmhEpTAwSMWdwBJA2IuKSRxgTIp/i5Yp/QA3pSlq+f+Jp1LU0WS/BjtM0o5KZ3dMkeDn
-	2CSmD+LCfLhwrV
-X-Received: by 2002:ac8:7d8c:0:b0:4e8:a7d6:bc07 with SMTP id d75a77b69052e-4ed72628c9dmr18858421cf.71.1762303568978;
-        Tue, 04 Nov 2025 16:46:08 -0800 (PST)
-X-Google-Smtp-Source: AGHT+IEWNMNBfUTT4rg1Cfryk8ANuc5CyRy+3uj/V1/C0sa5odRgWZsOoF8OUbkVS4NNLvdrFtR6wQ==
-X-Received: by 2002:ac8:7d8c:0:b0:4e8:a7d6:bc07 with SMTP id d75a77b69052e-4ed72628c9dmr18858281cf.71.1762303568485;
-        Tue, 04 Nov 2025 16:46:08 -0800 (PST)
-Received: from umbar.lan (2001-14ba-a0c3-3a00-264b-feff-fe8b-be8a.rev.dnainternet.fi. [2001:14ba:a0c3:3a00:264b:feff:fe8b:be8a])
-        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-5943443db22sm1174829e87.66.2025.11.04.16.46.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 04 Nov 2025 16:46:06 -0800 (PST)
-Date: Wed, 5 Nov 2025 02:46:03 +0200
-From: Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>
-To: Dikshita Agarwal <dikshita.agarwal@oss.qualcomm.com>
-Cc: Vikash Garodia <vikash.garodia@oss.qualcomm.com>,
-        Abhinav Kumar <abhinav.kumar@linux.dev>,
-        Bryan O'Donoghue <bod@kernel.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Hans Verkuil <hverkuil@kernel.org>,
-        Stefan Schmidt <stefan.schmidt@linaro.org>,
-        linux-media@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Val Packett <val@packett.cool>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="mMt7z2f9"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1762304991; x=1793840991;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=FFfDIqSM/9x7BMOCDpR60+XjPYyWl3N8kflVm4dcMck=;
+  b=mMt7z2f9BvnGdIAQBy7E9sk8yBVZMa7W+zZlwP7p+U/hnuhEV6D/xj+C
+   aLyDDUj543wGGmlYEC6eSQiwRw1lFj0KZ1G2sInmMJ/F9gvK934itO1js
+   lL1gZ+R0rN1c7EYftuniU9qy00J//i5wB5GWO6IQjDnKF0ZYILLZBYx05
+   7JiXHU3wQL7ddh1KmpEPzn1opGv49fl/nh3EZsAgb8WoKO5jIpu905iur
+   YBZG4PpLHsnmUO3XLSupYNgZtzyQpCJsDjVWPaUbXCYohfa+AYjfTGqIu
+   PqTBmhgsT30W8jyg9sLeshh9y3o+iUo5zpkRWo0BkgpmeojRYF18vulv+
+   g==;
+X-CSE-ConnectionGUID: Rx6+9894Qy2pOLFDAdXssA==
+X-CSE-MsgGUID: cCS93jTVRYu266fx+G1TTw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11603"; a="87040689"
+X-IronPort-AV: E=Sophos;i="6.19,280,1754982000"; 
+   d="scan'208";a="87040689"
+Received: from orviesa002.jf.intel.com ([10.64.159.142])
+  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Nov 2025 17:09:51 -0800
+X-CSE-ConnectionGUID: u4x7LBY1TjafuokxlPvc3g==
+X-CSE-MsgGUID: T1qvwjEnQmadicmAvnWwqQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.19,280,1754982000"; 
+   d="scan'208";a="217956010"
+Received: from lkp-server02.sh.intel.com (HELO 66d7546c76b2) ([10.239.97.151])
+  by orviesa002.jf.intel.com with ESMTP; 04 Nov 2025 17:09:48 -0800
+Received: from kbuild by 66d7546c76b2 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1vGS1x-000S0O-1D;
+	Wed, 05 Nov 2025 01:09:45 +0000
+Date: Wed, 5 Nov 2025 09:08:57 +0800
+From: kernel test robot <lkp@intel.com>
+To: Dikshita Agarwal <dikshita.agarwal@oss.qualcomm.com>,
+	Vikash Garodia <vikash.garodia@oss.qualcomm.com>,
+	Abhinav Kumar <abhinav.kumar@linux.dev>,
+	Bryan O'Donoghue <bod@kernel.org>,
+	Mauro Carvalho Chehab <mchehab@kernel.org>,
+	Hans Verkuil <hverkuil@xs4all.nl>,
+	Stefan Schmidt <stefan.schmidt@linaro.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-media@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+	linux-kernel@vger.kernel.org, Val Packett <val@packett.cool>,
+	Dikshita Agarwal <dikshita.agarwal@oss.qualcomm.com>
 Subject: Re: [PATCH v2] media: iris: Refine internal buffer reconfiguration
  logic for resolution change
-Message-ID: <5vjvhg7xph34e5mg5q2yrytj6ugyokz7forfvhidjqhzta55st@uvgbfrvkzrxm>
+Message-ID: <202511050842.FTUh6ym8-lkp@intel.com>
 References: <20251104-iris-seek-fix-v2-1-c9dace39b43d@oss.qualcomm.com>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
@@ -102,100 +73,140 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 In-Reply-To: <20251104-iris-seek-fix-v2-1-c9dace39b43d@oss.qualcomm.com>
-X-Proofpoint-ORIG-GUID: IykG-_EoCIxJAMGMm49vloYjcTpR0_43
-X-Proofpoint-GUID: IykG-_EoCIxJAMGMm49vloYjcTpR0_43
-X-Authority-Analysis: v=2.4 cv=b7O/I9Gx c=1 sm=1 tr=0 ts=690a9e51 cx=c_pps
- a=WeENfcodrlLV9YRTxbY/uA==:117 a=xqWC_Br6kY4A:10 a=kj9zAlcOel0A:10
- a=6UeiqGixMTsA:10 a=s4-Qcg_JpJYA:10 a=VkNPw1HP01LnGYTKEx00:22
- a=e5mUnYsNAAAA:8 a=VwQbUJbxAAAA:8 a=EUspDBNiAAAA:8 a=ip-fXVA9LE2ppvREXl4A:9
- a=CjuIK1q_8ugA:10 a=kacYvNCVWA4VmyqE58fU:22 a=Vxmtnl_E_bksehYqCbjh:22
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUxMTA1MDAwNCBTYWx0ZWRfX/wt07xDfuK61
- eC9S1LTu1OPvICtgTEWJnt/nO6vtRKnaYAtW5+mvYwMgKtBwpydeqYAy+raLva1LDY6TWp7K78x
- O8Y45Fq+2t29Cz4IharsgSvzFaBbgf+mKEF9pELSXeqYTRTT/iXZgro9FOrLf4mXH8aogykwM2s
- q3GUgJ30FU7qVr6cPTmE0aFNTtK05kAl+O6loKDGJlCpAEKfJeWP/AKRyFIZZ/mHNH75btFfQIj
- 6o2/a8zJCD6drKk+bbjA/Jv5pqkBSZf+2wzg2nDeMddBYP59TeCgByXQ0bcGKH3XnYU0K5SNwsq
- o+qcjIPW8HLpAcw23mOuCsEjzwDbAimoJx7vN77BdNGKg1MHLfHX0isD0zjMBZZn5nYXaxP958Q
- /jy+fOYyzqfGbyFDctByz7IZfTTriA==
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.9,FMLib:17.12.100.49
- definitions=2025-11-05_01,2025-11-03_03,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- impostorscore=0 adultscore=0 priorityscore=1501 malwarescore=0 clxscore=1015
- phishscore=0 spamscore=0 bulkscore=0 lowpriorityscore=0 suspectscore=0
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.22.0-2510240001 definitions=main-2511050004
 
-On Tue, Nov 04, 2025 at 10:41:05AM +0530, Dikshita Agarwal wrote:
-> Improve the condition used to determine when input internal buffers need
-> to be reconfigured during streamon on the capture port. Previously, the
-> check relied on the INPUT_PAUSE sub-state, which was also being set
-> during seek operations. This led to input buffers being queued multiple
-> times to the firmware, causing session errors due to duplicate buffer
-> submissions.
-> 
-> This change introduces a more accurate check using the FIRST_IPSC and
-> DRC sub-states to ensure that input buffer reconfiguration is triggered
-> only during resolution change scenarios, such as streamoff/on on the
-> capture port. This avoids duplicate buffer queuing during seek
-> operations.
-> 
-> Fixes: c1f8b2cc72ec ("media: iris: handle streamoff/on from client in dynamic resolution change")
-> Reported-by: Val Packett <val@packett.cool>
-> Closes: https://gitlab.freedesktop.org/gstreamer/gstreamer/-/issues/4700
-> Signed-off-by: Dikshita Agarwal <dikshita.agarwal@oss.qualcomm.com>
-> ---
-> Changes in v2:
-> - Removed spurious space and addressed other comments (Nicolas)
-> - Remove the unnecessary initializations (Self) 
-> - Link to v1: https://lore.kernel.org/r/20251103-iris-seek-fix-v1-1-6db5f5e17722@oss.qualcomm.com
-> ---
->  drivers/media/platform/qcom/iris/iris_common.c | 6 ++++--
->  1 file changed, 4 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/media/platform/qcom/iris/iris_common.c b/drivers/media/platform/qcom/iris/iris_common.c
-> index 9fc663bdaf3fc989fe1273b4d4280a87f68de85d..ee377131c8419c434c85ec8e4321db39bbdecda0 100644
-> --- a/drivers/media/platform/qcom/iris/iris_common.c
-> +++ b/drivers/media/platform/qcom/iris/iris_common.c
-> @@ -91,12 +91,13 @@ int iris_process_streamon_input(struct iris_inst *inst)
->  int iris_process_streamon_output(struct iris_inst *inst)
->  {
->  	const struct iris_hfi_command_ops *hfi_ops = inst->core->hfi_ops;
-> -	bool drain_active = false, drc_active = false;
->  	enum iris_inst_sub_state clear_sub_state = 0;
->  	int ret = 0;
->  
->  	iris_scale_power(inst);
->  
-> +	first_ipsc = inst->sub_state & IRIS_INST_SUB_FIRST_IPSC;
-> +
->  	drain_active = inst->sub_state & IRIS_INST_SUB_DRAIN &&
->  		inst->sub_state & IRIS_INST_SUB_DRAIN_LAST;
->  
-> @@ -108,7 +109,8 @@ int iris_process_streamon_output(struct iris_inst *inst)
->  	else if (drain_active)
->  		clear_sub_state = IRIS_INST_SUB_DRAIN | IRIS_INST_SUB_DRAIN_LAST;
->  
-> -	if (inst->domain == DECODER && inst->sub_state & IRIS_INST_SUB_INPUT_PAUSE) {
-> +	/* Input internal buffer reconfiguration required in case of resolution change */
-> +	if (first_ipsc || drc_active) {
->  		ret = iris_alloc_and_queue_input_int_bufs(inst);
->  		if (ret)
->  			return ret;
+Hi Dikshita,
 
-After this line comes manual writing of STAGE and PIPE. Could you please
-point out where is the driver updating the resolution in the firmware?
-And if it does, why do we need to write STAGE and PIPE again?
+kernel test robot noticed the following build errors:
 
-> 
-> ---
-> base-commit: 163917839c0eea3bdfe3620f27f617a55fd76302
-> change-id: 20251103-iris-seek-fix-7a25af22fa52
-> 
-> Best regards,
-> -- 
-> Dikshita Agarwal <dikshita.agarwal@oss.qualcomm.com>
-> 
+[auto build test ERROR on 163917839c0eea3bdfe3620f27f617a55fd76302]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Dikshita-Agarwal/media-iris-Refine-internal-buffer-reconfiguration-logic-for-resolution-change/20251104-131307
+base:   163917839c0eea3bdfe3620f27f617a55fd76302
+patch link:    https://lore.kernel.org/r/20251104-iris-seek-fix-v2-1-c9dace39b43d%40oss.qualcomm.com
+patch subject: [PATCH v2] media: iris: Refine internal buffer reconfiguration logic for resolution change
+config: loongarch-allmodconfig (https://download.01.org/0day-ci/archive/20251105/202511050842.FTUh6ym8-lkp@intel.com/config)
+compiler: clang version 19.1.7 (https://github.com/llvm/llvm-project cd708029e0b2869e80abe31ddb175f7c35361f90)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251105/202511050842.FTUh6ym8-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202511050842.FTUh6ym8-lkp@intel.com/
+
+All error/warnings (new ones prefixed by >>):
+
+>> drivers/media/platform/qcom/iris/iris_common.c:99:2: error: use of undeclared identifier 'first_ipsc'
+      99 |         first_ipsc = inst->sub_state & IRIS_INST_SUB_FIRST_IPSC;
+         |         ^
+>> drivers/media/platform/qcom/iris/iris_common.c:101:2: error: use of undeclared identifier 'drain_active'
+     101 |         drain_active = inst->sub_state & IRIS_INST_SUB_DRAIN &&
+         |         ^
+>> drivers/media/platform/qcom/iris/iris_common.c:104:2: error: use of undeclared identifier 'drc_active'
+     104 |         drc_active = inst->sub_state & IRIS_INST_SUB_DRC &&
+         |         ^
+   drivers/media/platform/qcom/iris/iris_common.c:107:6: error: use of undeclared identifier 'drc_active'
+     107 |         if (drc_active)
+         |             ^
+   drivers/media/platform/qcom/iris/iris_common.c:109:11: error: use of undeclared identifier 'drain_active'; did you mean 'swait_active'?
+     109 |         else if (drain_active)
+         |                  ^~~~~~~~~~~~
+         |                  swait_active
+   include/linux/swait.h:121:19: note: 'swait_active' declared here
+     121 | static inline int swait_active(struct swait_queue_head *wq)
+         |                   ^
+   drivers/media/platform/qcom/iris/iris_common.c:113:6: error: use of undeclared identifier 'first_ipsc'
+     113 |         if (first_ipsc || drc_active) {
+         |             ^
+   drivers/media/platform/qcom/iris/iris_common.c:113:20: error: use of undeclared identifier 'drc_active'
+     113 |         if (first_ipsc || drc_active) {
+         |                           ^
+   drivers/media/platform/qcom/iris/iris_common.c:127:8: error: use of undeclared identifier 'drain_active'; did you mean 'swait_active'?
+     127 |                 if (!drain_active)
+         |                      ^~~~~~~~~~~~
+         |                      swait_active
+   include/linux/swait.h:121:19: note: 'swait_active' declared here
+     121 | static inline int swait_active(struct swait_queue_head *wq)
+         |                   ^
+>> drivers/media/platform/qcom/iris/iris_common.c:127:8: warning: address of function 'swait_active' will always evaluate to 'true' [-Wpointer-bool-conversion]
+     127 |                 if (!drain_active)
+         |                     ~^~~~~~~~~~~~
+   drivers/media/platform/qcom/iris/iris_common.c:127:8: note: prefix with the address-of operator to silence this warning
+     127 |                 if (!drain_active)
+         |                      ^
+         |                      &
+   1 warning and 8 errors generated.
+
+
+vim +/first_ipsc +99 drivers/media/platform/qcom/iris/iris_common.c
+
+    90	
+    91	int iris_process_streamon_output(struct iris_inst *inst)
+    92	{
+    93		const struct iris_hfi_command_ops *hfi_ops = inst->core->hfi_ops;
+    94		enum iris_inst_sub_state clear_sub_state = 0;
+    95		int ret = 0;
+    96	
+    97		iris_scale_power(inst);
+    98	
+  > 99		first_ipsc = inst->sub_state & IRIS_INST_SUB_FIRST_IPSC;
+   100	
+ > 101		drain_active = inst->sub_state & IRIS_INST_SUB_DRAIN &&
+   102			inst->sub_state & IRIS_INST_SUB_DRAIN_LAST;
+   103	
+ > 104		drc_active = inst->sub_state & IRIS_INST_SUB_DRC &&
+   105			inst->sub_state & IRIS_INST_SUB_DRC_LAST;
+   106	
+   107		if (drc_active)
+   108			clear_sub_state = IRIS_INST_SUB_DRC | IRIS_INST_SUB_DRC_LAST;
+   109		else if (drain_active)
+   110			clear_sub_state = IRIS_INST_SUB_DRAIN | IRIS_INST_SUB_DRAIN_LAST;
+   111	
+   112		/* Input internal buffer reconfiguration required in case of resolution change */
+   113		if (first_ipsc || drc_active) {
+   114			ret = iris_alloc_and_queue_input_int_bufs(inst);
+   115			if (ret)
+   116				return ret;
+   117			ret = iris_set_stage(inst, STAGE);
+   118			if (ret)
+   119				return ret;
+   120			ret = iris_set_pipe(inst, PIPE);
+   121			if (ret)
+   122				return ret;
+   123		}
+   124	
+   125		if (inst->state == IRIS_INST_INPUT_STREAMING &&
+   126		    inst->sub_state & IRIS_INST_SUB_INPUT_PAUSE) {
+ > 127			if (!drain_active)
+   128				ret = hfi_ops->session_resume_drc(inst,
+   129								  V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE);
+   130			else if (hfi_ops->session_resume_drain)
+   131				ret = hfi_ops->session_resume_drain(inst,
+   132								    V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE);
+   133			if (ret)
+   134				return ret;
+   135			clear_sub_state |= IRIS_INST_SUB_INPUT_PAUSE;
+   136		}
+   137	
+   138		if (inst->sub_state & IRIS_INST_SUB_FIRST_IPSC)
+   139			clear_sub_state |= IRIS_INST_SUB_FIRST_IPSC;
+   140	
+   141		ret = hfi_ops->session_start(inst, V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE);
+   142		if (ret)
+   143			return ret;
+   144	
+   145		if (inst->sub_state & IRIS_INST_SUB_OUTPUT_PAUSE)
+   146			clear_sub_state |= IRIS_INST_SUB_OUTPUT_PAUSE;
+   147	
+   148		ret = iris_inst_state_change_streamon(inst, V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE);
+   149		if (ret)
+   150			return ret;
+   151	
+   152		inst->last_buffer_dequeued = false;
+   153	
+   154		return iris_inst_change_sub_state(inst, clear_sub_state, 0);
+   155	}
+   156	
 
 -- 
-With best wishes
-Dmitry
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
