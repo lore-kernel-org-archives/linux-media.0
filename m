@@ -1,102 +1,171 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D5D0619D093;
-	Wed,  5 Nov 2025 08:17:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A1C8428A1E6
+	for <linux-media@vger.kernel.org>; Wed,  5 Nov 2025 08:23:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762330628; cv=none; b=qhr3tPfZHEuKcPRm/c+nX2mLpjHlw5ldYu6VgIiR3FpyUFX1DO4WoklzsdCPMcM8Rmo4MmnXvZeA7t9ARjOyx3/RuCNTlvmdzkN9wIDRQXgXhdqCvaOUo7HRWmoemrzHfK1puPL/ch33XVEg5A5UXaRunbDaFqVrHpFTRIQrS3Y=
+	t=1762331006; cv=none; b=lpa1r7QJzofQqcgJC4lpzWUCJ2DAfch7tRX0ftfpcP7pI0RCLOQRiOWWImwAaXj0IcRdtehzVO+CbdoZ6vTgqJKaS4LVNnVbhY/cyii1PADzjqd2oWy4jaKZSGyZGR6JrkYUcqjB6NUzFLJ6D7iLWAqYH9U5vtTo39uAlbQK/0w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762330628; c=relaxed/simple;
-	bh=I+PyMO8FO2EK1xxh53hnQc6PLSI72+wbeSBrnWGdMZ0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=XzI4p120MfU45Gz7+nOgc2mEP1g6hn1j3xEp/CMObxSOgpTW4DISmrPZxQdipFvCMJ6zkBde5tgUrDleFdP4csEjtM8j2S6kxaCAkoWpTBmYW5L6Gq+Hszj85s+/JfM7GqqTXsWEmUZmhXFmY2Sy/sMsaLUxomfDV6FKASve5pM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Zb+T55Yc; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1762331006; c=relaxed/simple;
+	bh=OGxIuTjuT9QUth5tviNLROGJDx0BPvfd0vIUdJqNFQc=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=lP03xUdJqqjW02w4pOzJDs4tn1zkLxUf0C/0bRaiDoKO+6L0ptQFQMXhaXRYV84gggChPJZVO42Paqy6nz7IxvkO/rUyGJ+33dga1QyTJeHUTON50+8jnT+hrCv28hNsiWSiLqbINn2zNXBM6esoZC88Y2fJdMeI5ZawHSRNgI8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=juopY66a; dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b=WXw8o2Dh; arc=none smtp.client-ip=205.220.180.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Zb+T55Yc"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EBA46C4CEF8;
-	Wed,  5 Nov 2025 08:17:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1762330627;
-	bh=I+PyMO8FO2EK1xxh53hnQc6PLSI72+wbeSBrnWGdMZ0=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=Zb+T55YcpTdB9AIBqOV3Tfmamiogsb9dfH66G5UFmsvyAaTjQwCqltsPnhHyyZY73
-	 nOFOU6WP1ft/xSqaEt/fxOYY34rSlR2Z7kZJZ2rbDDGT2htW8PuKNT7WyTlieODQ2k
-	 plYxGV3055zKvlQOpqNywGZpdXSL7V90rwPlEqkcB+Fr5kSmTRutn309z5RZ99K/Ju
-	 Qy5ihI41f0ozi/Asgk4c77bI9TE2m7zGEd4Zm7hcmxOJ2Ac8BiG00O/RgTJT/OiOJ6
-	 8jlwnQigCl72ejo1WwJNNSX9r2OE+z6ujbXlOVM0BZHNjqTh2DxRuz7XYwq0B/+2mq
-	 08Aom7/pRG6lw==
-Date: Wed, 5 Nov 2025 10:17:04 +0200
-From: Leon Romanovsky <leon@kernel.org>
-To: Nicolin Chen <nicolinc@nvidia.com>
-Cc: Bjorn Helgaas <bhelgaas@google.com>,
-	Logan Gunthorpe <logang@deltatee.com>, Jens Axboe <axboe@kernel.dk>,
-	Robin Murphy <robin.murphy@arm.com>, Joerg Roedel <joro@8bytes.org>,
-	Will Deacon <will@kernel.org>,
-	Marek Szyprowski <m.szyprowski@samsung.com>,
-	Jason Gunthorpe <jgg@ziepe.ca>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Sumit Semwal <sumit.semwal@linaro.org>,
-	Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
-	Alex Williamson <alex.williamson@redhat.com>,
-	Kees Cook <kees@kernel.org>,
-	"Gustavo A. R. Silva" <gustavoars@kernel.org>,
-	Ankit Agrawal <ankita@nvidia.com>,
-	Yishai Hadas <yishaih@nvidia.com>,
-	Shameer Kolothum <skolothumtho@nvidia.com>,
-	Kevin Tian <kevin.tian@intel.com>,
-	Krishnakant Jaju <kjaju@nvidia.com>, Matt Ochs <mochs@nvidia.com>,
-	linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-block@vger.kernel.org, iommu@lists.linux.dev,
-	linux-mm@kvack.org, linux-doc@vger.kernel.org,
-	linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
-	linaro-mm-sig@lists.linaro.org, kvm@vger.kernel.org,
-	linux-hardening@vger.kernel.org,
-	Vivek Kasireddy <vivek.kasireddy@intel.com>
-Subject: Re: [PATCH v6 00/11] vfio/pci: Allow MMIO regions to be exported
- through dma-buf
-Message-ID: <20251105081704.GB16832@unreal>
-References: <20251102-dmabuf-vfio-v6-0-d773cff0db9f@nvidia.com>
- <aQpRz74RurfhZK15@Asurada-Nvidia>
+	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="juopY66a";
+	dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b="WXw8o2Dh"
+Received: from pps.filterd (m0279872.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 5A582or63090222
+	for <linux-media@vger.kernel.org>; Wed, 5 Nov 2025 08:23:23 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
+	cc:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
+	tCgTIkJgcGjREVJRipm5DUuZDPsi1flrzSwxBnkSqZU=; b=juopY66a6UdbqL8n
+	OJ8fNl7s5iZ4HP6YnenlhW1kxzJ+Iy5qFmeOHql3qvMlOsyzMY+IWk3479tHH1G+
+	shj9yCwS4K9n/rts86FBGIB4hKeVF/2pjMYbIEwWPyJmWVGVlyEzFI898Vs4zkh4
+	KAH2kCRpAjxTBoa3wV0NcK5Phwpsmzu2Z2hqsMoOeUjL8iBOYFvQNU6mAOFX8SQw
+	K4uMpao5sw/9hVjvPyvSWwSNS4gIticbDzJZmGlJNm3S8Chfw9j4Xd3njfm3kFkK
+	KB1q6WFEQZyhf5w6jpDOMAS+GSsDDX6an6XbNrlDZVPy3LYQ8KI5F1vqvkehORRg
+	hp6fXw==
+Received: from mail-pl1-f199.google.com (mail-pl1-f199.google.com [209.85.214.199])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4a7s5e9nge-1
+	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
+	for <linux-media@vger.kernel.org>; Wed, 05 Nov 2025 08:23:23 +0000 (GMT)
+Received: by mail-pl1-f199.google.com with SMTP id d9443c01a7336-294df925293so71628235ad.2
+        for <linux-media@vger.kernel.org>; Wed, 05 Nov 2025 00:23:23 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=oss.qualcomm.com; s=google; t=1762331002; x=1762935802; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=tCgTIkJgcGjREVJRipm5DUuZDPsi1flrzSwxBnkSqZU=;
+        b=WXw8o2Dh5KBoMD86YGNl9m7yloi1RfmICqg9u+CituAUqFYbGYbiNkorV4VCM+FdvG
+         f3+glNo0BgX6cGOjNlIl2F7OvJmdsFeVhU6dLfCHCOnDfyVZtn3cymsF7G6sKZy2j3wV
+         E/V9pzHGX1lp9G+XETEI7vL0WzPqfQzDuNk6aTXRuQAYYiIJORCJ0EimVAmmSl5TVtLt
+         Od9LxYIAjPEwj1TnYgTnJvO8bKC1+WfuT1YEKWF7n1IqkNlq8pevwmmN8Pk1regTABsj
+         eY7UOHOsuO3ulqzpiPrAOvr1FbqXu9+SvyiSbas83oHhgRoO0Gm3TV871mJ4nm6PWMJs
+         gSjg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1762331002; x=1762935802;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=tCgTIkJgcGjREVJRipm5DUuZDPsi1flrzSwxBnkSqZU=;
+        b=tyx3DAAAbB0hTdF8TZ+ePIspHWBvky+rcN2Tc6d0J4n85pO+zlVd6YaV7s1y4u6jx1
+         7J2kbSYqDNV/8pGujOj8j1SLB8oX3t+Vy18GJ/AEfX5JSGOkAGTgF0Ce9wQHkHATH3Uc
+         lTFv+yRkMs7CPDDJMNe/vOf9BoDov4JdrYEtsFZqMwsZTcTWT9OHvkZLxIi6Gwyqokj9
+         orBkNJtiERFHytu1ytxUZ+434yxjsdvALj3+PgASI+lV4cMHs2PIsNG3NJPSXugmVmCM
+         Dbgt20vNsUcbP9l6Dog+/KRxSLmAucEO7MWOotXeLjxCp384VuRB3xk6mVopdKBSeYsD
+         GmhQ==
+X-Gm-Message-State: AOJu0Yy5mcEulQ9o+mM7gDbPafcuSbTJhm1GdV/oZ/mq+vJNQT9b/H3z
+	h/fpfjNknzshX6bPwFAReJ4+AT3kxSNKQ8fAeuOXTPEYRfyIbrrt/YV9UqBBb2ifE1XBVq+yYmY
+	vR1EhHLO4aUWyoPIvfsBRXGuAjGahZtasnPw4SBgICiRXxLh4Yv5OTx97gjlJ/yeCfr+FQ8Ut9A
+	==
+X-Gm-Gg: ASbGncsSpcHooXnr2fcimUY5oc3B1A02Q58IjEBbGNG1OeZuWayUlNReogV79oDB81q
+	YIYfCxbb7iSNUZY1XSN2yu6V5BUXxHFQGO+h09MLA2IRnbxuBmUhSmA2t52CCnZ5poHOKYkGTJA
+	3fsrRHBoYGiOlN+9SB0TwFF0u/SGkSZjdWrBRrKJWcB13Uhm4Q40dgxhEf6QW1qXUEf+VaWZAsQ
+	46yZqqaqkUlJ9P/cGMKy1KO0k9KOzX8dCEUdG+5uOc+y8CFn4zMF5KP8mOI1UKQ4gnJGihhZRlM
+	wO1Y0L2FFOM2rB69J6PQopK/P0/LiaSvSDg9cn+aaNOvAeq193Uggee1dbhTL3/oOSz2u1iK5B8
+	RYon/LznaDACV/x/bawtMGhUGgq+x5V4=
+X-Received: by 2002:a17:902:ecce:b0:294:621c:a84b with SMTP id d9443c01a7336-2962ade3a3emr41995775ad.56.1762331002093;
+        Wed, 05 Nov 2025 00:23:22 -0800 (PST)
+X-Google-Smtp-Source: AGHT+IH2/ml1wZTgQyjOdGBjdGCJJ3AbNiVC5lD7CGWaurnvwcR2//Zu+UgCzBWxIDLg25v0xDEA+w==
+X-Received: by 2002:a17:902:ecce:b0:294:621c:a84b with SMTP id d9443c01a7336-2962ade3a3emr41995485ad.56.1762331001599;
+        Wed, 05 Nov 2025 00:23:21 -0800 (PST)
+Received: from [10.0.0.3] ([106.222.229.252])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-29601a69d91sm51520155ad.95.2025.11.05.00.23.18
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 05 Nov 2025 00:23:21 -0800 (PST)
+Message-ID: <ea009a8b-5a09-5c2c-8f61-7b7c7efc8b53@oss.qualcomm.com>
+Date: Wed, 5 Nov 2025 13:53:17 +0530
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <aQpRz74RurfhZK15@Asurada-Nvidia>
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.13.0
+Subject: Re: [PATCH v2] media: iris: Refine internal buffer reconfiguration
+ logic for resolution change
+Content-Language: en-US
+To: Val Packett <val@packett.cool>,
+        Vikash Garodia <vikash.garodia@oss.qualcomm.com>,
+        Abhinav Kumar <abhinav.kumar@linux.dev>,
+        Bryan O'Donoghue <bod@kernel.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Hans Verkuil <hverkuil@kernel.org>,
+        Stefan Schmidt <stefan.schmidt@linaro.org>
+Cc: linux-media@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20251104-iris-seek-fix-v2-1-c9dace39b43d@oss.qualcomm.com>
+ <7d26e4e9-e298-4991-883f-ceb60f240394@packett.cool>
+From: Dikshita Agarwal <dikshita.agarwal@oss.qualcomm.com>
+In-Reply-To: <7d26e4e9-e298-4991-883f-ceb60f240394@packett.cool>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-GUID: yGMlbyPxaVFBLa9qwBCfHDCo-baYGuIY
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUxMTA1MDA2MSBTYWx0ZWRfX6OxJX5/a8E96
+ PauuwAewGcFr81LNKTCRdwxbqSxG2vEq/vqIKjZzarRd0PcM/QQSaj8OBEuqowP4LpBlheKz0E3
+ 5ccLlqpZ4WG+Gv+ZosLJnrGOj4626CFylsC+5v2FUkATGCvrKdCu9JyaJGBInpIOaK7bVD6QGQT
+ U4XaJaVxiZnc6fwuqJpyxhsfJS4uXT+1MZigTEhmv1J9uSM4lQ3NQoMRBp+/z4MjhZ7wpGKhHb9
+ FPRg3DAiiSwroQLeiSeTpmnznWEQ63iVOAR/dJxhxftPsk7W9DhqDEwFRXa13OjnekdrETFfAiJ
+ w0A9G6MQO9zsmysz3bqB+qzx0ownmaqTe9xMbx5mKYwRMluy5XmHGqtkeSc/eeR/7JtQ5l1SZli
+ roRiJjPM8vTKLKRgx+nfWAjjWgWpzw==
+X-Authority-Analysis: v=2.4 cv=OayVzxTY c=1 sm=1 tr=0 ts=690b097b cx=c_pps
+ a=JL+w9abYAAE89/QcEU+0QA==:117 a=L4UNg9I9cQSOxNpRiiGXlA==:17
+ a=IkcTkHD0fZMA:10 a=6UeiqGixMTsA:10 a=s4-Qcg_JpJYA:10
+ a=VkNPw1HP01LnGYTKEx00:22 a=k8ZG-Nafi6ezIJLqpSUA:9 a=3ZKOabzyN94A:10
+ a=QEXdDO2ut3YA:10 a=324X-CrmTo6CU4MGRt3R:22
+X-Proofpoint-ORIG-GUID: yGMlbyPxaVFBLa9qwBCfHDCo-baYGuIY
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.9,FMLib:17.12.100.49
+ definitions=2025-11-05_03,2025-11-03_03,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ priorityscore=1501 clxscore=1015 phishscore=0 adultscore=0 impostorscore=0
+ bulkscore=0 suspectscore=0 spamscore=0 lowpriorityscore=0 malwarescore=0
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.22.0-2510240001 definitions=main-2511050061
 
-On Tue, Nov 04, 2025 at 11:19:43AM -0800, Nicolin Chen wrote:
-> On Sun, Nov 02, 2025 at 10:00:48AM +0200, Leon Romanovsky wrote:
-> > Changelog:
-> > v6:
-> >  * Fixed wrong error check from pcim_p2pdma_init().
-> >  * Documented pcim_p2pdma_provider() function.
-> >  * Improved commit messages.
-> >  * Added VFIO DMA-BUF selftest.
-> >  * Added __counted_by(nr_ranges) annotation to struct vfio_device_feature_dma_buf.
-> >  * Fixed error unwind when dma_buf_fd() fails.
-> >  * Document latest changes to p2pmem.
-> >  * Removed EXPORT_SYMBOL_GPL from pci_p2pdma_map_type.
-> >  * Moved DMA mapping logic to DMA-BUF.
-> >  * Removed types patch to avoid dependencies between subsystems.
-> >  * Moved vfio_pci_dma_buf_move() in err_undo block.
-> >  * Added nvgrace patch.
-> 
-> I have verified this v6 using Jason's iommufd dmabuf branch:
-> https://github.com/jgunthorpe/linux/commits/iommufd_dmabuf/
-> 
-> by drafting a QEMU patch on top of Shameer's vSMMU v5 series:
-> https://github.com/nicolinc/qemu/commits/wip/iommufd_dmabuf/
-> 
-> with that, I see GPU BAR memory be correctly fetched in the QEMU:
-> vfio_region_dmabuf Device 0009:01:00.0, region "0009:01:00.0 BAR 0", offset: 0x0, size: 0x1000000
-> vfio_region_dmabuf Device 0009:01:00.0, region "0009:01:00.0 BAR 2", offset: 0x0, size: 0x44f00000
-> vfio_region_dmabuf Device 0009:01:00.0, region "0009:01:00.0 BAR 4", offset: 0x0, size: 0x17a0000000
-> 
-> Tested-by: Nicolin Chen <nicolinc@nvidia.com>
 
-Thanks a lot.
+
+On 11/5/2025 5:20 AM, Val Packett wrote:
+> 
+> On 11/4/25 2:11 AM, Dikshita Agarwal wrote:
+>> [..]
+>> --- a/drivers/media/platform/qcom/iris/iris_common.c
+>> +++ b/drivers/media/platform/qcom/iris/iris_common.c
+>> @@ -91,12 +91,13 @@ int iris_process_streamon_input(struct iris_inst *inst)
+>>   int iris_process_streamon_output(struct iris_inst *inst)
+>>   {
+>>       const struct iris_hfi_command_ops *hfi_ops = inst->core->hfi_ops;
+>> -    bool drain_active = false, drc_active = false;
+>>       enum iris_inst_sub_state clear_sub_state = 0;
+>>       int ret = 0;
+>>
+>> [..]
+> 
+> Somehow, you have lost the + edited line that declares the bools.. Hence
+> the CI failure reported for v1, and the kernel test robot message from just
+> a couple minutes ago.
+
+Yes, I realized the mistake and have posted v3 with the fix. However, I
+missed to add your tested-by, apologies for the same.
+
+Could you please review v3 and add the tag again.
+
+Thanks,
+Dikshita
+> 
+> But with `bool first_ipsc = false, drain_active = false, drc_active =
+> false;` filled in,
+> 
+> Tested-by: Val Packett <val@packett.cool>
+> 
+> finally the decoder is actually usable \o/
+> 
+> ~val
+> 
