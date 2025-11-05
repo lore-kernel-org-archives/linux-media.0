@@ -1,70 +1,93 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from bali.collaboradmins.com (bali.collaboradmins.com [148.251.105.195])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 638D72E7650;
-	Wed,  5 Nov 2025 08:49:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 89B242FB978;
+	Wed,  5 Nov 2025 09:14:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.251.105.195
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762332599; cv=none; b=FWxRObC92DsMVPbtE/W9/yU0lSDnOs4QPTmg0VpqsqJ43e2zGLA1pRRHBGPRAZ75AtSWnHhtvyfcnFA4IMutWuOOCIaItzRxSDjHwnNkkKkb2fdBVg6Xb50rzCkSNUYm/PWfc2LcCFxquxIjxtPPwOZf7vyVA2LVRAmKutq5ERA=
+	t=1762334077; cv=none; b=KaJZDCE8PNIyvLutYcbSnCAkyvur0xY0figTi2Iw6eu0V3Xve3Em1ICKCUALNu7XAR/G5kt160FM9WLSsA3TYvjRNWM6hmqizJZxJF7o7tH4v00MD/EJEa5H7um0RzkQw0/tOTamsq2LVP8cjP1jPqY+VeMPqAti67LoKD1HLzA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762332599; c=relaxed/simple;
-	bh=2Y1w6bkA2Q5H1e/6/2oG37f+BVtHYYjkIoM1/5dBfiQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=jJsOIFJ5V7kGeTJxihS7OccFKEeTP4ewlq+1JwPgP4Tms3gFg5bUbVkBf3T2emROE9OSSBSTsIoTt9bApPMQHDGQqZ5pTKYKoIU6ZA2l6YxNMS+vGa1jv9S87oLxS+swwG+INvJj63TPW3WmyuZhWwQ+DRxhpEkYpR8QydvHLrg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jJSPmQEY; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1762334077; c=relaxed/simple;
+	bh=qWtgovMFKiTMTHDBfS7Kxt4dQ9VFI2F4oQIKhJkL1jY=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
+	 MIME-Version:Content-Type; b=jCyz09IuWclzItj5fjTgeyXA2fpy8Cvw5EEC9iBXr5UrQNM5Xny8ZpSsDx8+ppnGTvSvHiY6WxT9cnrhuOi70Md/Ip4X6ph5A5Esb38P39Z08xciKJWtEw4fPKg8FIYVP0oWj7ftnNlJGoEyfeENUpXOLXvb2n+MXM8tRS1mTEI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=Z//sTn5c; arc=none smtp.client-ip=148.251.105.195
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jJSPmQEY"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8EFCBC4CEF8;
-	Wed,  5 Nov 2025 08:49:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1762332598;
-	bh=2Y1w6bkA2Q5H1e/6/2oG37f+BVtHYYjkIoM1/5dBfiQ=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=jJSPmQEYTzfQYPTiek+jRvogb/YBMztLwwi7hhdfdJlXd556tHxFp+VkmjCAfIh41
-	 f6Iah2WW4+4Orano4Wim+FwboOprywWhW2OefKKctrEhFFuEVa3APLSatzvawLcIeD
-	 P0EZnPODL+7kWzrUaV/s++lRMQAr1KMn3JNxDRVkFOi9Ko7sz9Bd8zidiQSsabIfYO
-	 EBx5VpgB7kQqFkRxNOnVUFoD5//NgbaFVVIjic4oqVMLySYmHmf3rbsJxg3tzzzxhh
-	 k3dum8VVKQIKdMVrZrL+wbmXFjW3I2CPMOPIS6LTkkzt4YjKph3tQSGRWfeSd17q3p
-	 Jcy2tEad3dcrw==
-Date: Wed, 5 Nov 2025 09:49:56 +0100
-From: Krzysztof Kozlowski <krzk@kernel.org>
-To: Guoniu Zhou <guoniu.zhou@oss.nxp.com>
-Cc: Laurent Pinchart <laurent.pinchart@ideasonboard.com>, 
-	Mauro Carvalho Chehab <mchehab@kernel.org>, Rob Herring <robh@kernel.org>, 
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Shawn Guo <shawnguo@kernel.org>, Sascha Hauer <s.hauer@pengutronix.de>, 
-	Pengutronix Kernel Team <kernel@pengutronix.de>, Fabio Estevam <festevam@gmail.com>, Frank Li <Frank.Li@nxp.com>, 
-	linux-media@vger.kernel.org, devicetree@vger.kernel.org, imx@lists.linux.dev, 
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, Guoniu Zhou <guoniu.zhou@nxp.com>
-Subject: Re: [PATCH v3 1/3] media: dt-bindings: nxp,imx8-isi: Add i.MX95 ISI
- compatible string
-Message-ID: <20251105-fancy-practical-saluki-1a6ec8@kuoka>
-References: <20251105-isi_imx95-v3-0-3987533cca1c@nxp.com>
- <20251105-isi_imx95-v3-1-3987533cca1c@nxp.com>
+	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="Z//sTn5c"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+	s=mail; t=1762334073;
+	bh=qWtgovMFKiTMTHDBfS7Kxt4dQ9VFI2F4oQIKhJkL1jY=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+	b=Z//sTn5cgHw750Qw6GxY5XREnvUNETEmFkS3svN8Y+59h7+pZt88kiAHz/G47pffY
+	 QWaL2k7AHtjnpXrcMuvUJqv1R2UfglFDV0dt7hIV43tH2gG/gmimBSOhOYSf1rhc4D
+	 dR065+SV4njc+oxNiFXJ8noBKGMa0MWKU/IO+E4/0VN23bslViMB7F4DT2pR7ETsyk
+	 mJOD9Tvt8Ypt4kfd1WeubJp/2wjUTpX3cq2+JFCe3yKG8JztHPrn5IOOjw0Aaq9Onb
+	 vxUjSm7DB7XyxM9sLF2A+aMrod/lsSZGURl17/u7pyApgFa9CJKTOtX5AoJPeI+1jL
+	 IZUUIETtm/gSg==
+Received: from IcarusMOD.eternityproject.eu (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: kholk11)
+	by bali.collaboradmins.com (Postfix) with ESMTPSA id C2B6A17E128C;
+	Wed,  5 Nov 2025 10:14:32 +0100 (CET)
+From: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+To: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+ Conor Dooley <conor+dt@kernel.org>, Jassi Brar <jassisinghbrar@gmail.com>, 
+ Chun-Kuang Hu <chunkuang.hu@kernel.org>, 
+ Mauro Carvalho Chehab <mchehab@kernel.org>, 
+ Jason-JH Lin <jason-jh.lin@mediatek.com>
+Cc: Matthias Brugger <matthias.bgg@gmail.com>, 
+ Nicolas Dufresne <nicolas@ndufresne.ca>, Nancy Lin <nancy.lin@mediatek.com>, 
+ Singo Chang <singo.chang@mediatek.com>, 
+ Paul-PL Chen <paul-pl.chen@mediatek.com>, Moudy Ho <moudy.ho@mediatek.com>, 
+ Xiandong Wang <xiandong.wang@mediatek.com>, 
+ Sirius Wang <sirius.wang@mediatek.com>, Fei Shao <fshao@chromium.org>, 
+ Chen-yu Tsai <wenst@chromium.org>, 
+ Project_Global_Chrome_Upstream_Group@mediatek.com, 
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ dri-devel@lists.freedesktop.org, linux-mediatek@lists.infradead.org, 
+ linux-arm-kernel@lists.infradead.org, linux-media@vger.kernel.org, 
+ Jason-jh Lin <jason-jh.lin@mediatek.corp-partner.google.com>
+In-Reply-To: <20251031155838.1650833-1-jason-jh.lin@mediatek.com>
+References: <20251031155838.1650833-1-jason-jh.lin@mediatek.com>
+Subject: Re: (subset) [PATCH 0/9] Add GCE support for MT8196 (series 1/4)
+Message-Id: <176233407273.17051.14832672768529226895.b4-ty@collabora.com>
+Date: Wed, 05 Nov 2025 10:14:32 +0100
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20251105-isi_imx95-v3-1-3987533cca1c@nxp.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.14.3
 
-On Wed, Nov 05, 2025 at 01:55:10PM +0800, Guoniu Zhou wrote:
-> From: Guoniu Zhou <guoniu.zhou@nxp.com>
+On Fri, 31 Oct 2025 23:56:28 +0800, Jason-JH Lin wrote:
+> From: Jason-jh Lin <jason-jh.lin@mediatek.corp-partner.google.com>
 > 
-> The ISI module on i.MX95 supports up to eight channels and four link
-> sources to obtain the image data for processing in its pipelines. It
-> can process up to eight image sources at the same time.
+> This series adds initial support for the MediaTek MT8196 GCE in the CMDQ
+> driver, including related API changes for new hardware requirements.
 > 
-> Signed-off-by: Guoniu Zhou <guoniu.zhou@nxp.com>
-> ---
->  .../devicetree/bindings/media/nxp,imx8-isi.yaml    | 27 +++++++++++++++++++++-
->  1 file changed, 26 insertions(+), 1 deletion(-)
+> Series application order:
+>   1. [Fixes] Refine DMA address handling for the command buffer
+>   - https://lore.kernel.org/all/20251022171847.379470-1-jason-jh.lin@mediatek.com/
+>   2. [Series 1/4] Add GCE support for MT8196 and update CMDQ APIs (this series)
+>   3. [Series 2/4] Migrate subsystems to new CMDQ APIs
+>   4. [Series 3/4] Remove shift_pa from CMDQ jump functions
+>   5. [Series 4/4] Remove deprecated CMDQ APIs
+> 
+> [...]
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Applied to v6.18-next/dts64, thanks!
 
-Best regards,
-Krzysztof
+[1/9] arm64: dts: mediatek: Add GCE header for MT8196
+      commit: 355531a5ffd9e26f4d87ab34015c679e32d60e3c
+
+Cheers,
+Angelo
+
 
