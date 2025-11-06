@@ -1,155 +1,126 @@
-Received: from bali.collaboradmins.com (bali.collaboradmins.com [148.251.105.195])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8BAA924E4BD;
-	Thu,  6 Nov 2025 15:17:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.251.105.195
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3A31721D59C
+	for <linux-media@vger.kernel.org>; Thu,  6 Nov 2025 15:28:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762442270; cv=none; b=idVzcSdarxvOIDWuuNbLQd/m9Pca92C17fDSTJuBrFtQAvrTFLjMZ9/OsY2U6lv8DMpL1FNecKT4lWUXgDOETC8OZgN+pL/v6yraPQJvRIBRTLjaNjVgu5fCRNxDpzlu6rgUyKVBuN5cITFjbUTTWHi7P9+LJY/IoEHnuweaEIc=
+	t=1762442918; cv=none; b=ikmI6C5QGwaFM58hfNWtFa0MVyF2QD3rDMMHV3+dchbj3sW0QFGbD5iJVPBjoyloPJdRRTEjsuzYn9F1sONzPuH68GjEEZ/EEPh60wNxXmUIyTVM7fOrq2qg0ziQaUmfW/IKjzJOpUx/THCVzqZ5LXG0zlafL399lc9bBBe/V/0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762442270; c=relaxed/simple;
-	bh=DRgu+1zEiLJzFvpqNcYywnec1hhXYCa75y4/TrlRBwg=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=tXY2dtWvDIfkKR7p+FyWXgbcdeCZQSPRXcPaboBfSwEqS/iNfhpc6M38P6dG7rvlv23lYCSfoh3XoTTXKsVa+zvPULzQ1ZCdIg69ieeUe+0Yehr68LhMLtYmnvB9EnXakDZLTLlgcg7LsREPOXln6c3Aqg0Qe2O+8Z+8snxYC7w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=H3PJOxvt; arc=none smtp.client-ip=148.251.105.195
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
+	s=arc-20240116; t=1762442918; c=relaxed/simple;
+	bh=z3rafII3GZVVdLj7QkBVWwycgU2qXok4k+OYmj6mPMw=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=JHaN8gr/B/OBIEGeoTmlJ8YhlwhmGTjbn/CRH6dd9QKAC1pdVXfzNKFSk2grEFRGVKvtBT++SBcs4DPz2F4QxR7/S2qG4Gu6RRZsKMHrPZv/3G233zbolw9Slfi3aCihTQyxsMLWs0A/VgH3gy7MqvEnomS0fOHpqFU9qMKi/DI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=YalrXv9h; arc=none smtp.client-ip=192.198.163.15
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="H3PJOxvt"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1762442266;
-	bh=DRgu+1zEiLJzFvpqNcYywnec1hhXYCa75y4/TrlRBwg=;
-	h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-	b=H3PJOxvtqbQ72kA29/dtPRySRy3X/JZY1JnX8vB8mMpkAnGTDMeazey1oWJ2Ho9bt
-	 zeyRgpkd6g8h6igHZu13qSn79r4sGm7JHTfoDCk8iAX1CHOFL+AxPlO4inD6jJ1QqB
-	 uPQrJdaTa1qv33cFL6/UrVxby54yqTFa+ngnn6rQ5plXOROKyynfxGemVj56YAIDCt
-	 D/evrmMFyB4XrDTUjJMYmLQiugeCmw2UdOWrpJPgLxqjgs5wRcuGmlmi52GRaxxVHg
-	 8LUUNLXrhQl8bSoRw4FfLkKQW4xHjNzNSlBQJ/s523TL00QFWSRe4L5hYjAft+T3LG
-	 eXeZ4etQ4nneA==
-Received: from [IPv6:2606:6d00:11:ef24::c41] (unknown [IPv6:2606:6d00:11:ef24::c41])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: nicolas)
-	by bali.collaboradmins.com (Postfix) with ESMTPSA id CFAF817E090D;
-	Thu,  6 Nov 2025 16:17:43 +0100 (CET)
-Message-ID: <bd2f63265df829ec9bb3498c83126827415c2ebf.camel@collabora.com>
-Subject: Re: [PATCH v5 5/8] media: mediatek: vcodec: fix vp9 4096x2176 fail
- for profile2
-From: Nicolas Dufresne <nicolas.dufresne@collabora.com>
-To: Kyrie Wu <kyrie.wu@mediatek.com>, Tiffany Lin
- <tiffany.lin@mediatek.com>,  Andrew-CT Chen <andrew-ct.chen@mediatek.com>,
- Yunfei Dong <yunfei.dong@mediatek.com>, Mauro Carvalho Chehab	
- <mchehab@kernel.org>, Rob Herring <robh@kernel.org>, Krzysztof Kozlowski	
- <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, Matthias Brugger	
- <matthias.bgg@gmail.com>, AngeloGioacchino Del Regno	
- <angelogioacchino.delregno@collabora.com>, Hans Verkuil
- <hverkuil@xs4all.nl>,  Nathan Hebert <nhebert@chromium.org>, Arnd Bergmann
- <arnd@arndb.de>, Irui Wang <irui.wang@mediatek.com>,  George Sun
- <george.sun@mediatek.com>, linux-media@vger.kernel.org,
- devicetree@vger.kernel.org, 	linux-kernel@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, 	linux-mediatek@lists.infradead.org,
- Yilong Zhou <yilong.zhou@mediatek.com>
-Cc: Neil Armstrong <neil.armstrong@linaro.org>, Andrzej Pietrasiewicz
-	 <andrzejtp2010@gmail.com>
-Date: Thu, 06 Nov 2025 10:17:42 -0500
-In-Reply-To: <20251106061323.2193-6-kyrie.wu@mediatek.com>
-References: <20251106061323.2193-1-kyrie.wu@mediatek.com>
-	 <20251106061323.2193-6-kyrie.wu@mediatek.com>
-Autocrypt: addr=nicolas.dufresne@collabora.com; prefer-encrypt=mutual;
- keydata=mDMEaCN2ixYJKwYBBAHaRw8BAQdAM0EHepTful3JOIzcPv6ekHOenE1u0vDG1gdHFrChD
- /e0J05pY29sYXMgRHVmcmVzbmUgPG5pY29sYXNAbmR1ZnJlc25lLmNhPoicBBMWCgBEAhsDBQsJCA
- cCAiICBhUKCQgLAgQWAgMBAh4HAheABQkJZfd1FiEE7w1SgRXEw8IaBG8S2UGUUSlgcvQFAmibrjo
- CGQEACgkQ2UGUUSlgcvQlQwD/RjpU1SZYcKG6pnfnQ8ivgtTkGDRUJ8gP3fK7+XUjRNIA/iXfhXMN
- abIWxO2oCXKf3TdD7aQ4070KO6zSxIcxgNQFtDFOaWNvbGFzIER1ZnJlc25lIDxuaWNvbGFzLmR1Z
- nJlc25lQGNvbGxhYm9yYS5jb20+iJkEExYKAEECGwMFCwkIBwICIgIGFQoJCAsCBBYCAwECHgcCF4
- AWIQTvDVKBFcTDwhoEbxLZQZRRKWBy9AUCaCyyxgUJCWX3dQAKCRDZQZRRKWBy9ARJAP96pFmLffZ
- smBUpkyVBfFAf+zq6BJt769R0al3kHvUKdgD9G7KAHuioxD2v6SX7idpIazjzx8b8rfzwTWyOQWHC
- AAS0LU5pY29sYXMgRHVmcmVzbmUgPG5pY29sYXMuZHVmcmVzbmVAZ21haWwuY29tPoiZBBMWCgBBF
- iEE7w1SgRXEw8IaBG8S2UGUUSlgcvQFAmibrGYCGwMFCQll93UFCwkIBwICIgIGFQoJCAsCBBYCAw
- ECHgcCF4AACgkQ2UGUUSlgcvRObgD/YnQjfi4+L8f4fI7p1pPMTwRTcaRdy6aqkKEmKsCArzQBAK8
- bRLv9QjuqsE6oQZra/RB4widZPvphs78H0P6NmpIJ
-Organization: Collabora Canada
-Content-Type: multipart/signed; micalg="pgp-sha512";
-	protocol="application/pgp-signature"; boundary="=-p4Bu9/Ayloxs70Y/YXH1"
-User-Agent: Evolution 3.56.2 (3.56.2-2.fc42) 
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="YalrXv9h"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1762442917; x=1793978917;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=z3rafII3GZVVdLj7QkBVWwycgU2qXok4k+OYmj6mPMw=;
+  b=YalrXv9hkwzP/tZAREz/BhusOC0wsLhXX87bcQdMWdAZReAm+zReJqWE
+   cXLUxQjqNtaAVwftrHE5/Nk5JbA3IAb1WhqwEPOo28vqKoChvMlYDJ3Nm
+   PDge3kMjkD5vkXENd9EkqO+kF0L48MuzBfddsdel7OfVjyYGG5cqbrkZ5
+   mZ9PVwai82shVaidv7mmH61rKbTBDGk84/gYv2PDaHGUsv8AbARw4YMhL
+   i36Hu4cgILXKnU6HGrlqjQ0KgaDFWZ9uXaxCl+u0YsHoPAwBsgsWQnfbp
+   kyi3cY3sid56aAzIoazzo+cvBooS3ljLMeVtPdtZOovVE1EfVTgBMpaPL
+   g==;
+X-CSE-ConnectionGUID: AvsfVXMgS4OJVQKPnEl9aA==
+X-CSE-MsgGUID: l3Le9NgYTia2kFy+l+KsZw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11604"; a="64676862"
+X-IronPort-AV: E=Sophos;i="6.19,284,1754982000"; 
+   d="scan'208";a="64676862"
+Received: from fmviesa010.fm.intel.com ([10.60.135.150])
+  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Nov 2025 07:28:36 -0800
+X-CSE-ConnectionGUID: UrKIdx1QRKOAvO2AXqfifg==
+X-CSE-MsgGUID: KcV2QMtNSQyD0ATWi5HhxA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.19,284,1754982000"; 
+   d="scan'208";a="188502162"
+Received: from abityuts-desk.ger.corp.intel.com (HELO mdjait-mobl) ([10.245.244.232])
+  by fmviesa010-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Nov 2025 07:28:35 -0800
+Date: Thu, 6 Nov 2025 16:28:28 +0100
+From: Mehdi Djait <mehdi.djait@linux.intel.com>
+To: Hans de Goede <hansg@kernel.org>
+Cc: Bingbu Cao <bingbu.cao@intel.com>, 
+	Sakari Ailus <sakari.ailus@linux.intel.com>, linux-media@vger.kernel.org
+Subject: Re: [PATCH 16/25] media: i2c: ov01a10: Add cropping support / allow
+ arbitrary sizes
+Message-ID: <eswyokov4fzty53fkdyzmifhhuu2mkgsnc4nb5c6vbwpj4xosd@yipyaigpxa7p>
+References: <20251014174033.20534-1-hansg@kernel.org>
+ <20251014174033.20534-17-hansg@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20251014174033.20534-17-hansg@kernel.org>
 
+Hi Hans,
 
---=-p4Bu9/Ayloxs70Y/YXH1
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Thank you for the patches!
 
-Hi,
+On Tue, Oct 14, 2025 at 07:40:24PM +0200, Hans de Goede wrote:
+> Remove the fixed mode list and add cropping support. The main reason for
+> doing this is to allow libcamera to select 1292x812 instead of 1280x800
+> so that after the extra border which the CPU debayer code needs libcamera
+> can output 1280x720 instead of 1276x720.
+> 
+> This in turn allows google-meet to use 720p instead of it falling back
+> to a pretty bad 360p.
+> 
+> This has been tested on a Dell XPS 9320, with both libcamera as well as
+> with Intel's out-of-tree psys driver + proprietary userspace stack.
+> 
+> Libcamera asks for 1292x812 where as the Intel stack asks for 1280x800
+> and neither stack explicitly sets the crop-window. Hence the need for
+> ov01a10_set_format() to adjust the crop-window if necessary.
+> 
+> Note the differentiating between pattern_size and border_size is done in
+> preparation for adding support for the monochrome OV01A1B model where
+> coordinates still need to be aligned to a multiple of 2, but there will
+> be no need for a border (border_size=0).
+> 
 
-Le jeudi 06 novembre 2025 =C3=A0 14:13 +0800, Kyrie Wu a =C3=A9crit=C2=A0:
-> The dram addr of vp9 decoder tile number, which use dram mode
-> to set tile information, may reach to 36bits for 4096x2176.
-> It needs to get the highest 4bit of tile buffer address to
-> set tile buffer address.
+Tested-by: Mehdi Djait <mehdi.djait@linux.intel.com> # Dell XPS 9315
+Reviewed-by: Mehdi Djait <mehdi.djait@linux.intel.com>
 
-An after thought, I don't see any call to vb2_dma_contig_set_max_seg_size()=
- or
-dma_set_coherent_mask() with DMA_BIT_MASK(32)/DMA_BIT_MASK(36) in this driv=
-er.
-How do you control this ?
-
-Nicolas
-
->=20
-> Fixes: 5d418351ca8f1 ("media: mediatek: vcodec: support stateless VP9
-> decoding")
->=20
-> Signed-off-by: Kyrie Wu <kyrie.wu@mediatek.com>
-> Reviewed-by: AngeloGioacchino Del Regno
-> <angelogioacchino.delregno@collabora.com>
+> Link: https://bugzilla.redhat.com/show_bug.cgi?id=2337593
+> Signed-off-by: Hans de Goede <hansg@kernel.org>
 > ---
-> =C2=A0.../mediatek/vcodec/decoder/vdec/vdec_vp9_req_lat_if.c=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0 | 5 ++++-
-> =C2=A01 file changed, 4 insertions(+), 1 deletion(-)
->=20
-> diff --git
-> a/drivers/media/platform/mediatek/vcodec/decoder/vdec/vdec_vp9_req_lat_if=
-.c
-> b/drivers/media/platform/mediatek/vcodec/decoder/vdec/vdec_vp9_req_lat_if=
-.c
-> index d966914db4b9..91c563c049bd 100644
-> ---
-> a/drivers/media/platform/mediatek/vcodec/decoder/vdec/vdec_vp9_req_lat_if=
-.c
-> +++
-> b/drivers/media/platform/mediatek/vcodec/decoder/vdec/vdec_vp9_req_lat_if=
-.c
-> @@ -1156,7 +1156,10 @@ static int vdec_vp9_slice_setup_tile_buffer(struct
-> vdec_vp9_slice_instance *inst
-> =C2=A0			tiles->size[i][j] =3D size;
-> =C2=A0			if (tiles->mi_rows[i]) {
-> =C2=A0				*tb++ =3D (size << 3) + ((offset << 3) & 0x7f);
-> -				*tb++ =3D pa & ~0xf;
-> +				*tb =3D pa & ~0xf;
-> +				if (IS_ENABLED(CONFIG_ARCH_DMA_ADDR_T_64BIT))
-> +					*tb |=3D (pa >> 32) & 0xf;
-> +				tb++;
-> =C2=A0				*tb++ =3D (pa << 3) & 0x7f;
-> =C2=A0				mi_row =3D (tiles->mi_rows[i] - 1) & 0x1ff;
-> =C2=A0				mi_col =3D (tiles->mi_cols[j] - 1) & 0x3f;
 
---=-p4Bu9/Ayloxs70Y/YXH1
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-Description: This is a digitally signed message part
-Content-Transfer-Encoding: 7bit
+[..]
 
------BEGIN PGP SIGNATURE-----
+> +static int ov01a10_set_mode(struct ov01a10 *ov01a10)
+> +{
+> +	struct v4l2_mbus_framefmt *fmt = ov01a10_get_active_format(ov01a10);
+> +	int ret = 0;
+> +
+> +	cci_write(ov01a10->regmap, OV01A10_REG_X_ADDR_START, 0, &ret);
+> +	cci_write(ov01a10->regmap, OV01A10_REG_Y_ADDR_START, 0, &ret);
+> +	cci_write(ov01a10->regmap, OV01A10_REG_X_ADDR_END,
+> +		  OV01A10_NATIVE_WIDTH - 1, &ret);
+> +	cci_write(ov01a10->regmap, OV01A10_REG_Y_ADDR_END,
+> +		  OV01A10_NATIVE_HEIGHT - 1, &ret);
+> +	cci_write(ov01a10->regmap, OV01A10_REG_X_OUTPUT_SIZE,
+> +		  fmt->width, &ret);
+> +	cci_write(ov01a10->regmap, OV01A10_REG_Y_OUTPUT_SIZE,
+> +		  fmt->height, &ret);
+> +	/* HTS register is in units of 2 pixels */
+> +	cci_write(ov01a10->regmap, OV01A10_REG_HTS,
+> +		  OV01A10_HTS_DEF / 2, &ret);
+> +	/* OV01A10_REG_VTS is set by vblank control */
+> +	/* OV01A10_REG_X_WIN is set by hlip control */
 
-iHUEABYKAB0WIQTvDVKBFcTDwhoEbxLZQZRRKWBy9AUCaQy8FgAKCRDZQZRRKWBy
-9NPSAP4g8gTapYL8m2LxcUUuZCeWMhCOGTCX8BR5UqAbTL8qfwD/WKrYbiY+6bxl
-DWa6+3ECPDXoTJi+A2WmiP1MGLhfOQc=
-=PEsx
------END PGP SIGNATURE-----
+nit: typo here hlip -> hflip
 
---=-p4Bu9/Ayloxs70Y/YXH1--
+--
+Kind Regards
+Mehdi Djait
