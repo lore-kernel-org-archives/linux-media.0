@@ -1,40 +1,41 @@
 Received: from bali.collaboradmins.com (bali.collaboradmins.com [148.251.105.195])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D4CE72E7F1C;
-	Thu,  6 Nov 2025 14:18:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A287345CBC;
+	Thu,  6 Nov 2025 14:22:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.251.105.195
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762438701; cv=none; b=Vh1CwRVtrEF2VNYeVUf9COU86YGTibBHrsrQpy2n71z1J9LFM4CGxLcwfQdslNUvE3bMiBv5IKaM1ndphIko/C0JCAKAGq6DRwrya28/amskPRg+Nenx78c1KVNXORp7nchvJGJzA/alfukQNMqeRIKexWEMrEYat/WOEB9QfWc=
+	t=1762438928; cv=none; b=siJf+N2V5Jj0IzIfVD729gc7LX+co6plrXgr+6C0+T4m2NWEg6eRSrVOeu6HJkkF6GKoFTJtthmgedPJ4vtqVhHklXxcenWwtp6NTrEVsFD78WZQWS4b7tDy8dPFd9Pf417IrEDDHuC+JmYSgHGX/bgj3ftvWmfbbfjpmB2ciaA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762438701; c=relaxed/simple;
-	bh=D1YqLCZ+wLztmcGu4DKC3azE74VCT3buGcL50oC22eU=;
+	s=arc-20240116; t=1762438928; c=relaxed/simple;
+	bh=6LTpQ06d4NRkE2ObR0JDxtr4dVIQE2cbJXlCr+9SGQo=;
 	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=qNTDgGWMF1OyerFPpvpNtONBxmYCvZxvd8xrPwHVRahcjit13iJgOpXw4YLuwqOONc268zm9ztrUVqOOekaktC8WrM6eAekPRnN650K7WlNqkLEaiy+KEPglIn56txRi6IUbD1Jk1oWWvg8MgqYw1ITWeHC9QS7qMTsfWBa1CxU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=pHS0e98b; arc=none smtp.client-ip=148.251.105.195
+	 Content-Type:MIME-Version; b=Tw+vigqxULf55ojeTM293YM3+0p8jfJFMXURga+XyXojxIb7SUFiAJtwHGjUJDe3GrCvuMBOZkWy95mZpu2wZMZ4gryrRIl/xXLI4hktllJYPaifwDm6bmXYkTPCv0tB82nVq9Q1M7gjHjK8023VZ0YqB1cuIFQidB7uBYgqW6c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=AvNHmc91; arc=none smtp.client-ip=148.251.105.195
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="pHS0e98b"
+	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="AvNHmc91"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1762438690;
-	bh=D1YqLCZ+wLztmcGu4DKC3azE74VCT3buGcL50oC22eU=;
+	s=mail; t=1762438922;
+	bh=6LTpQ06d4NRkE2ObR0JDxtr4dVIQE2cbJXlCr+9SGQo=;
 	h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-	b=pHS0e98bq+XlRk1N9o9qiu5PBFQRLoK8tS0F0eg6MyGsSEDmpq5aGzsBXdGA/LFla
-	 zOay8S0aKHGlPX5dPqGUIqBCToYQjXKFXU9r6OxDTHAAW6opc7D6jLbwvNiwsTa7U6
-	 veFCOG4PgaL77nH4Vbsy+4mjMCgaYgVqeD/paKL5CCyNFwKUFFXR+UNhveCb8m66RR
-	 2jtKQNsK+nCMJHZ1UNizKFYB3aX9MyJOv2CN/PWJkEPYVq+OMgqsWu8tDw3t3mTnQT
-	 pGRh4WA6JN4FjINHYkc5/rkhH3ZDix99BreqWFTYGCvw98WzVeWxGsErhBWpQKvqQ4
-	 yvUvpGLKg3YSg==
+	b=AvNHmc91KLAG8qg2YdrxcA23kBbT0V6pU8eF7ZDi5rzEosUUGyqVDj5OgFWp64ID6
+	 bpFNatoHW27V4DLYZAcwOhygMkZVztAYKU1hg7Gmu6yrmI94QlWN6Sng9tsrdXAmyF
+	 fjN+RZCVQh+cz/OqyTrYQE/ncAQj9DHLFe3aqhoMtvdvUqUaBQe5YNRXNTOgyoaEze
+	 FVxoy/KJzFVuuURroCk5YqtzAOZPmd3bNCi8pbtrwk/GJHJ7/UhCTmxxcP5s/8jMOo
+	 YiO/hzwHJEvBc0H7ss2lT4h4bPKgjRsmVFxfhVoATgEUXcXptMrOjt0pwILFK2Cc+/
+	 pedulFEpLTLyA==
 Received: from [IPv6:2606:6d00:11:ef24::c41] (unknown [IPv6:2606:6d00:11:ef24::c41])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits))
 	(No client certificate requested)
 	(Authenticated sender: nicolas)
-	by bali.collaboradmins.com (Postfix) with ESMTPSA id 2A83117E0299;
-	Thu,  6 Nov 2025 15:18:08 +0100 (CET)
-Message-ID: <c49b979fd911f2587bbfed129b07065f1cd2a2db.camel@collabora.com>
-Subject: Re: [PATCH v5 0/8] Enable video decoder & encoder for MT8189
+	by bali.collaboradmins.com (Postfix) with ESMTPSA id 25B5717E0CA1;
+	Thu,  6 Nov 2025 15:21:59 +0100 (CET)
+Message-ID: <49d55e669473bef7b08882916095f10f409c85a0.camel@collabora.com>
+Subject: Re: [PATCH v5 2/8] media: mediatek: vcodec: add decoder compatible
+ to support MT8189
 From: Nicolas Dufresne <nicolas.dufresne@collabora.com>
 To: Kyrie Wu <kyrie.wu@mediatek.com>, Tiffany Lin
  <tiffany.lin@mediatek.com>,  Andrew-CT Chen <andrew-ct.chen@mediatek.com>,
@@ -51,9 +52,10 @@ To: Kyrie Wu <kyrie.wu@mediatek.com>, Tiffany Lin
  Yilong Zhou <yilong.zhou@mediatek.com>
 Cc: Neil Armstrong <neil.armstrong@linaro.org>, Andrzej Pietrasiewicz
 	 <andrzejtp2010@gmail.com>
-Date: Thu, 06 Nov 2025 09:18:06 -0500
-In-Reply-To: <20251106061323.2193-1-kyrie.wu@mediatek.com>
+Date: Thu, 06 Nov 2025 09:21:58 -0500
+In-Reply-To: <20251106061323.2193-3-kyrie.wu@mediatek.com>
 References: <20251106061323.2193-1-kyrie.wu@mediatek.com>
+	 <20251106061323.2193-3-kyrie.wu@mediatek.com>
 Autocrypt: addr=nicolas.dufresne@collabora.com; prefer-encrypt=mutual;
  keydata=mDMEaCN2ixYJKwYBBAHaRw8BAQdAM0EHepTful3JOIzcPv6ekHOenE1u0vDG1gdHFrChD
  /e0J05pY29sYXMgRHVmcmVzbmUgPG5pY29sYXNAbmR1ZnJlc25lLmNhPoicBBMWCgBEAhsDBQsJCA
@@ -69,7 +71,7 @@ Autocrypt: addr=nicolas.dufresne@collabora.com; prefer-encrypt=mutual;
  bRLv9QjuqsE6oQZra/RB4widZPvphs78H0P6NmpIJ
 Organization: Collabora Canada
 Content-Type: multipart/signed; micalg="pgp-sha512";
-	protocol="application/pgp-signature"; boundary="=-AX19oTKFu1+mQq19n1Qb"
+	protocol="application/pgp-signature"; boundary="=-IdhGf+gEgY7bxzqJixSa"
 User-Agent: Evolution 3.56.2 (3.56.2-2.fc42) 
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
@@ -79,121 +81,94 @@ List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 
 
---=-AX19oTKFu1+mQq19n1Qb
+--=-IdhGf+gEgY7bxzqJixSa
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
 Hi,
 
 Le jeudi 06 novembre 2025 =C3=A0 14:13 +0800, Kyrie Wu a =C3=A9crit=C2=A0:
-> This series have the follow changing:
-> Firstly add mt8189 video decoder compatible, profile and level to support
-> MT8189 kernel driver.
-> Secondly fix some bugs, including vp 4K profile2 and media device node
-> number bug.
-> Lastly, add mt8189 video encoder compatible.
+> MT8189 is pure single core architecture. Support its compatible and
+> use `mtk_vdec_single_core_pdata` to initialize platform data.
 >=20
-> This series has been tested with MT8189 tast test.
-> Encoding and decoding worked for this chip.
->=20
-> Patches 1-2 Add decoder compatible.
-> Patches 3 Add profile and level supporting.
-> Patches 4 Add core-only VP9 decoding supporting.
-> Patches 5-6 fix some bugs.
-> Patches 7-8 Adds encoder compatible.
->=20
+> Signed-off-by: Kyrie Wu <kyrie.wu@mediatek.com>
+> Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collab=
+ora.com>
 > ---
-> H264 test results:
-> ./fluster.py run -d GStreamer-H.264-V4L2SL-Gst1.0 -j2 -t 90
-> =C2=A0=C2=A0=C2=A0 JVT-AVC_V1	Ran 96/135 tests successfully
+> =C2=A0.../platform/mediatek/vcodec/decoder/mtk_vcodec_dec_drv.c=C2=A0=C2=
+=A0 | 6 ++++++
+> =C2=A0.../platform/mediatek/vcodec/decoder/mtk_vcodec_dec_drv.h=C2=A0=C2=
+=A0 | 1 +
+> =C2=A02 files changed, 7 insertions(+)
 >=20
-> VP9 test results:
-> ./fluster.py run -d GStreamer-VP9-V4L2SL-Gst1.0 -j2 -t 90
-> 	VP9-TEST-VECTORS	Ran 276/305 tests successfully
->=20
-> v4l2-compliance test results:
-> Compliance test for mtk-vcodec-enc device /dev/video2:
-> Total for mtk-vcodec-enc device /dev/video2: 47, Succeeded: 46, Failed: 1=
-, Warnings: 0
+> diff --git a/drivers/media/platform/mediatek/vcodec/decoder/mtk_vcodec_de=
+c_drv.c b/drivers/media/platform/mediatek/vcodec/decoder/mtk_vcodec_dec_drv=
+.c
+> index 6fb05bb00641..fca60e81e3c7 100644
+> --- a/drivers/media/platform/mediatek/vcodec/decoder/mtk_vcodec_dec_drv.c
+> +++ b/drivers/media/platform/mediatek/vcodec/decoder/mtk_vcodec_dec_drv.c
+> @@ -347,6 +347,8 @@ static void mtk_vcodec_dec_get_chip_name(struct mtk_v=
+codec_dec_dev *vdec_dev)
+> =C2=A0		vdec_dev->chip_name =3D MTK_VDEC_MT8188;
+> =C2=A0	else if (of_device_is_compatible(dev->of_node, "mediatek,mt8196-vc=
+odec-dec"))
+> =C2=A0		vdec_dev->chip_name =3D MTK_VDEC_MT8196;
+> +	else if (of_device_is_compatible(dev->of_node, "mediatek,mt8189-vcodec-=
+dec"))
+> +		vdec_dev->chip_name =3D MTK_VDEC_MT8189;
+> =C2=A0	else
+> =C2=A0		vdec_dev->chip_name =3D MTK_VDEC_INVAL;
+> =C2=A0}
+> @@ -574,6 +576,10 @@ static const struct of_device_id mtk_vcodec_match[] =
+=3D {
+> =C2=A0		.compatible =3D "mediatek,mt8196-vcodec-dec",
+> =C2=A0		.data =3D &mtk_lat_sig_core_pdata,
+> =C2=A0	},
+> +	{
+> +		.compatible =3D "mediatek,mt8189-vcodec-dec",
+> +		.data =3D &mtk_vdec_single_core_pdata,
+> +	},
 
-There is one fail, can you explain it ?
+Maybe its just me, but its annoying that you match the compatible twice. It=
+ is
+of course more work to add yet another indirection for the chip_name, but
+considering you do 2 soc / year (and sometimes more) this will keep growing=
+.
+
+Opinions ? I'd don't want to block this forever, but I'd like to see some
+cleanup of this driver happening in the long term.
 
 Nicolas
 
-> Compliance test for mtk-vcodec-dec device /dev/video3:
-> Total for mtk-vcodec-dec device /dev/video3: 48, Succeeded: 48, Failed: 0=
-, Warnings: 0
->=20
-> scp upstream link:
-> https://patchwork.kernel.org/project/linux-mediatek/patch/20250811015922.=
-32680-1-huayu.zong@mediatek.com/
-> dtsi upstream link:
-> https://lore.kernel.org/linux-mediatek/20251030134541.784011-12-jh.hsu@me=
-diatek.com/T/#m847e35de0a5b18fac0ca0624a8559d84964ad5c7
->=20
-> Changes compared with v4:
-> --update H264 & vp9 fluster test results
-> --update vp9 single core decoder prob size setting and commit messages
->=20
-> Changes compared with v3:
-> --add reviewer to commit messages
-> --Rebased on top of the latest media tree
->=20
-> Changes compared with v2:
-> --add H264 fluster test results
-> --reorder compatible string for dt-bindings
->=20
-> Changes compared with v1:
-> --add v4l2-compliance test results
-> --add scp upstream link
-> --add HW difference discriptions for dt-bindings commit messages
->=20
-> This series patches dependent on:
-> [1]
-> https://patchwork.linuxtv.org/project/linux-media/cover/20250510075357.11=
-761-1-yunfei.dong@mediatek.com/
-> [2]
-> https://patchwork.linuxtv.org/project/linux-media/cover/20250814085642.17=
-343-1-kyrie.wu@mediatek.com/
->=20
-> Kyrie Wu (8):
-> =C2=A0 dt-bindings: media: mediatek: decoder: Add MT8189
-> =C2=A0=C2=A0=C2=A0 mediatek,vcodec-decoder
-> =C2=A0 media: mediatek: vcodec: add decoder compatible to support MT8189
-> =C2=A0 media: mediatek: vcodec: add profile and level supporting for MT81=
-89
-> =C2=A0 media: mediatek: vcodec: Add single core VP9 decoding support for
-> =C2=A0=C2=A0=C2=A0 MT8189
-> =C2=A0 media: mediatek: vcodec: fix vp9 4096x2176 fail for profile2
-> =C2=A0 media: mediatek: vcodec: fix media device node number
-> =C2=A0 dt-bindings: media: Add MT8189 mediatek,vcodec-encoder
-> =C2=A0 media: mediatek: encoder: Add MT8189 encoder compatible data
->=20
-> =C2=A0.../media/mediatek,vcodec-encoder.yaml=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0 |=C2=A0 2 +
-> =C2=A0.../media/mediatek,vcodec-subdev-decoder.yaml |=C2=A0 5 +-
-> =C2=A0.../vcodec/decoder/mtk_vcodec_dec_drv.c=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0 |=C2=A0 9 +++-
-> =C2=A0.../vcodec/decoder/mtk_vcodec_dec_drv.h=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0 |=C2=A0 1 +
-> =C2=A0.../vcodec/decoder/mtk_vcodec_dec_stateless.c |=C2=A0 4 ++
-> =C2=A0.../vcodec/decoder/vdec/vdec_vp9_req_lat_if.c | 48 ++++++++++++++--=
----
-> =C2=A0.../vcodec/encoder/mtk_vcodec_enc_drv.c=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0 | 14 ++++++
-> =C2=A07 files changed, 68 insertions(+), 15 deletions(-)
+> =C2=A0	{},
+> =C2=A0};
+> =C2=A0
+> diff --git a/drivers/media/platform/mediatek/vcodec/decoder/mtk_vcodec_de=
+c_drv.h b/drivers/media/platform/mediatek/vcodec/decoder/mtk_vcodec_dec_drv=
+.h
+> index 429b32952194..9421fd4fda1d 100644
+> --- a/drivers/media/platform/mediatek/vcodec/decoder/mtk_vcodec_dec_drv.h
+> +++ b/drivers/media/platform/mediatek/vcodec/decoder/mtk_vcodec_dec_drv.h
+> @@ -25,6 +25,7 @@ enum mtk_vcodec_dec_chip_name {
+> =C2=A0	MTK_VDEC_MT8183 =3D 8183,
+> =C2=A0	MTK_VDEC_MT8186 =3D 8186,
+> =C2=A0	MTK_VDEC_MT8188 =3D 8188,
+> +	MTK_VDEC_MT8189 =3D 8189,
+> =C2=A0	MTK_VDEC_MT8192 =3D 8192,
+> =C2=A0	MTK_VDEC_MT8195 =3D 8195,
+> =C2=A0	MTK_VDEC_MT8196 =3D 8196,
 
---=-AX19oTKFu1+mQq19n1Qb
+--=-IdhGf+gEgY7bxzqJixSa
 Content-Type: application/pgp-signature; name="signature.asc"
 Content-Description: This is a digitally signed message part
 Content-Transfer-Encoding: 7bit
 
 -----BEGIN PGP SIGNATURE-----
 
-iHUEABYKAB0WIQTvDVKBFcTDwhoEbxLZQZRRKWBy9AUCaQyuHgAKCRDZQZRRKWBy
-9GzzAQC9JvEjAqGmbr6LW33oZiyGcWY0ryOA79ls2yujy1q7iwEA0bH9kaKtrf0m
-Qb5ZjB7rfho2ovN2pheFNN9ADJ88AQw=
-=8/5c
+iHUEABYKAB0WIQTvDVKBFcTDwhoEbxLZQZRRKWBy9AUCaQyvBgAKCRDZQZRRKWBy
+9IPJAP9KEcQgbQ/1/dn3z4hh+pf9gIoQw7JY+DY9KFuzQSbuDgEAoYvS0YGR1n9V
+ksidpcraN6RLZCAcUMnEhwYavCvi8wg=
+=RRDe
 -----END PGP SIGNATURE-----
 
---=-AX19oTKFu1+mQq19n1Qb--
+--=-IdhGf+gEgY7bxzqJixSa--
