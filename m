@@ -1,111 +1,119 @@
-Received: from mail-pl1-f178.google.com (mail-pl1-f178.google.com [209.85.214.178])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 89974BA3F
-	for <linux-media@vger.kernel.org>; Thu,  6 Nov 2025 05:03:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 844682DBF78;
+	Thu,  6 Nov 2025 06:13:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=60.244.123.138
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762405397; cv=none; b=pr24BJuzCDrfPqD1/WoD+KuLEEGUFIJTX61waFAbNAYAE5Z9akEgXYB26xD88cLcSk5UHKfKfgLvw8B8ml1a1NECqYVCAa9DFs6J3y+OjgdljuNmwxrmLJ+bPF57PEfrEwPztNojoHdZsj5CdjgM/IB/Ikpy2oHaqdeSBo+KM+I=
+	t=1762409615; cv=none; b=Hy6PIISRS2mX5aw722mJI6nVpPjiRPveG4wOFXopl3NsYVy30qXW3sk31e6Tjs5rMl6Y2YkoGnU4skkXTGsXVqFesCx2NuF8uIGAoIHmzHMDaPHFDZAtlp4AQ3A8bIq0O073em+NH0sfCOsRFiTJlndfjuknt8ZosWmNUYHIZIk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762405397; c=relaxed/simple;
-	bh=EvcrG3dDGncaL739yj1nMubM8EpRLHOh2MgJIi094OU=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=UNFJ6+S8rljtqc+1Wxz7RdZ1Xvr/W92mTv68q4N/Pl+AAjRw3FZ3xc13Gx7PzCdX/lAa5uhRhMWkvhUYM2MrZEZnoY8/J+yqm8aBtIfFzxARCt6rtQFdgShlIojFGbZ2b4qm0usym5RD405UljVaci8oqS+tFYqLlOrRwE2kwo8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=PGWl50ho; arc=none smtp.client-ip=209.85.214.178
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1762409615; c=relaxed/simple;
+	bh=s+fYGnA08QTeIzgiSM2+Kw5/k+uUaAOCCoUBmKF+exg=;
+	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=J3kXq9H3hcsyiNtGxgW468mj6EoYsTYOlGWi1PcNcHwFsBFXuuhKUIyHcf1FNw7NUi6GKk4oiuOo8ib0hKY/pWdJqnwPMPwBxWdT8WvOYGGC0lzgLYE7L2gZ9l6C9QoyXSFXrB50RHSnJEiVOAO7/xhMm3zW3cnNHpsm5BkP5pc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mediatek.com; spf=pass smtp.mailfrom=mediatek.com; dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b=u+FwqOir; arc=none smtp.client-ip=60.244.123.138
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mediatek.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mediatek.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="PGWl50ho"
-Received: by mail-pl1-f178.google.com with SMTP id d9443c01a7336-2957850c63bso6750025ad.0
-        for <linux-media@vger.kernel.org>; Wed, 05 Nov 2025 21:03:16 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1762405396; x=1763010196; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=EvcrG3dDGncaL739yj1nMubM8EpRLHOh2MgJIi094OU=;
-        b=PGWl50hoLXqBoiz5k1atMyyqYuxDFlIS1xqH1F1J7gY02ih/OBBCBbhcvlYqi+HefP
-         oWpLWMyyrWX9p6Y2ySWM9aXcrQbffegzleeczde/KQaGTy7EhDfzjHxAABTXb9ZdXd/q
-         v0h7p7A91LykxCMuOHRDuiomxd6mzJGtdFQZIXy5PYgY/3jAZSh0xWd/x546CZWzLHHa
-         KAsg/rqDirONtZeGvmkU0KO7z4Zn9AW5vVprMtaXR4FPbbMrZpYEAOnKvlWIJkhAXalF
-         u9aNTH5LOGd6YkpgQbEW/cpFz9hGMbYKJL+8DHQFYl5ikYGjOWIKVWGMD7W/7o95CVkm
-         XfVA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1762405396; x=1763010196;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=EvcrG3dDGncaL739yj1nMubM8EpRLHOh2MgJIi094OU=;
-        b=KS0B8hsEy+Weom+Zss1W0ju6euxWCtjDf+DbuBUlEKMTmMIBsWl/BevbiK0y52IE/M
-         t842PAJoNAq8D1DTh2Qa6ThN6n8E8XHwf+P8uABxCBHDOB8d8vWOrZTgsoyumT9bZ2Yo
-         e9+QECfO1QqfnRYnvjDYwzCtIFejn+PhLLBtln3tNuBaERNW8zwUy98yypZY/1tD/2uV
-         rF3OECg3Q9ipPWsMw6c7ZC91z3mOZyUePxflX5n1r3hCAgnh+BnCckNXvvPzrsx8ubU6
-         bXsPEyKvoChnJ+hA3vQlBj+acfGGfUM4Nk4lq3Y6q/7a4tD5LFilwBKU0cgaefIJkaRm
-         4dpQ==
-X-Forwarded-Encrypted: i=1; AJvYcCU8AYfRCVbV++eAqUy9HW1jSX8YGYKqIGuDQDvbSYoIsCuOMtA7DK8mo3u0W6J+tgezMfeDfrpHkJnpjw==@vger.kernel.org
-X-Gm-Message-State: AOJu0YyoB2dnzt2AbNKq+9CK9SJh0nG+XIR3ZyKdDFYPzO8VtPVdoDvz
-	AJWcJ14RXximayLbt+XlWgWDbZ4RgEfvob9z4/WSWhZECwhVUhWcliTc8uvAHXsfOA1Qc19HhOS
-	We5v7G3SZ8N7ZpLM9w3WFAitFbtSz3VMozg==
-X-Gm-Gg: ASbGncuCF147ramjHG70oiBeuKxIoKQb5He4TdWr4BkCDHu7uNtVrd6KeEXG3dIWdX3
-	xjwEcZtV4f57vbGnMpgG4Cle4cWAlOIHHUj7xk8CEdWQJbScZmE+hA/3pCbiMueYKA1cUtOhfoA
-	FQ75a5Jkxp5tptroR+jcXKk/8Rl0kHGvB3drK3JZW9or9zoZjeOncCCpvBEPwzNqnfs1TUMmKBo
-	N+nK8HroNV8O+ymWgmvl6drS3b6+3b2UUcVPQCmeTY56Bsv2csePnhckNvtDCwthelXPuLvJ6qy
-	IZmCBUBnKov3fUcf7xs=
-X-Google-Smtp-Source: AGHT+IHrzZ1/4Im3y8/huzYUwmXZhSlgvoJLEyQxj5Zo/aAIeNAwDkLVT9KBvnRTTtAYY599LBT0I1aztN6PiD0fTwc=
-X-Received: by 2002:a17:902:f601:b0:290:ad7a:bb50 with SMTP id
- d9443c01a7336-29651a60c70mr19004155ad.27.1762405395674; Wed, 05 Nov 2025
- 21:03:15 -0800 (PST)
+	dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b="u+FwqOir"
+X-UUID: b699030abad711f08ac0a938fc7cd336-20251106
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+	h=Content-Type:Content-Transfer-Encoding:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=mDYeX9hnxM609HsQNMFBzZYeMea5lku9+jD+ltF6O3E=;
+	b=u+FwqOir7T1LYiWDyinHnu4Wf0YqP5Cy5cf8zGLh6nRcRMqLNojVl8ngpX9HGOvRQNfySPPxewjQUZtsU6a4P9TppCotwKNjbwh64l9Ub/SL0VBzCE0ysq11iPZB00AuAazby9GcA+KxHyxSsH1gpenU08xzLKSAc02OEr3czlA=;
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.3.6,REQID:df7b4230-4347-4b50-9167-941b13423d73,IP:0,UR
+	L:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:r
+	elease,TS:0
+X-CID-META: VersionHash:a9d874c,CLOUDID:47a2fa18-3399-4579-97ab-008f994989ea,B
+	ulkID:nil,BulkQuantity:0,Recheck:0,SF:81|82|102|836|888|898,TC:-5,Content:
+	0|15|50,EDM:-3,IP:nil,URL:0,File:130,RT:0,Bulk:nil,QS:nil,BEC:nil,COL:0,OS
+	I:0,OSA:0,AV:0,LES:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0,ARC:0
+X-CID-BVR: 2,SSN|SDN
+X-CID-BAS: 2,SSN|SDN,0,_
+X-CID-FACTOR: TF_CID_SPAM_SNR
+X-CID-RHF: D41D8CD98F00B204E9800998ECF8427E
+X-UUID: b699030abad711f08ac0a938fc7cd336-20251106
+Received: from mtkmbs14n1.mediatek.inc [(172.21.101.75)] by mailgw01.mediatek.com
+	(envelope-from <kyrie.wu@mediatek.com>)
+	(Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+	with ESMTP id 1867168653; Thu, 06 Nov 2025 14:13:29 +0800
+Received: from mtkmbs13n1.mediatek.inc (172.21.101.193) by
+ MTKMBS14N1.mediatek.inc (172.21.101.75) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1748.26; Thu, 6 Nov 2025 14:13:27 +0800
+Received: from mhfsdcap04.gcn.mediatek.inc (10.17.3.154) by
+ mtkmbs13n1.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
+ 15.2.1748.26 via Frontend Transport; Thu, 6 Nov 2025 14:13:26 +0800
+From: Kyrie Wu <kyrie.wu@mediatek.com>
+To: Tiffany Lin <tiffany.lin@mediatek.com>, Andrew-CT Chen
+	<andrew-ct.chen@mediatek.com>, Yunfei Dong <yunfei.dong@mediatek.com>, "Mauro
+ Carvalho Chehab" <mchehab@kernel.org>, Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>,
+	Matthias Brugger <matthias.bgg@gmail.com>, AngeloGioacchino Del Regno
+	<angelogioacchino.delregno@collabora.com>, Kyrie Wu <kyrie.wu@mediatek.com>,
+	Hans Verkuil <hverkuil@xs4all.nl>, Nicolas Dufresne
+	<nicolas.dufresne@collabora.com>, Nathan Hebert <nhebert@chromium.org>, "Arnd
+ Bergmann" <arnd@arndb.de>, Irui Wang <irui.wang@mediatek.com>, George Sun
+	<george.sun@mediatek.com>, <linux-media@vger.kernel.org>,
+	<devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+	<linux-arm-kernel@lists.infradead.org>, <linux-mediatek@lists.infradead.org>,
+	Yilong Zhou <yilong.zhou@mediatek.com>
+CC: Neil Armstrong <neil.armstrong@linaro.org>, Andrzej Pietrasiewicz
+	<andrzejtp2010@gmail.com>
+Subject: [PATCH v5 1/8] dt-bindings: media: mediatek: decoder: Add MT8189 mediatek,vcodec-decoder
+Date: Thu, 6 Nov 2025 14:13:16 +0800
+Message-ID: <20251106061323.2193-2-kyrie.wu@mediatek.com>
+X-Mailer: git-send-email 2.46.0
+In-Reply-To: <20251106061323.2193-1-kyrie.wu@mediatek.com>
+References: <20251106061323.2193-1-kyrie.wu@mediatek.com>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20251101052651.6197-1-opensource206@gmail.com> <959ac74b-a8b7-4d4e-9d34-3b3d971f9f8a@linuxfoundation.org>
-In-Reply-To: <959ac74b-a8b7-4d4e-9d34-3b3d971f9f8a@linuxfoundation.org>
-From: opensource india <opensource206@gmail.com>
-Date: Thu, 6 Nov 2025 10:33:04 +0530
-X-Gm-Features: AWmQ_bmtfdYLunGxnebB2YzfbIByDDfiElXZmfRrWBesyRCRzuiHt6fwI6_gKWU
-Message-ID: <CAKPKb8-nFzqgh+k3aBxUvZ8g28usiAt5BEdFDQysVnCk3S+sEg@mail.gmail.com>
-Subject: Re: [PATCH] media: vimc: add RGB/YUV input entity implementation
-To: Shuah Khan <skhan@linuxfoundation.org>
-Cc: kieran.bingham@ideasonboard.com, mchehab@kernel.org, 
-	linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-MTK: N
 
-Hi Shuah,
+Add compatible for video decoder on MT8189 platform. Compared with
+former ICs, the MT8189 decoder use iommu to instead of smmu, and
+use scp architecture, the frequency is only 406MHZ, and cannot reach
+more than 700MHZ. It used only one clock. At the same time, the decoder
+supports the vp9 decoding protocol for the first time in single IC.
 
-On Wed, Nov 5, 2025 at 10:43=E2=80=AFPM Shuah Khan <skhan@linuxfoundation.o=
-rg> wrote:
->
-> On 10/31/25 23:26, Pavan Bobba wrote:
-> > Introduce a new vimc-input entity to simulate a color frame source in t=
-he
-> > Virtual Media Controller (VIMC) pipeline. This entity outputs RGB888 fr=
-ames
-> > and allows testing of pipelines that start from a pre-processed RGB/YUV
-> > source instead of a raw Bayer sensor.
-> >
-> > The patch adds vimc-input.c with basic pad operations for format
-> > enumeration, get/set, and stream enable/disable handlers. The entity is
-> > registered in the VIMC core configuration, replacing the previous tempo=
-rary
-> > use of vimc-sensor. Frame generation is not yet implemented and remains=
- a
-> > TODO for future work.
-> >
-> > This change enables link validation and format negotiation for the
-> > RGB/YUV input path, paving the way for software frame injection and
-> > test-pattern generation.
-> >
-> > Signed-off-by: Pavan Bobba <opensource206@gmail.com>
->
-> I see 4 patches - are they dependent then gerenrate a sries
-> with cover letter explaining the changes you are making.
->
-> thanks,
-> -- Shuah
+Signed-off-by: Kyrie Wu <kyrie.wu@mediatek.com>
+Acked-by: Rob Herring (Arm) <robh@kernel.org>
+---
+ .../bindings/media/mediatek,vcodec-subdev-decoder.yaml       | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-even though all 4 patches are part of vimc driver,
-these are independent patches
+diff --git a/Documentation/devicetree/bindings/media/mediatek,vcodec-subdev-decoder.yaml b/Documentation/devicetree/bindings/media/mediatek,vcodec-subdev-decoder.yaml
+index 74e1d88d3056..ee2bbbdb2d50 100644
+--- a/Documentation/devicetree/bindings/media/mediatek,vcodec-subdev-decoder.yaml
++++ b/Documentation/devicetree/bindings/media/mediatek,vcodec-subdev-decoder.yaml
+@@ -75,6 +75,7 @@ properties:
+       - mediatek,mt8192-vcodec-dec
+       - mediatek,mt8186-vcodec-dec
+       - mediatek,mt8188-vcodec-dec
++      - mediatek,mt8189-vcodec-dec
+       - mediatek,mt8195-vcodec-dec
+       - mediatek,mt8196-vcodec-dec
+ 
+@@ -132,11 +133,11 @@ patternProperties:
+           Refer to bindings/iommu/mediatek,iommu.yaml.
+ 
+       clocks:
+-        minItems: 4
++        minItems: 1
+         maxItems: 5
+ 
+       clock-names:
+-        minItems: 4
++        minItems: 1
+         maxItems: 5
+ 
+       assigned-clocks:
+-- 
+2.45.2
+
