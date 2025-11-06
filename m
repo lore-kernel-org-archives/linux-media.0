@@ -1,41 +1,41 @@
 Received: from bali.collaboradmins.com (bali.collaboradmins.com [148.251.105.195])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8449A2343B6;
-	Thu,  6 Nov 2025 14:29:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3FD9B3043D2;
+	Thu,  6 Nov 2025 14:46:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.251.105.195
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762439359; cv=none; b=Yh/6lCGcdi4r1rvrKG6HoyL+OqOll/JK7s1XTu1KK6E29ISYK/tGD4oXbjFClySyJGqiI4EY8Ys2tsysyMm+bzt5EAufjFi25HjWVB0qxuVe06KHigLECBXWAaidg91DMJ/Gzw8gLB+fZcXeCIqmjBhH7hj2ldaPDW1Kd+dwUS8=
+	t=1762440391; cv=none; b=L+7cvGX1Bl/Pmyi09HkRbUuSUiGvxqIVdWcmCpavXYsAbcxklyshGFDRX9d6Vl74zuglgglmz0QnGSB6I9FoXFm9qA2dSwApSVcvjmaDFiSUzk340dAs4I08aB5vo3BeWG4m4eSmq3CrHKoz1CiEOUfohUMwt3d0t9KWePXKapM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762439359; c=relaxed/simple;
-	bh=V144ITPhJaheSq6B4sSkjanob0iMvCwByWKwZnn8vVw=;
+	s=arc-20240116; t=1762440391; c=relaxed/simple;
+	bh=dGOlyZRnTXRalBcuIplk4eH5kRwlh1SL2I9sgliJA7c=;
 	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=AE5YWjgUspXpbdHRKhiJK7xxuS4lM7hizPloU2aMoz6DTsMpqct3/8BjlkVRArt6MCkzfIZId7mihlTh3nTPyliNpIA/DfKkJnpMObIAD2PeaDBFACSMPNzUi9ehCMl8QwAO7T4MFeM/HNugZMdJZJad+4/dEZZzhXpEGjVT7Xo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=X6YkEiQJ; arc=none smtp.client-ip=148.251.105.195
+	 Content-Type:MIME-Version; b=DzWMhEdoXj8qM7xeGXcvTMhnzmGWtyto+75GHseYwujjNQjIYecoHKbeknkmD46G5zL3xXKNNDbZgP33zZojQUyxWuc2RzsiEbqBtmPcP/CKDaJ3xfh0jsU0JqPwORCZD3AUy90X/7rAB5XJcQrMZGeaKeVb8QnHF2DoV5x8u7o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=Lw+gF5MQ; arc=none smtp.client-ip=148.251.105.195
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="X6YkEiQJ"
+	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="Lw+gF5MQ"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1762439355;
-	bh=V144ITPhJaheSq6B4sSkjanob0iMvCwByWKwZnn8vVw=;
+	s=mail; t=1762440387;
+	bh=dGOlyZRnTXRalBcuIplk4eH5kRwlh1SL2I9sgliJA7c=;
 	h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-	b=X6YkEiQJfoguC+wfJWLl+scVfOt+2BoboFhF58RJ+alMJ4GUR2Vdx+lDly6tm4VgK
-	 rHtU0GhiHNskumXYJWcQX2/Jbplhmlhypv1gfS6bN/C7/Yt14dYC7hobmYOvLtRpo1
-	 JhR+GbWromFuLorTVZBoD1aYamepfJ9KllMKxykYjEBIQApOBSR9GrE5jZe9uspPsF
-	 0ho/FgxfUIOVmnsXByjnP4zw7lWO58a2Z0p8a8vPC8aOdLl4veltCZWSnBX8hO/fgL
-	 gpBGlhRehaozRgIDWekWlXmK5ew/BhN4K+5y9bakveGYamaP6xcbWhbLYSZ4ooHud/
-	 El0bRpp2Loakg==
+	b=Lw+gF5MQXFFl9ynmcctABtq3k21bUx5HiAupg4ybdkPoF/NQil2aqKCXeAshG/8mK
+	 qMlQdBNo+XZcPao+2NcGO4If6Eaf0uKx35SVnN3+w7GxG73Icp1bjh8vtXW1BbJ27S
+	 iPNHUWbtXlC4cB76egMk8Azv9k8CBpfsId0fYRLLU8u61uV+yWvS/NqNoeoYqhI221
+	 p1EMlLumWtsFPo3OP2gvGryIHlzHRnYz9lUGqXLvKkVJ+ntASTFyd2Yz2tG/DJl4tR
+	 3NEmcVuQUH4xVU6lYrKPAJo3t9h68XahX5lMPmmNTelgQ1PGnPlaYSTxDyfGuIrWBL
+	 4x9BV88PLBBuA==
 Received: from [IPv6:2606:6d00:11:ef24::c41] (unknown [IPv6:2606:6d00:11:ef24::c41])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits))
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
 	(Authenticated sender: nicolas)
-	by bali.collaboradmins.com (Postfix) with ESMTPSA id 3E43E17E0E63;
-	Thu,  6 Nov 2025 15:29:13 +0100 (CET)
-Message-ID: <5834fe661f38462d65795a20b5a4f9d2a12d3b35.camel@collabora.com>
-Subject: Re: [PATCH v5 4/8] media: mediatek: vcodec: Add single core VP9
- decoding support for MT8189
+	by bali.collaboradmins.com (Postfix) with ESMTPSA id DB48C17E0CA1;
+	Thu,  6 Nov 2025 15:46:24 +0100 (CET)
+Message-ID: <899fb4c2ce292bcce4caeb6cf6f38744c449e8e9.camel@collabora.com>
+Subject: Re: [PATCH v5 5/8] media: mediatek: vcodec: fix vp9 4096x2176 fail
+ for profile2
 From: Nicolas Dufresne <nicolas.dufresne@collabora.com>
 To: Kyrie Wu <kyrie.wu@mediatek.com>, Tiffany Lin
  <tiffany.lin@mediatek.com>,  Andrew-CT Chen <andrew-ct.chen@mediatek.com>,
@@ -52,10 +52,10 @@ To: Kyrie Wu <kyrie.wu@mediatek.com>, Tiffany Lin
  Yilong Zhou <yilong.zhou@mediatek.com>
 Cc: Neil Armstrong <neil.armstrong@linaro.org>, Andrzej Pietrasiewicz
 	 <andrzejtp2010@gmail.com>
-Date: Thu, 06 Nov 2025 09:29:12 -0500
-In-Reply-To: <20251106061323.2193-5-kyrie.wu@mediatek.com>
+Date: Thu, 06 Nov 2025 09:46:22 -0500
+In-Reply-To: <20251106061323.2193-6-kyrie.wu@mediatek.com>
 References: <20251106061323.2193-1-kyrie.wu@mediatek.com>
-	 <20251106061323.2193-5-kyrie.wu@mediatek.com>
+	 <20251106061323.2193-6-kyrie.wu@mediatek.com>
 Autocrypt: addr=nicolas.dufresne@collabora.com; prefer-encrypt=mutual;
  keydata=mDMEaCN2ixYJKwYBBAHaRw8BAQdAM0EHepTful3JOIzcPv6ekHOenE1u0vDG1gdHFrChD
  /e0J05pY29sYXMgRHVmcmVzbmUgPG5pY29sYXNAbmR1ZnJlc25lLmNhPoicBBMWCgBEAhsDBQsJCA
@@ -71,7 +71,7 @@ Autocrypt: addr=nicolas.dufresne@collabora.com; prefer-encrypt=mutual;
  bRLv9QjuqsE6oQZra/RB4widZPvphs78H0P6NmpIJ
 Organization: Collabora Canada
 Content-Type: multipart/signed; micalg="pgp-sha512";
-	protocol="application/pgp-signature"; boundary="=-wlcyIPJc95NX9hPSGVRO"
+	protocol="application/pgp-signature"; boundary="=-RJXZVmVnlFQ3K2q8dvWW"
 User-Agent: Evolution 3.56.2 (3.56.2-2.fc42) 
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
@@ -81,158 +81,84 @@ List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 
 
---=-wlcyIPJc95NX9hPSGVRO
+--=-RJXZVmVnlFQ3K2q8dvWW
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-Le jeudi 06 novembre 2025 =C3=A0 14:13 +0800, Kyrie Wu a =C3=A9crit=C2=A0:
-> 1. add config to support 4K prob size;
-> 2. Previously, calling vdec_vp9_slice_setup_single_from_src_to_dst
-> with v4l2_m2m_next_src_buf to obtain both buffers resulted in -EINVAL,
-> interrupting the decoding process. To resolve this,
-> the interface should be updated to set both src and dst buffers
-> for metadata configuration.
+Hi,
 
-Please avoid using bullets in commit messages. Everyone will assume that if=
- you
-have two bullets, you should have two patches. And I think they would be ri=
-ght
-for this patch.
+Le jeudi 06 novembre 2025 =C3=A0 14:13 +0800, Kyrie Wu a =C3=A9crit=C2=A0:
+> The dram addr of vp9 decoder tile number, which use dram mode
+> to set tile information, may reach to 36bits for 4096x2176.
+> It needs to get the highest 4bit of tile buffer address to
+> set tile buffer address.
+
+Please rework that commit message. Perhaps:
+
+	The DRAM address of the VP9 decoder mode info (MI) buffers may require
+	as much as 36bits for 4096x2176 resolution. Fold the 4 most significant
+	bits into the lower (padding) four bits of address.
 
 >=20
+> Fixes: 5d418351ca8f1 ("media: mediatek: vcodec: support stateless VP9 dec=
+oding")
+>=20
 > Signed-off-by: Kyrie Wu <kyrie.wu@mediatek.com>
+> Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collab=
+ora.com>
 > ---
-> =C2=A0.../vcodec/decoder/vdec/vdec_vp9_req_lat_if.c | 43 ++++++++++++++--=
----
-> =C2=A01 file changed, 32 insertions(+), 11 deletions(-)
+> =C2=A0.../mediatek/vcodec/decoder/vdec/vdec_vp9_req_lat_if.c=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0 | 5 ++++-
+> =C2=A01 file changed, 4 insertions(+), 1 deletion(-)
 >=20
 > diff --git a/drivers/media/platform/mediatek/vcodec/decoder/vdec/vdec_vp9=
 _req_lat_if.c b/drivers/media/platform/mediatek/vcodec/decoder/vdec/vdec_vp=
 9_req_lat_if.c
-> index fa0f406f7726..d966914db4b9 100644
+> index d966914db4b9..91c563c049bd 100644
 > --- a/drivers/media/platform/mediatek/vcodec/decoder/vdec/vdec_vp9_req_la=
 t_if.c
 > +++ b/drivers/media/platform/mediatek/vcodec/decoder/vdec/vdec_vp9_req_la=
 t_if.c
-> @@ -23,6 +23,7 @@
-> =C2=A0
-> =C2=A0#define VP9_TILE_BUF_SIZE 4096
-> =C2=A0#define VP9_PROB_BUF_SIZE 2560
-> +#define VP9_PROB_BUF_4K_SIZE 3840
-> =C2=A0#define VP9_COUNTS_BUF_SIZE 16384
-> =C2=A0
-> =C2=A0#define HDR_FLAG(x) (!!((hdr)->flags & V4L2_VP9_FRAME_FLAG_##x))
-> @@ -542,6 +543,23 @@ static int vdec_vp9_slice_init_default_frame_ctx(str=
-uct vdec_vp9_slice_instance
-> =C2=A0	return ret;
-> =C2=A0}
-> =C2=A0
-> +static size_t mtk_vcodec_get_vp9_prob_size(enum mtk_vcodec_dec_chip_name=
- chip_name)
-> +{
-> +	size_t prob_size;
-> +
-> +	switch (chip_name) {
-> +	case MTK_VDEC_MT8189:
-> +	case MTK_VDEC_MT8196:
-> +		prob_size =3D VP9_PROB_BUF_4K_SIZE;
-> +		break;
-> +	default:
-> +		prob_size =3D VP9_PROB_BUF_SIZE;
-> +		break;
-> +	}
-> +
-> +	return prob_size;
-> +}
+> @@ -1156,7 +1156,10 @@ static int vdec_vp9_slice_setup_tile_buffer:q(stru=
+ct vdec_vp9_slice_instance *inst
+> =C2=A0			tiles->size[i][j] =3D size;
+> =C2=A0			if (tiles->mi_rows[i]) {
+> =C2=A0				*tb++ =3D (size << 3) + ((offset << 3) & 0x7f);
+> -				*tb++ =3D pa & ~0xf;
+> +				*tb =3D pa & ~0xf;
+> +				if (IS_ENABLED(CONFIG_ARCH_DMA_ADDR_T_64BIT))
+> +					*tb |=3D (pa >> 32) & 0xf;
+> +				tb++;
 
-This is another example of something that could be in the static compatible
-data.
+You are following the style here, so no complaints, though the macros
+GENMASK(3, 0) instead of 0xf and GENMASK(31, 4) instead of ~0xf is another =
+way
+to write this code.
 
-> +
-> =C2=A0static int vdec_vp9_slice_alloc_working_buffer(struct vdec_vp9_slic=
-e_instance *instance,
-> =C2=A0					=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 struct vdec_vp9_slice_vsi=
- *vsi)
-> =C2=A0{
-> @@ -616,7 +634,9 @@ static int vdec_vp9_slice_alloc_working_buffer(struct=
- vdec_vp9_slice_instance *i
-> =C2=A0	}
-> =C2=A0
-> =C2=A0	if (!instance->prob.va) {
-> -		instance->prob.size =3D VP9_PROB_BUF_SIZE;
-> +		instance->prob.size =3D
-> +			mtk_vcodec_get_vp9_prob_size(ctx->dev->chip_name);
-> +
-> =C2=A0		if (mtk_vcodec_mem_alloc(ctx, &instance->prob))
-> =C2=A0			goto err;
-> =C2=A0	}
-> @@ -696,21 +716,22 @@ static int vdec_vp9_slice_tile_offset(int idx, int =
-mi_num, int tile_log2)
-> =C2=A0	return min(offset, mi_num);
-> =C2=A0}
-> =C2=A0
-> -static
-> -int vdec_vp9_slice_setup_single_from_src_to_dst(struct vdec_vp9_slice_in=
-stance *instance)
-> +static int vdec_vp9_slice_setup_single_from_src_to_dst(struct vdec_vp9_s=
-lice_instance *instance,
-> +						=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 struct mtk_vcodec_mem *bs,
-> +						=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 struct vdec_fb *fb)
-> =C2=A0{
-> -	struct vb2_v4l2_buffer *src;
-> -	struct vb2_v4l2_buffer *dst;
-> +	struct mtk_video_dec_buf *src_buf_info;
-> +	struct mtk_video_dec_buf *dst_buf_info;
-> =C2=A0
-> -	src =3D v4l2_m2m_next_src_buf(instance->ctx->m2m_ctx);
-> -	if (!src)
-> +	src_buf_info =3D container_of(bs, struct mtk_video_dec_buf, bs_buffer);
-> +	if (!src_buf_info)
-> =C2=A0		return -EINVAL;
-> =C2=A0
-> -	dst =3D v4l2_m2m_next_dst_buf(instance->ctx->m2m_ctx);
-> -	if (!dst)
-> +	dst_buf_info =3D container_of(fb, struct mtk_video_dec_buf, frame_buffe=
-r);
-> +	if (!dst_buf_info)
-> =C2=A0		return -EINVAL;
-> =C2=A0
-> -	v4l2_m2m_buf_copy_metadata(src, dst, true);
-> +	v4l2_m2m_buf_copy_metadata(&src_buf_info->m2m_buf.vb, &dst_buf_info->m2=
-m_buf.vb, true);
-> =C2=A0
-> =C2=A0	return 0;
-> =C2=A0}
-> @@ -1800,7 +1821,7 @@ static int vdec_vp9_slice_setup_single(struct vdec_=
-vp9_slice_instance *instance,
-> =C2=A0	struct vdec_vp9_slice_vsi *vsi =3D &pfc->vsi;
-> =C2=A0	int ret;
-> =C2=A0
-> -	ret =3D vdec_vp9_slice_setup_single_from_src_to_dst(instance);
-> +	ret =3D vdec_vp9_slice_setup_single_from_src_to_dst(instance, bs, fb);
+Since this is not always obvious when the alignment padding of an address i=
+s
+being reused to extend the number of bits of an address, it would be nice i=
+f you
+add a comment explaining in words what his is doing.
 
-I don't see a direct correlation betwen the buffer size change and this cha=
-nge.
-Please split. Changes looks good, the commit message isn't very clear thoug=
-h.
-
+cheers,
 Nicolas
 
-> =C2=A0	if (ret)
-> =C2=A0		goto err;
-> =C2=A0
+> =C2=A0				*tb++ =3D (pa << 3) & 0x7f;
+> =C2=A0				mi_row =3D (tiles->mi_rows[i] - 1) & 0x1ff;
+> =C2=A0				mi_col =3D (tiles->mi_cols[j] - 1) & 0x3f;
 
---=-wlcyIPJc95NX9hPSGVRO
+--=-RJXZVmVnlFQ3K2q8dvWW
 Content-Type: application/pgp-signature; name="signature.asc"
 Content-Description: This is a digitally signed message part
 Content-Transfer-Encoding: 7bit
 
 -----BEGIN PGP SIGNATURE-----
 
-iHUEABYKAB0WIQTvDVKBFcTDwhoEbxLZQZRRKWBy9AUCaQywuAAKCRDZQZRRKWBy
-9K5IAQCXlmAAzl+iCuLAYIlMe0L1aV3/vtGJvQ4QmLxUy0BkRgEA89XXHgOE2Ewx
-OrW4Z94rpraxJcv92KTX7rtrXRkmkw4=
-=qhRy
+iHUEABYKAB0WIQTvDVKBFcTDwhoEbxLZQZRRKWBy9AUCaQy0vgAKCRDZQZRRKWBy
+9L2NAQC5CFyK0h7cwfX3f6U15ujRa3Ls59ivxET4FMGkhDKXOwEAnBWXXu23j4ET
+ZmbIdwMT3KVsp0HnznoqU3/1OIsg7QI=
+=MdCW
 -----END PGP SIGNATURE-----
 
---=-wlcyIPJc95NX9hPSGVRO--
+--=-RJXZVmVnlFQ3K2q8dvWW--
