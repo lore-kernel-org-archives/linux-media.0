@@ -1,130 +1,128 @@
-Received: from mail-wr1-f49.google.com (mail-wr1-f49.google.com [209.85.221.49])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C5662316917
-	for <linux-media@vger.kernel.org>; Fri,  7 Nov 2025 09:12:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 94DFB1E51E0
+	for <linux-media@vger.kernel.org>; Fri,  7 Nov 2025 09:17:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762506774; cv=none; b=uGSxTd3tn2L3Cp+mN0ZIBzfUvkSd4tQtmf6xMh7Qpl5tARYFSDcjdWj5qKCCVGkNnaNGNEs5eo01wj0aS+DknplkiMIu0G9+0F07cXEOXrEgeYOGg7TnfBWBDCKekZSdyWUT8kbr4BQ2TJG1ur/2212YDgjXTax88fJI1uZYkVc=
+	t=1762507083; cv=none; b=Vj2oekcRkEApkVT9MH2MSode+NpHs/kRxlpBbvlwuh2QfOOXfE6xrlBzwUp8RuKHDBjcpuTpCae31w/1R0TxHzr9mwdq4rrLhdlYgBL52zs4Dfps9D/LSVED8tiwS9wVpZVgGNp8mzZktiOClKXi35n2Mnjl2ulWffhSg9BcPPM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762506774; c=relaxed/simple;
-	bh=ySb+pop94SqpdbyZsYpGfmunwgkKv5LASXUw8Mbt2b0=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=QaX50VLeZg22HRbvg6cTUs4xtXqqT4753b6A8h/tiFw+yJ9U+afH7JFh6FgJATpl09iF+e82osY/J+OK9zQiKSw9z2AHR8059bW/z8arv6LlxnbAZ98AhDomxeaD61MVjKliB8qu3pbilr3eFbN5js4Zdwaef8/woFL+2FPrQN4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=mZJ+Tzia; arc=none smtp.client-ip=209.85.221.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1762507083; c=relaxed/simple;
+	bh=Qz4zX/8crUeq6EwFctv/igfgaxk2y7x2TYFvtZQEtuc=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=sRffUlw7nYKxuIgAB1LCUq8HRF/bmvs0RBfXOuqkUIwd5PKBP8xf0FYlYupSSs3l5yh60KhwCwoJB+h5QNJvGyQxO74d2z0Gbbq2sGd74y7D5pH/MNMGcQpCnlpv1N+dmAIO9/I49L8VPQjJ3GFRYcJGNpEn5UHASj85WMWDnZ0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=MDTdy3Nm; arc=none smtp.client-ip=198.175.65.15
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="mZJ+Tzia"
-Received: by mail-wr1-f49.google.com with SMTP id ffacd0b85a97d-3ecdf2b1751so282814f8f.0
-        for <linux-media@vger.kernel.org>; Fri, 07 Nov 2025 01:12:52 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1762506771; x=1763111571; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=cwbNx98NAV67oyTmVbgDZ/t5BsyU5lLwVlOoJ6t3e0g=;
-        b=mZJ+TziathtEj0lCeVghoJ8qe5Og/eCculTzvtfLW7O4TCQmbpYaopK8zm+OfFQAVe
-         50Cl9A9mjJX1v6BDyftxzxMIOK4K4XmF3xdtLz3dYY2n2dHduLbqcBrc7lpEZc8/pSQ+
-         AmtSmiTIa/pswSLxfcxQ6a8wS+HWHlofa2FnCPKICvxo9m1PL0BDQHMVQWwd0nKgDuf4
-         /aIq3e3Uy0tGEmL6tBbwmdlRlqdG0e8xcVU+ovpw2qE+R9zEOuNXpFezzj4R2XDNVFZ3
-         wZS1kAIAlLEzs63cLGCBj+4cmz9hmrM97e5HMceViOtkiGL/8jACByqHknakrcpI76XU
-         cY+A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1762506771; x=1763111571;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=cwbNx98NAV67oyTmVbgDZ/t5BsyU5lLwVlOoJ6t3e0g=;
-        b=BwMkxTF15GEP1CCVZv3mA5SUnr3/4JxzxQpTTVTpcr7IKriVWpp4EFuR+NyUIURTU5
-         LyD8gmW/Zh83KlYG4zvR7YFkeyY4lYzXTwZaP8XcnUdwm7Phk108cxZQTv5B+00Nr83d
-         mLwabEiQuxoSAOyqQfFvuCqn38opriRZsYtzVlO+Pb0kQb4NS7lxVSaBOygJpbC09EGF
-         wivabYWT50BLgE9Ok0j4Kf3uXsKlARRUOcsNWArdu0FUGvB7nHpzLGkeNVc8K3OFzP8q
-         58ohPPdBMwxxKjUW3LS2c8w0q3lFJxI4kbnfFNbtky4/zpPsCvfE561Iix+5Yd/vLjMS
-         QQIQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUiErt+fA5Xp4evVaulww/Du99c2H1b53T2SU3OLkKBwobvz4pAkDeKAukmFb5TnCVuYnAyOwmEcV0K+Q==@vger.kernel.org
-X-Gm-Message-State: AOJu0YxvqT0IaAU74Rgk25EZX3Y7iCOU3nL79N9XHaWqpKx/pY2oOi9x
-	vCOEe4qye1EHU9ZW4BbgFR/6YXXh8OScoq/wl077aQC4U9U/t+J1jkIl
-X-Gm-Gg: ASbGncvrfbA/n0x6bFJJlavrIvl+FT1ZqzPnaod4xi5NbkuaMiii7MUYVDMDXn/p3wT
-	OjGPbB0HGdkGNeojMLRBAlp/g0OZ3FfJ8H1bykhwBxq5evUII08rmKFrjE3LkbZs6U/qSuaJIQg
-	jQodaI7CEPzd/0MUGeOzy6RR9oU0ZbTOdZinsMjefAx+SmLlP51K76l9O6Op8DkgTNiZVjOgocq
-	HMd4K6WjE68YH9ZReOcSLbucRqAjAHuJYjLaOiXG6pC/wh3GsPL58s2QOI91EZVww0m1wBsx4Se
-	4cM4022611IqKeoR9vEZOByKrQSxAKvN2UP82T44YsUrONmNGTlxpQOLSDL5sBcMY8qrkxDDij6
-	3+bDY1mV7oUjo9Ao1xWoveYFkLcuvYIODq/V4vw89ARUA0AaecjUsgN9j8lDzxg/IKlaoaZbQA8
-	Uy4Ry4L9hHzPKD++Wy/3K3KuyrRZtzXu50JKIWSnUkta54aYUhfyDj
-X-Google-Smtp-Source: AGHT+IG9saNXs40oR1IEnqn2ZJqpHZqHgNAPFU5PXOa3lUzB4P6UMLrs3Ay2s/I5KpU2wmqmBc0PbQ==
-X-Received: by 2002:a05:6000:40db:b0:3e7:5f26:f1e5 with SMTP id ffacd0b85a97d-42ae58812c9mr1862887f8f.23.1762506770833;
-        Fri, 07 Nov 2025 01:12:50 -0800 (PST)
-Received: from pumpkin (82-69-66-36.dsl.in-addr.zen.co.uk. [82.69.66.36])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-42abe62bf35sm4130393f8f.7.2025.11.07.01.12.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 07 Nov 2025 01:12:50 -0800 (PST)
-Date: Fri, 7 Nov 2025 09:12:46 +0000
-From: David Laight <david.laight.linux@gmail.com>
-To: Andrew Morton <akpm@linux-foundation.org>
-Cc: Junrui Luo <moonafterrain@outlook.com>, linux-kernel@vger.kernel.org,
- pmladek@suse.com, rostedt@goodmis.org, andriy.shevchenko@linux.intel.com,
- tiwai@suse.com, perex@perex.cz, linux-sound@vger.kernel.org,
- mchehab@kernel.org, awalls@md.metrocast.net, linux-media@vger.kernel.org,
- davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
- pabeni@redhat.com, netdev@vger.kernel.org
-Subject: Re: [PATCH 1/4] lib/sprintf: add scnprintf_append() helper function
-Message-ID: <20251107091246.4e5900f4@pumpkin>
-In-Reply-To: <20251106213833.546c8eaba8aec6aa6a5e30b6@linux-foundation.org>
-References: <20251107051616.21606-1-moonafterrain@outlook.com>
-	<SYBPR01MB788110A77D7F0F7A27F0974FAFC3A@SYBPR01MB7881.ausprd01.prod.outlook.com>
-	<20251106213833.546c8eaba8aec6aa6a5e30b6@linux-foundation.org>
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; arm-unknown-linux-gnueabihf)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="MDTdy3Nm"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1762507080; x=1794043080;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=Qz4zX/8crUeq6EwFctv/igfgaxk2y7x2TYFvtZQEtuc=;
+  b=MDTdy3NmItVRG1c450XCGbHrr+ulkcWQ0jfR7/iZHvfG5uU8FNagZXlO
+   Q1PVFf+NqmOwHpfKEBjkaE3bxT38PtybAorMEdCVg2MsPpJtZTreSV3aw
+   Cxd69u4MVJARA9bOGnUps+NYSK+ML22bl8sicyeMGLvt6Yt5TOvUqMZUq
+   YMOdNslWXrgLoowzcGTz4boHwRWVvdUsiLstUJ36RK5Hp6T95myoRjak1
+   XI3svLh36tAa8ywxyxOqxHC1LZ0cVYUC7mXn5znOgt/QF3B+T5KW4uF0v
+   5bZrvQ22dIcxkc2XtuEznCc2fXkwtzF7TaNnID/7sOt2UWHbPx2M3eII5
+   g==;
+X-CSE-ConnectionGUID: erelWT9jT2m6zaleFRQ1nw==
+X-CSE-MsgGUID: Lr/94GmySJuhArOOkqN6+w==
+X-IronPort-AV: E=McAfee;i="6800,10657,11605"; a="68302742"
+X-IronPort-AV: E=Sophos;i="6.19,286,1754982000"; 
+   d="scan'208";a="68302742"
+Received: from fmviesa007.fm.intel.com ([10.60.135.147])
+  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Nov 2025 01:17:59 -0800
+X-CSE-ConnectionGUID: WQKFnYYRRZ2XQMDdwyZsfw==
+X-CSE-MsgGUID: Mo02gvo6RQelMc86oNLYUg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.19,286,1754982000"; 
+   d="scan'208";a="187652646"
+Received: from pgcooper-mobl3.ger.corp.intel.com (HELO mdjait-mobl) ([10.245.245.65])
+  by fmviesa007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Nov 2025 01:17:57 -0800
+Date: Fri, 7 Nov 2025 10:17:50 +0100
+From: Mehdi Djait <mehdi.djait@linux.intel.com>
+To: Hans de Goede <hansg@kernel.org>
+Cc: Bingbu Cao <bingbu.cao@intel.com>, 
+	Sakari Ailus <sakari.ailus@linux.intel.com>, linux-media@vger.kernel.org
+Subject: Re: [PATCH 25/25] media: i2c: ov01a10: Register tweaks for ov01a1s
+ model
+Message-ID: <7fd4qbgendumnwahn7bqu7zyczvr6l3htbxxurq56cb6th7gyv@jncmh7kihgd6>
+References: <20251014174033.20534-1-hansg@kernel.org>
+ <20251014174033.20534-26-hansg@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20251014174033.20534-26-hansg@kernel.org>
 
-On Thu, 6 Nov 2025 21:38:33 -0800
-Andrew Morton <akpm@linux-foundation.org> wrote:
+Hi Hans,
 
-> On Fri,  7 Nov 2025 13:16:13 +0800 Junrui Luo <moonafterrain@outlook.com> wrote:
+Thank you for the patches!
+
+On Tue, Oct 14, 2025 at 07:40:33PM +0200, Hans de Goede wrote:
+> The out of tree drivers from:
+> https://github.com/intel/ipu6-drivers/tree/master/drivers/media/i2c
 > 
-> > +/**
-> > + * scnprintf_append - Append a formatted string to a buffer
-> > + * @buf: The buffer to append to (must be null-terminated)
-> > + * @size: The size of the buffer
-> > + * @fmt: Format string
-> > + * @...: Arguments for the format string
-> > + *
-> > + * This function appends a formatted string to an existing null-terminated
-> > + * buffer. It is safe to use in a chain of calls, as it returns the total
-> > + * length of the string.
-> > + *
-> > + * Returns: The total length of the string in @buf  
+> Have a separate driver for the ov01a1s. This driver is 95% the same as
+> the ov01a10 driver (same sensor, different color-filters) but there are
+> a couple of registers for which the out of tree ov01a1s driver uses
+> different values.
 > 
-> It wouldn't hurt to describe the behavior when this runs out of space
-> in *buf.
+> Add a per model reg_sequence to struct ov01a10_sensor_cfg and apply
+> the register tweaks from the out of tree driver to the ov01a1s model.
 > 
+> Signed-off-by: Hans de Goede <hansg@kernel.org>
+> ---
+>  drivers/media/i2c/ov01a10.c | 28 ++++++++++++++++++++++++++--
+>  1 file changed, 26 insertions(+), 2 deletions(-)
 > 
-> 
-> The whole thing is a bit unweildy - how much space must the caller
-> allocate for `buf'?  I bet that's a wild old guess.
+> diff --git a/drivers/media/i2c/ov01a10.c b/drivers/media/i2c/ov01a10.c
+> index 058ff311a289..08cab1e4be1d 100644
+> --- a/drivers/media/i2c/ov01a10.c
+> +++ b/drivers/media/i2c/ov01a10.c
+> @@ -161,7 +161,6 @@ static const struct reg_sequence ov01a10_global_setting[] = {
+>  	{0x3815, 0x01},
+>  	{0x3816, 0x01},
+>  	{0x3817, 0x01},
+> -	{0x3822, 0x13},
+>  	{0x3832, 0x28},
+>  	{0x3833, 0x10},
+>  	{0x3b00, 0x00},
+> @@ -186,7 +185,6 @@ static const struct reg_sequence ov01a10_global_setting[] = {
+>  	{0x4800, 0x64},
+>  	{0x481f, 0x34},
+>  	{0x4825, 0x33},
+> -	{0x4837, 0x11},
+>  	{0x4881, 0x40},
+>  	{0x4883, 0x01},
+>  	{0x4890, 0x00},
+> @@ -203,6 +201,17 @@ static const struct reg_sequence ov01a10_global_setting[] = {
+>  	{0x0325, 0xc2},
+>  };
+>  
+> +static const struct reg_sequence ov01a10_regs[] = {
+> +	{0x3822, 0x13},
+> +	{0x4837, 0x11},
+> +};
+> +
+> +static const struct reg_sequence ov01a1s_regs[] = {
+> +	{0x3822, 0x03},
+> +	{0x4837, 0x14},
+> +	{0x373d, 0x24},
+> +};
 
-That is true for all the snprintf() functions.
+How about the 0x4800 register ?
+we write 0x64 for the ov01a10 driver but the out-of-tree driver for
+ov01a1s does not write that value
 
-> I wonder if we should instead implement a kasprintf() version of this
-> which reallocs each time and then switch all the callers over to that.
-
-That adds the cost of a malloc, and I, like kasprintf() probably ends up
-doing all the work of snprintf twice.
-
-I'd be tempted to avoid the strlen() by passing in the offset.
-So (say):
-#define scnprintf_at(buf, len, off, ...) \
-	scnprintf((buf) + off, (len) - off, __VA_ARGS__)
-
-Then you can chain calls, eg:
-	off = scnprintf(buf, sizeof buf, ....);
-	off += scnprintf_at(buf, sizeof buf, off, ....);
-
-    David
+--
+Kind Regards
+Mehdi Djait
