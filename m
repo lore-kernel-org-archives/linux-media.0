@@ -1,166 +1,127 @@
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
+Received: from bali.collaboradmins.com (bali.collaboradmins.com [148.251.105.195])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8A0B832860F
-	for <linux-media@vger.kernel.org>; Fri,  7 Nov 2025 18:37:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.167.242.64
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 82A11336ECC;
+	Fri,  7 Nov 2025 18:42:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.251.105.195
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762540625; cv=none; b=Qp2RlTQINl3AKoURkrwJmWBF4PWwV0c8Zdi5/jYxjVVoqWiV3vV6RCSQ9iG3DG4OHa9VUU3ItbFhTJpoxayEJzt10HPv7BbPKXSQzahzfRd2h+3wgJb2zVbClDfLHc4BYo+77L/gaDh3QIssfLMzylwldq7q0Wx7kypERp//90k=
+	t=1762540931; cv=none; b=bRyJzNFDt1lGhPamxGQa/VMAhTda64BW3gjoB7ruuAUKSWW/TDpFJru3rps3JGSXl3WnL73DT1+TYVp70sVYXzRofloqC5dseKvHikxcDmmy7VN53V7hMmTkTsX3rJbP/pehoXWZrwewU0ZpA0ov3IU/9yKEUZyDUqRSUiMj/Dg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762540625; c=relaxed/simple;
-	bh=rLiP3gEtn72ck68kGmlb3ojW5hIqH/o/7GXrlLRkSi8=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=n2kaK/2tNRZ3kYRs+IlN9T7CFBMaDJ/5HENqjN4JmGWBWTG/406xDnawG/1V1fvl0uaj9NF8W4q3x7HC8iJ5q0fG2XuMBaPdMf08KIINQmSuQFzDEvtVpl+UcWbR6KIWT9JF1UPDXpSeaTTJwzuFuLkc41BoJhZhmHA/W956ihk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ideasonboard.com; spf=pass smtp.mailfrom=ideasonboard.com; dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b=pP6ZGZP1; arc=none smtp.client-ip=213.167.242.64
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ideasonboard.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ideasonboard.com
+	s=arc-20240116; t=1762540931; c=relaxed/simple;
+	bh=QurK2/aeYYaTshySUtEliqovujqE6ttMkDCo9FMWluk=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=lSTQ8zoGXed8LIoepM6hW+nZWJo2p8fUrUh6NLi5jLjd9Hqjayo3zJ3dgXLBhzPgS8T30xBM9iMyon6IoPrfUMPYDsy5pnAS68mSYjaCETKqqPOkZkpIPmz31msxpp84i96+3Q40kz2y0Yb4AfrA3Y7o9lIIW6DDrPmfYHGhA4U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=eJxS1HR/; arc=none smtp.client-ip=148.251.105.195
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="pP6ZGZP1"
-Received: from pendragon.ideasonboard.com (82-203-161-95.bb.dnainternet.fi [82.203.161.95])
-	by perceval.ideasonboard.com (Postfix) with UTF8SMTPSA id 1C544111F;
-	Fri,  7 Nov 2025 19:26:53 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-	s=mail; t=1762540013;
-	bh=rLiP3gEtn72ck68kGmlb3ojW5hIqH/o/7GXrlLRkSi8=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=pP6ZGZP1+Zp4ZOyeB6rmVyJJI8TLMd4d1MeRqy/wEipiTE9NWTChZyyWQSdc8LE5N
-	 5vDCwPYlN1U/ye2L4OJYQbnlSwlvVESmxZ0yKEcvARwQByxzC1vOdAy3z5XgaBcKHA
-	 plwFCBXirR1DSAjzhetkcQRa5MA9McgOI9wnLFHI=
-Date: Fri, 7 Nov 2025 20:28:43 +0200
-From: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To: Martin Kepplinger <martink@posteo.de>
-Cc: linux-media@vger.kernel.org, Rui Miguel Silva <rmfrfs@gmail.com>,
-	Purism Kernel Team <kernel@puri.sm>,
-	Pengutronix Kernel Team <kernel@pengutronix.de>,
-	imx@lists.linux.dev, Frank Li <Frank.Li@nxp.com>,
-	Stefan Klug <stefan.klug@ideasonboard.com>,
-	Sakari Ailus <sakari.ailus@iki.fi>
-Subject: Re: [PATCH v1 0/6] media: imx-mipi-csis: Add streams support
-Message-ID: <20251107182843.GB5558@pendragon.ideasonboard.com>
-References: <20251107015813.5834-1-laurent.pinchart@ideasonboard.com>
- <60dac85af5ed941c40cfb55dff0ccf7864f0e681.camel@posteo.de>
+	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="eJxS1HR/"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+	s=mail; t=1762540921;
+	bh=QurK2/aeYYaTshySUtEliqovujqE6ttMkDCo9FMWluk=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=eJxS1HR/gSikwNVeEpl1avVNjIn7ZGA5CTTYUp2tru/xqQnyTn0H3l11WaYOyugVm
+	 +RbdSUs6PSlOPKSYLA0/iLT+ftjhNzx0D4/qIkVqCykXfPtjI7NdPlL0ekn1tF4Rhw
+	 OMp49kkjL8hTafEWwJnuSBP+fWL2jyYRY6HnXojFl466kwGFzqmeWCGK8Ado7+SMss
+	 642WgG6YFCbEEZDrMOHAIFkMQSBTqkV3dmpEwXCG1RQOGhlcUTVksZiyU4iGqQWD3c
+	 tcZ5lzNIroWcWn84WINhOEpiSRiSISmIZ8Jhs0wd3iv9v1LTZdtLVMSZwAWEmOO9pb
+	 bDpj0p60CljWw==
+Received: from [10.40.0.100] (185-67-175-126.lampert.tv [185.67.175.126])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: mriesch)
+	by bali.collaboradmins.com (Postfix) with ESMTPSA id 4814D17E108B;
+	Fri,  7 Nov 2025 19:42:00 +0100 (CET)
+Message-ID: <074cd08e-0412-49f9-8dd9-b1f96eb11717@collabora.com>
+Date: Fri, 7 Nov 2025 19:41:59 +0100
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <60dac85af5ed941c40cfb55dff0ccf7864f0e681.camel@posteo.de>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v14 00/18] media: rockchip: add a driver for the rockchip
+ camera interface
+To: Sakari Ailus <sakari.ailus@linux.intel.com>
+Cc: Mehdi Djait <mehdi.djait@linux.intel.com>,
+ Maxime Chevallier <maxime.chevallier@bootlin.com>,
+ =?UTF-8?Q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ Gerald Loacker <gerald.loacker@wolfvision.net>,
+ Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
+ Markus Elfring <Markus.Elfring@web.de>,
+ Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+ Mauro Carvalho Chehab <mchehab@kernel.org>, Rob Herring
+ <robh+dt@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
+ Conor Dooley <conor+dt@kernel.org>, Heiko Stuebner <heiko@sntech.de>,
+ Kever Yang <kever.yang@rock-chips.com>,
+ Nicolas Dufresne <nicolas.dufresne@collabora.com>,
+ Sebastian Reichel <sebastian.reichel@collabora.com>,
+ Collabora Kernel Team <kernel@collabora.com>,
+ Paul Kocialkowski <paulk@sys-base.io>,
+ Alexander Shiyan <eagle.alexander923@gmail.com>,
+ Val Packett <val@packett.cool>, Rob Herring <robh@kernel.org>,
+ Philipp Zabel <p.zabel@pengutronix.de>, linux-media@vger.kernel.org,
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, linux-rockchip@lists.infradead.org,
+ Mehdi Djait <mehdi.djait@bootlin.com>,
+ Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+ Bryan O'Donoghue <bod@kernel.org>, Chen-Yu Tsai <wens@csie.org>
+References: <20240220-rk3568-vicap-v14-0-b38b6da0fc80@collabora.com>
+ <aQ4tJg8r_j4NyKhv@kekkonen.localdomain>
+Content-Language: en-US
+From: Michael Riesch <michael.riesch@collabora.com>
+In-Reply-To: <aQ4tJg8r_j4NyKhv@kekkonen.localdomain>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Hi Martin,
+Hi Sakari,
 
-On Fri, Nov 07, 2025 at 09:31:39AM +0000, Martin Kepplinger wrote:
-> Am Freitag, dem 07.11.2025 um 03:58 +0200 schrieb Laurent Pinchart:
-> > Hello,
-> > 
-> > The reference manual for the NXP i.MX7D in which the CSIS is integrated
-> > lists four outputs named "channels" in various diagrams and tables, but 
-> > only documents registers for channel 0. Reference manuals for i.MX8 SoCs
-> > that integrate the CSIS gradually removed mentions of channels 1 to 3 as
-> > newer revisions of the documents got released, which was interpreted as
-> > an indication that the CSIS has only a single output.
-> > 
-> > That interpretation turned out not to be correct. In the i.MX8MP, the
-> > CSIS features multiple output channels. Channel 0 is connected to the
-> > ISI, and channels 0, 1 and 2 are connected to the ISP. Multi-channel
-> > support towards the ISP is meant to support HDR, where camera sensors
-> > transmit multiple exposures or gains over different virtual channels.
-> > The glue logic between the CSIS and ISP hardcodes this use case and
-> > combines the channels in a way suitable for the ISP's single input
-> > port.
+On 11/7/25 18:32, Sakari Ailus wrote:
+> Hi Michael,
 > 
-> Hi Laurent,
+> On Fri, Oct 24, 2025 at 02:51:29PM +0200, Michael Riesch via B4 Relay wrote:
+>> Habidere,
+>>
+>> This series introduces support for the Rockchip Camera Interface (CIF),
+>> which is featured in many Rockchip SoCs in different variations.
+>> For example, the PX30 Video Input Processor (VIP) is able to receive
+>> video data via the Digital Video Port (DVP, a parallel data interface)
+>> and transfer it into system memory using a double-buffering mechanism
+>> called ping-pong mode.
+>> The RK3568 Video Capture (VICAP) unit, on the other hand, features a
+>> DVP and a MIPI CSI-2 receiver that can receive video data independently
+>> (both using the ping-pong scheme).
+>> The different variants may have additional features, such as scaling
+>> and/or cropping.
+>> Finally, the RK3588 VICAP unit constitutes an essential piece of the
+>> camera interface with one DVP, six MIPI CSI-2 receivers, scale/crop
+>> units, and a data path multiplexer (to scaler units, to ISP, ...).
 > 
-> This is going to be a dumb question, I know this, but I'm equally
-> confused as interested:
+> I understand both RK3568 and RK3588 include an ISP. Do you have insight on
+> how would this work, should the support for the ISP be added later on?
 > 
-> What you implement here is *not* muxing CSIS to (one of the 2) ISI-
-> pipes, right? This specifically is something I still need to do on
-> mainline (nxp-tree has a way to "mux" this, with rather cryptic
-> devicetree properties) where a board physically has the camera
-> connected to the *second* CSI interface but I need data to run through
-> the *first* ISI pipe. By default the second ISI pipe is used for the
-> second CSI interface but only the first ISI pipe can do 4k. Is this
-> "muxing" implemented in mainline right now? (ISI driver most
-> probably?).
 
-You can configure routing of inputs to channels within the ISI crossbar
-subdev using the set routing ioctl. This should work in mainline today.
+Short answer: Yes and yes.
 
-> Also, your patch is not about the connection CSIS->ISP, right? Because
-> that is something I tested using libcamera a while ago and have a dtso
-> lying around for.
+Long answer:
 
-Connecting the CSIS to the ISP also works today with a change in DT,
-that's correct. I would like to make this more dynamic by declaring both
-connections in DT and dynamically configuring the routing from
-userspace, but that's an entirely different issue (and will require lots
-of work).
+The patch series at hand adds support for the PX30 VIP and the RK3568
+VICAP. I cannot really say something about the PX30, but on the RK3568
+VICAP and ISP are orthogonal (the ISP features its own MIPI CSI-2
+receiver, different from that introduced in this series). Thus, ISP
+support can be introduced anytime (whenever someone is motivated ;-)).
 
-> Can you put this new functionality into perspective for lazy people
-> like me? :) For the ISI-case this doesn't seem to have any implication
-> right?
+Once this patch series is merged, I'll push out changes that introduce
+support for the RK3588 VICAP. We can discuss the integration of any
+RK3588 ISP in this scope then -- and there may be some things to discuss
+as there the VICAP and the ISP(s) are directly connected by means of a
+MUX unit in the VICAP.
 
-What this series is about is how to demultiplex CSI-2 virtual channels
-(not to be confused with the CSIS output channels, despite being both
-called channels they are entirely different things) inside the CSIS and
-route them to different CSIS outputs. This is not a feature useful for
-the ISI as only CSIS output channel 0 is connected to the ISI.
+Alright?
 
-> anyways, fascinating :)
-> 
-> > With a time machine, we would probably redesign the CSIS DT bindings to
-> > model each output channel with a port, and the V4L2 subdev would use
-> > multiple source pads. Without a time machine, we need to preserve
-> > backward compatibility with userspace. Not only would the addition of
-> > new ports and pads make this tricky, they would also require modelling
-> > the glue logic between the CSIS and ISP with a subdev. This would
-> > conflict with the need to preserve backward compatibility.
-> > 
-> > Fortunately for us, the CSIS is an old IP. The NXP i.MX9 series uses a
-> > different CSI-2 receiver, and the probability of needing to support an
-> > SoC that connects different output channels to different devices is
-> > extremely low. We can therefore implement a solution tailored to the
-> > needs of the i.MX8MP, and model the output channels as separate streams
-> > instead of separate pads. Should the need arise in the future to support
-> > connecting output channels to different devices in a new SoC, we will
-> > still be able to model this with extra ports in the device tree without
-> > breaking backward compatibility. The driver could then create extra
-> > subdev pads accordingly.
-> > 
-> > The series starts with 5 preparatory patches to ease review. Patch 1/6
-> > adds missing register definitions. Patch 2/6 then switches from
-> > .s_stream() to .enable_streams() and .disable_streams(), a pre-requisite
-> > for multi-stream support. Patch 3/6 follows by implementing the
-> > .s_routing() operation, supporting a single route exactly as done
-> > implicitly so far. Patches 4/6 and 5/6 refactor the code to group
-> > parameters in structures and clean up how they are written to registers.
-> > Finally, patch 6/6 adds multi-channel support.
-> > 
-> > The series has been tested on an i.MX8MP with libcamera, both without
-> > changes to verify that backward compatibility is preserved, and with HDR
-> > support (work still in progress) to verify that VC filtering works as
-> > expected.
-> > 
-> > Laurent Pinchart (6):
-> >   media: imx-mipi-csis: Add VC-related register fields
-> >   media: imx-mipi-csis: Switch to .enable_streams()
-> >   media: imx-mipi-csis: Implement the .set_routing() operation
-> >   media: imx-mipi-csis: Group runtime parameters in structure
-> >   media: imx-mipi-csis: Set all per-channel registers in one function
-> >   media: imx-mipi-csis: Add multi-channel support
-> > 
-> >  drivers/media/platform/nxp/imx-mipi-csis.c | 551 ++++++++++++++++---
-> > --
-> >  1 file changed, 429 insertions(+), 122 deletions(-)
-> > 
-> > 
-> > base-commit: dcb6fa37fd7bc9c3d2b066329b0d27dedf8becaa
+Best regards,
+Michael
 
--- 
-Regards,
-
-Laurent Pinchart
