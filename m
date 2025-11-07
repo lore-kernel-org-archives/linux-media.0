@@ -1,68 +1,64 @@
-Received: from AS8PR04CU009.outbound.protection.outlook.com (mail-westeuropeazon11011018.outbound.protection.outlook.com [52.101.70.18])
+Received: from AM0PR02CU008.outbound.protection.outlook.com (mail-westeuropeazon11013069.outbound.protection.outlook.com [52.101.72.69])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 003791DA62E;
-	Fri,  7 Nov 2025 16:01:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.70.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 625F42D7DFF
+	for <linux-media@vger.kernel.org>; Fri,  7 Nov 2025 16:10:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.72.69
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762531311; cv=fail; b=CtxONe485h46gKk6z/pkcZ8u6paVvD+WjNdji8K9H90oF4s28A8+jJVhr3g1ykZJH1d7/JUlx8gWq7qMO7RSiFNW16tffFXExzXt+uYIB3ngaOifcDVv3sL4ioxsYi7CPJ5FePZAodxMGlKrdznot43trslKid2ccO4V8t209r4=
+	t=1762531853; cv=fail; b=GEWg78+Ei7jkJ6yJqY9SDaOCT5tTxPlnmBuvk7x3A4Orh/dSvnzL7IHSguXXHx+nYCC3fXo/hxCZyYrGDNDZDp1JN59oVS1sfZnrlW+1ugEg/jkjEJyy0/1c87ApnjeOjWO/AVGYTs+OHdAEb2Gm8jXCTYNGTqW56J03aYgkVec=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762531311; c=relaxed/simple;
-	bh=BUfGFa+6gpdaM/4QJiq94U8HeNBIGbZKHMjTnTMRYZM=;
+	s=arc-20240116; t=1762531853; c=relaxed/simple;
+	bh=B75V/Xk2pBGOZqiPAXtJZPpL/fk/2wkLynk9B+m0vZA=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
-	 Content-Disposition:In-Reply-To:MIME-Version; b=oY7+uRpnC4/sxaQuAjc6A0DRGNGQDr8Vr7vhiokigJF1ct019WgY15F7LbvxCdmEvFj6hwOz5tAqUKj+X47vJSXFZ1vbdbPBnZ6gAou9fKcBwjeoXcWMEaRquED+eRPWik+DVDwvu601YlYZ4xPj9Hmkcapa2WMu/5bu62gceds=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com; spf=pass smtp.mailfrom=nxp.com; dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b=DYaQJOVo; arc=fail smtp.client-ip=52.101.70.18
+	 Content-Disposition:In-Reply-To:MIME-Version; b=JPlnkaAL7mA9hAhYAOaqWmqiqW717wN58M8hJNBA7r9jdD5v78WgtW8keHd9eJ5Pv4OSOg+vNi800rCxKenjePeMolOcI6qoNAzmlEgZTBzl5/TnMpA+Cn2g2vHrmu8XS2pKvFlFNwnlJBU5E2fiICoFgcB7nkAl7sB/1EF0qz0=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com; spf=pass smtp.mailfrom=nxp.com; dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b=WnZ/+VUV; arc=fail smtp.client-ip=52.101.72.69
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nxp.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b="DYaQJOVo"
+	dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b="WnZ/+VUV"
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=tKjKeYX0iR3txymMbKB3A0aL7c8dcWNC5Y3eGelXn2CNeaZBthWkyZeOfPbMyd6cLmNJS6ZMAmlCC9FmcmfrHBVTc9Ae6P9bDx1buQpr0+lKR6qDGeRjpG0ZcgF4TPxOl/xq7od6SSbudtPqeqTegu+6laaUfBnF0/HBaJFPMM8bZBLoUw+FBtTlsWsc761OBWjbOHFB3k+faD5nrYmtG2kmK928IAZ0lWLL7skkXxiEsHkvg7qNmBYKpTJJn0ap3UK1tZuyODwYdNXKWjV/dVcD7WTLiIFl5016D54LnWriaOxcXiywqw6AYZT7rvQgvfJIpPBOz63fMrvWw5eAug==
+ b=yR6PnHun9YTdek4M6Kjp/DnJQ2MSL7kA4Da9IyrIEUG2IYyba6X3Oe+EnQZppbE4o6vEzx2T3r0Hk+kOr8fFzbrGnCbBIf4gCmq3Z+NTmoVtzPlyDJ1Ta5M8q8II1B6u7QpkYLv5Ot31tFxAsZ0IZbjTKtkO3RNgWxDLGns3DQgLcukiPdJRVKESuD9OH0gHT6T8Aj25n54R/+0quomvnew1tqAMUKZbOvkgnJ/H2d5VGlu6kuLijG+2hPQslG1VgeooutHdHh9p3S4HGRBvfRRH4PEgEgDxUQSfjKsIWwACzyMJKhBFeP5zaE2gPSMdlnDFl0qAUC46VeNoiwnRFQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=xZoJ2hKryKACymwm11YWLeHl+zXO6knEuLiQC8WmJWw=;
- b=B2NXz9Ww7eCgmd6cCOGkpN2BEZ5f+dxk5ElDEyj9gXaalZFjr0TZdV74kAK3sypppARZ/Y9zeZFX1J1E6WwY5R51ZixScK9FufqnyYjvbvRxcWJEBaJksCpS+53K376SRMWFe2AiKDeJsFAUvBI1wt0ywkV4JZ2mRB4BypYFMvLP8NIrobLcpgENfcKGCn5YsMRw0T4laPvUNKlbSEFTeXRr9SHBPunazgX4DONgNuoTcavhHqnl7FHLpDSRVdnIZ/K0dNHzFDWK8e2F/ZeQTd7tRDrZLTHdhb8r61BE34lN5WO87mJT8Xd2dAM+Ubmw0iKovg5ux3bBg7ICQEvVaA==
+ bh=PNbm5M/50yaHoDp5XTlZKE4c1RlcfihjzhbMGfYEdq4=;
+ b=slh+NyIteI/tiM4qVK76LFTnTfq0VMFDsmTBDP5I9Zz/c7NdC8/2+Dd7Np5TJ3FHDHzenrM+zFE2hsUlc7uWLEFfwhS6hdjdWLbgBC5d+zhmjg8VdBSay9LvvvhTI8lFphO4CxgYGTjThHTQiI7T8AbNL6ysRazJWi5fXe5Sa/Lz6ipxu+epA2UxejE4GQhE9E8ADsFOvJ2LX6+h/BybsJFsgahFUU5rp8zM+/RQOZCFd+NTid4I+9EMC8rfDRdQQ9bSK3rskdBazllwjabHGG56SNNlbl1vGussv+/6xVtqzUZg1a4xGzqGmN7t4p96714bOKeZEnRXHSUi+TLAAw==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
  header.d=nxp.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=xZoJ2hKryKACymwm11YWLeHl+zXO6knEuLiQC8WmJWw=;
- b=DYaQJOVoxICT+PW9Ou3ZpSgTKhNVB4E4jOVHYFS4Jci+nNUy0LVNxr45loqpSQvWIzmLMiYaA8hekO8yQRxb6vMN/oERKDiI+ELoSFVPbft4x4OkIjZ/ANMYl3cpfNrXUpsAM8UU86Lkih8TQkg6qI/fGKMrxQpxwWZ7Cp94gfU+M/PxmMTPuS3apNV96U8ya9Q18LLQuhrkEnhDTttG+hpuybjBmBkyLDyIJsZe5T948TXczU/iso9nRqq3mxy4ZcIidzQfZq6KYdK34GvHSyPML8KnZH9C4Uq/jNdj+e8RCukZId/QOQGooWxlQbvgG/VjVZmK4NPFcfq0zFj5Ng==
+ bh=PNbm5M/50yaHoDp5XTlZKE4c1RlcfihjzhbMGfYEdq4=;
+ b=WnZ/+VUVX53P5oP+ca8eScm+zbcIdp+54N8zf7gX/M/+vW7MK8vm7Ot0jnRDbZHHPukhWKqQUkKfucJCBWCGG+PdyaxE1V1Hc2paGUzpSdL/ChwpsfDeVMFGJwXFthn5QT0WqY+zljkGP/+Sx9XZ9qkjnUs8/0EdJ2goMQI6kdVvKqKLJF7ZrAzWfYCeHmqiOK9fM/4/zrnETavCk9dHl4AtcjTT+v2Im8x0Oq/kmY5nG4dIrqYqX41iaFxRspblyZNXz7141Pq0Ee/ZDu/jhabpUgKx0DP164omj9QBfVg7KSxP12gOgf6zz5gZMx2QG2dYsSGSXq1JhIRmBL4fIg==
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=nxp.com;
 Received: from PAXSPRMB0053.eurprd04.prod.outlook.com (2603:10a6:102:23f::21)
- by AM9PR04MB8486.eurprd04.prod.outlook.com (2603:10a6:20b:419::21) with
+ by GVXPR04MB10110.eurprd04.prod.outlook.com (2603:10a6:150:1b2::9) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9298.12; Fri, 7 Nov
- 2025 16:01:46 +0000
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9275.16; Fri, 7 Nov
+ 2025 16:10:48 +0000
 Received: from PAXSPRMB0053.eurprd04.prod.outlook.com
  ([fe80::504f:2a06:4579:5f15]) by PAXSPRMB0053.eurprd04.prod.outlook.com
  ([fe80::504f:2a06:4579:5f15%6]) with mapi id 15.20.9298.010; Fri, 7 Nov 2025
- 16:01:46 +0000
-Date: Fri, 7 Nov 2025 11:01:38 -0500
+ 16:10:48 +0000
+Date: Fri, 7 Nov 2025 11:10:41 -0500
 From: Frank Li <Frank.li@nxp.com>
 To: Michael Tretter <m.tretter@pengutronix.de>
 Cc: Steve Longerbeam <slongerbeam@gmail.com>,
 	Philipp Zabel <p.zabel@pengutronix.de>,
 	Mauro Carvalho Chehab <mchehab@kernel.org>,
-	Pengutronix Kernel Team <kernel@pengutronix.de>,
-	Fabio Estevam <festevam@gmail.com>,
-	Hans Verkuil <hans.verkuil@cisco.com>, linux-media@vger.kernel.org,
+	Fabio Estevam <festevam@gmail.com>, linux-media@vger.kernel.org,
 	imx@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
-	stable@vger.kernel.org,
-	Michael Tretter <michael.tretter@pengutronix.de>
-Subject: Re: [PATCH v2 2/2] media: staging: imx: configure src_mux in
- csi_start
-Message-ID: <aQ4X4o3CqOI7e0Dm@lizhi-Precision-Tower-5810>
-References: <20251107-media-imx-fixes-v2-0-07d949964194@pengutronix.de>
- <20251107-media-imx-fixes-v2-2-07d949964194@pengutronix.de>
+	Pengutronix Kernel Team <kernel@pengutronix.de>
+Subject: Re: [PATCH 1/3] media: imx-csi: move media_pipeline to video device
+Message-ID: <aQ4aAUZY4jrFKjwA@lizhi-Precision-Tower-5810>
+References: <20251107-media-imx-cleanup-v1-0-f82a693c28f4@pengutronix.de>
+ <20251107-media-imx-cleanup-v1-1-f82a693c28f4@pengutronix.de>
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20251107-media-imx-fixes-v2-2-07d949964194@pengutronix.de>
-X-ClientProxiedBy: SJ0PR03CA0037.namprd03.prod.outlook.com
- (2603:10b6:a03:33e::12) To PAXSPRMB0053.eurprd04.prod.outlook.com
+In-Reply-To: <20251107-media-imx-cleanup-v1-1-f82a693c28f4@pengutronix.de>
+X-ClientProxiedBy: PH7PR02CA0004.namprd02.prod.outlook.com
+ (2603:10b6:510:33d::7) To PAXSPRMB0053.eurprd04.prod.outlook.com
  (2603:10a6:102:23f::21)
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
@@ -71,197 +67,184 @@ List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PAXSPRMB0053:EE_|AM9PR04MB8486:EE_
-X-MS-Office365-Filtering-Correlation-Id: 8643a627-012e-4947-c236-08de1e16f3f0
+X-MS-TrafficTypeDiagnostic: PAXSPRMB0053:EE_|GVXPR04MB10110:EE_
+X-MS-Office365-Filtering-Correlation-Id: cd22d11b-990b-4b15-2922-08de1e183717
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|7416014|52116014|376014|366016|1800799024|19092799006|38350700014|7053199007;
+	BCL:0;ARA:13230040|366016|52116014|376014|19092799006|1800799024|38350700014|7053199007;
 X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?drUsbkql5q2CVpFQa38B8icdbcB1Miu9huvBuNkHeefLRPxtS+x8wwGC+rYY?=
- =?us-ascii?Q?puwDE8y6pg5ATk1Ll4bJhz+J8vTeuL8olN6CoNc10aYlHZspBCTHxBr+eFy0?=
- =?us-ascii?Q?P+Ma1A5FG6WNtsp7nxpd5gBB9iccv+fu7tVNg0McpccTxDTCZsMXb091OpDK?=
- =?us-ascii?Q?+Rj0+27bYhxtWNuK1r06IWkBdkwyIHqJ+Owjq4Ud/GLAycc6vecfu6DLFM+f?=
- =?us-ascii?Q?fHTxP7avvxAT7KSe/v6LS6WcfSjdqptJaewKOMcpCaD0AG2c/Rj9+F1BVGZs?=
- =?us-ascii?Q?ggOQvzzdE1GIg6ClMtASRY2NuqF7zRMtYRW0ob+WRFTsZQ1PCNXA9nM/vYBc?=
- =?us-ascii?Q?qzSetWU/WtlESTo3cNvOgbYnR2MW3ZhZSKTYpiTyZ8ImpSH0x0w5TSXKTpy3?=
- =?us-ascii?Q?+PlLr++XNXjxjmAjkJT8kTq32mlogdKLfT0lnQYGbCgVLE8xZUa0buLbLr98?=
- =?us-ascii?Q?d2lbTY/sNu82k1CY5RrlIW32REjsOAQAIW85wXXv8YjOpL2Kse0ddZ8LPzpe?=
- =?us-ascii?Q?EweBkUU205G9mTMhxCYchUIy8BMcdsk+aYzAORgAh9WK/LsH6+H/tCvhL6m+?=
- =?us-ascii?Q?F64aFcnjwMYeTlpzVsTuXEsHd+VE8rXIoU/o7FCqJWZ4Czy2d9u4mhd92UIK?=
- =?us-ascii?Q?ljwFy2x9AgvVAWqf5pmWcGI+LYPkx7QLSvkHu6xMSscLUfRizdTVLq0xKPIP?=
- =?us-ascii?Q?QkIjT4BDl0WN8WB6IN1Djke9TKgC95sqc3AIcfvx8zGwVljKjuRAE8wc5dB0?=
- =?us-ascii?Q?cWVIR4KXJMJOyQ45QNIQu5NckAcH7R5sscnM/OTjbZfJmsH6Sa9Ka+tnMQ26?=
- =?us-ascii?Q?8OY5sNz43Vvd3WWyxDf8HMKCksQ2sgPl96ltuuLvJfQo59Ib/cL7OEmC40Qw?=
- =?us-ascii?Q?pF2X6iDPtCxRH2LT3938q/qYfB0SjxOFWz2G12pqVFSFgJXSFQBmrIVo2sO3?=
- =?us-ascii?Q?fe//5Zgpp4i8DkXv7j9lWB8NkOqtxlVkc8qSthx4xP7ZlQs3o7yENn+qN6IS?=
- =?us-ascii?Q?OFej3Kax0DF6YWWcHySW4tnnH8ogzlX7efPftLIBUQoyZOwGJ2baqXd21sWK?=
- =?us-ascii?Q?0ePjPWU4p0g2hLOpYDbPJ1VLXOPIGrmHsi4rwiqgGlgehbRiOJgysk8Ifuy0?=
- =?us-ascii?Q?q8Ej9KCLoXh1CR0lKTqz25jwxGarX1DiYjBG/Z4KZp2YwYXdMJ2HNAIDapn+?=
- =?us-ascii?Q?L75Lm5nWuqib3T4ppSRgVAljqBIRXz5Sy+MlxwjOAi763vUyAEBgUQiehcLY?=
- =?us-ascii?Q?KBtTZ0ZxgZfQnFDvUrlotNs4kCFvogp/CDTj7Oejft3rR4sYy/pLPB6DtQ70?=
- =?us-ascii?Q?M9PksXTHYBaJcPaHURIfLTdJQWRn7kEOfSdmpWTiUXpil018IdbOTTLU3epI?=
- =?us-ascii?Q?GI6HduVcAzOXwoiAzGaUhCnIMB50Mjyzk/yKQKpiBVRgwO7CP8ZdkGbkWNbo?=
- =?us-ascii?Q?X/wLsC2dUpRZeUIVc3Iq1aQ8VUBfwSa3t87Ey1rGV/wQqOLGk/5YoGd0LOgo?=
- =?us-ascii?Q?9reYJ7/nUSIZfBCNhmP/c7XXAGKkei5CAFRc?=
+	=?us-ascii?Q?yKN7RepJ89H5Q1ldr6yBRNqJO9u/NECqxc8Pn4mnBPWMtd9LfxmXQZLtvDuO?=
+ =?us-ascii?Q?VV5JC9ps3tpSVD1XMfIrkL8cD/UlQSX61C4whWYU6+g1Y7nvuDiRR9i8Gc7M?=
+ =?us-ascii?Q?B6EqGfz/zKi6y+zh0FaEsNNAtVCW6SoteK4kcHYtBjVypYVW1cbgCs0QcFIU?=
+ =?us-ascii?Q?7NWgohHEY/l8JfBF5GfdflqOC6HZaynq+/iJIN8VW9ZEg/bNanVEYGfzYNsm?=
+ =?us-ascii?Q?k5WFQbXf+tWvLg6MSzNadYwGh77R6uDTZr++8x49oV9jviEd5Wq4WstkCmj5?=
+ =?us-ascii?Q?6E3BB+cwecqdFNt5N1donDiqJi95BwAnv7d8jeFSi1NakUTRAZmP94F6fIoq?=
+ =?us-ascii?Q?/ktuJMDSIfjMQ/oDyt9FqbCA6pA7SH5onxYtObj3xTDL/M7aJPALRYRr8YC7?=
+ =?us-ascii?Q?I0FS2AIj38pdW+d3QGXTnVcR4spoh6gYpMSoQf/NfwLeTB/Yn8Of66TtF73/?=
+ =?us-ascii?Q?9Txqgn1GeRwShjwDz1daRDZ+43hchPPSyruCglCYvT0pLSb38n4n9wa/B2yl?=
+ =?us-ascii?Q?3Zoumi9lJTJecL3lahXn7xAv9dG72b4HbduSxZm/ob3csEm+Q8I8I1Gs2xnR?=
+ =?us-ascii?Q?NXNINVyUYPhf65KWqHVcB4gNpApf/GGo2ewl0dzY454QsFESkupXHXxTsTLs?=
+ =?us-ascii?Q?bafN+6RReeQXKQQ8XWFMTMhBDL2geZddPfBRSgDR2G7oosAtb9YJsXOrg7BC?=
+ =?us-ascii?Q?e2fgQNUSCutkFaJAF7dKDgfb63oJRccsy80h0kHy4HDZa88lUgYooOoN7BtX?=
+ =?us-ascii?Q?wA3RcwsyQTTE+CjDpAlF7pdzVhzk8QyMW2ArUyY5bsxo72NZmrRZ0hal+X7M?=
+ =?us-ascii?Q?GVjKJV+FtQtkWITiS5/Sn0ES+rI5ZsfXIoqrNIlTEiN56XIuvmY876FWpL/9?=
+ =?us-ascii?Q?IaSoR3OfVbN3TRF/Lhxn5aO309Z/LsOul3nWiIZaPoHzZl0ouhSj2Mr5ymqB?=
+ =?us-ascii?Q?4/FPeJdQWL1e/2/e9gvw18yBVegWicX9P4ote+/oYY+9Ro5/kSPZ3tGPpi+f?=
+ =?us-ascii?Q?/BU9kt2S8DXjWOQmyiybd6bnGqaUnGq8oeNq14r2tmJ/fEDBmrc5zObtoJBJ?=
+ =?us-ascii?Q?zCJlpKzOD2dm8DVXhBMD05pc8gq5R/b6tDXlCtnnoivK8RrDIOdpOc1k3Qkh?=
+ =?us-ascii?Q?lICWL8w7RFcU0tqfanqJunRkcHZn3X/gIzZibDNUHc7C/rEZRfVapxp3EV7y?=
+ =?us-ascii?Q?OF1kocgJzsDjpqp+shDcOfQBqTrsMlI34etw7kYkxiRUkPRmBteXnjJLOGEE?=
+ =?us-ascii?Q?EfGky6scjH8YTxMauPn5YxSpNQEueI+lwyH1gCtAUvehDRX0474gnpRpi9ao?=
+ =?us-ascii?Q?bQa0Vv7+/bVMCrnieYwAEqykD6Tr0w+NkSrO20F4QYy4+Y958SrTiC5+2+rT?=
+ =?us-ascii?Q?NoX7V/UdiVMfnk8t9qP0W+BDBantgolRcDjhkfNuihZhTWhF6BU+J3EVcmSG?=
+ =?us-ascii?Q?SyPSVIJR3F13Zimw2LBEXG82RkCalEfdDnVQOu0NJIldcVY+y7y8xRtKHHv8?=
+ =?us-ascii?Q?F7zj7rRKrCshS4ulhQqZgDwmCVlKm0y17p3t?=
 X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PAXSPRMB0053.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(7416014)(52116014)(376014)(366016)(1800799024)(19092799006)(38350700014)(7053199007);DIR:OUT;SFP:1101;
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PAXSPRMB0053.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(52116014)(376014)(19092799006)(1800799024)(38350700014)(7053199007);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
 X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?xf4MPUoE1rHT5z9xsxrXvWqc2nw15Oetw37X+vZkfCoI4WIRJ8KzSdjjXAxt?=
- =?us-ascii?Q?mlPkSg12ehwNxVuoYxq8nLkBVFxcIU0ZBZR1qDYZYT85NbUsWIKwSHqDPzoq?=
- =?us-ascii?Q?tndjnxw9vqmUvn/Wpnmk7s3NW1WbtV3bfgaYvA5YqHSNxqFJCPY5MYd0R8sm?=
- =?us-ascii?Q?Eh/tBu6Mp+Ahq2TfCsu7A2Ar7keJjobfbwyn6M72tA3rpUo6nENCpOJeXx7A?=
- =?us-ascii?Q?kLLT8c2IjibcKPm+D3DZY/TMPfh8Z2BEAsUd1jiaqZ5GGxauZe2+KUfXnC1p?=
- =?us-ascii?Q?4kOBPytdFeuLqx/dvZZBbHIe/UDoalFUW+6/8hwolgHzWn0rHickapkMebtu?=
- =?us-ascii?Q?A2vnBS7L0cPE1/57ZbINapfohWdygxve0oXPsnaJUcB0brF/Id5w6AsLp/Df?=
- =?us-ascii?Q?sUxQtHKRfG+3SEJbbhdeARU4AwZsHDHg7Z8RJTzp4vtbzK05CheYkoUpUax0?=
- =?us-ascii?Q?40jYttRnrHTQSLrb5bej/wVNkxQ6pkDaFRQ1glU8Y5YlKqGHRj5pokA8eNAA?=
- =?us-ascii?Q?yvvp5q29Znay9SbYPVzFQR9aQkqAPBN8JMHSHkwbdx2x8Vzfpl7HRsbppp97?=
- =?us-ascii?Q?PTHYc/t2Y1OOkP0+EHUXZjnL0zbWQEu5MfuPUI2CT/3HKI7waIYkHJnsiJDj?=
- =?us-ascii?Q?t2CGeGMvhDP96kDOp+/3fElnvvVx7OWAsNu2GXI1db/TTy4k8bkAwBrh7dSH?=
- =?us-ascii?Q?sZ/eZ2SamwkFXWKfma3ze8J8Mypye48g4PXZkHZdJURvHZuveAUXjXFQHFJv?=
- =?us-ascii?Q?8g7qG7aMmK7sZ3/050tIYAPaYEnV1tlaq7S7kKbocPkdJuuL+oVUaM+2pTS8?=
- =?us-ascii?Q?pvlCpg1JwF2fuwA97Qit3iwj0cRq28k3lFntUriPd6iOX7G1WzNqInrHwN3L?=
- =?us-ascii?Q?EmxLbYYDs2Y4/kkWX6LHUQMVV0dPSCiUY+y6IK7agLsLRhWj9kpyN6o1r3MA?=
- =?us-ascii?Q?Zj59v+jiOLcE/jfc3WsGMY9cfldFSX8hKSNQHWO+uZQW8v1KVRd6id0anE5h?=
- =?us-ascii?Q?o6rtb3DMioXu3GiD7/E8CtiVb7yxxfGHhva5uYbOmcuGSgq1g7SEiJlz2KNX?=
- =?us-ascii?Q?zD7m3slT4KGqvl9HWDy1Y1hDFsLv7zxbfWs9GC4DQq9NCKbYOtHhInFN89qs?=
- =?us-ascii?Q?7Eaq/ishr2J3RylCJcujgvXuweCGVMh6PvGGUEd7AgruPyqBz8Np2arR81Q5?=
- =?us-ascii?Q?PIj+O7AHKoy5ucTslIuwGcP6+sG7cWlwWTazmvQzHOmYynbO49tlm837Yw98?=
- =?us-ascii?Q?JdK/lPg7JAImMiIriLeq92mLeGoID3501zda1B3SfQmWsXzzyvDiOdqxm3dR?=
- =?us-ascii?Q?VMy6t3NHlD1kEIUnZpgfuNI8Ly/PZeH73bxPK3xE0kseFcZAsLBCEzr0DCAs?=
- =?us-ascii?Q?yT8u5R2Ko83hK9PVwqI5qtdm06xI0XU21uS0YKk6N1rFdNTQ4w/jdD9vLlgK?=
- =?us-ascii?Q?i3OMv6iNhQLVDNOTtp/pNmnmoYsa9cXIsQonrKnlSQtMJbAi4BRJgMigqdHZ?=
- =?us-ascii?Q?1KEvZHLOBkMGBCT/Sefq7QbqS6qxsAxlBqvP9DIVmOKZeC/yvzsnwfHFMKZN?=
- =?us-ascii?Q?XA2a+1qLMiIQjfFqUBYpfb17RQ6ohe5zJ6xR8igF?=
+	=?us-ascii?Q?wrKcPOPwkwvTH1GTeBTikhqZ2E1TMnGMMW53+wrPL10uqGjz8yJv8iABjAV3?=
+ =?us-ascii?Q?qtJm6TPRHuYIS6+rYtSBeMmxabR3eAMX8c4PhVjORqerZ21U+ILExjyanmia?=
+ =?us-ascii?Q?VWLP4Nkl+kIawfxXxLVLD3JhM/lT9zopq4EMY+Ac8zOnmHYnilal1pSGaqHB?=
+ =?us-ascii?Q?X5v2DJfyQtgKW+Yau/2lqIs1wAjXjst7wJbAnxUkMsLAsoaoETypqun5a9yo?=
+ =?us-ascii?Q?1udKE//igr6eETsDmRBWYifU+rIgqefwC7iLrjsAs7nrpoIWDUtvTTMUpW44?=
+ =?us-ascii?Q?aoY1cp0Wa7hI3/+YCiDPZelAlp3EVf7lslzL4Xk28ljoMeeCVDHzWMBimxtQ?=
+ =?us-ascii?Q?EAc+lcigH/yIgt0EcAiVXW11I9zSvjXXmyho09WEuZKAnpfoO20Lv6JwR5Nd?=
+ =?us-ascii?Q?HoQpQAZsuS3RYxPznljYay1SMvTMM/qB0vuj8f0m/1/xCEzT48dVPwe/q0FB?=
+ =?us-ascii?Q?Qo4yCJJN5wcaLnMjtH92oS1BAPFufVkOFwKRq5feDIUmoXNT2NX7/k+KK2qj?=
+ =?us-ascii?Q?BwkqblhDelqYMETs0zgD+jCl08BXrzA+NCtYLzZgXgowuiAtUAjZV+nF2uEG?=
+ =?us-ascii?Q?2C7iiIREiYeXWsaO+juGFv91jbHj2Ruf1lWmSDPdj0VfrUjDe95XGvxX4Sbb?=
+ =?us-ascii?Q?rtKmlq3gv9rebuglFuJ4HGRc8orVGy7Y7vaWfQV7erkmwLR3cA2Qqq2i45MI?=
+ =?us-ascii?Q?qWoPvNH6gJ5OGFemtN7vUDj4VsJSHHNAqg9QLdczlO/lSDR92YPrYW8BUsKH?=
+ =?us-ascii?Q?LOjjm9FoHlTj3Q5fhNANZu5NinTth88DuBSdQGl3Zr1jmBrPWAH7LaquyWXr?=
+ =?us-ascii?Q?QuSPpk7TL+Ssi5H6Vobcnsv1z2SH9/Cw5ffZ+2bslgol/aH2qzJVBXVFNTu6?=
+ =?us-ascii?Q?hS9FgU4b1PywyVKwxtLLxghjR9Y3ra+OFsIfVkf/b1mfzFLTd8SZScsE1GCz?=
+ =?us-ascii?Q?vORCGVufOeONQEFxkaca7F0OY1SXnUygO5N5jHiQ/5fIu0ozErLM8UtehGR6?=
+ =?us-ascii?Q?dKizgebSPVlGeKwfKU1iGTBcDYwv76t0C+kZHyzFBz2InmADFgV5LMbIWtTK?=
+ =?us-ascii?Q?yRFd9Uwr5zr8m5A+vU6QjwARuQDEAy4ndr0CgikRJr++46clKP6v3P3+6wYl?=
+ =?us-ascii?Q?/KXyiEY5U29+ZNlJ3GrAJ7Ik9nYp+lWrKvYwBGPNF1XVA0RmSRc+wDAzYfp1?=
+ =?us-ascii?Q?tdeG6/4p4QUBpb78A6s7S12yss/zLcEvQ13tCOk6E+aueSIaFdChcUh0KCPC?=
+ =?us-ascii?Q?isHxPWZNMaja4ITJrZNTp/bvvxrzg898zaNnZVe+yPkZLGwiEmvChsRCwIk6?=
+ =?us-ascii?Q?3N+oXAOGAqhKyDQhThIoF+7CNw4Cgfzaz5s8ZpHUARZcElDk7NxvYLEC50kA?=
+ =?us-ascii?Q?j9klOj3geRgWS3o0N18g1TbGBdO0DZJzHzMn+5AVMT8hBDj4nLyvjMmRD6M0?=
+ =?us-ascii?Q?GTWhHD6eLs+/6f3CwH+IVKaShSAI0damdzW6QzPpsDGfM6FH+Eecs/yNNH+o?=
+ =?us-ascii?Q?o05YUeQV6FnvtpmxJhV9Fef/SBLoNHglSrGMTsZUTA3vaNZiluAHY3XqpQz1?=
+ =?us-ascii?Q?JoNWewB0MGbVPXLegxKvO8l+m2mLcBBVXz+eoRZj?=
 X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 8643a627-012e-4947-c236-08de1e16f3f0
+X-MS-Exchange-CrossTenant-Network-Message-Id: cd22d11b-990b-4b15-2922-08de1e183717
 X-MS-Exchange-CrossTenant-AuthSource: PAXSPRMB0053.eurprd04.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Nov 2025 16:01:46.5083
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Nov 2025 16:10:48.7174
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: QxBRcq/tDBr+lHz+ltuXPbp1HRphM61qfSVO1WSwS2eqirRtn4o3EXxfChnkalBGqTi68LF1ja6IE8/Iat7UQg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM9PR04MB8486
+X-MS-Exchange-CrossTenant-UserPrincipalName: ZpXL3dg+Sk6FNqyib2XYGPA7gBDky1Bs0ia3IcM8TsW0M6i2R1au0uiZsFwxkEWM6ToKU2nbqSOfwVaffWWzbw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: GVXPR04MB10110
 
-On Fri, Nov 07, 2025 at 11:34:34AM +0100, Michael Tretter wrote:
-> After media_pipeline_start() was called, the media graph is assumed to
-> be validated. It won't be validated again if a second stream starts.
+On Fri, Nov 07, 2025 at 11:16:33AM +0100, Michael Tretter wrote:
+> The imx-media driver has a single imx_media_device. Attaching the
+> media_pipeline to the imx_media_device prevents the execution of
+> multiple media pipelines on the device. This should be possible as long
+> as the media_pipelines don't use the same pads or pads that be
+> configured while the other media pipeline is streaming.
 >
-> The imx-media-csi driver, however, changes hardware configuration in the
-> link_validate() callback. This can result in started streams with
-> misconfigured hardware.
+> Move the media_pipeline to the imx_media_video_dev to be able to
+> construct media pipelines per imx capture device.
 >
-> In the concrete example, the ipu2_csi1 is driven by a parallel video
-> input. After the media pipeline has been started with this
-> configuration, a second stream is configured to use ipu1_csi0 with
-> MIPI-CSI input from imx6-mipi-csi2. This may require the reconfiguration
-> of ipu1_csi0 with ipu_set_csi_src_mux(). Since the media pipeline is
-> already running, link_validate won't be called, and the ipu1_csi0 won't
-> be reconfigured. The resulting video is broken, because the ipu1_csi0 is
-> misconfigured, but no error is reported.
->
-> Move ipu_set_csi_src_mux from csi_link_validate to csi_start to ensure
-> that input to ipu1_csi0 is configured correctly when starting the
-> stream. This is a local reconfiguration in ipu1_csi0 and is possible
-> while the media pipeline is running.
->
-> Since csi_start() is called with priv->lock already locked,
-> csi_set_src() must not lock priv->lock again. Thus, the mutex_lock() is
-> dropped.
+> If different media pipelines in the media device conflict, the
+> validation will fail. Thus, the pipeline will fail to start and signal
+> an error to user space.
 >
 > Signed-off-by: Michael Tretter <m.tretter@pengutronix.de>
-> Fixes: 4a34ec8e470c ("[media] media: imx: Add CSI subdev driver")
-> Cc: stable@vger.kernel.org
 > ---
 
 Reviewed-by: Frank Li <Frank.Li@nxp.com>
 
-> Changes in v2:
+>  drivers/staging/media/imx/imx-media-capture.c | 8 ++++----
+>  drivers/staging/media/imx/imx-media-utils.c   | 3 ++-
+>  drivers/staging/media/imx/imx-media.h         | 7 ++++---
+>  3 files changed, 10 insertions(+), 8 deletions(-)
 >
-> - Add documentation for the dropped priv->lock in commit message
-> ---
->  drivers/staging/media/imx/imx-media-csi.c | 44 +++++++++++++++++--------------
->  1 file changed, 24 insertions(+), 20 deletions(-)
->
-> diff --git a/drivers/staging/media/imx/imx-media-csi.c b/drivers/staging/media/imx/imx-media-csi.c
-> index 55a7d8f38465..1bc644f73a9d 100644
-> --- a/drivers/staging/media/imx/imx-media-csi.c
-> +++ b/drivers/staging/media/imx/imx-media-csi.c
-> @@ -744,6 +744,28 @@ static int csi_setup(struct csi_priv *priv,
->  	return 0;
->  }
->
-> +static void csi_set_src(struct csi_priv *priv,
-> +			struct v4l2_mbus_config *mbus_cfg)
-> +{
-> +	bool is_csi2;
-> +
-> +	is_csi2 = !is_parallel_bus(mbus_cfg);
-> +	if (is_csi2) {
-> +		/*
-> +		 * NOTE! It seems the virtual channels from the mipi csi-2
-> +		 * receiver are used only for routing by the video mux's,
-> +		 * or for hard-wired routing to the CSI's. Once the stream
-> +		 * enters the CSI's however, they are treated internally
-> +		 * in the IPU as virtual channel 0.
-> +		 */
-> +		ipu_csi_set_mipi_datatype(priv->csi, 0,
-> +					  &priv->format_mbus[CSI_SINK_PAD]);
-> +	}
-> +
-> +	/* select either parallel or MIPI-CSI2 as input to CSI */
-> +	ipu_set_csi_src_mux(priv->ipu, priv->csi_id, is_csi2);
-> +}
-> +
->  static int csi_start(struct csi_priv *priv)
->  {
->  	struct v4l2_mbus_config mbus_cfg = { .type = 0 };
-> @@ -760,6 +782,8 @@ static int csi_start(struct csi_priv *priv)
->  	input_fi = &priv->frame_interval[CSI_SINK_PAD];
->  	output_fi = &priv->frame_interval[priv->active_output_pad];
->
-> +	csi_set_src(priv, &mbus_cfg);
-> +
->  	/* start upstream */
->  	ret = v4l2_subdev_call(priv->src_sd, video, s_stream, 1);
->  	ret = (ret && ret != -ENOIOCTLCMD) ? ret : 0;
-> @@ -1130,7 +1154,6 @@ static int csi_link_validate(struct v4l2_subdev *sd,
->  {
->  	struct csi_priv *priv = v4l2_get_subdevdata(sd);
->  	struct v4l2_mbus_config mbus_cfg = { .type = 0 };
-> -	bool is_csi2;
->  	int ret;
->
->  	ret = v4l2_subdev_link_validate_default(sd, link,
-> @@ -1145,25 +1168,6 @@ static int csi_link_validate(struct v4l2_subdev *sd,
->  		return ret;
+> diff --git a/drivers/staging/media/imx/imx-media-capture.c b/drivers/staging/media/imx/imx-media-capture.c
+> index e9cef7af000a..bfd71d25facc 100644
+> --- a/drivers/staging/media/imx/imx-media-capture.c
+> +++ b/drivers/staging/media/imx/imx-media-capture.c
+> @@ -722,8 +722,8 @@ static int capture_start_streaming(struct vb2_queue *vq, unsigned int count)
+>  		goto return_bufs;
 >  	}
 >
-> -	mutex_lock(&priv->lock);
+> -	ret = imx_media_pipeline_set_stream(priv->md, &priv->src_sd->entity,
+> -					    true);
+> +	ret = imx_media_pipeline_set_stream(priv->md, &priv->vdev,
+> +					    &priv->src_sd->entity, true);
+>  	if (ret) {
+>  		dev_err(priv->dev, "pipeline start failed with %d\n", ret);
+>  		goto return_bufs;
+> @@ -749,8 +749,8 @@ static void capture_stop_streaming(struct vb2_queue *vq)
+>  	unsigned long flags;
+>  	int ret;
+>
+> -	ret = imx_media_pipeline_set_stream(priv->md, &priv->src_sd->entity,
+> -					    false);
+> +	ret = imx_media_pipeline_set_stream(priv->md, &priv->vdev,
+> +					    &priv->src_sd->entity, false);
+>  	if (ret)
+>  		dev_warn(priv->dev, "pipeline stop failed with %d\n", ret);
+>
+> diff --git a/drivers/staging/media/imx/imx-media-utils.c b/drivers/staging/media/imx/imx-media-utils.c
+> index 1b5af8945e6b..f520529a7cfe 100644
+> --- a/drivers/staging/media/imx/imx-media-utils.c
+> +++ b/drivers/staging/media/imx/imx-media-utils.c
+> @@ -749,6 +749,7 @@ EXPORT_SYMBOL_GPL(imx_media_pipeline_subdev);
+>   * Turn current pipeline streaming on/off starting from entity.
+>   */
+>  int imx_media_pipeline_set_stream(struct imx_media_dev *imxmd,
+> +				  struct imx_media_video_dev *vdev,
+>  				  struct media_entity *entity,
+>  				  bool on)
+>  {
+> @@ -762,7 +763,7 @@ int imx_media_pipeline_set_stream(struct imx_media_dev *imxmd,
+>  	mutex_lock(&imxmd->md.graph_mutex);
+>
+>  	if (on) {
+> -		ret = __media_pipeline_start(entity->pads, &imxmd->pipe);
+> +		ret = __media_pipeline_start(entity->pads, &vdev->pipe);
+>  		if (ret)
+>  			goto out;
+>  		ret = v4l2_subdev_call(sd, video, s_stream, 1);
+> diff --git a/drivers/staging/media/imx/imx-media.h b/drivers/staging/media/imx/imx-media.h
+> index f095d9134fee..8b65f79b125f 100644
+> --- a/drivers/staging/media/imx/imx-media.h
+> +++ b/drivers/staging/media/imx/imx-media.h
+> @@ -104,6 +104,9 @@ struct imx_media_buffer {
+>  struct imx_media_video_dev {
+>  	struct video_device *vfd;
+>
+> +	/* the pipeline object */
+> +	struct media_pipeline pipe;
+> +
+>  	/* the user format */
+>  	struct v4l2_pix_format fmt;
+>  	/* the compose rectangle */
+> @@ -145,9 +148,6 @@ struct imx_media_dev {
+>  	struct media_device md;
+>  	struct v4l2_device  v4l2_dev;
+>
+> -	/* the pipeline object */
+> -	struct media_pipeline pipe;
 > -
-> -	is_csi2 = !is_parallel_bus(&mbus_cfg);
-> -	if (is_csi2) {
-> -		/*
-> -		 * NOTE! It seems the virtual channels from the mipi csi-2
-> -		 * receiver are used only for routing by the video mux's,
-> -		 * or for hard-wired routing to the CSI's. Once the stream
-> -		 * enters the CSI's however, they are treated internally
-> -		 * in the IPU as virtual channel 0.
-> -		 */
-> -		ipu_csi_set_mipi_datatype(priv->csi, 0,
-> -					  &priv->format_mbus[CSI_SINK_PAD]);
-> -	}
-> -
-> -	/* select either parallel or MIPI-CSI2 as input to CSI */
-> -	ipu_set_csi_src_mux(priv->ipu, priv->csi_id, is_csi2);
-> -
-> -	mutex_unlock(&priv->lock);
->  	return ret;
->  }
+>  	struct mutex mutex; /* protect elements below */
+>
+>  	/* master video device list */
+> @@ -223,6 +223,7 @@ int imx_media_alloc_dma_buf(struct device *dev,
+>  			    int size);
+>
+>  int imx_media_pipeline_set_stream(struct imx_media_dev *imxmd,
+> +				  struct imx_media_video_dev *vdev,
+>  				  struct media_entity *entity,
+>  				  bool on);
 >
 >
 > --
