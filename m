@@ -1,147 +1,164 @@
-Received: from mail-ed1-f41.google.com (mail-ed1-f41.google.com [209.85.208.41])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A415C2BEC42
-	for <linux-media@vger.kernel.org>; Fri,  7 Nov 2025 13:08:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0EC3A290D81;
+	Fri,  7 Nov 2025 13:22:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762520889; cv=none; b=IY2/CuHzMTINQxDpKwsYbEpGrbEeMZ0vX9lmo9dnRg9EjoRFoXEPVmTX5TZAtaWZ88M/utcjNUxNCFl2ALI70SF/yp1K+mS3GpDw8FJCxc0FOyDIDWrdlUhJPE5kILKHhdkbDM46JBHJBGGZzrGyvKcmBWvLisX+ZcS/WrbkBgw=
+	t=1762521752; cv=none; b=SRYyIT6AUE9X2Sa0udrtyRnlnaKVCzCcrEn8QylCBShQe/0WBtbI8Kng0SIt1nQLUhcwXnw5ejw6lJN8QqsiHQmTQU9BMY64SSja1tDhoClbKAI2lVq1hGnz/RGjpUA7ORl0/0Qo4/0G/K9EGTg6tgzjtKlgRb4Ak+xHzV2HDnA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762520889; c=relaxed/simple;
-	bh=ab4JdEU2wkT0Hj03mRg7cQTBpYv7n0lBGv/VFV9YQ5E=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=SEc8YZySZZrWF6lt4oQBcyyfHKrhHR1Jx+/O3uWEDDvTCPlt77JEnu6cnAB0byqNO2EP6uKpKbleFX6B2b6vc3QLoWTG1v3aVFxWDsw9bNA32pHtI+9UCOBz/5AshSBkJj9x1q1iXWXYjKiA5QhNEHIfXFUu9QKlJZrVTh2lraY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=uOpuKlo/; arc=none smtp.client-ip=209.85.208.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+	s=arc-20240116; t=1762521752; c=relaxed/simple;
+	bh=JPCwZc73Ez6KYYqoOUs01xAqhsP8w5dT71K55P50y+M=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=p8hMXk4LlRh5mRkzlk1uDZ0bT3AYcutLPZhKktBkCujMuLckS6YxjHu6tLtRvjvgAMnEVWdxvwMz3XYVw0cG7/Fjx2PBONhhFdtHx89IvRWz7SV8sCFi5+wyF3ng5Oe9CKOCVoTsD0XWJri+5bnlvyd6FEi2bdwINrt84mFsSNI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=hjE7+65T; arc=none smtp.client-ip=205.220.180.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="uOpuKlo/"
-Received: by mail-ed1-f41.google.com with SMTP id 4fb4d7f45d1cf-64124874e6dso119085a12.3
-        for <linux-media@vger.kernel.org>; Fri, 07 Nov 2025 05:08:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1762520886; x=1763125686; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=PUZwTrdAx5DA1QRiAEjUm/Dj+qOzLieiy+DwjMngH4U=;
-        b=uOpuKlo/yAGDmdsbjTqnvwt3QU4cMvcG4XlcvqqXxtARKW7qwsd2/zi1asHoiYU8F+
-         6G+siioOvn/hjQQdupT8jVm1sjg3XcX8BOrHNb4Gk+3e+MtPJW94ZH/C1GAyg1wGfK2t
-         +/6hynOlY/xrok0ja2uu3XwDMK4W+N0ci/3MnO5L8tKnKmDeWf/WCKv7++IoWRyogKlt
-         Exj4YfwItzfphRVv3xX++966ezFo9mhQQe+hTveeuf84xAPhuTM73nx/47giLioosA0T
-         Z1RZ/o1njm+M/bnXjHlKJtK7EKTP+DfSaO5mANy35iUhU2FDxSuPQCZ6WBeAFrCWLeZt
-         /RnA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1762520886; x=1763125686;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=PUZwTrdAx5DA1QRiAEjUm/Dj+qOzLieiy+DwjMngH4U=;
-        b=vZrRpY+16zUJO91jH/N1fgaFOJMHNq++5fqWWrbiMXw+LV0kOl4AhKMaVnDWU1fm/e
-         sSOopKoCCI2QlEeG9Xkm7Tgz+DWABLHBbQW9fJll8tJw5xqS1lGpDPQ7j6xHH2LATaH+
-         Gw08TPFDMdQS5WtxGjpMaEH8mWBeMBbF3ANY1DjFGzqDVnwwf4wGNgSGnpq5nXoQFFxN
-         +tlEzq4Zm85CFR6U0zEeXq6PPN4wbzbK4UdlBHNjJATofTUaNAJFCMEq6XZqXr54yO6i
-         HhChqIZNLtFeITjdgwoCZevRm1EUGBKnw41B0cBSMD03mTxOAPcKbAXwxe9QkROKEGpx
-         9UDg==
-X-Forwarded-Encrypted: i=1; AJvYcCX1l+U6FAZ+ToTBWcMMOn+utV6Y8U58z7QtroSIOm4UZAnKJYCqkUlT5Zv1J3MTcw1hFqjVvaEGNZKBtw==@vger.kernel.org
-X-Gm-Message-State: AOJu0YzsOCeZMMA3lhcHlvvy5MFde36/GSmnNzadFw4WDYYwPLLRt/hB
-	kU94BZ0xDjj6gwGOxUtohUL6hWExio6mwYzgrbxO9TI9V0yzDG8kChuM+Upzzd6xapc=
-X-Gm-Gg: ASbGncuAUir1x3x9p8qmMR0qJarpBXzlmYEG5554YijTvvJ8LIN9WIIRjkAT20/65Ic
-	4OTzoE/+PVfPudyxXAWYrSHGUdEjQoPg3+UK+4Zi+wGsiog1GBAcoIDddHBj1vANk6YIzv+Y8an
-	lfhVNFYP6Rg80xFLtHGor4myVoCWyHRK61UqJvsSkB9+Euw3ySyGMFjlv0jPavo+FU1l4zEqK6R
-	o1kjHglZSOnP2Ez57QVynUSLapBtOI6AlO6zSQVP+h+SZkbP5xbFFQWIIiZVOIUNystjy5tkriC
-	6LYki/FXHlgmoc1OwPX5EC9Tcl3gCJ6S6gI6ZIU7HblW8+woagcXvLXCm1ilnhykqpiX7PayULu
-	ZKSYRUyekTl5PWN5K5755clcRvHTFVGydZhWmY11cAMR0AkhGovqa7DXHK45T7CfUsl5k9s3wp2
-	8cCtS4qr4l2lijnXoCdeDRDU+dq8D57A==
-X-Google-Smtp-Source: AGHT+IH9tINldpmuxzATwX+vJGBph2fWU/B2JPxAB+dd5zTEjXHIhI/JdfJAw6vwGdZgenYc3xl5rA==
-X-Received: by 2002:a05:6402:268b:b0:639:fbd0:4e44 with SMTP id 4fb4d7f45d1cf-6413f063d32mr1657770a12.2.1762520885794;
-        Fri, 07 Nov 2025 05:08:05 -0800 (PST)
-Received: from [172.20.148.107] ([87.213.113.147])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-b72bf97e457sm235515266b.43.2025.11.07.05.08.04
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 07 Nov 2025 05:08:05 -0800 (PST)
-Message-ID: <57585b7f-0c4c-4b28-892f-4aefec388136@linaro.org>
-Date: Fri, 7 Nov 2025 15:08:04 +0200
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="hjE7+65T"
+Received: from pps.filterd (m0279869.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 5A7B5RaT3175381;
+	Fri, 7 Nov 2025 13:22:19 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	cc:content-transfer-encoding:content-type:date:from:message-id
+	:mime-version:subject:to; s=qcppdkim1; bh=98URZ/cpJXW9rn2zuoqCwF
+	PwoXiSh4G9Lz7HidOJFoA=; b=hjE7+65TXp+y9nRW523UqFKurqYTRIE/f7noHQ
+	FXHcamKbPsdPMK8bJwSVtA9p3Ed5dvXN95i1yh1/Zedg5YZZYqCXQq0DCJ8iyWMW
+	+9/885/jtA7nQsuY62CqfF/M25SfkNQEGx5V+PclFBKQlWb5ZT2/FtRLnAAoi8C4
+	apx7i8jTaQsTen9XtGq9WZ14gUqfbpea4S92J/sI+PZfzqJKzVUUN7yWagdEnJ82
+	hX4vmfgf1KCDarfzK6/VGiprpPOGe0D0NeSJ75Ystse68voQA0Im05W6lu1xwFLk
+	jWEhlPrhU5S3CmmSbM4E6RQrb3l4ZASPMvSCst7MAigyhWkQ==
+Received: from nasanppmta01.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4a9fk80ar7-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 07 Nov 2025 13:22:19 +0000 (GMT)
+Received: from nasanex01b.na.qualcomm.com (nasanex01b.na.qualcomm.com [10.46.141.250])
+	by NASANPPMTA01.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 5A7DMHUd007636
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 7 Nov 2025 13:22:18 GMT
+Received: from hu-vikramsa-hyd.qualcomm.com (10.80.80.8) by
+ nasanex01b.na.qualcomm.com (10.46.141.250) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1748.24; Fri, 7 Nov 2025 05:22:12 -0800
+From: Vikram Sharma <quic_vikramsa@quicinc.com>
+To: <bryan.odonoghue@linaro.org>, <mchehab@kernel.org>, <robh@kernel.org>,
+        <krzk+dt@kernel.org>, <conor+dt@kernel.org>, <andersson@kernel.org>,
+        <konradybcio@kernel.org>, <hverkuil-cisco@xs4all.nl>,
+        <cros-qcom-dts-watchers@chromium.org>, <catalin.marinas@arm.com>,
+        <will@kernel.org>
+CC: <linux-arm-kernel@lists.infradead.org>, <quic_svankada@quicinc.com>,
+        <linux-media@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <quic_nihalkum@quicinc.com>, <quic_vikramsa@quicinc.com>
+Subject: [PATCH v5 0/2] qcom: qcs8300: Add qcs8300 camss support
+Date: Fri, 7 Nov 2025 18:51:52 +0530
+Message-ID: <20251107132154.436017-1-quic_vikramsa@quicinc.com>
+X-Mailer: git-send-email 2.25.1
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 2/2] media: i2c: add Samsung S5KJN1 image sensor device
- driver
-Content-Language: ru-RU
-To: Luca Weiss <luca.weiss@fairphone.com>,
- Mauro Carvalho Chehab <mchehab@kernel.org>,
- Sakari Ailus <sakari.ailus@linux.intel.com>,
- Hans Verkuil <hverkuil@kernel.org>, Hans de Goede <hansg@kernel.org>
-Cc: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
- Conor Dooley <conor+dt@kernel.org>, linux-media@vger.kernel.org,
- devicetree@vger.kernel.org
-References: <20251023025356.2421327-1-vladimir.zapolskiy@linaro.org>
- <20251023025356.2421327-3-vladimir.zapolskiy@linaro.org>
- <DDZU8E8EBAMW.3J9K3YJ94V2B4@fairphone.com>
-From: Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>
-In-Reply-To: <DDZU8E8EBAMW.3J9K3YJ94V2B4@fairphone.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nasanex01b.na.qualcomm.com (10.46.141.250)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: f_1oKXw3S4z_kdK8yB_M9eOm_017e-1G
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUxMTA3MDEwOSBTYWx0ZWRfX7X5enrP4+zTB
+ cs4AeL39Yieqd0pGd1kSzBOh+++/t2bx2mr7N+dxMDlMTZ38GqhLcat1NFMZP4W7Hzj2Yd6OHtd
+ JtkczR4CICoMvMvRkDQRY9zzA66RAyR78kx7BhWA4TQ5j92N2fdA8jSdEqmTD9kgndiFr3I7t+Y
+ Ltw0ryrMCHuP35FaVgk9lSZI2jCDDrUXBN5rNt8K+IhDuYPmqo7J9M76rF8YabvxkJ1JKxwaLpj
+ MP+lTGtsZ/yKS2ykBOewsj5MAHEVBvHLDsqF8s1Y5HCPqWprQghW/HniE3hicOxl/++DwSWJsjL
+ m4PoP7Njt6hcn+Fnapx9DqPWRPb+g4LwUzSiYGb2n1aivBOzHaNSdUyRWeubdcsdS9KVhMGEkwT
+ pmi/n/UavIAuZFR/aaliTvn+xD2nPQ==
+X-Proofpoint-GUID: f_1oKXw3S4z_kdK8yB_M9eOm_017e-1G
+X-Authority-Analysis: v=2.4 cv=CPAnnBrD c=1 sm=1 tr=0 ts=690df28b cx=c_pps
+ a=JYp8KDb2vCoCEuGobkYCKw==:117 a=JYp8KDb2vCoCEuGobkYCKw==:17
+ a=GEpy-HfZoHoA:10 a=6UeiqGixMTsA:10 a=VkNPw1HP01LnGYTKEx00:22
+ a=VwQbUJbxAAAA:8 a=COk6AnOGAAAA:8 a=EUspDBNiAAAA:8 a=0I1b_zmpnLY7N7-knUEA:9
+ a=TjNXssC_j7lpFel5tvFf:22 a=cPQSjfK2_nFv0Q5t_7PE:22
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.9,FMLib:17.12.100.49
+ definitions=2025-11-07_03,2025-11-06_01,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ spamscore=0 clxscore=1011 malwarescore=0 suspectscore=0 phishscore=0
+ priorityscore=1501 adultscore=0 lowpriorityscore=0 impostorscore=0
+ bulkscore=0 classifier=typeunknown authscore=0 authtc= authcc= route=outbound
+ adjust=0 reason=mlx scancount=1 engine=8.22.0-2510240001
+ definitions=main-2511070109
 
-Hi Luca.
+QCS8300 is a Qualcomm SoC. This series adds bindings and devicetree
+and driver changes to bring up CSIPHY, TPG, CSID, VFE/RDI interfaces
+in QCS8300.
 
-On 11/4/25 12:28, Luca Weiss wrote:
-> Hi Vladimir,
-> 
-> On Thu Oct 23, 2025 at 4:53 AM CEST, Vladimir Zapolskiy wrote:
->> Samsung S5KJN1 is a 50MP image sensor, it produces Bayer GRBG (2x2)
->> frames in RAW10 output format, the maximum supported output resolution
->> is 8160x6144 at 10 frames per second rate.
->>
->> Signed-off-by: Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>
->> ---
->>   MAINTAINERS                |    8 +
->>   drivers/media/i2c/Kconfig  |   10 +
->>   drivers/media/i2c/Makefile |    1 +
->>   drivers/media/i2c/s5kjn1.c | 1407 ++++++++++++++++++++++++++++++++++++
->>   4 files changed, 1426 insertions(+)
->>   create mode 100644 drivers/media/i2c/s5kjn1.c
->>
->> diff --git a/drivers/media/i2c/s5kjn1.c b/drivers/media/i2c/s5kjn1.c
->> new file mode 100644
->> index 000000000000..9e2ac3d695ae
->> --- /dev/null
->> +++ b/drivers/media/i2c/s5kjn1.c
-> 
-> <snip>
-> 
->> +static const char * const s5kjn1_supply_names[] = {
->> +	"afvdd",	/* Autofocus power */
->> +	"avdd",		/* Analog power */
->> +	"dovdd",	/* Digital I/O power */
->> +	"dvdd",		/* Digital core power */
-> 
-> My comments from the dt-bindings patch apply here as well of course.
-> 
-> Also my datasheet mentions that VDDD should be powered up before VDDA,
-> and there should be a minimum time of 1 us between them.
-> 
+QCS8300 provides
+- 2 x VFE, 3 RDI per VFE
+- 5 x VFE Lite, 6 RDI per VFE
+- 2 x CSID
+- 5 x CSID Lite
+- 3 x TPG
+- 3 x CSIPHY
 
-Good, thank you.
+Changes in v5:
+- Added Fixes: tag - Bryan
+- Removed empty lines between single properties - Vladimir
+- Modified binding phy supply description - Vladimir
+- Link to v4:
+  https://lore.kernel.org/all/8966ddaf-9c10-4626-a4cc-36efd3fc93e2@kernel.org
 
-> And power down first VDDA then VDDD, again with 1 us minimum time
-> between the two.
-> 
+Changes in v4 compared to v3:
+- Added supplies in bindings to enable camera sensor.
+  This change was earlier added as V3.1 of Binidings which was 
+  reviewed by Krzysztof and Bryan. Link to this discussion:
+  https://lore.kernel.org/all/20250910104915.1444669-1-quic_vikramsa@quicinc.com/
+- Droped the zero-prefix from the size field un DT patch - Konrad
+- Link to v3:
+  https://lore.kernel.org/all/20250813053724.232494-1-quic_vikramsa@quicinc.com/
 
-Ack.
+Changes in v3 compared to v2:
+- Bindings and Device Tree: Reordered csid_wrapper to appear first in the
+  register list (as suggested by Bryan).
+- CSIPHY Driver: Updated the commit message for the CSIPHY patch.
+- VFE/CSID Resource Data: Reused the same resource data as sa8775p for VFE
+  and CSID.
+- Patch Series Order: Rearranged the patch sequence and moved the DTSI
+  update to the final patch in the series.
+- Code Cleanup: Removed duplicate data structures and reused existing
+  ones.
+- Optimization: Simplified and optimized conditional checks.
+- Link to v2:
+  https://lore.kernel.org/linux-arm-msm/20250711131134.215382-1-quic_vikramsa@quicinc.com/
 
-> Can't say much more about the rest of the driver, great to see this
-> being worked on!
-> 
+Changes compared to v1:
+- Changed the order for register entries in bindings - Krzysztof
+- Changed the naming for interrupts for consistency - Krzysztof
+- Combined separate series for driver and dtsi into one.
+- Rebased on top of latest version of sa8775p camss patches.
+- Link to v1:
+  Driver: https://lore.kernel.org/all/20250214095611.2498950-1-quic_vikramsa@quicinc.com
+  DTSI: https://lore.kernel.org/all/20250214094747.2483058-1-quic_vikramsa@quicinc.com  
 
-What might be the most important, my plan is to keep the AF supply
-on the list of the regulators. The testing has been done on SM8650
-reference boards, you'll find the dts changes.
+We have tested this on qcs8300-ride board with 'Test Pattern Generator'
+https://lore.kernel.org/all/20250925-camss_tpg-v4-0-d2eb099902c8@oss.qualcomm.com/
+
+Used following tools for the sanity check of these changes.
+- make CHECK_DTBS=y W=1 DT_SCHEMA_FILES=media/qcom,qcs8300-camss.yaml
+  qcom/qcs8300-ride.dtb
+- make DT_CHECKER_FLAGS=-m W=1 DT_SCHEMA_FILES=media/qcom,qcs8300-camss.yaml
+  dt_binding_check
+- make -j32 W=1
+- checkpatch.pl
+
+Vikram Sharma (2):
+  dt-bindings: media: qcom,qcs8300-camss: Add missing power supplies
+  arm64: dts: qcom: qcs8300: Add support for camss
+
+ .../bindings/media/qcom,qcs8300-camss.yaml    |  13 ++
+ arch/arm64/boot/dts/qcom/qcs8300.dtsi         | 170 ++++++++++++++++++
+ 2 files changed, 183 insertions(+)
 
 -- 
-Best wishes,
-Vladimir
+2.34.1
+
