@@ -1,46 +1,46 @@
 Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 61F632E040D
-	for <linux-media@vger.kernel.org>; Fri,  7 Nov 2025 18:43:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E549C329396
+	for <linux-media@vger.kernel.org>; Fri,  7 Nov 2025 18:44:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.167.242.64
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762541029; cv=none; b=TpzzcuVSVDq4PrMu3x5vbO0wweP80k6npDoZFZ4Ct2O5E8q7ZgR0V4PVugUvnqBz83GbB0OeOhjXakRaWvAFVuDyg7PUL+53nIT0M72Ing2x+BxDfD5HwvWBCjAVQtE3HmCEWVDlwtyVmB5Cl6794sENlq6ln5htJwfgtv/LEGI=
+	t=1762541077; cv=none; b=tVi98lZ+degqc3djAIg9seq3RwYPW0Ul/gZandgHSS4kuGRx0KT9tUIdvSDjolfWtFBS6i0ByGsi8ijYvPadVyEm6vE79P6qu0y0tB68AGJSY0sKOzkRiLKIdT/5PPaAH4SOq+7D2AQcW/Gi2E2ashNUjrzkd3Ksiyx7jeW2MkQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762541029; c=relaxed/simple;
-	bh=2Qslz0WU4vUqT8FvbXJWeCK1b7per959HNeg84zBc5Y=;
+	s=arc-20240116; t=1762541077; c=relaxed/simple;
+	bh=27RUtw6Eea5nu4M4bsLtRDG2tXxgGK12MfBmueOq/RI=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=eCJV2wu+uwBSmGEvwX2b9PXfzkcYXAOZ6aMOyOUgyk7+Mc4vWS2+kyZhDZ3t8LXX5oBI8Nd1+iTpf2HfuJav7KCSjFsU21IP4INp2+wmqhtyNAExZQQGM1WgkqXrlP3Fv1305sw9fT50V9mphUJfaKDrlwXs78wi0EiabPG50mI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ideasonboard.com; spf=pass smtp.mailfrom=ideasonboard.com; dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b=KoTqJJj3; arc=none smtp.client-ip=213.167.242.64
+	 Content-Type:Content-Disposition:In-Reply-To; b=pK96o0TjhAn7mSpwMNrD40JTafiJ4Hz2hLho/bC54Z9V5DpqPzqtKC7KVWA7rrGDBKyqm/Eiz7WG49knfTiYHsFmecvoPrBxnsfWlYq/RZkIsGX+syI/mJDoyHa19M9s0QG7JDPALU7kV9v8bIKBqzafKMSBQkKY66emX8ahabc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ideasonboard.com; spf=pass smtp.mailfrom=ideasonboard.com; dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b=iAepoCfQ; arc=none smtp.client-ip=213.167.242.64
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ideasonboard.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ideasonboard.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="KoTqJJj3"
+	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="iAepoCfQ"
 Received: from pendragon.ideasonboard.com (82-203-161-95.bb.dnainternet.fi [82.203.161.95])
-	by perceval.ideasonboard.com (Postfix) with UTF8SMTPSA id 8905E111F;
-	Fri,  7 Nov 2025 19:41:49 +0100 (CET)
+	by perceval.ideasonboard.com (Postfix) with UTF8SMTPSA id 94650111F;
+	Fri,  7 Nov 2025 19:42:38 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-	s=mail; t=1762540910;
-	bh=2Qslz0WU4vUqT8FvbXJWeCK1b7per959HNeg84zBc5Y=;
+	s=mail; t=1762540958;
+	bh=27RUtw6Eea5nu4M4bsLtRDG2tXxgGK12MfBmueOq/RI=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=KoTqJJj3F9OUqY97A1xWPTqeyb6mLMitaXPSPvoWl0X0KoBItK0o8CZqWMwG/VlLU
-	 n5CEPVghGaF4/dcW4rqNFUk1tAKzFb1Vc16sXrLjs0G5ROd/ohWrBvfNIggvRASPPD
-	 Ay/SOOd3fECgEBYgAB2t1oslF5kWjzSbFqifen3M=
-Date: Fri, 7 Nov 2025 20:43:40 +0200
+	b=iAepoCfQEx2k7T4QACua9ihSdZe2S0fehDHxBkuyIFwCsmZF9oqHTVVuS2PuFEHcS
+	 V9bpU4KfZ52OM4YAok2suAWnxBRrLOOEU2cvaeFlWSu3wRwPic7sPss8DU/1ORYScv
+	 eUYjSzABqy3ttzhoh8TOX0rgc1N+Ciu1mD4hkXpQ=
+Date: Fri, 7 Nov 2025 20:44:29 +0200
 From: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 To: Frank Li <Frank.li@nxp.com>
-Cc: guoniu.zhou@nxp.com, linux-media@vger.kernel.org,
-	Rui Miguel Silva <rmfrfs@gmail.com>,
+Cc: linux-media@vger.kernel.org, Rui Miguel Silva <rmfrfs@gmail.com>,
 	Martin Kepplinger <martink@posteo.de>,
 	Purism Kernel Team <kernel@puri.sm>,
 	Pengutronix Kernel Team <kernel@pengutronix.de>,
 	imx@lists.linux.dev, Stefan Klug <stefan.klug@ideasonboard.com>,
 	Sakari Ailus <sakari.ailus@iki.fi>
-Subject: Re: [PATCH v1 6/6] media: imx-mipi-csis: Add multi-channel support
-Message-ID: <20251107184340.GE5558@pendragon.ideasonboard.com>
+Subject: Re: [PATCH v1 1/6] media: imx-mipi-csis: Add VC-related register
+ fields
+Message-ID: <20251107184429.GF5558@pendragon.ideasonboard.com>
 References: <20251107015813.5834-1-laurent.pinchart@ideasonboard.com>
- <20251107015813.5834-7-laurent.pinchart@ideasonboard.com>
- <aQ4iwFHVoweNl/mS@lizhi-Precision-Tower-5810>
+ <20251107015813.5834-2-laurent.pinchart@ideasonboard.com>
+ <aQ4cKf3y1zqwBmar@lizhi-Precision-Tower-5810>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
@@ -49,463 +49,49 @@ List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <aQ4iwFHVoweNl/mS@lizhi-Precision-Tower-5810>
+In-Reply-To: <aQ4cKf3y1zqwBmar@lizhi-Precision-Tower-5810>
 
-On Fri, Nov 07, 2025 at 11:48:00AM -0500, Frank Li wrote:
-> On Fri, Nov 07, 2025 at 03:58:13AM +0200, Laurent Pinchart wrote:
-> > CSIS output channels can be used to demultiplex CSI-2 virtual channels,
-> > and likely data types. While this feature is not clearly documented,
-> > tests seem to indicate that each output channel includes filters to
-> > select which VC and DT to output, with the filtering mode being
-> > configured globally. Four modes are supported:
+On Fri, Nov 07, 2025 at 11:19:53AM -0500, Frank Li wrote:
+> On Fri, Nov 07, 2025 at 03:58:08AM +0200, Laurent Pinchart wrote:
+> > The CMN_CTRL and ISPCFG registers have fiels related to virtual channel
+> > handling. In CMN_CTRL, the INTERLEAVE_MODE field is 2 bits wide, and
+> > controls filtering by DT, VC or both. The VC number is then set in the
+> > ISPCFG.VIRTUAL_CHANNEL field.
 > >
-> > - No filtering: all VCs and DTs are output on channel 0
-> > - VC filtering: each channel filters out all but the configured VC, the
-> >   DT is ignored
-> > - DT filtering: each channel filters out all but the configured DT, the
-> >   VC is ignored
-> > - DT and VC filtering: each channel filters out all but the configured
-> >   VC and DT
+> > Expand the definition of the register macros to support those features,
+> > and set the VC ID to 0 explicitly instead of relying on the default
+> > register value. This prepares for VC filtering but does not modify the
+> > driver's behaviour.
 > >
-> > Expose this feature to userspace through the streams API. The routing
-> > table is expanded to support multiple routes, with the source stream ID
-> > mapping to the output channel number. As the VC and DT values
-> > corresponding to a stream are not known until they get queried from the
-> > source, validation of the routes is postponed to stream enable time in
-> > the mipi_csis_calculate_params() function that extract the configuration
-> > of each output channel from the routing table. The validation ensures
-> > that, when filtering is enabled, each output channel is configured to
-> > output exactly one VC and one DT.
-> >
-> > When multiple streams are routed to the same output channel, the output
-> > heights is the sum of the heights of all the streams. This is
-> > implemented when propagating formats frim sink to source pads.
-> >
-> > Due to how the SoC glues together IP cores, multi-output operation in
-> > the i.MX8MP is used only for the purpose of capturing multi-exposure or
-> > multi-gain HDR streams from a camera sensor over different CSI-2 VCs and
-> > transmitting them to the ISP. The streams are stitched together by the
-> > ISP and can't be captured individually. This has allowed testing VC
-> > filtering but not DT filtering. For that reason, multi-channel support
-> > is currently limited to VC filtering only.
+> > While at it, use GENMASK in the last few register mask macros that don't
+> > use it.
 > >
 > > Signed-off-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-> 
-> Add guoniu.zhou@nxp.com, patch itself look good, but I am not famillar with
-> internal logic, Guoniu, can you help check it?
-
-I've tried hard to find more information about how the CSIS operates,
-but all my attempts failed :-/ If anyone can confirm (or infirm) my
-understanding, that would be great.
-
 > > ---
-> >  drivers/media/platform/nxp/imx-mipi-csis.c | 264 ++++++++++++++++++---
-> >  1 file changed, 234 insertions(+), 30 deletions(-)
+> >  drivers/media/platform/nxp/imx-mipi-csis.c | 19 ++++++++++++++++---
+> >  1 file changed, 16 insertions(+), 3 deletions(-)
 > >
-> > diff --git a/drivers/media/platform/nxp/imx-mipi-csis.c b/drivers/media/platform/nxp/imx-mipi-csis.c
-> > index d8c11223ed0a..b5c7ab7c541c 100644
-> > --- a/drivers/media/platform/nxp/imx-mipi-csis.c
-> > +++ b/drivers/media/platform/nxp/imx-mipi-csis.c
-> > @@ -12,6 +12,7 @@
-> >   *
-> >   */
-> >
-> > +#include <linux/bitops.h>
-> >  #include <linux/clk.h>
-> >  #include <linux/debugfs.h>
-> >  #include <linux/delay.h>
-> > @@ -334,7 +335,8 @@ struct mipi_csis_info {
-> >  };
-> >
-> >  struct mipi_csis_channel_params {
-> > -	unsigned int data_type;
-> > +	u16 vc_mask;
-> > +	u16 data_type;
-> >  	unsigned int width;
-> >  	unsigned int height;
-> >  };
-> > @@ -343,6 +345,7 @@ struct mipi_csis_params {
-> >  	u32 hs_settle;
-> >  	u32 clk_settle;
-> >
-> > +	bool interleave_vc;
-> >  	struct mipi_csis_channel_params channels[MIPI_CSIS_MAX_CHANNELS];
-> >  };
-> >
-> > @@ -626,7 +629,7 @@ static void mipi_csis_set_channel_params(struct mipi_csis_device *csis,
-> >  		val |= MIPI_CSIS_ISPCFG_PIXEL_MODE_DUAL;
-> >
-> >  	val |= MIPI_CSIS_ISPCFG_DATAFORMAT(params->data_type);
-> > -	val |= MIPI_CSIS_ISPCFG_VIRTUAL_CHANNEL(0);
-> > +	val |= MIPI_CSIS_ISPCFG_VIRTUAL_CHANNEL(ffs(params->vc_mask) - 1);
-> >
-> >  	mipi_csis_write(csis, MIPI_CSIS_ISP_CONFIG_CH(channel), val);
-> >
-> > @@ -645,20 +648,148 @@ static int mipi_csis_calculate_params(struct mipi_csis_device *csis,
-> >  				      const struct v4l2_subdev_state *state,
-> >  				      struct mipi_csis_params *params)
-> >  {
-> > -	const struct v4l2_mbus_framefmt *format;
-> > -	const struct csis_pix_format *csis_fmt;
-> > +	const struct csis_pix_format *csis_fmt = NULL;
-> > +	struct v4l2_subdev_route *route;
-> > +	struct v4l2_mbus_frame_desc fd;
-> >  	s64 link_freq;
-> >  	u32 lane_rate;
-> > +	int ret;
-> >
-> > -	format = v4l2_subdev_state_get_format(state, CSIS_PAD_SINK);
-> > -	csis_fmt = find_csis_format(format->code);
-> > +	memset(params, 0, sizeof(*params));
-> >
-> > -	params->channels[0].data_type = csis_fmt->data_type;
-> > -	params->channels[0].width = format->width;
-> > -	params->channels[0].height = format->height;
-> > +	/*
-> > +	 * Translate routing configuration to output channels parameters.
-> > +	 *
-> > +	 * The CSIS VC and DT handling is poorly documented. The device supports
-> > +	 * a global "interleave mode" parameter in the CMN_CTRL register that
-> > +	 * can be set to "VC and DT", "VC only", "DT only" or "CH0 only, no data
-> > +	 * interleave". The ISP_CONFIG registers specify DT and VC values per
-> > +	 * output channel.
-> > +	 *
-> > +	 * This can be interpreted as per-channel VC and DT filters, with the
-> > +	 * filter type being configured globally and the VC and DT configured
-> > +	 * per-channel. VC tests seem to corroborate this interpretation, but DT
-> > +	 * tests are yet to be performed.
-> > +	 */
-> > +	ret = v4l2_subdev_call(csis->source.sd, pad, get_frame_desc,
-> > +			       csis->source.pad->index, &fd);
-> > +	if (ret && ret != -ENOIOCTLCMD) {
-> > +		dev_err(csis->dev, "Failed to get source frame descriptors: %d\n", ret);
-> > +		return ret;
-> > +	}
-> >
-> > -	/* Calculate the line rate from the pixel rate. */
-> > -	link_freq = v4l2_get_link_freq(csis->source.pad, csis_fmt->width,
-> > +	if (ret == -ENOIOCTLCMD) {
-> > +		const struct v4l2_mbus_framefmt *format;
-> > +
-> > +		/*
-> > +		 * The source doesn't report frame descriptors. Assume a single
-> > +		 * stream on VC0.
-> > +		 */
-> > +		format = v4l2_subdev_state_get_format(state, CSIS_PAD_SINK, 0);
-> > +		if (!format)
-> > +			return -EPIPE;
-> > +
-> > +		csis_fmt = find_csis_format(format->code);
-> > +
-> > +		fd.type = V4L2_MBUS_FRAME_DESC_TYPE_CSI2;
-> > +		fd.num_entries = 1;
-> > +		fd.entry[0].pixelcode = format->code;
-> > +		fd.entry[0].bus.csi2.dt = csis_fmt->data_type;
-> > +	}
-> > +
-> > +	/*
-> > +	 * Translate sink streams to source streams and fill the channel
-> > +	 * configuration vc_mask and data_type fields.
-> > +	 */
-> > +	for_each_active_route(&state->routing, route) {
-> > +		struct mipi_csis_channel_params *channel =
-> > +			&params->channels[route->source_stream];
-> > +		const struct v4l2_mbus_frame_desc_entry *entry = NULL;
-> > +
-> > +		/*
-> > +		 * Find the corresponding frame descriptor entry, to get the VC
-> > +		 * and DT for the stream. Multiple entries may match the stream,
-> > +		 * but they have to all report the same VC and DT, so we can
-> > +		 * just use the first matching entry.
-> > +		 */
-> > +		for (unsigned int i = 0; i < fd.num_entries; ++i) {
-> > +			if (fd.entry[i].stream == route->sink_stream) {
-> > +				entry = &fd.entry[i];
-> > +				break;
-> > +			}
-> > +		}
-> > +
-> > +		if (!entry) {
-> > +			dev_dbg(csis->dev, "No frame descriptor for stream %u\n",
-> > +				route->sink_stream);
-> > +			return -EPIPE;
-> > +		}
-> > +
-> > +		/*
-> > +		 * Routing constraint: all streams routed to the same output
-> > +		 * channel need to have the same DT.
-> > +		 */
-> > +		if (channel->data_type &&
-> > +		    channel->data_type != entry->bus.csi2.dt) {
-> > +			dev_dbg(csis->dev,
-> > +				"DT mismatch on channel %u: stream %u DT 0x%02x != 0x%02x\n",
-> > +				route->source_stream, route->sink_stream,
-> > +				entry->bus.csi2.dt, channel->data_type);
-> > +			return -EPIPE;
-> > +		}
-> > +
-> > +		/* Record the VC and DT for the output channel. */
-> > +		channel->vc_mask |= BIT(entry->bus.csi2.vc);
-> > +		channel->data_type = entry->bus.csi2.dt;
-> > +
-> > +		/*
-> > +		 * If any output channel beside channel 0 is enabled, enable VC
-> > +		 * interleave mode.
-> > +		 */
-> > +		if (route->source_stream > 0)
-> > +			params->interleave_vc = true;
-> > +	}
-> > +
-> > +	/*
-> > +	 * Iterate over the enabled output channels to record the width and
-> > +	 * height. Verify that the VC filtering matches the hardware
-> > +	 * constraints.
-> > +	 */
-> > +	for (unsigned int i = 0; i < csis->num_channels; ++i) {
-> > +		struct mipi_csis_channel_params *channel = &params->channels[i];
-> > +		const struct v4l2_mbus_framefmt *format;
-> > +
-> > +		if (!channel->vc_mask)
-> > +			continue;
-> > +
-> > +		/*
-> > +		 * In VC interleave mode, each output channel is limited to a
-> > +		 * single VC.
-> > +		 */
-> > +		if (params->interleave_vc && hweight8(channel->vc_mask) != 1) {
-> > +			dev_dbg(csis->dev,
-> > +				"Channel %u must output a single VCs\n", i);
-> > +			return -EPIPE;
-> > +		}
-> > +
-> > +		format = v4l2_subdev_state_get_format(state, CSIS_PAD_SOURCE, i);
-> > +		if (!format) {
-> > +			dev_dbg(csis->dev, "No format for source stream %u\n", i);
-> > +			return -EPIPE;
-> > +		}
-> > +
-> > +		channel->width = format->width;
-> > +		channel->height = format->height;
-> > +	}
-> > +
-> > +	/*
-> > +	 * Calculate the line rate from the pixel rate. If the source supports
-> > +	 * the .get_frame_desc() operation it has to implement the LINK_FREQ
-> > +	 * control, as the link frequency can't be calculated from the pixel
-> > +	 * rate with multiple streams having possibly different data types.
-> > +	 */
-> > +	link_freq = v4l2_get_link_freq(csis->source.pad,
-> > +				       csis_fmt ? csis_fmt->width : 0,
-> >  				       csis->bus.num_data_lanes * 2);
-> >  	if (link_freq < 0) {
-> >  		dev_err(csis->dev, "Unable to obtain link frequency: %d\n",
-> > @@ -704,6 +835,8 @@ static void mipi_csis_set_params(struct mipi_csis_device *csis,
-> >  				 const struct mipi_csis_params *params)
-> >  {
-> >  	int lanes = csis->bus.num_data_lanes;
-> > +	u32 cmn_ctrl = 0;
-> > +	u32 clk_ctrl = 0;
-> >  	u32 val;
+> ...
 > >
 > >  	val = mipi_csis_read(csis, MIPI_CSIS_CMN_CTRL);
-> > @@ -714,19 +847,32 @@ static void mipi_csis_set_params(struct mipi_csis_device *csis,
-> >
+> > -	val &= ~MIPI_CSIS_CMN_CTRL_LANE_NUMBER_MASK;
+> > +	val &= ~(MIPI_CSIS_CMN_CTRL_LANE_NUMBER_MASK |
+> > +		 MIPI_CSIS_CMN_CTRL_INTERLEAVE_MODE_MASK);
+> > +
+> >  	val |= MIPI_CSIS_CMN_CTRL_LANE_NUMBER(lanes - 1);
+> > +
 > >  	if (csis->info->version == MIPI_CSIS_V3_3)
 > >  		val |= MIPI_CSIS_CMN_CTRL_INTERLEAVE_MODE_DT;
-> > +	if (params->interleave_vc)
-> > +		val |= MIPI_CSIS_CMN_CTRL_INTERLEAVE_MODE_VC;
-> >
+> > +
+> 
+> above two empty line is not related this patch
+
+It's just a matter of giving the code more room to breathe. I can move
+them to patch 6/6 if you prefer.
+
 > >  	mipi_csis_write(csis, MIPI_CSIS_CMN_CTRL, val);
 > >
-> > -	mipi_csis_set_channel_params(csis, 0, &params->channels[0]);
-> > +	for (unsigned int i = 0; i < csis->num_channels; ++i) {
-> > +		const struct mipi_csis_channel_params *channel =
-> > +			&params->channels[i];
-> > +
-> > +		if (!channel->vc_mask)
-> > +			continue;
-> > +
-> > +		mipi_csis_set_channel_params(csis, i, channel);
-> > +
-> > +		cmn_ctrl |= MIPI_CSIS_CMN_CTRL_UPDATE_SHADOW(i);
-> > +		clk_ctrl |= MIPI_CSIS_CLK_CTRL_CLKGATE_TRAIL(i, 15)
-> > +			 |  MIPI_CSIS_CLK_CTRL_WCLK_SRC(i);
-> > +	}
-> >
-> >  	mipi_csis_write(csis, MIPI_CSIS_DPHY_CMN_CTRL,
-> >  			MIPI_CSIS_DPHY_CMN_CTRL_HSSETTLE(params->hs_settle) |
-> >  			MIPI_CSIS_DPHY_CMN_CTRL_CLKSETTLE(params->clk_settle));
-> >
-> >  	val = mipi_csis_read(csis, MIPI_CSIS_CLK_CTRL);
-> > -	val |= MIPI_CSIS_CLK_CTRL_WCLK_SRC(0);
-> > -	val |= MIPI_CSIS_CLK_CTRL_CLKGATE_TRAIL(0, 15);
-> >  	val &= ~MIPI_CSIS_CLK_CTRL_CLKGATE_EN_MASK;
-> > +	val |= clk_ctrl;
-> >  	mipi_csis_write(csis, MIPI_CSIS_CLK_CTRL, val);
-> >
-> >  	mipi_csis_write(csis, MIPI_CSIS_DPHY_BCTRL_L,
-> > @@ -741,8 +887,7 @@ static void mipi_csis_set_params(struct mipi_csis_device *csis,
-> >
-> >  	/* Update the shadow register. */
-> >  	val = mipi_csis_read(csis, MIPI_CSIS_CMN_CTRL);
-> > -	mipi_csis_write(csis, MIPI_CSIS_CMN_CTRL,
-> > -			val | MIPI_CSIS_CMN_CTRL_UPDATE_SHADOW(0) |
-> > +	mipi_csis_write(csis, MIPI_CSIS_CMN_CTRL, val | cmn_ctrl |
-> >  			MIPI_CSIS_CMN_CTRL_UPDATE_SHADOW_CTRL);
-> >  }
-> >
-> > @@ -1053,7 +1198,7 @@ static int mipi_csis_enum_mbus_code(struct v4l2_subdev *sd,
-> >  		if (code->index > 0)
-> >  			return -EINVAL;
-> >
-> > -		fmt = v4l2_subdev_state_get_format(state, code->pad);
-> > +		fmt = v4l2_subdev_state_get_format(state, code->pad, code->stream);
-> >  		code->code = fmt->code;
-> >  		return 0;
-> >  	}
-> > @@ -1069,10 +1214,57 @@ static int mipi_csis_enum_mbus_code(struct v4l2_subdev *sd,
-> >  	return 0;
-> >  }
-> >
-> > +static void mipi_csis_propagate_formats(struct mipi_csis_device *csis,
-> > +					struct v4l2_subdev_state *state)
-> > +{
-> > +	const struct v4l2_mbus_framefmt *channels[MIPI_CSIS_MAX_CHANNELS] = { };
-> > +	struct v4l2_subdev_route *route;
-> > +
-> > +	for_each_active_route(&state->routing, route) {
-> > +		const struct csis_pix_format *csis_fmt;
-> > +		struct v4l2_mbus_framefmt *sink_fmt;
-> > +		struct v4l2_mbus_framefmt *src_fmt;
-> > +
-> > +		sink_fmt = v4l2_subdev_state_get_format(state, CSIS_PAD_SINK,
-> > +							route->sink_stream);
-> > +		src_fmt = v4l2_subdev_state_get_format(state, CSIS_PAD_SOURCE,
-> > +						       route->source_stream);
-> > +
-> > +		csis_fmt = find_csis_format(sink_fmt->code);
-> > +
-> > +		/*
-> > +		 * If the output channel corresponding to this source stream
-> > +		 * isn't associated with a sink stream yet, simply propagate the
-> > +		 * format from sink stream to source stream and associate the
-> > +		 * sink stream with the channel.
-> > +		 *
-> > +		 * Otherwise, the sink stream format must match the primary sink
-> > +		 * stream associated with the channel except for the height that
-> > +		 * can be different. We propagate the format from the primary to
-> > +		 * secondary sink stream, and accumulate the height in the
-> > +		 * source stream format.
-> > +		 */
-> > +		if (!channels[route->source_stream]) {
-> > +			*src_fmt = *sink_fmt;
-> > +			src_fmt->code = csis_fmt->output;
-> > +
-> > +			channels[route->source_stream] = sink_fmt;
-> > +		} else {
-> > +			unsigned int height = sink_fmt->height;
-> > +
-> > +			*sink_fmt = *channels[route->source_stream];
-> > +			sink_fmt->height = height;
-> > +
-> > +			src_fmt->height += sink_fmt->height;
-> > +		}
-> > +	}
-> > +}
-> > +
-> >  static int mipi_csis_set_fmt(struct v4l2_subdev *sd,
-> >  			     struct v4l2_subdev_state *state,
-> >  			     struct v4l2_subdev_format *sdformat)
-> >  {
-> > +	struct mipi_csis_device *csis = sd_to_mipi_csis_device(sd);
-> >  	const struct csis_pix_format *csis_fmt;
-> >  	struct v4l2_mbus_framefmt *fmt;
-> >  	unsigned int align;
-> > @@ -1120,7 +1312,8 @@ static int mipi_csis_set_fmt(struct v4l2_subdev *sd,
-> >  			      &sdformat->format.height, 1,
-> >  			      CSIS_MAX_PIX_HEIGHT, 0, 0);
-> >
-> > -	fmt = v4l2_subdev_state_get_format(state, sdformat->pad);
-> > +	fmt = v4l2_subdev_state_get_format(state, sdformat->pad,
-> > +					   sdformat->stream);
-> >
-> >  	fmt->code = csis_fmt->code;
-> >  	fmt->width = sdformat->format.width;
-> > @@ -1133,12 +1326,8 @@ static int mipi_csis_set_fmt(struct v4l2_subdev *sd,
-> >
-> >  	sdformat->format = *fmt;
-> >
-> > -	/* Propagate the format from sink to source. */
-> > -	fmt = v4l2_subdev_state_get_format(state, CSIS_PAD_SOURCE);
-> > -	*fmt = sdformat->format;
-> > -
-> > -	/* The format on the source pad might change due to unpacking. */
-> > -	fmt->code = csis_fmt->output;
-> > +	/* Propagate the format. */
-> > +	mipi_csis_propagate_formats(csis, state);
-> >
-> >  	return 0;
-> >  }
-> > @@ -1155,7 +1344,7 @@ static int mipi_csis_get_frame_desc(struct v4l2_subdev *sd, unsigned int pad,
-> >  		return -EINVAL;
-> >
-> >  	state = v4l2_subdev_lock_and_get_active_state(sd);
-> > -	fmt = v4l2_subdev_state_get_format(state, CSIS_PAD_SOURCE);
-> > +	fmt = v4l2_subdev_state_get_format(state, CSIS_PAD_SOURCE, 0);
-> >  	csis_fmt = find_csis_format(fmt->code);
-> >  	v4l2_subdev_unlock_state(state);
-> >
-> > @@ -1187,6 +1376,8 @@ static int __mipi_csis_set_routing(struct v4l2_subdev *sd,
-> >  		.quantization = V4L2_QUANTIZATION_LIM_RANGE,
-> >  		.xfer_func = V4L2_XFER_FUNC_SRGB,
-> >  	};
-> > +	struct mipi_csis_device *csis = sd_to_mipi_csis_device(sd);
-> > +	struct v4l2_subdev_route *route;
-> >  	int ret;
-> >
-> >  	ret = v4l2_subdev_routing_validate(sd, routing,
-> > @@ -1194,15 +1385,27 @@ static int __mipi_csis_set_routing(struct v4l2_subdev *sd,
-> >  	if (ret)
-> >  		return ret;
-> >
-> > -	/* Only a single route is supported for now. */
-> > -	if (routing->num_routes != 1 ||
-> > -	    !(routing->routes[0].flags & V4L2_SUBDEV_ROUTE_FL_ACTIVE))
-> > -		return -EINVAL;
-> > +	/*
-> > +	 * The source stream identifies the output channel. Validate that it
-> > +	 * does not exceed the number of channels available in the device. The
-> > +	 * other routing constraints can't be validated now as they require
-> > +	 * querying the frame descriptor on the sink side, which can only be
-> > +	 * done when enabling streaming.
-> > +	 */
-> > +	for_each_active_route(routing, route) {
-> > +		if (route->source_stream >= csis->num_channels) {
-> > +			dev_dbg(csis->dev, "Invalid source stream %u",
-> > +				route->source_stream);
-> > +			return -EINVAL;
-> > +		}
-> > +	}
-> >
-> >  	ret = v4l2_subdev_set_routing_with_fmt(sd, state, routing, &format);
-> >  	if (ret)
-> >  		return ret;
-> >
-> > +	mipi_csis_propagate_formats(csis, state);
-> > +
-> >  	return 0;
-> >  }
-> >
-> > @@ -1554,7 +1757,8 @@ static int mipi_csis_subdev_init(struct mipi_csis_device *csis)
-> >  	snprintf(sd->name, sizeof(sd->name), "csis-%s",
-> >  		 dev_name(csis->dev));
-> >
-> > -	sd->flags |= V4L2_SUBDEV_FL_HAS_DEVNODE | V4L2_SUBDEV_FL_HAS_EVENTS;
-> > +	sd->flags |= V4L2_SUBDEV_FL_HAS_DEVNODE | V4L2_SUBDEV_FL_HAS_EVENTS
-> > +		  |  V4L2_SUBDEV_FL_STREAMS;
-> >  	sd->ctrl_handler = NULL;
-> >
-> >  	sd->entity.function = MEDIA_ENT_F_VID_IF_BRIDGE;
+> >  	__mipi_csis_set_format(csis, format, csis_fmt);
 
 -- 
 Regards,
