@@ -1,290 +1,212 @@
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+Received: from bali.collaboradmins.com (bali.collaboradmins.com [148.251.105.195])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5161E2E5B05;
-	Fri,  7 Nov 2025 13:22:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 147872F12C5;
+	Fri,  7 Nov 2025 13:41:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.251.105.195
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762521761; cv=none; b=P3wkri+4yR+NER0rpFQ+wTIQmh+koUWPlH3mf+nQj1kWdtT9Rw11filzrCWT2hi8/VsZr/hdGcrPZxBl7LW+mqDhr4lZXQkcvFZX6/sRIcUDGcBoqXTUs2/IwjgPS/i07MVWgZ65h+8Zrk5/qpWp8awl1qcFkHB7hN/nP8bSsUY=
+	t=1762522909; cv=none; b=ApNPO01KHvrzxkinYRYjkziKIwVVYE+o8lK1ZSeLtZL515/T3AgGXIMq+hSpqbozgeu1AlhQ7wzkKZnQMAMGH8QHwLh5GBqRxZVdyx6mn9sOWScg5XmLdjtLx4tihhjYNtIFp8q5NrTPv/72OOdgz7hJ+I6tX71qtCQsLJqiDGM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762521761; c=relaxed/simple;
-	bh=zAUrVGjn3Z1UGwi3G8DZAISU+Y1hweIcpO3HfjAcduQ=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=B6fQn8PPtygxnydDPa+82NKNSb5ZrdhEC2Tz8aj8Wykl2emZRDBeIrnTWSMdVda4KSb7WyoCT+6DoIwSaE0ldqXgcyYY2EJlbCGYP+DROX8ZTkI1Brok6gYAAQe0jzbSFngXqgT+pEhjorVGho5IoLTx4uBD9tKjiS+OMDldtTs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=jQ7LM9dN; arc=none smtp.client-ip=205.220.180.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+	s=arc-20240116; t=1762522909; c=relaxed/simple;
+	bh=tpsTqs/Y7T2Yvoo+xOTlHiByURwvXqjJIVJB/t75ng4=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=tYXJn91c9l9psaXTh2yYZ3GLm/3DpEHjvb+QspdcIjpH5QJuG5SGGmQ4LGvBPbl0o9sKKTVd1G52UzanwwHtz7bXd6HWVNeKnTXhlLh/JQVzY84YMT9kbhvvn+k8amB/ZgMYCWos18hm+zIeggOeps9N9zIUvk6NhhvMX4gNkCA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=Mt0WyBo2; arc=none smtp.client-ip=148.251.105.195
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="jQ7LM9dN"
-Received: from pps.filterd (m0279873.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 5A76pc46629578;
-	Fri, 7 Nov 2025 13:22:30 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	XGcOu4dm6gh+KtQti15yeZGYrxuK1OKN7l2ciyc6NFM=; b=jQ7LM9dN815o0GXz
-	pivhYv0gphHGE9hE0qNb1pTqhH1o3LsPn+2/Z/uYniufTUmRnu/f0gXW0u2gpeGV
-	ZyBYQO9lJVHr0uBFh0lKNMXK4ZreBfIt6pjgszRn91a7QRu9rennY6qKmMNZy03e
-	iVZSfFefbl1ixD4kEePHVGYYIA53tRyW3yULiG2cj2xgRblq6o6Vl50JPlC3Q2HS
-	sUb2s5Z3po1HLRyzprdb6OW3uPvhM0DRHGld6XhbOIX1pSW5zeVkuikMq5+171B4
-	aN8HK1Y6wBPWVUMsLvgIiGY/MnZgVEcXu3y4HhC82mG+z5IGx0Ayftm7AWo3hoA4
-	7/ktMQ==
-Received: from nasanppmta05.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4a92232q3v-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 07 Nov 2025 13:22:30 +0000 (GMT)
-Received: from nasanex01b.na.qualcomm.com (nasanex01b.na.qualcomm.com [10.46.141.250])
-	by NASANPPMTA05.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 5A7DMTL7027147
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 7 Nov 2025 13:22:29 GMT
-Received: from hu-vikramsa-hyd.qualcomm.com (10.80.80.8) by
- nasanex01b.na.qualcomm.com (10.46.141.250) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1748.24; Fri, 7 Nov 2025 05:22:23 -0800
-From: Vikram Sharma <quic_vikramsa@quicinc.com>
-To: <bryan.odonoghue@linaro.org>, <mchehab@kernel.org>, <robh@kernel.org>,
-        <krzk+dt@kernel.org>, <conor+dt@kernel.org>, <andersson@kernel.org>,
-        <konradybcio@kernel.org>, <hverkuil-cisco@xs4all.nl>,
-        <cros-qcom-dts-watchers@chromium.org>, <catalin.marinas@arm.com>,
-        <will@kernel.org>
-CC: <linux-arm-kernel@lists.infradead.org>, <quic_svankada@quicinc.com>,
-        <linux-media@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <quic_nihalkum@quicinc.com>, <quic_vikramsa@quicinc.com>,
-        Konrad Dybcio
-	<konrad.dybcio@oss.qualcomm.com>
-Subject: [PATCH v5 2/2] arm64: dts: qcom: qcs8300: Add support for camss
-Date: Fri, 7 Nov 2025 18:51:54 +0530
-Message-ID: <20251107132154.436017-3-quic_vikramsa@quicinc.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20251107132154.436017-1-quic_vikramsa@quicinc.com>
-References: <20251107132154.436017-1-quic_vikramsa@quicinc.com>
+	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="Mt0WyBo2"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+	s=mail; t=1762522905;
+	bh=tpsTqs/Y7T2Yvoo+xOTlHiByURwvXqjJIVJB/t75ng4=;
+	h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+	b=Mt0WyBo2k7zdUdi15ebiZyiNTF3LnC08Rab5FRqhzZD5QmpfCtuNqlpaV8NfGavVm
+	 OaHaxJRF5ZRglCF9gksUiqgwYhDb4RUNuqusYYGrPgWOHEVxhFjosoSDTB2rM5XAIb
+	 VPdUQAr6AYQdJxwffBZCX+0A0ywQ0xWEBW0+THxbnVI+ZtKdol00m9cuZPma4UnKQO
+	 NPHH4F2fY7WNPej8o13U+u2vm2Q2xSchx8YU/G+0N7Z++S96WoiN8B2HZfbeZsSJDE
+	 k69q2N+nk2WxBVWumVZGs7qdBBSUrJ8F6ACKYlD+l3lkocxyIJMmPh128Da6FFGNaP
+	 iFeJ2WrK4DtQw==
+Received: from [IPv6:2606:6d00:11:ef24::c41] (unknown [IPv6:2606:6d00:11:ef24::c41])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: nicolas)
+	by bali.collaboradmins.com (Postfix) with ESMTPSA id D06D517E0CA1;
+	Fri,  7 Nov 2025 14:41:43 +0100 (CET)
+Message-ID: <19cdb1996557824554789dccc805014b0fa2deda.camel@collabora.com>
+Subject: Re: [PATCH v4 1/5] media: uapi: videodev2: Add support for AV1
+ stateful decoder
+From: Nicolas Dufresne <nicolas.dufresne@collabora.com>
+To: Hans Verkuil <hverkuil+cisco@kernel.org>, Deepa Guthyappa Madivalara	
+ <deepa.madivalara@oss.qualcomm.com>, Mauro Carvalho Chehab
+ <mchehab@kernel.org>,  Vikash Garodia <vikash.garodia@oss.qualcomm.com>,
+ Dikshita Agarwal <dikshita.agarwal@oss.qualcomm.com>,  Abhinav Kumar
+ <abhinav.kumar@linux.dev>, Bryan O'Donoghue <bod@kernel.org>
+Cc: linux-media@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-arm-msm@vger.kernel.org, kernel test robot <lkp@intel.com>, Bryan
+ O'Donoghue <bryan.odonoghue@linaro.org>
+Date: Fri, 07 Nov 2025 08:41:41 -0500
+In-Reply-To: <6198674a-2af0-4906-9ffe-bc10e68eb5c5@kernel.org>
+References: <20251103-av1d_stateful_v3-v4-0-33cc1eaa83f2@oss.qualcomm.com>
+	 <20251103-av1d_stateful_v3-v4-1-33cc1eaa83f2@oss.qualcomm.com>
+	 <6198674a-2af0-4906-9ffe-bc10e68eb5c5@kernel.org>
+Autocrypt: addr=nicolas.dufresne@collabora.com; prefer-encrypt=mutual;
+ keydata=mDMEaCN2ixYJKwYBBAHaRw8BAQdAM0EHepTful3JOIzcPv6ekHOenE1u0vDG1gdHFrChD
+ /e0J05pY29sYXMgRHVmcmVzbmUgPG5pY29sYXNAbmR1ZnJlc25lLmNhPoicBBMWCgBEAhsDBQsJCA
+ cCAiICBhUKCQgLAgQWAgMBAh4HAheABQkJZfd1FiEE7w1SgRXEw8IaBG8S2UGUUSlgcvQFAmibrjo
+ CGQEACgkQ2UGUUSlgcvQlQwD/RjpU1SZYcKG6pnfnQ8ivgtTkGDRUJ8gP3fK7+XUjRNIA/iXfhXMN
+ abIWxO2oCXKf3TdD7aQ4070KO6zSxIcxgNQFtDFOaWNvbGFzIER1ZnJlc25lIDxuaWNvbGFzLmR1Z
+ nJlc25lQGNvbGxhYm9yYS5jb20+iJkEExYKAEECGwMFCwkIBwICIgIGFQoJCAsCBBYCAwECHgcCF4
+ AWIQTvDVKBFcTDwhoEbxLZQZRRKWBy9AUCaCyyxgUJCWX3dQAKCRDZQZRRKWBy9ARJAP96pFmLffZ
+ smBUpkyVBfFAf+zq6BJt769R0al3kHvUKdgD9G7KAHuioxD2v6SX7idpIazjzx8b8rfzwTWyOQWHC
+ AAS0LU5pY29sYXMgRHVmcmVzbmUgPG5pY29sYXMuZHVmcmVzbmVAZ21haWwuY29tPoiZBBMWCgBBF
+ iEE7w1SgRXEw8IaBG8S2UGUUSlgcvQFAmibrGYCGwMFCQll93UFCwkIBwICIgIGFQoJCAsCBBYCAw
+ ECHgcCF4AACgkQ2UGUUSlgcvRObgD/YnQjfi4+L8f4fI7p1pPMTwRTcaRdy6aqkKEmKsCArzQBAK8
+ bRLv9QjuqsE6oQZra/RB4widZPvphs78H0P6NmpIJ
+Organization: Collabora Canada
+Content-Type: multipart/signed; micalg="pgp-sha512";
+	protocol="application/pgp-signature"; boundary="=-es5HQ6y1SajJNzU3gUQu"
+User-Agent: Evolution 3.58.1 (3.58.1-1.fc43) 
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nasanex01b.na.qualcomm.com (10.46.141.250)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUxMTA3MDEwOSBTYWx0ZWRfXwNPzimRGKfJm
- Lv43/F8/l88yBld6NMFNUPwp8FLEOacRi56o1so2PsyXfImz5WuCyP9DZy/tyBrVO8RqCLwgrAa
- VbsQPu6wdarV4neHqFPTEuI+nuEfRG5ZWC005G/ZYokLhQ3t7s+9aJW+18oFNNjowl11OnQ9cRO
- yjy0AaGnkBJCeEQdRPzurAPyM6K3AU+FH5dlP521bLyKkfPhp8+QN0X9Jw4/xKIKapPUDs5+HI1
- xIHTxKtWALq67N//toM3L/b1yrJlgEvAOznsINCgAwApDahQzyXSE/PE8I8LKcIknHiozupdRMp
- lBPu4GG9l6Z5x0JkURFLPMWJcMAN00m255unXsZWl4Vn4OFDSPGCmkB85/47WU+ff6X4S32cruk
- BJmzY3PfL/yUigzqwliEGn9VSnLauQ==
-X-Authority-Analysis: v=2.4 cv=Csmys34D c=1 sm=1 tr=0 ts=690df296 cx=c_pps
- a=JYp8KDb2vCoCEuGobkYCKw==:117 a=JYp8KDb2vCoCEuGobkYCKw==:17
- a=GEpy-HfZoHoA:10 a=6UeiqGixMTsA:10 a=VkNPw1HP01LnGYTKEx00:22
- a=EUspDBNiAAAA:8 a=KKAkSRfTAAAA:8 a=COk6AnOGAAAA:8 a=49fK2wAub7YDTLIv2YQA:9
- a=FOEl7-wtY1rPn7cj:21 a=cvBusfyB2V15izCimMoJ:22 a=TjNXssC_j7lpFel5tvFf:22
- a=cPQSjfK2_nFv0Q5t_7PE:22
-X-Proofpoint-GUID: KmjCYbZTsYE0Kp6n8qG-EPYohh_UUkN2
-X-Proofpoint-ORIG-GUID: KmjCYbZTsYE0Kp6n8qG-EPYohh_UUkN2
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.9,FMLib:17.12.100.49
- definitions=2025-11-07_03,2025-11-06_01,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- adultscore=0 suspectscore=0 spamscore=0 lowpriorityscore=0 impostorscore=0
- priorityscore=1501 malwarescore=0 bulkscore=0 clxscore=1015 phishscore=0
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.22.0-2510240001 definitions=main-2511070109
 
-Add changes to support the camera subsystem on the QCS8300.
 
-Reviewed-by: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
-Reviewed-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-Signed-off-by: Vikram Sharma <quic_vikramsa@quicinc.com>
----
- arch/arm64/boot/dts/qcom/monaco.dtsi | 170 +++++++++++++++++++++++++++
- 1 file changed, 170 insertions(+)
+--=-es5HQ6y1SajJNzU3gUQu
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-diff --git a/arch/arm64/boot/dts/qcom/monaco.dtsi b/arch/arm64/boot/dts/qcom/monaco.dtsi
-index 816fa2af8a9a..3afb5e5f7d5e 100644
---- a/arch/arm64/boot/dts/qcom/monaco.dtsi
-+++ b/arch/arm64/boot/dts/qcom/monaco.dtsi
-@@ -4776,6 +4776,176 @@ videocc: clock-controller@abf0000 {
- 			#power-domain-cells = <1>;
- 		};
- 
-+		camss: isp@ac78000 {
-+			compatible = "qcom,qcs8300-camss";
-+
-+			reg = <0x0 0xac78000 0x0 0x1000>,
-+			      <0x0 0xac7a000 0x0 0xf00>,
-+			      <0x0 0xac7c000 0x0 0xf00>,
-+			      <0x0 0xac84000 0x0 0xf00>,
-+			      <0x0 0xac88000 0x0 0xf00>,
-+			      <0x0 0xac8c000 0x0 0xf00>,
-+			      <0x0 0xac90000 0x0 0xf00>,
-+			      <0x0 0xac94000 0x0 0xf00>,
-+			      <0x0 0xac9c000 0x0 0x2000>,
-+			      <0x0 0xac9e000 0x0 0x2000>,
-+			      <0x0 0xaca0000 0x0 0x2000>,
-+			      <0x0 0xacac000 0x0 0x400>,
-+			      <0x0 0xacad000 0x0 0x400>,
-+			      <0x0 0xacae000 0x0 0x400>,
-+			      <0x0 0xac4d000 0x0 0xf000>,
-+			      <0x0 0xac60000 0x0 0xf000>,
-+			      <0x0 0xac85000 0x0 0xd00>,
-+			      <0x0 0xac89000 0x0 0xd00>,
-+			      <0x0 0xac8d000 0x0 0xd00>,
-+			      <0x0 0xac91000 0x0 0xd00>,
-+			      <0x0 0xac95000 0x0 0xd00>;
-+			reg-names = "csid_wrapper",
-+				    "csid0",
-+				    "csid1",
-+				    "csid_lite0",
-+				    "csid_lite1",
-+				    "csid_lite2",
-+				    "csid_lite3",
-+				    "csid_lite4",
-+				    "csiphy0",
-+				    "csiphy1",
-+				    "csiphy2",
-+				    "tpg0",
-+				    "tpg1",
-+				    "tpg2",
-+				    "vfe0",
-+				    "vfe1",
-+				    "vfe_lite0",
-+				    "vfe_lite1",
-+				    "vfe_lite2",
-+				    "vfe_lite3",
-+				    "vfe_lite4";
-+
-+			clocks = <&camcc CAM_CC_CAMNOC_AXI_CLK>,
-+				 <&camcc CAM_CC_CORE_AHB_CLK>,
-+				 <&camcc CAM_CC_CPAS_AHB_CLK>,
-+				 <&camcc CAM_CC_CPAS_FAST_AHB_CLK>,
-+				 <&camcc CAM_CC_CPAS_IFE_LITE_CLK>,
-+				 <&camcc CAM_CC_CPAS_IFE_0_CLK>,
-+				 <&camcc CAM_CC_CPAS_IFE_1_CLK>,
-+				 <&camcc CAM_CC_CSID_CLK>,
-+				 <&camcc CAM_CC_CSIPHY0_CLK>,
-+				 <&camcc CAM_CC_CSI0PHYTIMER_CLK>,
-+				 <&camcc CAM_CC_CSIPHY1_CLK>,
-+				 <&camcc CAM_CC_CSI1PHYTIMER_CLK>,
-+				 <&camcc CAM_CC_CSIPHY2_CLK>,
-+				 <&camcc CAM_CC_CSI2PHYTIMER_CLK>,
-+				 <&camcc CAM_CC_CSID_CSIPHY_RX_CLK>,
-+				 <&gcc GCC_CAMERA_HF_AXI_CLK>,
-+				 <&gcc GCC_CAMERA_SF_AXI_CLK>,
-+				 <&camcc CAM_CC_ICP_AHB_CLK>,
-+				 <&camcc CAM_CC_IFE_0_CLK>,
-+				 <&camcc CAM_CC_IFE_0_FAST_AHB_CLK>,
-+				 <&camcc CAM_CC_IFE_1_CLK>,
-+				 <&camcc CAM_CC_IFE_1_FAST_AHB_CLK>,
-+				 <&camcc CAM_CC_IFE_LITE_CLK>,
-+				 <&camcc CAM_CC_IFE_LITE_AHB_CLK>,
-+				 <&camcc CAM_CC_IFE_LITE_CPHY_RX_CLK>,
-+				 <&camcc CAM_CC_IFE_LITE_CSID_CLK>;
-+			clock-names = "camnoc_axi",
-+				      "core_ahb",
-+				      "cpas_ahb",
-+				      "cpas_fast_ahb_clk",
-+				      "cpas_vfe_lite",
-+				      "cpas_vfe0",
-+				      "cpas_vfe1",
-+				      "csid",
-+				      "csiphy0",
-+				      "csiphy0_timer",
-+				      "csiphy1",
-+				      "csiphy1_timer",
-+				      "csiphy2",
-+				      "csiphy2_timer",
-+				      "csiphy_rx",
-+				      "gcc_axi_hf",
-+				      "gcc_axi_sf",
-+				      "icp_ahb",
-+				      "vfe0",
-+				      "vfe0_fast_ahb",
-+				      "vfe1",
-+				      "vfe1_fast_ahb",
-+				      "vfe_lite",
-+				      "vfe_lite_ahb",
-+				      "vfe_lite_cphy_rx",
-+				      "vfe_lite_csid";
-+
-+			interrupts = <GIC_SPI 565 IRQ_TYPE_EDGE_RISING>,
-+				     <GIC_SPI 564 IRQ_TYPE_EDGE_RISING>,
-+				     <GIC_SPI 468 IRQ_TYPE_EDGE_RISING>,
-+				     <GIC_SPI 359 IRQ_TYPE_EDGE_RISING>,
-+				     <GIC_SPI 759 IRQ_TYPE_EDGE_RISING>,
-+				     <GIC_SPI 758 IRQ_TYPE_EDGE_RISING>,
-+				     <GIC_SPI 604 IRQ_TYPE_EDGE_RISING>,
-+				     <GIC_SPI 477 IRQ_TYPE_EDGE_RISING>,
-+				     <GIC_SPI 478 IRQ_TYPE_EDGE_RISING>,
-+				     <GIC_SPI 479 IRQ_TYPE_EDGE_RISING>,
-+				     <GIC_SPI 545 IRQ_TYPE_EDGE_RISING>,
-+				     <GIC_SPI 546 IRQ_TYPE_EDGE_RISING>,
-+				     <GIC_SPI 547 IRQ_TYPE_EDGE_RISING>,
-+				     <GIC_SPI 465 IRQ_TYPE_EDGE_RISING>,
-+				     <GIC_SPI 467 IRQ_TYPE_EDGE_RISING>,
-+				     <GIC_SPI 469 IRQ_TYPE_EDGE_RISING>,
-+				     <GIC_SPI 360 IRQ_TYPE_EDGE_RISING>,
-+				     <GIC_SPI 761 IRQ_TYPE_EDGE_RISING>,
-+				     <GIC_SPI 760 IRQ_TYPE_EDGE_RISING>,
-+				     <GIC_SPI 605 IRQ_TYPE_EDGE_RISING>;
-+			interrupt-names = "csid0",
-+					  "csid1",
-+					  "csid_lite0",
-+					  "csid_lite1",
-+					  "csid_lite2",
-+					  "csid_lite3",
-+					  "csid_lite4",
-+					  "csiphy0",
-+					  "csiphy1",
-+					  "csiphy2",
-+					  "tpg0",
-+					  "tpg1",
-+					  "tpg2",
-+					  "vfe0",
-+					  "vfe1",
-+					  "vfe_lite0",
-+					  "vfe_lite1",
-+					  "vfe_lite2",
-+					  "vfe_lite3",
-+					  "vfe_lite4";
-+
-+			interconnects = <&gem_noc MASTER_APPSS_PROC QCOM_ICC_TAG_ACTIVE_ONLY
-+					 &config_noc SLAVE_CAMERA_CFG QCOM_ICC_TAG_ACTIVE_ONLY>,
-+					<&mmss_noc MASTER_CAMNOC_HF QCOM_ICC_TAG_ALWAYS
-+					 &mc_virt SLAVE_EBI1 QCOM_ICC_TAG_ALWAYS>;
-+			interconnect-names = "ahb",
-+					     "hf_0";
-+			iommus = <&apps_smmu 0x2400 0x20>;
-+
-+			power-domains = <&camcc CAM_CC_TITAN_TOP_GDSC>;
-+			power-domain-names = "top";
-+			status = "disabled";
-+
-+			ports {
-+				#address-cells = <1>;
-+				#size-cells = <0>;
-+
-+				port@0 {
-+					reg = <0>;
-+				};
-+
-+				port@1 {
-+					reg = <1>;
-+				};
-+
-+				port@2 {
-+					reg = <2>;
-+				};
-+			};
-+		};
-+
- 		camcc: clock-controller@ade0000 {
- 			compatible = "qcom,qcs8300-camcc";
- 			reg = <0x0 0x0ade0000 0x0 0x20000>;
--- 
-2.34.1
+Le vendredi 07 novembre 2025 =C3=A0 10:25 +0100, Hans Verkuil a =C3=A9crit=
+=C2=A0:
+> On 03/11/2025 14:24, Deepa Guthyappa Madivalara wrote:
+> > Introduce a new pixel format, V4L2_PIX_FMT_AV1, to the
+> > Video4Linux2(V4L2) API. This format is intended for AV1
+> > bitstreams in stateful decoding/encoding workflows.
+> > The fourcc code 'AV10' is used to distinguish
+> > this format from the existing V4L2_PIX_FMT_AV1_FRAME,
+> > which is used for stateless AV1 decoder implementation.
+> >=20
+> > Reviewed-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+> > Reviewed-by: Nicolas Dufresne <nicolas.dufresne@collabora.com>
+> > Signed-off-by: Deepa Guthyappa Madivalara <deepa.madivalara@oss.qualcom=
+m.com>
+> > ---
+> > =C2=A0Documentation/userspace-api/media/v4l/pixfmt-compressed.rst | 8 +=
++++++++
+> > =C2=A0include/uapi/linux/videodev2.h=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 | 1 +
+> > =C2=A02 files changed, 9 insertions(+)
+> >=20
+> > diff --git a/Documentation/userspace-api/media/v4l/pixfmt-compressed.rs=
+t b/Documentation/userspace-api/media/v4l/pixfmt-compressed.rst
+> > index c7efb0465db6480fe35be8557728c196e0e530f4..0c70410ffd4d58e0719d3cf=
+13ad336c97b454ae9 100644
+> > --- a/Documentation/userspace-api/media/v4l/pixfmt-compressed.rst
+> > +++ b/Documentation/userspace-api/media/v4l/pixfmt-compressed.rst
+> > @@ -275,6 +275,14 @@ Compressed Formats
+> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 of macroblocks to deco=
+de a full corresponding frame to the matching
+> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 capture buffer.
+> > =C2=A0
+> > +=C2=A0=C2=A0=C2=A0 * .. _V4L2-PIX-FMT-AV1:
+> > +
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 - ``V4L2_PIX_FMT_AV1``
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 - 'AV01'
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 - AV1 compressed video frame. This form=
+at is adapted for implementing AV1
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 pipeline. The decoder imple=
+ments stateful video decoder and expects one
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 Temporal Unit per buffer fr=
+om OBU-stream or AnnexB.
+>=20
+> OK, but the next patch says:
+>=20
+> 		case V4L2_PIX_FMT_AV1:		descr =3D "AV1 OBU stream"; break;
+>=20
+> And Nicolas said here:
 
+Hmm, good catch, we had quite a bit of back and forth actually on the subje=
+ct.
+The discussion went toward that this is OBU Stream format, but it is concei=
+vable
+to enable Annex B support in the future using a control. That mandates that=
+ OBU
+stream must always be supported for that format.
+
+I'd drop the "or AnnexB". Then I'd try and harmonize how we write OBU strea=
+m, I
+prefer without the -.
+
+>=20
+> https://lore.kernel.org/linux-media/544147436308901fba85d6de48380c0c1eea7=
+c67.camel@ndufresne.ca/
+>=20
+> "Perhaps "AV1 OBU stream", so its clear its no Annex B ?"
+>=20
+> So if this is just for OBU streams and not Annex B, then the description =
+is wrong.
+>=20
+> Since I'm no AV1 expert and have no idea what the difference between OBU =
+and Annex B streams is,
+> I can only comment on what looks like an inconsistency.
+
+Annex B is very unlike H.264 annex b. Its adds a wrapper around time units,
+making it faster to walk through displayable frames when you have the abili=
+ty to
+skip bytes. I've only ever seen it in tests vectors so far. My impression i=
+s
+that we'll never have a hardware that requires that.
+
+Nicolas
+
+>=20
+> Regards,
+>=20
+> 	Hans
+>=20
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 The encoder generates one T=
+emporal Unit per buffer.
+> > =C2=A0.. raw:: latex
+> > =C2=A0
+> > =C2=A0=C2=A0=C2=A0=C2=A0 \normalsize
+> > diff --git a/include/uapi/linux/videodev2.h b/include/uapi/linux/videod=
+ev2.h
+> > index becd08fdbddb857f8f2bf205d2164dc6e20e80b2..cf0b71bbe0f9d397e1e6c88=
+433a0fc3ba11fb947 100644
+> > --- a/include/uapi/linux/videodev2.h
+> > +++ b/include/uapi/linux/videodev2.h
+> > @@ -775,6 +775,7 @@ struct v4l2_pix_format {
+> > =C2=A0#define V4L2_PIX_FMT_H264_SLICE v4l2_fourcc('S', '2', '6', '4') /=
+* H264 parsed slices */
+> > =C2=A0#define V4L2_PIX_FMT_HEVC_SLICE v4l2_fourcc('S', '2', '6', '5') /=
+* HEVC parsed slices */
+> > =C2=A0#define V4L2_PIX_FMT_AV1_FRAME v4l2_fourcc('A', 'V', '1', 'F') /*=
+ AV1 parsed frame */
+> > +#define V4L2_PIX_FMT_AV1=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 v4l2_fourcc('A'=
+, 'V', '0', '1') /* AV1 */
+> > =C2=A0#define V4L2_PIX_FMT_SPK=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 v4l2_fourc=
+c('S', 'P', 'K', '0') /* Sorenson Spark */
+> > =C2=A0#define V4L2_PIX_FMT_RV30=C2=A0=C2=A0=C2=A0=C2=A0 v4l2_fourcc('R'=
+, 'V', '3', '0') /* RealVideo 8 */
+> > =C2=A0#define V4L2_PIX_FMT_RV40=C2=A0=C2=A0=C2=A0=C2=A0 v4l2_fourcc('R'=
+, 'V', '4', '0') /* RealVideo 9 & 10 */
+> >=20
+
+--=-es5HQ6y1SajJNzU3gUQu
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-Description: This is a digitally signed message part
+Content-Transfer-Encoding: 7bit
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQTvDVKBFcTDwhoEbxLZQZRRKWBy9AUCaQ33FQAKCRDZQZRRKWBy
+9GApAQD3K5fkh0Zh8EvSjULexP615g0OO4cvr2/lqmKcRy8RIAEA2q/rLvQIoZQb
+tpPtU48yqYAS7+2v+BzGQALQyzp5QwU=
+=8PzL
+-----END PGP SIGNATURE-----
+
+--=-es5HQ6y1SajJNzU3gUQu--
