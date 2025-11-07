@@ -1,191 +1,162 @@
-Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
+Received: from SA9PR02CU001.outbound.protection.outlook.com (mail-southcentralusazon11013041.outbound.protection.outlook.com [40.93.196.41])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1C5D333CEA8;
-	Fri,  7 Nov 2025 18:58:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.133
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762541923; cv=none; b=oOrWT/WtaSGTmZWpMsAyWJkW+Wa83PzmeCi0FhRoZrsAnZ7eQ8DtE+CEd9DSTwVpFbcT/ovwy35otzl/Tn+9p4yR8oQ/tDmk1ZQDLpOfHjoUqgMPkY8tUjU7ESeDSYQIrFzEvgQEZGvfe65mux3XEK7puJ9GZ8bUYkJku0ZpDzQ=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762541923; c=relaxed/simple;
-	bh=bOUbnZvb2TbWof6JwYRWtCUjJZ+np312O1qVpM42BAw=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=H9TCIRg3b9h++Fo3Wzci5wvQZ3FtVyvuMpuW/ggrpBTWtIenztLxNNy4teBNCWKDaidLLOkSBzMCxWeKLpqGEODj2YIwSkXCTbjTbYSXbivQqp793Tn6Jrd+k42inzb3MVRR5iq/O+gWDCCDIrEMOasmE+MJv/30HTJZias6qjI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=H59v75Ni; arc=none smtp.client-ip=198.137.202.133
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6F67727D77D;
+	Fri,  7 Nov 2025 19:44:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.93.196.41
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1762544662; cv=fail; b=RgkKPBDG2KqBvto9Sa/qWaFhFB5O714YhqIrh+CRnqb+QjaBBZGgWNqPe2I9m3H+kZKDaSKvLslJbp9Asea/OdVo/cxMkppvEy4HsGvhKBDgEvGtAHtxKPA1yWz4OFxFcq9yVxkz3aDHv9FtSXW7N4i9vwMZL9Ht0P3xXGd/0u8=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1762544662; c=relaxed/simple;
+	bh=f+8fkiXJ5COUUR3oG4GRMnse4/Y0EZN70+lZ9H4WCOA=;
+	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=DnybWK0rn+E4SUajSOalmMyAQZzFIVcqr4kFytQZaseA0UGUjOIWl/COELuqIxXE6d97oE7qnc4pKNlWaJUSg6G5binI7+ILL0WRLDdmOx1HGKpeJuxdBpt9hmxqBfNEDYNojD+drIrGgz4hsmnD+LR5NOnDWqMhWkVnK5BQKKk=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=Hxrvf/qt; arc=fail smtp.client-ip=40.93.196.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="H59v75Ni"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-	Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
-	Message-ID:Sender:Reply-To:Content-ID:Content-Description;
-	bh=PjiF0FDj1ggdA8+srznADWIujFetT2w1WcC08yNm+xE=; b=H59v75NiiIx555adWgSui938BX
-	Yc3i1CYEaGF7O6kQ1NqaqRVT/Zz7Cswv0/fmOzsuOsqzoIRagasqeUrHrhrdChqEbZeXwaG25NO+S
-	5wwiT1Bk++lMCO2rTIpSkO6LuvNwiSk1/lj7Setie4/hO5vXucwRTkyP4yelMuEJS4S3/t3xpANoZ
-	fMWvRG+69LUGWzme6PVDco0ZFCeM7vfUpGeksDZI3z5FpBYHlU5+MqvBB/XCUz0tSEk1fDzrRkUZ2
-	YHwjo2XWY68XJ4S/UyDHNpcYYoIRz6GCK8IoBHNkuYm6Mq2NkrCY2ePjJ4l6ltSL9O9XJUZxKJPhW
-	/Noao/Cg==;
-Received: from [50.53.43.113] (helo=[192.168.254.34])
-	by bombadil.infradead.org with esmtpsa (Exim 4.98.2 #2 (Red Hat Linux))
-	id 1vHRfI-00000000bYE-3FZm;
-	Fri, 07 Nov 2025 18:58:28 +0000
-Message-ID: <0c265a9b-fdc5-40d7-845f-30910f1ac6ea@infradead.org>
-Date: Fri, 7 Nov 2025 10:58:27 -0800
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="Hxrvf/qt"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=IsPbLyAkPYdZJ2Y/NZQAxcr64JWaWUbbu7cr4cDxUlcOZBWIuPnHRsEzHHm1obv1StGJKqvqWzKmfca8UWTuE7arSHmM3gZ8/gcYLLQZGaEzYNvR/G8vc0mUC3mdfIKL7CGxGXi1772V8GpTYvPjtrcXi3eNVV9YD15gyEY6XS0/8op6CZa1WBibpXsBYdTsKflHHFGaXY14oCJdFaB8DoDkQ6WXRJnKPR/Qp4TKa358QAJN6jjWqsKWJzDHjwHpJDkh12jRP/KNs9jn7co7tn0/duSF0g2NQgYJLFni+ZY1kKdkcWaqk35KZ07MEfzU5Ac8mZfFrxmcuCev8/FH8Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=qGFpBUsbjy/THko9FXd2tawYqCuRGpFlX+SGLB0LePI=;
+ b=EvZFjpuuoGX62rQofYkhskt0I+t+MTJgIp7ZbTa8wGp5f/vZsJOc8tGejoqi4FawcuO51jwCFscsp5ItZR5AvSwecxcXJRW4sEtkkWjHo6ITFE5SPDWP/j6xLh0zO8pr5ka8gsZMU2uZG0Y1RiQWfY4G7eAPDjogARIQZlfgl/9z1vhTt1HSBRA+xUqTA4CGd4LuDU7DrHrKjxo0DzEYYukx4e4/fyNILs1WXalRkqraIiuK+Esm38M0HzIAOK1z9PX4O2s5uqyoAplGtV6YVDttIbqXh4pbmkYWg1di/hQ5Whm10oGJQJb05W2HIbn2At3LtINHY1Vt4cXKKuWe1g==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 216.228.117.161) smtp.rcpttodomain=ffwll.ch smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
+ dkim=none (message not signed); arc=none (0)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=qGFpBUsbjy/THko9FXd2tawYqCuRGpFlX+SGLB0LePI=;
+ b=Hxrvf/qtu9RnrN4nwH74Gac1nxYDsIVylQvs1QVmcGO522TNzoJjJnYUxLRIo2sjNJpqqOdrcJWtL40vRrhQ+5NJ+DA84zNxVFo2U2e1HX9IVF0BOT3m4ZjTxgfhRWw5ER995fZ+sV+VngYZrKD04i5ydZarprb1SN6ZKIMQzz8f+Znn3ILlJUWuv3VXi2I2vakByujKM02Z2uI7VFQYV+5JiTUgRdAzPdxuqGmrLetyJLnoKebebmSYWpZB7Xa+vsC72bF8bEv1oB5A5jFfKZK7zLphLnBkW5Cy31iZj29zm4b/7T9oI4JQOdHwjSiOOxmP2EDioBu7SqUwTVxFYQ==
+Received: from SJ0PR05CA0139.namprd05.prod.outlook.com (2603:10b6:a03:33d::24)
+ by IA4PR12MB9764.namprd12.prod.outlook.com (2603:10b6:208:5d0::9) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9298.12; Fri, 7 Nov
+ 2025 19:44:17 +0000
+Received: from MWH0EPF000989E5.namprd02.prod.outlook.com
+ (2603:10b6:a03:33d:cafe::6e) by SJ0PR05CA0139.outlook.office365.com
+ (2603:10b6:a03:33d::24) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.20.9320.8 via Frontend Transport; Fri, 7
+ Nov 2025 19:44:17 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.161)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 216.228.117.161 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.117.161; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (216.228.117.161) by
+ MWH0EPF000989E5.mail.protection.outlook.com (10.167.241.132) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.9298.6 via Frontend Transport; Fri, 7 Nov 2025 19:44:17 +0000
+Received: from rnnvmail203.nvidia.com (10.129.68.9) by mail.nvidia.com
+ (10.129.200.67) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.20; Fri, 7 Nov
+ 2025 11:43:59 -0800
+Received: from rnnvmail202.nvidia.com (10.129.68.7) by rnnvmail203.nvidia.com
+ (10.129.68.9) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.20; Fri, 7 Nov
+ 2025 11:43:59 -0800
+Received: from Asurada-Nvidia (10.127.8.11) by mail.nvidia.com (10.129.68.7)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.20 via Frontend
+ Transport; Fri, 7 Nov 2025 11:43:57 -0800
+Date: Fri, 7 Nov 2025 11:43:56 -0800
+From: Nicolin Chen <nicolinc@nvidia.com>
+To: Jason Gunthorpe <jgg@nvidia.com>
+CC: Alex Williamson <alex@shazbot.org>, Christian =?iso-8859-1?Q?K=F6nig?=
+	<christian.koenig@amd.com>, <dri-devel@lists.freedesktop.org>,
+	<iommu@lists.linux.dev>, Joerg Roedel <joro@8bytes.org>, Kevin Tian
+	<kevin.tian@intel.com>, <kvm@vger.kernel.org>,
+	<linaro-mm-sig@lists.linaro.org>, <linux-kselftest@vger.kernel.org>,
+	<linux-media@vger.kernel.org>, Robin Murphy <robin.murphy@arm.com>, "Shuah
+ Khan" <shuah@kernel.org>, Sumit Semwal <sumit.semwal@linaro.org>, Will Deacon
+	<will@kernel.org>, Krishnakant Jaju <kjaju@nvidia.com>, Leon Romanovsky
+	<leon@kernel.org>, Matt Ochs <mochs@nvidia.com>, <patches@lists.linux.dev>,
+	Simona Vetter <simona.vetter@ffwll.ch>, Vivek Kasireddy
+	<vivek.kasireddy@intel.com>, Xu Yilun <yilun.xu@linux.intel.com>
+Subject: Re: [PATCH 9/9] iommufd/selftest: Add some tests for the dmabuf flow
+Message-ID: <aQ5L/NXA+pYfK9zf@Asurada-Nvidia>
+References: <0-v1-af84a3ab44f5+f68-iommufd_buf_jgg@nvidia.com>
+ <9-v1-af84a3ab44f5+f68-iommufd_buf_jgg@nvidia.com>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v7 05/11] PCI/P2PDMA: Document DMABUF model
-To: Leon Romanovsky <leon@kernel.org>
-Cc: Bjorn Helgaas <bhelgaas@google.com>, Logan Gunthorpe
- <logang@deltatee.com>, Jens Axboe <axboe@kernel.dk>,
- Robin Murphy <robin.murphy@arm.com>, Joerg Roedel <joro@8bytes.org>,
- Will Deacon <will@kernel.org>, Marek Szyprowski <m.szyprowski@samsung.com>,
- Jason Gunthorpe <jgg@ziepe.ca>, Andrew Morton <akpm@linux-foundation.org>,
- Jonathan Corbet <corbet@lwn.net>, Sumit Semwal <sumit.semwal@linaro.org>,
- =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
- Kees Cook <kees@kernel.org>, "Gustavo A. R. Silva" <gustavoars@kernel.org>,
- Ankit Agrawal <ankita@nvidia.com>, Yishai Hadas <yishaih@nvidia.com>,
- Shameer Kolothum <skolothumtho@nvidia.com>, Kevin Tian
- <kevin.tian@intel.com>, Alex Williamson <alex@shazbot.org>,
- Krishnakant Jaju <kjaju@nvidia.com>, Matt Ochs <mochs@nvidia.com>,
- linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-block@vger.kernel.org, iommu@lists.linux.dev, linux-mm@kvack.org,
- linux-doc@vger.kernel.org, linux-media@vger.kernel.org,
- dri-devel@lists.freedesktop.org, linaro-mm-sig@lists.linaro.org,
- kvm@vger.kernel.org, linux-hardening@vger.kernel.org
-References: <20251106-dmabuf-vfio-v7-0-2503bf390699@nvidia.com>
- <20251106-dmabuf-vfio-v7-5-2503bf390699@nvidia.com>
- <135df7eb-9291-428b-9c86-d58c2e19e052@infradead.org>
- <20251107160120.GD15456@unreal>
-Content-Language: en-US
-From: Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <20251107160120.GD15456@unreal>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <9-v1-af84a3ab44f5+f68-iommufd_buf_jgg@nvidia.com>
+X-NV-OnPremToCloud: ExternallySecured
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: MWH0EPF000989E5:EE_|IA4PR12MB9764:EE_
+X-MS-Office365-Filtering-Correlation-Id: f7917bcb-4518-4d0e-c9d1-08de1e3609ba
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|36860700013|82310400026|7416014|376014|1800799024;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?Zue1yWPcUuKEsAgL+cCEIfMxtP87nUV7pf43dzweM8RA5Oy5eOI6k3EYJLwW?=
+ =?us-ascii?Q?nO3tlPdlUR989TftlbJXYXyB0vTXSmxapO0nCclGrQVHTdvu91t7ebrJNJRl?=
+ =?us-ascii?Q?tfDM8uxx5qOPEfUxWt+ZsgWinPj9b86ahgFn2vNhJ2XJz2kYo5HIdLvOsIo4?=
+ =?us-ascii?Q?OP/QTpQm936A0cSK1eAUVyH/K/+4AqLAIzZdgN9xg1exkKqKtmmZZ+cwA9Bm?=
+ =?us-ascii?Q?NU/EjR1Qq1QP9pG93tS5ssNAFz4Lp6giXOu18Rqv5ScrcSsiQTaeELe0nO8o?=
+ =?us-ascii?Q?MRaCeiN+JNjX8dJIKAZc8wBlTgEsen4nlddjYSmrEDIrLQSO+w8PNCfn+fGe?=
+ =?us-ascii?Q?xLQxxUuSkr6dc4lGOuNCnrDC3+n+BfDyoDlE3lgn2QQuEKAL2Vg3NWf3fgiF?=
+ =?us-ascii?Q?3iAdcwJSfPq6jAPtlPJyUqYwGkUtsYnyfQVMGR7sbnlde7OxOPF1xtbnbbWS?=
+ =?us-ascii?Q?J76eRrA8uasI40erHpZbX77FmetevpBfw0UWfRVtLVAW44d5MbcgHUb4f7zH?=
+ =?us-ascii?Q?FaNELoB1MmwVRXAXVdAIepu6lHgDTTEEmWzhMpFmHXxojuxaiJHrBtLCvNMC?=
+ =?us-ascii?Q?NbJv42AqaLZKjKPLSapp8Srjx7URA9bvIVmTfpf/weqNm7/qxjSJ4b1cL7Wg?=
+ =?us-ascii?Q?wkmErmn0utUlD/mSywj8b4VmpBI+pxz3WxVptF36wA5KmNwNJvz6DECrK3YA?=
+ =?us-ascii?Q?Iii4iwNPaL6FpeHwlbjVIND2N6Q+M7hP2fzinJKDnQIZFhlPqq/Qb7x/aFV0?=
+ =?us-ascii?Q?cJtuv2qEGOq3D3p1zRVrOVLsgiFtRGfxZUWuhwjMIAzsfKka9yRGgjhuKtse?=
+ =?us-ascii?Q?8uoIfcK9uIVK9gR/oApnS4hqZkvtesIQtvvAqxLgFB5JjEdo0o8lJlJDfcrd?=
+ =?us-ascii?Q?xFmZTX9kXDZOfVF27uo2e81XoMtkn9Z5zdSGo3Cvt9tqFz7z9psBUhuvdkIj?=
+ =?us-ascii?Q?TacxxAWiayAWTEliHIXkDhwKNnMGJjzJGIi1fCJJYZBL/rRykSxqocp2FS0q?=
+ =?us-ascii?Q?NeC3PEbtj/vVosWGAQne/pYgNuSt6gZFR8GxSmMgmnntzwh/pBDo5PZ6UHMi?=
+ =?us-ascii?Q?PuyF6buNTv4QqmsQhv2B6CNe5RT/T/FH8lNi7d9o6gfJoGRHIHG6GK3CGnRs?=
+ =?us-ascii?Q?Djcnd0S0tb6atufW6NSZmT5e3YBv1JfoKWkd36xKZubAXSQ73zf9vGsbERBZ?=
+ =?us-ascii?Q?X3kUBrok0LVv+dgGkHe0w+uQc6ZoJT7mRWDGx5LCfGTA4EnDzv3dpVVzBfd3?=
+ =?us-ascii?Q?L5Di+EimCFc2bCmrWmnyjgawD/jHMgo4wHJlHzmofdAtTmVfYNYyT2cbAEm5?=
+ =?us-ascii?Q?FkDKUWtj2NgZFWOtz49G8p3FWBtzxqO1uI15xh1jS9KVhVXytIR5iQTovxC0?=
+ =?us-ascii?Q?J+U79KUCDyZrOG43VqpuZIMGZUMoEq8UklipIJSVSnpGSAOllE40p0DSRl93?=
+ =?us-ascii?Q?B8SxpCj60hl1JEok1mTl0Q+YLbHT9K1aR5kjWvnE9TnjSxRAOsuTdFGsgPh0?=
+ =?us-ascii?Q?LcZffR4kepHLr5tnxO3GMyFQ553Bsr6hD2hpgdMJ0AZ1JOrr7tWy4wVbrNp/?=
+ =?us-ascii?Q?XRm8fi535DmqqiFcY2A=3D?=
+X-Forefront-Antispam-Report:
+	CIP:216.228.117.161;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge2.nvidia.com;CAT:NONE;SFS:(13230040)(36860700013)(82310400026)(7416014)(376014)(1800799024);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Nov 2025 19:44:17.2172
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: f7917bcb-4518-4d0e-c9d1-08de1e3609ba
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.161];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	MWH0EPF000989E5.namprd02.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA4PR12MB9764
 
-	
+On Fri, Nov 07, 2025 at 12:49:41PM -0400, Jason Gunthorpe wrote:
+> Basic tests of establishing a dmabuf and revoking it. The selftest kernel
+> side provides a basic small dmabuf for this testing.
+> 
+> Signed-off-by: Jason Gunthorpe <jgg@nvidia.com>
 
-On 11/7/25 8:01 AM, Leon Romanovsky wrote:
-> On Thu, Nov 06, 2025 at 10:15:07PM -0800, Randy Dunlap wrote:
->>
->>
->> On 11/6/25 6:16 AM, Leon Romanovsky wrote:
->>> From: Jason Gunthorpe <jgg@nvidia.com>
->>>
->>> Reflect latest changes in p2p implementation to support DMABUF lifecycle.
->>>
->>> Signed-off-by: Leon Romanovsky <leonro@nvidia.com>
->>> Signed-off-by: Jason Gunthorpe <jgg@nvidia.com>
->>> ---
->>>  Documentation/driver-api/pci/p2pdma.rst | 95 +++++++++++++++++++++++++--------
->>>  1 file changed, 72 insertions(+), 23 deletions(-)
->>>
->>> diff --git a/Documentation/driver-api/pci/p2pdma.rst b/Documentation/driver-api/pci/p2pdma.rst
->>> index d0b241628cf1..69adea45f73e 100644
->>> --- a/Documentation/driver-api/pci/p2pdma.rst
->>> +++ b/Documentation/driver-api/pci/p2pdma.rst
->>> @@ -9,22 +9,47 @@ between two devices on the bus. This type of transaction is henceforth
->>>  called Peer-to-Peer (or P2P). However, there are a number of issues that
->>>  make P2P transactions tricky to do in a perfectly safe way.
->>>  
->>> -One of the biggest issues is that PCI doesn't require forwarding
->>> -transactions between hierarchy domains, and in PCIe, each Root Port
->>> -defines a separate hierarchy domain. To make things worse, there is no
->>> -simple way to determine if a given Root Complex supports this or not.
->>> -(See PCIe r4.0, sec 1.3.1). Therefore, as of this writing, the kernel
->>> -only supports doing P2P when the endpoints involved are all behind the
->>> -same PCI bridge, as such devices are all in the same PCI hierarchy
->>> -domain, and the spec guarantees that all transactions within the
->>> -hierarchy will be routable, but it does not require routing
->>> -between hierarchies.
->>> -
->>> -The second issue is that to make use of existing interfaces in Linux,
->>> -memory that is used for P2P transactions needs to be backed by struct
->>> -pages. However, PCI BARs are not typically cache coherent so there are
->>> -a few corner case gotchas with these pages so developers need to
->>> -be careful about what they do with them.
->>> +For PCIe the routing of TLPs is well defined up until they reach a host bridge
->>
->> Define what TLP means?
-> 
-> In PCIe "world", TLP is very well-known and well-defined acronym, which
-> means Transaction Layer Packet.
+Reviewed-by: Nicolin Chen <nicolinc@nvidia.com>
 
-It's your choice (or Bjorn's). I'm just reviewing...
+> +static void iommufd_test_dma_buf_release(struct dma_buf *dmabuf)
+> +{
+> +	struct iommufd_test_dma_buf *priv = dmabuf->priv;
+> +
+> +	kfree(priv);
+> +}
 
->>                                    well-defined
-> 
-> Thanks
-> 
-> diff --git a/Documentation/driver-api/pci/p2pdma.rst b/Documentation/driver-api/pci/p2pdma.rst
-> index 69adea45f73e..7530296a5dea 100644
-> --- a/Documentation/driver-api/pci/p2pdma.rst
-> +++ b/Documentation/driver-api/pci/p2pdma.rst
-> @@ -9,17 +9,17 @@ between two devices on the bus. This type of transaction is henceforth
->  called Peer-to-Peer (or P2P). However, there are a number of issues that
->  make P2P transactions tricky to do in a perfectly safe way.
-> 
-> -For PCIe the routing of TLPs is well defined up until they reach a host bridge
-> -or root port. If the path includes PCIe switches then based on the ACS settings
-> -the transaction can route entirely within the PCIe hierarchy and never reach the
-> -root port. The kernel will evaluate the PCIe topology and always permit P2P
-> -in these well defined cases.
-> +For PCIe the routing of Transaction Layer Packets (TLPs) is well-defined up
-> +until they reach a host bridge or root port. If the path includes PCIe switches
-> +then based on the ACS settings the transaction can route entirely within
-> +the PCIe hierarchy and never reach the root port. The kernel will evaluate
-> +the PCIe topology and always permit P2P in these well-defined cases.
-> 
->  However, if the P2P transaction reaches the host bridge then it might have to
->  hairpin back out the same root port, be routed inside the CPU SOC to another
->  PCIe root port, or routed internally to the SOC.
-> 
-> -As this is not well defined or well supported in real HW the kernel defaults to
-> +As this is not well-defined or well supported in real HW the kernel defaults to
-Nit:                              well-supported
-
-The rest of it looks good. Thanks.
-
->  blocking such routing. There is an allow list to allow detecting known-good HW,
->  in which case P2P between any two PCIe devices will be permitted.
-> 
-> @@ -39,7 +39,7 @@ delegates lifecycle management to the providing driver. It is expected that
->  drivers using this option will wrap their MMIO memory in DMABUF and use DMABUF
->  to provide an invalidation shutdown. These MMIO pages have no struct page, and
->  if used with mmap() must create special PTEs. As such there are very few
-> -kernel uAPIs that can accept pointers to them, in particular they cannot be used
-> +kernel uAPIs that can accept pointers to them; in particular they cannot be used
->  with read()/write(), including O_DIRECT.
-> 
->  Building on this, the subsystem offers a layer to wrap the MMIO in a ZONE_DEVICE
-> @@ -154,7 +154,7 @@ access happens.
->  Usage With DMABUF
->  =================
-> 
-> -DMABUF provides an alternative to the above struct page based
-> +DMABUF provides an alternative to the above struct page-based
->  client/provider/orchestrator system. In this mode the exporting driver will wrap
->  some of its MMIO in a DMABUF and give the DMABUF FD to userspace.
-> 
-> @@ -162,10 +162,10 @@ Userspace can then pass the FD to an importing driver which will ask the
->  exporting driver to map it.
-> 
->  In this case the initiator and target pci_devices are known and the P2P subsystem
-> -is used to determine the mapping type. The phys_addr_t based DMA API is used to
-> +is used to determine the mapping type. The phys_addr_t-based DMA API is used to
->  establish the dma_addr_t.
-> 
-> -Lifecycle is controlled by DMABUF move_notify(), when the exporting driver wants
-> +Lifecycle is controlled by DMABUF move_notify(). When the exporting driver wants
->  to remove() it must deliver an invalidation shutdown to all DMABUF importing
->  drivers through move_notify() and synchronously DMA unmap all the MMIO.
-> 
-
--- 
-~Randy
-
+Missing
+	kfree(priv->memory);
+?
