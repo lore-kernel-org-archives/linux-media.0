@@ -1,266 +1,275 @@
-Received: from mail-qv1-f68.google.com (mail-qv1-f68.google.com [209.85.219.68])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from DB3PR0202CU003.outbound.protection.outlook.com (mail-northeuropeazon11010008.outbound.protection.outlook.com [52.101.84.8])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3DA55328638
-	for <linux-media@vger.kernel.org>; Fri,  7 Nov 2025 16:33:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.68
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762533193; cv=none; b=IUFU7anBLWBwMJIXJ/m2bRQjLrSpjLgOzG7BjpUNy66VA+ybQnENBoAuILCcUwVlc4EFjc0bri8LnAu9JUXqtWN9xMpYgzgCV2jYY7JWqOK6lne8ygngUbdWbTAkY3iauSqcaMMOvVaSR6crJLjmZr/tXZ/jFSukok3DXPm8cFU=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762533193; c=relaxed/simple;
-	bh=AWo05EnOi9/03+u8bn3n24GhXxRQ4Bgj2L49SL9N0ZI=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=Vz1aG3lypJ6Js6uMgybcT5WsY8RFbI84uW0aGMv1KE7Cm7HrnIkFzP1+X+hAflgqRgxvIfSfFlSINdUVFxXWYkM0WbnK2MaVKBCRbFoKwyqLUf1gerWraw/BLTMuU07AHTz8+HMStkYADnloJI5cdCqduXbJYSWvSV99E6dJBZ8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ndufresne.ca; spf=pass smtp.mailfrom=ndufresne.ca; dkim=pass (2048-bit key) header.d=ndufresne-ca.20230601.gappssmtp.com header.i=@ndufresne-ca.20230601.gappssmtp.com header.b=wtRUIK3E; arc=none smtp.client-ip=209.85.219.68
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ndufresne.ca
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ndufresne.ca
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C2BE1331A5B
+	for <linux-media@vger.kernel.org>; Fri,  7 Nov 2025 16:36:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.84.8
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1762533392; cv=fail; b=lGPeA59ruaeFyBXTG6pl0ZwhsBIeEq5i2tAIqyqU2cEjq0r6j71ORToFE3KSJHtYbznE9NmUsKdPRAg103tGqMPOSsLPHF1zaPi0H+7cWS3Pcw4CYW55SFbDWNsweA/J5YR+BSMIt6a/7CNGgW2aHxHhwqf+94TmW9uFFhSynP0=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1762533392; c=relaxed/simple;
+	bh=jhS2GlDEH7nsFU2NL3ZEfW0zrHDmDuomGEGOMUKB33M=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
+	 Content-Disposition:In-Reply-To:MIME-Version; b=jncT6XhHFwOBoN1PwJHKbVzI6pqlVKdExSF+Z/gyUY0+Ps5GA7egDrUkVtt8+KbJat74WID8jPdOs+xWIBwXw6m+8IooULO/QXGArCO1ecOatZVxsd7vyz5mXnKwcHW7GszOAC1salDRgc/+8UkkWF8Dus8ZqPENV7PCyM1ocrc=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com; spf=pass smtp.mailfrom=nxp.com; dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b=JX7aC58Y; arc=fail smtp.client-ip=52.101.84.8
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nxp.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ndufresne-ca.20230601.gappssmtp.com header.i=@ndufresne-ca.20230601.gappssmtp.com header.b="wtRUIK3E"
-Received: by mail-qv1-f68.google.com with SMTP id 6a1803df08f44-78f30dac856so9717126d6.2
-        for <linux-media@vger.kernel.org>; Fri, 07 Nov 2025 08:33:10 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ndufresne-ca.20230601.gappssmtp.com; s=20230601; t=1762533190; x=1763137990; darn=vger.kernel.org;
-        h=mime-version:user-agent:references:in-reply-to:date:cc:to:from
-         :subject:message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=AWo05EnOi9/03+u8bn3n24GhXxRQ4Bgj2L49SL9N0ZI=;
-        b=wtRUIK3ECnykdwiZ+BsiN2T5s4GKbBsQ0UsjGHoaIqf9C3pVfabgn56c2m4tSwj+0v
-         /6mxKdUHA9riy/D8Rcgd1bmarXbmYfgbdcQvTSCLJazTQ9x6tLbQdLabLgjMu0mj+tSS
-         AaPjhBoF0tvCAmt/cPE+JHvcbCoPz+xfCO0R8sw1kdOJ1/kgwI8ZjUWj3avy+RMBO9jm
-         6f63UzxrNiCrGRGHHzKd32A2UkehecqNnO2VstdHyjWU7f6rWKst9RuIfffuK7hNKFOW
-         n8rKeMkxXi3YYmp2yzqauzIn7PCRGg6hV0gtYq1tZp0rNDwqLIRxUBkNI4CrbdelkV17
-         pxfQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1762533190; x=1763137990;
-        h=mime-version:user-agent:references:in-reply-to:date:cc:to:from
-         :subject:message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=AWo05EnOi9/03+u8bn3n24GhXxRQ4Bgj2L49SL9N0ZI=;
-        b=oko299iQz07FpfHfrKuDK9X+6PLUyjpcjR/2DdW6hT2bORqtcRI4lmucFuDSn+edA9
-         VRqiZ4aGcbvafXxp4e26a8oqhPX2mm/6GaBZ/tGoN3ZQEIj9zw4SpyguJxkD9k8qbL/B
-         JDHTswhIieac0vau9ALXXdWh61ooD5I98N5+beZcLYIUlmxRJna8rb9S8Qkdj2ptLmu/
-         Od9FeM1hGsW77XTXvJUx0+cQy/P2nZGVbnAF4rt4YBSpigPtSuTconyLq4nYTVQcByKy
-         yJvUz5OuQ+A6+80teK4CNFED2u5YJkemQmxDnLomJ9u2ZRsYbGLr4g8Wa2SDw88kzcF1
-         ntoQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVUkmYYUjsUzJzZdCzxxXqeNf39RfmMxxzy8Zjtb8HIsjDNlRatQriRb6cUJoY7LRXljzjX8bEOAGmaQQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz9qdNR2m9cnI5Dj4lrjAxhm2haVNnoGlZ90oMQCo5kQPiaWoP+
-	uaxswoNEHsSH0V8sMVbkF+lkF6vGkxGH5DPNmwtAkvAleIuF6p6ipVJaE/AE4ENKVAM=
-X-Gm-Gg: ASbGncvxXLCHZ+iRnSVZGNIKivWDBndJCbJAuoJJb0/+/Iuhi7NQn3PBn5hVi5wHrc+
-	uOko30w0gvcjlE1V87E8WorRuFTk35dBQqEI16OYPFVxdbNTf5OGkC6Xj092f2c2bykKSOJXZjM
-	STK9ROjQaKTCdfR474MqcQQFtPvrGz4mLxt+emdNZYQWj8P3bkgQqqrjOkptLeKedE9WGWAHEky
-	dII2v3R1/3XATqFi65tvBSwR4NGOTW6fIZJe2sXsoU9Q9IRttoylfpQvVFCzNr2JYd6BHyWujvA
-	gTKUBfkGcUbiCCo2t2vgWpymL9oPb+O45KGBV9yjWEV9XzylG/w8lb7HxrhY/qJUGQ9c2KUKz6M
-	pDWNwwXERyBbRlib4AKrjHzsjx2CYya89YKjJD4i6gz7DyVEfrN+COhXMeozHhHipmMQQpgxcXS
-	lZpbTSpQ==
-X-Google-Smtp-Source: AGHT+IFsPMhSdrmOZ6ahN3sPxnvKd643mstGo618XCLtPRJlduqW3IJUvEqzr1ydUpduU0yqXdCstw==
-X-Received: by 2002:a05:6214:482:b0:87c:2024:4d5c with SMTP id 6a1803df08f44-881767a96ccmr45493816d6.35.1762533189704;
-        Fri, 07 Nov 2025 08:33:09 -0800 (PST)
-Received: from ?IPv6:2606:6d00:11:ef24::c41? ([2606:6d00:11:ef24::c41])
-        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-880828f4192sm43277236d6.14.2025.11.07.08.33.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 07 Nov 2025 08:33:08 -0800 (PST)
-Message-ID: <4cbd47f8211e3e1a038857f848ad4197d95bd31c.camel@ndufresne.ca>
-Subject: Re: [PATCH v4 3/5] dt-bindings: media: Add the Raspberry Pi HEVC
- decoder
-From: Nicolas Dufresne <nicolas@ndufresne.ca>
-To: Dave Stevenson <dave.stevenson@raspberrypi.com>, Sakari Ailus	
- <sakari.ailus@linux.intel.com>, Laurent Pinchart	
- <laurent.pinchart@ideasonboard.com>, Mauro Carvalho Chehab
- <mchehab@kernel.org>,  Rob Herring <robh@kernel.org>, Krzysztof Kozlowski
- <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>,  Florian Fainelli
- <florian.fainelli@broadcom.com>, Broadcom internal kernel review list	
- <bcm-kernel-feedback-list@broadcom.com>, John Cox
- <john.cox@raspberrypi.com>,  Dom Cobley <dom@raspberrypi.com>, review list
- <kernel-list@raspberrypi.com>, Ezequiel Garcia	
- <ezequiel@vanguardiasur.com.ar>
-Cc: John Cox <jc@kynesim.co.uk>, Stefan Wahren <wahrenst@gmx.net>, 
-	linux-media@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	devicetree@vger.kernel.org, linux-rpi-kernel@lists.infradead.org, 
-	linux-arm-kernel@lists.infradead.org
-Date: Fri, 07 Nov 2025 11:33:07 -0500
-In-Reply-To: <20250701-media-rpi-hevc-dec-v4-3-057cfa541177@raspberrypi.com>
-References: <20250701-media-rpi-hevc-dec-v4-0-057cfa541177@raspberrypi.com>
-	 <20250701-media-rpi-hevc-dec-v4-3-057cfa541177@raspberrypi.com>
-Content-Type: multipart/signed; micalg="pgp-sha512";
-	protocol="application/pgp-signature"; boundary="=-3X+v+qqpBxti/ZHprAy2"
-User-Agent: Evolution 3.58.1 (3.58.1-1.fc43) 
+	dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b="JX7aC58Y"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=KE3MsWxwKr2MUS7a2EbxRGXJ/Nz03f9VZa3G5z+LFU/iV7orKeAAA7gCP6RVbqcgYsVZlVjh6K0mnOmbeUYRT42mbO5PPQbtr32NkCMnVgR4bQaRGGUOvAkMaZ8DG2Ffcg5Uyz0jdxkNz1FCQ6H6K2ged3Km8Gcf6MGwf+GmpPJKzQDTZgPQliz2L5j/YzQvsQkd+ADilqbAqd4rdJGgvKSBFL7Zua1XyzS/bEKgHH3bN7XS4PbqZrwcy7ygDrzEfADrWBjMk2+Yxq87tghYWbWcSgO6D5iD1ug3vRojOmfVyTDlWl8gfoAkmtXLfzYj2J7ZJ9MS+bj5ujRD0qOaLw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=PVgmDneioKeppZhrBwQU08L0mr5D6eNFWQjddaYPegg=;
+ b=L/LV0fVxUMBjCJFRO3gqvgbtxjxXLxBIvYJrHOHqNqSS/sOnu17nzIgIvIJXfY8Sgk3jTPqmf+x9ktz5MxEV4bt6qg20QuayUxh4apj9XfwDW4BCtDxdDVmh5NpOeXtvE+gb5cNHLHvqiBueGFSB9yvVjWF19A0JdXM1HCRVPgjwq9FKsokmD6zFWTBXfFUHeggrFwdhJy+5MeY+ZuNZz3l8SUjGCYacRwH/0Ugn7FCLMxiEyfimdGZ5ZSJEN8S4C3GEchWox9O1dQEfym9IVD+nZoeswc6EHY9br6Ru90Z536HgsKDfXVKrpnNrjh1tGsOZBYprpj7wA+mlH1181A==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=PVgmDneioKeppZhrBwQU08L0mr5D6eNFWQjddaYPegg=;
+ b=JX7aC58YqY3xeytua56CoVJdmjtlMPOe5r/rCjum/BZqOSErGm5G4G3ts2XpdVJIJb0RSfJ+BVyWXnBB0lP9MvtSj3Qz03zbkL5ShWsNycL4PT/OFKDRyO+zw2ahGDZGjf6qfrfOriTXPGZHT1jH2l7mOsQZ4POYGiv0XjvgqC3WBSTu8MpVn1GtuIW6h5dKT9a/FG8TbMTAcRENHVCxbV4dCWz4a/4Qs9VSjDayMgbpIiO6uFJRaKVSyUsjo/ZFVwKMXtBxclo238mba7CC3fxuIO4xaWODSiGvGjUQpWHfMw0wKBeEMiGQG5PpbuDuMFyQXhnDzbBdi3lKnUCdIA==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+Received: from PAXSPRMB0053.eurprd04.prod.outlook.com (2603:10a6:102:23f::21)
+ by VI1PR04MB6957.eurprd04.prod.outlook.com (2603:10a6:803:135::24) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9298.12; Fri, 7 Nov
+ 2025 16:36:25 +0000
+Received: from PAXSPRMB0053.eurprd04.prod.outlook.com
+ ([fe80::504f:2a06:4579:5f15]) by PAXSPRMB0053.eurprd04.prod.outlook.com
+ ([fe80::504f:2a06:4579:5f15%6]) with mapi id 15.20.9298.010; Fri, 7 Nov 2025
+ 16:36:25 +0000
+Date: Fri, 7 Nov 2025 11:36:18 -0500
+From: Frank Li <Frank.li@nxp.com>
+To: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Cc: linux-media@vger.kernel.org, Rui Miguel Silva <rmfrfs@gmail.com>,
+	Martin Kepplinger <martink@posteo.de>,
+	Purism Kernel Team <kernel@puri.sm>,
+	Pengutronix Kernel Team <kernel@pengutronix.de>,
+	imx@lists.linux.dev, Stefan Klug <stefan.klug@ideasonboard.com>,
+	Sakari Ailus <sakari.ailus@iki.fi>
+Subject: Re: [PATCH v1 3/6] media: imx-mipi-csis: Implement the
+ .set_routing() operation
+Message-ID: <aQ4gAuYsS5jlw/Cv@lizhi-Precision-Tower-5810>
+References: <20251107015813.5834-1-laurent.pinchart@ideasonboard.com>
+ <20251107015813.5834-4-laurent.pinchart@ideasonboard.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20251107015813.5834-4-laurent.pinchart@ideasonboard.com>
+X-ClientProxiedBy: BY3PR04CA0012.namprd04.prod.outlook.com
+ (2603:10b6:a03:217::17) To PAXSPRMB0053.eurprd04.prod.outlook.com
+ (2603:10a6:102:23f::21)
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PAXSPRMB0053:EE_|VI1PR04MB6957:EE_
+X-MS-Office365-Filtering-Correlation-Id: 2710b95b-6497-4bd3-e209-08de1e1bcb49
+X-LD-Processed: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635,ExtAddr
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+ BCL:0;ARA:13230040|366016|19092799006|376014|52116014|1800799024|7053199007|38350700014;
+X-Microsoft-Antispam-Message-Info:
+ =?us-ascii?Q?tEs5bS+RG6ArN/AkC0eVW2v2umqXlswaonK2kK0LIhIYn2Izt40qxxSRTYyT?=
+ =?us-ascii?Q?rwOR+nuHAnF1YDBXZsH+Nrl6KBKKNLNZVBxYeNxpKdj0UVIvgbhFe04t98nx?=
+ =?us-ascii?Q?4Tchf6bvKnJBcBx/VsJ2tiHD9JnzG1jVjVSNiwoDP0ZFojRVrbx7kAnI4td9?=
+ =?us-ascii?Q?elBHzOpl6pZMOrqjyJ1/GokY4qhYeg0jYmoeWZKyDwCqXlGiYGhyEqD9OB8L?=
+ =?us-ascii?Q?6dThjdsgnP4K6x+fPtKTSm7LOgbe6MvcjmXG1c+01QMyh5lUbZeEs5WY7n7G?=
+ =?us-ascii?Q?oPoxqV6aB4U6xf90mrqldl7feSYOHABB9t6pA1asY5pw6pW+qpSuJRt7MLBt?=
+ =?us-ascii?Q?k7Oq1ninQjH20SDS7Z0drqNyuuWV7FcSBboTbX0anLNedds3wd4hm+3pbtBh?=
+ =?us-ascii?Q?I4hNCyhaeulyH1q0pVIMfMsRm7A4c3JPrsJB3kOxY4p8Tf0iJlCBzXWKukHc?=
+ =?us-ascii?Q?MMkKpuly3GTfd0coei1hScTh9jV6li2oH92jnF6GDztIcQTMMrO6RmVy6cNs?=
+ =?us-ascii?Q?qQBzYyAGtk3Sxz2+FCaofYSnNH3DsnnZaLCWbKzqNPq0Q6mU6075s8dlj0Ms?=
+ =?us-ascii?Q?10r+2M4HdriR7p/kGphN5r3zNH6LvARP8VuaQkURoajJHPJU4mRgmYosI77u?=
+ =?us-ascii?Q?2xtADdLdHrXrlf3AOPuRVCtgZ76NZsFJ9adu/QYF96iWelovCMHX/pQJF7Wk?=
+ =?us-ascii?Q?O3AIWYJmSm1D+3PcELmziVf95YW/ECa7yK+aj3Br8RDpcxTJetzPN7bU5GMe?=
+ =?us-ascii?Q?/Mkvi5zyzsZKqPLOzwA1pq1JL5XnIU4BsEmxt/9mEJDhqyYUNYXziFDY6AsO?=
+ =?us-ascii?Q?HtX+JOpyuaOVvwiza8vt7N5/3nTuCNATjfKoigjHdNnf6C2MWXdxNlznW3tn?=
+ =?us-ascii?Q?vgQgLCH4lZ3h9SM0SzMs6aeDmdFNsIKSa+RhP1w9EgTqeLp7PoAx+XS6cszq?=
+ =?us-ascii?Q?KJlKfHU33HvFNAwpwOONZMZvz8CjXIFnCzoF1kvZ780D60q9eJxTnZE9neE5?=
+ =?us-ascii?Q?QiPY94aTZ4xU2VEiq7ipyB25s/94Mer8bR3GF8SIefbg8Iatezvnox6ZXkOE?=
+ =?us-ascii?Q?SRoFh78ipjkD3ses2/LR4X5YUXdklfNSHdnOcepFyyAqroc9syOnD2YNfeWQ?=
+ =?us-ascii?Q?gKbYpfLP8IepzkPQJ/7T/WqMSTcYlNyuHMj8GREprCsyFJbMOzPNK8XnkX/o?=
+ =?us-ascii?Q?vpAW1HVTCnbIYPRAvjP1OTmMRYqqIGKf15FDPWt+o53vQ3asIwDxu/lqNhas?=
+ =?us-ascii?Q?toHZKsO0Vn/YKAcVviJemBaY9pK1xfZO6Wzu2cx0wsXn5Iy8dsOhsPbLhMmb?=
+ =?us-ascii?Q?FBOHlJH6nATg3xIvf+bE5SvATRyik0bdpD5cXmwILF9ebCpju/1W2/tLgZ2N?=
+ =?us-ascii?Q?y0vC9cq9dCS2cTNhmDpIERB9VirqPhwrENy1yNRp1Va8K+5nf/7Z+hUsRw9Q?=
+ =?us-ascii?Q?WCu3xzIF74QDWBeZYobVCLsgvdRfPpxeE+34en63zNRgWoVENYppynv46j4F?=
+ =?us-ascii?Q?oq7Xnvmtp2xtAPBpkleTBreZ+w4dEX/lpPKB?=
+X-Forefront-Antispam-Report:
+ CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PAXSPRMB0053.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(19092799006)(376014)(52116014)(1800799024)(7053199007)(38350700014);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+ =?us-ascii?Q?SupUbSbG0b0Ea7qkZ2YC14o5MqsbyDqiHyCPXziUoLkSV+ueGGzvqBHhVa3j?=
+ =?us-ascii?Q?TLuIIKI6L9Og1leRDz2glYm/KyFEw2V9pCVPoQkZ4tx/zS4ySGtSU7hQpTOy?=
+ =?us-ascii?Q?zi88oRH0TaKA/+4/L56c+XyLCoG7Z9zGAIqcZ75sOI2uSwkQBiwSOPVYnQo4?=
+ =?us-ascii?Q?UIU+a4Nxx8blw/EalEppZwqRwxqlzzssMMqUT4bGpezxJMM6mt3DjNytY0lw?=
+ =?us-ascii?Q?DTcsczdE3RLbDddH0f/V6hf1biHsQkOMbzoO3mJX59561VtjXCf/obi/nwok?=
+ =?us-ascii?Q?v788QG+axY/B4dUlnatC2eyd3aKaLnmOkp8qDFH/uxBkcaO3i0cQkd42yAqV?=
+ =?us-ascii?Q?GxuDMnX1k9KOnjKmebVqorq653ivr895Dh0ChdNFnmBwDWIIv87Mt8Wu4nbX?=
+ =?us-ascii?Q?2Ro/71DDSRiWBBiEtAHG3khU92xG4cIhujh2QshfCgV/r6BsJgVTxaXvoALA?=
+ =?us-ascii?Q?EqsRk7FnZKSfBdJTRw08rWa4NEi7ava8yTZYeIzGBhFfHdupyZfYqeaJKlZC?=
+ =?us-ascii?Q?dAG8hXRL4z5Nwzoek73fkxnAHdbz8d/ez3dm5QG0JObD8/LqEQ82sVNONLwT?=
+ =?us-ascii?Q?su6Wq0Re+3M72im0R2NYM/lDCq/Lujzxott/h0ZpPwPprBFHS3ludmK4Tn4a?=
+ =?us-ascii?Q?JklW85tMY8roATXFDW8Gl92g5WtJ3KrzmD3bzWWmONfb37WBl7NTTPLpGsv+?=
+ =?us-ascii?Q?ejwBZqVH+/70LeLPVs+hNh0u+m11NTHJI1NBhCdccqsYCKsrnCScQkKCsJpy?=
+ =?us-ascii?Q?2vnuAovqJksK+K1culi2BYsbB09JrGOWx9T5h1szJIJvJMM6GBzqnjT3vcSj?=
+ =?us-ascii?Q?3SITfc5V8diSQ1/pqX7vRz+6nuKLBE89avTQPPeknWAyuDEDzpVCFadA/9KG?=
+ =?us-ascii?Q?s6zV08OV0QoxoaRLpUvL/AfwjNXYFbgGAK6PA4PgBXLz8p0vd2I4H9gih9SP?=
+ =?us-ascii?Q?HnFZpw4Ezo6h+1B7R049ODP0baKvHjGQQI9kzWFndx1qveihBGqCFRabNq2i?=
+ =?us-ascii?Q?PvyrLmm0ISN+zRco8uc7jiDRMGOXEg2sk48qjMrPDOX5cjPTy1Z8sm9HVqXr?=
+ =?us-ascii?Q?6At3pAVyirQOqb80N2VVWf4llyHcNRJp1FbqWXdyCuYlzkaphj/PEbr6xcY9?=
+ =?us-ascii?Q?h8K2t/4cgzn36pXuJGvJ6Rx31pN9r4YffiUE/gU8ZmTVfG2ih0UcLNQa3lsd?=
+ =?us-ascii?Q?2tXBT66IMEzOAW8a0lMOZU/fLgoHCrf3UTPTTFsqCQu5mIuwL3Fv5NVqXF1j?=
+ =?us-ascii?Q?M2yvLDUFVZpwW+SD24ctCh/A6FKjmO+2Cx9IrNLtl4Azodpcdeka3+3+2Wmz?=
+ =?us-ascii?Q?CFK5Dtqm+K15DcDULp0BL7aabIBj3MVVGJxhn68rn+7o+qkMPnW6TjTc+Jck?=
+ =?us-ascii?Q?3tcDokej9M8wfGG3BOH+YkU9L3Hpg62bTXeqm61/uh2D9CvSKmYlMvC6vCdM?=
+ =?us-ascii?Q?99gLckHM/dK7pe7g2vaSUh1kEny4YeCa2vK0yHVY6KdqJI4QxirtK/7r5ymi?=
+ =?us-ascii?Q?6emugsbRitZUO8Z6bGwPTgGD2HTQ3WXt7eVi5yzE/HnfvBbAgYWSefTGUSk/?=
+ =?us-ascii?Q?YSnXvO22LbSugIlWL/E=3D?=
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 2710b95b-6497-4bd3-e209-08de1e1bcb49
+X-MS-Exchange-CrossTenant-AuthSource: PAXSPRMB0053.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Nov 2025 16:36:25.8112
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: mj6AgyZaejPdlReFEKELKWTLTeMtHmQABbQWv1l8dxJfex65gDUDYnQGtbheybWag3oRR5qOwbS6HID14YBmuA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR04MB6957
 
-
---=-3X+v+qqpBxti/ZHprAy2
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-
-Le mardi 01 juillet 2025 =C3=A0 17:01 +0100, Dave Stevenson a =C3=A9crit=C2=
-=A0:
-> Adds a binding for the HEVC decoder IP owned by Raspberry Pi.
->=20
-> Instantiations of the decoder IP can currently be found in
-> the Broadcom BCM2711 and BCM2712 SoCs.
->=20
-> Signed-off-by: Dave Stevenson <dave.stevenson@raspberrypi.com>
->=20
+On Fri, Nov 07, 2025 at 03:58:10AM +0200, Laurent Pinchart wrote:
+> To prepare for multi-stream support, implement the .set_routing()
+> operation. The routing table is currently hardcoded to a single route.
+>
+> Signed-off-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 > ---
->=20
-> Updated based on the thread in v3 [1] with Krzystof to drop to only SoC
-> specific compatible strings.
->=20
-> This still feels wrong to me as this is NOT Broadcom IP - it is solely
-> owned by Raspberry Pi.
->=20
-> It is the same situation as for the Raspberry Pi ISP Backend where
-> it was proposed to have
-> =C2=A0 compatible =3D "brcm,pispbe-bcm2712", "raspberrypi,pispbe";
-> in [2]. That proposal was viewed as acceptable by both Rob[3] and Conor[4=
-],
-> and the binding given a Reviewed-by by Rob[5].
->=20
-> Yes it is found as a block inside an SoC, but the same could be said
-> for a Synopsys I2C controller ("snps,designware-i2c"), Cadence ethernet
-> MAC ("cdns,macb"), ARM CPU (eg "arm,cortex-a53"), or any number of other
-> examples. They are all 3rd party IP blocks found in SoCs, have an SoC spe=
-cific
-> compatible defined, but acknowledge the IP owner and use a common fallbac=
-k
-> compatible where possible.
->=20
-> Please could we have confirmation that this really is what is required
-> by device tree?
+>  drivers/media/platform/nxp/imx-mipi-csis.c | 73 ++++++++++++++++++----
+>  1 file changed, 60 insertions(+), 13 deletions(-)
+>
+> diff --git a/drivers/media/platform/nxp/imx-mipi-csis.c b/drivers/media/platform/nxp/imx-mipi-csis.c
+> index f142e79acbcf..f4b19576a235 100644
+> --- a/drivers/media/platform/nxp/imx-mipi-csis.c
+> +++ b/drivers/media/platform/nxp/imx-mipi-csis.c
+> @@ -1154,6 +1154,52 @@ static int mipi_csis_get_frame_desc(struct v4l2_subdev *sd, unsigned int pad,
+>  	return 0;
+>  }
+>
+> +static int __mipi_csis_set_routing(struct v4l2_subdev *sd,
+> +				   struct v4l2_subdev_state *state,
+> +				   struct v4l2_subdev_krouting *routing)
+> +{
+> +	static const struct v4l2_mbus_framefmt format = {
+> +		.width = MIPI_CSIS_DEF_PIX_WIDTH,
+> +		.height = MIPI_CSIS_DEF_PIX_HEIGHT,
+> +		.code = mipi_csis_formats[0].code,
+> +		.field = V4L2_FIELD_NONE,
+> +		.colorspace = V4L2_XFER_FUNC_709,
+> +		.ycbcr_enc = V4L2_YCBCR_ENC_601,
 
-Its been approved like this, are you confortable with that now ? If I'm rea=
-ding
-this correctly, its common practice to add and use a SoC specific compatibl=
-e
-just in case some variation exists. Its quite unlikely in this case of cour=
-se.
+Is it same as  V4L2_MAP_YCBCR_ENC_DEFAULT(fmt.format.colorspace)
 
-cheers,
-Nicolas
+> +		.quantization = V4L2_QUANTIZATION_LIM_RANGE,
 
->=20
-> Thanks
-> =C2=A0 Dave
->=20
-> [1] https://lore.kernel.org/linux-media/20250423-media-rpi-hevc-dec-v3-3-=
-8fd3fad1d6fb@raspberrypi.com/
-> [2] https://lore.kernel.org/linux-media/20240213104405.GB5012@pendragon.i=
-deasonboard.com/
-> [3] https://lore.kernel.org/linux-media/20240215140058.GA4147262-robh@ker=
-nel.org/
-> [4] https://lore.kernel.org/linux-media/20240213-landlady-backstab-6e7da8=
-24c99a@spud/
-> [5] https://lore.kernel.org/linux-media/170932821578.3062059.181501592562=
-47255021.robh@kernel.org/
-> ---
-> =C2=A0.../bindings/media/raspberrypi,hevc-dec.yaml=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0 | 72 ++++++++++++++++++++++
-> =C2=A01 file changed, 72 insertions(+)
->=20
-> diff --git a/Documentation/devicetree/bindings/media/raspberrypi,hevc-dec=
-.yaml b/Documentation/devicetree/bindings/media/raspberrypi,hevc-dec.yaml
-> new file mode 100644
-> index 000000000000..fe3361bddd1f
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/media/raspberrypi,hevc-dec.yaml
-> @@ -0,0 +1,72 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/media/raspberrypi,hevc-dec.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Raspberry Pi HEVC Decoder
-> +
-> +maintainers:
-> +=C2=A0 - John Cox <john.cox@raspberrypi.com>
-> +=C2=A0 - Dom Cobley <dom@raspberrypi.com>
-> +=C2=A0 - Dave Stevenson <dave.stevenson@raspberrypi.com>
-> +
-> +description:
-> +=C2=A0 The Raspberry Pi HEVC decoder is a hardware video decode accelera=
-tor IP block
-> +=C2=A0 developed and owned by Raspberry Pi.
-> +
-> +=C2=A0 Currently it can be found in the Broadcom BCM2711 and BCM2712 pro=
-cessors used
-> +=C2=A0 on Raspberry Pi 4 and 5 boards respectively.
-> +
-> +properties:
-> +=C2=A0 compatible:
-> +=C2=A0=C2=A0=C2=A0 oneOf:
-> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 - const: brcm,bcm2711-hevc-dec
-> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 - items:
-> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 - enum:
-> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0 - brcm,bcm2712-hevc-dec
-> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 - const: brcm,bcm=
-2711-hevc-dec
-> +
-> +=C2=A0 reg:
-> +=C2=A0=C2=A0=C2=A0 items:
-> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 - description: The HEVC main register reg=
-ion
-> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 - description: The Interrupt control regi=
-ster region
-> +
-> +=C2=A0 reg-names:
-> +=C2=A0=C2=A0=C2=A0 items:
-> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 - const: hevc
-> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 - const: intc
-> +
-> +=C2=A0 interrupts:
-> +=C2=A0=C2=A0=C2=A0 maxItems: 1
-> +
-> +=C2=A0 clocks:
-> +=C2=A0=C2=A0=C2=A0 items:
-> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 - description: The HEVC block clock
-> +
-> +required:
-> +=C2=A0 - compatible
-> +=C2=A0 - reg
-> +=C2=A0 - reg-names
-> +=C2=A0 - interrupts
-> +=C2=A0 - clocks
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +=C2=A0 - |
-> +=C2=A0=C2=A0=C2=A0 #include <dt-bindings/interrupt-controller/arm-gic.h>
-> +
-> +=C2=A0=C2=A0=C2=A0 video-codec@7eb10000 {
-> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 compatible =3D "brcm,bcm2711-=
-hevc-dec";
-> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 reg =3D <0x7eb00000 0x10000>,=
- /* HEVC */
-> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0 <0x7eb10000 0x1000>;=C2=A0 /* INTC */
-> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 reg-names =3D "hevc",
-> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 "intc";
-> +
-> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 interrupts =3D <GIC_SPI 98 IR=
-Q_TYPE_LEVEL_HIGH>;
-> +
-> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 clocks =3D <&clk 0>;
-> +=C2=A0=C2=A0=C2=A0 };
-> +
-> +...
+Is it same as
+	V4L2_MAP_QUANTIZATION_DEFAULT(false, fmt.format.colorspace,
+                                            fmt.format.ycbcr_enc);
 
---=-3X+v+qqpBxti/ZHprAy2
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-Description: This is a digitally signed message part
+> +		.xfer_func = V4L2_XFER_FUNC_SRGB,
 
------BEGIN PGP SIGNATURE-----
+Is it same as
+       V4L2_MAP_XFER_FUNC_DEFAULT(fmt.format.colorspace);
 
-iHUEABYKAB0WIQTvDVKBFcTDwhoEbxLZQZRRKWBy9AUCaQ4fQwAKCRDZQZRRKWBy
-9JiWAP9aJDUC+DwYY4YEakcAJEpmjHTtr46zD7hn3ACBBR4/agD/V2BqBy+VHQKe
-BnFBOdM8RMAcrD/5z9Gr8HaJXTJpvgI=
-=djZq
------END PGP SIGNATURE-----
-
---=-3X+v+qqpBxti/ZHprAy2--
+Frank
+> +	};
+> +	int ret;
+> +
+> +	ret = v4l2_subdev_routing_validate(sd, routing,
+> +					   V4L2_SUBDEV_ROUTING_NO_1_TO_N);
+> +	if (ret)
+> +		return ret;
+> +
+> +	/* Only a single route is supported for now. */
+> +	if (routing->num_routes != 1 ||
+> +	    !(routing->routes[0].flags & V4L2_SUBDEV_ROUTE_FL_ACTIVE))
+> +		return -EINVAL;
+> +
+> +	ret = v4l2_subdev_set_routing_with_fmt(sd, state, routing, &format);
+> +	if (ret)
+> +		return ret;
+> +
+> +	return 0;
+> +}
+> +
+> +static int mipi_csis_set_routing(struct v4l2_subdev *sd,
+> +				 struct v4l2_subdev_state *state,
+> +				 enum v4l2_subdev_format_whence which,
+> +				 struct v4l2_subdev_krouting *routing)
+> +{
+> +	struct mipi_csis_device *csis = sd_to_mipi_csis_device(sd);
+> +
+> +	if (which == V4L2_SUBDEV_FORMAT_ACTIVE && csis->source.enabled_streams)
+> +		return -EBUSY;
+> +
+> +	return __mipi_csis_set_routing(sd, state, routing);
+> +}
+> +
+>  static int mipi_csis_enable_streams(struct v4l2_subdev *sd,
+>  				    struct v4l2_subdev_state *state,
+>  				    u32 pad, u64 streams_mask)
+> @@ -1240,22 +1286,22 @@ static int mipi_csis_disable_streams(struct v4l2_subdev *sd,
+>  static int mipi_csis_init_state(struct v4l2_subdev *sd,
+>  				struct v4l2_subdev_state *state)
+>  {
+> -	struct v4l2_subdev_format fmt = {
+> -		.pad = CSIS_PAD_SINK,
+> +	struct v4l2_subdev_route routes[] = {
+> +		{
+> +			.sink_pad = CSIS_PAD_SINK,
+> +			.sink_stream = 0,
+> +			.source_pad = CSIS_PAD_SOURCE,
+> +			.source_stream = 0,
+> +			.flags = V4L2_SUBDEV_ROUTE_FL_ACTIVE,
+> +		},
+>  	};
+>
+> -	fmt.format.code = mipi_csis_formats[0].code;
+> -	fmt.format.width = MIPI_CSIS_DEF_PIX_WIDTH;
+> -	fmt.format.height = MIPI_CSIS_DEF_PIX_HEIGHT;
+> +	struct v4l2_subdev_krouting routing = {
+> +		.num_routes = ARRAY_SIZE(routes),
+> +		.routes = routes,
+> +	};
+>
+> -	fmt.format.colorspace = V4L2_COLORSPACE_SMPTE170M;
+> -	fmt.format.xfer_func = V4L2_MAP_XFER_FUNC_DEFAULT(fmt.format.colorspace);
+> -	fmt.format.ycbcr_enc = V4L2_MAP_YCBCR_ENC_DEFAULT(fmt.format.colorspace);
+> -	fmt.format.quantization =
+> -		V4L2_MAP_QUANTIZATION_DEFAULT(false, fmt.format.colorspace,
+> -					      fmt.format.ycbcr_enc);
+> -
+> -	return mipi_csis_set_fmt(sd, state, &fmt);
+> +	return __mipi_csis_set_routing(sd, state, &routing);
+>  }
+>
+>  static int mipi_csis_log_status(struct v4l2_subdev *sd)
+> @@ -1297,6 +1343,7 @@ static const struct v4l2_subdev_pad_ops mipi_csis_pad_ops = {
+>  	.get_fmt		= v4l2_subdev_get_fmt,
+>  	.set_fmt		= mipi_csis_set_fmt,
+>  	.get_frame_desc		= mipi_csis_get_frame_desc,
+> +	.set_routing		= mipi_csis_set_routing,
+>  	.enable_streams		= mipi_csis_enable_streams,
+>  	.disable_streams	= mipi_csis_disable_streams,
+>  };
+> --
+> Regards,
+>
+> Laurent Pinchart
+>
