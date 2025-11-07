@@ -1,27 +1,26 @@
 Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6CD86302742
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7280F30275B
 	for <linux-media@vger.kernel.org>; Fri,  7 Nov 2025 10:16:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762510603; cv=none; b=BfXO0GaNgt24V/TzmgkyTqGGex/DTB4DcZWpkmHfxxeTWvaUl9b8I+x4AyPgU7pqSBunZ2zHUMJlC+74VgRnWlRc810K4geFXf5asGIGQbkf0Xee0rIqYF7VU+tf3i2m9ip2pLkd+jQVyeTovV56OuqM1DEqivoT6ZJFmtQXIxM=
+	t=1762510603; cv=none; b=s4SolQi4nuiNyeV0+vxXIQmAnCwEdpupKG7M2wg8KrQ03GlLgbO6LTOLNCrgm/vFdtTll/CFGaLOVo5S3SpO8ZC18LslIu/J7nxQOP7uLKxn7OdOWq1SkJBIKujn56YpHi5RRrU72A5CNijyeP+TpPRvutHF29stsz2mrgDP46g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1762510603; c=relaxed/simple;
-	bh=/BBvlPJiyWBIzDICKzroygGmWbARSAzrY+QzXWCf0TY=;
+	bh=+lhyce2/09h420i5kzs3n3f8hzA5AvvilpI4thgjv1k=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=NJJ9IL5YO6c7NdlB8bCyM8vu65uFi8Z0enYJXSa/ZSsDhCZANCuan/0TAm3BROAEQ0/9mAycb5/HIL2jx/plyDd+U8K3ezakPKxA5q3WWQ8a9BeFPWI9GnRM0GZbvdzmv1u/e7gtaq/bvcwvcrCVxIwH8zBDt/68J/uGFIsDNxQ=
+	 In-Reply-To:To:Cc; b=jau4JDV0F9x2lWoeCjiaslWnPOimquyp5DgCgd47+aC94paREVQUQdHjm5PPJVdTRBkYmy3QgnkZfbChtdNTenUAwpqGGeHLPDN0ropmL4+KgBrv3zUaFETcKNyww6+O7BeABzxTzLoDL2oFrmOuFUYd+aRsu7+GRHz7BQWtPRY=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
 Received: from dude05.red.stw.pengutronix.de ([2a0a:edc0:0:1101:1d::54])
 	by metis.whiteo.stw.pengutronix.de with esmtp (Exim 4.92)
 	(envelope-from <m.tretter@pengutronix.de>)
-	id 1vHJWH-0003HZ-Md; Fri, 07 Nov 2025 11:16:37 +0100
+	id 1vHJWH-0003HZ-Nv; Fri, 07 Nov 2025 11:16:37 +0100
 From: Michael Tretter <m.tretter@pengutronix.de>
-Date: Fri, 07 Nov 2025 11:16:34 +0100
-Subject: [PATCH 2/3] media: imx-csi: explicitly start media pipeline on pad
- 0
+Date: Fri, 07 Nov 2025 11:16:35 +0100
+Subject: [PATCH 3/3] media: imx-csi: use media_pad_is_streaming helper
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
@@ -30,7 +29,7 @@ List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20251107-media-imx-cleanup-v1-2-f82a693c28f4@pengutronix.de>
+Message-Id: <20251107-media-imx-cleanup-v1-3-f82a693c28f4@pengutronix.de>
 References: <20251107-media-imx-cleanup-v1-0-f82a693c28f4@pengutronix.de>
 In-Reply-To: <20251107-media-imx-cleanup-v1-0-f82a693c28f4@pengutronix.de>
 To: Steve Longerbeam <slongerbeam@gmail.com>, 
@@ -47,56 +46,28 @@ X-SA-Exim-Mail-From: m.tretter@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
 X-PTX-Original-Recipient: linux-media@vger.kernel.org
 
-entity->pads is an array that contains all the pads of an entity.
-
-Calling __media_pipeline_start() or __media_pipeline_stop() on the pads,
-implicitly starts the pipeline with the first pad in this array as
-origin.
-
-Explicitly use the first pad to start the pipeline to make this more
-obvious to the reader.
+The media_pad_is_streaming helper is explicitly for checking, if a pad
+has been started with media_pipeline_start. Use it instead of relying on
+the implicit knowledge, that a pad that has a pipeline is streaming.
 
 Signed-off-by: Michael Tretter <m.tretter@pengutronix.de>
 ---
- drivers/staging/media/imx/imx-media-utils.c | 11 +++++++----
- 1 file changed, 7 insertions(+), 4 deletions(-)
+ drivers/staging/media/imx/imx-media-utils.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/drivers/staging/media/imx/imx-media-utils.c b/drivers/staging/media/imx/imx-media-utils.c
-index f520529a7cfe..6d69f69c16c1 100644
+index 6d69f69c16c1..4ea9b3fc59d0 100644
 --- a/drivers/staging/media/imx/imx-media-utils.c
 +++ b/drivers/staging/media/imx/imx-media-utils.c
-@@ -755,6 +755,7 @@ int imx_media_pipeline_set_stream(struct imx_media_dev *imxmd,
- {
- 	struct v4l2_subdev *sd;
- 	int ret = 0;
-+	struct media_pad *pad;
- 
- 	if (!is_media_entity_v4l2_subdev(entity))
- 		return -EINVAL;
-@@ -762,17 +763,19 @@ int imx_media_pipeline_set_stream(struct imx_media_dev *imxmd,
- 
- 	mutex_lock(&imxmd->md.graph_mutex);
- 
-+	pad = &entity->pads[0];
-+
- 	if (on) {
--		ret = __media_pipeline_start(entity->pads, &vdev->pipe);
-+		ret = __media_pipeline_start(pad, &vdev->pipe);
- 		if (ret)
- 			goto out;
- 		ret = v4l2_subdev_call(sd, video, s_stream, 1);
- 		if (ret)
--			__media_pipeline_stop(entity->pads);
-+			__media_pipeline_stop(pad);
+@@ -774,7 +774,7 @@ int imx_media_pipeline_set_stream(struct imx_media_dev *imxmd,
+ 			__media_pipeline_stop(pad);
  	} else {
  		v4l2_subdev_call(sd, video, s_stream, 0);
--		if (media_pad_pipeline(entity->pads))
--			__media_pipeline_stop(entity->pads);
-+		if (media_pad_pipeline(pad))
-+			__media_pipeline_stop(pad);
+-		if (media_pad_pipeline(pad))
++		if (media_pad_is_streaming(pad))
+ 			__media_pipeline_stop(pad);
  	}
  
- out:
 
 -- 
 2.47.3
