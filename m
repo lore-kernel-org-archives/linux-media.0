@@ -1,124 +1,134 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f47.google.com (mail-wm1-f47.google.com [209.85.128.47])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8AAB03081B9;
-	Fri,  7 Nov 2025 13:49:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ADAD4322C98
+	for <linux-media@vger.kernel.org>; Fri,  7 Nov 2025 14:11:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762523358; cv=none; b=advpvVxkR6hK0cLUtgkgR3UpyNJEcHC8wmEibgca1Jxm2YYMrkbsrInZ+aXgr+Sc16cIKnBqvKCqJwYe2s6V0o2lIttxTLr7TC8UygwgWI4acj+lPBOqFcLDyaVQAegZ0/BY6MAgIfHVEKBVy5RPbR6nXLaORRfnswLNwBCeCyg=
+	t=1762524669; cv=none; b=MKy+54845jjoPa4CoNytbXu5I44cfmCKJDa77lYD0O5Ulg6RT0WJ98HZcIkjMPJy2kLUeQLRu6fCsncaaPe/SH1a5VzR7y9iAidl4d399gTE/CuuhbykuwcPvOFrN0hB5qkiiM0NzcgPaHcrg0NRV8Bbu8S4uoBKVYduynrmgqs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762523358; c=relaxed/simple;
-	bh=d5B/NwZk6ebhuP3QANVrGVMe+8wpDqpML+bx+HNq8b8=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=r4/RLamH0Nepjs1cV9e4Gi4p9P/MMCw9lB+eDEzUKmHOW1bII52Hi3+5E3tBJmAMQXWJ4kIeZZDTn6YPWBqxYN22UZDV7U8titvKLoaJu6QUGl77C0j8Yhcdw/sFYeg1mzaxo43M+cuJlciOEaJlektQahYBii71mVtcOunTEco=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=FxwATd/m; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1762524669; c=relaxed/simple;
+	bh=7oY4W8cvYI7cWgk2hDetziaayLxMm08O1hUX9ep82XI=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=okHzE0JrT188tN816u7YUkzDjAgNqfrJMIdbuZiAvWGddZOckf1bG1oAYuSBSKH5NGPP2QTQLAHVRUp2SNw7JDzUe6RiqmU28DpPcXktg3cKPswFp34x8JsPtQLRfGt9+LZUxEdoKJIENK58ANRug/br+0YLGXjcUzvlAyl+x+E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=auhHcOML; arc=none smtp.client-ip=209.85.128.47
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="FxwATd/m"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DD796C16AAE;
-	Fri,  7 Nov 2025 13:49:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1762523358;
-	bh=d5B/NwZk6ebhuP3QANVrGVMe+8wpDqpML+bx+HNq8b8=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=FxwATd/m8lKRhqAEHtVD9zS/H2TdFm+MLoy6kMMqNMcutonTnJ1vWtEEJGz+bfOme
-	 HM4uYVegWRerovkPIBdg193QZ7aSPETucmcR/4nXcppPSC5dcNmflMUYNTzL3Vlzxo
-	 DTLC4WEwuclQn3jOCkXijJozd/4YKnKtJ/HYG6MEPK/bwkHZFmsVLLKbw1oKdRPVEt
-	 CeqkIa89ikZfgGUh06yOadq9LGXXgCoL3Oa2HphHAJUfGQvnCDFYAbRPA26hZ4IAdE
-	 S7srCKBhVv1Jq5uvY8Z6arBsSLIJGTD3PDu+6/v/0U1oPc9lzkgjUKlyX9D8VHi6qQ
-	 Jm5UFbWk5UBSw==
-Message-ID: <82a4fc28-1cd7-4d89-a521-6e6e5a133f3c@kernel.org>
-Date: Fri, 7 Nov 2025 14:49:12 +0100
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="auhHcOML"
+Received: by mail-wm1-f47.google.com with SMTP id 5b1f17b1804b1-4711b95226dso7944945e9.0
+        for <linux-media@vger.kernel.org>; Fri, 07 Nov 2025 06:11:05 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=suse.com; s=google; t=1762524664; x=1763129464; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=saC/xSM2GWNzn8WIqniCyfPLhsnZ0TcGnftuhkvfXXw=;
+        b=auhHcOMLR7gD0N4E3861Gj/sjnXMjFRFpmAtuUguqrZ9RTObr5luCVIJOitseYOxA5
+         87dsyTnEmmk5wQyA0WeRV6K9e4tK2lH18xnFtpsO847x6wilOjbrj/fTGa5new9G4qPn
+         Lp7roOcyC/fq1n0Kpi4GCj833dvGRmp+xrLQL2wP6HkULw6XwgaHL2dVZnHiLksdRJLU
+         cU22xFFEH+3TWo5rg/Kwe5WpFkwaZsSmqD4C1RfXhS3ay6oh+2FLPJUGu5uxyYeZvMLq
+         v9E9GxnZMk1L5VKLq7B/MKOAZtjdBgttKTv8YsXbB+W80FKFjg5/PXq7vE0XMBbt1Olm
+         4v9w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1762524664; x=1763129464;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=saC/xSM2GWNzn8WIqniCyfPLhsnZ0TcGnftuhkvfXXw=;
+        b=ZbUgAfHP7Fs5R/pBJVPFBxq08M3eLFMK02yAwRMDXJPEM4l0LiviCwsTgwHSgsn+57
+         5oQqmX542nm5VgOLqhATqZlZahXOvUC4fO2tSk11m6/fEah1hip5d+lh4wi97BB22Jj9
+         f1R8qxNZBdlsd2C/nd/kLg0ECIqoOzcG4dPkMgJ2t/Z1k0lmSPHnzfrnhj05ICeL0zId
+         I8h5GuG66hXJ3pQFJufbO+9FAMWbwhDsoRmhvRdIlMFz5osMQFsxM04g4eYRd/l/YmNL
+         HTAMpwedY6VN3Jn9J52uqXCNYVTjNT9XAVPLNWRO99lNZfpfkMsRzjbdUnae4/aBSWOz
+         DBLg==
+X-Forwarded-Encrypted: i=1; AJvYcCUDZebk0cFhFyOWGZ/CjfNu1mAj/hTfYmz+Tn6ZqiSqBb+UrAucz/nwiA3WjG+JQLKVzdu+hDbsa3oK5Q==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy46hBr7mmeZve5JchC/DIvAE5p/THG7zsLWmwa/VZmWzcxHoDN
+	wh3aR0EgnPkbSDMTulYdqmO3hh5Dj1829GIcnCQEOA016nubFHZnyk9eZC3hZsa3KFU=
+X-Gm-Gg: ASbGncsC6okZsS9BvKBF0X0orDC9IL8v7YHRoAwLFyb3Dg1N3SHRZ83+t4uv9RcUEKD
+	P8rYA4YyTOSWEwtlPMSQCXgX0Rv08nlq3uVex74yJUAxLb1onmFeBbC7tK6uPXuCp45835KmVAA
+	O4/9+SzM8M9YURImYsLc58QPCxCfkRrm3GItPklN6o8OogOe2Ab2ftJQASpDssNltrFYUK4sBHy
+	mNSovWpAxZB8XW7VkOtWrwVqAN6zg1zEOzED2+FtjVGYWHlm0Fdni+ARUmPVkFC8G2hNJmhPhnn
+	/Kvk4JiQMylPPJDA2CsZ8bL60mjRNvMaVrwkmK3taM2LgYiRftlxfoPiJmE8t/vCuXohJeI3bxD
+	1CmvawCPWkz0959HQvHkQ8rpihWJZMr6HWeobRNp6gXQHskwR72dV6BhwKL2EanLA9efGZMCZiA
+	92HX5xrs4uEaSuauOE1QISDxAQ
+X-Google-Smtp-Source: AGHT+IGKyGh79+Bwp1DW6zyVUm25mj+TgdIHaXGyejMxXcxObw2DsmyhhvrgTD7xRs8ge4kMqfNcTw==
+X-Received: by 2002:a05:600c:1f0d:b0:46e:4586:57e4 with SMTP id 5b1f17b1804b1-4776bcb8963mr24846865e9.24.1762524663735;
+        Fri, 07 Nov 2025 06:11:03 -0800 (PST)
+Received: from localhost.localdomain ([2a00:6d43:105:c401:e307:1a37:2e76:ce91])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4775cdcc552sm181174875e9.6.2025.11.07.06.11.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 07 Nov 2025 06:11:03 -0800 (PST)
+From: Marco Crivellari <marco.crivellari@suse.com>
+To: linux-kernel@vger.kernel.org,
+	linux-media@vger.kernel.org
+Cc: Tejun Heo <tj@kernel.org>,
+	Lai Jiangshan <jiangshanlai@gmail.com>,
+	Frederic Weisbecker <frederic@kernel.org>,
+	Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+	Marco Crivellari <marco.crivellari@suse.com>,
+	Michal Hocko <mhocko@suse.com>,
+	Mauro Carvalho Chehab <mchehab@kernel.org>
+Subject: [PATCH] media: ddbridge: add WQ_PERCPU to alloc_workqueue users
+Date: Fri,  7 Nov 2025 15:10:52 +0100
+Message-ID: <20251107141052.221108-1-marco.crivellari@suse.com>
+X-Mailer: git-send-email 2.51.1
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v5 2/2] arm64: dts: qcom: qcs8300: Add support for camss
-To: Vikram Sharma <quic_vikramsa@quicinc.com>, bryan.odonoghue@linaro.org,
- mchehab@kernel.org, robh@kernel.org, krzk+dt@kernel.org,
- conor+dt@kernel.org, andersson@kernel.org, konradybcio@kernel.org,
- hverkuil-cisco@xs4all.nl, cros-qcom-dts-watchers@chromium.org,
- catalin.marinas@arm.com, will@kernel.org
-Cc: linux-arm-kernel@lists.infradead.org, quic_svankada@quicinc.com,
- linux-media@vger.kernel.org, linux-arm-msm@vger.kernel.org,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
- quic_nihalkum@quicinc.com, Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
-References: <20251107132154.436017-1-quic_vikramsa@quicinc.com>
- <20251107132154.436017-3-quic_vikramsa@quicinc.com>
-From: Krzysztof Kozlowski <krzk@kernel.org>
-Content-Language: en-US
-Autocrypt: addr=krzk@kernel.org; keydata=
- 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 a/A=
-In-Reply-To: <20251107132154.436017-3-quic_vikramsa@quicinc.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On 07/11/2025 14:21, Vikram Sharma wrote:
-> +			interconnects = <&gem_noc MASTER_APPSS_PROC QCOM_ICC_TAG_ACTIVE_ONLY
-> +					 &config_noc SLAVE_CAMERA_CFG QCOM_ICC_TAG_ACTIVE_ONLY>,
-> +					<&mmss_noc MASTER_CAMNOC_HF QCOM_ICC_TAG_ALWAYS
-> +					 &mc_virt SLAVE_EBI1 QCOM_ICC_TAG_ALWAYS>;
-> +			interconnect-names = "ahb",
-> +					     "hf_0";
-> +			iommus = <&apps_smmu 0x2400 0x20>;
-> +
-> +			power-domains = <&camcc CAM_CC_TITAN_TOP_GDSC>;
-> +			power-domain-names = "top";
+Currently if a user enqueues a work item using schedule_delayed_work() the
+used wq is "system_wq" (per-cpu wq) while queue_delayed_work() use
+WORK_CPU_UNBOUND (used when a cpu is not specified). The same applies to
+schedule_work() that is using system_wq and queue_work(), that makes use
+again of WORK_CPU_UNBOUND.
+This lack of consistency cannot be addressed without refactoring the API.
 
-You introduce some unusual changes, not present in the existing sources,
-not being part of common (please read DTS coding style) or even qcom
-style. Please do not come with your own coding style.
+alloc_workqueue() treats all queues as per-CPU by default, while unbound
+workqueues must opt-in via WQ_UNBOUND.
 
-Your previous patch was correct here - you had here blank line. Any
-advises around this are just incorrect. Qualcomm SoC maintainer already
-expressed this in other patch:
+This default is suboptimal: most workloads benefit from unbound queues,
+allowing the scheduler to place worker threads where they’re needed and
+reducing noise when CPUs are isolated.
 
-https://lore.kernel.org/all/4a4a24aa-d8a2-4150-a7bd-1d0a4b141116@oss.qualcomm.com/
+This continues the effort to refactor workqueue APIs, which began with
+the introduction of new workqueues and a new alloc_workqueue flag in:
 
+commit 128ea9f6ccfb ("workqueue: Add system_percpu_wq and system_dfl_wq")
+commit 930c2ea566af ("workqueue: Add new WQ_PERCPU flag")
 
+This change adds a new WQ_PERCPU flag to explicitly request
+alloc_workqueue() to be per-cpu when WQ_UNBOUND has not been specified.
 
-Best regards,
-Krzysztof
+With the introduction of the WQ_PERCPU flag (equivalent to !WQ_UNBOUND),
+any alloc_workqueue() caller that doesn’t explicitly specify WQ_UNBOUND
+must now use WQ_PERCPU.
+
+Once migration is complete, WQ_UNBOUND can be removed and unbound will
+become the implicit default.
+
+Suggested-by: Tejun Heo <tj@kernel.org>
+Signed-off-by: Marco Crivellari <marco.crivellari@suse.com>
+---
+ drivers/media/pci/ddbridge/ddbridge-core.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/media/pci/ddbridge/ddbridge-core.c b/drivers/media/pci/ddbridge/ddbridge-core.c
+index 40e6c873c36d..d240e291ba4f 100644
+--- a/drivers/media/pci/ddbridge/ddbridge-core.c
++++ b/drivers/media/pci/ddbridge/ddbridge-core.c
+@@ -3430,7 +3430,7 @@ int ddb_init_ddbridge(void)
+ 
+ 	if (ddb_class_create() < 0)
+ 		return -1;
+-	ddb_wq = alloc_workqueue("ddbridge", 0, 0);
++	ddb_wq = alloc_workqueue("ddbridge", WQ_PERCPU, 0);
+ 	if (!ddb_wq)
+ 		return ddb_exit_ddbridge(1, -1);
+ 
+-- 
+2.51.1
+
