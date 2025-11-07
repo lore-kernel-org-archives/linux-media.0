@@ -1,45 +1,44 @@
 Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 14901324B3B
-	for <linux-media@vger.kernel.org>; Fri,  7 Nov 2025 18:33:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8A0B832860F
+	for <linux-media@vger.kernel.org>; Fri,  7 Nov 2025 18:37:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.167.242.64
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762540385; cv=none; b=u90kWyrDeDc48rM/CWPFWIUiRDlYyLaoSSPnKhOVyegyG+vvlmXZ01TuhddUPybqzsLedtuH/F6gm8xGpNcUf88nZmhwk+t1VLtX4/8feXGtr9U/ftkd5d60fydhC/GkbUf6WbNj7stN777qitSIryK8dKAcweNbdJh/EivTGWQ=
+	t=1762540625; cv=none; b=Qp2RlTQINl3AKoURkrwJmWBF4PWwV0c8Zdi5/jYxjVVoqWiV3vV6RCSQ9iG3DG4OHa9VUU3ItbFhTJpoxayEJzt10HPv7BbPKXSQzahzfRd2h+3wgJb2zVbClDfLHc4BYo+77L/gaDh3QIssfLMzylwldq7q0Wx7kypERp//90k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762540385; c=relaxed/simple;
-	bh=aqXb+TP1AHAF4kvpnB6W+6ximuq9U6Mt2igRAdwhdy8=;
+	s=arc-20240116; t=1762540625; c=relaxed/simple;
+	bh=rLiP3gEtn72ck68kGmlb3ojW5hIqH/o/7GXrlLRkSi8=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=jXPWpX0qRzQGocbVITTUVo6i1ek2CyLHRWuht7BE9HEKaoyRuvSJg/1sHpU6Z0eYQF83q0V4Pwul5ZXfqsdOOyoP/cJUvWJ7o2XHIQ+vfds/oPnPFt9pBEl4WL4QRLDVXujQLLEys8I2TcZiYwwSrsmTfjNAEiuc0QdlrqEjKlg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ideasonboard.com; spf=pass smtp.mailfrom=ideasonboard.com; dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b=hWXnqd5z; arc=none smtp.client-ip=213.167.242.64
+	 Content-Type:Content-Disposition:In-Reply-To; b=n2kaK/2tNRZ3kYRs+IlN9T7CFBMaDJ/5HENqjN4JmGWBWTG/406xDnawG/1V1fvl0uaj9NF8W4q3x7HC8iJ5q0fG2XuMBaPdMf08KIINQmSuQFzDEvtVpl+UcWbR6KIWT9JF1UPDXpSeaTTJwzuFuLkc41BoJhZhmHA/W956ihk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ideasonboard.com; spf=pass smtp.mailfrom=ideasonboard.com; dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b=pP6ZGZP1; arc=none smtp.client-ip=213.167.242.64
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ideasonboard.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ideasonboard.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="hWXnqd5z"
+	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="pP6ZGZP1"
 Received: from pendragon.ideasonboard.com (82-203-161-95.bb.dnainternet.fi [82.203.161.95])
-	by perceval.ideasonboard.com (Postfix) with UTF8SMTPSA id 23A981419;
-	Fri,  7 Nov 2025 19:31:04 +0100 (CET)
+	by perceval.ideasonboard.com (Postfix) with UTF8SMTPSA id 1C544111F;
+	Fri,  7 Nov 2025 19:26:53 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-	s=mail; t=1762540265;
-	bh=aqXb+TP1AHAF4kvpnB6W+6ximuq9U6Mt2igRAdwhdy8=;
+	s=mail; t=1762540013;
+	bh=rLiP3gEtn72ck68kGmlb3ojW5hIqH/o/7GXrlLRkSi8=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=hWXnqd5zqKH/aDKkpS5veqFDNnjcSzy3RmO3Z48Sc5SXpB+kFrxuHpzLo62Xdqbhw
-	 Kp3ZJqidjeMDsypqHSujQvusdH+ZtaJ/tghh3zIeRfhm5JD0v0x6xDGSrb7kJ5CJPb
-	 h9ccw5bIs01x4H4+xKCTAWI85zR0uPGMpsvQTmRc=
-Date: Fri, 7 Nov 2025 20:32:55 +0200
+	b=pP6ZGZP1+Zp4ZOyeB6rmVyJJI8TLMd4d1MeRqy/wEipiTE9NWTChZyyWQSdc8LE5N
+	 5vDCwPYlN1U/ye2L4OJYQbnlSwlvVESmxZ0yKEcvARwQByxzC1vOdAy3z5XgaBcKHA
+	 plwFCBXirR1DSAjzhetkcQRa5MA9McgOI9wnLFHI=
+Date: Fri, 7 Nov 2025 20:28:43 +0200
 From: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To: Frank Li <Frank.li@nxp.com>
+To: Martin Kepplinger <martink@posteo.de>
 Cc: linux-media@vger.kernel.org, Rui Miguel Silva <rmfrfs@gmail.com>,
-	Martin Kepplinger <martink@posteo.de>,
 	Purism Kernel Team <kernel@puri.sm>,
 	Pengutronix Kernel Team <kernel@pengutronix.de>,
-	imx@lists.linux.dev, Stefan Klug <stefan.klug@ideasonboard.com>,
+	imx@lists.linux.dev, Frank Li <Frank.Li@nxp.com>,
+	Stefan Klug <stefan.klug@ideasonboard.com>,
 	Sakari Ailus <sakari.ailus@iki.fi>
-Subject: Re: [PATCH v1 2/6] media: imx-mipi-csis: Switch to .enable_streams()
-Message-ID: <20251107183255.GD5558@pendragon.ideasonboard.com>
+Subject: Re: [PATCH v1 0/6] media: imx-mipi-csis: Add streams support
+Message-ID: <20251107182843.GB5558@pendragon.ideasonboard.com>
 References: <20251107015813.5834-1-laurent.pinchart@ideasonboard.com>
- <20251107015813.5834-3-laurent.pinchart@ideasonboard.com>
- <aQ4eaPxL3n1I/95Y@lizhi-Precision-Tower-5810>
+ <60dac85af5ed941c40cfb55dff0ccf7864f0e681.camel@posteo.de>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
@@ -48,216 +47,118 @@ List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <aQ4eaPxL3n1I/95Y@lizhi-Precision-Tower-5810>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <60dac85af5ed941c40cfb55dff0ccf7864f0e681.camel@posteo.de>
 
-On Fri, Nov 07, 2025 at 11:29:28AM -0500, Frank Li wrote:
-> On Fri, Nov 07, 2025 at 03:58:09AM +0200, Laurent Pinchart wrote:
-> > To prepare for multi-stream support, switch from the legacy .s_stream()
-> > operation to the .enable_streams() and .disable_streams() operations.
-> >
-> > Signed-off-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-> > ---
-> >  drivers/media/platform/nxp/imx-mipi-csis.c | 146 ++++++++++++---------
-> >  1 file changed, 87 insertions(+), 59 deletions(-)
-> >
-> > diff --git a/drivers/media/platform/nxp/imx-mipi-csis.c b/drivers/media/platform/nxp/imx-mipi-csis.c
-> > index 42b1ec8eed96..f142e79acbcf 100644
-> > --- a/drivers/media/platform/nxp/imx-mipi-csis.c
-> > +++ b/drivers/media/platform/nxp/imx-mipi-csis.c
-> > @@ -350,6 +350,7 @@ struct mipi_csis_device {
-> >  	struct {
-> >  		struct v4l2_subdev *sd;
-> >  		const struct media_pad *pad;
-> > +		u64 enabled_streams;
-> >  	} source;
-> >
-> >  	struct v4l2_mbus_config_mipi_csi2 bus;
-> > @@ -1019,64 +1020,6 @@ static struct mipi_csis_device *sd_to_mipi_csis_device(struct v4l2_subdev *sdev)
-> >  	return container_of(sdev, struct mipi_csis_device, sd);
-> >  }
-> >
-> > -static int mipi_csis_s_stream(struct v4l2_subdev *sd, int enable)
-> > -{
-> > -	struct mipi_csis_device *csis = sd_to_mipi_csis_device(sd);
-> > -	const struct v4l2_mbus_framefmt *format;
-> > -	const struct csis_pix_format *csis_fmt;
-> > -	struct v4l2_subdev_state *state;
-> > -	int ret;
-> > -
-> > -	if (!enable) {
-> > -		v4l2_subdev_disable_streams(csis->source.sd,
-> > -					    csis->source.pad->index, BIT(0));
-> > -
-> > -		mipi_csis_stop_stream(csis);
-> > -		if (csis->debug.enable)
-> > -			mipi_csis_log_counters(csis, true);
-> > -
-> > -		pm_runtime_put(csis->dev);
-> > -
-> > -		return 0;
-> > -	}
-> > -
-> > -	state = v4l2_subdev_lock_and_get_active_state(sd);
-> > -
-> > -	format = v4l2_subdev_state_get_format(state, CSIS_PAD_SINK);
-> > -	csis_fmt = find_csis_format(format->code);
-> > -
-> > -	ret = mipi_csis_calculate_params(csis, csis_fmt);
-> > -	if (ret < 0)
-> > -		goto err_unlock;
-> > -
-> > -	mipi_csis_clear_counters(csis);
-> > -
-> > -	ret = pm_runtime_resume_and_get(csis->dev);
-> > -	if (ret < 0)
-> > -		goto err_unlock;
-> > -
-> > -	mipi_csis_start_stream(csis, format, csis_fmt);
-> > -
-> > -	ret = v4l2_subdev_enable_streams(csis->source.sd,
-> > -					 csis->source.pad->index, BIT(0));
-> > -	if (ret < 0)
-> > -		goto err_stop;
-> > -
-> > -	mipi_csis_log_counters(csis, true);
-> > -
-> > -	v4l2_subdev_unlock_state(state);
-> > -
-> > -	return 0;
-> > -
-> > -err_stop:
-> > -	mipi_csis_stop_stream(csis);
-> > -	pm_runtime_put(csis->dev);
-> > -err_unlock:
-> > -	v4l2_subdev_unlock_state(state);
-> > -
-> > -	return ret;
-> > -}
-> > -
-> >  static int mipi_csis_enum_mbus_code(struct v4l2_subdev *sd,
-> >  				    struct v4l2_subdev_state *state,
-> >  				    struct v4l2_subdev_mbus_code_enum *code)
-> > @@ -1211,6 +1154,89 @@ static int mipi_csis_get_frame_desc(struct v4l2_subdev *sd, unsigned int pad,
-> >  	return 0;
-> >  }
-> >
-> > +static int mipi_csis_enable_streams(struct v4l2_subdev *sd,
-> > +				    struct v4l2_subdev_state *state,
-> > +				    u32 pad, u64 streams_mask)
-> > +{
-> > +	struct mipi_csis_device *csis = sd_to_mipi_csis_device(sd);
-> > +	u64 sink_streams;
-> > +	int ret;
-> > +
-> > +	sink_streams = v4l2_subdev_state_xlate_streams(state, CSIS_PAD_SOURCE,
-> > +						       CSIS_PAD_SINK,
+Hi Martin,
+
+On Fri, Nov 07, 2025 at 09:31:39AM +0000, Martin Kepplinger wrote:
+> Am Freitag, dem 07.11.2025 um 03:58 +0200 schrieb Laurent Pinchart:
+> > Hello,
+> > 
+> > The reference manual for the NXP i.MX7D in which the CSIS is integrated
+> > lists four outputs named "channels" in various diagrams and tables, but 
+> > only documents registers for channel 0. Reference manuals for i.MX8 SoCs
+> > that integrate the CSIS gradually removed mentions of channels 1 to 3 as
+> > newer revisions of the documents got released, which was interpreted as
+> > an indication that the CSIS has only a single output.
+> > 
+> > That interpretation turned out not to be correct. In the i.MX8MP, the
+> > CSIS features multiple output channels. Channel 0 is connected to the
+> > ISI, and channels 0, 1 and 2 are connected to the ISP. Multi-channel
+> > support towards the ISP is meant to support HDR, where camera sensors
+> > transmit multiple exposures or gains over different virtual channels.
+> > The glue logic between the CSIS and ISP hardcodes this use case and
+> > combines the channels in a way suitable for the ISP's single input
+> > port.
 > 
-> Original code use hardcode BIT(0), I think keep the same logic with original
-> code in this type patch to easy review.
+> Hi Laurent,
 > 
-> Add bitmask enabled_streams should be following patch.
+> This is going to be a dumb question, I know this, but I'm equally
+> confused as interested:
+> 
+> What you implement here is *not* muxing CSIS to (one of the 2) ISI-
+> pipes, right? This specifically is something I still need to do on
+> mainline (nxp-tree has a way to "mux" this, with rather cryptic
+> devicetree properties) where a board physically has the camera
+> connected to the *second* CSI interface but I need data to run through
+> the *first* ISI pipe. By default the second ISI pipe is used for the
+> second CSI interface but only the first ISI pipe can do 4k. Is this
+> "muxing" implemented in mainline right now? (ISI driver most
+> probably?).
 
-It could be moved to patch 6/6, which is where support for multiple
-streams is enabled, but I've decided to instead keep it here as 6/6 is
-already a bit patch. I also think it's better to handle it all here
-instead of doing a partial conversion to .enable_streams(), a
-self-contained feature is easier to review than a partial implementation
-that then gets fixed in a separate patch.
+You can configure routing of inputs to channels within the ISI crossbar
+subdev using the set routing ioctl. This should work in mainline today.
 
-> > +						       &streams_mask);
-> > +	if (!sink_streams || !streams_mask)
-> > +		return -EINVAL;
-> > +
-> > +	/* Start the CSIS with the first stream. */
-> > +	if (!csis->source.enabled_streams) {
-> > +		const struct v4l2_mbus_framefmt *format;
-> > +		const struct csis_pix_format *csis_fmt;
-> > +
-> > +		format = v4l2_subdev_state_get_format(state, CSIS_PAD_SINK);
-> > +		csis_fmt = find_csis_format(format->code);
-> > +
-> > +		ret = mipi_csis_calculate_params(csis, csis_fmt);
-> > +		if (ret)
-> > +			return ret;
-> > +
-> > +		mipi_csis_clear_counters(csis);
-> > +
-> > +		ret = pm_runtime_resume_and_get(csis->dev);
-> > +		if (ret < 0)
-> > +			return ret;
-> > +
-> > +		mipi_csis_start_stream(csis, format, csis_fmt);
-> > +	}
-> > +
-> > +	ret = v4l2_subdev_enable_streams(csis->source.sd,
-> > +					 csis->source.pad->index, sink_streams);
-> > +	if (ret) {
-> > +		if (!csis->source.enabled_streams) {
-> > +			mipi_csis_stop_stream(csis);
-> > +			pm_runtime_put(csis->dev);
-> > +		}
-> > +
-> > +		return ret;
-> > +	}
-> > +
-> > +	mipi_csis_log_counters(csis, true);
-> > +
-> > +	csis->source.enabled_streams |= streams_mask;
-> > +
-> > +	return 0;
-> > +}
-> > +
-> > +static int mipi_csis_disable_streams(struct v4l2_subdev *sd,
-> > +				     struct v4l2_subdev_state *state,
-> > +				     u32 pad, u64 streams_mask)
-> > +{
-> > +	struct mipi_csis_device *csis = sd_to_mipi_csis_device(sd);
-> > +	u64 sink_streams;
-> > +
-> > +	sink_streams = v4l2_subdev_state_xlate_streams(state, CSIS_PAD_SOURCE,
-> > +						       CSIS_PAD_SINK,
-> > +						       &streams_mask);
-> > +	if (!sink_streams || !streams_mask)
-> > +		return -EINVAL;
-> > +
-> > +	v4l2_subdev_disable_streams(csis->source.sd,
-> > +				    csis->source.pad->index, sink_streams);
-> > +`
-> > +	csis->source.enabled_streams &= ~streams_mask;
-> > +
-> > +	/* Stop the CSIS with the last stream. */
-> > +	if (!csis->source.enabled_streams) {
-> > +		mipi_csis_stop_stream(csis);
-> > +		pm_runtime_put(csis->dev);
-> > +
-> > +		if (csis->debug.enable)
-> > +			mipi_csis_log_counters(csis, true);
-> > +	}
-> > +
-> > +	return 0;
-> > +}
-> > +
-> >  static int mipi_csis_init_state(struct v4l2_subdev *sd,
-> >  				struct v4l2_subdev_state *state)
-> >  {
-> > @@ -1263,7 +1289,7 @@ static const struct v4l2_subdev_core_ops mipi_csis_core_ops = {
-> >  };
-> >
-> >  static const struct v4l2_subdev_video_ops mipi_csis_video_ops = {
-> > -	.s_stream	= mipi_csis_s_stream,
-> > +	.s_stream		= v4l2_subdev_s_stream_helper,
-> >  };
-> >
-> >  static const struct v4l2_subdev_pad_ops mipi_csis_pad_ops = {
-> > @@ -1271,6 +1297,8 @@ static const struct v4l2_subdev_pad_ops mipi_csis_pad_ops = {
-> >  	.get_fmt		= v4l2_subdev_get_fmt,
-> >  	.set_fmt		= mipi_csis_set_fmt,
-> >  	.get_frame_desc		= mipi_csis_get_frame_desc,
-> > +	.enable_streams		= mipi_csis_enable_streams,
-> > +	.disable_streams	= mipi_csis_disable_streams,
-> >  };
-> >
-> >  static const struct v4l2_subdev_ops mipi_csis_subdev_ops = {
+> Also, your patch is not about the connection CSIS->ISP, right? Because
+> that is something I tested using libcamera a while ago and have a dtso
+> lying around for.
+
+Connecting the CSIS to the ISP also works today with a change in DT,
+that's correct. I would like to make this more dynamic by declaring both
+connections in DT and dynamically configuring the routing from
+userspace, but that's an entirely different issue (and will require lots
+of work).
+
+> Can you put this new functionality into perspective for lazy people
+> like me? :) For the ISI-case this doesn't seem to have any implication
+> right?
+
+What this series is about is how to demultiplex CSI-2 virtual channels
+(not to be confused with the CSIS output channels, despite being both
+called channels they are entirely different things) inside the CSIS and
+route them to different CSIS outputs. This is not a feature useful for
+the ISI as only CSIS output channel 0 is connected to the ISI.
+
+> anyways, fascinating :)
+> 
+> > With a time machine, we would probably redesign the CSIS DT bindings to
+> > model each output channel with a port, and the V4L2 subdev would use
+> > multiple source pads. Without a time machine, we need to preserve
+> > backward compatibility with userspace. Not only would the addition of
+> > new ports and pads make this tricky, they would also require modelling
+> > the glue logic between the CSIS and ISP with a subdev. This would
+> > conflict with the need to preserve backward compatibility.
+> > 
+> > Fortunately for us, the CSIS is an old IP. The NXP i.MX9 series uses a
+> > different CSI-2 receiver, and the probability of needing to support an
+> > SoC that connects different output channels to different devices is
+> > extremely low. We can therefore implement a solution tailored to the
+> > needs of the i.MX8MP, and model the output channels as separate streams
+> > instead of separate pads. Should the need arise in the future to support
+> > connecting output channels to different devices in a new SoC, we will
+> > still be able to model this with extra ports in the device tree without
+> > breaking backward compatibility. The driver could then create extra
+> > subdev pads accordingly.
+> > 
+> > The series starts with 5 preparatory patches to ease review. Patch 1/6
+> > adds missing register definitions. Patch 2/6 then switches from
+> > .s_stream() to .enable_streams() and .disable_streams(), a pre-requisite
+> > for multi-stream support. Patch 3/6 follows by implementing the
+> > .s_routing() operation, supporting a single route exactly as done
+> > implicitly so far. Patches 4/6 and 5/6 refactor the code to group
+> > parameters in structures and clean up how they are written to registers.
+> > Finally, patch 6/6 adds multi-channel support.
+> > 
+> > The series has been tested on an i.MX8MP with libcamera, both without
+> > changes to verify that backward compatibility is preserved, and with HDR
+> > support (work still in progress) to verify that VC filtering works as
+> > expected.
+> > 
+> > Laurent Pinchart (6):
+> >   media: imx-mipi-csis: Add VC-related register fields
+> >   media: imx-mipi-csis: Switch to .enable_streams()
+> >   media: imx-mipi-csis: Implement the .set_routing() operation
+> >   media: imx-mipi-csis: Group runtime parameters in structure
+> >   media: imx-mipi-csis: Set all per-channel registers in one function
+> >   media: imx-mipi-csis: Add multi-channel support
+> > 
+> >  drivers/media/platform/nxp/imx-mipi-csis.c | 551 ++++++++++++++++---
+> > --
+> >  1 file changed, 429 insertions(+), 122 deletions(-)
+> > 
+> > 
+> > base-commit: dcb6fa37fd7bc9c3d2b066329b0d27dedf8becaa
 
 -- 
 Regards,
