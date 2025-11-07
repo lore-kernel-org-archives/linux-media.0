@@ -1,141 +1,178 @@
-Received: from mailhub9-fb.kaspersky-labs.com (mailhub9-fb.kaspersky-labs.com [195.122.169.2])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 497AA32E753;
-	Fri,  7 Nov 2025 15:54:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.122.169.2
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AA9AE1DE8AE;
+	Fri,  7 Nov 2025 16:01:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762530897; cv=none; b=R7M6zPGZPSgBjYiC898LCtXhUnrZUDAoDiPGd8e9SGSCMZ91HF80JOxW9gm6uCnHMPJgZ0E4hN8Z3t6Vz26zD3HxnhIGm4A5lDcZ2zBfQqOTYFMpZ3Wmmg2LA6cuJBBjM+aWMKc3LaaAwzqfNdEf72RTHYQqwyldeZhPBCm1OWs=
+	t=1762531285; cv=none; b=X2o+jSgd/sEkieoSsHJLzPhtEZJslTg9vU1LCyApi0nN7B1kylXXrZ8DGo1QbrBpu1TWLBttzybEMyOcF8MmMvQBbQMqkkTHudXXTpme0M0U9l8Syy9o8rUKxxFlJ+KX/wYVeJHs+UMDC9cy/jtJlTOZxJ2X9h9r8Xuw1+w0Mlw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762530897; c=relaxed/simple;
-	bh=0kPZIRWiQDeuxUV2+ZIjVBj0pHRaQ2tC4rF8+P00BW0=;
-	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=ZqKkfHiyF5ttxUFlQtWL7VaZ8VAuigYSLopEg5czW+lFyX39UQD/YEsWfknUguoxhfhfy+iaM5tVIAEZflhKqx+3gyIlgqUvmo775bpJ3WY7sxqDvD3AeyiI1CZ9VnPrE4ekd35vSc68YeKBgfMbLxKZSL0ndouimjfvwES1dgc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=kaspersky.com; spf=pass smtp.mailfrom=kaspersky.com; dkim=pass (2048-bit key) header.d=kaspersky.com header.i=@kaspersky.com header.b=owAuX2s4; dkim=pass (2048-bit key) header.d=kaspersky.com header.i=@kaspersky.com header.b=RN0rp9DZ; arc=none smtp.client-ip=195.122.169.2
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=kaspersky.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kaspersky.com
+	s=arc-20240116; t=1762531285; c=relaxed/simple;
+	bh=SAXkSml11M5xQ5oAowfwGP1WfIbbhD9Zwsc1+gFtZVE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=gE5bBhg+qvsgoRdDnfV9IRjE9MFxMtgCa7aJ6jruVf1wiXM6knGj4pWj7db4h7VRxedWTkHsqJ8HDx+v61GFnJWcB5VidzFLNt6aIL0PER+l4gkoRPu6W16xFsoST5DW3QzpL8uMxANXyPq4oLSp6Jb+CqpZgpf4naH7//Q5Ngc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=G1OqoxtV; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kaspersky.com header.i=@kaspersky.com header.b="owAuX2s4";
-	dkim=pass (2048-bit key) header.d=kaspersky.com header.i=@kaspersky.com header.b="RN0rp9DZ"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kaspersky.com;
-	s=mail202505; t=1762530332;
-	bh=YoL0rmniGZrR8nKZFcQUMl53tWAqxuZqCMgD831YzeQ=;
-	h=From:To:Subject:Date:Message-ID:MIME-Version:Content-Type;
-	b=owAuX2s4ve3J1Pqi5nD1xfNa+PgHwEjIVTnL0I8LpsjTUXEtADXylpLPgl1fnrLM8
-	 THOPkPuHZ7mJ0Js6Bh9pmhKe0btnsKv/PqEdLNyBb7HQ9DC10xFGAktTw9BIditFNJ
-	 IuS/8CL0aj70yyj6+MPUnFgW+Z+fMmB1JqIqIlZ0WgnR72GrP4psC7mtVFm+xtnH2u
-	 Uv1kZNLPUhuibYhKgCC7JkppQy5wSs5jim1/whZHJQcEBUfHgHQ0qLtIoayf+h1jTe
-	 ohUyQPrUiYecO2XGDE5mDt7F1Vl2DVG2DKgt+N4x6L01Ri/rvidwXpxTgj7On380k5
-	 jINzPFrbokriQ==
-Received: from mailhub9-fb.kaspersky-labs.com (localhost [127.0.0.1])
-	by mailhub9-fb.kaspersky-labs.com (Postfix) with ESMTP id C5D899002A9;
-	Fri,  7 Nov 2025 18:45:32 +0300 (MSK)
-Received: from mx13.kaspersky-labs.com (mx13.kaspersky-labs.com [91.103.66.164])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256
-	 client-signature RSA-PSS (4096 bits) client-digest SHA256)
-	(Client CN "mx13.kaspersky-labs.com", Issuer "Kaspersky MailRelays CA G3" (verified OK))
-	by mailhub9-fb.kaspersky-labs.com (Postfix) with ESMTPS id 9CC489000C3;
-	Fri,  7 Nov 2025 18:45:32 +0300 (MSK)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kaspersky.com;
-	s=mail202505; t=1762530323;
-	bh=YoL0rmniGZrR8nKZFcQUMl53tWAqxuZqCMgD831YzeQ=;
-	h=From:To:Subject:Date:Message-ID:MIME-Version:Content-Type;
-	b=RN0rp9DZFnymQdKkreWZiih/4SBJF+FODp1Z3y/hMHuxE9XVBNa6dvKbwrfK/Ltrz
-	 GYefEhqxfaF+KZTIJL06ydPvMvPAvFTOBAcAFxVUisFT9oTz4b4tg3Lfh58KlEIJCX
-	 IlHBW/Z9nadQKLSZkgpSzxPRyOrzAA/WS6M+eUptIbkDxLEvc4tfABlmyLDc4wMs7+
-	 i94SBHfxGW+Rf5yk0pqxeWFWSFMiCUUKUu/SHhQGKobgIW8CK1ZlhKPWYaQomQC1+W
-	 3Jc9+YK+niI1hyq7WT7mny3mYc89hTVMzfwfrMdHKWYMj3rFreh0mQge1rkG83JUEs
-	 q6IbBNJAxPz4w==
-Received: from relay13.kaspersky-labs.com (localhost [127.0.0.1])
-	by relay13.kaspersky-labs.com (Postfix) with ESMTP id C4BDC3E450E;
-	Fri,  7 Nov 2025 18:45:23 +0300 (MSK)
-Received: from mail-hq2.kaspersky.com (unknown [91.103.66.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(Client CN "mail-hq2.kaspersky.com", Issuer "Kaspersky MailRelays CA G3" (verified OK))
-	by mailhub13.kaspersky-labs.com (Postfix) with ESMTPS id 1D00A3E1CB8;
-	Fri,  7 Nov 2025 18:45:23 +0300 (MSK)
-Received: from Nalivayko.avp.ru (10.16.105.14) by HQMAILSRV3.avp.ru
- (10.64.57.53) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.29; Fri, 7 Nov
- 2025 18:45:07 +0300
-From: Nalivayko Sergey <Sergey.Nalivayko@kaspersky.com>
-To: <linux-media@vger.kernel.org>
-CC: Nalivayko Sergey <Sergey.Nalivayko@kaspersky.com>,
-	<linux-kernel@vger.kernel.org>, <lvc-project@linuxtesting.org>, Mauro
- Carvalho Chehab <mchehab@kernel.org>, Michael Krufky <mkrufky@linuxtv.org>
-Subject: [PATCH 0/2] media: dvb-usb-v2: add init_ready flag to prevent  race during device initialization
-Date: Fri, 7 Nov 2025 18:44:24 +0300
-Message-ID: <20251107154426.2116743-1-Sergey.Nalivayko@kaspersky.com>
-X-Mailer: git-send-email 2.39.5
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="G1OqoxtV"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C30C3C4CEF8;
+	Fri,  7 Nov 2025 16:01:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1762531285;
+	bh=SAXkSml11M5xQ5oAowfwGP1WfIbbhD9Zwsc1+gFtZVE=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=G1OqoxtV7XlT2wwuQ5Uez60kwG8g2e3K4oXYvr5lCUmDLnRe2lDqJfqpdyozZ9Kfs
+	 9cK/Pp4gs2exlM5ZaZgfE/mSts/OwwIwkCNUlopoOf55C/E/oCxFH4g1GkpuhBOQLc
+	 GevH4WEkQ/xUCsGWGMcEuw40zHNAV2BFJUHAJFbr5fa5pHtu6BKUEsKKzGsJoGHBVK
+	 LIruon02MTTCyGk7ziSVANwsf4TxGmKVozxHLsq3vvxJUR+H9wB9GZSvIotqrUV4ud
+	 cVhLCCIpj3frChH2BVoHb8jxb4jO/OzKabXV1PHaTXuqZVIniF59yBQsetybD1Wq21
+	 bF79hpL4xdXKw==
+Date: Fri, 7 Nov 2025 18:01:20 +0200
+From: Leon Romanovsky <leon@kernel.org>
+To: Randy Dunlap <rdunlap@infradead.org>
+Cc: Bjorn Helgaas <bhelgaas@google.com>,
+	Logan Gunthorpe <logang@deltatee.com>, Jens Axboe <axboe@kernel.dk>,
+	Robin Murphy <robin.murphy@arm.com>, Joerg Roedel <joro@8bytes.org>,
+	Will Deacon <will@kernel.org>,
+	Marek Szyprowski <m.szyprowski@samsung.com>,
+	Jason Gunthorpe <jgg@ziepe.ca>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Sumit Semwal <sumit.semwal@linaro.org>,
+	Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
+	Kees Cook <kees@kernel.org>,
+	"Gustavo A. R. Silva" <gustavoars@kernel.org>,
+	Ankit Agrawal <ankita@nvidia.com>,
+	Yishai Hadas <yishaih@nvidia.com>,
+	Shameer Kolothum <skolothumtho@nvidia.com>,
+	Kevin Tian <kevin.tian@intel.com>,
+	Alex Williamson <alex@shazbot.org>,
+	Krishnakant Jaju <kjaju@nvidia.com>, Matt Ochs <mochs@nvidia.com>,
+	linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-block@vger.kernel.org, iommu@lists.linux.dev,
+	linux-mm@kvack.org, linux-doc@vger.kernel.org,
+	linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
+	linaro-mm-sig@lists.linaro.org, kvm@vger.kernel.org,
+	linux-hardening@vger.kernel.org
+Subject: Re: [PATCH v7 05/11] PCI/P2PDMA: Document DMABUF model
+Message-ID: <20251107160120.GD15456@unreal>
+References: <20251106-dmabuf-vfio-v7-0-2503bf390699@nvidia.com>
+ <20251106-dmabuf-vfio-v7-5-2503bf390699@nvidia.com>
+ <135df7eb-9291-428b-9c86-d58c2e19e052@infradead.org>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: HQMAILSRV3.avp.ru (10.64.57.53) To HQMAILSRV3.avp.ru
- (10.64.57.53)
-X-KSE-ServerInfo: HQMAILSRV3.avp.ru, 9
-X-KSE-AntiSpam-Interceptor-Info: scan successful
-X-KSE-AntiSpam-Version: 6.1.1, Database issued on: 11/07/2025 15:33:04
-X-KSE-AntiSpam-Status: KAS_STATUS_NOT_DETECTED
-X-KSE-AntiSpam-Method: none
-X-KSE-AntiSpam-Rate: 0
-X-KSE-AntiSpam-Info: Lua profiles 197892 [Nov 07 2025]
-X-KSE-AntiSpam-Info: Version: 6.1.1.11
-X-KSE-AntiSpam-Info: Envelope from: Sergey.Nalivayko@kaspersky.com
-X-KSE-AntiSpam-Info: LuaCore: 75 0.3.75
- aab2175a55dcbd410b25b8694e49bbee3c09cdde
-X-KSE-AntiSpam-Info: {Tracking_cluster_exceptions}
-X-KSE-AntiSpam-Info: {Tracking_real_kaspersky_domains}
-X-KSE-AntiSpam-Info: {Tracking_uf_ne_domains}
-X-KSE-AntiSpam-Info: {Tracking_from_domain_doesnt_match_to}
-X-KSE-AntiSpam-Info: kaspersky.com:5.0.1,7.1.1;d41d8cd98f00b204e9800998ecf8427e.com:7.1.1;127.0.0.199:7.1.2
-X-KSE-AntiSpam-Info: {Tracking_white_helo}
-X-KSE-AntiSpam-Info: FromAlignment: s
-X-KSE-AntiSpam-Info: Rate: 0
-X-KSE-AntiSpam-Info: Status: not_detected
-X-KSE-AntiSpam-Info: Method: none
-X-KSE-Antiphishing-Info: Clean
-X-KSE-Antiphishing-ScanningType: Deterministic
-X-KSE-Antiphishing-Method: None
-X-KSE-Antiphishing-Bases: 11/07/2025 15:34:00
-X-KSE-AttachmentFiltering-Interceptor-Info: no applicable attachment filtering
- rules found
-X-KSE-Antivirus-Interceptor-Info: scan successful
-X-KSE-Antivirus-Info: Clean, bases: 11/7/2025 12:14:00 PM
-X-KSE-BulkMessagesFiltering-Scan-Result: InTheLimit
-X-KSE-AttachmentFiltering-Interceptor-Info: no applicable attachment filtering
- rules found
-X-KSE-BulkMessagesFiltering-Scan-Result: InTheLimit
-X-KSMG-AntiPhishing: NotDetected
-X-KSMG-AntiSpam-Interceptor-Info: not scanned
-X-KSMG-AntiSpam-Status: not scanned, disabled by settings
-X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 2.1.1.8310, bases: 2025/11/07 15:09:00 #27893311
-X-KSMG-AntiVirus-Status: NotDetected, skipped
-X-KSMG-LinksScanning: NotDetected
-X-KSMG-Message-Action: skipped
-X-KSMG-Rule-ID: 52
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <135df7eb-9291-428b-9c86-d58c2e19e052@infradead.org>
 
-This patch series introduces an atomic init_ready flag in 
-struct dvb_usb_device and adds checks in relevant code paths. 
-Drivers now verify that device initialization has completed before 
-performing operations that rely on initialized device state. 
-If the device is not yet ready, the operation is deferred until 
-initialization finishes, preventing race conditions and improving 
-driver robustness.
+On Thu, Nov 06, 2025 at 10:15:07PM -0800, Randy Dunlap wrote:
+> 
+> 
+> On 11/6/25 6:16 AM, Leon Romanovsky wrote:
+> > From: Jason Gunthorpe <jgg@nvidia.com>
+> > 
+> > Reflect latest changes in p2p implementation to support DMABUF lifecycle.
+> > 
+> > Signed-off-by: Leon Romanovsky <leonro@nvidia.com>
+> > Signed-off-by: Jason Gunthorpe <jgg@nvidia.com>
+> > ---
+> >  Documentation/driver-api/pci/p2pdma.rst | 95 +++++++++++++++++++++++++--------
+> >  1 file changed, 72 insertions(+), 23 deletions(-)
+> > 
+> > diff --git a/Documentation/driver-api/pci/p2pdma.rst b/Documentation/driver-api/pci/p2pdma.rst
+> > index d0b241628cf1..69adea45f73e 100644
+> > --- a/Documentation/driver-api/pci/p2pdma.rst
+> > +++ b/Documentation/driver-api/pci/p2pdma.rst
+> > @@ -9,22 +9,47 @@ between two devices on the bus. This type of transaction is henceforth
+> >  called Peer-to-Peer (or P2P). However, there are a number of issues that
+> >  make P2P transactions tricky to do in a perfectly safe way.
+> >  
+> > -One of the biggest issues is that PCI doesn't require forwarding
+> > -transactions between hierarchy domains, and in PCIe, each Root Port
+> > -defines a separate hierarchy domain. To make things worse, there is no
+> > -simple way to determine if a given Root Complex supports this or not.
+> > -(See PCIe r4.0, sec 1.3.1). Therefore, as of this writing, the kernel
+> > -only supports doing P2P when the endpoints involved are all behind the
+> > -same PCI bridge, as such devices are all in the same PCI hierarchy
+> > -domain, and the spec guarantees that all transactions within the
+> > -hierarchy will be routable, but it does not require routing
+> > -between hierarchies.
+> > -
+> > -The second issue is that to make use of existing interfaces in Linux,
+> > -memory that is used for P2P transactions needs to be backed by struct
+> > -pages. However, PCI BARs are not typically cache coherent so there are
+> > -a few corner case gotchas with these pages so developers need to
+> > -be careful about what they do with them.
+> > +For PCIe the routing of TLPs is well defined up until they reach a host bridge
+> 
+> Define what TLP means?
 
-Nalivayko Sergey (2):
-  media: dvb-usb-v2: add device init_ready flag
-  media: mxl111sf: fix i2c race condition during device probe
+In PCIe "world", TLP is very well-known and well-defined acronym, which
+means Transaction Layer Packet.
 
- drivers/media/usb/dvb-usb-v2/dvb_usb.h      | 3 +++
- drivers/media/usb/dvb-usb-v2/dvb_usb_core.c | 4 ++++
- drivers/media/usb/dvb-usb-v2/mxl111sf-i2c.c | 2 +-
- 3 files changed, 8 insertions(+), 1 deletion(-)
+>                                    well-defined
 
--- 
-2.39.5
+Thanks
+
+diff --git a/Documentation/driver-api/pci/p2pdma.rst b/Documentation/driver-api/pci/p2pdma.rst
+index 69adea45f73e..7530296a5dea 100644
+--- a/Documentation/driver-api/pci/p2pdma.rst
++++ b/Documentation/driver-api/pci/p2pdma.rst
+@@ -9,17 +9,17 @@ between two devices on the bus. This type of transaction is henceforth
+ called Peer-to-Peer (or P2P). However, there are a number of issues that
+ make P2P transactions tricky to do in a perfectly safe way.
+
+-For PCIe the routing of TLPs is well defined up until they reach a host bridge
+-or root port. If the path includes PCIe switches then based on the ACS settings
+-the transaction can route entirely within the PCIe hierarchy and never reach the
+-root port. The kernel will evaluate the PCIe topology and always permit P2P
+-in these well defined cases.
++For PCIe the routing of Transaction Layer Packets (TLPs) is well-defined up
++until they reach a host bridge or root port. If the path includes PCIe switches
++then based on the ACS settings the transaction can route entirely within
++the PCIe hierarchy and never reach the root port. The kernel will evaluate
++the PCIe topology and always permit P2P in these well-defined cases.
+
+ However, if the P2P transaction reaches the host bridge then it might have to
+ hairpin back out the same root port, be routed inside the CPU SOC to another
+ PCIe root port, or routed internally to the SOC.
+
+-As this is not well defined or well supported in real HW the kernel defaults to
++As this is not well-defined or well supported in real HW the kernel defaults to
+ blocking such routing. There is an allow list to allow detecting known-good HW,
+ in which case P2P between any two PCIe devices will be permitted.
+
+@@ -39,7 +39,7 @@ delegates lifecycle management to the providing driver. It is expected that
+ drivers using this option will wrap their MMIO memory in DMABUF and use DMABUF
+ to provide an invalidation shutdown. These MMIO pages have no struct page, and
+ if used with mmap() must create special PTEs. As such there are very few
+-kernel uAPIs that can accept pointers to them, in particular they cannot be used
++kernel uAPIs that can accept pointers to them; in particular they cannot be used
+ with read()/write(), including O_DIRECT.
+
+ Building on this, the subsystem offers a layer to wrap the MMIO in a ZONE_DEVICE
+@@ -154,7 +154,7 @@ access happens.
+ Usage With DMABUF
+ =================
+
+-DMABUF provides an alternative to the above struct page based
++DMABUF provides an alternative to the above struct page-based
+ client/provider/orchestrator system. In this mode the exporting driver will wrap
+ some of its MMIO in a DMABUF and give the DMABUF FD to userspace.
+
+@@ -162,10 +162,10 @@ Userspace can then pass the FD to an importing driver which will ask the
+ exporting driver to map it.
+
+ In this case the initiator and target pci_devices are known and the P2P subsystem
+-is used to determine the mapping type. The phys_addr_t based DMA API is used to
++is used to determine the mapping type. The phys_addr_t-based DMA API is used to
+ establish the dma_addr_t.
+
+-Lifecycle is controlled by DMABUF move_notify(), when the exporting driver wants
++Lifecycle is controlled by DMABUF move_notify(). When the exporting driver wants
+ to remove() it must deliver an invalidation shutdown to all DMABUF importing
+ drivers through move_notify() and synchronously DMA unmap all the MMIO.
 
