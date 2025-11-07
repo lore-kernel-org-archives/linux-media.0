@@ -1,223 +1,150 @@
-Received: from MRWPR03CU001.outbound.protection.outlook.com (mail-francesouthazon11011071.outbound.protection.outlook.com [40.107.130.71])
+Received: from bali.collaboradmins.com (bali.collaboradmins.com [148.251.105.195])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9D170276058;
-	Fri,  7 Nov 2025 20:45:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.130.71
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762548324; cv=fail; b=CEEfSm7Q5tCfdehEF5De+JzfMzZiw/YQaAed6p1RBxcYOE/3Tce84AM+6DnmJMXcuSueQS8aL4ike9umm7A9r8GVUAeTkWkDpu6kWfZajRlBVT31h/MczOk/d74ZxB9AJwK8Q+tWimbL8kGHLuTs631sIQO/OGPORyWEDRgQ5Ig=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762548324; c=relaxed/simple;
-	bh=KYE583q4vmW1mcXOjTH0ZrT2IPx0TsZuwDVd9xXPz9I=;
-	h=From:Date:Subject:Content-Type:Message-Id:References:In-Reply-To:
-	 To:Cc:MIME-Version; b=tEr+3b6VhUcIqYTauPUgYsg2NdQFOB1NM+77AZ/c7KqmvXpLPR8XcY4Q5dA61tbJg/HgHKQwnED/gk1U7gEmvCqBcp+hc+eWyIXkl6NY/BiV7oUFXoUM/dUHB8heNgNDbhLpBJBuYt7urjEsvLhQipj96YmEUnW5Tj0xbsq1R7E=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com; spf=pass smtp.mailfrom=nxp.com; dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b=PIH5QHrC; arc=fail smtp.client-ip=40.107.130.71
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nxp.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 613002C3248;
+	Fri,  7 Nov 2025 20:51:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.251.105.195
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1762548703; cv=none; b=CHsSSzdJTqpqh6Za8EkrXaR+fV1mGTVPskNK2scT5QMK/4u3cC54xqQkT1/6y++OLmIeI7iHApJ5YsW7/m6g2fCvS2+hXNlWXGYljVcpGDf91nkxvap5YP/yp7JFlE0DTMUPcxYwuepNDD7kRwP9FQInkgvGItORf0IaNwLDjCo=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1762548703; c=relaxed/simple;
+	bh=8UovAiOWTROIXZYM+ZVGV+MUbMteVqZyd+P1kJY5714=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=XFwgeszM+XqGp4c5z/ztcW4+fQSSI6unDR4urtDtPplCT49Zz0s+4h6TiuvxsCfaD1GQZ1QZSwEoCJuWTSjQD+1Otowdw6a4Xrrfzaxpg3thxd3lyj9ipFPC2x4+fU7JhQTZOYixVk/AS/meZH5oLCBJVK5zIgCSY7+DJv6m03M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=PwpJW9oO; arc=none smtp.client-ip=148.251.105.195
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b="PIH5QHrC"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=doJVsVGSOr0zEaKC0bH9DgQX+4D9TGCYVg76yK/IWohIECBsPkowA89CLLdM1W9qCIWATfcyxozm1iwBmpnM1Ho6wLu8onSpMUlUzvbBsbfmFGpdufBddAqFVl6fnCQsFaGFAoGb8NuYo+z2gJe3t26Ic9kepmUHwKXhnUrab2/MYSvGPZOOrvVv87Kb1SYV9FGiyCxjEXAcugkXATJlHVBDNKfbQSzAM4tMolDrITzz+GHd+8rkvp/0H5g6A8KY9gnwdtXsUQXfIhd/ae2CyXgjCZQmKj5NSgI++hr2000LemW208C82kjeIwrfXGo9YKXXRtrksk30FhrxXFIbmg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=1UYZKkcezqYuD3WQrO4Zo8+Ug2eUZTEFTtCV/8xZtvA=;
- b=JAzPxsA1yY6/S0SNgm+rKjuyNk0jjAdDm0ADRiZohhJ+tZTM1eGqiFl2mCiBMKQ4OOiVb+yUC7Ccg8A6NnqwbO317c7oNW349GVi3C/IQQ8m5vcEVTEtvQsEEpGy0QyhZPwPsA/S1etov0GO40t6fiOexcFjta1IrWpEBK09p6UU1HAwwqH3LuupUaYS8JqC/hTYxxtMLq+O3TtFvKwLOhMbc6wQsAu4WhJeCrkMn/pT5QdKkmGq7TVb15P1xfhHIbNJiYfwKsiA4V7K949GwfbN8WBRwetIgUQYuX323iRVWatEJ5Ny6BmpV9mFTmFhXHrlImIDfKswi+MMhR0XGA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=1UYZKkcezqYuD3WQrO4Zo8+Ug2eUZTEFTtCV/8xZtvA=;
- b=PIH5QHrCQ46ffTFEJw5nLdgNxvG8V+8BYqYWrbtnhifrJW1xY4Um5w81ivjTzyOiGFxjeITxuLvc/Dx1/lZNXl69pooTzBOF59SN8C+FqXDionTJdERumFRkb6Or4r00SKiXwqvY+VqwnumsPYo/w3kU88ymNU8qcLFUlblNq9iPzCaFxIGsXMPC9MZuHvjST7sMRkxYx/VVH6zrIoxHpq42NzT8e6HC/blSS5wRhAd5niSNXgmex16/WV7OyeMiTEWNa1/VUH4srVVjeR58pXE5iSOnXVwVXxwYm+dVv0ATYw3Vn+l/d1waNMgy/sfRbWhE1jWMLKIMSOcn7gzb2Q==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-Received: from DB9PR04MB9626.eurprd04.prod.outlook.com (2603:10a6:10:309::18)
- by DU6PR04MB11181.eurprd04.prod.outlook.com (2603:10a6:10:5c0::14) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9298.12; Fri, 7 Nov
- 2025 20:45:17 +0000
-Received: from DB9PR04MB9626.eurprd04.prod.outlook.com
- ([fe80::55ef:fa41:b021:b5dd]) by DB9PR04MB9626.eurprd04.prod.outlook.com
- ([fe80::55ef:fa41:b021:b5dd%4]) with mapi id 15.20.9298.012; Fri, 7 Nov 2025
- 20:45:15 +0000
-From: Frank Li <Frank.Li@nxp.com>
-Date: Fri, 07 Nov 2025 15:44:37 -0500
-Subject: [PATCH 6/6] media: staging: media: imx6-mipi-csi2: use
- devm_platform_ioremap_resource() simplify code
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20251107-stage-csi2-cleanup-v1-6-5d42535243ac@nxp.com>
-References: <20251107-stage-csi2-cleanup-v1-0-5d42535243ac@nxp.com>
-In-Reply-To: <20251107-stage-csi2-cleanup-v1-0-5d42535243ac@nxp.com>
-To: Steve Longerbeam <slongerbeam@gmail.com>, 
- Philipp Zabel <p.zabel@pengutronix.de>, 
- Mauro Carvalho Chehab <mchehab@kernel.org>, 
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
- Shawn Guo <shawnguo@kernel.org>, Sascha Hauer <s.hauer@pengutronix.de>, 
- Pengutronix Kernel Team <kernel@pengutronix.de>, 
- Fabio Estevam <festevam@gmail.com>
-Cc: imx@lists.linux.dev, linux-media@vger.kernel.org, 
- linux-staging@lists.linux.dev, linux-arm-kernel@lists.infradead.org, 
- linux-kernel@vger.kernel.org, Frank Li <Frank.Li@nxp.com>, 
- Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1762548279; l=1527;
- i=Frank.Li@nxp.com; s=20240130; h=from:subject:message-id;
- bh=KYE583q4vmW1mcXOjTH0ZrT2IPx0TsZuwDVd9xXPz9I=;
- b=mx8SjWYV9fp6yu1jH2dyrCWYyDfRRQUwn+YYpCkwMACVGdPANgMh+JQHrA5tgX+qEFDbV9h5H
- Ika3wkKuGxvBYzzw9e/kj/Fp3qOCw3wGIqf7TWf1sCeNgkY18U27UnB
-X-Developer-Key: i=Frank.Li@nxp.com; a=ed25519;
- pk=I0L1sDUfPxpAkRvPKy7MdauTuSENRq+DnA+G4qcS94Q=
-X-ClientProxiedBy: SJ0PR03CA0332.namprd03.prod.outlook.com
- (2603:10b6:a03:39c::7) To PAXSPRMB0053.eurprd04.prod.outlook.com
- (2603:10a6:102:23f::21)
+	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="PwpJW9oO"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+	s=mail; t=1762548699;
+	bh=8UovAiOWTROIXZYM+ZVGV+MUbMteVqZyd+P1kJY5714=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=PwpJW9oOEFMqTwZPZKr4AcwLhrUGSHyEZdZloMFfJkZNeWHxC8gLE8fZCEmqhK62c
+	 A2cl0V710LDQdQM54axRs5ZpzuEz1uk0ruczX5ImU0ybiDx9oo5En6YUz+qu0KKO1A
+	 6gxkjEiCF0oPIFCMoCNOfTqOTNlfcbQY9kzTPqnS29cuOVJ70XYrDrEFhPbln5A9YU
+	 BBjLgTbdxX96s6FDW0aaaxXLjfBIGM+lcoVijXj9E6j/BtdEJP9F3sU0etd/00P7O7
+	 efPwYzWpT37DH9qhvqetbqsF5Z9HgOFWshuslCWI8BcD/4ivTKMytg1tFRM64hSWIy
+	 AySk/Fmm926Vg==
+Received: from [10.40.0.100] (185-67-175-126.lampert.tv [185.67.175.126])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: mriesch)
+	by bali.collaboradmins.com (Postfix) with ESMTPSA id 2C3BC17E12D5;
+	Fri,  7 Nov 2025 21:51:38 +0100 (CET)
+Message-ID: <13c43edb-9592-4779-a39a-7856bb0f964d@collabora.com>
+Date: Fri, 7 Nov 2025 21:51:37 +0100
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DB9PR04MB9626:EE_|DU6PR04MB11181:EE_
-X-MS-Office365-Filtering-Correlation-Id: 639fea4f-9913-4f2c-1a66-08de1e3e8d65
-X-LD-Processed: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635,ExtAddr
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
- BCL:0;ARA:13230040|366016|1800799024|19092799006|376014|7416014|52116014|38350700014;
-X-Microsoft-Antispam-Message-Info:
- =?utf-8?B?QWpiMGFsQU8xODMwajIzWWNROGhmMVBoOEJxdldPQnlqS0dRbE9qc2tCekJa?=
- =?utf-8?B?eEhsbVZLWEtCUktOVjZFQ3BwU3ZLZjM0VnhvNWRPcHBiaDRsL3lVaDJkcFdJ?=
- =?utf-8?B?dUNxclRseFBzbjNBbzVCSndybEs4dkRXaml3VWsvaldRR0hEdW8wbms2Q1lK?=
- =?utf-8?B?NzZCRDlDdTB2bEVkUWFtbWVoT2w4U3dyQUovOEVqaDhYUXpHYU9TMFBHZTZJ?=
- =?utf-8?B?K0FIWnpRbTZvbUEzUmJpWklwQkdsbVVYZVlzaXNJRFdKdC9YWGZxVG5xb2Yr?=
- =?utf-8?B?bUlaUXhHY25renp1UGJTVVpsRXhBQjhPam02T1VxMm0ybHJzWmN4RG5wQy9I?=
- =?utf-8?B?dzMycWkvMzZJSElXTGlYYU9tanFjdCtwQmwveGdtc3N6dUp0aFFUQjlkRFNJ?=
- =?utf-8?B?cG1PVGEvdmxBWkpuQnBiYUxRUG40WjVCY2UrNWlKV3dJK2J1d1Zydmgzd1gx?=
- =?utf-8?B?TmVxWWdubFNkRWdnNEZnUndKWTkrNjJrdHVsc0N0SUx5K0VSM01JMXpmS0tu?=
- =?utf-8?B?eUlaWWJmQ1hDUHlvUVoyR1NTNThHZVJhUTl4ci9HVnREVGxpem9ESWViaE4x?=
- =?utf-8?B?VVQvaHpPNW1OQlNBM1NuZXJ3SCtrT3RsdG53NFlTdXZEZkdVTU0wM21uNXgv?=
- =?utf-8?B?OE5YbVBuNml5NU9qN3N1NmN1ZnI4ZGs4Q0FWS25lemtCNkZ4TkpFYlpNNmxM?=
- =?utf-8?B?T09LUVlPSE9OV3k2ckVSbGNGajM5R24yQXAwM0ErK0tiaXZSVkd5aktOVzVP?=
- =?utf-8?B?SkdyaXNMSmRiek9CbzNmQnd5QzJmYlRtczVEU3Qxd2paYmlhUE1ha3hQbTJt?=
- =?utf-8?B?bitSbDh0Z005RU0rRVdLek10N3NKOXhtVXUxbnYrWjErbXJOWWhHemJoc3N4?=
- =?utf-8?B?N2MvRTNPLzBUV2s5SkdNZ3BIQVpRU1FzRTZOUlZjb0pEWlJHaGY1emR4Unda?=
- =?utf-8?B?bEhYWGRwRFZPVFFKdzVnUFIrTUJVV3B2Mlo0a3pxWlQ1eU1ucTh1b0x0Qk5v?=
- =?utf-8?B?ZW5WVHI0dGVCa0Q4SXY5MjJ4bzg2ak9NT0NQL1FVTkQ0QTdJZVVreVRHQXhv?=
- =?utf-8?B?aUtGV3N0QWUwaVFCRVEvdm50K0pKVk5zbUVjczJkaGgwL0RjY2dDb20vbmVX?=
- =?utf-8?B?K3hUbFdMMzlHWkgwMHhLZ2k1QkJDQ0dlSFNJcUhieFZSOW5kSVRZUXBMYklt?=
- =?utf-8?B?WjVhS3BsbW92QVhiUkZmemZEQXlOY2V2NUJ6MStFRnh3TU1CUTI5clZraUxs?=
- =?utf-8?B?L0hHWnRJQzBLdEFQckdFaW45Q0liMU1ha2FaQnY1QkN2MkVEY0lhS1V1VHEy?=
- =?utf-8?B?VDhXMjVRRXU3U0NzLzVHam9kU1lWZThIdmF1VTFDT0J6dUkrMDg4QTRGZ3Z2?=
- =?utf-8?B?bTNJbzBaMjZRdUx1V2Jxb1dxYzdsb2ZzOVFJSTRZeW5Ic0h2MTNKNFhacnA4?=
- =?utf-8?B?S3UrdUNubnlrVmFqMTdValhOenI3SVdqZ09ZQ3RuUkJPQVdERHd5UjlsMUFP?=
- =?utf-8?B?ME5ORVdMYzhkYVM4eXViODJHbVBMVGdWOEd5SE5KazFET3FuUlRUT29tdnJ4?=
- =?utf-8?B?ZkM1bi9NQjVMeGRpN2FrKzNud3lsbzIzSTVPU0JXT1g2K3p1ZUdFWHFNbkMw?=
- =?utf-8?B?dEZRcEhYYkVxemRpY0JTQUdPNCtZMHcwYnFsUlRDZ2dmdjdvcEtwRUNUYTZL?=
- =?utf-8?B?MWthMC8ycGJ4dVJPNE5ybDdyVzNLcktkN1BPdm1RRmJFNkRtdnRLNXB4R3A3?=
- =?utf-8?B?RStuWnRoTnVlMjZWR1pLKzRpckZza3pjRnhBZjhuWEt6cWczeEpSSDBNeDBo?=
- =?utf-8?B?ckhsWXBibjZieUcrUm51bSs1NnYra2VmaFI0RitrMEg3SmxPbVNmaUtrQjJS?=
- =?utf-8?B?OG1ZdVZXR20vdUpBb1dxcytWZ3RDUFFWaXpYUG1rMVhXb3pDQUsxNzE0VUt0?=
- =?utf-8?B?dnNJK2QzNVM5cStRNnoxTmNnSGkwS1VLRjhqdEI5Ti9ObWlTWldpUVFJdlNo?=
- =?utf-8?B?cU5EMForT0lWczI4aC9zTTBkYzErTU9PdlMzd0U0cGpZY0ZsZEEyYmZUcW1M?=
- =?utf-8?Q?C7wX7i?=
-X-Forefront-Antispam-Report:
- CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DB9PR04MB9626.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(1800799024)(19092799006)(376014)(7416014)(52116014)(38350700014);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
- =?utf-8?B?ZmJhdDVhYk00UDJyTzNOS2xOVTNJZXlVL29hYzdVY2x4NDhUUTk4MDgvLy96?=
- =?utf-8?B?eEVIOFVTUmY3Qk1LWXlkM0VORDBOOXVTNW02dEFZNkF6MzR1Q2RhNUpTVzhq?=
- =?utf-8?B?QlVjNFQwVW1BZy9KdnBQb2tKUG1aY0x4NmxHS0E2L29QekhJRk5CQS9NL3o0?=
- =?utf-8?B?OENWMGFBc2g5b21VQ09tamVNK2lIbGRKTktjU3RWR1BNK2pBVFBGSWRuRnA1?=
- =?utf-8?B?eG5hQjRVeWY1NUFPTW9lZ2xiTURIcVNvUkIwRnRwalJZY1pXeDBzaDE3MHVE?=
- =?utf-8?B?T1JxeS9McThVWWJINkFPY0ErVHpaSlkvVWtVVlFsYTZSS1lHbnJNbDBBR1Uw?=
- =?utf-8?B?YkFkNXNwV2kxZDV5cHFqd2tRR05YZnlYM1lNZ0x2aDFZaHl0THcreVl1eS9O?=
- =?utf-8?B?NGp6bVd4TEFiVnZoaVFlbDdSQi95bEZaK2JORkQzMEdTM3hxTVMzTjI3bkpV?=
- =?utf-8?B?eldiZTZKaVZHMnFOUjVweWNIajJIV2d3UjFSM1VweDRUdm9vNnBvUlhCZm9h?=
- =?utf-8?B?VFVUZEJiME9va3NzN0hPS3NLeUlCQWZNYStOaFlIMTNvVUhnZEcwaFVFNEtZ?=
- =?utf-8?B?MTVGMnB6SU9wb0cyZlNQS2FSdVJ3NEhGUE9obTdVcHVoTEp6TENzT2lkckxG?=
- =?utf-8?B?elpKZmZEL2F1S2JXaTYybWhjSTNpWkR2d1MrTGQ5QUhwTWp2bWpyclRGemtL?=
- =?utf-8?B?VWtrK05LRGJzU3ZKWnhMRzlsL28zcVpKWVYwSDBnWFZ3dTFaOWlTSEk3dml0?=
- =?utf-8?B?dlpCRWJ0OTJrejlDSEJlM0k3RC9WMkt3WDhXNHVwVDR4Ykt1RnhuZEN4aS9E?=
- =?utf-8?B?cFRpL2dZcHc0dm1LNWZzU0tvaGdHTzkzUVRoeXZtSFRteXRxMzRObVV0N3Bi?=
- =?utf-8?B?TjN1aWVFejhBclVQMzJhQ1NUVVNEbkNOcGZwUDd3SGZuSG5FbDMzR2tWOU1u?=
- =?utf-8?B?MnZUR2ZMUTJUVGtRQzF2SmZ0OWJHcmUycWNjM2syYVdUTWZWOHhKazVjYXFz?=
- =?utf-8?B?cjRQTEMxbGZTVURYWk9qUlA0K0VJbjI0aHNJU0c1VHBtY2d6ZXkrdVVUWmVR?=
- =?utf-8?B?UU9EaWxvclJ5RFBtbGtzZDFsd1RqZlZKT0swS1hzc2NzSkNnWFhaaUdvWlB3?=
- =?utf-8?B?amxkM3FMSTMveE01aHR6MXlaWkZSdG5uZXZYaWtVLzMvU0FtaHlia0IweFlF?=
- =?utf-8?B?KzFlY2l6SzFVcVpYUXBTbFVTNGgwQXplQUdxY01vM0JPOFJHRzFSWU1BTFBN?=
- =?utf-8?B?UUI5elBtbENsZjIxeTNnTG9KSEpxK2FBYm16SnQ0MVNVUlhFVGlDSFVBdFhJ?=
- =?utf-8?B?UzZ5WFJGYjJNajFBdU1IRDVlbG8zZ3lOdE9jREJCVE5pRWVQWk8wK2ptWlVk?=
- =?utf-8?B?MVM2Q1JVL2QwbmpudnFRQkRZWXFFOVdjYlV4OFJ4NmZ1dkE4MG9HZlhXR3ox?=
- =?utf-8?B?WWsvZStyMHB1aHJhbWxicGxveHpQUlRIZkJ1SzRlSUZ5MncwbEJsSWxlSGN0?=
- =?utf-8?B?R2g0S0RYQ2Z2MkRwMW1wdk1ySndpUnF6eVBzTG51bXp5TDJCQ3hIQ3Nrc0NO?=
- =?utf-8?B?NGxaMlZjQkVsOTM1amtSemZkYStLS3AyQ3JqbVdXbytEcmwyZ0trK1VsMFpu?=
- =?utf-8?B?dEoySXQvUDlPWjB5R2xlK1F5T2VuOEZOaGVON3grRXZFWGlMNVUvbE5wYUVt?=
- =?utf-8?B?R2RlWFBkdjVVN0hIOHY1OHQ0M3VBWDZ1alJFWUZMVCtkaXBDTGRWcHRwYVl2?=
- =?utf-8?B?VWwrYWI3K2VhdWQ1cUhxcklUdXFCYkY4UUt0MEwxNFljdFY5Z0g3TlZDcXlD?=
- =?utf-8?B?TklROGdHTjNzcU5CUVRpZXZVZHZ5UjNOam1CMk9oUldBOHBRWUwzZ20rV1FQ?=
- =?utf-8?B?WFZVYlhPZzVweDNpU1M0ZWtmSWZkT3FlN3NIa2JiNlBnWEh3ZzhWRzl2YnNY?=
- =?utf-8?B?TmVqZVU1NjNNcFNzWTVuMExMWG5ibnEyY3UrdVpDRTIrYUxOOFhyN3Q3c1Vh?=
- =?utf-8?B?ZzFmaW1QeE9vdVdLNGJEWmhwcVVyck16NFY2UWR2czYzczZ1YVAxUHNzcTlG?=
- =?utf-8?B?MVI0bDNuQ2F0RGFKVmQyb3JXR1F1MlJ4akNoc0htalZhSGhzVUtSeXRqY2Zz?=
- =?utf-8?Q?2Z6I=3D?=
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 639fea4f-9913-4f2c-1a66-08de1e3e8d65
-X-MS-Exchange-CrossTenant-AuthSource: PAXSPRMB0053.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Nov 2025 20:45:14.9291
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: oT3so6bqHofInHqBUoDsMobL2y1cySIUrd4l+SxQVR7U7HkFeNgXFj0J07bVQk/FeVqsY57+gkPl994rNfVpIw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DU6PR04MB11181
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v14 00/18] media: rockchip: add a driver for the rockchip
+ camera interface
+To: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Cc: Sakari Ailus <sakari.ailus@linux.intel.com>,
+ Mehdi Djait <mehdi.djait@linux.intel.com>,
+ Maxime Chevallier <maxime.chevallier@bootlin.com>,
+ =?UTF-8?Q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ Gerald Loacker <gerald.loacker@wolfvision.net>,
+ Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
+ Markus Elfring <Markus.Elfring@web.de>,
+ Mauro Carvalho Chehab <mchehab@kernel.org>, Rob Herring
+ <robh+dt@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
+ Conor Dooley <conor+dt@kernel.org>, Heiko Stuebner <heiko@sntech.de>,
+ Kever Yang <kever.yang@rock-chips.com>,
+ Nicolas Dufresne <nicolas.dufresne@collabora.com>,
+ Sebastian Reichel <sebastian.reichel@collabora.com>,
+ Collabora Kernel Team <kernel@collabora.com>,
+ Paul Kocialkowski <paulk@sys-base.io>,
+ Alexander Shiyan <eagle.alexander923@gmail.com>,
+ Val Packett <val@packett.cool>, Rob Herring <robh@kernel.org>,
+ Philipp Zabel <p.zabel@pengutronix.de>, linux-media@vger.kernel.org,
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, linux-rockchip@lists.infradead.org,
+ Mehdi Djait <mehdi.djait@bootlin.com>,
+ Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+ Bryan O'Donoghue <bod@kernel.org>, Chen-Yu Tsai <wens@csie.org>
+References: <20240220-rk3568-vicap-v14-0-b38b6da0fc80@collabora.com>
+ <aQ4tJg8r_j4NyKhv@kekkonen.localdomain>
+ <074cd08e-0412-49f9-8dd9-b1f96eb11717@collabora.com>
+ <20251107185441.GG5558@pendragon.ideasonboard.com>
+Content-Language: en-US
+From: Michael Riesch <michael.riesch@collabora.com>
+In-Reply-To: <20251107185441.GG5558@pendragon.ideasonboard.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Use devm_platform_ioremap_resource() simplify code. No functional change.
+Hi Laurent,
 
-Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Signed-off-by: Frank Li <Frank.Li@nxp.com>
----
-change in v4
-- add Laurent Pinchart's review tags
-- return PTR_ERR(csi2->base) directly.
----
- drivers/staging/media/imx/imx6-mipi-csi2.c | 13 +++----------
- 1 file changed, 3 insertions(+), 10 deletions(-)
+On 11/7/25 19:54, Laurent Pinchart wrote:
+> On Fri, Nov 07, 2025 at 07:41:59PM +0100, Michael Riesch wrote:
+>> On 11/7/25 18:32, Sakari Ailus wrote:
+>>> On Fri, Oct 24, 2025 at 02:51:29PM +0200, Michael Riesch via B4 Relay wrote:
+>>>> Habidere,
+>>>>
+>>>> This series introduces support for the Rockchip Camera Interface (CIF),
+>>>> which is featured in many Rockchip SoCs in different variations.
+>>>> For example, the PX30 Video Input Processor (VIP) is able to receive
+>>>> video data via the Digital Video Port (DVP, a parallel data interface)
+>>>> and transfer it into system memory using a double-buffering mechanism
+>>>> called ping-pong mode.
+>>>> The RK3568 Video Capture (VICAP) unit, on the other hand, features a
+>>>> DVP and a MIPI CSI-2 receiver that can receive video data independently
+>>>> (both using the ping-pong scheme).
+>>>> The different variants may have additional features, such as scaling
+>>>> and/or cropping.
+>>>> Finally, the RK3588 VICAP unit constitutes an essential piece of the
+>>>> camera interface with one DVP, six MIPI CSI-2 receivers, scale/crop
+>>>> units, and a data path multiplexer (to scaler units, to ISP, ...).
+>>>
+>>> I understand both RK3568 and RK3588 include an ISP. Do you have insight on
+>>> how would this work, should the support for the ISP be added later on?
+>>
+>> Short answer: Yes and yes.
+>>
+>> Long answer:
+>>
+>> The patch series at hand adds support for the PX30 VIP and the RK3568
+>> VICAP. I cannot really say something about the PX30, but on the RK3568
+>> VICAP and ISP are orthogonal (the ISP features its own MIPI CSI-2
+>> receiver, different from that introduced in this series). Thus, ISP
+>> support can be introduced anytime (whenever someone is motivated ;-)).
+> 
+> Won't they both be connected to the same sensor though, and probably the
+> same D-PHY in the SoC ? They don't seem entirely separate to me.
 
-diff --git a/drivers/staging/media/imx/imx6-mipi-csi2.c b/drivers/staging/media/imx/imx6-mipi-csi2.c
-index 54e9491d3428686288a5bc9bb58a5a0a25aca696..3d590968483e4f70d284f8abe2e789a7f32e6728 100644
---- a/drivers/staging/media/imx/imx6-mipi-csi2.c
-+++ b/drivers/staging/media/imx/imx6-mipi-csi2.c
-@@ -711,7 +711,6 @@ static void csi2_nf_cleanup(void *data)
- static int csi2_probe(struct platform_device *pdev)
- {
- 	struct csi2_dev *csi2;
--	struct resource *res;
- 	int i, ret;
- 
- 	csi2 = devm_kzalloc(&pdev->dev, sizeof(*csi2), GFP_KERNEL);
-@@ -745,15 +744,9 @@ static int csi2_probe(struct platform_device *pdev)
- 	if (ret)
- 		return ret;
- 
--	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
--	if (!res) {
--		v4l2_err(&csi2->sd, "failed to get platform resources\n");
--		return -ENODEV;
--	}
--
--	csi2->base = devm_ioremap(&pdev->dev, res->start, PAGE_SIZE);
--	if (!csi2->base)
--		return -ENOMEM;
-+	csi2->base = devm_platform_ioremap_resource(pdev, 0);
-+	if (IS_ERR(csi2->base))
-+		return PTR_ERR(csi2->base);
- 
- 	ret = devm_mutex_init(&pdev->dev, &csi2->lock);
- 	if (ret)
+The MIPI CSI-2 DPHY is shared, indeed. Thus, they *maybe technically
+could be* connected to the same sensor, but I don't know whether that
+works and fail to see why anyone would to such a thing (if it is about
+raw capture, the MIPI CSI-2 receiver in the ISP can do that on its own).
 
--- 
-2.34.1
+The DPHY can be operated in split mode, with two lanes for VICAP and two
+lanes for ISP. This is not implemented yet, but can be done at a later
+stage on PHY level (not media related). In this case, ISP and VICAP can
+receive data from different subdevices via CSI-2.
+
+BTW the ISP is able to process the data captured by VICAP, but
+apparently this includes a RAM round trip (VICAP captures to memory, ISP
+operates in mem2mem mode).
+
+> A block diagram that shows connections between the CSI-2 pins, D-PHY,
+> CSI-2 receivers, VICAP and ISP could help.
+> 
+>> Once this patch series is merged, I'll push out changes that introduce
+>> support for the RK3588 VICAP. We can discuss the integration of any
+>> RK3588 ISP in this scope then -- and there may be some things to discuss
+>> as there the VICAP and the ISP(s) are directly connected by means of a
+>> MUX unit in the VICAP.
+>>
+>> Alright?
+> 
+
+Best regards,
+Michael
+
 
