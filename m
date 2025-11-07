@@ -1,106 +1,127 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oa1-f50.google.com (mail-oa1-f50.google.com [209.85.160.50])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 201C134C804;
-	Fri,  7 Nov 2025 21:06:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 88104320A38
+	for <linux-media@vger.kernel.org>; Fri,  7 Nov 2025 21:10:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762549589; cv=none; b=k7jb3dxmtcrmT2rQ0XTFKI8ybhYiVazsTFg0ZAGAlcTbe6av06qKB2AafQ8JAN6AY7naUdzDJrKb+5tloRXCQf5PM+KALjl8htha0Lia+WTDEHcM/uur99URqdZcapk/T6OkHPdjta83hzCcSUCgkJPCCDLzoBpEyOykDHSYvkY=
+	t=1762549805; cv=none; b=gNuFmpRJSz8ykHB89NgrVvHsiQVP9xPMGBlJzPucAdu9eft0GOW4rJIzsRYCgoWYLtDWWC0dJ9fnBmN59SIteTRbyRDHPDSpjAhaHqIe5vdWv7DuHq0Wk8tOqe/BImqXtxsqVNN+0MKBI06k4AQTEzY6ET6Oox+KpPuYXVdOm5E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762549589; c=relaxed/simple;
-	bh=s90W+PqOhJZw+tTu6G5O700n2F3C9OPDEv5k6C24h4w=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=lUuQBnf8DiKnjx8BsLSGKvyhcEzRFYQ0V7yAz9j6XZONWp52+4lZN4wpXHxx0riIpqOY71nrPuiPmUO5Ef1Pef04+XzI9XmjluSnVP1jc/9LQsD4LsjPXM+BepryQeaU6kPnP8HY0St0Jd15X8hYwu2Am6kNfqokwJJ7NcfcZjU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=cXBKZMj4; arc=none smtp.client-ip=192.198.163.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1762549805; c=relaxed/simple;
+	bh=zIMMhU08e0AhUMrxZVFeK23QuEqKtkjM3A1gejF0Vds=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=QgEDxSIWp4UDl1SDqaRs13gF9DfQpil7S8yAozgpmlOwkAnu2XGNjcmNJT1J690x0ijeIAKRktAwS47AVboh8UxiOJPLBG5WorXKINIRK6piyvIPUb0p4YP8+5Q9OS811LM23P6WnArRh08FpudLl3tFtjdar22wGoXHSfmrwE8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=qFE+UGCs; arc=none smtp.client-ip=209.85.160.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="cXBKZMj4"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1762549587; x=1794085587;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=s90W+PqOhJZw+tTu6G5O700n2F3C9OPDEv5k6C24h4w=;
-  b=cXBKZMj4dCaG5QJKdTTWSsAIU9sM9+01tR98FQMmyFW3GrTo5JWVWVvf
-   I7tIJDS2hKZJVm1aqDHbsAtodynw+gUZl23/KcATkY/Tf7mmCUbyz5Alb
-   +k+G4fOG45DkyrENQnA1QvOfc0XiUnxNKGo/Vd3kcyJdWD6fTwsXMocwQ
-   +WqRN3aTPqf8W76892GjWjEpopCwU7ICLCe1ER9rU0gYQE/cpIQ50x+Ej
-   YbKScwNbzHDgPAy20j1tugz7090G11GxToZw/XPx689K6OEzIYyTNWFE9
-   8hUcSiWQoUhOCwAmpavym1EV1rvDCmj++MG9JV4GnC522cikxPeXogY8I
-   A==;
-X-CSE-ConnectionGUID: X46KZVyiSkq4Cgo5nEKzDg==
-X-CSE-MsgGUID: varOPppVQVibHN9J0NqkaA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11606"; a="90173475"
-X-IronPort-AV: E=Sophos;i="6.19,287,1754982000"; 
-   d="scan'208";a="90173475"
-Received: from orviesa002.jf.intel.com ([10.64.159.142])
-  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Nov 2025 13:06:26 -0800
-X-CSE-ConnectionGUID: 4zmO05DxQuGjVTeTZpBvkw==
-X-CSE-MsgGUID: QB+bLE7EQouO/WNw+EhCLg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.19,287,1754982000"; 
-   d="scan'208";a="218787805"
-Received: from lkp-server01.sh.intel.com (HELO 6ef82f2de774) ([10.239.97.150])
-  by orviesa002.jf.intel.com with ESMTP; 07 Nov 2025 13:06:24 -0800
-Received: from kbuild by 6ef82f2de774 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1vHTf3-0000Mt-1W;
-	Fri, 07 Nov 2025 21:06:21 +0000
-Date: Sat, 8 Nov 2025 05:05:46 +0800
-From: kernel test robot <lkp@intel.com>
-To: Richard Leitner <richard.leitner@linux.dev>,
-	Sakari Ailus <sakari.ailus@linux.intel.com>,
-	Dave Stevenson <dave.stevenson@raspberrypi.com>,
-	Mauro Carvalho Chehab <mchehab@kernel.org>,
-	Lee Jones <lee@kernel.org>, Pavel Machek <pavel@kernel.org>,
-	Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Cc: oe-kbuild-all@lists.linux.dev, linux-media@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-leds@vger.kernel.org,
-	Richard Leitner <richard.leitner@linux.dev>,
-	Hans Verkuil <hverkuil@xs4all.nl>
-Subject: Re: [PATCH v8 7/8] media: i2c: ov9282: implement try_ctrl for
- strobe_duration
-Message-ID: <202511080412.AYpJ1DIq-lkp@intel.com>
-References: <20251104-ov9282-flash-strobe-v8-7-b91dfef1c65a@linux.dev>
+	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="qFE+UGCs"
+Received: by mail-oa1-f50.google.com with SMTP id 586e51a60fabf-3e37ad3d95aso827772fac.3
+        for <linux-media@vger.kernel.org>; Fri, 07 Nov 2025 13:10:01 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1762549800; x=1763154600; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=D5C+80SdGLi7QO5N0XFDPLF3yCCePwCkQlTQxlk0Flw=;
+        b=qFE+UGCsS7sLrf45Ycr/RRti3fxVQJPDhV2YJAJOToKeg8p3F68H1bcDP2BLwlLW3G
+         NHAiAFVOLObjapldX/6Kn4WgYDVlqzhl/nIv3pxk6OEP0luzgz1MhrcOMHdzDpTjJyb2
+         Nu97xm94PaVQohmMgTBjGfWk5AqY6nTadHO3juMRL5MKia3T2WXcGDk3FtzHQVFXB+ud
+         ukE1GRzlGD8KDcvtMJjFqBjQ3u4UdShkw5+K9wJoBuUibNzZOyNEg772cp4Cn5jxkR2c
+         0tgO0nKKdLPuUKAoXs+PV2j2GMI0fNvQ4gUpRj3p4iHG8SstBLJsGkLOvfQI9SzaiauK
+         g8yw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1762549800; x=1763154600;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=D5C+80SdGLi7QO5N0XFDPLF3yCCePwCkQlTQxlk0Flw=;
+        b=Qqsxv23xtlKun+0W+hghY/dUnI/Zutq6t4y4+eduV5MVZunvDXwGgNeM9aUFDlpGIi
+         GlBE6zumrEoUYkBpdpA3+hEqmwUqEVu73wfzmqJLWf1dwtJ9INBSKKURUr2yw8XqNKBK
+         iw7Y30rH4304UKoStVbFpzmWF2GPt+DTrFyLkxOX5F7hvii5Hi1AYgNevgI+Mujurzmw
+         EuFtMazzOoVfLdY8+AxqJIkL40MZErY5qk9q7Mpf3AI1MvFBrDsvlSz89KBojFDNoi60
+         lsIHeO2j6JlREmEv8cN2uYpOebQESRLh29i6G40AiZ/dKJ+tNUK/OEF+nhIb/lKavjbG
+         Q+Pw==
+X-Forwarded-Encrypted: i=1; AJvYcCXxIby+opufAcpuLraN+6cZiQc7NQ+JjYCBjHzcbBTz+jMWbng7XrlTLfvWO6wg+w/U5+bQuHbduRIY9A==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yye3urlqmwuxWWutAeYH0DY8oTurG0asuD8qzkFEEXc9JJlGR6x
+	4tFFWCyV4CR1uG6N6PTVY7BKC9QxHOQMueKnCVMJXtjrbI71ArmJrEu4fIzZM3nRuR0=
+X-Gm-Gg: ASbGncs/59fzsBYiUyyhDGb0oIlWDPZfGW6hF9V4gYpdKJYO/FWIGzLOCfwEsrqVHqu
+	aMTK8iQ/nff2vwdAHNk+ReaTIeL2yKtqpUody6DH8XJvoPRCLgtmEehZ6n8NyDL8IyqNhEUubYY
+	CtUafN1D1uNakKbRvaCIC7yE4OmGC0nKkYaUmqxpbVuQEoZJKG3LfCs+tXLh6XpuDkqiPqk4Qj2
+	GOm6MnGG9U2V8Wz2/DxkHioENpT1hh8dniKKrlAedQhEnYzp36gdcFU5G7LGhnia+OVzfNi8BxG
+	fqvTfCGDpweoSRBA+OTdW1sM8SHWl+/XawTpiyK2bf9d2iA5lpGzc7dr38z1QE75sM6ZziUL2y1
+	ph1XaA5R9HdF9DGk8VrICX7Bpn8nuAlksDjX6sTfeVrLDewOgy5H3w/Kn9ljUg2n9BGY1Q9xqqe
+	e9hdbIPaaLWfAHv4et8y5O2Jea13qqNMoEnWle4a3xaGUz34WeHSVqHD9IH8Db
+X-Google-Smtp-Source: AGHT+IEQ9ejL+2ENcC9XsVRhLImuzZ+9b4tsXdGn2sN6c46sz5ZWDsXEvMKwQS2aRvyWRPmKUjbTWA==
+X-Received: by 2002:a05:6871:28a:b0:3d2:a718:7b36 with SMTP id 586e51a60fabf-3e7c24e337bmr535332fac.20.1762549800616;
+        Fri, 07 Nov 2025 13:10:00 -0800 (PST)
+Received: from ?IPV6:2600:8803:e7e4:500:7bb8:950b:327d:4ba4? ([2600:8803:e7e4:500:7bb8:950b:327d:4ba4])
+        by smtp.gmail.com with ESMTPSA id 586e51a60fabf-3e41f2557a1sm2394214fac.21.2025.11.07.13.09.58
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 07 Nov 2025 13:09:58 -0800 (PST)
+Message-ID: <fb4aafc1-dbfb-4533-b368-5d26e24acdf1@baylibre.com>
+Date: Fri, 7 Nov 2025 15:09:58 -0600
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20251104-ov9282-flash-strobe-v8-7-b91dfef1c65a@linux.dev>
+User-Agent: Mozilla Thunderbird
+Subject: =?UTF-8?Q?Re=3A_=5BPATCH_v2_2/6=5D_units=3A_Add_32-_and_64-bit_sign?=
+ =?UTF-8?Q?ed_values_of_=CF=80?=
+To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+ Hans Verkuil <hverkuil+cisco@kernel.org>, linux-iio@vger.kernel.org,
+ chrome-platform@lists.linux.dev, linux-kernel@vger.kernel.org,
+ linux-media@vger.kernel.org
+Cc: Jonathan Cameron <jic23@kernel.org>, =?UTF-8?Q?Nuno_S=C3=A1?=
+ <nuno.sa@analog.com>, Andy Shevchenko <andy@kernel.org>,
+ Benson Leung <bleung@chromium.org>, Guenter Roeck <groeck@chromium.org>,
+ Lars-Peter Clausen <lars@metafoo.de>,
+ Michael Hennerich <Michael.Hennerich@analog.com>,
+ Mauro Carvalho Chehab <mchehab@kernel.org>,
+ "Daniel W. S. Almeida" <dwlsalmeida@gmail.com>
+References: <20251107201005.3156118-1-andriy.shevchenko@linux.intel.com>
+ <20251107201005.3156118-3-andriy.shevchenko@linux.intel.com>
+Content-Language: en-US
+From: David Lechner <dlechner@baylibre.com>
+In-Reply-To: <20251107201005.3156118-3-andriy.shevchenko@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-Hi Richard,
+On 11/7/25 2:03 PM, Andy Shevchenko wrote:
+> There are a few drivers that want to have these values, and
+> one more known to come soon. Let's define the values for them.
+> 
+> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> ---
+>  include/linux/units.h | 6 ++++++
+>  1 file changed, 6 insertions(+)
+> 
+> diff --git a/include/linux/units.h b/include/linux/units.h
+> index f626e212d4ca..5b3293bce04c 100644
+> --- a/include/linux/units.h
+> +++ b/include/linux/units.h
+> @@ -21,6 +21,12 @@
+>  #define PICO	1000000000000ULL
+>  #define FEMTO	1000000000000000ULL
+>  
+> +/* Value of π * 10⁸ (fits s32 or signed int) */
+> +#define PI	314159265
 
-kernel test robot noticed the following build errors:
+It isn't clear to me at all in the other patches that e.g.
+DIV_ROUND_UP(PI, 1000) would be π ✕ 10⁴ (rounded to nearest
+integer, of course).
 
-[auto build test ERROR on 2f112b1c25da9f5346c2261ed35c5b1e0b906471]
+Calling these PI_E8 and PI_E18 or PI_x10_8 and PI_x10_18
+would help to clear that up.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Richard-Leitner/media-v4l-ctrls-add-a-control-for-flash-strobe-duration/20251104-225658
-base:   2f112b1c25da9f5346c2261ed35c5b1e0b906471
-patch link:    https://lore.kernel.org/r/20251104-ov9282-flash-strobe-v8-7-b91dfef1c65a%40linux.dev
-patch subject: [PATCH v8 7/8] media: i2c: ov9282: implement try_ctrl for strobe_duration
-config: xtensa-randconfig-001-20251107 (https://download.01.org/0day-ci/archive/20251108/202511080412.AYpJ1DIq-lkp@intel.com/config)
-compiler: xtensa-linux-gcc (GCC) 10.5.0
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251108/202511080412.AYpJ1DIq-lkp@intel.com/reproduce)
+> +
+> +/* Value of π * 10¹⁸ (fits s64 or signed long long) */
+> +#define PI_LL	3141592653589793238LL
+> +
+>  /* Hz based multipliers */
+>  #define NANOHZ_PER_HZ		1000000000UL
+>  #define MICROHZ_PER_HZ		1000000UL
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202511080412.AYpJ1DIq-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
->> xtensa-linux-ld: drivers/media/i2c/ov9282.o:(.text+0xc): undefined reference to `__udivdi3'
-   xtensa-linux-ld: drivers/media/i2c/ov9282.o: in function `ov9282_try_ctrl':
->> ov9282.c:(.text+0x62): undefined reference to `__udivdi3'
-   xtensa-linux-ld: drivers/media/i2c/ov9282.o:(.text+0x10): undefined reference to `__udivdi3'
-   xtensa-linux-ld: drivers/media/i2c/ov9282.o: in function `ov9282_try_ctrl':
-   ov9282.c:(.text+0x7e): undefined reference to `__udivdi3'
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
