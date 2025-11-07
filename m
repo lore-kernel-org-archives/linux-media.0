@@ -1,120 +1,135 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f48.google.com (mail-wm1-f48.google.com [209.85.128.48])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C2098331A79;
-	Fri,  7 Nov 2025 17:32:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A28ED3358B7
+	for <linux-media@vger.kernel.org>; Fri,  7 Nov 2025 17:51:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762536757; cv=none; b=osgJ7sDjY5K4HHd+SqowX39OXTjsAQuV5DKSGyLJuDCMjlUdsxhgFPhFiyoLm807CKSSQlPZjDSShK4sg0Mfd9LnXk7O5ZwBOz6EcNeGwI1i5pyVWKztfkaFsI6peI6qv3T45rkEVC24axQw0vuqS3dW8Q47ypk+NSOCbC0xCng=
+	t=1762537889; cv=none; b=LJkdD6AIiYBmmGvqro231RxbMMcH+QbomAc7iPhbeOZrzNPeTx4LA0B3BB6ZnCBDaq8fMicXGq5UT27+IfcA2W+IpKFZ2G+iktp71SqEVQ7iFd8l94GQLNLONaaKRZRRrVbCPuT7A2/GPFAooEpQztgcUfz6yBOUS9D5ZpE1/w8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762536757; c=relaxed/simple;
-	bh=br/yoQcXazpIhba0JM9br+2Xu+ekNSGhpyy+fjDbUQs=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Jnu6utkrpKfKtglZQySYvTrrjsse25X2C1J712qOK5ldmULGS/xLDRMJj2dkbgFlVrDMFwuk4EEYunUfLlJezhtA/6/UZ3raJpUbb3YTrcxfVXAKpGlHkVrhLXk91lZSyvSTq791bzApHrHfqETL/F6Oz4R0GHT6RkV09EMaqCo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=UctZZkL5; arc=none smtp.client-ip=198.175.65.18
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
+	s=arc-20240116; t=1762537889; c=relaxed/simple;
+	bh=zH5Y5kzfZDqM6XSPZXHd+xDsjJay/Ois7rZjMY6UsPU=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=A0kuX8miSZwQBPvjnt6PZIMgd6Gh1da+G+7p0hVXBWnHE14+dqRj9k7ytHETf4AIgShVSni+XdFbSF6qdnYbenuPJwyWMzYW2LqbQP24MuvfHjlP+Toi1f3TJYgBnU75oci6cNWJxUUywWIuf7FSAew5aT5CBuGLIAMHUOYKE0A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ELrQNNZt; arc=none smtp.client-ip=209.85.128.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="UctZZkL5"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1762536756; x=1794072756;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=br/yoQcXazpIhba0JM9br+2Xu+ekNSGhpyy+fjDbUQs=;
-  b=UctZZkL5koKMojkM5bfVDVrOHTThROa/jxDccYX45TiHiq22QvoFrtIu
-   MzKauQ3A0Tr7N4dmYMq6aauDUEJXAcapnywnzNSNb4LjLQkykpuBvXkCQ
-   0FQHY7nKzyhuLmk3A+Mxwdr1C4QQxwiC9KLx7eFh+cf9d55Fdj6IcPzni
-   /fHD35ekTFitl8N1CpVespRvcc2kAUaExs7FCmV6b+nYEBmVc2uXdBUR2
-   6/zrGbfXReWcORw7cpxSSNSTcOywWPeIAx0vVGVq/7y7g33LX/i6kkxU/
-   0WvffRev8Solm01k9OX2F9SMUxoFKqis4VjSoYm05aTozRKM+M/yb1ynU
-   g==;
-X-CSE-ConnectionGUID: LolPIA3qQ6SrEyh14arZtA==
-X-CSE-MsgGUID: puYFi6/cQCOHLqRxIjSOeA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11606"; a="64729508"
-X-IronPort-AV: E=Sophos;i="6.19,287,1754982000"; 
-   d="scan'208";a="64729508"
-Received: from orviesa003.jf.intel.com ([10.64.159.143])
-  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Nov 2025 09:32:35 -0800
-X-CSE-ConnectionGUID: olbkBok6TgOZIIyj+YRicw==
-X-CSE-MsgGUID: fEjkLyDgQ8C+BXPOdvpQGw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.19,287,1754982000"; 
-   d="scan'208";a="192185843"
-Received: from kniemiec-mobl1.ger.corp.intel.com (HELO kekkonen.fi.intel.com) ([10.245.245.117])
-  by ORVIESA003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Nov 2025 09:32:26 -0800
-Received: from kekkonen.localdomain (localhost [IPv6:::1])
-	by kekkonen.fi.intel.com (Postfix) with SMTP id D3FDF11FC72;
-	Fri, 07 Nov 2025 19:32:22 +0200 (EET)
-Date: Fri, 7 Nov 2025 19:32:22 +0200
-Organization: Intel Finland Oy - BIC 0357606-4 - c/o Alberga Business Park, 6 krs, Bertel Jungin Aukio 5, 02600 Espoo
-From: Sakari Ailus <sakari.ailus@linux.intel.com>
-To: michael.riesch@collabora.com
-Cc: Mehdi Djait <mehdi.djait@linux.intel.com>,
-	Maxime Chevallier <maxime.chevallier@bootlin.com>,
-	=?iso-8859-1?Q?Th=E9o?= Lebrun <theo.lebrun@bootlin.com>,
-	Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-	Gerald Loacker <gerald.loacker@wolfvision.net>,
-	Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
-	Markus Elfring <Markus.Elfring@web.de>,
-	Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-	Mauro Carvalho Chehab <mchehab@kernel.org>,
-	Rob Herring <robh+dt@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Heiko Stuebner <heiko@sntech.de>,
-	Kever Yang <kever.yang@rock-chips.com>,
-	Nicolas Dufresne <nicolas.dufresne@collabora.com>,
-	Sebastian Reichel <sebastian.reichel@collabora.com>,
-	Collabora Kernel Team <kernel@collabora.com>,
-	Paul Kocialkowski <paulk@sys-base.io>,
-	Alexander Shiyan <eagle.alexander923@gmail.com>,
-	Val Packett <val@packett.cool>, Rob Herring <robh@kernel.org>,
-	Philipp Zabel <p.zabel@pengutronix.de>, linux-media@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-rockchip@lists.infradead.org,
-	Mehdi Djait <mehdi.djait@bootlin.com>,
-	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-	Bryan O'Donoghue <bod@kernel.org>, Chen-Yu Tsai <wens@csie.org>
-Subject: Re: [PATCH v14 00/18] media: rockchip: add a driver for the rockchip
- camera interface
-Message-ID: <aQ4tJg8r_j4NyKhv@kekkonen.localdomain>
-References: <20240220-rk3568-vicap-v14-0-b38b6da0fc80@collabora.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ELrQNNZt"
+Received: by mail-wm1-f48.google.com with SMTP id 5b1f17b1804b1-477563e28a3so7384785e9.1
+        for <linux-media@vger.kernel.org>; Fri, 07 Nov 2025 09:51:27 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1762537886; x=1763142686; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=3Tucutz7IrOhRztkZU3smHLVMxqcaOobL5jt095lc2k=;
+        b=ELrQNNZtZ8xpyrUTaNVMrMLq6edSahgtODjiKm1IKWRWjWseiPqOOQhk1anKez3R3S
+         8T+u+cMNZ7ztTu0DnveXsu7TuI93hL0HOIUEG4uMv+Fbfa2ls1yVSCKK8p/fCbDSC+cm
+         UVNvMrpIn4Y1pzdQWBN7WcbtmJopnlnzNsOmV3c6WrcGlVVwdiZbVTO2BvBdtWuLYhqV
+         qk741iJpVI6iTsleB0+cO0DAi80Wsdt43uMhT8Mxjxo2/h0Z8tFvMESZLdyCV8AhyaM/
+         5QXnZR1Q0oUIjeN+7442j8mCLFcl4Z0SFtewxSlgIKOh0eyzSxJQTcORp34lE4LhEveK
+         QALw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1762537886; x=1763142686;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=3Tucutz7IrOhRztkZU3smHLVMxqcaOobL5jt095lc2k=;
+        b=RqAX0x4nODhoiJXvl4EUN54nS6GhIx/nO82xIBGdYl6zC9YKvKNslMOmFsv3PSRPsM
+         4aojHL9xPiI9BIsLlsgcsp+1g5aJlOqf7vIx2I+efuknoFXSE3BYGJnVi786fVhNMQgf
+         YqhAY/S1SwuTk0sMIyFmMIzo4WQe5XbkTgEwDPy0RsyY5Q3MqEikkaLeNpQD1iRwUwk5
+         Jiv9kUb9E/JBB5wcxhTn13O0vqpEzGUL/Vwx+glKns38g4ZDKrA25JIDnt2ulFyqiyYv
+         D1xkyQoLk4cWrAwTae+GyS5i/4yXRfXjMWnoCTO9HGFo+3DfzGitj60YQm/bQLog6jKe
+         2s3Q==
+X-Forwarded-Encrypted: i=1; AJvYcCVsFi51GQ9PjkXj03iYMXx78aJ/R/8m1ohn1LyYYL3KtrHIpuhVhmCCTcgQaqj9euYrVlWRXgNYLEyRmw==@vger.kernel.org
+X-Gm-Message-State: AOJu0Ywg44/j+GF3gKlQ34yVU/53I3dG+nXrD4HyQTruAxdOmTAGfLQH
+	6laK/joCKYqygJ8Ib3gGWYrVVzrzyPn2fuDUJQn8CxwlnfmL7w2xw5xm
+X-Gm-Gg: ASbGncujsmSrLnOVGfbswHXcDe+qGadMauKr0gA37g2unszkg+ilojFTrmOtQrmGXs7
+	FDvbXL48PxIVkfvAkJmayXcS68xCOVBCWAKK6mK1H/NwUmT2W2CM5ElDPilYoby1KTYe+QftmEi
+	3GEKGaTRyFs9Z8S7ItCYQh7ZRYoHOn0xbZVFHSI8WIG+eRGMPa7kR02U6tDKA8EeAEFqLb4bhg0
+	BE3HwXAHxRkEgQw89abwc0e2GyEPBsQHx3Fpx0y8pI1jBwST7MC2Cg5X6dVZo0UusGKzm0WRGGS
+	BGqmfEeGlIq14k+ENKxErmQdztp8tIKdMAgG1o1bu+YxLhPGv2mBA8J1kZj7ZaA1aABMiP1IXxz
+	hCRb4uVg85AWFFsHY6ma+4D1chTc2YYPHHU33wRjqCSJ4lz696R+Z5bbSwpB148daUc/cVWOhyE
+	/rtCu+5ZeA24Xop5XhGUzb8mY6f0tzootbahuuG5VUAfH6weL/52rD
+X-Google-Smtp-Source: AGHT+IEoWHsw26cGBlNpbuXd/J8PJbsclbLScfONHz/78/yXn3dKVEpgZr30FQ4+9RfcD30Gp2hhjg==
+X-Received: by 2002:a05:600c:c0c9:b0:475:d7fd:5c59 with SMTP id 5b1f17b1804b1-4776e57b741mr22139575e9.16.1762537885623;
+        Fri, 07 Nov 2025 09:51:25 -0800 (PST)
+Received: from pumpkin (82-69-66-36.dsl.in-addr.zen.co.uk. [82.69.66.36])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-47763e4f89fsm49280675e9.3.2025.11.07.09.51.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 07 Nov 2025 09:51:25 -0800 (PST)
+Date: Fri, 7 Nov 2025 17:51:23 +0000
+From: David Laight <david.laight.linux@gmail.com>
+To: Petr Mladek <pmladek@suse.com>
+Cc: Andy Shevchenko <andriy.shevchenko@linux.intel.com>, Andrew Morton
+ <akpm@linux-foundation.org>, Junrui Luo <moonafterrain@outlook.com>,
+ linux-kernel@vger.kernel.org, rostedt@goodmis.org, tiwai@suse.com,
+ perex@perex.cz, linux-sound@vger.kernel.org, mchehab@kernel.org,
+ awalls@md.metrocast.net, linux-media@vger.kernel.org, davem@davemloft.net,
+ edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+ netdev@vger.kernel.org
+Subject: Re: [PATCH 1/4] lib/sprintf: add scnprintf_append() helper function
+Message-ID: <20251107175123.70ded89e@pumpkin>
+In-Reply-To: <aQ3riwUO_3v3UOvj@pathway.suse.cz>
+References: <20251107051616.21606-1-moonafterrain@outlook.com>
+	<SYBPR01MB788110A77D7F0F7A27F0974FAFC3A@SYBPR01MB7881.ausprd01.prod.outlook.com>
+	<20251106213833.546c8eaba8aec6aa6a5e30b6@linux-foundation.org>
+	<20251107091246.4e5900f4@pumpkin>
+	<aQ29Zzajef81E2DZ@smile.fi.intel.com>
+	<aQ3riwUO_3v3UOvj@pathway.suse.cz>
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; arm-unknown-linux-gnueabihf)
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240220-rk3568-vicap-v14-0-b38b6da0fc80@collabora.com>
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-Hi Michael,
+On Fri, 7 Nov 2025 13:52:27 +0100
+Petr Mladek <pmladek@suse.com> wrote:
 
-On Fri, Oct 24, 2025 at 02:51:29PM +0200, Michael Riesch via B4 Relay wrote:
-> Habidere,
+> On Fri 2025-11-07 11:35:35, Andy Shevchenko wrote:
+> > On Fri, Nov 07, 2025 at 09:12:46AM +0000, David Laight wrote:  
+> > > On Thu, 6 Nov 2025 21:38:33 -0800
+> > > Andrew Morton <akpm@linux-foundation.org> wrote:  
+> > > > On Fri,  7 Nov 2025 13:16:13 +0800 Junrui Luo <moonafterrain@outlook.com> wrote:  
+> > 
+> > ...
+> >   
+> > > That is true for all the snprintf() functions.
+> > >   
+> > > > I wonder if we should instead implement a kasprintf() version of this
+> > > > which reallocs each time and then switch all the callers over to that.  
+> > > 
+> > > That adds the cost of a malloc, and I, like kasprintf() probably ends up
+> > > doing all the work of snprintf twice.
+> > > 
+> > > I'd be tempted to avoid the strlen() by passing in the offset.
+> > > So (say):
+> > > #define scnprintf_at(buf, len, off, ...) \
+> > > 	scnprintf((buf) + off, (len) - off, __VA_ARGS__)  
 > 
-> This series introduces support for the Rockchip Camera Interface (CIF),
-> which is featured in many Rockchip SoCs in different variations.
-> For example, the PX30 Video Input Processor (VIP) is able to receive
-> video data via the Digital Video Port (DVP, a parallel data interface)
-> and transfer it into system memory using a double-buffering mechanism
-> called ping-pong mode.
-> The RK3568 Video Capture (VICAP) unit, on the other hand, features a
-> DVP and a MIPI CSI-2 receiver that can receive video data independently
-> (both using the ping-pong scheme).
-> The different variants may have additional features, such as scaling
-> and/or cropping.
-> Finally, the RK3588 VICAP unit constitutes an essential piece of the
-> camera interface with one DVP, six MIPI CSI-2 receivers, scale/crop
-> units, and a data path multiplexer (to scaler units, to ISP, ...).
+> It does not handle correctly the situation when len < off.
+> Othersise, it looks good.
 
-I understand both RK3568 and RK3588 include an ISP. Do you have insight on
-how would this work, should the support for the ISP be added later on?
+That shouldn't happen unless the calling code is really buggy.
+There is also a WARN_ON_ONCE() at the top of snprintf().
 
--- 
-Kind regards,
+	David
 
-Sakari Ailus
+> 
+> > > Then you can chain calls, eg:
+> > > 	off = scnprintf(buf, sizeof buf, ....);
+> > > 	off += scnprintf_at(buf, sizeof buf, off, ....);  
+> > 
+> > I like this suggestion. Also note, that the original implementation works directly
+> > on static buffers.  
+> 
+> I would prefer this as well. IMHO, it encourages people to write a better code.
+> 
+> Best Regards,
+> Petr
+
