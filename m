@@ -1,75 +1,72 @@
 Received: from mailhub9-fb.kaspersky-labs.com (mailhub9-fb.kaspersky-labs.com [195.122.169.2])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F088838DE1;
-	Fri,  7 Nov 2025 15:45:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 497AA32E753;
+	Fri,  7 Nov 2025 15:54:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.122.169.2
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762530345; cv=none; b=aG4bmCM0G3zoX08Fnb6I/CRYk/lcgswcbTBu5e8RsE7vh5JoPKyc6gX1AydCZMfefZzW5owGAMZb0RBIjJF535P4LdLXfUvm25nRkkZ7BiqigdwtNp0k3F0a44Gr+qrhGiYG9XYAlyLp5QSEEuchuL5HmDUpaQft4l1jODgY744=
+	t=1762530897; cv=none; b=R7M6zPGZPSgBjYiC898LCtXhUnrZUDAoDiPGd8e9SGSCMZ91HF80JOxW9gm6uCnHMPJgZ0E4hN8Z3t6Vz26zD3HxnhIGm4A5lDcZ2zBfQqOTYFMpZ3Wmmg2LA6cuJBBjM+aWMKc3LaaAwzqfNdEf72RTHYQqwyldeZhPBCm1OWs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762530345; c=relaxed/simple;
-	bh=nsCJ6a381lZvXja5H/Dqoj6c/Rc2k2EOWhfoNqA+Fw0=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=FsBqjNmVss9RxJCvkqBGFf9RSDP0Xlq6WJxGnVcxnTT5uER7EgpPpZqCKV6Yz4q2YSZAsNSyH099Lg62aca48gk0CrNTqcxFEbW0sKLjl/ki8kXWT4pFoEezMQ5wjqs6xHFnrIIWFINXYfJtHMW1ybOAan6S9G6OgPyvSRaWmyU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=kaspersky.com; spf=pass smtp.mailfrom=kaspersky.com; dkim=pass (2048-bit key) header.d=kaspersky.com header.i=@kaspersky.com header.b=PhooyY3I; dkim=pass (2048-bit key) header.d=kaspersky.com header.i=@kaspersky.com header.b=bPqVF78q; arc=none smtp.client-ip=195.122.169.2
+	s=arc-20240116; t=1762530897; c=relaxed/simple;
+	bh=0kPZIRWiQDeuxUV2+ZIjVBj0pHRaQ2tC4rF8+P00BW0=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=ZqKkfHiyF5ttxUFlQtWL7VaZ8VAuigYSLopEg5czW+lFyX39UQD/YEsWfknUguoxhfhfy+iaM5tVIAEZflhKqx+3gyIlgqUvmo775bpJ3WY7sxqDvD3AeyiI1CZ9VnPrE4ekd35vSc68YeKBgfMbLxKZSL0ndouimjfvwES1dgc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=kaspersky.com; spf=pass smtp.mailfrom=kaspersky.com; dkim=pass (2048-bit key) header.d=kaspersky.com header.i=@kaspersky.com header.b=owAuX2s4; dkim=pass (2048-bit key) header.d=kaspersky.com header.i=@kaspersky.com header.b=RN0rp9DZ; arc=none smtp.client-ip=195.122.169.2
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=kaspersky.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kaspersky.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kaspersky.com header.i=@kaspersky.com header.b="PhooyY3I";
-	dkim=pass (2048-bit key) header.d=kaspersky.com header.i=@kaspersky.com header.b="bPqVF78q"
+	dkim=pass (2048-bit key) header.d=kaspersky.com header.i=@kaspersky.com header.b="owAuX2s4";
+	dkim=pass (2048-bit key) header.d=kaspersky.com header.i=@kaspersky.com header.b="RN0rp9DZ"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kaspersky.com;
-	s=mail202505; t=1762530340;
-	bh=JInZQS1g+rhl7OoPvdNtZ79da3janGd3rLGqkYOhSjM=;
+	s=mail202505; t=1762530332;
+	bh=YoL0rmniGZrR8nKZFcQUMl53tWAqxuZqCMgD831YzeQ=;
 	h=From:To:Subject:Date:Message-ID:MIME-Version:Content-Type;
-	b=PhooyY3I2ZFBPyJLUgb6e0B3olAAzgZoMuTYIaTbXVRnpHXGYY/9JwjsE1nfZgcJ6
-	 MEYba8EF+NK5F2tgVcGn1bVBCjV2d55I5OA8864saCmwxWz22WLAarZqmfa6F2vRVP
-	 k8u+eQbqz6y0YUqdCXDB+kBVzTJIr2inhCHzb9Fs50H6ENvxQ1n2dhOUFCbPX8/WWR
-	 LMjCvqZI3u21MvQURxy8bjjy7D29gJMbNaWbLPRUyTTaW7vWBfaDonMRMvbPVpy52q
-	 A3SpPvPbJ5XnaLjFm24QQDHwTgs3ErRw7VpCg4Ez1kcSUh/UexGDrezl5858CzyYKP
-	 TLxGxjHTOkc7w==
+	b=owAuX2s4ve3J1Pqi5nD1xfNa+PgHwEjIVTnL0I8LpsjTUXEtADXylpLPgl1fnrLM8
+	 THOPkPuHZ7mJ0Js6Bh9pmhKe0btnsKv/PqEdLNyBb7HQ9DC10xFGAktTw9BIditFNJ
+	 IuS/8CL0aj70yyj6+MPUnFgW+Z+fMmB1JqIqIlZ0WgnR72GrP4psC7mtVFm+xtnH2u
+	 Uv1kZNLPUhuibYhKgCC7JkppQy5wSs5jim1/whZHJQcEBUfHgHQ0qLtIoayf+h1jTe
+	 ohUyQPrUiYecO2XGDE5mDt7F1Vl2DVG2DKgt+N4x6L01Ri/rvidwXpxTgj7On380k5
+	 jINzPFrbokriQ==
 Received: from mailhub9-fb.kaspersky-labs.com (localhost [127.0.0.1])
-	by mailhub9-fb.kaspersky-labs.com (Postfix) with ESMTP id DE68790122D;
-	Fri,  7 Nov 2025 18:45:40 +0300 (MSK)
-Received: from mx12.kaspersky-labs.com (mx12.kaspersky-labs.com [91.103.66.155])
+	by mailhub9-fb.kaspersky-labs.com (Postfix) with ESMTP id C5D899002A9;
+	Fri,  7 Nov 2025 18:45:32 +0300 (MSK)
+Received: from mx13.kaspersky-labs.com (mx13.kaspersky-labs.com [91.103.66.164])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256
 	 client-signature RSA-PSS (4096 bits) client-digest SHA256)
-	(Client CN "mx12.kaspersky-labs.com", Issuer "Kaspersky MailRelays CA G3" (verified OK))
-	by mailhub9-fb.kaspersky-labs.com (Postfix) with ESMTPS id A96F39000C3;
-	Fri,  7 Nov 2025 18:45:40 +0300 (MSK)
+	(Client CN "mx13.kaspersky-labs.com", Issuer "Kaspersky MailRelays CA G3" (verified OK))
+	by mailhub9-fb.kaspersky-labs.com (Postfix) with ESMTPS id 9CC489000C3;
+	Fri,  7 Nov 2025 18:45:32 +0300 (MSK)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kaspersky.com;
-	s=mail202505; t=1762530331;
-	bh=JInZQS1g+rhl7OoPvdNtZ79da3janGd3rLGqkYOhSjM=;
+	s=mail202505; t=1762530323;
+	bh=YoL0rmniGZrR8nKZFcQUMl53tWAqxuZqCMgD831YzeQ=;
 	h=From:To:Subject:Date:Message-ID:MIME-Version:Content-Type;
-	b=bPqVF78q98WTcYGobI9hLzSoNdn5zviMygQrA9ngaZYOSLlQA5sikJWWa5zpg4E0B
-	 ACj7yncowQZzWqgTZZDtkYVS94wrRdepRQeHeglXaUVlI6Xmlb349h7tumBEaLKrk5
-	 +AFbYF0NTwT5Xp3SviZJDu/tDjYF6EiUBYx1lbhToi+4TxB0Ixjo/vO1cx517LV/S1
-	 b4c4tJmmmb04j/4+7Vy0MmG16b94P6VWP1oP4pBkrM4CS/3mRlG3m4JX0hzKXac5EO
-	 khxpapk8r935uUCT372FyxSuPHRNp7wxHhEnaeWx5/06Mchb7/t2Z6a2R27JiFijJe
-	 udjvvKT+e1a5w==
-Received: from relay12.kaspersky-labs.com (localhost [127.0.0.1])
-	by relay12.kaspersky-labs.com (Postfix) with ESMTP id 918DF5A197C;
-	Fri,  7 Nov 2025 18:45:31 +0300 (MSK)
+	b=RN0rp9DZFnymQdKkreWZiih/4SBJF+FODp1Z3y/hMHuxE9XVBNa6dvKbwrfK/Ltrz
+	 GYefEhqxfaF+KZTIJL06ydPvMvPAvFTOBAcAFxVUisFT9oTz4b4tg3Lfh58KlEIJCX
+	 IlHBW/Z9nadQKLSZkgpSzxPRyOrzAA/WS6M+eUptIbkDxLEvc4tfABlmyLDc4wMs7+
+	 i94SBHfxGW+Rf5yk0pqxeWFWSFMiCUUKUu/SHhQGKobgIW8CK1ZlhKPWYaQomQC1+W
+	 3Jc9+YK+niI1hyq7WT7mny3mYc89hTVMzfwfrMdHKWYMj3rFreh0mQge1rkG83JUEs
+	 q6IbBNJAxPz4w==
+Received: from relay13.kaspersky-labs.com (localhost [127.0.0.1])
+	by relay13.kaspersky-labs.com (Postfix) with ESMTP id C4BDC3E450E;
+	Fri,  7 Nov 2025 18:45:23 +0300 (MSK)
 Received: from mail-hq2.kaspersky.com (unknown [91.103.66.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(Client CN "mail-hq2.kaspersky.com", Issuer "Kaspersky MailRelays CA G3" (verified OK))
-	by mailhub12.kaspersky-labs.com (Postfix) with ESMTPS id BAE7A5A4942;
-	Fri,  7 Nov 2025 18:45:30 +0300 (MSK)
+	by mailhub13.kaspersky-labs.com (Postfix) with ESMTPS id 1D00A3E1CB8;
+	Fri,  7 Nov 2025 18:45:23 +0300 (MSK)
 Received: from Nalivayko.avp.ru (10.16.105.14) by HQMAILSRV3.avp.ru
  (10.64.57.53) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.29; Fri, 7 Nov
- 2025 18:45:16 +0300
+ 2025 18:45:07 +0300
 From: Nalivayko Sergey <Sergey.Nalivayko@kaspersky.com>
 To: <linux-media@vger.kernel.org>
 CC: Nalivayko Sergey <Sergey.Nalivayko@kaspersky.com>,
 	<linux-kernel@vger.kernel.org>, <lvc-project@linuxtesting.org>, Mauro
  Carvalho Chehab <mchehab@kernel.org>, Michael Krufky <mkrufky@linuxtv.org>
-Subject: [PATCH 1/2] media: dvb-usb-v2: add device init_ready flag
-Date: Fri, 7 Nov 2025 18:44:25 +0300
-Message-ID: <20251107154426.2116743-2-Sergey.Nalivayko@kaspersky.com>
+Subject: [PATCH 0/2] media: dvb-usb-v2: add init_ready flag to prevent  race during device initialization
+Date: Fri, 7 Nov 2025 18:44:24 +0300
+Message-ID: <20251107154426.2116743-1-Sergey.Nalivayko@kaspersky.com>
 X-Mailer: git-send-email 2.39.5
-In-Reply-To: <20251107154426.2116743-1-Sergey.Nalivayko@kaspersky.com>
-References: <20251107154426.2116743-1-Sergey.Nalivayko@kaspersky.com>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
@@ -95,7 +92,7 @@ X-KSE-AntiSpam-Info: {Tracking_cluster_exceptions}
 X-KSE-AntiSpam-Info: {Tracking_real_kaspersky_domains}
 X-KSE-AntiSpam-Info: {Tracking_uf_ne_domains}
 X-KSE-AntiSpam-Info: {Tracking_from_domain_doesnt_match_to}
-X-KSE-AntiSpam-Info: d41d8cd98f00b204e9800998ecf8427e.com:7.1.1;127.0.0.199:7.1.2;kaspersky.com:7.1.1,5.0.1
+X-KSE-AntiSpam-Info: kaspersky.com:5.0.1,7.1.1;d41d8cd98f00b204e9800998ecf8427e.com:7.1.1;127.0.0.199:7.1.2
 X-KSE-AntiSpam-Info: {Tracking_white_helo}
 X-KSE-AntiSpam-Info: FromAlignment: s
 X-KSE-AntiSpam-Info: Rate: 0
@@ -122,63 +119,23 @@ X-KSMG-LinksScanning: NotDetected
 X-KSMG-Message-Action: skipped
 X-KSMG-Rule-ID: 52
 
-The current implementation of dvb-usb-v2 initializes device in
-dvb_usbv2_probe() while making it immediately available for use in the I2C,
-Remote Control, demux and potentially other kernel subsystems before
-the driver has fully completed initialization. As a result, the device
-becomes accessible through these subsystem interfaces prematurely,
-allowing to invoke read/write operations on the device before it is
-fully initialized.
+This patch series introduces an atomic init_ready flag in 
+struct dvb_usb_device and adds checks in relevant code paths. 
+Drivers now verify that device initialization has completed before 
+performing operations that rely on initialized device state. 
+If the device is not yet ready, the operation is deferred until 
+initialization finishes, preventing race conditions and improving 
+driver robustness.
 
-Introduce an atomic init_ready flag in struct dvb_usb_device for
-the DVB-USB-V2 driver.
+Nalivayko Sergey (2):
+  media: dvb-usb-v2: add device init_ready flag
+  media: mxl111sf: fix i2c race condition during device probe
 
-Allow driver code to check this flag before performing actions
-that access device state (for example I2C reads) which may race
-with device initialization.
-
-Signed-off-by: Nalivayko Sergey <Sergey.Nalivayko@kaspersky.com>
----
  drivers/media/usb/dvb-usb-v2/dvb_usb.h      | 3 +++
  drivers/media/usb/dvb-usb-v2/dvb_usb_core.c | 4 ++++
- 2 files changed, 7 insertions(+)
+ drivers/media/usb/dvb-usb-v2/mxl111sf-i2c.c | 2 +-
+ 3 files changed, 8 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/media/usb/dvb-usb-v2/dvb_usb.h b/drivers/media/usb/dvb-usb-v2/dvb_usb.h
-index ecdc20d45132..ecb929e006ba 100644
---- a/drivers/media/usb/dvb-usb-v2/dvb_usb.h
-+++ b/drivers/media/usb/dvb-usb-v2/dvb_usb.h
-@@ -389,6 +389,9 @@ struct dvb_usb_device {
- 	struct mutex i2c_mutex;
- 	struct i2c_adapter i2c_adap;
- 
-+	/* Check in drivers to prevent read from uninitialized device */
-+	atomic_t init_ready;
-+
- 	struct dvb_usb_adapter adapter[MAX_NO_OF_ADAPTER_PER_DEVICE];
- 
- 	/* remote control */
-diff --git a/drivers/media/usb/dvb-usb-v2/dvb_usb_core.c b/drivers/media/usb/dvb-usb-v2/dvb_usb_core.c
-index f1c79f351ec8..d1cd68f242cc 100644
---- a/drivers/media/usb/dvb-usb-v2/dvb_usb_core.c
-+++ b/drivers/media/usb/dvb-usb-v2/dvb_usb_core.c
-@@ -988,6 +988,8 @@ int dvb_usbv2_probe(struct usb_interface *intf,
- exit:
- 	usb_set_intfdata(intf, d);
- 
-+	atomic_set(&d->init_ready, 1);
-+
- 	return 0;
- err_free_all:
- 	dvb_usbv2_exit(d);
-@@ -1012,6 +1014,8 @@ void dvb_usbv2_disconnect(struct usb_interface *intf)
- 	dev_dbg(&d->udev->dev, "%s: bInterfaceNumber=%d\n", __func__,
- 			intf->cur_altsetting->desc.bInterfaceNumber);
- 
-+	atomic_set(&d->init_ready, 0);
-+
- 	if (d->props->exit)
- 		d->props->exit(d);
- 
 -- 
 2.39.5
 
