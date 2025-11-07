@@ -1,46 +1,67 @@
 Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E549C329396
-	for <linux-media@vger.kernel.org>; Fri,  7 Nov 2025 18:44:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4DE9833B964;
+	Fri,  7 Nov 2025 18:54:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.167.242.64
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762541077; cv=none; b=tVi98lZ+degqc3djAIg9seq3RwYPW0Ul/gZandgHSS4kuGRx0KT9tUIdvSDjolfWtFBS6i0ByGsi8ijYvPadVyEm6vE79P6qu0y0tB68AGJSY0sKOzkRiLKIdT/5PPaAH4SOq+7D2AQcW/Gi2E2ashNUjrzkd3Ksiyx7jeW2MkQ=
+	t=1762541691; cv=none; b=jkY1xxdYjxza5rSofW9ivJh8OOZjOYA5gIf97pL06K4vtDDCEu498fMA4Z1vFFQbXF7jZSmOxCjhvtUpLk6HxVJDdNt0G5nCxbNtPfnCFZchXSvXbkxrGYO7ny9UBcve6Dx6U3KOLmg3JC1OXrMc0j71csiFgwimCzCnOCC6Dls=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762541077; c=relaxed/simple;
-	bh=27RUtw6Eea5nu4M4bsLtRDG2tXxgGK12MfBmueOq/RI=;
+	s=arc-20240116; t=1762541691; c=relaxed/simple;
+	bh=T5Rw6eWbPlE27qTm/Y51A5DLe5CKLXrJE8yBA6UrFuw=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=pK96o0TjhAn7mSpwMNrD40JTafiJ4Hz2hLho/bC54Z9V5DpqPzqtKC7KVWA7rrGDBKyqm/Eiz7WG49knfTiYHsFmecvoPrBxnsfWlYq/RZkIsGX+syI/mJDoyHa19M9s0QG7JDPALU7kV9v8bIKBqzafKMSBQkKY66emX8ahabc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ideasonboard.com; spf=pass smtp.mailfrom=ideasonboard.com; dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b=iAepoCfQ; arc=none smtp.client-ip=213.167.242.64
+	 Content-Type:Content-Disposition:In-Reply-To; b=JHeP3Q/T5KYF7iaWDDKdctcdYNC7174tqdyg67LnaLxSbDvSAkRnVZLw8jMkZfZjkBpoSj9dHpKGaesUlvIvD4PnF7YoxM4UEu6/D8BIeEhLYuxUwbSasCo2/f+yqAcIdgidmgsFetFkDXjv2aBNOR8IVwBKWKSdYuAjGKLM+oc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ideasonboard.com; spf=pass smtp.mailfrom=ideasonboard.com; dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b=wm+Oa9C6; arc=none smtp.client-ip=213.167.242.64
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ideasonboard.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ideasonboard.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="iAepoCfQ"
+	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="wm+Oa9C6"
 Received: from pendragon.ideasonboard.com (82-203-161-95.bb.dnainternet.fi [82.203.161.95])
-	by perceval.ideasonboard.com (Postfix) with UTF8SMTPSA id 94650111F;
-	Fri,  7 Nov 2025 19:42:38 +0100 (CET)
+	by perceval.ideasonboard.com (Postfix) with UTF8SMTPSA id 5891B111F;
+	Fri,  7 Nov 2025 19:52:50 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-	s=mail; t=1762540958;
-	bh=27RUtw6Eea5nu4M4bsLtRDG2tXxgGK12MfBmueOq/RI=;
+	s=mail; t=1762541570;
+	bh=T5Rw6eWbPlE27qTm/Y51A5DLe5CKLXrJE8yBA6UrFuw=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=iAepoCfQEx2k7T4QACua9ihSdZe2S0fehDHxBkuyIFwCsmZF9oqHTVVuS2PuFEHcS
-	 V9bpU4KfZ52OM4YAok2suAWnxBRrLOOEU2cvaeFlWSu3wRwPic7sPss8DU/1ORYScv
-	 eUYjSzABqy3ttzhoh8TOX0rgc1N+Ciu1mD4hkXpQ=
-Date: Fri, 7 Nov 2025 20:44:29 +0200
+	b=wm+Oa9C6Gi4k4YZUlAj74M3wS8m7LFsTeP8uiJemarhggDXSx0cAHpWMnLk5pFtGL
+	 czvnQ4dmulBRace93soXdOvIr7hInH9xghsFxPHOY8pIwWDr0nZd5/Qd7cToxKGqmx
+	 fx5nvc+2KOD5qgHhY4wmsZ0zyFgl40HA+c0fXv3o=
+Date: Fri, 7 Nov 2025 20:54:41 +0200
 From: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To: Frank Li <Frank.li@nxp.com>
-Cc: linux-media@vger.kernel.org, Rui Miguel Silva <rmfrfs@gmail.com>,
-	Martin Kepplinger <martink@posteo.de>,
-	Purism Kernel Team <kernel@puri.sm>,
-	Pengutronix Kernel Team <kernel@pengutronix.de>,
-	imx@lists.linux.dev, Stefan Klug <stefan.klug@ideasonboard.com>,
-	Sakari Ailus <sakari.ailus@iki.fi>
-Subject: Re: [PATCH v1 1/6] media: imx-mipi-csis: Add VC-related register
- fields
-Message-ID: <20251107184429.GF5558@pendragon.ideasonboard.com>
-References: <20251107015813.5834-1-laurent.pinchart@ideasonboard.com>
- <20251107015813.5834-2-laurent.pinchart@ideasonboard.com>
- <aQ4cKf3y1zqwBmar@lizhi-Precision-Tower-5810>
+To: Michael Riesch <michael.riesch@collabora.com>
+Cc: Sakari Ailus <sakari.ailus@linux.intel.com>,
+	Mehdi Djait <mehdi.djait@linux.intel.com>,
+	Maxime Chevallier <maxime.chevallier@bootlin.com>,
+	=?utf-8?B?VGjDqW8=?= Lebrun <theo.lebrun@bootlin.com>,
+	Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+	Gerald Loacker <gerald.loacker@wolfvision.net>,
+	Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
+	Markus Elfring <Markus.Elfring@web.de>,
+	Mauro Carvalho Chehab <mchehab@kernel.org>,
+	Rob Herring <robh+dt@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Heiko Stuebner <heiko@sntech.de>,
+	Kever Yang <kever.yang@rock-chips.com>,
+	Nicolas Dufresne <nicolas.dufresne@collabora.com>,
+	Sebastian Reichel <sebastian.reichel@collabora.com>,
+	Collabora Kernel Team <kernel@collabora.com>,
+	Paul Kocialkowski <paulk@sys-base.io>,
+	Alexander Shiyan <eagle.alexander923@gmail.com>,
+	Val Packett <val@packett.cool>, Rob Herring <robh@kernel.org>,
+	Philipp Zabel <p.zabel@pengutronix.de>, linux-media@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-rockchip@lists.infradead.org,
+	Mehdi Djait <mehdi.djait@bootlin.com>,
+	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+	Bryan O'Donoghue <bod@kernel.org>, Chen-Yu Tsai <wens@csie.org>
+Subject: Re: [PATCH v14 00/18] media: rockchip: add a driver for the rockchip
+ camera interface
+Message-ID: <20251107185441.GG5558@pendragon.ideasonboard.com>
+References: <20240220-rk3568-vicap-v14-0-b38b6da0fc80@collabora.com>
+ <aQ4tJg8r_j4NyKhv@kekkonen.localdomain>
+ <074cd08e-0412-49f9-8dd9-b1f96eb11717@collabora.com>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
@@ -49,49 +70,54 @@ List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <aQ4cKf3y1zqwBmar@lizhi-Precision-Tower-5810>
+In-Reply-To: <074cd08e-0412-49f9-8dd9-b1f96eb11717@collabora.com>
 
-On Fri, Nov 07, 2025 at 11:19:53AM -0500, Frank Li wrote:
-> On Fri, Nov 07, 2025 at 03:58:08AM +0200, Laurent Pinchart wrote:
-> > The CMN_CTRL and ISPCFG registers have fiels related to virtual channel
-> > handling. In CMN_CTRL, the INTERLEAVE_MODE field is 2 bits wide, and
-> > controls filtering by DT, VC or both. The VC number is then set in the
-> > ISPCFG.VIRTUAL_CHANNEL field.
-> >
-> > Expand the definition of the register macros to support those features,
-> > and set the VC ID to 0 explicitly instead of relying on the default
-> > register value. This prepares for VC filtering but does not modify the
-> > driver's behaviour.
-> >
-> > While at it, use GENMASK in the last few register mask macros that don't
-> > use it.
-> >
-> > Signed-off-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-> > ---
-> >  drivers/media/platform/nxp/imx-mipi-csis.c | 19 ++++++++++++++++---
-> >  1 file changed, 16 insertions(+), 3 deletions(-)
-> >
-> ...
-> >
-> >  	val = mipi_csis_read(csis, MIPI_CSIS_CMN_CTRL);
-> > -	val &= ~MIPI_CSIS_CMN_CTRL_LANE_NUMBER_MASK;
-> > +	val &= ~(MIPI_CSIS_CMN_CTRL_LANE_NUMBER_MASK |
-> > +		 MIPI_CSIS_CMN_CTRL_INTERLEAVE_MODE_MASK);
-> > +
-> >  	val |= MIPI_CSIS_CMN_CTRL_LANE_NUMBER(lanes - 1);
-> > +
-> >  	if (csis->info->version == MIPI_CSIS_V3_3)
-> >  		val |= MIPI_CSIS_CMN_CTRL_INTERLEAVE_MODE_DT;
-> > +
+On Fri, Nov 07, 2025 at 07:41:59PM +0100, Michael Riesch wrote:
+> On 11/7/25 18:32, Sakari Ailus wrote:
+> > On Fri, Oct 24, 2025 at 02:51:29PM +0200, Michael Riesch via B4 Relay wrote:
+> >> Habidere,
+> >>
+> >> This series introduces support for the Rockchip Camera Interface (CIF),
+> >> which is featured in many Rockchip SoCs in different variations.
+> >> For example, the PX30 Video Input Processor (VIP) is able to receive
+> >> video data via the Digital Video Port (DVP, a parallel data interface)
+> >> and transfer it into system memory using a double-buffering mechanism
+> >> called ping-pong mode.
+> >> The RK3568 Video Capture (VICAP) unit, on the other hand, features a
+> >> DVP and a MIPI CSI-2 receiver that can receive video data independently
+> >> (both using the ping-pong scheme).
+> >> The different variants may have additional features, such as scaling
+> >> and/or cropping.
+> >> Finally, the RK3588 VICAP unit constitutes an essential piece of the
+> >> camera interface with one DVP, six MIPI CSI-2 receivers, scale/crop
+> >> units, and a data path multiplexer (to scaler units, to ISP, ...).
+> > 
+> > I understand both RK3568 and RK3588 include an ISP. Do you have insight on
+> > how would this work, should the support for the ISP be added later on?
 > 
-> above two empty line is not related this patch
+> Short answer: Yes and yes.
+> 
+> Long answer:
+> 
+> The patch series at hand adds support for the PX30 VIP and the RK3568
+> VICAP. I cannot really say something about the PX30, but on the RK3568
+> VICAP and ISP are orthogonal (the ISP features its own MIPI CSI-2
+> receiver, different from that introduced in this series). Thus, ISP
+> support can be introduced anytime (whenever someone is motivated ;-)).
 
-It's just a matter of giving the code more room to breathe. I can move
-them to patch 6/6 if you prefer.
+Won't they both be connected to the same sensor though, and probably the
+same D-PHY in the SoC ? They don't seem entirely separate to me.
 
-> >  	mipi_csis_write(csis, MIPI_CSIS_CMN_CTRL, val);
-> >
-> >  	__mipi_csis_set_format(csis, format, csis_fmt);
+A block diagram that shows connections between the CSI-2 pins, D-PHY,
+CSI-2 receivers, VICAP and ISP could help.
+
+> Once this patch series is merged, I'll push out changes that introduce
+> support for the RK3588 VICAP. We can discuss the integration of any
+> RK3588 ISP in this scope then -- and there may be some things to discuss
+> as there the VICAP and the ISP(s) are directly connected by means of a
+> MUX unit in the VICAP.
+> 
+> Alright?
 
 -- 
 Regards,
