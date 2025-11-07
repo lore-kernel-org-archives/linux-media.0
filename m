@@ -1,639 +1,320 @@
-Received: from mx.gpxsee.org (mx.gpxsee.org [37.205.14.76])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qk1-f178.google.com (mail-qk1-f178.google.com [209.85.222.178])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 795FA328B53;
-	Fri,  7 Nov 2025 14:23:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=37.205.14.76
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 16A5832AACE
+	for <linux-media@vger.kernel.org>; Fri,  7 Nov 2025 14:50:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762525407; cv=none; b=sIJQ4YSXTBZinUTI3DaFrUIZZIo7qu4mJTHgPuFYJ0u5ABI86/SCRlHyfb8AakMBOV3TyextNw2Az7HaLR/E89rPI5rZUuKdhkTCguBREyerV54nW6E5WC00ey3kK4hXXgHoXHNOj1hjB9uKiQCWo5auCEJsFvMRVKSBRTMd0bc=
+	t=1762527034; cv=none; b=rciyI97LvBNBKLsPSD5AV/XBOpA/NhhPnr16GHba8ylnMC7vdHuaFe+0HX3jwb1vT48aBRd6sDmOxuSlC7MK6YfBF6UZzPJ+S8VFh4ciAX1+kOLE1ErFGrT6tNHI+RT5gltW/IfgsdHrOGjHyQ2zBJhGxCPAbNkF0WX59XA/oxg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762525407; c=relaxed/simple;
-	bh=2wyR2ORFs61fuM1sqIp6ZFgjmd5QTE8aa1fIQ6NLW2Y=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=YYfyfyk3S1bfjIuQsSM6D04kGRW34p/DENDDiMYvE/bAlw9Zrt06WeXmo2VYZtf/vC+XSDpesfHdS6T2aEdsG/aLD5gkQQv+4ca3tApmIKj7ehhKDXZZ/ax1oCWgb4dI628GV7pQW296umhKMWCdgIuvCQhH4i/V1PnfoNRdnJg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=gpxsee.org; spf=pass smtp.mailfrom=gpxsee.org; arc=none smtp.client-ip=37.205.14.76
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=gpxsee.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gpxsee.org
-Received: from localhost (unknown [62.77.71.229])
-	by mx.gpxsee.org (Postfix) with ESMTPSA id E877779CFE;
-	Fri, 07 Nov 2025 15:17:05 +0100 (CET)
-From: tumic@gpxsee.org
-To: Mauro Carvalho Chehab <mchehab@kernel.org>,
-	Hans Verkuil <hverkuil@xs4all.nl>
-Cc: linux-media@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	=?UTF-8?q?Martin=20T=C5=AFma?= <martin.tuma@digiteqautomotive.com>
-Subject: [PATCH 1/3] media: pci: mgb4: Add support for GMSL1 modules
-Date: Fri,  7 Nov 2025 15:16:46 +0100
-Message-ID: <20251107141648.1889-2-tumic@gpxsee.org>
-X-Mailer: git-send-email 2.51.0
-In-Reply-To: <20251107141648.1889-1-tumic@gpxsee.org>
-References: <20251107141648.1889-1-tumic@gpxsee.org>
+	s=arc-20240116; t=1762527034; c=relaxed/simple;
+	bh=rCNkb9pzNrqDFTfYtkOxauKhObKtplXkIA7x1oxsXi4=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=eNNOpejsGhCEBNuZcqQZ1O+iAhESQb6cW7k2+mVUahgdQw5Q8qNGOgsKm2K0dzsTdNvSK8rN0fx9Zao63PDbNh2eP5TakxnemLyz+aMjecHGWW4sFl2lekru+C33V/u9kdrhI2Xr+3kUOUircORthaXl5ESEcnODlloyPXtO5Bk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ndufresne.ca; spf=pass smtp.mailfrom=ndufresne.ca; dkim=pass (2048-bit key) header.d=ndufresne-ca.20230601.gappssmtp.com header.i=@ndufresne-ca.20230601.gappssmtp.com header.b=TvU1QJ2x; arc=none smtp.client-ip=209.85.222.178
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ndufresne.ca
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ndufresne.ca
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=ndufresne-ca.20230601.gappssmtp.com header.i=@ndufresne-ca.20230601.gappssmtp.com header.b="TvU1QJ2x"
+Received: by mail-qk1-f178.google.com with SMTP id af79cd13be357-8b0f54370ecso88809685a.2
+        for <linux-media@vger.kernel.org>; Fri, 07 Nov 2025 06:50:30 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ndufresne-ca.20230601.gappssmtp.com; s=20230601; t=1762527030; x=1763131830; darn=vger.kernel.org;
+        h=mime-version:user-agent:references:in-reply-to:date:cc:to:from
+         :subject:message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=rCNkb9pzNrqDFTfYtkOxauKhObKtplXkIA7x1oxsXi4=;
+        b=TvU1QJ2xDeeImVhvkgPgQbY+rs5/k3xB+G0Tt9fmsg9DOf2MP7qRUK9xcK+zXCOfhD
+         VAMwpRexnhjIhySbkJBgyVgFlhxKLMQRtiqhD+6Jrv0S/YX5U3ZCRl2oEalWZ+Bjl9pn
+         b5/C3nzT+16/KtdMIQ7Iyp5w1zAp9bmrILW6glHQPzd5I/Hov1+6mB0jfJrCrjcsEGlv
+         ber1O/3sXNW5moVYFXnElBxfxkme4XwZzQkUVyaT+PIxgkm2Fe6Yy27rlPkTCaG3Tc1W
+         NjQap71zdG/9ihfMNCmVr1zV/TBtU9qmGrN0/1c2s+07KWGbvQSLJwZ8EXTmhEkOm/MZ
+         zXuw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1762527030; x=1763131830;
+        h=mime-version:user-agent:references:in-reply-to:date:cc:to:from
+         :subject:message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=rCNkb9pzNrqDFTfYtkOxauKhObKtplXkIA7x1oxsXi4=;
+        b=TSv4pgs1jXj64gmikPVccRmBxSocdBifwa+S2gqV98M+1QOjVtKZSSKXazRaEtimAa
+         xbgJdhX6jT7YaHVH8OfGvpaZORGdQGA793ZIBDsQcURahxuXqaW9lEZKv+0zx4Hwb7KX
+         FFk3XtVR4sySDEC2AcO5R/wEIKwHZ3jaBmfGSHeCgazYEWkevZxNeTGmMgztrwC8SnPS
+         1DTvRWGmyy/lllZ/EJ9EyZyRa0f1gDdygitcjYbe563wlRK1hdlwcKXJs6xZAkGjY5HC
+         FQK2DNaIGQowQYTt3XaB3Zu3bHVIzRx/vK7b73lm+tUijXPcGFbt1sKRCl7OmviF0JBc
+         JS1Q==
+X-Forwarded-Encrypted: i=1; AJvYcCWJiOPdzPzJ5XY8Cq+1VI68a6RUsLON8hjBzIL24Sp0p7P8VCJvAvOg+ZJvN5fvxw1VGQb+6gL8ePpwFQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0YzWY4DRf60VOyp4tTd+HGd/24hn1Mh06iImGbj7wZpEgeLB37Hy
+	e2TDw3u0csqIONQ/1ZHXyo9fd45rr4LsLFzMxg29qPkwTiiTyBCtxnspNLiy5HUke4g=
+X-Gm-Gg: ASbGncu3BkiNO95LrONeR19Ecs/P8Q0Q66PyROElPJ0PSia2Zo3Z1mThnDSBFdZNSpW
+	lhJ6AfF+spEKAxuVPehPOYnh1qEr418pmu5Aqfnw1gghTjsQPllf3N1YfIgIF6FDcbArTB6Ih8+
+	7cwLT/rVrsoSfFQNlCMOwV9QBRFsrEt/V88ys3bVJs65Gv7EBZCQ/QewH5g5Mj4vWwcRELDH/bb
+	AEy2stkBbOb85MSaBheEXEwfP5VkLVRcpXsVXyw5e2N11EhYQW6wJue9OaxUGu2/d765Xq0A/9x
+	NlEMgwkX68NTaIVYjAkKmDi0WEMG5a1MGzODiFpoYuTgQNX3cl3mROxA2qmP/sesUgp9jdOHdKA
+	DmpjzatukDnyoIWW+D86MSUrdX3Gpg8uTAYYrs6wG8/n3+262Ex+ehBVN2hiLfAEeqO+QtTWdQv
+	hTLY1f9yMeRHCF61TU
+X-Google-Smtp-Source: AGHT+IF19jZG8V4gtAHEGC5v+53YAOJOwKlSf5LHBbsF7OEIQOjrxRqEdEvXBBLd4UJL6qEVJkgbDQ==
+X-Received: by 2002:a05:620a:2697:b0:891:6891:5668 with SMTP id af79cd13be357-8b245351ec4mr451627785a.63.1762527029440;
+        Fri, 07 Nov 2025 06:50:29 -0800 (PST)
+Received: from ?IPv6:2606:6d00:11:ef24::c41? ([2606:6d00:11:ef24::c41])
+        by smtp.gmail.com with ESMTPSA id d75a77b69052e-4ed8131b371sm40453501cf.8.2025.11.07.06.50.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 07 Nov 2025 06:50:28 -0800 (PST)
+Message-ID: <141a14f366abe431be65e3977c27d2b39180f38e.camel@ndufresne.ca>
+Subject: Re: [PATCH v3 2/4] media: docs: dev-decoder: Trigger dynamic source
+ change for colorspace
+From: Nicolas Dufresne <nicolas@ndufresne.ca>
+To: "Ming Qian(OSS)" <ming.qian@oss.nxp.com>, mchehab@kernel.org, 
+	hverkuil-cisco@xs4all.nl
+Cc: shawnguo@kernel.org, s.hauer@pengutronix.de, kernel@pengutronix.de, 
+	festevam@gmail.com, linux-imx@nxp.com, xiahong.bao@nxp.com,
+ eagle.zhou@nxp.com, 	imx@lists.linux.dev, linux-media@vger.kernel.org,
+ linux-kernel@vger.kernel.org, 	linux-arm-kernel@lists.infradead.org
+Date: Fri, 07 Nov 2025 09:50:27 -0500
+In-Reply-To: <0c68a2c0-7e30-46da-abf1-759a7dbb7ecf@oss.nxp.com>
+References: <20250418085422.193-1-ming.qian@oss.nxp.com>
+	 <20250418085422.193-2-ming.qian@oss.nxp.com>
+	 <4d1260be46be22d7b40fab9788763af796d118dc.camel@ndufresne.ca>
+	 <0c68a2c0-7e30-46da-abf1-759a7dbb7ecf@oss.nxp.com>
+Content-Type: multipart/signed; micalg="pgp-sha512";
+	protocol="application/pgp-signature"; boundary="=-Le2x+CLghYjLb8UyRe2r"
+User-Agent: Evolution 3.58.1 (3.58.1-1.fc43) 
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
 
-From: Martin Tůma <martin.tuma@digiteqautomotive.com>
 
-Add support for GMSL1 modules. GMSL1 modules have 2 inputs, 2 outputs and
-require a separate FW (id #3).
+--=-Le2x+CLghYjLb8UyRe2r
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Signed-off-by: Martin Tůma <martin.tuma@digiteqautomotive.com>
----
- drivers/media/pci/mgb4/mgb4_core.c      | 22 ++++++--
- drivers/media/pci/mgb4/mgb4_core.h      |  9 ++--
- drivers/media/pci/mgb4/mgb4_sysfs.h     |  6 ++-
- drivers/media/pci/mgb4/mgb4_sysfs_in.c  | 49 +++++++++++++----
- drivers/media/pci/mgb4/mgb4_sysfs_out.c | 38 ++++++++++---
- drivers/media/pci/mgb4/mgb4_vin.c       | 72 ++++++++++++++++---------
- drivers/media/pci/mgb4/mgb4_vout.c      | 64 +++++++++++++++-------
- 7 files changed, 189 insertions(+), 71 deletions(-)
+Hi,
 
-diff --git a/drivers/media/pci/mgb4/mgb4_core.c b/drivers/media/pci/mgb4/mgb4_core.c
-index 3ce6b717ca32..a7cb8dc50b53 100644
---- a/drivers/media/pci/mgb4/mgb4_core.c
-+++ b/drivers/media/pci/mgb4/mgb4_core.c
-@@ -381,6 +381,18 @@ static int get_serial_number(struct mgb4_dev *mgbdev)
- 	return 0;
- }
- 
-+static const char *module_type_str(struct mgb4_dev *mgbdev)
-+{
-+	if (MGB4_IS_FPDL3(mgbdev))
-+		return "FPDL3";
-+	else if (MGB4_IS_GMSL3(mgbdev))
-+		return "GMSL3";
-+	else if (MGB4_IS_GMSL1(mgbdev))
-+		return "GMSL1";
-+	else
-+		return "UNKNOWN";
-+}
-+
- static int get_module_version(struct mgb4_dev *mgbdev)
- {
- 	struct device *dev = &mgbdev->pdev->dev;
-@@ -402,19 +414,21 @@ static int get_module_version(struct mgb4_dev *mgbdev)
- 	}
- 
- 	mgbdev->module_version = ~((u32)version) & 0xff;
--	if (!(MGB4_IS_FPDL3(mgbdev) || MGB4_IS_GMSL(mgbdev))) {
-+	if (!(MGB4_IS_FPDL3(mgbdev) ||
-+	      MGB4_IS_GMSL3(mgbdev) ||
-+	      MGB4_IS_GMSL1(mgbdev))) {
- 		dev_err(dev, "unknown module type\n");
- 		return -EINVAL;
- 	}
- 	fw_version = mgb4_read_reg(&mgbdev->video, 0xC4) >> 24;
- 	if ((MGB4_IS_FPDL3(mgbdev) && fw_version != 1) ||
--	    (MGB4_IS_GMSL(mgbdev) && fw_version != 2)) {
-+	    (MGB4_IS_GMSL3(mgbdev) && fw_version != 2) ||
-+	    (MGB4_IS_GMSL1(mgbdev) && fw_version != 3)) {
- 		dev_err(dev, "module/firmware type mismatch\n");
- 		return -EINVAL;
- 	}
- 
--	dev_info(dev, "%s module detected\n",
--		 MGB4_IS_FPDL3(mgbdev) ? "FPDL3" : "GMSL");
-+	dev_info(dev, "%s module detected\n", module_type_str(mgbdev));
- 
- 	return 0;
- }
-diff --git a/drivers/media/pci/mgb4/mgb4_core.h b/drivers/media/pci/mgb4/mgb4_core.h
-index cc24068400a2..06ef8bb44089 100644
---- a/drivers/media/pci/mgb4/mgb4_core.h
-+++ b/drivers/media/pci/mgb4/mgb4_core.h
-@@ -18,14 +18,17 @@
- #define MGB4_VIN_DEVICES  2
- #define MGB4_VOUT_DEVICES 2
- 
--#define MGB4_IS_GMSL(mgbdev) \
-+#define MGB4_IS_GMSL1(mgbdev) \
-+	(((mgbdev)->module_version >> 4) == 6)
-+#define MGB4_IS_GMSL3(mgbdev) \
- 	((((mgbdev)->module_version >> 4) >= 2) && \
- 	 (((mgbdev)->module_version >> 4) <= 4))
- #define MGB4_IS_FPDL3(mgbdev) \
- 	(((mgbdev)->module_version >> 4) == 1)
- #define MGB4_HAS_VOUT(mgbdev) \
--	((((mgbdev)->module_version >> 4) >= 1) && \
--	 (((mgbdev)->module_version >> 4) <= 3))
-+	(((((mgbdev)->module_version >> 4) >= 1) && \
-+	  (((mgbdev)->module_version >> 4) <= 3)) || \
-+	 ((((mgbdev)->module_version >> 4) == 6)))
- 
- struct mgb4_dma_channel {
- 	struct dma_chan *chan;
-diff --git a/drivers/media/pci/mgb4/mgb4_sysfs.h b/drivers/media/pci/mgb4/mgb4_sysfs.h
-index 017d82c0624e..fa7fd232c2c2 100644
---- a/drivers/media/pci/mgb4/mgb4_sysfs.h
-+++ b/drivers/media/pci/mgb4/mgb4_sysfs.h
-@@ -11,8 +11,10 @@
- 
- extern struct attribute *mgb4_pci_attrs[];
- extern struct attribute *mgb4_fpdl3_in_attrs[];
--extern struct attribute *mgb4_gmsl_in_attrs[];
-+extern struct attribute *mgb4_gmsl3_in_attrs[];
-+extern struct attribute *mgb4_gmsl1_in_attrs[];
- extern struct attribute *mgb4_fpdl3_out_attrs[];
--extern struct attribute *mgb4_gmsl_out_attrs[];
-+extern struct attribute *mgb4_gmsl3_out_attrs[];
-+extern struct attribute *mgb4_gmsl1_out_attrs[];
- 
- #endif
-diff --git a/drivers/media/pci/mgb4/mgb4_sysfs_in.c b/drivers/media/pci/mgb4/mgb4_sysfs_in.c
-index 9626fa59e3d3..7c26fb8d9c4c 100644
---- a/drivers/media/pci/mgb4/mgb4_sysfs_in.c
-+++ b/drivers/media/pci/mgb4/mgb4_sysfs_in.c
-@@ -36,10 +36,13 @@ static ssize_t oldi_lane_width_show(struct device *dev,
- 	u32 config;
- 	int ret;
- 
--	i2c_reg = MGB4_IS_GMSL(mgbdev) ? 0x1CE : 0x49;
--	i2c_mask = MGB4_IS_GMSL(mgbdev) ? 0x0E : 0x03;
--	i2c_single_val = MGB4_IS_GMSL(mgbdev) ? 0x00 : 0x02;
--	i2c_dual_val = MGB4_IS_GMSL(mgbdev) ? 0x0E : 0x00;
-+	if (MGB4_IS_GMSL1(mgbdev))
-+		return 0;
-+
-+	i2c_reg = MGB4_IS_GMSL3(mgbdev) ? 0x1CE : 0x49;
-+	i2c_mask = MGB4_IS_GMSL3(mgbdev) ? 0x0E : 0x03;
-+	i2c_single_val = MGB4_IS_GMSL3(mgbdev) ? 0x00 : 0x02;
-+	i2c_dual_val = MGB4_IS_GMSL3(mgbdev) ? 0x0E : 0x00;
- 
- 	mutex_lock(&mgbdev->i2c_lock);
- 	ret = mgb4_i2c_read_byte(&vindev->deser, i2c_reg);
-@@ -79,21 +82,24 @@ static ssize_t oldi_lane_width_store(struct device *dev,
- 	if (ret)
- 		return ret;
- 
-+	if (MGB4_IS_GMSL1(mgbdev))
-+		return val ? -EINVAL : count;
-+
- 	switch (val) {
- 	case 0: /* single */
- 		fpga_data = 0;
--		i2c_data = MGB4_IS_GMSL(mgbdev) ? 0x00 : 0x02;
-+		i2c_data = MGB4_IS_GMSL3(mgbdev) ? 0x00 : 0x02;
- 		break;
- 	case 1: /* dual */
- 		fpga_data = 1U << 9;
--		i2c_data = MGB4_IS_GMSL(mgbdev) ? 0x0E : 0x00;
-+		i2c_data = MGB4_IS_GMSL3(mgbdev) ? 0x0E : 0x00;
- 		break;
- 	default:
- 		return -EINVAL;
- 	}
- 
--	i2c_reg = MGB4_IS_GMSL(mgbdev) ? 0x1CE : 0x49;
--	i2c_mask = MGB4_IS_GMSL(mgbdev) ? 0x0E : 0x03;
-+	i2c_reg = MGB4_IS_GMSL3(mgbdev) ? 0x1CE : 0x49;
-+	i2c_mask = MGB4_IS_GMSL3(mgbdev) ? 0x0E : 0x03;
- 
- 	mutex_lock(&mgbdev->i2c_lock);
- 	ret = mgb4_i2c_mask_byte(&vindev->deser, i2c_reg, i2c_mask, i2c_data);
-@@ -102,7 +108,7 @@ static ssize_t oldi_lane_width_store(struct device *dev,
- 		return -EIO;
- 	mgb4_mask_reg(&mgbdev->video, vindev->config->regs.config, 1U << 9,
- 		      fpga_data);
--	if (MGB4_IS_GMSL(mgbdev)) {
-+	if (MGB4_IS_GMSL3(mgbdev)) {
- 		/* reset input link */
- 		mutex_lock(&mgbdev->i2c_lock);
- 		ret = mgb4_i2c_mask_byte(&vindev->deser, 0x10, 1U << 5, 1U << 5);
-@@ -745,7 +751,7 @@ struct attribute *mgb4_fpdl3_in_attrs[] = {
- 	NULL
- };
- 
--struct attribute *mgb4_gmsl_in_attrs[] = {
-+struct attribute *mgb4_gmsl3_in_attrs[] = {
- 	&dev_attr_input_id.attr,
- 	&dev_attr_link_status.attr,
- 	&dev_attr_stream_status.attr,
-@@ -770,3 +776,26 @@ struct attribute *mgb4_gmsl_in_attrs[] = {
- 	&dev_attr_gmsl_fec.attr,
- 	NULL
- };
-+
-+struct attribute *mgb4_gmsl1_in_attrs[] = {
-+	&dev_attr_input_id.attr,
-+	&dev_attr_link_status.attr,
-+	&dev_attr_stream_status.attr,
-+	&dev_attr_video_width.attr,
-+	&dev_attr_video_height.attr,
-+	&dev_attr_hsync_status.attr,
-+	&dev_attr_vsync_status.attr,
-+	&dev_attr_oldi_lane_width.attr,
-+	&dev_attr_color_mapping.attr,
-+	&dev_attr_hsync_gap_length.attr,
-+	&dev_attr_vsync_gap_length.attr,
-+	&dev_attr_pclk_frequency.attr,
-+	&dev_attr_hsync_width.attr,
-+	&dev_attr_vsync_width.attr,
-+	&dev_attr_hback_porch.attr,
-+	&dev_attr_hfront_porch.attr,
-+	&dev_attr_vback_porch.attr,
-+	&dev_attr_vfront_porch.attr,
-+	&dev_attr_frequency_range.attr,
-+	NULL
-+};
-diff --git a/drivers/media/pci/mgb4/mgb4_sysfs_out.c b/drivers/media/pci/mgb4/mgb4_sysfs_out.c
-index 573aa61c69d4..5769f3ca6c2f 100644
---- a/drivers/media/pci/mgb4/mgb4_sysfs_out.c
-+++ b/drivers/media/pci/mgb4/mgb4_sysfs_out.c
-@@ -665,6 +665,7 @@ static ssize_t pclk_frequency_store(struct device *dev,
- {
- 	struct video_device *vdev = to_video_device(dev);
- 	struct mgb4_vout_dev *voutdev = video_get_drvdata(vdev);
-+	struct mgb4_dev *mgbdev = voutdev->mgbdev;
- 	unsigned long val;
- 	int ret;
- 	unsigned int dp;
-@@ -679,14 +680,16 @@ static ssize_t pclk_frequency_store(struct device *dev,
- 		return -EBUSY;
- 	}
- 
--	dp = (val > 50000) ? 1 : 0;
-+	dp = (MGB4_IS_FPDL3(mgbdev) && val > 50000) ? 1 : 0;
- 	voutdev->freq = mgb4_cmt_set_vout_freq(voutdev, val >> dp) << dp;
--
--	mgb4_mask_reg(&voutdev->mgbdev->video, voutdev->config->regs.config,
--		      0x10, dp << 4);
--	mutex_lock(&voutdev->mgbdev->i2c_lock);
--	ret = mgb4_i2c_mask_byte(&voutdev->ser, 0x4F, 1 << 6, ((~dp) & 1) << 6);
--	mutex_unlock(&voutdev->mgbdev->i2c_lock);
-+	mgb4_mask_reg(&mgbdev->video, voutdev->config->regs.config, 0x10,
-+		      dp << 4);
-+	if (MGB4_IS_FPDL3(mgbdev)) {
-+		mutex_lock(&mgbdev->i2c_lock);
-+		ret = mgb4_i2c_mask_byte(&voutdev->ser, 0x4F, 1 << 6,
-+					 ((~dp) & 1) << 6);
-+		mutex_unlock(&mgbdev->i2c_lock);
-+	}
- 
- 	mutex_unlock(voutdev->vdev.lock);
- 
-@@ -731,7 +734,7 @@ struct attribute *mgb4_fpdl3_out_attrs[] = {
- 	NULL
- };
- 
--struct attribute *mgb4_gmsl_out_attrs[] = {
-+struct attribute *mgb4_gmsl3_out_attrs[] = {
- 	&dev_attr_output_id.attr,
- 	&dev_attr_video_source.attr,
- 	&dev_attr_display_width.attr,
-@@ -739,3 +742,22 @@ struct attribute *mgb4_gmsl_out_attrs[] = {
- 	&dev_attr_frame_rate.attr,
- 	NULL
- };
-+
-+struct attribute *mgb4_gmsl1_out_attrs[] = {
-+	&dev_attr_output_id.attr,
-+	&dev_attr_video_source.attr,
-+	&dev_attr_display_width.attr,
-+	&dev_attr_display_height.attr,
-+	&dev_attr_frame_rate.attr,
-+	&dev_attr_hsync_polarity.attr,
-+	&dev_attr_vsync_polarity.attr,
-+	&dev_attr_de_polarity.attr,
-+	&dev_attr_pclk_frequency.attr,
-+	&dev_attr_hsync_width.attr,
-+	&dev_attr_vsync_width.attr,
-+	&dev_attr_hback_porch.attr,
-+	&dev_attr_hfront_porch.attr,
-+	&dev_attr_vback_porch.attr,
-+	&dev_attr_vfront_porch.attr,
-+	NULL
-+};
-diff --git a/drivers/media/pci/mgb4/mgb4_vin.c b/drivers/media/pci/mgb4/mgb4_vin.c
-index 4b38076486ff..116eb2fa3266 100644
---- a/drivers/media/pci/mgb4/mgb4_vin.c
-+++ b/drivers/media/pci/mgb4/mgb4_vin.c
-@@ -32,7 +32,8 @@
- #include "mgb4_vin.h"
- 
- ATTRIBUTE_GROUPS(mgb4_fpdl3_in);
--ATTRIBUTE_GROUPS(mgb4_gmsl_in);
-+ATTRIBUTE_GROUPS(mgb4_gmsl3_in);
-+ATTRIBUTE_GROUPS(mgb4_gmsl1_in);
- 
- static const struct mgb4_vin_config vin_cfg[] = {
- 	{0, 0, 0, 6, {0x10, 0x00, 0x04, 0x08, 0x1C, 0x14, 0x18, 0x20, 0x24, 0x28, 0xE8}},
-@@ -44,23 +45,31 @@ static const struct i2c_board_info fpdl3_deser_info[] = {
- 	{I2C_BOARD_INFO("deserializer2", 0x36)},
- };
- 
--static const struct i2c_board_info gmsl_deser_info[] = {
-+static const struct i2c_board_info gmsl3_deser_info[] = {
- 	{I2C_BOARD_INFO("deserializer1", 0x4C)},
- 	{I2C_BOARD_INFO("deserializer2", 0x2A)},
- };
- 
-+static const struct i2c_board_info gmsl1_deser_info[] = {
-+	{I2C_BOARD_INFO("deserializer1", 0x2C)},
-+	{I2C_BOARD_INFO("deserializer2", 0x6C)},
-+};
-+
- static const struct mgb4_i2c_kv fpdl3_i2c[] = {
- 	{0x06, 0xFF, 0x04}, {0x07, 0xFF, 0x01}, {0x45, 0xFF, 0xE8},
- 	{0x49, 0xFF, 0x00}, {0x34, 0xFF, 0x00}, {0x23, 0xFF, 0x00}
- };
- 
--static const struct mgb4_i2c_kv gmsl_i2c[] = {
-+static const struct mgb4_i2c_kv gmsl3_i2c[] = {
- 	{0x01, 0x03, 0x03}, {0x300, 0x0C, 0x0C}, {0x03, 0xC0, 0xC0},
- 	{0x1CE, 0x0E, 0x0E}, {0x11, 0x05, 0x00}, {0x05, 0xC0, 0x40},
- 	{0x307, 0x0F, 0x00}, {0xA0, 0x03, 0x00}, {0x3E0, 0x07, 0x07},
- 	{0x308, 0x01, 0x01}, {0x10, 0x20, 0x20}, {0x300, 0x40, 0x40}
- };
- 
-+static const struct mgb4_i2c_kv gmsl1_i2c[] = {
-+};
-+
- static const struct v4l2_dv_timings_cap video_timings_cap = {
- 	.type = V4L2_DV_BT_656_1120,
- 	.bt = {
-@@ -796,22 +805,29 @@ static irqreturn_t err_handler(int irq, void *ctx)
- 
- static int deser_init(struct mgb4_vin_dev *vindev, int id)
- {
--	int rv, addr_size;
--	size_t values_count;
--	const struct mgb4_i2c_kv *values;
--	const struct i2c_board_info *info;
-+	int rv, addr_size = 0;
-+	size_t count = 0;
-+	const struct mgb4_i2c_kv *values = NULL;
-+	const struct i2c_board_info *info = NULL;
- 	struct device *dev = &vindev->mgbdev->pdev->dev;
- 
--	if (MGB4_IS_GMSL(vindev->mgbdev)) {
--		info = &gmsl_deser_info[id];
-+	if (MGB4_IS_GMSL3(vindev->mgbdev)) {
-+		info = &gmsl3_deser_info[id];
- 		addr_size = 16;
--		values = gmsl_i2c;
--		values_count = ARRAY_SIZE(gmsl_i2c);
--	} else {
-+		values = gmsl3_i2c;
-+		count = ARRAY_SIZE(gmsl3_i2c);
-+	} else if (MGB4_IS_FPDL3(vindev->mgbdev)) {
- 		info = &fpdl3_deser_info[id];
- 		addr_size = 8;
- 		values = fpdl3_i2c;
--		values_count = ARRAY_SIZE(fpdl3_i2c);
-+		count = ARRAY_SIZE(fpdl3_i2c);
-+	} else if (MGB4_IS_GMSL1(vindev->mgbdev)) {
-+		info = &gmsl1_deser_info[id];
-+		addr_size = 8;
-+		values = gmsl1_i2c;
-+		count = ARRAY_SIZE(gmsl1_i2c);
-+	} else {
-+		return -EINVAL;
- 	}
- 
- 	rv = mgb4_i2c_init(&vindev->deser, vindev->mgbdev->i2c_adap, info,
-@@ -820,7 +836,7 @@ static int deser_init(struct mgb4_vin_dev *vindev, int id)
- 		dev_err(dev, "failed to create deserializer\n");
- 		return rv;
- 	}
--	rv = mgb4_i2c_configure(&vindev->deser, values, values_count);
-+	rv = mgb4_i2c_configure(&vindev->deser, values, count);
- 	if (rv < 0) {
- 		dev_err(dev, "failed to configure deserializer\n");
- 		goto err_i2c_dev;
-@@ -838,11 +854,12 @@ static void fpga_init(struct mgb4_vin_dev *vindev)
- {
- 	struct mgb4_regs *video = &vindev->mgbdev->video;
- 	const struct mgb4_vin_regs *regs = &vindev->config->regs;
-+	int dp = MGB4_IS_GMSL1(vindev->mgbdev) ? 0 : 1;
- 
- 	mgb4_write_reg(video, regs->config, 0x00000001);
- 	mgb4_write_reg(video, regs->sync, 0x03E80002);
- 	mgb4_write_reg(video, regs->padding, 0x00000000);
--	mgb4_write_reg(video, regs->config, 1U << 9);
-+	mgb4_write_reg(video, regs->config, dp << 9);
- }
- 
- static void create_debugfs(struct mgb4_vin_dev *vindev)
-@@ -890,10 +907,21 @@ static void create_debugfs(struct mgb4_vin_dev *vindev)
- #endif
- }
- 
-+static const struct attribute_group **module_groups(struct mgb4_dev *mgbdev)
-+{
-+	if (MGB4_IS_FPDL3(mgbdev))
-+		return mgb4_fpdl3_in_groups;
-+	else if (MGB4_IS_GMSL3(mgbdev))
-+		return mgb4_gmsl3_in_groups;
-+	else if (MGB4_IS_GMSL1(mgbdev))
-+		return mgb4_gmsl1_in_groups;
-+	else
-+		return 0;
-+}
-+
- struct mgb4_vin_dev *mgb4_vin_create(struct mgb4_dev *mgbdev, int id)
- {
- 	int rv;
--	const struct attribute_group **groups;
- 	struct mgb4_vin_dev *vindev;
- 	struct pci_dev *pdev = mgbdev->pdev;
- 	struct device *dev = &pdev->dev;
-@@ -914,14 +942,13 @@ struct mgb4_vin_dev *mgb4_vin_create(struct mgb4_dev *mgbdev, int id)
- 	INIT_WORK(&vindev->dma_work, dma_transfer);
- 	INIT_WORK(&vindev->err_work, signal_change);
- 
--	/* IRQ callback */
-+	/* IRQ callbacks */
- 	vin_irq = xdma_get_user_irq(mgbdev->xdev, vindev->config->vin_irq);
- 	rv = request_irq(vin_irq, vin_handler, 0, "mgb4-vin", vindev);
- 	if (rv) {
- 		dev_err(dev, "failed to register vin irq handler\n");
- 		goto err_alloc;
- 	}
--	/* Error IRQ callback */
- 	err_irq = xdma_get_user_irq(mgbdev->xdev, vindev->config->err_irq);
- 	rv = request_irq(err_irq, err_handler, 0, "mgb4-err", vindev);
- 	if (rv) {
-@@ -986,9 +1013,7 @@ struct mgb4_vin_dev *mgb4_vin_create(struct mgb4_dev *mgbdev, int id)
- 	}
- 
- 	/* Module sysfs attributes */
--	groups = MGB4_IS_GMSL(mgbdev)
--	  ? mgb4_gmsl_in_groups : mgb4_fpdl3_in_groups;
--	rv = device_add_groups(&vindev->vdev.dev, groups);
-+	rv = device_add_groups(&vindev->vdev.dev, module_groups(mgbdev));
- 	if (rv) {
- 		dev_err(dev, "failed to create sysfs attributes\n");
- 		goto err_video_dev;
-@@ -1014,7 +1039,6 @@ struct mgb4_vin_dev *mgb4_vin_create(struct mgb4_dev *mgbdev, int id)
- 
- void mgb4_vin_free(struct mgb4_vin_dev *vindev)
- {
--	const struct attribute_group **groups;
- 	int vin_irq = xdma_get_user_irq(vindev->mgbdev->xdev,
- 					vindev->config->vin_irq);
- 	int err_irq = xdma_get_user_irq(vindev->mgbdev->xdev,
-@@ -1025,9 +1049,7 @@ void mgb4_vin_free(struct mgb4_vin_dev *vindev)
- 	free_irq(vin_irq, vindev);
- 	free_irq(err_irq, vindev);
- 
--	groups = MGB4_IS_GMSL(vindev->mgbdev)
--	  ? mgb4_gmsl_in_groups : mgb4_fpdl3_in_groups;
--	device_remove_groups(&vindev->vdev.dev, groups);
-+	device_remove_groups(&vindev->vdev.dev, module_groups(vindev->mgbdev));
- 
- 	mgb4_i2c_free(&vindev->deser);
- 	video_unregister_device(&vindev->vdev);
-diff --git a/drivers/media/pci/mgb4/mgb4_vout.c b/drivers/media/pci/mgb4/mgb4_vout.c
-index fd93fbbaf755..209c0950002c 100644
---- a/drivers/media/pci/mgb4/mgb4_vout.c
-+++ b/drivers/media/pci/mgb4/mgb4_vout.c
-@@ -25,7 +25,8 @@
- #include "mgb4_vout.h"
- 
- ATTRIBUTE_GROUPS(mgb4_fpdl3_out);
--ATTRIBUTE_GROUPS(mgb4_gmsl_out);
-+ATTRIBUTE_GROUPS(mgb4_gmsl3_out);
-+ATTRIBUTE_GROUPS(mgb4_gmsl1_out);
- 
- static const struct mgb4_vout_config vout_cfg[] = {
- 	{0, 0, 8, {0x78, 0x60, 0x64, 0x68, 0x74, 0x6C, 0x70, 0x7C, 0xE0}},
-@@ -37,10 +38,18 @@ static const struct i2c_board_info fpdl3_ser_info[] = {
- 	{I2C_BOARD_INFO("serializer2", 0x16)},
- };
- 
-+static const struct i2c_board_info gmsl1_ser_info[] = {
-+	{I2C_BOARD_INFO("serializer1", 0x24)},
-+	{I2C_BOARD_INFO("serializer2", 0x22)},
-+};
-+
- static const struct mgb4_i2c_kv fpdl3_i2c[] = {
- 	{0x05, 0xFF, 0x04}, {0x06, 0xFF, 0x01}, {0xC2, 0xFF, 0x80}
- };
- 
-+static const struct mgb4_i2c_kv gmsl1_i2c[] = {
-+};
-+
- static const struct v4l2_dv_timings_cap video_timings_cap = {
- 	.type = V4L2_DV_BT_656_1120,
- 	.bt = {
-@@ -634,12 +643,24 @@ static irqreturn_t handler(int irq, void *ctx)
- 
- static int ser_init(struct mgb4_vout_dev *voutdev, int id)
- {
--	int rv;
--	const struct i2c_board_info *info = &fpdl3_ser_info[id];
- 	struct mgb4_i2c_client *ser = &voutdev->ser;
- 	struct device *dev = &voutdev->mgbdev->pdev->dev;
-+	const struct i2c_board_info *info = NULL;
-+	const struct mgb4_i2c_kv *values = NULL;
-+	size_t count = 0;
-+	int rv;
-+
-+	if (MGB4_IS_FPDL3(voutdev->mgbdev)) {
-+		info = &fpdl3_ser_info[id];
-+		values = fpdl3_i2c;
-+		count = ARRAY_SIZE(fpdl3_i2c);
-+	} else if (MGB4_IS_GMSL1(voutdev->mgbdev)) {
-+		info = &gmsl1_ser_info[id];
-+		values = gmsl1_i2c;
-+		count = ARRAY_SIZE(gmsl1_i2c);
-+	}
- 
--	if (MGB4_IS_GMSL(voutdev->mgbdev))
-+	if (!info)
- 		return 0;
- 
- 	rv = mgb4_i2c_init(ser, voutdev->mgbdev->i2c_adap, info, 8);
-@@ -647,7 +668,7 @@ static int ser_init(struct mgb4_vout_dev *voutdev, int id)
- 		dev_err(dev, "failed to create serializer\n");
- 		return rv;
- 	}
--	rv = mgb4_i2c_configure(ser, fpdl3_i2c, ARRAY_SIZE(fpdl3_i2c));
-+	rv = mgb4_i2c_configure(ser, values, count);
- 	if (rv < 0) {
- 		dev_err(dev, "failed to configure serializer\n");
- 		goto err_i2c_dev;
-@@ -665,18 +686,19 @@ static void fpga_init(struct mgb4_vout_dev *voutdev)
- {
- 	struct mgb4_regs *video = &voutdev->mgbdev->video;
- 	const struct mgb4_vout_regs *regs = &voutdev->config->regs;
-+	int dp = MGB4_IS_GMSL1(voutdev->mgbdev) ? 0 : 1;
-+	u32 source = (voutdev->config->id + MGB4_VIN_DEVICES) << 2;
- 
--	mgb4_write_reg(video, regs->config, 0x00000011);
-+	mgb4_write_reg(video, regs->config, 0x00000001);
- 	mgb4_write_reg(video, regs->resolution, (1280 << 16) | 640);
- 	mgb4_write_reg(video, regs->hsync, 0x00283232);
- 	mgb4_write_reg(video, regs->vsync, 0x40141F1E);
- 	mgb4_write_reg(video, regs->frame_limit, MGB4_HW_FREQ / 60);
- 	mgb4_write_reg(video, regs->padding, 0x00000000);
- 
--	voutdev->freq = mgb4_cmt_set_vout_freq(voutdev, 61150 >> 1) << 1;
-+	voutdev->freq = mgb4_cmt_set_vout_freq(voutdev, 61150 >> dp) << dp;
- 
--	mgb4_write_reg(video, regs->config,
--		       (voutdev->config->id + MGB4_VIN_DEVICES) << 2 | 1 << 4);
-+	mgb4_write_reg(video, regs->config, source | dp << 4);
- }
- 
- static void create_debugfs(struct mgb4_vout_dev *voutdev)
-@@ -720,10 +742,21 @@ static void create_debugfs(struct mgb4_vout_dev *voutdev)
- #endif
- }
- 
-+static const struct attribute_group **module_groups(struct mgb4_dev *mgbdev)
-+{
-+	if (MGB4_IS_FPDL3(mgbdev))
-+		return mgb4_fpdl3_out_groups;
-+	else if (MGB4_IS_GMSL3(mgbdev))
-+		return mgb4_gmsl3_out_groups;
-+	else if (MGB4_IS_GMSL1(mgbdev))
-+		return mgb4_gmsl1_out_groups;
-+	else
-+		return 0;
-+}
-+
- struct mgb4_vout_dev *mgb4_vout_create(struct mgb4_dev *mgbdev, int id)
- {
- 	int rv, irq;
--	const struct attribute_group **groups;
- 	struct mgb4_vout_dev *voutdev;
- 	struct pci_dev *pdev = mgbdev->pdev;
- 	struct device *dev = &pdev->dev;
-@@ -804,9 +837,7 @@ struct mgb4_vout_dev *mgb4_vout_create(struct mgb4_dev *mgbdev, int id)
- 	}
- 
- 	/* Module sysfs attributes */
--	groups = MGB4_IS_GMSL(mgbdev)
--	  ? mgb4_gmsl_out_groups : mgb4_fpdl3_out_groups;
--	rv = device_add_groups(&voutdev->vdev.dev, groups);
-+	rv = device_add_groups(&voutdev->vdev.dev, module_groups(mgbdev));
- 	if (rv) {
- 		dev_err(dev, "failed to create sysfs attributes\n");
- 		goto err_video_dev;
-@@ -830,15 +861,10 @@ struct mgb4_vout_dev *mgb4_vout_create(struct mgb4_dev *mgbdev, int id)
- 
- void mgb4_vout_free(struct mgb4_vout_dev *voutdev)
- {
--	const struct attribute_group **groups;
- 	int irq = xdma_get_user_irq(voutdev->mgbdev->xdev, voutdev->config->irq);
- 
- 	free_irq(irq, voutdev);
--
--	groups = MGB4_IS_GMSL(voutdev->mgbdev)
--	  ? mgb4_gmsl_out_groups : mgb4_fpdl3_out_groups;
--	device_remove_groups(&voutdev->vdev.dev, groups);
--
-+	device_remove_groups(&voutdev->vdev.dev, module_groups(voutdev->mgbdev));
- 	mgb4_i2c_free(&voutdev->ser);
- 	video_unregister_device(&voutdev->vdev);
- 	v4l2_device_unregister(&voutdev->v4l2dev);
--- 
-2.51.0
+I'm reviewing my backlog and this one has been stalled.
 
+Le lundi 03 novembre 2025 =C3=A0 09:45 +0800, Ming Qian(OSS) a =C3=A9crit=
+=C2=A0:
+> Hi Nicolas,
+>=20
+> On 8/1/2025 11:23 PM, Nicolas Dufresne wrote:
+> > Hi Ming,
+> >=20
+> > Le vendredi 18 avril 2025 =C3=A0 16:54 +0800, ming.qian@oss.nxp.com=C2=
+=A0a =C3=A9crit :
+> > > From: Ming Qian <ming.qian@oss.nxp.com>
+> > >=20
+> > > If colorspace changes, the client needs to renegotiate the pipeline,
+> > > otherwise the decoded frame may not be displayed correctly.
+> > >=20
+> > > When a colorspace change in the stream, the decoder sends a
+> > > V4L2_EVENT_SOURCE_CHANGE event with changes set to
+> > > V4L2_EVENT_SRC_CH_COLORSPACE. After client receive this source change
+> > > event, then client can switch to the correct stream setting. And each
+> > > frame can be displayed properly.
+> >=20
+> > sorry for the long delay. While reading this, in any case userspace hav=
+e to read
+> > the new format. Why can't userspace compare the old and new v4l2_format=
+ and
+> > decide to avoid re-allocation that way ?
+> >=20
+> > There is also backward compatbility issues for driver that was sending
+> > V4L2_EVENT_SRC_CH_RESOLUTION for colorspace change before. Despite the =
+costly
+> > re-allocation, userspace only watching for V4L2_EVENT_SRC_CH_RESOLUTION=
+ would
+> > endup not updating the colorspace anymore.
+> >=20
+> > Combining both would be an option, but then V4L2_EVENT_SRC_CH_RESOLUTIO=
+N means
+> > any v4l2_format changes, which is awkward. What do you think of leaving=
+ to
+> > userspace the task of comparing the old and new v4l2_format ?
+> >=20
+> > Nicolas
+> >=20
+>=20
+> Sorry for the delay response (I don't understand why I received this
+> email several months late.)
+>=20
+> I agree that comparing the old and new v4l2_format is feasible. And
+> there are currently four conditions that can trigger source change.
+> - coded resolution (OUTPUT width and height),
+> - visible resolution (selection rectangles),
+> - the minimum number of buffers needed for decoding,
+> - bit-depth of the bitstream has been changed.
+>=20
+> Therefore, comparing only v4l2_format is insufficient. This is much more
+> complicated than checking a flag. I'm not sure if existing applications
+> have already done this.
+>=20
+> I also think it's OK for driver to send V4L2_EVENT_SRC_CH_RESOLUTION for
+> colorspace change, This will only incur additional allocation overhead,
+> without causing any functional issues.
+>=20
+> Therefore, from a driver perspective:
+> - V4L2_EVENT_SRC_CH_RESOLUTION for format change=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0 OK
+> - V4L2_EVENT_SRC_CH_RESOLUTION for colorspace chagne=C2=A0 OK, but=20
+> re-allocation cost
+> - V4L2_EVENT_SOURCE_CHANGE for colorspace change=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0 OK
+>=20
+> from a client perspective:
+> - V4L2_EVENT_SRC_CH_RESOLUTION without compareing format=C2=A0=C2=A0=C2=
+=A0 OK,=20
+> re-allocation
+> - V4L2_EVENT_SRC_CH_RESOLUTION with comparing format=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0 OK,=20
+> additional support required
+> - V4L2_EVENT_SOURCE_CHANGE=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0 OK,=20
+> additional support required
+>=20
+>=20
+> I believe that adding a V4L2_EVENT_SOURCE_CHANGE flag will help simplify
+> the process and will not cause too many backward compatibility issues.
+
+So stepping back a little, the point is the V4L2_EVENT_SRC_CH_RESOLUTION is=
+ not
+clear enough. For backward compatibility reason we have to keep it though. =
+So
+that gives two choices:
+
+1. We don't add new API, and its up to clients to check what actually chang=
+es.
+Documentation to help this would be nice.
+
+This is easy driver side, you just emit more SOURCE_CHANGE event, and get a
+performance hit on client that have not been updated and just naively re-
+allocate.
+
+2. We keep V4L2_EVENT_SRC_CH_RESOLUTION, but introduce SRC_CH_REALLOC,
+SRC_CH_COLORSPACE, ...
+
+We still endup seding more events. If the flags are exactly=20
+V4L2_EVENT_SRC_CH_RESOLUTION, we have a legacy driver and can't assume anyt=
+hing.
+Just realloc or check in the format details. Then if one or more flags of t=
+he
+other are present, use this in order to minimize the work.
+
+In all cases, a drain operation must happen, otherwise you would not know a=
+t
+which boundary this change takes place. I will mark this as "Change Request=
+ed"
+so it is removed from my queue. If you want to continue this work, I think =
+this
+is best plan I can think of with consideration for backward compatibility. =
+If
+you go for 1, no new API is needed, but perhaps some better doc would help.
+
+Nicolas
+
+
+>=20
+> Regards,
+> Ming
+>=20
+> > >=20
+> > > So add colorspace as a trigger parameter for dynamic resolution chang=
+e.
+> > >=20
+> > > Signed-off-by: Ming Qian <ming.qian@oss.nxp.com>
+> > > ---
+> > > v2
+> > > - Add V4L2_EVENT_SRC_CH_COLORSPACE for colorspace source change event
+> > >=20
+> > > =C2=A0 .../userspace-api/media/v4l/dev-decoder.rst=C2=A0=C2=A0=C2=A0=
+=C2=A0 | 17 +++++++++++++----
+> > > =C2=A0 1 file changed, 13 insertions(+), 4 deletions(-)
+> > >=20
+> > > diff --git a/Documentation/userspace-api/media/v4l/dev-decoder.rst
+> > > b/Documentation/userspace-api/media/v4l/dev-decoder.rst
+> > > index ef8e8cf31f90..51d6da3eea4a 100644
+> > > --- a/Documentation/userspace-api/media/v4l/dev-decoder.rst
+> > > +++ b/Documentation/userspace-api/media/v4l/dev-decoder.rst
+> > > @@ -784,8 +784,8 @@ before the sequence started. Last of the buffers =
+will have
+> > > the
+> > > =C2=A0 must check if there is any pending event and:
+> > > =C2=A0=20
+> > > =C2=A0 * if a ``V4L2_EVENT_SOURCE_CHANGE`` event with ``changes`` set=
+ to
+> > > -=C2=A0 ``V4L2_EVENT_SRC_CH_RESOLUTION`` is pending, the `Dynamic Res=
+olution
+> > > -=C2=A0 Change` sequence needs to be followed,
+> > > +=C2=A0 ``V4L2_EVENT_SRC_CH_RESOLUTION`` or ``V4L2_EVENT_SRC_CH_COLOR=
+SPACE`` is
+> > > pending,
+> > > +=C2=A0 the `Dynamic Resolution Change` sequence needs to be followed=
+,
+> > > =C2=A0=20
+> > > =C2=A0 * if a ``V4L2_EVENT_EOS`` event is pending, the `End of Stream=
+` sequence
+> > > needs
+> > > =C2=A0=C2=A0=C2=A0 to be followed.
+> > > @@ -932,13 +932,17 @@ reflected by corresponding queries):
+> > > =C2=A0=20
+> > > =C2=A0 * the minimum number of buffers needed for decoding,
+> > > =C2=A0=20
+> > > -* bit-depth of the bitstream has been changed.
+> > > +* bit-depth of the bitstream has been changed,
+> > > +
+> > > +* colorspace of the bitstream has been changed.
+> > > =C2=A0=20
+> > > =C2=A0 Whenever that happens, the decoder must proceed as follows:
+> > > =C2=A0=20
+> > > =C2=A0 1.=C2=A0 After encountering a resolution change in the stream,=
+ the decoder sends a
+> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 ``V4L2_EVENT_SOURCE_CHANGE`` event wit=
+h ``changes`` set to
+> > > -=C2=A0=C2=A0=C2=A0 ``V4L2_EVENT_SRC_CH_RESOLUTION``.
+> > > +=C2=A0=C2=A0=C2=A0 ``V4L2_EVENT_SRC_CH_RESOLUTION``, or a colorspace=
+ change in the stream,
+> > > the
+> > > +=C2=A0=C2=A0=C2=A0 decoder sends a ``V4L2_EVENT_SOURCE_CHANGE`` even=
+t with ``changes`` set
+> > > to
+> > > +=C2=A0=C2=A0=C2=A0 ``V4L2_EVENT_SRC_CH_COLORSPACE``.
+> > > =C2=A0=20
+> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 .. important::
+> > > =C2=A0=20
+> > > @@ -946,6 +950,11 @@ Whenever that happens, the decoder must proceed =
+as
+> > > follows:
+> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 values applying to t=
+he stream after the resolution change, including
+> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 queue formats, selec=
+tion rectangles and controls.
+> > > =C2=A0=20
+> > > +.. note::
+> > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 A ``V4L2_EVENT_SOURCE_CHA=
+NGE`` event with ``changes`` set to
+> > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 ``V4L2_EVENT_SRC_CH_RESOL=
+UTION`` will affect the allocation, but
+> > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 ``V4L2_EVENT_SRC_CH_COLOR=
+SPACE`` won't.
+> > > +
+> > > =C2=A0 2.=C2=A0 The decoder will then process and decode all remainin=
+g buffers from
+> > > before
+> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 the resolution change point.
+> > > =C2=A0=20
+
+--=-Le2x+CLghYjLb8UyRe2r
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-Description: This is a digitally signed message part
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQTvDVKBFcTDwhoEbxLZQZRRKWBy9AUCaQ4HMwAKCRDZQZRRKWBy
+9JrTAQCnHoz3uQ+b82l+MHWqw45LRz6HHqCT33Bycw5sK/dn6wEA1285fSHb2aiT
+bolkIwcN+a+h2cQkhPjERHn9TQ1fxAs=
+=eV8/
+-----END PGP SIGNATURE-----
+
+--=-Le2x+CLghYjLb8UyRe2r--
