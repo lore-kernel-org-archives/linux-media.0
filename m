@@ -1,150 +1,106 @@
-Received: from bali.collaboradmins.com (bali.collaboradmins.com [148.251.105.195])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 613002C3248;
-	Fri,  7 Nov 2025 20:51:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.251.105.195
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 201C134C804;
+	Fri,  7 Nov 2025 21:06:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762548703; cv=none; b=CHsSSzdJTqpqh6Za8EkrXaR+fV1mGTVPskNK2scT5QMK/4u3cC54xqQkT1/6y++OLmIeI7iHApJ5YsW7/m6g2fCvS2+hXNlWXGYljVcpGDf91nkxvap5YP/yp7JFlE0DTMUPcxYwuepNDD7kRwP9FQInkgvGItORf0IaNwLDjCo=
+	t=1762549589; cv=none; b=k7jb3dxmtcrmT2rQ0XTFKI8ybhYiVazsTFg0ZAGAlcTbe6av06qKB2AafQ8JAN6AY7naUdzDJrKb+5tloRXCQf5PM+KALjl8htha0Lia+WTDEHcM/uur99URqdZcapk/T6OkHPdjta83hzCcSUCgkJPCCDLzoBpEyOykDHSYvkY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762548703; c=relaxed/simple;
-	bh=8UovAiOWTROIXZYM+ZVGV+MUbMteVqZyd+P1kJY5714=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=XFwgeszM+XqGp4c5z/ztcW4+fQSSI6unDR4urtDtPplCT49Zz0s+4h6TiuvxsCfaD1GQZ1QZSwEoCJuWTSjQD+1Otowdw6a4Xrrfzaxpg3thxd3lyj9ipFPC2x4+fU7JhQTZOYixVk/AS/meZH5oLCBJVK5zIgCSY7+DJv6m03M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=PwpJW9oO; arc=none smtp.client-ip=148.251.105.195
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
+	s=arc-20240116; t=1762549589; c=relaxed/simple;
+	bh=s90W+PqOhJZw+tTu6G5O700n2F3C9OPDEv5k6C24h4w=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=lUuQBnf8DiKnjx8BsLSGKvyhcEzRFYQ0V7yAz9j6XZONWp52+4lZN4wpXHxx0riIpqOY71nrPuiPmUO5Ef1Pef04+XzI9XmjluSnVP1jc/9LQsD4LsjPXM+BepryQeaU6kPnP8HY0St0Jd15X8hYwu2Am6kNfqokwJJ7NcfcZjU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=cXBKZMj4; arc=none smtp.client-ip=192.198.163.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="PwpJW9oO"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1762548699;
-	bh=8UovAiOWTROIXZYM+ZVGV+MUbMteVqZyd+P1kJY5714=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=PwpJW9oOEFMqTwZPZKr4AcwLhrUGSHyEZdZloMFfJkZNeWHxC8gLE8fZCEmqhK62c
-	 A2cl0V710LDQdQM54axRs5ZpzuEz1uk0ruczX5ImU0ybiDx9oo5En6YUz+qu0KKO1A
-	 6gxkjEiCF0oPIFCMoCNOfTqOTNlfcbQY9kzTPqnS29cuOVJ70XYrDrEFhPbln5A9YU
-	 BBjLgTbdxX96s6FDW0aaaxXLjfBIGM+lcoVijXj9E6j/BtdEJP9F3sU0etd/00P7O7
-	 efPwYzWpT37DH9qhvqetbqsF5Z9HgOFWshuslCWI8BcD/4ivTKMytg1tFRM64hSWIy
-	 AySk/Fmm926Vg==
-Received: from [10.40.0.100] (185-67-175-126.lampert.tv [185.67.175.126])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: mriesch)
-	by bali.collaboradmins.com (Postfix) with ESMTPSA id 2C3BC17E12D5;
-	Fri,  7 Nov 2025 21:51:38 +0100 (CET)
-Message-ID: <13c43edb-9592-4779-a39a-7856bb0f964d@collabora.com>
-Date: Fri, 7 Nov 2025 21:51:37 +0100
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="cXBKZMj4"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1762549587; x=1794085587;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=s90W+PqOhJZw+tTu6G5O700n2F3C9OPDEv5k6C24h4w=;
+  b=cXBKZMj4dCaG5QJKdTTWSsAIU9sM9+01tR98FQMmyFW3GrTo5JWVWVvf
+   I7tIJDS2hKZJVm1aqDHbsAtodynw+gUZl23/KcATkY/Tf7mmCUbyz5Alb
+   +k+G4fOG45DkyrENQnA1QvOfc0XiUnxNKGo/Vd3kcyJdWD6fTwsXMocwQ
+   +WqRN3aTPqf8W76892GjWjEpopCwU7ICLCe1ER9rU0gYQE/cpIQ50x+Ej
+   YbKScwNbzHDgPAy20j1tugz7090G11GxToZw/XPx689K6OEzIYyTNWFE9
+   8hUcSiWQoUhOCwAmpavym1EV1rvDCmj++MG9JV4GnC522cikxPeXogY8I
+   A==;
+X-CSE-ConnectionGUID: X46KZVyiSkq4Cgo5nEKzDg==
+X-CSE-MsgGUID: varOPppVQVibHN9J0NqkaA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11606"; a="90173475"
+X-IronPort-AV: E=Sophos;i="6.19,287,1754982000"; 
+   d="scan'208";a="90173475"
+Received: from orviesa002.jf.intel.com ([10.64.159.142])
+  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Nov 2025 13:06:26 -0800
+X-CSE-ConnectionGUID: 4zmO05DxQuGjVTeTZpBvkw==
+X-CSE-MsgGUID: QB+bLE7EQouO/WNw+EhCLg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.19,287,1754982000"; 
+   d="scan'208";a="218787805"
+Received: from lkp-server01.sh.intel.com (HELO 6ef82f2de774) ([10.239.97.150])
+  by orviesa002.jf.intel.com with ESMTP; 07 Nov 2025 13:06:24 -0800
+Received: from kbuild by 6ef82f2de774 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1vHTf3-0000Mt-1W;
+	Fri, 07 Nov 2025 21:06:21 +0000
+Date: Sat, 8 Nov 2025 05:05:46 +0800
+From: kernel test robot <lkp@intel.com>
+To: Richard Leitner <richard.leitner@linux.dev>,
+	Sakari Ailus <sakari.ailus@linux.intel.com>,
+	Dave Stevenson <dave.stevenson@raspberrypi.com>,
+	Mauro Carvalho Chehab <mchehab@kernel.org>,
+	Lee Jones <lee@kernel.org>, Pavel Machek <pavel@kernel.org>,
+	Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Cc: oe-kbuild-all@lists.linux.dev, linux-media@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-leds@vger.kernel.org,
+	Richard Leitner <richard.leitner@linux.dev>,
+	Hans Verkuil <hverkuil@xs4all.nl>
+Subject: Re: [PATCH v8 7/8] media: i2c: ov9282: implement try_ctrl for
+ strobe_duration
+Message-ID: <202511080412.AYpJ1DIq-lkp@intel.com>
+References: <20251104-ov9282-flash-strobe-v8-7-b91dfef1c65a@linux.dev>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v14 00/18] media: rockchip: add a driver for the rockchip
- camera interface
-To: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Cc: Sakari Ailus <sakari.ailus@linux.intel.com>,
- Mehdi Djait <mehdi.djait@linux.intel.com>,
- Maxime Chevallier <maxime.chevallier@bootlin.com>,
- =?UTF-8?Q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- Gerald Loacker <gerald.loacker@wolfvision.net>,
- Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
- Markus Elfring <Markus.Elfring@web.de>,
- Mauro Carvalho Chehab <mchehab@kernel.org>, Rob Herring
- <robh+dt@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
- Conor Dooley <conor+dt@kernel.org>, Heiko Stuebner <heiko@sntech.de>,
- Kever Yang <kever.yang@rock-chips.com>,
- Nicolas Dufresne <nicolas.dufresne@collabora.com>,
- Sebastian Reichel <sebastian.reichel@collabora.com>,
- Collabora Kernel Team <kernel@collabora.com>,
- Paul Kocialkowski <paulk@sys-base.io>,
- Alexander Shiyan <eagle.alexander923@gmail.com>,
- Val Packett <val@packett.cool>, Rob Herring <robh@kernel.org>,
- Philipp Zabel <p.zabel@pengutronix.de>, linux-media@vger.kernel.org,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, linux-rockchip@lists.infradead.org,
- Mehdi Djait <mehdi.djait@bootlin.com>,
- Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
- Bryan O'Donoghue <bod@kernel.org>, Chen-Yu Tsai <wens@csie.org>
-References: <20240220-rk3568-vicap-v14-0-b38b6da0fc80@collabora.com>
- <aQ4tJg8r_j4NyKhv@kekkonen.localdomain>
- <074cd08e-0412-49f9-8dd9-b1f96eb11717@collabora.com>
- <20251107185441.GG5558@pendragon.ideasonboard.com>
-Content-Language: en-US
-From: Michael Riesch <michael.riesch@collabora.com>
-In-Reply-To: <20251107185441.GG5558@pendragon.ideasonboard.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20251104-ov9282-flash-strobe-v8-7-b91dfef1c65a@linux.dev>
 
-Hi Laurent,
+Hi Richard,
 
-On 11/7/25 19:54, Laurent Pinchart wrote:
-> On Fri, Nov 07, 2025 at 07:41:59PM +0100, Michael Riesch wrote:
->> On 11/7/25 18:32, Sakari Ailus wrote:
->>> On Fri, Oct 24, 2025 at 02:51:29PM +0200, Michael Riesch via B4 Relay wrote:
->>>> Habidere,
->>>>
->>>> This series introduces support for the Rockchip Camera Interface (CIF),
->>>> which is featured in many Rockchip SoCs in different variations.
->>>> For example, the PX30 Video Input Processor (VIP) is able to receive
->>>> video data via the Digital Video Port (DVP, a parallel data interface)
->>>> and transfer it into system memory using a double-buffering mechanism
->>>> called ping-pong mode.
->>>> The RK3568 Video Capture (VICAP) unit, on the other hand, features a
->>>> DVP and a MIPI CSI-2 receiver that can receive video data independently
->>>> (both using the ping-pong scheme).
->>>> The different variants may have additional features, such as scaling
->>>> and/or cropping.
->>>> Finally, the RK3588 VICAP unit constitutes an essential piece of the
->>>> camera interface with one DVP, six MIPI CSI-2 receivers, scale/crop
->>>> units, and a data path multiplexer (to scaler units, to ISP, ...).
->>>
->>> I understand both RK3568 and RK3588 include an ISP. Do you have insight on
->>> how would this work, should the support for the ISP be added later on?
->>
->> Short answer: Yes and yes.
->>
->> Long answer:
->>
->> The patch series at hand adds support for the PX30 VIP and the RK3568
->> VICAP. I cannot really say something about the PX30, but on the RK3568
->> VICAP and ISP are orthogonal (the ISP features its own MIPI CSI-2
->> receiver, different from that introduced in this series). Thus, ISP
->> support can be introduced anytime (whenever someone is motivated ;-)).
-> 
-> Won't they both be connected to the same sensor though, and probably the
-> same D-PHY in the SoC ? They don't seem entirely separate to me.
+kernel test robot noticed the following build errors:
 
-The MIPI CSI-2 DPHY is shared, indeed. Thus, they *maybe technically
-could be* connected to the same sensor, but I don't know whether that
-works and fail to see why anyone would to such a thing (if it is about
-raw capture, the MIPI CSI-2 receiver in the ISP can do that on its own).
+[auto build test ERROR on 2f112b1c25da9f5346c2261ed35c5b1e0b906471]
 
-The DPHY can be operated in split mode, with two lanes for VICAP and two
-lanes for ISP. This is not implemented yet, but can be done at a later
-stage on PHY level (not media related). In this case, ISP and VICAP can
-receive data from different subdevices via CSI-2.
+url:    https://github.com/intel-lab-lkp/linux/commits/Richard-Leitner/media-v4l-ctrls-add-a-control-for-flash-strobe-duration/20251104-225658
+base:   2f112b1c25da9f5346c2261ed35c5b1e0b906471
+patch link:    https://lore.kernel.org/r/20251104-ov9282-flash-strobe-v8-7-b91dfef1c65a%40linux.dev
+patch subject: [PATCH v8 7/8] media: i2c: ov9282: implement try_ctrl for strobe_duration
+config: xtensa-randconfig-001-20251107 (https://download.01.org/0day-ci/archive/20251108/202511080412.AYpJ1DIq-lkp@intel.com/config)
+compiler: xtensa-linux-gcc (GCC) 10.5.0
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251108/202511080412.AYpJ1DIq-lkp@intel.com/reproduce)
 
-BTW the ISP is able to process the data captured by VICAP, but
-apparently this includes a RAM round trip (VICAP captures to memory, ISP
-operates in mem2mem mode).
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202511080412.AYpJ1DIq-lkp@intel.com/
 
-> A block diagram that shows connections between the CSI-2 pins, D-PHY,
-> CSI-2 receivers, VICAP and ISP could help.
-> 
->> Once this patch series is merged, I'll push out changes that introduce
->> support for the RK3588 VICAP. We can discuss the integration of any
->> RK3588 ISP in this scope then -- and there may be some things to discuss
->> as there the VICAP and the ISP(s) are directly connected by means of a
->> MUX unit in the VICAP.
->>
->> Alright?
-> 
+All errors (new ones prefixed by >>):
 
-Best regards,
-Michael
+>> xtensa-linux-ld: drivers/media/i2c/ov9282.o:(.text+0xc): undefined reference to `__udivdi3'
+   xtensa-linux-ld: drivers/media/i2c/ov9282.o: in function `ov9282_try_ctrl':
+>> ov9282.c:(.text+0x62): undefined reference to `__udivdi3'
+   xtensa-linux-ld: drivers/media/i2c/ov9282.o:(.text+0x10): undefined reference to `__udivdi3'
+   xtensa-linux-ld: drivers/media/i2c/ov9282.o: in function `ov9282_try_ctrl':
+   ov9282.c:(.text+0x7e): undefined reference to `__udivdi3'
 
-
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
