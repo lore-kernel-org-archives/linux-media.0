@@ -1,292 +1,130 @@
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f49.google.com (mail-wr1-f49.google.com [209.85.221.49])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F2C263164CB
-	for <linux-media@vger.kernel.org>; Fri,  7 Nov 2025 09:05:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C5662316917
+	for <linux-media@vger.kernel.org>; Fri,  7 Nov 2025 09:12:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762506360; cv=none; b=SPtSGynde4YQqjXxy2260nmuhvja5e1TkrUPKu9OsVBjbM8kmR/8IQaWGmSXddRXqNYsIHumyOGzsz1S8yiiwnQe0jeHC4MSyP43eGoU+fIKmXePdWIAlZUWC4HN+/m3SqHWhKuH/5/mLWJRzfNlgYrGnqcLaYc++KJTY+2QF3M=
+	t=1762506774; cv=none; b=uGSxTd3tn2L3Cp+mN0ZIBzfUvkSd4tQtmf6xMh7Qpl5tARYFSDcjdWj5qKCCVGkNnaNGNEs5eo01wj0aS+DknplkiMIu0G9+0F07cXEOXrEgeYOGg7TnfBWBDCKekZSdyWUT8kbr4BQ2TJG1ur/2212YDgjXTax88fJI1uZYkVc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762506360; c=relaxed/simple;
-	bh=lCNEOWLT+7/XeDg1YbyCpFzIANEFWFgCWrikEPbPsGM=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=kud8gKZqJA5wQlaVGUYSVOx/kkGH8EfP8K+nu9pod8NsVrV3d87c7Nle8DUVwDqHmBBSPcWUk1JC6QbrnDsV7LxqwO3PxxFyXNZ2U2NYNbVIfNKdqHtym+kLHGmSQulRGtOi8QX+GHYYTiNP41gaaE5qnEI1mZDlSswtOAgMacI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=cJaDXBbt; dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b=CBdb7nwY; arc=none smtp.client-ip=205.220.180.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
+	s=arc-20240116; t=1762506774; c=relaxed/simple;
+	bh=ySb+pop94SqpdbyZsYpGfmunwgkKv5LASXUw8Mbt2b0=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=QaX50VLeZg22HRbvg6cTUs4xtXqqT4753b6A8h/tiFw+yJ9U+afH7JFh6FgJATpl09iF+e82osY/J+OK9zQiKSw9z2AHR8059bW/z8arv6LlxnbAZ98AhDomxeaD61MVjKliB8qu3pbilr3eFbN5js4Zdwaef8/woFL+2FPrQN4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=mZJ+Tzia; arc=none smtp.client-ip=209.85.221.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="cJaDXBbt";
-	dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b="CBdb7nwY"
-Received: from pps.filterd (m0279869.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 5A773Mqb3748647
-	for <linux-media@vger.kernel.org>; Fri, 7 Nov 2025 09:05:58 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	cn/9gp5o7cY90sjFMFqcqEPElzL9CFdH/lnBGbpOTmk=; b=cJaDXBbthCESDqZh
-	nWtyVe0UgJ2Qh8b58GU7o33f/sE9RcO0l9Ixle7vKS9ixhpf5owMOeadT02Vg8wv
-	EoRQx19nV8OVQAwv9DPPynMQa1LdUEZlf3rbFi9VieFQF3JOMVC34NGhl6I0orAv
-	e/L8LW9G3zHaP/DC7Bfze+olz4yV9oCjAFKHl84yb6BbfGwei9h91unfZOeTe0vR
-	bA2j9S0kWpNv2JY/D/QvaufkJgdlAJItf3ryaK8P4Mkaxxh3OV4ZD1/q8Dqe3SUg
-	NsXGrgPR1VH2vX9lZkgfWptwESVlFWOxxgtellkROTY3neJ8T0jYfkVDllrPgl4K
-	twFddw==
-Received: from mail-pg1-f197.google.com (mail-pg1-f197.google.com [209.85.215.197])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4a8sy6kn1w-1
-	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
-	for <linux-media@vger.kernel.org>; Fri, 07 Nov 2025 09:05:57 +0000 (GMT)
-Received: by mail-pg1-f197.google.com with SMTP id 41be03b00d2f7-ba5cb208d06so593090a12.0
-        for <linux-media@vger.kernel.org>; Fri, 07 Nov 2025 01:05:57 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="mZJ+Tzia"
+Received: by mail-wr1-f49.google.com with SMTP id ffacd0b85a97d-3ecdf2b1751so282814f8f.0
+        for <linux-media@vger.kernel.org>; Fri, 07 Nov 2025 01:12:52 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=oss.qualcomm.com; s=google; t=1762506356; x=1763111156; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=cn/9gp5o7cY90sjFMFqcqEPElzL9CFdH/lnBGbpOTmk=;
-        b=CBdb7nwYh+yBYcvn9igfN68+s+0xzZ+Tstr8M7v4K0Nd8E/9VdT4hecSuvcqFpnsQg
-         oRRwIpcq3Q7URUO5yKv6HS4+WVpaGBx0p2BFNG3cK1Z02Vz3YreiVysnjJoOyL5hGoXH
-         +9ESAP26IjkqcFa6ZGD5Y2AnU9lkm/4KJLqmOp6bH0bLzrTkYVMvS2e1Xilp5VrZVpZ5
-         1OcB91BtwCKuW/Fq9KLBhOBuLHwF6/KUNwRV48Ahyeiqp15867ZQKkLyvbU8XYHLejSE
-         tO6E2cVt1WJwUs536IMVuQfJwLMmbK788vwAW1lWuaKyL/oaIIbcSJrBhioa9AJ72KBt
-         XglA==
+        d=gmail.com; s=20230601; t=1762506771; x=1763111571; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=cwbNx98NAV67oyTmVbgDZ/t5BsyU5lLwVlOoJ6t3e0g=;
+        b=mZJ+TziathtEj0lCeVghoJ8qe5Og/eCculTzvtfLW7O4TCQmbpYaopK8zm+OfFQAVe
+         50Cl9A9mjJX1v6BDyftxzxMIOK4K4XmF3xdtLz3dYY2n2dHduLbqcBrc7lpEZc8/pSQ+
+         AmtSmiTIa/pswSLxfcxQ6a8wS+HWHlofa2FnCPKICvxo9m1PL0BDQHMVQWwd0nKgDuf4
+         /aIq3e3Uy0tGEmL6tBbwmdlRlqdG0e8xcVU+ovpw2qE+R9zEOuNXpFezzj4R2XDNVFZ3
+         wZS1kAIAlLEzs63cLGCBj+4cmz9hmrM97e5HMceViOtkiGL/8jACByqHknakrcpI76XU
+         cY+A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1762506356; x=1763111156;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=cn/9gp5o7cY90sjFMFqcqEPElzL9CFdH/lnBGbpOTmk=;
-        b=S1SqHRx5GQWV545d5vD4EDJTE6qbQ1Rou5+eoQJjpau+6UzKCzAT+u6LHyOjW8i8Ui
-         KaJfvUP9yO/yvJKqYp2OuaSqjVwuOrkFNyRRA5ldsS+WyQMCPCxttAqmFN8l1H8xiRkm
-         +1LTu4mObdm7AK341AAngHaXpL8utrfYqvxT8DE9QKOBDCfXCaYMIVqR8KNjbdQE18yj
-         5ctz/ZF5FxtQW1w+hon+EbKDm9HEmZoFsaH9s+sSVft5Op4GkyA3lSU5Y7/C9YUU/IVn
-         IVxm1emuUY36MAdRUL7QUXqXep/sfJFSikh1hbHN/KfGBRoOzGq0wuJSm8tsi9SKpDjM
-         dUhQ==
-X-Gm-Message-State: AOJu0YyOOHM2uZnT5EsM4EbGgLnuqHwcPDDjIujei3IHW4+qIF5+OLWV
-	3FtPmhhiDUmG34UDR2btuZqwbuiHBIwqYTtGwVgTTDh6nguVVLF1FO/Qr67FMoiuO9A4pBocBbO
-	vmAjcM0HefADHYFxKgsGjS1b6DtiE7qxfu/4CjQ4tbj3Q+d4cXobM5zisbMMbqFIxsw==
-X-Gm-Gg: ASbGnct6fIjD2I5qAV53wRBupvhODP3gDRV/UWEobFXyV3Qd3sK5FbnghL82iZV0pdD
-	HDqK0hY94wm1un7EUtKnc/fTpQUQGR2ZsYv/U61UxFAHYk6zxQKSk4j939iOl+pmD8DObiQEJlM
-	lXxM6HDBWSkKI6hXbfLd3XpgSppnOwxs93LKRDN1832g5g61HTYT0coLDmFcDppMrcyQ5/+chXn
-	Ajdr3+c4fH8t6/YxJu+4dE5qm5mPsRy+MTMUnne3bvJ5qnoZrZoPnAIUt9VmlnOUyjoIJCGzSxe
-	pZuDf6HRTN9wT25+InT5FLdrWbaFzylNEykbzIXYYM8DSFKt3oJ4WrGZYONotoifTN5fKGCc7x6
-	wd03AnHU8WWxJGtENxZXfW1XLzq5TV1o=
-X-Received: by 2002:a05:6a21:328e:b0:334:a854:64a7 with SMTP id adf61e73a8af0-352b5f0904cmr1608560637.3.1762506356454;
-        Fri, 07 Nov 2025 01:05:56 -0800 (PST)
-X-Google-Smtp-Source: AGHT+IFcUtnP5yaDtpiYGU+yKvPAjbntPIIVLxWawJk98uJOABN63v9LKaz2/ekuR0+CKD0lsWt6yg==
-X-Received: by 2002:a05:6a21:328e:b0:334:a854:64a7 with SMTP id adf61e73a8af0-352b5f0904cmr1608521637.3.1762506355877;
-        Fri, 07 Nov 2025 01:05:55 -0800 (PST)
-Received: from [10.0.0.3] ([106.222.229.252])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-7b0cd05d17asm2241017b3a.72.2025.11.07.01.05.52
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 07 Nov 2025 01:05:55 -0800 (PST)
-Message-ID: <75d84de1-4f7c-1397-d445-42a367985991@oss.qualcomm.com>
-Date: Fri, 7 Nov 2025 14:35:51 +0530
+        d=1e100.net; s=20230601; t=1762506771; x=1763111571;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=cwbNx98NAV67oyTmVbgDZ/t5BsyU5lLwVlOoJ6t3e0g=;
+        b=BwMkxTF15GEP1CCVZv3mA5SUnr3/4JxzxQpTTVTpcr7IKriVWpp4EFuR+NyUIURTU5
+         LyD8gmW/Zh83KlYG4zvR7YFkeyY4lYzXTwZaP8XcnUdwm7Phk108cxZQTv5B+00Nr83d
+         mLwabEiQuxoSAOyqQfFvuCqn38opriRZsYtzVlO+Pb0kQb4NS7lxVSaBOygJpbC09EGF
+         wivabYWT50BLgE9Ok0j4Kf3uXsKlARRUOcsNWArdu0FUGvB7nHpzLGkeNVc8K3OFzP8q
+         58ohPPdBMwxxKjUW3LS2c8w0q3lFJxI4kbnfFNbtky4/zpPsCvfE561Iix+5Yd/vLjMS
+         QQIQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUiErt+fA5Xp4evVaulww/Du99c2H1b53T2SU3OLkKBwobvz4pAkDeKAukmFb5TnCVuYnAyOwmEcV0K+Q==@vger.kernel.org
+X-Gm-Message-State: AOJu0YxvqT0IaAU74Rgk25EZX3Y7iCOU3nL79N9XHaWqpKx/pY2oOi9x
+	vCOEe4qye1EHU9ZW4BbgFR/6YXXh8OScoq/wl077aQC4U9U/t+J1jkIl
+X-Gm-Gg: ASbGncvrfbA/n0x6bFJJlavrIvl+FT1ZqzPnaod4xi5NbkuaMiii7MUYVDMDXn/p3wT
+	OjGPbB0HGdkGNeojMLRBAlp/g0OZ3FfJ8H1bykhwBxq5evUII08rmKFrjE3LkbZs6U/qSuaJIQg
+	jQodaI7CEPzd/0MUGeOzy6RR9oU0ZbTOdZinsMjefAx+SmLlP51K76l9O6Op8DkgTNiZVjOgocq
+	HMd4K6WjE68YH9ZReOcSLbucRqAjAHuJYjLaOiXG6pC/wh3GsPL58s2QOI91EZVww0m1wBsx4Se
+	4cM4022611IqKeoR9vEZOByKrQSxAKvN2UP82T44YsUrONmNGTlxpQOLSDL5sBcMY8qrkxDDij6
+	3+bDY1mV7oUjo9Ao1xWoveYFkLcuvYIODq/V4vw89ARUA0AaecjUsgN9j8lDzxg/IKlaoaZbQA8
+	Uy4Ry4L9hHzPKD++Wy/3K3KuyrRZtzXu50JKIWSnUkta54aYUhfyDj
+X-Google-Smtp-Source: AGHT+IG9saNXs40oR1IEnqn2ZJqpHZqHgNAPFU5PXOa3lUzB4P6UMLrs3Ay2s/I5KpU2wmqmBc0PbQ==
+X-Received: by 2002:a05:6000:40db:b0:3e7:5f26:f1e5 with SMTP id ffacd0b85a97d-42ae58812c9mr1862887f8f.23.1762506770833;
+        Fri, 07 Nov 2025 01:12:50 -0800 (PST)
+Received: from pumpkin (82-69-66-36.dsl.in-addr.zen.co.uk. [82.69.66.36])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-42abe62bf35sm4130393f8f.7.2025.11.07.01.12.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 07 Nov 2025 01:12:50 -0800 (PST)
+Date: Fri, 7 Nov 2025 09:12:46 +0000
+From: David Laight <david.laight.linux@gmail.com>
+To: Andrew Morton <akpm@linux-foundation.org>
+Cc: Junrui Luo <moonafterrain@outlook.com>, linux-kernel@vger.kernel.org,
+ pmladek@suse.com, rostedt@goodmis.org, andriy.shevchenko@linux.intel.com,
+ tiwai@suse.com, perex@perex.cz, linux-sound@vger.kernel.org,
+ mchehab@kernel.org, awalls@md.metrocast.net, linux-media@vger.kernel.org,
+ davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+ pabeni@redhat.com, netdev@vger.kernel.org
+Subject: Re: [PATCH 1/4] lib/sprintf: add scnprintf_append() helper function
+Message-ID: <20251107091246.4e5900f4@pumpkin>
+In-Reply-To: <20251106213833.546c8eaba8aec6aa6a5e30b6@linux-foundation.org>
+References: <20251107051616.21606-1-moonafterrain@outlook.com>
+	<SYBPR01MB788110A77D7F0F7A27F0974FAFC3A@SYBPR01MB7881.ausprd01.prod.outlook.com>
+	<20251106213833.546c8eaba8aec6aa6a5e30b6@linux-foundation.org>
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; arm-unknown-linux-gnueabihf)
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.13.0
-Subject: Re: [PATCH v4 6/6] media: qcom: iris: Add intra refresh support for
- encoder
-Content-Language: en-US
-To: Wangao Wang <wangao.wang@oss.qualcomm.com>,
-        Vikash Garodia <vikash.garodia@oss.qualcomm.com>,
-        Abhinav Kumar <abhinav.kumar@linux.dev>,
-        Bryan O'Donoghue <bod@kernel.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc: linux-media@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Neil Armstrong <neil.armstrong@linaro.org>, quic_qiweil@quicinc.com,
-        quic_renjiang@quicinc.com
-References: <20251106-iris_encoder_enhancements-v4-0-5d6cff963f1b@oss.qualcomm.com>
- <20251106-iris_encoder_enhancements-v4-6-5d6cff963f1b@oss.qualcomm.com>
-From: Dikshita Agarwal <dikshita.agarwal@oss.qualcomm.com>
-In-Reply-To: <20251106-iris_encoder_enhancements-v4-6-5d6cff963f1b@oss.qualcomm.com>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-Authority-Analysis: v=2.4 cv=AYu83nXG c=1 sm=1 tr=0 ts=690db675 cx=c_pps
- a=rz3CxIlbcmazkYymdCej/Q==:117 a=L4UNg9I9cQSOxNpRiiGXlA==:17
- a=IkcTkHD0fZMA:10 a=6UeiqGixMTsA:10 a=s4-Qcg_JpJYA:10
- a=VkNPw1HP01LnGYTKEx00:22 a=KKAkSRfTAAAA:8 a=EUspDBNiAAAA:8
- a=jOerO3nEycnuB6UvFdUA:9 a=QEXdDO2ut3YA:10 a=bFCP_H2QrGi7Okbo017w:22
- a=cvBusfyB2V15izCimMoJ:22
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUxMTA3MDA3MiBTYWx0ZWRfXwnH6M13nvl82
- lF1HgfAVdiR0IIU3dbmygPAHvCNTTuUwlPYUm1XwCzT9phGu2EL2ozJ7CZ3QWjy8lLY6Px0xn5I
- 9aT+g2EJ3cIDKc7SYxkrFsepRHG+Ycn1vJKKyjRq2neh2vcQgO+mmoOUehhH/4mxd2Zk3Q19+lL
- h11mFkSlq22WSsatcvQ9A6+4z18uN85Wm19olmYSDCwBMJ4OsuVnbIM5lR+R1AmD9x3Kr7pedNY
- v1fjw5GKDC0SWjqtC/dTUEf3RdqActKZqJBxlfElpOuPh2cRaPg7t3zj+vGhUPLiS+X2wK1oTqY
- 64iFopab0cI0iv7TQBssXMgrhxUiL3DhST/yfm36ABCBpjCZSenUUAbWmXTCUVxCNVJe7Flk9GK
- HJj6RsWYxUFd//cJXKJu6TSgSZT3iw==
-X-Proofpoint-ORIG-GUID: 0bPraaPsuvSKf49faeGNkxpa3GqOJ1To
-X-Proofpoint-GUID: 0bPraaPsuvSKf49faeGNkxpa3GqOJ1To
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.9,FMLib:17.12.100.49
- definitions=2025-11-07_02,2025-11-06_01,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- bulkscore=0 adultscore=0 lowpriorityscore=0 suspectscore=0 malwarescore=0
- clxscore=1015 spamscore=0 phishscore=0 priorityscore=1501 impostorscore=0
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.22.0-2510240001 definitions=main-2511070072
 
+On Thu, 6 Nov 2025 21:38:33 -0800
+Andrew Morton <akpm@linux-foundation.org> wrote:
 
-
-On 11/6/2025 9:00 AM, Wangao Wang wrote:
-> Add support for V4L2_CID_MPEG_VIDEO_INTRA_REFRESH_PERIOD and
-> V4L2_CID_MPEG_VIDEO_INTRA_REFRESH_PERIOD_TYPE controls.
+> On Fri,  7 Nov 2025 13:16:13 +0800 Junrui Luo <moonafterrain@outlook.com> wrote:
 > 
-> Tested-by: Neil Armstrong <neil.armstrong@linaro.org> # on SM8650-HDK
-> Signed-off-by: Wangao Wang <wangao.wang@oss.qualcomm.com>
-> ---
->  drivers/media/platform/qcom/iris/iris_ctrls.c      | 33 ++++++++++++++++++++++
->  drivers/media/platform/qcom/iris/iris_ctrls.h      |  1 +
->  .../platform/qcom/iris/iris_hfi_gen2_defines.h     |  2 ++
->  .../platform/qcom/iris/iris_platform_common.h      |  2 ++
->  .../media/platform/qcom/iris/iris_platform_gen2.c  | 19 +++++++++++++
->  5 files changed, 57 insertions(+)
+> > +/**
+> > + * scnprintf_append - Append a formatted string to a buffer
+> > + * @buf: The buffer to append to (must be null-terminated)
+> > + * @size: The size of the buffer
+> > + * @fmt: Format string
+> > + * @...: Arguments for the format string
+> > + *
+> > + * This function appends a formatted string to an existing null-terminated
+> > + * buffer. It is safe to use in a chain of calls, as it returns the total
+> > + * length of the string.
+> > + *
+> > + * Returns: The total length of the string in @buf  
 > 
-> diff --git a/drivers/media/platform/qcom/iris/iris_ctrls.c b/drivers/media/platform/qcom/iris/iris_ctrls.c
-> index 8f74c12f2f41f23d75424819c707aff61ea61b33..14891569247318aaa7b2009b737f077d1cb45095 100644
-> --- a/drivers/media/platform/qcom/iris/iris_ctrls.c
-> +++ b/drivers/media/platform/qcom/iris/iris_ctrls.c
-> @@ -104,6 +104,10 @@ static enum platform_inst_fw_cap_type iris_get_cap_id(u32 id)
->  		return HFLIP;
->  	case V4L2_CID_VFLIP:
->  		return VFLIP;
-> +	case V4L2_CID_MPEG_VIDEO_INTRA_REFRESH_PERIOD_TYPE:
-> +		return IR_TYPE;
-> +	case V4L2_CID_MPEG_VIDEO_INTRA_REFRESH_PERIOD:
-> +		return IR_PERIOD;
->  	default:
->  		return INST_FW_CAP_MAX;
->  	}
-> @@ -197,6 +201,10 @@ static u32 iris_get_v4l2_id(enum platform_inst_fw_cap_type cap_id)
->  		return V4L2_CID_HFLIP;
->  	case VFLIP:
->  		return V4L2_CID_VFLIP;
-> +	case IR_TYPE:
-> +		return V4L2_CID_MPEG_VIDEO_INTRA_REFRESH_PERIOD_TYPE;
-> +	case IR_PERIOD:
-> +		return V4L2_CID_MPEG_VIDEO_INTRA_REFRESH_PERIOD;
->  	default:
->  		return 0;
->  	}
-> @@ -944,6 +952,31 @@ int iris_set_flip(struct iris_inst *inst, enum platform_inst_fw_cap_type cap_id)
->  					     &hfi_val, sizeof(u32));
->  }
->  
-> +int iris_set_ir_period(struct iris_inst *inst, enum platform_inst_fw_cap_type cap_id)
-> +{
-> +	const struct iris_hfi_command_ops *hfi_ops = inst->core->hfi_ops;
-> +	struct vb2_queue *q = v4l2_m2m_get_dst_vq(inst->m2m_ctx);
-> +	u32 ir_period = inst->fw_caps[cap_id].value;
-> +	u32 ir_type = 0;
-> +
-> +	if (inst->fw_caps[IR_TYPE].value ==
-> +			V4L2_CID_MPEG_VIDEO_INTRA_REFRESH_PERIOD_TYPE_RANDOM) {
-> +		if (vb2_is_streaming(q))
-> +			return 0;
-> +		ir_type = HFI_PROP_IR_RANDOM_PERIOD;
-> +	} else if (inst->fw_caps[IR_TYPE].value ==
-> +			V4L2_CID_MPEG_VIDEO_INTRA_REFRESH_PERIOD_TYPE_CYCLIC) {
-> +		ir_type = HFI_PROP_IR_CYCLIC_PERIOD;
-> +	} else
-> +		return -EINVAL;
-
-missing braces.
-
-with that fixed,
-
-Reviewed-by: Dikshita Agarwal <dikshita.agarwal@oss.qualcomm.com>
-
-Thanks,
-Dikshita
-> +
-> +	return hfi_ops->session_set_property(inst, ir_type,
-> +					     HFI_HOST_FLAGS_NONE,
-> +					     iris_get_port_info(inst, cap_id),
-> +					     HFI_PAYLOAD_U32,
-> +					     &ir_period, sizeof(u32));
-> +}
-> +
->  int iris_set_properties(struct iris_inst *inst, u32 plane)
->  {
->  	const struct iris_hfi_command_ops *hfi_ops = inst->core->hfi_ops;
-> diff --git a/drivers/media/platform/qcom/iris/iris_ctrls.h b/drivers/media/platform/qcom/iris/iris_ctrls.h
-> index 355a592049f3fcc715a1b9df44b4d1398b052653..9518803577bc39f5c1339a49878dd0c3e8f510ad 100644
-> --- a/drivers/media/platform/qcom/iris/iris_ctrls.h
-> +++ b/drivers/media/platform/qcom/iris/iris_ctrls.h
-> @@ -34,6 +34,7 @@ int iris_set_frame_qp(struct iris_inst *inst, enum platform_inst_fw_cap_type cap
->  int iris_set_qp_range(struct iris_inst *inst, enum platform_inst_fw_cap_type cap_id);
->  int iris_set_rotation(struct iris_inst *inst, enum platform_inst_fw_cap_type cap_id);
->  int iris_set_flip(struct iris_inst *inst, enum platform_inst_fw_cap_type cap_id);
-> +int iris_set_ir_period(struct iris_inst *inst, enum platform_inst_fw_cap_type cap_id);
->  int iris_set_properties(struct iris_inst *inst, u32 plane);
->  
->  #endif
-> diff --git a/drivers/media/platform/qcom/iris/iris_hfi_gen2_defines.h b/drivers/media/platform/qcom/iris/iris_hfi_gen2_defines.h
-> index 0f92468dca91cbb2ca9b451ebce255180066b3a4..9e8fdddf2aef439e7f133c9bb2fafa6d95062b02 100644
-> --- a/drivers/media/platform/qcom/iris/iris_hfi_gen2_defines.h
-> +++ b/drivers/media/platform/qcom/iris/iris_hfi_gen2_defines.h
-> @@ -70,6 +70,7 @@ enum hfi_rate_control {
->  #define HFI_PROP_QP_PACKED			0x0300012e
->  #define HFI_PROP_MIN_QP_PACKED			0x0300012f
->  #define HFI_PROP_MAX_QP_PACKED			0x03000130
-> +#define HFI_PROP_IR_RANDOM_PERIOD		0x03000131
->  #define HFI_PROP_TOTAL_BITRATE			0x0300013b
->  #define HFI_PROP_MAX_GOP_FRAMES			0x03000146
->  #define HFI_PROP_MAX_B_FRAMES			0x03000147
-> @@ -108,6 +109,7 @@ enum hfi_flip {
->  #define HFI_PROP_BUFFER_MARK			0x0300016c
->  #define HFI_PROP_RAW_RESOLUTION		0x03000178
->  #define HFI_PROP_TOTAL_PEAK_BITRATE		0x0300017C
-> +#define HFI_PROP_IR_CYCLIC_PERIOD		0x0300017E
->  #define HFI_PROP_COMV_BUFFER_COUNT		0x03000193
->  #define HFI_PROP_END				0x03FFFFFF
->  
-> diff --git a/drivers/media/platform/qcom/iris/iris_platform_common.h b/drivers/media/platform/qcom/iris/iris_platform_common.h
-> index 284d6bde6d6bcdf70016646d1c92e6ae7f067efc..30b98e769ad34c2b63dd63e7714bfeaa5b4f162c 100644
-> --- a/drivers/media/platform/qcom/iris/iris_platform_common.h
-> +++ b/drivers/media/platform/qcom/iris/iris_platform_common.h
-> @@ -143,6 +143,8 @@ enum platform_inst_fw_cap_type {
->  	ROTATION,
->  	HFLIP,
->  	VFLIP,
-> +	IR_TYPE,
-> +	IR_PERIOD,
->  	INST_FW_CAP_MAX,
->  };
->  
-> diff --git a/drivers/media/platform/qcom/iris/iris_platform_gen2.c b/drivers/media/platform/qcom/iris/iris_platform_gen2.c
-> index e74bdd00a4bb2f457ec9352e0acaebc820dae235..ce54aac766e2bf76fa2de64c884724ca63f05dcb 100644
-> --- a/drivers/media/platform/qcom/iris/iris_platform_gen2.c
-> +++ b/drivers/media/platform/qcom/iris/iris_platform_gen2.c
-> @@ -620,6 +620,25 @@ static struct platform_inst_fw_cap inst_fw_cap_sm8550_enc[] = {
->  			CAP_FLAG_DYNAMIC_ALLOWED,
->  		.set = iris_set_flip,
->  	},
-> +	{
-> +		.cap_id = IR_TYPE,
-> +		.min = V4L2_CID_MPEG_VIDEO_INTRA_REFRESH_PERIOD_TYPE_RANDOM,
-> +		.max = V4L2_CID_MPEG_VIDEO_INTRA_REFRESH_PERIOD_TYPE_CYCLIC,
-> +		.step_or_mask = BIT(V4L2_CID_MPEG_VIDEO_INTRA_REFRESH_PERIOD_TYPE_RANDOM) |
-> +			BIT(V4L2_CID_MPEG_VIDEO_INTRA_REFRESH_PERIOD_TYPE_CYCLIC),
-> +		.value = V4L2_CID_MPEG_VIDEO_INTRA_REFRESH_PERIOD_TYPE_RANDOM,
-> +		.flags = CAP_FLAG_OUTPUT_PORT | CAP_FLAG_MENU,
-> +	},
-> +	{
-> +		.cap_id = IR_PERIOD,
-> +		.min = 0,
-> +		.max = INT_MAX,
-> +		.step_or_mask = 1,
-> +		.value = 0,
-> +		.flags = CAP_FLAG_OUTPUT_PORT |
-> +			CAP_FLAG_DYNAMIC_ALLOWED,
-> +		.set = iris_set_ir_period,
-> +	},
->  };
->  
->  static struct platform_inst_caps platform_inst_cap_sm8550 = {
+> It wouldn't hurt to describe the behavior when this runs out of space
+> in *buf.
 > 
+> 
+> 
+> The whole thing is a bit unweildy - how much space must the caller
+> allocate for `buf'?  I bet that's a wild old guess.
+
+That is true for all the snprintf() functions.
+
+> I wonder if we should instead implement a kasprintf() version of this
+> which reallocs each time and then switch all the callers over to that.
+
+That adds the cost of a malloc, and I, like kasprintf() probably ends up
+doing all the work of snprintf twice.
+
+I'd be tempted to avoid the strlen() by passing in the offset.
+So (say):
+#define scnprintf_at(buf, len, off, ...) \
+	scnprintf((buf) + off, (len) - off, __VA_ARGS__)
+
+Then you can chain calls, eg:
+	off = scnprintf(buf, sizeof buf, ....);
+	off += scnprintf_at(buf, sizeof buf, off, ....);
+
+    David
