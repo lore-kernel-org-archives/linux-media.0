@@ -1,259 +1,384 @@
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5A3DE3595B;
-	Sat,  8 Nov 2025 00:17:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.167.242.64
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B3051171C9
+	for <linux-media@vger.kernel.org>; Sat,  8 Nov 2025 04:24:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762561043; cv=none; b=usfKd/6Rf4l/JmNIuPWwKI7HKzbKYRJYZTVSlI6wSjEPV/IrRVn+HA6UZu2gO5RkAGaTdeCQK8LC/zLHf79MseLhHARDs5OJH0RtdyD9D6qzJRRYTlYvxg7ZuAXihYrdPz4kyEOdtUU3QLr2jcatvzpSIiYrmQ5xGbvFED5R8mk=
+	t=1762575853; cv=none; b=oZyx3mYBdxTMmD+HEOhN7K7Bc5f/dtv5ER2iApuBDd6mvQEyTzbL1t6/pgWpdNPf4tmIqBmTTAqXg33nGu0UyluMcgm4Q4PAQnLUTIt+Sh034J57zCt3URPbXa243wj3ZORM3U723dkCUYhCVgQfTx6pt+sXqdQN1WpVKgeAwcI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762561043; c=relaxed/simple;
-	bh=ojB+a2DTst1XfKFJV78Vgu0HOH/aW8mkmjJDGhjVS88=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=KRHCkcDUSxFjlr4bRhv5XvZa5ut17hA+w2gPDBp9yQYh4fcLuGkMl4mKYOzlumzVf53HlGS7hzdJfbSZPmTAs1vORozaD3Rv7Dmv55VVyATicRL2VXh5v0a4CUKt1WhiY7H0kk7nn4vnS+cPJjsbj8EnBTdxCOwD76reQbeeXew=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ideasonboard.com; spf=pass smtp.mailfrom=ideasonboard.com; dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b=dXcqXRgT; arc=none smtp.client-ip=213.167.242.64
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ideasonboard.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ideasonboard.com
+	s=arc-20240116; t=1762575853; c=relaxed/simple;
+	bh=bSIuBiGfCZIEjCDAyTy63LfslP31QAHOyP8mwIbtjJQ=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=MZMM5ZcM+ogIVP8OjgmQeswj+z+nk/L12UY30bgArtWaBXJ4BGyUfFeqq2YKa7LJg79gTd/TEaJjNJ4KvUvTnvletfMBYEsP4AIT8e9J3J4qRYz2rAboAbK4dl2iGc+6e8umQooWcOy7x13Zc+SCAHzXBVvBsx35VnBtAaRa14Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=bt0soVyy; dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b=V4P72yd+; arc=none smtp.client-ip=205.220.168.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="dXcqXRgT"
-Received: from pendragon.ideasonboard.com (82-203-161-95.bb.dnainternet.fi [82.203.161.95])
-	by perceval.ideasonboard.com (Postfix) with UTF8SMTPSA id D9948B3;
-	Sat,  8 Nov 2025 01:15:22 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-	s=mail; t=1762560923;
-	bh=ojB+a2DTst1XfKFJV78Vgu0HOH/aW8mkmjJDGhjVS88=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=dXcqXRgTwgvkImn2+w7CpcGZrDRAEErxLOct0yKJycod7ino1Mz20CPU13jFLfwhw
-	 SRGiVrTchZun6ttRqi/Vt5PAq46h4J/1Ic/GsfoRDzHZFtDPRkJEC9Fp9svuZAy1QJ
-	 vQ+2qf6TrdNxVIqT7nFWb1OummJIFJNfm+IJpSKA=
-Date: Sat, 8 Nov 2025 02:17:13 +0200
-From: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To: Jacopo Mondi <jacopo.mondi@ideasonboard.com>
-Cc: Dafna Hirschfeld <dafna@fastmail.com>, Keke Li <keke.li@amlogic.com>,
-	Mauro Carvalho Chehab <mchehab@kernel.org>,
-	Heiko Stuebner <heiko@sntech.de>,
-	Dan Scally <dan.scally@ideasonboard.com>,
-	Sakari Ailus <sakari.ailus@linux.intel.com>,
-	Antoine Bouyer <antoine.bouyer@nxp.com>,
-	linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
-	linux-rockchip@lists.infradead.org,
-	linux-arm-kernel@lists.infradead.org,
-	Michael Riesch <michael.riesch@collabora.com>
-Subject: Re: [PATCH v8 4/8] media: Documentation: uapi: Add V4L2 ISP
- documentation
-Message-ID: <20251108001713.GL5558@pendragon.ideasonboard.com>
-References: <20251020-extensible-parameters-validation-v8-0-afba4ba7b42d@ideasonboard.com>
- <20251020-extensible-parameters-validation-v8-4-afba4ba7b42d@ideasonboard.com>
+	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="bt0soVyy";
+	dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b="V4P72yd+"
+Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 5A82A1Fe557506
+	for <linux-media@vger.kernel.org>; Sat, 8 Nov 2025 04:24:11 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
+	cc:content-transfer-encoding:content-type:date:from:message-id
+	:mime-version:subject:to; s=qcppdkim1; bh=Wi3vWGnUpjpfRW8srtI05D
+	eHxanTwmx6o5HITixA0BI=; b=bt0soVyyG0kkFPXUyeLNqwf5xLupCUMy4DhC5N
+	tWXl7XyWslFe5mJt4fGvyDHWnJdTN+XcZn7iF0dslj+tytb1tOT6HwEenq01AZd1
+	bmul3f4olYyERZ0YZAn7d8TfGwkXqbboSFG36WShGpbYQyYqT7GLt8K2Z18imqBZ
+	um4I3MUeWXvjiskzinw6dECRTcRRf2OYzEvn5/VHDTrru4XJdebSgdjWgwme+vHU
+	pzEfxs1x67iewJEF8BOMBoqw2PaRh26QIe3rNtUDAGeMRyjIuEovU4KUuPq0eWLx
+	dhPiUy2vq+rKn0inZKtsJ0AJ4nP9hWXMgU2pOlI6G/4GEsjA==
+Received: from mail-pg1-f198.google.com (mail-pg1-f198.google.com [209.85.215.198])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4a9vtr05qa-1
+	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
+	for <linux-media@vger.kernel.org>; Sat, 08 Nov 2025 04:24:10 +0000 (GMT)
+Received: by mail-pg1-f198.google.com with SMTP id 41be03b00d2f7-b633babe5b9so347488a12.3
+        for <linux-media@vger.kernel.org>; Fri, 07 Nov 2025 20:24:10 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=oss.qualcomm.com; s=google; t=1762575850; x=1763180650; darn=vger.kernel.org;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=Wi3vWGnUpjpfRW8srtI05DeHxanTwmx6o5HITixA0BI=;
+        b=V4P72yd+ykeZqSPGZgPSyMqIq+hKw2oOVgC3wRmTYDcMPPz8VvfyUwdw6QadJp+a6R
+         cYpNTruRvT0lFuHk6bkLjzeLYs77MjbcKi6Gh0HqnqIMBqZmx64oLurya0baIVPGbvGp
+         1fgR6AeJMrsCWuRF7so198JpHpd51TMArADsYu51mdBxl0yJdOmTaR4s6wyeZhH+Mj6M
+         VPy+qTiMNDJ6RknKeDMg7Xmw9TSxOBaxosa0UeVJYc4Q7TNLu0dPGcNlCJE5rK//PM8o
+         0W3EhXU6nzykMbgkuGN5ZQhlX0436xGBwHgVPzC9oOtR8+siqiUI/TPcI+07SL3MYg7z
+         o5pQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1762575850; x=1763180650;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Wi3vWGnUpjpfRW8srtI05DeHxanTwmx6o5HITixA0BI=;
+        b=FiM6TnML2K3xBtVWS76FOnrjFE41dEDt6R/R2WfNzvKSvI0Rd83H3v7wgWjJ1D6ifZ
+         j7VNcrt1dFDCQc7aQ1ypzxxwCMI47F59ZW/CUxbq03v38yjd//Dz+W8u3H241mh8W/BS
+         FjCGlAYnR5KXLM0lBkKnP58Qw2QxcAUyEhQeIQ8xE4byzT6bVA6nsUEqVuuLPXeU/9nA
+         n2hn1eEEVrtKS+1TSIu2Ujz9HaV9PDDWiyFqKcTmSkhFiv1Z+RsQHccXn3MqC7C0SdV5
+         rQROvDGAsnUxV4H9Y8YJ9P8zBYAW6S+JrEmgbuTUpAsRp0LsWwoy1lCESBW+cKoepul1
+         4iCg==
+X-Gm-Message-State: AOJu0Yx9rmoHl+1byTYLFT8Zi3b1HWS31eflZdSE6NDOj0iOFLrGDKEy
+	xCW1HOiBmijgN0VbhTUd9nm2CA2a/ZDt9Ah6bgS/lpsxmqmddK2UnRg0EKaVs5JWIyNuGuJ8aW4
+	0wLGywEE5hMCwOKWK6X2637h3jQAWfaYF2J1C4FL6xMoApVCvkk9E8G1eUaNfSgHcFw==
+X-Gm-Gg: ASbGncuz4FInCX+0YNkEUFl9G0+4H0ga/qL7Drz502eWGIS2blQisxaHfHh3TuF1nQE
+	obMtGGgo1Ox2xBbY+96Y6vlVsAdzyJ47aQ5w6cF9cOTZweKNsjeC2Cyu07Rjd7D8HgZnAzNlAoQ
+	j1xGDhx5Lp2N5OqWnb0LCP8zq54loDRGV6MZuyd9WGcEC+UcC0E/u+eeL7cjimDv3/Fo0AlGRF/
+	xXqDeogw+InTofXb+jbbuggutMuU+oeH5C1SCM36r/RazpnLkWoZ3iHwYind2p1gHM5yEAChNpB
+	qN/ohQZIFL7MZBz8ZjNtlqfVSXZBql37rP/JEhrkrUKjlVJ7leCS3wfWqgXYreDu+059Ua3EwKo
+	cP6rvI9+vtydS1Q8KRpyHH6W2j8SsoteYjo2TMmQkmw2wGTLHqNd6w3OjnyM=
+X-Received: by 2002:a17:902:d2c9:b0:296:4e0c:8013 with SMTP id d9443c01a7336-297e56d8ddbmr11167685ad.6.1762575849868;
+        Fri, 07 Nov 2025 20:24:09 -0800 (PST)
+X-Google-Smtp-Source: AGHT+IHrl1qrHv8E+G5GUEIE2uNV5CotKNTCUVa1+l5Jsy/637gK5QvLcxRi/O7xvkMhgTgsRO2tOw==
+X-Received: by 2002:a17:902:d2c9:b0:296:4e0c:8013 with SMTP id d9443c01a7336-297e56d8ddbmr11167555ad.6.1762575849246;
+        Fri, 07 Nov 2025 20:24:09 -0800 (PST)
+Received: from gu-dmadival-lv.qualcomm.com (Global_NAT1.qualcomm.com. [129.46.96.20])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2965096b90asm75442235ad.23.2025.11.07.20.24.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 07 Nov 2025 20:24:08 -0800 (PST)
+From: Deepa Guthyappa Madivalara <deepa.madivalara@oss.qualcomm.com>
+Subject: [PATCH v5 0/5] Enable support for AV1 stateful decoder
+Date: Fri, 07 Nov 2025 20:24:04 -0800
+Message-Id: <20251107-av1d_stateful_v3-v5-0-351652ba49cd@oss.qualcomm.com>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20251020-extensible-parameters-validation-v8-4-afba4ba7b42d@ideasonboard.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAOTFDmkC/23PTW7DIBAF4KtErEvEgP9XvUdVRWOYaZASOwGbt
+ op892J7kUUjIaQ3Eh/zHiJS8BRFd3iIQMlHPw45lG8HYc84fJH0LmehlS5B6VZiAneKE07E8+W
+ UjLQ9t0wOAJ0V+dktEPufjfz43HOg+5zlaR8+4W5VVQuNTN7RKH3wUc79t5U0YH8h2dSEtuICG
+ Isu6ZXvMZK04/Xqpw4q00LdmNYqIjS9YzKVVqxrrqDGsmRXV0Zpse5x9nEaw+/WNJltkb2UUf9
+ L5ZOnAE3hqNRsi/cxxuN9xsv69TFfm5mKp5OhF06RHWOsBUJsDOsXzrIsfxS+RnCHAQAA
+X-Change-ID: 20251029-av1d_stateful_v3-cbf9fed11adc
+To: Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Vikash Garodia <vikash.garodia@oss.qualcomm.com>,
+        Dikshita Agarwal <dikshita.agarwal@oss.qualcomm.com>,
+        Abhinav Kumar <abhinav.kumar@linux.dev>,
+        Bryan O'Donoghue <bod@kernel.org>
+Cc: linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, kernel test robot <lkp@intel.com>,
+        Deepa Guthyappa Madivalara <deepa.madivalara@oss.qualcomm.com>,
+        Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
+        Nicolas Dufresne <nicolas.dufresne@collabora.com>
+X-Mailer: b4 0.14.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1762575848; l=8777;
+ i=deepa.madivalara@oss.qualcomm.com; s=20250814; h=from:subject:message-id;
+ bh=bSIuBiGfCZIEjCDAyTy63LfslP31QAHOyP8mwIbtjJQ=;
+ b=U18YDaP2ATMwPvXjoOLcR4ARVnNHM5RC6dRv1CoCCKmIOlP4xPgqH4ckBxnacm32ZaugyVkzV
+ 6FfQW5jLeUuBHfWAJ7PzE+KOFePa55CTFpBcs+eyE1RfpS//AKdAzfi
+X-Developer-Key: i=deepa.madivalara@oss.qualcomm.com; a=ed25519;
+ pk=MOEXgyokievn+bgpHdS6Ixh/KQYyS90z2mqIbQ822FQ=
+X-Proofpoint-GUID: 355GYbF4xjkqO8SOwY2p4WtPV3lHzLbk
+X-Proofpoint-ORIG-GUID: 355GYbF4xjkqO8SOwY2p4WtPV3lHzLbk
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUxMTA4MDAzMyBTYWx0ZWRfX225gNNGrazgL
+ vLC8bFq/p7E+HzHy8av2lObd3IX7Spz4pxPs2Shrgam3Hg4OLyf2695X++wnwHdm79QbP1p07nc
+ C7mEwUNh+kUSCUEGvKh2qa/Sp2wE+O8G29Lb0a1+oK1cXKZePnoA8aPR/G8UcY4x3si6K7KyN7T
+ FPxvjDCVJXJxyhNOK25tVpHdEoDAfo0UjPC+10AINfuCWVsRMMk9CW+hvPSul1tzg2OEDPFuKSF
+ z3prcQ6KRme/Y9IWOEj3fG1Pog2qpLAOyxAVjByYf45Cukb2q8ksYGT7JCbIt5+WejKFvIcACuu
+ 7LE+FX3jmjayu56JuNS1vRXfht//z1AHjGva+NoD+FVZSr+/E+uy6ns4w9LlpCeeAFTF1RkBk06
+ sQbQf2bGL1Bzyl61KtjMvIUDU8FY9w==
+X-Authority-Analysis: v=2.4 cv=Vtouwu2n c=1 sm=1 tr=0 ts=690ec5ea cx=c_pps
+ a=Qgeoaf8Lrialg5Z894R3/Q==:117 a=ouPCqIW2jiPt+lZRy3xVPw==:17
+ a=IkcTkHD0fZMA:10 a=6UeiqGixMTsA:10 a=s4-Qcg_JpJYA:10
+ a=VkNPw1HP01LnGYTKEx00:22 a=VwQbUJbxAAAA:8 a=EUspDBNiAAAA:8 a=QyXUC8HyAAAA:8
+ a=e5mUnYsNAAAA:8 a=rSFLfVtXdW1OZ3NksNsA:9 a=QEXdDO2ut3YA:10
+ a=x9snwWr2DeNwDh03kgHS:22 a=Vxmtnl_E_bksehYqCbjh:22
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.9,FMLib:17.12.100.49
+ definitions=2025-11-08_01,2025-11-06_01,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ bulkscore=0 malwarescore=0 lowpriorityscore=0 spamscore=0 suspectscore=0
+ impostorscore=0 clxscore=1015 priorityscore=1501 adultscore=0 phishscore=0
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.22.0-2510240001 definitions=main-2511080033
 
-Hi Jacopo,
+Hi all,
 
-Thank you for the patch.
+This patch series adds initial support for the AV1 stateful decoder
+codecs in iris decoder. Also it adds support for AV1 stateful decoder
+in V4l2. The objective of this work is to extend the Iris decoder's
+capabilities to handle AV1 format codec streams, including necessary
+format handling and buffer management.
 
-On Mon, Oct 20, 2025 at 10:24:50AM +0200, Jacopo Mondi wrote:
-> Add userspace documentation for V4L2 ISP generic parameters and
-> statistics formats.
-> 
-> Reviewed-by: Daniel Scally <dan.scally@ideasonboard.com>
-> Reviewed-by: Michael Riesch <michael.riesch@collabora.com>
-> Acked-by: Sakari Ailus <sakari.ailus@linux.intel.com>
-> Signed-off-by: Jacopo Mondi <jacopo.mondi@ideasonboard.com>
-> ---
->  .../userspace-api/media/v4l/meta-formats.rst       |   1 +
->  Documentation/userspace-api/media/v4l/v4l2-isp.rst | 120 +++++++++++++++++++++
->  MAINTAINERS                                        |   1 +
->  3 files changed, 122 insertions(+)
-> 
-> diff --git a/Documentation/userspace-api/media/v4l/meta-formats.rst b/Documentation/userspace-api/media/v4l/meta-formats.rst
-> index d9868ee88a0717c1acaa4ee477eaed96a6411f73..7b758ea9eb4ac3c4b354bf8e2f319985ed9e2b37 100644
-> --- a/Documentation/userspace-api/media/v4l/meta-formats.rst
-> +++ b/Documentation/userspace-api/media/v4l/meta-formats.rst
-> @@ -25,3 +25,4 @@ These formats are used for the :ref:`metadata` interface only.
->      metafmt-vivid
->      metafmt-vsp1-hgo
->      metafmt-vsp1-hgt
-> +    v4l2-isp
-> diff --git a/Documentation/userspace-api/media/v4l/v4l2-isp.rst b/Documentation/userspace-api/media/v4l/v4l2-isp.rst
-> new file mode 100644
-> index 0000000000000000000000000000000000000000..b53df722ed29117c3827314e844fc4de61343f40
-> --- /dev/null
-> +++ b/Documentation/userspace-api/media/v4l/v4l2-isp.rst
-> @@ -0,0 +1,120 @@
-> +.. SPDX-License-Identifier: GFDL-1.1-no-invariants-or-later
-> +
-> +.. _v4l2-isp:
-> +
-> +************************
-> +Generic V4L2 ISP formats
-> +************************
-> +
-> +ISP configuration and statistics: theory of operations
-> +======================================================
-> +
-> +ISP configuration parameters are computed by userspace and programmed into a
-> +*parameters buffer* which is queued to the ISP driver on a per-frame basis.
-> +
-> +ISP statistics are collected at a specific time point and drivers use them to
-> +populate a *statistics buffer* which is then returned to userspace.
-> +
-> +The parameters and statistics buffers are organized in a driver-specific
-> +way, and their data layout differs between one driver and another.
-> +
-> +ISP drivers generally exchange parameters and statistics with userspace through
-> +a metadata output and capture node respectively, implementing the
-> +:c:type:`v4l2_meta_format` interface. Each ISP driver defines one metadata
-> +capture format and one metadata output format to be used on those video nodes,
-> +and the buffer content layout and organization is fixed by the format definition.
-> +
-> +The uAPI/ABI problem
-> +--------------------
-> +
-> +By upstreaming the metadata formats that describe the parameters and statistics
-> +buffers layout, driver developers make them part of the Linux kernel ABI. As for
-> +most peripherals, ISP driver development in Linux is often an iterative process,
-> +in which not all of the hardware features are supported in the first version.
-> +
-> +The support for new features and/or bug fixes may land in the kernel at a later
-> +stage and require changes to the metadata formats definition. This is
-> +considered an ABI breakage that is strictly forbidden by the Linux kernel
-> +policies. For this reason, any change in the ISP parameters and statistics
-> +buffer layout would require defining a new metadata format.
-> +
-> +For these reasons Video4Linux2 has introduced support for generic ISP parameters
-> +and statistics data types, designed with the goal of being:
-> +
-> +- Extensible: new features can be added later on without breaking the existing
-> +  interface
-> +- Versioned: different versions of the format can be defined without
-> +  breaking the existing interface
-> +
-> +ISP configuration
-> +=================
-> +
-> +Before the introduction of generic formats
-> +------------------------------------------
-> +
-> +Metadata output formats that describe ISP configuration parameters were
-> +typically realized by defining C structures that reflect the ISP registers
-> +layout and get populated by userspace before queueing the buffer to the ISP.
-> +Each C structure usually corresponds to one ISP *processing block*, with each
-> +block implementing one of the ISP supported features.
-> +
-> +The number of supported ISP blocks, the layout of their configuration data are
-> +fixed by the format definition, incurring in the above described uAPI/uABI
-> +problem.
-> +
-> +Generic ISP parameters
-> +----------------------
-> +
+These patches also address the comments and feedback received from the
+patches previously sent. I have made the necessary improvements
+based on the community's suggestions.
 
-Most of the text above is a design rationale that in my opinion doesn't
-belong to the UAPI documentation. You already include a design rationale
-in the kernel documentation, in patch 8/8. If some of the text above
-contains a more verbose explanation, it could be moved there.
+Changes in v5:
+- Updated Documentation (Hans, Nicolas)
+- Link to v4:
+  https://lore.kernel.org/r/20251103-av1d_stateful_v3-v4-0-33cc1eaa83f2@oss.qualcomm.com
 
-I would shorten all this to
+Changes in v4:
+- Reuse sm8550_vdec_output_config_params (Dikshita)
+- Add definition for 256 (Bryan)
+- Fix identation (Bryan)
+- Link to v3:
+  https://lore.kernel.org/r/20251030-av1d_stateful_v3-v3-0-a1184de52fc4@oss.qualcomm.com
 
-************************
-Generic V4L2 ISP formats
-************************
+Changes in v3:
+- Updated fourcc could be to match the ISO specification (Nicolas)
+- Addressed comments and rebased changes to resolve potential merge
+  conflicts (Dikshita)
+- Updated GST MR
+- Link to v2:
+  https://lore.kernel.org/r/20251017-av1_irisdecoder-v2-0-964a5478139e@oss.qualcomm.com
 
-Generic ISP formats are metadata formats that define a mechanism to pass ISP
-parameters and statistics between userspace and drivers in V4L2 buffers. They
-are designed to allow extending the data in a backward-compatible way.
+Changes in v2:
+- Updated documentation to target AV1 codec, not just AV1 decoder
+  (Nicolas)
+- Updated description for V4L2_PIX_FMT_AV1 (Nicolas)
+- Simplified buffer calculations and replaced numbers with relevant
+  enums (Bryan, Nicolas)
+- Improved commit text for patch 5/5
+- Fix for kernel test robot failure
+  Reported-by: kernel test robot <lkp@intel.com>
+  Closes:
+  https://lore.kernel.org/oe-kbuild-all/202510021620.4BVCZwgf-lkp@intel.com/
+- Link to v1:
+  https://lore.kernel.org/r/20251001-av1_irisdecoder-v1-0-9fb08f3b96a0@oss.qualcomm.com
 
-ISP configuration
-=================
+Changes since RFC:
+- Addressed CRC issues seen during fluster testing which
+  are fixed with firmware fix [1]
+- Added Documentation for AV1 stateful uapi [Nicholas]
+- Resolved issues reported by static tool analyzers
+- RFC:
+  https://lore.kernel.org/linux-media/20250902-rfc_split-v1-0-47307a70c061@oss.qualcomm.com/
 
-> +The generic ISP configuration parameters format is realized by a defining a
-> +single C structure that contains a header, followed by a binary buffer where
-> +userspace programs a variable number of ISP configuration data block, one for
-> +each supported ISP feature.
-> +
-> +The :c:type:`v4l2_isp_params_buffer` structure defines the parameters buffer
-> +header which is followed by a binary buffer of ISP configuration parameters.
-> +Userspace shall correctly populate the buffer header with the versioning
+[1]:
+https://lore.kernel.org/linux-firmware/ff27f712-a96e-4fa6-7572-a0091537d8ac@oss.qualcomm.com/
 
-s/versioning information/extensible parameters format version/
+These patches are tested on SM8550 for AV1 decoder while
+ensuring other codecs are not affected.
 
-> +information and with the size (in bytes) of the binary data buffer where it will
-> +store the ISP blocks configuration.
-> +
-> +Each *ISP configuration block* is preceded by an header implemented by the
-> +:c:type:`v4l2_isp_params_block_header` structure, followed by the configuration
-> +parameters for that specific block, defined by the ISP driver specific data
-> +types.
-> +
-> +Userspace applications are responsible for correctly populating each block's
-> +header fields (type, flags and size) and the block-specific parameters.
-> +
-> +ISP Block enabling, disabling and configuration
-> +-----------------------------------------------
-> +
-> +When userspace wants to configure and enable an ISP block it shall fully
-> +populate the block configuration and set the V4L2_ISP_PARAMS_FL_BLOCK_ENABLE
-> +bit in the block header's `flags` field.
-> +
-> +When userspace simply wants to disable an ISP block the
-> +V4L2_ISP_PARAMS_FL_BLOCK_DISABLE bit should be set in block header's `flags`
-> +field. Drivers accept a configuration parameters block with no additional
-> +data after the header in this case.
-> +
-> +If the configuration of an already active ISP block has to be updated,
-> +userspace shall fully populate the ISP block parameters and omit setting the
-> +V4L2_ISP_PARAMS_FL_BLOCK_ENABLE and V4L2_ISP_PARAMS_FL_BLOCK_DISABLE bits in the
-> +header's `flags` field.
-> +
-> +Setting both the V4L2_ISP_PARAMS_FL_BLOCK_ENABLE and
-> +V4L2_ISP_PARAMS_FL_BLOCK_DISABLE bits in the flags field is not allowed and not
-> +accepted.
+Gstreamer testing:
+Gstreamer MR for enabling AV1 stateful decoder:
+https://gitlab.freedesktop.org/gstreamer/gstreamer/-/merge_requests/9892
 
-s/and not accepted/and returns an error/
+Fluster testing:
+Test suite: AV1-TEST-VECTORS
+The result of fluster test on SM8550:
+135/242 testcases passed while testing AV1-TEST-VECTORS with
+GStreamer-AV1-V4L2-Gst1.0
 
-> +
-> +Any further extension to the parameters layout that happens after the ISP driver
+failing tests:
+unsupported content with bitdepth 10 (66 tests)
+Iris decoder supports only 8bit NV12
+av1-1-b10-00-quantizer-*
 
-s/Any further extension/Extensions/
+Unsupported resolution (36 tests).
+Iris hardware decoder supports min resolution of 96x96
+av1-1-b8-01-size-*
 
-> +has been merged in Linux can be implemented by adding new blocks definition
+Unsupported colorformat (1 test)
+av1-1-b8-24-monochrome
 
-s/after the ISP driver has been merged in Linux //
+Unsupported SVC tests (2tests)
+av1-1-b8-22-svc-L2T1
+av1-1-b8-22-svc-L2T2
 
-Reviewed-by: Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>
+Bitstream corruption issue: (2tests)
+av1-1-b8-03-sizeup
+av1-1-b8-03-sizedown
 
-> +without invalidating the existing ones.
-> +
-> +ISP statistics
-> +==============
-> +
-> +Support for generic statistics format is not yet implemented in Video4Linux2.
-> +
-> +V4L2 ISP uAPI data types
-> +========================
-> +
-> +.. kernel-doc:: include/uapi/linux/media/v4l2-isp.h
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index d925745077f21e5a1388a30217a24beeb4fff3b5..f52237d57710cadff78b297d2b4610b508f55092 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -26856,6 +26856,7 @@ V4L2 GENERIC ISP PARAMETERS AND STATISTIC FORMATS
->  M:	Jacopo Mondi <jacopo.mondi@ideasonboard.com>
->  L:	linux-media@vger.kernel.org
->  S:	Maintained
-> +F:	Documentation/userspace-api/media/v4l/v4l2-isp.rst
->  F:	include/uapi/linux/media/v4l2-isp.h
->  
->  VF610 NAND DRIVER
+Testsuite: CHROMIUM-8bit-AV1-TEST-VECTORS
+13/13 testcases passed while testing CHROMIUM-8bit-AV1-TEST-VECTORS with
+GStreamer-AV1-V4L2-Gst1.0
 
+Following the RFC feedback, focused on only IVF/MKV content
+as AV1 parser lacks support for below content
+AV1-ARGON-PROFILE0-CORE-ANNEX-B
+AV1-ARGON-PROFILE0-NON-ANNEX-B
+AV1-ARGON-PROFILE0-NON-ANNEX-B
+
+Unsupported test suites:
+Iris Decoder supports only PROFILE0/V4L2_MPEG_VIDEO_AV1_PROFILE_MAIN
+and 8 bit, 420 only
+AV1-ARGON-PROFILE1-CORE-ANNEX-B
+AV1-ARGON-PROFILE1-NON-ANNEX-B
+AV1-ARGON-PROFILE1-STRESS-ANNEX-B
+AV1-ARGON-PROFILE2-CORE-ANNEX-B
+AV1-ARGON-PROFILE2-NON-ANNEX-B
+AV1-ARGON-PROFILE2-STRESS-ANNEX-B
+CHROMIUM-10bit-AV1-TEST-VECTORS
+
+Compliance test for iris_driver device /dev/video0:
+
+Driver Info:
+		Driver name      : iris_driver
+		Card type        : Iris Decoder
+		Bus info         : platform:aa00000.video-codec
+		Driver version   : 6.17.0
+		Capabilities     : 0x84204000
+				Video Memory-to-Memory Multiplanar
+				Streaming
+				Extended Pix Format
+				Device Capabilities
+		Device Caps      : 0x04204000
+				Video Memory-to-Memory Multiplanar
+				Streaming
+				Extended Pix Format
+		Detected Stateful Decoder
+
+Required ioctls:
+		test VIDIOC_QUERYCAP: OK
+		test invalid ioctls: OK
+
+Allow for multiple opens:
+		test second /dev/video0 open: OK
+		test VIDIOC_QUERYCAP: OK
+		test VIDIOC_G/S_PRIORITY: OK
+		test for unlimited opens: OK
+
+Debug ioctls:
+		test VIDIOC_DBG_G/S_REGISTER: OK (Not Supported)
+		test VIDIOC_LOG_STATUS: OK (Not Supported)
+
+Input ioctls:
+		test VIDIOC_G/S_TUNER/ENUM_FREQ_BANDS: OK (Not
+Supported)
+		test VIDIOC_G/S_FREQUENCY: OK (Not Supported)
+		test VIDIOC_S_HW_FREQ_SEEK: OK (Not Supported)
+		test VIDIOC_ENUMAUDIO: OK (Not Supported)
+		test VIDIOC_G/S/ENUMINPUT: OK (Not Supported)
+		test VIDIOC_G/S_AUDIO: OK (Not Supported)
+		Inputs: 0 Audio Inputs: 0 Tuners: 0
+
+Output ioctls:
+		test VIDIOC_G/S_MODULATOR: OK (Not Supported)
+		test VIDIOC_G/S_FREQUENCY: OK (Not Supported)
+		test VIDIOC_ENUMAUDOUT: OK (Not Supported)
+		test VIDIOC_G/S/ENUMOUTPUT: OK (Not Supported)
+		test VIDIOC_G/S_AUDOUT: OK (Not Supported)
+		Outputs: 0 Audio Outputs: 0 Modulators: 0
+
+Input/Output configuration ioctls:
+		test VIDIOC_ENUM/G/S/QUERY_STD: OK (Not Supported)
+		test VIDIOC_ENUM/G/S/QUERY_DV_TIMINGS: OK (Not
+Supported)
+		test VIDIOC_DV_TIMINGS_CAP: OK (Not Supported)
+		test VIDIOC_G/S_EDID: OK (Not Supported)
+
+Control ioctls:
+		test VIDIOC_QUERY_EXT_CTRL/QUERYMENU: OK
+		test VIDIOC_QUERYCTRL: OK
+		test VIDIOC_G/S_CTRL: OK
+		test VIDIOC_G/S/TRY_EXT_CTRLS: OK
+		test VIDIOC_(UN)SUBSCRIBE_EVENT/DQEVENT: OK
+		test VIDIOC_G/S_JPEGCOMP: OK (Not Supported)
+		Standard Controls: 12 Private Controls: 0
+
+Format ioctls:
+		test VIDIOC_ENUM_FMT/FRAMESIZES/FRAMEINTERVALS: OK
+		test VIDIOC_G/S_PARM: OK (Not Supported)
+		test VIDIOC_G_FBUF: OK (Not Supported)
+		test VIDIOC_G_FMT: OK
+		test VIDIOC_TRY_FMT: OK
+		test VIDIOC_S_FMT: OK
+		test VIDIOC_G_SLICED_VBI_CAP: OK (Not Supported)
+		test Cropping: OK
+		test Composing: OK
+		test Scaling: OK (Not Supported)
+
+Codec ioctls:
+		test VIDIOC_(TRY_)ENCODER_CMD: OK (Not Supported)
+		test VIDIOC_G_ENC_INDEX: OK (Not Supported)
+		test VIDIOC_(TRY_)DECODER_CMD: OK
+
+Buffer ioctls:
+		test VIDIOC_REQBUFS/CREATE_BUFS/QUERYBUF: OK
+		test CREATE_BUFS maximum buffers: OK
+		test VIDIOC_REMOVE_BUFS: OK
+		test VIDIOC_EXPBUF: OK
+		test Requests: OK (Not Supported)
+		test blocking wait: OK
+
+Total for iris_driver device /dev/video0: 48, Succeeded: 48, Failed: 0,
+Warnings: 0
+
+Thanks,
+Deepa
+
+Signed-off-by: Deepa Guthyappa Madivalara <deepa.madivalara@oss.qualcomm.com>
+---
+Deepa Guthyappa Madivalara (5):
+      media: uapi: videodev2: Add support for AV1 stateful decoder
+      media: v4l2: Add description for V4L2_PIX_FMT_AV1 in v4l_fill_fmtdesc()
+      media: iris: Add support for AV1 format in iris decoder
+      media: iris: Define AV1-specific platform capabilities and properties
+      media: iris: Add internal buffer calculation for AV1 decoder
+
+ .../userspace-api/media/v4l/pixfmt-compressed.rst  |   8 +
+ drivers/media/platform/qcom/iris/iris_buffer.h     |   2 +
+ drivers/media/platform/qcom/iris/iris_ctrls.c      |   8 +
+ drivers/media/platform/qcom/iris/iris_hfi_common.h |   3 +
+ .../platform/qcom/iris/iris_hfi_gen2_command.c     |  85 +++++-
+ .../platform/qcom/iris/iris_hfi_gen2_defines.h     |  11 +-
+ .../platform/qcom/iris/iris_hfi_gen2_response.c    |  22 ++
+ drivers/media/platform/qcom/iris/iris_instance.h   |   1 +
+ .../platform/qcom/iris/iris_platform_common.h      |  13 +
+ .../media/platform/qcom/iris/iris_platform_gen2.c  | 142 +++++++++-
+ .../platform/qcom/iris/iris_platform_sm8250.c      |  17 ++
+ drivers/media/platform/qcom/iris/iris_vdec.c       |  23 +-
+ drivers/media/platform/qcom/iris/iris_vidc.c       |   1 +
+ drivers/media/platform/qcom/iris/iris_vpu_buffer.c | 299 ++++++++++++++++++++-
+ drivers/media/platform/qcom/iris/iris_vpu_buffer.h | 116 ++++++++
+ drivers/media/v4l2-core/v4l2-ioctl.c               |   1 +
+ include/uapi/linux/videodev2.h                     |   1 +
+ 17 files changed, 726 insertions(+), 27 deletions(-)
+---
+base-commit: 163917839c0eea3bdfe3620f27f617a55fd76302
+change-id: 20251029-av1d_stateful_v3-cbf9fed11adc
+prerequisite-change-id:20250918-video-iris-ubwc-enable-87eac6f41fa4:v2
+prerequisite-patch-id: 11fd97eabf65d22120ff89985be5510599eb4159
+prerequisite-patch-id: aea5a497f31db23a05424fe2cddedec613571f2a
+prerequisite-patch-id: e3b10c34426c33432208e120a3e1239630893d88
+
+Best regards,
 -- 
-Regards,
+Deepa Guthyappa Madivalara <deepa.madivalara@oss.qualcomm.com>
 
-Laurent Pinchart
