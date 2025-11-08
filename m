@@ -1,224 +1,447 @@
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5ACC0217648
-	for <linux-media@vger.kernel.org>; Sat,  8 Nov 2025 04:29:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 28EAC29ACFD;
+	Sat,  8 Nov 2025 08:46:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.167.242.64
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762576185; cv=none; b=THlOPqZGgy/hy6jXeG0ogKQMWdCiWj+1OFRRr4tXCOvsdU4qEjAvBdW7Q+qWL2zkMgxPLhAJfovn1WCZBouKzPNV7Z+g934OqWWRiBGfJHdj5bEm1bbCufsWv2ZQHP3I6elUnJ3umhYo3XhiA+lh/zgi7KK7E7C1BsdK5+E8g/M=
+	t=1762591586; cv=none; b=gxyZglvPWs/+CT84rj7wZvXyUCoDNc0PCY9C5VRuUTqvG140IS2nBIDMH2X4eBYHHZaCtA9sybGS2wsy5SZos5YrQq6X1/JaxMdetJNgea5GtKwNJvn2ay6wvbkwO3zY9+Zg3JvY3++7O7fp++oAQKjfg3guMIoghhP6pjq3GHE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762576185; c=relaxed/simple;
-	bh=GrqF3Btt70TYVVkeKpPrI2n8V5I1xfOAi37SrsDWidA=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=hgmCwdM7IhNJY+bFMcEt3hiPoKmsQ2ffizaHZfoCkCjgqBf1TPtMEcM9tMWdv7FIRoVgg32dNo5NdMe0nEqEwPLz0J6E2BBb1mnCWKeHdETSS50+RMySQbcMSvIxo6KQjvqH9gabh/13Ddi42e0ILjW1UberUHJYPK082RokMMw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=oVZeidxv; dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b=fwnxejIu; arc=none smtp.client-ip=205.220.168.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
+	s=arc-20240116; t=1762591586; c=relaxed/simple;
+	bh=5f9LLR2G5PjtiaSZgbdwtMDFj6zttyrTMGNkNYlOtFc=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=jM/+ppxZRr4J5JXKcIuxqjzgIvTeEImOWm6GFgxitAY3cMb7VJAuoBD2J+XXo1RiKUIqmY/PjYZlWvbyECG/OsPQQFZMLQJCvJCo98i0cuzXcL8jf0ZmSLmltRMEkZJ+ODe1K8G/93xF0iWb8KYE08vzdbhSLIj4buoqOjmaToE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ideasonboard.com; spf=pass smtp.mailfrom=ideasonboard.com; dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b=cXDIwjeK; arc=none smtp.client-ip=213.167.242.64
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ideasonboard.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ideasonboard.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="oVZeidxv";
-	dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b="fwnxejIu"
-Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 5A84QHPR827588
-	for <linux-media@vger.kernel.org>; Sat, 8 Nov 2025 04:29:43 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	MHKiEPMGJiDkpwGtmXYIoaq5aBgKnZRJk5urWtbVNhw=; b=oVZeidxvkX6GIxcg
-	m88qoILeDD7B7WnGaTqh7W7Yu1ORb+kSCztbMeohV7AEUAJv87ilq98C7OmwgEQe
-	fIEWUBMYrFw5jRiJXfDItJViZlIp9RXSFSwY1gjXpbWg/RCzDQ1Y0tpd9h3Z/Io5
-	T3bT50euW5q79nQSdEqdEa0oqIQvIpyYg2jfXfv6hyna60qUbS6m43wI1w/QxfMC
-	NyzKVlVSAaoYWvlnbjRTl1eHEMbOCIMKZQmywKrvNL/a2ZMGoaORhhLnICrJaRMg
-	esUJHDn2OrtHj2XNIKTSCa2Ciey6GZz0bwr33eP2tu6+zCD/1J10V5p8TGzodckv
-	1FTgJw==
-Received: from mail-pg1-f199.google.com (mail-pg1-f199.google.com [209.85.215.199])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4a9xu9r04s-1
-	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
-	for <linux-media@vger.kernel.org>; Sat, 08 Nov 2025 04:29:43 +0000 (GMT)
-Received: by mail-pg1-f199.google.com with SMTP id 41be03b00d2f7-b9c1b12c151so352177a12.2
-        for <linux-media@vger.kernel.org>; Fri, 07 Nov 2025 20:29:43 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=oss.qualcomm.com; s=google; t=1762576183; x=1763180983; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=MHKiEPMGJiDkpwGtmXYIoaq5aBgKnZRJk5urWtbVNhw=;
-        b=fwnxejIuJJS2GIgB2ZrdGhP9iDU/hHjho/wjwyrTOEUxoCsj669ZRPt3qeV/ARAs8t
-         o2af3471qKpRrYvvj/iJNVo+J66DA8GjgxplHq6RRFCTL/d3NixDiGkBr+1CVc4tJihf
-         9Ap9mmFpyE7g7+g0f2CRJp+01iXVIy6gZRHgF92v2Rq+UGdbiBxu+P5dL5Ch8aIv64+u
-         1QS1RKmsnza9GC9NyKjhosxXH9O8LeoMZRcDyB3kCYzb/yv2jqst4jeSVmkwZVn9Vmeg
-         E06qFkXoE264qAu5MDhAHxuut3GBW3HFwZK60IUslONaG7kOUlwOlq8BXT1Vxo1fPL7z
-         RzRw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1762576183; x=1763180983;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=MHKiEPMGJiDkpwGtmXYIoaq5aBgKnZRJk5urWtbVNhw=;
-        b=lpe0kdBYjaBGluG5DacQBB2OLs2evQrwDj0vKUezzEhn8gGX+lb3CDMmhzNbx0FCCE
-         Ub3V3y7vyrHGYur2hkCil46KGYGw0D8aXq8c+5x8FHbkKncqkz6eEq84wIXHIbahBOhG
-         6chUvo/FodWbPFm4OdwJMXatNMipbbgbHj889VMDQERsEPUPq8O7/ISW/W/Yqmshlrmc
-         9iH8+rv9aFFg2SZikG0DvDxAAZzZO49pixwr365SYuk+ehnHopqyQZ5C09JKwIR5rnON
-         pf3qGobXR6Q8u3fcf/rxWsb2Kl3ghprIIbrvO7n4pzv8+irK4MFWrXgSFkOyaKKBW6PB
-         SAaQ==
-X-Gm-Message-State: AOJu0Yx30H9svC6n+/s8/Qbu+28d5P3U0n+oym4QHWZAuXcLek4oenlU
-	i7piv2PZCmTsnvk91EP+3hlbD47yynmcQY9vFKC5LSsb8LGlD4nZd921XZy/3OxiqHQVpB1wL9O
-	5/Msl5ZvMfzCKnHBOOuOAR95DPfgQVyHm/qNjBStN/tyTIM4C/vvuCG8MlZLuzebWZQ==
-X-Gm-Gg: ASbGncs0NWOXgRTnU2cTzXKdlD3IiEtPYqJYAeAT6utZSmBnLWxbARTZWTlhsuGoix8
-	Zt/6xvMVh+Ajp9H3YwlMvu/OykAO1f/qbapJSlh15W30j1TkY53hbfSMeStjgteZZx0U2DOyV/H
-	hswwEoY5FIagCYuXDlKMdlQEPSERK8ckl/RQI9NWdxHz/DaZQP4GpqrLXquH75eBX9Bg6sA+8kW
-	vKx11BzcBJ8D0xOrfmQex3ejArjk/viSK9RbAJTyGxOxe17PgrJXq8VDXOtQtsveYB74uQiynRI
-	0wHrTIGvbBWUz/vszLIIerVdR7Mp0jcv6SnzVYkQFs4S6PHjOsZf4tYQrGEqzw/vmKieuZUoNn9
-	j6KQzidioA7WyLvVDq4g91HCLvYcpfAVJCz4gKB8ZRjvufrHYAvG8m9UCGxEaVg==
-X-Received: by 2002:a17:903:230f:b0:295:70b1:edd6 with SMTP id d9443c01a7336-297e5643e76mr8706655ad.3.1762576182866;
-        Fri, 07 Nov 2025 20:29:42 -0800 (PST)
-X-Google-Smtp-Source: AGHT+IF3sfbuDhDXySXPAVcfmEF/y2AIuNMy7+QjiPXwwDd2S9+fLZylcYi6yhb2l9ZzI+uh+oI6JQ==
-X-Received: by 2002:a17:903:230f:b0:295:70b1:edd6 with SMTP id d9443c01a7336-297e5643e76mr8706485ad.3.1762576182355;
-        Fri, 07 Nov 2025 20:29:42 -0800 (PST)
-Received: from [10.110.21.199] (i-global254.qualcomm.com. [199.106.103.254])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-29651c73382sm75330285ad.69.2025.11.07.20.29.36
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 07 Nov 2025 20:29:42 -0800 (PST)
-Message-ID: <47a16514-9cc1-46c9-b0d8-029c5bc44638@oss.qualcomm.com>
-Date: Fri, 7 Nov 2025 20:29:34 -0800
+	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="cXDIwjeK"
+Received: from ideasonboard.com (mob-5-90-142-135.net.vodafone.it [5.90.142.135])
+	by perceval.ideasonboard.com (Postfix) with ESMTPSA id E81E8A8F;
+	Sat,  8 Nov 2025 09:44:17 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+	s=mail; t=1762591458;
+	bh=5f9LLR2G5PjtiaSZgbdwtMDFj6zttyrTMGNkNYlOtFc=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=cXDIwjeKo1Xa20m4bm+sG9QKg04n6meFCVclWUEfYbuqVDy57Nnnpd5Cy+UM/tOlH
+	 ZX5JW4sLth1DJGhfUqgI5VCUh8CCDYcGR1lniTPN5h0npg2WRSNpfvWuZroQ0ia/+G
+	 V/koM0zsfmqJvcgg6hAa7NT/7O+0OpvyEyCqzChU=
+Date: Sat, 8 Nov 2025 09:46:10 +0100
+From: Jacopo Mondi <jacopo.mondi@ideasonboard.com>
+To: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Cc: Jacopo Mondi <jacopo.mondi@ideasonboard.com>, 
+	Dafna Hirschfeld <dafna@fastmail.com>, Keke Li <keke.li@amlogic.com>, 
+	Mauro Carvalho Chehab <mchehab@kernel.org>, Heiko Stuebner <heiko@sntech.de>, 
+	Dan Scally <dan.scally@ideasonboard.com>, Sakari Ailus <sakari.ailus@linux.intel.com>, 
+	Antoine Bouyer <antoine.bouyer@nxp.com>, linux-kernel@vger.kernel.org, linux-media@vger.kernel.org, 
+	linux-rockchip@lists.infradead.org, linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH v8 6/8] media: rkisp1: Use v4l2-isp for validation
+Message-ID: <tkgroszon7wi43jvmte5vylbxdn7oafm665weecztkfguqhu6c@mw24ipqvwxou>
+References: <20251020-extensible-parameters-validation-v8-0-afba4ba7b42d@ideasonboard.com>
+ <20251020-extensible-parameters-validation-v8-6-afba4ba7b42d@ideasonboard.com>
+ <20251107231818.GH5558@pendragon.ideasonboard.com>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4 1/5] media: uapi: videodev2: Add support for AV1
- stateful decoder
-To: Nicolas Dufresne <nicolas.dufresne@collabora.com>,
-        Hans Verkuil <hverkuil+cisco@kernel.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Vikash Garodia <vikash.garodia@oss.qualcomm.com>,
-        Dikshita Agarwal <dikshita.agarwal@oss.qualcomm.com>,
-        Abhinav Kumar <abhinav.kumar@linux.dev>,
-        Bryan O'Donoghue <bod@kernel.org>
-Cc: linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, kernel test robot <lkp@intel.com>,
-        Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-References: <20251103-av1d_stateful_v3-v4-0-33cc1eaa83f2@oss.qualcomm.com>
- <20251103-av1d_stateful_v3-v4-1-33cc1eaa83f2@oss.qualcomm.com>
- <6198674a-2af0-4906-9ffe-bc10e68eb5c5@kernel.org>
- <19cdb1996557824554789dccc805014b0fa2deda.camel@collabora.com>
-Content-Language: en-US
-From: Deepa Guthyappa Madivalara <deepa.madivalara@oss.qualcomm.com>
-In-Reply-To: <19cdb1996557824554789dccc805014b0fa2deda.camel@collabora.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Proofpoint-ORIG-GUID: vYEzC4p1_x5ey5axTVgjYfVT-FzEN27l
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUxMTA4MDAzMyBTYWx0ZWRfX/WmX6K2pX2Kw
- 6hIfivDc+L91Dm7nV8PBMfi4XoomhNDNnfya7bU0P0nXBo8vlFDGaHqLmBeFo5dhzCT+rFPTYKx
- iVPxjNe2ZOfcv9cE+/nJpLdVMBrFU2/8jwvBVnaCsRoQ1G6sg7t1zj6NzUEF7BJaTW2hhwzhSiy
- fqJG1SllT46gxwE0iUD1ZZuSL6QHeVZOIz+CU3lM3vPpJmArTIQryS1rqr7Nwn48N0EUKjDrpSE
- MeTLUYujyNsUWPq2a1TIm2CZ9IHvLmVXo1uaexk2o3/cjKf1Ep4yqvfsFE+QrnnFAh2YTNVSDMW
- 7VqoqoXwJ7K7RGsaSlH2AWrb/qhp4UAxQsLzNfdH2nilKkxQNd5ez3hr2VFj8Y344e5g943My8B
- mGvZggjImtUXEShTRMDwZlCdxauiqg==
-X-Authority-Analysis: v=2.4 cv=ZPXaWH7b c=1 sm=1 tr=0 ts=690ec737 cx=c_pps
- a=Oh5Dbbf/trHjhBongsHeRQ==:117 a=JYp8KDb2vCoCEuGobkYCKw==:17
- a=IkcTkHD0fZMA:10 a=6UeiqGixMTsA:10 a=s4-Qcg_JpJYA:10
- a=VkNPw1HP01LnGYTKEx00:22 a=VwQbUJbxAAAA:8 a=apL-334RAAAA:8 a=KKAkSRfTAAAA:8
- a=QX4gbG5DAAAA:8 a=EUspDBNiAAAA:8 a=OyDfNFrtaf6QVTBVua8A:9 a=3ZKOabzyN94A:10
- a=QEXdDO2ut3YA:10 a=_Vgx9l1VpLgwpw_dHYaR:22 a=eWIHaOtA_ULHaMmHwLHW:22
- a=cvBusfyB2V15izCimMoJ:22 a=AbAUZ8qAyYyZVLSsDulk:22
-X-Proofpoint-GUID: vYEzC4p1_x5ey5axTVgjYfVT-FzEN27l
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.9,FMLib:17.12.100.49
- definitions=2025-11-08_01,2025-11-06_01,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- impostorscore=0 lowpriorityscore=0 bulkscore=0 suspectscore=0 clxscore=1015
- priorityscore=1501 phishscore=0 spamscore=0 adultscore=0 malwarescore=0
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.22.0-2510240001 definitions=main-2511080033
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20251107231818.GH5558@pendragon.ideasonboard.com>
 
+Hi Laurent
 
-On 11/7/2025 5:41 AM, Nicolas Dufresne wrote:
-> Le vendredi 07 novembre 2025 à 10:25 +0100, Hans Verkuil a écrit :
->> On 03/11/2025 14:24, Deepa Guthyappa Madivalara wrote:
->>> Introduce a new pixel format, V4L2_PIX_FMT_AV1, to the
->>> Video4Linux2(V4L2) API. This format is intended for AV1
->>> bitstreams in stateful decoding/encoding workflows.
->>> The fourcc code 'AV10' is used to distinguish
->>> this format from the existing V4L2_PIX_FMT_AV1_FRAME,
->>> which is used for stateless AV1 decoder implementation.
->>>
->>> Reviewed-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
->>> Reviewed-by: Nicolas Dufresne <nicolas.dufresne@collabora.com>
->>> Signed-off-by: Deepa Guthyappa Madivalara <deepa.madivalara@oss.qualcomm.com>
->>> ---
->>>   Documentation/userspace-api/media/v4l/pixfmt-compressed.rst | 8 ++++++++
->>>   include/uapi/linux/videodev2.h                              | 1 +
->>>   2 files changed, 9 insertions(+)
->>>
->>> diff --git a/Documentation/userspace-api/media/v4l/pixfmt-compressed.rst b/Documentation/userspace-api/media/v4l/pixfmt-compressed.rst
->>> index c7efb0465db6480fe35be8557728c196e0e530f4..0c70410ffd4d58e0719d3cf13ad336c97b454ae9 100644
->>> --- a/Documentation/userspace-api/media/v4l/pixfmt-compressed.rst
->>> +++ b/Documentation/userspace-api/media/v4l/pixfmt-compressed.rst
->>> @@ -275,6 +275,14 @@ Compressed Formats
->>>           of macroblocks to decode a full corresponding frame to the matching
->>>           capture buffer.
->>>   
->>> +    * .. _V4L2-PIX-FMT-AV1:
->>> +
->>> +      - ``V4L2_PIX_FMT_AV1``
->>> +      - 'AV01'
->>> +      - AV1 compressed video frame. This format is adapted for implementing AV1
->>> +        pipeline. The decoder implements stateful video decoder and expects one
->>> +        Temporal Unit per buffer from OBU-stream or AnnexB.
->> OK, but the next patch says:
->>
->> 		case V4L2_PIX_FMT_AV1:		descr = "AV1 OBU stream"; break;
->>
->> And Nicolas said here:
-> Hmm, good catch, we had quite a bit of back and forth actually on the subject.
-> The discussion went toward that this is OBU Stream format, but it is conceivable
-> to enable Annex B support in the future using a control. That mandates that OBU
-> stream must always be supported for that format.
-
-Thanks for the comments. I had a similar understanding as Nicolas.
-To keep things clear updated v4 to just have OBU Stream.
-Thanks,
-Deepa
-
-> I'd drop the "or AnnexB". Then I'd try and harmonize how we write OBU stream, I
-> prefer without the -.
+On Sat, Nov 08, 2025 at 01:18:18AM +0200, Laurent Pinchart wrote:
+> Hi Jacopo,
 >
->> https://lore.kernel.org/linux-media/544147436308901fba85d6de48380c0c1eea7c67.camel@ndufresne.ca/
->>
->> "Perhaps "AV1 OBU stream", so its clear its no Annex B ?"
->>
->> So if this is just for OBU streams and not Annex B, then the description is wrong.
->>
->> Since I'm no AV1 expert and have no idea what the difference between OBU and Annex B streams is,
->> I can only comment on what looks like an inconsistency.
-> Annex B is very unlike H.264 annex b. Its adds a wrapper around time units,
-> making it faster to walk through displayable frames when you have the ability to
-> skip bytes. I've only ever seen it in tests vectors so far. My impression is
-> that we'll never have a hardware that requires that.
+> Thank you for the patch.
 >
-> Nicolas
+> On Mon, Oct 20, 2025 at 10:24:52AM +0200, Jacopo Mondi wrote:
+> > Convert rkisp1-params.c to use the helpers defined in v4l2-isp.h
+> > to perform validation of a ISP parameters buffer.
+> >
+> > Reviewed-by: Daniel Scally <dan.scally@ideasonboard.com>
+> > Acked-by: Sakari Ailus <sakari.ailus@linux.intel.com>
+> > Signed-off-by: Jacopo Mondi <jacopo.mondi@ideasonboard.com>
+> > ---
+> >  drivers/media/platform/rockchip/rkisp1/Kconfig     |   1 +
+> >  .../media/platform/rockchip/rkisp1/rkisp1-params.c | 183 +++++++++------------
+> >  2 files changed, 77 insertions(+), 107 deletions(-)
+> >
+> > diff --git a/drivers/media/platform/rockchip/rkisp1/Kconfig b/drivers/media/platform/rockchip/rkisp1/Kconfig
+> > index 731c9acbf6efa33188617204d441fb0ea59adebc..f53eb1f3f3e7003d8e02c9236aeabb5ae8844f7b 100644
+> > --- a/drivers/media/platform/rockchip/rkisp1/Kconfig
+> > +++ b/drivers/media/platform/rockchip/rkisp1/Kconfig
+> > @@ -10,6 +10,7 @@ config VIDEO_ROCKCHIP_ISP1
+> >  	select VIDEOBUF2_VMALLOC
+> >  	select V4L2_FWNODE
+> >  	select GENERIC_PHY_MIPI_DPHY
+> > +	select V4L2_ISP
+> >  	default n
+> >  	help
+> >  	  Enable this to support the Image Signal Processing (ISP) module
+> > diff --git a/drivers/media/platform/rockchip/rkisp1/rkisp1-params.c b/drivers/media/platform/rockchip/rkisp1/rkisp1-params.c
+> > index f1585f8fa0f478304f74317fd9dd09199c94ec82..a880a46d2eefefc6474b36dc5aa69b4f3dce51d1 100644
+> > --- a/drivers/media/platform/rockchip/rkisp1/rkisp1-params.c
+> > +++ b/drivers/media/platform/rockchip/rkisp1/rkisp1-params.c
+> > @@ -12,6 +12,7 @@
+> >  #include <media/v4l2-common.h>
+> >  #include <media/v4l2-event.h>
+> >  #include <media/v4l2-ioctl.h>
+> > +#include <media/v4l2-isp.h>
+> >  #include <media/videobuf2-core.h>
+> >  #include <media/videobuf2-vmalloc.h>	/* for ISP params */
+> >
+> > @@ -2097,122 +2098,166 @@ typedef void (*rkisp1_block_handler)(struct rkisp1_params *params,
+> >  			     const union rkisp1_ext_params_config *config);
+> >
+> >  static const struct rkisp1_ext_params_handler {
+> > -	size_t size;
+> >  	rkisp1_block_handler handler;
+> >  	unsigned int group;
+> >  	unsigned int features;
+> >  } rkisp1_ext_params_handlers[] = {
+> >  	[RKISP1_EXT_PARAMS_BLOCK_TYPE_BLS] = {
+> > -		.size		= sizeof(struct rkisp1_ext_params_bls_config),
+> >  		.handler	= rkisp1_ext_params_bls,
+> >  		.group		= RKISP1_EXT_PARAMS_BLOCK_GROUP_OTHERS,
+> >  		.features       = RKISP1_FEATURE_BLS,
+> >  	},
+> >  	[RKISP1_EXT_PARAMS_BLOCK_TYPE_DPCC] = {
+> > -		.size		= sizeof(struct rkisp1_ext_params_dpcc_config),
+> >  		.handler	= rkisp1_ext_params_dpcc,
+> >  		.group		= RKISP1_EXT_PARAMS_BLOCK_GROUP_OTHERS,
+> >  	},
+> >  	[RKISP1_EXT_PARAMS_BLOCK_TYPE_SDG] = {
+> > -		.size		= sizeof(struct rkisp1_ext_params_sdg_config),
+> >  		.handler	= rkisp1_ext_params_sdg,
+> >  		.group		= RKISP1_EXT_PARAMS_BLOCK_GROUP_OTHERS,
+> >  	},
+> >  	[RKISP1_EXT_PARAMS_BLOCK_TYPE_AWB_GAIN] = {
+> > -		.size		= sizeof(struct rkisp1_ext_params_awb_gain_config),
+> >  		.handler	= rkisp1_ext_params_awbg,
+> >  		.group		= RKISP1_EXT_PARAMS_BLOCK_GROUP_OTHERS,
+> >  	},
+> >  	[RKISP1_EXT_PARAMS_BLOCK_TYPE_FLT] = {
+> > -		.size		= sizeof(struct rkisp1_ext_params_flt_config),
+> >  		.handler	= rkisp1_ext_params_flt,
+> >  		.group		= RKISP1_EXT_PARAMS_BLOCK_GROUP_OTHERS,
+> >  	},
+> >  	[RKISP1_EXT_PARAMS_BLOCK_TYPE_BDM] = {
+> > -		.size		= sizeof(struct rkisp1_ext_params_bdm_config),
+> >  		.handler	= rkisp1_ext_params_bdm,
+> >  		.group		= RKISP1_EXT_PARAMS_BLOCK_GROUP_OTHERS,
+> >  	},
+> >  	[RKISP1_EXT_PARAMS_BLOCK_TYPE_CTK] = {
+> > -		.size		= sizeof(struct rkisp1_ext_params_ctk_config),
+> >  		.handler	= rkisp1_ext_params_ctk,
+> >  		.group		= RKISP1_EXT_PARAMS_BLOCK_GROUP_OTHERS,
+> >  	},
+> >  	[RKISP1_EXT_PARAMS_BLOCK_TYPE_GOC] = {
+> > -		.size		= sizeof(struct rkisp1_ext_params_goc_config),
+> >  		.handler	= rkisp1_ext_params_goc,
+> >  		.group		= RKISP1_EXT_PARAMS_BLOCK_GROUP_OTHERS,
+> >  	},
+> >  	[RKISP1_EXT_PARAMS_BLOCK_TYPE_DPF] = {
+> > -		.size		= sizeof(struct rkisp1_ext_params_dpf_config),
+> >  		.handler	= rkisp1_ext_params_dpf,
+> >  		.group		= RKISP1_EXT_PARAMS_BLOCK_GROUP_OTHERS,
+> >  	},
+> >  	[RKISP1_EXT_PARAMS_BLOCK_TYPE_DPF_STRENGTH] = {
+> > -		.size		= sizeof(struct rkisp1_ext_params_dpf_strength_config),
+> >  		.handler	= rkisp1_ext_params_dpfs,
+> >  		.group		= RKISP1_EXT_PARAMS_BLOCK_GROUP_OTHERS,
+> >  	},
+> >  	[RKISP1_EXT_PARAMS_BLOCK_TYPE_CPROC] = {
+> > -		.size		= sizeof(struct rkisp1_ext_params_cproc_config),
+> >  		.handler	= rkisp1_ext_params_cproc,
+> >  		.group		= RKISP1_EXT_PARAMS_BLOCK_GROUP_OTHERS,
+> >  	},
+> >  	[RKISP1_EXT_PARAMS_BLOCK_TYPE_IE] = {
+> > -		.size		= sizeof(struct rkisp1_ext_params_ie_config),
+> >  		.handler	= rkisp1_ext_params_ie,
+> >  		.group		= RKISP1_EXT_PARAMS_BLOCK_GROUP_OTHERS,
+> >  	},
+> >  	[RKISP1_EXT_PARAMS_BLOCK_TYPE_LSC] = {
+> > -		.size		= sizeof(struct rkisp1_ext_params_lsc_config),
+> >  		.handler	= rkisp1_ext_params_lsc,
+> >  		.group		= RKISP1_EXT_PARAMS_BLOCK_GROUP_LSC,
+> >  	},
+> >  	[RKISP1_EXT_PARAMS_BLOCK_TYPE_AWB_MEAS] = {
+> > -		.size		= sizeof(struct rkisp1_ext_params_awb_meas_config),
+> >  		.handler	= rkisp1_ext_params_awbm,
+> >  		.group		= RKISP1_EXT_PARAMS_BLOCK_GROUP_OTHERS,
+> >  	},
+> >  	[RKISP1_EXT_PARAMS_BLOCK_TYPE_HST_MEAS] = {
+> > -		.size		= sizeof(struct rkisp1_ext_params_hst_config),
+> >  		.handler	= rkisp1_ext_params_hstm,
+> >  		.group		= RKISP1_EXT_PARAMS_BLOCK_GROUP_OTHERS,
+> >  	},
+> >  	[RKISP1_EXT_PARAMS_BLOCK_TYPE_AEC_MEAS] = {
+> > -		.size		= sizeof(struct rkisp1_ext_params_aec_config),
+> >  		.handler	= rkisp1_ext_params_aecm,
+> >  		.group		= RKISP1_EXT_PARAMS_BLOCK_GROUP_OTHERS,
+> >  	},
+> >  	[RKISP1_EXT_PARAMS_BLOCK_TYPE_AFC_MEAS] = {
+> > -		.size		= sizeof(struct rkisp1_ext_params_afc_config),
+> >  		.handler	= rkisp1_ext_params_afcm,
+> >  		.group		= RKISP1_EXT_PARAMS_BLOCK_GROUP_OTHERS,
+> >  	},
+> >  	[RKISP1_EXT_PARAMS_BLOCK_TYPE_COMPAND_BLS] = {
+> > -		.size		= sizeof(struct rkisp1_ext_params_compand_bls_config),
+> >  		.handler	= rkisp1_ext_params_compand_bls,
+> >  		.group		= RKISP1_EXT_PARAMS_BLOCK_GROUP_OTHERS,
+> >  		.features	= RKISP1_FEATURE_COMPAND,
+> >  	},
+> >  	[RKISP1_EXT_PARAMS_BLOCK_TYPE_COMPAND_EXPAND] = {
+> > -		.size		= sizeof(struct rkisp1_ext_params_compand_curve_config),
+> >  		.handler	= rkisp1_ext_params_compand_expand,
+> >  		.group		= RKISP1_EXT_PARAMS_BLOCK_GROUP_OTHERS,
+> >  		.features	= RKISP1_FEATURE_COMPAND,
+> >  	},
+> >  	[RKISP1_EXT_PARAMS_BLOCK_TYPE_COMPAND_COMPRESS] = {
+> > -		.size		= sizeof(struct rkisp1_ext_params_compand_curve_config),
+> >  		.handler	= rkisp1_ext_params_compand_compress,
+> >  		.group		= RKISP1_EXT_PARAMS_BLOCK_GROUP_OTHERS,
+> >  		.features	= RKISP1_FEATURE_COMPAND,
+> >  	},
+> >  	[RKISP1_EXT_PARAMS_BLOCK_TYPE_WDR] = {
+> > -		.size		= sizeof(struct rkisp1_ext_params_wdr_config),
+> >  		.handler	= rkisp1_ext_params_wdr,
+> >  		.group		= RKISP1_EXT_PARAMS_BLOCK_GROUP_OTHERS,
+> >  	},
+> >  };
+> >
+> > +static const struct v4l2_isp_params_block_info rkisp1_ext_params_blocks_info[] = {
+> > +	[RKISP1_EXT_PARAMS_BLOCK_TYPE_BLS] = {
+> > +		.size		= sizeof(struct rkisp1_ext_params_bls_config),
+> > +	},
+> > +	[RKISP1_EXT_PARAMS_BLOCK_TYPE_DPCC] = {
+> > +		.size		= sizeof(struct rkisp1_ext_params_dpcc_config),
+> > +	},
+> > +	[RKISP1_EXT_PARAMS_BLOCK_TYPE_SDG] = {
+> > +		.size		= sizeof(struct rkisp1_ext_params_sdg_config),
+> > +	},
+> > +	[RKISP1_EXT_PARAMS_BLOCK_TYPE_AWB_GAIN] = {
+> > +		.size		= sizeof(struct rkisp1_ext_params_awb_gain_config),
+> > +	},
+> > +	[RKISP1_EXT_PARAMS_BLOCK_TYPE_FLT] = {
+> > +		.size		= sizeof(struct rkisp1_ext_params_flt_config),
+> > +	},
+> > +	[RKISP1_EXT_PARAMS_BLOCK_TYPE_BDM] = {
+> > +		.size		= sizeof(struct rkisp1_ext_params_bdm_config),
+> > +	},
+> > +	[RKISP1_EXT_PARAMS_BLOCK_TYPE_CTK] = {
+> > +		.size		= sizeof(struct rkisp1_ext_params_ctk_config),
+> > +	},
+> > +	[RKISP1_EXT_PARAMS_BLOCK_TYPE_GOC] = {
+> > +		.size		= sizeof(struct rkisp1_ext_params_goc_config),
+> > +	},
+> > +	[RKISP1_EXT_PARAMS_BLOCK_TYPE_DPF] = {
+> > +		.size		= sizeof(struct rkisp1_ext_params_dpf_config),
+> > +	},
+> > +	[RKISP1_EXT_PARAMS_BLOCK_TYPE_DPF_STRENGTH] = {
+> > +		.size		= sizeof(struct rkisp1_ext_params_dpf_strength_config),
+> > +	},
+> > +	[RKISP1_EXT_PARAMS_BLOCK_TYPE_CPROC] = {
+> > +		.size		= sizeof(struct rkisp1_ext_params_cproc_config),
+> > +	},
+> > +	[RKISP1_EXT_PARAMS_BLOCK_TYPE_IE] = {
+> > +		.size		= sizeof(struct rkisp1_ext_params_ie_config),
+> > +	},
+> > +	[RKISP1_EXT_PARAMS_BLOCK_TYPE_LSC] = {
+> > +		.size		= sizeof(struct rkisp1_ext_params_lsc_config),
+> > +	},
+> > +	[RKISP1_EXT_PARAMS_BLOCK_TYPE_AWB_MEAS] = {
+> > +		.size		= sizeof(struct rkisp1_ext_params_awb_meas_config),
+> > +	},
+> > +	[RKISP1_EXT_PARAMS_BLOCK_TYPE_HST_MEAS] = {
+> > +		.size		= sizeof(struct rkisp1_ext_params_hst_config),
+> > +	},
+> > +	[RKISP1_EXT_PARAMS_BLOCK_TYPE_AEC_MEAS] = {
+> > +		.size		= sizeof(struct rkisp1_ext_params_aec_config),
+> > +	},
+> > +	[RKISP1_EXT_PARAMS_BLOCK_TYPE_AFC_MEAS] = {
+> > +		.size		= sizeof(struct rkisp1_ext_params_afc_config),
+> > +	},
+> > +	[RKISP1_EXT_PARAMS_BLOCK_TYPE_COMPAND_BLS] = {
+> > +		.size		= sizeof(struct rkisp1_ext_params_compand_bls_config),
+> > +	},
+> > +	[RKISP1_EXT_PARAMS_BLOCK_TYPE_COMPAND_EXPAND] = {
+> > +		.size		= sizeof(struct rkisp1_ext_params_compand_curve_config),
+> > +	},
+> > +	[RKISP1_EXT_PARAMS_BLOCK_TYPE_COMPAND_COMPRESS] = {
+> > +		.size		= sizeof(struct rkisp1_ext_params_compand_curve_config),
+> > +	},
+> > +	[RKISP1_EXT_PARAMS_BLOCK_TYPE_WDR] = {
+> > +		.size		= sizeof(struct rkisp1_ext_params_wdr_config),
+> > +	},
 >
->> Regards,
->>
->> 	Hans
->>
->>> +        The encoder generates one Temporal Unit per buffer.
->>>   .. raw:: latex
->>>   
->>>       \normalsize
->>> diff --git a/include/uapi/linux/videodev2.h b/include/uapi/linux/videodev2.h
->>> index becd08fdbddb857f8f2bf205d2164dc6e20e80b2..cf0b71bbe0f9d397e1e6c88433a0fc3ba11fb947 100644
->>> --- a/include/uapi/linux/videodev2.h
->>> +++ b/include/uapi/linux/videodev2.h
->>> @@ -775,6 +775,7 @@ struct v4l2_pix_format {
->>>   #define V4L2_PIX_FMT_H264_SLICE v4l2_fourcc('S', '2', '6', '4') /* H264 parsed slices */
->>>   #define V4L2_PIX_FMT_HEVC_SLICE v4l2_fourcc('S', '2', '6', '5') /* HEVC parsed slices */
->>>   #define V4L2_PIX_FMT_AV1_FRAME v4l2_fourcc('A', 'V', '1', 'F') /* AV1 parsed frame */
->>> +#define V4L2_PIX_FMT_AV1      v4l2_fourcc('A', 'V', '0', '1') /* AV1 */
->>>   #define V4L2_PIX_FMT_SPK      v4l2_fourcc('S', 'P', 'K', '0') /* Sorenson Spark */
->>>   #define V4L2_PIX_FMT_RV30     v4l2_fourcc('R', 'V', '3', '0') /* RealVideo 8 */
->>>   #define V4L2_PIX_FMT_RV40     v4l2_fourcc('R', 'V', '4', '0') /* RealVideo 9 & 10 */
->>>
+> We could make this more compact with
+>
+> #define RKISP1_PARAMS_BLOCK_INFO(block, data) \
+> 	[RKISP1_EXT_PARAMS_BLOCK_TYPE_ ## block] = { \
+> 		.size = sizeof(struct rkisp1_ext_params_ ## data ## _config), \
+> 	}
+>
+> 	RKISP1_PARAMS_BLOCK_INFO(BLS, bls),
+> 	RKISP1_PARAMS_BLOCK_INFO(DPCC, dpcc),
+> 	RKISP1_PARAMS_BLOCK_INFO(SDG, sdg),
+> 	RKISP1_PARAMS_BLOCK_INFO(AWB_GAIN, awb_gain),
+> 	RKISP1_PARAMS_BLOCK_INFO(FLT, flt),
+> 	RKISP1_PARAMS_BLOCK_INFO(BDM, bdm),
+> 	RKISP1_PARAMS_BLOCK_INFO(CTK, ctk),
+> 	RKISP1_PARAMS_BLOCK_INFO(GOC, goc),
+> 	RKISP1_PARAMS_BLOCK_INFO(DPF, dpf),
+> 	RKISP1_PARAMS_BLOCK_INFO(DPF_STRENGTH, dpf_strength),
+> 	RKISP1_PARAMS_BLOCK_INFO(CPROC, cproc),
+> 	RKISP1_PARAMS_BLOCK_INFO(IE, ie),
+> 	RKISP1_PARAMS_BLOCK_INFO(LSC, lsc),
+> 	RKISP1_PARAMS_BLOCK_INFO(AWB_MEAS, awb_meas),
+> 	RKISP1_PARAMS_BLOCK_INFO(HST_MEAS, hst),
+> 	RKISP1_PARAMS_BLOCK_INFO(AEC_MEAS, aec),
+> 	RKISP1_PARAMS_BLOCK_INFO(AFC_MEAS, afc),
+> 	RKISP1_PARAMS_BLOCK_INFO(COMPAND_BLS, compand_bls),
+> 	RKISP1_PARAMS_BLOCK_INFO(COMPAND_EXPAND, compand_curve),
+> 	RKISP1_PARAMS_BLOCK_INFO(COMPAND_COMPRESS, compand_curve),
+> 	RKISP1_PARAMS_BLOCK_INFO(WDR, wdr),
+>
+> It helped me quickly visualize that the block types and data types
+> matched, so I think it could help reviews when adding new blocks.
+>
+> This can also be done in a patch on top. Same for the c3-isp driver.
+>
+> Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+
+Nicer, thanks.
+
+I've also added (here and in the C3 driver)
+
+static_assert(ARRAY_SIZE(rkisp1_ext_params_handlers) ==
+              ARRAY_SIZE(rkisp1_ext_params_blocks_info));
+
+>
+> > +};
+> > +
+> >  static void rkisp1_ext_params_config(struct rkisp1_params *params,
+> >  				     struct rkisp1_ext_params_cfg *cfg,
+> >  				     u32 block_group_mask)
+> > @@ -2646,31 +2691,16 @@ static int rkisp1_params_prepare_ext_params(struct rkisp1_params *params,
+> >  {
+> >  	struct vb2_v4l2_buffer *vbuf = to_vb2_v4l2_buffer(vb);
+> >  	struct rkisp1_params_buffer *params_buf = to_rkisp1_params_buffer(vbuf);
+> > -	size_t header_size = offsetof(struct rkisp1_ext_params_cfg, data);
+> >  	struct rkisp1_ext_params_cfg *cfg = params_buf->cfg;
+> >  	size_t payload_size = vb2_get_plane_payload(vb, 0);
+> >  	struct rkisp1_ext_params_cfg *usr_cfg =
+> >  		vb2_plane_vaddr(&vbuf->vb2_buf, 0);
+> > -	size_t block_offset = 0;
+> > -	size_t cfg_size;
+> > -
+> > -	/*
+> > -	 * Validate the buffer payload size before copying the parameters. The
+> > -	 * payload has to be smaller than the destination buffer size and larger
+> > -	 * than the header size.
+> > -	 */
+> > -	if (payload_size > params->metafmt->buffersize) {
+> > -		dev_dbg(params->rkisp1->dev,
+> > -			"Too large buffer payload size %zu\n", payload_size);
+> > -		return -EINVAL;
+> > -	}
+> > +	int ret;
+> >
+> > -	if (payload_size < header_size) {
+> > -		dev_dbg(params->rkisp1->dev,
+> > -			"Buffer payload %zu smaller than header size %zu\n",
+> > -			payload_size, header_size);
+> > -		return -EINVAL;
+> > -	}
+> > +	ret = v4l2_isp_params_validate_buffer_size(params->rkisp1->dev, vb,
+> > +						   params->metafmt->buffersize);
+> > +	if (ret)
+> > +		return ret;
+> >
+> >  	/*
+> >  	 * Copy the parameters buffer to the internal scratch buffer to avoid
+> > @@ -2678,71 +2708,10 @@ static int rkisp1_params_prepare_ext_params(struct rkisp1_params *params,
+> >  	 */
+> >  	memcpy(cfg, usr_cfg, payload_size);
+> >
+> > -	/* Only v1 is supported at the moment. */
+> > -	if (cfg->version != RKISP1_EXT_PARAM_BUFFER_V1) {
+> > -		dev_dbg(params->rkisp1->dev,
+> > -			"Unsupported extensible format version: %u\n",
+> > -			cfg->version);
+> > -		return -EINVAL;
+> > -	}
+> > -
+> > -	/* Validate the size reported in the parameters buffer header. */
+> > -	cfg_size = header_size + cfg->data_size;
+> > -	if (cfg_size != payload_size) {
+> > -		dev_dbg(params->rkisp1->dev,
+> > -			"Data size %zu different than buffer payload size %zu\n",
+> > -			cfg_size, payload_size);
+> > -		return -EINVAL;
+> > -	}
+> > -
+> > -	/* Walk the list of parameter blocks and validate them. */
+> > -	cfg_size = cfg->data_size;
+> > -	while (cfg_size >= sizeof(struct rkisp1_ext_params_block_header)) {
+> > -		const struct rkisp1_ext_params_block_header *block;
+> > -		const struct rkisp1_ext_params_handler *handler;
+> > -
+> > -		block = (const struct rkisp1_ext_params_block_header *)
+> > -			&cfg->data[block_offset];
+> > -
+> > -		if (block->type >= ARRAY_SIZE(rkisp1_ext_params_handlers)) {
+> > -			dev_dbg(params->rkisp1->dev,
+> > -				"Invalid parameters block type\n");
+> > -			return -EINVAL;
+> > -		}
+> > -
+> > -		if (block->size > cfg_size) {
+> > -			dev_dbg(params->rkisp1->dev,
+> > -				"Premature end of parameters data\n");
+> > -			return -EINVAL;
+> > -		}
+> > -
+> > -		if ((block->flags & (RKISP1_EXT_PARAMS_FL_BLOCK_ENABLE |
+> > -				     RKISP1_EXT_PARAMS_FL_BLOCK_DISABLE)) ==
+> > -		   (RKISP1_EXT_PARAMS_FL_BLOCK_ENABLE |
+> > -		    RKISP1_EXT_PARAMS_FL_BLOCK_DISABLE)) {
+> > -			dev_dbg(params->rkisp1->dev,
+> > -				"Invalid parameters block flags\n");
+> > -			return -EINVAL;
+> > -		}
+> > -
+> > -		handler = &rkisp1_ext_params_handlers[block->type];
+> > -		if (block->size != handler->size) {
+> > -			dev_dbg(params->rkisp1->dev,
+> > -				"Invalid parameters block size\n");
+> > -			return -EINVAL;
+> > -		}
+> > -
+> > -		block_offset += block->size;
+> > -		cfg_size -= block->size;
+> > -	}
+> > -
+> > -	if (cfg_size) {
+> > -		dev_dbg(params->rkisp1->dev,
+> > -			"Unexpected data after the parameters buffer end\n");
+> > -		return -EINVAL;
+> > -	}
+> > -
+> > -	return 0;
+> > +	return v4l2_isp_params_validate_buffer(params->rkisp1->dev, vb,
+> > +				(struct v4l2_isp_params_buffer *)cfg,
+> > +				rkisp1_ext_params_blocks_info,
+> > +				ARRAY_SIZE(rkisp1_ext_params_blocks_info));
+> >  }
+> >
+> >  static int rkisp1_params_vb2_buf_prepare(struct vb2_buffer *vb)
+>
+> --
+> Regards,
+>
+> Laurent Pinchart
