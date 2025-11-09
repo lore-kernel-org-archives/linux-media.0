@@ -1,313 +1,178 @@
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 492B0B67A;
-	Sun,  9 Nov 2025 09:02:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.167.242.64
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EA90826C399;
+	Sun,  9 Nov 2025 09:40:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762678929; cv=none; b=tvzU081FIY16QVOsWwoPWcr2rtAuDUxWhcLW3lLbcueLu5eOGTcV7aSgSKXjpBuzlvEdVAHaKB+oxODEU9vNVApZJrv5m/wTIpCDrpKyGsAhyG3+npwCsnZEoHh5y2mUpMbM3uunyVuvFfEtzcToR+kLZXYNvf0I6qGCdb1ycHk=
+	t=1762681205; cv=none; b=oDxwDr1TgO83TwFv/d8FqLhRQfP93Gfh1lrU2P/IjatyRRDJc9044vRPXLGy8xfyyD+WtxiEmN+aU69CoJ5TBCzhKIbLYcd1vshYbudS9Ic9FYDqXQvF0onM+4PIut8TN/jBAOOx8acIqDVgbsDe/Mk/wTPf5FY6+eIP5stPvUE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762678929; c=relaxed/simple;
-	bh=vGyf/vOP5buzlkUbqiHzVnnWuP1efLVlk+uzqz1Lavc=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=rwuphthpnpYh2xzugxq+Ibob9k3rygSptppc2/iiW7BJ5qRqgyjcIegphf8SlZwYzmVZ50UtJNWI9uk1n2fOgg2trJbvTJAaUfOgehkuz1pESnaI5fpOe2cmtpDH+SKLQ+R7vACSDczT+f+GFJhwD5hHJZLsufyVi+w80cFCPLI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ideasonboard.com; spf=pass smtp.mailfrom=ideasonboard.com; dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b=dgVN/DEa; arc=none smtp.client-ip=213.167.242.64
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ideasonboard.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ideasonboard.com
+	s=arc-20240116; t=1762681205; c=relaxed/simple;
+	bh=VURxhsrja0d1mbf83rp6CbYeiedDgrQAvgKCqq1ekF0=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=iSEHuk/Wo00g8Ku1s8BfDrMA6XJmN4TuDnJA2CYOeFXHrUO3ijOnuX2k8AGkbAcjn03zmM8jF4GwGnKDNMkt9UfwpnHmVR2YF3LsiqUE/2p0lxFAqdsiMYWdbFWxzqJg17D64s5GjS6ZgNcEZ/GEdsW2mAWtSZ2JyMIB24gOfp4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BZ/ijM87; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="dgVN/DEa"
-Received: from ideasonboard.com (mob-5-90-142-135.net.vodafone.it [5.90.142.135])
-	by perceval.ideasonboard.com (Postfix) with ESMTPSA id 9E83C22E;
-	Sun,  9 Nov 2025 09:59:59 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-	s=mail; t=1762678800;
-	bh=vGyf/vOP5buzlkUbqiHzVnnWuP1efLVlk+uzqz1Lavc=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=dgVN/DEaRJgva5oRH7rco2VcKbvV1nwcdi1T/aNZSktNdSlcJPcmHf0zmapYKvFFT
-	 GXPRtuy0s9faHyNLkL2OK54APP9ISYq8Cy3ZTLV/pC1A0SMVdVoILsBTnIn2QyHAK7
-	 Aq3BsUydS0OuVVog35QJoDlnMUB0NW3auQBw7IiY=
-Date: Sun, 9 Nov 2025 10:01:51 +0100
-From: Jacopo Mondi <jacopo.mondi@ideasonboard.com>
-To: Dan Scally <dan.scally@ideasonboard.com>
-Cc: Jacopo Mondi <jacopo.mondi@ideasonboard.com>, 
-	"Lad, Prabhakar" <prabhakar.csengg@gmail.com>, linux-media@vger.kernel.org, devicetree@vger.kernel.org, 
-	linux-arm-kernel@lists.infradead.org, Anthony.McGivern@arm.com, nayden.kanchev@arm.com, 
-	robh+dt@kernel.org, mchehab@kernel.org, krzysztof.kozlowski+dt@linaro.org, 
-	conor+dt@kernel.org, jerome.forissier@linaro.org, kieran.bingham@ideasonboard.com, 
-	laurent.pinchart@ideasonboard.com, Sakari Ailus <sakari.ailus@linux.intel.com>, 
-	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: Re: [PATCH v12 03/15] dt-bindings: media: Add bindings for ARM
- mali-c55
-Message-ID: <olployk2d6ui4jh5os2ga4zhfee54322vwwhdqrate7f3agg5m@wxeizzoysxbo>
-References: <20251002-c55-v12-0-3eda2dba9554@ideasonboard.com>
- <20251002-c55-v12-3-3eda2dba9554@ideasonboard.com>
- <CA+V-a8sg4c697WTS=wXoWvgc_UCFM3+Qjh1br=rMm4F84NVw-Q@mail.gmail.com>
- <8c5a4c68-8299-4d8f-96b2-8db232df70fe@ideasonboard.com>
- <CA+V-a8vey1y0QAxk7vYNHzPHrOrQ4uTpjf4LCb9wSRRCT3v3Qg@mail.gmail.com>
- <pwnwqoghzznwp5faozxhsjzfd6qx3xeqvwcmk4zpkcgmmbtetu@vafr5viwhizp>
- <37015806-bf91-4e31-9550-50d17062b1e4@ideasonboard.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BZ/ijM87"
+Received: by smtp.kernel.org (Postfix) with ESMTPS id C461DC2BC86;
+	Sun,  9 Nov 2025 09:40:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1762681204;
+	bh=VURxhsrja0d1mbf83rp6CbYeiedDgrQAvgKCqq1ekF0=;
+	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To:From;
+	b=BZ/ijM87uSBCFwUXQwAYnTfypRVKx8fRYV+q0h9yjp+6OFgaPgCSJo9BBKVsttO3q
+	 rLLmeQNadwsPs5pE6wKsTft014yYVo7rhY9syOC1g1123VrMtD9QwmNVuBz3sfN8Xi
+	 rjwNrVxOC57XBql4HuVqLWgniqW8FT6M8nD82GTszYlcN6TbtoyDoVglV7sTgwc667
+	 raBQ5AcZD/gafWkcxqpb4hv5nzQxkwGthnYUyklQHhQJQ5khoYBaAgB/TRjRYYyNa+
+	 dl0cr5FgHkZqeBjDN3gJfOXG0V+K+o0UGuUblqPYH+CB4z5QVqNEgd5L/22ffAYkX9
+	 YDCbZGL+BhXZg==
+Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B9FA6CCFA13;
+	Sun,  9 Nov 2025 09:40:04 +0000 (UTC)
+From: David Heidelberg via B4 Relay <devnull+david.ixit.cz@kernel.org>
+Date: Sun, 09 Nov 2025 10:39:44 +0100
+Subject: [PATCH RFC 1/8] media: qcom: camss: csiphy-3ph: Add Gen2 v1.1 MIPI
+ CSI-2 CPHY init
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <37015806-bf91-4e31-9550-50d17062b1e4@ideasonboard.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20251109-qcom-cphy-v1-1-165f7e79b0e1@ixit.cz>
+References: <20251109-qcom-cphy-v1-0-165f7e79b0e1@ixit.cz>
+In-Reply-To: <20251109-qcom-cphy-v1-0-165f7e79b0e1@ixit.cz>
+To: Robert Foss <rfoss@kernel.org>, Todor Tomov <todor.too@gmail.com>, 
+ Bryan O'Donoghue <bryan.odonoghue@linaro.org>, 
+ Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>, 
+ Mauro Carvalho Chehab <mchehab@kernel.org>, 
+ Luca Weiss <luca.weiss@fairphone.com>, Petr Hodina <phodina@protonmail.com>, 
+ Casey Connolly <casey.connolly@linaro.org>, "Dr. Git" <drgitx@gmail.com>
+Cc: Joel Selvaraj <foss@joelselvaraj.com>, linux-media@vger.kernel.org, 
+ linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ phone-devel@vger.kernel.org, David Heidelberg <david@ixit.cz>
+X-Mailer: b4 0.14.3
+X-Developer-Signature: v=1; a=openpgp-sha256; l=4140; i=david@ixit.cz;
+ h=from:subject:message-id;
+ bh=pWsEEMfrqwWPA3Vwo7teUg13fNUs6yNCOr6Nd/+BhR0=;
+ b=owEBbQKS/ZANAwAIAWACP8TTSSByAcsmYgBpEGFyHWEZW7qXgbF0CK4H+doJ++mLYWtI2uEcV
+ /MCjdkFHFyJAjMEAAEIAB0WIQTXegnP7twrvVOnBHRgAj/E00kgcgUCaRBhcgAKCRBgAj/E00kg
+ cuywD/9X99MIxdvKioSz1yJlZgESQudwPpuTXBefCggreBsm1PT1vsrlmVHFPb/46sS5rxtoABc
+ sDugMaKjQZhHAO1Quf7YZJkefYjfEYbokSJ7CMuDON8n+l156zOoHa1dv1b5aaocZGuAJFWHYRn
+ djAodsM+hAYfRAbx15JPffSy0SwFlgABZzS711fcdZ8/I03LeFeUnLjLr0YVhXD+R93YGD2Qn2N
+ 3Fu6QTdeQDftyrNn6XlERS92xr6/rpQogQxTo3lTbBBJPWh+M0OUkCtQEX9RzxDesFG7IcC3rLu
+ 20tMObp0ZNjsk5kI3Eg+CgevCL4/0nhLrmk4up0rTqhemXZGqfAnODbu2h6fif/hxt3wE6YCk9k
+ y1wo0Sg0V6b4HgAf5t2oDqCGXbCrSI+TLC47B9V1b/t9gSSynkmY5Nvv+mgsbVPOIGrrXGxc4xi
+ F1T9xiAP/ac2B1dawx/kKK2XGa/rz5K9xchqiZ3blZfBInTiC7/JgZnamS6a3k8kJBGrzOD4oPC
+ w0lk9BZaw9VMzDN09/R2nRBnLNcJL2+wZ0qRMmtfj6bVBRT4R4idZlhOBV1n/8sWVoyr2NG92rf
+ eMygq5g4TMMeHr4BgOraR3/7+x3T4ZvJDfb3lixPjqJAkB0J71NAPAM1ZI3XLQed2Vfp2lX6KKL
+ /tWLlXJFLCpoAaQ==
+X-Developer-Key: i=david@ixit.cz; a=openpgp;
+ fpr=D77A09CFEEDC2BBD53A7047460023FC4D3492072
+X-Endpoint-Received: by B4 Relay for david@ixit.cz/default with auth_id=355
+X-Original-From: David Heidelberg <david@ixit.cz>
+Reply-To: david@ixit.cz
 
-Hi Dan
+From: Casey Connolly <casey.connolly@linaro.org>
 
-On Sat, Nov 08, 2025 at 03:16:05PM +0000, Dan Scally wrote:
-> Hi Jacopo, Prabhakar
->
-> On 08/11/2025 13:07, Jacopo Mondi wrote:
-> > Hi
-> >
-> > On Wed, Nov 05, 2025 at 01:35:59PM +0000, Lad, Prabhakar wrote:
-> > > Hi Dan,
-> > >
-> > > On Mon, Nov 3, 2025 at 4:17 PM Dan Scally <dan.scally@ideasonboard.com> wrote:
-> > > >
-> > > > Hi Prabhakar
-> > > >
-> > > > On 28/10/2025 18:23, Lad, Prabhakar wrote:
-> > > > > Hi Daniel,
-> > > > >
-> > > > > Thank you for the patch.
-> > > > >
-> > > > > On Thu, Oct 2, 2025 at 11:19 AM Daniel Scally
-> > > > > <dan.scally@ideasonboard.com> wrote:
-> > > > > >
-> > > > > > Add the yaml binding for ARM's Mali-C55 Image Signal Processor.
-> > > > > >
-> > > > > > Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-> > > > > > Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> > > > > > Acked-by: Nayden Kanchev <nayden.kanchev@arm.com>
-> > > > > > Co-developed-by: Jacopo Mondi <jacopo.mondi@ideasonboard.com>
-> > > > > > Signed-off-by: Jacopo Mondi <jacopo.mondi@ideasonboard.com>
-> > > > > > Signed-off-by: Daniel Scally <dan.scally@ideasonboard.com>
-> > > > > > ---
-> > > > > > Changes in v12:
-> > > > > >
-> > > > > >           - _Actually_ dropped the arm,inline property mode, having forgotten to
-> > > > > >             do so in v11.
-> > > > > >
-> > > > > > Changes in v11:
-> > > > > >
-> > > > > >           - Dropped in arm,inline_mode property. This is now identical to the
-> > > > > >             reviewed version 8, so I have kept the tags on there.
-> > > > > >
-> > > > > > Changes in v10:
-> > > > > >
-> > > > > >           - None
-> > > > > >
-> > > > > > Changes in v9:
-> > > > > >
-> > > > > >           - Added the arm,inline_mode property to differentiate between inline and
-> > > > > >             memory input configurations
-> > > > > >
-> > > > > > Changes in v8:
-> > > > > >
-> > > > > >           - Added the video clock back in. Now that we have actual hardware it's
-> > > > > >             clear that it's necessary.
-> > > > > >           - Added reset lines
-> > > > > >           - Dropped R-bs
-> > > > > >
-> > > > > > Changes in v7:
-> > > > > >
-> > > > > >           - None
-> > > > > >
-> > > > > > Changes in v6:
-> > > > > >
-> > > > > >           - None
-> > > > > >
-> > > > > > Changes in v5:
-> > > > > >
-> > > > > >           - None
-> > > > > >
-> > > > > > Changes in v4:
-> > > > > >
-> > > > > >           - Switched to port instead of ports
-> > > > > >
-> > > > > > Changes in v3:
-> > > > > >
-> > > > > >           - Dropped the video clock as suggested by Laurent. I didn't retain it
-> > > > > >           for the purposes of the refcount since this driver will call .s_stream()
-> > > > > >           for the sensor driver which will refcount the clock anyway.
-> > > > > >           - Clarified that the port is a parallel input port rather (Sakari)
-> > > > > >
-> > > > > > Changes in v2:
-> > > > > >
-> > > > > >           - Added clocks information
-> > > > > >           - Fixed the warnings raised by Rob
-> > > > > > ---
-> > > > > >    .../devicetree/bindings/media/arm,mali-c55.yaml    | 82 ++++++++++++++++++++++
-> > > > > >    1 file changed, 82 insertions(+)
-> > > > > >
-> > > > > > diff --git a/Documentation/devicetree/bindings/media/arm,mali-c55.yaml b/Documentation/devicetree/bindings/media/arm,mali-c55.yaml
-> > > > > > new file mode 100644
-> > > > > > index 0000000000000000000000000000000000000000..efc88fd2c447e98dd82a1fc1bae234147eb967a8
-> > > > > > --- /dev/null
-> > > > > > +++ b/Documentation/devicetree/bindings/media/arm,mali-c55.yaml
-> > > > > > @@ -0,0 +1,82 @@
-> > > > > > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> > > > > > +%YAML 1.2
-> > > > > > +---
-> > > > > > +$id: http://devicetree.org/schemas/media/arm,mali-c55.yaml#
-> > > > > > +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> > > > > > +
-> > > > > > +title: ARM Mali-C55 Image Signal Processor
-> > > > > > +
-> > > > > > +maintainers:
-> > > > > > +  - Daniel Scally <dan.scally@ideasonboard.com>
-> > > > > > +  - Jacopo Mondi <jacopo.mondi@ideasonboard.com>
-> > > > > > +
-> > > > > > +properties:
-> > > > > > +  compatible:
-> > > > > > +    const: arm,mali-c55
-> > > > > > +
-> > > > > > +  reg:
-> > > > > > +    maxItems: 1
-> > > > > > +
-> > > > > > +  interrupts:
-> > > > > > +    maxItems: 1
-> > > > > > +
-> > > > > > +  clocks:
-> > > > > > +    items:
-> > > > > > +      - description: ISP Video Clock
-> > > > > > +      - description: ISP AXI clock
-> > > > > > +      - description: ISP AHB-lite clock
-> > > > > As per RZ/V2H HW manual we have reg clock looking at the driver code
-> > > > > it does have readl. IVC has reg clock if IVC driver fails are you
-> > > > > still able to read/write regs from ISP driver?
-> > > >   >
-> > > >   > I think we do need to pass reg clock too.
-> > > >
-> > > > Yes - but I should clarify that the names are from the arm documentation that we had when we
-> > > > originally developed the ISP driver. The RZ/V2H documentation treats the ISP and IVC as one block
-> > > > that shares 4 clocks and resets, but when we originally developed the ISP driver the platform we
-> > > > used had the ISP implemented as an inline configuration (taking data directly from a csi-2 receiver
-> > > > without an IVC equivalent), and the documentation detailed just the three clocks and resets. The
-> > > > dtsi changes for the RZ/V2H(P) [1] assign clocks 226, 228 and 229 to the ISP which are named
-> > > > reg_aclk, vin_aclk and isp_sclk in the renesas documentation.
-> > > >
-> > > > The IVC gets pclk, vin_aclk and isp_sclk.
-> > > >
-> > > > [1] https://lore.kernel.org/linux-renesas-soc/20251010-kakip_dts-v1-1-64f798ad43c9@ideasonboard.com/
-> > > >
-> > > Thanks for the info.
-> >
-> > I won't question the Mali clock assignment as I don't have the
-> > documentation you mentioned.
-> >
-> > But looking at the patch you shared
-> >
-> > IVC:
-> > +			clocks = <&cpg CPG_MOD 0xe3>,
-> > +				 <&cpg CPG_MOD 0xe4>,
-> > +				 <&cpg CPG_MOD 0xe5>;
-> > +			clock-names = "reg", "axi", "isp";
-> >
-> > Mali:
-> > +			clocks = <&cpg CPG_MOD 0xe2>,
-> > +				 <&cpg CPG_MOD 0xe4>,
-> > +				 <&cpg CPG_MOD 0xe5>;
-> > +			clock-names = "vclk", "aclk", "hclk";
-> >
-> > It seems the IVC-only clock is
-> >
-> >          <cpg CPG_MOD 0xe3> "reg"
-> >
-> > trying to match the clocks here with the V2H documentation and the
-> > above names
-> >
-> >          clk     IVC             Mali    RZ V2H Doc
-> >          0xe2                    vclk    vin_aclk   Video input data AXI bus clock
-> >          0xe3    reg                     pclk       Input Video Control block register access APB clock
-> >          0xe4    axi             aclk    reg_aclk   AXI to AHB bus bridge AXI slave cloc
-> >          0xe5    isp             hclk    isp_sclk   ISP system clock (pixel clock)
->
-> No I think it's:
->
-> clk	IVC	ISP	V2H doc		Desc
-> 0xe2		vclk	reg_aclk	AXI to AHB bus bridge AXI slave clock
-> 0xe3	reg		pclk		Input Video Control Block register access APB clock
-> 0xe4	axi	aclk	vin_aclk	Video input data AXI bus clock
-> 0xe5	isp	hclk	isp_sclk	ISP system clock (pixel clock)
+Add a PHY configuration sequence for the sdm845 which uses a Qualcomm
+Gen 2 version 1.1 CSI-2 PHY.
 
-I failed to find a proper clock description in the RZ V2H doc (the ISP
-clocks are blank in table 4.4-2 List of Clock Signals (11/16))
+The PHY can be configured as two phase or three phase in C-PHY or D-PHY
+mode. This configuration supports three-phase C-PHY mode.
 
-Is there another version ? Not that I doubt your version here, just
-for my education..
+Signed-off-by: Casey Connolly <casey.connolly@linaro.org>
+Signed-off-by: David Heidelberg <david@ixit.cz>
+---
+ .../platform/qcom/camss/camss-csiphy-3ph-1-0.c     | 64 ++++++++++++++++++++++
+ 1 file changed, 64 insertions(+)
 
->
-> So the IVC needs 227, 228, 229 and the bindings name them reg, axi and isp.
+diff --git a/drivers/media/platform/qcom/camss/camss-csiphy-3ph-1-0.c b/drivers/media/platform/qcom/camss/camss-csiphy-3ph-1-0.c
+index 619abbf607813..f28c32d1a4ec5 100644
+--- a/drivers/media/platform/qcom/camss/camss-csiphy-3ph-1-0.c
++++ b/drivers/media/platform/qcom/camss/camss-csiphy-3ph-1-0.c
+@@ -144,6 +144,7 @@ csiphy_lane_regs lane_regs_sa8775p[] = {
+ };
+ 
+ /* GEN2 1.0 2PH */
++/* 5 entries: clock + 4 lanes */
+ static const struct
+ csiphy_lane_regs lane_regs_sdm845[] = {
+ 	{0x0004, 0x0C, 0x00, CSIPHY_DEFAULT_PARAMS},
+@@ -218,6 +219,69 @@ csiphy_lane_regs lane_regs_sdm845[] = {
+ 	{0x0664, 0x7F, 0x00, CSIPHY_DEFAULT_PARAMS},
+ };
+ 
++/* GEN2 1.0 3PH */
++/* 3 entries: 3 lanes (C-PHY) */
++static const struct
++csiphy_lane_regs lane_regs_sdm845_3ph[] = {
++	{0x015C, 0x43, 0x00, CSIPHY_DEFAULT_PARAMS},
++	{0x0168, 0xA0, 0x00, CSIPHY_DEFAULT_PARAMS},
++	{0x016C, 0x25, 0x00, CSIPHY_DEFAULT_PARAMS},
++	{0x0104, 0x06, 0x00, CSIPHY_DEFAULT_PARAMS},
++	{0x010C, 0x12, 0x00, CSIPHY_SETTLE_CNT_LOWER_BYTE},
++	{0x0108, 0x00, 0x00, CSIPHY_SETTLE_CNT_HIGHER_BYTE},
++	{0x0114, 0x20, 0x00, CSIPHY_DEFAULT_PARAMS},
++	{0x0150, 0x00, 0x00, CSIPHY_DEFAULT_PARAMS},
++	{0x0118, 0x3e, 0x00, CSIPHY_DEFAULT_PARAMS},
++	{0x011C, 0x41, 0x00, CSIPHY_DEFAULT_PARAMS},
++	{0x0120, 0x41, 0x00, CSIPHY_DEFAULT_PARAMS},
++	{0x0124, 0x7F, 0x00, CSIPHY_DEFAULT_PARAMS},
++	{0x0128, 0x00, 0x00, CSIPHY_DEFAULT_PARAMS},
++	{0x012C, 0x00, 0x00, CSIPHY_DEFAULT_PARAMS},
++	{0x0144, 0x12, 0x00, CSIPHY_DEFAULT_PARAMS},
++	{0x0160, 0x02, 0x00, CSIPHY_DEFAULT_PARAMS},
++	{0x01CC, 0x41, 0x00, CSIPHY_DEFAULT_PARAMS},
++	{0x0164, 0x00, 0x00, CSIPHY_DEFAULT_PARAMS},
++	{0x01DC, 0x51, 0x00, CSIPHY_DEFAULT_PARAMS},
++	{0x035C, 0x43, 0x00, CSIPHY_DEFAULT_PARAMS},
++	{0x0368, 0xA0, 0x00, CSIPHY_DEFAULT_PARAMS},
++	{0x036C, 0x25, 0x00, CSIPHY_DEFAULT_PARAMS},
++	{0x0304, 0x06, 0x00, CSIPHY_DEFAULT_PARAMS},
++	{0x030C, 0x12, 0x00, CSIPHY_SETTLE_CNT_LOWER_BYTE},
++	{0x0308, 0x00, 0x00, CSIPHY_SETTLE_CNT_HIGHER_BYTE},
++	{0x0314, 0x20, 0x00, CSIPHY_DEFAULT_PARAMS},
++	{0x0350, 0x00, 0x00, CSIPHY_DEFAULT_PARAMS},
++	{0x0318, 0x3e, 0x00, CSIPHY_DEFAULT_PARAMS},
++	{0x031C, 0x41, 0x00, CSIPHY_DEFAULT_PARAMS},
++	{0x0320, 0x41, 0x00, CSIPHY_DEFAULT_PARAMS},
++	{0x0324, 0x7F, 0x00, CSIPHY_DEFAULT_PARAMS},
++	{0x0328, 0x00, 0x00, CSIPHY_DEFAULT_PARAMS},
++	{0x032C, 0x00, 0x00, CSIPHY_DEFAULT_PARAMS},
++	{0x0344, 0x12, 0x00, CSIPHY_DEFAULT_PARAMS},
++	{0x0360, 0x02, 0x00, CSIPHY_DEFAULT_PARAMS},
++	{0x03CC, 0x41, 0x00, CSIPHY_DEFAULT_PARAMS},
++	{0x0364, 0x00, 0x00, CSIPHY_DEFAULT_PARAMS},
++	{0x03DC, 0x51, 0x00, CSIPHY_DEFAULT_PARAMS},
++	{0x055C, 0x43, 0x00, CSIPHY_DEFAULT_PARAMS},
++	{0x0568, 0xA0, 0x00, CSIPHY_DEFAULT_PARAMS},
++	{0x056C, 0x25, 0x00, CSIPHY_DEFAULT_PARAMS},
++	{0x0504, 0x06, 0x00, CSIPHY_DEFAULT_PARAMS},
++	{0x050C, 0x12, 0x00, CSIPHY_SETTLE_CNT_LOWER_BYTE},
++	{0x0508, 0x00, 0x00, CSIPHY_SETTLE_CNT_HIGHER_BYTE},
++	{0x0514, 0x20, 0x00, CSIPHY_DEFAULT_PARAMS},
++	{0x0550, 0x00, 0x00, CSIPHY_DEFAULT_PARAMS},
++	{0x0518, 0x3e, 0x00, CSIPHY_DEFAULT_PARAMS},
++	{0x051C, 0x41, 0x00, CSIPHY_DEFAULT_PARAMS},
++	{0x0520, 0x41, 0x00, CSIPHY_DEFAULT_PARAMS},
++	{0x0524, 0x7F, 0x00, CSIPHY_DEFAULT_PARAMS},
++	{0x0528, 0x00, 0x00, CSIPHY_DEFAULT_PARAMS},
++	{0x052C, 0x00, 0x00, CSIPHY_DEFAULT_PARAMS},
++	{0x0544, 0x12, 0x00, CSIPHY_DEFAULT_PARAMS},
++	{0x0560, 0x02, 0x00, CSIPHY_DEFAULT_PARAMS},
++	{0x05CC, 0x41, 0x00, CSIPHY_DEFAULT_PARAMS},
++	{0x0564, 0x00, 0x00, CSIPHY_DEFAULT_PARAMS},
++	{0x05DC, 0x51, 0x00, CSIPHY_DEFAULT_PARAMS},
++};
++
+ /* GEN2 1.1 2PH */
+ static const struct
+ csiphy_lane_regs lane_regs_sc8280xp[] = {
 
-Makes sense according to the table above
+-- 
+2.51.0
 
-> The ISP needs 226, 228 and 229 and the bindings name them vclk, aclk, hclk.
-> If we want to rename the ISP's binding names then 228 and 229 become "axi"
-> and "isp", and we need a sensible name for the "reg_aclk" from the Renesas
-> documentation..."ahb"? or "reg"?
->
->
-> >
-> > I would only question if the IVC shouldn't actually only get its reg
-> > clock as the other 2 are mandatory for the ISP even when integrated
-> > inline without an IVC.
->
-> In my mind, given that we're treating them as separate devices, they ought
-> to be fully (if worthlessly) functional independently. If the IVC gets only
-> its reg clock then it will not stream until you power on the ISP separately,
-> which does not seem right to me.>
-> > I guess the question is if there are other IVC instances not paired
-> > with a Mali ISP in other SoCs ?
->
-> Good question, I too would be interested to know.
->
 
-As we don't know, one more reason to describe the IVC as a stand-alone
-fully-functional device ?
-
->
-> > >
-> > > > > Also for IVC we do have a main clock (which is a system clock).  Can
-> > > > > you please educate me on what is the purpose of it. Just curious as we
-> > > > > pass to IVC and not ISP.
-> > > >
-> > > > The IVC uniquely gets the one called "pclk" in renesas documentation, with the description "Input
-> > > > Video Control block register access APB clock".
-> >
-> > Let alone I find 'reg' better, but if the documentation uses 'pclk'
-> > why has 'reg' been used ?
->
-> I used the documentation names for the ISP, but Krzysztof later convinced me
-> that following the documentation names isn't the best approach given it
-> doesn't really tell us anything. The "reg" was because the docs describe
-> that one as the register access clock.
-
-Ok, I guessed it was about using generic names. Makes sense..
-
-With the last issues from Prabhakar addressed
-Reviewed-by: Jacopo Mondi <jacopo.mondi@ideasonboard.com>
-
-Thanks
-  j
->
-> Thanks
-> Dan
->
-> >
-> > Thanks
-> >     j
-> >
-> > > >
-> > > Got you.
-> > >
-> > > Cheers,
-> > > Prabhakar
-> > >
->
