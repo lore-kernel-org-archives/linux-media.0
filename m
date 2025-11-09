@@ -1,172 +1,120 @@
-Received: from mail-ed1-f50.google.com (mail-ed1-f50.google.com [209.85.208.50])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0F8E32ECD06
-	for <linux-media@vger.kernel.org>; Sun,  9 Nov 2025 12:49:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 856B734D3A9;
+	Sun,  9 Nov 2025 17:00:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762692600; cv=none; b=fuwAh6U+ivxq5qtVBDth8Nu/xxosoggazs7K9yyCQTcHyf3qzJDFC75xYZybc0KXI8WPti/TV0lFZbwzGBfVogfRtgWHFTGs4wVgztyJRQJdDEhUosdKeoAQ4llrM0M0PTEt+qFhdjPT5/9mryoTYtDb08e94vSr53KAOl4b440=
+	t=1762707640; cv=none; b=PCDk0dg7t0+9bQfzZGb5Zh9JGpKBNcj9cp1U7inU9Moltx1b94847FJ8RXfu1dGsVJCeBYaqoe6/rasX/8QoT0eL0PoH07s4/lHZu8HoFTGztlVaFH592JEyg+HDwG5pUYC9TbHUjlgY/525Qqa4+oXl2YKgsmCEl7OX9on+Xvw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762692600; c=relaxed/simple;
-	bh=RWsh0MNVHHOeT+2llJsTwxoFnM5p6UnPIPtoFkDeVgQ=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=L+SOpDEGr+7F21jkX9BuQozKbpromABKsrgs/hiv9W+hDNumMPsgBcAoI7A49lU872oN4oZO+7dtxv8A/pCxbrajqvStu8Er3KpoRk6CZ2llwND1GaA5t/ELZWJ40V3NHjqg2cTs39W6hZqX6rUQ9BUk/6Q0es2lqakaM5vzg2E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=mM+BddcS; arc=none smtp.client-ip=209.85.208.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+	s=arc-20240116; t=1762707640; c=relaxed/simple;
+	bh=/YTzYEC+/7A1yssydEpBLvFuXa5TokqzNj5SqgQkNMo=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=oIv5S8/2dbDNdhLBbw8HqTwQ5CGgrs7jWfNcyvQn0pjwb+JNB3QN7IaYkI30h+7asa2EchUyADDh2j1AckswVU0/580xuhWeeUBU6fUGMRKAD6x3GACkMSc4FSceKeAbxrftTVr8jhlly5EcwMaP1Tc1ZJFLIoNeX4JxIC4iRH4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=EIgjYpcz; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="mM+BddcS"
-Received: by mail-ed1-f50.google.com with SMTP id 4fb4d7f45d1cf-6409e985505so3443547a12.2
-        for <linux-media@vger.kernel.org>; Sun, 09 Nov 2025 04:49:58 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1762692597; x=1763297397; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=b3uCPMdMXg41Vg12Apli3BT+126wRXMTBjult076Xbo=;
-        b=mM+BddcSrPO4Ff3Lxyd4Awuwj0dTiUnDLqiFoUqaFWTzSBZCtkQg9W5WOo/cSrzDlE
-         io8ZKsjLtfXqvlHfZuY90IYMn6nNmcjv/cWT8ErAW4fmkqFVMmRSZ+y5itJUU3Jle2t4
-         PCmdXXjRIyC1RoCe9eWSuoFTayWUadJY5rrjSoh5tMLLj6wd6I1vYk4FDleM6J6MrVBL
-         w0qhAmEGukwif5uqjcnzAJigPcpXK68zz1V6Xxb5T6yLdJ1N22kUlXfudmgOquipi8Yw
-         2fd2Ipsr37h2tvI0IuoGWOdMrhJUri4N2TvG3bzrg1g4v5PQzBVvN5BS6asHi2BEj6RD
-         UEjQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1762692597; x=1763297397;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=b3uCPMdMXg41Vg12Apli3BT+126wRXMTBjult076Xbo=;
-        b=iLngSH/SXi8Wf2pdjkEg4iXFzpm2nXNVjLPVajqvj74MbI0+ESHAZqdvLPjEGnaIit
-         4f51RLd5+Bb2emlCC8ipiyBR8oxqnU0KpLTXKoRub2O0iSx29/JtOGBkJcg10IzAj0qD
-         mpYrLdMWcvE2gb6Pob51Ydy52M1R3fwsXwJx+k5xmhaqWgMPA1HZ2/BUdhewohF0ADe3
-         SFwiVZmfpJwZi5mQksPibsXVvEYWCQWnJClWwuTYd2A0YfLFF6ZOkOaLtLE0cFYVsl5s
-         zl6jtefmxRWoCqP33/cjdUKqHW3YMVMDZ8XfPYpGwX9uryKbxJqXnQu+LeU09GqdVzit
-         cE7A==
-X-Forwarded-Encrypted: i=1; AJvYcCXmCAEv6ifoZ/pIFn5lhbP5bMaj7ZXWuaoVLpAytyft/8XXo5H6MYrBqJGI2PNRa6XqC/FvUYhhvtktbA==@vger.kernel.org
-X-Gm-Message-State: AOJu0YyHOPf31ipUYlheHofeXo8MTYdRQexnPlIFSzIQhMWMJPVMpSgW
-	Wz5LMJCLMiagxitW/5kNyB13y4t4jpXnNR4Hl90GwIeJ1pemcPd6OaEc/2rkudmpZ0Y=
-X-Gm-Gg: ASbGncs91bcCBLQ6Gtl88jVfI7WWuWy5gy97L0tM0YJI1oaY4u7NW2pMf8TkZFHO0/c
-	+ISuIuBYuC1yF+TwhwOt12uS8c7lowL5E+ZncLLIHruclKHM7TSXtL+SvYHvFRAnJztVY/10g/i
-	b7y2wIwHmblBu5ZlWpAv1NB2XxH3OrLY2hTHsxwZciEBBqevO/Y/fo2QC50h2mWwnTHaqDz2T7T
-	Uz/srgHD8LDJgMmclULA0Kz5goSfdCjXWIu//66cig1f4mi61OEAuYcvHRFwYw/VEfHtm3ql0Zg
-	hTNcGiIR8L4k+aCQ7Gq84AjvbeweSDu9IqX1+gffWFEM1o25tuxL02IbZW8q53ZuzT4sE+B0pyT
-	yB1RKnkgC364WwmGV0cGkepSHxReI0rEFO/B7FOrinxNLkRZiBZGw9vRrJ7TmnDoBdFaP7kP0LO
-	gQR9epzbdC0KHnI+wBisgdktsZD0Cy2KqcM+pAuiYZm2ht6+/xAPh0fwKI5VGuHoJj5r1Mcki3t
-	H3AllCKlC3ph7wlel4cdg4BiaMyFl+DFVEjUF3l/iNYSYaHdF2Us7/MevZiEGhT37pR6VcyDl9R
-X-Google-Smtp-Source: AGHT+IHq3tipKWAq6loGNwoQe1tMCrBPSrk3SZF+kU2pkM50gqp5iIGyhpBDk7dlni6/awXeEtBrLA==
-X-Received: by 2002:a05:6402:1474:b0:640:9b74:b448 with SMTP id 4fb4d7f45d1cf-6415e813d04mr3914452a12.30.1762692597394;
-        Sun, 09 Nov 2025 04:49:57 -0800 (PST)
-Received: from ?IPV6:2001:1c00:3b8a:ea00:4729:b0ef:dcc4:b0b6? (2001-1c00-3b8a-ea00-4729-b0ef-dcc4-b0b6.cable.dynamic.v6.ziggo.nl. [2001:1c00:3b8a:ea00:4729:b0ef:dcc4:b0b6])
-        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-6418b54a888sm611277a12.32.2025.11.09.04.49.56
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 09 Nov 2025 04:49:56 -0800 (PST)
-Message-ID: <0390ae7b-8f56-4ed3-a3f9-616e7c74adbd@linaro.org>
-Date: Sun, 9 Nov 2025 13:49:56 +0100
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="EIgjYpcz"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0B82FC4CEF7;
+	Sun,  9 Nov 2025 17:00:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1762707640;
+	bh=/YTzYEC+/7A1yssydEpBLvFuXa5TokqzNj5SqgQkNMo=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=EIgjYpczUOJ/qkpiyiaObxa/4HwzMUGSj/DKg/EDJY1bXoIX3RaGcEIACjwzpLhDU
+	 OO+QHIEIaLofhMLq2t4CS3ec98r6oyFiOEjSIC3z1KAThmfRyJLWcDNre7NGFWCGVA
+	 e1NJ2Y3/C+HueHWreW0A6XfygPU76invrZXlXEc7OO1oMicZsLP14Z94fxKDyo/nLU
+	 hkYFboDAHp32P2w3BaLCM4MOi2C3vpMQF9+t783kIgTnSC52fong2/QUEF15oKLWQ0
+	 9yyUDa9OvYsw0py629P+lAxAAwfF8WfnVAnFZ6Hnycns9D1oW85mremLgPymNpVtTc
+	 sW0bzB5r9W43w==
+Date: Sun, 9 Nov 2025 17:00:32 +0000
+From: Jonathan Cameron <jic23@kernel.org>
+To: Andy Shevchenko <andy.shevchenko@gmail.com>
+Cc: David Lechner <dlechner@baylibre.com>, Andy Shevchenko
+ <andriy.shevchenko@linux.intel.com>, Hans Verkuil
+ <hverkuil+cisco@kernel.org>, "linux-iio@vger.kernel.org"
+ <linux-iio@vger.kernel.org>, "chrome-platform@lists.linux.dev"
+ <chrome-platform@lists.linux.dev>, "linux-kernel@vger.kernel.org"
+ <linux-kernel@vger.kernel.org>, "linux-media@vger.kernel.org"
+ <linux-media@vger.kernel.org>, Nuno =?UTF-8?B?U8Oh?= <nuno.sa@analog.com>,
+ Andy Shevchenko <andy@kernel.org>, Benson Leung <bleung@chromium.org>,
+ Guenter Roeck <groeck@chromium.org>, Lars-Peter Clausen <lars@metafoo.de>,
+ Michael Hennerich <Michael.Hennerich@analog.com>, Mauro Carvalho Chehab
+ <mchehab@kernel.org>, "Daniel W. S. Almeida" <dwlsalmeida@gmail.com>
+Subject: Re: [PATCH v2 2/6] units: Add 32- and 64-bit signed values of
+ =?UTF-8?B?z4A=?=
+Message-ID: <20251109170032.2763ae5b@jic23-huawei>
+In-Reply-To: <CAHp75VexvdYyjt1GkbfqOotkFpLeb=io6outJ5dpRqBv2qPNng@mail.gmail.com>
+References: <20251107201005.3156118-1-andriy.shevchenko@linux.intel.com>
+	<20251107201005.3156118-3-andriy.shevchenko@linux.intel.com>
+	<fb4aafc1-dbfb-4533-b368-5d26e24acdf1@baylibre.com>
+	<CAHp75VexvdYyjt1GkbfqOotkFpLeb=io6outJ5dpRqBv2qPNng@mail.gmail.com>
+X-Mailer: Claws Mail 4.3.1 (GTK 3.24.51; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH RFC 0/8] media: camss: Add support for C-PHY configuration
- on Qualcomm platforms
-To: david@ixit.cz, Robert Foss <rfoss@kernel.org>,
- Todor Tomov <todor.too@gmail.com>,
- Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
- Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>,
- Mauro Carvalho Chehab <mchehab@kernel.org>,
- Luca Weiss <luca.weiss@fairphone.com>, Petr Hodina <phodina@protonmail.com>,
- "Dr. Git" <drgitx@gmail.com>
-Cc: Joel Selvaraj <foss@joelselvaraj.com>, linux-media@vger.kernel.org,
- linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
- phone-devel@vger.kernel.org, Sakari Ailus <sakari.ailus@linux.intel.com>
-References: <20251109-qcom-cphy-v1-0-165f7e79b0e1@ixit.cz>
-Content-Language: en-US, en-GB
-From: Casey Connolly <casey.connolly@linaro.org>
-In-Reply-To: <20251109-qcom-cphy-v1-0-165f7e79b0e1@ixit.cz>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
 
-Hi David,
+On Sat, 8 Nov 2025 21:02:54 +0200
+Andy Shevchenko <andy.shevchenko@gmail.com> wrote:
 
-On 11/9/25 10:39, David Heidelberg via B4 Relay wrote:
-> # Short summary
-> 
-> This patch series extends the Qualcomm CAMSS (Camera Subsystem),
-> including CSID and CSIPHY components, to support C-PHY mode configuration.
+> =D0=BF=CA=BC=D1=8F=D1=82=D0=BD=D0=B8=D1=86=D1=8F, 7 =D0=BB=D0=B8=D1=81=D1=
+=82=D0=BE=D0=BF=D0=B0=D0=B4=D0=B0 2025=E2=80=AF=D1=80. David Lechner <dlech=
+ner@baylibre.com> =D0=BF=D0=B8=D1=88=D0=B5:
+>=20
+> > On 11/7/25 2:03 PM, Andy Shevchenko wrote: =20
+> > > There are a few drivers that want to have these values, and
+> > > one more known to come soon. Let's define the values for them.
+> > > =20
+>=20
+>=20
+>=20
+>=20
+>=20
+> > > @@ -21,6 +21,12 @@
+> > >  #define PICO 1000000000000ULL
+> > >  #define FEMTO        1000000000000000ULL
+> > >
+> > > +/* Value of =CF=80 * 10=E2=81=B8 (fits s32 or signed int) */
+> > > +#define PI   314159265 =20
+> >
+> > It isn't clear to me at all in the other patches that e.g.
+> > DIV_ROUND_UP(PI, 1000) would be =CF=80 =E2=9C=95 10=E2=81=B4 (rounded t=
+o nearest
+> > integer, of course).
+> >
+> > Calling these PI_E8 and PI_E18 or PI_x10_8 and PI_x10_18
+> > would help to clear that up. =20
+>=20
+>=20
+>=20
+> This will be an awful and ugly name(s). I fully disagree on such a
+> proposal. The power is chosen to fit the type with maximum precision, no
+> need to explain this in the name.
+With no indicate of the multiplier we have to check it every time wwe
+use it which isn't ideal either.
 
-Awesome to see this actually working after so much time and prior effort!
-> 
-> # Background and motivation
-> 
-> Modern smartphone cameras increasingly rely on MIPI C-PHY rather than D-PHY,
-> thanks to its higher data throughput and signal efficiency. As a result,
-> many OEMs adopt C-PHY interfaces for main (rear) cameras on Qualcomm-based
-> devices.
-> 
-> Until now, mainline Linux lacked C-PHY configuration support for Qualcomm
-> chipsets, preventing bring-up of primary camera sensors on several
-> Snapdragon platforms. This series closes that gap.
+So I agree with David that we have to indicate this somewhere. Maybe hold t=
+he
+multiplier in a separate define
+#define PI_MUL
+#define PI_MUL_LL
 
-I think it's worth being clearer here that this is only tested on 
-SDM845, and will only work on sdm845 anyway because of the lane 
-configuration.
-
-Additionally, with Luca's explicit D-phy check removed, other platforms 
-won't error out if someone tries to use c-phy without adding the lane 
-configuration (and whatever other configuration might also be needed), 
-so it might be worth adding a proper check for that.
-> 
->   - Introduces C-PHY configuration support for the CAMSS driver stack,
->     covering both CSID and CSIPHY blocks.
->   - Successfully enables C-PHY operation on the Snapdragon 845 platform.
->   - Tested on OnePlus 6 and 6T phones running mainline Linux,
->     using the Sony IMX519 main camera sensor.
->   - The new configuration allows other chipsets versionsto enable C-PHY by
->     simply adding corresponding sensor driver support and csiphy
->     initialization data, following the example set for sdm845.
-> 
-> With this patch series, mainline Linux gains working C-PHY support for
-> Snapdragon 845, paving the way for improved main camera functionality
-> across many Qualcomm-based devices. The groundwork also simplifies
-> future enablement efforts for additional SoCs and sensors.
-
-woohoo!
-
-Kind regards,
-Casey (she/they)
-
-> 
-> Signed-off-by: David Heidelberg <david@ixit.cz>
-> ---
-> Casey Connolly (1):
->        media: qcom: camss: csiphy-3ph: Add Gen2 v1.1 MIPI CSI-2 CPHY init
-> 
-> David Heidelberg (6):
->        media: qcom: camss: csiphy: Introduce C-PHY
->        media: qcom: camss: csiphy-3ph: Use odd bits for configuring C-PHY lanes
->        media: qcom: camss: Prepare CSID for C-PHY support
->        media: qcom: camss: csiphy-3ph: Use sdm845 C-PHY configuration sequence
->        media: qcom: camss: Account for C-PHY when calculating link frequency
->        media: qcom: camss: Remove D-PHY-only endpoint restriction
-> 
-> Petr Hodina (1):
->        media: qcom: camss: Initialize lanes after lane configuration is available
-> 
->   .../media/platform/qcom/camss/camss-csid-gen2.c    |   1 +
->   drivers/media/platform/qcom/camss/camss-csid.c     |   3 +-
->   drivers/media/platform/qcom/camss/camss-csid.h     |   1 +
->   .../platform/qcom/camss/camss-csiphy-3ph-1-0.c     | 165 ++++++++++++++++-----
->   drivers/media/platform/qcom/camss/camss-csiphy.c   |   6 +-
->   drivers/media/platform/qcom/camss/camss-csiphy.h   |   2 +
->   drivers/media/platform/qcom/camss/camss.c          |  24 ++-
->   drivers/media/platform/qcom/camss/camss.h          |   2 +-
->   8 files changed, 146 insertions(+), 58 deletions(-)
-> ---
-> base-commit: 9c0826a5d9aa4d52206dd89976858457a2a8a7ed
-> change-id: 20251109-qcom-cphy-bb8cbda1c644
-> 
-> Best regards,
+Then compute the divisions by (PI_MUL) / KILO or something along those line=
+s?
+>=20
+> > =20
+> > > +
+> > > +/* Value of =CF=80 * 10=C2=B9=E2=81=B8 (fits s64 or signed long long=
+) */
+> > > +#define PI_LL        3141592653589793238LL
+> > > +
+> > >  /* Hz based multipliers */
+> > >  #define NANOHZ_PER_HZ                1000000000UL
+> > >  #define MICROHZ_PER_HZ               1000000UL =20
+> >
+> > =20
 
