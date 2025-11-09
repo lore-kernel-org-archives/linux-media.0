@@ -1,88 +1,130 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f49.google.com (mail-ed1-f49.google.com [209.85.208.49])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 18BB3306B01;
-	Sun,  9 Nov 2025 17:18:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DE425308F3A
+	for <linux-media@vger.kernel.org>; Sun,  9 Nov 2025 17:22:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762708732; cv=none; b=Iws77et4eIqxF/LZfBJS4ixsXum8JV39ZMbzyINdN2HB5pPn4d9vCwnYq/6vwmVVxfuDfJeJe9HW/mqZ4FkrtHG4RKNAUupgmkMSej94QJkXyaEYOvjAWT9mXPr8SPOOaePHrh6eQJzIDmU/aoq/cf7hzqisukwdMPv42+JZ0X4=
+	t=1762708975; cv=none; b=eowPGs45v3BwFbO77CCJvN7gS6QguZEWFfymfNDPMxG+oizjyHIWE0eaU/FJOcMy+rnmfr0zhsX3yfhOjGJBmtvCY/4u8QqlmH1PnlPyILOyMeza2rgFsfkDr09n2jjPrRE49qL6Yca445t4Blj1A+IC357xzwxIYQbzlohbwU8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762708732; c=relaxed/simple;
-	bh=nkg22z2ppe49/uZ19yN89Sdc29GKykFNpzXJ4F3iA/M=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=e2HNlHjDOZ4b8+ABLZA2dMebKuGRT1xpfPA/lSjVr+8yRhqU9iX68RxlJHChW5pJdrKkEXVz5EvcbK/QDBFe6laL+xRoH2zpS03oDOCRkdGCQCLeun0QbhXzRnoKDEPh28ZE0a/MkNiC71jXKVrmxw858qIOv2Gpquf1awnIenE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=eXG8AE28; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1762708975; c=relaxed/simple;
+	bh=8xrRb4Ja7YDYCikqkpnM1+9xLkErGoSE0Ilyg3K603U=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
+	 References:In-Reply-To; b=cJlyVXm5QLNN6k3Y7SD9cPc/2PXk3hxRuILiihKoXVu23fclMKT4Hg2SPqaCK5Ei4WInq8OVa/uGqoosXQREqvVUwvoPCVK/sfEzzKo6cGH47a9WC2MR6XChGYnG5npM2hIfhzZZWwPGJ1KQdnqcISWagMf/dq7JhCRxwpOK5uM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=fairphone.com; spf=pass smtp.mailfrom=fairphone.com; dkim=pass (2048-bit key) header.d=fairphone.com header.i=@fairphone.com header.b=tlf32Vm4; arc=none smtp.client-ip=209.85.208.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=fairphone.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=fairphone.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="eXG8AE28"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 24ECDC116B1;
-	Sun,  9 Nov 2025 17:18:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1762708730;
-	bh=nkg22z2ppe49/uZ19yN89Sdc29GKykFNpzXJ4F3iA/M=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=eXG8AE28GKIpIYZIwueusJtwfyOJlBocHS+VPXjIcCGWTX93woRqN4kaFecAg5WJT
-	 n3weM/e9nncrJeWTPI+yymUok3KRorbpaBBJAIapsehImnSrtJNg2bJA5yIjtuc9N1
-	 9/QzCOlJtvzcJYpqdEyAhet5UPq2U1AlbXh3WT+FggxSHRAxjSFlrXEi6g3kuYdhQ2
-	 JYyFe6Ow8y0D8ZIx6SiG+1EEFyGFpG9LtNFsWsx1KsYu7JDgXjRnETSrqEmekoBdpr
-	 NTyzvwzcm7xjrswvbN771zsOQf1/rKMrKptKD5NKIpPMLv4QGMCgkUEFYE166wbxai
-	 k2kOF+eC8QE8Q==
-Date: Sun, 9 Nov 2025 18:18:48 +0100
-From: Krzysztof Kozlowski <krzk@kernel.org>
-To: Alex Tran <alex.t.tran@gmail.com>
-Cc: Rob Herring <robh@kernel.org>, 
-	Mauro Carvalho Chehab <mchehab@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
-	Conor Dooley <conor+dt@kernel.org>, Bryan O'Donoghue <bryan.odonoghue@linaro.org>, 
-	Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>, Hans Verkuil <hverkuil+cisco@kernel.org>, 
-	linux-media@vger.kernel.org, devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v1 2/2] dt-bindings: media: i2c: et8ek8: document missing
- crc as optional property
-Message-ID: <20251109-hospitable-poised-scorpion-bdf833@kuoka>
-References: <20251108233200.2068334-1-alex.t.tran@gmail.com>
+	dkim=pass (2048-bit key) header.d=fairphone.com header.i=@fairphone.com header.b="tlf32Vm4"
+Received: by mail-ed1-f49.google.com with SMTP id 4fb4d7f45d1cf-63b9da57cecso3659099a12.0
+        for <linux-media@vger.kernel.org>; Sun, 09 Nov 2025 09:22:53 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=fairphone.com; s=fair; t=1762708972; x=1763313772; darn=vger.kernel.org;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-transfer-encoding:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=a7u5viM8iOHpulamZW8Yl5pjwnfS/F/QVQpeIUIajsE=;
+        b=tlf32Vm4NVrasKbkE996+Mj6XQVE03iUa6BZr/4GVFSrrOzf3ZgZdS0WAMnZw++XHF
+         wPAmk7eAJNPJSm8b9OfBtOjhyVHnYWFl+Q78i/d/WyVjXGOcMz8PNpar9PYBq6dP0+aa
+         el5n5PPNIQpi4CSO92ADIdilnEVstRU2D/PH8dmGQYeVO/PVWP/yVAjg+U3kAlyB2wqR
+         xHHRnazDTd7x3VviVzdyGH1a/mQw6NJ/xm6RJ70TGzKyYI+EdfBPb3G9VRzTLgfcVfLo
+         7GKfazWZWyc/lEa0gNbGh6VeOLO/TB9YDYIo2I/UxD1zTGmnqCtIJrJHkJFF5pB2+Nll
+         2/Yg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1762708972; x=1763313772;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-transfer-encoding:mime-version:x-gm-gg:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=a7u5viM8iOHpulamZW8Yl5pjwnfS/F/QVQpeIUIajsE=;
+        b=gxxABf7Hg6sOa+QqvSpTsFZlpYDqkSuJFxfbegru5OEC2GWHm+Ut017eyToXU9y19o
+         LlwTVrlpPkIXfhrAvQATZH+hURuQHjPloJCFkFahnkhLqTyC08sJKSaVsV53a8WuVodo
+         ed5jh9K4tNgk9PtXKzTlpUlkgRIEAxKqROM6tg1BKMVVnQdSAyE+siXZXaRfPvqvE/aU
+         EnYo4NQs+W75Ta5/OJQGGi/v+ieVCGlaEqjKr0DWpYXNR9C1N+KnG7y8r5wbcLyYNixJ
+         l/f80yoUMpORj1Ek1nhIY/xU87mbj/y+mKqLNyXwTtADr0OoNfTcCsPVI7SfFl81O4RQ
+         JoJg==
+X-Forwarded-Encrypted: i=1; AJvYcCUAei5zpl0c5/yM6qUk/JlSzfyzOS02g8uk641OiPQmbIqdWFw3DarjWMsOYz2R2yPDcjCwRlX8w2Yctw==@vger.kernel.org
+X-Gm-Message-State: AOJu0YwmmV1vrLkKj5m+eqmr0m7Qx5fVyii57Kbc2eBhR9Xb9PrsfmwI
+	vw9wtiW6pEBW7yuiiBrsrLVL/uJc28yGee7cb50bRc5aAGrYSnlAqNCJWeczMkDn/Bg=
+X-Gm-Gg: ASbGncvsr0esiyQdCg95sQPmPmbrPLBv8tdIjBOqGrJBauZpy2Ww7D0XzHVmg/Y6oQ7
+	hopESpWOKyEkmqG/HcNlkRwCMfCZSuDTDI1G4252wY4E62tXq/U2rgdfzIKZHMpP1sQOy1zAnYe
+	u5dbDMLQ+u0/lHusvhq5qAtaeUogcMCdl1crsbvJWOCdTp5loRIZw4SZu3rYm+Nj2LqLsA8WbkA
+	nHO3miNyt2fFcXVzxD0VF85u5R/23MkeYQXNYtljDrM9y+Agtwu8WQ0oPdhoqbrcA45CeYshx+q
+	4Auwv429L/O7fCjXRGz+yoxgK4OsI/o3yiZhP7RijeHn4GGaGIO/2X73vt9xFph+ZxvROqZ4YdK
+	mON2Kwm0Trlp6kDRfY2QtYkE8TdwsZCwEG1wMgTVU4sDWxyoCRcVubC9KVBUfC3I0sjSFSGPSHv
+	bnTmPAZ4Sc6hFgMa8ebQKAQyhpmIG6KOILC6Rx0T5nl81dSgazgsJjksoI2YO3GZ0YGMkEuGCl4
+	7xyw9dEoyhIm3abX2E1DdAfNGHaTGzd+Vk=
+X-Google-Smtp-Source: AGHT+IHiNx88guNnogcxy/ePccl6T4u99WrAa4tO6dTyzZ7pWo9gTArz9LqZTlbTuW3AfvNrVuFznA==
+X-Received: by 2002:a05:6402:3546:b0:640:f974:7629 with SMTP id 4fb4d7f45d1cf-6415dc205e6mr4941873a12.15.1762708971341;
+        Sun, 09 Nov 2025 09:22:51 -0800 (PST)
+Received: from localhost (2001-1c00-3b8a-ea00-c4de-d39d-05f4-c77a.cable.dynamic.v6.ziggo.nl. [2001:1c00:3b8a:ea00:c4de:d39d:5f4:c77a])
+        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-6415d91f486sm4786157a12.22.2025.11.09.09.22.50
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 09 Nov 2025 09:22:51 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20251108233200.2068334-1-alex.t.tran@gmail.com>
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Sun, 09 Nov 2025 18:22:50 +0100
+Message-Id: <DE4C6HV76V5M.1I1NJB2JCK1LN@fairphone.com>
+Cc: "Joel Selvaraj" <foss@joelselvaraj.com>, <linux-media@vger.kernel.org>,
+ <linux-arm-msm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+ <phone-devel@vger.kernel.org>
+Subject: Re: [PATCH RFC 8/8] media: qcom: camss: Remove D-PHY-only endpoint
+ restriction
+From: "Luca Weiss" <luca.weiss@fairphone.com>
+To: <david@ixit.cz>, "Robert Foss" <rfoss@kernel.org>, "Todor Tomov"
+ <todor.too@gmail.com>, "Bryan O'Donoghue" <bryan.odonoghue@linaro.org>,
+ "Vladimir Zapolskiy" <vladimir.zapolskiy@linaro.org>, "Mauro Carvalho
+ Chehab" <mchehab@kernel.org>, "Luca Weiss" <luca.weiss@fairphone.com>,
+ "Petr Hodina" <phodina@protonmail.com>, "Casey Connolly"
+ <casey.connolly@linaro.org>, "Dr. Git" <drgitx@gmail.com>
+X-Mailer: aerc 0.21.0-0-g5549850facc2
+References: <20251109-qcom-cphy-v1-0-165f7e79b0e1@ixit.cz>
+ <20251109-qcom-cphy-v1-8-165f7e79b0e1@ixit.cz>
+In-Reply-To: <20251109-qcom-cphy-v1-8-165f7e79b0e1@ixit.cz>
 
-On Sat, Nov 08, 2025 at 03:32:00PM -0800, Alex Tran wrote:
-> Add the optional crc property to the endpoint node for the et8ek8 sensor.
-> This property enables CRC checksums for the sensor bus and was added to
-> match the new driver support for reading it from the device tree.
-
-We do not add bindings because you want this in the driver. Please
-describe the hardware.
-
-> 
-> Signed-off-by: Alex Tran <alex.t.tran@gmail.com>
-
-Your patchser has broken threading. There is no patch #1.
-
+On Sun Nov 9, 2025 at 10:39 AM CET, David Heidelberg via B4 Relay wrote:
+> From: David Heidelberg <david@ixit.cz>
+>
+> C-PHY mode is now supported, so the endpoint bus-type restriction to
+> D-PHY can be removed.
+>
+> Signed-off-by: David Heidelberg <david@ixit.cz>
 > ---
->  .../devicetree/bindings/media/i2c/toshiba,et8ek8.txt        | 6 ++++++
->  1 file changed, 6 insertions(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/media/i2c/toshiba,et8ek8.txt b/Documentation/devicetree/bindings/media/i2c/toshiba,et8ek8.txt
-> index 8d8e40c56..5fd30f59b 100644
-> --- a/Documentation/devicetree/bindings/media/i2c/toshiba,et8ek8.txt
-> +++ b/Documentation/devicetree/bindings/media/i2c/toshiba,et8ek8.txt
-> @@ -30,6 +30,12 @@ Endpoint node mandatory properties
->  - remote-endpoint: A phandle to the bus receiver's endpoint node.
->  
->  
-> +Endpoint node optional properties
-> +---------------------------------
-> +
-> +- crc: Enable CRC checksums.
+>  drivers/media/platform/qcom/camss/camss.c | 9 ---------
+>  1 file changed, 9 deletions(-)
+>
+> diff --git a/drivers/media/platform/qcom/camss/camss.c b/drivers/media/pl=
+atform/qcom/camss/camss.c
+> index 248aa6b21b5ad..1408e8a03f0bd 100644
+> --- a/drivers/media/platform/qcom/camss/camss.c
+> +++ b/drivers/media/platform/qcom/camss/camss.c
+> @@ -4044,15 +4044,6 @@ static int camss_of_parse_endpoint_node(struct dev=
+ice *dev,
+>  	if (ret)
+>  		return ret;
+> =20
+> -	/*
+> -	 * Most SoCs support both D-PHY and C-PHY standards, but currently only
+> -	 * D-PHY is supported in the driver.
+> -	 */
+> -	if (vep.bus_type !=3D V4L2_MBUS_CSI2_DPHY) {
 
-Looks like SW property, so not really suitable for bindings.
+How about just adding && !=3D V4L2_MBUS_CSI2_CPHY to it? Good to check in
+any case imo.
 
-Also, no changes to TXT bindings are accepted, so first this would have
-to be converted to DT schema.
+Regards
+Luca
 
-Best regards,
-Krzysztof
+> -		dev_err(dev, "Unsupported bus type %d\n", vep.bus_type);
+> -		return -EINVAL;
+> -	}
+> -
+>  	csd->interface.csiphy_id =3D vep.base.port;
+> =20
+>  	mipi_csi2 =3D &vep.bus.mipi_csi2;
 
