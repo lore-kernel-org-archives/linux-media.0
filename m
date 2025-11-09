@@ -1,140 +1,154 @@
-Received: from mail-il1-f208.google.com (mail-il1-f208.google.com [209.85.166.208])
+Received: from mail-ej1-f51.google.com (mail-ej1-f51.google.com [209.85.218.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 78C981F0994
-	for <linux-media@vger.kernel.org>; Sun,  9 Nov 2025 10:15:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.208
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 006992E9EB5
+	for <linux-media@vger.kernel.org>; Sun,  9 Nov 2025 12:35:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762683336; cv=none; b=tQvaVT5ygtwFr8TlB420i5+u0CVfPXra5jN6KN5Ses3flloVhSpDe/xVOK89iwW+q2ybQL+od2Z6IQ1okvGpNx7HKZQ6niZDmGOy3wyl/1XqgdpjTLoEdFpmymZZhljTn3UK1xYd+oL/b5k0QRTlk3DsAPCqbrPMpsjf2gWmfD8=
+	t=1762691758; cv=none; b=e1Z4nvIaJZvpyYk5wwWh14qgyO6Zo4R/Yysu0EF6XjjSry8cIzkX5jnF5Rux3Ifx/2jXtgN8+RvmFi/QMVAc0RoUH6DQjcsC0HRcJ7blWzt01biG0ya35w7TS7g8M7dvJWOIa7ylGcsworQDLdSSdM5cMOdjlJPuG9y8KTfATr4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762683336; c=relaxed/simple;
-	bh=q/qbJWFfFE5P6vG0JPZ59MczMNUFyCKYvENiFok2S2U=;
-	h=MIME-Version:Date:In-Reply-To:Message-ID:Subject:From:To:
-	 Content-Type; b=VkIRTqzLyY3rKqWdinTcRA7tSONAdQVxVBH75RHLVCQjjXfD5yWo4PCj/e9BArHJIiJyderuMe9mBAlkipzPPIpMg+cuzJlHdqoOM7BAsFf0PusdeyCEBdh75aYcQVPpGf/fmZZ5fsloiTUuzl+dQYTAdGSiSfHYTlZeME58WS0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.166.208
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
-Received: by mail-il1-f208.google.com with SMTP id e9e14a558f8ab-433270dad0dso18365545ab.0
-        for <linux-media@vger.kernel.org>; Sun, 09 Nov 2025 02:15:34 -0800 (PST)
+	s=arc-20240116; t=1762691758; c=relaxed/simple;
+	bh=aipiftIL6cxlw0GmgAzYCOHVmHzME3ZaXt6XC5G+Nz0=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=Zx67Nr2l4lJ/1aI4GVoUCT7Y8UDizM6MCCrSzX/wL2QaQyUp3rwen+Ms9Zj8JEBaZOH820fz7qZdhvnfangat/kVByCMhIMDErLGbk+fFUb87bqOq6pWuSMXOkAhaJAJQwXNQ0PBYffGxuJOhgX3iBybOSQVbEOLV6tWL3MtKqQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=AKmndVwy; arc=none smtp.client-ip=209.85.218.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="AKmndVwy"
+Received: by mail-ej1-f51.google.com with SMTP id a640c23a62f3a-b72dc0c15abso238432266b.1
+        for <linux-media@vger.kernel.org>; Sun, 09 Nov 2025 04:35:56 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1762691755; x=1763296555; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=+0Qyhz1x92lWHWIws7RgtXksw84DNzrjoWDqoYr7AO8=;
+        b=AKmndVwyCCdfIuvbYslfOaz43nYUeQLkQFvyscJDKS6u4GGhwp+q2LAcOmfnREbnly
+         F6PjfVWxM9VI1joImX+CfXhVyK/iVZ5whptNyuYGEukSwzyrMWRfZ8TZVoqaIEWbHtkG
+         WLnhTGiLsTosV3+miPaqJVfO6Wsu2ciiobAEHUMXWdAPWjO8H5VhLLxPaXjBbmxi5huF
+         LxVwNdo8s2Dl39vsokC1Ja3X0Izjy9ZSnDbXyLFhKNWRcNwR0cPzIji0MJY2TEMl6HAP
+         H6+pDPYUz7IeCeJKEjRILOY7yv3F26Wc9FuKX7skhFgMUQTWkZrle4kUHrPR7UEFWuiB
+         JJlQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1762683333; x=1763288133;
-        h=to:from:subject:message-id:in-reply-to:date:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=NWfewmnudh1KlyEWNvuVvB5Kgj50o7QInWoa1pVfLis=;
-        b=nljOxjJOpuQCL2Tp8o3nof+TXVFMYbVI0ggP5u/ekB7/PTgvDp5I9tIRQSfSTvGvK6
-         IZ6hb9alWz3qTUp1cqkvk+cz24bT01v+pLOtrHKAeNUm8Io9SnXZsrXV1HEM18u547V6
-         su5bjB6T7srqo3N512hA5a/bKZ/HJ/2jjhhyxUS/vwYI4/E45BvvTWFdvKfURk+hS5FW
-         MZqBFMxw2Zcezrb9KqRqCI1BSXPQqEkfCAgeKZpHh/N/YG+wjPF3dVno2o/hAwFuDhFm
-         7e6ff3ofUU8k1OldqRLMfJTTHyp0Ui+BeaRdgKE59cCy2UICghOMpzvmZMLfWDLy4KLr
-         xCUQ==
-X-Forwarded-Encrypted: i=1; AJvYcCX5RP2bhmSdj0/eScFmk2MQybypWl037AV7x90xcZHKLg1OrLDM3R1xU2DxNP4l0c0uXkBarHesmRCkpQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0YxZmUH8GbfUJIjGy9Q2irXQ0ehFsqJLzBJgEyrrH6N1V36Y+F9X
-	Ckh1Ljf508iV4tzQJc4fGa1fFKE5X7SXS9XPSwzsUkNgyefL1GwPXiGTNQVph7LbsyE+2HUc7Kx
-	SGDhsfx2g8NU8pC3NiqRkxZTtZZCKm8P0QDhn06vbAPrIWfPINibiSd3RdT0=
-X-Google-Smtp-Source: AGHT+IEbcKnfSa5fRGJI6MUUWScp8I9DxMyTDf8/KLrLsOwjjl8LC6bhITS7iNJ8+amgcbqzNaoHjpmnfLUcajxKRTAphhZ1AsKm
+        d=1e100.net; s=20230601; t=1762691755; x=1763296555;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=+0Qyhz1x92lWHWIws7RgtXksw84DNzrjoWDqoYr7AO8=;
+        b=oeEgtE5ZuW8QSXz66Psm6N4/TU3voZabmpJzPh7VWMbgTuh6kPVEAqFg9ftb0Bo1Va
+         FizsBWhhkabR43rAp+xdtlyHQUg0rZKOV38zwkaORBBOFz1LJqSYwwtGyFWs3Hkm+rcK
+         uJZR8ntuv+QlZrZSi7pi/kO9qJ1JigBhBskMCn7vWbZ8XdQ8EQz+ym5BfkvHUl2vRqiR
+         qqqAaM1DU3ij+uMsyhJwNMASpvWNsO+SvE9FCsEddrcFfT55zrtgZ0jLnoNN5Fm7nnCR
+         FQ0xLqzK3/x4OlZXvdZeFgqhTcsYxfsuQmuXC8Yp05L1WPeSfPsln5bjqi6y6bF4r0wC
+         Apbw==
+X-Forwarded-Encrypted: i=1; AJvYcCXXj02C9evQuPW7Jada9qKAn48/gT64Q6UBXv2l5xhertfsKbM2Y4Lj/XeyCK2ggOpJoGT12HTosKqHfA==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw/ZnHHxpk/GG7TBP1mgKllyanW4AQreqdKPwwQ094dm2jpOqiS
+	cw/aS58MIXmxeovu7HSMV1mXqubk0YwlDJN/OT9XhAuI37326BviZasKCHLu66DxPzE=
+X-Gm-Gg: ASbGnctSxcvx2mH25/cn+WfPMVwbLcHH6Pgzf1xf9mTzQgB5Sc1JYSSMvGfQvgKpx7O
+	SvyDUZIb7RZ2998UNjwPrUMAeCErDz2w8rOUe2RL4AKZaYuZknNVGRf3mF4iyn0mW6hZWTUYirO
+	ooMj+CjoGGQHYf9dRDXydArLdl1wuQNzlESY6IuIvxQ9Ay0rH8x4nk1zTSXIPZYOnt9kVV2zKku
+	ioKWv00CPc4aBCiDlC0ZoJ8XyQZMtDZdgNoH6bn8M0HvVjDHqS0n2RaN69OSxOu882YNT3FB3UM
+	0DjqG/LEwn0GAmh9ZCF58FtbbjRkbZs2bc1wh9rBUqk7GzQZ5+gMsGC/Iyl6YyuLrkzEE6ZnlcQ
+	ENEzduVv4lFKq7+TkODolywJ3zXxpxZdrk+PTkT+d+us1i+RUVZ4HKKPapOeOucTFfLpTerNvNU
+	dtMGi5fjTy92ejz8VYV8HOoMyGq6lWeCvDgv0zM9BayBVdCjkt42K7qf+snbbXyya968ztgUIAV
+	O+a1XxbVjPOT/zKMRWkjHa6Vs1eR1q7OE9i0OxQfo73SsB4ueiBUaj/7gJb/7bwQHY5X8Fj+gIG
+X-Google-Smtp-Source: AGHT+IHyykZNktMvLQKNtgxSniaCk3u7efAcZ163+WwM1eqdehxI0ewxnn6NYoG1aJsp8Lj9a6zjlA==
+X-Received: by 2002:a17:907:2d8d:b0:b72:a899:169f with SMTP id a640c23a62f3a-b72e028a446mr537437266b.4.1762691755219;
+        Sun, 09 Nov 2025 04:35:55 -0800 (PST)
+Received: from ?IPV6:2001:1c00:3b8a:ea00:4729:b0ef:dcc4:b0b6? (2001-1c00-3b8a-ea00-4729-b0ef-dcc4-b0b6.cable.dynamic.v6.ziggo.nl. [2001:1c00:3b8a:ea00:4729:b0ef:dcc4:b0b6])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-b72bf97ea95sm811509566b.44.2025.11.09.04.35.54
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 09 Nov 2025 04:35:54 -0800 (PST)
+Message-ID: <f3a5c965-6bf7-4e0a-bccf-f0342928150f@linaro.org>
+Date: Sun, 9 Nov 2025 13:35:53 +0100
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6e02:1fc3:b0:433:43fb:37dd with SMTP id
- e9e14a558f8ab-43367de214emr71758115ab.5.1762683333724; Sun, 09 Nov 2025
- 02:15:33 -0800 (PST)
-Date: Sun, 09 Nov 2025 02:15:33 -0800
-In-Reply-To: <68fc0765.a00a0220.9662e.000e.GAE@google.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <691069c5.a70a0220.22f260.00aa.GAE@google.com>
-Subject: Re: [syzbot] [f2fs?] WARNING in get_data
-From: syzbot <syzbot+f5d91b1897d5b094c6b4@syzkaller.appspotmail.com>
-To: almaz.alexandrovich@paragon-software.com, chao@kernel.org, 
-	jaegeuk@kernel.org, linux-f2fs-devel@lists.sourceforge.net, 
-	linux-kernel@vger.kernel.org, linux-media@vger.kernel.org, mchehab@kernel.org, 
-	ntfs3@lists.linux.dev, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH RFC 2/8] media: qcom: camss: csiphy: Introduce C-PHY
+To: david@ixit.cz, Robert Foss <rfoss@kernel.org>,
+ Todor Tomov <todor.too@gmail.com>,
+ Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
+ Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>,
+ Mauro Carvalho Chehab <mchehab@kernel.org>,
+ Luca Weiss <luca.weiss@fairphone.com>, Petr Hodina <phodina@protonmail.com>,
+ "Dr. Git" <drgitx@gmail.com>
+Cc: Joel Selvaraj <foss@joelselvaraj.com>, linux-media@vger.kernel.org,
+ linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+ phone-devel@vger.kernel.org
+References: <20251109-qcom-cphy-v1-0-165f7e79b0e1@ixit.cz>
+ <20251109-qcom-cphy-v1-2-165f7e79b0e1@ixit.cz>
+Content-Language: en-US, en-GB
+From: Casey Connolly <casey.connolly@linaro.org>
+In-Reply-To: <20251109-qcom-cphy-v1-2-165f7e79b0e1@ixit.cz>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-syzbot has found a reproducer for the following issue on:
+Hi David,
 
-HEAD commit:    9c0826a5d9aa Add linux-next specific files for 20251107
-git tree:       linux-next
-console output: https://syzkaller.appspot.com/x/log.txt?x=11c44b42580000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=f2ebeee52bf052b8
-dashboard link: https://syzkaller.appspot.com/bug?extid=f5d91b1897d5b094c6b4
-compiler:       Debian clang version 20.1.8 (++20250708063551+0c9f909b7976-1~exp1~20250708183702.136), Debian LLD 20.1.8
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=16263084580000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=14496a92580000
+On 11/9/25 10:39, David Heidelberg via B4 Relay wrote:
+> From: David Heidelberg <david@ixit.cz>
+> 
+> Read C-PHY from the device-tree bus-type and save it into the csiphy
+> structure for later use.
+> 
+> For C-PHY, skip clock line configuration, as there is none.
+> 
+> Signed-off-by: David Heidelberg <david@ixit.cz>
+> ---
+>   drivers/media/platform/qcom/camss/camss-csiphy.h | 2 ++
+>   drivers/media/platform/qcom/camss/camss.c        | 8 ++++++--
+>   2 files changed, 8 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/media/platform/qcom/camss/camss-csiphy.h b/drivers/media/platform/qcom/camss/camss-csiphy.h
+> index 895f80003c441..8f7d0e4c73075 100644
+> --- a/drivers/media/platform/qcom/camss/camss-csiphy.h
+> +++ b/drivers/media/platform/qcom/camss/camss-csiphy.h
+> @@ -28,11 +28,13 @@ struct csiphy_lane {
+>   
+>   /**
+>    * struct csiphy_lanes_cfg - CSIPHY lanes configuration
+> + * @cphy:     true if C-PHY is used, false if D-PHY is used
+>    * @num_data: number of data lanes
+>    * @data:     data lanes configuration
+>    * @clk:      clock lane configuration (only for D-PHY)
+>    */
+>   struct csiphy_lanes_cfg {
+> +	bool cphy;
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/32b5c04a0baa/disk-9c0826a5.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/9438206c142a/vmlinux-9c0826a5.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/129cd0208baa/bzImage-9c0826a5.xz
-mounted in repro: https://storage.googleapis.com/syzbot-assets/be89fc48acf0/mount_3.gz
+Bit of a nit, but it would read better to use an enum here I think, then 
+one doesn't have to infer that "!lncfg->cphy" means dphy mode.
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+f5d91b1897d5b094c6b4@syzkaller.appspotmail.com
+Kind regards,
+Casey (she/they)
 
-loop0: detected capacity change from 0 to 4096
-ntfs3(loop0): Different NTFS sector size (1024) and media sector size (512).
-------------[ cut here ]------------
-WARNING: kernel/printk/printk_ringbuffer.c:1278 at get_data+0x48a/0x840 kernel/printk/printk_ringbuffer.c:1278, CPU#1: syz.0.541/6553
-Modules linked in:
-CPU: 1 UID: 0 PID: 6553 Comm: syz.0.541 Not tainted syzkaller #0 PREEMPT(full) 
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/02/2025
-RIP: 0010:get_data+0x48a/0x840 kernel/printk/printk_ringbuffer.c:1278
-Code: 83 c4 f8 48 b8 00 00 00 00 00 fc ff df 41 0f b6 04 07 84 c0 0f 85 ee 01 00 00 44 89 65 00 49 83 c5 08 eb 13 e8 87 47 1f 00 90 <0f> 0b 90 eb 05 e8 7c 47 1f 00 45 31 ed 4c 89 e8 48 83 c4 28 5b 41
-RSP: 0018:ffffc9000c0eec40 EFLAGS: 00010293
-RAX: ffffffff81a238a9 RBX: 00003fffffffffff RCX: ffff888026123d00
-RDX: 0000000000000000 RSI: 00003fffffffffff RDI: 0000000000000000
-RBP: 0000000000000012 R08: 0000000000000f4d R09: 0000003b6994bf6b
-R10: 0000003b6994bf6b R11: 0000199962000021 R12: 0000000000000012
-R13: 0000000000000000 R14: ffffc9000c0eed88 R15: 1ffffffff1bca6c2
-FS:  000055557ac66500(0000) GS:ffff888125fc2000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007ffec7fad000 CR3: 000000002ea20000 CR4: 00000000003526f0
-Call Trace:
- <TASK>
- copy_data kernel/printk/printk_ringbuffer.c:1857 [inline]
- prb_read kernel/printk/printk_ringbuffer.c:1966 [inline]
- _prb_read_valid+0x672/0xa90 kernel/printk/printk_ringbuffer.c:2143
- prb_read_valid+0x3c/0x60 kernel/printk/printk_ringbuffer.c:2215
- printk_get_next_message+0x15c/0x7b0 kernel/printk/printk.c:2978
- console_emit_next_record kernel/printk/printk.c:3062 [inline]
- console_flush_one_record kernel/printk/printk.c:3194 [inline]
- console_flush_all+0x4cc/0xb10 kernel/printk/printk.c:3268
- __console_flush_and_unlock kernel/printk/printk.c:3298 [inline]
- console_unlock+0xbb/0x190 kernel/printk/printk.c:3338
- vprintk_emit+0x4c5/0x590 kernel/printk/printk.c:2423
- _printk+0xcf/0x120 kernel/printk/printk.c:2448
- ntfs_inode_printk+0x5fd/0x700 fs/ntfs3/super.c:156
- ntfs_bad_inode+0x71/0x150 fs/ntfs3/fsntfs.c:910
- mi_enum_attr+0x7b9/0x9f0 fs/ntfs3/record.c:352
- ntfs_read_mft fs/ntfs3/inode.c:123 [inline]
- ntfs_iget5+0x245b/0x3860 fs/ntfs3/inode.c:542
- ntfs_fill_super+0x23ce/0x43d0 fs/ntfs3/super.c:1284
- get_tree_bdev_flags+0x40e/0x4d0 fs/super.c:1692
- vfs_get_tree+0x92/0x2b0 fs/super.c:1752
- fc_mount fs/namespace.c:1198 [inline]
- do_new_mount_fc fs/namespace.c:3641 [inline]
- do_new_mount+0x302/0xa10 fs/namespace.c:3717
- do_mount fs/namespace.c:4040 [inline]
- __do_sys_mount fs/namespace.c:4228 [inline]
- __se_sys_mount+0x313/0x410 fs/namespace.c:4205
- do_syscall_x64 arch/x86/entry/syscall_64.c:63 [inline]
- do_syscall_64+0xfa/0xfa0 arch/x86/entry/syscall_64.c:94
- entry_SYSCALL_64_after_hwframe+0x77/0x7f
-RIP: 0033:0x7f6530f90e6a
-Code: d8 64 89 02 48 c7 c0 ff ff ff ff eb a6 e8 de 1a 00 00 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 40 00 49 89 ca b8 a5 00 00 00 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 a8 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007ffec7fac3c8 EFLAGS: 00000246 ORIG_RAX: 00000000000000a5
-RAX: ffffffffffffffda RBX: 00007ffec7fac450 RCX: 00007f6530f90e6a
-RDX: 00002000000002c0 RSI: 0000200000000040 RDI: 00007ffec7fac410
-RBP: 00002000000002c0 R08: 00007ffec7fac450 R09: 0000000000000082
-R10: 0000000000000082 R11: 0000000000000246 R12: 0000200000000040
-R13: 00007ffec7fac410 R14: 000000000001f853 R15: 00002000000000c0
- </TASK>
+>   	int num_data;
+>   	struct csiphy_lane *data;
+>   	struct csiphy_lane clk;
+> diff --git a/drivers/media/platform/qcom/camss/camss.c b/drivers/media/platform/qcom/camss/camss.c
+> index fcc2b2c3cba07..549780f3f948b 100644
+> --- a/drivers/media/platform/qcom/camss/camss.c
+> +++ b/drivers/media/platform/qcom/camss/camss.c
+> @@ -4055,9 +4055,13 @@ static int camss_of_parse_endpoint_node(struct device *dev,
+>   	csd->interface.csiphy_id = vep.base.port;
+>   
+>   	mipi_csi2 = &vep.bus.mipi_csi2;
+> -	lncfg->clk.pos = mipi_csi2->clock_lane;
+> -	lncfg->clk.pol = mipi_csi2->lane_polarities[0];
+>   	lncfg->num_data = mipi_csi2->num_data_lanes;
+> +	lncfg->cphy = vep.bus_type == V4L2_MBUS_CSI2_CPHY;
+> +
+> +	if (!lncfg->cphy) {
+> +		lncfg->clk.pos = mipi_csi2->clock_lane;
+> +		lncfg->clk.pol = mipi_csi2->lane_polarities[0];
+> +	}
+>   
+>   	lncfg->data = devm_kcalloc(dev,
+>   				   lncfg->num_data, sizeof(*lncfg->data),
+> 
 
-
----
-If you want syzbot to run the reproducer, reply with:
-#syz test: git://repo/address.git branch-or-commit-hash
-If you attach or paste a git patch, syzbot will apply it before testing.
