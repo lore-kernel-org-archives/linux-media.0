@@ -1,37 +1,38 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6BC692D63E8;
-	Sun,  9 Nov 2025 09:40:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6BE5F2D6400;
+	Sun,  9 Nov 2025 09:40:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762681205; cv=none; b=O6guTLnrt5BwgnQQHvb50z1N2vpGkFcsEBX3Gq2JfYfKz6KfMrAU1hydtmMylpHnRmOj+6gTKhrmEZ8xOdPJ/iJ+AwNUmdB+WBoHp+icjr7xEyiJd0/FlnoHQHw8yrO/tKhhtffU4o1t36Wrf8uUpWmJ2kLt33GFIwTUUeqbdTM=
+	t=1762681205; cv=none; b=Bjx0pQMZh2NNo4lupfR1SGTSFuNVbkcJelOr2oQGGlLpiydfIv+iYtD7uzGaVKxrxTINEO0kiSN5PcwLLYRZS+lrL2Z5/RK39fRFqp8b9eH8L3fxQ9zl04vBAFXASuoQkuHXCSC3FjJ2OwbIiitAljNxxtkGjRyLf+8gcq3BK+U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1762681205; c=relaxed/simple;
-	bh=Wmf076hxS/+CAwqbNUrfj0PlYofvsiTBvx2C1+aN0iI=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=pGRfvgvWitAYeyPboh356I5xsqW2tRGb2w05c6OawvSScUKowMXvOPuTq4EyBejKnXAjwy2mlyyjeeZjT9CCU/RvkkMq/bYrNp0d34QofcjHYwEra6p5ORhKYhYtB2HyTSk4PYe7LOA/y4c8mMbpYMFn2rnC1ydNThTOKj6SCkk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=L4jCW/VX; arc=none smtp.client-ip=10.30.226.201
+	bh=1mafSDjzBgsMCZ7ArlDk0UuSa3iSLw6qNMUKGLRpjvw=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=Oz9iOY2DcQgbhuuE8EJUHtAYYJA/V3u00HwnoCluqLwS2a+QtMdpVhtRJT4hysQxlrZfDo3sxiW9LGdbIcY7RtLAaRYDbjgY69iKHVOsWjO49+pwetIwHigL3W3tOCzEr725rI5DyWplLaQiA2CwkpKUU2QBZevCxR/0YyRqyrs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ZNLQJC/M; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="L4jCW/VX"
-Received: by smtp.kernel.org (Postfix) with ESMTPS id ED547C4CEFB;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ZNLQJC/M"
+Received: by smtp.kernel.org (Postfix) with ESMTPS id B2F63C4CEF8;
 	Sun,  9 Nov 2025 09:40:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1762681205;
-	bh=Wmf076hxS/+CAwqbNUrfj0PlYofvsiTBvx2C1+aN0iI=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To:From;
-	b=L4jCW/VXGgWNl1eowHTTVm6SZvotAL8aba1h0Tj+qhLkb8E7xXckvkjuXf9drvxms
-	 4mt12MdJEoSInrexl4D1A3Eovp3m6kfz83mVL4sPmzXWciP1H1Du+nUWmqO5kr9kIe
-	 7o+BB2/gchtkGXnLgEEku99WpAAtQEToMoAhXHASLU6gNd8yNRTEXcaIrJjQ0e1vXT
-	 6HDs6kJnsqBqqHse2gR0w8OZlopzY7TAw6fJX5YnVXF1hmYjhRnh/w+LpizG87h5xU
-	 YqkuawE55lfK/rt1fVUKz8zm1Yg24gilC07Gbgn82Y/H+dT3OKvbBYTkDiviKhu+qn
-	 EQWfudebsc71A==
+	s=k20201202; t=1762681204;
+	bh=1mafSDjzBgsMCZ7ArlDk0UuSa3iSLw6qNMUKGLRpjvw=;
+	h=From:Subject:Date:To:Cc:Reply-To:From;
+	b=ZNLQJC/MliYq1YMSb99C1AI+K0n1njY75gqgXPUtW5Mi4gVhrbku+gruTkU3wVJr1
+	 i7TiA7LaUzf6vS7CeyxlyChbNYHjHNn/TIrqrFqQCpaTBt+nqSMZF2h5SOAnYEVIrm
+	 3f7rwHsa3NRKKpvaDnN/5uSLqx32oVQ2kh5649HxF4kKQREpKlGJefpRgyVXS+CM4q
+	 oJ1qj+DxFbrAx/vmpvnamWvPF7GDnm8sRb5AH1UXBrlsH6NhMUbM5RJRDWjncJO7yl
+	 0AfE4MWH5YWPzvZAORhjX34nizBQfvvSKL8nOAyICZW1NKMW8yDnKNu6u1WGZHA/Iw
+	 P/bkGCR4LhRbg==
 Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E798BCD13CF;
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A90BACD1288;
 	Sun,  9 Nov 2025 09:40:04 +0000 (UTC)
 From: David Heidelberg via B4 Relay <devnull+david.ixit.cz@kernel.org>
-Date: Sun, 09 Nov 2025 10:39:47 +0100
-Subject: [PATCH RFC 4/8] media: qcom: camss: Prepare CSID for C-PHY support
+Subject: [PATCH RFC 0/8] media: camss: Add support for C-PHY configuration
+ on Qualcomm platforms
+Date: Sun, 09 Nov 2025 10:39:43 +0100
+Message-Id: <20251109-qcom-cphy-v1-0-165f7e79b0e1@ixit.cz>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
@@ -40,9 +41,10 @@ List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20251109-qcom-cphy-v1-4-165f7e79b0e1@ixit.cz>
-References: <20251109-qcom-cphy-v1-0-165f7e79b0e1@ixit.cz>
-In-Reply-To: <20251109-qcom-cphy-v1-0-165f7e79b0e1@ixit.cz>
+X-B4-Tracking: v=1; b=H4sIAF9hEGkC/6tWKk4tykwtVrJSqFYqSi3LLM7MzwNyDHUUlJIzE
+ vPSU3UzU4B8JSMDI1NDQwNL3cLk/Fzd5IKMSt2kJIvkpJREw2QzExMloPqCotS0zAqwWdFKQW7
+ OSrG1tQCzqm6gYAAAAA==
+X-Change-ID: 20251109-qcom-cphy-bb8cbda1c644
 To: Robert Foss <rfoss@kernel.org>, Todor Tomov <todor.too@gmail.com>, 
  Bryan O'Donoghue <bryan.odonoghue@linaro.org>, 
  Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>, 
@@ -51,81 +53,91 @@ To: Robert Foss <rfoss@kernel.org>, Todor Tomov <todor.too@gmail.com>,
  Casey Connolly <casey.connolly@linaro.org>, "Dr. Git" <drgitx@gmail.com>
 Cc: Joel Selvaraj <foss@joelselvaraj.com>, linux-media@vger.kernel.org, 
  linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org, 
- phone-devel@vger.kernel.org, David Heidelberg <david@ixit.cz>
+ phone-devel@vger.kernel.org, David Heidelberg <david@ixit.cz>, 
+ Sakari Ailus <sakari.ailus@linux.intel.com>
 X-Mailer: b4 0.14.3
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2110; i=david@ixit.cz;
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2819; i=david@ixit.cz;
  h=from:subject:message-id;
- bh=67QPHtM7I6s6uFEWjy+7P8alMIyko6ww9PvBrgKxm7s=;
- b=owEBbQKS/ZANAwAIAWACP8TTSSByAcsmYgBpEGFyHQdwgNa69TcTXUJ7+0HiDqgW6zw++IncQ
- ewgH+t9VWyJAjMEAAEIAB0WIQTXegnP7twrvVOnBHRgAj/E00kgcgUCaRBhcgAKCRBgAj/E00kg
- crY+D/wPfC3CCHkyHKDhzQhl7Ydcyh+dDiR/RwwUrrK0RZ+CRoKnn9BELlgYOzt46nfs1R8+L4M
- DjMFrGT2vp+ILDsRLLD6sgYSbcRVZG1wy9y9JUMB1HSrXlciljZtGNGjiH4pxl/uYlmE1aNXo45
- M2uRIpjfVQOZvoJ0tOepwPjUKSqom26ixbQTA5PUHIiRBxCnxuZ2940pqLXT/mmqixOvXsEmWod
- ViKqD+jWLN70a+tmj3fXzTKd5rlcx8VS0C7oxtkmiebSPxMm2Gs2uM+B/IlSzDqlNSmoxnSXJfN
- 89GFDCPWeVQGwBSWDEiAn0sx8V5KjXyQ8+RS87p13g5JiPsuVOSlyRV0hGuZG2TFmgh+H1SVrA9
- y3Pydza5wHAoWc1rf2uZGABJFDBulo/1VvstJiss80yJ5BLDJLCWVh5WgQl3QuWO3YVvbki7IG7
- x3H3VbGUrlS8SghJ8SjBZbgvueGPZMFfiSOEIc0yQU2zqRhmMbapjejhIFj/p+c6HvVEBl95NdW
- wZB0gC3EZEWJSe5d6dShv5NrfNGAZMSIghD/2QglRREKKrE+7DxIWDDvuQPJIKIiD5/MG7sTXF1
- wUCF6Q2pG6fQwHV3uI19j11nuLlTXnjwN23uZAWaJQxFMTlT8LktsO1r6VsTOohRK7JYXmiUqKx
- mpbEAcz/YnFcyIw==
+ bh=1mafSDjzBgsMCZ7ArlDk0UuSa3iSLw6qNMUKGLRpjvw=;
+ b=owEBbQKS/ZANAwAIAWACP8TTSSByAcsmYgBpEGFy2+CmwZYEuSn/R9jhfOrAc/Q8g4MAn54NH
+ Jy0hZCQstqJAjMEAAEIAB0WIQTXegnP7twrvVOnBHRgAj/E00kgcgUCaRBhcgAKCRBgAj/E00kg
+ ciHkD/9M7HjTM7Vr9eE8Z+80lQ5KK/JshPHF4fZsh/lgPbPqOcGyq+05W28Jnu+PKSsjp7Dn8MR
+ b7wM4PyKskvy/iLrBVgMzY9xM2v6iIzrratp1gLfoDRWLmStSmMcDvWebgFz+ocWGnd9iX4PL5T
+ Pe9hUCwlWNrEFAqHDj9WEZbsgI0/PKtVzRL1aDDBal/lobxzEfklLjtTNwhvIHPWVpfRSGjQlMM
+ XJD9965Th9OqvMX6wfDv6c3zw21AFmxZ+rg6REX25nqGMIYomuTM6ZIJBGpO0JmINRc15WjgTgp
+ que14JxgJ6C0cCdMoNYFIdJKFFUUjSOOWgfyqV9UPWJNzXas7RGMGwBJnimXSBuSa1jwsTuFUdB
+ mfgfSTbVDzrMCZnVF08Oc+knH53pv/9r4EoGrObSDdpMVmV3HdD3Es8KzQfXKM0Sllo9Cwwr9R3
+ QZZmKF4yqQwDUkcimMptVN339cktKgPVnASrWsYGf6vJ3lznXVUnE9l6afsIdMvITEaMpLbnf51
+ ACtmAIiKdNqgyq2DdnzFzmL+YZkb0VhkddzxnyzG4xBivuurdNs6d7MHgGTZ2ub6lIzEBlWtGM+
+ dEoP8CRHKy9d7UPCLs2GmSV3XtG3MYodFYBT+YNGSYv+W97VaObg8UHSjz/P7f576kjXhRHSrww
+ ko1toCiSge6IXfg==
 X-Developer-Key: i=david@ixit.cz; a=openpgp;
  fpr=D77A09CFEEDC2BBD53A7047460023FC4D3492072
 X-Endpoint-Received: by B4 Relay for david@ixit.cz/default with auth_id=355
 X-Original-From: David Heidelberg <david@ixit.cz>
 Reply-To: david@ixit.cz
 
-From: David Heidelberg <david@ixit.cz>
+# Short summary
 
-Inherit C-PHY information from CSIPHY, so we can configure CSID
-properly.
+This patch series extends the Qualcomm CAMSS (Camera Subsystem),
+including CSID and CSIPHY components, to support C-PHY mode configuration.
 
-CSI2_RX_CFG0_PHY_TYPE_SEL must be set to 1, when C-PHY mode is used.
+# Background and motivation
+
+Modern smartphone cameras increasingly rely on MIPI C-PHY rather than D-PHY,
+thanks to its higher data throughput and signal efficiency. As a result,
+many OEMs adopt C-PHY interfaces for main (rear) cameras on Qualcomm-based
+devices.
+
+Until now, mainline Linux lacked C-PHY configuration support for Qualcomm
+chipsets, preventing bring-up of primary camera sensors on several
+Snapdragon platforms. This series closes that gap.
+
+ - Introduces C-PHY configuration support for the CAMSS driver stack,
+   covering both CSID and CSIPHY blocks.
+ - Successfully enables C-PHY operation on the Snapdragon 845 platform.
+ - Tested on OnePlus 6 and 6T phones running mainline Linux,
+   using the Sony IMX519 main camera sensor.
+ - The new configuration allows other chipsets versionsto enable C-PHY by
+   simply adding corresponding sensor driver support and csiphy
+   initialization data, following the example set for sdm845.
+
+With this patch series, mainline Linux gains working C-PHY support for
+Snapdragon 845, paving the way for improved main camera functionality
+across many Qualcomm-based devices. The groundwork also simplifies
+future enablement efforts for additional SoCs and sensors.
 
 Signed-off-by: David Heidelberg <david@ixit.cz>
 ---
- drivers/media/platform/qcom/camss/camss-csid-gen2.c | 1 +
- drivers/media/platform/qcom/camss/camss-csid.c      | 1 +
- drivers/media/platform/qcom/camss/camss-csid.h      | 1 +
- 3 files changed, 3 insertions(+)
+Casey Connolly (1):
+      media: qcom: camss: csiphy-3ph: Add Gen2 v1.1 MIPI CSI-2 CPHY init
 
-diff --git a/drivers/media/platform/qcom/camss/camss-csid-gen2.c b/drivers/media/platform/qcom/camss/camss-csid-gen2.c
-index 2a1746dcc1c5b..033036ae28a4f 100644
---- a/drivers/media/platform/qcom/camss/camss-csid-gen2.c
-+++ b/drivers/media/platform/qcom/camss/camss-csid-gen2.c
-@@ -183,6 +183,7 @@ static void __csid_configure_rx(struct csid_device *csid,
- 	val = (lane_cnt - 1) << CSI2_RX_CFG0_NUM_ACTIVE_LANES;
- 	val |= phy->lane_assign << CSI2_RX_CFG0_DL0_INPUT_SEL;
- 	val |= phy->csiphy_id << CSI2_RX_CFG0_PHY_NUM_SEL;
-+	val |= csid->phy.cphy << CSI2_RX_CFG0_PHY_TYPE_SEL;
- 	writel_relaxed(val, csid->base + CSID_CSI2_RX_CFG0);
- 
- 	val = 1 << CSI2_RX_CFG1_PACKET_ECC_CORRECTION_EN;
-diff --git a/drivers/media/platform/qcom/camss/camss-csid.c b/drivers/media/platform/qcom/camss/camss-csid.c
-index 5284b5857368c..68adea33cc719 100644
---- a/drivers/media/platform/qcom/camss/camss-csid.c
-+++ b/drivers/media/platform/qcom/camss/camss-csid.c
-@@ -1287,6 +1287,7 @@ static int csid_link_setup(struct media_entity *entity,
- 		csid->phy.csiphy_id = csiphy->id;
- 
- 		lane_cfg = &csiphy->cfg.csi2->lane_cfg;
-+		csid->phy.cphy = lane_cfg->cphy;
- 		csid->phy.lane_cnt = lane_cfg->num_data;
- 		csid->phy.lane_assign = csid_get_lane_assign(lane_cfg);
- 	}
-diff --git a/drivers/media/platform/qcom/camss/camss-csid.h b/drivers/media/platform/qcom/camss/camss-csid.h
-index aedc96ed84b2f..a82db31bd2335 100644
---- a/drivers/media/platform/qcom/camss/camss-csid.h
-+++ b/drivers/media/platform/qcom/camss/camss-csid.h
-@@ -70,6 +70,7 @@ struct csid_phy_config {
- 	u32 lane_assign;
- 	u32 en_vc;
- 	u8 need_vc_update;
-+	bool cphy;
- };
- 
- struct csid_device;
+David Heidelberg (6):
+      media: qcom: camss: csiphy: Introduce C-PHY
+      media: qcom: camss: csiphy-3ph: Use odd bits for configuring C-PHY lanes
+      media: qcom: camss: Prepare CSID for C-PHY support
+      media: qcom: camss: csiphy-3ph: Use sdm845 C-PHY configuration sequence
+      media: qcom: camss: Account for C-PHY when calculating link frequency
+      media: qcom: camss: Remove D-PHY-only endpoint restriction
 
+Petr Hodina (1):
+      media: qcom: camss: Initialize lanes after lane configuration is available
+
+ .../media/platform/qcom/camss/camss-csid-gen2.c    |   1 +
+ drivers/media/platform/qcom/camss/camss-csid.c     |   3 +-
+ drivers/media/platform/qcom/camss/camss-csid.h     |   1 +
+ .../platform/qcom/camss/camss-csiphy-3ph-1-0.c     | 165 ++++++++++++++++-----
+ drivers/media/platform/qcom/camss/camss-csiphy.c   |   6 +-
+ drivers/media/platform/qcom/camss/camss-csiphy.h   |   2 +
+ drivers/media/platform/qcom/camss/camss.c          |  24 ++-
+ drivers/media/platform/qcom/camss/camss.h          |   2 +-
+ 8 files changed, 146 insertions(+), 58 deletions(-)
+---
+base-commit: 9c0826a5d9aa4d52206dd89976858457a2a8a7ed
+change-id: 20251109-qcom-cphy-bb8cbda1c644
+
+Best regards,
 -- 
-2.51.0
+David Heidelberg <david@ixit.cz>
 
 
