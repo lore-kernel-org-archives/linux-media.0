@@ -1,69 +1,68 @@
-Received: from mail-ed1-f46.google.com (mail-ed1-f46.google.com [209.85.208.46])
+Received: from mail-ed1-f50.google.com (mail-ed1-f50.google.com [209.85.208.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9CE1B2E9EB5
-	for <linux-media@vger.kernel.org>; Sun,  9 Nov 2025 12:43:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0F8E32ECD06
+	for <linux-media@vger.kernel.org>; Sun,  9 Nov 2025 12:49:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762692226; cv=none; b=s1NqQleGAZqPAX/BZX/p34NvfOf3ogagwhgCywOy00k6YbkQ1lrReDKxjAaferPItMZfrI0REF/Q5hOiRpH7Qr3S+SaOb6qxtn2H3D+vy6ANRAJt3dJUXBB4pd0dJ+z9xCtn0YEm+VLzHJvl2oUnGqpnNfZ9d3EvjUpPojDJeUc=
+	t=1762692600; cv=none; b=fuwAh6U+ivxq5qtVBDth8Nu/xxosoggazs7K9yyCQTcHyf3qzJDFC75xYZybc0KXI8WPti/TV0lFZbwzGBfVogfRtgWHFTGs4wVgztyJRQJdDEhUosdKeoAQ4llrM0M0PTEt+qFhdjPT5/9mryoTYtDb08e94vSr53KAOl4b440=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762692226; c=relaxed/simple;
-	bh=BS5KrCiw8PRT9pORU3Re/5WSroIZAKASnJGIlF3es7o=;
+	s=arc-20240116; t=1762692600; c=relaxed/simple;
+	bh=RWsh0MNVHHOeT+2llJsTwxoFnM5p6UnPIPtoFkDeVgQ=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=JZGXzMOykuQ66fmct+nJq+cJWMMJWM3pd7KN8yq86J4jVC91UBn1fTreClPnXgxC1GnHtHIVpoRkiAWrN5c4sF806xIRJXWOq8kcjCGusGzWYWJjBGKrXr8DE6AlaKgFGI+6SO2pzR5oI6rNYdMOHkw/rnxDwX+Yn6H8PvNfWLA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=RGw7p8hN; arc=none smtp.client-ip=209.85.208.46
+	 In-Reply-To:Content-Type; b=L+SOpDEGr+7F21jkX9BuQozKbpromABKsrgs/hiv9W+hDNumMPsgBcAoI7A49lU872oN4oZO+7dtxv8A/pCxbrajqvStu8Er3KpoRk6CZ2llwND1GaA5t/ELZWJ40V3NHjqg2cTs39W6hZqX6rUQ9BUk/6Q0es2lqakaM5vzg2E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=mM+BddcS; arc=none smtp.client-ip=209.85.208.50
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="RGw7p8hN"
-Received: by mail-ed1-f46.google.com with SMTP id 4fb4d7f45d1cf-640f0f82da9so4277005a12.1
-        for <linux-media@vger.kernel.org>; Sun, 09 Nov 2025 04:43:44 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="mM+BddcS"
+Received: by mail-ed1-f50.google.com with SMTP id 4fb4d7f45d1cf-6409e985505so3443547a12.2
+        for <linux-media@vger.kernel.org>; Sun, 09 Nov 2025 04:49:58 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1762692223; x=1763297023; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1762692597; x=1763297397; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:from:content-language
          :references:cc:to:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=GWErFsO2tEX/BOEFeY/JUuqvBv8pyRA62qDCMk8OHC0=;
-        b=RGw7p8hNtL1ayOFEGVZTU4WouxNqK8yu2MEPSf5gx2EU7tVz01TOOgDt0KklgcbsWW
-         mt9pfTmAXtzl8xEXjW7hV9P0SUiDz9nUaj4+ywh0YFutzB1TCTANBBXKi3v9kMnoSsba
-         ljY56Sm/xgNKoeqOVnm/mqw7zLoJpZhvXIxbbX2Soxl4pQebys9n232zR58dzp+2VxXk
-         7u/598z3jDO8PCP9uBd+BZwAQvLO3QmHq3XQ4Jw+8eDynnuO2hWrsEWZV9+grYQUOHka
-         4wsCgKbtr1b6Q6+yrj1jxXtKzEA2XM4EXUqK6mkXl+nBdzkeNElVuGBtMb9udl1I2FBK
-         n//g==
+        bh=b3uCPMdMXg41Vg12Apli3BT+126wRXMTBjult076Xbo=;
+        b=mM+BddcSrPO4Ff3Lxyd4Awuwj0dTiUnDLqiFoUqaFWTzSBZCtkQg9W5WOo/cSrzDlE
+         io8ZKsjLtfXqvlHfZuY90IYMn6nNmcjv/cWT8ErAW4fmkqFVMmRSZ+y5itJUU3Jle2t4
+         PCmdXXjRIyC1RoCe9eWSuoFTayWUadJY5rrjSoh5tMLLj6wd6I1vYk4FDleM6J6MrVBL
+         w0qhAmEGukwif5uqjcnzAJigPcpXK68zz1V6Xxb5T6yLdJ1N22kUlXfudmgOquipi8Yw
+         2fd2Ipsr37h2tvI0IuoGWOdMrhJUri4N2TvG3bzrg1g4v5PQzBVvN5BS6asHi2BEj6RD
+         UEjQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1762692223; x=1763297023;
+        d=1e100.net; s=20230601; t=1762692597; x=1763297397;
         h=content-transfer-encoding:in-reply-to:from:content-language
          :references:cc:to:subject:user-agent:mime-version:date:message-id
          :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=GWErFsO2tEX/BOEFeY/JUuqvBv8pyRA62qDCMk8OHC0=;
-        b=i9C5jV/bFwd5GZw6N1964GsrcaDHL5les9Tvsn+AC9WjXHq46SuOyUSDHwvRJmtUjP
-         HEhuc5JPQqHb3/y7Il0oj41j9vUwm+508rqRpCnSIVGP99AYA4hrhLZPu5TZtnta3O+F
-         xrG4OMX7DhRVmCE8gYp67acs3zVNfO2eA9W4nXiSvEQQlRvZNrHjA65K9CwUdKfDP1yF
-         SGtgFKRw2SFQVx4F79RHZnGa8E3/lbpgNThkuom/xdn1U5PE5IJh6cqySqny4pFyWa16
-         McfKA8uRWXmVvMroG9m6zgCy82vo1tD24A5RlFmsakUY1nQOEbU0+RKNTIDJipGtzQ+l
-         rHDQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXigmy5ffzSqMzI7kOsv3wcrkw/Stv/xQWdMqx21Uj22bqAlLGxAMyINcnC0F0Cv3auUVhvZpB8cHAPzg==@vger.kernel.org
-X-Gm-Message-State: AOJu0YxiLxdhSvJ1SrXmENcgQsq3nc2DDzwlMufn46f7/pJtxEwmLTt+
-	EAEbbyoBc2yEBfcwcdFLRd0ap6Rq46ttDsx1wpHHudVLVqjZN3P9lACm+eJbNzhbOH4=
-X-Gm-Gg: ASbGncsNS3EtBG/hOd9FTxKwIXtl/nhNg/ottYcY1+9arq7eWaK3D60dfX2t/8R/KT7
-	R2VEF+nW9UDbvwNUrDwLdpA4iCMRYjOhooAZ+rDsyXCxTAMjv1GfG+1zGhGYoNe9BCrNjgCQEHM
-	Aj3IB0kX4DIGPq+TDbijfrhDpGpkdHel0LYEfqtAavHJ7wP8pNRgsqig8qcbEM10b5SS17/0wuN
-	aDKVJPye4jqyc/3Em+DbR+h5k0nZecDm9hzYEvoj7VMER1P1t4gy6HehsSc0ChYs6cBlyepWp57
-	enX/SOeAKXbaRDjIIShI6fDKX+2KwMGZicZUlleZ15Aj/0uy4wWP/SZAwFiSEKJD13UF4jOqWWS
-	huIleobLEgF8zwaW+yg6ckh8F+mFPplSuwZHUprO/g0XIFXcA2sv+tuTxUcL8gRNlALHOsNRHCA
-	vmPz60Umfiv5skSohB8nKCaKtZY0YBsLXfBL7EIQPBhQVTcQpcApcmFRaXhE4nFWMDOPBn4Rhqg
-	5XPegdx53w48ac6ZH4PRSzCIC5henh16G0ve5DB3iv1FaAEHMfamO5ZPySIj73Q1RLz1dASnHD6
-	zR3WoAja3Bg=
-X-Google-Smtp-Source: AGHT+IEmKraCtXyz5pwfItQXmoPTPeRlR1wlc8EhkGzafL7gDnpHwT7RooYHeCo6KYAU03Bhf73/iA==
-X-Received: by 2002:a05:6402:3042:20b0:640:c918:e3b with SMTP id 4fb4d7f45d1cf-6415e80b1d2mr3448160a12.26.1762692222982;
-        Sun, 09 Nov 2025 04:43:42 -0800 (PST)
+        bh=b3uCPMdMXg41Vg12Apli3BT+126wRXMTBjult076Xbo=;
+        b=iLngSH/SXi8Wf2pdjkEg4iXFzpm2nXNVjLPVajqvj74MbI0+ESHAZqdvLPjEGnaIit
+         4f51RLd5+Bb2emlCC8ipiyBR8oxqnU0KpLTXKoRub2O0iSx29/JtOGBkJcg10IzAj0qD
+         mpYrLdMWcvE2gb6Pob51Ydy52M1R3fwsXwJx+k5xmhaqWgMPA1HZ2/BUdhewohF0ADe3
+         SFwiVZmfpJwZi5mQksPibsXVvEYWCQWnJClWwuTYd2A0YfLFF6ZOkOaLtLE0cFYVsl5s
+         zl6jtefmxRWoCqP33/cjdUKqHW3YMVMDZ8XfPYpGwX9uryKbxJqXnQu+LeU09GqdVzit
+         cE7A==
+X-Forwarded-Encrypted: i=1; AJvYcCXmCAEv6ifoZ/pIFn5lhbP5bMaj7ZXWuaoVLpAytyft/8XXo5H6MYrBqJGI2PNRa6XqC/FvUYhhvtktbA==@vger.kernel.org
+X-Gm-Message-State: AOJu0YyHOPf31ipUYlheHofeXo8MTYdRQexnPlIFSzIQhMWMJPVMpSgW
+	Wz5LMJCLMiagxitW/5kNyB13y4t4jpXnNR4Hl90GwIeJ1pemcPd6OaEc/2rkudmpZ0Y=
+X-Gm-Gg: ASbGncs91bcCBLQ6Gtl88jVfI7WWuWy5gy97L0tM0YJI1oaY4u7NW2pMf8TkZFHO0/c
+	+ISuIuBYuC1yF+TwhwOt12uS8c7lowL5E+ZncLLIHruclKHM7TSXtL+SvYHvFRAnJztVY/10g/i
+	b7y2wIwHmblBu5ZlWpAv1NB2XxH3OrLY2hTHsxwZciEBBqevO/Y/fo2QC50h2mWwnTHaqDz2T7T
+	Uz/srgHD8LDJgMmclULA0Kz5goSfdCjXWIu//66cig1f4mi61OEAuYcvHRFwYw/VEfHtm3ql0Zg
+	hTNcGiIR8L4k+aCQ7Gq84AjvbeweSDu9IqX1+gffWFEM1o25tuxL02IbZW8q53ZuzT4sE+B0pyT
+	yB1RKnkgC364WwmGV0cGkepSHxReI0rEFO/B7FOrinxNLkRZiBZGw9vRrJ7TmnDoBdFaP7kP0LO
+	gQR9epzbdC0KHnI+wBisgdktsZD0Cy2KqcM+pAuiYZm2ht6+/xAPh0fwKI5VGuHoJj5r1Mcki3t
+	H3AllCKlC3ph7wlel4cdg4BiaMyFl+DFVEjUF3l/iNYSYaHdF2Us7/MevZiEGhT37pR6VcyDl9R
+X-Google-Smtp-Source: AGHT+IHq3tipKWAq6loGNwoQe1tMCrBPSrk3SZF+kU2pkM50gqp5iIGyhpBDk7dlni6/awXeEtBrLA==
+X-Received: by 2002:a05:6402:1474:b0:640:9b74:b448 with SMTP id 4fb4d7f45d1cf-6415e813d04mr3914452a12.30.1762692597394;
+        Sun, 09 Nov 2025 04:49:57 -0800 (PST)
 Received: from ?IPV6:2001:1c00:3b8a:ea00:4729:b0ef:dcc4:b0b6? (2001-1c00-3b8a-ea00-4729-b0ef-dcc4-b0b6.cable.dynamic.v6.ziggo.nl. [2001:1c00:3b8a:ea00:4729:b0ef:dcc4:b0b6])
-        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-6411f86e9d7sm8852874a12.36.2025.11.09.04.43.41
+        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-6418b54a888sm611277a12.32.2025.11.09.04.49.56
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 09 Nov 2025 04:43:42 -0800 (PST)
-Message-ID: <a13b5b89-ee13-4fe6-b57c-5e4ea724522f@linaro.org>
-Date: Sun, 9 Nov 2025 13:43:40 +0100
+        Sun, 09 Nov 2025 04:49:56 -0800 (PST)
+Message-ID: <0390ae7b-8f56-4ed3-a3f9-616e7c74adbd@linaro.org>
+Date: Sun, 9 Nov 2025 13:49:56 +0100
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
@@ -71,8 +70,8 @@ List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH RFC 8/8] media: qcom: camss: Remove D-PHY-only endpoint
- restriction
+Subject: Re: [PATCH RFC 0/8] media: camss: Add support for C-PHY configuration
+ on Qualcomm platforms
 To: david@ixit.cz, Robert Foss <rfoss@kernel.org>,
  Todor Tomov <todor.too@gmail.com>,
  Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
@@ -82,49 +81,92 @@ To: david@ixit.cz, Robert Foss <rfoss@kernel.org>,
  "Dr. Git" <drgitx@gmail.com>
 Cc: Joel Selvaraj <foss@joelselvaraj.com>, linux-media@vger.kernel.org,
  linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
- phone-devel@vger.kernel.org
+ phone-devel@vger.kernel.org, Sakari Ailus <sakari.ailus@linux.intel.com>
 References: <20251109-qcom-cphy-v1-0-165f7e79b0e1@ixit.cz>
- <20251109-qcom-cphy-v1-8-165f7e79b0e1@ixit.cz>
 Content-Language: en-US, en-GB
 From: Casey Connolly <casey.connolly@linaro.org>
-In-Reply-To: <20251109-qcom-cphy-v1-8-165f7e79b0e1@ixit.cz>
+In-Reply-To: <20251109-qcom-cphy-v1-0-165f7e79b0e1@ixit.cz>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-
+Hi David,
 
 On 11/9/25 10:39, David Heidelberg via B4 Relay wrote:
-> From: David Heidelberg <david@ixit.cz>
+> # Short summary
 > 
-> C-PHY mode is now supported, so the endpoint bus-type restriction to
-> D-PHY can be removed.
+> This patch series extends the Qualcomm CAMSS (Camera Subsystem),
+> including CSID and CSIPHY components, to support C-PHY mode configuration.
+
+Awesome to see this actually working after so much time and prior effort!
+> 
+> # Background and motivation
+> 
+> Modern smartphone cameras increasingly rely on MIPI C-PHY rather than D-PHY,
+> thanks to its higher data throughput and signal efficiency. As a result,
+> many OEMs adopt C-PHY interfaces for main (rear) cameras on Qualcomm-based
+> devices.
+> 
+> Until now, mainline Linux lacked C-PHY configuration support for Qualcomm
+> chipsets, preventing bring-up of primary camera sensors on several
+> Snapdragon platforms. This series closes that gap.
+
+I think it's worth being clearer here that this is only tested on 
+SDM845, and will only work on sdm845 anyway because of the lane 
+configuration.
+
+Additionally, with Luca's explicit D-phy check removed, other platforms 
+won't error out if someone tries to use c-phy without adding the lane 
+configuration (and whatever other configuration might also be needed), 
+so it might be worth adding a proper check for that.
+> 
+>   - Introduces C-PHY configuration support for the CAMSS driver stack,
+>     covering both CSID and CSIPHY blocks.
+>   - Successfully enables C-PHY operation on the Snapdragon 845 platform.
+>   - Tested on OnePlus 6 and 6T phones running mainline Linux,
+>     using the Sony IMX519 main camera sensor.
+>   - The new configuration allows other chipsets versionsto enable C-PHY by
+>     simply adding corresponding sensor driver support and csiphy
+>     initialization data, following the example set for sdm845.
+> 
+> With this patch series, mainline Linux gains working C-PHY support for
+> Snapdragon 845, paving the way for improved main camera functionality
+> across many Qualcomm-based devices. The groundwork also simplifies
+> future enablement efforts for additional SoCs and sensors.
+
+woohoo!
+
+Kind regards,
+Casey (she/they)
+
 > 
 > Signed-off-by: David Heidelberg <david@ixit.cz>
 > ---
->   drivers/media/platform/qcom/camss/camss.c | 9 ---------
->   1 file changed, 9 deletions(-)
+> Casey Connolly (1):
+>        media: qcom: camss: csiphy-3ph: Add Gen2 v1.1 MIPI CSI-2 CPHY init
 > 
-> diff --git a/drivers/media/platform/qcom/camss/camss.c b/drivers/media/platform/qcom/camss/camss.c
-> index 248aa6b21b5ad..1408e8a03f0bd 100644
-> --- a/drivers/media/platform/qcom/camss/camss.c
-> +++ b/drivers/media/platform/qcom/camss/camss.c
-> @@ -4044,15 +4044,6 @@ static int camss_of_parse_endpoint_node(struct device *dev,
->   	if (ret)
->   		return ret;
->   
-> -	/*
-> -	 * Most SoCs support both D-PHY and C-PHY standards, but currently only
-> -	 * D-PHY is supported in the driver.
-> -	 */
-> -	if (vep.bus_type != V4L2_MBUS_CSI2_DPHY) {
-> -		dev_err(dev, "Unsupported bus type %d\n", vep.bus_type);
-> -		return -EINVAL;
-> -	}
-
-Might be better to just expand the check to include C-phy, since there 
-are other bus types that are also unsupported.> -
->   	csd->interface.csiphy_id = vep.base.port;
->   
->   	mipi_csi2 = &vep.bus.mipi_csi2;
+> David Heidelberg (6):
+>        media: qcom: camss: csiphy: Introduce C-PHY
+>        media: qcom: camss: csiphy-3ph: Use odd bits for configuring C-PHY lanes
+>        media: qcom: camss: Prepare CSID for C-PHY support
+>        media: qcom: camss: csiphy-3ph: Use sdm845 C-PHY configuration sequence
+>        media: qcom: camss: Account for C-PHY when calculating link frequency
+>        media: qcom: camss: Remove D-PHY-only endpoint restriction
 > 
+> Petr Hodina (1):
+>        media: qcom: camss: Initialize lanes after lane configuration is available
+> 
+>   .../media/platform/qcom/camss/camss-csid-gen2.c    |   1 +
+>   drivers/media/platform/qcom/camss/camss-csid.c     |   3 +-
+>   drivers/media/platform/qcom/camss/camss-csid.h     |   1 +
+>   .../platform/qcom/camss/camss-csiphy-3ph-1-0.c     | 165 ++++++++++++++++-----
+>   drivers/media/platform/qcom/camss/camss-csiphy.c   |   6 +-
+>   drivers/media/platform/qcom/camss/camss-csiphy.h   |   2 +
+>   drivers/media/platform/qcom/camss/camss.c          |  24 ++-
+>   drivers/media/platform/qcom/camss/camss.h          |   2 +-
+>   8 files changed, 146 insertions(+), 58 deletions(-)
+> ---
+> base-commit: 9c0826a5d9aa4d52206dd89976858457a2a8a7ed
+> change-id: 20251109-qcom-cphy-bb8cbda1c644
+> 
+> Best regards,
 
