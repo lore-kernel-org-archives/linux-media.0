@@ -1,172 +1,140 @@
-Received: from ixit.cz (ip-94-112-25-9.bb.vodafone.cz [94.112.25.9])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-il1-f208.google.com (mail-il1-f208.google.com [209.85.166.208])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EE880267729;
-	Sun,  9 Nov 2025 09:49:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=94.112.25.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 78C981F0994
+	for <linux-media@vger.kernel.org>; Sun,  9 Nov 2025 10:15:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.208
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762681788; cv=none; b=qVLSE2M5PfofiR9sT7ntOwRKBzZY5+TpmQOc9yIVm1QBMkMB6aCq4VWmhnTYqEO9busHon/1Ek6VHFwxDnGwGooJeD9z8mhDXt3UzKdEDXRXmDQviF+l8e5rITuzwcXGnRKexf9aPJeb6yEkU1700nmKOrW792ecpsluktZ5hOY=
+	t=1762683336; cv=none; b=tQvaVT5ygtwFr8TlB420i5+u0CVfPXra5jN6KN5Ses3flloVhSpDe/xVOK89iwW+q2ybQL+od2Z6IQ1okvGpNx7HKZQ6niZDmGOy3wyl/1XqgdpjTLoEdFpmymZZhljTn3UK1xYd+oL/b5k0QRTlk3DsAPCqbrPMpsjf2gWmfD8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762681788; c=relaxed/simple;
-	bh=E4JXquXVbascHNXQUhYTERU+iJwhJt6oQ4PCVofKrCI=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=HXkTF8Z+2cbRoinoMZihz1po/z7griSr9XtXHx1MIXudu6bWkZS4aUXDmTXd4Zke4908LU6s+UJntJGwPcMrU/PUlhaVZ0J3NYuTVMI5CGUHS2Qm6DMbRR6X+hAhbV33lLAXvdsdTtagAyquX0dE0rzQre1AakQukJG4GL2MQeU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ixit.cz; spf=pass smtp.mailfrom=ixit.cz; dkim=pass (1024-bit key) header.d=ixit.cz header.i=@ixit.cz header.b=LD8rSKll; arc=none smtp.client-ip=94.112.25.9
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ixit.cz
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ixit.cz
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ixit.cz header.i=@ixit.cz header.b="LD8rSKll"
-Received: from [10.0.0.200] (unknown [10.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange x25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by ixit.cz (Postfix) with ESMTPSA id 002EF5340EFE;
-	Sun, 09 Nov 2025 10:49:36 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ixit.cz; s=dkim;
-	t=1762681777;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=ZUxPTMvJDRydlSdxz5KqJTvqznFnI2NbIJUuYl/y6YE=;
-	b=LD8rSKlllL4vOxzAxbf32dk+NfNqnb8Ibw74yHrvZ1/HrSC4kVoKkSiCGl5F3ctPObJ0D+
-	f0X+saNSm9hs4CFpJnG/R8cO+u1DtgeyLRR1fGEKH7N1Kl0wiCJjv5lVmneKzilqrTGqGK
-	2zv/GXKHev2HVUwWpgseSUoGVz3gs9A=
-Message-ID: <801451a0-679d-42db-850e-88fe7af9625b@ixit.cz>
-Date: Sun, 9 Nov 2025 10:49:36 +0100
+	s=arc-20240116; t=1762683336; c=relaxed/simple;
+	bh=q/qbJWFfFE5P6vG0JPZ59MczMNUFyCKYvENiFok2S2U=;
+	h=MIME-Version:Date:In-Reply-To:Message-ID:Subject:From:To:
+	 Content-Type; b=VkIRTqzLyY3rKqWdinTcRA7tSONAdQVxVBH75RHLVCQjjXfD5yWo4PCj/e9BArHJIiJyderuMe9mBAlkipzPPIpMg+cuzJlHdqoOM7BAsFf0PusdeyCEBdh75aYcQVPpGf/fmZZ5fsloiTUuzl+dQYTAdGSiSfHYTlZeME58WS0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.166.208
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
+Received: by mail-il1-f208.google.com with SMTP id e9e14a558f8ab-433270dad0dso18365545ab.0
+        for <linux-media@vger.kernel.org>; Sun, 09 Nov 2025 02:15:34 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1762683333; x=1763288133;
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=NWfewmnudh1KlyEWNvuVvB5Kgj50o7QInWoa1pVfLis=;
+        b=nljOxjJOpuQCL2Tp8o3nof+TXVFMYbVI0ggP5u/ekB7/PTgvDp5I9tIRQSfSTvGvK6
+         IZ6hb9alWz3qTUp1cqkvk+cz24bT01v+pLOtrHKAeNUm8Io9SnXZsrXV1HEM18u547V6
+         su5bjB6T7srqo3N512hA5a/bKZ/HJ/2jjhhyxUS/vwYI4/E45BvvTWFdvKfURk+hS5FW
+         MZqBFMxw2Zcezrb9KqRqCI1BSXPQqEkfCAgeKZpHh/N/YG+wjPF3dVno2o/hAwFuDhFm
+         7e6ff3ofUU8k1OldqRLMfJTTHyp0Ui+BeaRdgKE59cCy2UICghOMpzvmZMLfWDLy4KLr
+         xCUQ==
+X-Forwarded-Encrypted: i=1; AJvYcCX5RP2bhmSdj0/eScFmk2MQybypWl037AV7x90xcZHKLg1OrLDM3R1xU2DxNP4l0c0uXkBarHesmRCkpQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0YxZmUH8GbfUJIjGy9Q2irXQ0ehFsqJLzBJgEyrrH6N1V36Y+F9X
+	Ckh1Ljf508iV4tzQJc4fGa1fFKE5X7SXS9XPSwzsUkNgyefL1GwPXiGTNQVph7LbsyE+2HUc7Kx
+	SGDhsfx2g8NU8pC3NiqRkxZTtZZCKm8P0QDhn06vbAPrIWfPINibiSd3RdT0=
+X-Google-Smtp-Source: AGHT+IEbcKnfSa5fRGJI6MUUWScp8I9DxMyTDf8/KLrLsOwjjl8LC6bhITS7iNJ8+amgcbqzNaoHjpmnfLUcajxKRTAphhZ1AsKm
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH RFC 3/8] media: qcom: camss: csiphy-3ph: Use odd bits for
- configuring C-PHY lanes
-To: Robert Foss <rfoss@kernel.org>, Todor Tomov <todor.too@gmail.com>,
- Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
- Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>,
- Mauro Carvalho Chehab <mchehab@kernel.org>,
- Luca Weiss <luca.weiss@fairphone.com>, Petr Hodina <phodina@protonmail.com>,
- Casey Connolly <casey.connolly@linaro.org>, "Dr. Git" <drgitx@gmail.com>
-Cc: Joel Selvaraj <foss@joelselvaraj.com>, linux-media@vger.kernel.org,
- linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
- phone-devel@vger.kernel.org
-References: <20251109-qcom-cphy-v1-0-165f7e79b0e1@ixit.cz>
- <20251109-qcom-cphy-v1-3-165f7e79b0e1@ixit.cz>
-Content-Language: en-US
-From: David Heidelberg <david@ixit.cz>
-Autocrypt: addr=david@ixit.cz; keydata=
- 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
-In-Reply-To: <20251109-qcom-cphy-v1-3-165f7e79b0e1@ixit.cz>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+X-Received: by 2002:a05:6e02:1fc3:b0:433:43fb:37dd with SMTP id
+ e9e14a558f8ab-43367de214emr71758115ab.5.1762683333724; Sun, 09 Nov 2025
+ 02:15:33 -0800 (PST)
+Date: Sun, 09 Nov 2025 02:15:33 -0800
+In-Reply-To: <68fc0765.a00a0220.9662e.000e.GAE@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <691069c5.a70a0220.22f260.00aa.GAE@google.com>
+Subject: Re: [syzbot] [f2fs?] WARNING in get_data
+From: syzbot <syzbot+f5d91b1897d5b094c6b4@syzkaller.appspotmail.com>
+To: almaz.alexandrovich@paragon-software.com, chao@kernel.org, 
+	jaegeuk@kernel.org, linux-f2fs-devel@lists.sourceforge.net, 
+	linux-kernel@vger.kernel.org, linux-media@vger.kernel.org, mchehab@kernel.org, 
+	ntfs3@lists.linux.dev, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
 
-On 09/11/2025 10:39, David Heidelberg via B4 Relay wrote:
-> From: David Heidelberg <david@ixit.cz>
-> 
-> So far, only D-PHY mode was supported, which uses even bits when enabling
-> or masking lanes. For C-PHY configuration, the hardware instead requires
-> using the odd bits.
-> 
-> Signed-off-by: David Heidelberg <david@ixit.cz>
-> ---
->   .../platform/qcom/camss/camss-csiphy-3ph-1-0.c     | 25 ++++++++++++++++------
->   1 file changed, 18 insertions(+), 7 deletions(-)
-> 
-> diff --git a/drivers/media/platform/qcom/camss/camss-csiphy-3ph-1-0.c b/drivers/media/platform/qcom/camss/camss-csiphy-3ph-1-0.c
-> index f28c32d1a4ec5..348b8cd18327e 100644
-> --- a/drivers/media/platform/qcom/camss/camss-csiphy-3ph-1-0.c
-> +++ b/drivers/media/platform/qcom/camss/camss-csiphy-3ph-1-0.c
-> @@ -1054,10 +1054,17 @@ static u8 csiphy_get_lane_mask(struct csiphy_lanes_cfg *lane_cfg)
->   	u8 lane_mask;
->   	int i;
->   
-> -	lane_mask = CSIPHY_3PH_CMN_CSI_COMMON_CTRL5_CLK_ENABLE;
-> +	if (lane_cfg->cphy) {
-> +		lane_mask = 0;
->   
-> -	for (i = 0; i < lane_cfg->num_data; i++)
-> -		lane_mask |= 1 << lane_cfg->data[i].pos;
-> +		for (i = 0; i < lane_cfg->num_data; i++)
-> +			lane_mask |= (1 << lane_cfg->data[i].pos) + 1;
-> +	} else {
-> +		lane_mask = CSIPHY_3PH_CMN_CSI_COMMON_CTRL5_CLK_ENABLE;
-> +
-> +		for (i = 0; i < lane_cfg->num_data; i++)
-> +			lane_mask |= 1 << lane_cfg->data[i].pos;
-> +	}
->   
->   	return lane_mask;
->   }
-> @@ -1096,10 +1103,14 @@ static void csiphy_lanes_enable(struct csiphy_device *csiphy,
->   
->   	settle_cnt = csiphy_settle_cnt_calc(link_freq, csiphy->timer_clk_rate);
->   
-> -	val = CSIPHY_3PH_CMN_CSI_COMMON_CTRL5_CLK_ENABLE;
-> -	for (i = 0; i < c->num_data; i++)
-> -		val |= BIT(c->data[i].pos * 2);
-> -
-> +	if (c->cphy) {
+syzbot has found a reproducer for the following issue on:
 
-Imagine val is initialized here:
-    		val = 0;
+HEAD commit:    9c0826a5d9aa Add linux-next specific files for 20251107
+git tree:       linux-next
+console output: https://syzkaller.appspot.com/x/log.txt?x=11c44b42580000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=f2ebeee52bf052b8
+dashboard link: https://syzkaller.appspot.com/bug?extid=f5d91b1897d5b094c6b4
+compiler:       Debian clang version 20.1.8 (++20250708063551+0c9f909b7976-1~exp1~20250708183702.136), Debian LLD 20.1.8
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=16263084580000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=14496a92580000
 
-is already fixed in next version.
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/32b5c04a0baa/disk-9c0826a5.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/9438206c142a/vmlinux-9c0826a5.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/129cd0208baa/bzImage-9c0826a5.xz
+mounted in repro: https://storage.googleapis.com/syzbot-assets/be89fc48acf0/mount_3.gz
 
-> +		for (i = 0; i < c->num_data; i++)
-> +			val |= BIT((c->data[i].pos * 2) + 1);
-> +	} else {
-> +		val = CSIPHY_3PH_CMN_CSI_COMMON_CTRL5_CLK_ENABLE;
-> +		for (i = 0; i < c->num_data; i++)
-> +			val |= BIT(c->data[i].pos * 2);
-> +	}
->   	writel_relaxed(val, csiphy->base +
->   		       CSIPHY_3PH_CMN_CSI_COMMON_CTRLn(regs->offset, 5));
->   
-> 
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+f5d91b1897d5b094c6b4@syzkaller.appspotmail.com
 
--- 
-David Heidelberg
+loop0: detected capacity change from 0 to 4096
+ntfs3(loop0): Different NTFS sector size (1024) and media sector size (512).
+------------[ cut here ]------------
+WARNING: kernel/printk/printk_ringbuffer.c:1278 at get_data+0x48a/0x840 kernel/printk/printk_ringbuffer.c:1278, CPU#1: syz.0.541/6553
+Modules linked in:
+CPU: 1 UID: 0 PID: 6553 Comm: syz.0.541 Not tainted syzkaller #0 PREEMPT(full) 
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/02/2025
+RIP: 0010:get_data+0x48a/0x840 kernel/printk/printk_ringbuffer.c:1278
+Code: 83 c4 f8 48 b8 00 00 00 00 00 fc ff df 41 0f b6 04 07 84 c0 0f 85 ee 01 00 00 44 89 65 00 49 83 c5 08 eb 13 e8 87 47 1f 00 90 <0f> 0b 90 eb 05 e8 7c 47 1f 00 45 31 ed 4c 89 e8 48 83 c4 28 5b 41
+RSP: 0018:ffffc9000c0eec40 EFLAGS: 00010293
+RAX: ffffffff81a238a9 RBX: 00003fffffffffff RCX: ffff888026123d00
+RDX: 0000000000000000 RSI: 00003fffffffffff RDI: 0000000000000000
+RBP: 0000000000000012 R08: 0000000000000f4d R09: 0000003b6994bf6b
+R10: 0000003b6994bf6b R11: 0000199962000021 R12: 0000000000000012
+R13: 0000000000000000 R14: ffffc9000c0eed88 R15: 1ffffffff1bca6c2
+FS:  000055557ac66500(0000) GS:ffff888125fc2000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007ffec7fad000 CR3: 000000002ea20000 CR4: 00000000003526f0
+Call Trace:
+ <TASK>
+ copy_data kernel/printk/printk_ringbuffer.c:1857 [inline]
+ prb_read kernel/printk/printk_ringbuffer.c:1966 [inline]
+ _prb_read_valid+0x672/0xa90 kernel/printk/printk_ringbuffer.c:2143
+ prb_read_valid+0x3c/0x60 kernel/printk/printk_ringbuffer.c:2215
+ printk_get_next_message+0x15c/0x7b0 kernel/printk/printk.c:2978
+ console_emit_next_record kernel/printk/printk.c:3062 [inline]
+ console_flush_one_record kernel/printk/printk.c:3194 [inline]
+ console_flush_all+0x4cc/0xb10 kernel/printk/printk.c:3268
+ __console_flush_and_unlock kernel/printk/printk.c:3298 [inline]
+ console_unlock+0xbb/0x190 kernel/printk/printk.c:3338
+ vprintk_emit+0x4c5/0x590 kernel/printk/printk.c:2423
+ _printk+0xcf/0x120 kernel/printk/printk.c:2448
+ ntfs_inode_printk+0x5fd/0x700 fs/ntfs3/super.c:156
+ ntfs_bad_inode+0x71/0x150 fs/ntfs3/fsntfs.c:910
+ mi_enum_attr+0x7b9/0x9f0 fs/ntfs3/record.c:352
+ ntfs_read_mft fs/ntfs3/inode.c:123 [inline]
+ ntfs_iget5+0x245b/0x3860 fs/ntfs3/inode.c:542
+ ntfs_fill_super+0x23ce/0x43d0 fs/ntfs3/super.c:1284
+ get_tree_bdev_flags+0x40e/0x4d0 fs/super.c:1692
+ vfs_get_tree+0x92/0x2b0 fs/super.c:1752
+ fc_mount fs/namespace.c:1198 [inline]
+ do_new_mount_fc fs/namespace.c:3641 [inline]
+ do_new_mount+0x302/0xa10 fs/namespace.c:3717
+ do_mount fs/namespace.c:4040 [inline]
+ __do_sys_mount fs/namespace.c:4228 [inline]
+ __se_sys_mount+0x313/0x410 fs/namespace.c:4205
+ do_syscall_x64 arch/x86/entry/syscall_64.c:63 [inline]
+ do_syscall_64+0xfa/0xfa0 arch/x86/entry/syscall_64.c:94
+ entry_SYSCALL_64_after_hwframe+0x77/0x7f
+RIP: 0033:0x7f6530f90e6a
+Code: d8 64 89 02 48 c7 c0 ff ff ff ff eb a6 e8 de 1a 00 00 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 40 00 49 89 ca b8 a5 00 00 00 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 a8 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007ffec7fac3c8 EFLAGS: 00000246 ORIG_RAX: 00000000000000a5
+RAX: ffffffffffffffda RBX: 00007ffec7fac450 RCX: 00007f6530f90e6a
+RDX: 00002000000002c0 RSI: 0000200000000040 RDI: 00007ffec7fac410
+RBP: 00002000000002c0 R08: 00007ffec7fac450 R09: 0000000000000082
+R10: 0000000000000082 R11: 0000000000000246 R12: 0000200000000040
+R13: 00007ffec7fac410 R14: 000000000001f853 R15: 00002000000000c0
+ </TASK>
 
+
+---
+If you want syzbot to run the reproducer, reply with:
+#syz test: git://repo/address.git branch-or-commit-hash
+If you attach or paste a git patch, syzbot will apply it before testing.
