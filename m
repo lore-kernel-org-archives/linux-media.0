@@ -1,117 +1,142 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 728BB24469E;
-	Sun,  9 Nov 2025 21:39:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 226B2171C9
+	for <linux-media@vger.kernel.org>; Sun,  9 Nov 2025 21:48:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762724352; cv=none; b=HoSx0SLDeHsWgkg0RJ20SsNcQotSCMStM3OBnh5oFrJ+Q6b47TTWvKJ0kfIY0Ul3N/L8694RLhyYZ6wQBqtFH6abr657/WuR6i1sGsxMhhBfbNEk1r30xCBiEUlbPZZUn3J3UCNOYECGrvurb7+QMdnGX4gDLHUNB/BkNDfXNoc=
+	t=1762724932; cv=none; b=rTVxZIPvoWK0HNDdNoMTg3TXIbh/nLCsfN1jfC8Xz5LX4sROcDM52HwzeU2Yq19AhpJ+Oft5KB5sFBByqI+VIPb0mFJYTfJ4bJ3LzM4Zw0VLAS+GnOCrb3LW0lsfAZkRq2xTWwb9wlVsxAEfljjsVsrkWadfaXNzh2X8AKvkiZU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762724352; c=relaxed/simple;
-	bh=kVgnVQO18a916rVySKF1mV8rRyJyvwESYEk0lLLgQaY=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=iv0JD+PS9YFaSNFCUBs3XhH2Ad5bq0rLnV/qbM/qik4JMVu5KYJv2GLGOgIp0fNZWdYf/CAcGdbOklqvjthgMUXRATiiPENGVYMajejQ8yzAl/GhbZyfKnZOvXwGuYyI/GIeUeEhxtZJCFcv4QYZQZUzZGnwZ0Roj2zS+aAbs7A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=WEefhM+w; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1762724932; c=relaxed/simple;
+	bh=Q2KbBtdvFBz63OxXv1wztUo9rT/L1z8KKdXs98sTjzo=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=TgbMKLKouuJ3FBry8ehwnB3SV6hpezvUn2ZS1f/YzTtnJHmRPNlLq+SiSnxn5dFit/StsLy7sYXFX14cOm1CkA0vJd/BFuJD39gfjZnubZ6nrJoVEFxvtnayykIn+SZtPGEb8q0HfU75L2N/5h0UvkMidkzdVcM3O04T7lDA1sc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Ag2QPTyW; arc=none smtp.client-ip=198.175.65.14
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="WEefhM+w"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BECEAC19423;
-	Sun,  9 Nov 2025 21:39:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1762724352;
-	bh=kVgnVQO18a916rVySKF1mV8rRyJyvwESYEk0lLLgQaY=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=WEefhM+wvXEy1rWWzumJC5RPb0gVAJSBqN7mRuhwxH8PvDdhBWgEqFwZStqMEMNF2
-	 taGAZqeHs/RbkUh58PsASM2X92CWWgOBU29vC8wHuFqIVesO2YFSWtrDJ1g4pA9BWX
-	 Ndwi6/JkinnfIsIFh+LYcbKrXszHMCzdV2Yb05W4D7wHhWEECCbELc8MHuaZoC9pbN
-	 yG55Zlnv+nUJuyCyEbr40jdhms4NDQ30g/7UyhzZFAbnhtSqT3Rsd63NwqT37D79PD
-	 J/AamRW5kFyj6MEW2UI68kpWObmACabj4HDf6WuqwSzA8XYRRMRJKoZqXpL+hqbqTG
-	 JKvmi+4MlwgMg==
-From: Roger Quadros <rogerq@kernel.org>
-Date: Sun, 09 Nov 2025 23:37:57 +0200
-Subject: [PATCH net-next v2 7/7] net: ethernet: ti: am65-cpsw: Fix clearing
- of irq_disabled flag in rx_poll
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Ag2QPTyW"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1762724931; x=1794260931;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=Q2KbBtdvFBz63OxXv1wztUo9rT/L1z8KKdXs98sTjzo=;
+  b=Ag2QPTyWEUdn56jVr9gCO43OYvPN9nD1wEm7d+Ism6Wi8bpg8gvnakos
+   BbcI8Bek7QgSRpH85LLZASJVPWsRkwPLYaviRCASRnDEa58/GVUEASn0k
+   ZAtZq0e+bV5ovJFW0ldJ08ATtd0Yr1wGy67AL6NruARajUCKK/YOGb0Lo
+   /dTFe3JJavIkyauqW7fZY5eNc+DBEGyCRUnhQO5kLtw/1xccwyvnHBJid
+   ymW/1ygyY9yDvyRwiWAfRidN6GEUgAWGGVQyPw4iYG8nZNcbm5ssiYzug
+   GoBjPlq9HiUx7MqmiLKvRISskv2Efr389JmgTFThY8PlPDSamhzT+uSjq
+   w==;
+X-CSE-ConnectionGUID: Jry6BA/YT5SXtgfTlHfyyw==
+X-CSE-MsgGUID: rKwpqh/7Sk+5OjLfrrfywg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11608"; a="68630232"
+X-IronPort-AV: E=Sophos;i="6.19,292,1754982000"; 
+   d="scan'208";a="68630232"
+Received: from fmviesa008.fm.intel.com ([10.60.135.148])
+  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Nov 2025 13:48:50 -0800
+X-CSE-ConnectionGUID: yZi8cpxlTAmH/01aimhL0A==
+X-CSE-MsgGUID: 016R6T/9TRG4taXsPRCqpQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.19,292,1754982000"; 
+   d="scan'208";a="188775217"
+Received: from lkp-server01.sh.intel.com (HELO 6ef82f2de774) ([10.239.97.150])
+  by fmviesa008.fm.intel.com with ESMTP; 09 Nov 2025 13:48:47 -0800
+Received: from kbuild by 6ef82f2de774 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1vIDHB-0002Qd-2b;
+	Sun, 09 Nov 2025 21:48:45 +0000
+Date: Mon, 10 Nov 2025 05:48:29 +0800
+From: kernel test robot <lkp@intel.com>
+To: Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+	linux-media@vger.kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Rui Miguel Silva <rmfrfs@gmail.com>,
+	Martin Kepplinger <martink@posteo.de>,
+	Purism Kernel Team <kernel@puri.sm>,
+	Pengutronix Kernel Team <kernel@pengutronix.de>,
+	imx@lists.linux.dev, Frank Li <Frank.Li@nxp.com>,
+	Stefan Klug <stefan.klug@ideasonboard.com>,
+	Sakari Ailus <sakari.ailus@iki.fi>
+Subject: Re: [PATCH v1 3/6] media: imx-mipi-csis: Implement the
+ .set_routing() operation
+Message-ID: <202511100531.4skNcchV-lkp@intel.com>
+References: <20251107015813.5834-4-laurent.pinchart@ideasonboard.com>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20251109-am65-cpsw-xdp-zc-v2-7-858f60a09d12@kernel.org>
-References: <20251109-am65-cpsw-xdp-zc-v2-0-858f60a09d12@kernel.org>
-In-Reply-To: <20251109-am65-cpsw-xdp-zc-v2-0-858f60a09d12@kernel.org>
-To: Siddharth Vadapalli <s-vadapalli@ti.com>, 
- Andrew Lunn <andrew+netdev@lunn.ch>, 
- "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
- Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
- Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
- Jesper Dangaard Brouer <hawk@kernel.org>, 
- John Fastabend <john.fastabend@gmail.com>, 
- Sumit Semwal <sumit.semwal@linaro.org>, 
- =?utf-8?q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>, 
- Stanislav Fomichev <sdf@fomichev.me>, Simon Horman <horms@kernel.org>
-Cc: srk@ti.com, Meghana Malladi <m-malladi@ti.com>, netdev@vger.kernel.org, 
- linux-kernel@vger.kernel.org, bpf@vger.kernel.org, 
- linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org, 
- linaro-mm-sig@lists.linaro.org, Roger Quadros <rogerq@kernel.org>
-X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1531; i=rogerq@kernel.org;
- h=from:subject:message-id; bh=kVgnVQO18a916rVySKF1mV8rRyJyvwESYEk0lLLgQaY=;
- b=owEBbQKS/ZANAwAIAdJaa9O+djCTAcsmYgBpEQnaoZQaCDOcP2jKXsqaIb7Y4IAM39JiwAlpR
- whm4N5Vn1iJAjMEAAEIAB0WIQRBIWXUTJ9SeA+rEFjSWmvTvnYwkwUCaREJ2gAKCRDSWmvTvnYw
- k+n2D/4n3QLBvZL+Ug6lzBiQ3yEIJ54RMQhXfWtoHhcZT+Wor3emaGkM+iZ3o3j+ObQhNfLnaH9
- nqj5dWuuKVXWirrXjeIcgudnU6FcaO1DUY8SH6+H3jAtspFAI0Ne/eaRWCMNtEgdWw+tjR6Hki5
- K/HF/m38zK2UzGqBPhSr/wFUiT7E94Xgvn30dEZEYJ2GMF0F9bDmsQLWkP12bD0U9M0Tkku8r3w
- YZbH/h+iY986+tLVcgL9bV72urrYlAFGtzfkoUzGwTD0CN0Gk8qsiDwPEfwAb/wpJMR1NsOhDiX
- RCa3Errmmt2VRD/ViOAbkobEfNRFsSGke6jrDeQ7VOeNJn6kIzrBtCDWZISg1orpImNpZLht1qF
- mBW2x+s/+/nJLMMTyZA1eo72nRW0gu+ugSQ0JIwcuvdTFPn67sV+LRwgJusoBUUyeUbhdquF/Y5
- EGMIRdGhkkVp+y4wSeZhmrWjyThAbUPh/ECj7mqphqLz4Ecd+osPOwtHjeQfZnJ+rXLSb+PAjqw
- 7+J6wPI83RIPktGVBgGr7kLkPqmSSRCTgs6NEEwDMp9x//wKe+AN1+X/PS48nmxQF2kYsJCzZsO
- NxWZ3LNtNVHwlyhZR7SEvxnM1T77zq0r9uYfJmHk1iqhaaOaUBNk+HA4ER1KeBvte0Fc7iehK80
- Dnd1EZKdXkopKeg==
-X-Developer-Key: i=rogerq@kernel.org; a=openpgp;
- fpr=412165D44C9F52780FAB1058D25A6BD3BE763093
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20251107015813.5834-4-laurent.pinchart@ideasonboard.com>
 
-In am65_cpsw_nuss_rx_poll() there is a possibility that irq_disabled flag
-is cleared but the IRQ is not enabled.
+Hi Laurent,
 
-This patch fixes by that by clearing irq_disabled flag right when enabling
-the irq.
+kernel test robot noticed the following build errors:
 
-Fixes: da70d184a8c3 ("net: ethernet: ti: am65-cpsw: Introduce multi queue Rx")
-Signed-off-by: Roger Quadros <rogerq@kernel.org>
----
- drivers/net/ethernet/ti/am65-cpsw-nuss.c | 14 ++++++--------
- 1 file changed, 6 insertions(+), 8 deletions(-)
+[auto build test ERROR on dcb6fa37fd7bc9c3d2b066329b0d27dedf8becaa]
 
-diff --git a/drivers/net/ethernet/ti/am65-cpsw-nuss.c b/drivers/net/ethernet/ti/am65-cpsw-nuss.c
-index 9d1048eea7e4734873676026906e07babf0345f5..c0f891a91d7471364bd4c8b7d82da9967f1753b8 100644
---- a/drivers/net/ethernet/ti/am65-cpsw-nuss.c
-+++ b/drivers/net/ethernet/ti/am65-cpsw-nuss.c
-@@ -1778,15 +1778,13 @@ static int am65_cpsw_nuss_rx_poll(struct napi_struct *napi_rx, int budget)
- 	dev_dbg(common->dev, "%s num_rx:%d %d\n", __func__, num_rx, budget);
- 
- 	if (num_rx < budget && napi_complete_done(napi_rx, num_rx)) {
--		if (flow->irq_disabled) {
-+		if (unlikely(flow->rx_pace_timeout)) {
-+			hrtimer_start(&flow->rx_hrtimer,
-+				      ns_to_ktime(flow->rx_pace_timeout),
-+				      HRTIMER_MODE_REL_PINNED);
-+		} else if (flow->irq_disabled) {
- 			flow->irq_disabled = false;
--			if (unlikely(flow->rx_pace_timeout)) {
--				hrtimer_start(&flow->rx_hrtimer,
--					      ns_to_ktime(flow->rx_pace_timeout),
--					      HRTIMER_MODE_REL_PINNED);
--			} else {
--				enable_irq(flow->irq);
--			}
-+			enable_irq(flow->irq);
- 		}
- 	}
- 
+url:    https://github.com/intel-lab-lkp/linux/commits/Laurent-Pinchart/media-imx-mipi-csis-Add-VC-related-register-fields/20251107-100134
+base:   dcb6fa37fd7bc9c3d2b066329b0d27dedf8becaa
+patch link:    https://lore.kernel.org/r/20251107015813.5834-4-laurent.pinchart%40ideasonboard.com
+patch subject: [PATCH v1 3/6] media: imx-mipi-csis: Implement the .set_routing() operation
+config: arm-randconfig-003-20251110 (https://download.01.org/0day-ci/archive/20251110/202511100531.4skNcchV-lkp@intel.com/config)
+compiler: clang version 16.0.6 (https://github.com/llvm/llvm-project 7cbf1a2591520c2491aa35339f227775f4d3adf6)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251110/202511100531.4skNcchV-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202511100531.4skNcchV-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+>> drivers/media/platform/nxp/imx-mipi-csis.c:1164:32: error: initializer element is not a compile-time constant
+                   .code = mipi_csis_formats[0].code,
+                           ~~~~~~~~~~~~~~~~~~~~~^~~~
+   1 error generated.
+
+
+vim +1164 drivers/media/platform/nxp/imx-mipi-csis.c
+
+  1156	
+  1157	static int __mipi_csis_set_routing(struct v4l2_subdev *sd,
+  1158					   struct v4l2_subdev_state *state,
+  1159					   struct v4l2_subdev_krouting *routing)
+  1160	{
+  1161		static const struct v4l2_mbus_framefmt format = {
+  1162			.width = MIPI_CSIS_DEF_PIX_WIDTH,
+  1163			.height = MIPI_CSIS_DEF_PIX_HEIGHT,
+> 1164			.code = mipi_csis_formats[0].code,
+  1165			.field = V4L2_FIELD_NONE,
+  1166			.colorspace = V4L2_XFER_FUNC_709,
+  1167			.ycbcr_enc = V4L2_YCBCR_ENC_601,
+  1168			.quantization = V4L2_QUANTIZATION_LIM_RANGE,
+  1169			.xfer_func = V4L2_XFER_FUNC_SRGB,
+  1170		};
+  1171		int ret;
+  1172	
+  1173		ret = v4l2_subdev_routing_validate(sd, routing,
+  1174						   V4L2_SUBDEV_ROUTING_NO_1_TO_N);
+  1175		if (ret)
+  1176			return ret;
+  1177	
+  1178		/* Only a single route is supported for now. */
+  1179		if (routing->num_routes != 1 ||
+  1180		    !(routing->routes[0].flags & V4L2_SUBDEV_ROUTE_FL_ACTIVE))
+  1181			return -EINVAL;
+  1182	
+  1183		ret = v4l2_subdev_set_routing_with_fmt(sd, state, routing, &format);
+  1184		if (ret)
+  1185			return ret;
+  1186	
+  1187		return 0;
+  1188	}
+  1189	
 
 -- 
-2.34.1
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
