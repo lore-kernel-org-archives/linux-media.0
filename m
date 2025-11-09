@@ -1,120 +1,139 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 856B734D3A9;
-	Sun,  9 Nov 2025 17:00:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3FF4F30499A;
+	Sun,  9 Nov 2025 17:09:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762707640; cv=none; b=PCDk0dg7t0+9bQfzZGb5Zh9JGpKBNcj9cp1U7inU9Moltx1b94847FJ8RXfu1dGsVJCeBYaqoe6/rasX/8QoT0eL0PoH07s4/lHZu8HoFTGztlVaFH592JEyg+HDwG5pUYC9TbHUjlgY/525Qqa4+oXl2YKgsmCEl7OX9on+Xvw=
+	t=1762708169; cv=none; b=uA5TfXQOxcrIxOC672QwOfPxW3NTGkJf8mHvHEry8XJ2tId4VCcpc+zgA0tnaerGSEBP+U3YSpOUS3m3bXez43Gv0o5yfDLqhRlqolN4mdnYQOr2o3hTwgCyz4uvUYBaIbWWK+wOkI/A337kxXxX1/pDQTFvImOIKYvhSg2BQ20=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762707640; c=relaxed/simple;
-	bh=/YTzYEC+/7A1yssydEpBLvFuXa5TokqzNj5SqgQkNMo=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=oIv5S8/2dbDNdhLBbw8HqTwQ5CGgrs7jWfNcyvQn0pjwb+JNB3QN7IaYkI30h+7asa2EchUyADDh2j1AckswVU0/580xuhWeeUBU6fUGMRKAD6x3GACkMSc4FSceKeAbxrftTVr8jhlly5EcwMaP1Tc1ZJFLIoNeX4JxIC4iRH4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=EIgjYpcz; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1762708169; c=relaxed/simple;
+	bh=ifyQCECAtBcQxgR5E0pL//6P+IXt1bCDRYzHSxJKPtk=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Y7xNFgmRPzZ7maCsyVQRkQd9QJ89B2yTz80k1aXuN0SsJFSJKk+UNBDWkDvE01SmLUHHxthQfbIvCJP3ZLpHnRQJZjYaDFoxJ0p7OVCaRcP77tQz+vxVYG8k6GAyKj7Vf8yIAUzbFP9/wqUTGv9WhW39QYVj/0+ivLgJHYAH6R4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=FHEAtoyd; arc=none smtp.client-ip=198.175.65.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="EIgjYpcz"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0B82FC4CEF7;
-	Sun,  9 Nov 2025 17:00:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1762707640;
-	bh=/YTzYEC+/7A1yssydEpBLvFuXa5TokqzNj5SqgQkNMo=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=EIgjYpczUOJ/qkpiyiaObxa/4HwzMUGSj/DKg/EDJY1bXoIX3RaGcEIACjwzpLhDU
-	 OO+QHIEIaLofhMLq2t4CS3ec98r6oyFiOEjSIC3z1KAThmfRyJLWcDNre7NGFWCGVA
-	 e1NJ2Y3/C+HueHWreW0A6XfygPU76invrZXlXEc7OO1oMicZsLP14Z94fxKDyo/nLU
-	 hkYFboDAHp32P2w3BaLCM4MOi2C3vpMQF9+t783kIgTnSC52fong2/QUEF15oKLWQ0
-	 9yyUDa9OvYsw0py629P+lAxAAwfF8WfnVAnFZ6Hnycns9D1oW85mremLgPymNpVtTc
-	 sW0bzB5r9W43w==
-Date: Sun, 9 Nov 2025 17:00:32 +0000
-From: Jonathan Cameron <jic23@kernel.org>
-To: Andy Shevchenko <andy.shevchenko@gmail.com>
-Cc: David Lechner <dlechner@baylibre.com>, Andy Shevchenko
- <andriy.shevchenko@linux.intel.com>, Hans Verkuil
- <hverkuil+cisco@kernel.org>, "linux-iio@vger.kernel.org"
- <linux-iio@vger.kernel.org>, "chrome-platform@lists.linux.dev"
- <chrome-platform@lists.linux.dev>, "linux-kernel@vger.kernel.org"
- <linux-kernel@vger.kernel.org>, "linux-media@vger.kernel.org"
- <linux-media@vger.kernel.org>, Nuno =?UTF-8?B?U8Oh?= <nuno.sa@analog.com>,
- Andy Shevchenko <andy@kernel.org>, Benson Leung <bleung@chromium.org>,
- Guenter Roeck <groeck@chromium.org>, Lars-Peter Clausen <lars@metafoo.de>,
- Michael Hennerich <Michael.Hennerich@analog.com>, Mauro Carvalho Chehab
- <mchehab@kernel.org>, "Daniel W. S. Almeida" <dwlsalmeida@gmail.com>
-Subject: Re: [PATCH v2 2/6] units: Add 32- and 64-bit signed values of
- =?UTF-8?B?z4A=?=
-Message-ID: <20251109170032.2763ae5b@jic23-huawei>
-In-Reply-To: <CAHp75VexvdYyjt1GkbfqOotkFpLeb=io6outJ5dpRqBv2qPNng@mail.gmail.com>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="FHEAtoyd"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1762708168; x=1794244168;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=ifyQCECAtBcQxgR5E0pL//6P+IXt1bCDRYzHSxJKPtk=;
+  b=FHEAtoyduAx6F1X+/yWxwweWKEMEi4TEVtbbiQI5pk/9VHvjH4yL8gv7
+   rwOAleNQFE0lw9wcq0QU5nKRaAVRzCbC4sLjuazSqKMXrqDB976hjc5CW
+   /dy8jYCCo+6LBJ+JvN6tpvvhxRsbNqJt00ezo9xshqD7wqIFBrnqwj94i
+   mkJNaWsx3iHC4Nx7ijeTvjz7gmHSHXXNkEJ7wwoSXtTTCOC/shBrsjlXJ
+   5Pj9g5GguEEu4CAixS2pKLlDneJAF7wV7e8742l+CexRCLoi78yIwyLUw
+   tEg+Z31wajslv2IglddUDKXbAtKmHInasqH0HFXAw1PfEgzusXrMpBVqx
+   A==;
+X-CSE-ConnectionGUID: xXY5ekOjSdWDac1B/Akvig==
+X-CSE-MsgGUID: R9sYzihvQEiufqqTIhVNRQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11608"; a="76228425"
+X-IronPort-AV: E=Sophos;i="6.19,292,1754982000"; 
+   d="scan'208";a="76228425"
+Received: from fmviesa006.fm.intel.com ([10.60.135.146])
+  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Nov 2025 09:09:27 -0800
+X-CSE-ConnectionGUID: Fd17s4YwRPaADzaVcPLRjg==
+X-CSE-MsgGUID: sw7bb81sQ7+538g9Rlqp5g==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.19,292,1754982000"; 
+   d="scan'208";a="188327592"
+Received: from fpallare-mobl4.ger.corp.intel.com (HELO ashevche-desk.local) ([10.245.245.185])
+  by fmviesa006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Nov 2025 09:09:23 -0800
+Received: from andy by ashevche-desk.local with local (Exim 4.98.2)
+	(envelope-from <andriy.shevchenko@linux.intel.com>)
+	id 1vI8um-000000074ls-1h2F;
+	Sun, 09 Nov 2025 19:09:20 +0200
+Date: Sun, 9 Nov 2025 19:09:20 +0200
+From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To: Jonathan Cameron <jic23@kernel.org>
+Cc: Andy Shevchenko <andy.shevchenko@gmail.com>,
+	David Lechner <dlechner@baylibre.com>,
+	Hans Verkuil <hverkuil+cisco@kernel.org>,
+	"linux-iio@vger.kernel.org" <linux-iio@vger.kernel.org>,
+	"chrome-platform@lists.linux.dev" <chrome-platform@lists.linux.dev>,
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+	"linux-media@vger.kernel.org" <linux-media@vger.kernel.org>,
+	Nuno =?iso-8859-1?Q?S=E1?= <nuno.sa@analog.com>,
+	Andy Shevchenko <andy@kernel.org>,
+	Benson Leung <bleung@chromium.org>,
+	Guenter Roeck <groeck@chromium.org>,
+	Lars-Peter Clausen <lars@metafoo.de>,
+	Michael Hennerich <Michael.Hennerich@analog.com>,
+	Mauro Carvalho Chehab <mchehab@kernel.org>,
+	"Daniel W. S. Almeida" <dwlsalmeida@gmail.com>
+Subject: Re: [PATCH v2 2/6] units: Add =?utf-8?Q?32?=
+ =?utf-8?Q?-_and_64-bit_signed_values_of_=CF=80?=
+Message-ID: <aRDKwFkjOSfypJVW@smile.fi.intel.com>
 References: <20251107201005.3156118-1-andriy.shevchenko@linux.intel.com>
-	<20251107201005.3156118-3-andriy.shevchenko@linux.intel.com>
-	<fb4aafc1-dbfb-4533-b368-5d26e24acdf1@baylibre.com>
-	<CAHp75VexvdYyjt1GkbfqOotkFpLeb=io6outJ5dpRqBv2qPNng@mail.gmail.com>
-X-Mailer: Claws Mail 4.3.1 (GTK 3.24.51; x86_64-pc-linux-gnu)
+ <20251107201005.3156118-3-andriy.shevchenko@linux.intel.com>
+ <fb4aafc1-dbfb-4533-b368-5d26e24acdf1@baylibre.com>
+ <CAHp75VexvdYyjt1GkbfqOotkFpLeb=io6outJ5dpRqBv2qPNng@mail.gmail.com>
+ <20251109170032.2763ae5b@jic23-huawei>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20251109170032.2763ae5b@jic23-huawei>
+Organization: Intel Finland Oy - BIC 0357606-4 - c/o Alberga Business Park, 6
+ krs, Bertel Jungin Aukio 5, 02600 Espoo
 
-On Sat, 8 Nov 2025 21:02:54 +0200
-Andy Shevchenko <andy.shevchenko@gmail.com> wrote:
+On Sun, Nov 09, 2025 at 05:00:32PM +0000, Jonathan Cameron wrote:
+> On Sat, 8 Nov 2025 21:02:54 +0200
+> Andy Shevchenko <andy.shevchenko@gmail.com> wrote:
+> > пʼятниця, 7 листопада 2025 р. David Lechner <dlechner@baylibre.com> пише:
+> > > On 11/7/25 2:03 PM, Andy Shevchenko wrote:  
+> > > > There are a few drivers that want to have these values, and
+> > > > one more known to come soon. Let's define the values for them.
 
-> =D0=BF=CA=BC=D1=8F=D1=82=D0=BD=D0=B8=D1=86=D1=8F, 7 =D0=BB=D0=B8=D1=81=D1=
-=82=D0=BE=D0=BF=D0=B0=D0=B4=D0=B0 2025=E2=80=AF=D1=80. David Lechner <dlech=
-ner@baylibre.com> =D0=BF=D0=B8=D1=88=D0=B5:
->=20
-> > On 11/7/25 2:03 PM, Andy Shevchenko wrote: =20
-> > > There are a few drivers that want to have these values, and
-> > > one more known to come soon. Let's define the values for them.
-> > > =20
->=20
->=20
->=20
->=20
->=20
-> > > @@ -21,6 +21,12 @@
-> > >  #define PICO 1000000000000ULL
-> > >  #define FEMTO        1000000000000000ULL
+...
+
+> > > > +/* Value of π * 10⁸ (fits s32 or signed int) */
+> > > > +#define PI   314159265  
 > > >
-> > > +/* Value of =CF=80 * 10=E2=81=B8 (fits s32 or signed int) */
-> > > +#define PI   314159265 =20
-> >
-> > It isn't clear to me at all in the other patches that e.g.
-> > DIV_ROUND_UP(PI, 1000) would be =CF=80 =E2=9C=95 10=E2=81=B4 (rounded t=
-o nearest
-> > integer, of course).
-> >
-> > Calling these PI_E8 and PI_E18 or PI_x10_8 and PI_x10_18
-> > would help to clear that up. =20
->=20
->=20
->=20
-> This will be an awful and ugly name(s). I fully disagree on such a
-> proposal. The power is chosen to fit the type with maximum precision, no
-> need to explain this in the name.
-With no indicate of the multiplier we have to check it every time wwe
-use it which isn't ideal either.
+> > > It isn't clear to me at all in the other patches that e.g.
+> > > DIV_ROUND_UP(PI, 1000) would be π ✕ 10⁴ (rounded to nearest
+> > > integer, of course).
+> > >
+> > > Calling these PI_E8 and PI_E18 or PI_x10_8 and PI_x10_18
+> > > would help to clear that up.  
+> > 
+> > This will be an awful and ugly name(s). I fully disagree on such a
+> > proposal. The power is chosen to fit the type with maximum precision, no
+> > need to explain this in the name.
+> With no indicate of the multiplier we have to check it every time wwe
+> use it which isn't ideal either.
+> 
+> So I agree with David that we have to indicate this somewhere. Maybe hold the
+> multiplier in a separate define
+> #define PI_MUL
+> #define PI_MUL_LL
+> 
+> Then compute the divisions by (PI_MUL) / KILO or something along those lines?
 
-So I agree with David that we have to indicate this somewhere. Maybe hold t=
-he
-multiplier in a separate define
-#define PI_MUL
-#define PI_MUL_LL
+I see, we have a disagreement here, because I don't like to uglify the pure PI
+definition. So, please abandon this series then.
 
-Then compute the divisions by (PI_MUL) / KILO or something along those line=
-s?
->=20
-> > =20
-> > > +
-> > > +/* Value of =CF=80 * 10=C2=B9=E2=81=B8 (fits s64 or signed long long=
-) */
-> > > +#define PI_LL        3141592653589793238LL
-> > > +
-> > >  /* Hz based multipliers */
-> > >  #define NANOHZ_PER_HZ                1000000000UL
-> > >  #define MICROHZ_PER_HZ               1000000UL =20
-> >
-> > =20
+> > > > +/* Value of π * 10¹⁸ (fits s64 or signed long long) */
+> > > > +#define PI_LL        3141592653589793238LL
+
+Note, this constant is used a lot in the tests (3+ modules), so if you go with
+your version, take this into account.
+
+> > > >  /* Hz based multipliers */
+> > > >  #define NANOHZ_PER_HZ                1000000000UL
+> > > >  #define MICROHZ_PER_HZ               1000000UL  
+
+-- 
+With Best Regards,
+Andy Shevchenko
+
 
