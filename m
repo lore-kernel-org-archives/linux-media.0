@@ -1,86 +1,98 @@
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5A6FB311C0C
-	for <linux-media@vger.kernel.org>; Mon, 10 Nov 2025 13:36:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0CDA6223DF9
+	for <linux-media@vger.kernel.org>; Mon, 10 Nov 2025 13:51:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762781764; cv=none; b=I/iPWsK4iK3VdhPHOjUtt1PaHG4xEDePCmhwVh0NILFyE64VhooqKNB4VMZNj+JxD1mngta57vcQgQvMVB5wj0qaCi5IkGamFVVyhTNVb4zy2Z0zHnbC/FcEqXPtAnBFZqM2j4267miiUfqn0vtahDFfm6yTdvT6GTJlB4OrvCY=
+	t=1762782721; cv=none; b=CIvrpnjyWHh/u4O/FGtrcutRUQcv4i+5vmRX4BVVvLPWvUNTOMqf9/4OQBz3IMpxyqpFFWAelsnv5JOg0iBQ3+G8wk9O8lBqSLlQV+tFPFvt+ZX7Qxylo5rzFeGJ6kkouZJT3gpR4IfN3mKV1hn4GSswoiQZLLcTrZTloRi07XM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762781764; c=relaxed/simple;
-	bh=QS9cmXQXKGnwoD3mp+GBzdPacfCPhiiv6IvqF7RF8mw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=YyyFVAP+IFN7pbRcVmHxYoDbR/9+mZ1Xsu1kW9ouFv4DgzJvZFaTSeQsK6qt+OsOZuKXnTXttGooSad/0AlGJsiK1Cy6UZrUmO4ahH/nNQDUjODHHv+fSj/eR3PVbRoxw9fcLHMi/I6tJm+bKKbh8WxoG6a9fqwyxFl6UUzfY0Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=nu/5d/oG; dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b=ARSHBck3; arc=none smtp.client-ip=205.220.168.131
+	s=arc-20240116; t=1762782721; c=relaxed/simple;
+	bh=4H2fw1nZerKjCesvxPE/tv7CG+Zj55dfVDI0escuNWk=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=OUJ4nyokTLypUq7b+51hKuAZlMWd6Ypl7tpFuRQ5bTFxQg4zvoxwmQ7NfOMaH7AnExJt/sn4D9iYJzCoEqdHVwZR88HKoM6yIr+tLVPAbd9YQfJAR07JAaIP52/RbHCvEWRYmCkLm1+YQSdg1SrApNDJqC1P1Gc7OK6H/xa0CUM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=KzjsP0iU; dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b=OMx9iuqP; arc=none smtp.client-ip=205.220.180.131
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="nu/5d/oG";
-	dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b="ARSHBck3"
-Received: from pps.filterd (m0279866.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 5AA9BstR2867933
-	for <linux-media@vger.kernel.org>; Mon, 10 Nov 2025 13:36:01 GMT
+	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="KzjsP0iU";
+	dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b="OMx9iuqP"
+Received: from pps.filterd (m0279872.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 5AADpbmQ2860870
+	for <linux-media@vger.kernel.org>; Mon, 10 Nov 2025 13:51:59 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
-	cc:content-type:date:from:in-reply-to:message-id:mime-version
-	:references:subject:to; s=qcppdkim1; bh=awc78OrtB3yTTjJ3NNR0OiAT
-	MRveR6javZmhFpqenTE=; b=nu/5d/oGWTBNWdterKNkxMYu1n7CXAIf05HSkfEx
-	ZLEz3kkLla/FdmoMAwmdlgPTDsOyMudJ5Ku1TkmlZGm6ySqR4bLqueSolciCEZee
-	VJvY0uu3kZ8mVCh3kzQjn9bOdfGFj459ZprPA6FY6C3B1QG4Os0aPn246S+UBJjA
-	eG64P7mpmzSKlXBtq/TD8pJB115bC3lvlsrUYMMvz41QJJmj0OK+G9PhY83wFTTm
-	9GAY11HGbTZ/t7cq4AeDn7kboJgJqh40XStRlKR6DNfG09Iparb2swr0zrbxO/pQ
-	s+U4VYUxk7UanBCg3SzfJdgLJJVs3EYaMlPKvXuv8vmZbg==
-Received: from mail-qt1-f200.google.com (mail-qt1-f200.google.com [209.85.160.200])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4abd760shx-1
+	cc:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
+	NZlV3jIxROciPtUCqpcLAitOvegR1QpOAc5SMbgsl7k=; b=KzjsP0iU+L0zRHhL
+	Z0MFLqIYsKYfVMR418odKMNhC4UYcKfQVBqErdGlrvXdAYI4gx4qzTGpDdLMlkAs
+	F828rcYyNa1j4PAz2ZlpGIh+0wDD3FEUlVau6j3tXMBUsvlL2HyMW6SpHVMhVWYy
+	UK9mAFTKrkH2ZTQ1dMDJl/2RlrVNjYZgoZkDIHhM5ikQ0S1G7wnkC09QSGC4USW5
+	4zk3MGw+76iUb6wuQsFABEUD1T1mWczuf786DKmT/+AKVzBZ2kziuBhdmOQmEMei
+	QFzMG6V1pyet4V5kRZt3WxQsPtbRUiqmYQRbLNt18ikznKHjOpbundYfMqFyWnxw
+	61GU5w==
+Received: from mail-pl1-f197.google.com (mail-pl1-f197.google.com [209.85.214.197])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4abbwe15ds-1
 	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
-	for <linux-media@vger.kernel.org>; Mon, 10 Nov 2025 13:36:01 +0000 (GMT)
-Received: by mail-qt1-f200.google.com with SMTP id d75a77b69052e-4ed6466f2baso86215231cf.0
-        for <linux-media@vger.kernel.org>; Mon, 10 Nov 2025 05:36:01 -0800 (PST)
+	for <linux-media@vger.kernel.org>; Mon, 10 Nov 2025 13:51:58 +0000 (GMT)
+Received: by mail-pl1-f197.google.com with SMTP id d9443c01a7336-297ddb3c707so21151285ad.2
+        for <linux-media@vger.kernel.org>; Mon, 10 Nov 2025 05:51:58 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=oss.qualcomm.com; s=google; t=1762781761; x=1763386561; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=awc78OrtB3yTTjJ3NNR0OiATMRveR6javZmhFpqenTE=;
-        b=ARSHBck3OyNww1BNTQi5OFaKjR7Bd3N7qA7yN1ZAXY7Ee+xyfz1aCzL1Z/Aw/BQfZK
-         8srg5xfVLRFymebwQW6HZzgd9oU2YzN5ondC0S9gjMI8vJ1ajX0dx/8ejRqoQxKQ84hD
-         jR8JwiDuyQldlglyGvqrfBjnG5utwiKyn1Unx0RMDxtfWw8aUXsIbxh6YgQ4XAI+jKwg
-         spN//zTlorbAlpDTKE11hurLafInN9jEdn1bTi6WYhC1anW/+Ai4G00DmPoXrEE0SdKB
-         7F9n1I/dbJCjgIX/OIylo550BNw7Dy38tE09fdvkdmLNWyRI/imKL92EAkKBiQXoB9cN
-         XgLQ==
+        d=oss.qualcomm.com; s=google; t=1762782718; x=1763387518; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=NZlV3jIxROciPtUCqpcLAitOvegR1QpOAc5SMbgsl7k=;
+        b=OMx9iuqPENASHMh9jiIpA0ouxHqXs8cgxWB9Gmq8GAXbEAE5ROiKU+OnlcX7GqFzmo
+         +v/9HvrnkmM4EE1+l4xkxAKWZaPoSKD28BC8ncPpRYnDGPeWqbBCCijafizFY+vuqxZ0
+         wuq2jCj2yHHBrkrSWQ/tRFW/TRAsFvHpU5bM4QjRrfSdNa1XYUZrL9CvdamzCTp8Ceuq
+         HVTJS6lO9Ec6mTJ4M4rYSs4UnxIAN2G6HWgk8Z90RugUquFG3zIHIu7M6u+SY2XPXXx6
+         x0aLUqmp+PAnMkFD+fKcdxTF2cFAheAbiZDaAV66Z27Xnr+3drLoDbf/XU4m2udboHDZ
+         oGTQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1762781761; x=1763386561;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=awc78OrtB3yTTjJ3NNR0OiATMRveR6javZmhFpqenTE=;
-        b=e9KXVo3TgZR95zhCtBKw1ZfKPfATn1w3F+5pgTSOyXqXmdxSPGBj0kosULwB/+G8rG
-         xhOLS2xeyCVnfdXSjKxV+ypV1BNdTarAJ53pGVrkgA5G09vVZ88DWG2CEXkyCclXKOGJ
-         5IrnRkuipYP6twdUoBTULbieVoWldaEr3rkcmr4fUZIPUXGcTO4srFQdgsP4LH5etxUI
-         8nS8FWLSRfXpsNuaksY3arTPIZcBE+bjZsEPK5vy/WW+A/ZCJ26LbtHN3kCXUfcwOyjt
-         NHZhCe8b0QYtFuYm85cGj4HfJTKLDj8nzXiIWVna8j6jfpGLtfKnh+L8GTo97x0Zq8Ow
-         pN5Q==
-X-Forwarded-Encrypted: i=1; AJvYcCXkeBVhlT5OfE182aPIoK5izTIwzKJYj+Vb50Wp5dearAXxw5gSnu2aUR54Q5zF0HwV52+MzBqETgikPQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0YxP3Q3mjZ8/4C9GuHl2w1KX9H1Wkht9CjzF4ajFoAT0STsP20mq
-	arWWhCyWrsMF1KTJPkp4WAxbJXFiiLmxg/d6UoZqaOEF3JhmbSc5+RCwmgPBI5/v53caRHZ0pIT
-	4hsUwvKT00xOUv/jt5PhcQrWti/RuwGTqqNo+K9uG0S01Uv30OWTqmwOYbLrOPLj3xg==
-X-Gm-Gg: ASbGnctZG9rSqKnzqh5D3WzOTZuPha8QehBWdxFde25g0aKGR+HFwKzvGIaisJxgXjM
-	uTBi+Cs5PoDSf1tXb9uOLDZOO1YzqT5gsK2YdbVsR3v2kpM7Jfl7tvkKlNiBLh19fMmFJ48b+BY
-	dfgy9NVuPBsb2JmTjzgZ3FFrCh7CaB8swlWnX76C3MlmbNDdDcOIbCQoyI1ey4bhf8qSLRFp+gw
-	0ZZ6Vgt12RlRZD00+k7U87pyztqwuDkFfXjO+bSqm7g1uhnsaFgBb+wBIZxKVgTDI13T9Bz6S9f
-	dcrQCWIR2e35X7wQfu0h7Dkx6SLc2vv090PrnJkEcGNlvownYiz03pS5DD+oHn1MovJGeS9rXt+
-	bUPxNh6wo98ZzV9E5mJdgQ7PGHNvrFz2OeRdDrzdOXg8vEyhY1SkLTd/h3S93g/Hn2sycQk5KEB
-	vqk3rrrkPiYEhG
-X-Received: by 2002:a05:622a:1a97:b0:4e8:b2df:fe1f with SMTP id d75a77b69052e-4eda4edad2fmr84130881cf.28.1762781760589;
-        Mon, 10 Nov 2025 05:36:00 -0800 (PST)
-X-Google-Smtp-Source: AGHT+IHXJ5BT/q7g/MBAV87Zw3lOF0GB6xqxQQW1RPh+OIbihbzKHhzyxU1QwSdJdQsAkfFK4qJhZw==
-X-Received: by 2002:a05:622a:1a97:b0:4e8:b2df:fe1f with SMTP id d75a77b69052e-4eda4edad2fmr84130551cf.28.1762781760095;
-        Mon, 10 Nov 2025 05:36:00 -0800 (PST)
-Received: from umbar.lan (2001-14ba-a0c3-3a00-264b-feff-fe8b-be8a.rev.dnainternet.fi. [2001:14ba:a0c3:3a00:264b:feff:fe8b:be8a])
-        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-5944a024f49sm4049881e87.42.2025.11.10.05.35.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 10 Nov 2025 05:35:59 -0800 (PST)
-Date: Mon, 10 Nov 2025 15:35:57 +0200
-From: Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>
-To: Dikshita Agarwal <dikshita.agarwal@oss.qualcomm.com>
+        d=1e100.net; s=20230601; t=1762782718; x=1763387518;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=NZlV3jIxROciPtUCqpcLAitOvegR1QpOAc5SMbgsl7k=;
+        b=SSxhGSlFOrMXpxKkezIeFBocOusQDKYQ4O+3iOOJoNJ0PZY1Nmfnxos3SiNB0NSUrm
+         DgO0wl9lAfinxdennAQ1m2X3i1L0t5lu3ND2smN6dWkWOICemlgyRqIJj4sebgthiJYJ
+         DHH0eLyAj1JjSyQZ/yinBtQ5mFDHpX2f12uJ0aG187tBex9EqaOEqjsb3QybOawqkG35
+         RBH9p0AHCE/aYRpZpQf1lWUeB4HJpUg9TtNxF/r8hOKNmNm1wZMMbQu+GbqYl1hHJwuz
+         jrPENe2TPx9JK1rilMmxWkROC5mEizIv930mVC+mBIwXXMnzbyGSHw6/hX6TTn/e6MAx
+         KyTg==
+X-Forwarded-Encrypted: i=1; AJvYcCUvWEDKYcw29mu7uqdRuStsu/bcSFVCKBrjoVogIdKyW2OVPpC9OQ6Jv+9gZcGGobm3zVxPlkEb7eZm3A==@vger.kernel.org
+X-Gm-Message-State: AOJu0YxxOg3g2hyrK0ZeAfasFzfygeDLhSOvZmybwEsILHg+i12+rXkL
+	fGLU2KbMP+RXgNoBR7z3YyTAW7cYrS85EROJ8bwhh/SFdI4Kz+z5Rb15L6Yy4HCUzno5XEPtTBJ
+	I2TgML3BPDI5fUiLmA5vxEa1eKBZpp1hMzhyolGqa6D5zyBDqowcfSEhIwwiDX9SUpw==
+X-Gm-Gg: ASbGnctqOnuSKXFViFU1lfxumcLJHGJDprG0T2ijBZzXooEbFNnvKm0t4o/W6981i+H
+	UKo2+sU0zvMlW48tigA3pWxAUo0veGF9pkP4wJKsPIIPOEkBCdwUCyo7nnYXr+JnOkEeqSqslbY
+	xjpm+H3NDnkDP6GA4YszDk9tVyGpOxLWNQz2skC5bCdvTHd5NiQwTw3Jq/98cMZOSY9IyNqPuUq
+	Wi0n2MhIwULNecUS5Cqfzdy+1peiLrqGi7sqe/r5j7gEWgpN5D8MamMtynY7GavPJ+Hx8FwYkzs
+	KArbjuqXYG62lZ8aVg1+iT+1quI7dbv2MHyTaRZ3gCn5cRRPDxBFesfNQSePujRDU3CTy3dXnES
+	/iObnToTGIaT3OJa/28NEyi/lDG068EI=
+X-Received: by 2002:a17:902:d581:b0:293:623:3260 with SMTP id d9443c01a7336-297e572957amr115879115ad.57.1762782717735;
+        Mon, 10 Nov 2025 05:51:57 -0800 (PST)
+X-Google-Smtp-Source: AGHT+IGfqiqS1BOPe+VMlfkJU0zIOGZuKtCtWI9NqPiJ0S4bKUKfTOQjBnZhjxrbV+/OQHnCK4jKBg==
+X-Received: by 2002:a17:902:d581:b0:293:623:3260 with SMTP id d9443c01a7336-297e572957amr115878545ad.57.1762782717110;
+        Mon, 10 Nov 2025 05:51:57 -0800 (PST)
+Received: from [10.0.0.3] ([106.222.229.252])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3434c344838sm11109221a91.15.2025.11.10.05.51.53
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 10 Nov 2025 05:51:56 -0800 (PST)
+Message-ID: <f28068ea-c14b-8502-f252-3ddfe4eb874d@oss.qualcomm.com>
+Date: Mon, 10 Nov 2025 19:21:51 +0530
+Precedence: bulk
+X-Mailing-List: linux-media@vger.kernel.org
+List-Id: <linux-media.vger.kernel.org>
+List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
+List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.13.0
+Subject: Re: [PATCH v3] media: iris: Refine internal buffer reconfiguration
+ logic for resolution change
+To: Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>
 Cc: Vikash Garodia <vikash.garodia@oss.qualcomm.com>,
         Abhinav Kumar <abhinav.kumar@linux.dev>,
         Bryan O'Donoghue <bod@kernel.org>,
@@ -90,119 +102,119 @@ Cc: Vikash Garodia <vikash.garodia@oss.qualcomm.com>,
         linux-media@vger.kernel.org, linux-arm-msm@vger.kernel.org,
         linux-kernel@vger.kernel.org, stable@vger.kernel.org,
         Val Packett <val@packett.cool>
-Subject: Re: [PATCH v3] media: iris: Refine internal buffer reconfiguration
- logic for resolution change
-Message-ID: <l2djrmw5i7dfvlrqyn3a5yrohbtpxr72xwwrgojvsfwo7w4feb@254rjgan2fyz>
 References: <20251105-iris-seek-fix-v3-1-279debaba37a@oss.qualcomm.com>
-Precedence: bulk
-X-Mailing-List: linux-media@vger.kernel.org
-List-Id: <linux-media.vger.kernel.org>
-List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
-List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20251105-iris-seek-fix-v3-1-279debaba37a@oss.qualcomm.com>
-X-Proofpoint-ORIG-GUID: 8HIKAez034KEXeSqW6W2U4Bt8WwgefaC
-X-Authority-Analysis: v=2.4 cv=OK4qHCaB c=1 sm=1 tr=0 ts=6911ea41 cx=c_pps
- a=JbAStetqSzwMeJznSMzCyw==:117 a=xqWC_Br6kY4A:10 a=kj9zAlcOel0A:10
- a=6UeiqGixMTsA:10 a=s4-Qcg_JpJYA:10 a=VkNPw1HP01LnGYTKEx00:22
- a=e5mUnYsNAAAA:8 a=VwQbUJbxAAAA:8 a=EUspDBNiAAAA:8 a=K7FOPutcZWfKzoRN3qAA:9
- a=CjuIK1q_8ugA:10 a=uxP6HrT_eTzRwkO_Te1X:22 a=Vxmtnl_E_bksehYqCbjh:22
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUxMTEwMDExOCBTYWx0ZWRfX1KitGlcUXol4
- hUQ9Os2LjABMIGhDNv7d908FCCfHtUbvqfr743x6pQ6Y1E8VaoE2JO7v7rw27j8A21fpgF2MvbA
- CR0WfDCq1kCfuuCymNCPinOi1kEMzpaIqkjcvxL3U0O5aDkkx6UqGykBesWY9H3KzE33VGJVWQV
- a6P73OKdMAyz3PEyieWXta9s3s8k7dX1F/tup1zOw6p1h6k2juE2Vz1V2Qya30+ZMd+JIiF6Okr
- jZaOgQvaY6k2K620xks5B30jTwfm6AUECLOYQMSd0of2U8LPvQ4hTp/UWmv7/MftzFUZeNhaizy
- i5lPv+TnITExHCbDcNzYrDA9ETsRbZ8R9MY82SLO0ZrhMBpUOgPfMOOV6N+Kj4pwlc3HYemGtMF
- w4Xr0hqF8nhPiT6o5vIdq+LVwxG/Tg==
-X-Proofpoint-GUID: 8HIKAez034KEXeSqW6W2U4Bt8WwgefaC
+ <l2djrmw5i7dfvlrqyn3a5yrohbtpxr72xwwrgojvsfwo7w4feb@254rjgan2fyz>
+Content-Language: en-US
+From: Dikshita Agarwal <dikshita.agarwal@oss.qualcomm.com>
+In-Reply-To: <l2djrmw5i7dfvlrqyn3a5yrohbtpxr72xwwrgojvsfwo7w4feb@254rjgan2fyz>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Proofpoint-GUID: qiie3sMrWRTJ0GtUT_r83tnW80vqla6j
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUxMTEwMDEyMSBTYWx0ZWRfX7uM1zxPYGMzd
+ dvo87+ivtOSgbCjRoz7NzGXCYn8gvG1A3F7qVwtpdZUeGoHoXBCi+mfgeP7fQ0+e+df/473bKQ6
+ KTC3c3DXCaqsrK0cm2ix1360mcutkbUFye1NVB0Zg6N3+FUi4Zs8Z2aMYwEN9ZkM1yk33ZSaaPY
+ hrnLZ+K2A0wzwQhSUVDZF+5yiUUs1lzHlIkS2k0OIDurbJuY58A4yOf22KfIY2Kza6CXkEkkSkM
+ xu+uKJc4bW/7U+6u5zykmOaAedbNVEO8/39AaejuDaInV+6GSiIagWuz5JKZEWYLppyb6fuSHC6
+ 9YTUjt5wag+rAyOZxQ+rS0QnhxRvCw2AorYpP7Nm8n4BgOmLiaakHbMhBhrt0PVN0OXo/PPuRfL
+ pI9w42E3Krcyc/SI/Pz0E8vcGu1MBg==
+X-Authority-Analysis: v=2.4 cv=GbEaXAXL c=1 sm=1 tr=0 ts=6911edff cx=c_pps
+ a=cmESyDAEBpBGqyK7t0alAg==:117 a=L4UNg9I9cQSOxNpRiiGXlA==:17
+ a=IkcTkHD0fZMA:10 a=6UeiqGixMTsA:10 a=s4-Qcg_JpJYA:10
+ a=VkNPw1HP01LnGYTKEx00:22 a=e5mUnYsNAAAA:8 a=VwQbUJbxAAAA:8 a=EUspDBNiAAAA:8
+ a=mVG3C3KJgNa-X6cAQn4A:9 a=QEXdDO2ut3YA:10 a=1OuFwYUASf3TG4hYMiVC:22
+ a=Vxmtnl_E_bksehYqCbjh:22
+X-Proofpoint-ORIG-GUID: qiie3sMrWRTJ0GtUT_r83tnW80vqla6j
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.9,FMLib:17.12.100.49
  definitions=2025-11-10_05,2025-11-10_01,2025-10-01_01
 X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- phishscore=0 clxscore=1015 suspectscore=0 bulkscore=0 impostorscore=0
- adultscore=0 priorityscore=1501 spamscore=0 malwarescore=0 lowpriorityscore=0
+ clxscore=1015 malwarescore=0 priorityscore=1501 phishscore=0 bulkscore=0
+ spamscore=0 adultscore=0 impostorscore=0 lowpriorityscore=0 suspectscore=0
  classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.22.0-2510240001 definitions=main-2511100118
+ reason=mlx scancount=1 engine=8.22.0-2510240001 definitions=main-2511100121
 
-On Wed, Nov 05, 2025 at 11:17:37AM +0530, Dikshita Agarwal wrote:
-> Improve the condition used to determine when input internal buffers need
-> to be reconfigured during streamon on the capture port. Previously, the
-> check relied on the INPUT_PAUSE sub-state, which was also being set
-> during seek operations. This led to input buffers being queued multiple
-> times to the firmware, causing session errors due to duplicate buffer
-> submissions.
-> 
-> This change introduces a more accurate check using the FIRST_IPSC and
-> DRC sub-states to ensure that input buffer reconfiguration is triggered
-> only during resolution change scenarios, such as streamoff/on on the
-> capture port. This avoids duplicate buffer queuing during seek
-> operations.
-> 
-> Fixes: c1f8b2cc72ec ("media: iris: handle streamoff/on from client in dynamic resolution change")
-> Cc: stable@vger.kernel.org
-> Reported-by: Val Packett <val@packett.cool>
-> Closes: https://gitlab.freedesktop.org/gstreamer/gstreamer/-/issues/4700
-> Signed-off-by: Dikshita Agarwal <dikshita.agarwal@oss.qualcomm.com>
-> ---
-> Changes in v3:
-> - Fixed the compilation issue
-> - Added stable@vger.kernel.org in Cc
-> - Link to v2: https://lore.kernel.org/r/20251104-iris-seek-fix-v2-1-c9dace39b43d@oss.qualcomm.com
-> 
-> Changes in v2:
-> - Removed spurious space and addressed other comments (Nicolas)
-> - Remove the unnecessary initializations (Self) 
-> - Link to v1: https://lore.kernel.org/r/20251103-iris-seek-fix-v1-1-6db5f5e17722@oss.qualcomm.com
-> ---
->  drivers/media/platform/qcom/iris/iris_common.c | 7 +++++--
->  1 file changed, 5 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/media/platform/qcom/iris/iris_common.c b/drivers/media/platform/qcom/iris/iris_common.c
-> index 9fc663bdaf3fc989fe1273b4d4280a87f68de85d..7f1c7fe144f707accc2e3da65ce37cd6d9dfeaff 100644
-> --- a/drivers/media/platform/qcom/iris/iris_common.c
-> +++ b/drivers/media/platform/qcom/iris/iris_common.c
-> @@ -91,12 +91,14 @@ int iris_process_streamon_input(struct iris_inst *inst)
->  int iris_process_streamon_output(struct iris_inst *inst)
->  {
->  	const struct iris_hfi_command_ops *hfi_ops = inst->core->hfi_ops;
-> -	bool drain_active = false, drc_active = false;
->  	enum iris_inst_sub_state clear_sub_state = 0;
-> +	bool drain_active, drc_active, first_ipsc;
->  	int ret = 0;
->  
->  	iris_scale_power(inst);
->  
-> +	first_ipsc = inst->sub_state & IRIS_INST_SUB_FIRST_IPSC;
-> +
->  	drain_active = inst->sub_state & IRIS_INST_SUB_DRAIN &&
->  		inst->sub_state & IRIS_INST_SUB_DRAIN_LAST;
->  
-> @@ -108,7 +110,8 @@ int iris_process_streamon_output(struct iris_inst *inst)
->  	else if (drain_active)
->  		clear_sub_state = IRIS_INST_SUB_DRAIN | IRIS_INST_SUB_DRAIN_LAST;
->  
-> -	if (inst->domain == DECODER && inst->sub_state & IRIS_INST_SUB_INPUT_PAUSE) {
-> +	/* Input internal buffer reconfiguration required in case of resolution change */
-> +	if (first_ipsc || drc_active) {
 
-Another question: can this now result in PIPE being sent for the ENCODER
-instance?
 
->  		ret = iris_alloc_and_queue_input_int_bufs(inst);
->  		if (ret)
->  			return ret;
+On 11/10/2025 7:05 PM, Dmitry Baryshkov wrote:
+> On Wed, Nov 05, 2025 at 11:17:37AM +0530, Dikshita Agarwal wrote:
+>> Improve the condition used to determine when input internal buffers need
+>> to be reconfigured during streamon on the capture port. Previously, the
+>> check relied on the INPUT_PAUSE sub-state, which was also being set
+>> during seek operations. This led to input buffers being queued multiple
+>> times to the firmware, causing session errors due to duplicate buffer
+>> submissions.
+>>
+>> This change introduces a more accurate check using the FIRST_IPSC and
+>> DRC sub-states to ensure that input buffer reconfiguration is triggered
+>> only during resolution change scenarios, such as streamoff/on on the
+>> capture port. This avoids duplicate buffer queuing during seek
+>> operations.
+>>
+>> Fixes: c1f8b2cc72ec ("media: iris: handle streamoff/on from client in dynamic resolution change")
+>> Cc: stable@vger.kernel.org
+>> Reported-by: Val Packett <val@packett.cool>
+>> Closes: https://gitlab.freedesktop.org/gstreamer/gstreamer/-/issues/4700
+>> Signed-off-by: Dikshita Agarwal <dikshita.agarwal@oss.qualcomm.com>
+>> ---
+>> Changes in v3:
+>> - Fixed the compilation issue
+>> - Added stable@vger.kernel.org in Cc
+>> - Link to v2: https://lore.kernel.org/r/20251104-iris-seek-fix-v2-1-c9dace39b43d@oss.qualcomm.com
+>>
+>> Changes in v2:
+>> - Removed spurious space and addressed other comments (Nicolas)
+>> - Remove the unnecessary initializations (Self) 
+>> - Link to v1: https://lore.kernel.org/r/20251103-iris-seek-fix-v1-1-6db5f5e17722@oss.qualcomm.com
+>> ---
+>>  drivers/media/platform/qcom/iris/iris_common.c | 7 +++++--
+>>  1 file changed, 5 insertions(+), 2 deletions(-)
+>>
+>> diff --git a/drivers/media/platform/qcom/iris/iris_common.c b/drivers/media/platform/qcom/iris/iris_common.c
+>> index 9fc663bdaf3fc989fe1273b4d4280a87f68de85d..7f1c7fe144f707accc2e3da65ce37cd6d9dfeaff 100644
+>> --- a/drivers/media/platform/qcom/iris/iris_common.c
+>> +++ b/drivers/media/platform/qcom/iris/iris_common.c
+>> @@ -91,12 +91,14 @@ int iris_process_streamon_input(struct iris_inst *inst)
+>>  int iris_process_streamon_output(struct iris_inst *inst)
+>>  {
+>>  	const struct iris_hfi_command_ops *hfi_ops = inst->core->hfi_ops;
+>> -	bool drain_active = false, drc_active = false;
+>>  	enum iris_inst_sub_state clear_sub_state = 0;
+>> +	bool drain_active, drc_active, first_ipsc;
+>>  	int ret = 0;
+>>  
+>>  	iris_scale_power(inst);
+>>  
+>> +	first_ipsc = inst->sub_state & IRIS_INST_SUB_FIRST_IPSC;
+>> +
+>>  	drain_active = inst->sub_state & IRIS_INST_SUB_DRAIN &&
+>>  		inst->sub_state & IRIS_INST_SUB_DRAIN_LAST;
+>>  
+>> @@ -108,7 +110,8 @@ int iris_process_streamon_output(struct iris_inst *inst)
+>>  	else if (drain_active)
+>>  		clear_sub_state = IRIS_INST_SUB_DRAIN | IRIS_INST_SUB_DRAIN_LAST;
+>>  
+>> -	if (inst->domain == DECODER && inst->sub_state & IRIS_INST_SUB_INPUT_PAUSE) {
+>> +	/* Input internal buffer reconfiguration required in case of resolution change */
+>> +	if (first_ipsc || drc_active) {
 > 
-> ---
-> base-commit: 163917839c0eea3bdfe3620f27f617a55fd76302
-> change-id: 20251103-iris-seek-fix-7a25af22fa52
-> 
-> Best regards,
-> -- 
-> Dikshita Agarwal <dikshita.agarwal@oss.qualcomm.com>
-> 
+> Another question: can this now result in PIPE being sent for the ENCODER
+> instance?
 
--- 
-With best wishes
-Dmitry
+This state check will never be true for Encoder.
+
+Thanks,
+Dikshita
+> 
+>>  		ret = iris_alloc_and_queue_input_int_bufs(inst);
+>>  		if (ret)
+>>  			return ret;
+>>
+>> ---
+>> base-commit: 163917839c0eea3bdfe3620f27f617a55fd76302
+>> change-id: 20251103-iris-seek-fix-7a25af22fa52
+>>
+>> Best regards,
+>> -- 
+>> Dikshita Agarwal <dikshita.agarwal@oss.qualcomm.com>
+>>
+> 
