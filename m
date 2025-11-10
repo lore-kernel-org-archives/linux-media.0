@@ -1,71 +1,54 @@
 Received: from bali.collaboradmins.com (bali.collaboradmins.com [148.251.105.195])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C64513112C4;
-	Mon, 10 Nov 2025 13:57:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E80FC30100C;
+	Mon, 10 Nov 2025 13:59:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.251.105.195
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762783059; cv=none; b=sDGi0gzqbu/SbDC3PpIKawPq0Vs8IKOmJwSUiPYQaaitCYDS31jKMGZP7L+jg3Qo0Es3Ho/tP4FMSL284DnNIENhWM/CzgBQKoyzm7El8ddQ+xjM6dKJb/KcxXdsvSRKi//bcng2/PQEkQRVrwL0767D1kGMvhm454mLA+U9GhI=
+	t=1762783199; cv=none; b=kKmL2sUJQNOojImdZzPp0krsixlTia3COajUXwwXEt0V5KdTsyYINO5GDuvyyMGAYAnVeAytTXj42FAko4t+EBm3KWbDlhoa2KNs1u5wRMYLsQlbH/A5GVa5zF1C4r4QZO3RdMe1U3tkZEhBHQbLAzFsonYmhLTINLr7zYM1EHc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762783059; c=relaxed/simple;
-	bh=KKRgKuFzrzMKfhZwoLlMMqh/HMidHruZpOkU87ZuQX8=;
+	s=arc-20240116; t=1762783199; c=relaxed/simple;
+	bh=qJtfTB6dKNpE8AehNrMASe8zC/+tcIHh6icQjRotbW8=;
 	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=RpMUxR2LuSh7knhZSZcvysD0VeuvOR3SGil+doPWQn4O0zl54AJecCqgvf7j9YuUjtRYqNgxYnu7HLYOfCkaKvFNUVjnD29jpaPJ9PxEvp5TfmjKvdJnN7yP4R5HDklf9otZLJg2FUWXGmH+CE3yPDYEIMzip4V5Bh4HYmwmtF4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=h6DFsJ4X; arc=none smtp.client-ip=148.251.105.195
+	 Content-Type:MIME-Version; b=YSbiJl0bkGqtGjhNPTuHW/Zer8MqgC97o1LZqJZyw6QAIXffGgFBdb6gWK8k5QvaPNq2GmdVJi5woYxGKhdWndsokSdqMnsyeyXDXqFhsgjzxWwd60y2+JyRG1yGekgRRjJMKyrfQfseFqcgdD0y7/sT9hhpOJJks/igvmkn0f0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=kSWe0ZhV; arc=none smtp.client-ip=148.251.105.195
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="h6DFsJ4X"
+	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="kSWe0ZhV"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1762783051;
-	bh=KKRgKuFzrzMKfhZwoLlMMqh/HMidHruZpOkU87ZuQX8=;
+	s=mail; t=1762783196;
+	bh=qJtfTB6dKNpE8AehNrMASe8zC/+tcIHh6icQjRotbW8=;
 	h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-	b=h6DFsJ4X6waWfhY3+YKw2XbcsEITbdvCaI7t6SQyO63CqQ2v7RT+/BgjWpLXVWbbJ
-	 jOMSwFyatiq0v5ccn8vslvqnFkhtRZMeGGyLVMyBX2WWLvOFokRpOL1U/wG/Dh+j9P
-	 AnLTP414aOhJLr5WUkC8YgOpP4az7amlae1b5g59Coun08z2ypdVpQXH8o9LooTpxO
-	 1hXBlflRgOWrpHpu+bxCmMTfHrvmBvR6KI+jkul9hmJTGyY06WdGcBvUmDSQktxeO9
-	 GUssCYfEMh4Pp9WeclYedwt0Z6fGNwiNeoYJyu6Lpvgjwu0Sh6AL6dZK+DpdLjt5Pm
-	 9+ooPKi8idFxg==
+	b=kSWe0ZhVZ1JJ0kWlWxkYx8z8Iswss68wh1HGE3FJ7nWd8uJ3lo/RxnVlkHzfVaOBt
+	 aiXtpR1Mn4FOtL+YFF9WJC7a6zQO8FpY2z5sSZhuX0+kg/8vfAHEKS1626y9mjaMP+
+	 pUMyaSWSyW4mVPj+XL8NSLdPQJgurmlb4nIUUyWWkmajsvakl6fuEZBJVUJl92XQxe
+	 2YEazds4JW8D760HmGQSUji3LxTLErKFpVlhVIbppMnYVg0y/PQb9Nj7Kwa8n0hQVq
+	 E8E2cPf5voywoL5CZ6GrNPky8vlDfygyyen14JzpkstvBmBc508kGtrU5vCWZzoyEW
+	 i897etuJXb1XA==
 Received: from [IPv6:2606:6d00:11:ef24::c41] (unknown [IPv6:2606:6d00:11:ef24::c41])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	 key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits))
 	(No client certificate requested)
 	(Authenticated sender: nicolas)
-	by bali.collaboradmins.com (Postfix) with ESMTPSA id 2C9FD17E110D;
-	Mon, 10 Nov 2025 14:57:29 +0100 (CET)
-Message-ID: <f4fee7587d8e3e58bab39f1b3202b67f0f5c3e04.camel@collabora.com>
-Subject: Re: [PATCH v5 0/8] Enable video decoder & encoder for MT8189
+	by bali.collaboradmins.com (Postfix) with ESMTPSA id B5A7A17E110D;
+	Mon, 10 Nov 2025 14:59:54 +0100 (CET)
+Message-ID: <2a458127834680ea8e4bc74639536a20494f1357.camel@collabora.com>
+Subject: Re: [PATCH v6 1/5] media: uapi: videodev2: Add support for AV1
+ stateful decoder
 From: Nicolas Dufresne <nicolas.dufresne@collabora.com>
-To: Kyrie Wu =?UTF-8?Q?=28=E5=90=B4=E6=99=97=29?= <Kyrie.Wu@mediatek.com>, 
- "linux-kernel@vger.kernel.org"	 <linux-kernel@vger.kernel.org>,
- "linux-mediatek@lists.infradead.org"	 <linux-mediatek@lists.infradead.org>,
- George Sun =?UTF-8?Q?=28=E5=AD=99=E6=9E=97=29?=	 <George.Sun@mediatek.com>,
- Tiffany Lin =?UTF-8?Q?=28=E6=9E=97=E6=85=A7=E7=8F=8A=29?=	
- <tiffany.lin@mediatek.com>, "nhebert@chromium.org" <nhebert@chromium.org>, 
- "linux-media@vger.kernel.org"	 <linux-media@vger.kernel.org>,
- "devicetree@vger.kernel.org"	 <devicetree@vger.kernel.org>,
- "mchehab@kernel.org" <mchehab@kernel.org>,  "hverkuil@xs4all.nl"	
- <hverkuil@xs4all.nl>, Yunfei Dong
- =?UTF-8?Q?=28=E8=91=A3=E4=BA=91=E9=A3=9E=29?=	 <Yunfei.Dong@mediatek.com>,
- "conor+dt@kernel.org" <conor+dt@kernel.org>,  Irui Wang
- =?UTF-8?Q?=28=E7=8E=8B=E7=91=9E=29?=	 <Irui.Wang@mediatek.com>,
- "robh@kernel.org" <robh@kernel.org>, 
- "linux-arm-kernel@lists.infradead.org"	
- <linux-arm-kernel@lists.infradead.org>, Yilong Zhou
- =?UTF-8?Q?=28=E5=91=A8=E6=98=93=E9=BE=99=29?=	 <Yilong.Zhou@mediatek.com>,
- "matthias.bgg@gmail.com" <matthias.bgg@gmail.com>,  "krzk+dt@kernel.org"	
- <krzk+dt@kernel.org>, "arnd@arndb.de" <arnd@arndb.de>, Andrew-CT Chen
- =?UTF-8?Q?=28=E9=99=B3=E6=99=BA=E8=BF=AA=29?=	
- <Andrew-CT.Chen@mediatek.com>, AngeloGioacchino Del Regno	
- <angelogioacchino.delregno@collabora.com>
-Cc: "andrzejtp2010@gmail.com" <andrzejtp2010@gmail.com>, 
- "neil.armstrong@linaro.org"
-	 <neil.armstrong@linaro.org>
-Date: Mon, 10 Nov 2025 08:57:26 -0500
-In-Reply-To: <09eb315e50aeaf865b093880aaaa5f2c9c0feba9.camel@mediatek.com>
-References: <20251106061323.2193-1-kyrie.wu@mediatek.com>
-		 <c49b979fd911f2587bbfed129b07065f1cd2a2db.camel@collabora.com>
-	 <09eb315e50aeaf865b093880aaaa5f2c9c0feba9.camel@mediatek.com>
+To: Deepa Guthyappa Madivalara <deepa.madivalara@oss.qualcomm.com>, Mauro
+ Carvalho Chehab <mchehab@kernel.org>, Vikash Garodia
+ <vikash.garodia@oss.qualcomm.com>, Dikshita Agarwal	
+ <dikshita.agarwal@oss.qualcomm.com>, Abhinav Kumar
+ <abhinav.kumar@linux.dev>,  Bryan O'Donoghue	 <bod@kernel.org>
+Cc: linux-media@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-arm-msm@vger.kernel.org, kernel test robot <lkp@intel.com>, Bryan
+ O'Donoghue <bryan.odonoghue@linaro.org>
+Date: Mon, 10 Nov 2025 08:59:53 -0500
+In-Reply-To: <20251109-av1d_stateful_v3-v6-1-4a9bde86025a@oss.qualcomm.com>
+References: <20251109-av1d_stateful_v3-v6-0-4a9bde86025a@oss.qualcomm.com>
+	 <20251109-av1d_stateful_v3-v6-1-4a9bde86025a@oss.qualcomm.com>
 Autocrypt: addr=nicolas.dufresne@collabora.com; prefer-encrypt=mutual;
  keydata=mDMEaCN2ixYJKwYBBAHaRw8BAQdAM0EHepTful3JOIzcPv6ekHOenE1u0vDG1gdHFrChD
  /e0J05pY29sYXMgRHVmcmVzbmUgPG5pY29sYXNAbmR1ZnJlc25lLmNhPoicBBMWCgBEAhsDBQsJCA
@@ -81,7 +64,7 @@ Autocrypt: addr=nicolas.dufresne@collabora.com; prefer-encrypt=mutual;
  bRLv9QjuqsE6oQZra/RB4widZPvphs78H0P6NmpIJ
 Organization: Collabora Canada
 Content-Type: multipart/signed; micalg="pgp-sha512";
-	protocol="application/pgp-signature"; boundary="=-QUHvuhjIUwreEvkskggy"
+	protocol="application/pgp-signature"; boundary="=-E0cDht+osNO+gG5376Xk"
 User-Agent: Evolution 3.58.1 (3.58.1-1.fc43) 
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
@@ -91,217 +74,96 @@ List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 
 
---=-QUHvuhjIUwreEvkskggy
+--=-E0cDht+osNO+gG5376Xk
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-Le lundi 10 novembre 2025 =C3=A0 02:32 +0000, Kyrie Wu (=E5=90=B4=E6=99=97)=
+Le dimanche 09 novembre 2025 =C3=A0 21:05 -0800, Deepa Guthyappa Madivalara=
  a =C3=A9crit=C2=A0:
+> Introduce a new pixel format, V4L2_PIX_FMT_AV1, to the
+> Video4Linux2(V4L2) API. This format is intended for AV1
+> bitstreams in stateful decoding/encoding workflows.
+> The fourcc code 'AV10' is used to distinguish
+> this format from the existing V4L2_PIX_FMT_AV1_FRAME,
+> which is used for stateless AV1 decoder implementation.
 >=20
-> On Thu, 2025-11-06 at 09:18 -0500, Nicolas Dufresne wrote:
-> > Hi,
-> >=20
-> > Le jeudi 06 novembre 2025 =C3=A0 14:13 +0800, Kyrie Wu a =C3=A9crit :
-> > > This series have the follow changing:
-> > > Firstly add mt8189 video decoder compatible, profile and level to
-> > > support
-> > > MT8189 kernel driver.
-> > > Secondly fix some bugs, including vp 4K profile2 and media device
-> > > node
-> > > number bug.
-> > > Lastly, add mt8189 video encoder compatible.
-> > >=20
-> > > This series has been tested with MT8189 tast test.
-> > > Encoding and decoding worked for this chip.
-> > >=20
-> > > Patches 1-2 Add decoder compatible.
-> > > Patches 3 Add profile and level supporting.
-> > > Patches 4 Add core-only VP9 decoding supporting.
-> > > Patches 5-6 fix some bugs.
-> > > Patches 7-8 Adds encoder compatible.
-> > >=20
-> > > ---
-> > > H264 test results:
-> > > ./fluster.py run -d GStreamer-H.264-V4L2SL-Gst1.0 -j2 -t 90
-> > > =C2=A0=C2=A0=C2=A0=C2=A0JVT-AVC_V1Ran 96/135 tests successfully
-> > >=20
-> > > VP9 test results:
-> > > ./fluster.py run -d GStreamer-VP9-V4L2SL-Gst1.0 -j2 -t 90
-> > > VP9-TEST-VECTORSRan 276/305 tests successfully
-> > >=20
-> > > v4l2-compliance test results:
-> > > Compliance test for mtk-vcodec-enc device /dev/video2:
-> > > Total for mtk-vcodec-enc device /dev/video2: 47, Succeeded: 46,
-> > > Failed: 1, Warnings: 0
-> >=20
-> > There is one fail, can you explain it ?
-> >=20
-> > Nicolas
+> Reviewed-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+> Reviewed-by: Nicolas Dufresne <nicolas.dufresne@collabora.com>
+> Signed-off-by: Deepa Guthyappa Madivalara <deepa.madivalara@oss.qualcomm.=
+com>
+> ---
+> =C2=A0Documentation/userspace-api/media/v4l/pixfmt-compressed.rst | 8 +++=
++++++
+> =C2=A0include/uapi/linux/videodev2.h=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 | 1 +
+> =C2=A02 files changed, 9 insertions(+)
 >=20
-> Dear Nicolas,
->=20
-> The failure is caused by subscribed event/dqevent. Our encoder driver
-> didn't register those apis, which caused this failure.
-> Here is the fail log, which is samed as MT8196:
->=20
-> https://patchwork.linuxtv.org/project/linux-media/cover/20250528063633.14=
-054-1-irui.wang@mediatek.com/
->=20
-> Control ioctls:
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0test VIDIOC_QUERY_EXT_CTR=
-L/QUERYMENU: OK
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0test VIDIOC_QUERYCTRL: OK
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0test VIDIOC_G/S_CTRL: OK
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0test VIDIOC_G/S/TRY_EXT_C=
-TRLS: OK
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0fail: v4l2-test-controls.cpp(1171): node->codec_mas=
-k &
-> STATEFUL_ENCODER
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0test VIDIOC_(UN)SUBSCRIBE=
-_EVENT/DQEVENT: FAIL
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0test VIDIOC_G/S_JPEGCOMP:=
- OK (Not Supported)
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0Standard Controls: 16 Pri=
-vate Controls: 0
+> diff --git a/Documentation/userspace-api/media/v4l/pixfmt-compressed.rst =
+b/Documentation/userspace-api/media/v4l/pixfmt-compressed.rst
+> index c7efb0465db6480fe35be8557728c196e0e530f4..6ca63f35b801b8aae142b69ed=
+dfaa549a5568a3f 100644
+> --- a/Documentation/userspace-api/media/v4l/pixfmt-compressed.rst
+> +++ b/Documentation/userspace-api/media/v4l/pixfmt-compressed.rst
+> @@ -275,6 +275,14 @@ Compressed Formats
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 of macroblocks to decode=
+ a full corresponding frame to the matching
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 capture buffer.
+> =C2=A0
+> +=C2=A0=C2=A0=C2=A0 * .. _V4L2-PIX-FMT-AV1:
+> +
+> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 - ``V4L2_PIX_FMT_AV1``
+> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 - 'AV01'
+> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 - AV1 compressed video frame. This format=
+ is adapted for implementing AV1
+> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 pipeline. The decoder impleme=
+nts stateful video decoder and expects one
+> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 Temporal Unit per buffer from=
+ OBU Stream.
 
+This should be something like, "one temporal unit per buffer in OBU stream
+format."
 
-The spec says:
-  =20
-  =20
-   For backwards compatibility, the encoder will signal a V4L2_EVENT_EOS ev=
-ent when
-   the last frame has been encoded and all frames are ready to be dequeued.=
-=20
-
-In practice, we test for that on every m2m, see the test code:
-
-
-	if (node->is_m2m) {
-		node_m2m_cap->g_fmt(fmt_q, m2m_q.g_type());
-		if (node_m2m_cap->buftype_pixfmts[m2m_q.g_type()][fmt_q.g_pixelformat()] =
-&
-			V4L2_FMT_FLAG_COMPRESSED)
-			valid_output_flags =3D V4L2_BUF_FLAG_TIMECODE | V4L2_BUF_FLAG_TSTAMP_SRC=
-_MASK;
-
-		struct v4l2_event_subscription sub =3D { 0 };
-
-		sub.type =3D V4L2_EVENT_EOS;
-		if (node->codec_mask & (STATEFUL_ENCODER | STATEFUL_DECODER))
-			doioctl(node, VIDIOC_SUBSCRIBE_EVENT, &sub);
-	}
-
-please fix,
 Nicolas
 
->=20
-> Thanks.
->=20
-> Regards,
-> Kyrie.
->=20
-> >=20
-> > > Compliance test for mtk-vcodec-dec device /dev/video3:
-> > > Total for mtk-vcodec-dec device /dev/video3: 48, Succeeded: 48,
-> > > Failed: 0, Warnings: 0
-> > >=20
-> > > scp upstream link:
-> > >=20
-> https://patchwork.kernel.org/project/linux-mediatek/patch/20250811015922.=
-32680-1-huayu.zong@mediatek.com/
-> > > dtsi upstream link:
-> > >=20
-> https://lore.kernel.org/linux-mediatek/20251030134541.784011-12-jh.hsu@me=
-diatek.com/T/#m847e35de0a5b18fac0ca0624a8559d84964ad5c7
-> > >=20
-> > > Changes compared with v4:
-> > > --update H264 & vp9 fluster test results
-> > > --update vp9 single core decoder prob size setting and commit
-> > > messages
-> > >=20
-> > > Changes compared with v3:
-> > > --add reviewer to commit messages
-> > > --Rebased on top of the latest media tree
-> > >=20
-> > > Changes compared with v2:
-> > > --add H264 fluster test results
-> > > --reorder compatible string for dt-bindings
-> > >=20
-> > > Changes compared with v1:
-> > > --add v4l2-compliance test results
-> > > --add scp upstream link
-> > > --add HW difference discriptions for dt-bindings commit messages
-> > >=20
-> > > This series patches dependent on:
-> > > [1]
-> > >=20
-> https://patchwork.linuxtv.org/project/linux-media/cover/20250510075357.11=
-761-1-yunfei.dong@mediatek.com/
-> > > [2]
-> > >=20
-> https://patchwork.linuxtv.org/project/linux-media/cover/20250814085642.17=
-343-1-kyrie.wu@mediatek.com/
-> > >=20
-> > > Kyrie Wu (8):
-> > > =C2=A0=C2=A0dt-bindings: media: mediatek: decoder: Add MT8189
-> > > =C2=A0=C2=A0=C2=A0=C2=A0mediatek,vcodec-decoder
-> > > =C2=A0=C2=A0media: mediatek: vcodec: add decoder compatible to suppor=
-t MT8189
-> > > =C2=A0=C2=A0media: mediatek: vcodec: add profile and level supporting=
- for
-> > > MT8189
-> > > =C2=A0=C2=A0media: mediatek: vcodec: Add single core VP9 decoding sup=
-port for
-> > > =C2=A0=C2=A0=C2=A0=C2=A0MT8189
-> > > =C2=A0=C2=A0media: mediatek: vcodec: fix vp9 4096x2176 fail for profi=
-le2
-> > > =C2=A0=C2=A0media: mediatek: vcodec: fix media device node number
-> > > =C2=A0=C2=A0dt-bindings: media: Add MT8189 mediatek,vcodec-encoder
-> > > =C2=A0=C2=A0media: mediatek: encoder: Add MT8189 encoder compatible d=
-ata
-> > >=20
-> > > =C2=A0.../media/mediatek,vcodec-encoder.yaml        |  2 +
-> > > =C2=A0.../media/mediatek,vcodec-subdev-decoder.yaml |  5 +-
-> > > =C2=A0.../vcodec/decoder/mtk_vcodec_dec_drv.c       |  9 +++-
-> > > =C2=A0.../vcodec/decoder/mtk_vcodec_dec_drv.h       |  1 +
-> > > =C2=A0.../vcodec/decoder/mtk_vcodec_dec_stateless.c |  4 ++
-> > > =C2=A0.../vcodec/decoder/vdec/vdec_vp9_req_lat_if.c | 48 ++++++++++++=
-++-
-> > > ----
-> > > =C2=A0.../vcodec/encoder/mtk_vcodec_enc_drv.c       | 14 ++++++
-> > > =C2=A07 files changed, 68 insertions(+), 15 deletions(-)
->=20
-> ************* MEDIATEK Confidentiality Notice
-> =C2=A0********************
-> The information contained in this e-mail message (including any=20
-> attachments) may be confidential, proprietary, privileged, or otherwise
-> exempt from disclosure under applicable laws. It is intended to be=20
-> conveyed only to the designated recipient(s). Any use, dissemination,=20
-> distribution, printing, retaining or copying of this e-mail (including it=
-s=20
-> attachments) by unintended recipient(s) is strictly prohibited and may=
-=20
-> be unlawful. If you are not an intended recipient of this e-mail, or beli=
-eve
+> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 The encoder generates one Tem=
+poral Unit per buffer.
+> =C2=A0.. raw:: latex
 > =C2=A0
-> that you have received this e-mail in error, please notify the sender=20
-> immediately (by replying to this e-mail), delete any and all copies of=
-=20
-> this e-mail (including any attachments) from your system, and do not
-> disclose the content of this e-mail to any other person. Thank you!
+> =C2=A0=C2=A0=C2=A0=C2=A0 \normalsize
+> diff --git a/include/uapi/linux/videodev2.h b/include/uapi/linux/videodev=
+2.h
+> index becd08fdbddb857f8f2bf205d2164dc6e20e80b2..cf0b71bbe0f9d397e1e6c8843=
+3a0fc3ba11fb947 100644
+> --- a/include/uapi/linux/videodev2.h
+> +++ b/include/uapi/linux/videodev2.h
+> @@ -775,6 +775,7 @@ struct v4l2_pix_format {
+> =C2=A0#define V4L2_PIX_FMT_H264_SLICE v4l2_fourcc('S', '2', '6', '4') /* =
+H264 parsed slices */
+> =C2=A0#define V4L2_PIX_FMT_HEVC_SLICE v4l2_fourcc('S', '2', '6', '5') /* =
+HEVC parsed slices */
+> =C2=A0#define V4L2_PIX_FMT_AV1_FRAME v4l2_fourcc('A', 'V', '1', 'F') /* A=
+V1 parsed frame */
+> +#define V4L2_PIX_FMT_AV1=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 v4l2_fourcc('A', =
+'V', '0', '1') /* AV1 */
+> =C2=A0#define V4L2_PIX_FMT_SPK=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 v4l2_fourcc(=
+'S', 'P', 'K', '0') /* Sorenson Spark */
+> =C2=A0#define V4L2_PIX_FMT_RV30=C2=A0=C2=A0=C2=A0=C2=A0 v4l2_fourcc('R', =
+'V', '3', '0') /* RealVideo 8 */
+> =C2=A0#define V4L2_PIX_FMT_RV40=C2=A0=C2=A0=C2=A0=C2=A0 v4l2_fourcc('R', =
+'V', '4', '0') /* RealVideo 9 & 10 */
 
---=-QUHvuhjIUwreEvkskggy
+--=-E0cDht+osNO+gG5376Xk
 Content-Type: application/pgp-signature; name="signature.asc"
 Content-Description: This is a digitally signed message part
 Content-Transfer-Encoding: 7bit
 
 -----BEGIN PGP SIGNATURE-----
 
-iHUEABYKAB0WIQTvDVKBFcTDwhoEbxLZQZRRKWBy9AUCaRHvRgAKCRDZQZRRKWBy
-9IodAP92sXKXxtzBgiSqcP5IWsLSfYE7FE4ekNtUGbBoWcArxAEAm5t9IiBp57Ej
-BAdduiviuXeRaE4BvqzLvLjiSOUUiAc=
-=JqZh
+iHUEABYKAB0WIQTvDVKBFcTDwhoEbxLZQZRRKWBy9AUCaRHv2QAKCRDZQZRRKWBy
+9MqfAP46f/rLcGFo2yviFJH3Kgrqf19WrdRSGu3todGKLFYYWwEAv2VHUW+q1dze
+YvdMWOzC/wMZlsgYMvYSS+93lHotsgo=
+=sdkT
 -----END PGP SIGNATURE-----
 
---=-QUHvuhjIUwreEvkskggy--
+--=-E0cDht+osNO+gG5376Xk--
