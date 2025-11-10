@@ -1,130 +1,65 @@
-Received: from fout-b7-smtp.messagingengine.com (fout-b7-smtp.messagingengine.com [202.12.124.150])
+Received: from gofer.mess.org (gofer.mess.org [88.97.38.141])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 680472F291B;
-	Mon, 10 Nov 2025 20:42:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.150
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4EBBD23F40C;
+	Mon, 10 Nov 2025 20:45:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=88.97.38.141
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762807347; cv=none; b=lysskvUAiExUfC+tFAC+Floa4Q7j5i/KPtcr0Dfzpwq0dwWBrxnbAnZCHu4dLgno5GgadBb+S5w7iocrL2JNCx1Q5SkCwtIO/awU7mlxvycMj3C7jah+vyiBSfi0hYrHxjRSH1rb3IJeQyLXjTAdtaEOqJ+K0peFSKe9R6VHMv4=
+	t=1762807554; cv=none; b=Sc5j+tR9dQFPjK9W07k5RLDANncDQZ2djaxOxMikCUboBTP0F/q4YAT0GhkFpx5Zf5qKG935wQjvmdOa8gGZ2vDmy1kFFqTI5EDZ4s0vb80najtEuU7gcHReGyHW+RLssue9n58r624SUfBgOCIithe+IWz6sIB20UjwZ7gH6nQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762807347; c=relaxed/simple;
-	bh=EVZlZ6pxpX8LL3e1/kedrfN4wUWfo9Ezw2G03AI99jE=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=Fi0vyutT7WBs6aU0w+xNF3bahL2GS9TQ3qVwvzd2PSq71W7oayLszx1k1HgKPXpPLPvRo9WU1hiQEDDcg+33vQcz42o5kWdybDi3e7ZY7lNu7UDRTdZiNqzBPvg0ZhGtItMPxtiabLM+E5JALVF9vta0nbVA+L2pFbVBgmDtt/0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=shazbot.org; spf=pass smtp.mailfrom=shazbot.org; dkim=pass (2048-bit key) header.d=shazbot.org header.i=@shazbot.org header.b=htuAqLZ4; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=W1pcFNtX; arc=none smtp.client-ip=202.12.124.150
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=shazbot.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=shazbot.org
+	s=arc-20240116; t=1762807554; c=relaxed/simple;
+	bh=0SD9Ewvk+/wZhTK1E9Nrbs9eHYimjnLTzygkomhvpS8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=RGtqnzllJnTV0HYbrEbrV0MDSMWblsHibwGSzT+tuMwT02Hu3OqoxMtqPAgSeE8Adk0Rw5Ckug8PWNbLNbpTEQ7lJlB6RG/Z8FpKRZ1xzJwUbIA9xoA2oBOq9pwOFbLupXX47WS+D51dk3URsG5mLPVSykacEk5jpY9CXpzRONs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=mess.org; spf=pass smtp.mailfrom=mess.org; dkim=pass (2048-bit key) header.d=mess.org header.i=@mess.org header.b=Pxm3YZ/G; arc=none smtp.client-ip=88.97.38.141
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=mess.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mess.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=shazbot.org header.i=@shazbot.org header.b="htuAqLZ4";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="W1pcFNtX"
-Received: from phl-compute-01.internal (phl-compute-01.internal [10.202.2.41])
-	by mailfout.stl.internal (Postfix) with ESMTP id C4D701D000F8;
-	Mon, 10 Nov 2025 15:42:23 -0500 (EST)
-Received: from phl-mailfrontend-01 ([10.202.2.162])
-  by phl-compute-01.internal (MEProxy); Mon, 10 Nov 2025 15:42:24 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=shazbot.org; h=
-	cc:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to; s=fm2; t=1762807343;
-	 x=1762893743; bh=gqeX2If3HYh30yCslpotpD1eSH8ukdg4bxJbH47uciI=; b=
-	htuAqLZ4SouJYoITuzsRhJjEXMvYg51jdhYpfuNbonoAiCijob/69evbidTgy+sh
-	iRd/focxifhKHG29GSovKjpd+ZahK1KX4u/ZS5xwu1cwXqVC/UCcfTwYH5JPDv12
-	hGHLp/nV+WavmCJRl9wTrZikJq0k+REA/xuHpzuBgd81DF7sIwQG9Nn6LXDccuBp
-	Kcbv2MQHhh0bNcI9y7090F/H/ONHQBQn0M3YoNGcqHaUJhgJYpUOx9LyevwJdnFy
-	Ict245DxpPf6jiaMEQZaHVfubTy/2FN5JOeKQcWBk3z0YAlBC9LITZ62vdXk1Y/c
-	Rd49/UzrTC9Hg0y+GBi9Hg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=1762807343; x=
-	1762893743; bh=gqeX2If3HYh30yCslpotpD1eSH8ukdg4bxJbH47uciI=; b=W
-	1pcFNtXWP9fMq2c7Go8PGx8HwIWpuPF2lBF5s8fzNuWqlubpSf71I4RGXc/+pwcE
-	wq+IM4acQDpUfJS8lOK336Hg+6Yhp/JfxC5SEFBEOLYskuuF1zMvdgewgnWx52X/
-	fNOBJyzaAv96LswEo/scIGTSRxWJi2ZUU5XAvFuOshhDJGBo38Xa+K5zj1omajl4
-	9Nzw2IiBoN/XHZmZW4L1O2XuQ5m2ygcV/Ej73MJG4tl8Yp+XoKJ+BgkgvopLu2GH
-	obrv7xcViS0KT+tbc+wUE4u16+09BsabKp6VUrTPLyomAqmaiXC7s3Fr/VvCaEMh
-	I3yt1TVyxJAxtgG24ZoJw==
-X-ME-Sender: <xms:Lk4SadPf7Z_61ugy1UZG-S0z50mLGWjkeWFW-KUtptz0WE1qSwYswA>
-    <xme:Lk4SaWQnTbNosFeU6S8-IkOOxvD-vMp6PSlA7UVcS1gFInm63zNeLDUnY47L26hp1
-    UJx5XZp5pVS_p1iGPb8C2-PW03MLsP60V0ld5GGp6ghlpo8mHKR>
-X-ME-Received: <xmr:Lk4SaSQT-qKgrv4djpFBdctnnMfQHHqqcvgPYrMcvkpGGEF5Ve9ebvTg>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtdeggdduleelfedtucetufdoteggodetrf
-    dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfurfetoffkrfgpnffqhgenuceu
-    rghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujf
-    gurhepfffhvfevuffkjghfgggtgfesthejredttddtvdenucfhrhhomheptehlvgigucgh
-    ihhllhhirghmshhonhcuoegrlhgvgiesshhhrgiisghothdrohhrgheqnecuggftrfgrth
-    htvghrnhepteetudelgeekieegudegleeuvdffgeehleeivddtfeektdekkeehffehudet
-    hffhnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprg
-    hlvgigsehshhgriigsohhtrdhorhhgpdhnsggprhgtphhtthhopeefhedpmhhouggvpehs
-    mhhtphhouhhtpdhrtghpthhtoheplhgvohhnsehkvghrnhgvlhdrohhrghdprhgtphhtth
-    hopegshhgvlhhgrggrshesghhoohhglhgvrdgtohhmpdhrtghpthhtoheplhhoghgrnhhg
-    seguvghlthgrthgvvgdrtghomhdprhgtphhtthhopegrgigsohgvsehkvghrnhgvlhdrug
-    hkpdhrtghpthhtoheprhhosghinhdrmhhurhhphhihsegrrhhmrdgtohhmpdhrtghpthht
-    ohepjhhorhhoseeksgihthgvshdrohhrghdprhgtphhtthhopeifihhllheskhgvrhhnvg
-    hlrdhorhhgpdhrtghpthhtohepmhdrshiihihprhhofihskhhisehsrghmshhunhhgrdgt
-    ohhmpdhrtghpthhtohepjhhgghesiihivghpvgdrtggr
-X-ME-Proxy: <xmx:Lk4SaXAf2U3xTIUQxs8i0IsnHoTy1Jl7o0BH0TlVy7zhF4WWB901JA>
-    <xmx:Lk4SacCXUZGgOPwzyeCst1KYlCMu_DTngssMm-yanfi8GAiSreZfOA>
-    <xmx:Lk4SaYxVBS9qwrWpCA566IQDcrCbii10ahjD77GRLJBh3SrN6LWZAw>
-    <xmx:Lk4SaejgdRKg7EjLQE1Gk-cfpzoWXZw-pFjsodEgU8MMWqFzLPeaiQ>
-    <xmx:L04SaZr36QwMGCQIKH-kIOIQH3332nOSuBo78ltSYdTNpyhWUvhiqLCC>
-Feedback-ID: i03f14258:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
- 10 Nov 2025 15:42:19 -0500 (EST)
-Date: Mon, 10 Nov 2025 13:42:18 -0700
-From: Alex Williamson <alex@shazbot.org>
-To: Leon Romanovsky <leon@kernel.org>
-Cc: Bjorn Helgaas <bhelgaas@google.com>,
- Logan Gunthorpe <logang@deltatee.com>, Jens Axboe <axboe@kernel.dk>,
- Robin Murphy <robin.murphy@arm.com>, Joerg Roedel <joro@8bytes.org>,
- Will Deacon <will@kernel.org>,
- Marek Szyprowski <m.szyprowski@samsung.com>,
- Jason Gunthorpe <jgg@ziepe.ca>,
- Andrew Morton <akpm@linux-foundation.org>,
- Jonathan Corbet <corbet@lwn.net>, Sumit Semwal <sumit.semwal@linaro.org>,
- Christian =?UTF-8?B?S8O2bmln?= <christian.koenig@amd.com>,
- Kees Cook <kees@kernel.org>,
- "Gustavo A. R. Silva" <gustavoars@kernel.org>,
- Ankit Agrawal <ankita@nvidia.com>, Yishai Hadas <yishaih@nvidia.com>,
- Shameer Kolothum <skolothumtho@nvidia.com>,
- Kevin Tian <kevin.tian@intel.com>, Krishnakant Jaju <kjaju@nvidia.com>,
- Matt Ochs <mochs@nvidia.com>, linux-pci@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-block@vger.kernel.org,
- iommu@lists.linux.dev, linux-mm@kvack.org, linux-doc@vger.kernel.org,
- linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
- linaro-mm-sig@lists.linaro.org, kvm@vger.kernel.org,
- linux-hardening@vger.kernel.org, Alex Mastro <amastro@fb.com>,
- Nicolin Chen <nicolinc@nvidia.com>,
- Vivek Kasireddy <vivek.kasireddy@intel.com>
-Subject: Re: [PATCH v7 00/11] vfio/pci: Allow MMIO regions to be exported
- through dma-buf
-Message-ID: <20251110134218.5e399b0f.alex@shazbot.org>
-In-Reply-To: <20251106-dmabuf-vfio-v7-0-2503bf390699@nvidia.com>
-References: <20251106-dmabuf-vfio-v7-0-2503bf390699@nvidia.com>
+	dkim=pass (2048-bit key) header.d=mess.org header.i=@mess.org header.b="Pxm3YZ/G"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=mess.org; s=2020;
+	t=1762807545; bh=0SD9Ewvk+/wZhTK1E9Nrbs9eHYimjnLTzygkomhvpS8=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=Pxm3YZ/GPdOMSnqh+znGRdNZSvJgB8KHEtFBAT+xWZh6jZ+G9qYw5olHTYCl55OvN
+	 ljpAS5iluemR9/UdxFKVXuOGI96xvLz5TnlpTw1OJN51aZWfMibPiFX3m6WsKDQmJb
+	 xki5mKrl9EAXUC1wN68+WM6Onvq83nV8F51lV5Ogd6C5PsksOXlDWBNNMGc2+K0m8A
+	 tlj1D6K6YC0Jk1DXMqzlh5rokpnPv7iVxuwaR6pLiPiwjdZEFRMMxCTpRiVWsvyQZ5
+	 GR7iyvQAYgsIkgGU+WaBG4pQenptaMiwT0o7TJIVvVbEBl3L7PKCLsMxy1aE7JWJip
+	 e6yYGHLtCw2eg==
+Received: by gofer.mess.org (Postfix, from userid 1000)
+	id 691901000D4; Mon, 10 Nov 2025 20:45:45 +0000 (GMT)
+Date: Mon, 10 Nov 2025 20:45:45 +0000
+From: Sean Young <sean@mess.org>
+To: Johan Hovold <johan@kernel.org>
+Cc: Mauro Carvalho Chehab <mchehab@kernel.org>, linux-media@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] media: ir-hix5hd2: drop unused module alias
+Message-ID: <aRJO-egLSI8doikz@gofer.mess.org>
+References: <20251017060626.8693-1-johan@kernel.org>
+ <aRGsnubMhZYJI0M_@hovoldconsulting.com>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <aRGsnubMhZYJI0M_@hovoldconsulting.com>
 
-On Thu,  6 Nov 2025 16:16:45 +0200
-Leon Romanovsky <leon@kernel.org> wrote:
+Hi Johan,
 
-> Changelog:
-> v7:
->  * Dropped restore_revoke flag and added vfio_pci_dma_buf_move
->    to reverse loop.
->  * Fixed spelling errors in documentation patch.
->  * Rebased on top of v6.18-rc3.
->  * Added include to stddef.h to vfio.h, to keep uapi header file independent.
+On Mon, Nov 10, 2025 at 10:13:02AM +0100, Johan Hovold wrote:
+> On Fri, Oct 17, 2025 at 08:06:26AM +0200, Johan Hovold wrote:
+> > The driver has never supported anything but OF probing so drop the
+> > unused platform module alias.
+> > 
+> > Signed-off-by: Johan Hovold <johan@kernel.org>
+> > ---
+> 
+> Can this one be picked up for 6.19?
 
-I think we're winding down on review comments.  It'd be great to get
-p2pdma and dma-buf acks on this series.  Otherwise it's been posted
-enough that we'll assume no objections.  Thanks,
+Of course; I've sent a pull request for this, you should be on the CC.
 
-Alex
+Thanks,
+
+Sean
