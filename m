@@ -1,197 +1,203 @@
-Received: from mail-lj1-f173.google.com (mail-lj1-f173.google.com [209.85.208.173])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 009122E92AF
-	for <linux-media@vger.kernel.org>; Mon, 10 Nov 2025 20:24:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 22DE72ECD06;
+	Mon, 10 Nov 2025 20:28:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762806245; cv=none; b=jVxp3YFOa2Wne39+HgxhvrHpNFjwB5l7+B64vW/eVp2BDWkpcf5D6+Kl4X3DUeBxhOXwfLdGFq1bNx4+Lo20I3cQGhffZW9ULQUn7lj6wlF7JEuQ/o8IFJeOjCyQe8/bLqNNClf4YbextmzYcId3Bz58EvTVuvwpALOFNJrtuOk=
+	t=1762806530; cv=none; b=ub1kiYY4ZnYTgbvXf3vrvERj8H6wKAJFEhRQF3wY1kl/5Z0nsT8iF76BPzh28kEH+hl75zRMnEq64uuIHs1qNQQCY/Etlze9DC5ZeVN5k5d6yuvbytfwTzh91+i64icw4k2mbY/JRJvAlViOjJ8H3sdpX77suXrL42jm8Ng6AFE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762806245; c=relaxed/simple;
-	bh=avENlQ35BzgI6tLMYtHuimKSX5F3uSHgrD8IvoL218c=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=DI87Dr2EWYQgpWtGP2XW7thZvSnlnxkENo3Zyo8Hn6jdPYrAKM1JwDfrlNKerUykAHe8gWhuDVXrGukmhLXFYRRWqQu8agjO2rxdHdkX3NbZz/5MMNpHuTjJAf4bLECa1egSLyLBWERL23n1iHxfQFLtyhlPXAgp08lVUxOhQE4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=mts42I+x; arc=none smtp.client-ip=209.85.208.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+	s=arc-20240116; t=1762806530; c=relaxed/simple;
+	bh=2+oC81xV69bAibilHvu376ufSMAg5fmIkqZozg3DinU=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=oAXHIT2DqcO73d5W82hEw8U36joel0ehcpbzVEgB9xDRRmazyoo841QIkq1sTq+dMGwL4/DiyVOVomALA/4iYoa/SygrxYTlxwiq48uRGeSvNb/EXot88o/zn97VQ1GmKIPRwGF+mXyvulle47sWADnXPPxKgV76O+5RpFz6olY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VDR5NR5O; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="mts42I+x"
-Received: by mail-lj1-f173.google.com with SMTP id 38308e7fff4ca-378e24c1c0aso2089731fa.2
-        for <linux-media@vger.kernel.org>; Mon, 10 Nov 2025 12:24:03 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1762806242; x=1763411042; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
-         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=GaNjgHiC4lYNLgJR1dvbSFLh/5KALMDQ9SZCFN88ta8=;
-        b=mts42I+xAsgv8eZE4+D5iwBfrt6505Gw+8ie43Jwc4Uzp8+eVtfzmeMalW/SBDv1pl
-         qyxEiUxi3qo6goc42iJ9vLKPEh6hGdcH3tBlkI7vnceyhz5Q9jAENVhhDY+FTgRkUw6k
-         DhVBDZ+ZwRtwyOu21RIMMBAtv3DuMV6FPLuMq5HjKfCW77HLhO8WycCrjy6f1exvn8EE
-         N9Hf0poSaaHl8rIusXBOvtFAL5YGqInPg9XbMI0C/vtNP8NOYUgF80uvujHE8T0CFuq7
-         ogybdERSxRHTkOOK3JaOCB/1r9uZp7+gHGIruaO0e5nfH9R0D81R9NuZqv5oyGRDf/iU
-         ERMw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1762806242; x=1763411042;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
-         :user-agent:mime-version:date:message-id:x-gm-gg:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=GaNjgHiC4lYNLgJR1dvbSFLh/5KALMDQ9SZCFN88ta8=;
-        b=vDtjcvzmcLXbQMHpz05OMCwjZSlJAEKNntDvQGT0PRIourtim0hmTKv5fNh40iMR7K
-         J/wVmXGHi0uP3XJEeTiIybdylO7AHLRFvRPwyX3hri1j4mCK3FsX5UoXI+sdDJ67vsaq
-         mKZNkOMRrKmlYPhzj3WeCJb8RuOm0QKLGKXdXGalt2IVQ1ERC+3rO6iTFXu1mRi9yjpm
-         X6BZSMCbH52J2Fb/gf0HMOQphYV6I7cYerkmwqKp/VdwQat5b8PbVR7c2cx0rY90GRq8
-         XI0z5a6w+7LgP+8+52LS17zPBC/xl9Rpp0N6IhDh5ayRZK0dRHVZYg+0TipCkxIWqBTN
-         +Sbg==
-X-Forwarded-Encrypted: i=1; AJvYcCUyoLv+pFrl6T3Q7NWznsBgR2FgRutvnIxz/QyKYt7iHC0uqzAr57IYpLpOC5cfNuHDGb4Tb4w6o61Hlw==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz+dGRgdnt87j6w/Gt5SZXmHzkf1DpKwxHBq9/+bvcKxNqVC67D
-	KBGoo4TXsYKAVc0nTMNiIYgO2Hwp/XuXYpG3SYEEw9SJNJjtDwKdSurHQ8Lr9M0pAZo=
-X-Gm-Gg: ASbGncvzZ4zSxZBHQMVHy2BynEr+HruW97w7vsie92pDZRW+aZ6Nf1+x8yEtCk887c/
-	1VuoYgGXKJy7BeBCNFzW3IAZHqxMcxlLXXnv7P6WRI/o+AO02RAmtKJq052ZeQrLk8eC7KHVpUo
-	9wsPYvBlAy6qIZhlyrywFaM8sgXFtk3WYBdYn9RMLiAwHzRy/kQ5qZ2z8ilRszh1jrOg5CNVFFq
-	gOExOjKUwB+BoVxkRRhJ6oAmmrTldGHDa82LBuXM1QDpQdMbvXvh40xOwPfP3/IwBHbJLILZYfr
-	XR0nh1znDtjtGAar40+VAIJ+vkWB4/7N8/eawdj21BITuCOCq1BF4BxVPpeEFZEvpozE3BpuOHo
-	5U69XB5CyCKokqItdCysiNoeeDLwAKmQvLlxVN2PrZ1TLyvdIAdNCcY9MoUovPwcNlTg+c/tT/5
-	jqAWIzoh1HXEku1LT8sAt30HF9Dk6Dw4+cM9csNzI34M7ilmOPa83R/r8=
-X-Google-Smtp-Source: AGHT+IH8eu2yFwyQ/7LEhVqdgKoEtPLjRlteAv+Gq5Xpiwbyk2U8UW/TW9k1sGKDpmscx/ao2kCmVA==
-X-Received: by 2002:a05:6512:3c8c:b0:594:2d0d:a3dc with SMTP id 2adb3069b0e04-5945f1dc4f9mr1551360e87.6.1762806242080;
-        Mon, 10 Nov 2025 12:24:02 -0800 (PST)
-Received: from [192.168.1.100] (91-159-24-186.elisa-laajakaista.fi. [91.159.24.186])
-        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-594549b4cd1sm3681566e87.8.2025.11.10.12.23.59
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 10 Nov 2025 12:24:01 -0800 (PST)
-Message-ID: <df209178-2871-4317-bfb6-d6605fb9f19b@linaro.org>
-Date: Mon, 10 Nov 2025 22:23:52 +0200
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VDR5NR5O"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0DA4BC4CEF5;
+	Mon, 10 Nov 2025 20:28:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1762806529;
+	bh=2+oC81xV69bAibilHvu376ufSMAg5fmIkqZozg3DinU=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=VDR5NR5O4p008RBxKau1oQ/sdWlbk31f0gH7CibVBxI2O26euYYItPd8xW5SsGwIf
+	 BfyOjN/ef0UL06UM/C3cMVem79iIrZmXWSv4wZWSr2v3hzmZyhdVYJRiHc/Nu+yUF8
+	 9iJeGQkgVYsrKA6/OXuRxy7pcx+XJQss+JBluppHjEB+L9jVPGPmZJuPlciZKxqZf+
+	 xzXvLVrHLoFaUWXdO8cGN0TSE8B1fAo4BssyPzeiffuWrvNmUc8/Mgm/FjLgoQgQmp
+	 E2+9VRHkM50gbCUNPShVcuzSzC5GNOuXLH1k7FYvnVqO5UUwveUcH1RL6Qm3MYu/Hn
+	 zaEFUM0yu5v3w==
+Date: Mon, 10 Nov 2025 22:28:44 +0200
+From: Leon Romanovsky <leon@kernel.org>
+To: Alex Williamson <alex@shazbot.org>
+Cc: Bjorn Helgaas <bhelgaas@google.com>,
+	Logan Gunthorpe <logang@deltatee.com>, Jens Axboe <axboe@kernel.dk>,
+	Robin Murphy <robin.murphy@arm.com>, Joerg Roedel <joro@8bytes.org>,
+	Will Deacon <will@kernel.org>,
+	Marek Szyprowski <m.szyprowski@samsung.com>,
+	Jason Gunthorpe <jgg@ziepe.ca>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Sumit Semwal <sumit.semwal@linaro.org>,
+	Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
+	Kees Cook <kees@kernel.org>,
+	"Gustavo A. R. Silva" <gustavoars@kernel.org>,
+	Ankit Agrawal <ankita@nvidia.com>,
+	Yishai Hadas <yishaih@nvidia.com>,
+	Shameer Kolothum <skolothumtho@nvidia.com>,
+	Kevin Tian <kevin.tian@intel.com>,
+	Krishnakant Jaju <kjaju@nvidia.com>, Matt Ochs <mochs@nvidia.com>,
+	linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-block@vger.kernel.org, iommu@lists.linux.dev,
+	linux-mm@kvack.org, linux-doc@vger.kernel.org,
+	linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
+	linaro-mm-sig@lists.linaro.org, kvm@vger.kernel.org,
+	linux-hardening@vger.kernel.org, Alex Mastro <amastro@fb.com>,
+	Nicolin Chen <nicolinc@nvidia.com>
+Subject: Re: [PATCH v7 11/11] vfio/nvgrace: Support get_dmabuf_phys
+Message-ID: <20251110202844.GL15456@unreal>
+References: <20251106-dmabuf-vfio-v7-0-2503bf390699@nvidia.com>
+ <20251106-dmabuf-vfio-v7-11-2503bf390699@nvidia.com>
+ <20251110130534.4d4b17ad.alex@shazbot.org>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH RFC 1/8] media: qcom: camss: csiphy-3ph: Add Gen2 v1.1
- MIPI CSI-2 CPHY init
-To: david@ixit.cz, Robert Foss <rfoss@kernel.org>,
- Todor Tomov <todor.too@gmail.com>,
- Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
- Mauro Carvalho Chehab <mchehab@kernel.org>,
- Luca Weiss <luca.weiss@fairphone.com>, Petr Hodina <phodina@protonmail.com>,
- Casey Connolly <casey.connolly@linaro.org>, "Dr. Git" <drgitx@gmail.com>
-Cc: Joel Selvaraj <foss@joelselvaraj.com>, linux-media@vger.kernel.org,
- linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
- phone-devel@vger.kernel.org
-References: <20251109-qcom-cphy-v1-0-165f7e79b0e1@ixit.cz>
- <20251109-qcom-cphy-v1-1-165f7e79b0e1@ixit.cz>
-From: Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>
-In-Reply-To: <20251109-qcom-cphy-v1-1-165f7e79b0e1@ixit.cz>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20251110130534.4d4b17ad.alex@shazbot.org>
 
-On 11/9/25 11:39, David Heidelberg via B4 Relay wrote:
-> From: Casey Connolly <casey.connolly@linaro.org>
+On Mon, Nov 10, 2025 at 01:05:34PM -0700, Alex Williamson wrote:
+> On Thu,  6 Nov 2025 16:16:56 +0200
+> Leon Romanovsky <leon@kernel.org> wrote:
 > 
-> Add a PHY configuration sequence for the sdm845 which uses a Qualcomm
-> Gen 2 version 1.1 CSI-2 PHY.
+> > From: Jason Gunthorpe <jgg@nvidia.com>
+> > 
+> > Call vfio_pci_core_fill_phys_vec() with the proper physical ranges for the
+> > synthetic BAR 2 and BAR 4 regions. Otherwise use the normal flow based on
+> > the PCI bar.
+> > 
+> > This demonstrates a DMABUF that follows the region info report to only
+> > allow mapping parts of the region that are mmapable. Since the BAR is
+> > power of two sized and the "CXL" region is just page aligned the there can
+> > be a padding region at the end that is not mmaped or passed into the
+> > DMABUF.
+> > 
+> > The "CXL" ranges that are remapped into BAR 2 and BAR 4 areas are not PCI
+> > MMIO, they actually run over the CXL-like coherent interconnect and for
+> > the purposes of DMA behave identically to DRAM. We don't try to model this
+> > distinction between true PCI BAR memory that takes a real PCI path and the
+> > "CXL" memory that takes a different path in the p2p framework for now.
+> > 
+> > Signed-off-by: Jason Gunthorpe <jgg@nvidia.com>
+> > Tested-by: Alex Mastro <amastro@fb.com>
+> > Tested-by: Nicolin Chen <nicolinc@nvidia.com>
+> > Signed-off-by: Leon Romanovsky <leonro@nvidia.com>
+> > ---
+> >  drivers/vfio/pci/nvgrace-gpu/main.c | 56 +++++++++++++++++++++++++++++++++++++
+> >  1 file changed, 56 insertions(+)
+> > 
+> > diff --git a/drivers/vfio/pci/nvgrace-gpu/main.c b/drivers/vfio/pci/nvgrace-gpu/main.c
+> > index e346392b72f6..7d7ab2c84018 100644
+> > --- a/drivers/vfio/pci/nvgrace-gpu/main.c
+> > +++ b/drivers/vfio/pci/nvgrace-gpu/main.c
+> > @@ -7,6 +7,7 @@
+> >  #include <linux/vfio_pci_core.h>
+> >  #include <linux/delay.h>
+> >  #include <linux/jiffies.h>
+> > +#include <linux/pci-p2pdma.h>
+> >  
+> >  /*
+> >   * The device memory usable to the workloads running in the VM is cached
+> > @@ -683,6 +684,54 @@ nvgrace_gpu_write(struct vfio_device *core_vdev,
+> >  	return vfio_pci_core_write(core_vdev, buf, count, ppos);
+> >  }
+> >  
+> > +static int nvgrace_get_dmabuf_phys(struct vfio_pci_core_device *core_vdev,
+> > +				   struct p2pdma_provider **provider,
+> > +				   unsigned int region_index,
+> > +				   struct dma_buf_phys_vec *phys_vec,
+> > +				   struct vfio_region_dma_range *dma_ranges,
+> > +				   size_t nr_ranges)
+> > +{
+> > +	struct nvgrace_gpu_pci_core_device *nvdev = container_of(
+> > +		core_vdev, struct nvgrace_gpu_pci_core_device, core_device);
+> > +	struct pci_dev *pdev = core_vdev->pdev;
+> > +
+> > +	if (nvdev->resmem.memlength && region_index == RESMEM_REGION_INDEX) {
+> > +		/*
+> > +		 * The P2P properties of the non-BAR memory is the same as the
+> > +		 * BAR memory, so just use the provider for index 0. Someday
+> > +		 * when CXL gets P2P support we could create CXLish providers
+> > +		 * for the non-BAR memory.
+> > +		 */
+> > +		*provider = pcim_p2pdma_provider(pdev, 0);
+> > +		if (!*provider)
+> > +			return -EINVAL;
+> > +		return vfio_pci_core_fill_phys_vec(phys_vec, dma_ranges,
+> > +						   nr_ranges,
+> > +						   nvdev->resmem.memphys,
+> > +						   nvdev->resmem.memlength);
+> > +	} else if (region_index == USEMEM_REGION_INDEX) {
+> > +		/*
+> > +		 * This is actually cachable memory and isn't treated as P2P in
+> > +		 * the chip. For now we have no way to push cachable memory
+> > +		 * through everything and the Grace HW doesn't care what caching
+> > +		 * attribute is programmed into the SMMU. So use BAR 0.
+> > +		 */
+> > +		*provider = pcim_p2pdma_provider(pdev, 0);
+> > +		if (!*provider)
+> > +			return -EINVAL;
+> > +		return vfio_pci_core_fill_phys_vec(phys_vec, dma_ranges,
+> > +						   nr_ranges,
+> > +						   nvdev->usemem.memphys,
+> > +						   nvdev->usemem.memlength);
+> > +	}
+> > +	return vfio_pci_core_get_dmabuf_phys(core_vdev, provider, region_index,
+> > +					     phys_vec, dma_ranges, nr_ranges);
+> > +}
 > 
-> The PHY can be configured as two phase or three phase in C-PHY or D-PHY
-> mode. This configuration supports three-phase C-PHY mode.
 > 
-> Signed-off-by: Casey Connolly <casey.connolly@linaro.org>
-> Signed-off-by: David Heidelberg <david@ixit.cz>
-> ---
->   .../platform/qcom/camss/camss-csiphy-3ph-1-0.c     | 64 ++++++++++++++++++++++
->   1 file changed, 64 insertions(+)
+> Unless my eyes deceive, we could reduce the redundancy a bit:
 > 
-> diff --git a/drivers/media/platform/qcom/camss/camss-csiphy-3ph-1-0.c b/drivers/media/platform/qcom/camss/camss-csiphy-3ph-1-0.c
-> index 619abbf607813..f28c32d1a4ec5 100644
-> --- a/drivers/media/platform/qcom/camss/camss-csiphy-3ph-1-0.c
-> +++ b/drivers/media/platform/qcom/camss/camss-csiphy-3ph-1-0.c
-> @@ -144,6 +144,7 @@ csiphy_lane_regs lane_regs_sa8775p[] = {
->   };
->   
->   /* GEN2 1.0 2PH */
-> +/* 5 entries: clock + 4 lanes */
->   static const struct
->   csiphy_lane_regs lane_regs_sdm845[] = {
->   	{0x0004, 0x0C, 0x00, CSIPHY_DEFAULT_PARAMS},
-> @@ -218,6 +219,69 @@ csiphy_lane_regs lane_regs_sdm845[] = {
->   	{0x0664, 0x7F, 0x00, CSIPHY_DEFAULT_PARAMS},
->   };
->   
-> +/* GEN2 1.0 3PH */
-> +/* 3 entries: 3 lanes (C-PHY) */
-> +static const struct
-> +csiphy_lane_regs lane_regs_sdm845_3ph[] = {
-> +	{0x015C, 0x43, 0x00, CSIPHY_DEFAULT_PARAMS},
-> +	{0x0168, 0xA0, 0x00, CSIPHY_DEFAULT_PARAMS},
-> +	{0x016C, 0x25, 0x00, CSIPHY_DEFAULT_PARAMS},
-> +	{0x0104, 0x06, 0x00, CSIPHY_DEFAULT_PARAMS},
-> +	{0x010C, 0x12, 0x00, CSIPHY_SETTLE_CNT_LOWER_BYTE},
-> +	{0x0108, 0x00, 0x00, CSIPHY_SETTLE_CNT_HIGHER_BYTE},
-> +	{0x0114, 0x20, 0x00, CSIPHY_DEFAULT_PARAMS},
-> +	{0x0150, 0x00, 0x00, CSIPHY_DEFAULT_PARAMS},
-> +	{0x0118, 0x3e, 0x00, CSIPHY_DEFAULT_PARAMS},
-> +	{0x011C, 0x41, 0x00, CSIPHY_DEFAULT_PARAMS},
-> +	{0x0120, 0x41, 0x00, CSIPHY_DEFAULT_PARAMS},
-> +	{0x0124, 0x7F, 0x00, CSIPHY_DEFAULT_PARAMS},
-> +	{0x0128, 0x00, 0x00, CSIPHY_DEFAULT_PARAMS},
-> +	{0x012C, 0x00, 0x00, CSIPHY_DEFAULT_PARAMS},
-> +	{0x0144, 0x12, 0x00, CSIPHY_DEFAULT_PARAMS},
-> +	{0x0160, 0x02, 0x00, CSIPHY_DEFAULT_PARAMS},
-> +	{0x01CC, 0x41, 0x00, CSIPHY_DEFAULT_PARAMS},
-> +	{0x0164, 0x00, 0x00, CSIPHY_DEFAULT_PARAMS},
-> +	{0x01DC, 0x51, 0x00, CSIPHY_DEFAULT_PARAMS},
-> +	{0x035C, 0x43, 0x00, CSIPHY_DEFAULT_PARAMS},
-> +	{0x0368, 0xA0, 0x00, CSIPHY_DEFAULT_PARAMS},
-> +	{0x036C, 0x25, 0x00, CSIPHY_DEFAULT_PARAMS},
-> +	{0x0304, 0x06, 0x00, CSIPHY_DEFAULT_PARAMS},
-> +	{0x030C, 0x12, 0x00, CSIPHY_SETTLE_CNT_LOWER_BYTE},
-> +	{0x0308, 0x00, 0x00, CSIPHY_SETTLE_CNT_HIGHER_BYTE},
-> +	{0x0314, 0x20, 0x00, CSIPHY_DEFAULT_PARAMS},
-> +	{0x0350, 0x00, 0x00, CSIPHY_DEFAULT_PARAMS},
-> +	{0x0318, 0x3e, 0x00, CSIPHY_DEFAULT_PARAMS},
-> +	{0x031C, 0x41, 0x00, CSIPHY_DEFAULT_PARAMS},
-> +	{0x0320, 0x41, 0x00, CSIPHY_DEFAULT_PARAMS},
-> +	{0x0324, 0x7F, 0x00, CSIPHY_DEFAULT_PARAMS},
-> +	{0x0328, 0x00, 0x00, CSIPHY_DEFAULT_PARAMS},
-> +	{0x032C, 0x00, 0x00, CSIPHY_DEFAULT_PARAMS},
-> +	{0x0344, 0x12, 0x00, CSIPHY_DEFAULT_PARAMS},
-> +	{0x0360, 0x02, 0x00, CSIPHY_DEFAULT_PARAMS},
-> +	{0x03CC, 0x41, 0x00, CSIPHY_DEFAULT_PARAMS},
-> +	{0x0364, 0x00, 0x00, CSIPHY_DEFAULT_PARAMS},
-> +	{0x03DC, 0x51, 0x00, CSIPHY_DEFAULT_PARAMS},
-> +	{0x055C, 0x43, 0x00, CSIPHY_DEFAULT_PARAMS},
+> 	struct mem_region *mem_region = NULL;
+> 
+> 	if (nvdev->resmem.memlength && region_index == RESMEM_REGION_INDEX) {
+> 		/*
+> 		 * The P2P properties of the non-BAR memory is the same as the
+> 		 * BAR memory, so just use the provider for index 0. Someday
+> 		 * when CXL gets P2P support we could create CXLish providers
+> 		 * for the non-BAR memory.
+> 		 */
+> 		mem_region = &nvdev->resmem;
+> 	} else if (region_index == USEMEM_REGION_INDEX) {
+> 		/*
+> 		 * This is actually cachable memory and isn't treated as P2P in
+> 		 * the chip. For now we have no way to push cachable memory
+> 		 * through everything and the Grace HW doesn't care what caching
+> 		 * attribute is programmed into the SMMU. So use BAR 0.
+> 		 */
+> 		mem_region = &nvdev->usemem;
+> 	}
+> 
+> 	if (mem_region) {
+> 		*provider = pcim_p2pdma_provider(pdev, 0);
+> 		if (!*provider)
+> 			return -EINVAL;
+> 		return vfio_pci_core_fill_phys_vec(phys_vec, dma_ranges,
+> 						   nr_ranges,
+> 						   mem_region->memphys,
+> 						   mem_region->memlength);
+> 	}
+> 
+> 	return vfio_pci_core_get_dmabuf_phys(core_vdev, provider, region_index,
+> 					     phys_vec, dma_ranges, nr_ranges);
 
-You may find it be more structured, if the array is split between
-0x01zz, 0x03zz and 0x05zz blocks by new lines, each of those three
-blocks is a configuration of one of three lanes in total.
+Yes, this will work too.
 
-> +	{0x0568, 0xA0, 0x00, CSIPHY_DEFAULT_PARAMS},
-> +	{0x056C, 0x25, 0x00, CSIPHY_DEFAULT_PARAMS},
-> +	{0x0504, 0x06, 0x00, CSIPHY_DEFAULT_PARAMS},
-> +	{0x050C, 0x12, 0x00, CSIPHY_SETTLE_CNT_LOWER_BYTE},
-> +	{0x0508, 0x00, 0x00, CSIPHY_SETTLE_CNT_HIGHER_BYTE},
-> +	{0x0514, 0x20, 0x00, CSIPHY_DEFAULT_PARAMS},
-> +	{0x0550, 0x00, 0x00, CSIPHY_DEFAULT_PARAMS},
-> +	{0x0518, 0x3e, 0x00, CSIPHY_DEFAULT_PARAMS},
-> +	{0x051C, 0x41, 0x00, CSIPHY_DEFAULT_PARAMS},
-> +	{0x0520, 0x41, 0x00, CSIPHY_DEFAULT_PARAMS},
-> +	{0x0524, 0x7F, 0x00, CSIPHY_DEFAULT_PARAMS},
-> +	{0x0528, 0x00, 0x00, CSIPHY_DEFAULT_PARAMS},
-> +	{0x052C, 0x00, 0x00, CSIPHY_DEFAULT_PARAMS},
-> +	{0x0544, 0x12, 0x00, CSIPHY_DEFAULT_PARAMS},
-> +	{0x0560, 0x02, 0x00, CSIPHY_DEFAULT_PARAMS},
-> +	{0x05CC, 0x41, 0x00, CSIPHY_DEFAULT_PARAMS},
-> +	{0x0564, 0x00, 0x00, CSIPHY_DEFAULT_PARAMS},
-> +	{0x05DC, 0x51, 0x00, CSIPHY_DEFAULT_PARAMS},
-> +};
-> +
->   /* GEN2 1.1 2PH */
->   static const struct
->   csiphy_lane_regs lane_regs_sc8280xp[] = {
-> 
+Thanks
 
-Reviewed-by: Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>
-
--- 
-Best wishes,
-Vladimir
+> 		
+> Thanks,
+> Alex
