@@ -1,41 +1,40 @@
 Received: from gofer.mess.org (gofer.mess.org [88.97.38.141])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4EBBD23F40C;
-	Mon, 10 Nov 2025 20:45:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 055482ED17A
+	for <linux-media@vger.kernel.org>; Mon, 10 Nov 2025 20:51:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=88.97.38.141
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762807554; cv=none; b=Sc5j+tR9dQFPjK9W07k5RLDANncDQZ2djaxOxMikCUboBTP0F/q4YAT0GhkFpx5Zf5qKG935wQjvmdOa8gGZ2vDmy1kFFqTI5EDZ4s0vb80najtEuU7gcHReGyHW+RLssue9n58r624SUfBgOCIithe+IWz6sIB20UjwZ7gH6nQ=
+	t=1762807917; cv=none; b=UUMxC/YF8TRyFMVxbymtH7ktS3yHfeACe9DimH4diNsrTbSnWHVMQMD2gc4XLvtCCel4J2FLpdt+FvpMHGextkDfpzpaR9iOV4P/C/W5t+OEdqSdBLUxMZMBSs9gG5i98vqfhKV54DO9kuMZYJ06LV2sKNGBzxOQ/W8DLCoppJ8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762807554; c=relaxed/simple;
-	bh=0SD9Ewvk+/wZhTK1E9Nrbs9eHYimjnLTzygkomhvpS8=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=RGtqnzllJnTV0HYbrEbrV0MDSMWblsHibwGSzT+tuMwT02Hu3OqoxMtqPAgSeE8Adk0Rw5Ckug8PWNbLNbpTEQ7lJlB6RG/Z8FpKRZ1xzJwUbIA9xoA2oBOq9pwOFbLupXX47WS+D51dk3URsG5mLPVSykacEk5jpY9CXpzRONs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=mess.org; spf=pass smtp.mailfrom=mess.org; dkim=pass (2048-bit key) header.d=mess.org header.i=@mess.org header.b=Pxm3YZ/G; arc=none smtp.client-ip=88.97.38.141
+	s=arc-20240116; t=1762807917; c=relaxed/simple;
+	bh=msSa+ZN/cBDiQjQWcQiU9Jyh9ysAaSXK9U7nsPEiWiM=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=n+r3bCz3bOgms+6UIJa6Um3mAkLRcN60rkN/HAtpMjvKFKupsqapbchBi3YQ0xLvhXjREXvsIlDs4o06oH3oscOtokrW++Cmcs3bzv1ZdweSjntJe6KRr7PTjcQNvpqTyl6/aFozbGqV47/+RPa33jykB1Np5pQ8HzPNhamihSw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=mess.org; spf=pass smtp.mailfrom=mess.org; dkim=pass (2048-bit key) header.d=mess.org header.i=@mess.org header.b=E/XNIqC1; arc=none smtp.client-ip=88.97.38.141
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=mess.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mess.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=mess.org header.i=@mess.org header.b="Pxm3YZ/G"
+	dkim=pass (2048-bit key) header.d=mess.org header.i=@mess.org header.b="E/XNIqC1"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=mess.org; s=2020;
-	t=1762807545; bh=0SD9Ewvk+/wZhTK1E9Nrbs9eHYimjnLTzygkomhvpS8=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=Pxm3YZ/GPdOMSnqh+znGRdNZSvJgB8KHEtFBAT+xWZh6jZ+G9qYw5olHTYCl55OvN
-	 ljpAS5iluemR9/UdxFKVXuOGI96xvLz5TnlpTw1OJN51aZWfMibPiFX3m6WsKDQmJb
-	 xki5mKrl9EAXUC1wN68+WM6Onvq83nV8F51lV5Ogd6C5PsksOXlDWBNNMGc2+K0m8A
-	 tlj1D6K6YC0Jk1DXMqzlh5rokpnPv7iVxuwaR6pLiPiwjdZEFRMMxCTpRiVWsvyQZ5
-	 GR7iyvQAYgsIkgGU+WaBG4pQenptaMiwT0o7TJIVvVbEBl3L7PKCLsMxy1aE7JWJip
-	 e6yYGHLtCw2eg==
+	t=1762807465; bh=msSa+ZN/cBDiQjQWcQiU9Jyh9ysAaSXK9U7nsPEiWiM=;
+	h=Date:From:To:Cc:Subject:From;
+	b=E/XNIqC1LOngEIpcXf9jfrvOlzurQ2QOqc521xyme70NcoSK7E8A1loiMkLiBFpNJ
+	 E/cWYtbm3Zi5csb7BV2qSi1Hl0IvJdXE/gPNcdHshPMGeACHETeyR0850ZnmakqoTb
+	 rO/nuW6IbSIbELtraW+Rw0+T3j+KO+YpgKdZy4Ox1aj/od208AF/9tZioFqEr3wXSX
+	 wq97uaenzXNHy6bV4I8wYEr63PTky5zMexKGBFeAJgLjhS+wWC+h0bcgGNpbpKSwp6
+	 IEAAyx8z/+gZ/TyKptKdjWVM1RWm03t5Qbn9T/EGRsAzq9CQ2HRqOWxalsZzS2Y9pg
+	 94zJxCZWke+pg==
 Received: by gofer.mess.org (Postfix, from userid 1000)
-	id 691901000D4; Mon, 10 Nov 2025 20:45:45 +0000 (GMT)
-Date: Mon, 10 Nov 2025 20:45:45 +0000
+	id 27C1E1003DF; Mon, 10 Nov 2025 20:44:25 +0000 (GMT)
+Date: Mon, 10 Nov 2025 20:44:24 +0000
 From: Sean Young <sean@mess.org>
-To: Johan Hovold <johan@kernel.org>
-Cc: Mauro Carvalho Chehab <mchehab@kernel.org>, linux-media@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] media: ir-hix5hd2: drop unused module alias
-Message-ID: <aRJO-egLSI8doikz@gofer.mess.org>
-References: <20251017060626.8693-1-johan@kernel.org>
- <aRGsnubMhZYJI0M_@hovoldconsulting.com>
+To: linux-media@vger.kernel.org
+Cc: Haotian Zhang <vulab@iscas.ac.cn>,
+	Liao Yuanhong <liaoyuanhong@vivo.com>,
+	Johan Hovold <johan@kernel.org>
+Subject: [GIT PULL FOR 6.19] Rc fixes
+Message-ID: <aRJOqJF9nJGgBdhO@gofer.mess.org>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
@@ -44,22 +43,41 @@ List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <aRGsnubMhZYJI0M_@hovoldconsulting.com>
 
-Hi Johan,
+Hi Hans, Mauro,
 
-On Mon, Nov 10, 2025 at 10:13:02AM +0100, Johan Hovold wrote:
-> On Fri, Oct 17, 2025 at 08:06:26AM +0200, Johan Hovold wrote:
-> > The driver has never supported anything but OF probing so drop the
-> > unused platform module alias.
-> > 
-> > Signed-off-by: Johan Hovold <johan@kernel.org>
-> > ---
-> 
-> Can this one be picked up for 6.19?
+Just some small fixes.
 
-Of course; I've sent a pull request for this, you should be on the CC.
-
-Thanks,
+Many thanks,
 
 Sean
+
+The following changes since commit b4fbb13db86adb0bae1d7f968b61ea8dc9635e33:
+
+  media: qcom: camss: Add support for MSM8939 (2025-11-06 12:43:56 +0100)
+
+are available in the Git repository at:
+
+  https://gitlab.freedesktop.org/linux-media/users/seanyoung tags/v6.19a
+
+for you to fetch changes up to 370a7a6e77af43ea949710fd1919b8d6fb2b187e:
+
+  media: siano: Remove redundant ternary operators (2025-11-10 10:42:48 +0000)
+
+----------------------------------------------------------------
+v6.19a
+
+----------------------------------------------------------------
+Haotian Zhang (1):
+      media: rc: st_rc: Fix reset control resource leak
+
+Johan Hovold (1):
+      media: ir-hix5hd2: Drop unused module alias
+
+Liao Yuanhong (1):
+      media: siano: Remove redundant ternary operators
+
+ drivers/media/common/siano/smsir.c | 2 +-
+ drivers/media/rc/ir-hix5hd2.c      | 1 -
+ drivers/media/rc/st_rc.c           | 2 +-
+ 3 files changed, 2 insertions(+), 3 deletions(-)
