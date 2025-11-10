@@ -1,67 +1,67 @@
-Received: from mail-wm1-f53.google.com (mail-wm1-f53.google.com [209.85.128.53])
+Received: from mail-wr1-f53.google.com (mail-wr1-f53.google.com [209.85.221.53])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9749030594F
-	for <linux-media@vger.kernel.org>; Mon, 10 Nov 2025 11:38:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6228423EA88
+	for <linux-media@vger.kernel.org>; Mon, 10 Nov 2025 11:40:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762774736; cv=none; b=YTYa8Kza7UWQbSYSXW3RzHO74ByJQ4vsIPGoA8TcRw5HATWHWbPIjWGzqcRII8gtNjGD2wVTh45N6hjTYoJRA9QnygYoCgHWIsL0mhOoL+pJTE+SGS1vOZgVHYq0F66tczqHAqPY7UU4JrII1Eiuh4iZdbkd/+K3oMlKdTUlLW4=
+	t=1762774807; cv=none; b=KanEeRIKSSSqB0h6Vz3+j0GSU2GAWJ9iGeq9Qk8CWZo0HyHW6ImQ9xegmwyO/KShlWrhVnTWbRQO3F3l/TBWFj+mRm09zgte+xjM1hOn5LVnRDATOdSbQdVHXPIZUGPr8j8B/v1O4SWPAIHTUo6JT0OQ8WI6jnLwEynXEyrCbBI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762774736; c=relaxed/simple;
-	bh=442tawppyk6VW4zUh6UCP/rG01cfIHZsqjC14wtPq6I=;
+	s=arc-20240116; t=1762774807; c=relaxed/simple;
+	bh=54NkSaWzKBnhmYKVhYAafCeDsl+Vi7l2IbYdsfjy6rY=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=W2GS47/oCaBzENAzoVB4mLeuvm5/v/rW43SIDfwnZQH33hYd8t5+kaixfbDQbruv9H9WlEFWMeeL6QiZ3l9VUA6jJjzxkBZ+ffSmIhWcZCivcnNgwnEI14u9Til3uO0G99LnmrEYFQGONfQGgD2tSpSLQgoHOFndclKHeVwap8g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=aDasOyGa; arc=none smtp.client-ip=209.85.128.53
+	 In-Reply-To:Content-Type; b=qHS6GQMrG0khV6gEMYz5iZVkkrdChlMAL4RxG0n0RPk2FYBO4ihOaXpd90IR5ChjVGtUbWlz6glb8zDlfyP2Rv0q5HoJ3c4YnGKJaCgEdr6jMhxftHwU42R/W0kNSNvjTI2hb02KdYWg2uKJgzHh8OkgGemFrWiK6Yf74E2ioTM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=v6AIftcw; arc=none smtp.client-ip=209.85.221.53
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="aDasOyGa"
-Received: by mail-wm1-f53.google.com with SMTP id 5b1f17b1804b1-477549b3082so25804845e9.0
-        for <linux-media@vger.kernel.org>; Mon, 10 Nov 2025 03:38:54 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="v6AIftcw"
+Received: by mail-wr1-f53.google.com with SMTP id ffacd0b85a97d-42b31c610fcso1198968f8f.0
+        for <linux-media@vger.kernel.org>; Mon, 10 Nov 2025 03:40:05 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1762774733; x=1763379533; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1762774804; x=1763379604; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:content-language:from
          :references:cc:to:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=PDGyqZKTc6nb0bCAbSIQ1bmZ2i6gcCfwYTLcd5wNs/k=;
-        b=aDasOyGavf9cMAYOVFCg8V0Bts9qDcLZ0U4MZWY5IBd1UjKRuD8Bk7J6p3+XsWOZ7J
-         An45SH6ebNL+8/Dgnj6jkLoJ5YCEdMudgRmr4una4/tsPeAfOgJ87uDsdiMsSfTLvoJO
-         GowvWZl8np0p3ky+/Mn3BbXl4i3W1+wtaoMrZissmKo0t3L3DZKDBqcwDq9J2H/vKdOX
-         Z5RBf6E1o8/7TLhawbW2eSvMgzs8v8wTz09bmiem9BAG3elJ4yqHT3ot5GqwBjJ9hp4E
-         fHWXJSKRegWjDFMcMasqoGfifk47kx4mdjO0FX2s2iVifHJF+ei2Iiq3JncykkQLVORs
-         sJoA==
+        bh=/8LJLkQlhnVDYB5WFdSOlgPUhT3qQ6T/PIi1MnL8a34=;
+        b=v6AIftcwQ1ywkxLSX+uPqASz8T39pooRv69YFV1yTl5CvajDJ0hgWiE/hXWtrPTy22
+         dwgpp3dRIxV/g4dJALmCl8V+AK92J+Vx0o9IMbrqwfnHycHPFFi3/SmwA2twiZX0pKSH
+         mZKQjuMWQSn/KBCGFiKjr6gZhIiTuWmEWd0hl/MLyUdELWmNU+txhYzbFu7ju7PDJp6Q
+         tmrrSxvC7/3Jc0Zr3NVCg0dXMouJj5e8lV+nGoaG4Rw4+w/4BloJB+VeqtXPWbkXHMdu
+         V1T5h2I4cAXtV49mz0NZ7EHZK2ndRDwxK+kln0/sn9YKmOfN9Ra2feWsDg6l/ruxEuhw
+         ANQQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1762774733; x=1763379533;
+        d=1e100.net; s=20230601; t=1762774804; x=1763379604;
         h=content-transfer-encoding:in-reply-to:content-language:from
          :references:cc:to:subject:user-agent:mime-version:date:message-id
          :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=PDGyqZKTc6nb0bCAbSIQ1bmZ2i6gcCfwYTLcd5wNs/k=;
-        b=i78YSIwZzykZ3dVZujxFHBd/HUkEEMNQg4l50vBBuN/pP9aCZgY+QRzJcNJUVsa3rD
-         qRTbatO8+kj29Zt31Wel2mpIczGaJnZywRWJ5Un+MxX6CioyT2wutybkiE4IyYTb8Np9
-         1W6+eBujIL4VApvFmndBp60yOWMDlKE+bbV+OCU1RYsk+SCT8SJTzl8OovyA2Yh+mm68
-         PZM3RsvdjTdOWI4FfvmobD/1DfNEsFe+tQltvHvbC9YlVVentVn1PSZd8DkI2f/msxfk
-         bakVRY2CoDlEdXrQZDxvTyQzPd/o/zJHck3G1cZ7ZA3Lx9X6IfEzD99vNGJWHFpNvAFP
-         hikw==
-X-Forwarded-Encrypted: i=1; AJvYcCXbfThEzsnK4taecbB2pI0OLVdnEU5NYitP36Y0FPQgmtRlUt4AUni2dbCOi6fHZtacwdgQ5WS3LXSMOg==@vger.kernel.org
-X-Gm-Message-State: AOJu0YwHyAFgeXToqA8AWuQDN2ANthHRxlcm3ndpZCFLdDnFoKSCp9qR
-	PrqgAAR8AIk5g8fUKJ4BoBp+P0Jy1Rk1TTiEIUu5sZ/IR0XOjQ3CoJEGdwqzcPJzgis=
-X-Gm-Gg: ASbGnctiLzS2baEhkttF9X7gu8FZ7vr9leUi3gqlhrgvRA+Ft3Mw21qtAuCKggyYbCq
-	JNUdMfEfD4+qOPPeJ66XR/qkCMIHAVcR1Ms41vtS4zTcCI6WhNBiqd+zT+yx1hOJrEsb9QFV/Of
-	GGaja9SU1zAeIT/eB0hTldMgC6TNQ9brKojb8EzxSF0VwJZiZE9V243414VnEEdCbCj0hE066Mz
-	eJ9eioXeFZvyKJJMJEQhkBV66BUlnJ94tzk/g5LIOLBM/GZCH1aVnYJ6y3YCFLVoGxjdyCPUdWY
-	dCOKpl5BvUzorx1tJta4YGMBrUxs2huslhimD+2rH1NZM8brenfdU3MQ6Bp7ZuYb9ceMiXfYVBm
-	2Ufz9vOL0wsQ1t49hOv4qhXcZhJtQwUBJbmMew+/ECgPqc0w5/XuLIfDMiv1gZ2E9nJ0zjgDvIL
-	GCzPnWiiXhq2pfYVdeXJmtxgPSvbgvFzpRxEcmAE9mQg==
-X-Google-Smtp-Source: AGHT+IG+JUAf6UVQVsqEmCn1XhFTq5TWQOptKskoiqVgM/FKW2sNC6jwfwM3QRHOYWASpaXOTouW+A==
-X-Received: by 2002:a05:600c:4fcb:b0:46e:5b74:4858 with SMTP id 5b1f17b1804b1-477732341e9mr73691505e9.13.1762774732654;
-        Mon, 10 Nov 2025 03:38:52 -0800 (PST)
+        bh=/8LJLkQlhnVDYB5WFdSOlgPUhT3qQ6T/PIi1MnL8a34=;
+        b=ozw8v42IB+1cZ1KPuG6F05+tT274PP3PVv6GqqFUo7s84wJpancldHDJC/edttBce3
+         3/nsqtOcuAvaro7P5M3WPGJAeN7bgWSOutKSrDMWp+doUA4Svf9sBU+VIryx5ty3abpH
+         VxKjmeUawyk8Vad8eMo64/pxSKkUiSurAXV+jiwe4ZBthdc7Efk6Y8ZNoqjJYm8SW1ei
+         IU+SVqll8i1dB9lcsGA0br1PJBig+1XJ9NeLUZ5wnQcxnSQM3Yx2bEjvEp8pdXOl+V9m
+         u7Ik1goNH/9e3hdeOVJJ7wJsQbXcrnCObbx3urrXMtewOUPRy08OMmP73jHQr5wcmgYM
+         30bA==
+X-Forwarded-Encrypted: i=1; AJvYcCVzgJ+hJlHVSFHIwWEZ0CcgEDG0zU8pKZhdWNXhXI8JMmYcAlityUHbzd8yV1HOCOTIysJOsQnpEa3kCw==@vger.kernel.org
+X-Gm-Message-State: AOJu0YwYKTIwuAT8uNSvfPn2auRMTAexcIYjsi7IYiV2yaaX0o6UpWbZ
+	VaZYQpqIyiyksfa2m9LdBxJbSeEcXMIZ/STB2MrHqEEX+4scBMAtZrm4OOWabjYME+g=
+X-Gm-Gg: ASbGncu9nhePL0goWA3QfICk6+5jJgiAFR2pcDSadKnt6cy+1xzdMXWlVnp5X3P0cla
+	TUnL8mfcYgKKQ2vTCi5q1EISMohyiDQy7rOUGPbz0d9Y/NyM/b/jQ6wDLdBX68YRyvi7DFBHTIo
+	mvjN4a+5WccbAEMwgXTbaItfRhg1FsrctjPvvylVnG9uvhkqjXenMmAuaRItv8L7YA9BkcLymhc
+	AaHRxIIfGhmVBIA3O6i+GpbY4SWH/peYDXvgyM7izZqfO3cH2JFUxJB9F7mEa0cH7/C1Fs04BGz
+	EyguVTg9/xMAXgLjGZOd667l8CySPuYoojbHZ9extnIFiUO9WDYQsPNWKMx5YhHqo7DzJ6VBG2q
+	9LQ5axHJtfsOpKXC6F8XImzsM84fKi0QMU5E058ju/yrrf+/Ky3Rrhm3HT6lzRUqtGB3m0zRsua
+	K39bK5H08REgfi5/Bjdd02WFUVjtD9Pri40UpG0dPD0/xIXtRylFT3tj3+fYrwx+k=
+X-Google-Smtp-Source: AGHT+IHc0y0L/IlFkDJCuI/XoUBdec6Dc+v/BCPlZFQShA4ijfqtxDc6+cizrEb5ne5sPA0PgA8OEQ==
+X-Received: by 2002:a05:6000:657:b0:42b:3907:a38b with SMTP id ffacd0b85a97d-42b3907a591mr3013836f8f.44.1762774803631;
+        Mon, 10 Nov 2025 03:40:03 -0800 (PST)
 Received: from [192.168.0.21] (188-141-3-146.dynamic.upc.ie. [188.141.3.146])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4775ce20ee3sm314783285e9.9.2025.11.10.03.38.51
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-42ac679d544sm22562080f8f.46.2025.11.10.03.40.02
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 10 Nov 2025 03:38:52 -0800 (PST)
-Message-ID: <150cee0d-6c5f-4380-8c3b-ff29c4ca679b@linaro.org>
-Date: Mon, 10 Nov 2025 11:38:51 +0000
+        Mon, 10 Nov 2025 03:40:03 -0800 (PST)
+Message-ID: <f48bf868-29df-43bb-b1f5-d27f8ffb9d8e@linaro.org>
+Date: Mon, 10 Nov 2025 11:40:02 +0000
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
@@ -69,8 +69,8 @@ List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH RFC 5/8] media: qcom: camss: Initialize lanes after lane
- configuration is available
+Subject: Re: [PATCH RFC 6/8] media: qcom: camss: csiphy-3ph: Use sdm845 C-PHY
+ configuration sequence
 To: david@ixit.cz, Robert Foss <rfoss@kernel.org>,
  Todor Tomov <todor.too@gmail.com>,
  Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>,
@@ -81,125 +81,48 @@ Cc: Joel Selvaraj <foss@joelselvaraj.com>, linux-media@vger.kernel.org,
  linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
  phone-devel@vger.kernel.org
 References: <20251109-qcom-cphy-v1-0-165f7e79b0e1@ixit.cz>
- <20251109-qcom-cphy-v1-5-165f7e79b0e1@ixit.cz>
+ <20251109-qcom-cphy-v1-6-165f7e79b0e1@ixit.cz>
 From: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
 Content-Language: en-US
-In-Reply-To: <20251109-qcom-cphy-v1-5-165f7e79b0e1@ixit.cz>
+In-Reply-To: <20251109-qcom-cphy-v1-6-165f7e79b0e1@ixit.cz>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
 On 09/11/2025 09:39, David Heidelberg via B4 Relay wrote:
-> From: Petr Hodina <phodina@protonmail.com>
+> From: David Heidelberg <david@ixit.cz>
 > 
-> The lanes must not be initialized before the driver has access to
-> the lane configuration, as it depends on whether D-PHY or C-PHY mode
-> is in use. Move the lane initialization to a later stage where the
-> configuration structures are available.
+> Enable the 3-phase (3PH) lane configuration introduced earlier when
+> C-PHY mode is requested on the SDM845 platform. This ensures the proper
+> initialization sequence is used for C-PHY operation.
 > 
-> Signed-off-by: Petr Hodina <phodina@protonmail.com>
 > Signed-off-by: David Heidelberg <david@ixit.cz>
 > ---
->   .../platform/qcom/camss/camss-csiphy-3ph-1-0.c     | 70 ++++++++++++----------
->   1 file changed, 37 insertions(+), 33 deletions(-)
+>   drivers/media/platform/qcom/camss/camss-csiphy-3ph-1-0.c | 10 ++++++++--
+>   1 file changed, 8 insertions(+), 2 deletions(-)
 > 
 > diff --git a/drivers/media/platform/qcom/camss/camss-csiphy-3ph-1-0.c b/drivers/media/platform/qcom/camss/camss-csiphy-3ph-1-0.c
-> index 348b8cd18327e..c2adbde6b4e0d 100644
+> index c2adbde6b4e0d..03f5c4676e89a 100644
 > --- a/drivers/media/platform/qcom/camss/camss-csiphy-3ph-1-0.c
 > +++ b/drivers/media/platform/qcom/camss/camss-csiphy-3ph-1-0.c
-> @@ -1101,6 +1101,42 @@ static void csiphy_lanes_enable(struct csiphy_device *csiphy,
->   	u8 val;
->   	int i;
->   
-> +	switch (csiphy->camss->res->version) {
-> +	case CAMSS_845:
-> +		regs->lane_regs = &lane_regs_sdm845[0];
-> +		regs->lane_array_size = ARRAY_SIZE(lane_regs_sdm845);
-> +		break;
-> +	case CAMSS_2290:
-> +		regs->lane_regs = &lane_regs_qcm2290[0];
-> +		regs->lane_array_size = ARRAY_SIZE(lane_regs_qcm2290);
-> +		break;
-> +	case CAMSS_7280:
-> +	case CAMSS_8250:
-> +		regs->lane_regs = &lane_regs_sm8250[0];
-> +		regs->lane_array_size = ARRAY_SIZE(lane_regs_sm8250);
-> +		break;
-> +	case CAMSS_8280XP:
-> +		regs->lane_regs = &lane_regs_sc8280xp[0];
-> +		regs->lane_array_size = ARRAY_SIZE(lane_regs_sc8280xp);
-> +		break;
-> +	case CAMSS_X1E80100:
-> +	case CAMSS_8550:
-> +		regs->offset = 0x1000;
-> +		break;
-> +	case CAMSS_8650:
-> +		regs->lane_regs = &lane_regs_sm8650[0];
-> +		regs->lane_array_size = ARRAY_SIZE(lane_regs_sm8650);
-> +		regs->offset = 0x1000;
-> +		break;
-> +	case CAMSS_8300:
-> +	case CAMSS_8775P:
-> +		regs->lane_regs = &lane_regs_sa8775p[0];
-> +		regs->lane_array_size = ARRAY_SIZE(lane_regs_sa8775p);
-> +		break;
-> +	default:
-> +		break;
-> +	}
-> +
->   	settle_cnt = csiphy_settle_cnt_calc(link_freq, csiphy->timer_clk_rate);
->   
->   	if (c->cphy) {
-> @@ -1160,47 +1196,15 @@ static int csiphy_init(struct csiphy_device *csiphy)
->   		return -ENOMEM;
->   
->   	csiphy->regs = regs;
-> -	regs->offset = 0x800;
+> @@ -1103,8 +1103,14 @@ static void csiphy_lanes_enable(struct csiphy_device *csiphy,
 >   
 >   	switch (csiphy->camss->res->version) {
-> -	case CAMSS_845:
+>   	case CAMSS_845:
 > -		regs->lane_regs = &lane_regs_sdm845[0];
 > -		regs->lane_array_size = ARRAY_SIZE(lane_regs_sdm845);
-> -		break;
-> -	case CAMSS_2290:
-> -		regs->lane_regs = &lane_regs_qcm2290[0];
-> -		regs->lane_array_size = ARRAY_SIZE(lane_regs_qcm2290);
-> -		break;
-> -	case CAMSS_7280:
-> -	case CAMSS_8250:
-> -		regs->lane_regs = &lane_regs_sm8250[0];
-> -		regs->lane_array_size = ARRAY_SIZE(lane_regs_sm8250);
-> -		break;
-> -	case CAMSS_8280XP:
-> -		regs->lane_regs = &lane_regs_sc8280xp[0];
-> -		regs->lane_array_size = ARRAY_SIZE(lane_regs_sc8280xp);
-> -		break;
->   	case CAMSS_X1E80100:
-> -		regs->lane_regs = &lane_regs_x1e80100[0];
-> -		regs->lane_array_size = ARRAY_SIZE(lane_regs_x1e80100);
-> -		regs->offset = 0x1000;
-> -		break;
->   	case CAMSS_8550:
-> -		regs->lane_regs = &lane_regs_sm8550[0];
-> -		regs->lane_array_size = ARRAY_SIZE(lane_regs_sm8550);
-> -		regs->offset = 0x1000;
-> -		break;
->   	case CAMSS_8650:
-> -		regs->lane_regs = &lane_regs_sm8650[0];
-> -		regs->lane_array_size = ARRAY_SIZE(lane_regs_sm8650);
->   		regs->offset = 0x1000;
+> +		if (c->cphy) {
+> +			regs->lane_regs = &lane_regs_sdm845_3ph[0];
+> +			regs->lane_array_size = ARRAY_SIZE(lane_regs_sdm845_3ph);
+> +
+> +		} else {
+> +			regs->lane_regs = &lane_regs_sdm845[0];
+> +			regs->lane_array_size = ARRAY_SIZE(lane_regs_sdm845);
+> +		}
 >   		break;
-> -	case CAMSS_8300:
-> -	case CAMSS_8775P:
-> -		regs->lane_regs = &lane_regs_sa8775p[0];
-> -		regs->lane_array_size = ARRAY_SIZE(lane_regs_sa8775p);
-> -		break;
->   	default:
-> +		regs->offset = 0x800;
->   		break;
->   	}
->   
+>   	case CAMSS_2290:
+>   		regs->lane_regs = &lane_regs_qcm2290[0];
 > 
 
-Agreement in principle.
+Assuming the bool becomes an int derived from the define instead...
 
 Reviewed-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
