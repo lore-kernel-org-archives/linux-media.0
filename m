@@ -1,240 +1,374 @@
-Received: from SJ2PR03CU001.outbound.protection.outlook.com (mail-westusazon11012033.outbound.protection.outlook.com [52.101.43.33])
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B34D6266EE9;
-	Mon, 10 Nov 2025 09:46:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.43.33
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762768003; cv=fail; b=LDEkcsvKPJzFJtAT6uCCJRieXC8y8rqyAPZ59fWTicOTHAUGxZojZKdo4i1ucHwzvz8PFb+XC3cO0Xu2C7RU6+WpxLHN8uZByufRoy/kpFJieYpz/SbkVlyXMqGu1ZhEixUPbetg8FL4VlFqDnMz1NnOK75ooI5yKbymSZwIl1A=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762768003; c=relaxed/simple;
-	bh=42lMaqGZmJTpxNdnWEq1Hae+WyTqJLmd/humoAWEr3I=;
-	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
-	 Content-Type:MIME-Version; b=tGMYkQebcNwrPwa3peml8VEG8T2KF4WkIuEI2fxp9SXkl62hnmJ4P9rszsfdtJJMuuh/+ZjY7pWqyIqqEIvvFPLkoNy2q8rbr5KGRSkl+Kknwm1hE1TlFtprJCTPBWwuOjk/0s6AkdA7TbicqzenZ8I2B/cEUNxatXHOIqu05tA=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=wkx4Sds5; arc=fail smtp.client-ip=52.101.43.33
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B697C3054F9
+	for <linux-media@vger.kernel.org>; Mon, 10 Nov 2025 10:23:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1762770222; cv=none; b=OyanH/41FH7lzX01XxxCC/DIrOUxwmklKUGclTfXZ/5RSNYEqRlfmmooHPSpD4E0dO2WtDD3qZICn1yhS8YYQcleQD7X4Mp1rIwTvIt1jBl+LojRUbsZBTjgWTYhnBuPLuwWVS5Zjb81CmF3tuiaMfS8FnvPfnpnYc1seLc53Lg=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1762770222; c=relaxed/simple;
+	bh=zQbaSwQ07DnPLI+svW+Tr71zJf4jM9rxlcGOt95gUBU=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=D54n4nJ26s92pqcx0tF4qZMaCj4cIsNaI5HYATN7ER2CPQ34On5fbcvWYKa3BKxEoAjh0y9FEmynXX4BS16BCTNYBcr4fV+M29uiTKMEu2moTM0tdz3HzKNx/+BH9HmiZXgbSrAep8iTSjyy/UMJmQiqCEiLdC16bUc0wLohWak=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=GfRC7RbR; dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b=EbVZThzb; arc=none smtp.client-ip=205.220.180.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="wkx4Sds5"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=pigQpjarsAX0v9IXTZ3us6Pystm84WYwK+kHMiE7xQemNyKXqo+GsfreZImAf9jAmkGZyDLxQsaZiTkJHd7KQT9OJVeSUcUfEhZdGrDAFSYutSaOmZMuY5aVIaznpJpP5O7skm3kSQB+0b1aVVikFbd3IP4EoE8e1dRd9XtrRlId79PpYWXj8ib/jUAKKp83vD/R4fNxy3S0AZcI1Fk0hB/RhjnqpOKTPX1o8R3Hf6Z3gQ3x0sMM3dD6VKhWgiYqQ2XNcKYH4w+JPtPgVqiY+zSZLFxfe4qD3KFRSjKkItOsCMYroTzt/TcTgPnYwnqOACECsmX8mHM6BE6OseRfTg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=wgHeRQfvZphzAFb9Mw9/C2lDe154q9jHG1IOCsYDRKY=;
- b=YtTRV3N8HFo6BRwOgQQeceFXMN1ku1D7BXwLAaAmAAymp1yGjVwDJnOuJ6Tn4sqGL/DeBDga6lw3W7KFDnQCATUCGnoPru/fYKhsrmIpK6rtDjhXOHknHnR9LZH1uj1qRtIzVD6aXSHHMbbsNEeIgoiY9SQRrxnsVdVui0gVL77ltwSl+lrR7YVijcvNZhAtcR48n78Q0C0UzLkAbHAy/cui6YT9BZ+SVcaHGMtRnJtK20VU6o8XP8kCsfl61yPhZ+uWW6pTfgra5F/lcM4bZoyrWRx0nZn+twiKDgcMWoULJAJ2mylXkaQiRQ5fqkxnRH+OATzvsMUF9VG5anp98Q==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=wgHeRQfvZphzAFb9Mw9/C2lDe154q9jHG1IOCsYDRKY=;
- b=wkx4Sds5KmD1t9YzcDRyFQwYsnD7FLzM5kfzqSeXifIFYU2EWoO/b4Vu99K2P+ecQbeqHmL2xbG+fkFPzhQK1VSPM1jN+pYNJ4h/+dw0YANoQDAlRZiLh3O9vB6JeVhRnWQyfIMPGSWn6EBI53C3m2xGsufTHGfd0Blh48ze6+g=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from LV9PR12MB9829.namprd12.prod.outlook.com (2603:10b6:408:2eb::9)
- by SN7PR12MB6837.namprd12.prod.outlook.com (2603:10b6:806:267::10) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9298.16; Mon, 10 Nov
- 2025 09:46:38 +0000
-Received: from LV9PR12MB9829.namprd12.prod.outlook.com
- ([fe80::c47f:251d:7b84:e6b4]) by LV9PR12MB9829.namprd12.prod.outlook.com
- ([fe80::c47f:251d:7b84:e6b4%6]) with mapi id 15.20.9298.015; Mon, 10 Nov 2025
- 09:46:38 +0000
-Message-ID: <c41df0f5-b2b5-49f1-a49e-8750e55975e1@amd.com>
-Date: Mon, 10 Nov 2025 17:46:28 +0800
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v5 0/7] Add AMD ISP4 driver
-To: Sultan Alsawaf <sultan@kerneltoast.com>
-Cc: mchehab@kernel.org, hverkuil@xs4all.nl,
- laurent.pinchart+renesas@ideasonboard.com, bryan.odonoghue@linaro.org,
- sakari.ailus@linux.intel.com, prabhakar.mahadev-lad.rj@bp.renesas.com,
- linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
- pratap.nirujogi@amd.com, benjamin.chan@amd.com, king.li@amd.com,
- gjorgji.rosikopulos@amd.com, Phil.Jawich@amd.com, Dominic.Antony@amd.com,
- mario.limonciello@amd.com, richard.gong@amd.com, anson.tsao@amd.com
-References: <20251024090643.271883-1-Bin.Du@amd.com>
- <aQsYJhbGifdXhjCJ@sultan-box> <aRGjX1pv0y_lVext@sultan-box>
-Content-Language: en-US
-From: "Du, Bin" <bin.du@amd.com>
-In-Reply-To: <aRGjX1pv0y_lVext@sultan-box>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: SG3P274CA0015.SGPP274.PROD.OUTLOOK.COM (2603:1096:4:be::27)
- To LV9PR12MB9829.namprd12.prod.outlook.com (2603:10b6:408:2eb::9)
+	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="GfRC7RbR";
+	dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b="EbVZThzb"
+Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 5AA9CgGD3146244
+	for <linux-media@vger.kernel.org>; Mon, 10 Nov 2025 10:23:38 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
+	cc:content-transfer-encoding:content-type:date:from:message-id
+	:mime-version:subject:to; s=qcppdkim1; bh=3RSXLIfKi+zDkE8kdV4GWY
+	kr7jMI4A5nsfbi+rQhdtE=; b=GfRC7RbR4baNAHiH9FnBjzlRJzYoiPwVzE83+F
+	JORaDcEXM2hoPG3cktq4X1f0pr6Bj6NUn5X5GwDk1ZOf9nUi/u5KiE2QKCQmjreJ
+	1R6Z/v+qq+cwICdvvuYsYSstRXP/QltEKkTF/FeKw+a9wFYT/Cx88VFJdXz8k0TX
+	1xAqis3P8erXeDuRztUFT7/c8EP3BbxKg/FgDJ/b6EO2h2J6q2UOGcK9qVqxCvbw
+	1UhQVD16KiViAVaEHiBmH9O398DLufQ5GpdLDSBOVO86WlcUYII/nDgN1JMobbnt
+	ZiuzV0A518V0iRdByVG5JGEo6p5LUv+qwTVaGJdA57hNXNxA==
+Received: from mail-pf1-f197.google.com (mail-pf1-f197.google.com [209.85.210.197])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4abd7hr7w7-1
+	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
+	for <linux-media@vger.kernel.org>; Mon, 10 Nov 2025 10:23:38 +0000 (GMT)
+Received: by mail-pf1-f197.google.com with SMTP id d2e1a72fcca58-7900f597d08so2773971b3a.1
+        for <linux-media@vger.kernel.org>; Mon, 10 Nov 2025 02:23:38 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=oss.qualcomm.com; s=google; t=1762770217; x=1763375017; darn=vger.kernel.org;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=3RSXLIfKi+zDkE8kdV4GWYkr7jMI4A5nsfbi+rQhdtE=;
+        b=EbVZThzbdkI9rO+ZybuMVmB1UjGBJ4zNvw9VtPHoMM3XjnCglVeNCauzpt/VRUPYB4
+         dh52JwXU3d8y9ODJz9D1LGrwVsWGnYqO1dZh8vyaE7FMQ6STqA9oM2Z5Qf3OFBgL0e+h
+         vFY/GHHSgfSLD3MHIQfAxySPFptbk7ALEdBBxuWGGzukkuyBBVgryxbYd8yLQFAxETX3
+         nyx1D49bXDnA8IRbr4DP8Myaso38rfvYWu/rCUr6fUe+1ONQsaRg2cU4R7FPUfkrOqTg
+         f7YUNCyNa7/f7DJjpNxmy9TS1jqIx0LAyVLU9194p9DQMeTRWYXNpR36j1tXfnX7CV3L
+         7N3w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1762770217; x=1763375017;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=3RSXLIfKi+zDkE8kdV4GWYkr7jMI4A5nsfbi+rQhdtE=;
+        b=LvNxrhFtS5FCWfeIg9l2vm3tRcHl4xkXO2qM9sdjmFKXBwUL+cwipgoqM5hu1kwkEU
+         C+rmk9fPWM0MLtg2BuDFv1ayAtv3R7ekxx0osUdf8h1p+UP/c8piJB8XrR86aztyq5o4
+         LuQxKwQKZ4u5vL+x+rqwJrVunCBA5oktjkzOpzKUEGT7+o71ud3iKzcyr+Olo4IQ42sl
+         j6xEI195By0dos9JmVi1k8LAEUXRBdSgF3sh9wkF+kkJWE5GyRrB5/VFB7diDCMHro4Q
+         2mg4HNI4DfzkBKWusCQ7EMvL7rUsJ2wj820KwVB2novxTL6OLo3y8I/t2T0zrz68Z/Wu
+         kO8g==
+X-Gm-Message-State: AOJu0YxiAj9ovLubJ/bhqmxDyHSzbBFt8ve7zRdbzCD0jCZhsx5g23yE
+	ajwpliAhH8Bbn+R0dhlldLIWPcC25yav5gmJwJM2F794Uj27t3NVkmPXEvCrU+tVqB1HgDpTb0m
+	fkoyssn+j196UaJHoPqNpWFpXEKMng7N+6S+zZeWVQTqeiuxa/HtG9R++2BzEMi0ZEQ==
+X-Gm-Gg: ASbGnctN/LYJKWi5F31i3iETeW2+Saivz/W7YHO3SFKAsfJ4Rexw72GkvjV6jHhmx+R
+	xt8OK7GYB0QHFs+zxX9qMSopz6x5Ifj6azG8Xcl7UyBaLLDbacm2bNgmB1N1ohnXgiNxyZqzK4j
+	Obr6toHXRiIbf/y2SRjmTlVIQFn8V9IcokN0XqQDkh5+KuCBcjgJld2dlUBK1XGH2IulT2Eh/a9
+	bf9jyt6XijK8/8VLtGFvRQALrgCXQsgmSpYLmNyfYVX0GADTnlZqDTJmcVi2v6iDOgzyv9f6j5m
+	cx1IMo28zhKZhd3WuKahOXX0HmqJN+RU5OVkAIBSbxIwmBjx/yCIOK0GHd+2/4SOyvXdoWSeY3c
+	403Mc2dT8n7x1J19qa9B9Hc8oaqoq73ran5GAk1+ATBQrXKzOhHiGhSDsfmDLAQKaMB6awrX7YQ
+	==
+X-Received: by 2002:a05:6a00:18a1:b0:77f:4a83:8f9 with SMTP id d2e1a72fcca58-7b225aea5c9mr11195551b3a.2.1762770217321;
+        Mon, 10 Nov 2025 02:23:37 -0800 (PST)
+X-Google-Smtp-Source: AGHT+IF+aXzsbONT0ddaiwf7vLOs1dvlNYOIwKhB5GQ90YFemOubT/ThSUNbfRjrHw33/QFz3prhSw==
+X-Received: by 2002:a05:6a00:18a1:b0:77f:4a83:8f9 with SMTP id d2e1a72fcca58-7b225aea5c9mr11195492b3a.2.1762770216655;
+        Mon, 10 Nov 2025 02:23:36 -0800 (PST)
+Received: from WANGAOW-LAB01.ap.qualcomm.com (tpe-colo-wan-fw-bordernet.qualcomm.com. [103.229.16.4])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-7b0cc179f77sm11153832b3a.34.2025.11.10.02.23.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 10 Nov 2025 02:23:36 -0800 (PST)
+From: Wangao Wang <wangao.wang@oss.qualcomm.com>
+Subject: [PATCH v5 0/6] media: qcom: iris: encoder feature enhancements
+Date: Mon, 10 Nov 2025 18:23:11 +0800
+Message-Id: <20251110-iris_encoder_enhancements-v5-0-1dbb19968bd5@oss.qualcomm.com>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: LV9PR12MB9829:EE_|SN7PR12MB6837:EE_
-X-MS-Office365-Filtering-Correlation-Id: 78f0adb2-9594-4927-5600-08de203e0b59
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230040|376014|366016|1800799024;
-X-Microsoft-Antispam-Message-Info:
-	=?utf-8?B?MWx1Z1JHMVdBYXZMamtVcXpoNUtyNlhDdVd0YkFVRzdBQjRjNzE4bVh4ajBI?=
- =?utf-8?B?RHNGZ3M5WUJOTmY0Q0RGNFdYK0lCZ0R1RXBmbnpBdWpzbXVSYXhPUFRhWDRl?=
- =?utf-8?B?UkYydUo0ckcxd21JMWZ2N25tL3NzcFNyM21DM2J0cVVCMnNIVXVWNFIwR1ZP?=
- =?utf-8?B?d1NBZENFSllESUZyaTNPVjVmSHJ5bldEK0pTQytNZ0YwM1d6Z3hOdXdMOEdZ?=
- =?utf-8?B?eTlrbHh1Z3llS3YvOVo2eU0xMml3MlFTTU9DdnhSSnJWV3hWaTJVWXhoTmpn?=
- =?utf-8?B?ME9QeGdwT2xSYjY3OWM2ODlJRUFOTFVPUThtdm5DNHBPUEJReFZTV1VTOTNm?=
- =?utf-8?B?VmtqeVpvZ2t5cGtpb3ZxOEFLaXk3RHp2UVpyQlZsdFRIRTRUUU43QUpEY0dl?=
- =?utf-8?B?aXNJUGI3WUpLMnhGQk92NkZUSXdZRmI0TG5OR3hNb0Y4NTFDQXorQ3NpWGVj?=
- =?utf-8?B?SGR0SnRHT0hZbXAxQWErc3kyYlZuTDBMTlZQK254QWExS0U3S3lUVmxMb3or?=
- =?utf-8?B?cDRoanF5anNMS29vOWw1eDZPUS8ybnVJQXhNVVkrMHY0d0VIcUJQRmoxcVY0?=
- =?utf-8?B?OXoxK1RyOWdCRmtVTFpLWEVhb0dYQUw3RTZHaHFnK2dLVjFHa2xna3JhQ3RQ?=
- =?utf-8?B?VmVoMmxlSDBjUldGMXI3RkNCVTBkbEZMNWkybFo4clhEdGJRUVJ3bk5qRHR6?=
- =?utf-8?B?dnlZWERIY0ZyTnI5Y05JTENnelkxTm43SXpYYXRJK0Y2Y3lOdXJyUklJY3NQ?=
- =?utf-8?B?VW0zc2pNWFVTckpWK3U1Q0FJZmVjS2tQdkdDcnFISGZwNVFUWjZFK1hmYndV?=
- =?utf-8?B?RzA3ZjN5UHB0aXIralJaYkNqNGN3M1JtQ3JMTXFkcFJWSXNIOHUwRWRjaUFH?=
- =?utf-8?B?VnJ4U2szQjY4SVhPak1rSUovbFpUUU1zc1dlUGt3YjM2NEZYcVArVXhyZjNt?=
- =?utf-8?B?WVZjd3JQVzZaNjZMU3NvcjZ5ajloeC91UjFuSC9YRWRIa05RWmg4Sjl0Vm1h?=
- =?utf-8?B?eTI4NWpOSVdxOEhEaVBMNnFHa0dYUFF2TllPeWd5ZVpnd1ZnVE9qUTdxQVBp?=
- =?utf-8?B?YWZlMGxJVFhjVkx6ZktRNVJ1aTMxZ1k4Tkp1RjdtaWY2NnNvZVdkQmFhWkVT?=
- =?utf-8?B?ZG8wVnNSY0dEZkVReWw5cWVDaDZOV2wydDFwdHFhV1E3WmhGbDV2RzFwMzdI?=
- =?utf-8?B?Vnd1azVHdUYzTkNKdi9BSUNqL3lBUVhSKzBwMEZMbEhUay9WUVZCZDJyNDY5?=
- =?utf-8?B?NXc2OE1SdXFuNkZQNUl4aTloTjZta0ovbm9xWkc0alZxNHVOWHRBWWpEWE1L?=
- =?utf-8?B?dWVFV0lzeXpnd2wrQUQvdVFaNm96bVZsZGExbEVERkRWUnYrejJrSnRuQjhG?=
- =?utf-8?B?K0xLMm1MTE1XbndQQkZGMkJxS2hQd090ZzhHSFFZaHAxdURYNWpITjlsSFl6?=
- =?utf-8?B?Z3V0VkNjTzl5bkx1V05qTE1WNG50ajZiOC9uVVRkWGZDemdYT3Y2ZjFCYlRa?=
- =?utf-8?B?L2R1eXh3VVNvY1ZQOFNQODdNQkxTMnpFNUVNQ2QxSGVDWWZ6cDQvb0Y5SHJa?=
- =?utf-8?B?N2ZWdnNNMEpKcy9UcVdGdWdMaEVQYllaMG1FUkFjUm8rM2kyWmMxS0tlYTd0?=
- =?utf-8?B?TVlteTVxNGoxMytTS3pNcHN5L0psbjM2UXMyVGZ2aXpJZjhPaGVuaXVBMks5?=
- =?utf-8?B?dk91S2E0S2JiK21kN0wwTU8vNlJXUVFDRTlsbVJmVWxnODNqcGI2WHdqQ0t4?=
- =?utf-8?B?UnJJLzRJVDFwYTJLREQ4U24xYlFLVWhwYTdNeFFjNnVvNzNKUW4yZVZrVDRx?=
- =?utf-8?B?MnRSd1F4Y1NBZTNLYVBOeDhKUEJNMmJBS2d2aUQ5T3BZOVcvRTE5QmRTWllW?=
- =?utf-8?B?eVVQeTU0R0RUUUR2TFY0c0NvTlhjTjJZNGQxMGRadnlicHFzSVMzdSsybnlm?=
- =?utf-8?Q?WVl7wcxMWmCl6rRn0xJZ/XQV/6DG2wNj?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LV9PR12MB9829.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(366016)(1800799024);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?U1Y5Mm1YUHRlUUZPcVpMSlZWSnhjWDY0Y0M4dlgwT2dWdGttMllOSG1mbTVo?=
- =?utf-8?B?NC81WkJveWpzRXhiVkdwalBzMEtqSWgvNzZ6ZWpiaExqYVpnRTJFMTcxUlVx?=
- =?utf-8?B?amtRbzYvWk9CL3o5c3Q4MUpBNnIxdHE2M0xTTXZ6b3RXczhwSGRBQlcrajly?=
- =?utf-8?B?bldKeDVSdFNGdlRLWXdxUHV2bDJ5WmRxVVlFV3pyQ3VOV3Y2ZXN1Zm85REZC?=
- =?utf-8?B?eWJjd014NkU3dEpENTg3S09OcE9aMDAzL1RvcVVra2txNVUrblJuekViOTRG?=
- =?utf-8?B?UGYwK3N1SjRoYWRVQWgyMmwxMytzVnFFSUxFWFU5Z3NpVEZwVW8xVFpQMUcv?=
- =?utf-8?B?Yko0anBzMHowMElKNXFCV3JsNk16RVp2eVdWSWk3VHVkckhUekpuUUVGZ3FH?=
- =?utf-8?B?YWk2Zk5JQjZvSEZjL3JiNWowM2xMM21velFRcHdVb0tPSEJOUlVpYU54VXdB?=
- =?utf-8?B?UVVrT3ZuMytoUGovV0hsVlY2N0ZIcERFblR2WEFwQ1N6dUU3dGJ4cll0Qzdx?=
- =?utf-8?B?MWJIdWg5eVlEZi9STk5QemRhQTNxMm43enZPSjRnODhNNmw4dWI0d3Ztdjh2?=
- =?utf-8?B?aUxtOXI2Tjh6NUg0VnNTUnFYS01UelIvTFV1VHVrOWxCRGNPRzVhcHU5MWlt?=
- =?utf-8?B?NEdJenl2b092NUg3N2RLKzNGSy80cUdLQ2FwWG10ejNwQkcxZHhobnAwc084?=
- =?utf-8?B?N290MGdHQnFYQVFoYks0SElIZDhYcDdnVVNZSVRrT2pUNWhrZGwrbVRWQnF0?=
- =?utf-8?B?MDkwSWIrc3dERlRHdXU2T2EzWjdwblRrN3ZYVjRlazhlcS9SWmIvRG85TVpX?=
- =?utf-8?B?eXJBb1VHVkVONCszMXJMZkpUS0UvTWllZHFZc0MvWS9TRHhoaXB6M1krT3N0?=
- =?utf-8?B?b0hsdjFYSnNMR0lBNUx0ZERUR3pLTVIvRjJibW9hbWJZZkg2ZFRDM1pGN0Zk?=
- =?utf-8?B?b1JjSDIxTzhKV0VjQnpqWk1aSGhkaUZVd2ErYkVxQTFRL3JxWDdNTCttTlhm?=
- =?utf-8?B?MWpXTVFtTDNyZlRMRXgrR2Vmck9zUUNaTDdhTVJ0c0xHZ1NQSGU0TlFvRkE3?=
- =?utf-8?B?UGpHd0psT08zdWZsNS8rWjRDWEwrWjk1dElTeDhDT3ZqZ20xcmp6djFzUVZ1?=
- =?utf-8?B?aFovWWZ3ejI1NGFLYVQ3Q3R4NmxSOEtjZnlxY0s4bVhJZXFhQUZ6MVd5b3NC?=
- =?utf-8?B?R0FWUE8xYzNoUGFuY3NvenlTdmtPMmxqZmYybWp4ZGN4NkdIOEVaMjJDUlV6?=
- =?utf-8?B?elRZdXpOWHFiNytGcmd0WTNZYUYyekJYTGJRYm0wK0xRQlRtWkZGVDJ0eXd3?=
- =?utf-8?B?NVRNa0duS2dqVXZBMXF3RXVUakV2V1g1WWtrdVF6Z3hXZEdVTGJ2aGJqb2lW?=
- =?utf-8?B?UWFmeDVUUzZJZzBIZk5jaWIrWVZUNGZjdjNuTktxRk4vL1BVd3RYemo3N1FF?=
- =?utf-8?B?MDZlZGNGWmhmOUlVODgzeXpzRjI3aHJmV1k4RWpQd0ppM2ljdDlZekt2RkFG?=
- =?utf-8?B?Mi9QbHlQU0tiVEFUSE1ldFBkYkVLcVRid04zVVg5eTdwSjdUNy9jRGV5c2R3?=
- =?utf-8?B?eUlobHNYalRuUU9idURKTG9rMDlYbVVqNzkxclBwR21mdmZiRFFaYXRvSmNL?=
- =?utf-8?B?UUxRKzZkcXRCNGhaUXZ2dWVvQ2s2TUJ2cElaZUFJWmdUK2ptMmxTRS9lYWdB?=
- =?utf-8?B?em95NmFoM3phb0hPeDU3OXdGTzVscmNrUGxtbEE2Qk9Cc1IzRmlGdkRpK0JW?=
- =?utf-8?B?ZllQeXJMYnE1TG5RbFhsYk92YTAvZDhKeURWSmdrTmRTaXROeEk4Z25IN1VO?=
- =?utf-8?B?SmROWEhDZjFGL0xjUm1ZdUQ1Ukh2MjlwSUNZVVo5Tm4wOG1uZHUvZWJta1Jl?=
- =?utf-8?B?b1BwWEJoRFRWMG93c0wvQ1YvTEtScTc4OHVOTWNZaG5kc1J1OW5UQTZHNVRq?=
- =?utf-8?B?QzFVWmRXZjZML1dndmd3TE1CK0huUGFla1NMWjBuclJKdmVIRk8xTWsyYVI3?=
- =?utf-8?B?ZEVKRFRFcUl3bFBLZW9SK2ZvL0ZLU09Ndm82c2JLbG8wYmd5QkdJU1ZYb0w4?=
- =?utf-8?B?NE40aW9tUW9JTS9EUjZ1TDlyRzI5aUszZHBhVEpMMklGZFZ5YmR2MG9WQ21y?=
- =?utf-8?Q?R+no=3D?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 78f0adb2-9594-4927-5600-08de203e0b59
-X-MS-Exchange-CrossTenant-AuthSource: LV9PR12MB9829.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 Nov 2025 09:46:38.6960
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: eFDP5iDCnD0eLck6Ys8Rfc24IvXa7w9J/WYC7pgtNj3upSQvRa0m7/m/sA+BS4lF
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN7PR12MB6837
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAA+9EWkC/33OS2rDMBAG4KsErSuj0bPKqvcooVivRlBbrZS4C
+ cF3zzgQmkXjzQy/0HwzF9JizbGR7eZCapxyy2XEoF42xO/78TPSHDATzrgCBobmmttHHH0JsWL
+ HPz4OcTw0mngAq43jNlmC8981pny62e87zPvcDqWeb6smWF7vqmKWG/baCcMEBfqLe/vSLe2tt
+ Nb9HPsvX4ahw0IWaeIP0wJWbpo4ZVSA9cEo75xUT0DxBwKTa6BAUAvHvBTgZGBPQPkI6jVQIqi
+ C9ilZLRK4f8B5nq+YXDtuqQEAAA==
+X-Change-ID: 20251017-iris_encoder_enhancements-f2d1967b29f9
+To: Vikash Garodia <vikash.garodia@oss.qualcomm.com>,
+        Dikshita Agarwal <dikshita.agarwal@oss.qualcomm.com>,
+        Abhinav Kumar <abhinav.kumar@linux.dev>,
+        Bryan O'Donoghue <bod@kernel.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc: linux-media@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Wangao Wang <wangao.wang@oss.qualcomm.com>,
+        Neil Armstrong <neil.armstrong@linaro.org>, quic_qiweil@quicinc.com,
+        quic_renjiang@quicinc.com
+X-Mailer: b4 0.14.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1762770213; l=9415;
+ i=wangao.wang@oss.qualcomm.com; s=20251021; h=from:subject:message-id;
+ bh=zQbaSwQ07DnPLI+svW+Tr71zJf4jM9rxlcGOt95gUBU=;
+ b=eN/SLJgJbk5mrU5R3HKQ62DwcvOmgnkje+/jQYsE+OHta5I8qXninrNw1Lp8QNygTrefqIrwx
+ y1CB0iL7YzxBkq8FY2gfJjJopWhdHPdRDOvI/42BHz9hTcACHcSw3zX
+X-Developer-Key: i=wangao.wang@oss.qualcomm.com; a=ed25519;
+ pk=bUPgYblBUAsoPyGfssbNR7ZXUSGF8v1VF4FJzSO6/aA=
+X-Proofpoint-GUID: Raf_MfnGQyYl467TYaEhMnQYy9Meldnq
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUxMTEwMDA5MCBTYWx0ZWRfX95VZ5g/391qA
+ x2I2QG/ZRlrE/2UaL0ydBn25QfzxB+L7x8unTa3lsYl6RpTfOJOoSk2LNwvgc8Rhex/sFbKu/WI
+ hsLu8XwFANU50/jNjq9RRpEfHI5soDekKlY9rXarCLkOShj/AjW5+hEdpZSE1e3/snUTA+6BtUt
+ kD7rM24G2FMwY3Jp9yhcNrkermEkbvQ+L71bYhJLXvw24BNrCZNm6xWALfMsK4UvHsCzC7Y6DjJ
+ ssnVFzQYhMRKl5PLa1wBCVEm+NXUD6OV34mWbsp5v2PkiMSETV97uUlZvzM85xNqFdffF1REq35
+ WT3p0ZqvH69oZEvcMG9i2tY5sGtt1LwqFcymVAOEdDQJ1PsUbjcOISAVRYlrU8Wn6icswvocjV5
+ Wto1sjZxDLFNAzcjv7IWmlmAUL36jg==
+X-Proofpoint-ORIG-GUID: Raf_MfnGQyYl467TYaEhMnQYy9Meldnq
+X-Authority-Analysis: v=2.4 cv=Yt4ChoYX c=1 sm=1 tr=0 ts=6911bd2a cx=c_pps
+ a=rEQLjTOiSrHUhVqRoksmgQ==:117 a=nuhDOHQX5FNHPW3J6Bj6AA==:17
+ a=IkcTkHD0fZMA:10 a=6UeiqGixMTsA:10 a=s4-Qcg_JpJYA:10
+ a=VkNPw1HP01LnGYTKEx00:22 a=NEAV23lmAAAA:8 a=VwQbUJbxAAAA:8 a=EUspDBNiAAAA:8
+ a=uW5hs7etCHDVNyUx15YA:9 a=QEXdDO2ut3YA:10 a=2VI0MkxyNR6bbpdq8BZq:22
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.9,FMLib:17.12.100.49
+ definitions=2025-11-10_04,2025-11-06_01,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ bulkscore=0 adultscore=0 spamscore=0 phishscore=0 malwarescore=0
+ impostorscore=0 clxscore=1015 suspectscore=0 lowpriorityscore=0
+ priorityscore=1501 classifier=typeunknown authscore=0 authtc= authcc=
+ route=outbound adjust=0 reason=mlx scancount=1 engine=8.22.0-2510240001
+ definitions=main-2511100090
 
-Thank you, Sultan, for your time, big effort, and constant support. 
-Apologies for my delayed reply for being occupied a little with other 
-matters.
+Hi All,
 
-On 11/10/2025 4:33 PM, Sultan Alsawaf wrote:
-> Hi Bin,
-> 
-> On Wed, Nov 05, 2025 at 01:25:58AM -0800, Sultan Alsawaf wrote:
->> Hi Bin,
->>
->> To expedite review, I've attached a patch containing a bunch of fixes I've made
->> on top of v5. Most of my changes should be self-explanatory; feel free to ask
->> further about specific changes if you have any questions.
->>
->> I haven't had a chance to review all of the v4 -> v5 changes yet, but I figured
->> I should send what I've got so far.
->>
->> FYI, there is a regression in isp4if_dequeue_buffer() where the bufq lock isn't
->> protecting the list_del() anymore. I also checked the compiler output when using
->> guard() versus scoped_guard() in that function and there is no difference:
->>
->>    sha1sum:
->>    5652a0306da22ea741d80a9e03a787d0f71758a8  isp4_interface.o // guard()
->>    5652a0306da22ea741d80a9e03a787d0f71758a8  isp4_interface.o // scoped_guard()
->>
->> So guard() should be used there again, which I've done in my patch.
->>
->> I also have a few questions:
->>
->> 1. Does ISP FW provide a register interface to disable the IRQ? If so, it is
->>     faster to use that than using disable_irq_nosync() to disable the IRQ from
->>     the CPU's side.
->>
->> 2. When the IRQ is re-enabled in isp4sd_fw_resp_func(), is there anything
->>     beforehand to mask all pending interrupts from the ISP so that there isn't a
->>     bunch of stale interrupts firing as soon the IRQ is re-enabled?
->>
->> 3. Is there any risk of deadlock due to the stream kthread racing with the ISP
->>     when the ISP posts a new response _after_ the kthread determines there are no
->>     more new responses but _before_ the enable_irq() in isp4sd_fw_resp_func()?
->>
->> 4. Why are some lines much longer than before? It seems inconsistent that now
->>     there is a mix of several lines wrapped to 80 cols and many lines going
->>     beyond 80 cols. And there are multiple places where code is wrapped before
->>     reaching 80 cols even with lots of room left, specifically for cases where it
->>     wouldn't hurt readability to put more characters onto each line.
-> 
-> I've attached a new, complete patch of changes to apply on top of v5. You may
-> ignore the incomplete patch from my previous email and use the new one instead.
-> 
-> I made many changes and also answered questions 1-3 myself.
-> 
-> Please apply this on top of v5 and let me know if you have any questions.
-> 
+This patch series introduces several enhancements to the Qualcomm Iris
+encoder driver, improving support for V4L2 controls and enabling more
+ video encoding features.
 
-Sure, will review, apply and test your patch accordingly. Your 
-contribution is greatly appreciated, will let you know if there is any 
-question or problem.
+All patches have been tested with v4l2-compliance, v4l2-ctl and 
+on QCS8300 for encoder.
 
-> BTW, I noticed a strange regression in v5 even without any of my changes: every
-> time you use cheese after using it one time, the video will freeze after 30-60
-> seconds with this message printed to dmesg:
->    [ 2032.716559] amd_isp_capture amd_isp_capture: -><- fail respid unknown respid(0x30002)
-> 
-> And the video never unfreezes. I haven't found the cause for the regression yet;
-> can you try to reproduce it?
-> 
+Commands used for V4l2-ctl validation:
 
-Really weird, we don't see this issue either in dev or QA test. Is it 
-100% reproducible and any other fail or err in the log?
+Scale:
+v4l2-ctl --verbose -d /dev/video1 \
+--set-fmt-video-out=width=1920,height=1080,pixelformat=NV12 \
+--set-selection-output target=crop,width=1920,height=1080 \
+--set-fmt-video=width=1280,height=720,pixelformat=H264 \
+--stream-mmap --stream-out-mmap \
+--stream-from=input_nv12_1080p.yuv \
+--stream-to=output/scale_720p_output.h264
 
-> Thanks,
-> Sultan
+Flip:
+v4l2-ctl --verbose -d /dev/video1 \
+--set-fmt-video-out=width=1920,height=1080,pixelformat=NV12 \
+--set-selection-output target=crop,width=1920,height=1080 \
+--set-fmt-video=pixelformat=H264 --stream-mmap --stream-out-mmap \
+--stream-from=input_nv12_1080p.yuv \
+--stream-to=output/vertical_flip.h264 \
+--set-ctrl vertical_flip=1
 
+v4l2-ctl --verbose -d /dev/video1 \
+--set-fmt-video-out=width=1920,height=1080,pixelformat=NV12 \
+--set-selection-output target=crop,width=1920,height=1080 \
+--set-fmt-video=pixelformat=H264 --stream-mmap --stream-out-mmap \
+--stream-from=input_nv12_1080p.yuv \
+--stream-to=output/horizontal_flip.h264 \
+--set-ctrl horizontal_flip=1
+
+Rotate: 
+v4l2-ctl --verbose -d /dev/video1 \
+--set-fmt-video-out=width=1920,height=1080,pixelformat=NV12 \
+--set-selection-output target=crop,width=1920,height=1080 \
+--set-fmt-video=pixelformat=H264 --stream-mmap --stream-out-mmap \
+--stream-from=input_nv12_1080p.yuv \
+--stream-to=output/rotate90.h264 \
+--set-ctrl rotate=90
+
+v4l2-ctl --verbose -d /dev/video1 \
+--set-fmt-video-out=width=1920,height=1080,pixelformat=NV12 \
+--set-selection-output target=crop,width=1920,height=1080 \
+--set-fmt-video=pixelformat=H264 --stream-mmap --stream-out-mmap \
+--stream-from=input_nv12_1080p.yuv \
+--stream-to=output/rotate180.h264 \
+--set-ctrl rotate=180
+
+v4l2-ctl --verbose -d /dev/video1 \
+--set-fmt-video-out=width=1920,height=1080,pixelformat=NV12 \
+--set-selection-output target=crop,width=1920,height=1080 \
+--set-fmt-video=pixelformat=H264 --stream-mmap --stream-out-mmap \
+--stream-from=input_nv12_1080p.yuv \
+--stream-to=output/rotate270.h264 \
+--set-ctrl rotate=270
+
+Intra Refresh:
+Testing of this feature requires the use of this application.
+https://github.com/quic/v4l-video-test-app
+
+The result of v4l2-compliance on QCS8300:
+v4l2-compliance 1.31.0-5378, 64 bits, 64-bit time_t
+v4l2-compliance SHA: 2ed8da243dd1 2025-06-30 08:18:40
+
+Compliance test for iris_driver device /dev/video1:
+
+Driver Info:
+        Driver name      : iris_driver
+        Card type        : Iris Encoder
+        Bus info         : platform:aa00000.video-codec
+        Driver version   : 6.17.0
+        Capabilities     : 0x84204000
+                Video Memory-to-Memory Multiplanar
+                Streaming
+                Extended Pix Format
+                Device Capabilities
+        Device Caps      : 0x04204000
+                Video Memory-to-Memory Multiplanar
+                Streaming
+                Extended Pix Format
+        Detected Stateful Encoder
+
+Required ioctls:
+        test VIDIOC_QUERYCAP: OK
+        test invalid ioctls: OK
+
+Allow for multiple opens:
+        test second /dev/video1 open: OK
+        test VIDIOC_QUERYCAP: OK
+        test VIDIOC_G/S_PRIORITY: OK
+        test for unlimited opens: OK
+
+Debug ioctls:
+        test VIDIOC_DBG_G/S_REGISTER: OK (Not Supported)
+        test VIDIOC_LOG_STATUS: OK (Not Supported)
+
+Input ioctls:
+        test VIDIOC_G/S_TUNER/ENUM_FREQ_BANDS: OK (Not Supported)
+        test VIDIOC_G/S_FREQUENCY: OK (Not Supported)
+        test VIDIOC_S_HW_FREQ_SEEK: OK (Not Supported)
+        test VIDIOC_ENUMAUDIO: OK (Not Supported)
+        test VIDIOC_G/S/ENUMINPUT: OK (Not Supported)
+        test VIDIOC_G/S_AUDIO: OK (Not Supported)
+        Inputs: 0 Audio Inputs: 0 Tuners: 0
+
+Output ioctls:
+        test VIDIOC_G/S_MODULATOR: OK (Not Supported)
+        test VIDIOC_G/S_FREQUENCY: OK (Not Supported)
+        test VIDIOC_ENUMAUDOUT: OK (Not Supported)
+        test VIDIOC_G/S/ENUMOUTPUT: OK (Not Supported)
+        test VIDIOC_G/S_AUDOUT: OK (Not Supported)
+        Outputs: 0 Audio Outputs: 0 Modulators: 0
+
+Input/Output configuration ioctls:
+        test VIDIOC_ENUM/G/S/QUERY_STD: OK (Not Supported)
+        test VIDIOC_ENUM/G/S/QUERY_DV_TIMINGS: OK (Not Supported)
+        test VIDIOC_DV_TIMINGS_CAP: OK (Not Supported)
+        test VIDIOC_G/S_EDID: OK (Not Supported)
+
+Control ioctls:
+        test VIDIOC_QUERY_EXT_CTRL/QUERYMENU: OK
+        test VIDIOC_QUERYCTRL: OK
+        test VIDIOC_G/S_CTRL: OK
+        test VIDIOC_G/S/TRY_EXT_CTRLS: OK
+        test VIDIOC_(UN)SUBSCRIBE_EVENT/DQEVENT: OK
+        test VIDIOC_G/S_JPEGCOMP: OK (Not Supported)
+        Standard Controls: 43 Private Controls: 0
+
+Format ioctls:
+        test VIDIOC_ENUM_FMT/FRAMESIZES/FRAMEINTERVALS: OK
+        test VIDIOC_G/S_PARM: OK
+        test VIDIOC_G_FBUF: OK (Not Supported)
+        test VIDIOC_G_FMT: OK
+        test VIDIOC_TRY_FMT: OK
+        test VIDIOC_S_FMT: OK
+        test VIDIOC_G_SLICED_VBI_CAP: OK (Not Supported)
+        test Cropping: OK
+        test Composing: OK (Not Supported)
+        test Scaling: OK (Not Supported)
+
+Codec ioctls:
+        test VIDIOC_(TRY_)ENCODER_CMD: OK
+        test VIDIOC_G_ENC_INDEX: OK (Not Supported)
+        test VIDIOC_(TRY_)DECODER_CMD: OK (Not Supported)
+
+Buffer ioctls:
+        test VIDIOC_REQBUFS/CREATE_BUFS/QUERYBUF: OK
+        test CREATE_BUFS maximum buffers: OK
+        test VIDIOC_REMOVE_BUFS: OK
+        test VIDIOC_EXPBUF: OK
+        test Requests: OK (Not Supported)
+        test blocking wait: OK
+
+Test input 0:
+
+Streaming ioctls:
+        test read/write: OK (Not Supported)
+        Video Capture Multiplanar: Captured 61 buffers
+        test MMAP (select, REQBUFS): OK
+        Video Capture Multiplanar: Captured 61 buffers
+        test MMAP (epoll, REQBUFS): OK
+        Video Capture Multiplanar: Captured 61 buffers
+        test MMAP (select, CREATE_BUFS): OK
+        Video Capture Multiplanar: Captured 61 buffers
+        test MMAP (epoll, CREATE_BUFS): OK
+        test USERPTR (select): OK (Not Supported)
+        test DMABUF: Cannot test, specify --expbuf-device
+
+Total for iris_driver device /dev/video1: 54, Succeeded: 54, Failed: 0, Warnings: 0
+
+Signed-off-by: Wangao Wang <wangao.wang@oss.qualcomm.com>
+---
+Changes in v5:
+- Move crop_offset modification to 2nd patch.(Dikshita)
+- Fix missing braces.(Dikshita)
+- Link to v4: https://lore.kernel.org/r/20251106-iris_encoder_enhancements-v4-0-5d6cff963f1b@oss.qualcomm.com
+
+Changes in v4:
+- Split 'improve alignment' and 'crop offset' into two patches.(bod)
+- Modify the comments for the enc_raw_* variables.(Vikash)
+- Link to v3: https://lore.kernel.org/r/20251104-iris_encoder_enhancements-v3-0-63b0c431b4d0@oss.qualcomm.com
+
+Changes in v3:
+- Restore crop offset support for the input port.(Dikshita)
+- Set the output port's left and top offset directly to 0.(Dikshita)
+- fix the issue in iris_vpu_enc_line_size.(Neil Armstrong)
+- Link to v2: https://lore.kernel.org/r/20251031-iris_encoder_enhancements-v2-0-319cd75cbb45@oss.qualcomm.com
+
+Changes in v2:
+- Split 'improve alignment' and 'enable scale' into two patches.(bod)
+- HFI_PROP_RAW_RESOLUTION uses the actual YUV
+  resolution.(Vikash,Dikshita)
+- Rename enc_bitstream_* to enc_scale_*.(Dikshita)
+- Add comment for scale case.(Dikshita)
+- Make the resolution assignment into an inline function.(bod)
+- Shorten the long chain that checks whether scaling is enabled.(bod)
+- Correct the handling of rotation in crop offsets.(Dikshita)
+- Move VPSS buffer things into scale patch.(Dikshita)
+- Link to v1: https://lore.kernel.org/r/20251015092708.3703-1-wangao.wang@oss.qualcomm.com
+
+---
+Wangao Wang (6):
+      media: qcom: iris: Improve format alignment for encoder
+      media: qcom: iris: Improve crop_offset handling for encoder
+      media: qcom: iris: Add scale support for encoder
+      media: qcom: iris: Add rotation support for encoder
+      media: qcom: iris: Add flip support for encoder
+      media: qcom: iris: Add intra refresh support for encoder
+
+ drivers/media/platform/qcom/iris/iris_ctrls.c      | 95 ++++++++++++++++++++++
+ drivers/media/platform/qcom/iris/iris_ctrls.h      |  3 +
+ .../platform/qcom/iris/iris_hfi_gen2_command.c     | 56 ++++++++++---
+ .../platform/qcom/iris/iris_hfi_gen2_defines.h     | 19 +++++
+ .../platform/qcom/iris/iris_hfi_gen2_response.c    |  2 +
+ drivers/media/platform/qcom/iris/iris_instance.h   |  8 ++
+ .../platform/qcom/iris/iris_platform_common.h      |  5 ++
+ .../media/platform/qcom/iris/iris_platform_gen2.c  | 63 ++++++++++++++
+ drivers/media/platform/qcom/iris/iris_utils.c      |  6 ++
+ drivers/media/platform/qcom/iris/iris_utils.h      |  1 +
+ drivers/media/platform/qcom/iris/iris_venc.c       | 33 +++++++-
+ drivers/media/platform/qcom/iris/iris_vpu_buffer.c | 60 ++++++++------
+ 12 files changed, 310 insertions(+), 41 deletions(-)
+---
+base-commit: 13863a59e410cab46d26751941980dc8f088b9b3
+change-id: 20251017-iris_encoder_enhancements-f2d1967b29f9
+
+Best regards,
 -- 
-Regards,
-Bin
+Wangao Wang <wangao.wang@oss.qualcomm.com>
 
