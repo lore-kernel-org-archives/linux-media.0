@@ -1,246 +1,228 @@
-Received: from SN4PR0501CU005.outbound.protection.outlook.com (mail-southcentralusazon11011020.outbound.protection.outlook.com [40.93.194.20])
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D1E4A1E492D;
-	Mon, 10 Nov 2025 12:24:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.93.194.20
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762777449; cv=fail; b=uWjnaBxcI3K/BX7JNLLii63P3NNKM37Ir3QjjPG5MTNh1fJD5g4gfh8A52EsCEqKyU7s9xDljmFugllisjTt+k71HeBIGrlfPghAMnBWzFintTztB1Q64tQzu3EcPXTCz16XYLavWHk8PfKM1KrMkg1DB8zZZaF5TfdyE1HdkPU=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762777449; c=relaxed/simple;
-	bh=qD5MDswvq7X/2dmmTQon4dInJPWoFd1+ImxrKj4Y4vs=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=a/J+aU4xC1rIAL2crNjmzfyT4vZmmzsYRSO2TNGQV7Bwyw7YXLZ4PATYCLdxoHC3oiiRipnJIvnWuKHRRb8v9E2zX93xx7quh3yIa51jnxo0ZgmM0+YabGO+OMQCzICYWWbW3mmXawv+pThcmKDJjSI6Uc4Z/aHlU9Al3VvjqEs=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com; spf=pass smtp.mailfrom=ti.com; dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b=WKQEILQX; arc=fail smtp.client-ip=40.93.194.20
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ti.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EA02130EF85
+	for <linux-media@vger.kernel.org>; Mon, 10 Nov 2025 12:42:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1762778562; cv=none; b=uFidEEalfVXps/kjEsmR5F4idqeKmjCDOBPWQoN9Aam3UofiDinrft1kUbdR/gZONlZsN/JRviH5wwoHVFSMjZyIG4tv9Alwl1h5ih9SALY6y3qwOiDd4klceUATrWIytagtlPf2eQTQcGjXP3t3R0j5cjvT14RBLXsTWt3uMBk=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1762778562; c=relaxed/simple;
+	bh=oycCGrJnIys6pRkKgZL7qnTNFiPgdJ8eOZ85qTOqp34=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=mUbYpgMyUqsspRXduDH2Woat3XnfD/czUcj7yJ8w64KxhITcAtE6jshtHkzqZOiNANUHme8uTZufZM2yX0DeOkZugNWRVrcvrQXeh75oPOaU4TI7DX3mDS6R2cxrC/2a0NL3/YCKGnVWPmLbsyNFQbM7k/3DYngJfS+k1J4XIrE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=audW4yck; dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b=cVbC36I1; arc=none smtp.client-ip=205.220.168.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="WKQEILQX"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=QHY3+daKmYoDu+vEqNu5kUILH6Noc6YoeDI4yGpmbV10GuFkJRlclPDqMeFVwxAllupSgPLKC5LwinCLDzXu6KCTSaXvPfGj4kVAfZhqLkljQ0JBJpvnbrq4/5NRzJsKHY9A5BV31O1lwfmmEoK3TuCgAaO2AGDL9MooCFzKB9cQaKBaYvnZVevVBiKrzN3RvT/lvjOgWWwHvWqBHuOnuT/AsnTOJH/94DUMSXvpEIwUCJt/eKIzq4ei6nsRkUGwUzYZybYziZQ2z/spmZbw1x7c+GwVB+c0xD4jNC9tID7ipX7yT2cz+CWbCIVKGY8XOuHqHtgxMwIuqAs1BwUqLg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=v3+LhULDCFvqyUWh++pNK3HaGC8GxDeRN2mbwYgSIng=;
- b=GDe3gxp05nLdX5VhZJw6+nJlBBrKpnMUtwb+ORKFTDNfplmU636a9tGnv2dhZ83yXAwrH755w3ENckoY20SRp045u7b8CzOIulHjxaZo3vJV5YwOD6hlgzD0wL+U3geLnkjdAbd/J09dvaZ3pp9zEU+LBiMRl2FgyLS1o7L9JKh0yf0i0a9IBon3sx/VG/wAEb8e7CZbBr7YyZmu9KjLtkDR4mOM98YX4LPiTmbU5HQCH8zW2Gqw7jWwbIHSc+LPa8/xmH8s8QobDWPdWsfeaNDeiuM7nge2+BWJ3a9/Q7MSIEGNP85WJzfwnI0oNee7+cYt/Jk0aHwDb+AmN5oJmg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 198.47.23.194) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=ti.com;
- dmarc=pass (p=quarantine sp=none pct=100) action=none header.from=ti.com;
- dkim=none (message not signed); arc=none (0)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=v3+LhULDCFvqyUWh++pNK3HaGC8GxDeRN2mbwYgSIng=;
- b=WKQEILQXE336AN8ZeI84gWGdYIDVN5ykbYJVo2k3MzIN7TAsH/uu/LSNKzR8V51v4zqDiAPtlxyFt3OfQMtX7H/xoimkv7mnACQjzkipBY7hgWLDOc9nOZG2nfKo3UW4+7PjMi7+0LQvgqo+cHFJ0R51vybMoXx2Y1u/WQXQvqM=
-Received: from BL1P223CA0031.NAMP223.PROD.OUTLOOK.COM (2603:10b6:208:5b6::6)
- by IA1PR10MB6735.namprd10.prod.outlook.com (2603:10b6:208:42d::10) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9298.16; Mon, 10 Nov
- 2025 12:24:02 +0000
-Received: from MN1PEPF0000ECD4.namprd02.prod.outlook.com
- (2603:10b6:208:5b6:cafe::2a) by BL1P223CA0031.outlook.office365.com
- (2603:10b6:208:5b6::6) with Microsoft SMTP Server (version=TLS1_3,
- cipher=TLS_AES_256_GCM_SHA384) id 15.20.9298.16 via Frontend Transport; Mon,
- 10 Nov 2025 12:24:30 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 198.47.23.194)
- smtp.mailfrom=ti.com; dkim=none (message not signed) header.d=none;dmarc=pass
- action=none header.from=ti.com;
-Received-SPF: Pass (protection.outlook.com: domain of ti.com designates
- 198.47.23.194 as permitted sender) receiver=protection.outlook.com;
- client-ip=198.47.23.194; helo=lewvzet200.ext.ti.com; pr=C
-Received: from lewvzet200.ext.ti.com (198.47.23.194) by
- MN1PEPF0000ECD4.mail.protection.outlook.com (10.167.242.132) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.9320.13 via Frontend Transport; Mon, 10 Nov 2025 12:24:01 +0000
-Received: from DLEE201.ent.ti.com (157.170.170.76) by lewvzet200.ext.ti.com
- (10.4.14.103) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.20; Mon, 10 Nov
- 2025 06:23:57 -0600
-Received: from DLEE210.ent.ti.com (157.170.170.112) by DLEE201.ent.ti.com
- (157.170.170.76) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.20; Mon, 10 Nov
- 2025 06:23:56 -0600
-Received: from lelvem-mr06.itg.ti.com (10.180.75.8) by DLEE210.ent.ti.com
- (157.170.170.112) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.20 via Frontend
- Transport; Mon, 10 Nov 2025 06:23:56 -0600
-Received: from [172.24.233.149] (ws.dhcp.ti.com [172.24.233.149])
-	by lelvem-mr06.itg.ti.com (8.18.1/8.18.1) with ESMTP id 5AACNogT3396535;
-	Mon, 10 Nov 2025 06:23:51 -0600
-Message-ID: <e5ea0f98-b78c-4714-8713-f98521720a4b@ti.com>
-Date: Mon, 10 Nov 2025 17:53:50 +0530
+	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="audW4yck";
+	dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b="cVbC36I1"
+Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 5AA997Yb1809060
+	for <linux-media@vger.kernel.org>; Mon, 10 Nov 2025 12:42:40 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
+	cc:content-type:date:from:in-reply-to:message-id:mime-version
+	:references:subject:to; s=qcppdkim1; bh=Szk5oQu0JKW4WvvkHevPC12l
+	/Yr8odd2nrlXcJxADTI=; b=audW4yckeo0wqh+AJZjiTxCg7F/UhqXY05X88YPf
+	9no+NBEnjCJfkDUdXK8AcHfS6DETCyDMdzMZ8il8GcwZcHglTKCHJUr1bGaa1nNy
+	So1707lPFWixkzktIb7+quL+AuQvc+n0/wdoVtJ5YbR6VTVrhsAiXPGeT+jSG/BD
+	7LmGvMOh4VzwVOjKXwtifxs7V6EyrU/B2pAYWTSnjDBw+udssJHMnjgFjCtUkGE7
+	N3ckxKxKCq0rcWZwsm5HaaQQL+eQuuUyM/IDoEASUU+o9ftiYlMHKb3V9KG9Qei0
+	owybqnBgH4hGBLpKHLjhv2BM27m9f6quZiL1DqgfiVaQww==
+Received: from mail-qt1-f197.google.com (mail-qt1-f197.google.com [209.85.160.197])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4ab5m1hvm2-1
+	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
+	for <linux-media@vger.kernel.org>; Mon, 10 Nov 2025 12:42:40 +0000 (GMT)
+Received: by mail-qt1-f197.google.com with SMTP id d75a77b69052e-4e8b33c1d8eso86658561cf.2
+        for <linux-media@vger.kernel.org>; Mon, 10 Nov 2025 04:42:39 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=oss.qualcomm.com; s=google; t=1762778559; x=1763383359; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=Szk5oQu0JKW4WvvkHevPC12l/Yr8odd2nrlXcJxADTI=;
+        b=cVbC36I1a3rZ7LW9nbyBZ+OQZfHmiPf84+leq40dg0TfhZ5Ql4z84W9sKAloA1erac
+         75JCETO+pIS3lsVFI1B4D/D6mBFDZRFJFMDJleoXrrfxUyCEKkUUzS3Abrlg+hGdeXmt
+         j8jTQfbex1iSBxBSshykeSOMNPqDb4Xjz9Ds5JCYdPGNWy11byZP/18HAJXHKmdDRfvj
+         vNZswcPofTZ96q5vGMej6AyK4s2KJpr4rQoiDY3e9DsoGshPfaK28v9mmpyanS9WCSY0
+         EH0E4KN+SSGvCbPwaEtNhPBdDGzt+4aG/qdnIwT2nr24tA1mnHY8aTr1CtBCvJC8p69I
+         1YBA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1762778559; x=1763383359;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Szk5oQu0JKW4WvvkHevPC12l/Yr8odd2nrlXcJxADTI=;
+        b=Ib/l3RMJMbYAkjYdHvahsQJc7jsCSY6avj1GvOvPp4S6RIsILfrr6DusoolIB6qZDJ
+         a7JPpyAMUh7CefSB2A+Bkclv50+WpM0tPZDTrYoEhycNEPTxyjK2XJ9o5QBrejj+7dVy
+         6Y1H+AQfwmny6HlEvTLKbj76y7EfKPIYt5ES2Tr4eCTv6j1XHvPNfwDHAjKwFcWi9KYf
+         9EKZZlzSZ6UFFL2M3qeoRXna1FTjiEedpI8m70zim7cDFovdS8CfSpNomO9T8h1PFZDb
+         BiCW/ftBFAb/Xp4oZmR1VrqaL8OdmwbvEfeq5o7Vut8Al8Z0kJLAEmuHYWS7UPYuRi1F
+         tbTQ==
+X-Forwarded-Encrypted: i=1; AJvYcCW1iU1OuV1tmB51ES1sAxQn4skaAqGkrhgoYig5pmJFXH70E+3jzQwLdGQzdafwAcjYtrq2ztC8QTf5HA==@vger.kernel.org
+X-Gm-Message-State: AOJu0YwWbLRIPt1tXvWz4kMpPVdYXMbq1H6TcVJR+VT3ebJazEJ9K8K4
+	nyzkgX1LMfZDKqxGwlPtVTuDXkM1mvBF2C7U6WtRctWTnH36g2KjnQkU8cTiqAC6ta4x80KEHx2
+	fWtoenDCwyxqbqEAZW52wAA5zwe7dcW+GorFx+D5fJyitcAkH6eOhw5inpwcZ+5Wk7w==
+X-Gm-Gg: ASbGncuxSya8VC1CjLR8xVDAUognnkXhhtKGeDc8ycL7vJ7K50JPlg/hzwnOpmfVxCe
+	ZwoOIUBJFIFStICbX4zR4y1cSkEgCTg09MJa4ohdRRCiYUybgDxZs+j+BV5TOb2oN47T5xlQdnT
+	yIobR0Y5hgSAUeapk80hgMF40jFQjE1ZAiyANMOWm9AvR1tA0MOx/YZMDM2julIzMDcPpqFjcrN
+	DHUQXHrJfUlhn49PKKnQuGVq378z8P7eIIrYwILvkcAR/Am/PzWazCxuQe+9cAytAh+u1x8NcNs
+	LsVvLefpMTx4QCLnVYuAtVCaTzmyRYAgMxiZhl0daJPK1+6DbY+GTooOiSMjnL4f60d93upa1ho
+	1FutNy6QL1UY5lQ563v5f32AmXiBZzFgc1GqlzQQlyW/6UZHCsdN+4DXpGErqy/iZyekH4GSdtI
+	t/70qiJL+ZeoCC
+X-Received: by 2002:ac8:598b:0:b0:4ec:f1a4:5511 with SMTP id d75a77b69052e-4eda4fc3b6amr92542081cf.65.1762778558868;
+        Mon, 10 Nov 2025 04:42:38 -0800 (PST)
+X-Google-Smtp-Source: AGHT+IHVDggml7PAVV7SI4AjXNrlbgrxoxEoX+ZodOTGQvFGPNu6EQkyCxkyyGJCj9juxzvgZ2KRjw==
+X-Received: by 2002:ac8:598b:0:b0:4ec:f1a4:5511 with SMTP id d75a77b69052e-4eda4fc3b6amr92541681cf.65.1762778558271;
+        Mon, 10 Nov 2025 04:42:38 -0800 (PST)
+Received: from umbar.lan (2001-14ba-a0c3-3a00-264b-feff-fe8b-be8a.rev.dnainternet.fi. [2001:14ba:a0c3:3a00:264b:feff:fe8b:be8a])
+        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-5944a5964c5sm3925508e87.101.2025.11.10.04.42.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 10 Nov 2025 04:42:37 -0800 (PST)
+Date: Mon, 10 Nov 2025 14:42:35 +0200
+From: Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>
+To: Dikshita Agarwal <dikshita.agarwal@oss.qualcomm.com>
+Cc: Vikash Garodia <vikash.garodia@oss.qualcomm.com>,
+        Abhinav Kumar <abhinav.kumar@linux.dev>,
+        Bryan O'Donoghue <bod@kernel.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Hans Verkuil <hverkuil@kernel.org>,
+        Stefan Schmidt <stefan.schmidt@linaro.org>,
+        linux-media@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        Val Packett <val@packett.cool>
+Subject: Re: [PATCH v3] media: iris: Refine internal buffer reconfiguration
+ logic for resolution change
+Message-ID: <vt77gtk5fjwd4z4g5ppuwa7552y27nydnniikz64khzgif4qbg@rbzu3alfbg6x>
+References: <20251105-iris-seek-fix-v3-1-279debaba37a@oss.qualcomm.com>
+ <2uvinljz3gevbusjrz3bzi3nicelv3t6a64gliv4mdv6cbllvp@fz3qbyukypho>
+ <220c9fe4-00b4-3b42-0e80-8730a6388bde@oss.qualcomm.com>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v7 10/16] media: cadence: csi2rx: add multistream support
-To: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>, <jai.luthra@linux.dev>,
-	<laurent.pinchart@ideasonboard.com>, <mripard@kernel.org>
-CC: <y-abhilashchandra@ti.com>, <devarsht@ti.com>, <s-jain1@ti.com>,
-	<vigneshr@ti.com>, <mchehab@kernel.org>, <robh@kernel.org>,
-	<krzk+dt@kernel.org>, <p.zabel@pengutronix.de>, <conor+dt@kernel.org>,
-	<sakari.ailus@linux.intel.com>, <hverkuil-cisco@xs4all.nl>,
-	<jai.luthra@ideasonboard.com>, <changhuang.liang@starfivetech.com>,
-	<jack.zhu@starfivetech.com>, <sjoerd@collabora.com>,
-	<hverkuil+cisco@kernel.org>, <linux-kernel@vger.kernel.org>,
-	<linux-media@vger.kernel.org>, <devicetree@vger.kernel.org>
-References: <20250911102832.1583440-1-r-donadkar@ti.com>
- <20250911102832.1583440-11-r-donadkar@ti.com>
- <364c3b35-81a0-4e93-ad3b-a0fff3a29365@ideasonboard.com>
-Content-Language: en-US
-From: Rishikesh Donadkar <r-donadkar@ti.com>
-In-Reply-To: <364c3b35-81a0-4e93-ad3b-a0fff3a29365@ideasonboard.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-C2ProcessedOrg: 333ef613-75bf-4e12-a4b1-8e3623f5dcea
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: MN1PEPF0000ECD4:EE_|IA1PR10MB6735:EE_
-X-MS-Office365-Filtering-Correlation-Id: bdfe5fb9-9840-4435-5282-08de205407f6
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|82310400026|1800799024|7416014|376014|36860700013;
-X-Microsoft-Antispam-Message-Info:
-	=?utf-8?B?YkpQaWZKSEdvb0hnRUNndVNCQURxZ2E4cUxCbkczV2xyLzc5YUswL211Y0J3?=
- =?utf-8?B?dWpsVTdadTlLNUJhdldNa2w0blNKSnBYbGNOZnR1MEVzSkpiS1dmV2RFK2hn?=
- =?utf-8?B?RW4xUkE4em5DVVZXdzM2emJ6WXR5bTFuQW1mdHBZWU80ZkVnUDdCZDZYeDJP?=
- =?utf-8?B?SjFQbnJ1Yi9JdXZmTHFPaHh3VTRFLzBabElWV1ZWWGVZZ2RTaTdvWVV2dEg1?=
- =?utf-8?B?VlFvWWVPSFIvV0FIV21nUTZINEE3djBiTEIySlU1MW5LSUQ4Z2JSeldkWHRt?=
- =?utf-8?B?cE9aNlBhdloyc3plN1ZpNTBPenBlbW9TTDVDSDBNcUZUV0dHRngySnp5Nzlu?=
- =?utf-8?B?MFc2c1JaYzhMajdZWU1oa2oxRDA5dGFOK1QvRTV1K3p3VkpISWlBc25VZUhG?=
- =?utf-8?B?MU5kbnRBY1d4cVVTUVNSbUh2TUtSTDBIaUVCUGo4SW9jY1o0djlVK2FTY3pH?=
- =?utf-8?B?M0FmOGRXa2lvUHlsOHdtdkozd2QyMFVBRTUzaFpZWmlKL2QxTFRvRVNEWFA5?=
- =?utf-8?B?VlpoS1MvdlBVNWVJMlZYaWltaXZxZFZ2cEFqNjF2UzNLbVVWcFJvSEg3WUtC?=
- =?utf-8?B?MmUwQ2RMTEpUeFNLSDExRzdsNUpmQ0UwOVU2SWx5MHZrdThpL3c0bCtxNjFR?=
- =?utf-8?B?Y3lNZCtlM0FGU1VnVlpkTW5Rd1V3eDhWVUZ1aUF2MllnV1R0eUhlSnhRaWZp?=
- =?utf-8?B?UFltQmpHYVBndFREcVN0bmV0TDZicWxEeU40NjUrekh3WER1TmZsRVFyOG5M?=
- =?utf-8?B?Nk41UzZncmJONS81VXA2MU9PTURxZmowVlZGTmVtTHZ4b3dwN2hMSWwyUE9Q?=
- =?utf-8?B?OVhVemxrdlVXRVBUVXZib21xc2NHWHpCbndDS2ZZd0tyT29pZTlYdGtpVkhO?=
- =?utf-8?B?cU5PeVk5a0tGWjZkUGZpYlRzWUxCSWZYd21lMDVuck5PRStZTkhMT0VjQTBt?=
- =?utf-8?B?NGdoRVB1ZGVtZUxQWGxYdlpYUUFpbVRCbUZKdkYwZWJHY3NDV1laT1lHcE93?=
- =?utf-8?B?TEI4UjFtb2U5eWdzWFRQQzRhZEJvcDlCN1BvaUFHYVcxb1FuOCtWeXIyaEE0?=
- =?utf-8?B?dUJSUGg0MzVrMnlWaVRpSWdITzQ4QzZjSTZDWDdBTE5jckNjQVQvWVNEWjF5?=
- =?utf-8?B?dFVRSjV5SXhTL0FJN0ZUdlB2M3FkL1hCNGpiU2E0SlJsMGJLU2Eybi9rVEd2?=
- =?utf-8?B?dU1pbVI3TXpvOFFpbGpJeE9zaHp3ZGdLUENBOHliaXBraWI2TXdLVzI0NDZR?=
- =?utf-8?B?eEtLOFV0TXFjNWg4Z0ttQ2NXV2ZwZ21wMGswVkgxc1NCTTduYXpNMHc1Yis5?=
- =?utf-8?B?ZjV1TEh1eEF2M1AyTHh6aHJ1Y1hkSzVQeFdXbkFaKzY5cVhydWV0dGdhbitB?=
- =?utf-8?B?N1BhZFdobjROL3h4K0FNU29zeHQ1VElpQmk4NDZZV09LalZQQjdNY1hFNEJ4?=
- =?utf-8?B?cFZSSWRDZDZUSnhEV1phanAzT0VWM1lBYVlyR1hMemlmdkpiKzFpSSttdDJh?=
- =?utf-8?B?NHlLYnJHL3pzMUxIaFZqQUxLRllTR2dXZmJXV3FrenhUOWFuTU9wcWlKNVdC?=
- =?utf-8?B?NEI1cDJxcGc3TTBYMlc5L3lQOThCWHNEWEFaanZBWVZYcktVN0JGSHV3b0Yr?=
- =?utf-8?B?V2ZRdGZ5UThsaitUVjlJUDFhMEtEWlZqQ1FiWlkwZWhCZUtmTm1jcEtYN2pF?=
- =?utf-8?B?VWpET2k2ZXRXWnRSR2dIMjBWZnZwaWYrNWpUSzVWT0Qwb2RkQ3R1NnJRS1Jn?=
- =?utf-8?B?Y1ErT21Ka2dqSldxaU5NeXp0ZnZobzZvdHhPR2FRUVBXVENST1Z6UEd5SGk4?=
- =?utf-8?B?SG5PanpUWDJCN2xYdHVSd3krWnc0T2tVcXJiU1A2bzJXeXBaRDJUY1VLK0J4?=
- =?utf-8?B?M2NWZUhnYlRWWE9kUWYxODVmaGVnbTV2VHFTcjJQSDVmc25sR3YwTmxYZ0ZZ?=
- =?utf-8?B?M3REcW95WXpFRHpmc2FOcldwUTQ5Ly84ZlFoeURJaWxoK0lMazA1Vm5QRFB5?=
- =?utf-8?B?bVg5M0JpV2Z4Tk44ZjhYaTlkUkpMb0ZEUVVORjRVY0V1SkJySnorTFRreFo1?=
- =?utf-8?B?NDFyZTdCNTZyMUwvTnQ5YUxwM1I2Z3Y2SlhzUHhpak9UYXhrWWpvM3JNK0JO?=
- =?utf-8?Q?+5bA=3D?=
-X-Forefront-Antispam-Report:
-	CIP:198.47.23.194;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:lewvzet200.ext.ti.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(82310400026)(1800799024)(7416014)(376014)(36860700013);DIR:OUT;SFP:1101;
-X-OriginatorOrg: ti.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 Nov 2025 12:24:01.4893
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: bdfe5fb9-9840-4435-5282-08de205407f6
-X-MS-Exchange-CrossTenant-Id: e5b49634-450b-4709-8abb-1e2b19b982b7
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=e5b49634-450b-4709-8abb-1e2b19b982b7;Ip=[198.47.23.194];Helo=[lewvzet200.ext.ti.com]
-X-MS-Exchange-CrossTenant-AuthSource:
-	MN1PEPF0000ECD4.namprd02.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA1PR10MB6735
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <220c9fe4-00b4-3b42-0e80-8730a6388bde@oss.qualcomm.com>
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUxMTEwMDExMSBTYWx0ZWRfX0uG8rroy0bRm
+ lAUghfp1qBYXUNyOvYW8bMZTOvgJtfyjfGM9as3e0gNC71hBZ3hYWEFvg0uuU+Cj98zCCqDV/zf
+ wU2M6flWHvPSFDhtWLzLeP+4m9ZxWgIF+EaEut9PhBcd6BaddxrFE9MTp9cJcxObnWC99ZZt7PR
+ BvxA937KY62MtYatRVr+wBEDtQPhDTndTD/u7X6oSzRJ349lsBB5DOZOa7Ni+NOcb6RWDVHO1bu
+ azMRvcSqJY4s3c2fAWvKLLlWlwxBnQo/D1dU1140p9MZqBKF2U3AggBMCbp3UWL5qkTdBNSbud6
+ vXRF8fMKACPoU5YV/oxELpQF9xbh4hxtHzvCf4TGL+KvIF0UHC2Bgsrb02CZjqPhS/WjTsM17ps
+ SAaStJUFs8jw+wC3iUJKEC8RKXEP8w==
+X-Authority-Analysis: v=2.4 cv=TsXrRTXh c=1 sm=1 tr=0 ts=6911ddc0 cx=c_pps
+ a=EVbN6Ke/fEF3bsl7X48z0g==:117 a=xqWC_Br6kY4A:10 a=kj9zAlcOel0A:10
+ a=6UeiqGixMTsA:10 a=s4-Qcg_JpJYA:10 a=VkNPw1HP01LnGYTKEx00:22
+ a=e5mUnYsNAAAA:8 a=VwQbUJbxAAAA:8 a=EUspDBNiAAAA:8 a=bl5V-8u5B6lULHSYCfAA:9
+ a=CjuIK1q_8ugA:10 a=a_PwQJl-kcHnX1M80qC6:22 a=Vxmtnl_E_bksehYqCbjh:22
+X-Proofpoint-ORIG-GUID: X36ykxPWeNVFttngB4fPmPZiVxA3-bZH
+X-Proofpoint-GUID: X36ykxPWeNVFttngB4fPmPZiVxA3-bZH
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.9,FMLib:17.12.100.49
+ definitions=2025-11-10_05,2025-11-10_01,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ adultscore=0 lowpriorityscore=0 clxscore=1015 phishscore=0 spamscore=0
+ malwarescore=0 impostorscore=0 priorityscore=1501 bulkscore=0 suspectscore=0
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.22.0-2510240001 definitions=main-2511100111
 
+On Mon, Nov 10, 2025 at 02:31:20PM +0530, Dikshita Agarwal wrote:
+> 
+> 
+> On 11/10/2025 2:46 AM, Dmitry Baryshkov wrote:
+> > On Wed, Nov 05, 2025 at 11:17:37AM +0530, Dikshita Agarwal wrote:
+> >> Improve the condition used to determine when input internal buffers need
+> >> to be reconfigured during streamon on the capture port. Previously, the
+> >> check relied on the INPUT_PAUSE sub-state, which was also being set
+> >> during seek operations. This led to input buffers being queued multiple
+> >> times to the firmware, causing session errors due to duplicate buffer
+> >> submissions.
+> >>
+> >> This change introduces a more accurate check using the FIRST_IPSC and
+> >> DRC sub-states to ensure that input buffer reconfiguration is triggered
+> >> only during resolution change scenarios, such as streamoff/on on the
+> >> capture port. This avoids duplicate buffer queuing during seek
+> >> operations.
+> >>
+> >> Fixes: c1f8b2cc72ec ("media: iris: handle streamoff/on from client in dynamic resolution change")
+> >> Cc: stable@vger.kernel.org
+> >> Reported-by: Val Packett <val@packett.cool>
+> >> Closes: https://gitlab.freedesktop.org/gstreamer/gstreamer/-/issues/4700
+> >> Signed-off-by: Dikshita Agarwal <dikshita.agarwal@oss.qualcomm.com>
+> >> ---
+> >> Changes in v3:
+> >> - Fixed the compilation issue
+> >> - Added stable@vger.kernel.org in Cc
+> >> - Link to v2: https://lore.kernel.org/r/20251104-iris-seek-fix-v2-1-c9dace39b43d@oss.qualcomm.com
+> >>
+> >> Changes in v2:
+> >> - Removed spurious space and addressed other comments (Nicolas)
+> >> - Remove the unnecessary initializations (Self) 
+> >> - Link to v1: https://lore.kernel.org/r/20251103-iris-seek-fix-v1-1-6db5f5e17722@oss.qualcomm.com
+> >> ---
+> >>  drivers/media/platform/qcom/iris/iris_common.c | 7 +++++--
+> >>  1 file changed, 5 insertions(+), 2 deletions(-)
+> >>
+> >> diff --git a/drivers/media/platform/qcom/iris/iris_common.c b/drivers/media/platform/qcom/iris/iris_common.c
+> >> index 9fc663bdaf3fc989fe1273b4d4280a87f68de85d..7f1c7fe144f707accc2e3da65ce37cd6d9dfeaff 100644
+> >> --- a/drivers/media/platform/qcom/iris/iris_common.c
+> >> +++ b/drivers/media/platform/qcom/iris/iris_common.c
+> >> @@ -91,12 +91,14 @@ int iris_process_streamon_input(struct iris_inst *inst)
+> >>  int iris_process_streamon_output(struct iris_inst *inst)
+> >>  {
+> >>  	const struct iris_hfi_command_ops *hfi_ops = inst->core->hfi_ops;
+> >> -	bool drain_active = false, drc_active = false;
+> >>  	enum iris_inst_sub_state clear_sub_state = 0;
+> >> +	bool drain_active, drc_active, first_ipsc;
+> >>  	int ret = 0;
+> >>  
+> >>  	iris_scale_power(inst);
+> >>  
+> >> +	first_ipsc = inst->sub_state & IRIS_INST_SUB_FIRST_IPSC;
+> >> +
+> >>  	drain_active = inst->sub_state & IRIS_INST_SUB_DRAIN &&
+> >>  		inst->sub_state & IRIS_INST_SUB_DRAIN_LAST;
+> >>  
+> >> @@ -108,7 +110,8 @@ int iris_process_streamon_output(struct iris_inst *inst)
+> >>  	else if (drain_active)
+> >>  		clear_sub_state = IRIS_INST_SUB_DRAIN | IRIS_INST_SUB_DRAIN_LAST;
+> >>  
+> >> -	if (inst->domain == DECODER && inst->sub_state & IRIS_INST_SUB_INPUT_PAUSE) {
+> >> +	/* Input internal buffer reconfiguration required in case of resolution change */
+> >> +	if (first_ipsc || drc_active) {
+> >>  		ret = iris_alloc_and_queue_input_int_bufs(inst);
+> >>  		if (ret)
+> >>  			return ret;
+> > 
+> > I will repeat my (unanswered) question from v2:
+> > 
+> > After this line comes manual writing of STAGE and PIPE. Could you please
+> > point out where is the driver updating the resolution in the firmware?
+> > And if it does, why do we need to write STAGE and PIPE again?
+> 
+> Sorry for late reply,
+> 
+> During streamon on the output port, the driver sets the resolution in the
+> firmware. However, during Dynamic Resolution Change (DRC), the resolution
+> update originates from the firmware and is communicated to the driver. As a
+> result, the driver does not proactively update the resolution in the
+> firmware during DRC.
+> 
+> STAGE parameter depends on the resolution, the driver must update the
+> firmware with the new STAGE value after a resolution change to ensure
+> proper operation.
+> 
+> On the other hand, the PIPE value is independent of resolution. It is
+> typically updated to 1 for interlaced content, which is identified during
+> the sequence change. Currently, the Iris driver does not support interlaced
+> content, so updating the PIPE value during DRC handling is redundant.
+> However, this update is harmless and will be necessary once interlace
+> support is added in the future.
 
-On 25/09/25 18:14, Tomi Valkeinen wrote:
-> Hi,
+Ack, thanks for the explanation.
 
-
-Hi Tomi,
-
-Thank you for the review.
-
-
->
-> On 11/09/2025 13:28, Rishikesh Donadkar wrote:
->> From: Jai Luthra <j-luthra@ti.com>
->>
->> Cadence CSI-2 bridge IP supports capturing multiple virtual "streams"
->> of data over the same physical interface using MIPI Virtual Channels.
->>
->> While the hardware IP supports usecases where streams coming in the sink
->> pad can be broadcasted to multiple source pads, the driver will need
->> significant re-architecture to make that possible. The two users of this
->> IP in mainline linux are TI Shim and StarFive JH7110 CAMSS, and both
->> have only integrated the first source pad i.e stream0 of this IP. So for
->> now keep it simple and only allow 1-to-1 mapping of streams from sink to
->> source, without any broadcasting.
->>
->> The enable_streams() API in v4l2 supports passing a bitmask to enable
->> each pad/stream combination individually on any media subdev. Use this
->> API instead of  s_stream() API.
->>
->> Implement the enable_stream and disable_stream hooks in place of the
->> stream-unaware s_stream hook.
->>
->> Implement a fallback s_stream hook that internally calls enable_stream
->> on each source pad, for consumer drivers that don't use multi-stream
->> APIs to still work. The helper function v4l2_subdev_s_stream_helper()
->> form the v4l2 framework is not used here as it is meant only for the
->> subedvs that have a single source pad and this hardware IP supports
->> having multiple source pads.
-> <snip>
->
->> +static int csi2rx_enable_streams(struct v4l2_subdev *subdev,
->> +				 struct v4l2_subdev_state *state, u32 pad,
->> +				 u64 streams_mask)
->> +{
->> +	struct csi2rx_priv *csi2rx = v4l2_subdev_to_csi2rx(subdev);
->> +	u64 sink_streams;
->> +	int ret;
->> +
->> +	sink_streams = v4l2_subdev_state_xlate_streams(state, pad,
->> +						       CSI2RX_PAD_SINK,
->> +						       &streams_mask);
->> +
->> +	guard(mutex)(&csi2rx->lock);
-> This looks a bit odd too. With enable/disable_streams, the state is
-> already locked. What is the mutex protecting?
-
-We call the csi2rx_start() function in this function, which is 
-responsible for configuring and starting the streams, and operates on 
-shared resources like the HW IP registers. This function is supposed to 
-be called only once (done on the first enable_stream() call), for the 
-rest enable/disable_stream() calls, we just increment/decrement a common 
-variable(csi2rx->count).
-
-
->
-> j721e-csi2rx also has mutexes, and it's very unclear what they protect.
-> This should be described in the code.
->
-> I think in csi2rx the whole mutex can be just dropped.
-
-
-Sure, If the core itself serializes the enable/disable_streams() calls 
-than this mutex can be dropped. I will make this change in the patch 
-adding .enable/disable_stream().
-
-
-Regards,
-
-Rishikesh
-
-
->
-> j721e-csi2rx is a bit more complex, but there also I would consider if
-> and when the state lock protects the relevant parts already, and when
-> another lock is needed, what is the sequence to lock/unlock (e.g. always
-> csi->mutex first, then csi->subdev state lock), and make sure the code
-> follows that.
->
->   Tomi
->
+-- 
+With best wishes
+Dmitry
