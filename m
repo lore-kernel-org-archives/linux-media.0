@@ -1,138 +1,230 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0ACDA26299;
-	Mon, 10 Nov 2025 09:01:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 721682FD66E
+	for <linux-media@vger.kernel.org>; Mon, 10 Nov 2025 09:01:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762765286; cv=none; b=OvTR7sdIBV+O1nqoWYG9H2GCf5O9jH8U36rtS+YW1Nr+rs6Yw2cKGkFfa7qw+K+mt5TdxssMBHmH2AS6GftXMrV898rKBCwlt0Kvg1nm68JTftPjCNLH/fHdmbOwghuTBM3w7m94Pb1dJMeNpiy3Viv3GIscOg8tQXAr94h5ZeM=
+	t=1762765289; cv=none; b=TLueFzKRvf46+bD/rJTZ0BFEYWbm5SIK7l8dkuAHWTf7Jqlx6MwJWASMucyFzTd/7np5vt2Wt7mFewJGbHEDNLnG/bBSRfAiI4/heP6SZca3HLeq1F3UAf1JormMRliFNR78+eRmxKCoa0m3moSPkfjAhw0GEWURtDLcCO4XONI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762765286; c=relaxed/simple;
-	bh=gSjPQJmyRvp5FhE0nx669b4kg80b70C6/WXDHAf5wEE=;
-	h=Message-ID:Date:MIME-Version:From:Subject:To:Cc:References:
-	 In-Reply-To:Content-Type; b=hx2xBhN44Djw4X29M9xKtq0ZWUqYV+jk/nG3hXpANwa5YJF8iaeiV27CGr/5x/1FPUmZVoPg8QmTiF4qDdOhzLteQnybN4c/S6y3GnrD+LKJFFq7Ts5oUZAfLTYZlVD+0lIf9qqK+5ALORZ8RFJGm9tcOXb7gNWCFh2ROuCsLLA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=D84k4Gck; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1762765289; c=relaxed/simple;
+	bh=ccU9+qFZKZ7fCj6QGTBAJFQ2jYzt7LtNENdW2LxoxZM=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=TMbdKO30ozK+LYsnjyF1bHVYw3lpIazYLht1Y1dBy3AKfRpksBuBRj2mKjfVefGt8Zv05bb7Dav8u5CocPCe2U0gzyxh31rpf8PaMojNajdtY5BfgcG4JUQNjZ7CJzFr00AIVogFxzwvdEkoBtGi93iCDwOdxEymA58Q618cv+I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=oBHsj9cH; dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b=hDN87T2k; arc=none smtp.client-ip=205.220.168.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="D84k4Gck"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8B8A4C116B1;
-	Mon, 10 Nov 2025 09:01:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1762765285;
-	bh=gSjPQJmyRvp5FhE0nx669b4kg80b70C6/WXDHAf5wEE=;
-	h=Date:From:Subject:To:Cc:References:In-Reply-To:From;
-	b=D84k4GckFjHjwrv48lQ/D9n+GEKWWgXvOkSbUqwc5artvOBfq80Mwwk5SLy5cJ4mn
-	 p/Mh+mZUlmpD4A1G1cffHwAwKT6dX5ONntumJemLW6i+YR58yN5CfGQ/0HHViZdS6D
-	 HTdUdzm5VmfYybkMetHZUFNUzqF/aRAFnXAp9jROpw4DoHGJbArVvcehjllIvSXWm2
-	 TJQiFMzGss6wGXcpsPJ+3nsJL1d+qc6sxdcRs4bNOZOP0fJ+h/obzSRED1JXDQ72C2
-	 CG/lu2AC/Cz/M/ztiWSTGLwzSdUGATbhuXtFkvCaESBqIMMClHsaC90lyOUuJ1ApSF
-	 aT4XfEE/x6nkA==
-Message-ID: <843d646a-a720-4431-b9cb-5a0a9bdc9d59@kernel.org>
-Date: Mon, 10 Nov 2025 10:01:21 +0100
+	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="oBHsj9cH";
+	dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b="hDN87T2k"
+Received: from pps.filterd (m0279866.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 5AA87Fmb1388390
+	for <linux-media@vger.kernel.org>; Mon, 10 Nov 2025 09:01:27 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
+	cc:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
+	VjFJkh56K7+vszlTQwAFFoNDcHFHTbltKiU2coQ24F0=; b=oBHsj9cHNfV3LU1I
+	sFoJT6aShUeZc8d0f3vdWt+u/3N//1Fvm2dr2uxQ/eyzcpGLKCgoaZ+MsiLFtMOX
+	FoRTXJv0qDDwV3NymRDkiKs1d5QGm4+qElBFpSTEwSPd0ZcLr116MIeMiHl7xAY4
+	NLj53CAMe+0qoZa4//1AeqaJi9hznbIjj69OiDDpTPxI/gntZ7JS7yDzKX0xPV6t
+	M4TCsYocoZU689koXIdQPhpVugaztfHNkZ14ShVS2Z5y5ZOZGq+hc2LXwp97DrYa
+	EEPgMLgL7RspzC/nVxFFQBqko9HPf6xn+f8ChMDAzitv3wW2Q3D5xNU/4g6AeeN6
+	SwgJWg==
+Received: from mail-pf1-f197.google.com (mail-pf1-f197.google.com [209.85.210.197])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4ab2nxhcej-1
+	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
+	for <linux-media@vger.kernel.org>; Mon, 10 Nov 2025 09:01:26 +0000 (GMT)
+Received: by mail-pf1-f197.google.com with SMTP id d2e1a72fcca58-7a4c4eeeef2so5383129b3a.0
+        for <linux-media@vger.kernel.org>; Mon, 10 Nov 2025 01:01:26 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=oss.qualcomm.com; s=google; t=1762765286; x=1763370086; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=VjFJkh56K7+vszlTQwAFFoNDcHFHTbltKiU2coQ24F0=;
+        b=hDN87T2kp6VJqO0OvbvXMVw0HYNpKhIuZwr5aS9HCVCLAjLR4/LSv4/YIinliICBzP
+         zoRYB8HKA3NPhJGmXqOJnJARb4gV6fcnpocsaZ+A7kTU1E9Rfc1HXo4ZknGYf8h9Op2Y
+         icODd4koIhs81idVQ4MbvWVFY98HA576uhjFXLnsFoH1tXy1ACLnGjL6yvYBnhA/6BoB
+         IqxGjDFO4kXQhPZuYSTVl6xiOhNuRJk6Ohb89s/iVot9gsmkdZZa1YbO23IZwojCUaSW
+         hKVYguEjTdLiDtlOZDzvfdEZMmSv/7BteTmsB6/5uZTlH/T9o+DckffTm8W3Ot1SDo69
+         hwwA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1762765286; x=1763370086;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=VjFJkh56K7+vszlTQwAFFoNDcHFHTbltKiU2coQ24F0=;
+        b=G7/Vom4ETTLBNWfNuRoOx7TIq4xaCGDIZLxeSfXbJKCtwta4gN+pyVWodSFrVKoRfp
+         qL+WZ967jRMtbK50tYW3drhrtSxg5DpLP/bwLFlGkfbiqhlyYHsfGpk35gImzGg5wrBI
+         XnzuZc0pGiBzVClmN+qlsBVZLrG6FWBdSW3S2bL25YzmXkXi02ZryWzCo5lYTpmWROsi
+         2nJ1lET54vcm9OLrv+2sDNd3PpN+8QSzz0vQ2fW4PKCH6Uh5RAQuAqt5t/DS0byHM8uk
+         fO1azR51cVYomfxC1ALE560sfLSWaN087Wr4yYCFlnI+QZY+BAqkM7zwVw5ZBQrWmOaB
+         qUbQ==
+X-Forwarded-Encrypted: i=1; AJvYcCWml0280fNQwJBt0OQp0T2kSH/kBVKmyD7RXLHqR3vQgH1yXA5JvqfS5PdGEqhbVTDE6gRiFDyS2l+gXg==@vger.kernel.org
+X-Gm-Message-State: AOJu0Ywz8QmswtmCKLzCtEQmyLmgA7oaPNouGhVQQ/mLhyO2XA8Zk7bJ
+	xorVaEjYwrOc8jFoCaRm535O3A/HzTTZGs8hrtDTr6w866+/ssnDwfHAgR7hAcAyidDq32PQXIp
+	5jmzwSvFb4f+/e3aXnr8iBYkQMv4zOW6Bhh7EK5XZXhVhbN3Tl5OwJc7toahLHwIk5g==
+X-Gm-Gg: ASbGnctYJpU3BBno5nFdL+efZZ6HYkvRmbs9LnXIQxVwesifGuDb8aTPxWTlTFdE8v3
+	2Zm7zJHIPUpkN09F3fIprCIWOkJPIK35Qw2AR4X9ujU5zGh4EP3/1nPnDaQRkGBI38INQq2ztpJ
+	VCDKhPE+QW1a6p/83yeD2U/FlavlTNlqGO1WtSzIuZ3kiNjvhHR37ZGX0flF8C8Wxkr9l3RGkdg
+	E34QD8W5fT8P15qd671CLHNW7uARls0CbXHRW27bsrEPLjHcGl3EdZDT4K3WTgt6zAQ9nhlgIcD
+	JHQhEpQWeH7YhboO3sdpwTJzpD55SWS2aVq5NJuMuPVFIRk/XkjvM/691fvc4aZuM/H2gZ78TgZ
+	296jANVE7BrGqdeix8jsmzhXAMLFzMWI=
+X-Received: by 2002:aa7:888e:0:b0:7ab:f72e:8f9b with SMTP id d2e1a72fcca58-7b226b90d5bmr9656071b3a.25.1762765285794;
+        Mon, 10 Nov 2025 01:01:25 -0800 (PST)
+X-Google-Smtp-Source: AGHT+IHosFOAqp8NttTocVa+upK1X6V+G4BalraqG8mZS3F39o6UgfwXEKMpvqi7/lIqmyWo+/KjJA==
+X-Received: by 2002:aa7:888e:0:b0:7ab:f72e:8f9b with SMTP id d2e1a72fcca58-7b226b90d5bmr9656005b3a.25.1762765285176;
+        Mon, 10 Nov 2025 01:01:25 -0800 (PST)
+Received: from [10.0.0.3] ([106.222.229.252])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-7b0c963586fsm10881884b3a.10.2025.11.10.01.01.21
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 10 Nov 2025 01:01:24 -0800 (PST)
+Message-ID: <220c9fe4-00b4-3b42-0e80-8730a6388bde@oss.qualcomm.com>
+Date: Mon, 10 Nov 2025 14:31:20 +0530
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-From: Hans Verkuil <hverkuil+cisco@kernel.org>
-Subject: Re: [PATCH 00/18] media: microchip-isc: Color correction and
- histogram stats
-To: Balamanikandan Gunasundar <balamanikandan.gunasundar@microchip.com>,
- Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc: Eugen Hristev <eugen.hristev@linaro.org>, Chas Williams
- <3chas3@gmail.com>, Nicolas Ferre <nicolas.ferre@microchip.com>,
- Alexandre Belloni <alexandre.belloni@bootlin.com>,
- Claudiu Beznea <claudiu.beznea@tuxon.dev>,
- Balakrishnan Sambath <balakrishnan.s@microchip.com>,
- Hans Verkuil <hverkuil@kernel.org>, Ricardo Ribalda <ribalda@chromium.org>,
- Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
- Jacopo Mondi <jacopo.mondi@ideasonboard.com>,
- Daniel Scally <dan.scally+renesas@ideasonboard.com>,
- Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>,
- linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
- linux-atm-general@lists.sourceforge.net, netdev@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org
-References: <20251009155251.102472-1-balamanikandan.gunasundar@microchip.com>
-Content-Language: en-US, nl
-In-Reply-To: <20251009155251.102472-1-balamanikandan.gunasundar@microchip.com>
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.13.0
+Subject: Re: [PATCH v3] media: iris: Refine internal buffer reconfiguration
+ logic for resolution change
+Content-Language: en-US
+To: Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>
+Cc: Vikash Garodia <vikash.garodia@oss.qualcomm.com>,
+        Abhinav Kumar <abhinav.kumar@linux.dev>,
+        Bryan O'Donoghue <bod@kernel.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Hans Verkuil <hverkuil@kernel.org>,
+        Stefan Schmidt <stefan.schmidt@linaro.org>,
+        linux-media@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        Val Packett <val@packett.cool>
+References: <20251105-iris-seek-fix-v3-1-279debaba37a@oss.qualcomm.com>
+ <2uvinljz3gevbusjrz3bzi3nicelv3t6a64gliv4mdv6cbllvp@fz3qbyukypho>
+From: Dikshita Agarwal <dikshita.agarwal@oss.qualcomm.com>
+In-Reply-To: <2uvinljz3gevbusjrz3bzi3nicelv3t6a64gliv4mdv6cbllvp@fz3qbyukypho>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
+X-Proofpoint-ORIG-GUID: 7rb9ePREXXmuTVbGWlWT5EvNepp77qyg
+X-Authority-Analysis: v=2.4 cv=DJSCIiNb c=1 sm=1 tr=0 ts=6911a9e6 cx=c_pps
+ a=rEQLjTOiSrHUhVqRoksmgQ==:117 a=L4UNg9I9cQSOxNpRiiGXlA==:17
+ a=IkcTkHD0fZMA:10 a=6UeiqGixMTsA:10 a=s4-Qcg_JpJYA:10
+ a=VkNPw1HP01LnGYTKEx00:22 a=e5mUnYsNAAAA:8 a=VwQbUJbxAAAA:8 a=EUspDBNiAAAA:8
+ a=xnInQRZk-M5WjpmsOPIA:9 a=QEXdDO2ut3YA:10 a=2VI0MkxyNR6bbpdq8BZq:22
+ a=Vxmtnl_E_bksehYqCbjh:22
+X-Proofpoint-GUID: 7rb9ePREXXmuTVbGWlWT5EvNepp77qyg
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUxMTEwMDA3OSBTYWx0ZWRfX+uuL6m5Gk4Nr
+ DnKihwoOvR/qmDm3gqkLgYXtPBWZqHmPF/ILWFWS6VLsfHekl0o2dP5FFHaPpXmsPg/DpQuv8VE
+ vxYMv6Vn3J8sdYeM7+HTzwR4fJo16Qadhl/8/Y/61ToTPfkhzQy42+YFD8aEa+dG2QmHsm5oaFg
+ mHf6mm3oc7DVs3NBOUZYfWf6MWJqrmrc/avYeDb6LhV+z1gUkEAzmkld8A/XGON6OwRYJWFHYal
+ mNVaLbB7rbxHOwIHuLWTFzEyRLysPZHonAbYYnN/cSVoylc1nSjZfN536RjhZGHNsOf2Vc1Q8gG
+ vjnIMD1UVvjMIv85ckzej2vZ2CUb3HoXttueNDfHsttwiTvf5uaiFhuqDnreGX54/CNWejYtf2w
+ dZz6/CTS1qS9TV1xLotRv+H7MZ1CAg==
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.9,FMLib:17.12.100.49
+ definitions=2025-11-10_03,2025-11-06_01,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ bulkscore=0 adultscore=0 spamscore=0 priorityscore=1501 lowpriorityscore=0
+ malwarescore=0 phishscore=0 impostorscore=0 suspectscore=0 clxscore=1015
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.22.0-2510240001 definitions=main-2511100079
 
-Hi Balamanikandan,
 
-On 09/10/2025 17:52, Balamanikandan Gunasundar wrote:
-> Hi,
+
+On 11/10/2025 2:46 AM, Dmitry Baryshkov wrote:
+> On Wed, Nov 05, 2025 at 11:17:37AM +0530, Dikshita Agarwal wrote:
+>> Improve the condition used to determine when input internal buffers need
+>> to be reconfigured during streamon on the capture port. Previously, the
+>> check relied on the INPUT_PAUSE sub-state, which was also being set
+>> during seek operations. This led to input buffers being queued multiple
+>> times to the firmware, causing session errors due to duplicate buffer
+>> submissions.
+>>
+>> This change introduces a more accurate check using the FIRST_IPSC and
+>> DRC sub-states to ensure that input buffer reconfiguration is triggered
+>> only during resolution change scenarios, such as streamoff/on on the
+>> capture port. This avoids duplicate buffer queuing during seek
+>> operations.
+>>
+>> Fixes: c1f8b2cc72ec ("media: iris: handle streamoff/on from client in dynamic resolution change")
+>> Cc: stable@vger.kernel.org
+>> Reported-by: Val Packett <val@packett.cool>
+>> Closes: https://gitlab.freedesktop.org/gstreamer/gstreamer/-/issues/4700
+>> Signed-off-by: Dikshita Agarwal <dikshita.agarwal@oss.qualcomm.com>
+>> ---
+>> Changes in v3:
+>> - Fixed the compilation issue
+>> - Added stable@vger.kernel.org in Cc
+>> - Link to v2: https://lore.kernel.org/r/20251104-iris-seek-fix-v2-1-c9dace39b43d@oss.qualcomm.com
+>>
+>> Changes in v2:
+>> - Removed spurious space and addressed other comments (Nicolas)
+>> - Remove the unnecessary initializations (Self) 
+>> - Link to v1: https://lore.kernel.org/r/20251103-iris-seek-fix-v1-1-6db5f5e17722@oss.qualcomm.com
+>> ---
+>>  drivers/media/platform/qcom/iris/iris_common.c | 7 +++++--
+>>  1 file changed, 5 insertions(+), 2 deletions(-)
+>>
+>> diff --git a/drivers/media/platform/qcom/iris/iris_common.c b/drivers/media/platform/qcom/iris/iris_common.c
+>> index 9fc663bdaf3fc989fe1273b4d4280a87f68de85d..7f1c7fe144f707accc2e3da65ce37cd6d9dfeaff 100644
+>> --- a/drivers/media/platform/qcom/iris/iris_common.c
+>> +++ b/drivers/media/platform/qcom/iris/iris_common.c
+>> @@ -91,12 +91,14 @@ int iris_process_streamon_input(struct iris_inst *inst)
+>>  int iris_process_streamon_output(struct iris_inst *inst)
+>>  {
+>>  	const struct iris_hfi_command_ops *hfi_ops = inst->core->hfi_ops;
+>> -	bool drain_active = false, drc_active = false;
+>>  	enum iris_inst_sub_state clear_sub_state = 0;
+>> +	bool drain_active, drc_active, first_ipsc;
+>>  	int ret = 0;
+>>  
+>>  	iris_scale_power(inst);
+>>  
+>> +	first_ipsc = inst->sub_state & IRIS_INST_SUB_FIRST_IPSC;
+>> +
+>>  	drain_active = inst->sub_state & IRIS_INST_SUB_DRAIN &&
+>>  		inst->sub_state & IRIS_INST_SUB_DRAIN_LAST;
+>>  
+>> @@ -108,7 +110,8 @@ int iris_process_streamon_output(struct iris_inst *inst)
+>>  	else if (drain_active)
+>>  		clear_sub_state = IRIS_INST_SUB_DRAIN | IRIS_INST_SUB_DRAIN_LAST;
+>>  
+>> -	if (inst->domain == DECODER && inst->sub_state & IRIS_INST_SUB_INPUT_PAUSE) {
+>> +	/* Input internal buffer reconfiguration required in case of resolution change */
+>> +	if (first_ipsc || drc_active) {
+>>  		ret = iris_alloc_and_queue_input_int_bufs(inst);
+>>  		if (ret)
+>>  			return ret;
 > 
-> This patch series has a set of enhancements to the Microchip Image Sensor
-> Controller driver. The objective is to expand its image processing
-> capabilities and to improve the colors.
+> I will repeat my (unanswered) question from v2:
 > 
-> This series also introduces a new stats driver that exposes the histogram
-> data to userspace via v4l2 controls. This allows applications such as
-> libcamera to access real time image statistics for advanced image
-> processing like automatic exposure, white balance adjustments etc.
+> After this line comes manual writing of STAGE and PIPE. Could you please
+> point out where is the driver updating the resolution in the firmware?
+> And if it does, why do we need to write STAGE and PIPE again?
 
-Most of this series is fine, but the histogram part needs more work.
+Sorry for late reply,
 
-I would recommend splitting up this series in two parts: one for the
-various fixes and improvements, and one for the histogram feature.
+During streamon on the output port, the driver sets the resolution in the
+firmware. However, during Dynamic Resolution Change (DRC), the resolution
+update originates from the firmware and is communicated to the driver. As a
+result, the driver does not proactively update the resolution in the
+firmware during DRC.
 
-The first series with the fixes I can take easily. In fact, if you
-post that this week (no later than Thursday), then I can pick it
-up in time for v6.19.
+STAGE parameter depends on the resolution, the driver must update the
+firmware with the new STAGE value after a resolution change to ensure
+proper operation.
 
-As mentioned the histogram part needs more work. Mostly small stuff,
-but the documentation is the major missing part.
+On the other hand, the PIPE value is independent of resolution. It is
+typically updated to 1 for interlaced content, which is identified during
+the sequence change. Currently, the Iris driver does not support interlaced
+content, so updating the PIPE value during DRC handling is redundant.
+However, this update is harmless and will be necessary once interlace
+support is added in the future.
 
-I also want to see the output of 'v4l2-compliance -m0 -s' (i.e.
-with streaming) in the cover letter of the histogram series to be
-certain nothing was forgotten.
-
-Make sure you compile v4l2-compliance straight from the git repo,
-don't use a distro version since that's usually out of date.
-
-Regards,
-
-	Hans
-
+Thanks,
+Dikshita
 > 
-> Balakrishnan Sambath (11):
->   media: microchip-isc: Enable GDC and CBC module flags for RGB formats
->   media: microchip-isc: Improve histogram calculation with outlier
->     rejection
->   media: microchip-isc: Use channel averages for Grey World AWB
->   media: microchip-isc: Add range based black level correction
->   media: platform: microchip: Extend gamma table and control range
->   media: platform: microchip: Add new histogram submodule
->   media: microchip-isc: Register and unregister statistics device
->   media: microchip-isc: Always enable histogram for all RAW formats
->   media: microchip-isc: fix histogram state initialization order
->   media: microchip-isc: decouple histogram cycling from AWB mode
->   media: microchip-isc: enable userspace histogram statistics export
-> 
-> Balamanikandan Gunasundar (7):
->   media: platform: microchip: set maximum resolution for sam9x7
->   media: platform: microchip: Include DPC modules flags in pipeline
->   media: microchip-isc: expose hue and saturation as v4l2 controls
->   media: microchip-isc: Rename CBC to CBHS
->   media: microchip-isc: Store histogram data of all channels
->   media: videodev2.h, v4l2-ioctl: Add microchip statistics format
->   media: microchip-isc: expose color correction registers as v4l2
->     controls
-> 
->  drivers/media/platform/microchip/Kconfig      |   2 +
->  drivers/media/platform/microchip/Makefile     |   2 +-
->  .../platform/microchip/microchip-isc-base.c   | 373 ++++++++++--
->  .../platform/microchip/microchip-isc-regs.h   |   3 +
->  .../platform/microchip/microchip-isc-stats.c  | 549 ++++++++++++++++++
->  .../media/platform/microchip/microchip-isc.h  |  44 +-
->  .../microchip/microchip-sama5d2-isc.c         |   2 +-
->  .../microchip/microchip-sama7g5-isc.c         |  73 ++-
->  drivers/media/v4l2-core/v4l2-ioctl.c          |   1 +
->  include/linux/atmel-isc-media.h               |  13 +
->  include/uapi/linux/videodev2.h                |   3 +
->  11 files changed, 1001 insertions(+), 64 deletions(-)
->  create mode 100644 drivers/media/platform/microchip/microchip-isc-stats.c
-> 
-
