@@ -1,16 +1,16 @@
 Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 51A532F83BB
-	for <linux-media@vger.kernel.org>; Mon, 10 Nov 2025 08:27:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EE7852F3C32
+	for <linux-media@vger.kernel.org>; Mon, 10 Nov 2025 08:28:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762763256; cv=none; b=gVsALUnKaN+O0YXBfmz+e2vqa0jxNt7nS/+9UUFo6O/cPG5mM9iyGt7z/k450Iw8IkBX/tZUfS/168Ea2mpS3P3OlTLXU5f65s7//4XClPCu16yyg1H5awwCa9BY3HCY1oiyFNJK8JE9paVitxVKpjW+L4EC/WiWk1vEzvkUaQ4=
+	t=1762763322; cv=none; b=ocbi/ks9PQr7dQwAX9qvT9eu6HkCXA9S0AiKtmClCTz39ac5jxNqg1L4aGSRcr/MfUczFDJzpscwGgUqsiXDDyu0saFQyobNLalbVnne6EaUnEJO3HAni055lJP5W0wdAYYuNcC2+crkWg/sHxz2TJBjKf+at0F9m3fKNXFRK5o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762763256; c=relaxed/simple;
-	bh=1pCml4h8G2RzejcPO09IpeB8HRIK4qZx7GIqLp3Rmc4=;
+	s=arc-20240116; t=1762763322; c=relaxed/simple;
+	bh=EvtWBQFRZV7DO1p3ObWpe4+6Z7KE718cU+MX/WiuSB4=;
 	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=AgDhw5/2HekHrjc/jRa0z1fzG121uO2J2g9R9cQluvgFDEvEqvlAzBxHbNXo5967PRf8nQ22Q7/+RxZmb3oRf+koAqSkCm97lOc2hzArYHP58gYFIb7ojJ0Q15AKPn77DItEm4p/GT2hnTyVD0Vjw8VEGKxcqdiwP3ORefkkJsA=
+	 Content-Type:MIME-Version; b=lH0Pf0UM6TYTw/MWCcw6ird2T3xJnyzqXC7h72b6n9ZlHtm2nsoOykBVm1iXmHQkBM7a3uHKr/ffVUFax/tR1Pc/ZfJtauHuhe6Ar9uV2TSA0E4cR5gs6HHZPxioojyY3AQgu8N16qI86L5UVhpaID7U2py67Q5UBKCOnqwtvTI=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
@@ -18,20 +18,20 @@ Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
 	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
 	(Exim 4.92)
 	(envelope-from <p.zabel@pengutronix.de>)
-	id 1vINFB-0006EL-PQ; Mon, 10 Nov 2025 09:27:21 +0100
+	id 1vINGJ-0006Rp-SA; Mon, 10 Nov 2025 09:28:31 +0100
 Received: from lupine.office.stw.pengutronix.de ([2a0a:edc0:0:900:1d::4e] helo=lupine)
 	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
 	(Exim 4.96)
 	(envelope-from <p.zabel@pengutronix.de>)
-	id 1vINFB-007zQY-0g;
-	Mon, 10 Nov 2025 09:27:21 +0100
+	id 1vINGJ-007zQw-2A;
+	Mon, 10 Nov 2025 09:28:31 +0100
 Received: from pza by lupine with local (Exim 4.98.2)
 	(envelope-from <p.zabel@pengutronix.de>)
-	id 1vINFB-00000000472-0YzL;
-	Mon, 10 Nov 2025 09:27:21 +0100
-Message-ID: <90e5e430743eaca4b21097c64c42dd4f579bc48b.camel@pengutronix.de>
-Subject: Re: [PATCH 5/6] media: staging: media: imx6-mipi-csi2: use guard()
- to simplify code
+	id 1vINGJ-0000000049R-2T7U;
+	Mon, 10 Nov 2025 09:28:31 +0100
+Message-ID: <b198e853113e39397803d9651f7126566d269601.camel@pengutronix.de>
+Subject: Re: [PATCH 1/6] media: staging: media: imx6-mipi-csi2: replace
+ space with tab for alignment
 From: Philipp Zabel <p.zabel@pengutronix.de>
 To: Frank Li <Frank.Li@nxp.com>, Steve Longerbeam <slongerbeam@gmail.com>, 
  Mauro Carvalho Chehab	 <mchehab@kernel.org>, Greg Kroah-Hartman
@@ -41,10 +41,10 @@ To: Frank Li <Frank.Li@nxp.com>, Steve Longerbeam <slongerbeam@gmail.com>,
 Cc: imx@lists.linux.dev, linux-media@vger.kernel.org, 
 	linux-staging@lists.linux.dev, linux-arm-kernel@lists.infradead.org, 
 	linux-kernel@vger.kernel.org
-Date: Mon, 10 Nov 2025 09:27:21 +0100
-In-Reply-To: <20251107-stage-csi2-cleanup-v1-5-5d42535243ac@nxp.com>
+Date: Mon, 10 Nov 2025 09:28:31 +0100
+In-Reply-To: <20251107-stage-csi2-cleanup-v1-1-5d42535243ac@nxp.com>
 References: <20251107-stage-csi2-cleanup-v1-0-5d42535243ac@nxp.com>
-	 <20251107-stage-csi2-cleanup-v1-5-5d42535243ac@nxp.com>
+	 <20251107-stage-csi2-cleanup-v1-1-5d42535243ac@nxp.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 User-Agent: Evolution 3.56.1-1+deb13u1 
@@ -60,72 +60,88 @@ X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expand
 X-PTX-Original-Recipient: linux-media@vger.kernel.org
 
 On Fr, 2025-11-07 at 15:44 -0500, Frank Li wrote:
-> Use guard() to simplify mutex locking. No functional change.
->=20
+> Replace space with tab to follow coding convention. No functional change.
+
+Which convention? To be honest, this feels a bit like unnecessary churn
+to me.
+
 > Signed-off-by: Frank Li <Frank.Li@nxp.com>
+>
 > ---
->  drivers/staging/media/imx/imx6-mipi-csi2.c | 54 +++++++++++-------------=
+>  drivers/staging/media/imx/imx6-mipi-csi2.c | 92 +++++++++++++++---------=
 ------
->  1 file changed, 19 insertions(+), 35 deletions(-)
+>  1 file changed, 46 insertions(+), 46 deletions(-)
 >=20
 > diff --git a/drivers/staging/media/imx/imx6-mipi-csi2.c b/drivers/staging=
 /media/imx/imx6-mipi-csi2.c
-> index f8d0b3b8b250774af51f2aba731e639131aceff9..54e9491d3428686288a5bc9bb=
-58a5a0a25aca696 100644
+> index dd8c7b3233bccfc34b59e0f0ff813b36752e1526..42256441b881d9f132ad7ff89=
+9d6f1e35643b4ac 100644
 > --- a/drivers/staging/media/imx/imx6-mipi-csi2.c
 > +++ b/drivers/staging/media/imx/imx6-mipi-csi2.c
-> @@ -413,21 +413,17 @@ static int csi2_s_stream(struct v4l2_subdev *sd, in=
-t enable)
->  	struct csi2_dev *csi2 =3D sd_to_dev(sd);
->  	int i, ret =3D 0;
+> @@ -23,65 +23,65 @@
+>   * there must be 5 pads: 1 input pad from sensor, and
+>   * the 4 virtual channel output pads
+>   */
+> -#define CSI2_SINK_PAD       0
+> -#define CSI2_NUM_SINK_PADS  1
+> -#define CSI2_NUM_SRC_PADS   4
+> -#define CSI2_NUM_PADS       5
+> +#define CSI2_SINK_PAD		0
+> +#define CSI2_NUM_SINK_PADS	1
+> +#define CSI2_NUM_SRC_PADS	4
+> +#define CSI2_NUM_PADS		5
 > =20
-> -	mutex_lock(&csi2->lock);
-> +	guard(mutex)(&csi2->lock);
-> =20
-> -	if (!csi2->src_sd) {
-> -		ret =3D -EPIPE;
-> -		goto out;
-> -	}
-> +	if (!csi2->src_sd)
-> +		return -EPIPE;
-> =20
->  	for (i =3D 0; i < CSI2_NUM_SRC_PADS; i++) {
->  		if (csi2->sink_linked[i])
->  			break;
->  	}
-> -	if (i >=3D CSI2_NUM_SRC_PADS) {
-> -		ret =3D -EPIPE;
-> -		goto out;
-> -	}
-> +	if (i >=3D CSI2_NUM_SRC_PADS)
-> +		return -EPIPE;
-> =20
->  	/*
->  	 * enable/disable streaming only if stream_count is
-> @@ -442,14 +438,12 @@ static int csi2_s_stream(struct v4l2_subdev *sd, in=
-t enable)
->  	else
->  		csi2_stop(csi2);
->  	if (ret)
-> -		goto out;
-> +		return ret;
-> =20
->  update_count:
->  	csi2->stream_count +=3D enable ? 1 : -1;
->  	if (csi2->stream_count < 0)
->  		csi2->stream_count =3D 0;
-> -out:
-> -	mutex_unlock(&csi2->lock);
->  	return ret;
+>  /*
+>   * The default maximum bit-rate per lane in Mbps, if the
+>   * source subdev does not provide V4L2_CID_LINK_FREQ.
+>   */
+> -#define CSI2_DEFAULT_MAX_MBPS 849
+> +#define CSI2_DEFAULT_MAX_MBPS	849
 
-This is mixing goto and cleanup in the same function, which the scope-
-based cleanup helpers documentation suggests shouldn't be done.
+Personally, I like these changes.
 
-In this case I see no problem because we only jump to update_count from
-under the lock, but since issues with gotos around automatic cleanup
-are easy to miss, I think it would be better to also turn the
-update_count jump into a conditional block.
+>  struct csi2_dev {
+> -	struct device          *dev;
+> -	struct v4l2_subdev      sd;
+> -	struct v4l2_async_notifier notifier;
+> -	struct media_pad       pad[CSI2_NUM_PADS];
+> -	struct clk             *dphy_clk;
+> -	struct clk             *pllref_clk;
+> -	struct clk             *pix_clk; /* what is this? */
+> -	void __iomem           *base;
+> -
+> -	struct v4l2_subdev	*remote;
+> -	unsigned int		remote_pad;
+> -	unsigned short		data_lanes;
+> +	struct device			*dev;
+> +	struct v4l2_subdev		sd;
+> +	struct v4l2_async_notifier	notifier;
+> +	struct media_pad		pad[CSI2_NUM_PADS];
+> +	struct clk			*dphy_clk;
+> +	struct clk			*pllref_clk;
+> +	struct clk			*pix_clk; /* what is this? */
+> +	void __iomem			*base;
+> +
+> +	struct v4l2_subdev		*remote;
+> +	unsigned int			remote_pad;
+> +	unsigned short			data_lanes;
+> =20
+>  	/* lock to protect all members below */
+> -	struct mutex lock;
+> +	struct mutex			lock;
+> =20
+> -	struct v4l2_mbus_framefmt format_mbus;
+> +	struct v4l2_mbus_framefmt	format_mbus;
+> =20
+> -	int                     stream_count;
+> -	struct v4l2_subdev      *src_sd;
+> -	bool                    sink_linked[CSI2_NUM_SRC_PADS];
+> +	int				stream_count;
+> +	struct v4l2_subdev		*src_sd;
+> +	bool				sink_linked[CSI2_NUM_SRC_PADS];
+>  };
 
+Here I'd prefer just a single space between type and identifier.
 
 regards
 Philipp
