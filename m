@@ -1,211 +1,130 @@
-Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f54.google.com (mail-wm1-f54.google.com [209.85.128.54])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0807230149E
-	for <linux-media@vger.kernel.org>; Mon, 10 Nov 2025 11:34:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9C3873081C5
+	for <linux-media@vger.kernel.org>; Mon, 10 Nov 2025 11:35:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762774452; cv=none; b=dVIrRGNvoc+jsAXr8a22ytBgWekTjACg6XyfD9cQnKTu8tjJCyWpl+CVoNBAFFMGpN1sjj/2o+9cCNCV7vVyA7wV3q0M1DGToTnPoZLuMGs9uo71dlSMV9dg8EsuNTV2Q8N+Gyjw1Uvt/kVrgwbMZfCxjOQmL1gd2KEJKv/xVZw=
+	t=1762774556; cv=none; b=td5mRARlZ6i4oQgO1xELCnyptzAus8YfXudA4/1xZ9s9rjx5wsfKBHEXzQ6Y/NYuHQDDZ6ZKmT11pVwRF60aVcEYMrgOYacuIi8AI+KodBBfAu6GmFSN+8bDF/q9YMALUmhGPBuFmKfe7/ZgPCzTjWCSBAQLnrfTWI5ZST6JNzw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762774452; c=relaxed/simple;
-	bh=NfYoubvx1j/f7MW8Zs391OvlNHrm1NUlNfB/mJfNitw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=R5TcMkh4jweWkurK+5rgTwCnAeASWm+WH6VY6mk6m+D1RgFp1It5DmWLNPN5rc3aJcJRquZn6tvLXELQFLXIk6NCN/xkmYMvo2948SgYX6NCGczQ4talfjvmtcGYFLRbyerwSp8sE5OVgGWCZ/XN6rolNb+opywDUYJ4Prwqay8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-	(Exim 4.92)
-	(envelope-from <m.tretter@pengutronix.de>)
-	id 1vIQ9g-00022r-64; Mon, 10 Nov 2025 12:33:52 +0100
-Received: from pty.whiteo.stw.pengutronix.de ([2a0a:edc0:2:b01:1d::c5])
-	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.96)
-	(envelope-from <m.tretter@pengutronix.de>)
-	id 1vIQ9f-0080xM-2I;
-	Mon, 10 Nov 2025 12:33:51 +0100
-Received: from mtr by pty.whiteo.stw.pengutronix.de with local (Exim 4.96)
-	(envelope-from <m.tretter@pengutronix.de>)
-	id 1vIQ9f-00CYGP-1u;
-	Mon, 10 Nov 2025 12:33:51 +0100
-Date: Mon, 10 Nov 2025 12:33:51 +0100
-From: Michael Tretter <m.tretter@pengutronix.de>
-To: yassine.ouaissa@allegrodvt.com
-Cc: Mauro Carvalho Chehab <mchehab@kernel.org>,
-	Pengutronix Kernel Team <kernel@pengutronix.de>,
-	Michal Simek <michal.simek@amd.com>, Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Nicolas Dufresne <nicolas@ndufresne.ca>,
-	linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-	Conor Dooley <conor.dooley@microchip.com>
-Subject: Re: [PATCH v5 2/4] dt-bindings: media: allegro: Add al300 decoder IPs
-Message-ID: <aRHNn6fv8jiGXccq@pengutronix.de>
-Mail-Followup-To: Michael Tretter <m.tretter@pengutronix.de>,
-	yassine.ouaissa@allegrodvt.com,
-	Mauro Carvalho Chehab <mchehab@kernel.org>,
-	Pengutronix Kernel Team <kernel@pengutronix.de>,
-	Michal Simek <michal.simek@amd.com>, Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Nicolas Dufresne <nicolas@ndufresne.ca>,
-	linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-	Conor Dooley <conor.dooley@microchip.com>
-References: <20250813-allegro_dvt_al300_dec_driver-v5-0-a312ddebc4d8@allegrodvt.com>
- <20250813-allegro_dvt_al300_dec_driver-v5-2-a312ddebc4d8@allegrodvt.com>
+	s=arc-20240116; t=1762774556; c=relaxed/simple;
+	bh=AL9VUTAnPmoOffKlIJNa0kvWod/v0SpUxAnrML35V+s=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=iAZ4eZ33ZVzsgpol8xJoPIP+Ai8XNavbq2hVzOA4jDAF4YKk5Mi7ozMoTIFFOXHACpluAm2EW0sNoYHEII2fZHbPWqwj3sssyIYdZEkY8kJwiRkIIWZ2KcjNPV9deh5qNUs1mjJSrHLTDrRiz/dIMMpBfO3urCHbRRA55KC3/e8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=Yh5WZxVb; arc=none smtp.client-ip=209.85.128.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="Yh5WZxVb"
+Received: by mail-wm1-f54.google.com with SMTP id 5b1f17b1804b1-4775ae77516so34752765e9.1
+        for <linux-media@vger.kernel.org>; Mon, 10 Nov 2025 03:35:54 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1762774553; x=1763379353; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:content-language:from
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=5y6wCAKSaMKPZ+2wBt9jzrpJq7K1/r6VCG/1Dr2iUWQ=;
+        b=Yh5WZxVbt8FkT4g7ceHlcT4nG5nZjs4aiwypFKjbTCkX4X/A7PTlFZgdKCgBy4bsjI
+         IAdI7RzbOVCCZKN22E+8M2FoNQxxnrE9NwjhhVDsUfae17K2xnpD+Fys49MMiogXY8q9
+         2+hAhXk8nJCM30P8pG6PyS8GSwwEryLyCcq4PfEMpVO/dLSwyCVAE3s66SQgIiInHu92
+         79W9KicD6e2eyArPu1op2ekeVsWKWGZ+UAp/z1rmGwuInIU1makD1Meewzx7ePplk40u
+         fuTLVj3q5bXLLlh0kCL1B2egFwivheaMznl6P2fWBPrJSdAf228vdUrHvhLdceBgjyx2
+         VI8w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1762774553; x=1763379353;
+        h=content-transfer-encoding:in-reply-to:content-language:from
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=5y6wCAKSaMKPZ+2wBt9jzrpJq7K1/r6VCG/1Dr2iUWQ=;
+        b=cJkC9poLy0kd0ZmDH5RhRYAlDMWw1a8S5vNECPjfa/eMvUjhIL7Kk7Xj7VAhQsBzJz
+         gtsUF4nKMfTujQq70u+SlJCBwzOYwUbFJdP2Wl7yIfADAdODKtk26h294XWdDV1nA6md
+         cqBT5gHq3DEZnKou9HqoS2P1ecu9Ax0PZ4oI9/k+wVYGqty14zf8NhfV1wJX64ji5alJ
+         5wgR3mKlSfWTxWKr3EQB784RjwSDK5Qc5EcJEN0JrhqadoEt7i6Z6+gLf2jKu00hED8s
+         niPvDTtZOrY6avjJgoPLqKi+BqEB36WX3ngTgK+EbiKViH72jS+Ndp6R3nuVFzsLCp+f
+         6mQA==
+X-Forwarded-Encrypted: i=1; AJvYcCXpeTYTlVJNi5xMRRYNMEG/7/S731hOP0R0R2OQeaxPIKDD3kNuPSVkOVx75eEye0mS0yTtPhvYG11keA==@vger.kernel.org
+X-Gm-Message-State: AOJu0YxW6JDAqSOjp0CzgnWVaWAI0ATyyJROyfYQVcGTxTg7X0qKKygT
+	AlSCEAXLAriIHUD8RJZd3ZyE9om0tv0zcGD+ITK6ZFP5PNG3TutiRuXe15022CzGpyc=
+X-Gm-Gg: ASbGncusuQOcP2jORzWcgWBVNHlZxZvTeJoiG6mR3zMg2u7NZtZeGyo9+DEgyQXnd5I
+	xhEEhZX5BKgwzG3gK8rNgoyLfWMM+LVDPVnEKNZFmK+waSwMQhjEE6UelCaKkmggrMP5A8CzhTc
+	RUyxixBzKOyupH6uRQzfQCnsBBWgV23uxptZooQG22oPgUvmRSv0XgEO3o5yBMbNuUJNLVDLUcx
+	TITvjGUwdBE4KMmjjdpK9QrKNs+WDhnnUQvN4PdtYyCK5Yxkj1c7PGqK5mJojP/tq6wPt4RvaBi
+	tXwAz6QCLdTvfpor6VogZIVbl7eT7VgwLxEUai4LJsc9cPS2I7UPymF7SQDn5HFUZmFyOJeMGdG
+	rOaD6CBK9ZOE5RpnKYro4FZLfStTEOqJV/l2W8Kbj6qrmrQhsa3b4PVzu/e6srvbMphNGnIEwvo
+	SoC+IV2HGty53Q6BuBbcEih1dv+4MtXXDKtFubgMeJVA==
+X-Google-Smtp-Source: AGHT+IH7a4ZIA6K1hyshUjilyezxAd12GR80z/y8NgV7hZhcHkivP2UCzIhZhQjPDXMAGanfBiROLA==
+X-Received: by 2002:a05:600c:4704:b0:477:a9e:859b with SMTP id 5b1f17b1804b1-4777327cb50mr60888925e9.24.1762774552976;
+        Mon, 10 Nov 2025 03:35:52 -0800 (PST)
+Received: from [192.168.0.21] (188-141-3-146.dynamic.upc.ie. [188.141.3.146])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4776bccd41bsm197008495e9.2.2025.11.10.03.35.52
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 10 Nov 2025 03:35:52 -0800 (PST)
+Message-ID: <26bc458f-1db1-44e3-937a-f3ee7c1027be@linaro.org>
+Date: Mon, 10 Nov 2025 11:35:51 +0000
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20250813-allegro_dvt_al300_dec_driver-v5-2-a312ddebc4d8@allegrodvt.com>
-X-Sent-From: Pengutronix Hildesheim
-X-URL: http://www.pengutronix.de/
-X-Accept-Language: de,en
-X-Accept-Content-Type: text/plain
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: m.tretter@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-media@vger.kernel.org
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH RFC 2/8] media: qcom: camss: csiphy: Introduce C-PHY
+To: david@ixit.cz, Robert Foss <rfoss@kernel.org>,
+ Todor Tomov <todor.too@gmail.com>,
+ Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>,
+ Mauro Carvalho Chehab <mchehab@kernel.org>,
+ Luca Weiss <luca.weiss@fairphone.com>, Petr Hodina <phodina@protonmail.com>,
+ Casey Connolly <casey.connolly@linaro.org>, "Dr. Git" <drgitx@gmail.com>
+Cc: Joel Selvaraj <foss@joelselvaraj.com>, linux-media@vger.kernel.org,
+ linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+ phone-devel@vger.kernel.org
+References: <20251109-qcom-cphy-v1-0-165f7e79b0e1@ixit.cz>
+ <20251109-qcom-cphy-v1-2-165f7e79b0e1@ixit.cz>
+From: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+Content-Language: en-US
+In-Reply-To: <20251109-qcom-cphy-v1-2-165f7e79b0e1@ixit.cz>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Wed, 13 Aug 2025 09:54:54 +0000, Yassine Ouaissa via B4 Relay wrote:
-> From: Yassine Ouaissa <yassine.ouaissa@allegrodvt.com>
+On 09/11/2025 09:39, David Heidelberg via B4 Relay wrote:
+> From: David Heidelberg <david@ixit.cz>
 > 
-> Add a schema for the allegro gen3 video decoder.
+> Read C-PHY from the device-tree bus-type and save it into the csiphy
+> structure for later use.
 > 
-> Acked-by: Conor Dooley <conor.dooley@microchip.com>
-> Signed-off-by: Yassine Ouaissa <yassine.ouaissa@allegrodvt.com>
+> For C-PHY, skip clock line configuration, as there is none.
+> 
+> Signed-off-by: David Heidelberg <david@ixit.cz>
 > ---
->  .../bindings/media/allegro,al300-vdec.yaml         | 76 ++++++++++++++++++++++
->  MAINTAINERS                                        |  2 +
->  2 files changed, 78 insertions(+)
+>   drivers/media/platform/qcom/camss/camss-csiphy.h | 2 ++
+>   drivers/media/platform/qcom/camss/camss.c        | 8 ++++++--
+>   2 files changed, 8 insertions(+), 2 deletions(-)
 > 
-> diff --git a/Documentation/devicetree/bindings/media/allegro,al300-vdec.yaml b/Documentation/devicetree/bindings/media/allegro,al300-vdec.yaml
-> new file mode 100644
-> index 0000000000000000000000000000000000000000..12e86c306d5578d298ad03a6d59593dd1ddcff9e
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/media/allegro,al300-vdec.yaml
-> @@ -0,0 +1,76 @@
-> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/media/allegro,al300-vdec.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Allegro DVT Video IP Decoder Gen 3
-> +
-> +maintainers:
-> +  - Yassine OUAISSA <yassine.ouaissa@allegrodvt.com>
-> +
-> +description:
-> +  The al300-vdec represents the gen 3 of Allegro DVT IP video
-> +  decoding technology, offering significant advancements over its
-> +  predecessors. This new decoder features enhanced processing capabilities
-> +  with improved throughput and reduced latency.
+> diff --git a/drivers/media/platform/qcom/camss/camss-csiphy.h b/drivers/media/platform/qcom/camss/camss-csiphy.h
+> index 895f80003c441..8f7d0e4c73075 100644
+> --- a/drivers/media/platform/qcom/camss/camss-csiphy.h
+> +++ b/drivers/media/platform/qcom/camss/camss-csiphy.h
+> @@ -28,11 +28,13 @@ struct csiphy_lane {
+>   
+>   /**
+>    * struct csiphy_lanes_cfg - CSIPHY lanes configuration
+> + * @cphy:     true if C-PHY is used, false if D-PHY is used
+>    * @num_data: number of data lanes
+>    * @data:     data lanes configuration
+>    * @clk:      clock lane configuration (only for D-PHY)
+>    */
+>   struct csiphy_lanes_cfg {
+> +	bool cphy;
 
-This reads more like marketing than a technical description. Maybe just
-stick to the first sentence:
+Should be an integer from
 
-	The al300-vdec represents the gen 3 of Allegro DVT IP video decoding
-	technology.
+include/dt-bindings/phy/phy.h
 
-> +
-> +  Communication between the host driver software and the MCU is implemented
-> +  through a specialized mailbox interface mechanism. This mailbox system
-> +  provides a structured channel for exchanging commands, parameters, and
-> +  status information between the host CPU and the MCU controlling the codec
-> +  engines.
+- PHY_TYPE_DPHY
+- PHY_TYPE_CPHY
 
-I'd focus the description on the hardware/MCP and drop anything
-referring to the host driver software.
+this should be indicated in the dt and latched here.
 
-> +
-> +properties:
-> +  compatible:
-> +    const: allegro,al300-vdec
-> +
-> +  reg:
-> +    maxItems: 2
-> +
-> +  reg-names:
-> +    items:
-> +      - const: top
-> +      - const: apb
-> +
-> +  interrupts:
-> +    maxItems: 1
-> +
-> +  clocks:
-> +    description: MCU core clock
-> +    maxItems: 1
-> +
-> +  memory-region:
-> +    maxItems: 1
-
-Please add a description explaining the purpose of the memory-region.
-
-> +
-> +  firmware-name:
-> +    maxItems: 1
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - reg-names
-> +  - interrupts
-> +  - clocks
-> +
-> +additionalProperties: False
-> +
-> +examples:
-> +  - |
-> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
-> +
-> +    axi {
-> +        #address-cells = <2>;
-> +        #size-cells = <2>;
-> +
-> +        video-decoder@a0120000 {
-> +            compatible = "allegro,al300-vdec";
-> +            reg = <0x00 0xa0120000 0x00 0x10000>, /*VDEC_TOP*/
-> +                  <0x01 0x80000000 0x00 0x8000>;  /*MCU_APB*/
-
-Drop these comments. If the register maps need documentation, these
-should be a description in the binding above.
-
-> +            reg-names = "top", "apb";
-> +            interrupts = <GIC_SPI 96 IRQ_TYPE_LEVEL_HIGH>;
-> +            clocks = <&mcu_core_clk>;
-> +            memory-region = <&vdec_mem>;
-> +            firmware-name = "al300_vdec.fw";
-> +        };
-> +    };
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index 88a76452956eb3b91e7813cbdc16c361f26216a5..532d8a51df9f500767f468935d960b1634139c65 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -819,7 +819,9 @@ M:	Michael Tretter <m.tretter@pengutronix.de>
->  R:	Pengutronix Kernel Team <kernel@pengutronix.de>
->  L:	linux-media@vger.kernel.org
->  S:	Maintained
-> +F:	Documentation/devicetree/bindings/media/allegro,al300-vdec.yaml
->  F:	Documentation/devicetree/bindings/media/allegro,al5e.yaml
-> +F:	drivers/media/platform/allegro-dvt/al300
->  F:	drivers/media/platform/allegro-dvt/zynqmp
-
-This feels a bit weird. You first change the maintenance to the
-zynqmp subdirectory and then add the al300 to the same maintainers
-entry.
-
-Either add yourself as maintainer for the al300 directory or just leave
-the maintainership on the top directory.
-
-Also, the al300 directory should be added with the actual driver.
-
-Michael
+---
+bod
