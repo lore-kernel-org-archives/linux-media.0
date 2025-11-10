@@ -1,134 +1,141 @@
-Received: from mail-wm1-f47.google.com (mail-wm1-f47.google.com [209.85.128.47])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A8CBC30AAAD
-	for <linux-media@vger.kernel.org>; Mon, 10 Nov 2025 11:41:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D78F1191
+	for <linux-media@vger.kernel.org>; Mon, 10 Nov 2025 11:46:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762774906; cv=none; b=OuPtrAUbR5Vmj2PZibFIWe4R+0t14/ew7Xs3j1l48hjv9MZ9nBkmhABXTDo43yhVAHk96gWldA8vtbjXn90J8KXadLQ6y9ljw4h0n54MoJFfGPQi7cOOcvD4Mzk/DYo0rg/t5UPAI1TYZDOUwrqreSHoO6TRxEUx06MvHlFA+uA=
+	t=1762775200; cv=none; b=jLpIjEUATppglsOSEkxDVB6SS1SGDnlmPPm/KMF/uo1e1mVUDqqcmjc1K3p/W8Z5prA1jutPsX5htpIx7n2oD9Xbwg8I4J4Baq63N9oeKMCzS5iRQOdobtQ7utZGpTfIG2+0yUyJO72NnsjK8BsbJz5KTE1bqo+0oehTUGbuFss=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762774906; c=relaxed/simple;
-	bh=4evboygHfllG7Usog2TgDkAQtAorhUspDMGXw73Mraw=;
-	h=Mime-Version:Content-Type:Date:Message-Id:From:To:Cc:Subject:
-	 References:In-Reply-To; b=lrPTsLYkZue/cB1i0r8M6LEULiE7GdgZYxhF/nQW+YwTSrYs91ljbDZMtu0g7yZMonuQW0z0TWLBeDMDoK75gqeOLEVy0p+ZcLjS/S2ABCnliU1iubmVcU/QU9mY/WmPjk78TY7busCoipN7vSZkqDB++KtizfCzlK/sk/CnW68=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=fairphone.com; spf=pass smtp.mailfrom=fairphone.com; dkim=pass (2048-bit key) header.d=fairphone.com header.i=@fairphone.com header.b=H2bctr2a; arc=none smtp.client-ip=209.85.128.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=fairphone.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=fairphone.com
+	s=arc-20240116; t=1762775200; c=relaxed/simple;
+	bh=si5lW1ydzquhPG/yrtEo8G93FCB3p2Wrmwm9W6QchvE=;
+	h=Message-ID:Date:MIME-Version:From:Subject:To:Cc:References:
+	 In-Reply-To:Content-Type; b=EFKnqGMZJsWU//Cvw04U1/U5l7zqRSfCEZi6ciZ8cGtAbL3+xpxn6TcQqSGAES4cUXVswxQ/nxbvK6CCEb59GDATVqWTsDdrB4/0tQanG/ggkd5CYz3rjahBg2PnhJ42qtdOFyOmcT78rt6GfLdLP6UX5WfZS6D+wlDhDXeSayU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=tbwx95A3; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=fairphone.com header.i=@fairphone.com header.b="H2bctr2a"
-Received: by mail-wm1-f47.google.com with SMTP id 5b1f17b1804b1-4777771ed1aso10483695e9.2
-        for <linux-media@vger.kernel.org>; Mon, 10 Nov 2025 03:41:43 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=fairphone.com; s=fair; t=1762774902; x=1763379702; darn=vger.kernel.org;
-        h=in-reply-to:references:subject:cc:to:from:message-id:date
-         :content-transfer-encoding:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=WSv319ON8s5k79NCoOUYSS4YvjAcOb/v3+cIU8nITNc=;
-        b=H2bctr2abnNApyGwXZaxpnLxO8sitS/pjkiy877h2FDVALYcZJe6VFpFT5JevQm2yh
-         up7MPJB1IgL0r9938JlykAZQPx0ef4f8KRQ6tHnG+sgR46U49QE4fDZyUw56ynUS+JOn
-         kyoSEpd+48UDMWJpOnSNYeTfYfAZ2umZkAREfcCo/eAqRMkhD6A6vEH4MifHgW/anaJV
-         kLfrLyD+ADOe2oJy4D1WciBjfvQOgWoR7LRBICyDIMzf7kcBQiBgTXyZo70J6sB9v7gj
-         jqj98/yT2ifei5AAraWLqHEBcTJpJX0PTCamRH7Gb7SMIrvlfIWcXA2Al7ZX2aGm4jYC
-         WHmA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1762774902; x=1763379702;
-        h=in-reply-to:references:subject:cc:to:from:message-id:date
-         :content-transfer-encoding:mime-version:x-gm-gg:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=WSv319ON8s5k79NCoOUYSS4YvjAcOb/v3+cIU8nITNc=;
-        b=MQMdHe9Ns0zNtIQO4gQ8eSKR5tTV7WUaCxpnoNVrJyuFI86lxU1uun+p+EwkARZ/jz
-         P9cGwO9rryqfDVG027IvKgrTX7So4RgqxAEKlUsbgwTBCgvabTZysgqLQ7EUMRR7Z3oh
-         1lgYto+LNLVGCRk+rJFofbf3Js4RFrX2/jKVYpRmbnghlMrNCNIgSvF7++wnl01b91H8
-         s32AB8u9ouAHGJe0Cd44xoxzucFgtBswG63SC6+6ydEOgUBPE+otGctYVdWLSrrjOzow
-         PR7zjSlCmZA7VGFVbB4r+CKZMcN9eZ1cQqN/QxFl6R4Rlk4BmeVkMLirEaNYKX+lPk1a
-         qF3A==
-X-Forwarded-Encrypted: i=1; AJvYcCWwLikDJRbZCH1+XJ0CxBlAXLqcgH3OV4FC4wlQuBGS8fQ8R5lRo3VV5LT6tHwJrN7HHy3ZKtBrI/FvTw==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yyd/M+kOe+sxMvQdUWw+ULv1Hd7enBeol23E6KPriyQGDdghGCr
-	ZRfEMOsNV3XBd3p/uf6r0e/xFY2MK6DcfWIHA0eXxGrgo/KNgKrLtj3picgsXVK02BQ=
-X-Gm-Gg: ASbGncua8FFtOv/L0gWQxYMcW5ddvjlOdH4BXtDLjd4OhPSBHLk7qsrBGwzwhFOIssZ
-	9OeWmCA6vm0e7bAwZGaF84CsZBenT2Vvt7ArTbLiKb31YPnSB+uB0c/NFjC/j/OflRRjq4CxX4a
-	YT0S5hB1oabNETDSG/YgfGHhdTKeCkhitOBr8xEwQHdIaRsrf1JwBm9aABibgYlApyZjzi9ttML
-	poXu8mGh55wv6ctGop15cvQeKDk1InE+0H7/CFwrSVXgfUo14cWy/4dEZW7WJfMfJZvuqmf7V9f
-	RZ3KE5DUCp++05/jMWSCy+A3YqEqYpmy1M5IZoE21Fm5zwn1PjaP3R8LSsWk2s1fYVQVVXVolh2
-	w2PKt32/6DVWr9C8q5c1k8xw2SQNYv5glZlaRDcQ6h22HN68hwAyy01nsMqMJRvb6RddB2tJsrl
-	FfDU3v6Atr1wKZj3uVO5Hk+mM8OchCFPWFxb4DoglikxV42ts03dgEZriefQ==
-X-Google-Smtp-Source: AGHT+IHgURZ+2ALbsYAeFytpaGuY3bxXAOFksVTI2Vrqto3KQB0fcrxUmYbmcgxUCetGDJMVEYFXbw==
-X-Received: by 2002:a05:600c:1ca7:b0:46f:b43a:aee1 with SMTP id 5b1f17b1804b1-477732a9d90mr72371385e9.38.1762774902061;
-        Mon, 10 Nov 2025 03:41:42 -0800 (PST)
-Received: from localhost (84-115-213-210.cable.dynamic.surfer.at. [84.115.213.210])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4776bd084d4sm247107225e9.14.2025.11.10.03.41.39
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 10 Nov 2025 03:41:41 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="tbwx95A3"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D57A7C4CEFB;
+	Mon, 10 Nov 2025 11:46:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1762775200;
+	bh=si5lW1ydzquhPG/yrtEo8G93FCB3p2Wrmwm9W6QchvE=;
+	h=Date:From:Subject:To:Cc:References:In-Reply-To:From;
+	b=tbwx95A3d3o4lhyzn1sERSENKOGnpKZhEPUfyx2/m6vl6GHUP3SEzvMScGahy8+3D
+	 +6dzAImZnLTRNUEbWvwsnCOvQ+3tyl0ElyjaP/0Q9pIIV8FetHWttKZent8CqJZ5LA
+	 Qda4arIA+5cJ66J/rbHL6+ct7S6G4qfytstgR1qZNg3IO+Ex+LhOstQ5qZj0qSdBgj
+	 5bvZITwnZbwd0oE/WjNoFFJnTvQqkqj42BVWTBwhqHVfY36tSixV2tocNVWZCVswVo
+	 XsEQjGrLLBKlCGe+Xv/jp5brlnhlEH6sUZjUaCrbauPdCN91GrpF1vYtwneS/n7WfZ
+	 mQzBcjQBIOHtw==
+Message-ID: <09cefa2c-18ea-4051-8337-65bfd8472e43@kernel.org>
+Date: Mon, 10 Nov 2025 12:46:38 +0100
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+From: Hans Verkuil <hverkuil+cisco@kernel.org>
+Subject: Re: [v4l-utils] [PATCH] v4l2-ctl: Take stream skip into account to
+ setup out buffers
+To: Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+ linux-media@vger.kernel.org
+Cc: Nicolas Dufresne <nicolas.dufresne@collabora.com>
+References: <20251022155031.2978-1-laurent.pinchart@ideasonboard.com>
+Content-Language: en-US, nl
+In-Reply-To: <20251022155031.2978-1-laurent.pinchart@ideasonboard.com>
 Content-Type: text/plain; charset=UTF-8
-Date: Mon, 10 Nov 2025 12:41:39 +0100
-Message-Id: <DE4ZJT518WU8.1JNHYKMU3IBAQ@fairphone.com>
-From: "Luca Weiss" <luca.weiss@fairphone.com>
-To: <david@ixit.cz>, "Robert Foss" <rfoss@kernel.org>, "Todor Tomov"
- <todor.too@gmail.com>, "Bryan O'Donoghue" <bryan.odonoghue@linaro.org>,
- "Vladimir Zapolskiy" <vladimir.zapolskiy@linaro.org>, "Mauro Carvalho
- Chehab" <mchehab@kernel.org>, "Luca Weiss" <luca.weiss@fairphone.com>,
- "Petr Hodina" <phodina@protonmail.com>, "Casey Connolly"
- <casey.connolly@linaro.org>, "Dr. Git" <drgitx@gmail.com>
-Cc: "Joel Selvaraj" <foss@joelselvaraj.com>, <linux-media@vger.kernel.org>,
- <linux-arm-msm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
- <phone-devel@vger.kernel.org>
-Subject: Re: [PATCH RFC 6/8] media: qcom: camss: csiphy-3ph: Use sdm845
- C-PHY configuration sequence
-X-Mailer: aerc 0.21.0-0-g5549850facc2
-References: <20251109-qcom-cphy-v1-0-165f7e79b0e1@ixit.cz>
- <20251109-qcom-cphy-v1-6-165f7e79b0e1@ixit.cz>
-In-Reply-To: <20251109-qcom-cphy-v1-6-165f7e79b0e1@ixit.cz>
+Content-Transfer-Encoding: 7bit
 
-On Sun Nov 9, 2025 at 10:39 AM CET, David Heidelberg via B4 Relay wrote:
-> From: David Heidelberg <david@ixit.cz>
->
-> Enable the 3-phase (3PH) lane configuration introduced earlier when
-> C-PHY mode is requested on the SDM845 platform. This ensures the proper
-> initialization sequence is used for C-PHY operation.
->
-> Signed-off-by: David Heidelberg <david@ixit.cz>
+Hi Laurent,
+
+On 22/10/2025 17:50, Laurent Pinchart wrote:
+> When setting up out buffers in do_setup_out_buffers(), the function
+> stops after stream_count buffers and returns QUEUE_STOPPED. This doesn't
+> take the stream_skip counter into account, resulting in the queue being
+> stopped too early. Fix it.
+> 
+> Signed-off-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 > ---
->  drivers/media/platform/qcom/camss/camss-csiphy-3ph-1-0.c | 10 ++++++++--
->  1 file changed, 8 insertions(+), 2 deletions(-)
->
-> diff --git a/drivers/media/platform/qcom/camss/camss-csiphy-3ph-1-0.c b/d=
-rivers/media/platform/qcom/camss/camss-csiphy-3ph-1-0.c
-> index c2adbde6b4e0d..03f5c4676e89a 100644
-> --- a/drivers/media/platform/qcom/camss/camss-csiphy-3ph-1-0.c
-> +++ b/drivers/media/platform/qcom/camss/camss-csiphy-3ph-1-0.c
-> @@ -1103,8 +1103,14 @@ static void csiphy_lanes_enable(struct csiphy_devi=
-ce *csiphy,
-> =20
->  	switch (csiphy->camss->res->version) {
->  	case CAMSS_845:
-> -		regs->lane_regs =3D &lane_regs_sdm845[0];
-> -		regs->lane_array_size =3D ARRAY_SIZE(lane_regs_sdm845);
-> +		if (c->cphy) {
-> +			regs->lane_regs =3D &lane_regs_sdm845_3ph[0];
-> +			regs->lane_array_size =3D ARRAY_SIZE(lane_regs_sdm845_3ph);
-> +
-> +		} else {
-> +			regs->lane_regs =3D &lane_regs_sdm845[0];
-> +			regs->lane_array_size =3D ARRAY_SIZE(lane_regs_sdm845);
-> +		}
+> I've tested this patch with a JPEG encoder, invoking v4l2-ctl with
+> 
+> v4l2-ctl -d $dev \
+>         --set-fmt-video-out width=${width},height=${height},pixelformat='Y12 ' \
+>         --set-fmt-video width=${width},height=${height},pixelformat=JPEG \
+>         --stream-out-mmap \
+>         --stream-mmap=3 \
+>         --stream-from ${infile} \
+>         --stream-to ${outfile} \
+>         --stream-skip=50 \
+>         --stream-count=1 \
+>         --stream-loop \
+>         --verbose
+> 
+> Without the patch streaming stops after 1 frame, with it it stops after
+> 51 frames.
 
-Why not add this directly in the commit adding the sequence? Otherwise
-the other commit adding lane_regs_sdm845_3ph will just have an unused
-variable warning until this patch.
+This review is really for both this patch and the "v4l2-ctl: Don't ignore skip when writing
+capture buffers" patch since they are related.
 
-I think it's one logical change.
+--stream-skip was originally implemented for capture devices, and there it is easy to
+understand what it does.
 
-Regards
-Luca
+It was later used as well for output devices and m2m devices, but never documented what
+it should do (as you noticed).
 
->  		break;
->  	case CAMSS_2290:
->  		regs->lane_regs =3D &lane_regs_qcm2290[0];
+I think this needs to be properly defined.
+
+For output devices I would expect that --stream-skip skips the first N buffers that are
+received (typically from an input file), so they are never queued to the hardware. It's
+really the only thing that makes sense.
+
+do_setup_out_buffers() clearly doesn't do that, it queues them anyway. I doubt if this
+was ever tested.
+
+I think this proposed definition also works fine for m2m devices.
+
+The ignore_count_skip boolean is a bad name, perhaps that should be inverted and
+call it use_stream_skip instead.
+
+If you explicitly want to queue the buffers to the m2m device, but skip the first
+N captured (i.e. processed) buffers, then that would require a new option, I think.
+But I'm not sure if that's very useful, unless the first N buffers processed by an
+m2m device are garbage for some reason, but that's really bad hardware.
+
+If this is actually what you want, then I need to have a bit more info first and
+a discussion.
+
+Regards,
+
+	Hans
+
+> 
+> ---
+>  utils/v4l2-ctl/v4l2-ctl-streaming.cpp | 11 ++++++++---
+>  1 file changed, 8 insertions(+), 3 deletions(-)
+> 
+> diff --git a/utils/v4l2-ctl/v4l2-ctl-streaming.cpp b/utils/v4l2-ctl/v4l2-ctl-streaming.cpp
+> index ec85e41e9e12..5192f1e168b9 100644
+> --- a/utils/v4l2-ctl/v4l2-ctl-streaming.cpp
+> +++ b/utils/v4l2-ctl/v4l2-ctl-streaming.cpp
+> @@ -1374,9 +1374,14 @@ static int do_setup_out_buffers(cv4l_fd &fd, cv4l_queue &q, FILE *fin, bool qbuf
+>  			if (!verbose)
+>  				stderr_info(">");
+>  			fflush(stderr);
+> -			if (!ignore_count_skip && stream_count)
+> -				if (!--stream_count)
+> -					return QUEUE_STOPPED;
+> +			if (!ignore_count_skip) {
+> +				if (stream_skip) {
+> +					--stream_skip;
+> +				} else if (stream_count) {
+> +					if (!--stream_count)
+> +						return QUEUE_STOPPED;
+> +				}
+> +			}
+>  		}
+>  		if (fmt.g_pixelformat() == V4L2_PIX_FMT_FWHT_STATELESS) {
+>  			set_fwht_req_by_idx(i, &last_fwht_hdr,
+> 
+> base-commit: 910ce5d9ec8377811faaad7da456d25370c9188b
 
