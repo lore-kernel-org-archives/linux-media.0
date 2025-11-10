@@ -1,290 +1,231 @@
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+Received: from bali.collaboradmins.com (bali.collaboradmins.com [148.251.105.195])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6FBB8309EF9
-	for <linux-media@vger.kernel.org>; Mon, 10 Nov 2025 10:24:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2C854288C22;
+	Mon, 10 Nov 2025 10:30:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.251.105.195
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762770242; cv=none; b=HFpCbQ88xIrdOR0m0QSRMb43nEH21Rm8W/nR0W5HugA1j17wmFigelaGNGwLoXaFx18DAlMfxjeLekLsWb3bI407GJkXAgnbacgCBEYcrAVElK55MnvQiieo6jPlh/PSJCg2mv1kMJM3Yhu5APkPsz8J9uITvVIvSh82hTZ87LY=
+	t=1762770605; cv=none; b=Osn9/c1YiDOvnyNK7LqN5DYlH59SoAqV8u67BgIgr5zbWtc25L+j+cJaFgN4N4oxshqOIGAnUqHQNpSFCrE4vB0C+0pc4lIbexZ51XSh0QuDdKTE2vOjv1PKM/vlIpnctaBcMy0T9ereGbjjfTvbHfJQc9s7lQ/zdqtr/idoDKY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762770242; c=relaxed/simple;
-	bh=ir6soPnuXi73OnimUuOPlkHNAeCDSvP5B2tU9zm19Wc=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=oVvEBzmc1f5nREcd3FEll25prPjWl3ij4XZRuHN2VZRtxDXZ/Ni1T14JYaPYNuylc2eWekMHDvV2YBudIHFAvnsQfbtoCErEyaAyJAkGzkR5VDp1mAgCMOJcQRmv0Nhp/aOzc+b1wzok784cqf2HIqvPJ0G1jgvsk/opAuyHkOY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=Ft+41W6A; dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b=Vzhl8YMp; arc=none smtp.client-ip=205.220.180.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
+	s=arc-20240116; t=1762770605; c=relaxed/simple;
+	bh=LKcjUvamtaRp5VMo3tOXWpvnOYnMuYx9dZBPJdrUs+s=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=kCfZF0TB2fOgdgunntZLfxOiIKhphLV3/PdAVuMml1ozE6i5LLM0/n7TFhSp1L/q2uOyvR4ihJntBgMecXa+AhsJyhdDHUrTbqHGA8OVVgIMYfIMxw4YmJtCAnhQinF2H8CXY7vwWuXgNicxf2qT8DFyLcm4WHBqlycSnvfGNZg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=PRf6dxUc; arc=none smtp.client-ip=148.251.105.195
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="Ft+41W6A";
-	dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b="Vzhl8YMp"
-Received: from pps.filterd (m0279873.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 5AA8kGNK1930709
-	for <linux-media@vger.kernel.org>; Mon, 10 Nov 2025 10:23:59 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	8OS9XkmuiAShlq2VYm5mpFvdCAf1jt1FGO4tp4nBKNc=; b=Ft+41W6AHAjsGj2+
-	iVT8QnUpHMYpPz7rBrRQ759qzMni6YuXCTKGjwe3MQKXbRPO3qC4IZiyy7M7SDEp
-	meAAwt2AQ94mcBc++aqI6oOg911ZEKQrwRiAfU+i5VDzldxKnzpJIAQnd8y7Bo8i
-	dP+3vNiwHpD4dWMMFSEu+rNmwYkeCzh9uLsCqO5KkQ0IFoLN1HHSynjhfOLeqXVQ
-	Rq1TdGmQdwuoAJgSH5QeWe1xtlEZKyEBuzTegALBzR4GopHvq7/tmWveP19qPbdI
-	yiJHON0sGEqhrhlCpN8CFxKKiRXC4Tp63f9sX63swZD6VHurSblTFLhOVIDN/34h
-	QZAvBQ==
-Received: from mail-pg1-f197.google.com (mail-pg1-f197.google.com [209.85.215.197])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4aaue0j74b-1
-	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
-	for <linux-media@vger.kernel.org>; Mon, 10 Nov 2025 10:23:59 +0000 (GMT)
-Received: by mail-pg1-f197.google.com with SMTP id 41be03b00d2f7-b993eb2701bso2473293a12.0
-        for <linux-media@vger.kernel.org>; Mon, 10 Nov 2025 02:23:59 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=oss.qualcomm.com; s=google; t=1762770238; x=1763375038; darn=vger.kernel.org;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=8OS9XkmuiAShlq2VYm5mpFvdCAf1jt1FGO4tp4nBKNc=;
-        b=Vzhl8YMpv8zTBHlqd5/9mn7Tg0e0hCBsfBt8m8wkuBjE9oNMgxYxPtI2szjLEwL+Ee
-         TKWtOKwQG2TWRSk73a+J+o+iOY2qVXQ34etPMFlb/7HRcmbWAAqb601Jp1J98xScNj//
-         QTAt14atwlzhQ0OnC2ZvnLGVkIVueW5uMShtQzIaFHVUDF4nVp+Pw2JbT34Ju7SsnYEe
-         FkatysZghRUM80sqEzRc8IBxb3I74ZsjvyxybaOwwAMkvaRuYJ9rKQH5iZD9LT3FJf9K
-         8eq2GArIsXrJNp9/sUgbU1baUsWzmI88g0WLj3LaCK7N8liJBJ6ueIW7+3yGFFdF/wFQ
-         Hl/g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1762770238; x=1763375038;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-gg:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=8OS9XkmuiAShlq2VYm5mpFvdCAf1jt1FGO4tp4nBKNc=;
-        b=C/0WF6GVb9Lgii3GQ+3jQ5mnmGB8Ul8FA6d6A0Rt185I0xkY2642SwVKv9dl92lB0C
-         /dCNGzl9p4fy5QIm4qvT4t29f4ZUUV0gWNVGKzCfC2BKgPwyFKKTSqWg5mmbaf0Uuxvb
-         U1kXUGZ7Cr5eapDCSWsfgNTrs84t5d8nTT76Hor0u4Nw8eCjszUqPBo0lSE8qo3SYAHW
-         V69NPk0iHZAvdkpP6u+fP+D7KhtJAOJtA5UYwLCjPI2tz/mBnqXCHdWfvzDNF+7JvrMf
-         ljciNbauqq7wJPgf+tcio20gReSh9H1NM0SfoiHYfJJYCqmpolEcX0zXphJBz8C0MkGh
-         jupA==
-X-Gm-Message-State: AOJu0Yw+4qasrL25J9gAF4VqsX6fpaWbbu93DEm5ohgu1xZXL4MLm8y+
-	S8hvsWCkGt1/msXPOWGmGoXF8GM3+WjvEnkPEkeCyEP01exux/U3RcF3AOZGVP08VISdSxT3t0I
-	3fHkgtgBD6TZRIC8cAuDrccUqXVaRTtQdQ4rem9HtdwpsBklQ+kOQvo/Sk4ZBWezt1A==
-X-Gm-Gg: ASbGncuIaFDSLG7VDNVsJ/Vn95+6KEdsLuwMEq7mFKrcwPQ3Z4Wyp01MBfyZl+4+b9H
-	z3gDi24zeFsyStkqWn5s+I7WKxDyJZ8epy+QXRPJLYvHxxDoF/eS/QzYtqOLc7H6V9lqD6dJ4oZ
-	x/k1LStzt9PH+0x3EQHYYNjzjiZWaIdKl61dUV5JXfcXj/nReoYFogib02yxc1+Dhgk/S1Djqz7
-	S59+EkPojkLh9I0QXj1pXJkdk30F76QFzGh4/ADiX8i+87q8Sl2d8uTwRnNK4+3dwiagIBRNXUu
-	b7V3bBapxwT3IHm5ha8pPAI0J9IE3S8Gu0GXESWOVeS1LvtQRmGVpEMRpdjTDddyLLbFi1ItuOv
-	eZQo92S4bbjHpfqTALjH+0Z4mgB/iHvZvAN6RDWi6uFf7U37a0UzSQ2zyvye0vOw1nWt8lQbDRw
-	==
-X-Received: by 2002:a05:6a20:734f:b0:262:9461:2e5b with SMTP id adf61e73a8af0-353a448b381mr10612208637.53.1762770238217;
-        Mon, 10 Nov 2025 02:23:58 -0800 (PST)
-X-Google-Smtp-Source: AGHT+IHJ21zazZ0I4kIzPOPqkY1QG0rXFjUmN1nOTmlrkGWGwMP1iaL4BRBem10e5xTImQqk7H9yhg==
-X-Received: by 2002:a05:6a20:734f:b0:262:9461:2e5b with SMTP id adf61e73a8af0-353a448b381mr10612173637.53.1762770237623;
-        Mon, 10 Nov 2025 02:23:57 -0800 (PST)
-Received: from WANGAOW-LAB01.ap.qualcomm.com (tpe-colo-wan-fw-bordernet.qualcomm.com. [103.229.16.4])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-7b0cc179f77sm11153832b3a.34.2025.11.10.02.23.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 10 Nov 2025 02:23:57 -0800 (PST)
-From: Wangao Wang <wangao.wang@oss.qualcomm.com>
-Date: Mon, 10 Nov 2025 18:23:17 +0800
-Subject: [PATCH v5 6/6] media: qcom: iris: Add intra refresh support for
- encoder
+	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="PRf6dxUc"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+	s=mail; t=1762770599;
+	bh=LKcjUvamtaRp5VMo3tOXWpvnOYnMuYx9dZBPJdrUs+s=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=PRf6dxUcq0UEdSiLe1Onb+Yo+VTS6NVXgiv+vXd5KGFs3q/hoxY2VWb2yKh6CgtYV
+	 CDoyGNBBd1VsYgh4H49Vjydts0Ohh73OLYdXRRDcGXrb2Rpm+HGoAIVT5EsVLWsz0L
+	 wylVlsZDaV7eC29uWUEj9VRLVKiJsBGshU7PNM5RzX6BlqfkAuUZR2OENrKU6HAgIB
+	 c1X2R62jqJQah5MWwxKE3/5mJDYLea91xeuzAAm8fxuNl2DvcDZnS9YhhHRbA0MyMw
+	 YLf50y3rEOwrJ7hhFngeOqlToQZYUy8jXhMdDAmM7BSKw+p8boA4VSpFsD5jpb3Cxq
+	 7yn8NEXgetc6g==
+Received: from [10.40.0.100] (185-67-175-126.lampert.tv [185.67.175.126])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: mriesch)
+	by bali.collaboradmins.com (Postfix) with ESMTPSA id C2EA917E12E5;
+	Mon, 10 Nov 2025 11:29:57 +0100 (CET)
+Message-ID: <b89746e1-4574-4b65-af69-c533576ed185@collabora.com>
+Date: Mon, 10 Nov 2025 11:29:57 +0100
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v14 00/18] media: rockchip: add a driver for the rockchip
+ camera interface
+To: Sakari Ailus <sakari.ailus@linux.intel.com>
+Cc: Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+ Mehdi Djait <mehdi.djait@linux.intel.com>,
+ Maxime Chevallier <maxime.chevallier@bootlin.com>,
+ =?UTF-8?Q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ Gerald Loacker <gerald.loacker@wolfvision.net>,
+ Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
+ Markus Elfring <Markus.Elfring@web.de>,
+ Mauro Carvalho Chehab <mchehab@kernel.org>, Rob Herring
+ <robh+dt@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
+ Conor Dooley <conor+dt@kernel.org>, Heiko Stuebner <heiko@sntech.de>,
+ Kever Yang <kever.yang@rock-chips.com>,
+ Nicolas Dufresne <nicolas.dufresne@collabora.com>,
+ Sebastian Reichel <sebastian.reichel@collabora.com>,
+ Collabora Kernel Team <kernel@collabora.com>,
+ Paul Kocialkowski <paulk@sys-base.io>,
+ Alexander Shiyan <eagle.alexander923@gmail.com>,
+ Val Packett <val@packett.cool>, Rob Herring <robh@kernel.org>,
+ Philipp Zabel <p.zabel@pengutronix.de>, linux-media@vger.kernel.org,
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, linux-rockchip@lists.infradead.org,
+ Mehdi Djait <mehdi.djait@bootlin.com>,
+ Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+ Bryan O'Donoghue <bod@kernel.org>, Chen-Yu Tsai <wens@csie.org>
+References: <20240220-rk3568-vicap-v14-0-b38b6da0fc80@collabora.com>
+ <aQ4tJg8r_j4NyKhv@kekkonen.localdomain>
+ <074cd08e-0412-49f9-8dd9-b1f96eb11717@collabora.com>
+ <20251107185441.GG5558@pendragon.ideasonboard.com>
+ <13c43edb-9592-4779-a39a-7856bb0f964d@collabora.com>
+ <aRGlvQRVoQs0WjyA@kekkonen.localdomain>
+Content-Language: en-US
+From: Michael Riesch <michael.riesch@collabora.com>
+In-Reply-To: <aRGlvQRVoQs0WjyA@kekkonen.localdomain>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-Message-Id: <20251110-iris_encoder_enhancements-v5-6-1dbb19968bd5@oss.qualcomm.com>
-References: <20251110-iris_encoder_enhancements-v5-0-1dbb19968bd5@oss.qualcomm.com>
-In-Reply-To: <20251110-iris_encoder_enhancements-v5-0-1dbb19968bd5@oss.qualcomm.com>
-To: Vikash Garodia <vikash.garodia@oss.qualcomm.com>,
-        Dikshita Agarwal <dikshita.agarwal@oss.qualcomm.com>,
-        Abhinav Kumar <abhinav.kumar@linux.dev>,
-        Bryan O'Donoghue <bod@kernel.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc: linux-media@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Wangao Wang <wangao.wang@oss.qualcomm.com>,
-        Neil Armstrong <neil.armstrong@linaro.org>, quic_qiweil@quicinc.com,
-        quic_renjiang@quicinc.com
-X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1762770213; l=6402;
- i=wangao.wang@oss.qualcomm.com; s=20251021; h=from:subject:message-id;
- bh=ir6soPnuXi73OnimUuOPlkHNAeCDSvP5B2tU9zm19Wc=;
- b=ghJ3+Z4wLfneg4s2Dnza7LdGl3bMZ0RK5rj0FVdzLZdhLUf1+KkfyaJ4mMLfW+OHzcUGdKJxV
- NVPyo9/MEcuDYvoik4XVlLHtQOMCyHJEKx3cz3MfFzp3RE5T+ESDiIQ
-X-Developer-Key: i=wangao.wang@oss.qualcomm.com; a=ed25519;
- pk=bUPgYblBUAsoPyGfssbNR7ZXUSGF8v1VF4FJzSO6/aA=
-X-Proofpoint-ORIG-GUID: weD8FZF6YdP3P3dGh0W8HKDmauSRp9u9
-X-Authority-Analysis: v=2.4 cv=BfDVE7t2 c=1 sm=1 tr=0 ts=6911bd3f cx=c_pps
- a=rz3CxIlbcmazkYymdCej/Q==:117 a=nuhDOHQX5FNHPW3J6Bj6AA==:17
- a=IkcTkHD0fZMA:10 a=6UeiqGixMTsA:10 a=s4-Qcg_JpJYA:10
- a=VkNPw1HP01LnGYTKEx00:22 a=EUspDBNiAAAA:8 a=KKAkSRfTAAAA:8
- a=-vM60OG-bLC5KXgFrusA:9 a=QEXdDO2ut3YA:10 a=bFCP_H2QrGi7Okbo017w:22
- a=cvBusfyB2V15izCimMoJ:22
-X-Proofpoint-GUID: weD8FZF6YdP3P3dGh0W8HKDmauSRp9u9
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUxMTEwMDA5MCBTYWx0ZWRfX2L3ZRAL/JDBu
- d/LVGtXCSZowoPEHMnEm6o5lg2alBLeiViZSEZaOBKCB+w4SPaGYZlKquLUj6LxRv4FuxmxdjVr
- FLJBe41coDzie9AaXD1sjp5Up5g14zJms/rSe7qGYMF2NyswCUjBY22xXqwX1/LFmGnIVI4rkI3
- REEL5cPyHcd+T3YfMWAewgtqc8MaYGSPLhR6PDz6D3MiEJ/i2IZNxs6aTW++sDK/Bm0pK6Aql6A
- UF/Q+j3VjXX0O3PXf9eOemxbATQhmxfIR65ZLH4LSKkt/xFUSLsEI2jZARGNBvAIxwWZNxCQwJ4
- kF1LPZxdySfYp7Fsj9tYKg0g0cMHL4iYQnpCQq7AFTRbifEfacLIvsdHOw2B8u7XxXVWiLdvhOy
- 95cAsNDuFx3fK70kmQ+3tJd5bb+p4A==
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.9,FMLib:17.12.100.49
- definitions=2025-11-10_04,2025-11-06_01,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- bulkscore=0 priorityscore=1501 malwarescore=0 impostorscore=0 spamscore=0
- phishscore=0 lowpriorityscore=0 clxscore=1015 adultscore=0 suspectscore=0
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.22.0-2510240001 definitions=main-2511100090
 
-Add support for V4L2_CID_MPEG_VIDEO_INTRA_REFRESH_PERIOD and
-V4L2_CID_MPEG_VIDEO_INTRA_REFRESH_PERIOD_TYPE controls.
+Hi Sakari,
 
-Reviewed-by: Dikshita Agarwal <dikshita.agarwal@oss.qualcomm.com>
-Tested-by: Neil Armstrong <neil.armstrong@linaro.org> # on SM8650-HDK
-Signed-off-by: Wangao Wang <wangao.wang@oss.qualcomm.com>
----
- drivers/media/platform/qcom/iris/iris_ctrls.c      | 34 ++++++++++++++++++++++
- drivers/media/platform/qcom/iris/iris_ctrls.h      |  1 +
- .../platform/qcom/iris/iris_hfi_gen2_defines.h     |  2 ++
- .../platform/qcom/iris/iris_platform_common.h      |  2 ++
- .../media/platform/qcom/iris/iris_platform_gen2.c  | 19 ++++++++++++
- 5 files changed, 58 insertions(+)
+On 11/10/25 09:43, Sakari Ailus wrote:
+> Hi Michael, Laurent,
+> 
+> On Fri, Nov 07, 2025 at 09:51:37PM +0100, Michael Riesch wrote:
+>> Hi Laurent,
+>>
+>> On 11/7/25 19:54, Laurent Pinchart wrote:
+>>> On Fri, Nov 07, 2025 at 07:41:59PM +0100, Michael Riesch wrote:
+>>>> On 11/7/25 18:32, Sakari Ailus wrote:
+>>>>> On Fri, Oct 24, 2025 at 02:51:29PM +0200, Michael Riesch via B4 Relay wrote:
+>>>>>> Habidere,
+>>>>>>
+>>>>>> This series introduces support for the Rockchip Camera Interface (CIF),
+>>>>>> which is featured in many Rockchip SoCs in different variations.
+>>>>>> For example, the PX30 Video Input Processor (VIP) is able to receive
+>>>>>> video data via the Digital Video Port (DVP, a parallel data interface)
+>>>>>> and transfer it into system memory using a double-buffering mechanism
+>>>>>> called ping-pong mode.
+>>>>>> The RK3568 Video Capture (VICAP) unit, on the other hand, features a
+>>>>>> DVP and a MIPI CSI-2 receiver that can receive video data independently
+>>>>>> (both using the ping-pong scheme).
+>>>>>> The different variants may have additional features, such as scaling
+>>>>>> and/or cropping.
+>>>>>> Finally, the RK3588 VICAP unit constitutes an essential piece of the
+>>>>>> camera interface with one DVP, six MIPI CSI-2 receivers, scale/crop
+>>>>>> units, and a data path multiplexer (to scaler units, to ISP, ...).
+>>>>>
+>>>>> I understand both RK3568 and RK3588 include an ISP. Do you have insight on
+>>>>> how would this work, should the support for the ISP be added later on?
+>>>>
+>>>> Short answer: Yes and yes.
+>>>>
+>>>> Long answer:
+>>>>
+>>>> The patch series at hand adds support for the PX30 VIP and the RK3568
+>>>> VICAP. I cannot really say something about the PX30, but on the RK3568
+>>>> VICAP and ISP are orthogonal (the ISP features its own MIPI CSI-2
+>>>> receiver, different from that introduced in this series). Thus, ISP
+>>>> support can be introduced anytime (whenever someone is motivated ;-)).
+>>>
+>>> Won't they both be connected to the same sensor though, and probably the
+>>> same D-PHY in the SoC ? They don't seem entirely separate to me.
+>>
+>> The MIPI CSI-2 DPHY is shared, indeed. Thus, they *maybe technically
+>> could be* connected to the same sensor, but I don't know whether that
+>> works and fail to see why anyone would to such a thing (if it is about
+>> raw capture, the MIPI CSI-2 receiver in the ISP can do that on its own).
+>>
+>> The DPHY can be operated in split mode, with two lanes for VICAP and two
+>> lanes for ISP. This is not implemented yet, but can be done at a later
+>> stage on PHY level (not media related). In this case, ISP and VICAP can
+>> receive data from different subdevices via CSI-2.
+> 
+> The two would be part of the same media graph in that case and as there are
+> two CSI-2 receivers and a single PHY, the PHY would probably need to have a
+> sub-device as well, to allow link configuration to be used to select where
+> the PHY is connected.
+> 
+> I don't think we have such a setup elsewhere, and supporting this would
+> require changes in the MC framework.
 
-diff --git a/drivers/media/platform/qcom/iris/iris_ctrls.c b/drivers/media/platform/qcom/iris/iris_ctrls.c
-index 8f74c12f2f41f23d75424819c707aff61ea61b33..8c19aef6eb361e0ddf7f8dc45f6c67a90f16a04e 100644
---- a/drivers/media/platform/qcom/iris/iris_ctrls.c
-+++ b/drivers/media/platform/qcom/iris/iris_ctrls.c
-@@ -104,6 +104,10 @@ static enum platform_inst_fw_cap_type iris_get_cap_id(u32 id)
- 		return HFLIP;
- 	case V4L2_CID_VFLIP:
- 		return VFLIP;
-+	case V4L2_CID_MPEG_VIDEO_INTRA_REFRESH_PERIOD_TYPE:
-+		return IR_TYPE;
-+	case V4L2_CID_MPEG_VIDEO_INTRA_REFRESH_PERIOD:
-+		return IR_PERIOD;
- 	default:
- 		return INST_FW_CAP_MAX;
- 	}
-@@ -197,6 +201,10 @@ static u32 iris_get_v4l2_id(enum platform_inst_fw_cap_type cap_id)
- 		return V4L2_CID_HFLIP;
- 	case VFLIP:
- 		return V4L2_CID_VFLIP;
-+	case IR_TYPE:
-+		return V4L2_CID_MPEG_VIDEO_INTRA_REFRESH_PERIOD_TYPE;
-+	case IR_PERIOD:
-+		return V4L2_CID_MPEG_VIDEO_INTRA_REFRESH_PERIOD;
- 	default:
- 		return 0;
- 	}
-@@ -944,6 +952,32 @@ int iris_set_flip(struct iris_inst *inst, enum platform_inst_fw_cap_type cap_id)
- 					     &hfi_val, sizeof(u32));
- }
- 
-+int iris_set_ir_period(struct iris_inst *inst, enum platform_inst_fw_cap_type cap_id)
-+{
-+	const struct iris_hfi_command_ops *hfi_ops = inst->core->hfi_ops;
-+	struct vb2_queue *q = v4l2_m2m_get_dst_vq(inst->m2m_ctx);
-+	u32 ir_period = inst->fw_caps[cap_id].value;
-+	u32 ir_type = 0;
-+
-+	if (inst->fw_caps[IR_TYPE].value ==
-+			V4L2_CID_MPEG_VIDEO_INTRA_REFRESH_PERIOD_TYPE_RANDOM) {
-+		if (vb2_is_streaming(q))
-+			return 0;
-+		ir_type = HFI_PROP_IR_RANDOM_PERIOD;
-+	} else if (inst->fw_caps[IR_TYPE].value ==
-+			V4L2_CID_MPEG_VIDEO_INTRA_REFRESH_PERIOD_TYPE_CYCLIC) {
-+		ir_type = HFI_PROP_IR_CYCLIC_PERIOD;
-+	} else {
-+		return -EINVAL;
-+	}
-+
-+	return hfi_ops->session_set_property(inst, ir_type,
-+					     HFI_HOST_FLAGS_NONE,
-+					     iris_get_port_info(inst, cap_id),
-+					     HFI_PAYLOAD_U32,
-+					     &ir_period, sizeof(u32));
-+}
-+
- int iris_set_properties(struct iris_inst *inst, u32 plane)
- {
- 	const struct iris_hfi_command_ops *hfi_ops = inst->core->hfi_ops;
-diff --git a/drivers/media/platform/qcom/iris/iris_ctrls.h b/drivers/media/platform/qcom/iris/iris_ctrls.h
-index 355a592049f3fcc715a1b9df44b4d1398b052653..9518803577bc39f5c1339a49878dd0c3e8f510ad 100644
---- a/drivers/media/platform/qcom/iris/iris_ctrls.h
-+++ b/drivers/media/platform/qcom/iris/iris_ctrls.h
-@@ -34,6 +34,7 @@ int iris_set_frame_qp(struct iris_inst *inst, enum platform_inst_fw_cap_type cap
- int iris_set_qp_range(struct iris_inst *inst, enum platform_inst_fw_cap_type cap_id);
- int iris_set_rotation(struct iris_inst *inst, enum platform_inst_fw_cap_type cap_id);
- int iris_set_flip(struct iris_inst *inst, enum platform_inst_fw_cap_type cap_id);
-+int iris_set_ir_period(struct iris_inst *inst, enum platform_inst_fw_cap_type cap_id);
- int iris_set_properties(struct iris_inst *inst, u32 plane);
- 
- #endif
-diff --git a/drivers/media/platform/qcom/iris/iris_hfi_gen2_defines.h b/drivers/media/platform/qcom/iris/iris_hfi_gen2_defines.h
-index 0f92468dca91cbb2ca9b451ebce255180066b3a4..9e8fdddf2aef439e7f133c9bb2fafa6d95062b02 100644
---- a/drivers/media/platform/qcom/iris/iris_hfi_gen2_defines.h
-+++ b/drivers/media/platform/qcom/iris/iris_hfi_gen2_defines.h
-@@ -70,6 +70,7 @@ enum hfi_rate_control {
- #define HFI_PROP_QP_PACKED			0x0300012e
- #define HFI_PROP_MIN_QP_PACKED			0x0300012f
- #define HFI_PROP_MAX_QP_PACKED			0x03000130
-+#define HFI_PROP_IR_RANDOM_PERIOD		0x03000131
- #define HFI_PROP_TOTAL_BITRATE			0x0300013b
- #define HFI_PROP_MAX_GOP_FRAMES			0x03000146
- #define HFI_PROP_MAX_B_FRAMES			0x03000147
-@@ -108,6 +109,7 @@ enum hfi_flip {
- #define HFI_PROP_BUFFER_MARK			0x0300016c
- #define HFI_PROP_RAW_RESOLUTION		0x03000178
- #define HFI_PROP_TOTAL_PEAK_BITRATE		0x0300017C
-+#define HFI_PROP_IR_CYCLIC_PERIOD		0x0300017E
- #define HFI_PROP_COMV_BUFFER_COUNT		0x03000193
- #define HFI_PROP_END				0x03FFFFFF
- 
-diff --git a/drivers/media/platform/qcom/iris/iris_platform_common.h b/drivers/media/platform/qcom/iris/iris_platform_common.h
-index 284d6bde6d6bcdf70016646d1c92e6ae7f067efc..30b98e769ad34c2b63dd63e7714bfeaa5b4f162c 100644
---- a/drivers/media/platform/qcom/iris/iris_platform_common.h
-+++ b/drivers/media/platform/qcom/iris/iris_platform_common.h
-@@ -143,6 +143,8 @@ enum platform_inst_fw_cap_type {
- 	ROTATION,
- 	HFLIP,
- 	VFLIP,
-+	IR_TYPE,
-+	IR_PERIOD,
- 	INST_FW_CAP_MAX,
- };
- 
-diff --git a/drivers/media/platform/qcom/iris/iris_platform_gen2.c b/drivers/media/platform/qcom/iris/iris_platform_gen2.c
-index e74bdd00a4bb2f457ec9352e0acaebc820dae235..ce54aac766e2bf76fa2de64c884724ca63f05dcb 100644
---- a/drivers/media/platform/qcom/iris/iris_platform_gen2.c
-+++ b/drivers/media/platform/qcom/iris/iris_platform_gen2.c
-@@ -620,6 +620,25 @@ static struct platform_inst_fw_cap inst_fw_cap_sm8550_enc[] = {
- 			CAP_FLAG_DYNAMIC_ALLOWED,
- 		.set = iris_set_flip,
- 	},
-+	{
-+		.cap_id = IR_TYPE,
-+		.min = V4L2_CID_MPEG_VIDEO_INTRA_REFRESH_PERIOD_TYPE_RANDOM,
-+		.max = V4L2_CID_MPEG_VIDEO_INTRA_REFRESH_PERIOD_TYPE_CYCLIC,
-+		.step_or_mask = BIT(V4L2_CID_MPEG_VIDEO_INTRA_REFRESH_PERIOD_TYPE_RANDOM) |
-+			BIT(V4L2_CID_MPEG_VIDEO_INTRA_REFRESH_PERIOD_TYPE_CYCLIC),
-+		.value = V4L2_CID_MPEG_VIDEO_INTRA_REFRESH_PERIOD_TYPE_RANDOM,
-+		.flags = CAP_FLAG_OUTPUT_PORT | CAP_FLAG_MENU,
-+	},
-+	{
-+		.cap_id = IR_PERIOD,
-+		.min = 0,
-+		.max = INT_MAX,
-+		.step_or_mask = 1,
-+		.value = 0,
-+		.flags = CAP_FLAG_OUTPUT_PORT |
-+			CAP_FLAG_DYNAMIC_ALLOWED,
-+		.set = iris_set_ir_period,
-+	},
- };
- 
- static struct platform_inst_caps platform_inst_cap_sm8550 = {
+What follows is a response that also addresses issues raised during our
+off-list discussion.
 
--- 
-2.43.0
+First of all, I agree with you that the RK3568 HW is "a bit special" (to
+say the least) in that regard. Let's have an outlook to newer SoCs, such
+as the RK3588: Here, the MIPI CSI-2 DPHYs (there are two of them) with
+their split mode are present as well, but the assignment is fixed. For
+example, the RK3588 VICAP has six MIPI CSI-2 receiver units and six MIPI
+CSI-2 capture units. Units 1 and 2 handle a different MIPI PHY, units 3
+and 5 handle the DPHYs (without split mode), units 4 and/or 6 are active
+whenever DPHY 1 and/or 2 is in split mode.
+
+I would model this by adding support for more than one (logical) PHYs
+(phy-cells = <1>;) and assigning the logical PHYs to the MIPI CSI-2
+receivers. There is not really a possibility to route anything at this
+point (routing is done in a MUX unit that takes the different MIPI CSI-2
+receivers as inputs).
+
+Now back to the peculiar RK3568 situation: By default the split mode of
+the DPHY is off and both VICAP and ISP are able to receive the same data
+(from up to four lanes) with their MIPI CSI-2 receivers (not sure
+whether both can be active at the same time, though). There are two bits
+in the GRF that define the lanes that ISP and VICAP receive in split
+mode (lane 0/1 or lane 2/3). Not sure whether these bits are supposed to
+be changed during runtime.
+
+I would suggest modelling this on PHY level in DT, e.g., by passing
+reasonable properties to the dphy node, such as
+    rockchip,dphy-split-mode;
+    rockchip,dphy-split-invert;
+where the former activates the split mode and assigns lanes 0/1 to the
+ISP and lanes 2/3 to the VICAP, and the latter inverts this assignment
+(lanes 2/3 to the ISP and lanes 0/1 to the VICAP). This would facilitate
+the reasonable use cases with reasonable effort.
+
+Otherwise, to keep it perfectly general and most flexible and
+everything, we would have to introduce another subdevice indeed, which
+would be active on the RK3568 exclusively. Therefore, I don't see that
+the PHY driver introduces this subdevice, but a specialized (syscon?)
+MUX driver that deals with the RK3568 GRF bits. Something like this
+
+                           |----------------------|     |-------------|
+ Sensor A --- /2 lanes --- | lane 0/1      to ISP | --- | ISP MIPI RX |
+                           |                      |     |-------------|
+                           |                      |
+                           |                      |     |-------------|
+ Sensor B --- /2 lanes --- | lane 2/3    to VICAP | --- |VICAP MIPI RX|
+                           |----------------------|     |-------------|
+
+But IMHO this will be too much effort for corner use case that I doubt
+anyone will actually use.
+
+What do you think:
+ - Let's keep the PHYs out of V4L2/MC, ok?
+ - Let's model the reasonable use cases with device tree properties in
+   the dphy DT node, ok?
+
+> How does the media graph look like for the device at the moment?
+
+Please take a look at the media graph in the documentation patch (PATCH
+v14 01/18). This is without the ISP, but gives an overview of what the
+RK3568 VICAP is capable of.
+
+Best regards,
+Michael
+
+> 
+>>
+>> BTW the ISP is able to process the data captured by VICAP, but
+>> apparently this includes a RAM round trip (VICAP captures to memory, ISP
+>> operates in mem2mem mode).
+>>
+>>> A block diagram that shows connections between the CSI-2 pins, D-PHY,
+>>> CSI-2 receivers, VICAP and ISP could help.
+>>>
+>>>> Once this patch series is merged, I'll push out changes that introduce
+>>>> support for the RK3588 VICAP. We can discuss the integration of any
+>>>> RK3588 ISP in this scope then -- and there may be some things to discuss
+>>>> as there the VICAP and the ISP(s) are directly connected by means of a
+>>>> MUX unit in the VICAP.
+>>>>
+>>>> Alright?
+>>>
+> 
 
