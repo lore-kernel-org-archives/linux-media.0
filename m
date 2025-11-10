@@ -1,353 +1,307 @@
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+Received: from bali.collaboradmins.com (bali.collaboradmins.com [148.251.105.195])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 26596225417
-	for <linux-media@vger.kernel.org>; Mon, 10 Nov 2025 13:55:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C64513112C4;
+	Mon, 10 Nov 2025 13:57:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.251.105.195
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762782907; cv=none; b=Q23DLJGdznLxeO+CHtWF06SEewwdNp4UXP2xKDS2C4E7DRy8Eh0oolEk3sffdDX1NfGKqnUugcolz3DNCQVa1bBDgz4LtHWty8rPlNg/kW+EMP9616BmkXl1R2zo1NM/5qWf/h7F7A/354Tq8M3sF3ibj6QUSHVcdb1GX4QuVyM=
+	t=1762783059; cv=none; b=sDGi0gzqbu/SbDC3PpIKawPq0Vs8IKOmJwSUiPYQaaitCYDS31jKMGZP7L+jg3Qo0Es3Ho/tP4FMSL284DnNIENhWM/CzgBQKoyzm7El8ddQ+xjM6dKJb/KcxXdsvSRKi//bcng2/PQEkQRVrwL0767D1kGMvhm454mLA+U9GhI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762782907; c=relaxed/simple;
-	bh=VtKxyTYXKVMwbRBYUok5IOxyJLWZmmmNlAIF+qIVSHc=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=jByghMXJmLDZR4AyK1HFBJ0Pd/XWJHFcB5hlabmn2ALKgFrTWM6QZVEhU8Mdmd/7iL/Wp/0+WVChEqS2DVsrQ6HaelO4gaAyvFZYr9Lrkzv9+Z7+/a01LfaUWiFeUDlN/sGlIM5oMhu6TVYsBiF8bPqpUhOiwIfy5Yk3VrAbeHM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=QHcR7FdZ; dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b=PtKDwTuU; arc=none smtp.client-ip=205.220.180.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
+	s=arc-20240116; t=1762783059; c=relaxed/simple;
+	bh=KKRgKuFzrzMKfhZwoLlMMqh/HMidHruZpOkU87ZuQX8=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=RpMUxR2LuSh7knhZSZcvysD0VeuvOR3SGil+doPWQn4O0zl54AJecCqgvf7j9YuUjtRYqNgxYnu7HLYOfCkaKvFNUVjnD29jpaPJ9PxEvp5TfmjKvdJnN7yP4R5HDklf9otZLJg2FUWXGmH+CE3yPDYEIMzip4V5Bh4HYmwmtF4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=h6DFsJ4X; arc=none smtp.client-ip=148.251.105.195
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="QHcR7FdZ";
-	dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b="PtKDwTuU"
-Received: from pps.filterd (m0279872.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 5AA7hM5d2861409
-	for <linux-media@vger.kernel.org>; Mon, 10 Nov 2025 13:55:05 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	92NAht9vmhdQg3F3B362/2P/Al82g/z14lX6OMb7wfc=; b=QHcR7FdZ7iL3uGAh
-	Bp6DM08tPcpmlSZ2h4EpnKsYiYAI1cIXs60eSrLP/Sx1zf+aUh6DQLSjaOyVrHc2
-	bU++9uszuOPhNyAPQ2W3ztDPIn4q2NY35hCpm32zwG1AJX1SoLFJKmWYaQK26+Uz
-	+5mbpKx4cS5qlJ9s7QoXN89Youoi3TfnXKw8/M0bfjfMQJ6zON8X5gvJRd8doNqY
-	FFdv0K5XYqHBoHN8+eXKaKRnTsfAov/Wb79Sdq2aoLyDwKuXIG34q4AhcJ46FCO2
-	zhP90/fOP5tHhgjflQJBVGN5yqCDevh/lWJQcTrojLPCyF/nBufq77HpDcISi1mz
-	+9Ji4g==
-Received: from mail-pg1-f198.google.com (mail-pg1-f198.google.com [209.85.215.198])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4abbwe15m9-1
-	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
-	for <linux-media@vger.kernel.org>; Mon, 10 Nov 2025 13:55:04 +0000 (GMT)
-Received: by mail-pg1-f198.google.com with SMTP id 41be03b00d2f7-b6ce1b57b3eso5351060a12.1
-        for <linux-media@vger.kernel.org>; Mon, 10 Nov 2025 05:55:04 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=oss.qualcomm.com; s=google; t=1762782904; x=1763387704; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=92NAht9vmhdQg3F3B362/2P/Al82g/z14lX6OMb7wfc=;
-        b=PtKDwTuUpSNr2ol/MsFWg+PV4LHvP5ox/JyYo2N7cuZysNhyR+drC5Z83JQWqUormm
-         AJXa/UrxfUVS5f8usJ8BPN5DL/lqVN5ujzMlB+6yspWCEIlUZvmtR0pEUUg/ei8L4V8g
-         NvBDwKH90sFWgyD7Fx6qXhy8eDGjzZJPwj9GiarW8Qmu57iTHSldc6R8UF/jHsV7S6bc
-         8wIqKRAo+MnKHAgRcBPPxuS5hXa8Ih9Wia7568gsFVr2KqEj0c9Tl+pRkziUvn/iTvoT
-         KyJDqeGNCQm+cw9VEsGIQwcCaDlgt0qR3rz9xKzzr3XrsjjUtnVIHU/4KRdkjRmxbHos
-         qi+A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1762782904; x=1763387704;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=92NAht9vmhdQg3F3B362/2P/Al82g/z14lX6OMb7wfc=;
-        b=nyUyr3T53AXsMUL+e5foRiR/8U3s7bfeEmmkApIh9VT7tUid/wW0dNWm0qOTs9SoKf
-         XeQptgURHFKX0xKBu3ChqU+3eIZTmnWBuIs2cYrPT2ZLRc5+lTJAq0b5ZzEy+ReCNJ2k
-         pTDuA5vtCBTAMkMbStsbcsPmeq/maDOHE4DaG1/7D9Bs0r7xkzzToIGpMZmvZYCxVmUd
-         g0CTYOIYfVtuYLzz5uvMw7+lCVPTfrQmE2xTQuw769iG6ZUbzSiHnp7X4V2wLC9YWDR4
-         B6MaC9Yh41vPeSqVwtUD65nyCaXlon81NimiPM5jCa+vqzf89vgiU9mWw4guZyfctxuJ
-         VwPQ==
-X-Gm-Message-State: AOJu0YwBnBc57HxwiuK+WLgEgf48ZcbqsWmaruESgo4tuOtKZkmVYxWX
-	qd3kJcPlKJeyP/ypCtR26G8JMoz7EhjdfAB4TCBMEnw+W6M7O2Q14o3yhdwQJBRAk2SZZ7g6wUg
-	OzSVd2dyqnDE4zPlBnDD5eTTGG6MefhkORFvo4Qv7Jo/0anzCBXV5n0RqdX44x7Nd0Z4ihizTsw
-	==
-X-Gm-Gg: ASbGncvIsunNFxGJ1IcXcfW8jkDbdkoyrh04v7I6CnDXRYTi+kIn1iEM88JAh6hfWfW
-	Y9Edv61Yae4MZEOtsgS4DaxrfivVatC4vCBpMzdzkUR/1BfhSWVoq7l6n3esYRHlYXRkLaXiVAv
-	fK7V6P4RyA6GwsmblOyCsV8hnQFCgYMMfCTl8UWVafjygjtij1TRM2jU0G1hCjKqxwURSSHr2kz
-	j1xdS4XHI15XqRNsF2bkbm+iwlmbe4qqYdjlztVdMqGK2qarY4h6qIjvt8z4ypiaTOnhTf7eTlS
-	xfB8kMJyEtT1s3wFKIESCpKUs0oyeKwoGa4Yjz0yGZH2zh1Br/QO/IHgDXkE+ITvW1HpZkgSe52
-	H4iJo1GrcASEi7CXqsusZIwuq3yZn8FU=
-X-Received: by 2002:a05:6a20:4306:b0:34e:7bef:e816 with SMTP id adf61e73a8af0-353a1ae2947mr11700239637.35.1762782903527;
-        Mon, 10 Nov 2025 05:55:03 -0800 (PST)
-X-Google-Smtp-Source: AGHT+IFIBKl2qgrS/oNApP2Xt4xZhV9mgZMLUXTTjzVnFgpELSppcoQjGs791t09WSlCQ7C+ZhMFrw==
-X-Received: by 2002:a05:6a20:4306:b0:34e:7bef:e816 with SMTP id adf61e73a8af0-353a1ae2947mr11700183637.35.1762782902994;
-        Mon, 10 Nov 2025 05:55:02 -0800 (PST)
-Received: from [10.0.0.3] ([106.222.229.252])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-ba902207232sm12564983a12.32.2025.11.10.05.54.59
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 10 Nov 2025 05:55:02 -0800 (PST)
-Message-ID: <361d26e6-3137-5378-1fe6-e5fc51148419@oss.qualcomm.com>
-Date: Mon, 10 Nov 2025 19:24:58 +0530
+	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="h6DFsJ4X"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+	s=mail; t=1762783051;
+	bh=KKRgKuFzrzMKfhZwoLlMMqh/HMidHruZpOkU87ZuQX8=;
+	h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+	b=h6DFsJ4X6waWfhY3+YKw2XbcsEITbdvCaI7t6SQyO63CqQ2v7RT+/BgjWpLXVWbbJ
+	 jOMSwFyatiq0v5ccn8vslvqnFkhtRZMeGGyLVMyBX2WWLvOFokRpOL1U/wG/Dh+j9P
+	 AnLTP414aOhJLr5WUkC8YgOpP4az7amlae1b5g59Coun08z2ypdVpQXH8o9LooTpxO
+	 1hXBlflRgOWrpHpu+bxCmMTfHrvmBvR6KI+jkul9hmJTGyY06WdGcBvUmDSQktxeO9
+	 GUssCYfEMh4Pp9WeclYedwt0Z6fGNwiNeoYJyu6Lpvgjwu0Sh6AL6dZK+DpdLjt5Pm
+	 9+ooPKi8idFxg==
+Received: from [IPv6:2606:6d00:11:ef24::c41] (unknown [IPv6:2606:6d00:11:ef24::c41])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: nicolas)
+	by bali.collaboradmins.com (Postfix) with ESMTPSA id 2C9FD17E110D;
+	Mon, 10 Nov 2025 14:57:29 +0100 (CET)
+Message-ID: <f4fee7587d8e3e58bab39f1b3202b67f0f5c3e04.camel@collabora.com>
+Subject: Re: [PATCH v5 0/8] Enable video decoder & encoder for MT8189
+From: Nicolas Dufresne <nicolas.dufresne@collabora.com>
+To: Kyrie Wu =?UTF-8?Q?=28=E5=90=B4=E6=99=97=29?= <Kyrie.Wu@mediatek.com>, 
+ "linux-kernel@vger.kernel.org"	 <linux-kernel@vger.kernel.org>,
+ "linux-mediatek@lists.infradead.org"	 <linux-mediatek@lists.infradead.org>,
+ George Sun =?UTF-8?Q?=28=E5=AD=99=E6=9E=97=29?=	 <George.Sun@mediatek.com>,
+ Tiffany Lin =?UTF-8?Q?=28=E6=9E=97=E6=85=A7=E7=8F=8A=29?=	
+ <tiffany.lin@mediatek.com>, "nhebert@chromium.org" <nhebert@chromium.org>, 
+ "linux-media@vger.kernel.org"	 <linux-media@vger.kernel.org>,
+ "devicetree@vger.kernel.org"	 <devicetree@vger.kernel.org>,
+ "mchehab@kernel.org" <mchehab@kernel.org>,  "hverkuil@xs4all.nl"	
+ <hverkuil@xs4all.nl>, Yunfei Dong
+ =?UTF-8?Q?=28=E8=91=A3=E4=BA=91=E9=A3=9E=29?=	 <Yunfei.Dong@mediatek.com>,
+ "conor+dt@kernel.org" <conor+dt@kernel.org>,  Irui Wang
+ =?UTF-8?Q?=28=E7=8E=8B=E7=91=9E=29?=	 <Irui.Wang@mediatek.com>,
+ "robh@kernel.org" <robh@kernel.org>, 
+ "linux-arm-kernel@lists.infradead.org"	
+ <linux-arm-kernel@lists.infradead.org>, Yilong Zhou
+ =?UTF-8?Q?=28=E5=91=A8=E6=98=93=E9=BE=99=29?=	 <Yilong.Zhou@mediatek.com>,
+ "matthias.bgg@gmail.com" <matthias.bgg@gmail.com>,  "krzk+dt@kernel.org"	
+ <krzk+dt@kernel.org>, "arnd@arndb.de" <arnd@arndb.de>, Andrew-CT Chen
+ =?UTF-8?Q?=28=E9=99=B3=E6=99=BA=E8=BF=AA=29?=	
+ <Andrew-CT.Chen@mediatek.com>, AngeloGioacchino Del Regno	
+ <angelogioacchino.delregno@collabora.com>
+Cc: "andrzejtp2010@gmail.com" <andrzejtp2010@gmail.com>, 
+ "neil.armstrong@linaro.org"
+	 <neil.armstrong@linaro.org>
+Date: Mon, 10 Nov 2025 08:57:26 -0500
+In-Reply-To: <09eb315e50aeaf865b093880aaaa5f2c9c0feba9.camel@mediatek.com>
+References: <20251106061323.2193-1-kyrie.wu@mediatek.com>
+		 <c49b979fd911f2587bbfed129b07065f1cd2a2db.camel@collabora.com>
+	 <09eb315e50aeaf865b093880aaaa5f2c9c0feba9.camel@mediatek.com>
+Autocrypt: addr=nicolas.dufresne@collabora.com; prefer-encrypt=mutual;
+ keydata=mDMEaCN2ixYJKwYBBAHaRw8BAQdAM0EHepTful3JOIzcPv6ekHOenE1u0vDG1gdHFrChD
+ /e0J05pY29sYXMgRHVmcmVzbmUgPG5pY29sYXNAbmR1ZnJlc25lLmNhPoicBBMWCgBEAhsDBQsJCA
+ cCAiICBhUKCQgLAgQWAgMBAh4HAheABQkJZfd1FiEE7w1SgRXEw8IaBG8S2UGUUSlgcvQFAmibrjo
+ CGQEACgkQ2UGUUSlgcvQlQwD/RjpU1SZYcKG6pnfnQ8ivgtTkGDRUJ8gP3fK7+XUjRNIA/iXfhXMN
+ abIWxO2oCXKf3TdD7aQ4070KO6zSxIcxgNQFtDFOaWNvbGFzIER1ZnJlc25lIDxuaWNvbGFzLmR1Z
+ nJlc25lQGNvbGxhYm9yYS5jb20+iJkEExYKAEECGwMFCwkIBwICIgIGFQoJCAsCBBYCAwECHgcCF4
+ AWIQTvDVKBFcTDwhoEbxLZQZRRKWBy9AUCaCyyxgUJCWX3dQAKCRDZQZRRKWBy9ARJAP96pFmLffZ
+ smBUpkyVBfFAf+zq6BJt769R0al3kHvUKdgD9G7KAHuioxD2v6SX7idpIazjzx8b8rfzwTWyOQWHC
+ AAS0LU5pY29sYXMgRHVmcmVzbmUgPG5pY29sYXMuZHVmcmVzbmVAZ21haWwuY29tPoiZBBMWCgBBF
+ iEE7w1SgRXEw8IaBG8S2UGUUSlgcvQFAmibrGYCGwMFCQll93UFCwkIBwICIgIGFQoJCAsCBBYCAw
+ ECHgcCF4AACgkQ2UGUUSlgcvRObgD/YnQjfi4+L8f4fI7p1pPMTwRTcaRdy6aqkKEmKsCArzQBAK8
+ bRLv9QjuqsE6oQZra/RB4widZPvphs78H0P6NmpIJ
+Organization: Collabora Canada
+Content-Type: multipart/signed; micalg="pgp-sha512";
+	protocol="application/pgp-signature"; boundary="=-QUHvuhjIUwreEvkskggy"
+User-Agent: Evolution 3.58.1 (3.58.1-1.fc43) 
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.13.0
-Subject: Re: [PATCH v5 3/6] media: qcom: iris: Add scale support for encoder
-Content-Language: en-US
-To: Wangao Wang <wangao.wang@oss.qualcomm.com>,
-        Vikash Garodia <vikash.garodia@oss.qualcomm.com>,
-        Abhinav Kumar <abhinav.kumar@linux.dev>,
-        Bryan O'Donoghue <bod@kernel.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc: linux-media@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Neil Armstrong <neil.armstrong@linaro.org>, quic_qiweil@quicinc.com,
-        quic_renjiang@quicinc.com
-References: <20251110-iris_encoder_enhancements-v5-0-1dbb19968bd5@oss.qualcomm.com>
- <20251110-iris_encoder_enhancements-v5-3-1dbb19968bd5@oss.qualcomm.com>
-From: Dikshita Agarwal <dikshita.agarwal@oss.qualcomm.com>
-In-Reply-To: <20251110-iris_encoder_enhancements-v5-3-1dbb19968bd5@oss.qualcomm.com>
-Content-Type: text/plain; charset=UTF-8
+
+
+--=-QUHvuhjIUwreEvkskggy
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+Le lundi 10 novembre 2025 =C3=A0 02:32 +0000, Kyrie Wu (=E5=90=B4=E6=99=97)=
+ a =C3=A9crit=C2=A0:
+>=20
+> On Thu, 2025-11-06 at 09:18 -0500, Nicolas Dufresne wrote:
+> > Hi,
+> >=20
+> > Le jeudi 06 novembre 2025 =C3=A0 14:13 +0800, Kyrie Wu a =C3=A9crit :
+> > > This series have the follow changing:
+> > > Firstly add mt8189 video decoder compatible, profile and level to
+> > > support
+> > > MT8189 kernel driver.
+> > > Secondly fix some bugs, including vp 4K profile2 and media device
+> > > node
+> > > number bug.
+> > > Lastly, add mt8189 video encoder compatible.
+> > >=20
+> > > This series has been tested with MT8189 tast test.
+> > > Encoding and decoding worked for this chip.
+> > >=20
+> > > Patches 1-2 Add decoder compatible.
+> > > Patches 3 Add profile and level supporting.
+> > > Patches 4 Add core-only VP9 decoding supporting.
+> > > Patches 5-6 fix some bugs.
+> > > Patches 7-8 Adds encoder compatible.
+> > >=20
+> > > ---
+> > > H264 test results:
+> > > ./fluster.py run -d GStreamer-H.264-V4L2SL-Gst1.0 -j2 -t 90
+> > > =C2=A0=C2=A0=C2=A0=C2=A0JVT-AVC_V1Ran 96/135 tests successfully
+> > >=20
+> > > VP9 test results:
+> > > ./fluster.py run -d GStreamer-VP9-V4L2SL-Gst1.0 -j2 -t 90
+> > > VP9-TEST-VECTORSRan 276/305 tests successfully
+> > >=20
+> > > v4l2-compliance test results:
+> > > Compliance test for mtk-vcodec-enc device /dev/video2:
+> > > Total for mtk-vcodec-enc device /dev/video2: 47, Succeeded: 46,
+> > > Failed: 1, Warnings: 0
+> >=20
+> > There is one fail, can you explain it ?
+> >=20
+> > Nicolas
+>=20
+> Dear Nicolas,
+>=20
+> The failure is caused by subscribed event/dqevent. Our encoder driver
+> didn't register those apis, which caused this failure.
+> Here is the fail log, which is samed as MT8196:
+>=20
+> https://patchwork.linuxtv.org/project/linux-media/cover/20250528063633.14=
+054-1-irui.wang@mediatek.com/
+>=20
+> Control ioctls:
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0test VIDIOC_QUERY_EXT_CTR=
+L/QUERYMENU: OK
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0test VIDIOC_QUERYCTRL: OK
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0test VIDIOC_G/S_CTRL: OK
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0test VIDIOC_G/S/TRY_EXT_C=
+TRLS: OK
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0fail: v4l2-test-controls.cpp(1171): node->codec_mas=
+k &
+> STATEFUL_ENCODER
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0test VIDIOC_(UN)SUBSCRIBE=
+_EVENT/DQEVENT: FAIL
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0test VIDIOC_G/S_JPEGCOMP:=
+ OK (Not Supported)
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0Standard Controls: 16 Pri=
+vate Controls: 0
+
+
+The spec says:
+  =20
+  =20
+   For backwards compatibility, the encoder will signal a V4L2_EVENT_EOS ev=
+ent when
+   the last frame has been encoded and all frames are ready to be dequeued.=
+=20
+
+In practice, we test for that on every m2m, see the test code:
+
+
+	if (node->is_m2m) {
+		node_m2m_cap->g_fmt(fmt_q, m2m_q.g_type());
+		if (node_m2m_cap->buftype_pixfmts[m2m_q.g_type()][fmt_q.g_pixelformat()] =
+&
+			V4L2_FMT_FLAG_COMPRESSED)
+			valid_output_flags =3D V4L2_BUF_FLAG_TIMECODE | V4L2_BUF_FLAG_TSTAMP_SRC=
+_MASK;
+
+		struct v4l2_event_subscription sub =3D { 0 };
+
+		sub.type =3D V4L2_EVENT_EOS;
+		if (node->codec_mask & (STATEFUL_ENCODER | STATEFUL_DECODER))
+			doioctl(node, VIDIOC_SUBSCRIBE_EVENT, &sub);
+	}
+
+please fix,
+Nicolas
+
+>=20
+> Thanks.
+>=20
+> Regards,
+> Kyrie.
+>=20
+> >=20
+> > > Compliance test for mtk-vcodec-dec device /dev/video3:
+> > > Total for mtk-vcodec-dec device /dev/video3: 48, Succeeded: 48,
+> > > Failed: 0, Warnings: 0
+> > >=20
+> > > scp upstream link:
+> > >=20
+> https://patchwork.kernel.org/project/linux-mediatek/patch/20250811015922.=
+32680-1-huayu.zong@mediatek.com/
+> > > dtsi upstream link:
+> > >=20
+> https://lore.kernel.org/linux-mediatek/20251030134541.784011-12-jh.hsu@me=
+diatek.com/T/#m847e35de0a5b18fac0ca0624a8559d84964ad5c7
+> > >=20
+> > > Changes compared with v4:
+> > > --update H264 & vp9 fluster test results
+> > > --update vp9 single core decoder prob size setting and commit
+> > > messages
+> > >=20
+> > > Changes compared with v3:
+> > > --add reviewer to commit messages
+> > > --Rebased on top of the latest media tree
+> > >=20
+> > > Changes compared with v2:
+> > > --add H264 fluster test results
+> > > --reorder compatible string for dt-bindings
+> > >=20
+> > > Changes compared with v1:
+> > > --add v4l2-compliance test results
+> > > --add scp upstream link
+> > > --add HW difference discriptions for dt-bindings commit messages
+> > >=20
+> > > This series patches dependent on:
+> > > [1]
+> > >=20
+> https://patchwork.linuxtv.org/project/linux-media/cover/20250510075357.11=
+761-1-yunfei.dong@mediatek.com/
+> > > [2]
+> > >=20
+> https://patchwork.linuxtv.org/project/linux-media/cover/20250814085642.17=
+343-1-kyrie.wu@mediatek.com/
+> > >=20
+> > > Kyrie Wu (8):
+> > > =C2=A0=C2=A0dt-bindings: media: mediatek: decoder: Add MT8189
+> > > =C2=A0=C2=A0=C2=A0=C2=A0mediatek,vcodec-decoder
+> > > =C2=A0=C2=A0media: mediatek: vcodec: add decoder compatible to suppor=
+t MT8189
+> > > =C2=A0=C2=A0media: mediatek: vcodec: add profile and level supporting=
+ for
+> > > MT8189
+> > > =C2=A0=C2=A0media: mediatek: vcodec: Add single core VP9 decoding sup=
+port for
+> > > =C2=A0=C2=A0=C2=A0=C2=A0MT8189
+> > > =C2=A0=C2=A0media: mediatek: vcodec: fix vp9 4096x2176 fail for profi=
+le2
+> > > =C2=A0=C2=A0media: mediatek: vcodec: fix media device node number
+> > > =C2=A0=C2=A0dt-bindings: media: Add MT8189 mediatek,vcodec-encoder
+> > > =C2=A0=C2=A0media: mediatek: encoder: Add MT8189 encoder compatible d=
+ata
+> > >=20
+> > > =C2=A0.../media/mediatek,vcodec-encoder.yaml        |  2 +
+> > > =C2=A0.../media/mediatek,vcodec-subdev-decoder.yaml |  5 +-
+> > > =C2=A0.../vcodec/decoder/mtk_vcodec_dec_drv.c       |  9 +++-
+> > > =C2=A0.../vcodec/decoder/mtk_vcodec_dec_drv.h       |  1 +
+> > > =C2=A0.../vcodec/decoder/mtk_vcodec_dec_stateless.c |  4 ++
+> > > =C2=A0.../vcodec/decoder/vdec/vdec_vp9_req_lat_if.c | 48 ++++++++++++=
+++-
+> > > ----
+> > > =C2=A0.../vcodec/encoder/mtk_vcodec_enc_drv.c       | 14 ++++++
+> > > =C2=A07 files changed, 68 insertions(+), 15 deletions(-)
+>=20
+> ************* MEDIATEK Confidentiality Notice
+> =C2=A0********************
+> The information contained in this e-mail message (including any=20
+> attachments) may be confidential, proprietary, privileged, or otherwise
+> exempt from disclosure under applicable laws. It is intended to be=20
+> conveyed only to the designated recipient(s). Any use, dissemination,=20
+> distribution, printing, retaining or copying of this e-mail (including it=
+s=20
+> attachments) by unintended recipient(s) is strictly prohibited and may=
+=20
+> be unlawful. If you are not an intended recipient of this e-mail, or beli=
+eve
+> =C2=A0
+> that you have received this e-mail in error, please notify the sender=20
+> immediately (by replying to this e-mail), delete any and all copies of=
+=20
+> this e-mail (including any attachments) from your system, and do not
+> disclose the content of this e-mail to any other person. Thank you!
+
+--=-QUHvuhjIUwreEvkskggy
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-Description: This is a digitally signed message part
 Content-Transfer-Encoding: 7bit
-X-Proofpoint-GUID: JGyZWj0cC4P-GmdJ5kDjpf0jG2jf8NR8
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUxMTEwMDEyMSBTYWx0ZWRfX9q/SBYsFpoRd
- lO4kt3SnXN2BKn+3xY0yJ8IWc6Ade3MAqKFltugp1AHo0GGjgZd5t0cdRe+Az/sSzdKQYkMDG/+
- Bwjn9valaff6jqvQ9udCSknDvaql1qrurVnfFAUYg15smSAlpROixgxWemswo1IuBCRaMZtwhna
- hbahY0V2tw/E8VceIQGi1hwxNZbChnRGBAW6rZIKF6kEl0rHFJZ0n1eVXsC0kWEFzx2eHUZbeOf
- f0U/v75U5uubvFFAGMt1d3k1pPLegROtqMxprpJUjnpLefF8PZxfMPu/gQIEbasv4saoCrfsE7Z
- q9sezsCuk1xyB3po+suP7NN28cvYHUTm10ntjYR5OZbNp+69Rl6X8EnoViQwQmHF3p1UFQt0i5i
- AWLZxgWYCpp2GP1U50b4aeV64ayumg==
-X-Authority-Analysis: v=2.4 cv=GbEaXAXL c=1 sm=1 tr=0 ts=6911eeb8 cx=c_pps
- a=Qgeoaf8Lrialg5Z894R3/Q==:117 a=L4UNg9I9cQSOxNpRiiGXlA==:17
- a=IkcTkHD0fZMA:10 a=6UeiqGixMTsA:10 a=s4-Qcg_JpJYA:10
- a=VkNPw1HP01LnGYTKEx00:22 a=KKAkSRfTAAAA:8 a=EUspDBNiAAAA:8
- a=XTzlPML3CqmVTmx85CUA:9 a=QEXdDO2ut3YA:10 a=x9snwWr2DeNwDh03kgHS:22
- a=cvBusfyB2V15izCimMoJ:22
-X-Proofpoint-ORIG-GUID: JGyZWj0cC4P-GmdJ5kDjpf0jG2jf8NR8
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.9,FMLib:17.12.100.49
- definitions=2025-11-10_05,2025-11-10_01,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- clxscore=1015 malwarescore=0 priorityscore=1501 phishscore=0 bulkscore=0
- spamscore=0 adultscore=0 impostorscore=0 lowpriorityscore=0 suspectscore=0
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.22.0-2510240001 definitions=main-2511100121
 
+-----BEGIN PGP SIGNATURE-----
 
+iHUEABYKAB0WIQTvDVKBFcTDwhoEbxLZQZRRKWBy9AUCaRHvRgAKCRDZQZRRKWBy
+9IodAP92sXKXxtzBgiSqcP5IWsLSfYE7FE4ekNtUGbBoWcArxAEAm5t9IiBp57Ej
+BAdduiviuXeRaE4BvqzLvLjiSOUUiAc=
+=JqZh
+-----END PGP SIGNATURE-----
 
-On 11/10/2025 3:53 PM, Wangao Wang wrote:
-> Add members enc_scale_width, enc_scale_height to the struct iris_inst to
-> support scale requirements.
-> 
-> Add output width and height settings in iris_venc_s_fmt_output to
-> enable scaling functionality.
-> 
-> Add VPSS buffer to platform data, which the scale function requires.
-> 
-> Tested-by: Neil Armstrong <neil.armstrong@linaro.org> # on SM8650-HDK
-> Signed-off-by: Wangao Wang <wangao.wang@oss.qualcomm.com>
-> ---
->  .../platform/qcom/iris/iris_hfi_gen2_command.c     | 12 +++++------
->  .../platform/qcom/iris/iris_hfi_gen2_response.c    |  2 ++
->  drivers/media/platform/qcom/iris/iris_instance.h   |  4 ++++
->  .../media/platform/qcom/iris/iris_platform_gen2.c  | 12 +++++++++++
->  drivers/media/platform/qcom/iris/iris_venc.c       | 23 +++++++++++++++++++++-
->  drivers/media/platform/qcom/iris/iris_vpu_buffer.c |  9 +++++----
->  6 files changed, 51 insertions(+), 11 deletions(-)
-> 
-> diff --git a/drivers/media/platform/qcom/iris/iris_hfi_gen2_command.c b/drivers/media/platform/qcom/iris/iris_hfi_gen2_command.c
-> index 30c0cbe22d1d34b5bbbc6bdbd3881dd43a6ff647..8945e94ec9e87750fc87bebf63f4fbb634d8571a 100644
-> --- a/drivers/media/platform/qcom/iris/iris_hfi_gen2_command.c
-> +++ b/drivers/media/platform/qcom/iris/iris_hfi_gen2_command.c
-> @@ -194,8 +194,8 @@ static int iris_hfi_gen2_set_bitstream_resolution(struct iris_inst *inst, u32 pl
->  		payload_type = HFI_PAYLOAD_U32;
->  	} else {
->  		codec_align = inst->codec == V4L2_PIX_FMT_HEVC ? 32 : 16;
-> -		resolution = ALIGN(inst->fmt_dst->fmt.pix_mp.width, codec_align) << 16 |
-> -			ALIGN(inst->fmt_dst->fmt.pix_mp.height, codec_align);
-> +		resolution = ALIGN(inst->enc_scale_width, codec_align) << 16 |
-> +			ALIGN(inst->enc_scale_height, codec_align);
->  		inst_hfi_gen2->dst_subcr_params.bitstream_resolution = resolution;
->  		payload_type = HFI_PAYLOAD_32_PACKED;
->  	}
-> @@ -237,10 +237,10 @@ static int iris_hfi_gen2_set_crop_offsets(struct iris_inst *inst, u32 plane)
->  			left_offset = inst->crop.left;
->  			top_offset = inst->crop.top;
->  		} else {
-> -			bottom_offset = (ALIGN(inst->fmt_dst->fmt.pix_mp.height, codec_align) -
-> -					inst->fmt_dst->fmt.pix_mp.height);
-> -			right_offset = (ALIGN(inst->fmt_dst->fmt.pix_mp.width, codec_align) -
-> -					inst->fmt_dst->fmt.pix_mp.width);
-> +			bottom_offset = (ALIGN(inst->enc_scale_height, codec_align) -
-> +					inst->enc_scale_height);
-> +			right_offset = (ALIGN(inst->enc_scale_width, codec_align) -
-> +				       inst->enc_scale_width);
->  			left_offset = 0;
->  			top_offset = 0;
->  		}
-> diff --git a/drivers/media/platform/qcom/iris/iris_hfi_gen2_response.c b/drivers/media/platform/qcom/iris/iris_hfi_gen2_response.c
-> index 2f1f118eae4f6462ab1aa1d16844b34e6e699f1e..dc3e606b6ab429a1d15536fa8316afb1e384d674 100644
-> --- a/drivers/media/platform/qcom/iris/iris_hfi_gen2_response.c
-> +++ b/drivers/media/platform/qcom/iris/iris_hfi_gen2_response.c
-> @@ -54,6 +54,8 @@ static u32 iris_hfi_gen2_buf_type_to_driver(struct iris_inst *inst,
->  			return BUF_SCRATCH_2;
->  	case HFI_BUFFER_PERSIST:
->  		return BUF_PERSIST;
-> +	case HFI_BUFFER_VPSS:
-> +		return BUF_VPSS;
->  	default:
->  		return 0;
->  	}
-> diff --git a/drivers/media/platform/qcom/iris/iris_instance.h b/drivers/media/platform/qcom/iris/iris_instance.h
-> index a9892988c10bc28e9b2d8c3b5482e99b5b9af623..0b36092fe4e7296da2f66aecf9083f7f1edc5459 100644
-> --- a/drivers/media/platform/qcom/iris/iris_instance.h
-> +++ b/drivers/media/platform/qcom/iris/iris_instance.h
-> @@ -66,6 +66,8 @@ struct iris_fmt {
->   * @hfi_rc_type: rate control type
->   * @enc_raw_width: source image width for encoder instance
->   * @enc_raw_height: source image height for encoder instance
-> + * @enc_scale_width: scale width for encoder instance
-> + * @enc_scale_height: scale height for encoder instance
->   */
->  
->  struct iris_inst {
-> @@ -106,6 +108,8 @@ struct iris_inst {
->  	u32				hfi_rc_type;
->  	u32				enc_raw_width;
->  	u32				enc_raw_height;
-> +	u32				enc_scale_width;
-> +	u32				enc_scale_height;
->  };
->  
->  #endif
-> diff --git a/drivers/media/platform/qcom/iris/iris_platform_gen2.c b/drivers/media/platform/qcom/iris/iris_platform_gen2.c
-> index 36d69cc73986b74534a2912524c8553970fd862e..d3306189d902a1f42666010468c9e4e4316a66e1 100644
-> --- a/drivers/media/platform/qcom/iris/iris_platform_gen2.c
-> +++ b/drivers/media/platform/qcom/iris/iris_platform_gen2.c
-> @@ -729,6 +729,10 @@ static const u32 sm8550_dec_op_int_buf_tbl[] = {
->  	BUF_DPB,
->  };
->  
-> +static const u32 sm8550_enc_ip_int_buf_tbl[] = {
-> +	BUF_VPSS,
-> +};
-> +
->  static const u32 sm8550_enc_op_int_buf_tbl[] = {
->  	BUF_BIN,
->  	BUF_COMV,
-> @@ -816,6 +820,8 @@ struct iris_platform_data sm8550_data = {
->  	.dec_op_int_buf_tbl = sm8550_dec_op_int_buf_tbl,
->  	.dec_op_int_buf_tbl_size = ARRAY_SIZE(sm8550_dec_op_int_buf_tbl),
->  
-> +	.enc_ip_int_buf_tbl = sm8550_enc_ip_int_buf_tbl,
-> +	.enc_ip_int_buf_tbl_size = ARRAY_SIZE(sm8550_enc_ip_int_buf_tbl),
->  	.enc_op_int_buf_tbl = sm8550_enc_op_int_buf_tbl,
->  	.enc_op_int_buf_tbl_size = ARRAY_SIZE(sm8550_enc_op_int_buf_tbl),
->  };
-> @@ -908,6 +914,8 @@ struct iris_platform_data sm8650_data = {
->  	.dec_op_int_buf_tbl = sm8550_dec_op_int_buf_tbl,
->  	.dec_op_int_buf_tbl_size = ARRAY_SIZE(sm8550_dec_op_int_buf_tbl),
->  
-> +	.enc_ip_int_buf_tbl = sm8550_enc_ip_int_buf_tbl,
-> +	.enc_ip_int_buf_tbl_size = ARRAY_SIZE(sm8550_enc_ip_int_buf_tbl),
->  	.enc_op_int_buf_tbl = sm8550_enc_op_int_buf_tbl,
->  	.enc_op_int_buf_tbl_size = ARRAY_SIZE(sm8550_enc_op_int_buf_tbl),
->  };
-> @@ -989,6 +997,8 @@ struct iris_platform_data sm8750_data = {
->  	.dec_op_int_buf_tbl = sm8550_dec_op_int_buf_tbl,
->  	.dec_op_int_buf_tbl_size = ARRAY_SIZE(sm8550_dec_op_int_buf_tbl),
->  
-> +	.enc_ip_int_buf_tbl = sm8550_enc_ip_int_buf_tbl,
-> +	.enc_ip_int_buf_tbl_size = ARRAY_SIZE(sm8550_enc_ip_int_buf_tbl),
->  	.enc_op_int_buf_tbl = sm8550_enc_op_int_buf_tbl,
->  	.enc_op_int_buf_tbl_size = ARRAY_SIZE(sm8550_enc_op_int_buf_tbl),
->  };
-> @@ -1077,6 +1087,8 @@ struct iris_platform_data qcs8300_data = {
->  	.dec_op_int_buf_tbl = sm8550_dec_op_int_buf_tbl,
->  	.dec_op_int_buf_tbl_size = ARRAY_SIZE(sm8550_dec_op_int_buf_tbl),
->  
-> +	.enc_ip_int_buf_tbl = sm8550_enc_ip_int_buf_tbl,
-> +	.enc_ip_int_buf_tbl_size = ARRAY_SIZE(sm8550_enc_ip_int_buf_tbl),
->  	.enc_op_int_buf_tbl = sm8550_enc_op_int_buf_tbl,
->  	.enc_op_int_buf_tbl_size = ARRAY_SIZE(sm8550_enc_op_int_buf_tbl),
->  };
-> diff --git a/drivers/media/platform/qcom/iris/iris_venc.c b/drivers/media/platform/qcom/iris/iris_venc.c
-> index 7ad747d2272f029e69a56572a188a032f898a3fb..f573408a3fc66e1bbc7814a8fc7953158e043fce 100644
-> --- a/drivers/media/platform/qcom/iris/iris_venc.c
-> +++ b/drivers/media/platform/qcom/iris/iris_venc.c
-> @@ -70,6 +70,8 @@ int iris_venc_inst_init(struct iris_inst *inst)
->  
->  	inst->enc_raw_width = DEFAULT_WIDTH;
->  	inst->enc_raw_height = DEFAULT_HEIGHT;
-> +	inst->enc_scale_width = DEFAULT_WIDTH;
-> +	inst->enc_scale_height = DEFAULT_HEIGHT;
->  
->  	memcpy(&inst->fw_caps[0], &core->inst_fw_caps_enc[0],
->  	       INST_FW_CAP_MAX * sizeof(struct platform_inst_fw_cap));
-> @@ -188,15 +190,32 @@ int iris_venc_try_fmt(struct iris_inst *inst, struct v4l2_format *f)
->  
->  static int iris_venc_s_fmt_output(struct iris_inst *inst, struct v4l2_format *f)
->  {
-> +	const struct iris_fmt *venc_fmt;
->  	struct v4l2_format *fmt;
-> +	u32 codec_align;
->  
->  	iris_venc_try_fmt(inst, f);
->  
-> -	if (!(find_format(inst, f->fmt.pix_mp.pixelformat, f->type)))
-> +	venc_fmt = find_format(inst, f->fmt.pix_mp.pixelformat, f->type);
-> +	if (!venc_fmt)
->  		return -EINVAL;
->  
-> +	codec_align = venc_fmt->pixfmt == V4L2_PIX_FMT_HEVC ? 32 : 16;
-> +
->  	fmt = inst->fmt_dst;
->  	fmt->type = V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE;
-> +	/*
-> +	 * If output format size != input format size,
-> +	 * it is considered a scaling case,
-> +	 * and the scaled size needs to be saved.
-> +	 */
-> +	if (f->fmt.pix_mp.width != inst->fmt_src->fmt.pix_mp.width ||
-> +	    f->fmt.pix_mp.height != inst->fmt_src->fmt.pix_mp.height) {
-> +		inst->enc_scale_width = f->fmt.pix_mp.width;
-> +		inst->enc_scale_height = f->fmt.pix_mp.height;
-> +		fmt->fmt.pix_mp.width = ALIGN(f->fmt.pix_mp.width, codec_align);
-> +		fmt->fmt.pix_mp.height = ALIGN(f->fmt.pix_mp.height, codec_align);
-> +	}
->  	fmt->fmt.pix_mp.num_planes = 1;
->  	fmt->fmt.pix_mp.plane_fmt[0].bytesperline = 0;
->  	fmt->fmt.pix_mp.plane_fmt[0].sizeimage = iris_get_buffer_size(inst, BUF_OUTPUT);
-> @@ -254,6 +273,8 @@ static int iris_venc_s_fmt_input(struct iris_inst *inst, struct v4l2_format *f)
->  
->  	inst->enc_raw_width = f->fmt.pix_mp.width;
->  	inst->enc_raw_height = f->fmt.pix_mp.height;
-> +	inst->enc_scale_width = f->fmt.pix_mp.width;
-> +	inst->enc_scale_height = f->fmt.pix_mp.height;
->  
->  	if (f->fmt.pix_mp.width != inst->crop.width ||
->  	    f->fmt.pix_mp.height != inst->crop.height) {
-> diff --git a/drivers/media/platform/qcom/iris/iris_vpu_buffer.c b/drivers/media/platform/qcom/iris/iris_vpu_buffer.c
-> index 4463be05ce165adef6b152eb0c155d2e6a7b3c36..db5adadd1b39c06bc41ae6f1b3d2f924b3ebf150 100644
-> --- a/drivers/media/platform/qcom/iris/iris_vpu_buffer.c
-> +++ b/drivers/media/platform/qcom/iris/iris_vpu_buffer.c
-> @@ -1131,10 +1131,11 @@ static u32 iris_vpu_enc_arp_size(struct iris_inst *inst)
->  
->  inline bool is_scaling_enabled(struct iris_inst *inst)
->  {
-> -	return inst->crop.left != inst->compose.left ||
-> -		inst->crop.top != inst->compose.top ||
-> -		inst->crop.width != inst->compose.width ||
-> -		inst->crop.height != inst->compose.height;
-> +	struct v4l2_pix_format_mplane *dst_fmt = &inst->fmt_dst->fmt.pix_mp;
-> +	struct v4l2_pix_format_mplane *src_fmt = &inst->fmt_src->fmt.pix_mp;
-> +
-> +	return dst_fmt->width != src_fmt->width ||
-> +		dst_fmt->height != src_fmt->height;
->  }
->  
->  static inline
-> 
-
-Reviewed-by: Dikshita Agarwal <dikshita.agarwal@oss.qualcomm.com>
-
-Thanks,
-Dikshita
+--=-QUHvuhjIUwreEvkskggy--
