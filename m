@@ -1,284 +1,200 @@
-Received: from bali.collaboradmins.com (bali.collaboradmins.com [148.251.105.195])
+Received: from BL0PR03CU003.outbound.protection.outlook.com (mail-eastusazon11012059.outbound.protection.outlook.com [52.101.53.59])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E08121FF30;
-	Tue, 11 Nov 2025 08:37:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.251.105.195
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762850256; cv=none; b=LeTRq1IwFsgueQo0KxdBJUx7dg2KUJyrk6nT66yBCu4UAWEZJPxyC30PDG8YKqKaKy+2VbjDrBdO5eThjAXjQyqew7q2TENROPdSXn8YVCc9GdUn7ovpAktxkLcDemrSwOk7VVoCFNpLmW+gLNxGBgwQ0HFSI4gktEOqp659HZI=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762850256; c=relaxed/simple;
-	bh=eIneCGwWgW3wItlBDizl/HBWYB6NM2FWyR2b1JvEFfY=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=ef+77M+E6SNfehd9UqyNyYl+80UCCA2ygZ4ibio8aevxFwyEVh9EH2vNf5CCa6289hxQa81MkmZ+wREldC2gBUuxx7D7LTGQhOb/oo+5T4+nya/3Zzd5bVR0P8q0M2iWzI+7vCUVGa9fIghSVuHVNurQOdf0BuGxJP6tgBaejYA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=Y+BeQ+50; arc=none smtp.client-ip=148.251.105.195
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3B25A2561AE;
+	Tue, 11 Nov 2025 08:54:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.53.59
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1762851281; cv=fail; b=eQ6R3LJm6mfgPGAeGVp27Z74cJIv355KAJ8DAqNp4p0/nflzTo6R1cirriVeCeeBU1r41IluOwflHgGPJJD/O6awePy3s5Uh5AGKtpcu5gJGJnxqyc9qHcu6OScVx1EuJ6XPIdv16RA+16fMJjvcUeAEBigXVPKKuZ/+SMPrXTU=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1762851281; c=relaxed/simple;
+	bh=X9YPVRbu6MN3ha7CkEktdJrBueThlQ/GjNPgpUBa49w=;
+	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
+	 Content-Type:MIME-Version; b=rHpsm6pRYTjPSN35lmleR2ahZt7aFneQY8sm+B3xjYObo35Hn08MwijLHPxCzsB68hsunoJJ3MS7MOXPYrCcn5rietgn75nqvN25btDC8pT5MQwg4JA78ceLQOpXUFg9kkU6kMr4lOlki97eo9Jf8VoQrenZMNn3464jveemwMI=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=frNFVAsH; arc=fail smtp.client-ip=52.101.53.59
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="Y+BeQ+50"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1762850251;
-	bh=eIneCGwWgW3wItlBDizl/HBWYB6NM2FWyR2b1JvEFfY=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=Y+BeQ+50gCXfVnZeiccuwfxAhWB1T8Um6v2BfyrDaa/1D2B7iyXiYe9Z2y7l0ZIdi
-	 0/fWF/Id+gr5YdZYnQYX2qOKsYYY72c87ERDt+LCqi7TPpL3scdjHl0XxIOQbM5MFF
-	 VEVvi63RfXl7KRorC3MuZuWQMtiJWk208TBT/Js5xAMCtEEJ8Of/CFX3GdNfG2pV7B
-	 mKASJJE2j9YRm4APHYw1ZlcBAU2GBmowAVlNjheapfYpmZkTgXSGoxX6604ISc+5rh
-	 kudXGknQioT9sRk/pDJR+JTKzKcK8MFQMi/zjYeUwOXxehSlkBqe4zVMXzG2AAanH8
-	 hNG8UoMfS/zow==
-Received: from [10.40.0.100] (185-67-175-126.lampert.tv [185.67.175.126])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: mriesch)
-	by bali.collaboradmins.com (Postfix) with ESMTPSA id C40EE17E124A;
-	Tue, 11 Nov 2025 09:37:29 +0100 (CET)
-Message-ID: <7266245d-46b8-4355-a966-654e816ec93c@collabora.com>
-Date: Tue, 11 Nov 2025 09:37:29 +0100
+	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="frNFVAsH"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=vop6QVVseuXAixFOBHWnFKK1zkLiC+bhbBa/CC1w3sZVVx27edoyE1pPqDCZukv/bzFYysSmSVVSEKfM/x3rii7ub89YKWbUJi76IUbW/mPAbQJTHtgzwPNwlMAQdP/v4PTtF8Nwq+l0Y74Bv62AcTnq7sOgdV2q98Wg8D0/yTX0f+KkZhLacP2rucUndOJcEYIEi5cu2osG1+IK9VXNWyy40aQMPag0a8AxqMm1h0UoejUhiCf/uQ2JYU/Kgev8jBZbckXcceFSOtjiwTg1aM8jh686WD8PIuk5nfZ60qHfjsxt9Z8FJb+POFOh+yyB1HgXzhLEV9Se5qCOMks8kA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=+HSogeOULgjGakdGeJwHGr8EhkaVo60j5NpyI2a4FrY=;
+ b=ZGFPlv0PwyE8A+sDkJmoOyZ/61n+Xr7YjgssOiva8Dj2fTwPPWmx8zq2RYVSIObrIWIh4kdTXNwvgphFw1cSbvAmERkMy2O5JuOPAoQT8lw+pWY3+uKO8HplV/7hXshiFIcV30A8zGOrVW8b+XjQ72nv4VT+CtXz3DcuqsNx7H7gyA9AdhHsimfb8b3AgHeEHiL21uZIgrwKCSjQRoup6DoU/ETH66VEc/LnrB3hnYILqHeORMRHxD0BSkRJExHUB7THBIkPab9CnPDenQ06Q3GPb78rjcQhW/Gpk5ggeLT3ol3N/aaL/09qsJsB6YRsAq+2V8akwcFZg7fVYOIeaQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=+HSogeOULgjGakdGeJwHGr8EhkaVo60j5NpyI2a4FrY=;
+ b=frNFVAsH/5ef2g+Ws2MZ2xlI1LHfYCFZWJ+2RBaodRGFZePFdm6SXrF96nifwxrgiMydEDK4OJEZ26e9hgaQPiAbECZxlmZ13GLd9CGmz3M+uSw3JkrNSjNtMuYssj0G3CmQpROsfS4ZXD3jRPGolCDfZghQgkpDvxs/IKnN/oY=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from PH7PR12MB5685.namprd12.prod.outlook.com (2603:10b6:510:13c::22)
+ by SJ0PR12MB6926.namprd12.prod.outlook.com (2603:10b6:a03:485::8) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9298.16; Tue, 11 Nov
+ 2025 08:54:35 +0000
+Received: from PH7PR12MB5685.namprd12.prod.outlook.com
+ ([fe80::46fb:96f2:7667:7ca5]) by PH7PR12MB5685.namprd12.prod.outlook.com
+ ([fe80::46fb:96f2:7667:7ca5%4]) with mapi id 15.20.9298.015; Tue, 11 Nov 2025
+ 08:54:35 +0000
+Message-ID: <da399efa-ad5b-4bdc-964d-b6cc4a4fc55d@amd.com>
+Date: Tue, 11 Nov 2025 09:54:22 +0100
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v7 00/11] vfio/pci: Allow MMIO regions to be exported
+ through dma-buf
+To: Alex Williamson <alex@shazbot.org>, Leon Romanovsky <leon@kernel.org>
+Cc: Bjorn Helgaas <bhelgaas@google.com>, Logan Gunthorpe
+ <logang@deltatee.com>, Jens Axboe <axboe@kernel.dk>,
+ Robin Murphy <robin.murphy@arm.com>, Joerg Roedel <joro@8bytes.org>,
+ Will Deacon <will@kernel.org>, Marek Szyprowski <m.szyprowski@samsung.com>,
+ Jason Gunthorpe <jgg@ziepe.ca>, Andrew Morton <akpm@linux-foundation.org>,
+ Jonathan Corbet <corbet@lwn.net>, Sumit Semwal <sumit.semwal@linaro.org>,
+ Kees Cook <kees@kernel.org>, "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+ Ankit Agrawal <ankita@nvidia.com>, Yishai Hadas <yishaih@nvidia.com>,
+ Shameer Kolothum <skolothumtho@nvidia.com>, Kevin Tian
+ <kevin.tian@intel.com>, Krishnakant Jaju <kjaju@nvidia.com>,
+ Matt Ochs <mochs@nvidia.com>, linux-pci@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-block@vger.kernel.org,
+ iommu@lists.linux.dev, linux-mm@kvack.org, linux-doc@vger.kernel.org,
+ linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
+ linaro-mm-sig@lists.linaro.org, kvm@vger.kernel.org,
+ linux-hardening@vger.kernel.org, Alex Mastro <amastro@fb.com>,
+ Nicolin Chen <nicolinc@nvidia.com>,
+ Vivek Kasireddy <vivek.kasireddy@intel.com>
+References: <20251106-dmabuf-vfio-v7-0-2503bf390699@nvidia.com>
+ <20251110134218.5e399b0f.alex@shazbot.org>
+Content-Language: en-US
+From: =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>
+In-Reply-To: <20251110134218.5e399b0f.alex@shazbot.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: BN0PR04CA0018.namprd04.prod.outlook.com
+ (2603:10b6:408:ee::23) To PH7PR12MB5685.namprd12.prod.outlook.com
+ (2603:10b6:510:13c::22)
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v14 00/18] media: rockchip: add a driver for the rockchip
- camera interface
-To: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Cc: Sakari Ailus <sakari.ailus@linux.intel.com>,
- Mehdi Djait <mehdi.djait@linux.intel.com>,
- Maxime Chevallier <maxime.chevallier@bootlin.com>,
- =?UTF-8?Q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- Gerald Loacker <gerald.loacker@wolfvision.net>,
- Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
- Markus Elfring <Markus.Elfring@web.de>,
- Mauro Carvalho Chehab <mchehab@kernel.org>, Rob Herring
- <robh+dt@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
- Conor Dooley <conor+dt@kernel.org>, Heiko Stuebner <heiko@sntech.de>,
- Kever Yang <kever.yang@rock-chips.com>,
- Nicolas Dufresne <nicolas.dufresne@collabora.com>,
- Sebastian Reichel <sebastian.reichel@collabora.com>,
- Collabora Kernel Team <kernel@collabora.com>,
- Paul Kocialkowski <paulk@sys-base.io>,
- Alexander Shiyan <eagle.alexander923@gmail.com>,
- Val Packett <val@packett.cool>, Rob Herring <robh@kernel.org>,
- Philipp Zabel <p.zabel@pengutronix.de>, linux-media@vger.kernel.org,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, linux-rockchip@lists.infradead.org,
- Mehdi Djait <mehdi.djait@bootlin.com>,
- Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
- Bryan O'Donoghue <bod@kernel.org>, Chen-Yu Tsai <wens@csie.org>
-References: <20240220-rk3568-vicap-v14-0-b38b6da0fc80@collabora.com>
- <aQ4tJg8r_j4NyKhv@kekkonen.localdomain>
- <074cd08e-0412-49f9-8dd9-b1f96eb11717@collabora.com>
- <20251107185441.GG5558@pendragon.ideasonboard.com>
- <13c43edb-9592-4779-a39a-7856bb0f964d@collabora.com>
- <aRGlvQRVoQs0WjyA@kekkonen.localdomain>
- <b89746e1-4574-4b65-af69-c533576ed185@collabora.com>
- <20251111000627.GA30837@pendragon.ideasonboard.com>
-Content-Language: en-US
-From: Michael Riesch <michael.riesch@collabora.com>
-In-Reply-To: <20251111000627.GA30837@pendragon.ideasonboard.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PH7PR12MB5685:EE_|SJ0PR12MB6926:EE_
+X-MS-Office365-Filtering-Correlation-Id: 2970022c-20fe-4232-9e4a-08de20fff017
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;ARA:13230040|1800799024|366016|7416014|376014;
+X-Microsoft-Antispam-Message-Info:
+	=?utf-8?B?RXg3aVdoaU43RWp1WGFnRG1jYS93OUwxKzZtT3dPNHVTU0JvM09ZRCtNUS9n?=
+ =?utf-8?B?cDVuUHNaZkgvRlBEeWlHOUVQZlhvMFF5c0ZwWHFGZW80NkpRL3JXcEVXOHAv?=
+ =?utf-8?B?ZmFoQkphTk9PV1Y4NHNKNTJhbWJSalo2bTlJbFNvbkZNSTM5TC96bDVma1Vp?=
+ =?utf-8?B?Vi9oK0FSMUsvWGxnY3Q0WlFhUkZ0UE1jWEhEbWU5cUNvVEs2ZFU3Z0RGZG0x?=
+ =?utf-8?B?Sng4YlZCU253YnpsM25HcTFKbjdGZGdORmkya25uR1hRRWJxNUR0bFRzYkF2?=
+ =?utf-8?B?Z2dJSFlUQnZkbktaNTFlNjE2R0svTHBYS3VQVlB4Z2wzbWlnTGN5dURIOGN4?=
+ =?utf-8?B?YitRYjR1b1lNVDJFR0lacmhzcitVZHpsVHQ0RjlmS2lNekZLaFRDcThWb1BZ?=
+ =?utf-8?B?ZFBMYTlyK0ZCcGtGUW41V0hxNms1TERuN2gyejJ6aG1ZdFphclJ3UkpHVk9x?=
+ =?utf-8?B?TnNYMklwQTBWNzhzUnc2QWY0blJKdVF2L05USmlqN1FkN0plc3JlOUVJcEhO?=
+ =?utf-8?B?d01BNUtybElOdWdIbzRJRldTL1d6eDJMTStvRHJiUlBMS3pUQUFKdEtlaVJv?=
+ =?utf-8?B?RElsZjBweGhTOWQ4Qi9rNFdsbVZLSlczV2dSOXZUZThtNUFKMklhTlh2QWxw?=
+ =?utf-8?B?ZXlBL2tubU9RR1hIQldsYmZvUk1NU0xCUERsaEhyMWVNRzlLUGl2WU1wdXcr?=
+ =?utf-8?B?NHpLYzRGSGlqQ3hXSmhyNVNDRi9xZXo5dSsyV0FGUFREakVNZG91UDFHKzJz?=
+ =?utf-8?B?blFmQktsMTd0a1o1MXI2RllGc0U5K1dWdEFMME1rY2FqRFk4Yld5bVhROHM0?=
+ =?utf-8?B?aXdKNFhZRE9wVXArL2FQT1M0TXI1NWM1SzlBYkJoUTNtSE9yVHpmQU8ra0Zp?=
+ =?utf-8?B?aFNhYkVyWDU4WXlncWRMTGdOdkVZc24zZng4ZitFbytjM2RiQUxabUdRcmdB?=
+ =?utf-8?B?ZWlrSlI0bUVodW5SKzhBMnVZQTRodTZZM3NkajRXSEpyaVJxMFY2ZkpYd0Vn?=
+ =?utf-8?B?K3dWa3dnVExjVmtKSDhhdmZVajgxNUVYQms0bzJ4TDlNdDNvWlZwWFFoWmtF?=
+ =?utf-8?B?NnZSem5ScVRtZy9ycW8vVUVFelM3R0lpNkpmYW9LWFNEQk5DMWJRa1dVN3Q2?=
+ =?utf-8?B?OU9UNEhraTBBaVdUeFd2VTl2Vi9yajdZZm5wQSs3RFYwcHFwSjBRSCtoY3BR?=
+ =?utf-8?B?WHVDSlRiaGRQQ25zRmRzeVJ6dWZUamtRc1huVkJtMGovZUtaL21MaVlmYnhR?=
+ =?utf-8?B?UnBXT3ppazF5Q0Y5enlaK0dSWUI5RE11SnQ5dW5wTllveXVpRmIyVldJUDBz?=
+ =?utf-8?B?UExHY0VoTkpSbkV2ZmFwQzk1SnVxenZoQ1RvT3JiWXJIZGl3Y2FpbUJvajJ0?=
+ =?utf-8?B?bjgrdUxIZkFXQ1J0S1hQOSt0cS9HUGZkbUJMN21lUmk5UTF6V2t6dWhrYlZt?=
+ =?utf-8?B?aWFWcG5OVUw5YTBPNENEVG1yWDNrZDI2UXV4MHlEc0o2MzM0ZlprSGFaMUgy?=
+ =?utf-8?B?VGs5b05MMTFZOWRlYzJNTTBTR2N1OHpqczEwbFp6dU45SG10cTlZdDVDQ1N1?=
+ =?utf-8?B?bEVyMUJoSnQvbVhmcEpuMEVpclErbUNsM0RKcGI1RlJzT3FPaXMzRTFUNzB3?=
+ =?utf-8?B?MnlwSFlpMlZJUkJtQmRNZkZzNUs5bWFUZEZRU1VNamZkQmh6eUIwWXdPeTN0?=
+ =?utf-8?B?eVBvSDFhRFNFZlVxS1ZENkNBbkM1MzFyaDlJb1l0cXVZNStHRDhXVGU4WlZX?=
+ =?utf-8?B?QzZEZjNtRm51cDJ2dHBVTTh4cmVRTVBQK05YeFB6TTgzYytWRmVOMmcxd0h4?=
+ =?utf-8?B?YmVIaDJabWlacEU1MnBnTENDbmtFZ3o1MUpXdGpHN00rekdJYnA3MG1ENTRM?=
+ =?utf-8?B?aW9oeTFESHpKZkM5NUd5eUdmOWFiNjNzVE5YaEJDRTgrQUl6TUxYZkptZFFw?=
+ =?utf-8?Q?qp3koc+mPao3o/Bk8RHIDpLXbwnYyzRQ?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH7PR12MB5685.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(366016)(7416014)(376014);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?aUpXRWgxK1FhaTZ2MEpBNXlvVndCeGs5ditHbGNJZEJ1YTA1TWg1Z1VKa0l3?=
+ =?utf-8?B?bTBpeE44dkZLNGpHL0sySm0yTzJyQWxwOFl2MHhjQWJVV0xKWHlEa2YxQ3Rr?=
+ =?utf-8?B?ZmYrWU9GRk1LM2NtK0lvUGJHakZ5T1dhQnNGN1pTeGZtYWNXL3k5R1l6OU1q?=
+ =?utf-8?B?NVpaRmdOcjlkSDBYZmlYMkRTdlZoUW91NzNHNStUZjVtUG1pS21NMVhxeGd4?=
+ =?utf-8?B?VnMxY1lzYkE4Vm5SSTdEQUt6eDRFcGQrUXJnbmdTZEFiaWg1aWlpQnNqbjBj?=
+ =?utf-8?B?dnNQLzRIUVZkbVdrR3FiTmx3NWFzaCs2cGhIU1o5UC9aVDV2Sk4vaUs4UHBD?=
+ =?utf-8?B?R3J2RVVNcU8yU1JQdFJUNVhRbWN1TTlaNzExbENPRE1TcFQ2OFgyZ0ZCeFpD?=
+ =?utf-8?B?elBleTBhUXAzcWYvM2tzME5laEdFVzFRc0NvekkwY2JUSXpzVUJQKytwWXZW?=
+ =?utf-8?B?ZkZ4KzFYbnNHSUxTWEd5ejFmcjZmR09ReG1xLzZLdkFkUDVPOTBWZUhUdHNr?=
+ =?utf-8?B?d3NCRldFeVVqamg3NWJTM2taRFUzblVXR281NmE3TTltd1JmOG42UEtDVmpy?=
+ =?utf-8?B?ckVjSFEvNVErVmVrUzMvaUV3Q2lOVkpWUldCMFh0LzMyQytlZkE1Tk12cEdI?=
+ =?utf-8?B?bmxiZmljM2JwelRKdDZhdDY3SGxmT0dGQS91VDF3cFRXdDR6cjRTeDlnb21v?=
+ =?utf-8?B?bmR4RTN5cmdic1VSTStTZmZrVFBXYk9rSkJEU1Rsc3VETys1bDdHQ1R5Zkdn?=
+ =?utf-8?B?aWtjTFczWnBlVG4vV2dTZEd2d2VZN1VMYU9XcDNxSTdDKzEzTVNJMXFKeFA0?=
+ =?utf-8?B?cnptQ3RXektnbVJ5N29jSjc4anJQN3hjRXJmUnArNVZFSFRpWURwM0phQk9W?=
+ =?utf-8?B?QTFBWC9DbHNZQjk0aGxGdEF2V2o0SVJFekZRUWtVRWJESzVhSXBDb2RtaEk5?=
+ =?utf-8?B?emR2cy94Mm5KcUxoQUROREtZYVNCOWMreGswM1ZiUVJ1RDQ2TGNGT011OEJr?=
+ =?utf-8?B?M1B1NjAvMmhHbnlwUUxiM2tKcTJDYkxMVXNjZFhWWFJIOFBVd0FMUit0bzR5?=
+ =?utf-8?B?U0phdXRqYkNraVZOb0g5QzRFSlNTb2tndnhJWlNaalhESFcyZS9CRnlTSkdi?=
+ =?utf-8?B?SFJqUTE5NmVCLy9kN0FjOWFTY3NFU2Q2NjBBZ1VFcklKRUJoTkxRQkVvdGV4?=
+ =?utf-8?B?Q2VCS1ZTOEVXbERsZy9zSnNFTXFsVWM3dEx5S0J4NGVCZDFuTkdYSzdjcTBS?=
+ =?utf-8?B?ckpBREsxQ1cwc0RtdHRaMVdJcmw3b0hKZnZManZRV2g0Q1dZOFVubzUzRFRC?=
+ =?utf-8?B?WE1kcWxXRmJiV2NIdjhGcURodnJJSjJvcWhmakQ3ZUdSUE9QZ3MrTWZWMm5a?=
+ =?utf-8?B?TGtvMGhRaUJMK29GZkpOaUlVSjZUZlc4UUE3eUVNTkZPbHdFTlNPdk1vU0du?=
+ =?utf-8?B?S1BUUFRkVGVaSnQ3cmFsWGY1b0VDamw0UlZ4ZDEzNFdGYzA5Sk5SWGRaNndz?=
+ =?utf-8?B?N2lYZ0xPRCtLTXliTHg3SFRZMmkxcDc0bjY5VVkrTmdsZHVwQUFRUXdEM29a?=
+ =?utf-8?B?cUFucHlTN2RrUW5icStwS2hYUnRqVU53L1VoazgxbWtqY2tDL1F4NDJhUm5P?=
+ =?utf-8?B?U0NlTWo0OC83UCs5S1VDR1NyVnU4eERINFpuNHVmUENkNTN5dXNYV3g3Zkt4?=
+ =?utf-8?B?c3VHdGhJZytHcGYvR3V1N2thNHN6elowQU5pN200Sk4xY3pZSGk3ZEgyZ05R?=
+ =?utf-8?B?OWFwVHlPNTZTdWJqNk5mVzJvZnRyK0had0Y0M3lpQ3FIWGgycmFFYXV1NFZU?=
+ =?utf-8?B?K2Jub203VDVRZko5bkVIekhId0kvTE9WQTF5NXVEbDNEVGxNMlJpWm9XN21E?=
+ =?utf-8?B?Z29hcGhIWk5SR0F1ZXRaVXJVQWJoVVFDRFdhajA1WFFwVGNSelVrdnhRR1Rr?=
+ =?utf-8?B?d05PNm95MmkwNG9QYXI2ankwUDVrTG8zT0J0T2RtSC9mL1RZZUgwOFF6WVoz?=
+ =?utf-8?B?S1V5MmUxKzJ5aDE1Q1BJazhFNmJxbi9vMkVxTUFUaGFHM3dlSTRkMm12SEZs?=
+ =?utf-8?B?QTVpcko1N0hISjVoNFZDWmFpMWV6Umt3Z0QzVWNCdVpGVWFYa1lrRlVCaTRx?=
+ =?utf-8?Q?M4cHLK3S5fcCTIX3vVT9PlA7u?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 2970022c-20fe-4232-9e4a-08de20fff017
+X-MS-Exchange-CrossTenant-AuthSource: PH7PR12MB5685.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 Nov 2025 08:54:35.2332
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: qKHCWtDSyozt2GeTwZxTq5E0sJys9jWMYJp6opGv8Kq5WBAjVMM9o4xTBnv/HjoB
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR12MB6926
 
-Hi Laurent,
-
-On 11/11/25 01:06, Laurent Pinchart wrote:
-> On Mon, Nov 10, 2025 at 11:29:57AM +0100, Michael Riesch wrote:
->> On 11/10/25 09:43, Sakari Ailus wrote:
->>> On Fri, Nov 07, 2025 at 09:51:37PM +0100, Michael Riesch wrote:
->>>> On 11/7/25 19:54, Laurent Pinchart wrote:
->>>>> On Fri, Nov 07, 2025 at 07:41:59PM +0100, Michael Riesch wrote:
->>>>>> On 11/7/25 18:32, Sakari Ailus wrote:
->>>>>>> On Fri, Oct 24, 2025 at 02:51:29PM +0200, Michael Riesch via B4 Relay wrote:
->>>>>>>> Habidere,
->>>>>>>>
->>>>>>>> This series introduces support for the Rockchip Camera Interface (CIF),
->>>>>>>> which is featured in many Rockchip SoCs in different variations.
->>>>>>>> For example, the PX30 Video Input Processor (VIP) is able to receive
->>>>>>>> video data via the Digital Video Port (DVP, a parallel data interface)
->>>>>>>> and transfer it into system memory using a double-buffering mechanism
->>>>>>>> called ping-pong mode.
->>>>>>>> The RK3568 Video Capture (VICAP) unit, on the other hand, features a
->>>>>>>> DVP and a MIPI CSI-2 receiver that can receive video data independently
->>>>>>>> (both using the ping-pong scheme).
->>>>>>>> The different variants may have additional features, such as scaling
->>>>>>>> and/or cropping.
->>>>>>>> Finally, the RK3588 VICAP unit constitutes an essential piece of the
->>>>>>>> camera interface with one DVP, six MIPI CSI-2 receivers, scale/crop
->>>>>>>> units, and a data path multiplexer (to scaler units, to ISP, ...).
->>>>>>>
->>>>>>> I understand both RK3568 and RK3588 include an ISP. Do you have insight on
->>>>>>> how would this work, should the support for the ISP be added later on?
->>>>>>
->>>>>> Short answer: Yes and yes.
->>>>>>
->>>>>> Long answer:
->>>>>>
->>>>>> The patch series at hand adds support for the PX30 VIP and the RK3568
->>>>>> VICAP. I cannot really say something about the PX30, but on the RK3568
->>>>>> VICAP and ISP are orthogonal (the ISP features its own MIPI CSI-2
->>>>>> receiver, different from that introduced in this series). Thus, ISP
->>>>>> support can be introduced anytime (whenever someone is motivated ;-)).
->>>>>
->>>>> Won't they both be connected to the same sensor though, and probably the
->>>>> same D-PHY in the SoC ? They don't seem entirely separate to me.
->>>>
->>>> The MIPI CSI-2 DPHY is shared, indeed. Thus, they *maybe technically
->>>> could be* connected to the same sensor, but I don't know whether that
->>>> works and fail to see why anyone would to such a thing (if it is about
->>>> raw capture, the MIPI CSI-2 receiver in the ISP can do that on its own).
->>>>
->>>> The DPHY can be operated in split mode, with two lanes for VICAP and two
->>>> lanes for ISP. This is not implemented yet, but can be done at a later
->>>> stage on PHY level (not media related). In this case, ISP and VICAP can
->>>> receive data from different subdevices via CSI-2.
->>>
->>> The two would be part of the same media graph in that case and as there are
->>> two CSI-2 receivers and a single PHY, the PHY would probably need to have a
->>> sub-device as well, to allow link configuration to be used to select where
->>> the PHY is connected.
->>>
->>> I don't think we have such a setup elsewhere, and supporting this would
->>> require changes in the MC framework.
->>
->> What follows is a response that also addresses issues raised during our
->> off-list discussion.
->>
->> First of all, I agree with you that the RK3568 HW is "a bit special" (to
->> say the least) in that regard. Let's have an outlook to newer SoCs, such
->> as the RK3588: Here, the MIPI CSI-2 DPHYs (there are two of them) with
->> their split mode are present as well, but the assignment is fixed. For
->> example, the RK3588 VICAP has six MIPI CSI-2 receiver units and six MIPI
->> CSI-2 capture units. Units 1 and 2 handle a different MIPI PHY, units 3
->> and 5 handle the DPHYs (without split mode), units 4 and/or 6 are active
->> whenever DPHY 1 and/or 2 is in split mode.
->>
->> I would model this by adding support for more than one (logical) PHYs
->> (phy-cells = <1>;) and assigning the logical PHYs to the MIPI CSI-2
->> receivers. There is not really a possibility to route anything at this
->> point (routing is done in a MUX unit that takes the different MIPI CSI-2
->> receivers as inputs).
->>
->> Now back to the peculiar RK3568 situation: By default the split mode of
->> the DPHY is off and both VICAP and ISP are able to receive the same data
->> (from up to four lanes) with their MIPI CSI-2 receivers (not sure
->> whether both can be active at the same time, though).
+On 11/10/25 21:42, Alex Williamson wrote:
+> On Thu,  6 Nov 2025 16:16:45 +0200
+> Leon Romanovsky <leon@kernel.org> wrote:
 > 
-> A common use case for capturing data from the same sensor through both
-> ISP and VICAP would be routing image data to the ISP and embedded data
-> to VICAP. Assuming the hardware is able to do this, there will be users
-> interested in this feature.
-
-VICAP and ISP would capture different CSI-2 links. AFAIK the embedded
-data is usually transmitted on the same CSI-2 link but on a different
-virtual channel. The MIPI CSI receiver in the ISP is capable of
-capturing (up to three, I think) virtual channels and passing e.g. one
-VC to the ISP and capturing another VC to memory.
-
->> There are two bits
->> in the GRF that define the lanes that ISP and VICAP receive in split
->> mode (lane 0/1 or lane 2/3). Not sure whether these bits are supposed to
->> be changed during runtime.
->>
->> I would suggest modelling this on PHY level in DT, e.g., by passing
->> reasonable properties to the dphy node, such as
->>     rockchip,dphy-split-mode;
+>> Changelog:
+>> v7:
+>>  * Dropped restore_revoke flag and added vfio_pci_dma_buf_move
+>>    to reverse loop.
+>>  * Fixed spelling errors in documentation patch.
+>>  * Rebased on top of v6.18-rc3.
+>>  * Added include to stddef.h to vfio.h, to keep uapi header file independent.
 > 
-> Split mode should indeed be conveyed through DT, as it's a property of
-> the hardware.
+> I think we're winding down on review comments.  It'd be great to get
+> p2pdma and dma-buf acks on this series.  Otherwise it's been posted
+> enough that we'll assume no objections.  Thanks,
 
-Ack!
+Already have it on my TODO list to take a closer look, but no idea when that will be.
+
+This patch set is on place 4 or 5 on a rather long list of stuff to review/finish.
+
+Christian.
 
 > 
->>     rockchip,dphy-split-invert;
->> where the former activates the split mode and assigns lanes 0/1 to the
->> ISP and lanes 2/3 to the VICAP, and the latter inverts this assignment
->> (lanes 2/3 to the ISP and lanes 0/1 to the VICAP). This would facilitate
->> the reasonable use cases with reasonable effort.
-> 
-> This I'm less convinced about. The routing should be dynamic.
-
-Ack.
-
-> How do you envision the connections to the CSI-2 sources to be modelled
-> in DT ? We need ports and endpoints, and data-lanes properties. Where
-> would those reside on the RK3568 side ?
-
-Goto ASCII sketch below for that...
-
->> Otherwise, to keep it perfectly general and most flexible and
->> everything, we would have to introduce another subdevice indeed, which
->> would be active on the RK3568 exclusively. Therefore, I don't see that
->> the PHY driver introduces this subdevice, but a specialized (syscon?)
->> MUX driver that deals with the RK3568 GRF bits. Something like this
->>
->>                            |----------------------|     |-------------|
->>  Sensor A --- /2 lanes --- | lane 0/1      to ISP | --- | ISP MIPI RX |
->>                            |                      |     |-------------|
->>                            |                      |
->>                            |                      |     |-------------|
->>  Sensor B --- /2 lanes --- | lane 2/3    to VICAP | --- |VICAP MIPI RX|
->>                            |----------------------|     |-------------|
->>
->> But IMHO this will be too much effort for corner use case that I doubt
->> anyone will actually use.
->>
->> What do you think:
->>  - Let's keep the PHYs out of V4L2/MC, ok?
->>  - Let's model the reasonable use cases with device tree properties in
->>    the dphy DT node, ok?
-> 
-> I think the routing should be dynamic.
-
-In this case, my suggestion would be the following:
-
- - An additional MUX subdevice on the RK3568 only, see sketch above
- - One or two input ports (depending on split mode being activated)
- - Two output ports (to ISP MIPI RX, to VICAP MIPI RX)
- - Routing possible 1:N (both input ports can be connected to one or two
-   output ports)
- - The subdevice will have ports, endpoints, data-lanes properties on
-   both sides.
-
-The nice thing about it is that the current state can be extended once
-split mode is implemented, IOW patches 01/18 - 17/18 can be readily applied.
-
-Patch 18/18 must not be applied at this time, as this would be the first
-actual usage of the MIPI CSI-2 pipeline. I guess we need to implement
-and insert the new subdevice first for the sake of uAPI compatibility.
-
-So pretty-please-with-sugar-on-top can we merge 01-17 so that I don't
-have to drag these patches along anymore?
-
-Best regards,
-Michael
-
-> 
->>> How does the media graph look like for the device at the moment?
->>
->> Please take a look at the media graph in the documentation patch (PATCH
->> v14 01/18). This is without the ISP, but gives an overview of what the
->> RK3568 VICAP is capable of.
->>
->> Best regards,
->> Michael
->>
->>>> BTW the ISP is able to process the data captured by VICAP, but
->>>> apparently this includes a RAM round trip (VICAP captures to memory, ISP
->>>> operates in mem2mem mode).
->>>>
->>>>> A block diagram that shows connections between the CSI-2 pins, D-PHY,
->>>>> CSI-2 receivers, VICAP and ISP could help.
->>>>>
->>>>>> Once this patch series is merged, I'll push out changes that introduce
->>>>>> support for the RK3588 VICAP. We can discuss the integration of any
->>>>>> RK3588 ISP in this scope then -- and there may be some things to discuss
->>>>>> as there the VICAP and the ISP(s) are directly connected by means of a
->>>>>> MUX unit in the VICAP.
->>>>>>
->>>>>> Alright?
-> 
+> Alex
 
