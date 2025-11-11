@@ -1,34 +1,35 @@
 Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8630136C586;
-	Tue, 11 Nov 2025 16:16:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F4068369991;
+	Tue, 11 Nov 2025 16:16:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.167.242.64
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762877778; cv=none; b=CKKMn+tYNQSGIbfar4ElXQLPuUTl9YmtfKVmuEeshNrXzjhQPkB6AOi6HEmLTDUrYUXDCwy3ZselJx6TFPCBeRzT94eEXa6I234G/YPx/UhEIQ5ImvjmQE+HdneUqwSUZBn4k5RpV2rTymIl1h4JsNoI0Rt3ncdrGiwg4y+Ikb4=
+	t=1762877780; cv=none; b=UI/MHuVz8Tjt3nXPIxPcq4DqUqlXTLvYx5b2gq64NijeWS+ByNt2agMza501jj4t+/uZ0OQnURoHWz1ry0uSkTefEBrfIYmsvscQUIZg3kvQNTKsxZSly5g1y7IR5RMpgEYU6oOACOCwtDMmyLz3Whxv4SUOOkiRDZOe3GLzYXs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762877778; c=relaxed/simple;
-	bh=18x/P5rIcaquKFmKP9VYd6t8rWgyvIzpVAuo0I+UoUY=;
+	s=arc-20240116; t=1762877780; c=relaxed/simple;
+	bh=jAJ2eu48I5oAuQiJD9svJrov/FQNTulmO0GAoCJbmq0=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=hHcCOl0OXC1pY5XaoCMCsPzKieYNV6iMsRLoXL6l7sHSDJPe2yHwdYBZqIJIsBNLSOd9ebaw89DW39J08KqFJeX/Z5RMbo7iDuPdtgzdUBxNSTlIVL1iwZNF2/tmA2rIFTS8I5bRkT3YZpV3Uz9/whoUAyXQEBzbJLhS37jylOo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ideasonboard.com; spf=pass smtp.mailfrom=ideasonboard.com; dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b=OYGyLrHN; arc=none smtp.client-ip=213.167.242.64
+	 In-Reply-To:To:Cc; b=HD4EcIn0SgJpFe4ur02PD8D1AgmzURM9iwTXI+ksNBSUu5PxwS13kawdmL+8fe5g/MSFhAFlZ8buBsUvjgkRRp674XrtgZ6Cui4AvTHC2fNuGnWbUh1m7GDq2bIWnDrP1Vegsc3jdma3siSU68HOjqEoNlB8/PN5oiEOTsQGfjc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ideasonboard.com; spf=pass smtp.mailfrom=ideasonboard.com; dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b=jkAgw7Fd; arc=none smtp.client-ip=213.167.242.64
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ideasonboard.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ideasonboard.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="OYGyLrHN"
+	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="jkAgw7Fd"
 Received: from [127.0.1.1] (cpc141996-chfd3-2-0-cust928.12-3.cable.virginm.net [86.13.91.161])
-	by perceval.ideasonboard.com (Postfix) with ESMTPSA id 1BC9B1E4F;
+	by perceval.ideasonboard.com (Postfix) with ESMTPSA id D76491E53;
 	Tue, 11 Nov 2025 17:14:09 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-	s=mail; t=1762877649;
-	bh=18x/P5rIcaquKFmKP9VYd6t8rWgyvIzpVAuo0I+UoUY=;
+	s=mail; t=1762877650;
+	bh=jAJ2eu48I5oAuQiJD9svJrov/FQNTulmO0GAoCJbmq0=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=OYGyLrHNWacRnkoeJGr3x7kWo2/M8xbcGdXv/MvtyoSL7oFnoPa7rkORN6FE0C9Xi
-	 d9mvInOvbWs5DTAZg+u6DdMxlHmKeXawoK4F832x+VrfuuXDaSGaJVdhMHIy7zgusm
-	 mHfCm1Iway7RVmQmctXKVarIwLDAvIUaVqtfJXz8=
+	b=jkAgw7Fdgsj3ZUhFjeMlytHsJRMGIOGjgSdXZ2vNYuAjHvtjnRbLSbgNOGc9GjmD4
+	 UGlAUM2nh4tr0+dJJ8QP8gkRgdHjyrTIyeYm5R59sZx1JZ0kHmZqflaahZMxrsFOHA
+	 qXh7awwufa9YtifP6GfQ+/1SXIAxrep8xWrUIO7Q=
 From: Daniel Scally <dan.scally@ideasonboard.com>
-Date: Tue, 11 Nov 2025 16:15:46 +0000
-Subject: [PATCH v13 02/15] media: uapi: Add 20-bit bayer formats
+Date: Tue, 11 Nov 2025 16:15:47 +0000
+Subject: [PATCH v13 03/15] dt-bindings: media: Add bindings for ARM
+ mali-c55
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
@@ -37,7 +38,7 @@ List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20251111-c55-v13-2-3dc581355e3a@ideasonboard.com>
+Message-Id: <20251111-c55-v13-3-3dc581355e3a@ideasonboard.com>
 References: <20251111-c55-v13-0-3dc581355e3a@ideasonboard.com>
 In-Reply-To: <20251111-c55-v13-0-3dc581355e3a@ideasonboard.com>
 To: linux-media@vger.kernel.org, devicetree@vger.kernel.org, 
@@ -48,43 +49,52 @@ Cc: Anthony.McGivern@arm.com, jacopo.mondi@ideasonboard.com,
  jerome.forissier@linaro.org, kieran.bingham@ideasonboard.com, 
  laurent.pinchart@ideasonboard.com, dan.scally@ideasonboard.com, 
  Sakari Ailus <sakari.ailus@linux.intel.com>, 
- Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+ Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>, 
+ Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=13665;
+X-Developer-Signature: v=1; a=openpgp-sha256; l=4229;
  i=dan.scally@ideasonboard.com; h=from:subject:message-id;
- bh=18x/P5rIcaquKFmKP9VYd6t8rWgyvIzpVAuo0I+UoUY=;
- b=owEBbQKS/ZANAwAKAchJV3psRXUyAcsmYgBpE2FBs8t+HmW+b2AfwOOYwDWL0BPkQysywZiPf
- T7f/wNPVWeJAjMEAAEKAB0WIQQqyuwyDnZdb+mxmm/ISVd6bEV1MgUCaRNhQQAKCRDISVd6bEV1
- Mv8mEACX7atbQViZ+s8orG7hSLUsZboA8OH5SlqtHOWSH0sVjJ4jSqRp8/XTPypYGUw16ljBSkB
- E2KpcuKmb4WcVr7ySjeGfaPaytbe9rmoKzf4F/iPlLhXI8UqYM4TZgMjYGlCvGXhOzZ6TwwMw0S
- LqZqwDZQVibpJaeymxtxwMSPoXCIYn5Yz6TWcjDseE7zPt+nOvO2n7yyj0cmx8+Qu0jWljfuqHl
- /CjNMjW0Q+v6T4y94CBgFTxqKW9sql3tFux1rpRtpXv4ZADmBozCo9ku1aw25ArdQvkpRciRjuV
- G0CSYmkvQs54OKYsrt/TCKKzabEfsaWQg8LqV5pi4DD5h328vQ6sUosx9GVXIywiZF37q4mQ1Xb
- KmLFq/4/2Ww/MclJ+g+9aZlE5yT1Lwrj7cOhbRmVg3++8cyQBcXHBt5vkODQRGGRcQ39AZJv5Ic
- pmwusLPqL7h3JshsebyXyjMewKx8ZW8l8BLOskf49gVjZpT63ZnJAWetifBver94Fs1j34bKLES
- P2pTozbpeLlhzvlde0R5tI6DSTFAyfJzF+Uvwtg22mEzM27dUpy6919V076djcwmWx+z4fAFEDG
- OWoQKcPHus0Ay/I6OYL+KlM1XKdTKXTRHsCG7BuWU+MkHpRFsp3p4eAuKYw9lZf3eiattZKsuON
- dSNl8MQXPxdMZ8A==
+ bh=jAJ2eu48I5oAuQiJD9svJrov/FQNTulmO0GAoCJbmq0=;
+ b=owEBbQKS/ZANAwAKAchJV3psRXUyAcsmYgBpE2FCMXKZZLHT+1MZP6qkzXHbUG1hyWVVx96ZJ
+ eQRA1GH9iuJAjMEAAEKAB0WIQQqyuwyDnZdb+mxmm/ISVd6bEV1MgUCaRNhQgAKCRDISVd6bEV1
+ MtqiEACx9FJ5S/jXroMQsTHPrhnmLYa93trCwZ8CxEjF8MEX+kRTGg4prTPqOOogv+Y0UBnBhOM
+ LY8gXshlejDD7FQwycHYpipFp8I/UXWVtmGzfVUUnMJUmj+jhIGLNXUl0GiABEFB8Pmn9NtogSo
+ qo7R8qNW+WGN+Y655T9buYiDEN7ww3iAgh5StTMPCNfl7xu2xxuz98R+Za/ALFlexYxoQWMcJEf
+ BalzAsM41XfgKxcG2T32ZDl9qhp7/l4sjyuocznoGFNtHxUsbl3/awgJa9nDY2VM9QplIEI9JdY
+ XTYORRb8MiEAC68qh3bcs4s+Ea6DhDrlK78DWoHbtEz9yLuqpnvEv/5vW5YZkwOt5XyFSwWsYv3
+ T0wUf8fbw2lHGCLpnUNUZ0YWUTBIQmcxgMvKynZwHnyf1Z8CEZJJymkerua985Sv5gKYdeh/s22
+ B43HvnEQbyA4ShrsASVy7AtGjOK0hcPzHwDeB+9qeY3pOz8OHJvGCfPwEs5fzVrEmDAj8SqqZLW
+ 1rdCxAXjN70WlrNR+a5z87PBzecJF63TQvczbCQGG5sOIBLcPw+O6ixjRu5sbpYACEtB07SRWU6
+ sniPCbSJQbLjkiD6OLwJfL+jKn34ltr41fH+U6g7DLFnlhVTJC+526RVslwn785oE7mj3b8TlBn
+ 0lHMsEGv8AXxH7g==
 X-Developer-Key: i=dan.scally@ideasonboard.com; a=openpgp;
  fpr=EEC699ACA1B7CB5D31330C0BBD501C2A3546CCF6
 
-The Mali-C55 requires input data be in 20-bit format, MSB aligned.
-Add some new media bus format macros to represent that input format.
+Add the yaml binding for ARM's Mali-C55 Image Signal Processor.
 
-Reviewed-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
 Tested-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
 Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Acked-by: Nayden Kanchev <nayden.kanchev@arm.com>
 Co-developed-by: Jacopo Mondi <jacopo.mondi@ideasonboard.com>
 Signed-off-by: Jacopo Mondi <jacopo.mondi@ideasonboard.com>
 Signed-off-by: Daniel Scally <dan.scally@ideasonboard.com>
 ---
+Changes in v13:
+
+	- Added resets and reset-names to required properties
+	- More realistic interrupts property in the binding example
+	- Dropped the mali_c55 label from the node in the example
+
 Changes in v12:
 
-	- None
+	- _Actually_ dropped the arm,inline property mode, having forgotten to
+	  do so in v11.
 
 Changes in v11:
 
-	- None
+	- Dropped in arm,inline_mode property. This is now identical to the
+	  reviewed version 8, so I have kept the tags on there.
 
 Changes in v10:
 
@@ -92,11 +102,15 @@ Changes in v10:
 
 Changes in v9:
 
-	- None
+	- Added the arm,inline_mode property to differentiate between inline and
+	  memory input configurations
 
 Changes in v8:
 
-	- None
+	- Added the video clock back in. Now that we have actual hardware it's
+	  clear that it's necessary.
+	- Added reset lines
+	- Dropped R-bs
 
 Changes in v7:
 
@@ -104,565 +118,123 @@ Changes in v7:
 
 Changes in v6:
 
-	- Fixed the table formatting
+	- None
 
 Changes in v5:
 
-	- New patch
----
- .../userspace-api/media/v4l/subdev-formats.rst     | 252 ++++++++++++++++++++-
- include/uapi/linux/media-bus-format.h              |   6 +-
- 2 files changed, 255 insertions(+), 3 deletions(-)
+	- None
 
-diff --git a/Documentation/userspace-api/media/v4l/subdev-formats.rst b/Documentation/userspace-api/media/v4l/subdev-formats.rst
-index 894592e15a2becb84f02ac39168d2deed20d3a90..cf970750dd4c6ab32274f75453390eb8148ef3c6 100644
---- a/Documentation/userspace-api/media/v4l/subdev-formats.rst
-+++ b/Documentation/userspace-api/media/v4l/subdev-formats.rst
-@@ -2817,7 +2817,7 @@ organization is given as an example for the first pixel only.
-     \tiny
-     \setlength{\tabcolsep}{2pt}
- 
--.. tabularcolumns:: |p{6.0cm}|p{0.7cm}|p{0.3cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|
-+.. tabularcolumns:: |p{6.0cm}|p{0.7cm}|p{0.3cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|
- 
- .. _v4l2-mbus-pixelcode-bayer:
- 
-@@ -2830,10 +2830,14 @@ organization is given as an example for the first pixel only.
-     * - Identifier
-       - Code
-       -
--      - :cspan:`15` Data organization
-+      - :cspan:`19` Data organization
-     * -
-       -
-       - Bit
-+      - 19
-+      - 18
-+      - 17
-+      - 16
-       - 15
-       - 14
-       - 13
-@@ -2863,6 +2867,10 @@ organization is given as an example for the first pixel only.
-       -
-       -
-       -
-+      -
-+      -
-+      -
-+      -
-       - b\ :sub:`7`
-       - b\ :sub:`6`
-       - b\ :sub:`5`
-@@ -2884,6 +2892,10 @@ organization is given as an example for the first pixel only.
-       -
-       -
-       -
-+      -
-+      -
-+      -
-+      -
-       - g\ :sub:`7`
-       - g\ :sub:`6`
-       - g\ :sub:`5`
-@@ -2905,6 +2917,10 @@ organization is given as an example for the first pixel only.
-       -
-       -
-       -
-+      -
-+      -
-+      -
-+      -
-       - g\ :sub:`7`
-       - g\ :sub:`6`
-       - g\ :sub:`5`
-@@ -2926,6 +2942,10 @@ organization is given as an example for the first pixel only.
-       -
-       -
-       -
-+      -
-+      -
-+      -
-+      -
-       - r\ :sub:`7`
-       - r\ :sub:`6`
-       - r\ :sub:`5`
-@@ -2947,6 +2967,10 @@ organization is given as an example for the first pixel only.
-       -
-       -
-       -
-+      -
-+      -
-+      -
-+      -
-       - b\ :sub:`7`
-       - b\ :sub:`6`
-       - b\ :sub:`5`
-@@ -2968,6 +2992,10 @@ organization is given as an example for the first pixel only.
-       -
-       -
-       -
-+      -
-+      -
-+      -
-+      -
-       - g\ :sub:`7`
-       - g\ :sub:`6`
-       - g\ :sub:`5`
-@@ -2989,6 +3017,10 @@ organization is given as an example for the first pixel only.
-       -
-       -
-       -
-+      -
-+      -
-+      -
-+      -
-       - g\ :sub:`7`
-       - g\ :sub:`6`
-       - g\ :sub:`5`
-@@ -3010,6 +3042,10 @@ organization is given as an example for the first pixel only.
-       -
-       -
-       -
-+      -
-+      -
-+      -
-+      -
-       - r\ :sub:`7`
-       - r\ :sub:`6`
-       - r\ :sub:`5`
-@@ -3031,6 +3067,10 @@ organization is given as an example for the first pixel only.
-       -
-       -
-       -
-+      -
-+      -
-+      -
-+      -
-       - b\ :sub:`7`
-       - b\ :sub:`6`
-       - b\ :sub:`5`
-@@ -3052,6 +3092,10 @@ organization is given as an example for the first pixel only.
-       -
-       -
-       -
-+      -
-+      -
-+      -
-+      -
-       - g\ :sub:`7`
-       - g\ :sub:`6`
-       - g\ :sub:`5`
-@@ -3073,6 +3117,10 @@ organization is given as an example for the first pixel only.
-       -
-       -
-       -
-+      -
-+      -
-+      -
-+      -
-       - g\ :sub:`7`
-       - g\ :sub:`6`
-       - g\ :sub:`5`
-@@ -3094,6 +3142,10 @@ organization is given as an example for the first pixel only.
-       -
-       -
-       -
-+      -
-+      -
-+      -
-+      -
-       - r\ :sub:`7`
-       - r\ :sub:`6`
-       - r\ :sub:`5`
-@@ -3115,6 +3167,10 @@ organization is given as an example for the first pixel only.
-       -
-       -
-       -
-+      -
-+      -
-+      -
-+      -
-       - 0
-       - 0
-       - 0
-@@ -3134,6 +3190,10 @@ organization is given as an example for the first pixel only.
-       -
-       -
-       -
-+      -
-+      -
-+      -
-+      -
-       - b\ :sub:`7`
-       - b\ :sub:`6`
-       - b\ :sub:`5`
-@@ -3155,6 +3215,10 @@ organization is given as an example for the first pixel only.
-       -
-       -
-       -
-+      -
-+      -
-+      -
-+      -
-       - b\ :sub:`7`
-       - b\ :sub:`6`
-       - b\ :sub:`5`
-@@ -3174,6 +3238,10 @@ organization is given as an example for the first pixel only.
-       -
-       -
-       -
-+      -
-+      -
-+      -
-+      -
-       - 0
-       - 0
-       - 0
-@@ -3195,6 +3263,10 @@ organization is given as an example for the first pixel only.
-       -
-       -
-       -
-+      -
-+      -
-+      -
-+      -
-       - b\ :sub:`9`
-       - b\ :sub:`8`
-       - b\ :sub:`7`
-@@ -3214,6 +3286,10 @@ organization is given as an example for the first pixel only.
-       -
-       -
-       -
-+      -
-+      -
-+      -
-+      -
-       - b\ :sub:`1`
-       - b\ :sub:`0`
-       - 0
-@@ -3235,6 +3311,10 @@ organization is given as an example for the first pixel only.
-       -
-       -
-       -
-+      -
-+      -
-+      -
-+      -
-       - b\ :sub:`1`
-       - b\ :sub:`0`
-       - 0
-@@ -3254,6 +3334,10 @@ organization is given as an example for the first pixel only.
-       -
-       -
-       -
-+      -
-+      -
-+      -
-+      -
-       - b\ :sub:`9`
-       - b\ :sub:`8`
-       - b\ :sub:`7`
-@@ -3273,6 +3357,10 @@ organization is given as an example for the first pixel only.
-       -
-       -
-       -
-+      -
-+      -
-+      -
-+      -
-       - b\ :sub:`9`
-       - b\ :sub:`8`
-       - b\ :sub:`7`
-@@ -3294,6 +3382,10 @@ organization is given as an example for the first pixel only.
-       -
-       -
-       -
-+      -
-+      -
-+      -
-+      -
-       - g\ :sub:`9`
-       - g\ :sub:`8`
-       - g\ :sub:`7`
-@@ -3315,6 +3407,10 @@ organization is given as an example for the first pixel only.
-       -
-       -
-       -
-+      -
-+      -
-+      -
-+      -
-       - g\ :sub:`9`
-       - g\ :sub:`8`
-       - g\ :sub:`7`
-@@ -3336,6 +3432,10 @@ organization is given as an example for the first pixel only.
-       -
-       -
-       -
-+      -
-+      -
-+      -
-+      -
-       - r\ :sub:`9`
-       - r\ :sub:`8`
-       - r\ :sub:`7`
-@@ -3355,6 +3455,10 @@ organization is given as an example for the first pixel only.
-       -
-       -
-       -
-+      -
-+      -
-+      -
-+      -
-       - b\ :sub:`11`
-       - b\ :sub:`10`
-       - b\ :sub:`9`
-@@ -3376,6 +3480,10 @@ organization is given as an example for the first pixel only.
-       -
-       -
-       -
-+      -
-+      -
-+      -
-+      -
-       - g\ :sub:`11`
-       - g\ :sub:`10`
-       - g\ :sub:`9`
-@@ -3397,6 +3505,10 @@ organization is given as an example for the first pixel only.
-       -
-       -
-       -
-+      -
-+      -
-+      -
-+      -
-       - g\ :sub:`11`
-       - g\ :sub:`10`
-       - g\ :sub:`9`
-@@ -3418,6 +3530,10 @@ organization is given as an example for the first pixel only.
-       -
-       -
-       -
-+      -
-+      -
-+      -
-+      -
-       - r\ :sub:`11`
-       - r\ :sub:`10`
-       - r\ :sub:`9`
-@@ -3437,6 +3553,10 @@ organization is given as an example for the first pixel only.
-       -
-       -
-       -
-+      -
-+      -
-+      -
-+      -
-       - b\ :sub:`13`
-       - b\ :sub:`12`
-       - b\ :sub:`11`
-@@ -3458,6 +3578,10 @@ organization is given as an example for the first pixel only.
-       -
-       -
-       -
-+      -
-+      -
-+      -
-+      -
-       - g\ :sub:`13`
-       - g\ :sub:`12`
-       - g\ :sub:`11`
-@@ -3479,6 +3603,10 @@ organization is given as an example for the first pixel only.
-       -
-       -
-       -
-+      -
-+      -
-+      -
-+      -
-       - g\ :sub:`13`
-       - g\ :sub:`12`
-       - g\ :sub:`11`
-@@ -3500,6 +3628,10 @@ organization is given as an example for the first pixel only.
-       -
-       -
-       -
-+      -
-+      -
-+      -
-+      -
-       - r\ :sub:`13`
-       - r\ :sub:`12`
-       - r\ :sub:`11`
-@@ -3519,6 +3651,10 @@ organization is given as an example for the first pixel only.
-       - MEDIA_BUS_FMT_SBGGR16_1X16
-       - 0x301d
-       -
-+      -
-+      -
-+      -
-+      -
-       - b\ :sub:`15`
-       - b\ :sub:`14`
-       - b\ :sub:`13`
-@@ -3540,6 +3676,10 @@ organization is given as an example for the first pixel only.
-       - MEDIA_BUS_FMT_SGBRG16_1X16
-       - 0x301e
-       -
-+      -
-+      -
-+      -
-+      -
-       - g\ :sub:`15`
-       - g\ :sub:`14`
-       - g\ :sub:`13`
-@@ -3561,6 +3701,10 @@ organization is given as an example for the first pixel only.
-       - MEDIA_BUS_FMT_SGRBG16_1X16
-       - 0x301f
-       -
-+      -
-+      -
-+      -
-+      -
-       - g\ :sub:`15`
-       - g\ :sub:`14`
-       - g\ :sub:`13`
-@@ -3582,6 +3726,110 @@ organization is given as an example for the first pixel only.
-       - MEDIA_BUS_FMT_SRGGB16_1X16
-       - 0x3020
-       -
-+      -
-+      -
-+      -
-+      -
-+      - r\ :sub:`15`
-+      - r\ :sub:`14`
-+      - r\ :sub:`13`
-+      - r\ :sub:`12`
-+      - r\ :sub:`11`
-+      - r\ :sub:`10`
-+      - r\ :sub:`9`
-+      - r\ :sub:`8`
-+      - r\ :sub:`7`
-+      - r\ :sub:`6`
-+      - r\ :sub:`5`
-+      - r\ :sub:`4`
-+      - r\ :sub:`3`
-+      - r\ :sub:`2`
-+      - r\ :sub:`1`
-+      - r\ :sub:`0`
-+    * .. _MEDIA-BUS-FMT-SBGGR20-1X20:
+Changes in v4:
+
+	- Switched to port instead of ports
+
+Changes in v3:
+
+	- Dropped the video clock as suggested by Laurent. I didn't retain it
+	for the purposes of the refcount since this driver will call .s_stream()
+	for the sensor driver which will refcount the clock anyway.
+	- Clarified that the port is a parallel input port rather (Sakari)
+
+Changes in v2:
+
+	- Added clocks information
+	- Fixed the warnings raised by Rob
+---
+ .../devicetree/bindings/media/arm,mali-c55.yaml    | 86 ++++++++++++++++++++++
+ 1 file changed, 86 insertions(+)
+
+diff --git a/Documentation/devicetree/bindings/media/arm,mali-c55.yaml b/Documentation/devicetree/bindings/media/arm,mali-c55.yaml
+new file mode 100644
+index 0000000000000000000000000000000000000000..fc4fcd19922aad510ac40a02a53c3c098af9f6a0
+--- /dev/null
++++ b/Documentation/devicetree/bindings/media/arm,mali-c55.yaml
+@@ -0,0 +1,86 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/media/arm,mali-c55.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
 +
-+      - MEDIA_BUS_FMT_SBGGR20_1X20
-+      - 0x3021
-+      -
-+      - b\ :sub:`19`
-+      - b\ :sub:`18`
-+      - b\ :sub:`17`
-+      - b\ :sub:`16`
-+      - b\ :sub:`15`
-+      - b\ :sub:`14`
-+      - b\ :sub:`13`
-+      - b\ :sub:`12`
-+      - b\ :sub:`11`
-+      - b\ :sub:`10`
-+      - b\ :sub:`9`
-+      - b\ :sub:`8`
-+      - b\ :sub:`7`
-+      - b\ :sub:`6`
-+      - b\ :sub:`5`
-+      - b\ :sub:`4`
-+      - b\ :sub:`3`
-+      - b\ :sub:`2`
-+      - b\ :sub:`1`
-+      - b\ :sub:`0`
-+    * .. _MEDIA-BUS-FMT-SGBRG20-1X20:
++title: ARM Mali-C55 Image Signal Processor
 +
-+      - MEDIA_BUS_FMT_SGBRG20_1X20
-+      - 0x3022
-+      -
-+      - g\ :sub:`19`
-+      - g\ :sub:`18`
-+      - g\ :sub:`17`
-+      - g\ :sub:`16`
-+      - g\ :sub:`15`
-+      - g\ :sub:`14`
-+      - g\ :sub:`13`
-+      - g\ :sub:`12`
-+      - g\ :sub:`11`
-+      - g\ :sub:`10`
-+      - g\ :sub:`9`
-+      - g\ :sub:`8`
-+      - g\ :sub:`7`
-+      - g\ :sub:`6`
-+      - g\ :sub:`5`
-+      - g\ :sub:`4`
-+      - g\ :sub:`3`
-+      - g\ :sub:`2`
-+      - g\ :sub:`1`
-+      - g\ :sub:`0`
-+    * .. _MEDIA-BUS-FMT-SGRBG20-1X20:
++maintainers:
++  - Daniel Scally <dan.scally@ideasonboard.com>
++  - Jacopo Mondi <jacopo.mondi@ideasonboard.com>
 +
-+      - MEDIA_BUS_FMT_SGRBG20_1X20
-+      - 0x3023
-+      -
-+      - g\ :sub:`19`
-+      - g\ :sub:`18`
-+      - g\ :sub:`17`
-+      - g\ :sub:`16`
-+      - g\ :sub:`15`
-+      - g\ :sub:`14`
-+      - g\ :sub:`13`
-+      - g\ :sub:`12`
-+      - g\ :sub:`11`
-+      - g\ :sub:`10`
-+      - g\ :sub:`9`
-+      - g\ :sub:`8`
-+      - g\ :sub:`7`
-+      - g\ :sub:`6`
-+      - g\ :sub:`5`
-+      - g\ :sub:`4`
-+      - g\ :sub:`3`
-+      - g\ :sub:`2`
-+      - g\ :sub:`1`
-+      - g\ :sub:`0`
-+    * .. _MEDIA-BUS-FMT-SRGGB20-1X20:
++properties:
++  compatible:
++    const: arm,mali-c55
 +
-+      - MEDIA_BUS_FMT_SRGGB20_1X20
-+      - 0x3024
-+      -
-+      - r\ :sub:`19`
-+      - r\ :sub:`18`
-+      - r\ :sub:`17`
-+      - r\ :sub:`16`
-       - r\ :sub:`15`
-       - r\ :sub:`14`
-       - r\ :sub:`13`
-diff --git a/include/uapi/linux/media-bus-format.h b/include/uapi/linux/media-bus-format.h
-index 62ad82fd285a8ce24bd16c207c51c0e75ea95070..6005f033e62c04bdd3dff7ac905f5b921341cd47 100644
---- a/include/uapi/linux/media-bus-format.h
-+++ b/include/uapi/linux/media-bus-format.h
-@@ -124,7 +124,7 @@
- #define MEDIA_BUS_FMT_YUV16_1X48		0x202a
- #define MEDIA_BUS_FMT_UYYVYY16_0_5X48		0x202b
- 
--/* Bayer - next is	0x3021 */
-+/* Bayer - next is	0x3025 */
- #define MEDIA_BUS_FMT_SBGGR8_1X8		0x3001
- #define MEDIA_BUS_FMT_SGBRG8_1X8		0x3013
- #define MEDIA_BUS_FMT_SGRBG8_1X8		0x3002
-@@ -157,6 +157,10 @@
- #define MEDIA_BUS_FMT_SGBRG16_1X16		0x301e
- #define MEDIA_BUS_FMT_SGRBG16_1X16		0x301f
- #define MEDIA_BUS_FMT_SRGGB16_1X16		0x3020
-+#define MEDIA_BUS_FMT_SBGGR20_1X20		0x3021
-+#define MEDIA_BUS_FMT_SGBRG20_1X20		0x3022
-+#define MEDIA_BUS_FMT_SGRBG20_1X20		0x3023
-+#define MEDIA_BUS_FMT_SRGGB20_1X20		0x3024
- 
- /* JPEG compressed formats - next is	0x4002 */
- #define MEDIA_BUS_FMT_JPEG_1X8			0x4001
++  reg:
++    maxItems: 1
++
++  interrupts:
++    maxItems: 1
++
++  clocks:
++    items:
++      - description: ISP Video Clock
++      - description: ISP AXI clock
++      - description: ISP AHB-lite clock
++
++  clock-names:
++    items:
++      - const: vclk
++      - const: aclk
++      - const: hclk
++
++  resets:
++    items:
++      - description: vclk domain reset
++      - description: aclk domain reset
++      - description: hclk domain reset
++
++  reset-names:
++    items:
++      - const: vresetn
++      - const: aresetn
++      - const: hresetn
++
++  port:
++    $ref: /schemas/graph.yaml#/properties/port
++    description: Input parallel video bus
++
++    properties:
++      endpoint:
++        $ref: /schemas/graph.yaml#/properties/endpoint
++
++required:
++  - compatible
++  - reg
++  - interrupts
++  - clocks
++  - clock-names
++  - resets
++  - reset-names
++  - port
++
++additionalProperties: false
++
++examples:
++  - |
++    #include <dt-bindings/interrupt-controller/arm-gic.h>
++
++    isp@400000 {
++      compatible = "arm,mali-c55";
++      reg = <0x400000 0x200000>;
++      clocks = <&clk 0>, <&clk 1>, <&clk 2>;
++      clock-names = "vclk", "aclk", "hclk";
++      resets = <&resets 0>, <&resets 1>, <&resets 2>;
++      reset-names = "vresetn", "aresetn", "hresetn";
++      interrupts = <GIC_SPI 861 IRQ_TYPE_EDGE_RISING>;
++
++      port {
++        isp_in: endpoint {
++            remote-endpoint = <&csi2_rx_out>;
++        };
++      };
++    };
++...
 
 -- 
 2.43.0
