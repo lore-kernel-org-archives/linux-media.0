@@ -1,34 +1,34 @@
 Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 119CE36C585;
-	Tue, 11 Nov 2025 16:16:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 606BD36C595;
+	Tue, 11 Nov 2025 16:16:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.167.242.64
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762877789; cv=none; b=Ss0XvITux6UQT6Ag7prClorhw3MAC+j9yYv6xZ2Cehuw5mpA0t00Hlv1M3rZXVEpDoRt9oIoZx9loI2JTf4wZanpR3o2/UBA5m3GWVuRVjH3bHrzYPDP73kRs32jCNDdm112GJ8tuNKD3r9EhUIsOtY9BHPSrOyhubePnzWo4Lw=
+	t=1762877791; cv=none; b=CFwRWsq4OFPhjsdZc6393kj0fwXbAznG4vIWsaSm6xnEC3vDK4o2+xSCy+yCryXjVZz9RuDKJeKyL+Tfs3+CTGkLL4cVlFdlp3OrO8forZA5t63W752e5GCaBoCMcGXbJHva8GD/TAAjq7mjkTJy05Y0KiGOGD6CL39E64oYgdQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762877789; c=relaxed/simple;
-	bh=cTyl9DFfAu/dbpAG5WM+M+mb2gQCMDFd0XKNEogrbKU=;
+	s=arc-20240116; t=1762877791; c=relaxed/simple;
+	bh=CzpGklnvEveNZ32xlH2FueSqnRlwcvM0qaALq3kE6Bg=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=QhcIxR4dUW8d1d/+J4/r20dOZih6/yR2H5gI1jbycEgraCPLd3GzHZWxoJk/WsNcVsWQkUEe38KHDfmVa2C0/ZxNaK+j4I+P8GEMxJBQDNR/lxxQNGjqv+18PUvzkbCuA70jBhKZm/g0TByKwRnTLw5LB7dIaXx7utXJpxwAceo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ideasonboard.com; spf=pass smtp.mailfrom=ideasonboard.com; dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b=e3pfBqLX; arc=none smtp.client-ip=213.167.242.64
+	 In-Reply-To:To:Cc; b=iv2ymYVv71RXIiHtkFssCDprGvPina5f6oEtys9ZngoFKg7OOQE4L55dB0syiUkQayR5Nxj3iN2Y94+ngyWbOhrZhz6f9JKmG3V2SY/hQZq+uRSV5zVlKjDpkaUVSXzQeMcD6EGKL3sMwSueEtICa4kX6aHcsmZRe/ara7NcF60=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ideasonboard.com; spf=pass smtp.mailfrom=ideasonboard.com; dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b=Bz/XQmR4; arc=none smtp.client-ip=213.167.242.64
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ideasonboard.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ideasonboard.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="e3pfBqLX"
+	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="Bz/XQmR4"
 Received: from [127.0.1.1] (cpc141996-chfd3-2-0-cust928.12-3.cable.virginm.net [86.13.91.161])
-	by perceval.ideasonboard.com (Postfix) with ESMTPSA id 3853E1F17;
+	by perceval.ideasonboard.com (Postfix) with ESMTPSA id F3AA71FDD;
 	Tue, 11 Nov 2025 17:14:13 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-	s=mail; t=1762877653;
-	bh=cTyl9DFfAu/dbpAG5WM+M+mb2gQCMDFd0XKNEogrbKU=;
+	s=mail; t=1762877654;
+	bh=CzpGklnvEveNZ32xlH2FueSqnRlwcvM0qaALq3kE6Bg=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=e3pfBqLXKhNJjCPLuRSVd+6YkVcjRXXD6JDLwsy92Dzesev8YqiOVNDcwL6k0v0dP
-	 EbW1fl2YPqdHplmdEPYZp8tGBGLnIQwAAMXTxVvaI9FQRuOVqUTKfBlAGWXyOu3bdb
-	 Kp1ay0RwtwvHiujUkSKDXhjgCryPQWlxp7XLSPEk=
+	b=Bz/XQmR4jBFY5o8BxLvHHqWxEjHzAdpy6ynjtGirqSwJ1cd1dIzEMjvI44CERKPsO
+	 GiWhm3KzgXFDkcW+Qtwi5uh2MVVgF53yeXQk6DyDB8V714pnlu/PIogYykdIw4jJnw
+	 xbg4NEL5QEPOrvA+HWeKmsuNYbbmTlqAzKXAJ5pQ=
 From: Daniel Scally <dan.scally@ideasonboard.com>
-Date: Tue, 11 Nov 2025 16:15:51 +0000
-Subject: [PATCH v13 07/15] MAINTAINERS: Add entry for mali-c55 driver
+Date: Tue, 11 Nov 2025 16:15:52 +0000
+Subject: [PATCH v13 08/15] media: Add MALI_C55_3A_STATS meta format
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
@@ -37,7 +37,7 @@ List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20251111-c55-v13-7-3dc581355e3a@ideasonboard.com>
+Message-Id: <20251111-c55-v13-8-3dc581355e3a@ideasonboard.com>
 References: <20251111-c55-v13-0-3dc581355e3a@ideasonboard.com>
 In-Reply-To: <20251111-c55-v13-0-3dc581355e3a@ideasonboard.com>
 To: linux-media@vger.kernel.org, devicetree@vger.kernel.org, 
@@ -50,29 +50,30 @@ Cc: Anthony.McGivern@arm.com, jacopo.mondi@ideasonboard.com,
  Sakari Ailus <sakari.ailus@linux.intel.com>, 
  Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
 X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1830;
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2544;
  i=dan.scally@ideasonboard.com; h=from:subject:message-id;
- bh=cTyl9DFfAu/dbpAG5WM+M+mb2gQCMDFd0XKNEogrbKU=;
- b=owEBbQKS/ZANAwAKAchJV3psRXUyAcsmYgBpE2FDiMDD6RH36rHYlbsFPrH+2+ma/QzOg/dx1
- hs0EHXNkLKJAjMEAAEKAB0WIQQqyuwyDnZdb+mxmm/ISVd6bEV1MgUCaRNhQwAKCRDISVd6bEV1
- MioDD/9keUujPevWBwD8RVMqfkAq69iTKVVkl1H0G6ijnV20+uEr0BxiTMu1+sxpcGsuDPdn5f6
- /+3HNI8lGikyHWl7z2M+x+/4ok6vvhXKmMUl+PYBOoYXG74OpKamjYNu+CTgsdYSUsto1GlTDdG
- fs2TTFebi8WdksQCYKGMapsGS3MhqtcKRP/GBcvSZwXv1N0YjajjlP5zqRTX0RbXiMCecn/BvOX
- 7w0cCfUZMKP5unI71yGdBb4xERAUajjNQ+6zJ8NO+MQtwOkSukdoq9nx6gxXZ0qsSxBYU5BWIUJ
- wi1rS078IGBrpLLPYkuQnPNdXoRJBN2lBV27RQxDjOXZmBI8Zp77mUZ/BYcm6nS9zMukzhS9epE
- 4Tu0neqBLnzpmguEERvt2QeDKAD6wHnQSLCzSuUQ4IdIuPPIz+LlQvk1kJOBO5sDmgKRd60d3U0
- swaS8aopzqPUgpS9sf+rVYNsBTOwUV1didfe1Xoao57PZLd34cYbJswtsYnTELPaMH9mxPU4ZWO
- Dr+LUkVr+trHymSTzqHAC+i2fYqMaPJIr6IRRlrHc7vPyxCKd4mHGGEsMT9guKYIU8gWEkNfo33
- f0Ns4nq3G6FyAc2knuKnKEZNsPJWeEV/yJ9kil6W+0zSwayv0nlCARESSTFgV9zIFigAJNGV3H3
- 9mJo4VUNlYXqTAA==
+ bh=CzpGklnvEveNZ32xlH2FueSqnRlwcvM0qaALq3kE6Bg=;
+ b=owEBbQKS/ZANAwAKAchJV3psRXUyAcsmYgBpE2FDSkkt+cJhumgIEYCfySm74dPPoHtJUj068
+ fYrqYc4r3qJAjMEAAEKAB0WIQQqyuwyDnZdb+mxmm/ISVd6bEV1MgUCaRNhQwAKCRDISVd6bEV1
+ MpkvD/43vGsqYxOOsFbScihNbXpQNFocr5e55pZ9nD+48/p8xOTFVz2Q35K4n6bHBKOZqlmbuBY
+ ChqhAeDe6qD8JsutWA6LoRTQ5czKjgZR2LTXc+kSGpuJ9J1PK2rGX9eOJI4ESdUXGRPRIWy0Inl
+ rjbXIOAMpPU5KfZ3g4n1Hvecg9EAfp0KZO9R12axSiHUcGSnL23eI7IQhvkOcta39R2UB6TDw+z
+ /mHj/AT5P4lodvwhD+NItP1SXaSU2LiWpXQLnCFwnhRmOhaWf+xBC6DcxuLd4Bil5rp+Mhnn9sm
+ HAZHf8352U/d+ri3qaUie/8Ff6frbye0RaHSnqG/r3uxjrPKJdagRC8l55wJGdz3Y6v6w6khG8o
+ CxU/QHkVMDKu25IFBcJuUo2GkNT0nuvXZa6mlCssksN+4Eot6+tw5Q3PQbtVrKgl9cTE3E7z3WZ
+ 4Bvtn3kQLZtMJwikCUCnQ5nz2VLqKxwFWyRBS6yPQ/Dufmoc923h4DU1DesGFKpDo3ZjL5a/yR+
+ TXzlhI1KuEdH3l5mEZPnACusc2f54jqmYgieqPo4ZjiOM0rTXNOBa1XJ4nNHmrt9+jtfG8IpBf0
+ iL0GYeZ4mQoXIrCo9pW7VjCmrVOTKYYUZKNAWcVguWLer//cIQlX8yoxZeM9/wP6KZ3ZMfZ14Bx
+ JVH4JUG2hxJQ9Rw==
 X-Developer-Key: i=dan.scally@ideasonboard.com; a=openpgp;
  fpr=EEC699ACA1B7CB5D31330C0BBD501C2A3546CCF6
 
-Add a MAINTAINERS entry for the mali-c55 driver and its associated
-documentation.
+Add a new meta format for the Mali-C55 ISP's 3A Statistics along
+with a new descriptor entry.
 
 Tested-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
 Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Acked-by: Nayden Kanchev  <nayden.kanchev@arm.com>
 Co-developed-by: Jacopo Mondi <jacopo.mondi@ideasonboard.com>
 Signed-off-by: Jacopo Mondi <jacopo.mondi@ideasonboard.com>
 Signed-off-by: Daniel Scally <dan.scally@ideasonboard.com>
@@ -91,8 +92,7 @@ Changes in v10:
 
 Changes in v9:
 
-	- Added a File line for
-	  Documentation/userspace-api/media/drivers/mali-c55.rst
+	- None
 
 Changes in v8:
 
@@ -104,49 +104,42 @@ Changes in v7:
 
 Changes in v6:
 
-	- None
+	- New patch
 
 Changes in v5:
 
-	- None
-
-Changes in v4:
-	- None
-
-Changes in v3:
-
-	- none
-
-Changes in v2:
-
-	- none
+	- New patch
 ---
- MAINTAINERS | 12 ++++++++++++
- 1 file changed, 12 insertions(+)
+ drivers/media/v4l2-core/v4l2-ioctl.c | 1 +
+ include/uapi/linux/videodev2.h       | 3 +++
+ 2 files changed, 4 insertions(+)
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index aa379a0c5af49c0fce3de8135ae0471ac15540c8..ead49648bdaa4eb6fa8b8d6d82d0a370d8dc97ef 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -2105,6 +2105,18 @@ F:	drivers/gpu/drm/ci/xfails/panfrost*
- F:	drivers/gpu/drm/panfrost/
- F:	include/uapi/drm/panfrost_drm.h
+diff --git a/drivers/media/v4l2-core/v4l2-ioctl.c b/drivers/media/v4l2-core/v4l2-ioctl.c
+index 01cf52c3ea33e1a01e1b306036ba4e57ef5c95d0..bfab29938b8f43f3224e4bc794c21eb5b6e368a2 100644
+--- a/drivers/media/v4l2-core/v4l2-ioctl.c
++++ b/drivers/media/v4l2-core/v4l2-ioctl.c
+@@ -1469,6 +1469,7 @@ static void v4l_fill_fmtdesc(struct v4l2_fmtdesc *fmt)
+ 	case V4L2_META_FMT_RK_ISP1_EXT_PARAMS:	descr = "Rockchip ISP1 Ext 3A Params"; break;
+ 	case V4L2_META_FMT_C3ISP_PARAMS:	descr = "Amlogic C3 ISP Parameters"; break;
+ 	case V4L2_META_FMT_C3ISP_STATS:		descr = "Amlogic C3 ISP Statistics"; break;
++	case V4L2_META_FMT_MALI_C55_STATS:	descr = "ARM Mali-C55 ISP 3A Statistics"; break;
+ 	case V4L2_PIX_FMT_NV12_8L128:	descr = "NV12 (8x128 Linear)"; break;
+ 	case V4L2_PIX_FMT_NV12M_8L128:	descr = "NV12M (8x128 Linear)"; break;
+ 	case V4L2_PIX_FMT_NV12_10BE_8L128:	descr = "10-bit NV12 (8x128 Linear, BE)"; break;
+diff --git a/include/uapi/linux/videodev2.h b/include/uapi/linux/videodev2.h
+index becd08fdbddb857f8f2bf205d2164dc6e20e80b2..cba4b131166773ae0d52c00de6e1c304bd08573a 100644
+--- a/include/uapi/linux/videodev2.h
++++ b/include/uapi/linux/videodev2.h
+@@ -884,6 +884,9 @@ struct v4l2_pix_format {
+ #define V4L2_META_FMT_RPI_FE_CFG	v4l2_fourcc('R', 'P', 'F', 'C') /* PiSP FE configuration */
+ #define V4L2_META_FMT_RPI_FE_STATS	v4l2_fourcc('R', 'P', 'F', 'S') /* PiSP FE stats */
  
-+ARM MALI-C55 ISP DRIVER
-+M:	Daniel Scally <dan.scally@ideasonboard.com>
-+M:	Jacopo Mondi <jacopo.mondi@ideasonboard.com>
-+L:	linux-media@vger.kernel.org
-+S:	Maintained
-+T:	git git://linuxtv.org/media_tree.git
-+F:	Documentation/admin-guide/media/mali-c55-graph.dot
-+F:	Documentation/admin-guide/media/mali-c55.rst
-+F:	Documentation/devicetree/bindings/media/arm,mali-c55.yaml
-+F:	Documentation/userspace-api/media/drivers/mali-c55.rst
-+F:	drivers/media/platform/arm/mali-c55/
++/* Vendor specific - used for Arm Mali-C55 ISP */
++#define V4L2_META_FMT_MALI_C55_STATS	v4l2_fourcc('C', '5', '5', 'S') /* ARM Mali-C55 3A Statistics */
 +
- ARM MALI PANTHOR DRM DRIVER
- M:	Boris Brezillon <boris.brezillon@collabora.com>
- M:	Steven Price <steven.price@arm.com>
+ #ifdef __KERNEL__
+ /*
+  * Line-based metadata formats. Remember to update v4l_fill_fmtdesc() when
 
 -- 
 2.43.0
