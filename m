@@ -1,78 +1,80 @@
 Received: from fhigh-b7-smtp.messagingengine.com (fhigh-b7-smtp.messagingengine.com [202.12.124.158])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 750A328C5AA;
-	Tue, 11 Nov 2025 09:02:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6932C2E975F;
+	Tue, 11 Nov 2025 09:02:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.158
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762851767; cv=none; b=TlUrpfFwQR6usr5w/5IEicwJll/Ww6b9Tw332LeF8Ah2CGxKoxN+QNzHHeLlI0+fXD80M8Z0vXlX/SuaAoHVheG+dfe6pEzxmPMsZ4cr/bOeMTb1u03k/XG6QLEhFFbBtBw9ItqMEzcHEeq3ZUNbtJoN0BKsAZVchVE90PwiT6c=
+	t=1762851773; cv=none; b=hE0qD9mVSrxikU/P7/oLjxKiKSOuh3anvlLhIHjR1Xj8H3XK8k4Y5pSW8iwoXhgssKCJwTY9lNu6j8/Oiqo35edEpw38GFF7rA4OqY5iDTTVq+BS5H5wudcZ4XbJQKeWjNRGIlzUsTzIP9NJyzGZZGtB5ZjssenWEfq9zHjzBho=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762851767; c=relaxed/simple;
-	bh=51gWDnko7reNi6UEAViItMQjBBfLGAkZQIVtR4MXJ8Q=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=nbX0pTMZX0n6uuwdzRslFrtf9jyy64Us/fpmShMA7LXwVNr8LNWa3cyMk+iAt7Fk9qSOTH6G68N7xcmYKZhfVJ/VFJ2VCyn1+lUn5EDBSTqqrCsM2jolj1s2E9OSh1QTHN5sXraU4lBExglulK09Y/CVNDV+OY8Yy9MhNZ0URHY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ragnatech.se; spf=pass smtp.mailfrom=ragnatech.se; dkim=pass (2048-bit key) header.d=ragnatech.se header.i=@ragnatech.se header.b=HD6R7hG0; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=hD0NcfHD; arc=none smtp.client-ip=202.12.124.158
+	s=arc-20240116; t=1762851773; c=relaxed/simple;
+	bh=NnqOwYK4euxZQ45EmSgdPs+zN36Va8jqp7BhKdDkSxA=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=ow0sQxdVd0q42WSigs33OIh0n9dDoI84Ncs5QG3+11gT0HthnYkGGBFpnpvptvRrxqfbnJIFZm8/LfBIvmx7lYT+J3Gl7kNmHVVaxWdgih/vveBykK2TfoDDUDx0Cv2DMPXNZpOH099a5dXsIc0KdSeFgy+Ei5I9TT0YkDvtRH8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ragnatech.se; spf=pass smtp.mailfrom=ragnatech.se; dkim=pass (2048-bit key) header.d=ragnatech.se header.i=@ragnatech.se header.b=FqS6b7W8; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=njUk+sTr; arc=none smtp.client-ip=202.12.124.158
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ragnatech.se
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ragnatech.se
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ragnatech.se header.i=@ragnatech.se header.b="HD6R7hG0";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="hD0NcfHD"
-Received: from phl-compute-03.internal (phl-compute-03.internal [10.202.2.43])
-	by mailfhigh.stl.internal (Postfix) with ESMTP id E785B7A012A;
-	Tue, 11 Nov 2025 04:02:40 -0500 (EST)
+	dkim=pass (2048-bit key) header.d=ragnatech.se header.i=@ragnatech.se header.b="FqS6b7W8";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="njUk+sTr"
+Received: from phl-compute-02.internal (phl-compute-02.internal [10.202.2.42])
+	by mailfhigh.stl.internal (Postfix) with ESMTP id A28BE7A014C;
+	Tue, 11 Nov 2025 04:02:48 -0500 (EST)
 Received: from phl-mailfrontend-01 ([10.202.2.162])
-  by phl-compute-03.internal (MEProxy); Tue, 11 Nov 2025 04:02:41 -0500
+  by phl-compute-02.internal (MEProxy); Tue, 11 Nov 2025 04:02:48 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ragnatech.se; h=
 	cc:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:message-id:mime-version:reply-to
-	:subject:subject:to:to; s=fm2; t=1762851760; x=1762938160; bh=1j
-	XE00gYq2pIAHBN0U+G56EomYV6/NgLjHM/HWIN7EE=; b=HD6R7hG0iRv7OEgrca
-	cj8b8zaqEtIX0PWRfAoKLv53eMhtH5yMhrEmRo3C9Ki0DsR7M7H2blhTsx5i8Fg0
-	0MDfE9u4AeHmr5LDfpsLy79PS2+ER/Vcku6MwSLTo/uADTFa+9hT1XdAPA3FDlvz
-	nRWPqCXJqN5Xdp8/kKzyjvKSwMJyucasJIa73zpQ3Je9UWi5cdkEG/vXaoi08xos
-	YLJTvWt5jHIEInfYabNh+l+cENmwN9WFP2xOPSbHlKa959O0M85cO2oArRSxjcgi
-	gQ6To7B+NqiEc0aEq8qwaxAQC4Bjwv9jC8fPWyoHYfWCEwXfqsDl5A9SC9uPnnWh
-	of6w==
+	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to; s=fm2; t=1762851768;
+	 x=1762938168; bh=noF4ZYqR3MMxXLww1luSVwY6fXHAIcHe/YhuFLntuyU=; b=
+	FqS6b7W8RM0BWdvyrW394FBDdYKbYYcaZW5kLTRcvaxgq58X0uj6mCPJuPkoHQRS
+	1URsueXS2o46JmJZqDBB/YQgTrd5RscsM1sUyaTY2R+cKpQdvsuF8eaVVCAOZaLW
+	4MMn7zfMWFzg1vR/OuEQtpCRKJBhWQ+WZYi/nw3Utu4AKdaJ85MNLX+tN/BJZoNt
+	+oE5/JbesDRGZkv7VdVdQrhh0NkW1ZBY2B3G9gBe31N14tHIj07zjt/ZtGwfUtrS
+	DKiptPGFWlVTpszI1pHIlVI3vINj50ndICvc8+kTaD50qTroBfKoI2jscRKsTUIy
+	gLsalvjf5U4eRC5YZonAOQ==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
 	messagingengine.com; h=cc:cc:content-transfer-encoding
 	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:message-id:mime-version:reply-to:subject
-	:subject:to:to:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-	fm3; t=1762851760; x=1762938160; bh=1jXE00gYq2pIAHBN0U+G56EomYV6
-	/NgLjHM/HWIN7EE=; b=hD0NcfHDYfLxtqqkTt1OAwJ6kgBH0J+J6Rq8OSFLLFgo
-	UFKNv3OX663OyYfmT3NiLrM9H1H2pYpPF3fROoCy6h1cvrk60AriYQlASYqniuj8
-	tpwACCVlaCvmTTw25bqVvVy3uj7uzyjtY/aJSzw+fuErS4sdmvEh+uxgBeMdt2mX
-	KBVudaTL7bG01ida5cWO0fJVHWBgB4+G1U69ADVMLdZj4tJZxbceIAKis7Nvl/zN
-	49wLaYSpsL7tLrOMlG7cz9yTj0WuWZ82t1MdultC++QTMqyH3VO1vsBadmCcc4k9
-	rmryKrk6TN3EayYsxJphbCz63EcZvBFz4+IjE3yuVg==
-X-ME-Sender: <xms:sPsSafq21u1xJ1Dl2nPJKAto4MO45VsT3bh7tTkfrOGT7QacXXn6fA>
-    <xme:sPsSaTvklfkphZIORqC8BN5Ixaa38xGPO7Bb8Uhn384VSqocUIskN687MA1Gl3bDF
-    3pFNHK9W7I17LL3dlUtomrhukguHeRKwapvejfcg0IOiHBvSMQAEQ0>
-X-ME-Received: <xmr:sPsSacGKHfQ4BU0fZckGD38bnnA70O9YoueZqzdUtJIeNOx1-Pc0MqkwFv2e8FWGBkooPY4lAcAE_S8i0O8pYrC9>
+	:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to:x-me-proxy
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=1762851768; x=
+	1762938168; bh=noF4ZYqR3MMxXLww1luSVwY6fXHAIcHe/YhuFLntuyU=; b=n
+	jUk+sTrrmdHx3+/VCZqDXbOeUhlHMDszOjV2vmdcsldJO5TALb03DkYDv95iaw5F
+	q35Rx5Sn0FsFXAFaI7OnV1i9bvuPbIOzLC828KbFwapY3hvvv71ao3jjWngdO2HC
+	3Db79dCRs3aSkDnYbd3+RbC94ZfqGEI0GJGIShKpZgr/QSaDktapXXYPd7fYZng4
+	t4hEgvPLeS31f9H3nOXZPF0fcsVPlVCFmxgiRrTk25TnJZ2SlY9bq6sHyyneqOTP
+	XN0UXF8el5WzdIBusa7DGr+IE0bOSXl/Y+Sa0QajQqJcT2wD8/vu4Y/Srm8YMDND
+	yqA34K+rnOs8RWkQdK+EA==
+X-ME-Sender: <xms:uPsSaZK0hl7zZ3odffNexo4VNfadQPuQCavFJlJCmPGnh1GmqeO2-g>
+    <xme:uPsSafNte6r21V0_taySx-iVp2DwlFGVE-hbukeu84FkSsu_iGInX-JweaVzeBVzl
+    eB6Wj2MO-wQTt7s8dOLMTp_h_q6uNosfi0LGEFruLDdo0wjbG3zJfQ>
+X-ME-Received: <xmr:uPsSaRl-NAWrwrWlOgALT4Vsvwn4dW50Vk4k1feOUoA1Ugjunju4J0L82QWjggrGWhqAKN66j5gBi_fk_3HxqFyR>
 X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtdeggddvtddtjeekucetufdoteggodetrf
     dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfurfetoffkrfgpnffqhgenuceu
     rghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujf
-    gurhephffvvefufffkofggtgfgsehtkeertdertdejnecuhfhrohhmpefpihhklhgrshcu
-    ufpnuggvrhhluhhnugcuoehnihhklhgrshdrshhouggvrhhluhhnugdorhgvnhgvshgrsh
-    esrhgrghhnrghtvggthhdrshgvqeenucggtffrrghtthgvrhhnpeehudelteetkefgffef
-    udefuedvjeeivdekhfevieefgeffheeltddvvefhfeetgeenucevlhhushhtvghrufhiii
-    gvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehnihhklhgrshdrshhouggvrhhluhhn
-    ugesrhgrghhnrghtvggthhdrshgvpdhnsggprhgtphhtthhopeejpdhmohguvgepshhmth
-    hpohhuthdprhgtphhtthhopehmtghhvghhrggssehkvghrnhgvlhdrohhrghdprhgtphht
-    thhopehjrggtohhpohdrmhhonhguihesihguvggrshhonhgsohgrrhgurdgtohhmpdhrtg
-    hpthhtoheplhgruhhrvghnthdrphhinhgthhgrrhhtsehiuggvrghsohhnsghorghrugdr
-    tghomhdprhgtphhtthhopehlihhnuhigqdhmvgguihgrsehvghgvrhdrkhgvrhhnvghlrd
-    horhhgpdhrtghpthhtoheplhhinhhugidqrhgvnhgvshgrshdqshhotgesvhhgvghrrdhk
-    vghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrd
-    hkvghrnhgvlhdrohhrghdprhgtphhtthhopehnihhklhgrshdrshhouggvrhhluhhnugdo
-    rhgvnhgvshgrshesrhgrghhnrghtvggthhdrshgv
-X-ME-Proxy: <xmx:sPsSaUZ1klGCTyY0OsoFXbgoY-dcirxuVRoIi6fK0gffSXvVPFm2rg>
-    <xmx:sPsSacWQzbT3YDl9BuoN7nvEOFWDN7Li4hkpmNyp7fYpxwng0SfkKQ>
-    <xmx:sPsSaam_HGxDXSbKCIZdjyjVZgR3iHgHIDs4ahSnBdY1dJ6rOvUvLw>
-    <xmx:sPsSaXD_eULcAMQnW1yOn-wSXdnA6yrq7DWD8A7Dgi3Op9taI6KWnw>
-    <xmx:sPsSaRFeBebpDvSD891sm0QrdgVfgvZnccojXMmDaduLl1o0CChKUrs7>
+    gurhephffvvefufffkofgjfhggtgfgsehtkeertdertdejnecuhfhrohhmpefpihhklhgr
+    shcuufpnuggvrhhluhhnugcuoehnihhklhgrshdrshhouggvrhhluhhnugdorhgvnhgvsh
+    grshesrhgrghhnrghtvggthhdrshgvqeenucggtffrrghtthgvrhhnpeehiefgueevuedt
+    fefhheegkeevtdelueeukeevfeduhefhhfejfffggeffleefgeenucevlhhushhtvghruf
+    hiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehnihhklhgrshdrshhouggvrhhl
+    uhhnugesrhgrghhnrghtvggthhdrshgvpdhnsggprhgtphhtthhopeejpdhmohguvgepsh
+    hmthhpohhuthdprhgtphhtthhopehmtghhvghhrggssehkvghrnhgvlhdrohhrghdprhgt
+    phhtthhopehjrggtohhpohdrmhhonhguihesihguvggrshhonhgsohgrrhgurdgtohhmpd
+    hrtghpthhtoheplhgruhhrvghnthdrphhinhgthhgrrhhtsehiuggvrghsohhnsghorghr
+    ugdrtghomhdprhgtphhtthhopehlihhnuhigqdhmvgguihgrsehvghgvrhdrkhgvrhhnvg
+    hlrdhorhhgpdhrtghpthhtoheplhhinhhugidqrhgvnhgvshgrshdqshhotgesvhhgvghr
+    rdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvg
+    hrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehnihhklhgrshdrshhouggvrhhluhhn
+    ugdorhgvnhgvshgrshesrhgrghhnrghtvggthhdrshgv
+X-ME-Proxy: <xmx:uPsSab4hGdxGgk-GfRZ3E6ccpxt4jl6a_qX8Q0A5jeHOv80c5uxncw>
+    <xmx:uPsSad3PuL2dQu7bhtmFN_ymTZliXsWq6gHM8UV_qbZmcpScnVPSdQ>
+    <xmx:uPsSaeEsFo2iASS-ZUMxxppRHwOuVysvQigQvFWxHsy0vlnl_QwF3Q>
+    <xmx:uPsSaUjQbaRxNoj1raCXjkHxf8wCsm9jaMFHdKFQ0WDTktxcnE8EIA>
+    <xmx:uPsSaUk0e1kd4oreKHOFbDO5SN6ua2MeOJ_T2d7jFGckGdWdxRgq3Kid>
 Feedback-ID: i80c9496c:Fastmail
 Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
- 11 Nov 2025 04:02:39 -0500 (EST)
+ 11 Nov 2025 04:02:47 -0500 (EST)
 From: =?UTF-8?q?Niklas=20S=C3=B6derlund?= <niklas.soderlund+renesas@ragnatech.se>
 To: Mauro Carvalho Chehab <mchehab@kernel.org>,
 	Jacopo Mondi <jacopo.mondi@ideasonboard.com>,
@@ -81,10 +83,12 @@ To: Mauro Carvalho Chehab <mchehab@kernel.org>,
 	linux-renesas-soc@vger.kernel.org,
 	linux-kernel@vger.kernel.org
 Cc: =?UTF-8?q?Niklas=20S=C3=B6derlund?= <niklas.soderlund+renesas@ragnatech.se>
-Subject: [PATCH v4 00/12] media: Add support for R-Car ISP using Dreamchip RPPX1 ISP
-Date: Tue, 11 Nov 2025 10:02:16 +0100
-Message-ID: <20251111090228.2511734-1-niklas.soderlund+renesas@ragnatech.se>
+Subject: [PATCH v4 03/12] media: rppx1: Add support for AWB measurement parameters and statistics
+Date: Tue, 11 Nov 2025 10:02:19 +0100
+Message-ID: <20251111090228.2511734-4-niklas.soderlund+renesas@ragnatech.se>
 X-Mailer: git-send-email 2.51.1
+In-Reply-To: <20251111090228.2511734-1-niklas.soderlund+renesas@ragnatech.se>
+References: <20251111090228.2511734-1-niklas.soderlund+renesas@ragnatech.se>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
@@ -94,161 +98,195 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-Hello,
+Extend the RPPX1 driver to parse parameter blocks configuring for the
+auto white balance measurement window and parameters. As well as
+producing the measurements as part of a statistics buffer.
 
-This series adds support for two different devices that together enable
-ISP support on Renesas R-Car Gen4 ISP processing. The first driver added
-is for Dreamchip RPPX1 ISP, this device purely deals with image
-processing algorithms, statistics and image conversion; but have no DMA
-engines. The second driver is for the R-Car ISP CORE, this device
-deals with DMA to/from the RPPX1 ISP and provides a V4L2 user-space
-interface for the ISP.
+This is the first ISP algorithm added to the RPPX1 driver and exercises
+both the parameter and statistics API provided by the base driver. It
+shows how the RkISP1 parameter and statistics buffer data can be scaled
+and adopted to fit the RPPX1 hardware.
 
-The R-Car ISP driver uses the RPPX1 framework to drive the ISP and
-together the two devices provide a functional ISP. For detailed
-description of the RPPX1 see patch 1/12, and for details about the R-Car
-ISP see commit message in patch 2/12.
+It also uses the parameter writing interface which allows the framework
+user to specify how (and when) the configuration are applied to the
+RPPX1.
 
-The RPPX1 ISP is similar to functionality and design to the Rk1ISP
-already supported upstream. For this reason this series reuses the pixel
-format for ISP parameters (RK1E) and statistics (RK1S) as the user-space
-ABI to configure the ISP. The primary difference to Rk1iSP is the over
-all pipeline design and the register layout out is different enough to
-make it impractical to bolt it on the existing drivers.
+As the RkISP1 parameters and statics buffers have lower precision then
+the RPPX1 hardware the values needs to be scaled.
 
-However on a functional block level the blocks amiable and their
-register layout mapped to the buffer formats are similar enough to make
-the reuse practical. Another difference is that RPPX1 operates at a
-hight bitdepth then Rk1ISP, but this is easily supported by scaling the
-values to/from the buffers.
+Signed-off-by: Niklas Söderlund <niklas.soderlund+renesas@ragnatech.se>
+---
+ .../platform/dreamchip/rppx1/rpp_params.c     |   3 +
+ .../platform/dreamchip/rppx1/rpp_stats.c      |   4 +
+ .../platform/dreamchip/rppx1/rppx1_wbmeas.c   | 127 ++++++++++++++++++
+ 3 files changed, 134 insertions(+)
 
-All functional blocks present on the RPPX1 are not yet added to the
-driver, but most are. Hence not all configuration blocks of the Rk1E
-extensible format are supported, but most if not all can be added.
-
-A libcamera pipeline reusing the Rk1ISP IPA have been posted and it can
-exercise all function block enabled by this series. It produce good
-images using all algorithms available.
-
-Patch 1/12 adds the foundation for the RPPX1 framework. It deals with
-probing all function blocks making sure every blocks version register is
-supported and setup a "passthru" pipeline that just debayer RAW images.
-
-Patch 2/12 integrates the adds the R-Car ISP CORE DMA parts and
-integrates with the RPPX1 framework added in patch 1/12.
-
-Patches 3/12 to 12/12 extends the RPPX1 framework with the logic to drive
-the different IPS modules.
-
-The sum of the work pass v4l2-compliance. A test suite for the enabled
-function blocks exists and pass. The work have also been tested with
-various libcamera utilities and compliance tests together with a IMX219
-and IMX462 sensor on R-Car V4H.
-
-Biggest change from v3 is small fixes that 0day found when building for 
-non ARM architectures.
-
-Niklas Söderlund (12):
-  media: rppx1: Add framework to support Dreamchip RPPX1 ISP
-  media: rcar-isp: Add support for ISPCORE
-  media: rppx1: Add support for AWB measurement parameters and
-    statistics
-  media: rppx1: Add support for AWB gain settings
-  media: rppx1: Add support for Auto Exposure Measurement
-  media: rppx1: Add support for Histogram Measurement
-  media: rppx1: Add support for Black Level Subtraction
-  media: rppx1: Add support for Color Correction Matrix
-  media: rppx1: Add support for Lens Shade Correction
-  media: rppx1: Add support for Gamma Correction
-  media: rppx1: Add support for Bayer Demosaicing
-  media: rppx1: Add support for Bilateral Denoising
-
- MAINTAINERS                                   |    6 +
- drivers/media/platform/Kconfig                |    1 +
- drivers/media/platform/Makefile               |    1 +
- drivers/media/platform/dreamchip/Kconfig      |    3 +
- drivers/media/platform/dreamchip/Makefile     |    6 +
- .../media/platform/dreamchip/rppx1/Kconfig    |   11 +
- .../media/platform/dreamchip/rppx1/Makefile   |   33 +
- .../platform/dreamchip/rppx1/rpp_module.c     |   40 +
- .../platform/dreamchip/rppx1/rpp_module.h     |  158 +++
- .../platform/dreamchip/rppx1/rpp_params.c     |   82 ++
- .../platform/dreamchip/rppx1/rpp_stats.c      |   30 +
- .../media/platform/dreamchip/rppx1/rppx1.c    |  338 ++++++
- .../media/platform/dreamchip/rppx1/rppx1.h    |   99 ++
- .../platform/dreamchip/rppx1/rppx1_acq.c      |  147 +++
- .../platform/dreamchip/rppx1/rppx1_awbg.c     |   67 ++
- .../media/platform/dreamchip/rppx1/rppx1_bd.c |  210 ++++
- .../platform/dreamchip/rppx1/rppx1_bdrgb.c    |   80 ++
- .../platform/dreamchip/rppx1/rppx1_bls.c      |  175 +++
- .../platform/dreamchip/rppx1/rppx1_cac.c      |   29 +
- .../platform/dreamchip/rppx1/rppx1_ccor.c     |  180 +++
- .../media/platform/dreamchip/rppx1/rppx1_db.c |  156 +++
- .../platform/dreamchip/rppx1/rppx1_dpcc.c     |   76 ++
- .../platform/dreamchip/rppx1/rppx1_exm.c      |  140 +++
- .../media/platform/dreamchip/rppx1/rppx1_ga.c |   83 ++
- .../platform/dreamchip/rppx1/rppx1_hist.c     |  249 ++++
- .../platform/dreamchip/rppx1/rppx1_hist256.c  |   46 +
- .../media/platform/dreamchip/rppx1/rppx1_is.c |   42 +
- .../platform/dreamchip/rppx1/rppx1_lin.c      |   60 +
- .../platform/dreamchip/rppx1/rppx1_lsc.c      |  194 +++
- .../platform/dreamchip/rppx1/rppx1_ltm.c      |   48 +
- .../platform/dreamchip/rppx1/rppx1_ltmmeas.c  |   41 +
- .../platform/dreamchip/rppx1/rppx1_outif.c    |   45 +
- .../platform/dreamchip/rppx1/rppx1_outregs.c  |   75 ++
- .../platform/dreamchip/rppx1/rppx1_rmap.c     |   64 +
- .../platform/dreamchip/rppx1/rppx1_rmapmeas.c |   47 +
- .../platform/dreamchip/rppx1/rppx1_shrp.c     |   64 +
- .../platform/dreamchip/rppx1/rppx1_wbmeas.c   |  188 +++
- .../platform/dreamchip/rppx1/rppx1_xyz2luv.c  |   26 +
- .../media/platform/renesas/rcar-isp/Kconfig   |    1 +
- .../media/platform/renesas/rcar-isp/Makefile  |    2 +-
- .../media/platform/renesas/rcar-isp/core-io.c | 1053 +++++++++++++++++
- .../media/platform/renesas/rcar-isp/core.c    |  826 +++++++++++++
- .../media/platform/renesas/rcar-isp/csisp.c   |   48 +-
- .../platform/renesas/rcar-isp/risp-core.h     |  170 +++
- include/media/rppx1.h                         |   33 +
- 45 files changed, 5465 insertions(+), 8 deletions(-)
- create mode 100644 drivers/media/platform/dreamchip/Kconfig
- create mode 100644 drivers/media/platform/dreamchip/Makefile
- create mode 100644 drivers/media/platform/dreamchip/rppx1/Kconfig
- create mode 100644 drivers/media/platform/dreamchip/rppx1/Makefile
- create mode 100644 drivers/media/platform/dreamchip/rppx1/rpp_module.c
- create mode 100644 drivers/media/platform/dreamchip/rppx1/rpp_module.h
- create mode 100644 drivers/media/platform/dreamchip/rppx1/rpp_params.c
- create mode 100644 drivers/media/platform/dreamchip/rppx1/rpp_stats.c
- create mode 100644 drivers/media/platform/dreamchip/rppx1/rppx1.c
- create mode 100644 drivers/media/platform/dreamchip/rppx1/rppx1.h
- create mode 100644 drivers/media/platform/dreamchip/rppx1/rppx1_acq.c
- create mode 100644 drivers/media/platform/dreamchip/rppx1/rppx1_awbg.c
- create mode 100644 drivers/media/platform/dreamchip/rppx1/rppx1_bd.c
- create mode 100644 drivers/media/platform/dreamchip/rppx1/rppx1_bdrgb.c
- create mode 100644 drivers/media/platform/dreamchip/rppx1/rppx1_bls.c
- create mode 100644 drivers/media/platform/dreamchip/rppx1/rppx1_cac.c
- create mode 100644 drivers/media/platform/dreamchip/rppx1/rppx1_ccor.c
- create mode 100644 drivers/media/platform/dreamchip/rppx1/rppx1_db.c
- create mode 100644 drivers/media/platform/dreamchip/rppx1/rppx1_dpcc.c
- create mode 100644 drivers/media/platform/dreamchip/rppx1/rppx1_exm.c
- create mode 100644 drivers/media/platform/dreamchip/rppx1/rppx1_ga.c
- create mode 100644 drivers/media/platform/dreamchip/rppx1/rppx1_hist.c
- create mode 100644 drivers/media/platform/dreamchip/rppx1/rppx1_hist256.c
- create mode 100644 drivers/media/platform/dreamchip/rppx1/rppx1_is.c
- create mode 100644 drivers/media/platform/dreamchip/rppx1/rppx1_lin.c
- create mode 100644 drivers/media/platform/dreamchip/rppx1/rppx1_lsc.c
- create mode 100644 drivers/media/platform/dreamchip/rppx1/rppx1_ltm.c
- create mode 100644 drivers/media/platform/dreamchip/rppx1/rppx1_ltmmeas.c
- create mode 100644 drivers/media/platform/dreamchip/rppx1/rppx1_outif.c
- create mode 100644 drivers/media/platform/dreamchip/rppx1/rppx1_outregs.c
- create mode 100644 drivers/media/platform/dreamchip/rppx1/rppx1_rmap.c
- create mode 100644 drivers/media/platform/dreamchip/rppx1/rppx1_rmapmeas.c
- create mode 100644 drivers/media/platform/dreamchip/rppx1/rppx1_shrp.c
- create mode 100644 drivers/media/platform/dreamchip/rppx1/rppx1_wbmeas.c
- create mode 100644 drivers/media/platform/dreamchip/rppx1/rppx1_xyz2luv.c
- create mode 100644 drivers/media/platform/renesas/rcar-isp/core-io.c
- create mode 100644 drivers/media/platform/renesas/rcar-isp/core.c
- create mode 100644 drivers/media/platform/renesas/rcar-isp/risp-core.h
- create mode 100644 include/media/rppx1.h
-
+diff --git a/drivers/media/platform/dreamchip/rppx1/rpp_params.c b/drivers/media/platform/dreamchip/rppx1/rpp_params.c
+index a17a6ce82928..6e49f0e90c41 100644
+--- a/drivers/media/platform/dreamchip/rppx1/rpp_params.c
++++ b/drivers/media/platform/dreamchip/rppx1/rpp_params.c
+@@ -26,6 +26,9 @@ int rppx1_params_rkisp1(struct rppx1 *rpp, struct rkisp1_ext_params_cfg *cfg,
+ 		block_offset += block->header.size;
+ 
+ 		switch (block->header.type) {
++		case RKISP1_EXT_PARAMS_BLOCK_TYPE_AWB_MEAS:
++			module = &rpp->post.wbmeas;
++			break;
+ 		default:
+ 			module = NULL;
+ 			break;
+diff --git a/drivers/media/platform/dreamchip/rppx1/rpp_stats.c b/drivers/media/platform/dreamchip/rppx1/rpp_stats.c
+index a5daa28e09cf..a6abb85f0df1 100644
+--- a/drivers/media/platform/dreamchip/rppx1/rpp_stats.c
++++ b/drivers/media/platform/dreamchip/rppx1/rpp_stats.c
+@@ -11,5 +11,9 @@ void rppx1_stats_fill_isr(struct rppx1 *rpp, u32 isc, void *buf)
+ 	struct rkisp1_stat_buffer *stats = buf;
+ 
+ 	stats->meas_type = 0;
++
++	if (isc & RPPX1_IRQ_ID_POST_AWB_MEAS)
++		if (!rpp_module_call(&rpp->post.wbmeas, stats_rkisp1, &stats->params))
++			stats->meas_type |= RKISP1_CIF_ISP_STAT_AWB;
+ }
+ EXPORT_SYMBOL_GPL(rppx1_stats_fill_isr);
+diff --git a/drivers/media/platform/dreamchip/rppx1/rppx1_wbmeas.c b/drivers/media/platform/dreamchip/rppx1/rppx1_wbmeas.c
+index 3d197d914d07..126972cfd57a 100644
+--- a/drivers/media/platform/dreamchip/rppx1/rppx1_wbmeas.c
++++ b/drivers/media/platform/dreamchip/rppx1/rppx1_wbmeas.c
+@@ -56,6 +56,133 @@ static int rppx1_wbmeas_probe(struct rpp_module *mod)
+ 	return 0;
+ }
+ 
++static int
++rppx1_wbmeas_param_rkisp1(struct rpp_module *mod,
++			  const union rppx1_params_rkisp1_config *block,
++			  rppx1_reg_write write, void *priv)
++{
++	const struct rkisp1_ext_params_awb_meas_config *cfg = &block->awbm;
++	/*
++	 * The RkISP params are 8-bit while the RPP can be 8, 20 or 24 bit.
++	 * Figure out how much we need to adjust the input parameters.
++	 */
++	const unsigned int shift = mod->info.wbmeas.colorbits - 8;
++
++	/* If the modules is disabled, simply bypass it. */
++	if (cfg->header.flags & RKISP1_EXT_PARAMS_FL_BLOCK_DISABLE) {
++		write(priv, mod->base + AWB_MEAS_PROP_REG, 0);
++		return 0;
++	}
++
++	/* Program measurement window. */
++	write(priv, mod->base + AWB_MEAS_H_OFFS_REG,
++	      cfg->config.awb_wnd.h_offs);
++	write(priv, mod->base + AWB_MEAS_V_OFFS_REG,
++	      cfg->config.awb_wnd.v_offs);
++	write(priv, mod->base + AWB_MEAS_H_SIZE_REG,
++	      cfg->config.awb_wnd.h_size);
++	write(priv, mod->base + AWB_MEAS_V_SIZE_REG,
++	      cfg->config.awb_wnd.v_size);
++
++	/* Set number of frames to sample. */
++	write(priv, mod->base + AWB_MEAS_FRAMES_REG, cfg->config.frames);
++
++	if (cfg->config.awb_mode == RKISP1_CIF_ISP_AWB_MODE_YCBCR) {
++		write(priv, mod->base + AWB_MEAS_REF_CB_MAX_B_REG,
++		      cfg->config.awb_ref_cb << shift);
++		write(priv, mod->base + AWB_MEAS_REF_CR_MAX_R_REG,
++		      cfg->config.awb_ref_cr << shift);
++		write(priv, mod->base + AWB_MEAS_MAX_Y_REG,
++		      cfg->config.max_y << shift);
++		write(priv, mod->base + AWB_MEAS_MIN_Y_MAX_G_REG,
++		      cfg->config.min_y << shift);
++		write(priv, mod->base + AWB_MEAS_MAX_CSUM_REG,
++		      cfg->config.max_csum << shift);
++		write(priv, mod->base + AWB_MEAS_MIN_C_REG,
++		      cfg->config.min_c << shift);
++
++		/*
++		 * Match RkISP1 conversion, documented as
++		 *  Y = 16 + 0.2500 R + 0.5000 G + 0.1094 B
++		 *  Cb = 128 - 0.1406 R - 0.2969 G + 0.4375 B
++		 *  Cr = 128 + 0.4375 R - 0.3750 G - 0.0625 B
++		 *
++		 * Note map Y to G. Matrix is GBR, not RGB documented for RPPX1.
++		 */
++		write(priv, mod->base + AWB_MEAS_CCOR_COEFF_REG(0), 0x0800);
++		write(priv, mod->base + AWB_MEAS_CCOR_COEFF_REG(1), 0x01c0);
++		write(priv, mod->base + AWB_MEAS_CCOR_COEFF_REG(2), 0x0400);
++		write(priv, mod->base + AWB_MEAS_CCOR_COEFF_REG(3), 0xfb40);
++		write(priv, mod->base + AWB_MEAS_CCOR_COEFF_REG(4), 0x0700);
++		write(priv, mod->base + AWB_MEAS_CCOR_COEFF_REG(5), 0xfdc0);
++		write(priv, mod->base + AWB_MEAS_CCOR_COEFF_REG(6), 0xfa00);
++		write(priv, mod->base + AWB_MEAS_CCOR_COEFF_REG(7), 0xff00);
++		write(priv, mod->base + AWB_MEAS_CCOR_COEFF_REG(8), 0x0700);
++
++		write(priv, mod->base + AWB_MEAS_CCOR_OFFSET_R_REG, 0x00100000);
++		write(priv, mod->base + AWB_MEAS_CCOR_OFFSET_G_REG, 0x00800000);
++		write(priv, mod->base + AWB_MEAS_CCOR_OFFSET_B_REG, 0x00800000);
++
++		write(priv, mod->base + AWB_MEAS_PROP_REG,
++		      cfg->config.enable_ymax_cmp ? AWB_MEAS_PROP_YMAX : 0 |
++		      AWB_MEAS_PROP_AWB_MODE_ON);
++	} else {
++		/* The RkISP params are oddly named, but do map to RGB. */
++		write(priv, mod->base + AWB_MEAS_REF_CB_MAX_B_REG,
++		      cfg->config.awb_ref_cb << shift);
++		write(priv, mod->base + AWB_MEAS_REF_CR_MAX_R_REG,
++		      cfg->config.awb_ref_cr << shift);
++		write(priv, mod->base + AWB_MEAS_MIN_Y_MAX_G_REG,
++		      cfg->config.min_y << shift);
++
++		/* Values from datasheet to map G to Y, B to Cb and R to Cr. */
++		write(priv, mod->base + AWB_MEAS_CCOR_COEFF_REG(0), 0x1000);
++		write(priv, mod->base + AWB_MEAS_CCOR_COEFF_REG(1), 0x0000);
++		write(priv, mod->base + AWB_MEAS_CCOR_COEFF_REG(2), 0x0000);
++		write(priv, mod->base + AWB_MEAS_CCOR_COEFF_REG(3), 0x0000);
++		write(priv, mod->base + AWB_MEAS_CCOR_COEFF_REG(4), 0x1000);
++		write(priv, mod->base + AWB_MEAS_CCOR_COEFF_REG(5), 0x0000);
++		write(priv, mod->base + AWB_MEAS_CCOR_COEFF_REG(6), 0x0000);
++		write(priv, mod->base + AWB_MEAS_CCOR_COEFF_REG(7), 0x0000);
++		write(priv, mod->base + AWB_MEAS_CCOR_COEFF_REG(8), 0x1000);
++
++		/* Values from datasheet. */
++		write(priv, mod->base + AWB_MEAS_CCOR_OFFSET_R_REG, 0x00000000);
++		write(priv, mod->base + AWB_MEAS_CCOR_OFFSET_G_REG, 0x00000000);
++		write(priv, mod->base + AWB_MEAS_CCOR_OFFSET_B_REG, 0x00000000);
++
++		write(priv, mod->base + AWB_MEAS_PROP_REG,
++		      AWB_MEAS_PROP_MEAS_MODE_RGB |
++		      AWB_MEAS_PROP_AWB_MODE_ON);
++	}
++
++	return 0;
++}
++
++static int rppx1_wbmeas_stats_rkisp1(struct rpp_module *mod,
++				     struct rkisp1_cif_isp_stat *stats)
++{
++	struct rkisp1_cif_isp_awb_meas *meas = &stats->awb.awb_mean[0];
++	/*
++	 * The RkISP YCbCr/RGB mean stats are 8-bit while the RPP can be 8, 20
++	 * or 24 bit. Figure out how much we need to adjust the output
++	 * statistics.
++	 */
++	const unsigned int shift = mod->info.wbmeas.colorbits - 8;
++
++	meas->cnt = rpp_module_read(mod, AWB_MEAS_WHITE_CNT_REG);
++	meas->mean_y_or_g =
++		rpp_module_read(mod, AWB_MEAS_MEAN_Y_G_REG) >> shift;
++	meas->mean_cb_or_b =
++		rpp_module_read(mod, AWB_MEAS_MEAN_CB_B_REG) >> shift;
++	meas->mean_cr_or_r =
++		rpp_module_read(mod, AWB_MEAS_MEAN_CR_R_REG) >> shift;
++
++	return 0;
++}
++
+ const struct rpp_module_ops rppx1_wbmeas_ops = {
+ 	.probe = rppx1_wbmeas_probe,
++	.param_rkisp1 = rppx1_wbmeas_param_rkisp1,
++	.stats_rkisp1 = rppx1_wbmeas_stats_rkisp1
+ };
 -- 
 2.51.1
 
