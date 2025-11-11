@@ -1,153 +1,150 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8E51717D6;
-	Tue, 11 Nov 2025 00:11:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3284A173
+	for <linux-media@vger.kernel.org>; Tue, 11 Nov 2025 00:13:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.167.242.64
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762819899; cv=none; b=ASJdmkX7niKebNSKI514wIr6iBDkQ8iDvFTXsvF4o5TIBIRYKfJHPWVEzG/yqkH/zq4iS98kR+DKK0CvcNV3tud4RXXwZi9wUeD5rGFrGrQ4bTDf1m4Tf1vaSlFnEEnPxOsFygXGTX2UKZRve7kWe+notf6fEKoUEA4zcPXtvpk=
+	t=1762819997; cv=none; b=Xpr0wqWfqpz1X+CEghjy9ZlLLL1RFK40k401pO9vK+37bBJYaT18r6Nyf+Jcq5+kwMReDhHVJXub9xaJyX+v4Lchg8CSKqhfK5i2h5L3maRSvTBNdgTTvZDnxmGjlP2Gr63la8KZU16t1z+hfofEaArY2mWEKg434lDLDYgweDU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762819899; c=relaxed/simple;
-	bh=UJb6mXnrZynjLpPgHUrW0+nPkNlnIA1ohpPmrhdt5kI=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition:In-Reply-To; b=TXi8Wi80fCmXlZBuZvb0nZMteS9+QsWmfuYmjnr4Uaw9mTPoHTY+tI6IGmLxwvbN2OMLB0jjrp9TSMqyQcA7NX+uFT87J3VjN/pMiZxUD+MM8rKlpZes74FZsQ8BdKXuc26o6865gLNYIoKantNk/7vFYRcyysFOvW+GZ8zggz0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=RQNhfVxW; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1762819997; c=relaxed/simple;
+	bh=yYLYXQcl2ACik1idtfc4W+M0s3XvpPboOYSlSGbPW1A=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=TbtfWHJaY8MBLDDLi798hk60UbymDLfoh4MWD2Sp69IYzRdGMRAVuR/nTZSFx6A8vmMkpZi35yehaDWeK3WtDYRZY+fbht8FWIinJZeuUYotfQU6RgJvi0VdSMYjddDaMfJ5aly0lrhLV9kutZZtwErp6IFvT7AB5gGajzhSwDM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ideasonboard.com; spf=pass smtp.mailfrom=ideasonboard.com; dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b=NiRJrHff; arc=none smtp.client-ip=213.167.242.64
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ideasonboard.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ideasonboard.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="RQNhfVxW"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DE3B5C113D0;
-	Tue, 11 Nov 2025 00:11:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1762819899;
-	bh=UJb6mXnrZynjLpPgHUrW0+nPkNlnIA1ohpPmrhdt5kI=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:From;
-	b=RQNhfVxWS3kSkUZ3/Yn/h0BmXL51tmLd+96fcvkdQVv1vGLPiWTHRkycOoEeo86n+
-	 AomTbI2OwWKrh916BvopP2FmTFRSTMpM+ffKgocFApMJHdp1EKgU6X5hO4qa0osljw
-	 17UC1rMSI+vUK4hzsEvsvxu9BntOhbPUYi/m0034GgTDaN8qQYvPNZ+teI5+B2ybWa
-	 HwOKozmrkxff/CrJtzPPwDnYAm5CuGW9jLgaRZXE1tGy7RFW1GXxjP1lsvTw64BiD6
-	 3+AvpY4WKIjmTgnbEp1K+YKbfLbuPtZz53Jb09WBB7saLr4xY2Ybz2RWqug2curgjQ
-	 RYENRwzTM6ubQ==
-Date: Mon, 10 Nov 2025 18:11:37 -0600
-From: Bjorn Helgaas <helgaas@kernel.org>
-To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc: Corey Minyard <corey@minyard.net>,
-	Christian =?utf-8?B?S8O2bmln?= <christian.koenig@amd.com>,
-	"Dr. David Alan Gilbert" <linux@treblig.org>,
-	Alex Deucher <alexander.deucher@amd.com>,
-	Thomas Zimmermann <tzimmermann@suse.de>,
-	Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>,
-	Rob Clark <robin.clark@oss.qualcomm.com>,
-	Matthew Brost <matthew.brost@intel.com>,
-	Hans Verkuil <hverkuil@kernel.org>,
-	Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
-	Ulf Hansson <ulf.hansson@linaro.org>,
-	Vitaly Lifshits <vitaly.lifshits@intel.com>,
-	Manivannan Sadhasivam <mani@kernel.org>,
-	Niklas Cassel <cassel@kernel.org>, Calvin Owens <calvin@wbinvd.org>,
-	Sagi Maimon <maimon.sagi@gmail.com>,
-	"Martin K. Petersen" <martin.petersen@oracle.com>,
-	Karan Tilak Kumar <kartilak@cisco.com>,
-	Casey Schaufler <casey@schaufler-ca.com>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Petr Mladek <pmladek@suse.com>,
-	Max Kellermann <max.kellermann@ionos.com>,
-	Takashi Iwai <tiwai@suse.de>, linux-doc@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	openipmi-developer@lists.sourceforge.net,
-	linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
-	linaro-mm-sig@lists.linaro.org, amd-gfx@lists.freedesktop.org,
-	linux-arm-msm@vger.kernel.org, freedreno@lists.freedesktop.org,
-	intel-xe@lists.freedesktop.org, linux-mmc@vger.kernel.org,
-	netdev@vger.kernel.org, intel-wired-lan@lists.osuosl.org,
-	linux-pci@vger.kernel.org, linux-s390@vger.kernel.org,
-	linux-scsi@vger.kernel.org, linux-staging@lists.linux.dev,
-	ceph-devel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
-	linux-sound@vger.kernel.org,
-	Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-	Sergey Senozhatsky <senozhatsky@chromium.org>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Sumit Semwal <sumit.semwal@linaro.org>,
-	Gustavo Padovan <gustavo@padovan.org>,
-	David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
-	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-	Maxime Ripard <mripard@kernel.org>,
-	Dmitry Baryshkov <lumag@kernel.org>,
-	Abhinav Kumar <abhinav.kumar@linux.dev>,
-	Jessica Zhang <jesszhan0024@gmail.com>, Sean Paul <sean@poorly.run>,
-	Marijn Suijten <marijn.suijten@somainline.org>,
-	Konrad Dybcio <konradybcio@kernel.org>,
-	Lucas De Marchi <lucas.demarchi@intel.com>,
-	Thomas =?utf-8?Q?Hellstr=C3=B6m?= <thomas.hellstrom@linux.intel.com>,
-	Rodrigo Vivi <rodrigo.vivi@intel.com>,
-	Mauro Carvalho Chehab <mchehab@kernel.org>,
-	Vladimir Oltean <olteanv@gmail.com>, Andrew Lunn <andrew@lunn.ch>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Tony Nguyen <anthony.l.nguyen@intel.com>,
-	Przemek Kitszel <przemyslaw.kitszel@intel.com>,
-	Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kwilczynski@kernel.org>,
-	Kishon Vijay Abraham I <kishon@kernel.org>,
-	Bjorn Helgaas <bhelgaas@google.com>,
-	Rodolfo Giometti <giometti@enneenne.com>,
-	Jonathan Lemon <jonathan.lemon@gmail.com>,
-	Vadim Fedorenko <vadim.fedorenko@linux.dev>,
-	Richard Cochran <richardcochran@gmail.com>,
-	Stefan Haberland <sth@linux.ibm.com>,
-	Jan Hoeppner <hoeppner@linux.ibm.com>,
-	Heiko Carstens <hca@linux.ibm.com>,
-	Vasily Gorbik <gor@linux.ibm.com>,
-	Alexander Gordeev <agordeev@linux.ibm.com>,
-	Christian Borntraeger <borntraeger@linux.ibm.com>,
-	Sven Schnelle <svens@linux.ibm.com>,
-	Satish Kharat <satishkh@cisco.com>,
-	Sesidhar Baddela <sebaddel@cisco.com>,
-	"James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Xiubo Li <xiubli@redhat.com>, Ilya Dryomov <idryomov@gmail.com>,
-	Masami Hiramatsu <mhiramat@kernel.org>,
-	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>
-Subject: Re: [PATCH v1 17/23] PCI: epf-test: Switch to use %ptSp
-Message-ID: <20251111001137.GA2145521@bhelgaas>
+	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="NiRJrHff"
+Received: from pendragon.ideasonboard.com (82-203-161-95.bb.dnainternet.fi [82.203.161.95])
+	by perceval.ideasonboard.com (Postfix) with UTF8SMTPSA id EA296229;
+	Tue, 11 Nov 2025 01:11:14 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+	s=mail; t=1762819875;
+	bh=yYLYXQcl2ACik1idtfc4W+M0s3XvpPboOYSlSGbPW1A=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=NiRJrHff3IkR0WUA6mM45eVN6v+piN+LGCpeBmOF35HKIf3GUW9EzYroBH0v64h7/
+	 fR6M7CzN8SyuXHWUMVuQHwnw2hwgc3Cv6VF6Fj97IYigmfsytYPQFe7womIqlbFeAH
+	 nxqyFDkJPE/JoE0XJe5SmnIfI9OCYqBtJgRpncv4=
+Date: Tue, 11 Nov 2025 02:13:08 +0200
+From: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To: Hans Verkuil <hverkuil+cisco@kernel.org>
+Cc: linux-media@vger.kernel.org,
+	Nicolas Dufresne <nicolas.dufresne@collabora.com>
+Subject: Re: [v4l-utils] [PATCH] v4l2-ctl: Take stream skip into account to
+ setup out buffers
+Message-ID: <20251111001308.GB30837@pendragon.ideasonboard.com>
+References: <20251022155031.2978-1-laurent.pinchart@ideasonboard.com>
+ <09cefa2c-18ea-4051-8337-65bfd8472e43@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20251110184727.666591-18-andriy.shevchenko@linux.intel.com>
+In-Reply-To: <09cefa2c-18ea-4051-8337-65bfd8472e43@kernel.org>
 
-On Mon, Nov 10, 2025 at 07:40:36PM +0100, Andy Shevchenko wrote:
-> Use %ptSp instead of open coded variants to print content of
-> struct timespec64 in human readable format.
-> 
-> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Hi Hans,
 
-Acked-by: Bjorn Helgaas <bhelgaas@google.com>
+On Mon, Nov 10, 2025 at 12:46:38PM +0100, Hans Verkuil wrote:
+> On 22/10/2025 17:50, Laurent Pinchart wrote:
+> > When setting up out buffers in do_setup_out_buffers(), the function
+> > stops after stream_count buffers and returns QUEUE_STOPPED. This doesn't
+> > take the stream_skip counter into account, resulting in the queue being
+> > stopped too early. Fix it.
+> > 
+> > Signed-off-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+> > ---
+> > I've tested this patch with a JPEG encoder, invoking v4l2-ctl with
+> > 
+> > v4l2-ctl -d $dev \
+> >         --set-fmt-video-out width=${width},height=${height},pixelformat='Y12 ' \
+> >         --set-fmt-video width=${width},height=${height},pixelformat=JPEG \
+> >         --stream-out-mmap \
+> >         --stream-mmap=3 \
+> >         --stream-from ${infile} \
+> >         --stream-to ${outfile} \
+> >         --stream-skip=50 \
+> >         --stream-count=1 \
+> >         --stream-loop \
+> >         --verbose
+> > 
+> > Without the patch streaming stops after 1 frame, with it it stops after
+> > 51 frames.
+> 
+> This review is really for both this patch and the "v4l2-ctl: Don't ignore skip when writing
+> capture buffers" patch since they are related.
+> 
+> --stream-skip was originally implemented for capture devices, and there it is easy to
+> understand what it does.
+> 
+> It was later used as well for output devices and m2m devices, but never documented what
+> it should do (as you noticed).
 
-> ---
->  drivers/pci/endpoint/functions/pci-epf-test.c | 5 ++---
->  1 file changed, 2 insertions(+), 3 deletions(-)
+Indeed :-)
+
+> I think this needs to be properly defined.
+
+I certainly agreee.
+
+> For output devices I would expect that --stream-skip skips the first N buffers that are
+> received (typically from an input file), so they are never queued to the hardware. It's
+> really the only thing that makes sense.
 > 
-> diff --git a/drivers/pci/endpoint/functions/pci-epf-test.c b/drivers/pci/endpoint/functions/pci-epf-test.c
-> index b05e8db575c3..debd235253c5 100644
-> --- a/drivers/pci/endpoint/functions/pci-epf-test.c
-> +++ b/drivers/pci/endpoint/functions/pci-epf-test.c
-> @@ -331,9 +331,8 @@ static void pci_epf_test_print_rate(struct pci_epf_test *epf_test,
->  		rate = div64_u64(size * NSEC_PER_SEC, ns * 1000);
->  
->  	dev_info(&epf_test->epf->dev,
-> -		 "%s => Size: %llu B, DMA: %s, Time: %llu.%09u s, Rate: %llu KB/s\n",
-> -		 op, size, dma ? "YES" : "NO",
-> -		 (u64)ts.tv_sec, (u32)ts.tv_nsec, rate);
-> +		 "%s => Size: %llu B, DMA: %s, Time: %ptSp s, Rate: %llu KB/s\n",
-> +		 op, size, dma ? "YES" : "NO", &ts, rate);
->  }
->  
->  static void pci_epf_test_copy(struct pci_epf_test *epf_test,
-> -- 
-> 2.50.1
+> do_setup_out_buffers() clearly doesn't do that, it queues them anyway. I doubt if this
+> was ever tested.
 > 
+> I think this proposed definition also works fine for m2m devices.
+> 
+> The ignore_count_skip boolean is a bad name, perhaps that should be inverted and
+> call it use_stream_skip instead.
+> 
+> If you explicitly want to queue the buffers to the m2m device, but skip the first
+> N captured (i.e. processed) buffers, then that would require a new option, I think.
+> But I'm not sure if that's very useful, unless the first N buffers processed by an
+> m2m device are garbage for some reason, but that's really bad hardware.
+> 
+> If this is actually what you want, then I need to have a bit more info first and
+> a discussion.
+
+That's what I'm trying to achieve. I needed the ability to select the
+number of frames on the capture side to write to files, as well as the
+position of those frames within the capture stream. This is how
+skip+count operate on a capture device, so I thought it would make sense
+to do the same for M2M devices.
+
+> > ---
+> >  utils/v4l2-ctl/v4l2-ctl-streaming.cpp | 11 ++++++++---
+> >  1 file changed, 8 insertions(+), 3 deletions(-)
+> > 
+> > diff --git a/utils/v4l2-ctl/v4l2-ctl-streaming.cpp b/utils/v4l2-ctl/v4l2-ctl-streaming.cpp
+> > index ec85e41e9e12..5192f1e168b9 100644
+> > --- a/utils/v4l2-ctl/v4l2-ctl-streaming.cpp
+> > +++ b/utils/v4l2-ctl/v4l2-ctl-streaming.cpp
+> > @@ -1374,9 +1374,14 @@ static int do_setup_out_buffers(cv4l_fd &fd, cv4l_queue &q, FILE *fin, bool qbuf
+> >  			if (!verbose)
+> >  				stderr_info(">");
+> >  			fflush(stderr);
+> > -			if (!ignore_count_skip && stream_count)
+> > -				if (!--stream_count)
+> > -					return QUEUE_STOPPED;
+> > +			if (!ignore_count_skip) {
+> > +				if (stream_skip) {
+> > +					--stream_skip;
+> > +				} else if (stream_count) {
+> > +					if (!--stream_count)
+> > +						return QUEUE_STOPPED;
+> > +				}
+> > +			}
+> >  		}
+> >  		if (fmt.g_pixelformat() == V4L2_PIX_FMT_FWHT_STATELESS) {
+> >  			set_fwht_req_by_idx(i, &last_fwht_hdr,
+> > 
+> > base-commit: 910ce5d9ec8377811faaad7da456d25370c9188b
+
+-- 
+Regards,
+
+Laurent Pinchart
