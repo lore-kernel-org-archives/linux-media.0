@@ -1,237 +1,94 @@
-Received: from mail-ej1-f45.google.com (mail-ej1-f45.google.com [209.85.218.45])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4591634B1A3
-	for <linux-media@vger.kernel.org>; Tue, 11 Nov 2025 15:03:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6CE23311583;
+	Tue, 11 Nov 2025 15:33:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762873442; cv=none; b=PliniRtvSk1BcNeR+J2hvochIzz90BcFLP+KCmf6aZeaDa8vtP9uGgLMN/P4ddPA7T5EzeNjVPITlrjl0hmXRvM+Dj6EEoXEgIvqxvDJEVeUHfrbgswbStodHiLoGEZ6vSXR29yn/63w9xJmo0QbElMfWjyPtcovCY/2gLdAiRI=
+	t=1762875187; cv=none; b=Nh/O7Wt01mwGRatW7kr8OUFHf/svqhgy+E56Hy9fRNRFMD9C2sDHlLyYvb4JgvGUIAAfxaZrKwf5RTS7dco0rblpvpJR71WbSSdh1KMU7suUGu7mvGrNG7+i2KAdsiFHG/J4rquWB1RYxGxs/kQiK4zBgBJzn+QBfr8lSMZ9Q4I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762873442; c=relaxed/simple;
-	bh=ftiPYvx9c/Uo7f5Ce7Yzxcg1QUwJlxqYP2TiKTcKQ1Y=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=A/zriGEJ01B7NGwACfDo/Ty3Jm1uPLcEB20zWl68TlISi+ptAzW4Ot9Bm1qpTU5ldz/AWKQ4ZUROv7eKJxtIFmyqvZ61XuPw9WGT8jYaBN6zL54RIYrLZB8Vl633FtoriEEE2FKCfbVcn8N8pqvDA2n++Fc8KkYBC1SdbiI+oXI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=Wr3VZuHa; arc=none smtp.client-ip=209.85.218.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+	s=arc-20240116; t=1762875187; c=relaxed/simple;
+	bh=slRYGEdUz+cCTYCi+O6BuYqZxoSPQzRf1x/9/Q1H89U=;
+	h=Date:Content-Type:MIME-Version:From:Cc:To:In-Reply-To:References:
+	 Message-Id:Subject; b=p2kMImLdq3BgHbL3BUn2NlSlAqt5SoPcP5d8jp/vh5dr8ceRFapPOxMlzZT7YQLkhcm9ekrx6WUQ4zy0hiNdXbQmVkKJgjgCzx/CyPEBzoVrgh3E3PsqnHkjdcd9Byjaxv386cvcaJHvVzL8192BqJU2pn+fbaSbseYP58w7GIM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=LW9Pk7X/; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="Wr3VZuHa"
-Received: by mail-ej1-f45.google.com with SMTP id a640c23a62f3a-b7291af7190so611433966b.3
-        for <linux-media@vger.kernel.org>; Tue, 11 Nov 2025 07:03:59 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1762873437; x=1763478237; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=wi+5dbYm5JIgaP/t7Nx547fFCD450JcmYNBqfgVm42E=;
-        b=Wr3VZuHacnX19+kU8w1BvT68Xtso8bA8jlTRBVCYJ1QSuvBs90fW594AJGYD/sbcE7
-         zxfKSkMaz4WysTITq4/7YriC+cQSmhKybush57z8b7uRuaTcbHBANmIDfT/kvFehUGbD
-         sa2WDGvCupBaFLVNib0xm7M88OsMK+KVbkGvRv4wvS4KHLvTYQG7EePJTLqW1aHI85zL
-         INKcGCRRzF6J7N7BmrhtW9M7UhXv6JUTmkrQzq4x8G7ZqU0H7eSS+ojS9/DTLkAN67Bj
-         1wDhCFVl0BccErhxh7JzXNm1WChW2BMRTVSKywdBU4Q8uuZOXEejQRVPSvQONAdw7x2q
-         TGYA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1762873438; x=1763478238;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=wi+5dbYm5JIgaP/t7Nx547fFCD450JcmYNBqfgVm42E=;
-        b=uKJQEFlUS7/QfKYpIXV4ZcndzBhsw4I9CYusAlHQ8fhXU7IM17pu4tnvYaZ5aqe28n
-         VPGXqvw0+G9+i68xQCiWC1ERp2/yBrqgzXi4re9VFbsrgVo8G1S7JIgM2vhSe7Z5Hdsk
-         Ir6C4/nNwCYigIYMECaEeCG+vPYdvuaHletHROPQAelhHrWOpfZjzBkhdMkqAOHGIRpz
-         v8zMb6bXjYlzn/cQlhYoYDG9mkUmMP6LjyjjKbAVy1ziD6iaV7vE9KDwJWLJ24W5sp1r
-         Jp711qHSsJJ/NFbyhUIMf+/6MdJTQTxuJjQAhGnsx9SDNWx0wl5cFVmTSD4Kf2BkJTBp
-         VsqA==
-X-Forwarded-Encrypted: i=1; AJvYcCUGytkLvTu3QW9/Ms4ULYSK2oLsLSf2wMyelp/qNAsY933OuJrFM0fHBkei5rfYlKn1LLbz/BhZp9yJMw==@vger.kernel.org
-X-Gm-Message-State: AOJu0YyLwybyjb7Ix5w59WIhW3zmp/BtIsaKV4UsDdHx2bC+Ir9PhwJm
-	0JI6vVN1EAjz3FSPTHezxULg3NyqsHt+YS4FT7WGmQhyaCOeZOjiE3Jg4pygtQgu1u4=
-X-Gm-Gg: ASbGnctBRX+hnIPaWO0U4OjBNJvIwV7PKEJNNO+uU/8K+9/+AyeEzRzbD4ZyxUW/FA3
-	PuVGDHwdPNpa3G/I2GS9lyfqgzz83UR+3uhM1Y3Sl3bia9p17f5sVPnbkMEQnxExe/0PmdD92DO
-	0tmcfEd4mqjrkI7vUoZDaZnoaJvZeyY1q4+atvB9BQn/3NjJSBMu1xxM+VcnRZ0ijORQD0QckSY
-	S+ADR/KBnsgE8PtegF74NbdyBwQC3ooGVQ+eyMTBhQTsQXBGHncNH1LEFFrzsCyit92A3KEzJj5
-	mmVWoa9JUGvdubD495K1CY/gOyFUX952c4aNQKIk6p2JIeMlBr1I8sLeulFPR4dNs/Fsfz5j53z
-	8Ii7J2r5k8svMjlIhqaIPtsdsj4xSPmMf3pMaS/xeP9vJz0dJuo1L12aJTBc/coLjOSLoVaZriw
-	xLzWwdhvYt08l45rBs5Q==
-X-Google-Smtp-Source: AGHT+IGWUxoIalLG5xLZllX+zCkekRXIo7e3xykwl2APS2wZQPGHNLqastwX+dw6XlJnfwm9Fe+bGg==
-X-Received: by 2002:a17:906:f590:b0:b71:cec2:d54 with SMTP id a640c23a62f3a-b72e04e4ebemr1306841566b.57.1762873437355;
-        Tue, 11 Nov 2025 07:03:57 -0800 (PST)
-Received: from pathway (nat2.prg.suse.com. [195.250.132.146])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-b72bdbc9656sm1374243166b.7.2025.11.11.07.03.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 11 Nov 2025 07:03:56 -0800 (PST)
-Date: Tue, 11 Nov 2025 16:03:53 +0100
-From: Petr Mladek <pmladek@suse.com>
-To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc: Corey Minyard <corey@minyard.net>,
-	Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
-	"Dr. David Alan Gilbert" <linux@treblig.org>,
-	Alex Deucher <alexander.deucher@amd.com>,
-	Thomas Zimmermann <tzimmermann@suse.de>,
-	Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>,
-	Rob Clark <robin.clark@oss.qualcomm.com>,
-	Matthew Brost <matthew.brost@intel.com>,
-	Ulf Hansson <ulf.hansson@linaro.org>,
-	Vitaly Lifshits <vitaly.lifshits@intel.com>,
-	Manivannan Sadhasivam <mani@kernel.org>,
-	Niklas Cassel <cassel@kernel.org>, Calvin Owens <calvin@wbinvd.org>,
-	Vadim Fedorenko <vadim.fedorenko@linux.dev>,
-	Sagi Maimon <maimon.sagi@gmail.com>,
-	"Martin K. Petersen" <martin.petersen@oracle.com>,
-	Karan Tilak Kumar <kartilak@cisco.com>,
-	Hans Verkuil <hverkuil+cisco@kernel.org>,
-	Casey Schaufler <casey@schaufler-ca.com>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Viacheslav Dubeyko <Slava.Dubeyko@ibm.com>,
-	Max Kellermann <max.kellermann@ionos.com>,
-	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-	openipmi-developer@lists.sourceforge.net,
-	linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
-	linaro-mm-sig@lists.linaro.org, amd-gfx@lists.freedesktop.org,
-	linux-arm-msm@vger.kernel.org, freedreno@lists.freedesktop.org,
-	intel-xe@lists.freedesktop.org, linux-mmc@vger.kernel.org,
-	netdev@vger.kernel.org, intel-wired-lan@lists.osuosl.org,
-	linux-pci@vger.kernel.org, linux-s390@vger.kernel.org,
-	linux-scsi@vger.kernel.org, linux-staging@lists.linux.dev,
-	ceph-devel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
-	Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-	Sergey Senozhatsky <senozhatsky@chromium.org>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Sumit Semwal <sumit.semwal@linaro.org>,
-	Gustavo Padovan <gustavo@padovan.org>,
-	David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
-	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-	Maxime Ripard <mripard@kernel.org>,
-	Dmitry Baryshkov <lumag@kernel.org>,
-	Abhinav Kumar <abhinav.kumar@linux.dev>,
-	Jessica Zhang <jesszhan0024@gmail.com>, Sean Paul <sean@poorly.run>,
-	Marijn Suijten <marijn.suijten@somainline.org>,
-	Konrad Dybcio <konradybcio@kernel.org>,
-	Lucas De Marchi <lucas.demarchi@intel.com>,
-	Thomas =?iso-8859-1?Q?Hellstr=F6m?= <thomas.hellstrom@linux.intel.com>,
-	Rodrigo Vivi <rodrigo.vivi@intel.com>,
-	Vladimir Oltean <olteanv@gmail.com>, Andrew Lunn <andrew@lunn.ch>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Tony Nguyen <anthony.l.nguyen@intel.com>,
-	Przemek Kitszel <przemyslaw.kitszel@intel.com>,
-	Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kwilczynski@kernel.org>,
-	Kishon Vijay Abraham I <kishon@kernel.org>,
-	Bjorn Helgaas <bhelgaas@google.com>,
-	Rodolfo Giometti <giometti@enneenne.com>,
-	Richard Cochran <richardcochran@gmail.com>,
-	Jonathan Lemon <jonathan.lemon@gmail.com>,
-	Stefan Haberland <sth@linux.ibm.com>,
-	Jan Hoeppner <hoeppner@linux.ibm.com>,
-	Heiko Carstens <hca@linux.ibm.com>,
-	Vasily Gorbik <gor@linux.ibm.com>,
-	Alexander Gordeev <agordeev@linux.ibm.com>,
-	Christian Borntraeger <borntraeger@linux.ibm.com>,
-	Sven Schnelle <svens@linux.ibm.com>,
-	Satish Kharat <satishkh@cisco.com>,
-	Sesidhar Baddela <sebaddel@cisco.com>,
-	"James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
-	Mauro Carvalho Chehab <mchehab@kernel.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Xiubo Li <xiubli@redhat.com>, Ilya Dryomov <idryomov@gmail.com>,
-	Masami Hiramatsu <mhiramat@kernel.org>,
-	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-	Andrew Morton <akpm@linux-foundation.org>
-Subject: Re: [PATCH v2 01/21] lib/vsprintf: Add specifier for printing struct
- timespec64
-Message-ID: <aRNQWc8O2y94zoj8@pathway>
-References: <20251111122735.880607-1-andriy.shevchenko@linux.intel.com>
- <20251111122735.880607-2-andriy.shevchenko@linux.intel.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="LW9Pk7X/"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2AEFFC4CEF5;
+	Tue, 11 Nov 2025 15:33:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1762875187;
+	bh=slRYGEdUz+cCTYCi+O6BuYqZxoSPQzRf1x/9/Q1H89U=;
+	h=Date:From:Cc:To:In-Reply-To:References:Subject:From;
+	b=LW9Pk7X/VR8fktzjZL/brfLt7gG70sR7Kcw6PvQNtc2TVX8l+2MlPvZhnj58wZpBJ
+	 CVKrqO6lIR+9e/UVcKmz0OrQYq26+p+ILYI7xYsHGsUBzkqJ6poEvp7+hSRrD1SU6h
+	 5m+SWnJ9sIgnBcjV9h+3I6Kq1hqF+nl82OeJcNHGWz4YL1ej6R7H3+YShAkzThW8Jb
+	 Zp1KTilNbfIIaQmINSmwhpwlSW1hDmKbZVA60CpcBcGNC7DtinfAq8vKyUBA6BsgGN
+	 DoE9RrqIyjyyhfqfN/6gQDHoVk8TgY2gPBmo1CuImBxeQvnABC2qSfZswIPKuAXp43
+	 pbB/Dh6hf6M+Q==
+Date: Tue, 11 Nov 2025 09:33:05 -0600
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20251111122735.880607-2-andriy.shevchenko@linux.intel.com>
+From: "Rob Herring (Arm)" <robh@kernel.org>
+Cc: Conor Dooley <conor+dt@kernel.org>, 
+ Lars-Peter Clausen <lars@metafoo.de>, devicetree@vger.kernel.org, 
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+ Mauro Carvalho Chehab <mchehab@kernel.org>, 
+ =?utf-8?q?Niklas_S=C3=B6derlund?= <niklas.soderlund+renesas@ragnatech.se>, 
+ linux-media@vger.kernel.org, kernel@pengutronix.de
+To: Michael Tretter <m.tretter@pengutronix.de>
+In-Reply-To: <20251111-b4-adv7180-vpp-sub-device-v1-1-9877fe9f709b@pengutronix.de>
+References: <20251111-b4-adv7180-vpp-sub-device-v1-0-9877fe9f709b@pengutronix.de>
+ <20251111-b4-adv7180-vpp-sub-device-v1-1-9877fe9f709b@pengutronix.de>
+Message-Id: <176287518543.2990003.9870195789780384180.robh@kernel.org>
+Subject: Re: [PATCH 1/4] media: dt-bindings: adi,adv7180: add VPP and CSI
+ register maps
 
-On Tue 2025-11-11 13:20:01, Andy Shevchenko wrote:
-> A handful drivers want to print a content of the struct timespec64
-> in a format of %lld:%09ld. In order to make their lives easier, add
-> the respecting specifier directly to the printf() implementation.
+
+On Tue, 11 Nov 2025 15:36:14 +0100, Michael Tretter wrote:
+> The ADV7280 and ADV7280-M have up to three register maps for the VPP and
+> CSI. The address of these register maps may be programmed via registers
+> in the main register map.
 > 
-> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> Allow to specify the addresses of the VPP and CSI in the device tree to
+> solve address conflicts on a board level.
+> 
+> Signed-off-by: Michael Tretter <m.tretter@pengutronix.de>
 > ---
->  Documentation/core-api/printk-formats.rst | 11 ++++++++--
->  lib/tests/printf_kunit.c                  |  4 ++++
->  lib/vsprintf.c                            | 25 +++++++++++++++++++++++
->  3 files changed, 38 insertions(+), 2 deletions(-)
+>  .../devicetree/bindings/media/i2c/adi,adv7180.yaml | 44 ++++++++++++++++++++++
+>  1 file changed, 44 insertions(+)
 > 
-> diff --git a/Documentation/core-api/printk-formats.rst b/Documentation/core-api/printk-formats.rst
-> index 7f2f11b48286..c0b1b6089307 100644
-> --- a/Documentation/core-api/printk-formats.rst
-> +++ b/Documentation/core-api/printk-formats.rst
-> @@ -547,11 +547,13 @@ Time and date
->  	%pt[RT]s		YYYY-mm-dd HH:MM:SS
->  	%pt[RT]d		YYYY-mm-dd
->  	%pt[RT]t		HH:MM:SS
-> -	%pt[RT][dt][r][s]
-> +	%ptSp			<seconds>.<nanoseconds>
 
-I know that that there was no good choice. But I am curious.
-Does the 'p' stands for some particular word, for example, "plain" ?
+My bot found errors running 'make dt_binding_check' on your patch:
 
-I do not want to start bike shedding but I think about
-using 'n' as "number".
+yamllint warnings/errors:
 
-> +	%pt[RST][dt][r][s]
->  
->  For printing date and time as represented by::
->  
-> -	R  struct rtc_time structure
-> +	R  content of struct rtc_time
-> +	S  content of struct timespec64
->  	T  time64_t type
->  
->  in human readable format.
-> @@ -563,6 +565,11 @@ The %pt[RT]s (space) will override ISO 8601 separator by using ' ' (space)
->  instead of 'T' (Capital T) between date and time. It won't have any effect
->  when date or time is omitted.
->  
-> +The %ptSp is equivalent to %lld.%09ld for the content of the struct timespec64.
-> +When the other specifiers are given, it becomes the respective equivalent of
-> +%ptT[dt][r][s].%09ld. In other words, the seconds are being printed in
-> +the human readable format followed by a dot and nanoseconds.
-> +
->  Passed by reference.
->  
->  struct clk
-> diff --git a/lib/vsprintf.c b/lib/vsprintf.c
-> index 3f99834fd788..fdd06e8957a3 100644
-> --- a/lib/vsprintf.c
-> +++ b/lib/vsprintf.c
-> @@ -2464,6 +2488,7 @@ early_param("no_hash_pointers", no_hash_pointers_enable);
->   * - 'g' For block_device name (gendisk + partition number)
->   * - 't[RT][dt][r][s]' For time and date as represented by:
+dtschema/dtc warnings/errors:
+/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/media/i2c/adi,adv7180.example.dtb: composite-in@20 (adi,adv7280-m): 'reg-names' does not match any of the regexes: '^pinctrl-[0-9]+$'
+	from schema $id: http://devicetree.org/schemas/media/i2c/adi,adv7180.yaml
+/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/media/i2c/adi,adv7180.example.dtb: composite-in@20 (adi,adv7280-m): reg: [[32], [66], [68]] is too long
+	from schema $id: http://devicetree.org/schemas/media/i2c/adi,adv7180.yaml
 
-We should add 'S' here as well:
+doc reference errors (make refcheckdocs):
 
-   * - 't[RST][dt][r][s]' For time and date as represented by:
+See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20251111-b4-adv7180-vpp-sub-device-v1-1-9877fe9f709b@pengutronix.de
 
-That said, I am not sure about the optional '[p]'. We could
-either do:
+The base for the series is generally the latest rc1. A different dependency
+should be noted in *this* patch.
 
-   * - 't[RST][p][dt][r][s]' For time and date as represented by:
+If you already ran 'make dt_binding_check' and didn't see the above
+error(s), then make sure 'yamllint' is installed and dt-schema is up to
+date:
 
-or
+pip3 install dtschema --upgrade
 
-   * - 'tSp'	For time represented by struct timespec64 printed
-		as seconds.nanoseconds
-   * - 't[RST][dt][r][s]' For time and date as represented by:
+Please check and re-submit after running the above command yourself. Note
+that DT_SCHEMA_FILES can be set to your schema file to speed up checking
+your schema. However, it must be unset to test all examples with your schema.
 
->   *      R    struct rtc_time
-> + *      S    struct timespec64
->   *      T    time64_t
->   * - 'C' For a clock, it prints the name (Common Clock Framework) or address
->   *       (legacy clock framework) of the clock
-
-Otherwise, it looks good.
-
-Best Regards,
-Petr
