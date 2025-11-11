@@ -1,169 +1,240 @@
-Received: from out-174.mta0.migadu.com (out-174.mta0.migadu.com [91.218.175.174])
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 019E1301025;
-	Mon, 10 Nov 2025 23:37:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7802E10E0;
+	Tue, 11 Nov 2025 00:06:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.167.242.64
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762817872; cv=none; b=OvKcnqTwr3/pSgEPqGoPUKsndgiT4NQ+qJgy3tClddHhEhCmwnXP/bj1QcgOS7lCbx8MbFWl3guUjKAlPo2gtJ5OzhC5if4AZBH+/W86xyk2nGySNm0hdUbJEwjMWH72A/SGf9ZcL33Kd3TULb5FEf8OWlOrDLJW9EJPoMprmLs=
+	t=1762819598; cv=none; b=MlEWgZjyQuzlAxf6za6ib5vsPwmMQoCs3IBuPnYI48fpzkkCxnB9ZVEMJnRRkdo9OQkms7N7Bb+faIgVC3qw+uzeYAOVb4nNq+0nu7Oib8o85nAeOV4FkyKjaj/HlhoyXwcXLwNdp7eApA6mX14S0tfqn4+p7bkwrWhCrSa5Poo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762817872; c=relaxed/simple;
-	bh=odPTQHqCk/AknyMQCUhv0A0QcmH6YIldSa1T8WY4Ets=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=cY53qSbPUobmIyd1qsvB+xXxtzARZCO32Eg8pvjL/9cxUvJri0xnZzCBTdGjeN0DeXH696Y4YavfV60XpUqpWPejLhSHMeLw+U26IxYYqYU1+I6eZyiRj5P+muTRv1sl5nWqqbk07oT65wMqIhOuN5BoasOTB9F2Y0frTSVi+yg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=U0xyIRec; arc=none smtp.client-ip=91.218.175.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1762819598; c=relaxed/simple;
+	bh=b5HS5K/i5xVYvmbaitgAoeK1jJwdqZvJ5YqTS2oQGt0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=mqLoQz1HDwt3ZZTZd3pJhj1TfyZf1F2vKVBnHXmTGIacP2eEeZzoB38Dxkiaf9l86EjL4BdxgYRATxBsRCDvdV2t2loudJ6HIih8MihOnNRUHNRmkaq9l/6VaclpPdbgfMEUEGiCEzqrw/4oY351wrWaxCIOuF+uXDV7GN1YVC4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ideasonboard.com; spf=pass smtp.mailfrom=ideasonboard.com; dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b=HRGfahFt; arc=none smtp.client-ip=213.167.242.64
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ideasonboard.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ideasonboard.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="U0xyIRec"
-Message-ID: <3eb5379f-c7ad-4aea-ab9a-20e07b7f34d0@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1762817866;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=N5NdZ3Il1D+l8lwQLcK5dXwNIadjasDY9t8ilnV/mV0=;
-	b=U0xyIRecUBR+iYd+jFcmevJu/4H+A2bbNJnN96yfE0hlgn9ZMrH3LxAIKYqZS4s3cJ1uvm
-	+7WK+gk43pd/VuQQ8rDReqm1AlKlWm8GBWmK3v11GgPPZIdbI1RU8LPuoyCqW5EbUBDj5d
-	3Ou4TSlLX99wMRUdq/vNAC0vrqSI3Ow=
-Date: Mon, 10 Nov 2025 23:37:33 +0000
+	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="HRGfahFt"
+Received: from pendragon.ideasonboard.com (82-203-161-95.bb.dnainternet.fi [82.203.161.95])
+	by perceval.ideasonboard.com (Postfix) with UTF8SMTPSA id 01CBA229;
+	Tue, 11 Nov 2025 01:04:34 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+	s=mail; t=1762819474;
+	bh=b5HS5K/i5xVYvmbaitgAoeK1jJwdqZvJ5YqTS2oQGt0=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=HRGfahFtN7D5jcuxstlmLl4C86FOFe5h+RrhdVZauzDfjgVUwnetdZW3MpZMq+G0A
+	 w9qJ85assYM1fs/uzyh3k/P4jkNteNKz8v1vdCQt5ggLDwyZ7paDQWVI993kVMTKzW
+	 ZW+OP3olGOZpzooHk/tYV6rIdfKeB/N7wLEvj6iU=
+Date: Tue, 11 Nov 2025 02:06:27 +0200
+From: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To: Michael Riesch <michael.riesch@collabora.com>
+Cc: Sakari Ailus <sakari.ailus@linux.intel.com>,
+	Mehdi Djait <mehdi.djait@linux.intel.com>,
+	Maxime Chevallier <maxime.chevallier@bootlin.com>,
+	=?utf-8?B?VGjDqW8=?= Lebrun <theo.lebrun@bootlin.com>,
+	Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+	Gerald Loacker <gerald.loacker@wolfvision.net>,
+	Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
+	Markus Elfring <Markus.Elfring@web.de>,
+	Mauro Carvalho Chehab <mchehab@kernel.org>,
+	Rob Herring <robh+dt@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Heiko Stuebner <heiko@sntech.de>,
+	Kever Yang <kever.yang@rock-chips.com>,
+	Nicolas Dufresne <nicolas.dufresne@collabora.com>,
+	Sebastian Reichel <sebastian.reichel@collabora.com>,
+	Collabora Kernel Team <kernel@collabora.com>,
+	Paul Kocialkowski <paulk@sys-base.io>,
+	Alexander Shiyan <eagle.alexander923@gmail.com>,
+	Val Packett <val@packett.cool>, Rob Herring <robh@kernel.org>,
+	Philipp Zabel <p.zabel@pengutronix.de>, linux-media@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-rockchip@lists.infradead.org,
+	Mehdi Djait <mehdi.djait@bootlin.com>,
+	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+	Bryan O'Donoghue <bod@kernel.org>, Chen-Yu Tsai <wens@csie.org>
+Subject: Re: [PATCH v14 00/18] media: rockchip: add a driver for the rockchip
+ camera interface
+Message-ID: <20251111000627.GA30837@pendragon.ideasonboard.com>
+References: <20240220-rk3568-vicap-v14-0-b38b6da0fc80@collabora.com>
+ <aQ4tJg8r_j4NyKhv@kekkonen.localdomain>
+ <074cd08e-0412-49f9-8dd9-b1f96eb11717@collabora.com>
+ <20251107185441.GG5558@pendragon.ideasonboard.com>
+ <13c43edb-9592-4779-a39a-7856bb0f964d@collabora.com>
+ <aRGlvQRVoQs0WjyA@kekkonen.localdomain>
+ <b89746e1-4574-4b65-af69-c533576ed185@collabora.com>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH v1 19/23] ptp: ocp: Switch to use %ptSp
-To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
- Corey Minyard <corey@minyard.net>, =?UTF-8?Q?Christian_K=C3=B6nig?=
- <christian.koenig@amd.com>, "Dr. David Alan Gilbert" <linux@treblig.org>,
- Alex Deucher <alexander.deucher@amd.com>,
- Thomas Zimmermann <tzimmermann@suse.de>,
- Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>,
- Rob Clark <robin.clark@oss.qualcomm.com>,
- Matthew Brost <matthew.brost@intel.com>, Hans Verkuil <hverkuil@kernel.org>,
- Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
- Ulf Hansson <ulf.hansson@linaro.org>,
- Vitaly Lifshits <vitaly.lifshits@intel.com>,
- Manivannan Sadhasivam <mani@kernel.org>, Niklas Cassel <cassel@kernel.org>,
- Calvin Owens <calvin@wbinvd.org>, Sagi Maimon <maimon.sagi@gmail.com>,
- "Martin K. Petersen" <martin.petersen@oracle.com>,
- Karan Tilak Kumar <kartilak@cisco.com>,
- Casey Schaufler <casey@schaufler-ca.com>,
- Steven Rostedt <rostedt@goodmis.org>, Petr Mladek <pmladek@suse.com>,
- Max Kellermann <max.kellermann@ionos.com>, Takashi Iwai <tiwai@suse.de>,
- linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
- openipmi-developer@lists.sourceforge.net, linux-media@vger.kernel.org,
- dri-devel@lists.freedesktop.org, linaro-mm-sig@lists.linaro.org,
- amd-gfx@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
- freedreno@lists.freedesktop.org, intel-xe@lists.freedesktop.org,
- linux-mmc@vger.kernel.org, netdev@vger.kernel.org,
- intel-wired-lan@lists.osuosl.org, linux-pci@vger.kernel.org,
- linux-s390@vger.kernel.org, linux-scsi@vger.kernel.org,
- linux-staging@lists.linux.dev, ceph-devel@vger.kernel.org,
- linux-trace-kernel@vger.kernel.org, linux-sound@vger.kernel.org
-Cc: Rasmus Villemoes <linux@rasmusvillemoes.dk>,
- Sergey Senozhatsky <senozhatsky@chromium.org>,
- Jonathan Corbet <corbet@lwn.net>, Sumit Semwal <sumit.semwal@linaro.org>,
- Gustavo Padovan <gustavo@padovan.org>, David Airlie <airlied@gmail.com>,
- Simona Vetter <simona@ffwll.ch>,
- Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
- Maxime Ripard <mripard@kernel.org>, Dmitry Baryshkov <lumag@kernel.org>,
- Abhinav Kumar <abhinav.kumar@linux.dev>,
- Jessica Zhang <jesszhan0024@gmail.com>, Sean Paul <sean@poorly.run>,
- Marijn Suijten <marijn.suijten@somainline.org>,
- Konrad Dybcio <konradybcio@kernel.org>,
- Lucas De Marchi <lucas.demarchi@intel.com>,
- =?UTF-8?Q?Thomas_Hellstr=C3=B6m?= <thomas.hellstrom@linux.intel.com>,
- Rodrigo Vivi <rodrigo.vivi@intel.com>,
- Mauro Carvalho Chehab <mchehab@kernel.org>,
- Vladimir Oltean <olteanv@gmail.com>, Andrew Lunn <andrew@lunn.ch>,
- "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
- Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
- Tony Nguyen <anthony.l.nguyen@intel.com>,
- Przemek Kitszel <przemyslaw.kitszel@intel.com>,
- =?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kwilczynski@kernel.org>,
- Kishon Vijay Abraham I <kishon@kernel.org>,
- Bjorn Helgaas <bhelgaas@google.com>, Rodolfo Giometti
- <giometti@enneenne.com>, Jonathan Lemon <jonathan.lemon@gmail.com>,
- Richard Cochran <richardcochran@gmail.com>,
- Stefan Haberland <sth@linux.ibm.com>, Jan Hoeppner <hoeppner@linux.ibm.com>,
- Heiko Carstens <hca@linux.ibm.com>, Vasily Gorbik <gor@linux.ibm.com>,
- Alexander Gordeev <agordeev@linux.ibm.com>,
- Christian Borntraeger <borntraeger@linux.ibm.com>,
- Sven Schnelle <svens@linux.ibm.com>, Satish Kharat <satishkh@cisco.com>,
- Sesidhar Baddela <sebaddel@cisco.com>,
- "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Xiubo Li
- <xiubli@redhat.com>, Ilya Dryomov <idryomov@gmail.com>,
- Masami Hiramatsu <mhiramat@kernel.org>,
- Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
- Andrew Morton <akpm@linux-foundation.org>, Jaroslav Kysela <perex@perex.cz>,
- Takashi Iwai <tiwai@suse.com>
-References: <20251110184727.666591-1-andriy.shevchenko@linux.intel.com>
- <20251110184727.666591-20-andriy.shevchenko@linux.intel.com>
-Content-Language: en-US
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Vadim Fedorenko <vadim.fedorenko@linux.dev>
-In-Reply-To: <20251110184727.666591-20-andriy.shevchenko@linux.intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Migadu-Flow: FLOW_OUT
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <b89746e1-4574-4b65-af69-c533576ed185@collabora.com>
 
-On 10/11/2025 18:40, Andy Shevchenko wrote:
-> Use %ptSp instead of open coded variants to print content of
-> struct timespec64 in human readable format.
+On Mon, Nov 10, 2025 at 11:29:57AM +0100, Michael Riesch wrote:
+> On 11/10/25 09:43, Sakari Ailus wrote:
+> > On Fri, Nov 07, 2025 at 09:51:37PM +0100, Michael Riesch wrote:
+> >> On 11/7/25 19:54, Laurent Pinchart wrote:
+> >>> On Fri, Nov 07, 2025 at 07:41:59PM +0100, Michael Riesch wrote:
+> >>>> On 11/7/25 18:32, Sakari Ailus wrote:
+> >>>>> On Fri, Oct 24, 2025 at 02:51:29PM +0200, Michael Riesch via B4 Relay wrote:
+> >>>>>> Habidere,
+> >>>>>>
+> >>>>>> This series introduces support for the Rockchip Camera Interface (CIF),
+> >>>>>> which is featured in many Rockchip SoCs in different variations.
+> >>>>>> For example, the PX30 Video Input Processor (VIP) is able to receive
+> >>>>>> video data via the Digital Video Port (DVP, a parallel data interface)
+> >>>>>> and transfer it into system memory using a double-buffering mechanism
+> >>>>>> called ping-pong mode.
+> >>>>>> The RK3568 Video Capture (VICAP) unit, on the other hand, features a
+> >>>>>> DVP and a MIPI CSI-2 receiver that can receive video data independently
+> >>>>>> (both using the ping-pong scheme).
+> >>>>>> The different variants may have additional features, such as scaling
+> >>>>>> and/or cropping.
+> >>>>>> Finally, the RK3588 VICAP unit constitutes an essential piece of the
+> >>>>>> camera interface with one DVP, six MIPI CSI-2 receivers, scale/crop
+> >>>>>> units, and a data path multiplexer (to scaler units, to ISP, ...).
+> >>>>>
+> >>>>> I understand both RK3568 and RK3588 include an ISP. Do you have insight on
+> >>>>> how would this work, should the support for the ISP be added later on?
+> >>>>
+> >>>> Short answer: Yes and yes.
+> >>>>
+> >>>> Long answer:
+> >>>>
+> >>>> The patch series at hand adds support for the PX30 VIP and the RK3568
+> >>>> VICAP. I cannot really say something about the PX30, but on the RK3568
+> >>>> VICAP and ISP are orthogonal (the ISP features its own MIPI CSI-2
+> >>>> receiver, different from that introduced in this series). Thus, ISP
+> >>>> support can be introduced anytime (whenever someone is motivated ;-)).
+> >>>
+> >>> Won't they both be connected to the same sensor though, and probably the
+> >>> same D-PHY in the SoC ? They don't seem entirely separate to me.
+> >>
+> >> The MIPI CSI-2 DPHY is shared, indeed. Thus, they *maybe technically
+> >> could be* connected to the same sensor, but I don't know whether that
+> >> works and fail to see why anyone would to such a thing (if it is about
+> >> raw capture, the MIPI CSI-2 receiver in the ISP can do that on its own).
+> >>
+> >> The DPHY can be operated in split mode, with two lanes for VICAP and two
+> >> lanes for ISP. This is not implemented yet, but can be done at a later
+> >> stage on PHY level (not media related). In this case, ISP and VICAP can
+> >> receive data from different subdevices via CSI-2.
+> > 
+> > The two would be part of the same media graph in that case and as there are
+> > two CSI-2 receivers and a single PHY, the PHY would probably need to have a
+> > sub-device as well, to allow link configuration to be used to select where
+> > the PHY is connected.
+> > 
+> > I don't think we have such a setup elsewhere, and supporting this would
+> > require changes in the MC framework.
 > 
-> While at it, fix wrong use of %ptT against struct timespec64.
-> It's kinda lucky that it worked just because the first member
-> there 64-bit and it's of time64_t type. Now with %ptS it may
-> be used correctly.
+> What follows is a response that also addresses issues raised during our
+> off-list discussion.
 > 
-> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> ---
->   drivers/ptp/ptp_ocp.c | 15 ++++++---------
->   1 file changed, 6 insertions(+), 9 deletions(-)
+> First of all, I agree with you that the RK3568 HW is "a bit special" (to
+> say the least) in that regard. Let's have an outlook to newer SoCs, such
+> as the RK3588: Here, the MIPI CSI-2 DPHYs (there are two of them) with
+> their split mode are present as well, but the assignment is fixed. For
+> example, the RK3588 VICAP has six MIPI CSI-2 receiver units and six MIPI
+> CSI-2 capture units. Units 1 and 2 handle a different MIPI PHY, units 3
+> and 5 handle the DPHYs (without split mode), units 4 and/or 6 are active
+> whenever DPHY 1 and/or 2 is in split mode.
 > 
-> diff --git a/drivers/ptp/ptp_ocp.c b/drivers/ptp/ptp_ocp.c
-> index a5c363252986..a0bb8d3045d2 100644
-> --- a/drivers/ptp/ptp_ocp.c
-> +++ b/drivers/ptp/ptp_ocp.c
-> @@ -3261,7 +3261,7 @@ signal_show(struct device *dev, struct device_attribute *attr, char *buf)
->   			   signal->duty, signal->phase, signal->polarity);
->   
->   	ts = ktime_to_timespec64(signal->start);
-> -	count += sysfs_emit_at(buf, count, " %ptT TAI\n", &ts);
-> +	count += sysfs_emit_at(buf, count, " %ptS TAI\n", &ts);
->   
->   	return count;
->   }
-> @@ -4287,11 +4287,9 @@ ptp_ocp_summary_show(struct seq_file *s, void *data)
->   		ns += (s64)bp->utc_tai_offset * NSEC_PER_SEC;
->   		sys_ts = ns_to_timespec64(ns);
->   
-> -		seq_printf(s, "%7s: %lld.%ld == %ptT TAI\n", "PHC",
-> -			   ts.tv_sec, ts.tv_nsec, &ts);
-> -		seq_printf(s, "%7s: %lld.%ld == %ptT UTC offset %d\n", "SYS",
-> -			   sys_ts.tv_sec, sys_ts.tv_nsec, &sys_ts,
-> -			   bp->utc_tai_offset);
-> +		seq_printf(s, "%7s: %ptSp == %ptS TAI\n", "PHC", &ts, &ts);
-> +		seq_printf(s, "%7s: %ptSp == %ptS UTC offset %d\n", "SYS",
-> +			   &sys_ts, &sys_ts, bp->utc_tai_offset);
->   		seq_printf(s, "%7s: PHC:SYS offset: %lld  window: %lld\n", "",
->   			   timespec64_to_ns(&ts) - ns,
->   			   post_ns - pre_ns);
-> @@ -4499,9 +4497,8 @@ ptp_ocp_phc_info(struct ptp_ocp *bp)
->   		 ptp_clock_index(bp->ptp));
->   
->   	if (!ptp_ocp_gettimex(&bp->ptp_info, &ts, NULL))
-> -		dev_info(&bp->pdev->dev, "Time: %lld.%ld, %s\n",
-> -			 ts.tv_sec, ts.tv_nsec,
-> -			 bp->sync ? "in-sync" : "UNSYNCED");
-> +		dev_info(&bp->pdev->dev, "Time: %ptSp, %s\n",
-> +			 &ts, bp->sync ? "in-sync" : "UNSYNCED");
->   }
->   
->   static void
+> I would model this by adding support for more than one (logical) PHYs
+> (phy-cells = <1>;) and assigning the logical PHYs to the MIPI CSI-2
+> receivers. There is not really a possibility to route anything at this
+> point (routing is done in a MUX unit that takes the different MIPI CSI-2
+> receivers as inputs).
+> 
+> Now back to the peculiar RK3568 situation: By default the split mode of
+> the DPHY is off and both VICAP and ISP are able to receive the same data
+> (from up to four lanes) with their MIPI CSI-2 receivers (not sure
+> whether both can be active at the same time, though).
 
-Acked-by: Vadim Fedorenko <vadim.fedorenko@linux.dev>
+A common use case for capturing data from the same sensor through both
+ISP and VICAP would be routing image data to the ISP and embedded data
+to VICAP. Assuming the hardware is able to do this, there will be users
+interested in this feature.
+
+> There are two bits
+> in the GRF that define the lanes that ISP and VICAP receive in split
+> mode (lane 0/1 or lane 2/3). Not sure whether these bits are supposed to
+> be changed during runtime.
+> 
+> I would suggest modelling this on PHY level in DT, e.g., by passing
+> reasonable properties to the dphy node, such as
+>     rockchip,dphy-split-mode;
+
+Split mode should indeed be conveyed through DT, as it's a property of
+the hardware.
+
+>     rockchip,dphy-split-invert;
+> where the former activates the split mode and assigns lanes 0/1 to the
+> ISP and lanes 2/3 to the VICAP, and the latter inverts this assignment
+> (lanes 2/3 to the ISP and lanes 0/1 to the VICAP). This would facilitate
+> the reasonable use cases with reasonable effort.
+
+This I'm less convinced about. The routing should be dynamic.
+
+How do you envision the connections to the CSI-2 sources to be modelled
+in DT ? We need ports and endpoints, and data-lanes properties. Where
+would those reside on the RK3568 side ?
+
+> Otherwise, to keep it perfectly general and most flexible and
+> everything, we would have to introduce another subdevice indeed, which
+> would be active on the RK3568 exclusively. Therefore, I don't see that
+> the PHY driver introduces this subdevice, but a specialized (syscon?)
+> MUX driver that deals with the RK3568 GRF bits. Something like this
+> 
+>                            |----------------------|     |-------------|
+>  Sensor A --- /2 lanes --- | lane 0/1      to ISP | --- | ISP MIPI RX |
+>                            |                      |     |-------------|
+>                            |                      |
+>                            |                      |     |-------------|
+>  Sensor B --- /2 lanes --- | lane 2/3    to VICAP | --- |VICAP MIPI RX|
+>                            |----------------------|     |-------------|
+> 
+> But IMHO this will be too much effort for corner use case that I doubt
+> anyone will actually use.
+> 
+> What do you think:
+>  - Let's keep the PHYs out of V4L2/MC, ok?
+>  - Let's model the reasonable use cases with device tree properties in
+>    the dphy DT node, ok?
+
+I think the routing should be dynamic.
+
+> > How does the media graph look like for the device at the moment?
+> 
+> Please take a look at the media graph in the documentation patch (PATCH
+> v14 01/18). This is without the ISP, but gives an overview of what the
+> RK3568 VICAP is capable of.
+> 
+> Best regards,
+> Michael
+> 
+> >> BTW the ISP is able to process the data captured by VICAP, but
+> >> apparently this includes a RAM round trip (VICAP captures to memory, ISP
+> >> operates in mem2mem mode).
+> >>
+> >>> A block diagram that shows connections between the CSI-2 pins, D-PHY,
+> >>> CSI-2 receivers, VICAP and ISP could help.
+> >>>
+> >>>> Once this patch series is merged, I'll push out changes that introduce
+> >>>> support for the RK3588 VICAP. We can discuss the integration of any
+> >>>> RK3588 ISP in this scope then -- and there may be some things to discuss
+> >>>> as there the VICAP and the ISP(s) are directly connected by means of a
+> >>>> MUX unit in the VICAP.
+> >>>>
+> >>>> Alright?
+
+-- 
+Regards,
+
+Laurent Pinchart
