@@ -1,193 +1,86 @@
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D751D342503
-	for <linux-media@vger.kernel.org>; Tue, 11 Nov 2025 13:40:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E6C452F5339
+	for <linux-media@vger.kernel.org>; Tue, 11 Nov 2025 14:36:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762868410; cv=none; b=BiQOFRFTeyr8JVL09rEKvm841bCOkJpDgIYZALU2G1Q4P6U5mRcV3/d/skwwn3NhGw8F5yHW68cAN3HtEJE779qIcLAWbJ1lRgadIo94ZwEQnmBlmeOOW6AwyzfMBk0rfpSL7+Xa+8h01WiwUpd+oqMKFfp7lsRXSUUOFm7pVyU=
+	t=1762871799; cv=none; b=rdDnar/eq/BulK0iLFA/SZnM1s2LFvSro33XP+54vGnCpO0D7KjhDrLAxKAoRGaKbP0BfUtUl23+oH6nTTic23JLW3HBYCQxFKQbo8G/e/Pq9YWNgkxk5uzRBq/cj9ci5FQgXC/89tHu8+FB4zTWk4WzNZG2rAvrxbvQwgDK2H4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762868410; c=relaxed/simple;
-	bh=s2AjnkkPP2KRJHp+NjW1PV3jCSHP+i1I/AkGCZAB5+o=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=EipbGN1X2C2zyB8peX9uRVPdbhZ5kZ+0doQN47YK/vR7S3tBeHCjUSuYWOxpAmvaDilFj3eSFtgYpUs2V71jmdLS/8bXW3TVMKtFq0rMSrF5RjemaRWoXT+AAN7jGNoaZ66aRb3UbO42ifWF5408niCrNItgKxh77RII66iSQk4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=kzk210YO; dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b=R9Ka4mfl; arc=none smtp.client-ip=205.220.180.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="kzk210YO";
-	dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b="R9Ka4mfl"
-Received: from pps.filterd (m0279868.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 5ABBGCY12250261
-	for <linux-media@vger.kernel.org>; Tue, 11 Nov 2025 13:40:05 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
-	cc:content-type:date:from:in-reply-to:message-id:mime-version
-	:references:subject:to; s=qcppdkim1; bh=m/9OP2fjJmx3ZLFyrTIOYLQZ
-	UJpxWFVVOvLJMaZcRx4=; b=kzk210YOKcVVi9iPIY1l2uifnvu4ZI3+R485EIuL
-	bJgyV/L/R7oK6k+Y02rhWa0tdG6EPQ6ePFLUXpmasZ4137y2dLBzqGaFZsxPVshG
-	Q4LKtjVSuoRKx0UJNU8mjO3jRZP++LfB7TKMf4vxnnW+7gscLWpiK4oNd2BwPzkm
-	LMr3CcOOffrLtco5jz66kDU9lVO/yYjz3SSxYDp+WKHoL115xfkHWotVWcwimMNc
-	d3pogRbdiP9N3l910mIqdZF3sb4StNESK+zvBkqOQQnoySGBc668rwl93qg4/fuH
-	JdfGbAuhNHd1Mj4+ESoPlT+QYg6UcxcqyzXgxNAHd17p8A==
-Received: from mail-pg1-f199.google.com (mail-pg1-f199.google.com [209.85.215.199])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4abxxu9c03-1
-	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
-	for <linux-media@vger.kernel.org>; Tue, 11 Nov 2025 13:40:05 +0000 (GMT)
-Received: by mail-pg1-f199.google.com with SMTP id 41be03b00d2f7-ba265ee0e34so3701153a12.2
-        for <linux-media@vger.kernel.org>; Tue, 11 Nov 2025 05:40:05 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=oss.qualcomm.com; s=google; t=1762868405; x=1763473205; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=m/9OP2fjJmx3ZLFyrTIOYLQZUJpxWFVVOvLJMaZcRx4=;
-        b=R9Ka4mflBkk5GXLckw6TXlyvdgGcwBdI65knQQ9Rz2VrCJ5NeU4XpSTbrkfriSb2dv
-         iSZstai/dVP1nt91i1nI9RrSLQY5dyMpwZd38d5NHGsUUVJRoOHTe/gBgNPOEzwy+TkQ
-         uECwk8i6hMA/JPpTnBM0mwHprY7+yu5bnHKyEDAakh/Jx4oN3ZBVFT+bYQXAstRtDtlP
-         lCirDLHG6BL7rlIp2iraPYwJg2uGeP1cPVDIG91LasPzXIPlwA23ZkwNbANgFJUyFZWx
-         1Jz/sJl9ahsygRdWPlLrcTN2mCrh7+op4q19x242vjI6ene2wPSnVb9aMRN3M8ZzLRmA
-         HDuA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1762868405; x=1763473205;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=m/9OP2fjJmx3ZLFyrTIOYLQZUJpxWFVVOvLJMaZcRx4=;
-        b=l3hMU8vynnubUqXmZbaooUIB94Erq3jOKhOa8wWfGxbDy151jMIGp1X/Rvw5ETTs/V
-         pdOfGYXjbdESvlkDbENP7zRt1MkYI/n09wRb9sb0YRbr4iul/R346c1ZaADfmUrsm62G
-         7v+Y9SAqVuJXyfhRwjA3OR6XXdIKHIjEQOMDplw9+kIA9Zjn2fbeYmxZ3+CUjhsdKqtL
-         O75oLaPQbVNUUmorQgYU7efwLhHkA6qDJJI3LZ+DSerRwOhi5XJv/n68SuUpuflxHK9X
-         J9Tu/8USCUAv3r3pVRgZxezL7cSNmdBln4nJcMmNF1wg3f6fykzlWmkLT75TU+pADICw
-         o8WA==
-X-Forwarded-Encrypted: i=1; AJvYcCVjNDoKFoXhb8DRLs3UWtQSkNhdtXi+gevwQshxWqKKOf/tBF/OdBX0qdeL3iIzhR1qs8aToSfChMG6uQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz86avWF6lH+y8fBJE6iCpKMK0Mv7rQV0Hfk0NDWxFDrBmueTjv
-	rabpptAVW3bF+u6gFgNMKTFyQ4VYbUNNxAnXx6YHQ45dW4FVMpcDmTSyHAFfYXeAnOeiSIQZD8H
-	jRZ7lBOV+nLeMzz98hPKLk6KKZQQZBSrbYu/NCi4hMpv7TRnkNCC8W7j5FuNVgb9Gur921mLQ0O
-	ljRjwf8O7TjMx0FuqHTV6nSt3SBqC453SL8HL9MTzs
-X-Gm-Gg: ASbGnctc1qk6DvSrsbNpFtz7FDUkbnyo2O+uXGwQqg/ple/gwAKtWlfiAt2ZT9Fm24s
-	Y9c+4CgqsPV5KaCWYsphtHzQUUzdv6FpobY17TqM0QmNUMJs+xiGp38pfxeKAJR9yNfTrfCMWEz
-	uMumB9QH8ZxovJkZHCbva27IOIiLMblOL6XSI9g6UXdVGQbQSPkYzI
-X-Received: by 2002:a17:90b:4a4d:b0:341:8ad7:5f7a with SMTP id 98e67ed59e1d1-3436cbf8ee9mr14324781a91.18.1762868404463;
-        Tue, 11 Nov 2025 05:40:04 -0800 (PST)
-X-Google-Smtp-Source: AGHT+IHwgaH141MDvs6mYUD4Q5X8qYaZSdZRIsl83tR7MOsbdijrnHMQlgky3eynMPNNlWF7eVvF8AMO1yx39XcY/Yc=
-X-Received: by 2002:a17:90b:4a4d:b0:341:8ad7:5f7a with SMTP id
- 98e67ed59e1d1-3436cbf8ee9mr14324690a91.18.1762868403713; Tue, 11 Nov 2025
- 05:40:03 -0800 (PST)
+	s=arc-20240116; t=1762871799; c=relaxed/simple;
+	bh=NSHW+iEwcgPDJgnnlre4y7ZLL79WFUxR3azPJsCpSnk=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=HthhAzSKLkun/K7Kxr/Tj2asK/oyBosDLqldZB0SXkPeXHhG2f08+p0If0q3MyPBvyRaa4Wml+zAX5vPNNHkv88eKfPZ0mAEySUpnSilReoj+ujwCH7eEMvYjYIg2fok2iEWCDnf000C7MW/aYVl6o+GsVZIU9vGzA89Z2CqsQ4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
+Received: from dude05.red.stw.pengutronix.de ([2a0a:edc0:0:1101:1d::54])
+	by metis.whiteo.stw.pengutronix.de with esmtp (Exim 4.92)
+	(envelope-from <m.tretter@pengutronix.de>)
+	id 1vIpU4-0004Ul-56; Tue, 11 Nov 2025 15:36:36 +0100
+From: Michael Tretter <m.tretter@pengutronix.de>
+Subject: [PATCH 0/4] media: adv7180: make VPP handling more flexible
+Date: Tue, 11 Nov 2025 15:36:13 +0100
+Message-Id: <20251111-b4-adv7180-vpp-sub-device-v1-0-9877fe9f709b@pengutronix.de>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20251107-knp_video-v3-0-50c86cbb0eb8@oss.qualcomm.com>
- <3vbq76dpjnadfrnufojq4zqiv7p5p555rhxfx6yoncc354p3lk@ohcs3ldhuoao> <2d56fc4b-6e3c-4f83-aab1-c48db3b8bb2d@oss.qualcomm.com>
-In-Reply-To: <2d56fc4b-6e3c-4f83-aab1-c48db3b8bb2d@oss.qualcomm.com>
-From: Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>
-Date: Tue, 11 Nov 2025 15:39:52 +0200
-X-Gm-Features: AWmQ_blXQdwosO6i2_FdIYV6vtohi336OUCTfZYSjCdbYIy9ZUUucC_8UFt7TfE
-Message-ID: <CAO9ioeXSXwm03e_j8TuXz2Sqr1J2n3uEFH6dJoKVyE+hJx+woQ@mail.gmail.com>
-Subject: Re: [PATCH v3 0/6] media: iris: prepare support for video codecs on
- Qcom vpu4 platform
-To: Vikash Garodia <vikash.garodia@oss.qualcomm.com>
-Cc: Dikshita Agarwal <dikshita.agarwal@oss.qualcomm.com>,
-        Abhinav Kumar <abhinav.kumar@linux.dev>,
-        "Bryan O'Donoghue" <bod@kernel.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>,
-        linux-arm-msm@vger.kernel.org, linux-media@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Vishnu Reddy <busanna.reddy@oss.qualcomm.com>,
-        "Bryan O'Donoghue" <bryan.odonoghue@linaro.org>,
-        Vishnu Reddy <quic_bvisredd@quicinc.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUxMTExMDEwOSBTYWx0ZWRfXy4B73LgjAs3y
- 3B3CWmuDOu2m+6zFheEeoCc+dgedg0kj9yzQHu1/DzEbGE/wMyooj3Ls0uH13HGJLJ5uCU8X6ND
- D5LXE9Vabnf9U3vkH7Ab45qwDETXt0qyfTI/k2csjsy6Wkm5pqHJF2OiYg+4STiAhCKEf1NJ7Px
- upZY6TZMsWiMMKNXv/9WN+D/GV7Z4iPcU30Cir/lC4L2QtfdbVgmFUxI97NBlh9r+RbbStbVWAC
- G/wRWTvUylzsSNMBpI2xNlWswy6jpKNxJIj+ksYz6pxuJwXaJ1bPLPwJuiRg4HIPwbvxsohwM29
- nYOfm5m1G/kJzjHDPfmCNLjq/G9/W7yFfPYZ/3i8APqWCQqz1LSG/UiTvnheF3x3eJ7kWno9zYK
- 8YA8rjABvqTBMA+bN1I60Vny8yBy+Q==
-X-Proofpoint-GUID: YO02loFl-7Gc-e-oGFOo5Zfz09VG0yfp
-X-Proofpoint-ORIG-GUID: YO02loFl-7Gc-e-oGFOo5Zfz09VG0yfp
-X-Authority-Analysis: v=2.4 cv=TfObdBQh c=1 sm=1 tr=0 ts=69133cb5 cx=c_pps
- a=Oh5Dbbf/trHjhBongsHeRQ==:117 a=IkcTkHD0fZMA:10 a=6UeiqGixMTsA:10
- a=s4-Qcg_JpJYA:10 a=VkNPw1HP01LnGYTKEx00:22 a=EUspDBNiAAAA:8
- a=V0DlmUR_jgQx3hgdKxUA:9 a=QEXdDO2ut3YA:10 a=_Vgx9l1VpLgwpw_dHYaR:22
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.9,FMLib:17.12.100.49
- definitions=2025-11-11_02,2025-11-11_02,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- priorityscore=1501 lowpriorityscore=0 clxscore=1015 bulkscore=0 phishscore=0
- impostorscore=0 adultscore=0 suspectscore=0 malwarescore=0 spamscore=0
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.22.0-2510240001 definitions=main-2511110109
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAN1JE2kC/x2MSQqAMAwAvyI5G7AuVP2KeOgSNRctLRZB+neDc
+ 5vDzAuJIlOCuXohUubE1ymi6grcYc6dkL04tE07KAFtj8ZnrcYGcwiYboteOkdone8GbbTpJwX
+ Sh0gbP/97WUv5AKt6uGFrAAAA
+X-Change-ID: 20251111-b4-adv7180-vpp-sub-device-bcd357a7a491
+To: Lars-Peter Clausen <lars@metafoo.de>, 
+ =?utf-8?q?Niklas_S=C3=B6derlund?= <niklas.soderlund+renesas@ragnatech.se>, 
+ Mauro Carvalho Chehab <mchehab@kernel.org>, Rob Herring <robh@kernel.org>, 
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+ Conor Dooley <conor+dt@kernel.org>
+Cc: linux-media@vger.kernel.org, devicetree@vger.kernel.org, 
+ kernel@pengutronix.de, Michael Tretter <m.tretter@pengutronix.de>, 
+ Thorsten Schmelzer <tschmelzer@topcon.com>
+X-Mailer: b4 0.14.3
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:1101:1d::54
+X-SA-Exim-Mail-From: m.tretter@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-media@vger.kernel.org
 
-On Tue, 11 Nov 2025 at 14:43, Vikash Garodia
-<vikash.garodia@oss.qualcomm.com> wrote:
->
->
-> On 11/11/2025 4:08 PM, Dmitry Baryshkov wrote:
-> > On Fri, Nov 07, 2025 at 03:19:35PM +0530, Vikash Garodia wrote:
-> >> Upcoming Qualcomm kaanapali platform have a newer generation of video
-> >> IP, iris4 or vpu4. The hardware have evolved mostly w.r.t higher number
-> >> of power domains as well as multiple clock sources. It has support for
-> >> new codec(apv), when compared to prior generation.
-> >>
-> >>  From previous version of this series, the kaanapali binding patch(#1/8)
-> >> and the compatible patch(#8/8) have been dropped. The discussion for
-> >> this is captured here [1].
-> >> The series introducs buffer calculation and power sequence for vpu4. It
-> >> prepares for vpu4 when kaanapali is enabled after the binding discussion
-> >> is concluded.
-> >>
-> >>
-> >> gstreamer test:
-> >> Decoders validated with below commands, codec specific:
-> > Why not just run the fluster testsuite?
-> >
->
-> yeah, fluster can also be executed. Individual codec commands were
-> explicitly called out incase someone wants to run standalone gst pipeline.
+The adv7280 and adv7280-m have a Video Post Processor (VPP) unit that is
+able to de-interlace the video signal.
 
-Please switch to fluster (in addition to Gst), ideally running all
-test cases for a codec. While enabling SC7280 support I found that
-there are enough corner cases which are being ignored by the driver.
-One additional bonus is that fluster runs several process in parallel
-by default, catching issues caused by several decode threads running
-in parallel.
+This series makes the handling of the VPP more flexible. Furthermore, it
+fixes the reported frame interval if the VPP is enabled.
 
->
-> >> gst-launch-1.0 multifilesrc location=<input_file.h264> stop-index=0 !
-> >> parsebin ! v4l2h264dec ! video/x-raw ! videoconvert dither=none !
-> >> video/x-raw,format=I420 ! filesink location=<output_file.yuv>
-> >>
-> >> gst-launch-1.0 multifilesrc location=<input_file.hevc> stop-index=0 !
-> >> parsebin ! v4l2h265dec ! video/x-raw ! videoconvert dither=none !
-> >> video/x-raw,format=I420 ! filesink location=<output_file.yuv>
-> >>
-> >> gst-launch-1.0 filesrc location=<input_file.webm> stop-index=0 !
-> >> parsebin ! vp9dec ! video/x-raw ! videoconvert dither=none !
-> >> video/x-raw,format=I420 ! filesink location=<output_file.yuv>
-> >>
-> >> Encoders validated with below commands:
-> >> gst-launch-1.0 -v filesrc location=<input_file.yuv> ! rawvideoparse
-> >> format=nv12 width=<width> height=<height> framerate=30/1 ! v4l2h264enc
-> >> capture-io-mode=4 output-io-mode=4 ! filesink sync=true
-> >> location=<output_file.h264>
-> >>
-> >> gst-launch-1.0 -v filesrc location=<input_file.yuv> ! rawvideoparse
-> >> format=nv12 width=<width> height=<height> framerate=30/1 ! v4l2h265enc
-> >> capture-io-mode=4 output-io-mode=4 ! filesink sync=true
-> >> location=<output_file.hevc>
->
-> Regards,
-> Vikash
+Patches 1 and 2 add the device tree bindings and driver handling to
+specify the (programmable) I2C address of the VPP slave device via
+device tree.
 
+Patch 3 exposes the registers of the adv via CONFIG_VIDEO_ADV_DEBUG to
+user space for improved debugging capabilities.
 
+Patch 4 fixes the frame interval that is reported by the driver if the
+de-interlacing is active.
 
+Signed-off-by: Michael Tretter <m.tretter@pengutronix.de>
+---
+Michael Tretter (1):
+      media: dt-bindings: adi,adv7180: add VPP and CSI register maps
+
+Thorsten Schmelzer (3):
+      media: adv7180: add support for ancillary devices
+      media: adv7180: implement g_register and s_register
+      media: adv7180: fix frame interval in progressive mode
+
+ .../devicetree/bindings/media/i2c/adi,adv7180.yaml | 44 +++++++++++++++++
+ drivers/media/i2c/adv7180.c                        | 55 ++++++++++++++++++----
+ 2 files changed, 89 insertions(+), 10 deletions(-)
+---
+base-commit: b4fbb13db86adb0bae1d7f968b61ea8dc9635e33
+change-id: 20251111-b4-adv7180-vpp-sub-device-bcd357a7a491
+
+Best regards,
 -- 
-With best wishes
-Dmitry
+Michael Tretter <m.tretter@pengutronix.de>
+
