@@ -1,189 +1,103 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B13BB30E82E;
-	Tue, 11 Nov 2025 11:22:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.10
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2053D3074AA
+	for <linux-media@vger.kernel.org>; Tue, 11 Nov 2025 11:32:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.167.242.64
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762860159; cv=none; b=fDg7MwbmsxDY+fuWOykgMUAKrL/NqTLq6qM5vPLxpRKee8gRKDK1gMtX93fIabWpQAIKOLwHT+Eeqwjt+qG0mMIs6W2X1+8LPdPaZq8clqqzfXcxqEKa3IXLOsBsuvx6YpqdDEL/06JX5gwL7PnvfKGMjch9NDReEwR++6UN9is=
+	t=1762860747; cv=none; b=EvRmIOo8dlkbr9JoSKlybA89/8tYp8dHBA/JNA+M5X+J9m5QgZRT3diaaVgm86u93juLC61vbudgJdRMuaYAKmzmo/8Le6x8hxH9Gh8Rh6AE/t+jfVpU+RvsymC4jQ0karhP+Dnp4QhnOnME9MlCvRFI001ywMZ3siSDyhtNEX4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762860159; c=relaxed/simple;
-	bh=Qqa7vlU2LmRoidNI3H+dtyzXwYS/YoqLxD8vZyRNneA=;
+	s=arc-20240116; t=1762860747; c=relaxed/simple;
+	bh=1MiRAmTtb4XNmBa1pjHOOuEUotiTVicqhvCkgBqf7is=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=TdO/OrUe8P6PmuFIYxS5xEhCH6CyuRLBGqK+nrHsXoz0rbeaBjX1qzMbncAxqBI/JtkN4uS+gCMgMzJMcFDw0OxAFnYRHH0+8D0cMJM6pv4dNuAiN374yoPAWCKsyP3Rx3pGw6PMrdqP0Jfy4ohLtfIdHY4QUuaccPp3bEOnIRU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=RoBpfm4m; arc=none smtp.client-ip=198.175.65.10
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=DUGoe1C2DAP/cq3k6kgxXBiroDxnT+tg0i61WWE9nB/x5Gk8vMhwqY0ruaZUarRJHrobIJXXfL5g6fOEHnBUi+APx1rkMmd06gAqyvnGsZHvHp5rxNMpEwQTPMtrxURw1Zda2AMoZ2GW+Ueyipy254fnf3aJ8KjauoKn2zuRrZo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ideasonboard.com; spf=pass smtp.mailfrom=ideasonboard.com; dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b=AS1o2c0u; arc=none smtp.client-ip=213.167.242.64
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ideasonboard.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ideasonboard.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="RoBpfm4m"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1762860157; x=1794396157;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=Qqa7vlU2LmRoidNI3H+dtyzXwYS/YoqLxD8vZyRNneA=;
-  b=RoBpfm4mN3Ccq0oaYBH+DO1xHGTyxBATqmNpiysmawt3TZZzUgiXM+Ev
-   OKzxwa42NsK1nBIn15kz3nO1MOSC3/jK6ra7JqK0OICXz6K23dJ1ybyXP
-   pVWV3z7ulZQ+Utve6qSC5Kz/AHDvr7fBT6pPGNDBIfzHOoS2XxDgGXjvz
-   FTXEMEIP2yByXP8YFdZ2dsfcFfk7jldNzHd5lwlIonNZOQArHNbBSqCLY
-   0yq4puj35Z10gp64ioLGxXJdXrubhu503CMf1Af0QMzZ27sChB/C3jmCg
-   T4op95f832Y04ICgguHeLMnbTlP9DpYwUHADN47Pen1Lh9CGYRSWB9xm6
-   A==;
-X-CSE-ConnectionGUID: W4qDxJSHRBeAZayS9VJa/A==
-X-CSE-MsgGUID: 04ygD0CXSoO3k5qKSivwZQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11609"; a="82317624"
-X-IronPort-AV: E=Sophos;i="6.19,296,1754982000"; 
-   d="scan'208";a="82317624"
-Received: from orviesa003.jf.intel.com ([10.64.159.143])
-  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Nov 2025 03:22:37 -0800
-X-CSE-ConnectionGUID: M2uXnUFfQjK85tdzgDm3Dg==
-X-CSE-MsgGUID: +qtUA1mmS5eAjAEeHoet1w==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.19,296,1754982000"; 
-   d="scan'208";a="193053753"
-Received: from egrumbac-mobl6.ger.corp.intel.com (HELO kekkonen.fi.intel.com) ([10.245.244.96])
-  by ORVIESA003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Nov 2025 03:22:31 -0800
-Received: from kekkonen.localdomain (localhost [IPv6:::1])
-	by kekkonen.fi.intel.com (Postfix) with SMTP id DEC9011F983;
-	Tue, 11 Nov 2025 13:22:28 +0200 (EET)
-Date: Tue, 11 Nov 2025 13:22:28 +0200
-Organization: Intel Finland Oy - BIC 0357606-4 - c/o Alberga Business Park, 6 krs, Bertel Jungin Aukio 5, 02600 Espoo
-From: Sakari Ailus <sakari.ailus@linux.intel.com>
-To: Matthias Fend <matthias.fend@emfend.at>
-Cc: Mauro Carvalho Chehab <mchehab@kernel.org>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Hans Verkuil <hverkuil@kernel.org>,
-	Hans de Goede <hansg@kernel.org>,
-	Ricardo Ribalda <ribalda@chromium.org>,
-	=?iso-8859-1?Q?Andr=E9?= Apitzsch <git@apitzsch.eu>,
-	Tarang Raval <tarang.raval@siliconsignals.io>,
-	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-	Benjamin Mugnier <benjamin.mugnier@foss.st.com>,
-	Sylvain Petinot <sylvain.petinot@foss.st.com>,
-	Dongcheng Yan <dongcheng.yan@intel.com>,
-	Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
-	Alan Stern <stern@rowland.harvard.edu>,
-	Jingjing Xiong <jingjing.xiong@intel.com>,
-	Heimir Thor Sverrisson <heimir.sverrisson@gmail.com>,
-	Mehdi Djait <mehdi.djait@linux.intel.com>,
-	Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>,
-	Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-	Hardevsinh Palaniya <hardevsinh.palaniya@siliconsignals.io>,
-	linux-media@vger.kernel.org, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org, Hao Yao <hao.yao@intel.com>,
-	bsp-development.geo@leica-geosystems.com
-Subject: Re: [PATCH v5 2/2] media: i2c: add Himax HM1246 image sensor driver
-Message-ID: <aRMcdD43ShUFQKkN@kekkonen.localdomain>
-References: <20251104-hm1246-v5-0-97c8f25b5419@emfend.at>
- <20251104-hm1246-v5-2-97c8f25b5419@emfend.at>
+	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="AS1o2c0u"
+Received: from ideasonboard.com (mob-5-90-142-135.net.vodafone.it [5.90.142.135])
+	by perceval.ideasonboard.com (Postfix) with ESMTPSA id 7088050A;
+	Tue, 11 Nov 2025 12:30:22 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+	s=mail; t=1762860622;
+	bh=1MiRAmTtb4XNmBa1pjHOOuEUotiTVicqhvCkgBqf7is=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=AS1o2c0ul7NLlXxoVOEmEtUQN7OX48AyiUQyi4khy47QBYc3dancSriMaJlMRgkHl
+	 i4GQYsGxqi5emHutkWRyrw5Vo9MmnSRm7LkEqD0l7HpYhDyhRRJirnSad9oGgjlrGC
+	 0BFGctihGC2kZeWg0MEjSqPQ+G9kY8pGxAVpz1/w=
+Date: Tue, 11 Nov 2025 12:32:16 +0100
+From: Jacopo Mondi <jacopo.mondi@ideasonboard.com>
+To: Sakari Ailus <sakari.ailus@linux.intel.com>
+Cc: linux-media@vger.kernel.org, hans@jjverkuil.nl, 
+	laurent.pinchart@ideasonboard.com
+Subject: Re: [PATCH 1/1] media: v4l2-ctrls: Set error
+ v4l2_ctrl_new_fwnode_properties consistently
+Message-ID: <7ic266r6xq7exbvayosprrypyxliwmeh6aitubvcblgh6tu2l3@u4tvkkg5ig3i>
+References: <20251111112057.95655-1-sakari.ailus@linux.intel.com>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20251104-hm1246-v5-2-97c8f25b5419@emfend.at>
+In-Reply-To: <20251111112057.95655-1-sakari.ailus@linux.intel.com>
 
-Hi Matthias,
+Hi Sakari
 
-On Tue, Nov 04, 2025 at 11:31:34AM +0100, Matthias Fend wrote:
-> +static int hm1246_init_controls(struct hm1246 *hm1246)
-> +{
-> +	const struct hm1246_mode *mode = &hm1246_modes[0];
-> +	struct v4l2_fwnode_device_properties props;
-> +	struct v4l2_ctrl_handler *ctrl_hdlr;
-> +	s64 pixel_rate, exposure_max, vblank_min, hblank;
-> +	int ret;
-> +
-> +	ctrl_hdlr = &hm1246->ctrls;
-> +	v4l2_ctrl_handler_init(ctrl_hdlr, 11);
-> +
-> +	hm1246->hflip_ctrl = v4l2_ctrl_new_std(ctrl_hdlr, &hm1246_ctrl_ops,
-> +					       V4L2_CID_HFLIP, 0, 1, 1, 0);
-> +	if (hm1246->hflip_ctrl)
-> +		hm1246->hflip_ctrl->flags |= V4L2_CTRL_FLAG_MODIFY_LAYOUT;
-> +
-> +	hm1246->vflip_ctrl = v4l2_ctrl_new_std(ctrl_hdlr, &hm1246_ctrl_ops,
-> +					       V4L2_CID_VFLIP, 0, 1, 1, 0);
-> +	if (hm1246->vflip_ctrl)
-> +		hm1246->vflip_ctrl->flags |= V4L2_CTRL_FLAG_MODIFY_LAYOUT;
-> +
-> +	v4l2_ctrl_cluster(2, &hm1246->hflip_ctrl);
-> +
-> +	hm1246->link_freq_ctrl =
-> +		v4l2_ctrl_new_int_menu(ctrl_hdlr, &hm1246_ctrl_ops,
-> +				       V4L2_CID_LINK_FREQ,
-> +				       ARRAY_SIZE(hm1246_link_freqs) - 1, 0,
-> +				       hm1246_link_freqs);
-> +	if (hm1246->link_freq_ctrl)
-> +		hm1246->link_freq_ctrl->flags |= V4L2_CTRL_FLAG_READ_ONLY;
-> +
-> +	pixel_rate = div_u64(hm1246_link_freqs[mode->link_freq_index],
-> +			     mode->clocks_per_pixel);
-> +	hm1246->pixel_rate_ctrl = v4l2_ctrl_new_std(ctrl_hdlr, &hm1246_ctrl_ops,
-> +						    V4L2_CID_PIXEL_RATE,
-> +						    pixel_rate, pixel_rate, 1,
-> +						    pixel_rate);
-> +
-> +	vblank_min = mode->vts_min - mode->height;
-> +	hm1246->vblank_ctrl = v4l2_ctrl_new_std(ctrl_hdlr, &hm1246_ctrl_ops,
-> +						V4L2_CID_VBLANK, vblank_min,
-> +						HM1246_VTS_MAX - mode->height,
-> +						1, vblank_min);
-> +
-> +	hblank = mode->hts - mode->width;
-> +	hm1246->hblank_ctrl = v4l2_ctrl_new_std(ctrl_hdlr, &hm1246_ctrl_ops,
-> +						V4L2_CID_HBLANK, hblank, hblank,
-> +						1, hblank);
-> +	if (hm1246->hblank_ctrl)
-> +		hm1246->hblank_ctrl->flags |= V4L2_CTRL_FLAG_READ_ONLY;
-> +
-> +	v4l2_ctrl_new_std(ctrl_hdlr, &hm1246_ctrl_ops, V4L2_CID_ANALOGUE_GAIN,
-> +			  HM1246_ANALOG_GLOBAL_GAIN_MIN,
-> +			  HM1246_ANALOG_GLOBAL_GAIN_MAX,
-> +			  HM1246_ANALOG_GLOBAL_GAIN_STEP,
-> +			  HM1246_ANALOG_GLOBAL_GAIN_MIN);
-> +
-> +	exposure_max = mode->vts_min - HM1246_COARSE_INTG_MARGIN;
-> +	hm1246->exposure_ctrl = v4l2_ctrl_new_std(ctrl_hdlr, &hm1246_ctrl_ops,
-> +						  V4L2_CID_EXPOSURE,
-> +						  HM1246_COARSE_INTG_MIN,
-> +						  exposure_max,
-> +						  HM1246_COARSE_INTG_STEP,
-> +						  exposure_max);
-> +
-> +	v4l2_ctrl_new_std_menu_items(ctrl_hdlr, &hm1246_ctrl_ops,
-> +				     V4L2_CID_TEST_PATTERN,
-> +				     ARRAY_SIZE(hm1246_test_pattern_menu) - 1,
-> +				     0, 0, hm1246_test_pattern_menu);
-> +
-> +	ret = v4l2_fwnode_device_parse(hm1246->dev, &props);
-> +	if (ret)
-> +		goto err_v4l2_ctrl_handler_free;
+On Tue, Nov 11, 2025 at 01:20:57PM +0200, Sakari Ailus wrote:
+> The vast majority of the callers of v4l2_ctrl_new_fwnode_properties() do
+> check the returned error code but the function does not set the control
+> handler's error on failure. This will make error handling more complicated
+> and prone for bugs.
+>
+> Always assign the control handler's error field on error in
+> v4l2_ctrl_new_fwnode_properties().
+>
+> Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
 
-If you move this to the beginning of the function, you can return if this
-fails.
+I think it makes sense indeed
+Reviewed-by: Jacopo Mondi <jacopo.mondi@ideasonboard.com>
 
-> +
-> +	ret = v4l2_ctrl_new_fwnode_properties(ctrl_hdlr, &hm1246_ctrl_ops,
-> +					      &props);
-> +	if (ret)
-> +		goto err_v4l2_ctrl_handler_free;
+Thanks
+  j
 
-I'd omit the error check for this altogether. See also
-<20251111112057.95655-1-sakari.ailus@linux.intel.com> on LMML.
-
-> +
-> +	if (ctrl_hdlr->error) {
-> +		ret = ctrl_hdlr->error;
-> +		goto err_v4l2_ctrl_handler_free;
-> +	}
-
--- 
-Kind regards,
-
-Sakari Ailus
+> ---
+>  drivers/media/v4l2-core/v4l2-ctrls-core.c | 3 ++-
+>  include/media/v4l2-ctrls.h                | 3 +++
+>  2 files changed, 5 insertions(+), 1 deletion(-)
+>
+> diff --git a/drivers/media/v4l2-core/v4l2-ctrls-core.c b/drivers/media/v4l2-core/v4l2-ctrls-core.c
+> index 209bc05883bb..1d4b5859f0e2 100644
+> --- a/drivers/media/v4l2-core/v4l2-ctrls-core.c
+> +++ b/drivers/media/v4l2-core/v4l2-ctrls-core.c
+> @@ -2780,7 +2780,8 @@ int v4l2_ctrl_new_fwnode_properties(struct v4l2_ctrl_handler *hdl,
+>  			orientation_ctrl = V4L2_CAMERA_ORIENTATION_EXTERNAL;
+>  			break;
+>  		default:
+> -			return -EINVAL;
+> +			hdl->error = -EINVAL;
+> +			return hdl->error;
+>  		}
+>  		if (!v4l2_ctrl_new_std_menu(hdl, ctrl_ops,
+>  					    V4L2_CID_CAMERA_ORIENTATION,
+> diff --git a/include/media/v4l2-ctrls.h b/include/media/v4l2-ctrls.h
+> index 31fc1bee3797..327976b14d50 100644
+> --- a/include/media/v4l2-ctrls.h
+> +++ b/include/media/v4l2-ctrls.h
+> @@ -1581,6 +1581,9 @@ int v4l2_ctrl_subdev_log_status(struct v4l2_subdev *sd);
+>   * not overwritten. Callers should register the controls they want to handle
+>   * themselves before calling this function.
+>   *
+> + * This function will set the control handler's error field on failure, just as
+> + * other functions adding controls to the handler.
+> + *
+>   * Return: 0 on success, a negative error code on failure.
+>   */
+>  int v4l2_ctrl_new_fwnode_properties(struct v4l2_ctrl_handler *hdl,
+> --
+> 2.47.3
+>
+>
