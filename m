@@ -1,164 +1,192 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 942E313A3F7;
-	Tue, 11 Nov 2025 11:44:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 005823559F8;
+	Tue, 11 Nov 2025 12:07:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.167.242.64
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762861458; cv=none; b=IQti+Ivw10visDbXwU+hG6YsYOcYeM8u75EtGQybo0waWJix1XSDROFy5PsB9161j6Wxg1/kL4MGJAsniFRvEbLiI/rCjQ/WjrlPfqxeQehgxjJvhzbuVmORMYdfpLC8/p7BfqrQpLy2a4aNfQ0tvTyolDEIisBHeaakmUUNEAo=
+	t=1762862838; cv=none; b=sVxFFz5gZNgp5gkalzjm7LpjqoXDGslYRNvFVAE9nuLXxGvK+K+BTS8b7O8SwqnhYiUflbtGgIm0+XJfEIo3aEaQSbiWt/Jo9PCk3Xs7TIa95uRlTjSXb3d6PjmzGk0M55zGRycdkIeK7m+0KzU7qUSbKR2My5tP6+jfqQMXFyQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762861458; c=relaxed/simple;
-	bh=8hgo0SAlxDhqel27kLJFUy/dCtq9ThidmmkRD+8hvR4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=PzYIR22dkuFZ21ULDTUVA+DExB/OWtQpz457Exg64fVDgXxXn/RNYPqB3G97VYjdZN4nHb/0U+jT4nZkv5MYKwu6xlA6mXwchiett6xmglubRsEcbo8EXS9zlGr2nGnCcwjxX4rZD4XBmSad1QMIxG4F6dI6P6rwPe36mikxO4Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=LZU72NPK; arc=none smtp.client-ip=198.175.65.19
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1762862838; c=relaxed/simple;
+	bh=O8CvrRoMfamiivBrhxyLoF+42dG2wZYImhw8qkUTm7Y=;
+	h=Content-Type:MIME-Version:In-Reply-To:References:Subject:From:Cc:
+	 To:Date:Message-ID; b=E3sJ5zXyK3GTAymM8floM7BFbNCSCCj6X1FdIPT6boI9o4+6um4A2DTom45NkQjC1CEuUhBx6MIul1T0+pmmKGQpPf0J27V5M8DGUhNPMB0PODG8r+49qNsU8KSCOlcUGc3nCmQEQHYzrMe8EYCUx5A32CHxP9wPw92BXOEl0eM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ideasonboard.com; spf=pass smtp.mailfrom=ideasonboard.com; dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b=fyjIzro3; arc=none smtp.client-ip=213.167.242.64
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ideasonboard.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ideasonboard.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="LZU72NPK"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1762861456; x=1794397456;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=8hgo0SAlxDhqel27kLJFUy/dCtq9ThidmmkRD+8hvR4=;
-  b=LZU72NPKF9J647HtlyNU1v8zTRgdqKmgM2a6wLW5SaFKi4GPiB9P1Inx
-   rPT+yOnRdnnRTlgcENUxHg8l0oWOOeGKoxA1+lWbEL1jGfLSDFt49zKrl
-   8HfW8XVlRwXk23SqpHke/Kpjftlvd/FHd0B3GtG6+w6mfIosDYEbS0zHz
-   feoj1VKjJ7atr3JdfJp4iFitBzokh5jl/GLEFDTYp7TVUJUinTvAblOuz
-   j3yC4LLOAeXoscAZsKBeOX+gGIydb3r6C9/LNw8CqaCS1MsUQKm1a+3Rx
-   5m7aCt29eIxcIICAkrByojJaGA/RJBcKsAZK5z4RinClF6K8WriHOznQY
-   w==;
-X-CSE-ConnectionGUID: aYo+lPBbRbSh00FMgsZ4pw==
-X-CSE-MsgGUID: Di1vNDxHR3yAht1prPDCYA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11609"; a="64804535"
-X-IronPort-AV: E=Sophos;i="6.19,296,1754982000"; 
-   d="scan'208";a="64804535"
-Received: from orviesa010.jf.intel.com ([10.64.159.150])
-  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Nov 2025 03:42:40 -0800
-X-CSE-ConnectionGUID: eSASJ1xXSnGDKl/SB9RQ5w==
-X-CSE-MsgGUID: yynfhYt5TZ2P13SXesI9FQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.19,296,1754982000"; 
-   d="scan'208";a="188261875"
-Received: from black.igk.intel.com ([10.91.253.5])
-  by orviesa010.jf.intel.com with ESMTP; 11 Nov 2025 03:42:38 -0800
-Received: by black.igk.intel.com (Postfix, from userid 1003)
-	id 607B896; Tue, 11 Nov 2025 12:42:36 +0100 (CET)
-Date: Tue, 11 Nov 2025 12:42:36 +0100
-From: Andy Shevchenko <andriy.shevchenko@intel.com>
-To: Daniel Gomez <da.gomez@kernel.org>
-Cc: Kees Cook <kees@kernel.org>, Luis Chamberlain <mcgrof@kernel.org>,
-	Hans Verkuil <hverkuil+cisco@kernel.org>,
-	Malcolm Priestley <tvboxspy@gmail.com>,
-	Mauro Carvalho Chehab <mchehab@kernel.org>,
-	Hans Verkuil <hverkuil@kernel.org>,
-	Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= <u.kleine-koenig@pengutronix.de>,
-	Rusty Russell <rusty@rustcorp.com.au>,
-	Petr Pavlu <petr.pavlu@suse.com>,
-	Sami Tolvanen <samitolvanen@google.com>,
-	linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
-	linux-modules@vger.kernel.org, linux-hardening@vger.kernel.org
-Subject: Re: [PATCH v2 0/3] module: Add compile-time check for embedded NUL
- characters
-Message-ID: <aRMhLEs9NpGexL7B@black.igk.intel.com>
-References: <20251010030348.it.784-kees@kernel.org>
- <3dd1a00d-08f7-4801-a9f7-d6db61c0e0f3@kernel.org>
+	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="fyjIzro3"
+Received: from pendragon.ideasonboard.com (cpc89244-aztw30-2-0-cust6594.18-1.cable.virginm.net [86.31.185.195])
+	by perceval.ideasonboard.com (Postfix) with ESMTPSA id 863A0FE;
+	Tue, 11 Nov 2025 13:05:13 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+	s=mail; t=1762862713;
+	bh=O8CvrRoMfamiivBrhxyLoF+42dG2wZYImhw8qkUTm7Y=;
+	h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
+	b=fyjIzro3aBiXkBcHDQQx8QsTQC8m9VXT5JaBenEIju1kycZ+PDjvx3biBqD5F6r2J
+	 xYvqYyWVOoe/PrLUAS48CJgw1AHSUWEZ/bentPCNtclZcEn/HPr8MRgpty6xFjzc2l
+	 kuNmuj1EWPGO0HZLV3o/Z9sdsXJV5Gxa2tGt1Ql8=
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <3dd1a00d-08f7-4801-a9f7-d6db61c0e0f3@kernel.org>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20250910-rcar-vsp-underrun-revert-v1-1-2fa8d3b1b879@ideasonboard.com>
+References: <20250910-rcar-vsp-underrun-revert-v1-1-2fa8d3b1b879@ideasonboard.com>
+Subject: Re: [PATCH] Revert "media: vsp1: Add underrun debug print"
+From: Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>
+Cc: linux-media@vger.kernel.org, linux-renesas-soc@vger.kernel.org, linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org, Duy Nguyen <duy.nguyen.rh@renesas.com>, Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
+To: Laurent Pinchart <laurent.pinchart@ideasonboard.com>, Mauro Carvalho Chehab <mchehab@kernel.org>, Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
+Date: Tue, 11 Nov 2025 12:07:09 +0000
+Message-ID: <176286282930.2141792.17722042639840544380@ping.linuxembedded.co.uk>
+User-Agent: alot/0.9.1
 
-On Wed, Nov 05, 2025 at 02:03:59PM +0100, Daniel Gomez wrote:
-> On 10/10/2025 05.06, Kees Cook wrote:
-> >  v2:
-> >  - use static_assert instead of _Static_assert
-> >  - add Hans's Reviewed-by's
-> >  v1: https://lore.kernel.org/lkml/20251008033844.work.801-kees@kernel.org/
-> > 
-> > Hi!
-> > 
-> > A long time ago we had an issue with embedded NUL bytes in MODULE_INFO
-> > strings[1]. While this stands out pretty strongly when you look at the
-> > code, and we can't do anything about a binary module that just plain lies,
-> > we never actually implemented the trivial compile-time check needed to
-> > detect it.
-> > 
-> > Add this check (and fix 2 instances of needless trailing semicolons that
-> > this change exposed).
-> > 
-> > Note that these patches were produced as part of another LLM exercise.
-> > This time I wanted to try "what happens if I ask an LLM to go read
-> > a specific LWN article and write a patch based on a discussion?" It
-> > pretty effortlessly chose and implemented a suggested solution, tested
-> > the change, and fixed new build warnings in the process.
-> > 
-> > Since this was a relatively short session, here's an overview of the
-> > prompts involved as I guided it through a clean change and tried to see
-> > how it would reason about static_assert vs _Static_assert. (It wanted
-> > to use what was most common, not what was the current style -- we may
-> > want to update the comment above the static_assert macro to suggest
-> > using _Static_assert directly these days...)
-> > 
-> >   I want to fix a weakness in the module info strings. Read about it
-> >   here: https://lwn.net/Articles/82305/
-> > 
-> >   Since it's only "info" that we need to check, can you reduce the checks
-> >   to just that instead of all the other stuff?
-> > 
-> >   I think the change to the comment is redundent, and that should be
-> >   in a commit log instead. Let's just keep the change to the static assert.
-> > 
-> >   Is "static_assert" the idiomatic way to use a static assert in this
-> >   code base? I've seen _Static_assert used sometimes.
-> > 
-> >   What's the difference between the two?
-> > 
-> >   Does Linux use C11 by default now?
-> > 
-> >   Then let's not use the wrapper any more.
-> > 
-> >   Do an "allmodconfig all -s" build to verify this works for all modules
-> >   in the kernel.
-> > 
-> > 
-> > Thanks!
-> > 
-> > -Kees
-> > 
-> > [1] https://lwn.net/Articles/82305/
-> > 
-> > Kees Cook (3):
-> >   media: dvb-usb-v2: lmedm04: Fix firmware macro definitions
-> >   media: radio: si470x: Fix DRIVER_AUTHOR macro definition
-> >   module: Add compile-time check for embedded NUL characters
-> > 
-> >  include/linux/moduleparam.h                   |  3 +++
-> >  drivers/media/radio/si470x/radio-si470x-i2c.c |  2 +-
-> >  drivers/media/usb/dvb-usb-v2/lmedm04.c        | 12 ++++++------
-> >  3 files changed, 10 insertions(+), 7 deletions(-)
-> > 
-> 
-> Reviewed-by: Daniel Gomez <da.gomez@samsung.com>
-> 
-> I have also tested a build of v6.18-rc3 + patches using allmodconfig:
-> 
-> Tested-by: Daniel Gomez <da.gomez@samsung.com>
+Quoting Tomi Valkeinen (2025-09-10 08:26:43)
+> This reverts commit 1dc30075fb0fe02b74b1ea7fd1c1c734a89f1448.
+>=20
+> There have been reports of lots of underruns happening on earlier
+> generation SoCs (M3, E3) with display use cases, e.g.:
+>=20
+> vsp1 fea28000.vsp: Underrun occurred at WPF0 (total underruns 1)
+>=20
+> but the display still working fine, and reverting the above commit,
+> which added underrun prints, makes the prints go away (obviously).
+>=20
+> I made some tests on a remote M3, with no display connected, and I can
+> confirm that there seem to be a single underrun report quite often when
+> enabling a display, and an underrun flood when using interlace display
+> modes.
+>=20
+> E3 does not have interlace display support as far as I can see, so the
+> interlace issue does not concern it.
+>=20
+> Debugging display issues remotely without a display is quite
+> challenging, and I did not find any issues in the code, nor could I find
+> a way to stop the underruns by twiddling with the related registers.
+>=20
+> My pure guess is that the single underruns occurring when starting the
+> display hint at either a startup sequence issue, or some kind of initial
+> fifo loading issue. The interlace underruns hint at a bigger
+> misconfiguration, but as the display works fine, the issue might be just
+> an underrun at the start of the frame and the HW quickly catching up, or
+> at the end of the frame, where one block in the pipeline expects more
+> data but the previous block has already stopped (so maybe a misconfig
+> between using interlaced height vs progressive height?).
+>=20
+> But at the moment I have no solution to this, and as the displays work
+> fine, I think it makes sense to just revert the print.
 
-Folks, are you aware that this change blown up the sparse?
-Now there is a "bad constant expression" to each MODULE_*() macro line.
+Is there any value in instead 'ignoring' any underruns if say the frame
+count is < 5 to ignore startup underruns, and keep it as an active print
+if something causes underruns later once the pipeline is established?
 
-Nice that Uwe is in the Cc list, so IIRC he is Debian maintainer for sparse
-and perhaps has an influence to it to some extent.
-
--- 
-With Best Regards,
-Andy Shevchenko
+But maybe that doesn't change much - and if there's no current perceived
+issue
 
 
+Anyway, I don't object to this revert. It's low impact and it's only
+undoing 'your' work so no one else will complain :D
+
+Reviewed-by: Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>
+
+>=20
+> Signed-off-by: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
+> ---
+>  drivers/media/platform/renesas/vsp1/vsp1_drm.c  |  3 ---
+>  drivers/media/platform/renesas/vsp1/vsp1_drv.c  | 11 +----------
+>  drivers/media/platform/renesas/vsp1/vsp1_pipe.h |  2 --
+>  drivers/media/platform/renesas/vsp1/vsp1_regs.h |  2 --
+>  4 files changed, 1 insertion(+), 17 deletions(-)
+>=20
+> diff --git a/drivers/media/platform/renesas/vsp1/vsp1_drm.c b/drivers/med=
+ia/platform/renesas/vsp1/vsp1_drm.c
+> index 15d266439564..b8f211db16fc 100644
+> --- a/drivers/media/platform/renesas/vsp1/vsp1_drm.c
+> +++ b/drivers/media/platform/renesas/vsp1/vsp1_drm.c
+> @@ -721,9 +721,6 @@ int vsp1_du_setup_lif(struct device *dev, unsigned in=
+t pipe_index,
+>                 return 0;
+>         }
+> =20
+> -       /* Reset the underrun counter */
+> -       pipe->underrun_count =3D 0;
+> -
+>         drm_pipe->width =3D cfg->width;
+>         drm_pipe->height =3D cfg->height;
+>         pipe->interlaced =3D cfg->interlaced;
+> diff --git a/drivers/media/platform/renesas/vsp1/vsp1_drv.c b/drivers/med=
+ia/platform/renesas/vsp1/vsp1_drv.c
+> index b8d06e88c475..68e92d3c5915 100644
+> --- a/drivers/media/platform/renesas/vsp1/vsp1_drv.c
+> +++ b/drivers/media/platform/renesas/vsp1/vsp1_drv.c
+> @@ -47,8 +47,7 @@
+> =20
+>  static irqreturn_t vsp1_irq_handler(int irq, void *data)
+>  {
+> -       u32 mask =3D VI6_WPF_IRQ_STA_DFE | VI6_WPF_IRQ_STA_FRE |
+> -                  VI6_WPF_IRQ_STA_UND;
+> +       u32 mask =3D VI6_WPF_IRQ_STA_DFE | VI6_WPF_IRQ_STA_FRE;
+>         struct vsp1_device *vsp1 =3D data;
+>         irqreturn_t ret =3D IRQ_NONE;
+>         unsigned int i;
+> @@ -63,14 +62,6 @@ static irqreturn_t vsp1_irq_handler(int irq, void *dat=
+a)
+>                 status =3D vsp1_read(vsp1, VI6_WPF_IRQ_STA(i));
+>                 vsp1_write(vsp1, VI6_WPF_IRQ_STA(i), ~status & mask);
+> =20
+> -               if ((status & VI6_WPF_IRQ_STA_UND) && wpf->entity.pipe) {
+> -                       wpf->entity.pipe->underrun_count++;
+> -
+> -                       dev_warn_ratelimited(vsp1->dev,
+> -                               "Underrun occurred at WPF%u (total underr=
+uns %u)\n",
+> -                               i, wpf->entity.pipe->underrun_count);
+> -               }
+> -
+>                 if (status & VI6_WPF_IRQ_STA_DFE) {
+>                         vsp1_pipeline_frame_end(wpf->entity.pipe);
+>                         ret =3D IRQ_HANDLED;
+> diff --git a/drivers/media/platform/renesas/vsp1/vsp1_pipe.h b/drivers/me=
+dia/platform/renesas/vsp1/vsp1_pipe.h
+> index 7f623b8cbe5c..9cc2f1646b00 100644
+> --- a/drivers/media/platform/renesas/vsp1/vsp1_pipe.h
+> +++ b/drivers/media/platform/renesas/vsp1/vsp1_pipe.h
+> @@ -137,8 +137,6 @@ struct vsp1_pipeline {
+> =20
+>         unsigned int partitions;
+>         struct vsp1_partition *part_table;
+> -
+> -       u32 underrun_count;
+>  };
+> =20
+>  void vsp1_pipeline_reset(struct vsp1_pipeline *pipe);
+> diff --git a/drivers/media/platform/renesas/vsp1/vsp1_regs.h b/drivers/me=
+dia/platform/renesas/vsp1/vsp1_regs.h
+> index 10cfbcd1b6e0..188d26289714 100644
+> --- a/drivers/media/platform/renesas/vsp1/vsp1_regs.h
+> +++ b/drivers/media/platform/renesas/vsp1/vsp1_regs.h
+> @@ -32,12 +32,10 @@
+>  #define VI6_STATUS_SYS_ACT(n)          BIT((n) + 8)
+> =20
+>  #define VI6_WPF_IRQ_ENB(n)             (0x0048 + (n) * 12)
+> -#define VI6_WPF_IRQ_ENB_UNDE           BIT(16)
+>  #define VI6_WPF_IRQ_ENB_DFEE           BIT(1)
+>  #define VI6_WPF_IRQ_ENB_FREE           BIT(0)
+> =20
+>  #define VI6_WPF_IRQ_STA(n)             (0x004c + (n) * 12)
+> -#define VI6_WPF_IRQ_STA_UND            BIT(16)
+>  #define VI6_WPF_IRQ_STA_DFE            BIT(1)
+>  #define VI6_WPF_IRQ_STA_FRE            BIT(0)
+> =20
+>=20
+> ---
+> base-commit: 76eeb9b8de9880ca38696b2fb56ac45ac0a25c6c
+> change-id: 20250908-rcar-vsp-underrun-revert-f3e64612c62d
+>=20
+> Best regards,
+> --=20
+> Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
+>
