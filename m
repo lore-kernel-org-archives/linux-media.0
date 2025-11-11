@@ -1,232 +1,233 @@
-Received: from CY3PR05CU001.outbound.protection.outlook.com (mail-westcentralusazon11013008.outbound.protection.outlook.com [40.93.201.8])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 873DA21C9E5;
-	Tue, 11 Nov 2025 09:46:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.93.201.8
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762854400; cv=fail; b=dJR8FMJCQgk4JG+MTMIp4/+W0kWz9tqHM0en+PXeIaOmEKZZEtrWFm4IL5T7BHI4Cq/+n6SSgZlS8qT3qpz7TGPjWka4fpBGvp0tTSH0McxXnml1EOTEAKusEZexo3/hI1u6keDYVILbsifm4aLetG20UE6EZ4ZG7tGSneFsvGg=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762854400; c=relaxed/simple;
-	bh=ys5SCvJW1ZVbW8ny+rFbVgqxWYeWOdLBa3UD87BCdwg=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=pJtN8+7OWDNbHddqVw9F9dMlHoPbh+fxRFmFlhQ19hpLtnoQ8Z9e8+sjLUR+OXoCHEu5LcSHorKaBZr8c9KO23Y6sYWeBQGm31dvamEZrw+NDjH97Q7RpZrn2UuCBk5VUTjl+4hRfq8a8jcXSIyarM+WYfq4wAYCK5DHIv6EgwQ=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com; spf=pass smtp.mailfrom=ti.com; dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b=DhTVPyUX; arc=fail smtp.client-ip=40.93.201.8
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ti.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B87F22E8B83;
+	Tue, 11 Nov 2025 09:58:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1762855082; cv=none; b=KCarpnTvp45lXoTCu3R3DpICvBOIMTXWuovqs38Ds7GuWdyKd/VDVru6lWX2Q0P+gO2zoDvZVqycU1xpApE0hv3KXE6lbPbaj5/b3gBLkMaXcaFN1zwxnpcjuDS9Qmx3RTOMw2oexhMjRGsc6kRn8E+BHU+lHYcMRF3im+OIWBo=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1762855082; c=relaxed/simple;
+	bh=wRqC9BBU7AK8hlNM/MuZzbx4CSE/qfPFFz8/AqwN1y8=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=HjXLyJh0MCdEtGwbwo4EdPrUVaHwzMBqoDX+Dmh8FN5nyTRv5W/0uuYWffYGMuM7fQyNK6qoREDi6/bp9PyZBvmmhM+YV25af0t04fNwzMOV3TiRWEFu3t8a41XxGzzyeE9JdvYbpFM+9IG4py9nXtA5rRO/BbPMurtlVQWmbQY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=LoGvYxIS; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="DhTVPyUX"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=XOTZwkHVAP5OVHExcqaHcMaAG+zCrBz05Zcf2V1p+jg0G5/TWJ/xPzmAPZHVD+Bn3oLQ0hHWMR+trIGjdMASdNQjoQ+CBIPaiQ/p3GzWShUkQQy2t3ttYfKe7FDGehBtwl1lGIoQF+Hb2AMxxBPW7ASDML8ZWoP994ybDDMQ+lb+LtTTpp9F5l2bmjrgUureWyia0M3sFiI8erINFjRsHt3WGjyPFeQRgAohzuvcEP1mfECp/Wj71uSJlNENmyhB96gDKcLD42YdByloRSwc5QFEqrRw55QSidLeihLM84RhR2Ftx3G4v75RwDXbliy+55nDRGJtID0GonjR30Kpsw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=QXez4h61wsgwlcPmWXSRgrtHt/eIxpgTlgFDly5oIOI=;
- b=Lt5COOS85iN/lzlEjTGLB4fDBL/FsTTtPlzLUnB5adNoLsedoJaqW7fwU9xARJBT8vzTLz+40t9WAcpFfSLEHKL6K5GVgQ9bfEhI4AIslTmwbyrQCCP6SQOozrQfjQTWr+ziK0xMt5p/yww0Q+GSwAM6NkYQ9HxExwhun7A8vz5vU2xI9z5qdMXXdoTuQ87ES43N8VUeh8qnROC8AhWeDRy7gExlpWl34wEXgUQt7nDenBWr1PjTF9AJLLMweOSQDUqDYRmn8GQBaosoodoSzlRK6I5qNCVEtQJdgB3wO9ZS3ErOuTQbJIeSlw2wA79t1N/x8A7DvVRdlH1xzWoCqQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 198.47.23.195) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=ti.com;
- dmarc=pass (p=quarantine sp=none pct=100) action=none header.from=ti.com;
- dkim=none (message not signed); arc=none (0)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=QXez4h61wsgwlcPmWXSRgrtHt/eIxpgTlgFDly5oIOI=;
- b=DhTVPyUXi7sbbm53JgJFt6ZgSzQp5UEJkKYxNH7Qj2/J3EBMPdUftlHzIW9g/Pg7iGIdg0dXRNs0NmQZkAamXYC5HALFVXCdmg++GVtqP/v0w0ZG7Qgamvho3Bls97c42ZvOycGWFLs7w4CSURtvxFzs5dytAA1rxNSsOr5q8b0=
-Received: from SA9PR13CA0103.namprd13.prod.outlook.com (2603:10b6:806:24::18)
- by IA1PR10MB7487.namprd10.prod.outlook.com (2603:10b6:208:450::15) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9298.16; Tue, 11 Nov
- 2025 09:46:36 +0000
-Received: from SN1PEPF000252A4.namprd05.prod.outlook.com
- (2603:10b6:806:24:cafe::c3) by SA9PR13CA0103.outlook.office365.com
- (2603:10b6:806:24::18) with Microsoft SMTP Server (version=TLS1_3,
- cipher=TLS_AES_256_GCM_SHA384) id 15.20.9320.15 via Frontend Transport; Tue,
- 11 Nov 2025 09:46:27 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 198.47.23.195)
- smtp.mailfrom=ti.com; dkim=none (message not signed) header.d=none;dmarc=pass
- action=none header.from=ti.com;
-Received-SPF: Pass (protection.outlook.com: domain of ti.com designates
- 198.47.23.195 as permitted sender) receiver=protection.outlook.com;
- client-ip=198.47.23.195; helo=lewvzet201.ext.ti.com; pr=C
-Received: from lewvzet201.ext.ti.com (198.47.23.195) by
- SN1PEPF000252A4.mail.protection.outlook.com (10.167.242.11) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.9320.13 via Frontend Transport; Tue, 11 Nov 2025 09:46:35 +0000
-Received: from DLEE200.ent.ti.com (157.170.170.75) by lewvzet201.ext.ti.com
- (10.4.14.104) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.20; Tue, 11 Nov
- 2025 03:46:32 -0600
-Received: from DLEE203.ent.ti.com (157.170.170.78) by DLEE200.ent.ti.com
- (157.170.170.75) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.20; Tue, 11 Nov
- 2025 03:46:32 -0600
-Received: from lelvem-mr05.itg.ti.com (10.180.75.9) by DLEE203.ent.ti.com
- (157.170.170.78) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.20 via Frontend
- Transport; Tue, 11 Nov 2025 03:46:32 -0600
-Received: from [172.24.233.149] (ws.dhcp.ti.com [172.24.233.149])
-	by lelvem-mr05.itg.ti.com (8.18.1/8.18.1) with ESMTP id 5AB9kQdl714888;
-	Tue, 11 Nov 2025 03:46:27 -0600
-Message-ID: <7b4351bb-92ca-4cb7-b0d6-cc69feda7baa@ti.com>
-Date: Tue, 11 Nov 2025 15:16:26 +0530
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="LoGvYxIS"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9F142C116B1;
+	Tue, 11 Nov 2025 09:58:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1762855082;
+	bh=wRqC9BBU7AK8hlNM/MuZzbx4CSE/qfPFFz8/AqwN1y8=;
+	h=From:To:Cc:Subject:Date:From;
+	b=LoGvYxISSsbWSJpLSqoMmA8ayVVoAMBqC33CwOv+ST2WvWqOPENKtInN3CtWQUbq4
+	 HEVtxnuQ09/GPb58NWlgbsmtR4dG7E1L3mHeysOkRl8qsSY0YgbXAlkn4GidI9s1iH
+	 kjd+1j1fT+KsBaPKI2RCeHvOYOvACu63NIeBrlm8rLU0twScUJgCE6zFSrF04c2qKE
+	 kf0eJrz9bSHASxpdosWmkT9sSCYIgyk+gCRDOkaUuCB/54JpdyXuSzkBjKl7u4i+7S
+	 MUgJjp1vmLLeKKAsgz5c8TACT2i42q1X1EAWZcC1P5NvukX2U0R9f/TzlJHBDZ+OYD
+	 kRdSc68o9dneA==
+From: Leon Romanovsky <leon@kernel.org>
+To: Bjorn Helgaas <bhelgaas@google.com>,
+	Logan Gunthorpe <logang@deltatee.com>,
+	Jens Axboe <axboe@kernel.dk>,
+	Robin Murphy <robin.murphy@arm.com>,
+	Joerg Roedel <joro@8bytes.org>,
+	Will Deacon <will@kernel.org>,
+	Marek Szyprowski <m.szyprowski@samsung.com>,
+	Jason Gunthorpe <jgg@ziepe.ca>,
+	Leon Romanovsky <leon@kernel.org>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Sumit Semwal <sumit.semwal@linaro.org>,
+	=?utf-8?q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
+	Kees Cook <kees@kernel.org>,
+	"Gustavo A. R. Silva" <gustavoars@kernel.org>,
+	Ankit Agrawal <ankita@nvidia.com>,
+	Yishai Hadas <yishaih@nvidia.com>,
+	Shameer Kolothum <skolothumtho@nvidia.com>,
+	Kevin Tian <kevin.tian@intel.com>,
+	Alex Williamson <alex@shazbot.org>
+Cc: Krishnakant Jaju <kjaju@nvidia.com>,
+	Matt Ochs <mochs@nvidia.com>,
+	linux-pci@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-block@vger.kernel.org,
+	iommu@lists.linux.dev,
+	linux-mm@kvack.org,
+	linux-doc@vger.kernel.org,
+	linux-media@vger.kernel.org,
+	dri-devel@lists.freedesktop.org,
+	linaro-mm-sig@lists.linaro.org,
+	kvm@vger.kernel.org,
+	linux-hardening@vger.kernel.org,
+	Alex Mastro <amastro@fb.com>,
+	Nicolin Chen <nicolinc@nvidia.com>,
+	Vivek Kasireddy <vivek.kasireddy@intel.com>
+Subject: [PATCH v8 00/11] vfio/pci: Allow MMIO regions to be exported through dma-buf
+Date: Tue, 11 Nov 2025 11:57:42 +0200
+Message-ID: <20251111-dmabuf-vfio-v8-0-fd9aa5df478f@nvidia.com>
+X-Mailer: git-send-email 2.51.1
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v7 10/16] media: cadence: csi2rx: add multistream support
-To: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>, <jai.luthra@linux.dev>,
-	<laurent.pinchart@ideasonboard.com>, <mripard@kernel.org>
-CC: <y-abhilashchandra@ti.com>, <devarsht@ti.com>, <s-jain1@ti.com>,
-	<vigneshr@ti.com>, <mchehab@kernel.org>, <robh@kernel.org>,
-	<krzk+dt@kernel.org>, <p.zabel@pengutronix.de>, <conor+dt@kernel.org>,
-	<sakari.ailus@linux.intel.com>, <hverkuil-cisco@xs4all.nl>,
-	<jai.luthra@ideasonboard.com>, <changhuang.liang@starfivetech.com>,
-	<jack.zhu@starfivetech.com>, <sjoerd@collabora.com>,
-	<hverkuil+cisco@kernel.org>, <linux-kernel@vger.kernel.org>,
-	<linux-media@vger.kernel.org>, <devicetree@vger.kernel.org>
-References: <20250911102832.1583440-1-r-donadkar@ti.com>
- <20250911102832.1583440-11-r-donadkar@ti.com>
- <364c3b35-81a0-4e93-ad3b-a0fff3a29365@ideasonboard.com>
-Content-Language: en-US
-From: Rishikesh Donadkar <r-donadkar@ti.com>
-In-Reply-To: <364c3b35-81a0-4e93-ad3b-a0fff3a29365@ideasonboard.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-C2ProcessedOrg: 333ef613-75bf-4e12-a4b1-8e3623f5dcea
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SN1PEPF000252A4:EE_|IA1PR10MB7487:EE_
-X-MS-Office365-Filtering-Correlation-Id: 67c6e41e-2efd-4bf8-d617-08de21073447
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|82310400026|1800799024|7416014|376014|36860700013;
-X-Microsoft-Antispam-Message-Info:
-	=?utf-8?B?SlV5MkRQbEhuL3I0STByRlFVZ092Zkl0bmRTQkI4ekJsdS9BbUlkY2NDNnZK?=
- =?utf-8?B?Qi9PSkNHZVBOUmM1Wm13cnArVm5wd2liTi8wQjl3V04vMEtHSElXMm4xMTU4?=
- =?utf-8?B?Z3ZHRHJOVVN1Z2xZeTkrcFNJSnRSNzFOVi9CYXk5eG9oZHhVR0ZScjcvSFVW?=
- =?utf-8?B?UC9LUmgvK1BzRTdMVGRnSUV5QTYrdVNMVjJNUXcxZko3Yk9sVWRIa1ZIQllO?=
- =?utf-8?B?K04zRlZBcEQwcHg5S2dtUTJGV2duVWNpMXpyMlhtTG5xcG1aemdmV0N1NUl6?=
- =?utf-8?B?Mk5nVjJSNVVKV0czcTI3c0MrZm0yNmdqejA1U0dkVFhRS0lkZkQyd25PTVJh?=
- =?utf-8?B?WDZrbzM4ZjhjRHUwbGJyT0xmdE1rbllvQjhSbEJWWTE4bzVmcmFKMWk2alRN?=
- =?utf-8?B?Sy9iaHpveEZjZDFGK2gwR2R3NllFY0dITzJudGJ2dDFpa0xhd0ZTdmtlSmZQ?=
- =?utf-8?B?RXJxeVE2SW85Njg4R0hYSkhyOGFtZ3YzMlRqQUVhbHhXcWlQdmkyS2JQRE85?=
- =?utf-8?B?UnFZOGNJK2ltNXp6L0I1VGI2bDZPUGtLQitsUlRnYXExNDVxTnBCVWI4Z1hr?=
- =?utf-8?B?QmkrcDBjajBOMXBTRFdiNHE4d2Z4Q0RUb1ZhTEZTODJxNXNZWkcrb2xQYk9C?=
- =?utf-8?B?Ni9HcS9VaDQxVFBBYSs2bXY5Q2NlTVhTekY5NzNrbVZYTGZRZlNDV0VtWDdZ?=
- =?utf-8?B?RkgrdjBxbFQvK3gwS3ppajhxRm1udS9NNzM5ZGhaSVJUd1NSdHBLU08rdDVQ?=
- =?utf-8?B?T1lXcHBHak9lVHlOVEg0ZHRDMXh4WVZwdkNVb1Q1YVBxYVNRZTNjb0oxSml2?=
- =?utf-8?B?bDVTUVZ4MFFrQXE5eGdxZFF2NFdwL1VXWk5ZTFdZUW91VHc4V0JNRUxtQ1Rh?=
- =?utf-8?B?UHFpOTBiaFJqRFNwaEl6OXA5RWJubjRrYUhlRlVteWc2YU1aMXlEcUJiUlhm?=
- =?utf-8?B?R214V0xGOXhpRjBhbHM0bUczZjZPbTlBY0NBa3Zqbm9LbEp3d3pSa0RFSXp2?=
- =?utf-8?B?YmlQbExFaGo2dXNYMkhvZFlrZG8rQy9QcVhhQ0VBWlpnRURWTDFFSitnUW5r?=
- =?utf-8?B?Z3lzK3dEZ2ZSOWMvTXgzQnU3d0ZzWlpicjVhaDdwU203cDl5czFZY2lOK0tS?=
- =?utf-8?B?YkNFTW9lSEN3ZCs1ZzdjSkJKYk9uTGVIWm9MQ0xTNFVGdmMyZGUvNy80UThz?=
- =?utf-8?B?dlJLMitkeVV5MHJ6cHF1d3lSa29LdlVmc3E0NURhOW5FU2F1Z1RPeE1hRWF3?=
- =?utf-8?B?WVo5eVpheGtBNUZ1MEFldjZWS1BtYnZVa05XOXNZR0RRVVE1cElmaUpGL2NP?=
- =?utf-8?B?bFJlYkt3UVlSZkRXMXRYdnhMbFRYWm1HakRjempnaXdsNTlLRXRxdlJWem1x?=
- =?utf-8?B?UnE0RVJEQUUyR1N3M3VnckI3VGdaZEtVNmJ6YkVBVlF5Nm1KOTdHckk5aXNF?=
- =?utf-8?B?cGNIcFp4aGlVVWhTT3UyNE9DbkNHZ0RHS3V2dWZUeXh1ZUdIV3haNHpVVE1u?=
- =?utf-8?B?bCtBamIvZFBrY2l3YzlLUEZLKzlqTXZsalVuU01XdVNCRDJUWXNYYzV1MXhz?=
- =?utf-8?B?UlRlOTlwOUFWb1MwNTJDeldSRFFNWlVtRXBCWnR4KzNidnUzU3lzaFlic3Z4?=
- =?utf-8?B?dGIxOStLL0g3ZVRGQ1BnNkwwam9IaFpTSzR5THlPOUxKOENzSlVrSVFRcUhL?=
- =?utf-8?B?WGRSMEFxQmpGNXNHb3p1K2hTcmw2cFZSVVhPYnRzNDBnbW1WbE1YNGlwRnNz?=
- =?utf-8?B?bkNPKytyNFA5MDMrUVMwSHhjcXQ3YndiWEF6dFU0RGhta05vQXBTSVJGZjMr?=
- =?utf-8?B?dktrMkthNitkNDM1NWY3VE14NzlLY3FlaXhFbVpSZ2YxLzVVWmpZNWdOS2Nm?=
- =?utf-8?B?cE1JR3hhOGs0WlNSZTBlYjluYTFrVGhzQTl5WTIzUzJlR0o2ODZvWTk4Ny9k?=
- =?utf-8?B?MktLVFlYSWhJMUN6Yk1XUFRGNW9rTDRBc0VrenRJS1RDZkgwT3BVcnhBZGxY?=
- =?utf-8?B?ZUc4RXFjeG9kZTlmT0NyZ0NMMm1kVXdKSkx4OFlVSmxTMksvcG4yS0FyVEYx?=
- =?utf-8?B?S0RRam5OU2xLcFc3OG1zQ3lpd25nUVMrVERmQnozdHNFMDhJZlhkTGR0WDRx?=
- =?utf-8?Q?5Tb8=3D?=
-X-Forefront-Antispam-Report:
-	CIP:198.47.23.195;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:lewvzet201.ext.ti.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(82310400026)(1800799024)(7416014)(376014)(36860700013);DIR:OUT;SFP:1101;
-X-OriginatorOrg: ti.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 Nov 2025 09:46:35.8343
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 67c6e41e-2efd-4bf8-d617-08de21073447
-X-MS-Exchange-CrossTenant-Id: e5b49634-450b-4709-8abb-1e2b19b982b7
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=e5b49634-450b-4709-8abb-1e2b19b982b7;Ip=[198.47.23.195];Helo=[lewvzet201.ext.ti.com]
-X-MS-Exchange-CrossTenant-AuthSource:
-	SN1PEPF000252A4.namprd05.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA1PR10MB7487
+Content-Type: text/plain; charset="utf-8"
+X-Change-ID: 20251016-dmabuf-vfio-6cef732adf5a
+X-Mailer: b4 0.15-dev-3ae27
+Content-Transfer-Encoding: 8bit
 
+Changelog:
+v8:
+ * Fixed spelling errors in p2pdma documentation file.
+ * Added vdev->pci_ops check for NULL in vfio_pci_core_feature_dma_buf().
+ * Simplified the nvgrace_get_dmabuf_phys() function.
+ * Added extra check in pcim_p2pdma_provider() to catch missing call
+   to pcim_p2pdma_init().
+v7: https://patch.msgid.link/20251106-dmabuf-vfio-v7-0-2503bf390699@nvidia.com
+ * Dropped restore_revoke flag and added vfio_pci_dma_buf_move
+   to reverse loop.
+ * Fixed spelling errors in documentation patch.
+ * Rebased on top of v6.18-rc3.
+ * Added include to stddef.h to vfio.h, to keep uapi header file independent.
+v6: https://patch.msgid.link/20251102-dmabuf-vfio-v6-0-d773cff0db9f@nvidia.com
+ * Fixed wrong error check from pcim_p2pdma_init().
+ * Documented pcim_p2pdma_provider() function.
+ * Improved commit messages.
+ * Added VFIO DMA-BUF selftest, not sent yet.
+ * Added __counted_by(nr_ranges) annotation to struct vfio_device_feature_dma_buf.
+ * Fixed error unwind when dma_buf_fd() fails.
+ * Document latest changes to p2pmem.
+ * Removed EXPORT_SYMBOL_GPL from pci_p2pdma_map_type.
+ * Moved DMA mapping logic to DMA-BUF.
+ * Removed types patch to avoid dependencies between subsystems.
+ * Moved vfio_pci_dma_buf_move() in err_undo block.
+ * Added nvgrace patch.
+v5: https://lore.kernel.org/all/cover.1760368250.git.leon@kernel.org
+ * Rebased on top of v6.18-rc1.
+ * Added more validation logic to make sure that DMA-BUF length doesn't
+   overflow in various scenarios.
+ * Hide kernel config from the users.
+ * Fixed type conversion issue. DMA ranges are exposed with u64 length,
+   but DMA-BUF uses "unsigned int" as a length for SG entries.
+ * Added check to prevent from VFIO drivers which reports BAR size
+   different from PCI, do not use DMA-BUF functionality.
+v4: https://lore.kernel.org/all/cover.1759070796.git.leon@kernel.org
+ * Split pcim_p2pdma_provider() to two functions, one that initializes
+   array of providers and another to return right provider pointer.
+v3: https://lore.kernel.org/all/cover.1758804980.git.leon@kernel.org
+ * Changed pcim_p2pdma_enable() to be pcim_p2pdma_provider().
+ * Cache provider in vfio_pci_dma_buf struct instead of BAR index.
+ * Removed misleading comment from pcim_p2pdma_provider().
+ * Moved MMIO check to be in pcim_p2pdma_provider().
+v2: https://lore.kernel.org/all/cover.1757589589.git.leon@kernel.org/
+ * Added extra patch which adds new CONFIG, so next patches can reuse
+ * it.
+ * Squashed "PCI/P2PDMA: Remove redundant bus_offset from map state"
+   into the other patch.
+ * Fixed revoke calls to be aligned with true->false semantics.
+ * Extended p2pdma_providers to be per-BAR and not global to whole
+ * device.
+ * Fixed possible race between dmabuf states and revoke.
+ * Moved revoke to PCI BAR zap block.
+v1: https://lore.kernel.org/all/cover.1754311439.git.leon@kernel.org
+ * Changed commit messages.
+ * Reused DMA_ATTR_MMIO attribute.
+ * Returned support for multiple DMA ranges per-dMABUF.
+v0: https://lore.kernel.org/all/cover.1753274085.git.leonro@nvidia.com
 
-On 25/09/25 18:14, Tomi Valkeinen wrote:
-> Hi,
->
-> On 11/09/2025 13:28, Rishikesh Donadkar wrote:
->> From: Jai Luthra <j-luthra@ti.com>
->>
->> Cadence CSI-2 bridge IP supports capturing multiple virtual "streams"
->> of data over the same physical interface using MIPI Virtual Channels.
->>
->> While the hardware IP supports usecases where streams coming in the sink
->> pad can be broadcasted to multiple source pads, the driver will need
->> significant re-architecture to make that possible. The two users of this
->> IP in mainline linux are TI Shim and StarFive JH7110 CAMSS, and both
->> have only integrated the first source pad i.e stream0 of this IP. So for
->> now keep it simple and only allow 1-to-1 mapping of streams from sink to
->> source, without any broadcasting.
->>
->> The enable_streams() API in v4l2 supports passing a bitmask to enable
->> each pad/stream combination individually on any media subdev. Use this
->> API instead of  s_stream() API.
->>
->> Implement the enable_stream and disable_stream hooks in place of the
->> stream-unaware s_stream hook.
->>
->> Implement a fallback s_stream hook that internally calls enable_stream
->> on each source pad, for consumer drivers that don't use multi-stream
->> APIs to still work. The helper function v4l2_subdev_s_stream_helper()
->> form the v4l2 framework is not used here as it is meant only for the
->> subedvs that have a single source pad and this hardware IP supports
->> having multiple source pads.
-> <snip>
->
->> +static int csi2rx_enable_streams(struct v4l2_subdev *subdev,
->> +				 struct v4l2_subdev_state *state, u32 pad,
->> +				 u64 streams_mask)
->> +{
->> +	struct csi2rx_priv *csi2rx = v4l2_subdev_to_csi2rx(subdev);
->> +	u64 sink_streams;
->> +	int ret;
->> +
->> +	sink_streams = v4l2_subdev_state_xlate_streams(state, pad,
->> +						       CSI2RX_PAD_SINK,
->> +						       &streams_mask);
->> +
->> +	guard(mutex)(&csi2rx->lock);
-> This looks a bit odd too. With enable/disable_streams, the state is
-> already locked. What is the mutex protecting?
->
-> j721e-csi2rx also has mutexes, and it's very unclear what they protect.
-> This should be described in the code.
->
-> I think in csi2rx the whole mutex can be just dropped.
->
-> j721e-csi2rx is a bit more complex, but there also I would consider if
-> and when the state lock protects the relevant parts already, and when
-> another lock is needed, what is the sequence to lock/unlock (e.g. always
-> csi->mutex first, then csi->subdev state lock), and make sure the code
-> follows that.
+---------------------------------------------------------------------------
+Based on "[PATCH v6 00/16] dma-mapping: migrate to physical address-based API"
+https://lore.kernel.org/all/cover.1757423202.git.leonro@nvidia.com/ series.
+---------------------------------------------------------------------------
 
+This series extends the VFIO PCI subsystem to support exporting MMIO
+regions from PCI device BARs as dma-buf objects, enabling safe sharing of
+non-struct page memory with controlled lifetime management. This allows RDMA
+and other subsystems to import dma-buf FDs and build them into memory regions
+for PCI P2P operations.
 
-Thanks for pointing out, Since enable/disable_streams() are protected by 
-the v4l2-core by taking the state lock, all the mutex protection inside 
-these functions in the j721e-csi2rx driver can also be removed.
+The series supports a use case for SPDK where a NVMe device will be
+owned by SPDK through VFIO but interacting with a RDMA device. The RDMA
+device may directly access the NVMe CMB or directly manipulate the NVMe
+device's doorbell using PCI P2P.
 
-I will make sure that this order (csi->mutex followed by the 
-state->lock) is followed through out this driver.
+However, as a general mechanism, it can support many other scenarios with
+VFIO. This dmabuf approach can be usable by iommufd as well for generic
+and safe P2P mappings.
 
+In addition to the SPDK use-case mentioned above, the capability added
+in this patch series can also be useful when a buffer (located in device
+memory such as VRAM) needs to be shared between any two dGPU devices or
+instances (assuming one of them is bound to VFIO PCI) as long as they
+are P2P DMA compatible.
 
-Regards,
+The implementation provides a revocable attachment mechanism using dma-buf
+move operations. MMIO regions are normally pinned as BARs don't change
+physical addresses, but access is revoked when the VFIO device is closed
+or a PCI reset is issued. This ensures kernel self-defense against
+potentially hostile userspace.
 
-Rishikesh
+The series includes significant refactoring of the PCI P2PDMA subsystem
+to separate core P2P functionality from memory allocation features,
+making it more modular and suitable for VFIO use cases that don't need
+struct page support.
 
->
->   Tomi
->
+-----------------------------------------------------------------------
+The series is based originally on
+https://lore.kernel.org/all/20250307052248.405803-1-vivek.kasireddy@intel.com/
+but heavily rewritten to be based on DMA physical API.
+-----------------------------------------------------------------------
+The WIP branch can be found here:
+https://git.kernel.org/pub/scm/linux/kernel/git/leon/linux-rdma.git/log/?h=dmabuf-vfio-v8
+
+Thanks
+
+---
+Jason Gunthorpe (2):
+      PCI/P2PDMA: Document DMABUF model
+      vfio/nvgrace: Support get_dmabuf_phys
+
+Leon Romanovsky (7):
+      PCI/P2PDMA: Separate the mmap() support from the core logic
+      PCI/P2PDMA: Simplify bus address mapping API
+      PCI/P2PDMA: Refactor to separate core P2P functionality from memory allocation
+      PCI/P2PDMA: Provide an access to pci_p2pdma_map_type() function
+      dma-buf: provide phys_vec to scatter-gather mapping routine
+      vfio/pci: Enable peer-to-peer DMA transactions by default
+      vfio/pci: Add dma-buf export support for MMIO regions
+
+Vivek Kasireddy (2):
+      vfio: Export vfio device get and put registration helpers
+      vfio/pci: Share the core device pointer while invoking feature functions
+
+ Documentation/driver-api/pci/p2pdma.rst |  95 +++++++---
+ block/blk-mq-dma.c                      |   2 +-
+ drivers/dma-buf/dma-buf.c               | 235 ++++++++++++++++++++++++
+ drivers/iommu/dma-iommu.c               |   4 +-
+ drivers/pci/p2pdma.c                    | 186 ++++++++++++++-----
+ drivers/vfio/pci/Kconfig                |   3 +
+ drivers/vfio/pci/Makefile               |   1 +
+ drivers/vfio/pci/nvgrace-gpu/main.c     |  56 ++++++
+ drivers/vfio/pci/vfio_pci.c             |   5 +
+ drivers/vfio/pci/vfio_pci_config.c      |  22 ++-
+ drivers/vfio/pci/vfio_pci_core.c        |  53 ++++--
+ drivers/vfio/pci/vfio_pci_dmabuf.c      | 315 ++++++++++++++++++++++++++++++++
+ drivers/vfio/pci/vfio_pci_priv.h        |  23 +++
+ drivers/vfio/vfio_main.c                |   2 +
+ include/linux/dma-buf.h                 |  18 ++
+ include/linux/pci-p2pdma.h              | 120 +++++++-----
+ include/linux/vfio.h                    |   2 +
+ include/linux/vfio_pci_core.h           |  42 +++++
+ include/uapi/linux/vfio.h               |  28 +++
+ kernel/dma/direct.c                     |   4 +-
+ mm/hmm.c                                |   2 +-
+ 21 files changed, 1078 insertions(+), 140 deletions(-)
+---
+base-commit: dcb6fa37fd7bc9c3d2b066329b0d27dedf8becaa
+change-id: 20251016-dmabuf-vfio-6cef732adf5a
+
+Best regards,
+--  
+Leon Romanovsky <leonro@nvidia.com>
+
