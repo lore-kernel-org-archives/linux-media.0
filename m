@@ -1,73 +1,33 @@
-Received: from DM1PR04CU001.outbound.protection.outlook.com (mail-centralusazon11010032.outbound.protection.outlook.com [52.101.61.32])
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4937B239E70;
-	Tue, 11 Nov 2025 12:20:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.61.32
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762863617; cv=fail; b=lajEtabknyviOXabSuznO6SS/krtZ7nOLu6R2LfGYQshcRdRUAw8hVG+JFib+G3Y1VZ+xq8FidpRRPlmuh7ABNyq6/ltwf6vUeveHNMbsKOtrSJ8EACeFwxzmCEZGbHI4qxzrWq7TGCZDL5AlwEnS8EwZKbWz/ptATcCzCuCtRY=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762863617; c=relaxed/simple;
-	bh=vqFy24DGHh76az2g0OA4GM23HfmPyssy/vUL4FdZTx0=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=badBT9ZwQzFRaUnGrZjC8GPFpsfQeRKmUjJR/WpGR08EiMPxfwRNc7JKuR4oK/VawJ90Wo/GIuDfpx2LDEOSK944jxa7KZd5xYdI5XQtbwyioTjvmU5yhF7Kl05PVcgNK+Xk+kHaOcTbtY/tPLnclkPjvBvT7JvOdlSJLlhgYb4=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com; spf=pass smtp.mailfrom=ti.com; dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b=Z47pVn3U; arc=fail smtp.client-ip=52.101.61.32
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ti.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A8EB71E1A05;
+	Tue, 11 Nov 2025 12:23:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.167.242.64
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1762863793; cv=none; b=QAYqtgQKn3jSzzsjEHXC3oxNmjCLMui4+wZGFoayXNRCmXJQJqui4Tx1vlouM5/kuqIuqCsm7O+4oV4RYBZEI4D74N/0lMbJIB080ySxFZbj6uq96ZtY6VCn5s2Ze3t3bdSPSboFsbOFqSedclFnQVA1gVLx1/NpZa8IDkfCH7g=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1762863793; c=relaxed/simple;
+	bh=ab9Tx7OdaNNwimnpgR7WLe8oFQGeeCXeqmmfh0669Zk=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=DAgZyxDV9XbAcm3mWqqKRRFG7zxcI+SuW+fV3CxhCFWrMMZy+NqPTMX7RgePng4g1hmyzZwAs8Zq+gbGwDe6ciH7rqt/Qrs8E4TN0AK7HRcvHNqq1dYwBwcxxsdjnjsZDnLAqeYgsbj9QLiQnFz8s1IreO24WizMX0v3lJUCJOM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ideasonboard.com; spf=pass smtp.mailfrom=ideasonboard.com; dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b=FOgq18Vl; arc=none smtp.client-ip=213.167.242.64
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ideasonboard.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ideasonboard.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="Z47pVn3U"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=hZVQFJnzP1l729wAOzshU7zpCjtZJGZkhkq+KnnZfb4/4EW2VjPWxDfTtLBzg0h6INrvqFNI8DZkxPP6fsbNzJB3SlzbwCXUnhzBYCXkMqWXhVwvcFoE1wCowJuHMLs46yIaFn91qs2mWgqHVOtN6tVGBJIEMygPbN/zUt3kJKnBA4Vnd7QhqmtzmbjWruCHDIay/JRwVaYoycDMdOQ+aCOIqiSHaBD5/401X7PWm2zxzSs9HfyDMTe+4+lUiPl9MPLJIibqojx26JG7Nae2U7E9o7hY4tBUtl/WaZlWuDf88bMzluyKyBWiG320D4qzd4Cgmb+IQJjyIV14lKvj9A==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=UBQJ+FbK73gZ0zl/76iBqW0ZuRV7szRXoDY3HvMoV7k=;
- b=oS4U7j4ZCvnRhuYe/go9mewjJ0dkWgGP70pCq+UB+OYt3ixMI41DdZmOSEfkI6N3f1L3+GNg6aCmQOK0jM4GR0wumEW6smpaLjCtMsccj9eeEqt9KTLayT27zxtWkipBVRIQZkTK5FHV36zaXLuX+0fTmPY1FfkrBiOlCmWhhM9jq0gP0c+LL15PudJ7kO7E9pt+pzqbkRw6LahxEDI7I3Kat10lG9AA0zY4SB123WCU0YnAbCsHArIzzRxGHfrkPu2x4M8+z1LF1/upe32GRi1vbLmfdHA9tRZUkgJrcIGtrNZcQTZdc/fg92RtPeuuFrD8bVltEOkr6b15d/jg0g==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 198.47.21.195) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=ti.com;
- dmarc=pass (p=quarantine sp=none pct=100) action=none header.from=ti.com;
- dkim=none (message not signed); arc=none (0)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=UBQJ+FbK73gZ0zl/76iBqW0ZuRV7szRXoDY3HvMoV7k=;
- b=Z47pVn3UIAZZAP2Diz1tw8HTsMQ7j64LOgE5jEMM2mGS3u/6Klt74636PGF6J7umoyk49ungbPKPPbJzw7h/EZoc3dNyY0dQCv8zkAEz4nMT9+FEE8w92GEeGQrO9fbHl8JvXNzk75CWd0bOLbw8p8S+WhFLgs48VDj2kh+7svQ=
-Received: from BN0PR04CA0177.namprd04.prod.outlook.com (2603:10b6:408:eb::32)
- by MN0PR10MB5981.namprd10.prod.outlook.com (2603:10b6:208:3cb::6) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9298.16; Tue, 11 Nov
- 2025 12:20:12 +0000
-Received: from BN2PEPF0000449F.namprd02.prod.outlook.com
- (2603:10b6:408:eb:cafe::e) by BN0PR04CA0177.outlook.office365.com
- (2603:10b6:408:eb::32) with Microsoft SMTP Server (version=TLS1_3,
- cipher=TLS_AES_256_GCM_SHA384) id 15.20.9298.16 via Frontend Transport; Tue,
- 11 Nov 2025 12:20:05 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 198.47.21.195)
- smtp.mailfrom=ti.com; dkim=none (message not signed) header.d=none;dmarc=pass
- action=none header.from=ti.com;
-Received-SPF: Pass (protection.outlook.com: domain of ti.com designates
- 198.47.21.195 as permitted sender) receiver=protection.outlook.com;
- client-ip=198.47.21.195; helo=flwvzet201.ext.ti.com; pr=C
-Received: from flwvzet201.ext.ti.com (198.47.21.195) by
- BN2PEPF0000449F.mail.protection.outlook.com (10.167.243.150) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.9320.13 via Frontend Transport; Tue, 11 Nov 2025 12:20:11 +0000
-Received: from DFLE201.ent.ti.com (10.64.6.59) by flwvzet201.ext.ti.com
- (10.248.192.32) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.20; Tue, 11 Nov
- 2025 06:20:06 -0600
-Received: from DFLE214.ent.ti.com (10.64.6.72) by DFLE201.ent.ti.com
- (10.64.6.59) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.20; Tue, 11 Nov
- 2025 06:20:06 -0600
-Received: from lelvem-mr06.itg.ti.com (10.180.75.8) by DFLE214.ent.ti.com
- (10.64.6.72) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.20 via Frontend
- Transport; Tue, 11 Nov 2025 06:20:06 -0600
-Received: from [172.24.233.149] (ws.dhcp.ti.com [172.24.233.149])
-	by lelvem-mr06.itg.ti.com (8.18.1/8.18.1) with ESMTP id 5ABCJxEh924501;
-	Tue, 11 Nov 2025 06:20:00 -0600
-Message-ID: <3a297a74-768a-46c6-b204-e390a8fb09d1@ti.com>
-Date: Tue, 11 Nov 2025 17:49:59 +0530
+	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="FOgq18Vl"
+Received: from [192.168.88.20] (91-158-153-178.elisa-laajakaista.fi [91.158.153.178])
+	by perceval.ideasonboard.com (Postfix) with ESMTPSA id D4F1C741;
+	Tue, 11 Nov 2025 13:21:09 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+	s=mail; t=1762863670;
+	bh=ab9Tx7OdaNNwimnpgR7WLe8oFQGeeCXeqmmfh0669Zk=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=FOgq18VlmJ5UwZTFBgtQwXt8wPw9ptq2e7EOI/4SOcCpVyQrZ/36udHil0mW7Yr/G
+	 6CKrFxllwvrm6wGSN1kdtWNJp8j1KZp71x5wIRKDxc9LBytE7YErycu8nnIopx12jg
+	 fCuE6aDlpBXeQpo1Sma2nV4SFlehSTkR0YAwE/J4=
+Message-ID: <c5ab80df-0d60-4984-ad21-7dd1182b990f@ideasonboard.com>
+Date: Tue, 11 Nov 2025 14:23:05 +0200
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
@@ -75,155 +35,221 @@ List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v7 11/16] media: ti: j721e-csi2rx: add multistream support
-To: Jai Luthra <jai.luthra@ideasonboard.com>, Tomi Valkeinen
-	<tomi.valkeinen@ideasonboard.com>, <jai.luthra@linux.dev>,
-	<laurent.pinchart@ideasonboard.com>, <mripard@kernel.org>
-CC: <y-abhilashchandra@ti.com>, <devarsht@ti.com>, <s-jain1@ti.com>,
-	<vigneshr@ti.com>, <mchehab@kernel.org>, <robh@kernel.org>,
-	<krzk+dt@kernel.org>, <p.zabel@pengutronix.de>, <conor+dt@kernel.org>,
-	<sakari.ailus@linux.intel.com>, <hverkuil-cisco@xs4all.nl>,
-	<changhuang.liang@starfivetech.com>, <jack.zhu@starfivetech.com>,
-	<sjoerd@collabora.com>, <hverkuil+cisco@kernel.org>,
-	<linux-kernel@vger.kernel.org>, <linux-media@vger.kernel.org>,
-	<devicetree@vger.kernel.org>
-References: <20250911102832.1583440-1-r-donadkar@ti.com>
- <20250911102832.1583440-12-r-donadkar@ti.com>
- <4534a09b-7eef-4e61-835a-c70d07df3416@ideasonboard.com>
- <175983794202.36451.17500767517117494893@freya>
+Subject: Re: [PATCH] Revert "media: vsp1: Add underrun debug print"
+To: Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
+ Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+ Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc: linux-media@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
+ linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+ Duy Nguyen <duy.nguyen.rh@renesas.com>
+References: <20250910-rcar-vsp-underrun-revert-v1-1-2fa8d3b1b879@ideasonboard.com>
+ <176286282930.2141792.17722042639840544380@ping.linuxembedded.co.uk>
+From: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
 Content-Language: en-US
-From: Rishikesh Donadkar <r-donadkar@ti.com>
-In-Reply-To: <175983794202.36451.17500767517117494893@freya>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+Autocrypt: addr=tomi.valkeinen@ideasonboard.com; keydata=
+ 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
+In-Reply-To: <176286282930.2141792.17722042639840544380@ping.linuxembedded.co.uk>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-C2ProcessedOrg: 333ef613-75bf-4e12-a4b1-8e3623f5dcea
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BN2PEPF0000449F:EE_|MN0PR10MB5981:EE_
-X-MS-Office365-Filtering-Correlation-Id: c7f4830f-78f9-41fe-f6a4-08de211ca955
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|82310400026|376014|1800799024|36860700013|7416014;
-X-Microsoft-Antispam-Message-Info:
-	=?utf-8?B?WFRpTzU5cUtnWVFOaVgwcFBoaWs5ZzRIa2E5TzVROUtXT0JQeEFIU0wwM2gr?=
- =?utf-8?B?TGJxUWU1ckJHYUg1YnpXR1BSeFA3MWVTRzRhaURaM1YyYWFXbWVHckptWUFC?=
- =?utf-8?B?WHBvNDVmMzNDYUltdTBzNmtSZFFQMU5xaTdOZkp3bWxmZ2wvM1ZJNUkxby9z?=
- =?utf-8?B?Um5rclgzbDZJZDBFdTlmdmdjVzZGSEVlck5lanY3UFV0SDJzNXllMUE1MjR3?=
- =?utf-8?B?UmE3SFNtd0o3d1pSNFpwTFE3eE5zWDMxMUJFVXQyU1ZUZXFNcjMzOU5aUllX?=
- =?utf-8?B?Y1p1S01ENzZmNGdTM3RKMGFlcGRRbUtHdHYyZlVxMXBnby9NS0txYm5ORnNa?=
- =?utf-8?B?MVE4eTd6VVF1M1F2aEprZSs4WEVxRmVUNTVpYW1NL1BRT09zZTQ3N1M5anRP?=
- =?utf-8?B?STFWK1BHL1RUSVAxSGhpclNCTWswMlNvZHlEQ1l2V1dhV2dmYkpjeGduMDVW?=
- =?utf-8?B?WldadnQyRGxFN3pyTW9aSEFVRXM0dEhmbHhGVXk4SlAvQzQvME52MDhXQkEy?=
- =?utf-8?B?R20zWjh3T1hkYjh3UVpwb3dWSis2YksyZkdTb3I0NngrcXB1aUR4eEQyaXF4?=
- =?utf-8?B?djhiSnQvSTZJV3p4U0RtRi8vRllBNXNZRis4QUhxL2c4bnhicU5ZVmx2MDhr?=
- =?utf-8?B?T1AvQXlMd3RSSldQUTM5amVnYWlncTdvZ3JPQ2ZlM001aDRnN1FQUzJiczdG?=
- =?utf-8?B?THJuR3ZUVUVkNjVxcXNEbHh6UlFucHFXSjA5MEFQWlVDSXgwMnE4V0ZIUnJv?=
- =?utf-8?B?NEh6YmYvdE5Td2tSaVpJVXhpd1preGRvU1ZRMHJxVERwUjBtVGxmS1ZmMFg0?=
- =?utf-8?B?VlJtUmFlOVJMS1RjTHoyOGZack9rT1M2TWJ0L1BsQy9vbGZjMU93MUhVbWRr?=
- =?utf-8?B?eUFMdXJUWDVrMW9WRkNhd3kycXZ6UUFKVzZWUDgyQ0F4aGtXTjFBZm5oUDFr?=
- =?utf-8?B?ZjRGRk9teHRBVFNKSG5TK25ad0hjTVFraUcyZ1RGeWJvK0xlVUNFUTh5NU9p?=
- =?utf-8?B?Z25CZFQxSlFhM3FucFIybjBVVU9EajJkVm5OVnhtcWcwcTJsa0Q1S242ZXB1?=
- =?utf-8?B?Vk1Gb283RkRvcDNkaFk0YjF0UnJsaTJvTG92VnVFaGFDWTRnV3E2K2xqbnZG?=
- =?utf-8?B?ZDhQTGtna2JUMFc3Y2hONmcxNnAxOVl3MTBpZGY4YVBLR1FmREZtVVpZYWZ6?=
- =?utf-8?B?amJmTnE2M0hwejhmSC9ydk9GQ0k3MEZnODZpT1krYVBncHptMDM3KzZnUC9q?=
- =?utf-8?B?YVJkRHVKVHRyMHIyRVMxR2RsNnN2b1VUSitVdU8wQ1U1MnRnekhRRXhtVzJ5?=
- =?utf-8?B?NktRejJoSXhkNDhXTVVWMVl6eUtLVU1ZY3Voa2xuV01vckNEZlFmeGdRV3Bz?=
- =?utf-8?B?RW1XMEEwY0FrTUNaanpvaUlOeE4rYXJla21RSG9LN21NSFRNdS9IbHFqUUVM?=
- =?utf-8?B?dGZzbUYyRXVTem1YaTl0NDYzL3ZJWEpsbkFEK0xSTnB4M1V5YndZVjhZM2M3?=
- =?utf-8?B?amI0cm1MaVA3MXJLV3hnOVZQSmNXY1lrUkp5MXpNL1Y4NEZxWWpCaVBmRGh6?=
- =?utf-8?B?aEFJT0FxM1VyS3BVNXN3dEZvaXJ2NTRwQk9HYTZjYkVySHNEclM1QlBjYlBB?=
- =?utf-8?B?UDBvUlFqQm5pZC83enBWOHhQeFFxdnVjSTJ5eFZPOHB2aCsxcDN1L0hIR3dR?=
- =?utf-8?B?ZWpFMXFzK1JPeFVJTTUxdEQvM0l5NXpJdllIclFMbWlkZlZXSGU1eDJMSG83?=
- =?utf-8?B?K0RiM1QraXpNaDJoWVU4bnJGWnY4NDRQNjhCbWZ5TW9BOG1RMDUzVVFyKzBQ?=
- =?utf-8?B?VWdxak40RDBielh6TDBnYS8yOEIvcW5tVHUrTkZrWGNhbmt0UENOdk9yM3Uv?=
- =?utf-8?B?U285WmlkbU0vOEtnNXExL3dLV1dSY3FrbDFZays4NCt1OGpxbFJWbUpadTBQ?=
- =?utf-8?B?Z3Y5UmNPSklKeTZJSDF3MFhwZ2dhT2V6ZXFBVFNvL0ttdW8vSjFiaHI0SEZn?=
- =?utf-8?B?V2tjTXd4MWU3ak1pcVE1UjZxTjVIYUQzMU9CWGZCa256NGZoRG9oRmt1WGVJ?=
- =?utf-8?Q?FOTGZG?=
-X-Forefront-Antispam-Report:
-	CIP:198.47.21.195;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:flwvzet201.ext.ti.com;PTR:ErrorRetry;CAT:NONE;SFS:(13230040)(82310400026)(376014)(1800799024)(36860700013)(7416014);DIR:OUT;SFP:1101;
-X-OriginatorOrg: ti.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 Nov 2025 12:20:11.6195
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: c7f4830f-78f9-41fe-f6a4-08de211ca955
-X-MS-Exchange-CrossTenant-Id: e5b49634-450b-4709-8abb-1e2b19b982b7
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=e5b49634-450b-4709-8abb-1e2b19b982b7;Ip=[198.47.21.195];Helo=[flwvzet201.ext.ti.com]
-X-MS-Exchange-CrossTenant-AuthSource:
-	BN2PEPF0000449F.namprd02.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN0PR10MB5981
 
+Hi,
 
-On 07/10/25 17:22, Jai Luthra wrote:
-> Hi Tomi,
->
-> Quoting Tomi Valkeinen (2025-09-25 17:47:38)
->> Hi,
+On 11/11/2025 14:07, Kieran Bingham wrote:
+> Quoting Tomi Valkeinen (2025-09-10 08:26:43)
+>> This reverts commit 1dc30075fb0fe02b74b1ea7fd1c1c734a89f1448.
 >>
->> On 11/09/2025 13:28, Rishikesh Donadkar wrote:
->>> From: Jai Luthra <j-luthra@ti.com>
->>>
->>> Each CSI2 stream can be multiplexed into 4 independent streams, each
->>> identified by its virtual channel number. To capture this multiplexed
->> The split can also be done with the datatype. I don't see it supported
->> in the driver, but afaics the HW supports it. Was there a reason not to
->> support DT filtering? I would think it would be very simple addition.
+>> There have been reports of lots of underruns happening on earlier
+>> generation SoCs (M3, E3) with display use cases, e.g.:
 >>
-> I believe DT filtering should work as-is with the current driver, given we
-> program the SHIM DMACNTX register with the correct datatype depending upon
-> the v4l2 format of the video node.
->
-> So if there is multi-stream source with two different datatypes, it should
-> be possible to route it to different video devices and it "just" works. But
-> I agree that it would be good if it can be tested once, and this commit
-> message can mention that both VC and DT based filtering is supported.
->
-> Rishikesh, would you be able to use an IMX219 to test capturing embedded
-> data and frame data?
-
-
-Yes, DT filtering works. I tried hard coding 0x12 (CSI DT for embedded 
-data) in the DATTYP_CFG field of the DMACNTX_J register and captured 
-frames from IMX219 using yavta and viewed that using xxd. I can see 
-first few lines are that of embedded data, I can see the tags as 
-mentioned in the 'CSI-2 Embedded Data Line' section of the IMX219 
-datasheet[1]. I will mention this in the commit message as well.
-
-
-[1] : https://www.opensourceinstruments.com/Electronics/Data/IMX219PQ.pdf
-
-
-Thanks,
-
-Rishikesh
-
->
->>   Tomi
+>> vsp1 fea28000.vsp: Underrun occurred at WPF0 (total underruns 1)
 >>
-> Thanks,
->      Jai
->
->>> stream, the application needs to tell the driver how it wants to route
->>> the data. It needs to specify which context should process which stream.
->>> This is done via the new routing APIs.
->>>
->>> Add ioctls to accept routing information from the application and save
->>> that in the driver. This can be used when starting streaming on a
->>> context to determine which route and consequently which virtual channel
->>> it should process.
->>>
->>> Support the new enable_stream()/disable_stream() APIs in the subdev
->>> instead of s_stream() hook.
->>>
->>> De-assert the pixel interface reset on first start_streaming() and assert
->>> it on the last stop_streaming().
->>>
->>> Reviewed-by: Yemike Abhilash Chandra <y-abhilashchandra@ti.com>
->>> Co-developed-by: Pratyush Yadav <p.yadav@ti.com>
->>> Signed-off-by: Pratyush Yadav <p.yadav@ti.com>
->>> Signed-off-by: Jai Luthra <j-luthra@ti.com>
->>> Co-developed-by: Rishikesh Donadkar <r-donadkar@ti.com>
->>> Signed-off-by: Rishikesh Donadkar <r-donadkar@ti.com>
-> [snip]
+>> but the display still working fine, and reverting the above commit,
+>> which added underrun prints, makes the prints go away (obviously).
+>>
+>> I made some tests on a remote M3, with no display connected, and I can
+>> confirm that there seem to be a single underrun report quite often when
+>> enabling a display, and an underrun flood when using interlace display
+>> modes.
+>>
+>> E3 does not have interlace display support as far as I can see, so the
+>> interlace issue does not concern it.
+>>
+>> Debugging display issues remotely without a display is quite
+>> challenging, and I did not find any issues in the code, nor could I find
+>> a way to stop the underruns by twiddling with the related registers.
+>>
+>> My pure guess is that the single underruns occurring when starting the
+>> display hint at either a startup sequence issue, or some kind of initial
+>> fifo loading issue. The interlace underruns hint at a bigger
+>> misconfiguration, but as the display works fine, the issue might be just
+>> an underrun at the start of the frame and the HW quickly catching up, or
+>> at the end of the frame, where one block in the pipeline expects more
+>> data but the previous block has already stopped (so maybe a misconfig
+>> between using interlaced height vs progressive height?).
+>>
+>> But at the moment I have no solution to this, and as the displays work
+>> fine, I think it makes sense to just revert the print.
+> 
+> Is there any value in instead 'ignoring' any underruns if say the frame
+> count is < 5 to ignore startup underruns, and keep it as an active print
+> if something causes underruns later once the pipeline is established?
+> 
+> But maybe that doesn't change much - and if there's no current perceived
+> issue
+A single underrun at enable time could/should probably be ignored, as it
+might be just issue with the initial fifo filling or such (even then
+it's a bit annoying, but I've seen some HW docs (not on this platform)
+telling to ignore such underruns).
+
+But that wouldn't help with the underrun flood for interlace. I think
+there's a clear issue for ilace here, but I have no idea where exactly.
+And, the display works fine, so the display controller can recover
+instantly.
+
+> Anyway, I don't object to this revert. It's low impact and it's only
+> undoing 'your' work so no one else will complain :D
+
+Yep... I hate disabling error reporting, but I think it's the best
+option here, at least until someone with the board can debug it
+properly. In any case, if there are "real" underruns, the error is also
+visible on the display, you don't need the console print to show it.
+
+> Reviewed-by: Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>
+
+Thanks!
+
+ Tomi
+
+>>
+>> Signed-off-by: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
+>> ---
+>>  drivers/media/platform/renesas/vsp1/vsp1_drm.c  |  3 ---
+>>  drivers/media/platform/renesas/vsp1/vsp1_drv.c  | 11 +----------
+>>  drivers/media/platform/renesas/vsp1/vsp1_pipe.h |  2 --
+>>  drivers/media/platform/renesas/vsp1/vsp1_regs.h |  2 --
+>>  4 files changed, 1 insertion(+), 17 deletions(-)
+>>
+>> diff --git a/drivers/media/platform/renesas/vsp1/vsp1_drm.c b/drivers/media/platform/renesas/vsp1/vsp1_drm.c
+>> index 15d266439564..b8f211db16fc 100644
+>> --- a/drivers/media/platform/renesas/vsp1/vsp1_drm.c
+>> +++ b/drivers/media/platform/renesas/vsp1/vsp1_drm.c
+>> @@ -721,9 +721,6 @@ int vsp1_du_setup_lif(struct device *dev, unsigned int pipe_index,
+>>                 return 0;
+>>         }
+>>  
+>> -       /* Reset the underrun counter */
+>> -       pipe->underrun_count = 0;
+>> -
+>>         drm_pipe->width = cfg->width;
+>>         drm_pipe->height = cfg->height;
+>>         pipe->interlaced = cfg->interlaced;
+>> diff --git a/drivers/media/platform/renesas/vsp1/vsp1_drv.c b/drivers/media/platform/renesas/vsp1/vsp1_drv.c
+>> index b8d06e88c475..68e92d3c5915 100644
+>> --- a/drivers/media/platform/renesas/vsp1/vsp1_drv.c
+>> +++ b/drivers/media/platform/renesas/vsp1/vsp1_drv.c
+>> @@ -47,8 +47,7 @@
+>>  
+>>  static irqreturn_t vsp1_irq_handler(int irq, void *data)
+>>  {
+>> -       u32 mask = VI6_WPF_IRQ_STA_DFE | VI6_WPF_IRQ_STA_FRE |
+>> -                  VI6_WPF_IRQ_STA_UND;
+>> +       u32 mask = VI6_WPF_IRQ_STA_DFE | VI6_WPF_IRQ_STA_FRE;
+>>         struct vsp1_device *vsp1 = data;
+>>         irqreturn_t ret = IRQ_NONE;
+>>         unsigned int i;
+>> @@ -63,14 +62,6 @@ static irqreturn_t vsp1_irq_handler(int irq, void *data)
+>>                 status = vsp1_read(vsp1, VI6_WPF_IRQ_STA(i));
+>>                 vsp1_write(vsp1, VI6_WPF_IRQ_STA(i), ~status & mask);
+>>  
+>> -               if ((status & VI6_WPF_IRQ_STA_UND) && wpf->entity.pipe) {
+>> -                       wpf->entity.pipe->underrun_count++;
+>> -
+>> -                       dev_warn_ratelimited(vsp1->dev,
+>> -                               "Underrun occurred at WPF%u (total underruns %u)\n",
+>> -                               i, wpf->entity.pipe->underrun_count);
+>> -               }
+>> -
+>>                 if (status & VI6_WPF_IRQ_STA_DFE) {
+>>                         vsp1_pipeline_frame_end(wpf->entity.pipe);
+>>                         ret = IRQ_HANDLED;
+>> diff --git a/drivers/media/platform/renesas/vsp1/vsp1_pipe.h b/drivers/media/platform/renesas/vsp1/vsp1_pipe.h
+>> index 7f623b8cbe5c..9cc2f1646b00 100644
+>> --- a/drivers/media/platform/renesas/vsp1/vsp1_pipe.h
+>> +++ b/drivers/media/platform/renesas/vsp1/vsp1_pipe.h
+>> @@ -137,8 +137,6 @@ struct vsp1_pipeline {
+>>  
+>>         unsigned int partitions;
+>>         struct vsp1_partition *part_table;
+>> -
+>> -       u32 underrun_count;
+>>  };
+>>  
+>>  void vsp1_pipeline_reset(struct vsp1_pipeline *pipe);
+>> diff --git a/drivers/media/platform/renesas/vsp1/vsp1_regs.h b/drivers/media/platform/renesas/vsp1/vsp1_regs.h
+>> index 10cfbcd1b6e0..188d26289714 100644
+>> --- a/drivers/media/platform/renesas/vsp1/vsp1_regs.h
+>> +++ b/drivers/media/platform/renesas/vsp1/vsp1_regs.h
+>> @@ -32,12 +32,10 @@
+>>  #define VI6_STATUS_SYS_ACT(n)          BIT((n) + 8)
+>>  
+>>  #define VI6_WPF_IRQ_ENB(n)             (0x0048 + (n) * 12)
+>> -#define VI6_WPF_IRQ_ENB_UNDE           BIT(16)
+>>  #define VI6_WPF_IRQ_ENB_DFEE           BIT(1)
+>>  #define VI6_WPF_IRQ_ENB_FREE           BIT(0)
+>>  
+>>  #define VI6_WPF_IRQ_STA(n)             (0x004c + (n) * 12)
+>> -#define VI6_WPF_IRQ_STA_UND            BIT(16)
+>>  #define VI6_WPF_IRQ_STA_DFE            BIT(1)
+>>  #define VI6_WPF_IRQ_STA_FRE            BIT(0)
+>>  
+>>
+>> ---
+>> base-commit: 76eeb9b8de9880ca38696b2fb56ac45ac0a25c6c
+>> change-id: 20250908-rcar-vsp-underrun-revert-f3e64612c62d
+>>
+>> Best regards,
+>> -- 
+>> Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
+>>
+
