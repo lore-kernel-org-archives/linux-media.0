@@ -1,125 +1,200 @@
-Received: from mail-pg1-f182.google.com (mail-pg1-f182.google.com [209.85.215.182])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D746A2D739F
-	for <linux-media@vger.kernel.org>; Tue, 11 Nov 2025 08:08:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 091241EEE6
+	for <linux-media@vger.kernel.org>; Tue, 11 Nov 2025 08:10:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762848527; cv=none; b=c/w7lvlEc9xmQPiN8WwOH60ARWFB0ILn/3tSNsTDtCB/pj+V1HPhvSW+3p/NYJ0roEBSJrHyLZOfx7Iq4y+bjrRYVthe5j9rD6UhxuqqBS5LEhKpyRF3zxcgbw8lmjUnLsqg2VdsCvJNleOjQ0ap+YXXTMPBMUyZ5X4oMIg6UPE=
+	t=1762848640; cv=none; b=SZte0A3NYg5xNBE6LqCXejxZOkFNvWDoa9cVK06UdN7ETqGsz4w6eBiOgLBciwbNixcm8r5b1X4c9aC/41T7c7mXQUpKneOgu68i3MGSWGrTzSxCzWPIoF/oF27L3exmL92UuN4+pgqHhc3WEDZuMw2cu+enE1YJ+PRDmYZIBaI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762848527; c=relaxed/simple;
-	bh=e5xzHBdFbmW0XwOUR4XN/Edk4I4Zj1jSK1DHU7z74us=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=goqFuNA+WxAYrqSc/YM4hHD5UYh1PBkjaQyBJxpeElOmkVpxqJIKTpTua1GGPBbmDzpplaoVLqkqR/N+56JX2/bSVpTrILAFJ7wn6xCVd21xEoJNeK0BY4H/ObC04ExtgIwWmPf07wj0KXdlDh5DqWevaVBVbJT5vMjSn9PTBRg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=eO60w1ga; arc=none smtp.client-ip=209.85.215.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
+	s=arc-20240116; t=1762848640; c=relaxed/simple;
+	bh=qz0jAIjeW4fkA7pK9LadI3BxNgTZufvPUhuxnlKV50Y=;
+	h=Subject:To:Cc:References:From:Message-ID:Date:MIME-Version:
+	 In-Reply-To:Content-Type; b=RE2DesmCTWCWn3ka/3zeBpSz1WZyWJNWj/m6B9Txom2d1nDTZ6zo9rMXxkdxBAz8pPm4vc9V5DzLTG3wEbnc+mBIzdg0Q2xkOPrxvQbvtnZIWR/ELuPusAsA8Qal8CZKlSaDiT0+qde0z7iaC5sBpt2Gs8pN5iti5lZZe7asaW8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=VuHGMCA1; arc=none smtp.client-ip=192.198.163.13
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="eO60w1ga"
-Received: by mail-pg1-f182.google.com with SMTP id 41be03b00d2f7-b67684e2904so2432744a12.2
-        for <linux-media@vger.kernel.org>; Tue, 11 Nov 2025 00:08:43 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1762848523; x=1763453323; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=0w05K6KxFo07worIjxTlWcgaX/lcLwwSdDEeFRVch6g=;
-        b=eO60w1gaJ+K2zEQpiYSYxl5NHTKgGX7UDr1tcE1JEpXD52hn8nwKQkjhpXrZ5j7e+f
-         EeeN22XwN655jqnfUIUex//h7wnGg3jPNNOzAT8WFgBXNQX1UplqYHhNlN1tkwVCXn5V
-         gBWl5GtK+/aiaKXOsn6a9KSSHl+ehjnmtpRCQ=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1762848523; x=1763453323;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=0w05K6KxFo07worIjxTlWcgaX/lcLwwSdDEeFRVch6g=;
-        b=Ht0Ao3nxzlwViaRYIsIIVcNfk+V+VfCu9ZnsmqIfhMd6u9uAcLMACu7dFP+YFvN5lx
-         ocPdtQDEl/l3r/tNshM29SFofuKPz3zjh/RSMKP08L1hjmUxhefWR1CCnZG7PVBSCwgu
-         dQx5c6JXPv4/lthJohog+bSuAfU/Pts2sHhiOU4e5hJDk/FwmvMHpm1318TU8HIfM0wh
-         KTgt8jtwowyJxkUJ76AG2AGsyJTk6WmGza8VfY2MmCZReUNAdh5XHls/SVj7YP/z+gZ4
-         Ba1UzITRtARqqTfdDvcmMm7nABJBll8aeiUGF9+QDXJlEMVTpdx+JFbGPLeKcsi3iw88
-         xgqA==
-X-Forwarded-Encrypted: i=1; AJvYcCUwfpJdVTVgc3Gydrz4WgPsaIg8TSTRnUKrk8dgtcfEN0p1vQH8d+HPJjDTet7OqmvCVASdP/cw4Rerhw==@vger.kernel.org
-X-Gm-Message-State: AOJu0YyMofTdWIndbF4Z3GfWdPEYfyAZ43XnEXUE2fGXwoEv3/EyjDdJ
-	Fj4arfMhRn30zxSeWt0+hOVUMX3IPVFq44qiEEh6HrPRIQiJVKbzbntclc1M+dTdZA==
-X-Gm-Gg: ASbGncuDTjD2eebDCVWNHQsb8y2eG3rzOz4V614feSk/1r4MZOyxSpnrTiqQhfArxuA
-	xcY4UmzQ3ijRDckZrD6fDNcHZAot6HtwDo8Q2JC2UQe2hOBKNg7NRhpyPaDyv2sDcdmcEk9MmTp
-	TtsXUkVkjp0uzx0hVZ7Qi+n2dXCtKuAXy4WfxSZqMPR/C/pXF04w6VCDDvYHMvxnvoij6pSSHi0
-	XuGVjXNO63S769YnN0MFdhkTkIDAQgAshpvzJa6yuSFYEVIkxhoq6Gmt979rpBtgCTykojnVzCT
-	6m+LrwgSKuFbAz+GlJXkDxYbQ+qt5x/OT3niAwlWzai9R10zFhJ1IWy3i7/tWMEfPuaWSe4ZwHs
-	tyuJ+ie9qqSJZfXjUrU+6AR88qw9gB3rOJ8oPXwilnyh9Gy0iOr/xD+sxXmOCa/w1E6HwFjPXfH
-	ylq2Xg
-X-Google-Smtp-Source: AGHT+IHC6xuDhDXvZKC9hTiDPjxDoSsReKjYtkLbxL1ziXkP+RR6tEjoFAFy33iKv0lQXU9dzXWwTw==
-X-Received: by 2002:a17:903:2c06:b0:295:62d:503c with SMTP id d9443c01a7336-297e5627aecmr142808835ad.16.1762848523256;
-        Tue, 11 Nov 2025 00:08:43 -0800 (PST)
-Received: from google.com ([2401:fa00:8f:203:4557:54b2:676a:c304])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-29651ca4262sm173807695ad.86.2025.11.11.00.08.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 11 Nov 2025 00:08:42 -0800 (PST)
-Date: Tue, 11 Nov 2025 17:08:25 +0900
-From: Sergey Senozhatsky <senozhatsky@chromium.org>
-To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc: Corey Minyard <corey@minyard.net>, 
-	Christian =?utf-8?B?S8O2bmln?= <christian.koenig@amd.com>, "Dr. David Alan Gilbert" <linux@treblig.org>, 
-	Alex Deucher <alexander.deucher@amd.com>, Thomas Zimmermann <tzimmermann@suse.de>, 
-	Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>, Rob Clark <robin.clark@oss.qualcomm.com>, 
-	Matthew Brost <matthew.brost@intel.com>, Hans Verkuil <hverkuil@kernel.org>, 
-	Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>, Ulf Hansson <ulf.hansson@linaro.org>, 
-	Vitaly Lifshits <vitaly.lifshits@intel.com>, Manivannan Sadhasivam <mani@kernel.org>, 
-	Niklas Cassel <cassel@kernel.org>, Calvin Owens <calvin@wbinvd.org>, 
-	Sagi Maimon <maimon.sagi@gmail.com>, "Martin K. Petersen" <martin.petersen@oracle.com>, 
-	Karan Tilak Kumar <kartilak@cisco.com>, Casey Schaufler <casey@schaufler-ca.com>, 
-	Steven Rostedt <rostedt@goodmis.org>, Petr Mladek <pmladek@suse.com>, 
-	Max Kellermann <max.kellermann@ionos.com>, Takashi Iwai <tiwai@suse.de>, linux-doc@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, openipmi-developer@lists.sourceforge.net, 
-	linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org, linaro-mm-sig@lists.linaro.org, 
-	amd-gfx@lists.freedesktop.org, linux-arm-msm@vger.kernel.org, freedreno@lists.freedesktop.org, 
-	intel-xe@lists.freedesktop.org, linux-mmc@vger.kernel.org, netdev@vger.kernel.org, 
-	intel-wired-lan@lists.osuosl.org, linux-pci@vger.kernel.org, linux-s390@vger.kernel.org, 
-	linux-scsi@vger.kernel.org, linux-staging@lists.linux.dev, ceph-devel@vger.kernel.org, 
-	linux-trace-kernel@vger.kernel.org, linux-sound@vger.kernel.org, 
-	Rasmus Villemoes <linux@rasmusvillemoes.dk>, Sergey Senozhatsky <senozhatsky@chromium.org>, 
-	Jonathan Corbet <corbet@lwn.net>, Sumit Semwal <sumit.semwal@linaro.org>, 
-	Gustavo Padovan <gustavo@padovan.org>, David Airlie <airlied@gmail.com>, 
-	Simona Vetter <simona@ffwll.ch>, Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, 
-	Maxime Ripard <mripard@kernel.org>, Dmitry Baryshkov <lumag@kernel.org>, 
-	Abhinav Kumar <abhinav.kumar@linux.dev>, Jessica Zhang <jesszhan0024@gmail.com>, 
-	Sean Paul <sean@poorly.run>, Marijn Suijten <marijn.suijten@somainline.org>, 
-	Konrad Dybcio <konradybcio@kernel.org>, Lucas De Marchi <lucas.demarchi@intel.com>, 
-	Thomas =?utf-8?Q?Hellstr=C3=B6m?= <thomas.hellstrom@linux.intel.com>, Rodrigo Vivi <rodrigo.vivi@intel.com>, 
-	Mauro Carvalho Chehab <mchehab@kernel.org>, Vladimir Oltean <olteanv@gmail.com>, 
-	Andrew Lunn <andrew@lunn.ch>, "David S. Miller" <davem@davemloft.net>, 
-	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, 
-	Paolo Abeni <pabeni@redhat.com>, Tony Nguyen <anthony.l.nguyen@intel.com>, 
-	Przemek Kitszel <przemyslaw.kitszel@intel.com>, Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kwilczynski@kernel.org>, 
-	Kishon Vijay Abraham I <kishon@kernel.org>, Bjorn Helgaas <bhelgaas@google.com>, 
-	Rodolfo Giometti <giometti@enneenne.com>, Jonathan Lemon <jonathan.lemon@gmail.com>, 
-	Vadim Fedorenko <vadim.fedorenko@linux.dev>, Richard Cochran <richardcochran@gmail.com>, 
-	Stefan Haberland <sth@linux.ibm.com>, Jan Hoeppner <hoeppner@linux.ibm.com>, 
-	Heiko Carstens <hca@linux.ibm.com>, Vasily Gorbik <gor@linux.ibm.com>, 
-	Alexander Gordeev <agordeev@linux.ibm.com>, Christian Borntraeger <borntraeger@linux.ibm.com>, 
-	Sven Schnelle <svens@linux.ibm.com>, Satish Kharat <satishkh@cisco.com>, 
-	Sesidhar Baddela <sebaddel@cisco.com>, "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Xiubo Li <xiubli@redhat.com>, Ilya Dryomov <idryomov@gmail.com>, 
-	Masami Hiramatsu <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
-	Andrew Morton <akpm@linux-foundation.org>, Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>
-Subject: Re: [PATCH v1 12/23] ipmi: Switch to use %ptSp
-Message-ID: <pvjnjwm25ogu7khrpg5ttxylwnxazwxxb4jpvxhw7ysvqzkkpa@ucekjrrppaqm>
-References: <20251110184727.666591-1-andriy.shevchenko@linux.intel.com>
- <20251110184727.666591-13-andriy.shevchenko@linux.intel.com>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="VuHGMCA1"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1762848638; x=1794384638;
+  h=subject:to:cc:references:from:message-id:date:
+   mime-version:in-reply-to:content-transfer-encoding;
+  bh=qz0jAIjeW4fkA7pK9LadI3BxNgTZufvPUhuxnlKV50Y=;
+  b=VuHGMCA1+IjmqdMAToYK1T0iyAohR4fTwhhu5L0gPhumX1JKAh06USCO
+   6fZ5ZInrNAbEJNa96pn44pci7aacIB2owKF0EhOlyt+KzpXdjT7YyF7Lt
+   9EyF4lnvmInByxJgeF1dhF1oxSOE3VfVBWgDsP95LoL6DQx/QP1ZFYAGO
+   WxCwiOlYueblWoDrGKlLWDi4jf25Yko454iHbMLAIcpn0tp5no8//DIJc
+   Qbh2SyJqYXfTTfQQjg4yrbTP3Ei4deFDm4+S8Hkmp6CGzGaylXcQsVKFR
+   TxwjMJ1HjFE/8lZEz/4NblpFN/l1ewJviycX0FeiEY2Yh7ldkVjYwThOW
+   g==;
+X-CSE-ConnectionGUID: VQRa8qeXSNuKVZQ9dWkcjw==
+X-CSE-MsgGUID: FcpnfFe9RTCHJIYbTD7umA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11609"; a="67512655"
+X-IronPort-AV: E=Sophos;i="6.19,296,1754982000"; 
+   d="scan'208";a="67512655"
+Received: from orviesa005.jf.intel.com ([10.64.159.145])
+  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Nov 2025 00:10:37 -0800
+X-CSE-ConnectionGUID: WwqgW24SQrWTBSp89/MutQ==
+X-CSE-MsgGUID: XbKblEENQdOV+dC0dEvIoA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.19,296,1754982000"; 
+   d="scan'208";a="194094407"
+Received: from ipu5-build.bj.intel.com (HELO [10.238.153.130]) ([10.238.153.130])
+  by orviesa005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Nov 2025 00:10:31 -0800
+Subject: Re: [PATCH v11 65/66] media: ipu6: Add support for luma-only formats
+To: Sakari Ailus <sakari.ailus@linux.intel.com>, linux-media@vger.kernel.org
+Cc: hans@jjverkuil.nl, laurent.pinchart@ideasonboard.com,
+ Prabhakar <prabhakar.csengg@gmail.com>, Kate Hsuan <hpa@redhat.com>,
+ Alexander Shiyan <eagle.alexander923@gmail.com>,
+ Dave Stevenson <dave.stevenson@raspberrypi.com>,
+ Tommaso Merciai <tomm.merciai@gmail.com>,
+ Umang Jain <umang.jain@ideasonboard.com>,
+ Benjamin Mugnier <benjamin.mugnier@foss.st.com>,
+ Sylvain Petinot <sylvain.petinot@foss.st.com>,
+ Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+ Julien Massot <julien.massot@collabora.com>,
+ Naushir Patuck <naush@raspberrypi.com>,
+ "Yan, Dongcheng" <dongcheng.yan@intel.com>,
+ "Cao, Bingbu" <bingbu.cao@intel.com>, "Qiu, Tian Shu"
+ <tian.shu.qiu@intel.com>, "Wang, Hongju" <hongju.wang@intel.com>,
+ Stefan Klug <stefan.klug@ideasonboard.com>,
+ Mirela Rabulea <mirela.rabulea@nxp.com>, =?UTF-8?Q?Andr=c3=a9_Apitzsch?=
+ <git@apitzsch.eu>, Heimir Thor Sverrisson <heimir.sverrisson@gmail.com>,
+ Kieran Bingham <kieran.bingham@ideasonboard.com>,
+ Stanislaw Gruszka <stanislaw.gruszka@linux.intel.com>,
+ Mehdi Djait <mehdi.djait@linux.intel.com>,
+ Ricardo Ribalda Delgado <ribalda@kernel.org>,
+ Hans de Goede <hdegoede@redhat.com>,
+ Jacopo Mondi <jacopo.mondi@ideasonboard.com>,
+ Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
+References: <20250825095107.1332313-1-sakari.ailus@linux.intel.com>
+ <20250825095107.1332313-66-sakari.ailus@linux.intel.com>
+From: Bingbu Cao <bingbu.cao@linux.intel.com>
+Message-ID: <7e8d109c-c1f7-10da-d1a4-1a2f19702cb5@linux.intel.com>
+Date: Tue, 11 Nov 2025 16:01:09 +0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20251110184727.666591-13-andriy.shevchenko@linux.intel.com>
+In-Reply-To: <20250825095107.1332313-66-sakari.ailus@linux.intel.com>
+Content-Type: text/plain; charset=windows-1252
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 
-On (25/11/10 19:40), Andy Shevchenko wrote:
-[..]
-> +	dev_dbg(smi_info->io.dev, "**%s: %ptSp\n", msg, &t);
+Sakari,
 
-Strictly speaking, this is not exactly equivalent to %lld.%9.9ld
-or %lld.%6.6ld but I don't know if that's of any importance.
+Thanks for the patch.
+Reviewed-by: Bingbu Cao <bingbu.cao@intel.com>
 
+On 8/25/25 5:51 PM, Sakari Ailus wrote:
+> Add support for luma-only formats.
+> 
+> Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
+> ---
+>  drivers/media/pci/intel/ipu6/ipu6-isys-csi2.c   | 3 +++
+>  drivers/media/pci/intel/ipu6/ipu6-isys-subdev.c | 7 +++++++
+>  drivers/media/pci/intel/ipu6/ipu6-isys-video.c  | 6 ++++++
+>  3 files changed, 16 insertions(+)
+> 
+> diff --git a/drivers/media/pci/intel/ipu6/ipu6-isys-csi2.c b/drivers/media/pci/intel/ipu6/ipu6-isys-csi2.c
+> index d1fece6210ab..b6421d6b978a 100644
+> --- a/drivers/media/pci/intel/ipu6/ipu6-isys-csi2.c
+> +++ b/drivers/media/pci/intel/ipu6/ipu6-isys-csi2.c
+> @@ -34,14 +34,17 @@ static const u32 csi2_supported_codes[] = {
+>  	MEDIA_BUS_FMT_SGBRG10_1X10,
+>  	MEDIA_BUS_FMT_SGRBG10_1X10,
+>  	MEDIA_BUS_FMT_SRGGB10_1X10,
+> +	MEDIA_BUS_FMT_Y10_1X10,
+>  	MEDIA_BUS_FMT_SBGGR12_1X12,
+>  	MEDIA_BUS_FMT_SGBRG12_1X12,
+>  	MEDIA_BUS_FMT_SGRBG12_1X12,
+>  	MEDIA_BUS_FMT_SRGGB12_1X12,
+> +	MEDIA_BUS_FMT_Y12_1X12,
+>  	MEDIA_BUS_FMT_SBGGR8_1X8,
+>  	MEDIA_BUS_FMT_SGBRG8_1X8,
+>  	MEDIA_BUS_FMT_SGRBG8_1X8,
+>  	MEDIA_BUS_FMT_SRGGB8_1X8,
+> +	MEDIA_BUS_FMT_Y8_1X8,
+>  	MEDIA_BUS_FMT_META_8,
+>  	MEDIA_BUS_FMT_META_10,
+>  	MEDIA_BUS_FMT_META_12,
+> diff --git a/drivers/media/pci/intel/ipu6/ipu6-isys-subdev.c b/drivers/media/pci/intel/ipu6/ipu6-isys-subdev.c
+> index 463a0adf9e13..5db59cec821e 100644
+> --- a/drivers/media/pci/intel/ipu6/ipu6-isys-subdev.c
+> +++ b/drivers/media/pci/intel/ipu6/ipu6-isys-subdev.c
+> @@ -31,18 +31,21 @@ unsigned int ipu6_isys_mbus_code_to_bpp(u32 code)
+>  	case MEDIA_BUS_FMT_SGBRG12_1X12:
+>  	case MEDIA_BUS_FMT_SGRBG12_1X12:
+>  	case MEDIA_BUS_FMT_SRGGB12_1X12:
+> +	case MEDIA_BUS_FMT_Y12_1X12:
+>  	case MEDIA_BUS_FMT_META_12:
+>  		return 12;
+>  	case MEDIA_BUS_FMT_SBGGR10_1X10:
+>  	case MEDIA_BUS_FMT_SGBRG10_1X10:
+>  	case MEDIA_BUS_FMT_SGRBG10_1X10:
+>  	case MEDIA_BUS_FMT_SRGGB10_1X10:
+> +	case MEDIA_BUS_FMT_Y10_1X10:
+>  	case MEDIA_BUS_FMT_META_10:
+>  		return 10;
+>  	case MEDIA_BUS_FMT_SBGGR8_1X8:
+>  	case MEDIA_BUS_FMT_SGBRG8_1X8:
+>  	case MEDIA_BUS_FMT_SGRBG8_1X8:
+>  	case MEDIA_BUS_FMT_SRGGB8_1X8:
+> +	case MEDIA_BUS_FMT_Y8_1X8:
+>  	case MEDIA_BUS_FMT_META_8:
+>  		return 8;
+>  	default:
+> @@ -65,21 +68,25 @@ unsigned int ipu6_isys_mbus_code_to_mipi(u32 code)
+>  	case MEDIA_BUS_FMT_SGBRG16_1X16:
+>  	case MEDIA_BUS_FMT_SGRBG16_1X16:
+>  	case MEDIA_BUS_FMT_SRGGB16_1X16:
+> +	case MEDIA_BUS_FMT_Y16_1X16:
+>  		return MIPI_CSI2_DT_RAW16;
+>  	case MEDIA_BUS_FMT_SBGGR12_1X12:
+>  	case MEDIA_BUS_FMT_SGBRG12_1X12:
+>  	case MEDIA_BUS_FMT_SGRBG12_1X12:
+>  	case MEDIA_BUS_FMT_SRGGB12_1X12:
+> +	case MEDIA_BUS_FMT_Y12_1X12:
+>  		return MIPI_CSI2_DT_RAW12;
+>  	case MEDIA_BUS_FMT_SBGGR10_1X10:
+>  	case MEDIA_BUS_FMT_SGBRG10_1X10:
+>  	case MEDIA_BUS_FMT_SGRBG10_1X10:
+>  	case MEDIA_BUS_FMT_SRGGB10_1X10:
+> +	case MEDIA_BUS_FMT_Y10_1X10:
+>  		return MIPI_CSI2_DT_RAW10;
+>  	case MEDIA_BUS_FMT_SBGGR8_1X8:
+>  	case MEDIA_BUS_FMT_SGBRG8_1X8:
+>  	case MEDIA_BUS_FMT_SGRBG8_1X8:
+>  	case MEDIA_BUS_FMT_SRGGB8_1X8:
+> +	case MEDIA_BUS_FMT_Y8_1X8:
+>  		return MIPI_CSI2_DT_RAW8;
+>  	case MEDIA_BUS_FMT_META_8:
+>  	case MEDIA_BUS_FMT_META_10:
+> diff --git a/drivers/media/pci/intel/ipu6/ipu6-isys-video.c b/drivers/media/pci/intel/ipu6/ipu6-isys-video.c
+> index e1306b9510e7..9a6b4736cd67 100644
+> --- a/drivers/media/pci/intel/ipu6/ipu6-isys-video.c
+> +++ b/drivers/media/pci/intel/ipu6/ipu6-isys-video.c
+> @@ -85,6 +85,12 @@ const struct ipu6_isys_pixelformat ipu6_isys_pfmts[] = {
+>  	  IPU6_FW_ISYS_FRAME_FORMAT_RGB565 },
+>  	{ V4L2_PIX_FMT_BGR24, 24, 24, MEDIA_BUS_FMT_RGB888_1X24,
+>  	  IPU6_FW_ISYS_FRAME_FORMAT_RGBA888 },
+> +	{ V4L2_PIX_FMT_GREY, 8, 8, MEDIA_BUS_FMT_Y8_1X8,
+> +	  IPU6_FW_ISYS_FRAME_FORMAT_RAW8 },
+> +	{ V4L2_PIX_FMT_Y10, 10, 10, MEDIA_BUS_FMT_Y10_1X10,
+> +	  IPU6_FW_ISYS_FRAME_FORMAT_RAW10 },
+> +	{ V4L2_PIX_FMT_Y12, 12, 12, MEDIA_BUS_FMT_Y12_1X12,
+> +	  IPU6_FW_ISYS_FRAME_FORMAT_RAW12 },
+>  	{ V4L2_META_FMT_GENERIC_8, 8, 8, MEDIA_BUS_FMT_META_8,
+>  	  IPU6_FW_ISYS_FRAME_FORMAT_RAW8, true },
+>  	{ V4L2_META_FMT_GENERIC_CSI2_10, 10, 10, MEDIA_BUS_FMT_META_10,
+> 
+
+-- 
+Best regards,
+Bingbu Cao
