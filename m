@@ -1,310 +1,113 @@
-Received: from bali.collaboradmins.com (bali.collaboradmins.com [148.251.105.195])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C214F34EF04;
-	Tue, 11 Nov 2025 10:42:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.251.105.195
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 616FF275AF5
+	for <linux-media@vger.kernel.org>; Tue, 11 Nov 2025 11:21:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762857731; cv=none; b=G2OwNw9XShjM1bevIV0QgafJ9QtFT8i4DpKg9DtsgQGmZLNNd9vW6ZHaESpyZF9i3ETzzKbz5erqJX+0uRKF/NgIemcJZdem2zMWpiiZsMEhshVRy7767777EXu2MpcqhVBA0Jp+GEwbMx3ZboW54Q45KeYbFY3N38843XMcpC4=
+	t=1762860063; cv=none; b=QWTcwTIWdJ3w9D2upPBNsgYEsFp+YABVblJx0wZV6HVHCAfgKklpxfdzTkPWwX3DDRynXz/wbBiwQsuT4gCIeYB+jrfGmbxW3IyRgPYDrG8/ieYWfkdqJaSlf0gLDnbGvRzvNOgZF8Afr26SGYSKWc4GAFZemptnCHGAtiTA5f0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762857731; c=relaxed/simple;
-	bh=jJElLLmlTNOPMaQl1bcR+ybZDJWxkHdbChsUP8hGruA=;
-	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
-	 In-Reply-To:Content-Type; b=Lx0nS1QRAULuxuVYObyWQbApduaNHMHohLSUI0qWjFY66SicLvEWWK7qYmbx43Obi8/Lr/jf29b1i9s3C2SjqvLxJbhafoZssGt0xXbXqboLLgEKh5l474QsIyL7pgALAhQWHFCMiOBcJOHpAL3tD2SQeNHsHns0zEiAtfgd8Nc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=l/94beWZ; arc=none smtp.client-ip=148.251.105.195
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
+	s=arc-20240116; t=1762860063; c=relaxed/simple;
+	bh=AZBjE5xaurcKtZzY2oni9P2PkWeQW1P1L55/WtEuoMM=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=LpfPEyJry4ZPEMZ1+oxoF3DsG1MmHGdUimTB+WgrNMyj5fQsbtrSfa5La/puglraK8JGa+uT4y58VaQctWNdgyggvb/qB7e7YhotsSlKhdq69u1IaFXC06ZCFTDgftOpv/z7oKxQq+vMgSfJP29q3W0DpH3/38sw/AXmYKA2I7s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=IRsCwojE; arc=none smtp.client-ip=198.175.65.11
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="l/94beWZ"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1762857726;
-	bh=jJElLLmlTNOPMaQl1bcR+ybZDJWxkHdbChsUP8hGruA=;
-	h=Date:Subject:From:To:Cc:References:In-Reply-To:From;
-	b=l/94beWZkmZO79b/fiDDAu8zy1EAXp6k8Xlal0v33hcc3m4OYDM22+BhGtdRp4WAd
-	 lqrahqPCKy7CyekfNOjl/F3NLWhBHpe8mS7ljPJg3OoaLQwveWtCwNVhJ9ITLNroA0
-	 iWZioi10ZMhGFwCdpPSGx8PVfxn8bRQFCVdAKw4OxvRFFFKaJ+1b8z9LTDdjob7oVv
-	 Yf1q1t4MI8eHQ+3o7TtpvsjyWINctonT96daqcCoayLpvpHnQypXzNNILhCeLjSUQx
-	 46bwaWnMUIjyFEKttF0C/rNNmT4ApgcX6Uqn3KVC0XxXxzf7ggltmx/oScJnr9B1Fk
-	 TH/p7/lQRvjWQ==
-Received: from [10.40.0.100] (185-67-175-126.lampert.tv [185.67.175.126])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: mriesch)
-	by bali.collaboradmins.com (Postfix) with ESMTPSA id 9090017E1299;
-	Tue, 11 Nov 2025 11:42:05 +0100 (CET)
-Message-ID: <ea541696-40db-409e-955f-983723d42b79@collabora.com>
-Date: Tue, 11 Nov 2025 11:42:04 +0100
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="IRsCwojE"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1762860062; x=1794396062;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=AZBjE5xaurcKtZzY2oni9P2PkWeQW1P1L55/WtEuoMM=;
+  b=IRsCwojEs6iumcMewIVRHdN4dV52KDYm/+PhIU+KjdjItQ1+Stzv//2n
+   fv7zcADE+OglL5R7Xax0lRKbzj8p0hPAWYWzOltwEiG8cHLGpvRAqk4T9
+   eEFDjZ/Tt8EF4JzrHO3Rsu/5toLm3J40Srs3yHTtEtt4Wvs2awaFbooVh
+   h3e5iTpyRIYwOAOICQpJ5Jn6P9ghnb966fpHoLoWokroAcF0Eczgchrmq
+   qpKiq9Y3kMVrPQfsiTzAsR01o2c34poRc0vcG0SBSbeEjAO076R+WzpW2
+   Lr2GaNO04niTSWLbMpPkMfcY1TjYek5SUF37QnlN6PJgqQBH+COuXCd4Y
+   Q==;
+X-CSE-ConnectionGUID: i3cxaZGTTKC3Av/woW5Oow==
+X-CSE-MsgGUID: /jhFfUPxQoGD3YK5RFIlpQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11609"; a="75220587"
+X-IronPort-AV: E=Sophos;i="6.19,296,1754982000"; 
+   d="scan'208";a="75220587"
+Received: from fmviesa005.fm.intel.com ([10.60.135.145])
+  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Nov 2025 03:21:01 -0800
+X-CSE-ConnectionGUID: OFBJUn8xTCKGGuf0hI2Ekw==
+X-CSE-MsgGUID: ikp1niu6R4SUu2zn3sdnzQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.19,296,1754982000"; 
+   d="scan'208";a="193196260"
+Received: from egrumbac-mobl6.ger.corp.intel.com (HELO kekkonen.fi.intel.com) ([10.245.244.96])
+  by fmviesa005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Nov 2025 03:21:00 -0800
+Received: from punajuuri.localdomain (unknown [192.168.240.130])
+	by kekkonen.fi.intel.com (Postfix) with ESMTP id 70FCC11F983;
+	Tue, 11 Nov 2025 13:20:57 +0200 (EET)
+Received: from sailus by punajuuri.localdomain with local (Exim 4.98.2)
+	(envelope-from <sakari.ailus@linux.intel.com>)
+	id 1vImQj-00000000Ot1-1U81;
+	Tue, 11 Nov 2025 13:20:57 +0200
+Organization: Intel Finland Oy - BIC 0357606-4 - c/o Alberga Business Park, 6 krs, Bertel Jungin Aukio 5, 02600 Espoo
+From: Sakari Ailus <sakari.ailus@linux.intel.com>
+To: linux-media@vger.kernel.org
+Cc: hans@jjverkuil.nl,
+	laurent.pinchart@ideasonboard.com
+Subject: [PATCH 1/1] media: v4l2-ctrls: Set error v4l2_ctrl_new_fwnode_properties consistently
+Date: Tue, 11 Nov 2025 13:20:57 +0200
+Message-ID: <20251111112057.95655-1-sakari.ailus@linux.intel.com>
+X-Mailer: git-send-email 2.47.3
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v14 00/18] media: rockchip: add a driver for the rockchip
- camera interface
-From: Michael Riesch <michael.riesch@collabora.com>
-To: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Cc: Sakari Ailus <sakari.ailus@linux.intel.com>,
- Mehdi Djait <mehdi.djait@linux.intel.com>,
- Maxime Chevallier <maxime.chevallier@bootlin.com>,
- =?UTF-8?Q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- Gerald Loacker <gerald.loacker@wolfvision.net>,
- Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
- Markus Elfring <Markus.Elfring@web.de>,
- Mauro Carvalho Chehab <mchehab@kernel.org>, Rob Herring
- <robh+dt@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
- Conor Dooley <conor+dt@kernel.org>, Heiko Stuebner <heiko@sntech.de>,
- Kever Yang <kever.yang@rock-chips.com>,
- Nicolas Dufresne <nicolas.dufresne@collabora.com>,
- Sebastian Reichel <sebastian.reichel@collabora.com>,
- Collabora Kernel Team <kernel@collabora.com>,
- Paul Kocialkowski <paulk@sys-base.io>,
- Alexander Shiyan <eagle.alexander923@gmail.com>,
- Val Packett <val@packett.cool>, Rob Herring <robh@kernel.org>,
- Philipp Zabel <p.zabel@pengutronix.de>, linux-media@vger.kernel.org,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, linux-rockchip@lists.infradead.org,
- Mehdi Djait <mehdi.djait@bootlin.com>,
- Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
- Bryan O'Donoghue <bod@kernel.org>, Chen-Yu Tsai <wens@csie.org>
-References: <20240220-rk3568-vicap-v14-0-b38b6da0fc80@collabora.com>
- <aQ4tJg8r_j4NyKhv@kekkonen.localdomain>
- <074cd08e-0412-49f9-8dd9-b1f96eb11717@collabora.com>
- <20251107185441.GG5558@pendragon.ideasonboard.com>
- <13c43edb-9592-4779-a39a-7856bb0f964d@collabora.com>
- <aRGlvQRVoQs0WjyA@kekkonen.localdomain>
- <b89746e1-4574-4b65-af69-c533576ed185@collabora.com>
- <20251111000627.GA30837@pendragon.ideasonboard.com>
- <7266245d-46b8-4355-a966-654e816ec93c@collabora.com>
-Content-Language: en-US
-In-Reply-To: <7266245d-46b8-4355-a966-654e816ec93c@collabora.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-Hi Laurent,
+The vast majority of the callers of v4l2_ctrl_new_fwnode_properties() do
+check the returned error code but the function does not set the control
+handler's error on failure. This will make error handling more complicated
+and prone for bugs.
 
-On 11/11/25 09:37, Michael Riesch wrote:
-> Hi Laurent,
-> 
-> On 11/11/25 01:06, Laurent Pinchart wrote:
->> On Mon, Nov 10, 2025 at 11:29:57AM +0100, Michael Riesch wrote:
->>> On 11/10/25 09:43, Sakari Ailus wrote:
->>>> On Fri, Nov 07, 2025 at 09:51:37PM +0100, Michael Riesch wrote:
->>>>> On 11/7/25 19:54, Laurent Pinchart wrote:
->>>>>> On Fri, Nov 07, 2025 at 07:41:59PM +0100, Michael Riesch wrote:
->>>>>>> On 11/7/25 18:32, Sakari Ailus wrote:
->>>>>>>> On Fri, Oct 24, 2025 at 02:51:29PM +0200, Michael Riesch via B4 Relay wrote:
->>>>>>>>> Habidere,
->>>>>>>>>
->>>>>>>>> This series introduces support for the Rockchip Camera Interface (CIF),
->>>>>>>>> which is featured in many Rockchip SoCs in different variations.
->>>>>>>>> For example, the PX30 Video Input Processor (VIP) is able to receive
->>>>>>>>> video data via the Digital Video Port (DVP, a parallel data interface)
->>>>>>>>> and transfer it into system memory using a double-buffering mechanism
->>>>>>>>> called ping-pong mode.
->>>>>>>>> The RK3568 Video Capture (VICAP) unit, on the other hand, features a
->>>>>>>>> DVP and a MIPI CSI-2 receiver that can receive video data independently
->>>>>>>>> (both using the ping-pong scheme).
->>>>>>>>> The different variants may have additional features, such as scaling
->>>>>>>>> and/or cropping.
->>>>>>>>> Finally, the RK3588 VICAP unit constitutes an essential piece of the
->>>>>>>>> camera interface with one DVP, six MIPI CSI-2 receivers, scale/crop
->>>>>>>>> units, and a data path multiplexer (to scaler units, to ISP, ...).
->>>>>>>>
->>>>>>>> I understand both RK3568 and RK3588 include an ISP. Do you have insight on
->>>>>>>> how would this work, should the support for the ISP be added later on?
->>>>>>>
->>>>>>> Short answer: Yes and yes.
->>>>>>>
->>>>>>> Long answer:
->>>>>>>
->>>>>>> The patch series at hand adds support for the PX30 VIP and the RK3568
->>>>>>> VICAP. I cannot really say something about the PX30, but on the RK3568
->>>>>>> VICAP and ISP are orthogonal (the ISP features its own MIPI CSI-2
->>>>>>> receiver, different from that introduced in this series). Thus, ISP
->>>>>>> support can be introduced anytime (whenever someone is motivated ;-)).
->>>>>>
->>>>>> Won't they both be connected to the same sensor though, and probably the
->>>>>> same D-PHY in the SoC ? They don't seem entirely separate to me.
->>>>>
->>>>> The MIPI CSI-2 DPHY is shared, indeed. Thus, they *maybe technically
->>>>> could be* connected to the same sensor, but I don't know whether that
->>>>> works and fail to see why anyone would to such a thing (if it is about
->>>>> raw capture, the MIPI CSI-2 receiver in the ISP can do that on its own).
->>>>>
->>>>> The DPHY can be operated in split mode, with two lanes for VICAP and two
->>>>> lanes for ISP. This is not implemented yet, but can be done at a later
->>>>> stage on PHY level (not media related). In this case, ISP and VICAP can
->>>>> receive data from different subdevices via CSI-2.
->>>>
->>>> The two would be part of the same media graph in that case and as there are
->>>> two CSI-2 receivers and a single PHY, the PHY would probably need to have a
->>>> sub-device as well, to allow link configuration to be used to select where
->>>> the PHY is connected.
->>>>
->>>> I don't think we have such a setup elsewhere, and supporting this would
->>>> require changes in the MC framework.
->>>
->>> What follows is a response that also addresses issues raised during our
->>> off-list discussion.
->>>
->>> First of all, I agree with you that the RK3568 HW is "a bit special" (to
->>> say the least) in that regard. Let's have an outlook to newer SoCs, such
->>> as the RK3588: Here, the MIPI CSI-2 DPHYs (there are two of them) with
->>> their split mode are present as well, but the assignment is fixed. For
->>> example, the RK3588 VICAP has six MIPI CSI-2 receiver units and six MIPI
->>> CSI-2 capture units. Units 1 and 2 handle a different MIPI PHY, units 3
->>> and 5 handle the DPHYs (without split mode), units 4 and/or 6 are active
->>> whenever DPHY 1 and/or 2 is in split mode.
->>>
->>> I would model this by adding support for more than one (logical) PHYs
->>> (phy-cells = <1>;) and assigning the logical PHYs to the MIPI CSI-2
->>> receivers. There is not really a possibility to route anything at this
->>> point (routing is done in a MUX unit that takes the different MIPI CSI-2
->>> receivers as inputs).
->>>
->>> Now back to the peculiar RK3568 situation: By default the split mode of
->>> the DPHY is off and both VICAP and ISP are able to receive the same data
->>> (from up to four lanes) with their MIPI CSI-2 receivers (not sure
->>> whether both can be active at the same time, though).
->>
->> A common use case for capturing data from the same sensor through both
->> ISP and VICAP would be routing image data to the ISP and embedded data
->> to VICAP. Assuming the hardware is able to do this, there will be users
->> interested in this feature.
-> 
-> VICAP and ISP would capture different CSI-2 links. AFAIK the embedded
-> data is usually transmitted on the same CSI-2 link but on a different
-> virtual channel. The MIPI CSI receiver in the ISP is capable of
-> capturing (up to three, I think) virtual channels and passing e.g. one
-> VC to the ISP and capturing another VC to memory.
-> 
->>> There are two bits
->>> in the GRF that define the lanes that ISP and VICAP receive in split
->>> mode (lane 0/1 or lane 2/3). Not sure whether these bits are supposed to
->>> be changed during runtime.
->>>
->>> I would suggest modelling this on PHY level in DT, e.g., by passing
->>> reasonable properties to the dphy node, such as
->>>     rockchip,dphy-split-mode;
->>
->> Split mode should indeed be conveyed through DT, as it's a property of
->> the hardware.
-> 
-> Ack!
-> 
->>
->>>     rockchip,dphy-split-invert;
->>> where the former activates the split mode and assigns lanes 0/1 to the
->>> ISP and lanes 2/3 to the VICAP, and the latter inverts this assignment
->>> (lanes 2/3 to the ISP and lanes 0/1 to the VICAP). This would facilitate
->>> the reasonable use cases with reasonable effort.
->>
->> This I'm less convinced about. The routing should be dynamic.
-> 
-> Ack.
-> 
->> How do you envision the connections to the CSI-2 sources to be modelled
->> in DT ? We need ports and endpoints, and data-lanes properties. Where
->> would those reside on the RK3568 side ?
-> 
-> Goto ASCII sketch below for that...
-> 
->>> Otherwise, to keep it perfectly general and most flexible and
->>> everything, we would have to introduce another subdevice indeed, which
->>> would be active on the RK3568 exclusively. Therefore, I don't see that
->>> the PHY driver introduces this subdevice, but a specialized (syscon?)
->>> MUX driver that deals with the RK3568 GRF bits. Something like this
->>>
->>>                            |----------------------|     |-------------|
->>>  Sensor A --- /2 lanes --- | lane 0/1      to ISP | --- | ISP MIPI RX |
->>>                            |                      |     |-------------|
->>>                            |                      |
->>>                            |                      |     |-------------|
->>>  Sensor B --- /2 lanes --- | lane 2/3    to VICAP | --- |VICAP MIPI RX|
->>>                            |----------------------|     |-------------|
->>>
->>> But IMHO this will be too much effort for corner use case that I doubt
->>> anyone will actually use.
->>>
->>> What do you think:
->>>  - Let's keep the PHYs out of V4L2/MC, ok?
->>>  - Let's model the reasonable use cases with device tree properties in
->>>    the dphy DT node, ok?
->>
->> I think the routing should be dynamic.
-> 
-> In this case, my suggestion would be the following:
-> 
->  - An additional MUX subdevice on the RK3568 only, see sketch above
->  - One or two input ports (depending on split mode being activated)
->  - Two output ports (to ISP MIPI RX, to VICAP MIPI RX)
->  - Routing possible 1:N (both input ports can be connected to one or two
->    output ports)
->  - The subdevice will have ports, endpoints, data-lanes properties on
->    both sides.
-> 
-> The nice thing about it is that the current state can be extended once
-> split mode is implemented, IOW patches 01/18 - 17/18 can be readily applied.
-> 
-> Patch 18/18 must not be applied at this time, as this would be the first
-> actual usage of the MIPI CSI-2 pipeline. I guess we need to implement
-> and insert the new subdevice first for the sake of uAPI compatibility.
-> 
-> So pretty-please-with-sugar-on-top can we merge 01-17 so that I don't
-> have to drag these patches along anymore?
+Always assign the control handler's error field on error in
+v4l2_ctrl_new_fwnode_properties().
 
-In an off-list chat with Sakari we found that it would make sense to
-leave patches 01 and 12 away as well, in order to avoid uAPI
-compatibility issues for good. The MIPI CSI-2 receiver bindings and
-driver can be merged, as the only difference in the new setup will be
-that on the RK3568 the receiver is connected to the new MUX subdevice,
-rather than to a sensor (as will be the case on e.g. the RK3588).
+Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
+---
+ drivers/media/v4l2-core/v4l2-ctrls-core.c | 3 ++-
+ include/media/v4l2-ctrls.h                | 3 +++
+ 2 files changed, 5 insertions(+), 1 deletion(-)
 
-Can we agree on the following plan:
- 1) You shall merge patches 02/18 - 11/18 + 13/18 - 17/18.
- 2) I shall add the MUX subdev and send a revised version of patches 01,
-    12, 18 along with it.
- 3) We shall have a solid basis to implement split mode in the DPHY
-    driver, RK3568 ISP support (if anyone has time for that), and RK3588
-    VICAP support.
-
-OK for everyone? @Laurent: can we get an Ack from you?
-
-Best regards,
-Michael
-
-> 
-> Best regards,
-> Michael
-> 
->>
->>>> How does the media graph look like for the device at the moment?
->>>
->>> Please take a look at the media graph in the documentation patch (PATCH
->>> v14 01/18). This is without the ISP, but gives an overview of what the
->>> RK3568 VICAP is capable of.
->>>
->>> Best regards,
->>> Michael
->>>
->>>>> BTW the ISP is able to process the data captured by VICAP, but
->>>>> apparently this includes a RAM round trip (VICAP captures to memory, ISP
->>>>> operates in mem2mem mode).
->>>>>
->>>>>> A block diagram that shows connections between the CSI-2 pins, D-PHY,
->>>>>> CSI-2 receivers, VICAP and ISP could help.
->>>>>>
->>>>>>> Once this patch series is merged, I'll push out changes that introduce
->>>>>>> support for the RK3588 VICAP. We can discuss the integration of any
->>>>>>> RK3588 ISP in this scope then -- and there may be some things to discuss
->>>>>>> as there the VICAP and the ISP(s) are directly connected by means of a
->>>>>>> MUX unit in the VICAP.
->>>>>>>
->>>>>>> Alright?
->>
-> 
+diff --git a/drivers/media/v4l2-core/v4l2-ctrls-core.c b/drivers/media/v4l2-core/v4l2-ctrls-core.c
+index 209bc05883bb..1d4b5859f0e2 100644
+--- a/drivers/media/v4l2-core/v4l2-ctrls-core.c
++++ b/drivers/media/v4l2-core/v4l2-ctrls-core.c
+@@ -2780,7 +2780,8 @@ int v4l2_ctrl_new_fwnode_properties(struct v4l2_ctrl_handler *hdl,
+ 			orientation_ctrl = V4L2_CAMERA_ORIENTATION_EXTERNAL;
+ 			break;
+ 		default:
+-			return -EINVAL;
++			hdl->error = -EINVAL;
++			return hdl->error;
+ 		}
+ 		if (!v4l2_ctrl_new_std_menu(hdl, ctrl_ops,
+ 					    V4L2_CID_CAMERA_ORIENTATION,
+diff --git a/include/media/v4l2-ctrls.h b/include/media/v4l2-ctrls.h
+index 31fc1bee3797..327976b14d50 100644
+--- a/include/media/v4l2-ctrls.h
++++ b/include/media/v4l2-ctrls.h
+@@ -1581,6 +1581,9 @@ int v4l2_ctrl_subdev_log_status(struct v4l2_subdev *sd);
+  * not overwritten. Callers should register the controls they want to handle
+  * themselves before calling this function.
+  *
++ * This function will set the control handler's error field on failure, just as
++ * other functions adding controls to the handler.
++ *
+  * Return: 0 on success, a negative error code on failure.
+  */
+ int v4l2_ctrl_new_fwnode_properties(struct v4l2_ctrl_handler *hdl,
+-- 
+2.47.3
 
