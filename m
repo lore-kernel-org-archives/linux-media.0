@@ -1,44 +1,58 @@
 Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 042E73730DA;
-	Tue, 11 Nov 2025 17:21:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4111A369973;
+	Tue, 11 Nov 2025 17:28:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.167.242.64
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762881694; cv=none; b=S3pXR9x6n7cVGtFskHxtrMNQcjhRuRBa+t+ncmy0ReT23zy+AtBrBlmd+h0IwduyVaSOf7ADPmwkr/HRTW9l7e5Qyuv9SQSVvtPqOadlYeF8s6A09xewEaQuAknJSS7IzM36dnG3G3t0JRe/lBOXObzYBK1aFMwmw4PyFpLHGko=
+	t=1762882113; cv=none; b=UeE7j+ZMI4ZO9qY7lAAJdljjvXJDYCUG6j6n3vnSEHdFPt23iqiEgtfvSMWxA920fR3SkHpc9PZFlPkfAeo4VcKmUVZTrF//sKaMKSNzlmMQQBXEoUyuamzjNQvNSS9Iuh7DK4tRtp1gPKpYe5025Lz7ZLChJEH4SomUuHhmJA4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762881694; c=relaxed/simple;
-	bh=O8mHQn3liP2UUlM+m+8C3tF9osLYbychnmMSAfVoFLk=;
+	s=arc-20240116; t=1762882113; c=relaxed/simple;
+	bh=bsmd7kg6qnIb8MlMDLkiQd6rQpcUfqqxFWYPX1fT4WE=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=LzRDxsDg8beyJAPI2Htjq0qw3o9ThkT5J4JoJyY3/7b1gChySt4PQUIkJbMN0EVkM2jR4QxShleTrF7QHydoO6KKzyl6BQBWjhUwfvQ4Kjk4Zi6cg7yPjWj6KJmz7sxZYm0PGVxF/8hgJMlna57K0NBIaZGYt2BSB3JDUM2IgB4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ideasonboard.com; spf=pass smtp.mailfrom=ideasonboard.com; dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b=dGzxIXGt; arc=none smtp.client-ip=213.167.242.64
+	 Content-Type:Content-Disposition:In-Reply-To; b=uYL4PPe6v4par+OgAvjQKhf1/B2961TGMAG/T+DPXoIWQSKL9Uo637L9oI8Oc78fXZk1c66r37mVlyc8I0dXJ6jUeceHqK6vU86PyG4z59y3jf2fesiZFX59W+IDar6aR8NpWK6K0oZV5/TfR6juvWFZWAI6fTxTpy0kz7+m/hM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ideasonboard.com; spf=pass smtp.mailfrom=ideasonboard.com; dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b=pfqk8Swc; arc=none smtp.client-ip=213.167.242.64
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ideasonboard.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ideasonboard.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="dGzxIXGt"
+	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="pfqk8Swc"
 Received: from pendragon.ideasonboard.com (82-203-161-95.bb.dnainternet.fi [82.203.161.95])
-	by perceval.ideasonboard.com (Postfix) with UTF8SMTPSA id 204461D29;
-	Tue, 11 Nov 2025 18:19:31 +0100 (CET)
+	by perceval.ideasonboard.com (Postfix) with UTF8SMTPSA id CD3211D29;
+	Tue, 11 Nov 2025 18:26:22 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-	s=mail; t=1762881571;
-	bh=O8mHQn3liP2UUlM+m+8C3tF9osLYbychnmMSAfVoFLk=;
+	s=mail; t=1762881983;
+	bh=bsmd7kg6qnIb8MlMDLkiQd6rQpcUfqqxFWYPX1fT4WE=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=dGzxIXGtlQ5L+Iapz2cmB+eUbSgZNY7dVy0UcLiiGUG0eP7hLLH5gUYeh9o+lwAKU
-	 PWYr+Xg9mdInlXCnKvMk9bfBuzWtZGvyj0KpOUJilAMPOdwReU1BngnydP+FN05gbq
-	 MrbJgZEI03PSVgnUe/cmZKyLWcIN13Mq6iCRmUzg=
-Date: Tue, 11 Nov 2025 19:21:24 +0200
+	b=pfqk8SwcT5h2+q1NJF3KwQzpmFNVGC595cqR5z3NIVjAegXLrB56owuRgJqc6E9EP
+	 ACkTo6j2Ub5YCF3saLI3kxZD2yo9WNAWD6EYbbntbHiNqX5gLpxhiTIFz07LTO/Dc1
+	 ygB8oCU1JnuLQ8JWd20ngFgqS/AlJhIqU6wQvChc=
+Date: Tue, 11 Nov 2025 19:28:15 +0200
 From: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
-Cc: Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
+To: "G.N. Zhou (OSS)" <guoniu.zhou@oss.nxp.com>
+Cc: Rui Miguel Silva <rmfrfs@gmail.com>,
+	Martin Kepplinger <martink@posteo.de>,
+	Purism Kernel Team <kernel@puri.sm>,
 	Mauro Carvalho Chehab <mchehab@kernel.org>,
-	linux-media@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
-	linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-	Duy Nguyen <duy.nguyen.rh@renesas.com>
-Subject: Re: [PATCH] Revert "media: vsp1: Add underrun debug print"
-Message-ID: <20251111172124.GH4270@pendragon.ideasonboard.com>
-References: <20250910-rcar-vsp-underrun-revert-v1-1-2fa8d3b1b879@ideasonboard.com>
- <176286282930.2141792.17722042639840544380@ping.linuxembedded.co.uk>
- <c5ab80df-0d60-4984-ad21-7dd1182b990f@ideasonboard.com>
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>, Shawn Guo <shawnguo@kernel.org>,
+	Sascha Hauer <s.hauer@pengutronix.de>,
+	Pengutronix Kernel Team <kernel@pengutronix.de>,
+	Fabio Estevam <festevam@gmail.com>,
+	Philipp Zabel <p.zabel@pengutronix.de>, Frank Li <frank.li@nxp.com>,
+	"linux-media@vger.kernel.org" <linux-media@vger.kernel.org>,
+	"devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+	"imx@lists.linux.dev" <imx@lists.linux.dev>,
+	"linux-arm-kernel@lists.infradead.org" <linux-arm-kernel@lists.infradead.org>,
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+	"G.N. Zhou" <guoniu.zhou@nxp.com>
+Subject: Re: [PATCH v7 2/5] media: imx8mq-mipi-csi2: Use
+ devm_clk_bulk_get_all() to fetch clocks
+Message-ID: <20251111172815.GA12331@pendragon.ideasonboard.com>
+References: <20251023-csi2_imx8ulp-v7-0-5ecb081ce79b@nxp.com>
+ <20251023-csi2_imx8ulp-v7-2-5ecb081ce79b@nxp.com>
+ <20251027001151.GN13023@pendragon.ideasonboard.com>
+ <AS8PR04MB908014E336F99BEEB504EDB7FAC4A@AS8PR04MB9080.eurprd04.prod.outlook.com>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
@@ -47,171 +61,151 @@ List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <c5ab80df-0d60-4984-ad21-7dd1182b990f@ideasonboard.com>
+In-Reply-To: <AS8PR04MB908014E336F99BEEB504EDB7FAC4A@AS8PR04MB9080.eurprd04.prod.outlook.com>
 
-On Tue, Nov 11, 2025 at 02:23:05PM +0200, Tomi Valkeinen wrote:
-> On 11/11/2025 14:07, Kieran Bingham wrote:
-> > Quoting Tomi Valkeinen (2025-09-10 08:26:43)
-> >> This reverts commit 1dc30075fb0fe02b74b1ea7fd1c1c734a89f1448.
-> >>
-> >> There have been reports of lots of underruns happening on earlier
-> >> generation SoCs (M3, E3) with display use cases, e.g.:
-> >>
-> >> vsp1 fea28000.vsp: Underrun occurred at WPF0 (total underruns 1)
-> >>
-> >> but the display still working fine, and reverting the above commit,
-> >> which added underrun prints, makes the prints go away (obviously).
-> >>
-> >> I made some tests on a remote M3, with no display connected, and I can
-> >> confirm that there seem to be a single underrun report quite often when
-> >> enabling a display, and an underrun flood when using interlace display
-> >> modes.
-> >>
-> >> E3 does not have interlace display support as far as I can see, so the
-> >> interlace issue does not concern it.
-> >>
-> >> Debugging display issues remotely without a display is quite
-> >> challenging, and I did not find any issues in the code, nor could I find
-> >> a way to stop the underruns by twiddling with the related registers.
-> >>
-> >> My pure guess is that the single underruns occurring when starting the
-> >> display hint at either a startup sequence issue, or some kind of initial
-> >> fifo loading issue. The interlace underruns hint at a bigger
-> >> misconfiguration, but as the display works fine, the issue might be just
-> >> an underrun at the start of the frame and the HW quickly catching up, or
-> >> at the end of the frame, where one block in the pipeline expects more
-> >> data but the previous block has already stopped (so maybe a misconfig
-> >> between using interlaced height vs progressive height?).
-> >>
-> >> But at the moment I have no solution to this, and as the displays work
-> >> fine, I think it makes sense to just revert the print.
+On Tue, Nov 04, 2025 at 07:47:43AM +0000, G.N. Zhou (OSS) wrote:
+> On Monday, October 27, 2025 8:12 AM, Laurent Pinchart wrote:
+> > On Thu, Oct 23, 2025 at 05:19:43PM +0800, Guoniu Zhou wrote:
+> > > From: Guoniu Zhou <guoniu.zhou@nxp.com>
+> > >
+> > > Use devm_clk_bulk_get_all() helper to simplify clock handle code.
+> > >
+> > > No functional changes intended.
+> > >
+> > > Reviewed-by: Frank Li <Frank.Li@nxp.com>
+> > > Signed-off-by: Guoniu Zhou <guoniu.zhou@nxp.com>
+> > > ---
+> > >  drivers/media/platform/nxp/imx8mq-mipi-csi2.c | 52
+> > > ++++++++-------------------
+> > >  1 file changed, 15 insertions(+), 37 deletions(-)
+> > >
+> > > diff --git a/drivers/media/platform/nxp/imx8mq-mipi-csi2.c
+> > > b/drivers/media/platform/nxp/imx8mq-mipi-csi2.c
+> > > index d333ff43539f061b8b9cf88af2cda8c44b3ec2a9..fd202601d401145da8be23df4451
+> > > f6af660642c5 100644
+> > > --- a/drivers/media/platform/nxp/imx8mq-mipi-csi2.c
+> > > +++ b/drivers/media/platform/nxp/imx8mq-mipi-csi2.c
+> > > @@ -71,21 +71,6 @@ enum {
+> > >  	ST_SUSPENDED	= 4,
+> > >  };
+> > >
+> > > -enum imx8mq_mipi_csi_clk {
+> > > -	CSI2_CLK_CORE,
+> > > -	CSI2_CLK_ESC,
+> > > -	CSI2_CLK_UI,
+> > > -	CSI2_NUM_CLKS,
+> > > -};
+> > > -
+> > > -static const char * const imx8mq_mipi_csi_clk_id[CSI2_NUM_CLKS] = {
+> > > -	[CSI2_CLK_CORE] = "core",
+> > > -	[CSI2_CLK_ESC] = "esc",
+> > > -	[CSI2_CLK_UI] = "ui",
+> > > -};
+> > > -
+> > > -#define CSI2_NUM_CLKS	ARRAY_SIZE(imx8mq_mipi_csi_clk_id)
+> > > -
+> > >  struct imx8mq_plat_data {
+> > >  	int (*enable)(struct csi_state *state, u32 hs_settle);
+> > >  	void (*disable)(struct csi_state *state); @@ -111,7 +96,8 @@ struct csi_state {
+> > >  	struct device *dev;
+> > >  	const struct imx8mq_plat_data *pdata;
+> > >  	void __iomem *regs;
+> > > -	struct clk_bulk_data clks[CSI2_NUM_CLKS];
+> > > +	struct clk_bulk_data *clks;
+> > > +	int num_clks;
+> > >  	struct reset_control *rst;
+> > >  	struct regulator *mipi_phy_regulator;
+> > >
+> > > @@ -384,24 +370,16 @@ static void imx8mq_mipi_csi_set_params(struct csi_state *state)
+> > >  			      CSI2RX_SEND_LEVEL);
+> > >  }
+> > >
+> > > -static int imx8mq_mipi_csi_clk_enable(struct csi_state *state) -{
+> > > -	return clk_bulk_prepare_enable(CSI2_NUM_CLKS, state->clks);
+> > > -}
+> > > -
+> > > -static void imx8mq_mipi_csi_clk_disable(struct csi_state *state)
+> > > +static struct clk *find_esc_clk(struct csi_state *state)
 > > 
-> > Is there any value in instead 'ignoring' any underruns if say the frame
-> > count is < 5 to ignore startup underruns, and keep it as an active print
-> > if something causes underruns later once the pipeline is established?
+> > This is one of the reasons why I don't like devm_clk_bulk_get_all(). I won't
+> > object to this patch, but I don't like it. At the very lest, you should look up the
+> > clock at probe time and cache it in the imx8mq_plat_data structure, to avoid
+> > looking it up multiple times at runtime.
+> 
+> Ok, but could we cache the clock in the csi_state structure? Because the imx8mq_plat_data
+> structure instance is const.
+
+Yes sorry that's what I meant.
+
+> > >  {
+> > > -	clk_bulk_disable_unprepare(CSI2_NUM_CLKS, state->clks);
+> > > -}
+> > > -
+> > > -static int imx8mq_mipi_csi_clk_get(struct csi_state *state) -{
+> > > -	unsigned int i;
+> > > +	int i;
+> > >
+> > > -	for (i = 0; i < CSI2_NUM_CLKS; i++)
+> > > -		state->clks[i].id = imx8mq_mipi_csi_clk_id[i];
+> > > +	for (i = 0; i < state->num_clks; i++) {
 > > 
-> > But maybe that doesn't change much - and if there's no current perceived
-> > issue
+> > Make state->num_clks unsigned instead of making i signed.
+> > 
+> > > +		if (!strcmp(state->clks[i].id, "esc"))
+> > > +			return state->clks[i].clk;
+> > > +	}
+> > >
+> > > -	return devm_clk_bulk_get(state->dev, CSI2_NUM_CLKS, state->clks);
+> > > +	return NULL;
+> > 
+> > This needs to become a probe error.
 > 
-> A single underrun at enable time could/should probably be ignored, as it
-> might be just issue with the initial fifo filling or such (even then
-> it's a bit annoying, but I've seen some HW docs (not on this platform)
-> telling to ignore such underruns).
+> Got it, will update in next version.
 > 
-> But that wouldn't help with the underrun flood for interlace. I think
-> there's a clear issue for ilace here, but I have no idea where exactly.
-> And, the display works fine, so the display controller can recover
-> instantly.
-> 
-> > Anyway, I don't object to this revert. It's low impact and it's only
-> > undoing 'your' work so no one else will complain :D
-> 
-> Yep... I hate disabling error reporting, but I think it's the best
-> option here, at least until someone with the board can debug it
-> properly. In any case, if there are "real" underruns, the error is also
-> visible on the display, you don't need the console print to show it.
-
-Quoting https://lore.kernel.org/all/1651584010-10156-1-git-send-email-erosca@de.adit-jv.com/
-
-"A barely noticeable (especially if hardly reproducible) display flicker
-may not be the biggest concern in the development environment. However,
-an automotive OEM will not only notice it, but will also be haunted by
-its phenomenon/nature till it is understood in the greatest detail and
-ultimately eradicated, to avoid impairing user experience.
-
-Troubleshooting the above without the right tools becomes a nightmare."
-
-I think we need to get to the bottom of this and fix the root cause,
-unless we receive an explicit acknowledgement from Renesas that underrun
-detection is not desired.
-
-> > Reviewed-by: Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>
-> >
-> >> Signed-off-by: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
-> >> ---
-> >>  drivers/media/platform/renesas/vsp1/vsp1_drm.c  |  3 ---
-> >>  drivers/media/platform/renesas/vsp1/vsp1_drv.c  | 11 +----------
-> >>  drivers/media/platform/renesas/vsp1/vsp1_pipe.h |  2 --
-> >>  drivers/media/platform/renesas/vsp1/vsp1_regs.h |  2 --
-> >>  4 files changed, 1 insertion(+), 17 deletions(-)
-> >>
-> >> diff --git a/drivers/media/platform/renesas/vsp1/vsp1_drm.c b/drivers/media/platform/renesas/vsp1/vsp1_drm.c
-> >> index 15d266439564..b8f211db16fc 100644
-> >> --- a/drivers/media/platform/renesas/vsp1/vsp1_drm.c
-> >> +++ b/drivers/media/platform/renesas/vsp1/vsp1_drm.c
-> >> @@ -721,9 +721,6 @@ int vsp1_du_setup_lif(struct device *dev, unsigned int pipe_index,
-> >>                 return 0;
-> >>         }
-> >>  
-> >> -       /* Reset the underrun counter */
-> >> -       pipe->underrun_count = 0;
-> >> -
-> >>         drm_pipe->width = cfg->width;
-> >>         drm_pipe->height = cfg->height;
-> >>         pipe->interlaced = cfg->interlaced;
-> >> diff --git a/drivers/media/platform/renesas/vsp1/vsp1_drv.c b/drivers/media/platform/renesas/vsp1/vsp1_drv.c
-> >> index b8d06e88c475..68e92d3c5915 100644
-> >> --- a/drivers/media/platform/renesas/vsp1/vsp1_drv.c
-> >> +++ b/drivers/media/platform/renesas/vsp1/vsp1_drv.c
-> >> @@ -47,8 +47,7 @@
-> >>  
-> >>  static irqreturn_t vsp1_irq_handler(int irq, void *data)
-> >>  {
-> >> -       u32 mask = VI6_WPF_IRQ_STA_DFE | VI6_WPF_IRQ_STA_FRE |
-> >> -                  VI6_WPF_IRQ_STA_UND;
-> >> +       u32 mask = VI6_WPF_IRQ_STA_DFE | VI6_WPF_IRQ_STA_FRE;
-> >>         struct vsp1_device *vsp1 = data;
-> >>         irqreturn_t ret = IRQ_NONE;
-> >>         unsigned int i;
-> >> @@ -63,14 +62,6 @@ static irqreturn_t vsp1_irq_handler(int irq, void *data)
-> >>                 status = vsp1_read(vsp1, VI6_WPF_IRQ_STA(i));
-> >>                 vsp1_write(vsp1, VI6_WPF_IRQ_STA(i), ~status & mask);
-> >>  
-> >> -               if ((status & VI6_WPF_IRQ_STA_UND) && wpf->entity.pipe) {
-> >> -                       wpf->entity.pipe->underrun_count++;
-> >> -
-> >> -                       dev_warn_ratelimited(vsp1->dev,
-> >> -                               "Underrun occurred at WPF%u (total underruns %u)\n",
-> >> -                               i, wpf->entity.pipe->underrun_count);
-> >> -               }
-> >> -
-> >>                 if (status & VI6_WPF_IRQ_STA_DFE) {
-> >>                         vsp1_pipeline_frame_end(wpf->entity.pipe);
-> >>                         ret = IRQ_HANDLED;
-> >> diff --git a/drivers/media/platform/renesas/vsp1/vsp1_pipe.h b/drivers/media/platform/renesas/vsp1/vsp1_pipe.h
-> >> index 7f623b8cbe5c..9cc2f1646b00 100644
-> >> --- a/drivers/media/platform/renesas/vsp1/vsp1_pipe.h
-> >> +++ b/drivers/media/platform/renesas/vsp1/vsp1_pipe.h
-> >> @@ -137,8 +137,6 @@ struct vsp1_pipeline {
-> >>  
-> >>         unsigned int partitions;
-> >>         struct vsp1_partition *part_table;
-> >> -
-> >> -       u32 underrun_count;
-> >>  };
-> >>  
-> >>  void vsp1_pipeline_reset(struct vsp1_pipeline *pipe);
-> >> diff --git a/drivers/media/platform/renesas/vsp1/vsp1_regs.h b/drivers/media/platform/renesas/vsp1/vsp1_regs.h
-> >> index 10cfbcd1b6e0..188d26289714 100644
-> >> --- a/drivers/media/platform/renesas/vsp1/vsp1_regs.h
-> >> +++ b/drivers/media/platform/renesas/vsp1/vsp1_regs.h
-> >> @@ -32,12 +32,10 @@
-> >>  #define VI6_STATUS_SYS_ACT(n)          BIT((n) + 8)
-> >>  
-> >>  #define VI6_WPF_IRQ_ENB(n)             (0x0048 + (n) * 12)
-> >> -#define VI6_WPF_IRQ_ENB_UNDE           BIT(16)
-> >>  #define VI6_WPF_IRQ_ENB_DFEE           BIT(1)
-> >>  #define VI6_WPF_IRQ_ENB_FREE           BIT(0)
-> >>  
-> >>  #define VI6_WPF_IRQ_STA(n)             (0x004c + (n) * 12)
-> >> -#define VI6_WPF_IRQ_STA_UND            BIT(16)
-> >>  #define VI6_WPF_IRQ_STA_DFE            BIT(1)
-> >>  #define VI6_WPF_IRQ_STA_FRE            BIT(0)
-> >>  
-> >>
-> >> ---
-> >> base-commit: 76eeb9b8de9880ca38696b2fb56ac45ac0a25c6c
-> >> change-id: 20250908-rcar-vsp-underrun-revert-f3e64612c62d
+> > >  }
+> > >
+> > >  static int imx8mq_mipi_csi_calc_hs_settle(struct csi_state *state,
+> > > @@ -456,7 +434,7 @@ static int imx8mq_mipi_csi_calc_hs_settle(struct csi_state *state,
+> > >  	 * documentation recommends picking a value away from the boundaries.
+> > >  	 * Let's pick the average.
+> > >  	 */
+> > > -	esc_clk_rate = clk_get_rate(state->clks[CSI2_CLK_ESC].clk);
+> > > +	esc_clk_rate = clk_get_rate(find_esc_clk(state));
+> > >  	if (!esc_clk_rate) {
+> > >  		dev_err(state->dev, "Could not get esc clock rate.\n");
+> > >  		return -EINVAL;
+> > > @@ -783,7 +761,7 @@ static void imx8mq_mipi_csi_pm_suspend(struct device *dev)
+> > >
+> > >  	if (state->state & ST_POWERED) {
+> > >  		imx8mq_mipi_csi_stop_stream(state);
+> > > -		imx8mq_mipi_csi_clk_disable(state);
+> > > +		clk_bulk_disable_unprepare(state->num_clks, state->clks);
+> > >  		state->state &= ~ST_POWERED;
+> > >  	}
+> > >
+> > > @@ -801,7 +779,7 @@ static int imx8mq_mipi_csi_pm_resume(struct device *dev)
+> > >
+> > >  	if (!(state->state & ST_POWERED)) {
+> > >  		state->state |= ST_POWERED;
+> > > -		ret = imx8mq_mipi_csi_clk_enable(state);
+> > > +		ret = clk_bulk_prepare_enable(state->num_clks, state->clks);
+> > >  	}
+> > >  	if (state->state & ST_STREAMING) {
+> > >  		sd_state = v4l2_subdev_lock_and_get_active_state(sd);
+> > > @@ -1027,9 +1005,9 @@ static int imx8mq_mipi_csi_probe(struct platform_device *pdev)
+> > >  	if (IS_ERR(state->regs))
+> > >  		return PTR_ERR(state->regs);
+> > >
+> > > -	ret = imx8mq_mipi_csi_clk_get(state);
+> > > -	if (ret < 0)
+> > > -		return ret;
+> > > +	state->num_clks = devm_clk_bulk_get_all(dev, &state->clks);
+> > > +	if (state->num_clks < 0)
+> > > +		return dev_err_probe(dev, state->num_clks, "Failed to get
+> > > +clocks\n");
+> > >
+> > >  	platform_set_drvdata(pdev, &state->sd);
+> > >
 
 -- 
 Regards,
