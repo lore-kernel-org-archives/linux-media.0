@@ -1,223 +1,254 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
+Received: from fhigh-b7-smtp.messagingengine.com (fhigh-b7-smtp.messagingengine.com [202.12.124.158])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E856A23183A
-	for <linux-media@vger.kernel.org>; Tue, 11 Nov 2025 08:55:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 750A328C5AA;
+	Tue, 11 Nov 2025 09:02:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.158
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762851328; cv=none; b=DWsjnz8+s4vWk5eL2sGDLIMfswYFJDXeHmy7hfhH81LTaZbZ7/7/xC5W9/nkq/X8kF8B+Hw066tMGzj4jfIyqyZbCxpydXKuyrIcol9FVMlDN/4iSpyY9NJa/KPJa2DSRo+FDNWJUN+dq2zI7dHJPdfdKNfBZZxgw1yB+I5FlVU=
+	t=1762851767; cv=none; b=TlUrpfFwQR6usr5w/5IEicwJll/Ww6b9Tw332LeF8Ah2CGxKoxN+QNzHHeLlI0+fXD80M8Z0vXlX/SuaAoHVheG+dfe6pEzxmPMsZ4cr/bOeMTb1u03k/XG6QLEhFFbBtBw9ItqMEzcHEeq3ZUNbtJoN0BKsAZVchVE90PwiT6c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762851328; c=relaxed/simple;
-	bh=EG56e5gtJIoW9d9/7S20iEdh9HJqkXltPCJ+tYnVg/4=;
-	h=Subject:To:Cc:References:From:Message-ID:Date:MIME-Version:
-	 In-Reply-To:Content-Type; b=By+XpC0ZDwA6K4LgrZFUbZsX/vdG9Sm8pLA/eFbzkhpQRkByKfdMDQmzrMXRuwtVqyimWI5/jHOPCMGx6OmrnDSdl4qfVm0Sjsc8Rks7ZJOwjy7Us2/U1QxVyvxneiXGA7aAZOmsrNpkSenIR8ZSCn2DTwx8/R8yB+68rhIR+6o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=j6vHIGeV; arc=none smtp.client-ip=192.198.163.9
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
+	s=arc-20240116; t=1762851767; c=relaxed/simple;
+	bh=51gWDnko7reNi6UEAViItMQjBBfLGAkZQIVtR4MXJ8Q=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=nbX0pTMZX0n6uuwdzRslFrtf9jyy64Us/fpmShMA7LXwVNr8LNWa3cyMk+iAt7Fk9qSOTH6G68N7xcmYKZhfVJ/VFJ2VCyn1+lUn5EDBSTqqrCsM2jolj1s2E9OSh1QTHN5sXraU4lBExglulK09Y/CVNDV+OY8Yy9MhNZ0URHY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ragnatech.se; spf=pass smtp.mailfrom=ragnatech.se; dkim=pass (2048-bit key) header.d=ragnatech.se header.i=@ragnatech.se header.b=HD6R7hG0; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=hD0NcfHD; arc=none smtp.client-ip=202.12.124.158
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ragnatech.se
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ragnatech.se
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="j6vHIGeV"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1762851327; x=1794387327;
-  h=subject:to:cc:references:from:message-id:date:
-   mime-version:in-reply-to:content-transfer-encoding;
-  bh=EG56e5gtJIoW9d9/7S20iEdh9HJqkXltPCJ+tYnVg/4=;
-  b=j6vHIGeVU07VF+mLZlohfOtYnbxWyIOmO/mqhRO9zQB+giqyOC016w1M
-   H12YpQ7NOWJMKsD1AxCdG6tCNiVD+e84Ruzq+/Jg7TMN5Iu7SIjQLd1mY
-   92/5BNNp6bnOfHc2ifg6UbwxfJkBgdy0M7DQz6T0DCxVhxxUoUbPqheHo
-   cL2c5DwPMYN6GHBaJxygRi/pJkY46tt9NwUq72dAG0tc48pZXMWJc68tt
-   xFqxe9JWEGnbvKaar4Cp2dMSc5i3kaWKZ3sGahgSqB2Sff5wmSq48lkV1
-   8Y+VOF571efSzEm8KP88RY4GDIsJO8/yMokWlJUlVV3MrLvKwwGGbpWFb
-   A==;
-X-CSE-ConnectionGUID: +K93ELlaSyi22I1Do+Cj+w==
-X-CSE-MsgGUID: i4LxKTV4SIW1FgbfraS2tQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11609"; a="75593916"
-X-IronPort-AV: E=Sophos;i="6.19,296,1754982000"; 
-   d="scan'208";a="75593916"
-Received: from orviesa010.jf.intel.com ([10.64.159.150])
-  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Nov 2025 00:55:26 -0800
-X-CSE-ConnectionGUID: g+bUTiJ6TgOBJaBXkCLNzA==
-X-CSE-MsgGUID: gx9RhGswQxqH9LPKVEr1ow==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.19,296,1754982000"; 
-   d="scan'208";a="188234685"
-Received: from ipu5-build.bj.intel.com (HELO [10.238.153.130]) ([10.238.153.130])
-  by orviesa010-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Nov 2025 00:55:25 -0800
-Subject: Re: [PATCH] media: ipu6: isys: Add support for monochrome media bus
- formats
-To: Hans de Goede <hansg@kernel.org>,
- Sakari Ailus <sakari.ailus@linux.intel.com>,
- Bingbu Cao <bingbu.cao@intel.com>, Tianshu Qiu <tian.shu.qiu@intel.com>
-Cc: linux-media@vger.kernel.org
-References: <20251020153741.55404-1-hansg@kernel.org>
-From: Bingbu Cao <bingbu.cao@linux.intel.com>
-Message-ID: <8a2f06b1-57dd-8a17-e884-b495d05f14d8@linux.intel.com>
-Date: Tue, 11 Nov 2025 16:46:13 +0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+	dkim=pass (2048-bit key) header.d=ragnatech.se header.i=@ragnatech.se header.b="HD6R7hG0";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="hD0NcfHD"
+Received: from phl-compute-03.internal (phl-compute-03.internal [10.202.2.43])
+	by mailfhigh.stl.internal (Postfix) with ESMTP id E785B7A012A;
+	Tue, 11 Nov 2025 04:02:40 -0500 (EST)
+Received: from phl-mailfrontend-01 ([10.202.2.162])
+  by phl-compute-03.internal (MEProxy); Tue, 11 Nov 2025 04:02:41 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ragnatech.se; h=
+	cc:cc:content-transfer-encoding:content-type:content-type:date
+	:date:from:from:in-reply-to:message-id:mime-version:reply-to
+	:subject:subject:to:to; s=fm2; t=1762851760; x=1762938160; bh=1j
+	XE00gYq2pIAHBN0U+G56EomYV6/NgLjHM/HWIN7EE=; b=HD6R7hG0iRv7OEgrca
+	cj8b8zaqEtIX0PWRfAoKLv53eMhtH5yMhrEmRo3C9Ki0DsR7M7H2blhTsx5i8Fg0
+	0MDfE9u4AeHmr5LDfpsLy79PS2+ER/Vcku6MwSLTo/uADTFa+9hT1XdAPA3FDlvz
+	nRWPqCXJqN5Xdp8/kKzyjvKSwMJyucasJIa73zpQ3Je9UWi5cdkEG/vXaoi08xos
+	YLJTvWt5jHIEInfYabNh+l+cENmwN9WFP2xOPSbHlKa959O0M85cO2oArRSxjcgi
+	gQ6To7B+NqiEc0aEq8qwaxAQC4Bjwv9jC8fPWyoHYfWCEwXfqsDl5A9SC9uPnnWh
+	of6w==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:message-id:mime-version:reply-to:subject
+	:subject:to:to:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+	fm3; t=1762851760; x=1762938160; bh=1jXE00gYq2pIAHBN0U+G56EomYV6
+	/NgLjHM/HWIN7EE=; b=hD0NcfHDYfLxtqqkTt1OAwJ6kgBH0J+J6Rq8OSFLLFgo
+	UFKNv3OX663OyYfmT3NiLrM9H1H2pYpPF3fROoCy6h1cvrk60AriYQlASYqniuj8
+	tpwACCVlaCvmTTw25bqVvVy3uj7uzyjtY/aJSzw+fuErS4sdmvEh+uxgBeMdt2mX
+	KBVudaTL7bG01ida5cWO0fJVHWBgB4+G1U69ADVMLdZj4tJZxbceIAKis7Nvl/zN
+	49wLaYSpsL7tLrOMlG7cz9yTj0WuWZ82t1MdultC++QTMqyH3VO1vsBadmCcc4k9
+	rmryKrk6TN3EayYsxJphbCz63EcZvBFz4+IjE3yuVg==
+X-ME-Sender: <xms:sPsSafq21u1xJ1Dl2nPJKAto4MO45VsT3bh7tTkfrOGT7QacXXn6fA>
+    <xme:sPsSaTvklfkphZIORqC8BN5Ixaa38xGPO7Bb8Uhn384VSqocUIskN687MA1Gl3bDF
+    3pFNHK9W7I17LL3dlUtomrhukguHeRKwapvejfcg0IOiHBvSMQAEQ0>
+X-ME-Received: <xmr:sPsSacGKHfQ4BU0fZckGD38bnnA70O9YoueZqzdUtJIeNOx1-Pc0MqkwFv2e8FWGBkooPY4lAcAE_S8i0O8pYrC9>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtdeggddvtddtjeekucetufdoteggodetrf
+    dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfurfetoffkrfgpnffqhgenuceu
+    rghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujf
+    gurhephffvvefufffkofggtgfgsehtkeertdertdejnecuhfhrohhmpefpihhklhgrshcu
+    ufpnuggvrhhluhhnugcuoehnihhklhgrshdrshhouggvrhhluhhnugdorhgvnhgvshgrsh
+    esrhgrghhnrghtvggthhdrshgvqeenucggtffrrghtthgvrhhnpeehudelteetkefgffef
+    udefuedvjeeivdekhfevieefgeffheeltddvvefhfeetgeenucevlhhushhtvghrufhiii
+    gvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehnihhklhgrshdrshhouggvrhhluhhn
+    ugesrhgrghhnrghtvggthhdrshgvpdhnsggprhgtphhtthhopeejpdhmohguvgepshhmth
+    hpohhuthdprhgtphhtthhopehmtghhvghhrggssehkvghrnhgvlhdrohhrghdprhgtphht
+    thhopehjrggtohhpohdrmhhonhguihesihguvggrshhonhgsohgrrhgurdgtohhmpdhrtg
+    hpthhtoheplhgruhhrvghnthdrphhinhgthhgrrhhtsehiuggvrghsohhnsghorghrugdr
+    tghomhdprhgtphhtthhopehlihhnuhigqdhmvgguihgrsehvghgvrhdrkhgvrhhnvghlrd
+    horhhgpdhrtghpthhtoheplhhinhhugidqrhgvnhgvshgrshdqshhotgesvhhgvghrrdhk
+    vghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrd
+    hkvghrnhgvlhdrohhrghdprhgtphhtthhopehnihhklhgrshdrshhouggvrhhluhhnugdo
+    rhgvnhgvshgrshesrhgrghhnrghtvggthhdrshgv
+X-ME-Proxy: <xmx:sPsSaUZ1klGCTyY0OsoFXbgoY-dcirxuVRoIi6fK0gffSXvVPFm2rg>
+    <xmx:sPsSacWQzbT3YDl9BuoN7nvEOFWDN7Li4hkpmNyp7fYpxwng0SfkKQ>
+    <xmx:sPsSaam_HGxDXSbKCIZdjyjVZgR3iHgHIDs4ahSnBdY1dJ6rOvUvLw>
+    <xmx:sPsSaXD_eULcAMQnW1yOn-wSXdnA6yrq7DWD8A7Dgi3Op9taI6KWnw>
+    <xmx:sPsSaRFeBebpDvSD891sm0QrdgVfgvZnccojXMmDaduLl1o0CChKUrs7>
+Feedback-ID: i80c9496c:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
+ 11 Nov 2025 04:02:39 -0500 (EST)
+From: =?UTF-8?q?Niklas=20S=C3=B6derlund?= <niklas.soderlund+renesas@ragnatech.se>
+To: Mauro Carvalho Chehab <mchehab@kernel.org>,
+	Jacopo Mondi <jacopo.mondi@ideasonboard.com>,
+	Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+	linux-media@vger.kernel.org,
+	linux-renesas-soc@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Cc: =?UTF-8?q?Niklas=20S=C3=B6derlund?= <niklas.soderlund+renesas@ragnatech.se>
+Subject: [PATCH v4 00/12] media: Add support for R-Car ISP using Dreamchip RPPX1 ISP
+Date: Tue, 11 Nov 2025 10:02:16 +0100
+Message-ID: <20251111090228.2511734-1-niklas.soderlund+renesas@ragnatech.se>
+X-Mailer: git-send-email 2.51.1
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-In-Reply-To: <20251020153741.55404-1-hansg@kernel.org>
-Content-Type: text/plain; charset=windows-1252
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-Hans,
+Hello,
 
-Thanks for the patch.
-Reviewed-by: Bingbu Cao <bingbu.cao@intel.com>
+This series adds support for two different devices that together enable
+ISP support on Renesas R-Car Gen4 ISP processing. The first driver added
+is for Dreamchip RPPX1 ISP, this device purely deals with image
+processing algorithms, statistics and image conversion; but have no DMA
+engines. The second driver is for the R-Car ISP CORE, this device
+deals with DMA to/from the RPPX1 ISP and provides a V4L2 user-space
+interface for the ISP.
 
-On 10/20/25 11:37 PM, Hans de Goede wrote:
-> Add support for monochrome media bus formats, for use with monochrome/IR
-> camera sensors.
-> 
-> This has been tested on a Dell XPS 13 9320 with OV1A1B IR sensor.
-> 
-> Signed-off-by: Hans de Goede <hansg@kernel.org>
-> ---
->  drivers/media/pci/intel/ipu6/ipu6-isys-csi2.c |  4 +++
->  .../media/pci/intel/ipu6/ipu6-isys-subdev.c   | 34 ++++++++++++++-----
->  .../media/pci/intel/ipu6/ipu6-isys-video.c    | 14 ++++++++
->  3 files changed, 43 insertions(+), 9 deletions(-)
-> 
-> diff --git a/drivers/media/pci/intel/ipu6/ipu6-isys-csi2.c b/drivers/media/pci/intel/ipu6/ipu6-isys-csi2.c
-> index d1fece6210ab..daec6b865bda 100644
-> --- a/drivers/media/pci/intel/ipu6/ipu6-isys-csi2.c
-> +++ b/drivers/media/pci/intel/ipu6/ipu6-isys-csi2.c
-> @@ -42,6 +42,10 @@ static const u32 csi2_supported_codes[] = {
->  	MEDIA_BUS_FMT_SGBRG8_1X8,
->  	MEDIA_BUS_FMT_SGRBG8_1X8,
->  	MEDIA_BUS_FMT_SRGGB8_1X8,
-> +	MEDIA_BUS_FMT_Y8_1X8,
-> +	MEDIA_BUS_FMT_Y10_1X10,
-> +	MEDIA_BUS_FMT_Y12_1X12,
-> +	MEDIA_BUS_FMT_Y16_1X16,
->  	MEDIA_BUS_FMT_META_8,
->  	MEDIA_BUS_FMT_META_10,
->  	MEDIA_BUS_FMT_META_12,
-> diff --git a/drivers/media/pci/intel/ipu6/ipu6-isys-subdev.c b/drivers/media/pci/intel/ipu6/ipu6-isys-subdev.c
-> index 463a0adf9e13..869e7d4ba572 100644
-> --- a/drivers/media/pci/intel/ipu6/ipu6-isys-subdev.c
-> +++ b/drivers/media/pci/intel/ipu6/ipu6-isys-subdev.c
-> @@ -25,24 +25,28 @@ unsigned int ipu6_isys_mbus_code_to_bpp(u32 code)
->  	case MEDIA_BUS_FMT_RGB565_1X16:
->  	case MEDIA_BUS_FMT_UYVY8_1X16:
->  	case MEDIA_BUS_FMT_YUYV8_1X16:
-> +	case MEDIA_BUS_FMT_Y16_1X16:
->  	case MEDIA_BUS_FMT_META_16:
->  		return 16;
->  	case MEDIA_BUS_FMT_SBGGR12_1X12:
->  	case MEDIA_BUS_FMT_SGBRG12_1X12:
->  	case MEDIA_BUS_FMT_SGRBG12_1X12:
->  	case MEDIA_BUS_FMT_SRGGB12_1X12:
-> +	case MEDIA_BUS_FMT_Y12_1X12:
->  	case MEDIA_BUS_FMT_META_12:
->  		return 12;
->  	case MEDIA_BUS_FMT_SBGGR10_1X10:
->  	case MEDIA_BUS_FMT_SGBRG10_1X10:
->  	case MEDIA_BUS_FMT_SGRBG10_1X10:
->  	case MEDIA_BUS_FMT_SRGGB10_1X10:
-> +	case MEDIA_BUS_FMT_Y10_1X10:
->  	case MEDIA_BUS_FMT_META_10:
->  		return 10;
->  	case MEDIA_BUS_FMT_SBGGR8_1X8:
->  	case MEDIA_BUS_FMT_SGBRG8_1X8:
->  	case MEDIA_BUS_FMT_SGRBG8_1X8:
->  	case MEDIA_BUS_FMT_SRGGB8_1X8:
-> +	case MEDIA_BUS_FMT_Y8_1X8:
->  	case MEDIA_BUS_FMT_META_8:
->  		return 8;
->  	default:
-> @@ -65,21 +69,25 @@ unsigned int ipu6_isys_mbus_code_to_mipi(u32 code)
->  	case MEDIA_BUS_FMT_SGBRG16_1X16:
->  	case MEDIA_BUS_FMT_SGRBG16_1X16:
->  	case MEDIA_BUS_FMT_SRGGB16_1X16:
-> +	case MEDIA_BUS_FMT_Y16_1X16:
->  		return MIPI_CSI2_DT_RAW16;
->  	case MEDIA_BUS_FMT_SBGGR12_1X12:
->  	case MEDIA_BUS_FMT_SGBRG12_1X12:
->  	case MEDIA_BUS_FMT_SGRBG12_1X12:
->  	case MEDIA_BUS_FMT_SRGGB12_1X12:
-> +	case MEDIA_BUS_FMT_Y12_1X12:
->  		return MIPI_CSI2_DT_RAW12;
->  	case MEDIA_BUS_FMT_SBGGR10_1X10:
->  	case MEDIA_BUS_FMT_SGBRG10_1X10:
->  	case MEDIA_BUS_FMT_SGRBG10_1X10:
->  	case MEDIA_BUS_FMT_SRGGB10_1X10:
-> +	case MEDIA_BUS_FMT_Y10_1X10:
->  		return MIPI_CSI2_DT_RAW10;
->  	case MEDIA_BUS_FMT_SBGGR8_1X8:
->  	case MEDIA_BUS_FMT_SGBRG8_1X8:
->  	case MEDIA_BUS_FMT_SGRBG8_1X8:
->  	case MEDIA_BUS_FMT_SRGGB8_1X8:
-> +	case MEDIA_BUS_FMT_Y8_1X8:
->  		return MIPI_CSI2_DT_RAW8;
->  	case MEDIA_BUS_FMT_META_8:
->  	case MEDIA_BUS_FMT_META_10:
-> @@ -96,15 +104,23 @@ unsigned int ipu6_isys_mbus_code_to_mipi(u32 code)
->  
->  bool ipu6_isys_is_bayer_format(u32 code)
->  {
-> -	switch (ipu6_isys_mbus_code_to_mipi(code)) {
-> -	case MIPI_CSI2_DT_RAW8:
-> -	case MIPI_CSI2_DT_RAW10:
-> -	case MIPI_CSI2_DT_RAW12:
-> -	case MIPI_CSI2_DT_RAW14:
-> -	case MIPI_CSI2_DT_RAW16:
-> -	case MIPI_CSI2_DT_RAW20:
-> -	case MIPI_CSI2_DT_RAW24:
-> -	case MIPI_CSI2_DT_RAW28:
-> +	switch (code) {
-> +	case MEDIA_BUS_FMT_SBGGR8_1X8:
-> +	case MEDIA_BUS_FMT_SGBRG8_1X8:
-> +	case MEDIA_BUS_FMT_SGRBG8_1X8:
-> +	case MEDIA_BUS_FMT_SRGGB8_1X8:
-> +	case MEDIA_BUS_FMT_SBGGR10_1X10:
-> +	case MEDIA_BUS_FMT_SGBRG10_1X10:
-> +	case MEDIA_BUS_FMT_SGRBG10_1X10:
-> +	case MEDIA_BUS_FMT_SRGGB10_1X10:
-> +	case MEDIA_BUS_FMT_SBGGR12_1X12:
-> +	case MEDIA_BUS_FMT_SGBRG12_1X12:
-> +	case MEDIA_BUS_FMT_SGRBG12_1X12:
-> +	case MEDIA_BUS_FMT_SRGGB12_1X12:
-> +	case MEDIA_BUS_FMT_SRGGB16_1X16:
-> +	case MEDIA_BUS_FMT_SGRBG16_1X16:
-> +	case MEDIA_BUS_FMT_SGBRG16_1X16:
-> +	case MEDIA_BUS_FMT_SBGGR16_1X16:
->  		return true;
->  	default:
->  		return false;
-> diff --git a/drivers/media/pci/intel/ipu6/ipu6-isys-video.c b/drivers/media/pci/intel/ipu6/ipu6-isys-video.c
-> index f3f3bc0615e5..dec8f5ffcfa5 100644
-> --- a/drivers/media/pci/intel/ipu6/ipu6-isys-video.c
-> +++ b/drivers/media/pci/intel/ipu6/ipu6-isys-video.c
-> @@ -77,6 +77,20 @@ const struct ipu6_isys_pixelformat ipu6_isys_pfmts[] = {
->  	  IPU6_FW_ISYS_FRAME_FORMAT_RAW10 },
->  	{ V4L2_PIX_FMT_SRGGB10P, 10, 10, MEDIA_BUS_FMT_SRGGB10_1X10,
->  	  IPU6_FW_ISYS_FRAME_FORMAT_RAW10 },
-> +
-> +	{ V4L2_PIX_FMT_GREY, 8, 8, MEDIA_BUS_FMT_Y8_1X8,
-> +	  IPU6_FW_ISYS_FRAME_FORMAT_RAW8 },
-> +	{ V4L2_PIX_FMT_Y10, 16, 10, MEDIA_BUS_FMT_Y10_1X10,
-> +	  IPU6_FW_ISYS_FRAME_FORMAT_RAW16 },
-> +	{ V4L2_PIX_FMT_Y12, 16, 12, MEDIA_BUS_FMT_Y12_1X12,
-> +	  IPU6_FW_ISYS_FRAME_FORMAT_RAW16 },
-> +	{ V4L2_PIX_FMT_Y16, 16, 16, MEDIA_BUS_FMT_Y16_1X16,
-> +	  IPU6_FW_ISYS_FRAME_FORMAT_RAW16 },
-> +	{ V4L2_PIX_FMT_Y10P, 10, 10, MEDIA_BUS_FMT_Y10_1X10,
-> +	  IPU6_FW_ISYS_FRAME_FORMAT_RAW10 },
-> +	{ V4L2_PIX_FMT_Y12P, 12, 12, MEDIA_BUS_FMT_Y12_1X12,
-> +	  IPU6_FW_ISYS_FRAME_FORMAT_RAW12 },
-> +
->  	{ V4L2_PIX_FMT_UYVY, 16, 16, MEDIA_BUS_FMT_UYVY8_1X16,
->  	  IPU6_FW_ISYS_FRAME_FORMAT_UYVY},
->  	{ V4L2_PIX_FMT_YUYV, 16, 16, MEDIA_BUS_FMT_YUYV8_1X16,
-> 
+The R-Car ISP driver uses the RPPX1 framework to drive the ISP and
+together the two devices provide a functional ISP. For detailed
+description of the RPPX1 see patch 1/12, and for details about the R-Car
+ISP see commit message in patch 2/12.
+
+The RPPX1 ISP is similar to functionality and design to the Rk1ISP
+already supported upstream. For this reason this series reuses the pixel
+format for ISP parameters (RK1E) and statistics (RK1S) as the user-space
+ABI to configure the ISP. The primary difference to Rk1iSP is the over
+all pipeline design and the register layout out is different enough to
+make it impractical to bolt it on the existing drivers.
+
+However on a functional block level the blocks amiable and their
+register layout mapped to the buffer formats are similar enough to make
+the reuse practical. Another difference is that RPPX1 operates at a
+hight bitdepth then Rk1ISP, but this is easily supported by scaling the
+values to/from the buffers.
+
+All functional blocks present on the RPPX1 are not yet added to the
+driver, but most are. Hence not all configuration blocks of the Rk1E
+extensible format are supported, but most if not all can be added.
+
+A libcamera pipeline reusing the Rk1ISP IPA have been posted and it can
+exercise all function block enabled by this series. It produce good
+images using all algorithms available.
+
+Patch 1/12 adds the foundation for the RPPX1 framework. It deals with
+probing all function blocks making sure every blocks version register is
+supported and setup a "passthru" pipeline that just debayer RAW images.
+
+Patch 2/12 integrates the adds the R-Car ISP CORE DMA parts and
+integrates with the RPPX1 framework added in patch 1/12.
+
+Patches 3/12 to 12/12 extends the RPPX1 framework with the logic to drive
+the different IPS modules.
+
+The sum of the work pass v4l2-compliance. A test suite for the enabled
+function blocks exists and pass. The work have also been tested with
+various libcamera utilities and compliance tests together with a IMX219
+and IMX462 sensor on R-Car V4H.
+
+Biggest change from v3 is small fixes that 0day found when building for 
+non ARM architectures.
+
+Niklas Söderlund (12):
+  media: rppx1: Add framework to support Dreamchip RPPX1 ISP
+  media: rcar-isp: Add support for ISPCORE
+  media: rppx1: Add support for AWB measurement parameters and
+    statistics
+  media: rppx1: Add support for AWB gain settings
+  media: rppx1: Add support for Auto Exposure Measurement
+  media: rppx1: Add support for Histogram Measurement
+  media: rppx1: Add support for Black Level Subtraction
+  media: rppx1: Add support for Color Correction Matrix
+  media: rppx1: Add support for Lens Shade Correction
+  media: rppx1: Add support for Gamma Correction
+  media: rppx1: Add support for Bayer Demosaicing
+  media: rppx1: Add support for Bilateral Denoising
+
+ MAINTAINERS                                   |    6 +
+ drivers/media/platform/Kconfig                |    1 +
+ drivers/media/platform/Makefile               |    1 +
+ drivers/media/platform/dreamchip/Kconfig      |    3 +
+ drivers/media/platform/dreamchip/Makefile     |    6 +
+ .../media/platform/dreamchip/rppx1/Kconfig    |   11 +
+ .../media/platform/dreamchip/rppx1/Makefile   |   33 +
+ .../platform/dreamchip/rppx1/rpp_module.c     |   40 +
+ .../platform/dreamchip/rppx1/rpp_module.h     |  158 +++
+ .../platform/dreamchip/rppx1/rpp_params.c     |   82 ++
+ .../platform/dreamchip/rppx1/rpp_stats.c      |   30 +
+ .../media/platform/dreamchip/rppx1/rppx1.c    |  338 ++++++
+ .../media/platform/dreamchip/rppx1/rppx1.h    |   99 ++
+ .../platform/dreamchip/rppx1/rppx1_acq.c      |  147 +++
+ .../platform/dreamchip/rppx1/rppx1_awbg.c     |   67 ++
+ .../media/platform/dreamchip/rppx1/rppx1_bd.c |  210 ++++
+ .../platform/dreamchip/rppx1/rppx1_bdrgb.c    |   80 ++
+ .../platform/dreamchip/rppx1/rppx1_bls.c      |  175 +++
+ .../platform/dreamchip/rppx1/rppx1_cac.c      |   29 +
+ .../platform/dreamchip/rppx1/rppx1_ccor.c     |  180 +++
+ .../media/platform/dreamchip/rppx1/rppx1_db.c |  156 +++
+ .../platform/dreamchip/rppx1/rppx1_dpcc.c     |   76 ++
+ .../platform/dreamchip/rppx1/rppx1_exm.c      |  140 +++
+ .../media/platform/dreamchip/rppx1/rppx1_ga.c |   83 ++
+ .../platform/dreamchip/rppx1/rppx1_hist.c     |  249 ++++
+ .../platform/dreamchip/rppx1/rppx1_hist256.c  |   46 +
+ .../media/platform/dreamchip/rppx1/rppx1_is.c |   42 +
+ .../platform/dreamchip/rppx1/rppx1_lin.c      |   60 +
+ .../platform/dreamchip/rppx1/rppx1_lsc.c      |  194 +++
+ .../platform/dreamchip/rppx1/rppx1_ltm.c      |   48 +
+ .../platform/dreamchip/rppx1/rppx1_ltmmeas.c  |   41 +
+ .../platform/dreamchip/rppx1/rppx1_outif.c    |   45 +
+ .../platform/dreamchip/rppx1/rppx1_outregs.c  |   75 ++
+ .../platform/dreamchip/rppx1/rppx1_rmap.c     |   64 +
+ .../platform/dreamchip/rppx1/rppx1_rmapmeas.c |   47 +
+ .../platform/dreamchip/rppx1/rppx1_shrp.c     |   64 +
+ .../platform/dreamchip/rppx1/rppx1_wbmeas.c   |  188 +++
+ .../platform/dreamchip/rppx1/rppx1_xyz2luv.c  |   26 +
+ .../media/platform/renesas/rcar-isp/Kconfig   |    1 +
+ .../media/platform/renesas/rcar-isp/Makefile  |    2 +-
+ .../media/platform/renesas/rcar-isp/core-io.c | 1053 +++++++++++++++++
+ .../media/platform/renesas/rcar-isp/core.c    |  826 +++++++++++++
+ .../media/platform/renesas/rcar-isp/csisp.c   |   48 +-
+ .../platform/renesas/rcar-isp/risp-core.h     |  170 +++
+ include/media/rppx1.h                         |   33 +
+ 45 files changed, 5465 insertions(+), 8 deletions(-)
+ create mode 100644 drivers/media/platform/dreamchip/Kconfig
+ create mode 100644 drivers/media/platform/dreamchip/Makefile
+ create mode 100644 drivers/media/platform/dreamchip/rppx1/Kconfig
+ create mode 100644 drivers/media/platform/dreamchip/rppx1/Makefile
+ create mode 100644 drivers/media/platform/dreamchip/rppx1/rpp_module.c
+ create mode 100644 drivers/media/platform/dreamchip/rppx1/rpp_module.h
+ create mode 100644 drivers/media/platform/dreamchip/rppx1/rpp_params.c
+ create mode 100644 drivers/media/platform/dreamchip/rppx1/rpp_stats.c
+ create mode 100644 drivers/media/platform/dreamchip/rppx1/rppx1.c
+ create mode 100644 drivers/media/platform/dreamchip/rppx1/rppx1.h
+ create mode 100644 drivers/media/platform/dreamchip/rppx1/rppx1_acq.c
+ create mode 100644 drivers/media/platform/dreamchip/rppx1/rppx1_awbg.c
+ create mode 100644 drivers/media/platform/dreamchip/rppx1/rppx1_bd.c
+ create mode 100644 drivers/media/platform/dreamchip/rppx1/rppx1_bdrgb.c
+ create mode 100644 drivers/media/platform/dreamchip/rppx1/rppx1_bls.c
+ create mode 100644 drivers/media/platform/dreamchip/rppx1/rppx1_cac.c
+ create mode 100644 drivers/media/platform/dreamchip/rppx1/rppx1_ccor.c
+ create mode 100644 drivers/media/platform/dreamchip/rppx1/rppx1_db.c
+ create mode 100644 drivers/media/platform/dreamchip/rppx1/rppx1_dpcc.c
+ create mode 100644 drivers/media/platform/dreamchip/rppx1/rppx1_exm.c
+ create mode 100644 drivers/media/platform/dreamchip/rppx1/rppx1_ga.c
+ create mode 100644 drivers/media/platform/dreamchip/rppx1/rppx1_hist.c
+ create mode 100644 drivers/media/platform/dreamchip/rppx1/rppx1_hist256.c
+ create mode 100644 drivers/media/platform/dreamchip/rppx1/rppx1_is.c
+ create mode 100644 drivers/media/platform/dreamchip/rppx1/rppx1_lin.c
+ create mode 100644 drivers/media/platform/dreamchip/rppx1/rppx1_lsc.c
+ create mode 100644 drivers/media/platform/dreamchip/rppx1/rppx1_ltm.c
+ create mode 100644 drivers/media/platform/dreamchip/rppx1/rppx1_ltmmeas.c
+ create mode 100644 drivers/media/platform/dreamchip/rppx1/rppx1_outif.c
+ create mode 100644 drivers/media/platform/dreamchip/rppx1/rppx1_outregs.c
+ create mode 100644 drivers/media/platform/dreamchip/rppx1/rppx1_rmap.c
+ create mode 100644 drivers/media/platform/dreamchip/rppx1/rppx1_rmapmeas.c
+ create mode 100644 drivers/media/platform/dreamchip/rppx1/rppx1_shrp.c
+ create mode 100644 drivers/media/platform/dreamchip/rppx1/rppx1_wbmeas.c
+ create mode 100644 drivers/media/platform/dreamchip/rppx1/rppx1_xyz2luv.c
+ create mode 100644 drivers/media/platform/renesas/rcar-isp/core-io.c
+ create mode 100644 drivers/media/platform/renesas/rcar-isp/core.c
+ create mode 100644 drivers/media/platform/renesas/rcar-isp/risp-core.h
+ create mode 100644 include/media/rppx1.h
 
 -- 
-Best regards,
-Bingbu Cao
+2.51.1
+
