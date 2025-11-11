@@ -1,133 +1,200 @@
-Received: from mail-ej1-f54.google.com (mail-ej1-f54.google.com [209.85.218.54])
+Received: from mail-yw1-f182.google.com (mail-yw1-f182.google.com [209.85.128.182])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9CB9136C5A0
-	for <linux-media@vger.kernel.org>; Tue, 11 Nov 2025 17:52:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AD8D62BEC44
+	for <linux-media@vger.kernel.org>; Tue, 11 Nov 2025 18:25:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762883574; cv=none; b=Pq6VZV7HhTdXgWo6hpAF6d53cpMXFszsdWPrkKcPJFQZmkzjOpYQ3LtIudSi5SLYX9n2YBzFxr8An/9Yi9ZbWl9yhaX2DqSyt9xzoWkIDFCdSRN5X/VgxrsqMVIKvgHoHA6VRVU/73WYyZY4jvcp0UyOTo+NKZTZhz3LO0sAenw=
+	t=1762885517; cv=none; b=MnkyWELCxegcCIv66ci2DpUoArlFEty6ZG756bV+VMcZ/ffoi/tICpEKExWzfCjeHNcZZr6slsjkTSz7g4c6/bf7Ct+3B+UkktHu4jr42u6pf/e7aIfCCGHp6vmCKZPiW6V3OhZBJfez1ks85TmczY+sUvxQZf8Q8xqH4OG27fc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762883574; c=relaxed/simple;
-	bh=46edM+lm/eIeFQfqmSHoHH2PCoG6egQvGXMvADmFIHY=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Rf8QKMbSL2gOAohj/Y9OfvzwK5CRJUvXY/WpLLN5zN+lq6FS9ax+pSzEqT0QSe/pMUSmuRGon4jLgfHGVowLzbWI8P2Tgpp4hhupCB3b7r2wCoI2Pes61QsI0WW9exH3kZoeZ1TqRD4d3XMatraJlPthzVKeQzEQeG3aIMPIPZo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=j0uuJRWx; arc=none smtp.client-ip=209.85.218.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
+	s=arc-20240116; t=1762885517; c=relaxed/simple;
+	bh=uW3fdIJNojLg1+r7dEjr0CmWmSrdydlYHz/58yZZms0=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Content-Type; b=KAEuLd137ciqEoxEIOUnZn69bqfoc4PhqZxh254CRayRMJGNNKvJYDGqbspR4+deIPuFYeBRbF3E5uxW73NtG/UN0Hhy9hUYoD2qJKZCQ7XOHt2gHoeQ0UsuPO3IRJmXiLRqfPfbrTK+7XsrE37LmcUWNqoT0I9xib5VPGE4Xj0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=raspberrypi.com; spf=pass smtp.mailfrom=raspberrypi.com; dkim=pass (2048-bit key) header.d=raspberrypi.com header.i=@raspberrypi.com header.b=imoqJCvp; arc=none smtp.client-ip=209.85.128.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=raspberrypi.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=raspberrypi.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="j0uuJRWx"
-Received: by mail-ej1-f54.google.com with SMTP id a640c23a62f3a-b3d196b7eeeso8312966b.0
-        for <linux-media@vger.kernel.org>; Tue, 11 Nov 2025 09:52:52 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=raspberrypi.com header.i=@raspberrypi.com header.b="imoqJCvp"
+Received: by mail-yw1-f182.google.com with SMTP id 00721157ae682-78677ff31c2so142887b3.2
+        for <linux-media@vger.kernel.org>; Tue, 11 Nov 2025 10:25:15 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1762883571; x=1763488371; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=46edM+lm/eIeFQfqmSHoHH2PCoG6egQvGXMvADmFIHY=;
-        b=j0uuJRWx4TCgzGcs0iQ/SY+Rz3bHmVL8AO9iaZEmEfl2Hvk3Rq1JTDY0Avo9eNwBF9
-         g4jcgzz2Zn+9VuQKLxQChIuYSGAHg2DDU10EHVRSc9HmVefDP7xf1duGH/mXH/ktm/B6
-         5XK+iNWb7ZvuvPqVV1hlGaSXhp5zZjJyCm6uhxM9HLcul0bmu+qr7hUpjpt8bI3Nkx6h
-         PU/5p3MDB2/pt2aS6Ud1UqOm3jJKyIPNDVeSWfH4j/id7I85JcnMm5qASHLEUkY3bhn6
-         /xfn1gOFI/5IhBVMBp2HuV5VZkX/9Y4U6qcJACFw8kOrcLTqKTvhn68SVt7tB9yd4EGn
-         XIGQ==
+        d=raspberrypi.com; s=google; t=1762885514; x=1763490314; darn=vger.kernel.org;
+        h=to:subject:message-id:date:from:in-reply-to:references:mime-version
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=WbaypeAc+LAHLf1nSdqKLcHPmc0bIEfuTiR1igXjF8A=;
+        b=imoqJCvpoiAdl0EzWdphTSkKzxGeq2ss7g6JmYtimRnrOnq+5Ed+Xws7q6SAOLcHxq
+         huKZmH+ijTNRwSTtSA7+5iMW1ROGcOn3EUbjJ/FkfyOC5EVZMy5HvTaM0fN0BCWckLeV
+         TW5wE9JxVVsac6nE43Q8uJc0nMvRnARleDNVAfrmLwIO8oDSRRT1lDp6L4rTwa2qCH9O
+         wWidjI4c+IUrhFmPNECjZKSReVZJvWDIyiSlo+RXGzUfKoRGOUAzFGhWtpUY+ryNCTqu
+         qRLYX3/25rC88WbSX8j0V2rgwJWItINnuBwOEGg3+OCx0SnnczVRQIV8oIuF4Yy8iHTf
+         IKPA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1762883571; x=1763488371;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=46edM+lm/eIeFQfqmSHoHH2PCoG6egQvGXMvADmFIHY=;
-        b=knjhN7plnR2xu4LmI1Y/owXPcImNFRLwEKtDtt+OyDaom/RL37k3Qj2Rt+XhyFsjoh
-         lJi5lqevayBMpj81qw+PgfmkxvzykKmirJXG54B9xXYAlQpx/2GiFwHimh4AweymvhFR
-         QfqG1WzGiGKTMuIt8zpq0ZU9Y+x/fuzoZw7DP3vZubFJjxH/o9zILN4wdtCVlIeOAasW
-         BmKHKFVL9LzrrfvHpX4zqBgIJ8TIcQDOxlRn0b6+L5afNb+zY3E84/MpF2KPf2RopcHh
-         fDsAeyinDR2S4qLK3vbaQYW84UgAFFIGo8wKwUd7ttsvR80UCZ1NNY6Kj2XoRElg+3Dz
-         78Rg==
-X-Forwarded-Encrypted: i=1; AJvYcCWqBlXNg4GVagGPZ4+jW0p9O46172KcdbVSooi1rXjiddLuKnHRTO4qVZOFHq5op+jlWv0L140keyxjKA==@vger.kernel.org
-X-Gm-Message-State: AOJu0YySWO6J1Sg/rxPwd+j/lXLQyrDpxctluDikzV1CRHhcQ6z3NOEb
-	F8tmOfZKfrBfm5bSZn5EoFaCUzN52IpxIkfLWgaQ72M0eMj793YwkqnlUpoHtqJHzPE=
-X-Gm-Gg: ASbGnctTmxNBuT2xF3up3YgfVYcNEebFp23PV0or1WNXPGmWkBfL54xOrX7csSFuEQD
-	Blx57xbwfYEsQ8xGEbKK7BrQdcPn9J5+4gP182l70OrgZB6vXeODAwXspSZGfUV7PlCkOY5/3ux
-	xXM8CR0AxHxTUc/m8fjMqMgtsoFphYwOsXs0A6arA9CD5eemTaG3On7c2/04W5ztuQ+wqA5itQs
-	945YETn6/6iOD3j6ww35l0Ixjb4LVU8uLknDAV3XbPvt15ls7XOz38F7wjxtTA7V0J6t2k0FjKR
-	gBbeXYycVipooO8fR6/9X+m6zUNfXOFdaGeybHvdvR+ZfvR1D20pk/wJxvuCi2A6RBh2OUw6lZt
-	T8WXAHl/281kWh9AIFcxIp14eTp/JNoEwbQr5H02dR+R8aBXCz6D2BUqV8UlmAH0VhZc8sUVvBj
-	0P2Ybbq0fvMKAhPlkmditvcsHvoxw6g5cbq3HFgkcmLcI3uU8z0KSazJpZinJiLkeN
-X-Google-Smtp-Source: AGHT+IGZ24gPwNf9yPCfR7VYmGLvGJvKsnhVnsEWjyP34dYxdAWzeTApGxpBX2H8vl8E9dV82whA7w==
-X-Received: by 2002:a17:907:7fab:b0:b72:d56f:3468 with SMTP id a640c23a62f3a-b7331aac316mr1013366b.50.1762883570945;
-        Tue, 11 Nov 2025 09:52:50 -0800 (PST)
-Received: from localhost (p200300f65f2353049e8cfcf6469e7c35.dip0.t-ipconnect.de. [2003:f6:5f23:5304:9e8c:fcf6:469e:7c35])
-        by smtp.gmail.com with UTF8SMTPSA id a640c23a62f3a-b732c87ccfcsm76547366b.9.2025.11.11.09.52.49
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 11 Nov 2025 09:52:50 -0800 (PST)
-Date: Tue, 11 Nov 2025 18:52:49 +0100
-From: Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@baylibre.com>
-To: Andy Shevchenko <andriy.shevchenko@intel.com>
-Cc: Daniel Gomez <da.gomez@kernel.org>, Kees Cook <kees@kernel.org>, 
-	Luis Chamberlain <mcgrof@kernel.org>, Hans Verkuil <hverkuil+cisco@kernel.org>, 
-	Malcolm Priestley <tvboxspy@gmail.com>, Mauro Carvalho Chehab <mchehab@kernel.org>, 
-	Hans Verkuil <hverkuil@kernel.org>, Rusty Russell <rusty@rustcorp.com.au>, 
-	Petr Pavlu <petr.pavlu@suse.com>, Sami Tolvanen <samitolvanen@google.com>, 
-	linux-kernel@vger.kernel.org, linux-media@vger.kernel.org, linux-modules@vger.kernel.org, 
-	linux-hardening@vger.kernel.org
-Subject: Re: [PATCH v2 0/3] module: Add compile-time check for embedded NUL
- characters
-Message-ID: <dvdu27leqnwvxgz6rcgsdbovw2576dtcbmxuaznevjvijdxp6s@t64lg6bckgkd>
-References: <20251010030348.it.784-kees@kernel.org>
- <3dd1a00d-08f7-4801-a9f7-d6db61c0e0f3@kernel.org>
- <aRMhLEs9NpGexL7B@black.igk.intel.com>
+        d=1e100.net; s=20230601; t=1762885514; x=1763490314;
+        h=to:subject:message-id:date:from:in-reply-to:references:mime-version
+         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=WbaypeAc+LAHLf1nSdqKLcHPmc0bIEfuTiR1igXjF8A=;
+        b=dNHcowmVAjtiufepXIGlfoYrzqrUklasuOGXku/gx9yKShnPNDW46MZ4wyV3RJ59au
+         Lv3Y/azgPL+mDsNNGDVptMwjB3ET2dyTrnfEZo10Mpi66F5MjJU5X4+hBgeNQhArcUeZ
+         ks0F2sWKDSL1BhMlRxKPCAnLe3Y/Z0zyYtoc2hRoPWQ6TU/AJOWV4zhPz4dXS0ATKhIN
+         P560tPZGrw5ulRmeZMKVQ/gBDETdV+46o57jsNAQE1IGjFN3LLK06YQQ/n+qNbgvwrhV
+         a9qTaKpWW46np567yeiakSXBZxrjw+/E8cpoH3ESVJDa2+RcH0W1oZLFuoze97J7Caem
+         G2Tw==
+X-Forwarded-Encrypted: i=1; AJvYcCUUdkBf5Gv7xV5GeamkLMp74F6Ar+qZxC9uPJ/IgCReytVtD10SDRZyw1OagCUtqC3+ZLvKN/zJBMXYnQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0YyLygcOdq4n2SXTmEYnTyDL1UqejzbCqGtKilGj+3bejeBvh0YB
+	HGIsrnLzP6iPapZ/mfWdwsTNX7nVnZtQXvZ5XHal6wKZpEXrQAzQK2CeIb8OGEW/qgrCPnuFy7O
+	jYCc1w/Sqvd5dIrZ55aBXG2UEXuYt0HAHyeHSWbwWGA==
+X-Gm-Gg: ASbGnctA2nTGg2jlBydZ+r8P/yeJr3ppMnvk7Qkea/cQHAfJ9+U92JRQQF5HcqwUCtp
+	kICEsv1sIPCl1UNFP+6QFQekDWH805FzcEV4h4weRBv6bXvdklQcZ6hUFck6e16WNFStN3CtUsL
+	pT6ZvE+Tqbah9boHMM1uFzdZmyTFJkaN6ynoFZLjg2qZjYg8KTYRcBuSEjhaYg1dVVLDBPYIBIY
+	SBY9+S22PDWWXZuJPmz9R7LG9YneQuUYuMcGABInniUDOyWYoG+4XZGyQvObDNm+0uultS9DGxb
+	mNCtIdALWX3/tFcbb7BysL2mluY=
+X-Google-Smtp-Source: AGHT+IH/WEZ5YOvre83bEWsrI64IAmk0Xmrg/suPeYhWUxruEL1V+Ky/0K3tNxGTbF2OBLUFVsPG8mza82okHXcaBGM=
+X-Received: by 2002:a05:690c:7108:b0:787:f5c5:c630 with SMTP id
+ 00721157ae682-787f5c5ce8cmr58641017b3.41.1762885514479; Tue, 11 Nov 2025
+ 10:25:14 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="mwbp63t7mxf4mfm7"
-Content-Disposition: inline
-In-Reply-To: <aRMhLEs9NpGexL7B@black.igk.intel.com>
+References: <20251111-b4-adv7180-vpp-sub-device-v1-0-9877fe9f709b@pengutronix.de>
+ <20251111-b4-adv7180-vpp-sub-device-v1-1-9877fe9f709b@pengutronix.de>
+ <CAPY8ntAAbXq--N_=Lk-GeNMOt7Ucpm2zfkKOnvXB2bhY4i84zg@mail.gmail.com> <aRN039bNdqD8bySl@pengutronix.de>
+In-Reply-To: <aRN039bNdqD8bySl@pengutronix.de>
+From: Dave Stevenson <dave.stevenson@raspberrypi.com>
+Date: Tue, 11 Nov 2025 18:24:56 +0000
+X-Gm-Features: AWmQ_bnP3AdTyCu95ZcqXIRrbj6nzHhQqcYccZgtVweCzPdCw7EcgDuP6gytZ78
+Message-ID: <CAPY8ntDEdiYMPHgWcX_UkL_jEi=8kK+oT4R6C6kF6vnUgb17jg@mail.gmail.com>
+Subject: Re: [PATCH 1/4] media: dt-bindings: adi,adv7180: add VPP and CSI
+ register maps
+To: Michael Tretter <m.tretter@pengutronix.de>, 
+	Dave Stevenson <dave.stevenson@raspberrypi.com>, Lars-Peter Clausen <lars@metafoo.de>, 
+	=?UTF-8?Q?Niklas_S=C3=B6derlund?= <niklas.soderlund+renesas@ragnatech.se>, 
+	Mauro Carvalho Chehab <mchehab@kernel.org>, Rob Herring <robh@kernel.org>, 
+	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, linux-media@vger.kernel.org, 
+	devicetree@vger.kernel.org, kernel@pengutronix.de
+Content-Type: text/plain; charset="UTF-8"
 
+Hi Michael
 
---mwbp63t7mxf4mfm7
-Content-Type: text/plain; protected-headers=v1; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-Subject: Re: [PATCH v2 0/3] module: Add compile-time check for embedded NUL
- characters
-MIME-Version: 1.0
+On Tue, 11 Nov 2025 at 17:39, Michael Tretter <m.tretter@pengutronix.de> wrote:
+>
+> Hi Dave,
+>
+> On Tue, 11 Nov 2025 16:02:26 +0000, Dave Stevenson wrote:
+> > On Tue, 11 Nov 2025 at 14:50, Michael Tretter <m.tretter@pengutronix.de> wrote:
+> > >
+> > > The ADV7280 and ADV7280-M have up to three register maps for the VPP and
+> > > CSI. The address of these register maps may be programmed via registers
+> > > in the main register map.
+> >
+> > AIUI all the ADV728x devices have at least 2 addresses, signified by
+> > the ADV7180_FLAG_MIPI_CSI2 and ADV7180_FLAG_I2P flags in their
+> > adv7180_chip_info structures.
+> > Is there a reason that you've restricted this to just the two chips?
+>
+> I only have an ADV7280-M for testing. Thus, I restricted it to the chip
+> that I could test and the variant that's the same except for the CSI.
+>
+> >
+> > adv7281 - CSI
+> > adv7281-m - CSI
+> > adv7281-ma - CSI
+> > adv7282 - VPP
+> > adv7282-m - VPP and CSI
+> >
+> > The adv7180 and adv7182 families are the only two which only have the
+> > single I2C address.
+>
+> Are you suggesting to extend the binding to be able to specify the
+> addresses for the CSI and VPP for any of these chips?
 
-Helo Andy,
+Seeing as the driver change implements that, IMHO the binding ought to match.
+I can test adv7282-m for you if you want. I'd be very surprised if it
+didn't work with the entire family, and as setting the additional
+addresses is optional it's unlikely to cause an issue anyway.
 
-On Tue, Nov 11, 2025 at 12:42:36PM +0100, Andy Shevchenko wrote:
-> Folks, are you aware that this change blown up the sparse?
-> Now there is a "bad constant expression" to each MODULE_*() macro line.
->=20
-> Nice that Uwe is in the Cc list, so IIRC he is Debian maintainer for spar=
-se
-> and perhaps has an influence to it to some extent.
+  Dave
 
-To be honest, in the nearer past I'm very passive on the sparse
-maintainer side and even stopped using it as it fails on guard locking.
-
-My impression is also that upstream isn't very active any more, but that
-might have been temporal and wrong as I stopped looking.
-
-If there is an outcome and a patch to cherry-pick into the Debian
-packaging, give me a ping.
-
-Uwe
-
---mwbp63t7mxf4mfm7
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEP4GsaTp6HlmJrf7Tj4D7WH0S/k4FAmkTd+4ACgkQj4D7WH0S
-/k6QXQf/WqP001zUT4Bxw/oC7trx3KqIhrnryL+Ih+OAu0LFHWKobNA3K556JcXQ
-YEoGffzJU/J7ODVixICet7Uv94oeQ/1Oqr/OSPXlUst2vEIgQrkAO5guB/DCoS6C
-c+aODonO57Ovlc834ylWPacex8K1XrSEC3bO3guctIxR+FLcfYyc6w8CI7pMRZ/0
-Kqaype/E9cFIvlGjyxnIZ28NKGuACVyiO6a4jrfnLtCiFsirGWww65tqhUg9hJx8
-sZ2RViIzMnMbl+Vqgoxm3JhpqsfgiA9k6069Ey0zw6JgBVH67N8IQs4v/AKqeBeB
-05CxLfZZIK/RlfUZfQ1d/EY78KJxOg==
-=qd7W
------END PGP SIGNATURE-----
-
---mwbp63t7mxf4mfm7--
+> Michael
+>
+> >
+> > Thanks.
+> >   Dave
+> >
+> > > Allow to specify the addresses of the VPP and CSI in the device tree to
+> > > solve address conflicts on a board level.
+> > >
+> > > Signed-off-by: Michael Tretter <m.tretter@pengutronix.de>
+> > > ---
+> > >  .../devicetree/bindings/media/i2c/adi,adv7180.yaml | 44 ++++++++++++++++++++++
+> > >  1 file changed, 44 insertions(+)
+> > >
+> > > diff --git a/Documentation/devicetree/bindings/media/i2c/adi,adv7180.yaml b/Documentation/devicetree/bindings/media/i2c/adi,adv7180.yaml
+> > > index dee8ce7cb7ba..4bbdc812442b 100644
+> > > --- a/Documentation/devicetree/bindings/media/i2c/adi,adv7180.yaml
+> > > +++ b/Documentation/devicetree/bindings/media/i2c/adi,adv7180.yaml
+> > > @@ -138,6 +138,31 @@ allOf:
+> > >        required:
+> > >          - ports
+> > >
+> > > +  - if:
+> > > +      properties:
+> > > +        compatible:
+> > > +          contains:
+> > > +            enum:
+> > > +              - adi,adv7280
+> > > +              - adi,adv7280-m
+> > > +    then:
+> > > +      properties:
+> > > +        reg:
+> > > +          minItems: 1
+> > > +          maxItems: 3
+> > > +          description:
+> > > +            The ADV7280 and ADV7280-M have up to three register maps, which can be
+> > > +            accessed via the I2C port. The main register map, the VPP register map,
+> > > +            and the CSI register map. The main register map is mandatory. The other
+> > > +            register maps are optional and the default is used unless specified.
+> > > +
+> > > +        reg-names:
+> > > +          minItems: 1
+> > > +          items:
+> > > +            - const: main
+> > > +            - enum: [ csi, vpp ]
+> > > +            - enum: [ csi, vpp ]
+> > > +
+> > >  examples:
+> > >    - |
+> > >      i2c {
+> > > @@ -187,3 +212,22 @@ examples:
+> > >                      };
+> > >              };
+> > >      };
+> > > +
+> > > +  - |
+> > > +    i2c {
+> > > +            #address-cells = <1>;
+> > > +            #size-cells = <0>;
+> > > +
+> > > +            composite-in@20 {
+> > > +                    compatible = "adi,adv7280-m";
+> > > +                    reg = <0x20>, <0x42>, <0x44>;
+> > > +                    reg-names = "main", "vpp", "csi";
+> > > +
+> > > +                    port {
+> > > +                            adv7280_out: endpoint {
+> > > +                                    bus-width = <8>;
+> > > +                                    remote-endpoint = <&vin1ep>;
+> > > +                            };
+> > > +                    };
+> > > +            };
+> > > +    };
+> > >
+> > > --
+> > > 2.47.3
+> > >
+> > >
+> >
