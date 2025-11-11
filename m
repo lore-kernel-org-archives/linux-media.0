@@ -1,58 +1,59 @@
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
+Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4111A369973;
-	Tue, 11 Nov 2025 17:28:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.167.242.64
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0D90435A142
+	for <linux-media@vger.kernel.org>; Tue, 11 Nov 2025 17:39:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762882113; cv=none; b=UeE7j+ZMI4ZO9qY7lAAJdljjvXJDYCUG6j6n3vnSEHdFPt23iqiEgtfvSMWxA920fR3SkHpc9PZFlPkfAeo4VcKmUVZTrF//sKaMKSNzlmMQQBXEoUyuamzjNQvNSS9Iuh7DK4tRtp1gPKpYe5025Lz7ZLChJEH4SomUuHhmJA4=
+	t=1762882802; cv=none; b=UIUq0wehLOc2WS/4Js02lIY2M6Ad2modrZPDVnuf8yqJGFW+0MBB3XwajFTkakT2IOELO4FIGj7TR4x7eXY2lC+MjcXzFSP771/A3gjWrmRCHKy1b17Om5pClIpC1BsV6ne8EWkNoMa2fMH1iFUwpdhJTyuyXFkqPDgTpNgF8DI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762882113; c=relaxed/simple;
-	bh=bsmd7kg6qnIb8MlMDLkiQd6rQpcUfqqxFWYPX1fT4WE=;
+	s=arc-20240116; t=1762882802; c=relaxed/simple;
+	bh=8rWFm5kx0uCTaC5/KSK33hm+h+JDdRob+P3tgSHU7xY=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=uYL4PPe6v4par+OgAvjQKhf1/B2961TGMAG/T+DPXoIWQSKL9Uo637L9oI8Oc78fXZk1c66r37mVlyc8I0dXJ6jUeceHqK6vU86PyG4z59y3jf2fesiZFX59W+IDar6aR8NpWK6K0oZV5/TfR6juvWFZWAI6fTxTpy0kz7+m/hM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ideasonboard.com; spf=pass smtp.mailfrom=ideasonboard.com; dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b=pfqk8Swc; arc=none smtp.client-ip=213.167.242.64
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ideasonboard.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ideasonboard.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="pfqk8Swc"
-Received: from pendragon.ideasonboard.com (82-203-161-95.bb.dnainternet.fi [82.203.161.95])
-	by perceval.ideasonboard.com (Postfix) with UTF8SMTPSA id CD3211D29;
-	Tue, 11 Nov 2025 18:26:22 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-	s=mail; t=1762881983;
-	bh=bsmd7kg6qnIb8MlMDLkiQd6rQpcUfqqxFWYPX1fT4WE=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=pfqk8SwcT5h2+q1NJF3KwQzpmFNVGC595cqR5z3NIVjAegXLrB56owuRgJqc6E9EP
-	 ACkTo6j2Ub5YCF3saLI3kxZD2yo9WNAWD6EYbbntbHiNqX5gLpxhiTIFz07LTO/Dc1
-	 ygB8oCU1JnuLQ8JWd20ngFgqS/AlJhIqU6wQvChc=
-Date: Tue, 11 Nov 2025 19:28:15 +0200
-From: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To: "G.N. Zhou (OSS)" <guoniu.zhou@oss.nxp.com>
-Cc: Rui Miguel Silva <rmfrfs@gmail.com>,
-	Martin Kepplinger <martink@posteo.de>,
-	Purism Kernel Team <kernel@puri.sm>,
+	 Content-Type:Content-Disposition:In-Reply-To; b=oqYJRBzbIMSl/sMFvaPCQMnXQBQrqImy7ViYpRaeVzV8TqqFLkbPDfvXtBHimzlOYJyNYMKkNr4XoBuluoWO7bzakdGrjp8Orf6PVi3j76i2JuIASN0oxYk6id0pQ5zPw7PAR3HBTOo+Zanr4yJwC3ml7EdkrPf4EKiX+hqWJq0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+	(Exim 4.92)
+	(envelope-from <m.tretter@pengutronix.de>)
+	id 1vIsLJ-0000lw-6q; Tue, 11 Nov 2025 18:39:45 +0100
+Received: from pty.whiteo.stw.pengutronix.de ([2a0a:edc0:2:b01:1d::c5])
+	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.96)
+	(envelope-from <m.tretter@pengutronix.de>)
+	id 1vIsLI-008EwL-05;
+	Tue, 11 Nov 2025 18:39:44 +0100
+Received: from mtr by pty.whiteo.stw.pengutronix.de with local (Exim 4.96)
+	(envelope-from <m.tretter@pengutronix.de>)
+	id 1vIsLH-00EYen-2z;
+	Tue, 11 Nov 2025 18:39:43 +0100
+Date: Tue, 11 Nov 2025 18:39:43 +0100
+From: Michael Tretter <m.tretter@pengutronix.de>
+To: Dave Stevenson <dave.stevenson@raspberrypi.com>
+Cc: Lars-Peter Clausen <lars@metafoo.de>,
+	Niklas =?utf-8?Q?S=C3=B6derlund?= <niklas.soderlund+renesas@ragnatech.se>,
 	Mauro Carvalho Chehab <mchehab@kernel.org>,
 	Rob Herring <robh@kernel.org>,
 	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>, Shawn Guo <shawnguo@kernel.org>,
-	Sascha Hauer <s.hauer@pengutronix.de>,
-	Pengutronix Kernel Team <kernel@pengutronix.de>,
-	Fabio Estevam <festevam@gmail.com>,
-	Philipp Zabel <p.zabel@pengutronix.de>, Frank Li <frank.li@nxp.com>,
-	"linux-media@vger.kernel.org" <linux-media@vger.kernel.org>,
-	"devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-	"imx@lists.linux.dev" <imx@lists.linux.dev>,
-	"linux-arm-kernel@lists.infradead.org" <linux-arm-kernel@lists.infradead.org>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-	"G.N. Zhou" <guoniu.zhou@nxp.com>
-Subject: Re: [PATCH v7 2/5] media: imx8mq-mipi-csi2: Use
- devm_clk_bulk_get_all() to fetch clocks
-Message-ID: <20251111172815.GA12331@pendragon.ideasonboard.com>
-References: <20251023-csi2_imx8ulp-v7-0-5ecb081ce79b@nxp.com>
- <20251023-csi2_imx8ulp-v7-2-5ecb081ce79b@nxp.com>
- <20251027001151.GN13023@pendragon.ideasonboard.com>
- <AS8PR04MB908014E336F99BEEB504EDB7FAC4A@AS8PR04MB9080.eurprd04.prod.outlook.com>
+	Conor Dooley <conor+dt@kernel.org>, linux-media@vger.kernel.org,
+	devicetree@vger.kernel.org, kernel@pengutronix.de
+Subject: Re: [PATCH 1/4] media: dt-bindings: adi,adv7180: add VPP and CSI
+ register maps
+Message-ID: <aRN039bNdqD8bySl@pengutronix.de>
+Mail-Followup-To: Michael Tretter <m.tretter@pengutronix.de>,
+	Dave Stevenson <dave.stevenson@raspberrypi.com>,
+	Lars-Peter Clausen <lars@metafoo.de>,
+	Niklas =?utf-8?Q?S=C3=B6derlund?= <niklas.soderlund+renesas@ragnatech.se>,
+	Mauro Carvalho Chehab <mchehab@kernel.org>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>, linux-media@vger.kernel.org,
+	devicetree@vger.kernel.org, kernel@pengutronix.de
+References: <20251111-b4-adv7180-vpp-sub-device-v1-0-9877fe9f709b@pengutronix.de>
+ <20251111-b4-adv7180-vpp-sub-device-v1-1-9877fe9f709b@pengutronix.de>
+ <CAPY8ntAAbXq--N_=Lk-GeNMOt7Ucpm2zfkKOnvXB2bhY4i84zg@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
@@ -61,153 +62,122 @@ List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <AS8PR04MB908014E336F99BEEB504EDB7FAC4A@AS8PR04MB9080.eurprd04.prod.outlook.com>
+In-Reply-To: <CAPY8ntAAbXq--N_=Lk-GeNMOt7Ucpm2zfkKOnvXB2bhY4i84zg@mail.gmail.com>
+X-Sent-From: Pengutronix Hildesheim
+X-URL: http://www.pengutronix.de/
+X-Accept-Language: de,en
+X-Accept-Content-Type: text/plain
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: m.tretter@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-media@vger.kernel.org
 
-On Tue, Nov 04, 2025 at 07:47:43AM +0000, G.N. Zhou (OSS) wrote:
-> On Monday, October 27, 2025 8:12 AM, Laurent Pinchart wrote:
-> > On Thu, Oct 23, 2025 at 05:19:43PM +0800, Guoniu Zhou wrote:
-> > > From: Guoniu Zhou <guoniu.zhou@nxp.com>
-> > >
-> > > Use devm_clk_bulk_get_all() helper to simplify clock handle code.
-> > >
-> > > No functional changes intended.
-> > >
-> > > Reviewed-by: Frank Li <Frank.Li@nxp.com>
-> > > Signed-off-by: Guoniu Zhou <guoniu.zhou@nxp.com>
-> > > ---
-> > >  drivers/media/platform/nxp/imx8mq-mipi-csi2.c | 52
-> > > ++++++++-------------------
-> > >  1 file changed, 15 insertions(+), 37 deletions(-)
-> > >
-> > > diff --git a/drivers/media/platform/nxp/imx8mq-mipi-csi2.c
-> > > b/drivers/media/platform/nxp/imx8mq-mipi-csi2.c
-> > > index d333ff43539f061b8b9cf88af2cda8c44b3ec2a9..fd202601d401145da8be23df4451
-> > > f6af660642c5 100644
-> > > --- a/drivers/media/platform/nxp/imx8mq-mipi-csi2.c
-> > > +++ b/drivers/media/platform/nxp/imx8mq-mipi-csi2.c
-> > > @@ -71,21 +71,6 @@ enum {
-> > >  	ST_SUSPENDED	= 4,
-> > >  };
-> > >
-> > > -enum imx8mq_mipi_csi_clk {
-> > > -	CSI2_CLK_CORE,
-> > > -	CSI2_CLK_ESC,
-> > > -	CSI2_CLK_UI,
-> > > -	CSI2_NUM_CLKS,
-> > > -};
-> > > -
-> > > -static const char * const imx8mq_mipi_csi_clk_id[CSI2_NUM_CLKS] = {
-> > > -	[CSI2_CLK_CORE] = "core",
-> > > -	[CSI2_CLK_ESC] = "esc",
-> > > -	[CSI2_CLK_UI] = "ui",
-> > > -};
-> > > -
-> > > -#define CSI2_NUM_CLKS	ARRAY_SIZE(imx8mq_mipi_csi_clk_id)
-> > > -
-> > >  struct imx8mq_plat_data {
-> > >  	int (*enable)(struct csi_state *state, u32 hs_settle);
-> > >  	void (*disable)(struct csi_state *state); @@ -111,7 +96,8 @@ struct csi_state {
-> > >  	struct device *dev;
-> > >  	const struct imx8mq_plat_data *pdata;
-> > >  	void __iomem *regs;
-> > > -	struct clk_bulk_data clks[CSI2_NUM_CLKS];
-> > > +	struct clk_bulk_data *clks;
-> > > +	int num_clks;
-> > >  	struct reset_control *rst;
-> > >  	struct regulator *mipi_phy_regulator;
-> > >
-> > > @@ -384,24 +370,16 @@ static void imx8mq_mipi_csi_set_params(struct csi_state *state)
-> > >  			      CSI2RX_SEND_LEVEL);
-> > >  }
-> > >
-> > > -static int imx8mq_mipi_csi_clk_enable(struct csi_state *state) -{
-> > > -	return clk_bulk_prepare_enable(CSI2_NUM_CLKS, state->clks);
-> > > -}
-> > > -
-> > > -static void imx8mq_mipi_csi_clk_disable(struct csi_state *state)
-> > > +static struct clk *find_esc_clk(struct csi_state *state)
-> > 
-> > This is one of the reasons why I don't like devm_clk_bulk_get_all(). I won't
-> > object to this patch, but I don't like it. At the very lest, you should look up the
-> > clock at probe time and cache it in the imx8mq_plat_data structure, to avoid
-> > looking it up multiple times at runtime.
+Hi Dave,
+
+On Tue, 11 Nov 2025 16:02:26 +0000, Dave Stevenson wrote:
+> On Tue, 11 Nov 2025 at 14:50, Michael Tretter <m.tretter@pengutronix.de> wrote:
+> >
+> > The ADV7280 and ADV7280-M have up to three register maps for the VPP and
+> > CSI. The address of these register maps may be programmed via registers
+> > in the main register map.
 > 
-> Ok, but could we cache the clock in the csi_state structure? Because the imx8mq_plat_data
-> structure instance is const.
+> AIUI all the ADV728x devices have at least 2 addresses, signified by
+> the ADV7180_FLAG_MIPI_CSI2 and ADV7180_FLAG_I2P flags in their
+> adv7180_chip_info structures.
+> Is there a reason that you've restricted this to just the two chips?
 
-Yes sorry that's what I meant.
+I only have an ADV7280-M for testing. Thus, I restricted it to the chip
+that I could test and the variant that's the same except for the CSI.
 
-> > >  {
-> > > -	clk_bulk_disable_unprepare(CSI2_NUM_CLKS, state->clks);
-> > > -}
-> > > -
-> > > -static int imx8mq_mipi_csi_clk_get(struct csi_state *state) -{
-> > > -	unsigned int i;
-> > > +	int i;
-> > >
-> > > -	for (i = 0; i < CSI2_NUM_CLKS; i++)
-> > > -		state->clks[i].id = imx8mq_mipi_csi_clk_id[i];
-> > > +	for (i = 0; i < state->num_clks; i++) {
-> > 
-> > Make state->num_clks unsigned instead of making i signed.
-> > 
-> > > +		if (!strcmp(state->clks[i].id, "esc"))
-> > > +			return state->clks[i].clk;
-> > > +	}
-> > >
-> > > -	return devm_clk_bulk_get(state->dev, CSI2_NUM_CLKS, state->clks);
-> > > +	return NULL;
-> > 
-> > This needs to become a probe error.
 > 
-> Got it, will update in next version.
+> adv7281 - CSI
+> adv7281-m - CSI
+> adv7281-ma - CSI
+> adv7282 - VPP
+> adv7282-m - VPP and CSI
 > 
-> > >  }
-> > >
-> > >  static int imx8mq_mipi_csi_calc_hs_settle(struct csi_state *state,
-> > > @@ -456,7 +434,7 @@ static int imx8mq_mipi_csi_calc_hs_settle(struct csi_state *state,
-> > >  	 * documentation recommends picking a value away from the boundaries.
-> > >  	 * Let's pick the average.
-> > >  	 */
-> > > -	esc_clk_rate = clk_get_rate(state->clks[CSI2_CLK_ESC].clk);
-> > > +	esc_clk_rate = clk_get_rate(find_esc_clk(state));
-> > >  	if (!esc_clk_rate) {
-> > >  		dev_err(state->dev, "Could not get esc clock rate.\n");
-> > >  		return -EINVAL;
-> > > @@ -783,7 +761,7 @@ static void imx8mq_mipi_csi_pm_suspend(struct device *dev)
-> > >
-> > >  	if (state->state & ST_POWERED) {
-> > >  		imx8mq_mipi_csi_stop_stream(state);
-> > > -		imx8mq_mipi_csi_clk_disable(state);
-> > > +		clk_bulk_disable_unprepare(state->num_clks, state->clks);
-> > >  		state->state &= ~ST_POWERED;
-> > >  	}
-> > >
-> > > @@ -801,7 +779,7 @@ static int imx8mq_mipi_csi_pm_resume(struct device *dev)
-> > >
-> > >  	if (!(state->state & ST_POWERED)) {
-> > >  		state->state |= ST_POWERED;
-> > > -		ret = imx8mq_mipi_csi_clk_enable(state);
-> > > +		ret = clk_bulk_prepare_enable(state->num_clks, state->clks);
-> > >  	}
-> > >  	if (state->state & ST_STREAMING) {
-> > >  		sd_state = v4l2_subdev_lock_and_get_active_state(sd);
-> > > @@ -1027,9 +1005,9 @@ static int imx8mq_mipi_csi_probe(struct platform_device *pdev)
-> > >  	if (IS_ERR(state->regs))
-> > >  		return PTR_ERR(state->regs);
-> > >
-> > > -	ret = imx8mq_mipi_csi_clk_get(state);
-> > > -	if (ret < 0)
-> > > -		return ret;
-> > > +	state->num_clks = devm_clk_bulk_get_all(dev, &state->clks);
-> > > +	if (state->num_clks < 0)
-> > > +		return dev_err_probe(dev, state->num_clks, "Failed to get
-> > > +clocks\n");
-> > >
-> > >  	platform_set_drvdata(pdev, &state->sd);
-> > >
+> The adv7180 and adv7182 families are the only two which only have the
+> single I2C address.
 
--- 
-Regards,
+Are you suggesting to extend the binding to be able to specify the
+addresses for the CSI and VPP for any of these chips?
 
-Laurent Pinchart
+Michael
+
+> 
+> Thanks.
+>   Dave
+> 
+> > Allow to specify the addresses of the VPP and CSI in the device tree to
+> > solve address conflicts on a board level.
+> >
+> > Signed-off-by: Michael Tretter <m.tretter@pengutronix.de>
+> > ---
+> >  .../devicetree/bindings/media/i2c/adi,adv7180.yaml | 44 ++++++++++++++++++++++
+> >  1 file changed, 44 insertions(+)
+> >
+> > diff --git a/Documentation/devicetree/bindings/media/i2c/adi,adv7180.yaml b/Documentation/devicetree/bindings/media/i2c/adi,adv7180.yaml
+> > index dee8ce7cb7ba..4bbdc812442b 100644
+> > --- a/Documentation/devicetree/bindings/media/i2c/adi,adv7180.yaml
+> > +++ b/Documentation/devicetree/bindings/media/i2c/adi,adv7180.yaml
+> > @@ -138,6 +138,31 @@ allOf:
+> >        required:
+> >          - ports
+> >
+> > +  - if:
+> > +      properties:
+> > +        compatible:
+> > +          contains:
+> > +            enum:
+> > +              - adi,adv7280
+> > +              - adi,adv7280-m
+> > +    then:
+> > +      properties:
+> > +        reg:
+> > +          minItems: 1
+> > +          maxItems: 3
+> > +          description:
+> > +            The ADV7280 and ADV7280-M have up to three register maps, which can be
+> > +            accessed via the I2C port. The main register map, the VPP register map,
+> > +            and the CSI register map. The main register map is mandatory. The other
+> > +            register maps are optional and the default is used unless specified.
+> > +
+> > +        reg-names:
+> > +          minItems: 1
+> > +          items:
+> > +            - const: main
+> > +            - enum: [ csi, vpp ]
+> > +            - enum: [ csi, vpp ]
+> > +
+> >  examples:
+> >    - |
+> >      i2c {
+> > @@ -187,3 +212,22 @@ examples:
+> >                      };
+> >              };
+> >      };
+> > +
+> > +  - |
+> > +    i2c {
+> > +            #address-cells = <1>;
+> > +            #size-cells = <0>;
+> > +
+> > +            composite-in@20 {
+> > +                    compatible = "adi,adv7280-m";
+> > +                    reg = <0x20>, <0x42>, <0x44>;
+> > +                    reg-names = "main", "vpp", "csi";
+> > +
+> > +                    port {
+> > +                            adv7280_out: endpoint {
+> > +                                    bus-width = <8>;
+> > +                                    remote-endpoint = <&vin1ep>;
+> > +                            };
+> > +                    };
+> > +            };
+> > +    };
+> >
+> > --
+> > 2.47.3
+> >
+> >
+> 
