@@ -1,1282 +1,389 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yx1-f48.google.com (mail-yx1-f48.google.com [74.125.224.48])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 72270285C84;
-	Wed, 12 Nov 2025 14:24:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 97AD529994B
+	for <linux-media@vger.kernel.org>; Wed, 12 Nov 2025 14:36:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.224.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762957463; cv=none; b=jwoXRI4C1Dg3NAO09df//U/W1E3Ai8YnCINPhU8VPDkHlArQXvy66hMJ2r2+ugD+yrvY6ULHRUVMezEysiJXg7HMVYvnPjMhUn7Cummftbh2192skbKqoH24xYJYC8SNxIrQE0ny0xHEEW05c21rWZ1+YfpHpLfY2lK6TZgez1k=
+	t=1762958172; cv=none; b=RwNF8hSKs7sbG/ymBMNJ1ZGpIvyPtuqiparJlNjHUWGVY7LibrSuSx2uTE+HjlyEqLebxzTSOuE3eo+zXRi90kGpYS5W/eZa8DpEm8iApVYbhyi8FDXFPw/srMqu1Yl1FH3nZ2EnkpBPyfMjjSI8UGvbDsKq9jPiCQ2iEn6MY/Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762957463; c=relaxed/simple;
-	bh=zoKvz9dSbH/rnGsGMbDsx4Evns22z4xHj2Ok/Rh8W48=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=H0KsX07qodzA3NKdQiYl0J7i/5dw9HONBdpHAHquDi0wG0l3QQJoJB5GxJA3U/HCv2DrlakOjkqkaLV7zQmuT7Bq4oz5SIEycTx5C5ayFn2GfU3Ot0dGBXZvdmKf5aWBnpcK0RixEiEmja1bUt1P/Vvj88ylh1kVOiUukJFOfZg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ECyCC7ze; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1762958172; c=relaxed/simple;
+	bh=YWqYObxfhrzGyw+oHtYdu6jixPtPYlFkWtTCKC8ZZZg=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=rNwbOhzLH+c2NKWhqsNGMYarHVpqs2G/BV3vJLpXULtMnJHJwxMriV128ivyl4JwAanvX2QEy9rJJm7sn8NoMkVKnWv/hn/7plmA6suiaHAYOTRpxZuAOKSiNEO6j+EmPW7BWiqrvXxvQGEAywys18S/7uvsQ8uWfTnQJr/1scY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=raspberrypi.com; spf=pass smtp.mailfrom=raspberrypi.com; dkim=pass (2048-bit key) header.d=raspberrypi.com header.i=@raspberrypi.com header.b=AGDq724n; arc=none smtp.client-ip=74.125.224.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=raspberrypi.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=raspberrypi.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ECyCC7ze"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1ADDFC4CEF5;
-	Wed, 12 Nov 2025 14:24:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1762957463;
-	bh=zoKvz9dSbH/rnGsGMbDsx4Evns22z4xHj2Ok/Rh8W48=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=ECyCC7zeKwKef91FkVuR+HbU2GDTlImNv9ZUyP2jdqrrAGHDwNuieY8MqoXH6Fock
-	 zZcREeGUKoyresUGVcMkZo6OFRFBK7sxc6OOLOPQ+d+E7dhCoN/Pj9lAgHhBGQSgFs
-	 AMIDKUCGxqGuWI51HYgaf7IEw8/vbmEVlr1WyDeVcjGJAppdPNnAHpg+iz41SZbcy0
-	 Fwkof9tK0YBsRPPNSqsyOjwm2fmzpQSKDzytJtXasqOE0Dy1ULGvtlzSXfQvt2vxji
-	 5mpPFGNHXsoyJ8P5e887HNs779FJQRtVSndFMOS3kRBDPmSXnu4U8V3MS/OPSPsJi6
-	 odOUNKBrMslAQ==
-Message-ID: <7291da01-b981-4998-a846-89bc3649c420@kernel.org>
-Date: Wed, 12 Nov 2025 15:24:20 +0100
+	dkim=pass (2048-bit key) header.d=raspberrypi.com header.i=@raspberrypi.com header.b="AGDq724n"
+Received: by mail-yx1-f48.google.com with SMTP id 956f58d0204a3-63fbbad0ac3so903438d50.1
+        for <linux-media@vger.kernel.org>; Wed, 12 Nov 2025 06:36:09 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=raspberrypi.com; s=google; t=1762958168; x=1763562968; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=Xa4TjqqWHse1Uah851bvnZHrm9X5Irvs/ZTFLoWd7cw=;
+        b=AGDq724nggQd/dF59wOUCdL0JaLg/VyTOrvpCfD0Gg3jWySObRw8h9TUs5BJPejaDe
+         d/B/ExMRGf7W7fxk41zVm8OsSkPBYmwRxUNrVYBsseuc0guMZIt3E3N0LdF/Jhg39dge
+         uaP6Usn4j2DF2afzAPCv7Q9O5ZxhlRIXoNuI3aL01KXacV89q3EZiZK58D+KzRRcLAxT
+         ZmVaRwu5uLnF6CbEAROxo6nyEa4CbX9nwecAXTAKZcEiclmeBl98f5AnO81qhKCzitys
+         CdtT4bNsLj1H+MMkgolldvyqUlK0jSi84DVs0Z4McJiKVnTIaP6QoH62KIkhCQlBb2S3
+         BtuQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1762958168; x=1763562968;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Xa4TjqqWHse1Uah851bvnZHrm9X5Irvs/ZTFLoWd7cw=;
+        b=hbhGD+RGUGFf3lkFAwcHOIcR2FjIWgvSVdUWtpxbs16Lyv+kfB5J+yRK2HozRaC8mb
+         wkG1g1bRa8UT5LQMC5R60+duKgYnUNQqQnWqhdDZHeXRO9axvrWFBgmp0xtBt6cSrR+W
+         cj6d6aU4J3qIHIE8O7+bHV3B5vOQE9hMnsLiOczIIsTMzgoNjUrOz3sQprFG/YYVLblM
+         +ElAJx6sEjMZbCHi4hNi2+Lm7lYDhtpwt6hXZKV4CfypAVOkUABOy9IVdXytqgtKVNCa
+         JcZVSVvmy/7gdWiQOzR9SGmd5TzNh5mHbVlqV01h2A1QzPXrkZTpmgxy1Rly6RFTpKc/
+         8qSw==
+X-Forwarded-Encrypted: i=1; AJvYcCVuibD0jNW+7HLwqV/WK0WxbzGJUMjuNs7Y1m7kNInu8N6zdY2no1AeHTricPywGoZv0v207T3LMnrPzA==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz5wDsuIoqzGXU/oupdwypT2fLIRcQ3ZJPUrbBNjjjNuJPpDL8h
+	EHEr24tg9Iz81PlJ3ZBhoxCaRIsV2Gtf8Lz/95/oa96TvGldGkcqoSRUJx6fhYzL7COUm1H9MS7
+	kqPdOZH0GVEZaM/4aREQPvSvLKE91JkYZscALfU4vvA==
+X-Gm-Gg: ASbGncuiYANInpDQtALcKUegPYPtxPFv5jUTJcgLS03gLo7+7E9TaFv9USoi9goznua
+	swUDc/UemB8RfC2rPmOMwMPUyN1tLoJHdikV0usmHuwJVeOnyhwiUHSJcWJObrotMCpn4acQbTc
+	+McGtn9uJZPV6AAKenXh/XOSFZ/ObvHDbuGIByQhpG8pdZAHgxT5t9vouLJwqG9h5+FMCT7VrlY
+	hhOg5ef6fBPIQDZW/izjDEyrR+pmC4ttVVw46pbW9xP/DxDlg9U07/XBwEViPeIfu6aMvFNZtV5
+	KdIGGQjsnbeshEo=
+X-Google-Smtp-Source: AGHT+IG99mrpz0BvlDS5GlM7lwUUyw0Eb5y3dn9ClWV7MgR7k3Pbcpt/38lcIU/ltpIgiQKDC0t+KTC8VE/0IuvhqMM=
+X-Received: by 2002:a05:690e:d50:b0:63f:a8db:47b4 with SMTP id
+ 956f58d0204a3-64101a00c27mr2737748d50.3.1762958168248; Wed, 12 Nov 2025
+ 06:36:08 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v10] media: Add t4ka3 camera sensor driver
-To: kate Hsuan <hpa@redhat.com>, Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc: linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20251105070136.1101153-1-hpa@redhat.com>
-From: Hans de Goede <hansg@kernel.org>
-Content-Language: en-US, nl
-In-Reply-To: <20251105070136.1101153-1-hpa@redhat.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+References: <20251028-b4-rpi-ov5647-v1-0-098413454f5e@ideasonboard.com>
+ <20251028-b4-rpi-ov5647-v1-6-098413454f5e@ideasonboard.com>
+ <u5wdva6kk5n6q5myj3wuy4bxqhaqyhk2ngentrj4p3v5447y2a@3kujjl3nnwea> <176294861029.13219.15475344635093672267@freya>
+In-Reply-To: <176294861029.13219.15475344635093672267@freya>
+From: Dave Stevenson <dave.stevenson@raspberrypi.com>
+Date: Wed, 12 Nov 2025 14:35:49 +0000
+X-Gm-Features: AWmQ_bkV9BKk8iAerQn5YSP-oV9zjJgaxaGzBK80ddAq1V1M0Qr33jOllTUiA24
+Message-ID: <CAPY8ntB3X47aX=4TKrsF-kGR5xT0dvi5KKofs+5z-XY3YCf4Qw@mail.gmail.com>
+Subject: Re: [PATCH 06/13] media: i2c: ov5647: Support HFLIP and VFLIP
+To: Jai Luthra <jai.luthra@ideasonboard.com>
+Cc: Jacopo Mondi <jacopo.mondi@ideasonboard.com>, 
+	Sakari Ailus <sakari.ailus@linux.intel.com>, Jacopo Mondi <jacopo@jmondi.org>, 
+	Mauro Carvalho Chehab <mchehab@kernel.org>, linux-media@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, 
+	Mauro Carvalho Chehab <mchehab+huawei@kernel.org>, 
+	Kieran Bingham <kieran.bingham@ideasonboard.com>, 
+	David Plowman <david.plowman@raspberrypi.com>, 
+	Laurent Pinchart <laurent.pinchart@ideasonboard.com>, Peter Robinson <pbrobinson@gmail.com>, 
+	Stefan Wahren <wahrenst@gmx.net>, "Ivan T. Ivanov" <iivanov@suse.de>
+Content-Type: text/plain; charset="UTF-8"
 
-Hi Kate,
+Hi Jai & Jacopo.
 
-On 5-Nov-25 8:01 AM, kate Hsuan wrote:
-> From: Kate Hsuan <hpa@redhat.com>
-> 
-> Add the t4ka3 driver from:
-> https://github.com/kitakar5525/surface3-atomisp-cameras.git
-> 
-> With many cleanups / changes (almost a full rewrite) to make it suitable
-> for upstream:
-> 
-> * Remove the VCM and VCM-OTP support, the mainline kernel models VCMs and
->   calibration data eeproms as separate v4l2-subdev-s.
-> 
-> * Remove the integration-factor t4ka3_get_intg_factor() support and IOCTL,
->   this provided info to userspace through an atomisp private IOCTL.
-> 
-> * Turn atomisp specific exposure/gain IOCTL into standard v4l2 controls.
-> 
-> * Use normal ACPI power-management in combination with runtime-pm support
->   instead of atomisp specific GMIN power-management code.
-> 
-> * Turn into a standard V4L2 sensor driver using
->   v4l2_async_register_subdev_sensor().
-> 
-> * Add vblank, hblank, and link-freq controls; drop get_frame_interval().
-> 
-> * Use CCI register helpers.
-> 
-> * Calculate values for modes instead of using fixed register-value lists,
->   allowing arbritrary modes.
-> 
-> * Add get_selection() and set_selection() support
-> 
-> * Add a CSI2 bus configuration check
-> 
-> This been tested on a Xiaomi Mipad2 tablet which has a T4KA3 sensor with
-> DW9761 VCM as back sensor.
-> 
-> Co-developed-by: Hans de Goede <hansg@kernel.org>
-> Signed-off-by: Hans de Goede <hansg@kernel.org>
-> Signed-off-by: Kate Hsuan <hpa@redhat.com>
-> ---
-> Changes in v10:
-> 1. Fix the format settings.
-> 2. Fix the hblank range calculation.
-> 3. In t4ka3_enable_stream(), powerdown when pm_runtime_get_sync() fails.
-> 4. Fix the clean up call sequence when removing the driver.
-> 5. Fix the error handling in t4ka3_probe().
+On Wed, 12 Nov 2025 at 11:56, Jai Luthra <jai.luthra@ideasonboard.com> wrote:
+>
+> Hi Jacopo,
+>
+> Thanks a lot for the review.
+>
+> Quoting Jacopo Mondi (2025-11-02 16:20:36)
+> > Hi Jai
+> >
+> > On Tue, Oct 28, 2025 at 12:57:17PM +0530, Jai Luthra wrote:
+> > > From: David Plowman <david.plowman@raspberrypi.com>
+> > >
+> > > Add missing controls for horizontal and vertical flipping.
+> > >
+> > > Signed-off-by: David Plowman <david.plowman@raspberrypi.com>
+> > > Signed-off-by: Jai Luthra <jai.luthra@ideasonboard.com>
+> > > ---
+> > >  drivers/media/i2c/ov5647.c | 77 ++++++++++++++++++++++++++++++++++++++++++----
+> > >  1 file changed, 71 insertions(+), 6 deletions(-)
+> > >
+> > > diff --git a/drivers/media/i2c/ov5647.c b/drivers/media/i2c/ov5647.c
+> > > index 977b878b0d4b8cd5f39f510ebd8b33c9163f7da2..a33e2d8edc114d302e830639cb7cb161f16a6208 100644
+> > > --- a/drivers/media/i2c/ov5647.c
+> > > +++ b/drivers/media/i2c/ov5647.c
+> > > @@ -54,6 +54,8 @@
+> > >  #define OV5647_REG_GAIN_LO           0x350b
+> > >  #define OV5647_REG_VTS_HI            0x380e
+> > >  #define OV5647_REG_VTS_LO            0x380f
+> > > +#define OV5647_REG_VFLIP             0x3820
+> > > +#define OV5647_REG_HFLIP             0x3821
+> > >  #define OV5647_REG_FRAME_OFF_NUMBER  0x4202
+> > >  #define OV5647_REG_MIPI_CTRL00               0x4800
+> > >  #define OV5647_REG_MIPI_CTRL14               0x4814
+> > > @@ -109,6 +111,8 @@ struct ov5647 {
+> > >       struct v4l2_ctrl                *hblank;
+> > >       struct v4l2_ctrl                *vblank;
+> > >       struct v4l2_ctrl                *exposure;
+> > > +     struct v4l2_ctrl                *hflip;
+> > > +     struct v4l2_ctrl                *vflip;
+> > >  };
+> > >
+> > >  static inline struct ov5647 *to_sensor(struct v4l2_subdev *sd)
+> > > @@ -150,7 +154,7 @@ static struct regval_list ov5647_2592x1944_10bpp[] = {
+> > >       {0x3036, 0x69},
+> > >       {0x303c, 0x11},
+> > >       {0x3106, 0xf5},
+> > > -     {0x3821, 0x06},
+> > > +     {0x3821, 0x00},
+> > >       {0x3820, 0x00},
+> >
+> > That's interesting, as the datasheet says that by default
+> >
+> >         3820 = 0x40
+> >         3821 = 0x00
+> >
+> > And
+> > - BIT[2] = flip ISP
+> > - BIT[1] = flip SNR
+> >
+> > The implementation of ov5647_s_flip() toggles BIT(1) and ignores
+> > BIT(2) while the modes definition have both (BIT(2) | BIT(1)) set
+> >
+> > More interestingly the datasheet says:
+> >
+> > In flip mode, the OV5647 does not need additional settings because the
+> > ISP block will auto-detect whether the pixel is in the red line or
+> > blue line and make the necessary adjustments
+> >
+> > Might this suggest that if we flip using BIT(2) we don't need to
+> > change the bayer pattern ordering ?
+>
+> Indeed! That was a great find, I am now able to set BIT(2) to get flips
+> without needing to modify the pixelarray layout.
+>
+> Will do that in v2.
 
-Thanks, patch looks good to me:
+Are you going to update the rectangles reported by g_selection then?
+The sensor can't magically change the filter colour of the pixels
+being read out, therefore it must be reading different pixels.
+Figure 3-1 sensor array region color filter layout lists 2592x1944
+active pixels, and we're reading out all of those. "The backend
+processor can use the boundary pixels for additional processing", but
+how? There are no details.
 
-Reviewed-by: Hans de Goede <johannes.goede@oss.qualcomm.com>
+Yes it's minor, but in using BIT(1) we know exactly what the sensor is
+doing. Handling the change of Bayer order in the driver isn't that
+involved, and is common to so many sensors that clients have to
+support it anyway.
 
-Sakari, from my pov this is ready to merge now.
+None of the ISP features of OV5647 are used by this driver. I suspect
+the bits mentioned in the datasheet are probably a hang-over from
+OV5640 which is effectively the same sensor array with built-in ISP
+processing to produce YUYV images.
 
-Regards,
+Just my two-cents.
 
-Hans
+> >
+> > Now, I admit I'm not sure what are the ISP functions on the ov5647 and
+> > this patch is super-duper-tested as it comes from the RPi BSP, so if
+> > you don't have answers to the above questions, I'm fine with this
+> > patch!
+> >
+> > >       {0x3827, 0xec},
+> > >       {0x370c, 0x03},
+> > > @@ -239,7 +243,7 @@ static struct regval_list ov5647_1080p30_10bpp[] = {
+> > >       {0x3036, 0x62},
+> > >       {0x303c, 0x11},
+> > >       {0x3106, 0xf5},
+> > > -     {0x3821, 0x06},
+> > > +     {0x3821, 0x00},
+> > >       {0x3820, 0x00},
+> > >       {0x3827, 0xec},
+> > >       {0x370c, 0x03},
+> > > @@ -403,7 +407,7 @@ static struct regval_list ov5647_2x2binned_10bpp[] = {
+> > >       {0x4800, 0x24},
+> > >       {0x3503, 0x03},
+> > >       {0x3820, 0x41},
+> > > -     {0x3821, 0x07},
+> > > +     {0x3821, 0x01},
+> > >       {0x350a, 0x00},
+> > >       {0x350b, 0x10},
+> > >       {0x3500, 0x00},
+> > > @@ -419,7 +423,7 @@ static struct regval_list ov5647_640x480_10bpp[] = {
+> > >       {0x3035, 0x11},
+> > >       {0x3036, 0x46},
+> > >       {0x303c, 0x11},
+> > > -     {0x3821, 0x07},
+> > > +     {0x3821, 0x01},
+> > >       {0x3820, 0x41},
+> > >       {0x370c, 0x03},
+> > >       {0x3612, 0x59},
+> > > @@ -935,6 +939,26 @@ static const struct v4l2_subdev_video_ops ov5647_subdev_video_ops = {
+> > >       .s_stream =             ov5647_s_stream,
+> > >  };
+> > >
+> > > +/*
+> > > + * This function returns the mbus code for the current settings of the HFLIP
+> > > + * and VFLIP controls.
+> > > + */
+> > > +static u32 ov5647_get_mbus_code(struct v4l2_subdev *sd)
+> > > +{
+> > > +     struct ov5647 *sensor = to_sensor(sd);
+> > > +     /* The control values are only 0 or 1. */
+> > > +     int index =  sensor->hflip->val | (sensor->vflip->val << 1);
+> > > +
+> > > +     static const u32 codes[4] = {
+> > > +             MEDIA_BUS_FMT_SGBRG10_1X10,
+> > > +             MEDIA_BUS_FMT_SBGGR10_1X10,
+> > > +             MEDIA_BUS_FMT_SRGGB10_1X10,
+> > > +             MEDIA_BUS_FMT_SGRBG10_1X10
+> > > +     };
+> > > +
+> > > +     return codes[index];
+> > > +}
+> > > +
+> > >  static int ov5647_enum_mbus_code(struct v4l2_subdev *sd,
+> > >                                struct v4l2_subdev_state *sd_state,
+> > >                                struct v4l2_subdev_mbus_code_enum *code)
+> > > @@ -942,7 +966,7 @@ static int ov5647_enum_mbus_code(struct v4l2_subdev *sd,
+> > >       if (code->index > 0)
+> > >               return -EINVAL;
+> > >
+> > > -     code->code = MEDIA_BUS_FMT_SBGGR10_1X10;
+> > > +     code->code = ov5647_get_mbus_code(sd);
+> > >
+> > >       return 0;
+> > >  }
+> > > @@ -953,7 +977,7 @@ static int ov5647_enum_frame_size(struct v4l2_subdev *sd,
+> > >  {
+> > >       const struct v4l2_mbus_framefmt *fmt;
+> > >
+> > > -     if (fse->code != MEDIA_BUS_FMT_SBGGR10_1X10 ||
+> > > +     if (fse->code != ov5647_get_mbus_code(sd) ||
+> > >           fse->index >= ARRAY_SIZE(ov5647_modes))
+> > >               return -EINVAL;
+> > >
+> > > @@ -986,6 +1010,8 @@ static int ov5647_get_pad_fmt(struct v4l2_subdev *sd,
+> > >       }
+> > >
+> > >       *fmt = *sensor_format;
+> > > +     /* The code we pass back must reflect the current h/vflips. */
+> > > +     fmt->code = ov5647_get_mbus_code(sd);
+> > >       mutex_unlock(&sensor->lock);
+> > >
+> > >       return 0;
+> > > @@ -1033,6 +1059,8 @@ static int ov5647_set_pad_fmt(struct v4l2_subdev *sd,
+> > >                                        exposure_def);
+> > >       }
+> > >       *fmt = mode->format;
+> > > +     /* The code we pass back must reflect the current h/vflips. */
+> > > +     fmt->code = ov5647_get_mbus_code(sd);
+> > >       mutex_unlock(&sensor->lock);
+> > >
+> > >       return 0;
+> > > @@ -1208,6 +1236,25 @@ static int ov5647_s_exposure(struct v4l2_subdev *sd, u32 val)
+> > >       return ov5647_write(sd, OV5647_REG_EXP_LO, (val & 0xf) << 4);
+> > >  }
+> > >
+> > > +static int ov5647_s_flip(struct v4l2_subdev *sd, u16 reg, u32 ctrl_val)
+> > > +{
+> > > +     int ret;
+> > > +     u8 reg_val;
+> > > +
+> > > +     /* Set or clear bit 1 and leave everything else alone. */
+> > > +     ret = ov5647_read(sd, reg, &reg_val);
+> > > +     if (ret == 0) {
+> > > +             if (ctrl_val)
+> > > +                     reg_val |= 2;
+> > > +             else
+> > > +                     reg_val &= ~2;
+> > > +
+> > > +             ret = ov5647_write(sd, reg, reg_val);
+> > > +     }
+> > > +
+> > > +     return ret;
+> > > +}
+> > > +
+> > >  static int ov5647_s_ctrl(struct v4l2_ctrl *ctrl)
+> > >  {
+> > >       struct ov5647 *sensor = container_of(ctrl->handler,
+> > > @@ -1270,6 +1317,14 @@ static int ov5647_s_ctrl(struct v4l2_ctrl *ctrl)
+> > >               /* Read-only, but we adjust it based on mode. */
+> > >               break;
+> > >
+> > > +     case V4L2_CID_HFLIP:
+> > > +             /* There's an in-built hflip in the sensor, so account for that here. */
+> > > +             ov5647_s_flip(sd, OV5647_REG_HFLIP, !ctrl->val);
+> > > +             break;
+> > > +     case V4L2_CID_VFLIP:
+> > > +             ov5647_s_flip(sd, OV5647_REG_VFLIP, ctrl->val);
+> > > +             break;
+> >
+> > The modes definition used to set
+> >
+> >         0x3820 = 0x00
+> >         0x3821 = 0x06
+> >
+> > Is this the built-in hflip ?
+> >
+> > Or does it mean that setting the registers value to 1 'disabled' flips ?
+> >
+>
+> Yes, this particular sensor flips the image horizontally if 0x3820 = 0x00,
+> resulting in a mirrored image.
+>
+> But now that userspace can control flips, I am a bit confused on how to
+> report this in the controls.
+>
+> > > +
+> > >       default:
+> > >               dev_info(&client->dev,
+> > >                        "Control (id:0x%x, val:0x%x) not supported\n",
+> > > @@ -1341,6 +1396,16 @@ static int ov5647_init_controls(struct ov5647 *sensor, struct device *dev)
+> > >                                    ARRAY_SIZE(ov5647_test_pattern_menu) - 1,
+> > >                                    0, 0, ov5647_test_pattern_menu);
+> > >
+> > > +     sensor->hflip = v4l2_ctrl_new_std(&sensor->ctrls, &ov5647_ctrl_ops,
+> > > +                                       V4L2_CID_HFLIP, 0, 1, 1, 0);
+> > > +     if (sensor->hflip)
+> > > +             sensor->hflip->flags |= V4L2_CTRL_FLAG_MODIFY_LAYOUT;
+> >
+> > I wonder if hflip is enabled by default we shouldn't register the
+> > control with default value of 1 ?
+> >
+>
+> My preference is to let the driver toggle the value for HFLIP before
+> writing to the sensor, as it is done currently in this patch.
+>
+> This makes this sensor behave like others, where you get a normal
+> non-mirrored image when you set HFLIP = 0, and mirrored if HFLIP = 1.
+>
+> The alternative is to keep the driver transparent by reporting the register
+> values as-is in the control. In that case, we should make horizontal_flip =
+> 1 the default value for the control. But I'm not aware if any userspace
+> applications will override the default value resulting in bad experience
+> for the users.
+>
+> WDYT?
 
+My vote would be for the driver to invert the value before writing, as
+this patch does.
 
+Making userspace have to call QUERYCTRL / QUERY_EXT_CTRL to get the
+default before it can then work out that it needs to invert any flip
+settings is additional overhead for zero gain.
 
-> Changes in v9:
-> 1. Apply Hans' fix patch to fix the lock issue and squash it into this
->    patch.
-> https://lore.kernel.org/linux-media/33dd5660-efb6-47e0-9672-f3ae65751185@kernel.org/
-> 
-> Changes in v8:
-> 1. Drop the local mutex lock and v4l2-core manages all the locking.
-> 2. __t4ka3_get_pad_format() and __t4ka3_get_pad_crop() are replaced with
->    v4l2_subdev_state_get_format() and v4l2_subdev_state_get_crop().
-> 3. The deprecated s_stream was replaced with enable_streams() and
->    disable_streams().
-> 4. Drop unused functions.
-> 5. t4ka3_get_active_format() helper is used to get the active format.
-> 6. v4l2_link_freq_to_bitmap() is used to check and get the supported
->    link frequency.
-> 
-> Changes in v7:
-> 1. Add pixel_rate control.
-> 
-> Changes in v6:
-> 1. t4ka3_s_config() was removed.
-> 2. The unused macros were removed.
-> 3. The runtime pm initial flow was improved.
-> 4. In remove(), if the device is not in the "suspend" state, the device
->    will be manually turned off.
-> 
-> Changes in v5:
-> 1. Improved Kconfig help description.
-> 
-> Changes in v4:
-> 1. Another CI issue fixes.
-> 
-> Changes in v3:
-> 1. Fix the issues reported by the CI system.
-> 
-> Changes in v2:
-> 1. The regmap information was obtained before configuring runtime PM so
->    probe() can return without disabling runtime PM.
-> 2. In t4ka3_s_stream(), return -EBUSY when the streaming is enabled.
-> ---
->  drivers/media/i2c/Kconfig  |   12 +
->  drivers/media/i2c/Makefile |    1 +
->  drivers/media/i2c/t4ka3.c  | 1085 ++++++++++++++++++++++++++++++++++++
->  3 files changed, 1098 insertions(+)
->  create mode 100644 drivers/media/i2c/t4ka3.c
-> 
-> diff --git a/drivers/media/i2c/Kconfig b/drivers/media/i2c/Kconfig
-> index 6237fe804a5c..b60581dec514 100644
-> --- a/drivers/media/i2c/Kconfig
-> +++ b/drivers/media/i2c/Kconfig
-> @@ -713,6 +713,18 @@ config VIDEO_S5K6A3
->  	  This is a V4L2 sensor driver for Samsung S5K6A3 raw
->  	  camera sensor.
->  
-> +config VIDEO_T4KA3
-> +	tristate "Toshiba T4KA3 sensor support"
-> +	depends on ACPI || COMPILE_TEST
-> +	depends on GPIOLIB
-> +	select V4L2_CCI_I2C
-> +	help
-> +	  This is a Video4Linux2 sensor driver for the Toshiba T4KA3 8 MP
-> +	  camera sensor.
-> +
-> +	  To compile this driver as a module, choose M here: the
-> +	  module will be called t4ka3.
-> +
->  config VIDEO_VD55G1
->  	tristate "ST VD55G1 sensor support"
->  	select V4L2_CCI_I2C
-> diff --git a/drivers/media/i2c/Makefile b/drivers/media/i2c/Makefile
-> index 5873d29433ee..af4a18bebc42 100644
-> --- a/drivers/media/i2c/Makefile
-> +++ b/drivers/media/i2c/Makefile
-> @@ -132,6 +132,7 @@ obj-$(CONFIG_VIDEO_SAA717X) += saa717x.o
->  obj-$(CONFIG_VIDEO_SAA7185) += saa7185.o
->  obj-$(CONFIG_VIDEO_SONY_BTF_MPX) += sony-btf-mpx.o
->  obj-$(CONFIG_VIDEO_ST_MIPID02) += st-mipid02.o
-> +obj-$(CONFIG_VIDEO_T4KA3) += t4ka3.o
->  obj-$(CONFIG_VIDEO_TC358743) += tc358743.o
->  obj-$(CONFIG_VIDEO_TC358746) += tc358746.o
->  obj-$(CONFIG_VIDEO_TDA1997X) += tda1997x.o
-> diff --git a/drivers/media/i2c/t4ka3.c b/drivers/media/i2c/t4ka3.c
-> new file mode 100644
-> index 000000000000..d9af5e51f7a8
-> --- /dev/null
-> +++ b/drivers/media/i2c/t4ka3.c
-> @@ -0,0 +1,1085 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * Support for T4KA3 8M camera sensor.
-> + *
-> + * Copyright (C) 2015 Intel Corporation. All Rights Reserved.
-> + * Copyright (C) 2016 XiaoMi, Inc.
-> + * Copyright (C) 2024 Hans de Goede <hansg@kernel.org>
-> + */
-> +
-> +#include <linux/acpi.h>
-> +#include <linux/bits.h>
-> +#include <linux/delay.h>
-> +#include <linux/dev_printk.h>
-> +#include <linux/device.h>
-> +#include <linux/err.h>
-> +#include <linux/errno.h>
-> +#include <linux/gpio/consumer.h>
-> +#include <linux/i2c.h>
-> +#include <linux/mod_devicetable.h>
-> +#include <linux/mutex.h>
-> +#include <linux/pm_runtime.h>
-> +#include <linux/regmap.h>
-> +#include <linux/types.h>
-> +
-> +#include <media/media-entity.h>
-> +#include <media/v4l2-async.h>
-> +#include <media/v4l2-cci.h>
-> +#include <media/v4l2-common.h>
-> +#include <media/v4l2-ctrls.h>
-> +#include <media/v4l2-fwnode.h>
-> +#include <media/v4l2-subdev.h>
-> +
-> +#define T4KA3_NATIVE_WIDTH			3280
-> +#define T4KA3_NATIVE_HEIGHT			2464
-> +#define T4KA3_NATIVE_START_LEFT			0
-> +#define T4KA3_NATIVE_START_TOP			0
-> +#define T4KA3_ACTIVE_WIDTH			3280
-> +#define T4KA3_ACTIVE_HEIGHT			2460
-> +#define T4KA3_ACTIVE_START_LEFT			0
-> +#define T4KA3_ACTIVE_START_TOP			2
-> +#define T4KA3_MIN_CROP_WIDTH			2
-> +#define T4KA3_MIN_CROP_HEIGHT			2
-> +
-> +#define T4KA3_PIXELS_PER_LINE			3440
-> +#define T4KA3_LINES_PER_FRAME_30FPS		2492
-> +#define T4KA3_FPS				30
-> +#define T4KA3_PIXEL_RATE \
-> +	(T4KA3_PIXELS_PER_LINE * T4KA3_LINES_PER_FRAME_30FPS * T4KA3_FPS)
-> +
-> +/*
-> + * TODO this really should be derived from the 19.2 MHz xvclk combined
-> + * with the PLL settings. But without a datasheet this is the closest
-> + * approximation possible.
-> + *
-> + * link-freq = pixel_rate * bpp / (lanes * 2)
-> + * (lanes * 2) because CSI lanes use double-data-rate (DDR) signalling.
-> + * bpp = 10 and lanes = 4
-> + */
-> +#define T4KA3_LINK_FREQ				((u64)T4KA3_PIXEL_RATE * 10 / 8)
-> +
-> +/* For enum_frame_size() full-size + binned-/quarter-size */
-> +#define T4KA3_FRAME_SIZES			2
-> +
-> +#define T4KA3_REG_PRODUCT_ID_HIGH		CCI_REG8(0x0000)
-> +#define T4KA3_REG_PRODUCT_ID_LOW		CCI_REG8(0x0001)
-> +#define T4KA3_PRODUCT_ID			0x1490
-> +
-> +#define T4KA3_REG_STREAM			CCI_REG8(0x0100)
-> +#define T4KA3_REG_IMG_ORIENTATION		CCI_REG8(0x0101)
-> +#define T4KA3_HFLIP_BIT				BIT(0)
-> +#define T4KA3_VFLIP_BIT				BIT(1)
-> +#define T4KA3_REG_PARAM_HOLD			CCI_REG8(0x0104)
-> +#define T4KA3_REG_COARSE_INTEGRATION_TIME	CCI_REG16(0x0202)
-> +#define T4KA3_COARSE_INTEGRATION_TIME_MARGIN	6
-> +#define T4KA3_REG_DIGGAIN_GREEN_R		CCI_REG16(0x020e)
-> +#define T4KA3_REG_DIGGAIN_RED			CCI_REG16(0x0210)
-> +#define T4KA3_REG_DIGGAIN_BLUE			CCI_REG16(0x0212)
-> +#define T4KA3_REG_DIGGAIN_GREEN_B		CCI_REG16(0x0214)
-> +#define T4KA3_REG_GLOBAL_GAIN			CCI_REG16(0x0234)
-> +#define T4KA3_MIN_GLOBAL_GAIN_SUPPORTED		0x0080
-> +#define T4KA3_MAX_GLOBAL_GAIN_SUPPORTED		0x07ff
-> +#define T4KA3_REG_FRAME_LENGTH_LINES		CCI_REG16(0x0340) /* aka VTS */
-> +/* FIXME: need a datasheet to verify the min + max vblank values */
-> +#define T4KA3_MIN_VBLANK			4
-> +#define T4KA3_MAX_VBLANK			0xffff
-> +#define T4KA3_REG_PIXELS_PER_LINE		CCI_REG16(0x0342) /* aka HTS */
-> +/* These 2 being horz/vert start is a guess (no datasheet), always 0 */
-> +#define T4KA3_REG_HORZ_START			CCI_REG16(0x0344)
-> +#define T4KA3_REG_VERT_START			CCI_REG16(0x0346)
-> +/* Always 3279 (T4KA3_NATIVE_WIDTH - 1, window is used to crop */
-> +#define T4KA3_REG_HORZ_END			CCI_REG16(0x0348)
-> +/* Always 2463 (T4KA3_NATIVE_HEIGHT - 1, window is used to crop */
-> +#define T4KA3_REG_VERT_END			CCI_REG16(0x034a)
-> +/* Output size (after cropping/window) */
-> +#define T4KA3_REG_HORZ_OUTPUT_SIZE		CCI_REG16(0x034c)
-> +#define T4KA3_REG_VERT_OUTPUT_SIZE		CCI_REG16(0x034e)
-> +/* Window/crop start + size *after* binning */
-> +#define T4KA3_REG_WIN_START_X			CCI_REG16(0x0408)
-> +#define T4KA3_REG_WIN_START_Y			CCI_REG16(0x040a)
-> +#define T4KA3_REG_WIN_WIDTH			CCI_REG16(0x040c)
-> +#define T4KA3_REG_WIN_HEIGHT			CCI_REG16(0x040e)
-> +#define T4KA3_REG_TEST_PATTERN_MODE		CCI_REG8(0x0601)
-> +/* Unknown register at address 0x0900 */
-> +#define T4KA3_REG_0900				CCI_REG8(0x0900)
-> +#define T4KA3_REG_BINNING			CCI_REG8(0x0901)
-> +#define T4KA3_BINNING_VAL(_b) \
-> +	({ typeof(_b) (b) = (_b); \
-> +	((b) << 4) | (b); })
-> +
-> +struct t4ka3_ctrls {
-> +	struct v4l2_ctrl_handler handler;
-> +	struct v4l2_ctrl *hflip;
-> +	struct v4l2_ctrl *vflip;
-> +	struct v4l2_ctrl *vblank;
-> +	struct v4l2_ctrl *hblank;
-> +	struct v4l2_ctrl *exposure;
-> +	struct v4l2_ctrl *gain;
-> +	struct v4l2_ctrl *test_pattern;
-> +	struct v4l2_ctrl *link_freq;
-> +	struct v4l2_ctrl *pixel_rate;
-> +};
-> +
-> +struct t4ka3_mode {
-> +	int				binning;
-> +	u16				win_x;
-> +	u16				win_y;
-> +};
-> +
-> +struct t4ka3_data {
-> +	struct v4l2_subdev sd;
-> +	struct media_pad pad;
-> +	struct mutex lock; /* serialize sensor's ioctl */
-> +	struct t4ka3_ctrls ctrls;
-> +	struct t4ka3_mode mode;
-> +	struct device *dev;
-> +	struct regmap *regmap;
-> +	struct gpio_desc *powerdown_gpio;
-> +	struct gpio_desc *reset_gpio;
-> +	s64 link_freq[1];
-> +	int streaming;
-> +
-> +	/* MIPI lane info */
-> +	u32 link_freq_index;
-> +	u8 mipi_lanes;
-> +};
-> +
-> +/* init settings */
-> +static const struct cci_reg_sequence t4ka3_init_config[] = {
-> +	{CCI_REG8(0x4136), 0x13},
-> +	{CCI_REG8(0x4137), 0x33},
-> +	{CCI_REG8(0x3094), 0x01},
-> +	{CCI_REG8(0x0233), 0x01},
-> +	{CCI_REG8(0x4B06), 0x01},
-> +	{CCI_REG8(0x4B07), 0x01},
-> +	{CCI_REG8(0x3028), 0x01},
-> +	{CCI_REG8(0x3032), 0x14},
-> +	{CCI_REG8(0x305C), 0x0C},
-> +	{CCI_REG8(0x306D), 0x0A},
-> +	{CCI_REG8(0x3071), 0xFA},
-> +	{CCI_REG8(0x307E), 0x0A},
-> +	{CCI_REG8(0x307F), 0xFC},
-> +	{CCI_REG8(0x3091), 0x04},
-> +	{CCI_REG8(0x3092), 0x60},
-> +	{CCI_REG8(0x3096), 0xC0},
-> +	{CCI_REG8(0x3100), 0x07},
-> +	{CCI_REG8(0x3101), 0x4C},
-> +	{CCI_REG8(0x3118), 0xCC},
-> +	{CCI_REG8(0x3139), 0x06},
-> +	{CCI_REG8(0x313A), 0x06},
-> +	{CCI_REG8(0x313B), 0x04},
-> +	{CCI_REG8(0x3143), 0x02},
-> +	{CCI_REG8(0x314F), 0x0E},
-> +	{CCI_REG8(0x3169), 0x99},
-> +	{CCI_REG8(0x316A), 0x99},
-> +	{CCI_REG8(0x3171), 0x05},
-> +	{CCI_REG8(0x31A1), 0xA7},
-> +	{CCI_REG8(0x31A2), 0x9C},
-> +	{CCI_REG8(0x31A3), 0x8F},
-> +	{CCI_REG8(0x31A4), 0x75},
-> +	{CCI_REG8(0x31A5), 0xEE},
-> +	{CCI_REG8(0x31A6), 0xEA},
-> +	{CCI_REG8(0x31A7), 0xE4},
-> +	{CCI_REG8(0x31A8), 0xE4},
-> +	{CCI_REG8(0x31DF), 0x05},
-> +	{CCI_REG8(0x31EC), 0x1B},
-> +	{CCI_REG8(0x31ED), 0x1B},
-> +	{CCI_REG8(0x31EE), 0x1B},
-> +	{CCI_REG8(0x31F0), 0x1B},
-> +	{CCI_REG8(0x31F1), 0x1B},
-> +	{CCI_REG8(0x31F2), 0x1B},
-> +	{CCI_REG8(0x3204), 0x3F},
-> +	{CCI_REG8(0x3205), 0x03},
-> +	{CCI_REG8(0x3210), 0x01},
-> +	{CCI_REG8(0x3216), 0x68},
-> +	{CCI_REG8(0x3217), 0x58},
-> +	{CCI_REG8(0x3218), 0x58},
-> +	{CCI_REG8(0x321A), 0x68},
-> +	{CCI_REG8(0x321B), 0x60},
-> +	{CCI_REG8(0x3238), 0x03},
-> +	{CCI_REG8(0x3239), 0x03},
-> +	{CCI_REG8(0x323A), 0x05},
-> +	{CCI_REG8(0x323B), 0x06},
-> +	{CCI_REG8(0x3243), 0x03},
-> +	{CCI_REG8(0x3244), 0x08},
-> +	{CCI_REG8(0x3245), 0x01},
-> +	{CCI_REG8(0x3307), 0x19},
-> +	{CCI_REG8(0x3308), 0x19},
-> +	{CCI_REG8(0x3320), 0x01},
-> +	{CCI_REG8(0x3326), 0x15},
-> +	{CCI_REG8(0x3327), 0x0D},
-> +	{CCI_REG8(0x3328), 0x01},
-> +	{CCI_REG8(0x3380), 0x01},
-> +	{CCI_REG8(0x339E), 0x07},
-> +	{CCI_REG8(0x3424), 0x00},
-> +	{CCI_REG8(0x343C), 0x01},
-> +	{CCI_REG8(0x3398), 0x04},
-> +	{CCI_REG8(0x343A), 0x10},
-> +	{CCI_REG8(0x339A), 0x22},
-> +	{CCI_REG8(0x33B4), 0x00},
-> +	{CCI_REG8(0x3393), 0x01},
-> +	{CCI_REG8(0x33B3), 0x6E},
-> +	{CCI_REG8(0x3433), 0x06},
-> +	{CCI_REG8(0x3433), 0x00},
-> +	{CCI_REG8(0x33B3), 0x00},
-> +	{CCI_REG8(0x3393), 0x03},
-> +	{CCI_REG8(0x33B4), 0x03},
-> +	{CCI_REG8(0x343A), 0x00},
-> +	{CCI_REG8(0x339A), 0x00},
-> +	{CCI_REG8(0x3398), 0x00}
-> +};
-> +
-> +static const struct cci_reg_sequence t4ka3_pre_mode_set_regs[] = {
-> +	{CCI_REG8(0x0112), 0x0A},
-> +	{CCI_REG8(0x0113), 0x0A},
-> +	{CCI_REG8(0x0114), 0x03},
-> +	{CCI_REG8(0x4136), 0x13},
-> +	{CCI_REG8(0x4137), 0x33},
-> +	{CCI_REG8(0x0820), 0x0A},
-> +	{CCI_REG8(0x0821), 0x0D},
-> +	{CCI_REG8(0x0822), 0x00},
-> +	{CCI_REG8(0x0823), 0x00},
-> +	{CCI_REG8(0x0301), 0x0A},
-> +	{CCI_REG8(0x0303), 0x01},
-> +	{CCI_REG8(0x0305), 0x04},
-> +	{CCI_REG8(0x0306), 0x02},
-> +	{CCI_REG8(0x0307), 0x18},
-> +	{CCI_REG8(0x030B), 0x01},
-> +};
-> +
-> +static const struct cci_reg_sequence t4ka3_post_mode_set_regs[] = {
-> +	{CCI_REG8(0x0902), 0x00},
-> +	{CCI_REG8(0x4220), 0x00},
-> +	{CCI_REG8(0x4222), 0x01},
-> +	{CCI_REG8(0x3380), 0x01},
-> +	{CCI_REG8(0x3090), 0x88},
-> +	{CCI_REG8(0x3394), 0x20},
-> +	{CCI_REG8(0x3090), 0x08},
-> +	{CCI_REG8(0x3394), 0x10}
-> +};
-> +
-> +static const s64 link_freq_menu_items[] = {
-> +	T4KA3_LINK_FREQ,
-> +};
-> +
-> +static inline struct t4ka3_data *to_t4ka3_sensor(struct v4l2_subdev *sd)
-> +{
-> +	return container_of(sd, struct t4ka3_data, sd);
-> +}
-> +
-> +static inline struct t4ka3_data *ctrl_to_t4ka3(struct v4l2_ctrl *ctrl)
-> +{
-> +	return container_of(ctrl->handler, struct t4ka3_data, ctrls.handler);
-> +}
-> +
-> +/* T4KA3 default GRBG */
-> +static const int t4ka3_hv_flip_bayer_order[] = {
-> +	MEDIA_BUS_FMT_SGRBG10_1X10,
-> +	MEDIA_BUS_FMT_SBGGR10_1X10,
-> +	MEDIA_BUS_FMT_SRGGB10_1X10,
-> +	MEDIA_BUS_FMT_SGBRG10_1X10,
-> +};
-> +
-> +static const struct v4l2_rect t4ka3_default_crop = {
-> +	.left = T4KA3_ACTIVE_START_LEFT,
-> +	.top = T4KA3_ACTIVE_START_TOP,
-> +	.width = T4KA3_ACTIVE_WIDTH,
-> +	.height = T4KA3_ACTIVE_HEIGHT,
-> +};
-> +
-> +static int t4ka3_detect(struct t4ka3_data *sensor, u16 *id);
-> +
-> +static void t4ka3_set_bayer_order(struct t4ka3_data *sensor,
-> +				  struct v4l2_mbus_framefmt *fmt)
-> +{
-> +	int hv_flip = 0;
-> +
-> +	if (sensor->ctrls.vflip && sensor->ctrls.vflip->val)
-> +		hv_flip += 1;
-> +
-> +	if (sensor->ctrls.hflip && sensor->ctrls.hflip->val)
-> +		hv_flip += 2;
-> +
-> +	fmt->code = t4ka3_hv_flip_bayer_order[hv_flip];
-> +}
-> +
-> +static struct v4l2_mbus_framefmt *t4ka3_get_active_format(struct t4ka3_data *sensor)
-> +{
-> +	struct v4l2_subdev_state *active_state =
-> +		v4l2_subdev_get_locked_active_state(&sensor->sd);
-> +
-> +	return v4l2_subdev_state_get_format(active_state, 0);
-> +}
-> +
-> +static struct v4l2_rect *t4ka3_get_active_crop(struct t4ka3_data *sensor)
-> +{
-> +	struct v4l2_subdev_state *active_state =
-> +		v4l2_subdev_get_locked_active_state(&sensor->sd);
-> +
-> +	return v4l2_subdev_state_get_crop(active_state, 0);
-> +}
-> +
-> +static int t4ka3_update_exposure_range(struct t4ka3_data *sensor)
-> +{
-> +	struct v4l2_mbus_framefmt *fmt;
-> +
-> +	fmt = t4ka3_get_active_format(sensor);
-> +
-> +	int exp_max = fmt->height + sensor->ctrls.vblank->val -
-> +		      T4KA3_COARSE_INTEGRATION_TIME_MARGIN;
-> +
-> +	return __v4l2_ctrl_modify_range(sensor->ctrls.exposure, 0, exp_max,
-> +					1, exp_max);
-> +}
-> +
-> +static void t4ka3_fill_format(struct t4ka3_data *sensor,
-> +			      struct v4l2_mbus_framefmt *fmt,
-> +			      unsigned int width, unsigned int height)
-> +{
-> +	memset(fmt, 0, sizeof(*fmt));
-> +	fmt->width = width;
-> +	fmt->height = height;
-> +	fmt->field = V4L2_FIELD_NONE;
-> +	fmt->colorspace = V4L2_COLORSPACE_RAW;
-> +	t4ka3_set_bayer_order(sensor, fmt);
-> +}
-> +
-> +static void t4ka3_calc_mode(struct t4ka3_data *sensor)
-> +{
-> +	struct v4l2_mbus_framefmt *fmt;
-> +	struct v4l2_rect *crop;
-> +	int width;
-> +	int height;
-> +	int binning;
-> +
-> +	fmt = t4ka3_get_active_format(sensor);
-> +	crop = t4ka3_get_active_crop(sensor);
-> +
-> +	width = fmt->width;
-> +	height = fmt->height;
-> +
-> +	if (width <= (crop->width / 2) && height <= (crop->height / 2))
-> +		binning = 2;
-> +	else
-> +		binning = 1;
-> +
-> +	width *= binning;
-> +	height *= binning;
-> +
-> +	sensor->mode.binning = binning;
-> +	sensor->mode.win_x = (crop->left + (crop->width - width) / 2) & ~1;
-> +	sensor->mode.win_y = (crop->top + (crop->height - height) / 2) & ~1;
-> +	/*
-> +	 * t4ka3's window is done after binning, but must still be a multiple of 2 ?
-> +	 * Round up to avoid top 2 black lines in 1640x1230 (quarter res) case.
-> +	 */
-> +	sensor->mode.win_x = DIV_ROUND_UP(sensor->mode.win_x, binning);
-> +	sensor->mode.win_y = DIV_ROUND_UP(sensor->mode.win_y, binning);
-> +}
-> +
-> +static void t4ka3_get_vblank_limits(struct t4ka3_data *sensor, int *min, int *max, int *def)
-> +{
-> +	struct v4l2_mbus_framefmt *fmt;
-> +
-> +	fmt = t4ka3_get_active_format(sensor);
-> +
-> +	*min = T4KA3_MIN_VBLANK + (sensor->mode.binning - 1) * fmt->height;
-> +	*max = T4KA3_MAX_VBLANK - fmt->height;
-> +	*def = T4KA3_LINES_PER_FRAME_30FPS - fmt->height;
-> +}
-> +
-> +static int t4ka3_set_pad_format(struct v4l2_subdev *sd,
-> +				struct v4l2_subdev_state *sd_state,
-> +				struct v4l2_subdev_format *format)
-> +{
-> +	struct t4ka3_data *sensor = to_t4ka3_sensor(sd);
-> +	struct v4l2_mbus_framefmt *try_fmt;
-> +	struct v4l2_mbus_framefmt *fmt;
-> +	const struct v4l2_rect *crop;
-> +	unsigned int width, height;
-> +	int min, max, def, ret = 0;
-> +
-> +	crop = t4ka3_get_active_crop(sensor);
-> +	fmt = t4ka3_get_active_format(sensor);
-> +
-> +	/* Limit set_fmt max size to crop width / height */
-> +	width = clamp_val(ALIGN(format->format.width, 2),
-> +			  T4KA3_MIN_CROP_WIDTH, crop->width);
-> +	height = clamp_val(ALIGN(format->format.height, 2),
-> +			   T4KA3_MIN_CROP_HEIGHT, crop->height);
-> +	t4ka3_fill_format(sensor, &format->format, width, height);
-> +
-> +	if (format->which == V4L2_SUBDEV_FORMAT_TRY) {
-> +		try_fmt = v4l2_subdev_state_get_format(sd_state, 0);
-> +		*try_fmt = format->format;
-> +		return 0;
-> +	}
-> +
-> +	if (format->which == V4L2_SUBDEV_FORMAT_ACTIVE && sensor->streaming)
-> +		return -EBUSY;
-> +
-> +	*v4l2_subdev_state_get_format(sd_state, 0) = format->format;
-> +
-> +	if (format->which == V4L2_SUBDEV_FORMAT_TRY)
-> +		return 0;
-> +
-> +	t4ka3_calc_mode(sensor);
-> +
-> +	/* vblank range is height dependent adjust and reset to default */
-> +	t4ka3_get_vblank_limits(sensor, &min, &max, &def);
-> +	ret = __v4l2_ctrl_modify_range(sensor->ctrls.vblank, min, max, 1, def);
-> +	if (ret)
-> +		return ret;
-> +
-> +	ret = __v4l2_ctrl_s_ctrl(sensor->ctrls.vblank, def);
-> +	if (ret)
-> +		return ret;
-> +
-> +	def = T4KA3_PIXELS_PER_LINE - fmt->width;
-> +	ret = __v4l2_ctrl_modify_range(sensor->ctrls.hblank, def, def, 1, def);
-> +	if (ret)
-> +		return ret;
-> +
-> +	ret = __v4l2_ctrl_s_ctrl(sensor->ctrls.hblank, def);
-> +	if (ret)
-> +		return ret;
-> +
-> +	return 0;
-> +}
-> +
-> +/* Horizontal or vertically flip the image */
-> +static int t4ka3_t_vflip(struct v4l2_subdev *sd, int value, u8 flip_bit)
-> +{
-> +	struct t4ka3_data *sensor = to_t4ka3_sensor(sd);
-> +	struct v4l2_mbus_framefmt *fmt;
-> +	int ret;
-> +	u64 val;
-> +
-> +	if (sensor->streaming)
-> +		return -EBUSY;
-> +
-> +	val = value ? flip_bit : 0;
-> +
-> +	ret = cci_update_bits(sensor->regmap, T4KA3_REG_IMG_ORIENTATION,
-> +			      flip_bit, val, NULL);
-> +	if (ret)
-> +		return ret;
-> +
-> +	fmt = t4ka3_get_active_format(sensor);
-> +	t4ka3_set_bayer_order(sensor, fmt);
-> +	return 0;
-> +}
-> +
-> +static int t4ka3_test_pattern(struct t4ka3_data *sensor, s32 value)
-> +{
-> +	return cci_write(sensor->regmap, T4KA3_REG_TEST_PATTERN_MODE, value, NULL);
-> +}
-> +
-> +static int t4ka3_detect(struct t4ka3_data *sensor, u16 *id)
-> +{
-> +	struct i2c_client *client = v4l2_get_subdevdata(&sensor->sd);
-> +	struct i2c_adapter *adapter = client->adapter;
-> +	u64 high, low;
-> +	int ret = 0;
-> +
-> +	/* i2c check */
-> +	if (!i2c_check_functionality(adapter, I2C_FUNC_I2C))
-> +		return -ENODEV;
-> +
-> +	/* check sensor chip ID	 */
-> +	cci_read(sensor->regmap, T4KA3_REG_PRODUCT_ID_HIGH, &high, &ret);
-> +	cci_read(sensor->regmap, T4KA3_REG_PRODUCT_ID_LOW, &low, &ret);
-> +	if (ret)
-> +		return ret;
-> +
-> +	*id = (((u8)high) << 8) | (u8)low;
-> +	if (*id != T4KA3_PRODUCT_ID) {
-> +		dev_err(sensor->dev, "main sensor t4ka3 ID error\n");
-> +		return -ENODEV;
-> +	}
-> +
-> +	return 0;
-> +}
-> +
-> +static int t4ka3_s_ctrl(struct v4l2_ctrl *ctrl)
-> +{
-> +	struct t4ka3_data *sensor = ctrl_to_t4ka3(ctrl);
-> +	struct v4l2_mbus_framefmt *fmt;
-> +	int ret;
-> +
-> +	/* Update exposure range on vblank changes */
-> +	if (ctrl->id == V4L2_CID_VBLANK) {
-> +		ret = t4ka3_update_exposure_range(sensor);
-> +		if (ret)
-> +			return ret;
-> +	}
-> +
-> +	fmt = t4ka3_get_active_format(sensor);
-> +
-> +	/* Only apply changes to the controls if the device is powered up */
-> +	if (!pm_runtime_get_if_in_use(sensor->sd.dev)) {
-> +		t4ka3_set_bayer_order(sensor, fmt);
-> +		return 0;
-> +	}
-> +
-> +	switch (ctrl->id) {
-> +	case V4L2_CID_TEST_PATTERN:
-> +		ret = t4ka3_test_pattern(sensor, ctrl->val);
-> +		break;
-> +	case V4L2_CID_VFLIP:
-> +		ret = t4ka3_t_vflip(&sensor->sd, ctrl->val, T4KA3_VFLIP_BIT);
-> +		break;
-> +	case V4L2_CID_HFLIP:
-> +		ret = t4ka3_t_vflip(&sensor->sd, ctrl->val, T4KA3_HFLIP_BIT);
-> +		break;
-> +	case V4L2_CID_VBLANK:
-> +		ret = cci_write(sensor->regmap, T4KA3_REG_FRAME_LENGTH_LINES,
-> +				fmt->height + ctrl->val, NULL);
-> +		break;
-> +	case V4L2_CID_EXPOSURE:
-> +		ret = cci_write(sensor->regmap, T4KA3_REG_COARSE_INTEGRATION_TIME,
-> +				ctrl->val, NULL);
-> +		break;
-> +	case V4L2_CID_ANALOGUE_GAIN:
-> +		ret = cci_write(sensor->regmap, T4KA3_REG_GLOBAL_GAIN,
-> +				ctrl->val, NULL);
-> +		break;
-> +	default:
-> +		ret = -EINVAL;
-> +		break;
-> +	}
-> +
-> +	pm_runtime_put(sensor->sd.dev);
-> +	return ret;
-> +}
-> +
-> +static int t4ka3_set_mode(struct t4ka3_data *sensor)
-> +{
-> +	struct v4l2_mbus_framefmt *fmt;
-> +	int ret = 0;
-> +
-> +	fmt = t4ka3_get_active_format(sensor);
-> +
-> +	cci_write(sensor->regmap, T4KA3_REG_HORZ_OUTPUT_SIZE, fmt->width, &ret);
-> +	/* Write mode-height - 2 otherwise things don't work, hw-bug ? */
-> +	cci_write(sensor->regmap, T4KA3_REG_VERT_OUTPUT_SIZE, fmt->height - 2, &ret);
-> +	/* Note overwritten by __v4l2_ctrl_handler_setup() based on vblank ctrl */
-> +	cci_write(sensor->regmap, T4KA3_REG_FRAME_LENGTH_LINES, T4KA3_LINES_PER_FRAME_30FPS, &ret);
-> +	cci_write(sensor->regmap, T4KA3_REG_PIXELS_PER_LINE, T4KA3_PIXELS_PER_LINE, &ret);
-> +	/* Always use the full sensor, using window to crop */
-> +	cci_write(sensor->regmap, T4KA3_REG_HORZ_START, 0, &ret);
-> +	cci_write(sensor->regmap, T4KA3_REG_VERT_START, 0, &ret);
-> +	cci_write(sensor->regmap, T4KA3_REG_HORZ_END, T4KA3_NATIVE_WIDTH - 1, &ret);
-> +	cci_write(sensor->regmap, T4KA3_REG_VERT_END, T4KA3_NATIVE_HEIGHT - 1, &ret);
-> +	/* Set window */
-> +	cci_write(sensor->regmap, T4KA3_REG_WIN_START_X, sensor->mode.win_x, &ret);
-> +	cci_write(sensor->regmap, T4KA3_REG_WIN_START_Y, sensor->mode.win_y, &ret);
-> +	cci_write(sensor->regmap, T4KA3_REG_WIN_WIDTH, fmt->width, &ret);
-> +	cci_write(sensor->regmap, T4KA3_REG_WIN_HEIGHT, fmt->height, &ret);
-> +	/* Write 1 to unknown register 0x0900 */
-> +	cci_write(sensor->regmap, T4KA3_REG_0900, 1, &ret);
-> +	cci_write(sensor->regmap, T4KA3_REG_BINNING, T4KA3_BINNING_VAL(sensor->mode.binning), &ret);
-> +
-> +	return ret;
-> +}
-> +
-> +static int t4ka3_enable_stream(struct v4l2_subdev *sd, struct v4l2_subdev_state *state,
-> +			       u32 pad, u64 streams_mask)
-> +{
-> +	struct t4ka3_data *sensor = to_t4ka3_sensor(sd);
-> +	int ret;
-> +
-> +	ret = pm_runtime_get_sync(sensor->sd.dev);
-> +	if (ret < 0) {
-> +		dev_err(sensor->dev, "power-up err.\n");
-> +		goto error_powerdown;
-> +	}
-> +
-> +	cci_multi_reg_write(sensor->regmap, t4ka3_init_config,
-> +			    ARRAY_SIZE(t4ka3_init_config), &ret);
-> +	/* enable group hold */
-> +	cci_write(sensor->regmap, T4KA3_REG_PARAM_HOLD, 1, &ret);
-> +	cci_multi_reg_write(sensor->regmap, t4ka3_pre_mode_set_regs,
-> +			    ARRAY_SIZE(t4ka3_pre_mode_set_regs), &ret);
-> +	if (ret)
-> +		goto error_powerdown;
-> +
-> +	ret = t4ka3_set_mode(sensor);
-> +	if (ret)
-> +		goto error_powerdown;
-> +
-> +	ret = cci_multi_reg_write(sensor->regmap, t4ka3_post_mode_set_regs,
-> +				  ARRAY_SIZE(t4ka3_post_mode_set_regs), NULL);
-> +	if (ret)
-> +		goto error_powerdown;
-> +
-> +	/* Restore value of all ctrls */
-> +	ret = __v4l2_ctrl_handler_setup(&sensor->ctrls.handler);
-> +	if (ret)
-> +		goto error_powerdown;
-> +
-> +	/* disable group hold */
-> +	cci_write(sensor->regmap, T4KA3_REG_PARAM_HOLD, 0, &ret);
-> +	cci_write(sensor->regmap, T4KA3_REG_STREAM, 1, &ret);
-> +	if (ret)
-> +		goto error_powerdown;
-> +
-> +	sensor->streaming = 1;
-> +
-> +	return ret;
-> +
-> +error_powerdown:
-> +	pm_runtime_put(sensor->sd.dev);
-> +	return ret;
-> +}
-> +
-> +static int t4ka3_disable_stream(struct v4l2_subdev *sd, struct v4l2_subdev_state *state,
-> +				u32 pad, u64 streams_mask)
-> +{
-> +	struct t4ka3_data *sensor = to_t4ka3_sensor(sd);
-> +	int ret;
-> +
-> +	ret = cci_write(sensor->regmap, T4KA3_REG_STREAM, 0, NULL);
-> +	pm_runtime_put(sensor->sd.dev);
-> +	sensor->streaming = 0;
-> +	return ret;
-> +}
-> +
-> +static int t4ka3_get_selection(struct v4l2_subdev *sd,
-> +			       struct v4l2_subdev_state *state,
-> +			       struct v4l2_subdev_selection *sel)
-> +{
-> +	switch (sel->target) {
-> +	case V4L2_SEL_TGT_CROP:
-> +		sel->r = *v4l2_subdev_state_get_crop(state, sel->pad);
-> +		break;
-> +	case V4L2_SEL_TGT_NATIVE_SIZE:
-> +	case V4L2_SEL_TGT_CROP_BOUNDS:
-> +		sel->r.top = 0;
-> +		sel->r.left = 0;
-> +		sel->r.width = T4KA3_NATIVE_WIDTH;
-> +		sel->r.height = T4KA3_NATIVE_HEIGHT;
-> +		break;
-> +	case V4L2_SEL_TGT_CROP_DEFAULT:
-> +		sel->r = t4ka3_default_crop;
-> +		break;
-> +	default:
-> +		return -EINVAL;
-> +	}
-> +
-> +	return 0;
-> +}
-> +
-> +static int t4ka3_set_selection(struct v4l2_subdev *sd,
-> +			       struct v4l2_subdev_state *state,
-> +			       struct v4l2_subdev_selection *sel)
-> +{
-> +	struct t4ka3_data *sensor = to_t4ka3_sensor(sd);
-> +	struct v4l2_mbus_framefmt *format;
-> +	struct v4l2_rect *crop;
-> +	struct v4l2_rect rect;
-> +
-> +	if (sel->target != V4L2_SEL_TGT_CROP)
-> +		return -EINVAL;
-> +
-> +	/*
-> +	 * Clamp the boundaries of the crop rectangle to the size of the sensor
-> +	 * pixel array. Align to multiples of 2 to ensure Bayer pattern isn't
-> +	 * disrupted.
-> +	 */
-> +	rect.left = clamp_val(ALIGN(sel->r.left, 2),
-> +			      T4KA3_NATIVE_START_LEFT, T4KA3_NATIVE_WIDTH);
-> +	rect.top = clamp_val(ALIGN(sel->r.top, 2),
-> +			     T4KA3_NATIVE_START_TOP, T4KA3_NATIVE_HEIGHT);
-> +	rect.width = clamp_val(ALIGN(sel->r.width, 2), T4KA3_MIN_CROP_WIDTH,
-> +			       T4KA3_NATIVE_WIDTH - rect.left);
-> +	rect.height = clamp_val(ALIGN(sel->r.height, 2), T4KA3_MIN_CROP_HEIGHT,
-> +				T4KA3_NATIVE_HEIGHT - rect.top);
-> +
-> +	crop = v4l2_subdev_state_get_crop(state, sel->pad);
-> +
-> +	if (rect.width != crop->width || rect.height != crop->height) {
-> +		/*
-> +		 * Reset the output image size if the crop rectangle size has
-> +		 * been modified.
-> +		 */
-> +		format = v4l2_subdev_state_get_format(state, sel->pad);
-> +		format->width = rect.width;
-> +		format->height = rect.height;
-> +		if (sel->which == V4L2_SUBDEV_FORMAT_ACTIVE)
-> +			t4ka3_calc_mode(sensor);
-> +	}
-> +
-> +	sel->r = *crop = rect;
-> +
-> +	return 0;
-> +}
-> +
-> +static int
-> +t4ka3_enum_mbus_code(struct v4l2_subdev *sd,
-> +		     struct v4l2_subdev_state *sd_state,
-> +		     struct v4l2_subdev_mbus_code_enum *code)
-> +{
-> +	if (code->index)
-> +		return -EINVAL;
-> +
-> +	code->code = MEDIA_BUS_FMT_SGRBG10_1X10;
-> +	return 0;
-> +}
-> +
-> +static int t4ka3_enum_frame_size(struct v4l2_subdev *sd,
-> +				 struct v4l2_subdev_state *sd_state,
-> +				 struct v4l2_subdev_frame_size_enum *fse)
-> +{
-> +	struct v4l2_rect *crop;
-> +
-> +	if (fse->index >= T4KA3_FRAME_SIZES)
-> +		return -EINVAL;
-> +
-> +	crop = v4l2_subdev_state_get_crop(sd_state, fse->pad);
-> +
-> +	fse->min_width = crop->width / (fse->index + 1);
-> +	fse->min_height = crop->height / (fse->index + 1);
-> +	fse->max_width = fse->min_width;
-> +	fse->max_height = fse->min_height;
-> +
-> +	return 0;
-> +}
-> +
-> +static int t4ka3_check_hwcfg(struct t4ka3_data *sensor)
-> +{
-> +	struct fwnode_handle *fwnode = dev_fwnode(sensor->dev);
-> +	struct v4l2_fwnode_endpoint bus_cfg = {
-> +		.bus_type = V4L2_MBUS_CSI2_DPHY,
-> +	};
-> +	struct fwnode_handle *endpoint;
-> +	unsigned long link_freq_bitmap;
-> +	int ret;
-> +
-> +	/*
-> +	 * Sometimes the fwnode graph is initialized by the bridge driver.
-> +	 * Bridge drivers doing this may also add GPIO mappings, wait for this.
-> +	 */
-> +	endpoint = fwnode_graph_get_next_endpoint(fwnode, NULL);
-> +	if (!endpoint)
-> +		return dev_err_probe(sensor->dev, -EPROBE_DEFER,
-> +				     "waiting for fwnode graph endpoint\n");
-> +
-> +	ret = v4l2_fwnode_endpoint_alloc_parse(endpoint, &bus_cfg);
-> +	fwnode_handle_put(endpoint);
-> +	if (ret)
-> +		return ret;
-> +
-> +	ret = v4l2_link_freq_to_bitmap(sensor->dev, bus_cfg.link_frequencies,
-> +				       bus_cfg.nr_of_link_frequencies,
-> +				       link_freq_menu_items,
-> +				       ARRAY_SIZE(link_freq_menu_items),
-> +				       &link_freq_bitmap);
-> +
-> +	if (ret == -ENOENT) {
-> +		dev_err_probe(sensor->dev, -ENOENT,
-> +			      "No match found between driver-supported link frequencies.\n");
-> +		goto out_free_bus_cfg;
-> +	}
-> +
-> +	if (ret == -ENODATA) {
-> +		dev_err_probe(sensor->dev, -ENODATA,
-> +			      "No link frequency was specified in the firmware.\n");
-> +		goto out_free_bus_cfg;
-> +	}
-> +
-> +	sensor->link_freq_index = ffs(link_freq_bitmap) - 1;
-> +
-> +	/* 4 MIPI lanes */
-> +	if (bus_cfg.bus.mipi_csi2.num_data_lanes != 4) {
-> +		ret = dev_err_probe(sensor->dev, -EINVAL,
-> +				    "number of CSI2 data lanes %u is not supported\n",
-> +				    bus_cfg.bus.mipi_csi2.num_data_lanes);
-> +		goto out_free_bus_cfg;
-> +	}
-> +
-> +	sensor->mipi_lanes = bus_cfg.bus.mipi_csi2.num_data_lanes;
-> +
-> +out_free_bus_cfg:
-> +	v4l2_fwnode_endpoint_free(&bus_cfg);
-> +
-> +	return ret;
-> +}
-> +
-> +static int t4ka3_init_state(struct v4l2_subdev *sd,
-> +			    struct v4l2_subdev_state *sd_state)
-> +{
-> +	struct t4ka3_data *sensor = to_t4ka3_sensor(sd);
-> +
-> +	*v4l2_subdev_state_get_crop(sd_state, 0) = t4ka3_default_crop;
-> +
-> +	t4ka3_fill_format(sensor, v4l2_subdev_state_get_format(sd_state, 0),
-> +			  T4KA3_ACTIVE_WIDTH, T4KA3_ACTIVE_HEIGHT);
-> +	return 0;
-> +}
-> +
-> +static const struct v4l2_ctrl_ops t4ka3_ctrl_ops = {
-> +	.s_ctrl = t4ka3_s_ctrl,
-> +};
-> +
-> +static const struct v4l2_subdev_video_ops t4ka3_video_ops = {
-> +	.s_stream = v4l2_subdev_s_stream_helper,
-> +};
-> +
-> +static const struct v4l2_subdev_pad_ops t4ka3_pad_ops = {
-> +	.enum_mbus_code = t4ka3_enum_mbus_code,
-> +	.enum_frame_size = t4ka3_enum_frame_size,
-> +	.get_fmt = v4l2_subdev_get_fmt,
-> +	.set_fmt = t4ka3_set_pad_format,
-> +	.get_selection = t4ka3_get_selection,
-> +	.set_selection = t4ka3_set_selection,
-> +	.enable_streams = t4ka3_enable_stream,
-> +	.disable_streams = t4ka3_disable_stream,
-> +};
-> +
-> +static const struct v4l2_subdev_ops t4ka3_ops = {
-> +	.video = &t4ka3_video_ops,
-> +	.pad = &t4ka3_pad_ops,
-> +};
-> +
-> +static const struct v4l2_subdev_internal_ops t4ka3_internal_ops = {
-> +	.init_state = t4ka3_init_state,
-> +};
-> +
-> +static int t4ka3_init_controls(struct t4ka3_data *sensor)
-> +{
-> +	const struct v4l2_ctrl_ops *ops = &t4ka3_ctrl_ops;
-> +	struct t4ka3_ctrls *ctrls = &sensor->ctrls;
-> +	struct v4l2_ctrl_handler *hdl = &ctrls->handler;
-> +	struct v4l2_fwnode_device_properties props;
-> +	int ret, min, max, def;
-> +	static const char * const test_pattern_menu[] = {
-> +		"Disabled",
-> +		"Solid White",
-> +		"Color Bars",
-> +		"Gradient",
-> +		"Random Data",
-> +	};
-> +
-> +	v4l2_ctrl_handler_init(hdl, 11);
-> +
-> +	hdl->lock = &sensor->lock;
-> +
-> +	ctrls->vflip = v4l2_ctrl_new_std(hdl, ops, V4L2_CID_VFLIP, 0, 1, 1, 0);
-> +	ctrls->hflip = v4l2_ctrl_new_std(hdl, ops, V4L2_CID_HFLIP, 0, 1, 1, 0);
-> +
-> +	ctrls->test_pattern = v4l2_ctrl_new_std_menu_items(hdl, ops,
-> +							   V4L2_CID_TEST_PATTERN,
-> +							   ARRAY_SIZE(test_pattern_menu) - 1,
-> +							   0, 0, test_pattern_menu);
-> +	ctrls->link_freq = v4l2_ctrl_new_int_menu(hdl, NULL, V4L2_CID_LINK_FREQ,
-> +						  0, 0, sensor->link_freq);
-> +	ctrls->pixel_rate = v4l2_ctrl_new_std(hdl, NULL, V4L2_CID_PIXEL_RATE,
-> +					      0, T4KA3_PIXEL_RATE,
-> +					      1, T4KA3_PIXEL_RATE);
-> +
-> +	v4l2_subdev_lock_state(sensor->sd.active_state);
-> +	t4ka3_calc_mode(sensor);
-> +	t4ka3_get_vblank_limits(sensor, &min, &max, &def);
-> +	v4l2_subdev_unlock_state(sensor->sd.active_state);
-> +
-> +	ctrls->vblank = v4l2_ctrl_new_std(hdl, ops, V4L2_CID_VBLANK, min, max, 1, def);
-> +
-> +	def = T4KA3_PIXELS_PER_LINE - T4KA3_ACTIVE_WIDTH;
-> +	ctrls->hblank = v4l2_ctrl_new_std(hdl, ops, V4L2_CID_HBLANK,
-> +					  def, def, 1, def);
-> +
-> +	max = T4KA3_LINES_PER_FRAME_30FPS - T4KA3_COARSE_INTEGRATION_TIME_MARGIN;
-> +	ctrls->exposure = v4l2_ctrl_new_std(hdl, ops, V4L2_CID_EXPOSURE,
-> +					    0, max, 1, max);
-> +
-> +	ctrls->gain = v4l2_ctrl_new_std(hdl, ops, V4L2_CID_ANALOGUE_GAIN,
-> +					T4KA3_MIN_GLOBAL_GAIN_SUPPORTED,
-> +					T4KA3_MAX_GLOBAL_GAIN_SUPPORTED,
-> +					1, T4KA3_MIN_GLOBAL_GAIN_SUPPORTED);
-> +
-> +	ret = v4l2_fwnode_device_parse(sensor->dev, &props);
-> +	if (ret)
-> +		return ret;
-> +
-> +	v4l2_ctrl_new_fwnode_properties(hdl, ops, &props);
-> +
-> +	if (hdl->error)
-> +		return hdl->error;
-> +
-> +	ctrls->vflip->flags |= V4L2_CTRL_FLAG_MODIFY_LAYOUT;
-> +	ctrls->hflip->flags |= V4L2_CTRL_FLAG_MODIFY_LAYOUT;
-> +	ctrls->link_freq->flags |= V4L2_CTRL_FLAG_READ_ONLY;
-> +	ctrls->hblank->flags |= V4L2_CTRL_FLAG_READ_ONLY;
-> +
-> +	sensor->sd.ctrl_handler = hdl;
-> +	return 0;
-> +}
-> +
-> +static int t4ka3_pm_suspend(struct device *dev)
-> +{
-> +	struct t4ka3_data *sensor = dev_get_drvdata(dev);
-> +
-> +	gpiod_set_value_cansleep(sensor->powerdown_gpio, 1);
-> +	gpiod_set_value_cansleep(sensor->reset_gpio, 1);
-> +
-> +	return 0;
-> +}
-> +
-> +static int t4ka3_pm_resume(struct device *dev)
-> +{
-> +	struct t4ka3_data *sensor = dev_get_drvdata(dev);
-> +	u16 sensor_id;
-> +	int ret;
-> +
-> +	usleep_range(5000, 6000);
-> +
-> +	gpiod_set_value_cansleep(sensor->powerdown_gpio, 0);
-> +	gpiod_set_value_cansleep(sensor->reset_gpio, 0);
-> +
-> +	/* waiting for the sensor after powering up */
-> +	msleep(20);
-> +
-> +	ret = t4ka3_detect(sensor, &sensor_id);
-> +	if (ret) {
-> +		dev_err(sensor->dev, "sensor detect failed\n");
-> +		return ret;
-> +	}
-> +
-> +	return 0;
-> +}
-> +
-> +static DEFINE_RUNTIME_DEV_PM_OPS(t4ka3_pm_ops, t4ka3_pm_suspend, t4ka3_pm_resume, NULL);
-> +
-> +static void t4ka3_remove(struct i2c_client *client)
-> +{
-> +	struct v4l2_subdev *sd = i2c_get_clientdata(client);
-> +	struct t4ka3_data *sensor = to_t4ka3_sensor(sd);
-> +
-> +	v4l2_async_unregister_subdev(&sensor->sd);
-> +	v4l2_ctrl_handler_free(&sensor->ctrls.handler);
-> +	v4l2_subdev_cleanup(sd);
-> +	media_entity_cleanup(&sensor->sd.entity);
-> +
-> +	/*
-> +	 * Disable runtime PM. In case runtime PM is disabled in the kernel,
-> +	 * make sure to turn power off manually.
-> +	 */
-> +	pm_runtime_disable(&client->dev);
-> +	if (!pm_runtime_status_suspended(&client->dev))
-> +		t4ka3_pm_suspend(&client->dev);
-> +	pm_runtime_set_suspended(&client->dev);
-> +}
-> +
-> +static int t4ka3_probe(struct i2c_client *client)
-> +{
-> +	struct t4ka3_data *sensor;
-> +	int ret;
-> +
-> +	/* allocate sensor device & init sub device */
-> +	sensor = devm_kzalloc(&client->dev, sizeof(*sensor), GFP_KERNEL);
-> +	if (!sensor)
-> +		return -ENOMEM;
-> +
-> +	sensor->dev = &client->dev;
-> +
-> +	ret = t4ka3_check_hwcfg(sensor);
-> +	if (ret)
-> +		return ret;
-> +
-> +	mutex_init(&sensor->lock);
-> +
-> +	sensor->link_freq[0] = T4KA3_LINK_FREQ;
-> +
-> +	v4l2_i2c_subdev_init(&sensor->sd, client, &t4ka3_ops);
-> +	sensor->sd.internal_ops = &t4ka3_internal_ops;
-> +
-> +	sensor->powerdown_gpio = devm_gpiod_get(&client->dev, "powerdown",
-> +						GPIOD_OUT_HIGH);
-> +	if (IS_ERR(sensor->powerdown_gpio))
-> +		return dev_err_probe(&client->dev, PTR_ERR(sensor->powerdown_gpio),
-> +				     "getting powerdown GPIO\n");
-> +
-> +	sensor->reset_gpio = devm_gpiod_get_optional(&client->dev, "reset",
-> +						     GPIOD_OUT_HIGH);
-> +	if (IS_ERR(sensor->reset_gpio))
-> +		return dev_err_probe(&client->dev, PTR_ERR(sensor->reset_gpio),
-> +				     "getting reset GPIO\n");
-> +
-> +	sensor->regmap = devm_cci_regmap_init_i2c(client, 16);
-> +	if (IS_ERR(sensor->regmap))
-> +		return PTR_ERR(sensor->regmap);
-> +
-> +	ret = t4ka3_pm_resume(sensor->dev);
-> +	if (ret)
-> +		return ret;
-> +
-> +	pm_runtime_set_active(&client->dev);
-> +	pm_runtime_get_noresume(&client->dev);
-> +	pm_runtime_enable(&client->dev);
-> +
-> +	sensor->sd.flags |= V4L2_SUBDEV_FL_HAS_DEVNODE;
-> +	sensor->pad.flags = MEDIA_PAD_FL_SOURCE;
-> +	sensor->sd.entity.function = MEDIA_ENT_F_CAM_SENSOR;
-> +
-> +	ret = media_entity_pads_init(&sensor->sd.entity, 1, &sensor->pad);
-> +	if (ret)
-> +		goto err_pm_disable;
-> +
-> +	sensor->sd.state_lock = sensor->ctrls.handler.lock;
-> +	ret = v4l2_subdev_init_finalize(&sensor->sd);
-> +	if (ret < 0) {
-> +		dev_err(&client->dev, "failed to init subdev: %d", ret);
-> +		goto err_media_entity;
-> +	}
-> +
-> +	ret = t4ka3_init_controls(sensor);
-> +	if (ret)
-> +		goto err_controls;
-> +
-> +	ret = v4l2_async_register_subdev_sensor(&sensor->sd);
-> +	if (ret)
-> +		goto err_controls;
-> +
-> +	pm_runtime_set_autosuspend_delay(&client->dev, 1000);
-> +	pm_runtime_use_autosuspend(&client->dev);
-> +	pm_runtime_put_autosuspend(&client->dev);
-> +
-> +	return 0;
-> +
-> +err_controls:
-> +	v4l2_ctrl_handler_free(&sensor->ctrls.handler);
-> +	v4l2_subdev_cleanup(&sensor->sd);
-> +
-> +err_media_entity:
-> +	media_entity_cleanup(&sensor->sd.entity);
-> +
-> +err_pm_disable:
-> +	pm_runtime_disable(&client->dev);
-> +	pm_runtime_put_noidle(&client->dev);
-> +	t4ka3_pm_suspend(&client->dev);
-> +
-> +	return ret;
-> +}
-> +
-> +static struct acpi_device_id t4ka3_acpi_match[] = {
-> +	{ "XMCC0003" },
-> +	{}
-> +};
-> +MODULE_DEVICE_TABLE(acpi, t4ka3_acpi_match);
-> +
-> +static struct i2c_driver t4ka3_driver = {
-> +	.driver = {
-> +		.name = "t4ka3",
-> +		.acpi_match_table = ACPI_PTR(t4ka3_acpi_match),
-> +		.pm = pm_sleep_ptr(&t4ka3_pm_ops),
-> +	},
-> +	.probe = t4ka3_probe,
-> +	.remove = t4ka3_remove,
-> +};
-> +module_i2c_driver(t4ka3_driver)
-> +
-> +MODULE_DESCRIPTION("A low-level driver for T4KA3 sensor");
-> +MODULE_AUTHOR("HARVEY LV <harvey.lv@intel.com>");
-> +MODULE_AUTHOR("Kate Hsuan <hpa@redhat.com>");
-> +MODULE_LICENSE("GPL");
+  Dave
 
+> Thanks,
+>     Jai
+>
+> > > +
+> > > +     sensor->vflip = v4l2_ctrl_new_std(&sensor->ctrls, &ov5647_ctrl_ops,
+> > > +                                       V4L2_CID_VFLIP, 0, 1, 1, 0);
+> > > +     if (sensor->vflip)
+> > > +             sensor->vflip->flags |= V4L2_CTRL_FLAG_MODIFY_LAYOUT;
+> > > +
+> > >       v4l2_fwnode_device_parse(dev, &props);
+> > >
+> > >       v4l2_ctrl_new_fwnode_properties(&sensor->ctrls, &ov5647_ctrl_ops,
+> > >
+> > > --
+> > > 2.51.0
+> > >
