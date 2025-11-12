@@ -1,338 +1,411 @@
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
+Received: from CH1PR05CU001.outbound.protection.outlook.com (mail-northcentralusazon11010010.outbound.protection.outlook.com [52.101.193.10])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CA0D831B809;
-	Wed, 12 Nov 2025 11:56:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.167.242.64
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762948620; cv=none; b=crcNvTvEPHUllQh+LurtBpQO92qHcYUlLe4P6YnlL+beLwnRdqxuBASMDtKvfrOW6STmr/ckPfvAYOavWnt9hqVqZXRCFHTIoSqjTvZqkzjQ6opPu9bWQMGiZZ3S6PtNU8tEd7RKcWJFTch4ix9qz1DDnUzglwC3fMa84HHGW/Q=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762948620; c=relaxed/simple;
-	bh=zTcg7shsgAiP9rYLs4tmSZysIL5InAg9GgS9Auum/1g=;
-	h=Content-Type:MIME-Version:In-Reply-To:References:Subject:From:Cc:
-	 To:Date:Message-ID; b=g9WeOvMeL54sPqPq/7BYH2Lh8AVCy3FsTgfyVxLmFhzKFilOLQONTjgZUXZs1Bolv8MzR6/RZb4oUYusCv3MYWqmsMO+gvJyZCIM1fyMs8JLaCIwHkkkIdBtPfjPyOAUuAVUkrI0L2tNxVgKfE4RKbShvzHslVCiVMsjvMrwtWQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ideasonboard.com; spf=pass smtp.mailfrom=ideasonboard.com; dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b=U+gzFIU/; arc=none smtp.client-ip=213.167.242.64
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ideasonboard.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ideasonboard.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 05B333176E4;
+	Wed, 12 Nov 2025 11:57:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.193.10
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1762948623; cv=fail; b=DPc4LbMjfrS3jMkK2/J70gkxV/df/gQKWkomezJeW2QNuxrHTV0uC+2jnvA28SFVpEKX3LnVQx2B5Oslu1kO4tymXWWbykgNFasYuklgti+IFZEAKfZLdxBwhjCwnPzOc2olCxqM7bi/IZVWV5b5L8at8IuljHsaI2pez7Ia2aQ=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1762948623; c=relaxed/simple;
+	bh=oV09HqdO5lAfwySv1WBueOYbJLKmwLm2DGBP93EeY1U=;
+	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=cY7QhghB2SGSrclHniHyWZdhbfNNJcmX5bhxLJ3jllmTXdS0D2E0gVXK1YZ+pjfgGxFjnN0I7JjlVjncMINWHaHbTj7Bzxz4rTBJZ+kiy483nbTu6Hj/McklMtEjowCk95sHAa+swofSeihjW4mNHQBjMWe/n8/AHKNrguDJ8c4=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com; spf=pass smtp.mailfrom=ti.com; dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b=hzWMI1Qr; arc=fail smtp.client-ip=52.101.193.10
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ti.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="U+gzFIU/"
-Received: from mail.ideasonboard.com (unknown [IPv6:2401:4900:1c66:d4c7:f5bd:b015:f4e9:fab0])
-	by perceval.ideasonboard.com (Postfix) with ESMTPSA id 4DB2810D;
-	Wed, 12 Nov 2025 12:54:55 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-	s=mail; t=1762948495;
-	bh=zTcg7shsgAiP9rYLs4tmSZysIL5InAg9GgS9Auum/1g=;
-	h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
-	b=U+gzFIU/u8sFPmIBKK580Od3XgB1TTGe311pWVIHJQv1b/Xg3sZA6ij3aqLlHJs6x
-	 G44f/fEwrqiNwYoHyzi3on6Z3MBATIcWOdOQxaevxGivOJGg3LyYqR/eVKrpnUDlOD
-	 uwnztIL1BOb3rSnlLUSFdO2XPhzmFE2sx7APFQdo=
-Content-Type: text/plain; charset="utf-8"
+	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="hzWMI1Qr"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=Ju6dWOuM7oa5BAnfBi35byJYQeHdivxl7ZpWANxfRkd3htiMaERZeNQ5FSx6Ks7PACJynDBxXNEzZPMwz79vU8ulxxAYfGjkoRa6FzNtmx5vAx/TByXnd51n7APtrKH01IBa0qGATw9OVbQcK0ROk4670JKiKRscNaY+QtpTHa25ZrSmzsZcblgPvW6r89nOLOm4jrgzL4iLVwY+lkS2dRwJs+LzbNU27snxcbhGkKzbUPYktI4hYcjIr68ynGpUNddCvXs9B9T3Aj7bJw4nvu4ErCq3oBpWAumEfsYJxeK9dfv2z7On9f/PrPOjqvH8JTjpOw+jcArGk54sPmrjnQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=rxVOicTx+Kt457oktQ9FPfGBqJC3whauMUlmQgX51D4=;
+ b=xgys1A7CPD34UqGSR+fMEQCH3L7YASUF1o51pIaim87SYIbp4TLhgiZqiIkC2V0cXDlmVyekjWFTSndMRWjFIYfDxox0FVjosBvTkk0K+mTW1gkom5uQBPp1BkuIggc0I5tpcK3ZEqpOP8oy7lPbWLIQzod+rrWjINNzDgqJhVC0E9Qa/g13W6pKnn1lOFPnSWFlJoUOuYKk4cWY6iydFk87JKmX6QmfDKFy6ln0rOPbdruf8ZMr1MJXgDlsrxzw1E+W+/lEQN+CHlyZpyUUjdyrFEr+soQffTPflrH9Q2xW8OicyD2GCd2Cs4TlK1Ow30Bpr4RXsrypgilQE7czxw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 198.47.21.195) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=ti.com;
+ dmarc=pass (p=quarantine sp=none pct=100) action=none header.from=ti.com;
+ dkim=none (message not signed); arc=none (0)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=rxVOicTx+Kt457oktQ9FPfGBqJC3whauMUlmQgX51D4=;
+ b=hzWMI1Qr2ruBpHIAdHUJ6VjxyBuODziaQHPLv+AUoaaNIqs/8r0eQBwtVY9ucMwDV9bV4bS1jiHp7oL3m4PgtotgLvCGxajHtFd3FLipp90hSMXaxEvNdcre7ZlXkVdXxnZBb1mf6IgVfe/jKxxe1Hw/rmAh4xX7HvOQdE289T8=
+Received: from BYAPR05CA0073.namprd05.prod.outlook.com (2603:10b6:a03:e0::14)
+ by IA0PR10MB6746.namprd10.prod.outlook.com (2603:10b6:208:43e::16) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9320.17; Wed, 12 Nov
+ 2025 11:56:58 +0000
+Received: from SJ5PEPF00000203.namprd05.prod.outlook.com
+ (2603:10b6:a03:e0:cafe::33) by BYAPR05CA0073.outlook.office365.com
+ (2603:10b6:a03:e0::14) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.20.9343.5 via Frontend Transport; Wed,
+ 12 Nov 2025 11:56:57 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 198.47.21.195)
+ smtp.mailfrom=ti.com; dkim=none (message not signed) header.d=none;dmarc=pass
+ action=none header.from=ti.com;
+Received-SPF: Pass (protection.outlook.com: domain of ti.com designates
+ 198.47.21.195 as permitted sender) receiver=protection.outlook.com;
+ client-ip=198.47.21.195; helo=flwvzet201.ext.ti.com; pr=C
+Received: from flwvzet201.ext.ti.com (198.47.21.195) by
+ SJ5PEPF00000203.mail.protection.outlook.com (10.167.244.36) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.9320.13 via Frontend Transport; Wed, 12 Nov 2025 11:56:56 +0000
+Received: from DFLE212.ent.ti.com (10.64.6.70) by flwvzet201.ext.ti.com
+ (10.248.192.32) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.20; Wed, 12 Nov
+ 2025 05:56:53 -0600
+Received: from DFLE210.ent.ti.com (10.64.6.68) by DFLE212.ent.ti.com
+ (10.64.6.70) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.20; Wed, 12 Nov
+ 2025 05:56:53 -0600
+Received: from lelvem-mr06.itg.ti.com (10.180.75.8) by DFLE210.ent.ti.com
+ (10.64.6.68) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.20 via Frontend
+ Transport; Wed, 12 Nov 2025 05:56:53 -0600
+Received: from ws.dhcp.ti.com (ws.dhcp.ti.com [172.24.233.149])
+	by lelvem-mr06.itg.ti.com (8.18.1/8.18.1) with ESMTP id 5ACBsxc62638977;
+	Wed, 12 Nov 2025 05:56:47 -0600
+From: Rishikesh Donadkar <r-donadkar@ti.com>
+To: <jai.luthra@linux.dev>, <laurent.pinchart@ideasonboard.com>,
+	<mripard@kernel.org>
+CC: <r-donadkar@ti.com>, <y-abhilashchandra@ti.com>, <devarsht@ti.com>,
+	<s-jain1@ti.com>, <vigneshr@ti.com>, <mchehab@kernel.org>, <robh@kernel.org>,
+	<krzk+dt@kernel.org>, <p.zabel@pengutronix.de>, <conor+dt@kernel.org>,
+	<sakari.ailus@linux.intel.com>, <hverkuil-cisco@xs4all.nl>,
+	<tomi.valkeinen@ideasonboard.com>, <jai.luthra@ideasonboard.com>,
+	<changhuang.liang@starfivetech.com>, <jack.zhu@starfivetech.com>,
+	<sjoerd@collabora.com>, <dan.carpenter@linaro.org>,
+	<hverkuil+cisco@kernel.org>, <linux-kernel@vger.kernel.org>,
+	<linux-media@vger.kernel.org>, <devicetree@vger.kernel.org>
+Subject: [PATCH v8 16/18] media: cadence: csi2rx: Support runtime PM
+Date: Wed, 12 Nov 2025 17:24:57 +0530
+Message-ID: <20251112115459.2479225-17-r-donadkar@ti.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20251112115459.2479225-1-r-donadkar@ti.com>
+References: <20251112115459.2479225-1-r-donadkar@ti.com>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <u5wdva6kk5n6q5myj3wuy4bxqhaqyhk2ngentrj4p3v5447y2a@3kujjl3nnwea>
-References: <20251028-b4-rpi-ov5647-v1-0-098413454f5e@ideasonboard.com> <20251028-b4-rpi-ov5647-v1-6-098413454f5e@ideasonboard.com> <u5wdva6kk5n6q5myj3wuy4bxqhaqyhk2ngentrj4p3v5447y2a@3kujjl3nnwea>
-Subject: Re: [PATCH 06/13] media: i2c: ov5647: Support HFLIP and VFLIP
-From: Jai Luthra <jai.luthra@ideasonboard.com>
-Cc: Sakari Ailus <sakari.ailus@linux.intel.com>, Dave Stevenson <dave.stevenson@raspberrypi.com>, Jacopo Mondi <jacopo@jmondi.org>, Mauro Carvalho Chehab <mchehab@kernel.org>, linux-media@vger.kernel.org, linux-kernel@vger.kernel.org, Mauro Carvalho Chehab <mchehab+huawei@kernel.org>, Kieran Bingham <kieran.bingham@ideasonboard.com>, David Plowman <david.plowman@raspberrypi.com>, Laurent Pinchart <laurent.pinchart@ideasonboard.com>, Peter Robinson <pbrobinson@gmail.com>, Stefan Wahren <wahrenst@gmx.net>, Ivan T. Ivanov <iivanov@suse.de>
-To: Jacopo Mondi <jacopo.mondi@ideasonboard.com>
-Date: Wed, 12 Nov 2025 17:26:50 +0530
-Message-ID: <176294861029.13219.15475344635093672267@freya>
-User-Agent: alot/0.12.dev28+gd2c823fe
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-C2ProcessedOrg: 333ef613-75bf-4e12-a4b1-8e3623f5dcea
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: SJ5PEPF00000203:EE_|IA0PR10MB6746:EE_
+X-MS-Office365-Filtering-Correlation-Id: 85691873-2d09-4c75-2e99-08de21e29433
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|1800799024|36860700013|376014|7416014|82310400026;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?bk9b6h3D1GmHfe1jKR8kbwlBAFpXXFYwosdIDdQoVDFfBk+Oer8fa/U2AkNy?=
+ =?us-ascii?Q?grXuD+9FTD5J3WCaRO3hTNwC4XEZCA1DBKfIOYTRf3mWGHCeeBp2mo5Ju4gk?=
+ =?us-ascii?Q?LF5nTk2ACj7JahZ+0LNE+admQX8iRt9mLFMhTqPbyiXUWegwkiPxD06z3OcD?=
+ =?us-ascii?Q?6U2tOJPpE0+em4+wCDwYf7WKVi0TNNP/3H/G9e4bUBN7G3vnhGHfGvtcy5g/?=
+ =?us-ascii?Q?bMmJmCrnpmi0hmLhIulBB1FESJXXDVs0h7zCmgydPvgvj+P/vq/PE1n0/GxH?=
+ =?us-ascii?Q?cb9ijOxH6+bHJkb3D7pz5zYlJo+oSYplf37Bs+BH6D+VrsvkYAIUSEAghOEQ?=
+ =?us-ascii?Q?hVPZIhSh6JF0kKaty0NpnzJVmJewmaeBQzTMRpXV/KjUWixVdNPJVf8bh6Dx?=
+ =?us-ascii?Q?VG894QvjU/eoBG8a76NDYL5GF4KF8Fg2AxkwlisWohWV81lpUGNgxFxyqdwS?=
+ =?us-ascii?Q?PhbhyMG/AKG69kGTlmEa6Evbq64uTaEzSXw9PLzjwVPVikbAJKsCyeXEb9sM?=
+ =?us-ascii?Q?e7foYTgY7OUq6fLj/m96JrT4Cc4HSZFMtQ2vngYbLZmjnV1+xCqbOcitddZs?=
+ =?us-ascii?Q?K7i9UIYszzFQSoKjnswkpeDDfVe74ChgwI4nEW8sGQ8elT6XTnpYtNjE8j6n?=
+ =?us-ascii?Q?LUYLyboZ0q10GvBt20oLeUAlm99yTVBFwKSWR91iY4nOrYSDcUi0vcZDpyyC?=
+ =?us-ascii?Q?16QQhw3Oy28Q0/NzhSxQCC6JOmsclx6Y8DqpHM3i9B8jKH5RxnsfhQMucwr6?=
+ =?us-ascii?Q?rLZ/qIiHNhlnKpSWK2WXL0hBDE/4mIDedWzNbLsUu4hvRx73bpPyjiTN8p3q?=
+ =?us-ascii?Q?XgR9L9owBY1NGFzm9s0+wyj9fdgZ0b7QnWgHhTR8+cD940vTLPwnZi5YBCYJ?=
+ =?us-ascii?Q?rzpmv3oNIbXqQHNLofKVjbjIR0bObqJ66s5PpZtN43iVijbeXReuxn/BPgyn?=
+ =?us-ascii?Q?O2GBhCMFRRdLjhBtqLXyw9ATEo91qEjhYMgSvHe6kvxEYKJRMXAbNRnmPMzO?=
+ =?us-ascii?Q?cGWvWXPguHJ92AhrfAjFV7WAGSKn1jjqqzO58I9u7/QnIkQaQSb6Hf1VWakf?=
+ =?us-ascii?Q?6j2Yut/B40YQeEAQ2PfXp6Wxo3TnSLaZ3cPOCy4TUUiekWOPcC2UTcekxqSx?=
+ =?us-ascii?Q?hLzp+H1UwtQSb699TkfTRsgfspT/YuGn0QKFmc2BmDsoB9mfy+17f09iVddP?=
+ =?us-ascii?Q?jSFQ0v5RNCm/gVO9qiKevw/1K9X19ka0XsPo5DC/vPIVuk7azAqti5JHr4/T?=
+ =?us-ascii?Q?NSpZXPRwRSpN7BBMVMUpicKBCPEgClg5Sp2jnC77+sTjaGX9jRJdWFSMA5ya?=
+ =?us-ascii?Q?emwqKpUJ8ebhCLHC1L2azhZoPKL742dq+mwNUFiasfAOH4Tld0OjoKsWS4xt?=
+ =?us-ascii?Q?4joJ+f82vI0xhsWzBcXKIFdyQ3AON5J0WStJWEIyquEf9PDJRiHoYolFWQNt?=
+ =?us-ascii?Q?oTl53QTCWWn2fhL3t4JUivycUqG5bU/U0dZc8qLlLHPKQfxbRkAlSm+s5xG+?=
+ =?us-ascii?Q?pFn2iWa19GK1auzOMxbdytp1SEy2XUNxVAUTslA0HiukiYD8BIi6l06C48cc?=
+ =?us-ascii?Q?4fddJy0iGpFrdQ+dNzo=3D?=
+X-Forefront-Antispam-Report:
+	CIP:198.47.21.195;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:flwvzet201.ext.ti.com;PTR:ErrorRetry;CAT:NONE;SFS:(13230040)(1800799024)(36860700013)(376014)(7416014)(82310400026);DIR:OUT;SFP:1101;
+X-OriginatorOrg: ti.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Nov 2025 11:56:56.4913
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 85691873-2d09-4c75-2e99-08de21e29433
+X-MS-Exchange-CrossTenant-Id: e5b49634-450b-4709-8abb-1e2b19b982b7
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=e5b49634-450b-4709-8abb-1e2b19b982b7;Ip=[198.47.21.195];Helo=[flwvzet201.ext.ti.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	SJ5PEPF00000203.namprd05.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA0PR10MB6746
 
-Hi Jacopo,
+From: Changhuang Liang <changhuang.liang@starfivetech.com>
 
-Thanks a lot for the review.
+Use runtime power management hooks to save power when CSI-RX is not in
+use.
 
-Quoting Jacopo Mondi (2025-11-02 16:20:36)
-> Hi Jai
->=20
-> On Tue, Oct 28, 2025 at 12:57:17PM +0530, Jai Luthra wrote:
-> > From: David Plowman <david.plowman@raspberrypi.com>
-> >
-> > Add missing controls for horizontal and vertical flipping.
-> >
-> > Signed-off-by: David Plowman <david.plowman@raspberrypi.com>
-> > Signed-off-by: Jai Luthra <jai.luthra@ideasonboard.com>
-> > ---
-> >  drivers/media/i2c/ov5647.c | 77 ++++++++++++++++++++++++++++++++++++++=
-++++----
-> >  1 file changed, 71 insertions(+), 6 deletions(-)
-> >
-> > diff --git a/drivers/media/i2c/ov5647.c b/drivers/media/i2c/ov5647.c
-> > index 977b878b0d4b8cd5f39f510ebd8b33c9163f7da2..a33e2d8edc114d302e83063=
-9cb7cb161f16a6208 100644
-> > --- a/drivers/media/i2c/ov5647.c
-> > +++ b/drivers/media/i2c/ov5647.c
-> > @@ -54,6 +54,8 @@
-> >  #define OV5647_REG_GAIN_LO           0x350b
-> >  #define OV5647_REG_VTS_HI            0x380e
-> >  #define OV5647_REG_VTS_LO            0x380f
-> > +#define OV5647_REG_VFLIP             0x3820
-> > +#define OV5647_REG_HFLIP             0x3821
-> >  #define OV5647_REG_FRAME_OFF_NUMBER  0x4202
-> >  #define OV5647_REG_MIPI_CTRL00               0x4800
-> >  #define OV5647_REG_MIPI_CTRL14               0x4814
-> > @@ -109,6 +111,8 @@ struct ov5647 {
-> >       struct v4l2_ctrl                *hblank;
-> >       struct v4l2_ctrl                *vblank;
-> >       struct v4l2_ctrl                *exposure;
-> > +     struct v4l2_ctrl                *hflip;
-> > +     struct v4l2_ctrl                *vflip;
-> >  };
-> >
-> >  static inline struct ov5647 *to_sensor(struct v4l2_subdev *sd)
-> > @@ -150,7 +154,7 @@ static struct regval_list ov5647_2592x1944_10bpp[] =
-=3D {
-> >       {0x3036, 0x69},
-> >       {0x303c, 0x11},
-> >       {0x3106, 0xf5},
-> > -     {0x3821, 0x06},
-> > +     {0x3821, 0x00},
-> >       {0x3820, 0x00},
->=20
-> That's interesting, as the datasheet says that by default
->=20
->         3820 =3D 0x40
->         3821 =3D 0x00
->=20
-> And
-> - BIT[2] =3D flip ISP
-> - BIT[1] =3D flip SNR
->=20
-> The implementation of ov5647_s_flip() toggles BIT(1) and ignores
-> BIT(2) while the modes definition have both (BIT(2) | BIT(1)) set
->=20
-> More interestingly the datasheet says:
->=20
-> In flip mode, the OV5647 does not need additional settings because the
-> ISP block will auto-detect whether the pixel is in the red line or
-> blue line and make the necessary adjustments
->=20
-> Might this suggest that if we flip using BIT(2) we don't need to
-> change the bayer pattern ordering ?
+Signed-off-by: Changhuang Liang <changhuang.liang@starfivetech.com>
+Tested-by: Rishikesh Donadkar <r-donadkar@ti.com>
+Reviewed-by: Rishikesh Donadkar <r-donadkar@ti.com>
+Signed-off-by: Jai Luthra <jai.luthra@ideasonboard.com>
+Signed-off-by: Rishikesh Donadkar <r-donadkar@ti.com>
+---
+ drivers/media/platform/cadence/Kconfig       |   1 +
+ drivers/media/platform/cadence/cdns-csi2rx.c | 129 ++++++++++++-------
+ 2 files changed, 83 insertions(+), 47 deletions(-)
 
-Indeed! That was a great find, I am now able to set BIT(2) to get flips
-without needing to modify the pixelarray layout.
+diff --git a/drivers/media/platform/cadence/Kconfig b/drivers/media/platform/cadence/Kconfig
+index 1aa608c00dbce..ea85ef82760e6 100644
+--- a/drivers/media/platform/cadence/Kconfig
++++ b/drivers/media/platform/cadence/Kconfig
+@@ -5,6 +5,7 @@ comment "Cadence media platform drivers"
+ config VIDEO_CADENCE_CSI2RX
+ 	tristate "Cadence MIPI-CSI2 RX Controller"
+ 	depends on VIDEO_DEV
++	depends on PM
+ 	select MEDIA_CONTROLLER
+ 	select VIDEO_V4L2_SUBDEV_API
+ 	select V4L2_FWNODE
+diff --git a/drivers/media/platform/cadence/cdns-csi2rx.c b/drivers/media/platform/cadence/cdns-csi2rx.c
+index 833bc134f17cb..6447c225ba354 100644
+--- a/drivers/media/platform/cadence/cdns-csi2rx.c
++++ b/drivers/media/platform/cadence/cdns-csi2rx.c
+@@ -337,11 +337,6 @@ static int csi2rx_start(struct csi2rx_priv *csi2rx)
+ 	u32 reg;
+ 	int ret;
+ 
+-	ret = clk_prepare_enable(csi2rx->p_clk);
+-	if (ret)
+-		return ret;
+-
+-	reset_control_deassert(csi2rx->p_rst);
+ 	csi2rx_reset(csi2rx);
+ 
+ 	if (csi2rx->error_irq >= 0)
+@@ -382,7 +377,7 @@ static int csi2rx_start(struct csi2rx_priv *csi2rx)
+ 		if (ret) {
+ 			dev_err(csi2rx->dev,
+ 				"Failed to configure external DPHY: %d\n", ret);
+-			goto err_disable_pclk;
++			return ret;
+ 		}
+ 	}
+ 
+@@ -397,12 +392,6 @@ static int csi2rx_start(struct csi2rx_priv *csi2rx)
+ 	 * hence the reference counting.
+ 	 */
+ 	for (i = 0; i < csi2rx->max_streams; i++) {
+-		ret = clk_prepare_enable(csi2rx->pixel_clk[i]);
+-		if (ret)
+-			goto err_disable_pixclk;
+-
+-		reset_control_deassert(csi2rx->pixel_rst[i]);
+-
+ 		writel(CSI2RX_STREAM_CFG_FIFO_MODE_LARGE_BUF |
+ 			       FIELD_PREP(CSI2RX_STREAM_CFG_NUM_PIXELS_MASK,
+ 					  csi2rx->num_pixels[i]),
+@@ -415,30 +404,8 @@ static int csi2rx_start(struct csi2rx_priv *csi2rx)
+ 		       csi2rx->base + CSI2RX_STREAM_CTRL_REG(i));
+ 	}
+ 
+-	ret = clk_prepare_enable(csi2rx->sys_clk);
+-	if (ret)
+-		goto err_disable_pixclk;
+-
+-	reset_control_deassert(csi2rx->sys_rst);
+-
+-	clk_disable_unprepare(csi2rx->p_clk);
+ 
+ 	return 0;
+-
+-err_disable_pixclk:
+-	for (; i > 0; i--) {
+-		reset_control_assert(csi2rx->pixel_rst[i - 1]);
+-		clk_disable_unprepare(csi2rx->pixel_clk[i - 1]);
+-	}
+-
+-	if (csi2rx->dphy) {
+-		writel(0, csi2rx->base + CSI2RX_DPHY_LANE_CTRL_REG);
+-		phy_power_off(csi2rx->dphy);
+-	}
+-err_disable_pclk:
+-	clk_disable_unprepare(csi2rx->p_clk);
+-
+-	return ret;
+ }
+ 
+ static void csi2rx_stop(struct csi2rx_priv *csi2rx)
+@@ -447,10 +414,6 @@ static void csi2rx_stop(struct csi2rx_priv *csi2rx)
+ 	u32 val;
+ 	int ret;
+ 
+-	clk_prepare_enable(csi2rx->p_clk);
+-	reset_control_assert(csi2rx->sys_rst);
+-	clk_disable_unprepare(csi2rx->sys_clk);
+-
+ 	writel(0, csi2rx->base + CSI2RX_ERROR_IRQS_MASK_REG);
+ 
+ 	for (i = 0; i < csi2rx->max_streams; i++) {
+@@ -465,14 +428,8 @@ static void csi2rx_stop(struct csi2rx_priv *csi2rx)
+ 		if (ret)
+ 			dev_warn(csi2rx->dev,
+ 				 "Failed to stop streaming on pad%u\n", i);
+-
+-		reset_control_assert(csi2rx->pixel_rst[i]);
+-		clk_disable_unprepare(csi2rx->pixel_clk[i]);
+ 	}
+ 
+-	reset_control_assert(csi2rx->p_rst);
+-	clk_disable_unprepare(csi2rx->p_clk);
+-
+ 	if (csi2rx->dphy) {
+ 		writel(0, csi2rx->base + CSI2RX_DPHY_LANE_CTRL_REG);
+ 
+@@ -548,10 +505,17 @@ static int csi2rx_enable_streams(struct v4l2_subdev *subdev,
+ 	 * enable the whole controller.
+ 	 */
+ 	if (!csi2rx->count) {
++		ret = pm_runtime_resume_and_get(csi2rx->dev);
++		if (ret < 0)
++			return ret;
++
+ 		csi2rx_update_vc_select(csi2rx, state);
++
+ 		ret = csi2rx_start(csi2rx);
+-		if (ret)
++		if (ret) {
++			pm_runtime_put(csi2rx->dev);
+ 			return ret;
++		}
+ 	}
+ 
+ 	/* Start streaming on the source */
+@@ -561,8 +525,10 @@ static int csi2rx_enable_streams(struct v4l2_subdev *subdev,
+ 		dev_err(csi2rx->dev,
+ 			"Failed to start streams %#llx on subdev\n",
+ 			sink_streams);
+-		if (!csi2rx->count)
++		if (!csi2rx->count) {
+ 			csi2rx_stop(csi2rx);
++			pm_runtime_put(csi2rx->dev);
++		}
+ 		return ret;
+ 	}
+ 
+@@ -589,8 +555,10 @@ static int csi2rx_disable_streams(struct v4l2_subdev *subdev,
+ 	csi2rx->count--;
+ 
+ 	/* Let the last user turn off the lights. */
+-	if (!csi2rx->count)
++	if (!csi2rx->count) {
+ 		csi2rx_stop(csi2rx);
++		pm_runtime_put(csi2rx->dev);
++	}
+ 
+ 	return 0;
+ }
+@@ -1092,6 +1060,7 @@ static int csi2rx_probe(struct platform_device *pdev)
+ 	if (ret)
+ 		goto err_cleanup;
+ 
++	pm_runtime_enable(csi2rx->dev);
+ 	ret = v4l2_async_register_subdev(&csi2rx->subdev);
+ 	if (ret < 0)
+ 		goto err_free_state;
+@@ -1106,6 +1075,7 @@ static int csi2rx_probe(struct platform_device *pdev)
+ 
+ err_free_state:
+ 	v4l2_subdev_cleanup(&csi2rx->subdev);
++	pm_runtime_disable(csi2rx->dev);
+ err_cleanup:
+ 	v4l2_async_nf_unregister(&csi2rx->notifier);
+ 	v4l2_async_nf_cleanup(&csi2rx->notifier);
+@@ -1124,9 +1094,73 @@ static void csi2rx_remove(struct platform_device *pdev)
+ 	v4l2_async_unregister_subdev(&csi2rx->subdev);
+ 	v4l2_subdev_cleanup(&csi2rx->subdev);
+ 	media_entity_cleanup(&csi2rx->subdev.entity);
++	pm_runtime_disable(csi2rx->dev);
+ 	kfree(csi2rx);
+ }
+ 
++static int csi2rx_runtime_suspend(struct device *dev)
++{
++	struct csi2rx_priv *csi2rx = dev_get_drvdata(dev);
++	unsigned int i;
++
++	reset_control_assert(csi2rx->sys_rst);
++	clk_disable_unprepare(csi2rx->sys_clk);
++
++	for (i = 0; i < csi2rx->max_streams; i++) {
++		reset_control_assert(csi2rx->pixel_rst[i]);
++		clk_disable_unprepare(csi2rx->pixel_clk[i]);
++	}
++
++	reset_control_assert(csi2rx->p_rst);
++	clk_disable_unprepare(csi2rx->p_clk);
++
++	return 0;
++}
++
++static int csi2rx_runtime_resume(struct device *dev)
++{
++	struct csi2rx_priv *csi2rx = dev_get_drvdata(dev);
++	unsigned int i;
++	int ret;
++
++	ret = clk_prepare_enable(csi2rx->p_clk);
++	if (ret)
++		return ret;
++
++	reset_control_deassert(csi2rx->p_rst);
++
++	for (i = 0; i < csi2rx->max_streams; i++) {
++		ret = clk_prepare_enable(csi2rx->pixel_clk[i]);
++		if (ret)
++			goto err_disable_pixclk;
++
++		reset_control_deassert(csi2rx->pixel_rst[i]);
++	}
++
++	ret = clk_prepare_enable(csi2rx->sys_clk);
++	if (ret)
++		goto err_disable_pixclk;
++
++	reset_control_deassert(csi2rx->sys_rst);
++
++	return 0;
++
++err_disable_pixclk:
++	for (; i > 0; i--) {
++		reset_control_assert(csi2rx->pixel_rst[i - 1]);
++		clk_disable_unprepare(csi2rx->pixel_clk[i - 1]);
++	}
++
++	reset_control_assert(csi2rx->p_rst);
++	clk_disable_unprepare(csi2rx->p_clk);
++
++	return ret;
++}
++
++static const struct dev_pm_ops csi2rx_pm_ops = {
++	RUNTIME_PM_OPS(csi2rx_runtime_suspend, csi2rx_runtime_resume, NULL)
++};
++
+ static const struct of_device_id csi2rx_of_table[] = {
+ 	{ .compatible = "starfive,jh7110-csi2rx" },
+ 	{ .compatible = "cdns,csi2rx" },
+@@ -1141,6 +1175,7 @@ static struct platform_driver csi2rx_driver = {
+ 	.driver	= {
+ 		.name		= "cdns-csi2rx",
+ 		.of_match_table	= csi2rx_of_table,
++		.pm		= &csi2rx_pm_ops,
+ 	},
+ };
+ module_platform_driver(csi2rx_driver);
+-- 
+2.34.1
 
-Will do that in v2.
-
->=20
-> Now, I admit I'm not sure what are the ISP functions on the ov5647 and
-> this patch is super-duper-tested as it comes from the RPi BSP, so if
-> you don't have answers to the above questions, I'm fine with this
-> patch!
->=20
-> >       {0x3827, 0xec},
-> >       {0x370c, 0x03},
-> > @@ -239,7 +243,7 @@ static struct regval_list ov5647_1080p30_10bpp[] =
-=3D {
-> >       {0x3036, 0x62},
-> >       {0x303c, 0x11},
-> >       {0x3106, 0xf5},
-> > -     {0x3821, 0x06},
-> > +     {0x3821, 0x00},
-> >       {0x3820, 0x00},
-> >       {0x3827, 0xec},
-> >       {0x370c, 0x03},
-> > @@ -403,7 +407,7 @@ static struct regval_list ov5647_2x2binned_10bpp[] =
-=3D {
-> >       {0x4800, 0x24},
-> >       {0x3503, 0x03},
-> >       {0x3820, 0x41},
-> > -     {0x3821, 0x07},
-> > +     {0x3821, 0x01},
-> >       {0x350a, 0x00},
-> >       {0x350b, 0x10},
-> >       {0x3500, 0x00},
-> > @@ -419,7 +423,7 @@ static struct regval_list ov5647_640x480_10bpp[] =
-=3D {
-> >       {0x3035, 0x11},
-> >       {0x3036, 0x46},
-> >       {0x303c, 0x11},
-> > -     {0x3821, 0x07},
-> > +     {0x3821, 0x01},
-> >       {0x3820, 0x41},
-> >       {0x370c, 0x03},
-> >       {0x3612, 0x59},
-> > @@ -935,6 +939,26 @@ static const struct v4l2_subdev_video_ops ov5647_s=
-ubdev_video_ops =3D {
-> >       .s_stream =3D             ov5647_s_stream,
-> >  };
-> >
-> > +/*
-> > + * This function returns the mbus code for the current settings of the=
- HFLIP
-> > + * and VFLIP controls.
-> > + */
-> > +static u32 ov5647_get_mbus_code(struct v4l2_subdev *sd)
-> > +{
-> > +     struct ov5647 *sensor =3D to_sensor(sd);
-> > +     /* The control values are only 0 or 1. */
-> > +     int index =3D  sensor->hflip->val | (sensor->vflip->val << 1);
-> > +
-> > +     static const u32 codes[4] =3D {
-> > +             MEDIA_BUS_FMT_SGBRG10_1X10,
-> > +             MEDIA_BUS_FMT_SBGGR10_1X10,
-> > +             MEDIA_BUS_FMT_SRGGB10_1X10,
-> > +             MEDIA_BUS_FMT_SGRBG10_1X10
-> > +     };
-> > +
-> > +     return codes[index];
-> > +}
-> > +
-> >  static int ov5647_enum_mbus_code(struct v4l2_subdev *sd,
-> >                                struct v4l2_subdev_state *sd_state,
-> >                                struct v4l2_subdev_mbus_code_enum *code)
-> > @@ -942,7 +966,7 @@ static int ov5647_enum_mbus_code(struct v4l2_subdev=
- *sd,
-> >       if (code->index > 0)
-> >               return -EINVAL;
-> >
-> > -     code->code =3D MEDIA_BUS_FMT_SBGGR10_1X10;
-> > +     code->code =3D ov5647_get_mbus_code(sd);
-> >
-> >       return 0;
-> >  }
-> > @@ -953,7 +977,7 @@ static int ov5647_enum_frame_size(struct v4l2_subde=
-v *sd,
-> >  {
-> >       const struct v4l2_mbus_framefmt *fmt;
-> >
-> > -     if (fse->code !=3D MEDIA_BUS_FMT_SBGGR10_1X10 ||
-> > +     if (fse->code !=3D ov5647_get_mbus_code(sd) ||
-> >           fse->index >=3D ARRAY_SIZE(ov5647_modes))
-> >               return -EINVAL;
-> >
-> > @@ -986,6 +1010,8 @@ static int ov5647_get_pad_fmt(struct v4l2_subdev *=
-sd,
-> >       }
-> >
-> >       *fmt =3D *sensor_format;
-> > +     /* The code we pass back must reflect the current h/vflips. */
-> > +     fmt->code =3D ov5647_get_mbus_code(sd);
-> >       mutex_unlock(&sensor->lock);
-> >
-> >       return 0;
-> > @@ -1033,6 +1059,8 @@ static int ov5647_set_pad_fmt(struct v4l2_subdev =
-*sd,
-> >                                        exposure_def);
-> >       }
-> >       *fmt =3D mode->format;
-> > +     /* The code we pass back must reflect the current h/vflips. */
-> > +     fmt->code =3D ov5647_get_mbus_code(sd);
-> >       mutex_unlock(&sensor->lock);
-> >
-> >       return 0;
-> > @@ -1208,6 +1236,25 @@ static int ov5647_s_exposure(struct v4l2_subdev =
-*sd, u32 val)
-> >       return ov5647_write(sd, OV5647_REG_EXP_LO, (val & 0xf) << 4);
-> >  }
-> >
-> > +static int ov5647_s_flip(struct v4l2_subdev *sd, u16 reg, u32 ctrl_val)
-> > +{
-> > +     int ret;
-> > +     u8 reg_val;
-> > +
-> > +     /* Set or clear bit 1 and leave everything else alone. */
-> > +     ret =3D ov5647_read(sd, reg, &reg_val);
-> > +     if (ret =3D=3D 0) {
-> > +             if (ctrl_val)
-> > +                     reg_val |=3D 2;
-> > +             else
-> > +                     reg_val &=3D ~2;
-> > +
-> > +             ret =3D ov5647_write(sd, reg, reg_val);
-> > +     }
-> > +
-> > +     return ret;
-> > +}
-> > +
-> >  static int ov5647_s_ctrl(struct v4l2_ctrl *ctrl)
-> >  {
-> >       struct ov5647 *sensor =3D container_of(ctrl->handler,
-> > @@ -1270,6 +1317,14 @@ static int ov5647_s_ctrl(struct v4l2_ctrl *ctrl)
-> >               /* Read-only, but we adjust it based on mode. */
-> >               break;
-> >
-> > +     case V4L2_CID_HFLIP:
-> > +             /* There's an in-built hflip in the sensor, so account fo=
-r that here. */
-> > +             ov5647_s_flip(sd, OV5647_REG_HFLIP, !ctrl->val);
-> > +             break;
-> > +     case V4L2_CID_VFLIP:
-> > +             ov5647_s_flip(sd, OV5647_REG_VFLIP, ctrl->val);
-> > +             break;
->=20
-> The modes definition used to set
->=20
->         0x3820 =3D 0x00
->         0x3821 =3D 0x06
->=20
-> Is this the built-in hflip ?
->=20
-> Or does it mean that setting the registers value to 1 'disabled' flips ?
->=20
-
-Yes, this particular sensor flips the image horizontally if 0x3820 =3D 0x00,
-resulting in a mirrored image.
-
-But now that userspace can control flips, I am a bit confused on how to
-report this in the controls.
-
-> > +
-> >       default:
-> >               dev_info(&client->dev,
-> >                        "Control (id:0x%x, val:0x%x) not supported\n",
-> > @@ -1341,6 +1396,16 @@ static int ov5647_init_controls(struct ov5647 *s=
-ensor, struct device *dev)
-> >                                    ARRAY_SIZE(ov5647_test_pattern_menu)=
- - 1,
-> >                                    0, 0, ov5647_test_pattern_menu);
-> >
-> > +     sensor->hflip =3D v4l2_ctrl_new_std(&sensor->ctrls, &ov5647_ctrl_=
-ops,
-> > +                                       V4L2_CID_HFLIP, 0, 1, 1, 0);
-> > +     if (sensor->hflip)
-> > +             sensor->hflip->flags |=3D V4L2_CTRL_FLAG_MODIFY_LAYOUT;
->=20
-> I wonder if hflip is enabled by default we shouldn't register the
-> control with default value of 1 ?
->=20
-
-My preference is to let the driver toggle the value for HFLIP before
-writing to the sensor, as it is done currently in this patch.
-
-This makes this sensor behave like others, where you get a normal
-non-mirrored image when you set HFLIP =3D 0, and mirrored if HFLIP =3D 1.
-
-The alternative is to keep the driver transparent by reporting the register
-values as-is in the control. In that case, we should make horizontal_flip =
-=3D
-1 the default value for the control. But I'm not aware if any userspace
-applications will override the default value resulting in bad experience
-for the users.
-
-WDYT?
-
-Thanks,
-    Jai
-
-> > +
-> > +     sensor->vflip =3D v4l2_ctrl_new_std(&sensor->ctrls, &ov5647_ctrl_=
-ops,
-> > +                                       V4L2_CID_VFLIP, 0, 1, 1, 0);
-> > +     if (sensor->vflip)
-> > +             sensor->vflip->flags |=3D V4L2_CTRL_FLAG_MODIFY_LAYOUT;
-> > +
-> >       v4l2_fwnode_device_parse(dev, &props);
-> >
-> >       v4l2_ctrl_new_fwnode_properties(&sensor->ctrls, &ov5647_ctrl_ops,
-> >
-> > --
-> > 2.51.0
-> >
