@@ -1,340 +1,187 @@
-Received: from CY7PR03CU001.outbound.protection.outlook.com (mail-westcentralusazon11010015.outbound.protection.outlook.com [40.93.198.15])
+Received: from CH4PR04CU002.outbound.protection.outlook.com (mail-northcentralusazon11013056.outbound.protection.outlook.com [40.107.201.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A96FD31D754;
-	Wed, 12 Nov 2025 11:57:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.93.198.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C837B3176E0;
+	Wed, 12 Nov 2025 12:12:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.201.56
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762948635; cv=fail; b=N5KV7LHOMmALuDYokHituJhzbNY1dfDmHi5aFi19aXY77VeXaeoY+7+Y2oolqBKdbDKGXkLSC5yWLR+jsxa6WmbyUwJL+tFhf+/a7YGsVGCTaPKRjDQDpftGbEU+x6N8J40lcojdF7xbB2dZIE/oMl9Ug7ZE+Xq+4gIg/FH+Tsc=
+	t=1762949577; cv=fail; b=mzXU+8YhO7+FLHT93xYrIePZjKUJ/4V77+QNSVpFiU33rsIDBE+CRiIpBB4tFDeHWCBm83sJ/mzgEJWbVqeVbFvjuqzSqUdt+dPIPmjpu80H6dEwhAss3jHBO/7d7eRueOyxtcbCT2siiDSyuGDDLolKW54BWF1JfGUvdY2dGi8=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762948635; c=relaxed/simple;
-	bh=Nr1PrbXwMuX0nSCp7TA9WI7crkAUq7SkOU9CyUX0UnY=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=Jm1AKnQB2jvhC0lon+ukK6JTBcQiYvgy5oGqwYLlyITia3dZyAfMvSiaCSNXUqhTVnuvuQMMcXLwLlZG3vBBGKq3YnHuIa+msqfhjcfU/Ko1y59zzfzQ05qVvcOKEC8SyvzD6p+QVzHVTff1hk1bZR/7NVdXTIAigPx3OC62s8s=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com; spf=pass smtp.mailfrom=ti.com; dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b=GEDuGhhc; arc=fail smtp.client-ip=40.93.198.15
+	s=arc-20240116; t=1762949577; c=relaxed/simple;
+	bh=3QCX3xpOpAtuqSv5jL82xR2YMZo3nMUTzE/3uRhkVZ8=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=neq8JSCnQ1pzGFFZCvuXn+K4ZwMo+VO6Vos6qqzU0fCZOD9ihEAXDWlE5y/XLtgg08zan+ck+FqogEpQe3YaWXMZSz3B9Ofte2dzb1pU8oyzvLrIXQbrFgUD5zXkoJ76t1bQDUqaF0ADTMwT9iOLqkQYJ6VKDoOU1yd8gqTP5uE=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com; spf=pass smtp.mailfrom=ti.com; dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b=ff2O0KeH; arc=fail smtp.client-ip=40.107.201.56
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ti.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="GEDuGhhc"
+	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="ff2O0KeH"
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=RUgiG3UuQA+kUD0fsQJHF1l/vhl0nSj0yXSoxYSG+csq3Fb/h6Bs7v6O/V/lmJGZBTi0S1XzvGbXTaB2Zl+1TyeK9Y3Gl/TJH+UGaug2krV/QUoNTtQZc6/ANSE45IZaf1aCJ7xXfk9j8yBU3qzFF9xWM+sx8TmEGgk6qRETKJ7NnFzP3B/RY/Aw/lnxq2+OF+rqiIjr1GkD4Yp+DwcvrOYQi1r+3diqlSOvwU+y+EELmxUzLHE/q7t19AJ+5vwK/wOl9rNI22cXn8AxBchcsaqPsvbe7WwdhpBq5/6oc6J/icGux7T4vuCEKiJBXHO+GgsDINllepJfKMr2ao9QaA==
+ b=XNhykh/K31scJr0Xeo2uQwBIJMZav23Sw+HDiiHPoQF5dexiYqUFqxsGFfaKTkND0oCi0W7lboc6NwYBxY09lXGR12/+UKuBcHw4Fgoa9UqkukosNAIHXkze7fb7siN1RawwQWYyYFoPu9Yg6lJOWHbCljje0Hq9QdN9HXL04aX6df1hZmJO7stM9B1/MqeaX63qinFMQN9DP1OkXCizOSGDLS+8RJQTZiD5+ohlvcYOUlvvsVhZEWDnBeUdzCqyvhtbMka9zfR5ipkpnlewboog+QkSaAHtibHqanPiQxnavIFuj9YAxMzfPvo7rlSLh8b6KrssitDXLiFvAb7sCA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=g0ywUqN8SSdsa3kItg25Z75RSMbsaix8dHLJhcXwP4E=;
- b=bLP7VttlMv6i4+U/v3x+vC8mdIUvRfkO8Yp6QrXTBXLHt7U2RxfKv/klLmYGRSmS5VYzxxxQzGUCviyASp1OaBTF2f1FiNpWJpLXpkZb5fkwplZAlanT0aHUuQ72SGL2pMnPV92sWOMUAhTV6kf17PWRdDIQMSWNPVnlKgvI4zhqhHpkcj7V3zakVlrXpmUfGKSZ6geK/svD3hmDy9O8SHKo/9azQYc8atPMJOKrrt6JqZiwopqFs8AO5r0sL/hvFRd9vga7nlpEka9+viLAIojkdA0495OaDYU9X26FN9rvjQu7Hnm0NEAA/YM7yI2POLfdQpHEpv6LJNiqENqsqw==
+ bh=roz4TLf//9hbY+fQ0h5ew8qbVt1wKQ6zi7dge/IokNQ=;
+ b=j/r/eIzA7fGi38UF7vd/pJRlSq9QDvf5UVxKi3UwWZKKubq77sakYUB93l04AH7qlJ118reCMNrJN65qlOLDESCCHzdi1kSsj4RKqkN23Qpsf8YvOLa2eQCD7lPZPrz7ukzKzo1yANzNeYfs871zLU3LD0pGO8R9oXdlVppCLWLkkytDg6L6PrsQesQIY22nQc0Z5GqBaFkZwVrJ6mCFwJWgga1r80MhrgaPWLU2n4pGaQ09IxDI6faY4lzy4GZk5vrLKBf/bY5Di01bO+mYgh1Tqv91MBe3RikDVJAGBixqzqB/ADArzwRxxbX03OO45+l0b00EtDxwwUa+azguig==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 198.47.23.195) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=ti.com;
+ 198.47.21.194) smtp.rcpttodomain=lists.linaro.org smtp.mailfrom=ti.com;
  dmarc=pass (p=quarantine sp=none pct=100) action=none header.from=ti.com;
  dkim=none (message not signed); arc=none (0)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=g0ywUqN8SSdsa3kItg25Z75RSMbsaix8dHLJhcXwP4E=;
- b=GEDuGhhcbeuP2Pqhik0r361/s49nT3N5dZSDjdGGdZBVYxTlU+W8vBeNUVP3znKpwPbv6J7vk1ZxXL/M/qPouzGuc10eQ3Mma+VG0k2YN6GPjRdf8s9YMBC/+156W0wuB4FzMDFq9tUnTtcZYYGWj7OAh77IhX4j/BvHtMbKINs=
-Received: from CH0PR03CA0262.namprd03.prod.outlook.com (2603:10b6:610:e5::27)
- by IA4PR10MB8588.namprd10.prod.outlook.com (2603:10b6:208:569::6) with
+ bh=roz4TLf//9hbY+fQ0h5ew8qbVt1wKQ6zi7dge/IokNQ=;
+ b=ff2O0KeHOZ4k52cpw7UtMYKM9seEh1/aaxn+AtFKqhYKcE7n6O6M4r1JFjJ69I8BR1hyu5rupHKKoVKpk3JoxK2bsEYTGMy98Y9mssXfvbawmPH9L5Qf173uQopg12TdPxhOTsRy8okN+anbgRvU1CQNNUR3Kf6Kx0J6u2fuydQ=
+Received: from SN6PR08CA0029.namprd08.prod.outlook.com (2603:10b6:805:66::42)
+ by CO1PR10MB4724.namprd10.prod.outlook.com (2603:10b6:303:96::22) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9320.16; Wed, 12 Nov
- 2025 11:57:10 +0000
-Received: from CH2PEPF0000013D.namprd02.prod.outlook.com
- (2603:10b6:610:e5:cafe::de) by CH0PR03CA0262.outlook.office365.com
- (2603:10b6:610:e5::27) with Microsoft SMTP Server (version=TLS1_3,
- cipher=TLS_AES_256_GCM_SHA384) id 15.20.9320.15 via Frontend Transport; Wed,
- 12 Nov 2025 11:57:07 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 198.47.23.195)
+ 2025 12:12:52 +0000
+Received: from SN1PEPF0002BA50.namprd03.prod.outlook.com
+ (2603:10b6:805:66:cafe::6f) by SN6PR08CA0029.outlook.office365.com
+ (2603:10b6:805:66::42) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.20.9298.16 via Frontend Transport; Wed,
+ 12 Nov 2025 12:12:52 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 198.47.21.194)
  smtp.mailfrom=ti.com; dkim=none (message not signed) header.d=none;dmarc=pass
  action=none header.from=ti.com;
 Received-SPF: Pass (protection.outlook.com: domain of ti.com designates
- 198.47.23.195 as permitted sender) receiver=protection.outlook.com;
- client-ip=198.47.23.195; helo=lewvzet201.ext.ti.com; pr=C
-Received: from lewvzet201.ext.ti.com (198.47.23.195) by
- CH2PEPF0000013D.mail.protection.outlook.com (10.167.244.69) with Microsoft
+ 198.47.21.194 as permitted sender) receiver=protection.outlook.com;
+ client-ip=198.47.21.194; helo=flwvzet200.ext.ti.com; pr=C
+Received: from flwvzet200.ext.ti.com (198.47.21.194) by
+ SN1PEPF0002BA50.mail.protection.outlook.com (10.167.242.73) with Microsoft
  SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.9320.13 via Frontend Transport; Wed, 12 Nov 2025 11:57:09 +0000
-Received: from DLEE206.ent.ti.com (157.170.170.90) by lewvzet201.ext.ti.com
- (10.4.14.104) with Microsoft SMTP Server (version=TLS1_2,
+ 15.20.9320.13 via Frontend Transport; Wed, 12 Nov 2025 12:12:51 +0000
+Received: from DFLE205.ent.ti.com (10.64.6.63) by flwvzet200.ext.ti.com
+ (10.248.192.31) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.20; Wed, 12 Nov
- 2025 05:57:06 -0600
-Received: from DLEE211.ent.ti.com (157.170.170.113) by DLEE206.ent.ti.com
- (157.170.170.90) with Microsoft SMTP Server (version=TLS1_2,
+ 2025 06:12:45 -0600
+Received: from DFLE212.ent.ti.com (10.64.6.70) by DFLE205.ent.ti.com
+ (10.64.6.63) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.20; Wed, 12 Nov
- 2025 05:57:06 -0600
-Received: from lelvem-mr06.itg.ti.com (10.180.75.8) by DLEE211.ent.ti.com
- (157.170.170.113) with Microsoft SMTP Server (version=TLS1_2,
+ 2025 06:12:44 -0600
+Received: from lelvem-mr06.itg.ti.com (10.180.75.8) by DFLE212.ent.ti.com
+ (10.64.6.70) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.20 via Frontend
- Transport; Wed, 12 Nov 2025 05:57:06 -0600
-Received: from ws.dhcp.ti.com (ws.dhcp.ti.com [172.24.233.149])
-	by lelvem-mr06.itg.ti.com (8.18.1/8.18.1) with ESMTP id 5ACBsxc82638977;
-	Wed, 12 Nov 2025 05:57:00 -0600
-From: Rishikesh Donadkar <r-donadkar@ti.com>
-To: <jai.luthra@linux.dev>, <laurent.pinchart@ideasonboard.com>,
-	<mripard@kernel.org>
-CC: <r-donadkar@ti.com>, <y-abhilashchandra@ti.com>, <devarsht@ti.com>,
-	<s-jain1@ti.com>, <vigneshr@ti.com>, <mchehab@kernel.org>, <robh@kernel.org>,
-	<krzk+dt@kernel.org>, <p.zabel@pengutronix.de>, <conor+dt@kernel.org>,
-	<sakari.ailus@linux.intel.com>, <hverkuil-cisco@xs4all.nl>,
-	<tomi.valkeinen@ideasonboard.com>, <jai.luthra@ideasonboard.com>,
-	<changhuang.liang@starfivetech.com>, <jack.zhu@starfivetech.com>,
-	<sjoerd@collabora.com>, <dan.carpenter@linaro.org>,
-	<hverkuil+cisco@kernel.org>, <linux-kernel@vger.kernel.org>,
-	<linux-media@vger.kernel.org>, <devicetree@vger.kernel.org>
-Subject: [PATCH v8 18/18] media: ti: j721e-csi2rx: Support system suspend using pm_notifier
-Date: Wed, 12 Nov 2025 17:24:59 +0530
-Message-ID: <20251112115459.2479225-19-r-donadkar@ti.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20251112115459.2479225-1-r-donadkar@ti.com>
-References: <20251112115459.2479225-1-r-donadkar@ti.com>
+ Transport; Wed, 12 Nov 2025 06:12:44 -0600
+Received: from [172.24.231.164] (chintan-thinkstation-p360-tower.dhcp.ti.com [172.24.231.164])
+	by lelvem-mr06.itg.ti.com (8.18.1/8.18.1) with ESMTP id 5ACCCc4v2661507;
+	Wed, 12 Nov 2025 06:12:39 -0600
+Message-ID: <6eb4e9c0-debe-4643-a5b6-bd5ef0f72070@ti.com>
+Date: Wed, 12 Nov 2025 17:42:38 +0530
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH net-next v2 0/7] net: ethernet: ti: am65-cpsw: add AF_XDP
+ zero copy support
+To: Jakub Kicinski <kuba@kernel.org>, Roger Quadros <rogerq@kernel.org>
+CC: Siddharth Vadapalli <s-vadapalli@ti.com>, Andrew Lunn
+	<andrew+netdev@lunn.ch>, "David S. Miller" <davem@davemloft.net>, "Eric
+ Dumazet" <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>, "Alexei
+ Starovoitov" <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
+	"Jesper Dangaard Brouer" <hawk@kernel.org>, John Fastabend
+	<john.fastabend@gmail.com>, Sumit Semwal <sumit.semwal@linaro.org>,
+	=?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>, Stanislav
+ Fomichev <sdf@fomichev.me>, "Simon Horman" <horms@kernel.org>, <srk@ti.com>,
+	Meghana Malladi <m-malladi@ti.com>, <netdev@vger.kernel.org>,
+	<linux-kernel@vger.kernel.org>, <bpf@vger.kernel.org>,
+	<linux-media@vger.kernel.org>, <dri-devel@lists.freedesktop.org>,
+	<linaro-mm-sig@lists.linaro.org>
+References: <20251109-am65-cpsw-xdp-zc-v2-0-858f60a09d12@kernel.org>
+ <20251111171848.1a4c8c03@kernel.org>
+Content-Language: en-US
+From: Chintan Vankar <c-vankar@ti.com>
+In-Reply-To: <20251111171848.1a4c8c03@kernel.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
 X-C2ProcessedOrg: 333ef613-75bf-4e12-a4b1-8e3623f5dcea
 X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CH2PEPF0000013D:EE_|IA4PR10MB8588:EE_
-X-MS-Office365-Filtering-Correlation-Id: a4496a03-d470-4e85-1571-08de21e29bd9
+X-MS-TrafficTypeDiagnostic: SN1PEPF0002BA50:EE_|CO1PR10MB4724:EE_
+X-MS-Office365-Filtering-Correlation-Id: 4b88ebc5-613f-45a6-a1c5-08de21e4cd3a
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|82310400026|7416014|376014|36860700013|1800799024;
+	BCL:0;ARA:13230040|1800799024|82310400026|36860700013|7416014|376014;
 X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?zirHu1hraz5Bf7h2gOH4qf2nNkHylwE2P9hV+0Q0L9Tdxy9Y9bqb+EjxTBj3?=
- =?us-ascii?Q?LVlipqyCTaOfXtCIjS0gTjFWRGvXLXsE0OASH/4RIDOEj6n9oix+GOPfp1QM?=
- =?us-ascii?Q?730AxYTQTM13qOfY5a7PmhAnCPT+sbs3/GPwU4YkHHLrvliBZ6qTa/ztXFwW?=
- =?us-ascii?Q?4sFMK8gQq38s7jWsT1WmZbsFK+8JEJ1P0ZVYeWppHjikGYnffBdzSb3oZeZZ?=
- =?us-ascii?Q?MTqmrdbKKZFQYGPm89EmaDHJg4i91178IUqUiBuN7/7VBRy2ewDFAMsrhhB8?=
- =?us-ascii?Q?M8oQC90vRpMOs/BuwZSaFlF4B0Y5itNzyeNMaZ/nfoBNod6UTF9zjDtTVMLx?=
- =?us-ascii?Q?TkBcjvzYXjYgm2cy3XUWZRCG2hPabECPeE1PuOMhe42LnCkoikcv/7RypFfe?=
- =?us-ascii?Q?6D9FdSXS5ON/Sio3VvMPPuTL7LTEYou8Nm9DsM9JMVRCz/Qc/FvKyyq1xH4D?=
- =?us-ascii?Q?rXBoDCyfeMO39jio+baPk4wrcicI9Wd62uyEXwfYYBc86WStQzVRrsENGwzX?=
- =?us-ascii?Q?RogKTZ9SVygFWn/wdz5WGgJy/Bvarr8mtLarbBIWlRIXdUHeHEDTcAElGGA3?=
- =?us-ascii?Q?4KNke9/dE9Sbeo/gNywDTu1q5ESeOYIk19G4tXHSkS7gpUFHQuOrLWjqQfCk?=
- =?us-ascii?Q?1uvsrSr4ti7V1dx9bhZw/sMhWL9h3HER0ADfpka2+fadO0/TTlXuqQYXFaVy?=
- =?us-ascii?Q?9rmksz40VDqOSqHDmINdqHsEW9cKpVgjwc5+c07v+o8X1SFAaLwWtoUFyrEf?=
- =?us-ascii?Q?wta3g9zkIb//VECbcNRIH8MO7AyE55ww299ERXRuY/PaZTLn9hKfYAdCZvgl?=
- =?us-ascii?Q?1rawPY10zpd5LR8HzEvX9CvpxONGM6lqJFPEQgOKMOtrgR6WqeqDcTtLPH65?=
- =?us-ascii?Q?/+i7terrwwmEJTJ70UEMzskHko723UH/rQC8Q9aerMNeQxAAZQKgT2iXMByV?=
- =?us-ascii?Q?73921chgXYpsFC/rMc3+9w+lDDMhpD7is/DECR/cZj7ojpTHT2G1Q/qdG2fs?=
- =?us-ascii?Q?UCnOHNwY3yneMH3wJqMUi7wIx7wXUFY0tCZCI/kV75IfpXJk9DGHX0a24BfZ?=
- =?us-ascii?Q?RB9jlTkbTayryo6AFP2TgJ4bkWwgZZ5QbqPJDPwrhgKIn9lRN3Xy1RRRNf5a?=
- =?us-ascii?Q?hn5eQGqTLLclLCCg1WAOsJJVNDPXuMoTVDR4Ogec+VIo3OIdCoLGStGPz2MM?=
- =?us-ascii?Q?bJdWawy8uqJ6P240JcormuIGLUttEk5uxMAwRqL734UK7a6RGiJotDkyX2lm?=
- =?us-ascii?Q?gnS2OV/Dviz4xUynBaTolLRbDrCnorg5QdBWIKKvao7Qtc8rteG5qIL4SSPG?=
- =?us-ascii?Q?taJc39gBrPTIDZ2gXYSoQfXd8zE1Nhg9IxZrmUvZ9QJQ/ca1a3ka2Hhebjxu?=
- =?us-ascii?Q?ZNzltE5oFPMmd+RwaVZJQNM+0DDIt3MVDBybTkHalO0q0W61wOJzPNFfZY30?=
- =?us-ascii?Q?L+JVY3KGc/N2kXrl6+axnwWcrEJdFdWIc31pI0NQEdcfnVNLJCKaKZ+KYO/g?=
- =?us-ascii?Q?Gj4VfsYUGH8k6yaCjrXuTVhPD7z2IRhYKfPGmWLXOFxQIYRWE1RpEnOc1+xz?=
- =?us-ascii?Q?j4FrEGxi05UnImx9704=3D?=
+	=?utf-8?B?MzVrTmNxeFlKOXZXS0dvaDhpYXBCZklXWXhiblEvSEpieHpkakVoNUVZYW5X?=
+ =?utf-8?B?a25mM1JUbWptNHEzOTI5bytqMnhGMjMyamlUTVd3VmJWc2RYUjNIbU1GaTcv?=
+ =?utf-8?B?MVNyb2c2YkRzeDN4NUxMK1VJK0lsWlVhVWNvd09iNXQzV3Y3NUVtL1Fxdy9R?=
+ =?utf-8?B?enVocEJjZ1NmY0Z6TmpMZithb3paN1dRTlNKWlErL1pKWFpWUDFuU25tdlVw?=
+ =?utf-8?B?enZRUU9DdkFoVCtvblZFOTlkLzZ6cUVsODFwQUpmR1RUazZodjF1b29GTm8y?=
+ =?utf-8?B?VElnaTN2UXFrNkxia3RFZXZIQXljdmVBT0FhalhwdUZEZDdBMm1USDFpZkth?=
+ =?utf-8?B?NU5GMkN0QWhiNm5kSVhpOGdsZloybmRac2ttZldGWnBWUjZNZ3NsRVRNc1hJ?=
+ =?utf-8?B?eGZBNEVsRGJqM3gydll4UWRNYlNnbWJqcnl1UHQ2aXhBVzJtL29ST3RYUUtE?=
+ =?utf-8?B?dXdWSzQyaXNGTWNIMkdQWExDL2xtWmxtVEVQWUFmSVdUbEk5amhWUmcxd2Mw?=
+ =?utf-8?B?SHN5dDNoWUY3SzNlV1ZDaUU2OUIwQ3RyeC8yeXUrQ3haczRHc1ljaXNtb1F0?=
+ =?utf-8?B?dE8xTytOSStlVWdqRG1VQm9OOUFGakUwclV1Y3pGcGF1OU9ZS0dvQlEzdWZG?=
+ =?utf-8?B?SWsvaXZnK2NKaUVZM21HMjJ3VEFRS0dWd2pRMEltMTcwT1FnNmVhMkRKbDNy?=
+ =?utf-8?B?NW5HYitLQm9sWlQ4VTdubCtTYm5EVllMYVlMYURGaEVLT3hXN1dnTTBuS3Zi?=
+ =?utf-8?B?TVJQYUhHQnhWWGdwTHovSFJTUmNTWTRBN2NjTkdwWSt5ZXBiUDJ2NkNFRUtG?=
+ =?utf-8?B?aDhYZnZkQjFIazdXeVpqZEE0U1ZXMUZLWE5rd2xiSzE3MmtOciswNG9nSVFZ?=
+ =?utf-8?B?N0hvdGlsTll5M0tGL1BxamVTYU5YTUdoNWhxaE0yS1NUUG94b2hzZytrVmxw?=
+ =?utf-8?B?NE5YZ29JZkphRjJlUnFQQUxxZkNSZWphTUY3djF3VmgyTTR0OGEvRHl4VzRw?=
+ =?utf-8?B?T1lybTgvcTB0Vmd4RmZGZUdXSjZXZ2ZFdHBTZis2clZCOXBhekxVMnV1a1V0?=
+ =?utf-8?B?a3pKTmJLNS9aallqK1hIYmdBNUFGN3l6dEM4Nkl4aTBzZTdWSDNNeVl1amlF?=
+ =?utf-8?B?Rm9mbFFpMlpOdU9xc3BEWlB5ZjJEUlZQUVBaY0E5K2t3bGFIM0xqTm9KbEp6?=
+ =?utf-8?B?cS9vWGdTcVJ1OVdCZGRrSFNyZm9uSW92NmNkTGthcXcvWDZoRXI0dFJlZmZ0?=
+ =?utf-8?B?WjhqRWZjL2hhTTcrcUkwT2E3UlNYTk5WMzAycGc1cG9Qcy9ndDdLQkJpZWFE?=
+ =?utf-8?B?UnZuOW40aEZIeHRMa3RzUWMxR1N1c1lqTFZobU5tdFE1WGpkdU05WFN5TmpV?=
+ =?utf-8?B?KzdXcStLdm9BZ3FmVGZ4UTlNa3BWanBvVjVIUVZqN3JRVkRSbkRFNm1aRFM3?=
+ =?utf-8?B?TDZsODc5TW9CSnVlNTY0ZkVNdEVrWjVPY1BDbGRoRjlPQ2xOcW1aMFpOYTZG?=
+ =?utf-8?B?SmVpMVdWNzBqeUpZWUd0bVVtb2FOanRmcjVoOXZnRjRaSkRJdXduQnpwYTM2?=
+ =?utf-8?B?VVRCWTdsKzIwSHYyM1JTZXZWZ0NxZFpjT1ZFK1h0azlpVTRSbkI2ZWc3T3hG?=
+ =?utf-8?B?bVZHc1lQY2JoeEFWUXgraEFMcU1SOE9SUldOMmI3NXlRclBiYWxZbC91anpz?=
+ =?utf-8?B?WmFXaUh6SzlWdnNwT1dMT3dNSXN3b21FdGNoK2lrYlN0RmRYTU9uZ2xOK0ZR?=
+ =?utf-8?B?Z0cxMWxKdFFqTmN2eFVVN1lQdWhDRk9hWnZMUFlSNitOcXU2TmJSWEVpbE9O?=
+ =?utf-8?B?cXp6TVFPc2ZKclhpYmcveXFRWnU5c2FJcVhWVWtQRjhtTnlndlBSa3cyN05Y?=
+ =?utf-8?B?RHZIQ292VWhhaElGeHM5UG5LSWxKTmlMTDJDZUgxeFlFZTV1OFZ2RC9GYlZx?=
+ =?utf-8?B?YVZmaHkrU2ovZEI3SXlwbWJuK0FKVWI1emgxOGd4YjhMMEdVdmtLNTQ2Vzla?=
+ =?utf-8?B?Uk5JQkVHYWNlL1RlaTVYcTZ0MDlHT1FxRldZRVR2N0M5Ukx1dzVqR0VZTEp5?=
+ =?utf-8?B?U1FYelNaN0FGSnRjMlVnSGdXMCtQc293NmlCYi80NTRYVHJ3Zkx6Y2ZKYUdo?=
+ =?utf-8?Q?oPGY=3D?=
 X-Forefront-Antispam-Report:
-	CIP:198.47.23.195;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:lewvzet201.ext.ti.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(82310400026)(7416014)(376014)(36860700013)(1800799024);DIR:OUT;SFP:1101;
+	CIP:198.47.21.194;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:flwvzet200.ext.ti.com;PTR:ErrorRetry;CAT:NONE;SFS:(13230040)(1800799024)(82310400026)(36860700013)(7416014)(376014);DIR:OUT;SFP:1101;
 X-OriginatorOrg: ti.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Nov 2025 11:57:09.3422
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Nov 2025 12:12:51.2090
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: a4496a03-d470-4e85-1571-08de21e29bd9
+X-MS-Exchange-CrossTenant-Network-Message-Id: 4b88ebc5-613f-45a6-a1c5-08de21e4cd3a
 X-MS-Exchange-CrossTenant-Id: e5b49634-450b-4709-8abb-1e2b19b982b7
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=e5b49634-450b-4709-8abb-1e2b19b982b7;Ip=[198.47.23.195];Helo=[lewvzet201.ext.ti.com]
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=e5b49634-450b-4709-8abb-1e2b19b982b7;Ip=[198.47.21.194];Helo=[flwvzet200.ext.ti.com]
 X-MS-Exchange-CrossTenant-AuthSource:
-	CH2PEPF0000013D.namprd02.prod.outlook.com
+	SN1PEPF0002BA50.namprd03.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Anonymous
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA4PR10MB8588
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CO1PR10MB4724
 
-From: Jai Luthra <jai.luthra@ideasonboard.com>
+Hello Jakub,
 
-As this device is the "orchestrator" for the rest of the media
-pipeline, we need to stop all on-going streams before system suspend and
-enable them back when the system wakes up from sleep.
+On 12/11/25 06:48, Jakub Kicinski wrote:
+> On Sun, 09 Nov 2025 23:37:50 +0200 Roger Quadros wrote:
+>> This series adds AF_XDP zero coppy support to am65-cpsw driver.
+>>
+>> Tests were performed on AM62x-sk with xdpsock application [1].
+>>
+>> A clear improvement is seen in 64 byte packets on Transmit (txonly)
+>> and receive (rxdrop).
+>> 1500 byte test seems to be limited by line rate (1G link) so no
+>> improvement seen there in packet rate. A test on higher speed link
+>> (or PHY-less setup) might be worthwile.
+>>
+>> There is some issue during l2fwd with 64 byte packets and benchmark
+>> results show 0. This issue needs to be debugged further.
+>> A 512 byte l2fwd test result has been added to compare instead.
+> 
+> It appears that the drivers/net/ethernet/ti/am65-* files do not fall
+> under any MAINTAINERS entry. Please add one or extend the existing CPSW
+> entry as the first patch of the series.
+> 
 
-Using .suspend/.resume callbacks does not work, as the order of those
-callbacks amongst various devices in the camera pipeline like the sensor,
-FPD serdes, CSI bridge etc. is impossible to enforce, even with
-device links. For example, the Cadence CSI bridge is a child device of
-this device, thus we cannot create a device link with the CSI bridge as
-a provider and this device as consumer. This can lead to situations
-where all the dependencies for the bridge have not yet resumed when we
-request the subdev to start streaming again through the .resume callback
-defined in this device.
+I am mainly working on am65-cpsw-nuss.c driver and volunteering myself
+to be the MAINTAINER of am65-cpsw-nuss.c and other CPSW drivers.
 
-Instead here we register a notifier callback with the PM framework
-which is triggered when the system is fully functional. At this point we
-can cleanly stop or start the streams, because we know all other devices
-and their dependencies are functional. A downside of this approach is
-that the userspace is also alive (not frozen yet, or just thawed), so
-the suspend notifier might complete before the userspace has completed
-all ioctls, like QBUF/DQBUF/STREAMON/STREAMOFF.
-
-Tested-by: Rishikesh Donadkar <r-donadkar@ti.com>
-Reviewed-by: Rishikesh Donadkar <r-donadkar@ti.com>
-Signed-off-by: Jai Luthra <jai.luthra@ideasonboard.com>
-Signed-off-by: Rishikesh Donadkar <r-donadkar@ti.com>
----
- .../platform/ti/j721e-csi2rx/j721e-csi2rx.c   | 128 ++++++++++++++++++
- 1 file changed, 128 insertions(+)
-
-diff --git a/drivers/media/platform/ti/j721e-csi2rx/j721e-csi2rx.c b/drivers/media/platform/ti/j721e-csi2rx/j721e-csi2rx.c
-index 21e032c64b901..dd47758d51a90 100644
---- a/drivers/media/platform/ti/j721e-csi2rx/j721e-csi2rx.c
-+++ b/drivers/media/platform/ti/j721e-csi2rx/j721e-csi2rx.c
-@@ -131,6 +131,7 @@ struct ti_csi2rx_dev {
- 	struct v4l2_subdev		*source;
- 	struct v4l2_subdev		subdev;
- 	struct ti_csi2rx_ctx		ctx[TI_CSI2RX_MAX_CTX];
-+	struct notifier_block		pm_notifier;
- 	u8				pix_per_clk;
- 	/* Buffer to drain stale data from PSI-L endpoint */
- 	struct {
-@@ -1550,6 +1551,124 @@ static int ti_csi2rx_runtime_resume(struct device *dev)
- 	return 0;
- }
- 
-+static int ti_csi2rx_suspend(struct device *dev)
-+{
-+	struct ti_csi2rx_dev *csi = dev_get_drvdata(dev);
-+	enum ti_csi2rx_dma_state state;
-+	struct ti_csi2rx_ctx *ctx;
-+	struct ti_csi2rx_dma *dma;
-+	unsigned long flags = 0;
-+	int i, ret = 0;
-+
-+	/* If device was not in use we can simply suspend */
-+	if (pm_runtime_status_suspended(dev))
-+		return 0;
-+
-+	/*
-+	 * If device is running, assert the pixel reset to cleanly stop any
-+	 * on-going streams before we suspend.
-+	 */
-+	writel(0, csi->shim + SHIM_CNTL);
-+
-+	for (i = 0; i < csi->num_ctx; i++) {
-+		ctx = &csi->ctx[i];
-+		dma = &ctx->dma;
-+
-+		spin_lock_irqsave(&dma->lock, flags);
-+		state = dma->state;
-+		spin_unlock_irqrestore(&dma->lock, flags);
-+
-+		if (state != TI_CSI2RX_DMA_STOPPED) {
-+			/* Disable source */
-+			ret = v4l2_subdev_disable_streams(&csi->subdev,
-+							  TI_CSI2RX_PAD_FIRST_SOURCE + ctx->idx,
-+							  BIT(0));
-+			if (ret)
-+				dev_err(csi->dev, "Failed to stop subdev stream\n");
-+		}
-+
-+		/* Stop any on-going streams */
-+		writel(0, csi->shim + SHIM_DMACNTX(ctx->idx));
-+
-+		/* Drain DMA */
-+		ti_csi2rx_drain_dma(ctx);
-+
-+		/* Terminate DMA */
-+		ret = dmaengine_terminate_sync(ctx->dma.chan);
-+		if (ret)
-+			dev_err(csi->dev, "Failed to stop DMA\n");
-+	}
-+
-+	return ret;
-+}
-+
-+static int ti_csi2rx_resume(struct device *dev)
-+{
-+	struct ti_csi2rx_dev *csi = dev_get_drvdata(dev);
-+	struct ti_csi2rx_ctx *ctx;
-+	struct ti_csi2rx_dma *dma;
-+	struct ti_csi2rx_buffer *buf;
-+	unsigned long flags = 0;
-+	unsigned int reg;
-+	int i, ret = 0;
-+
-+	/* If device was not in use, we can simply wakeup */
-+	if (pm_runtime_status_suspended(dev))
-+		return 0;
-+
-+	/* If device was in use before, restore all the running streams */
-+	reg = SHIM_CNTL_PIX_RST;
-+	writel(reg, csi->shim + SHIM_CNTL);
-+
-+	for (i = 0; i < csi->num_ctx; i++) {
-+		ctx = &csi->ctx[i];
-+		dma = &ctx->dma;
-+		spin_lock_irqsave(&dma->lock, flags);
-+		if (dma->state != TI_CSI2RX_DMA_STOPPED) {
-+			/* Re-submit all previously submitted buffers to DMA */
-+			list_for_each_entry(buf, &ctx->dma.submitted, list) {
-+				ti_csi2rx_start_dma(ctx, buf);
-+			}
-+			spin_unlock_irqrestore(&dma->lock, flags);
-+
-+			/* Restore stream config */
-+			ti_csi2rx_setup_shim(ctx);
-+
-+			ret = v4l2_subdev_enable_streams(&csi->subdev,
-+							 TI_CSI2RX_PAD_FIRST_SOURCE + ctx->idx,
-+							 BIT(0));
-+			if (ret)
-+				dev_err(ctx->csi->dev, "Failed to start subdev\n");
-+		} else {
-+			spin_unlock_irqrestore(&dma->lock, flags);
-+		}
-+	}
-+
-+	return ret;
-+}
-+
-+static int ti_csi2rx_pm_notifier(struct notifier_block *nb,
-+				 unsigned long action, void *data)
-+{
-+	struct ti_csi2rx_dev *csi =
-+		container_of(nb, struct ti_csi2rx_dev, pm_notifier);
-+
-+	switch (action) {
-+	case PM_HIBERNATION_PREPARE:
-+	case PM_SUSPEND_PREPARE:
-+	case PM_RESTORE_PREPARE:
-+		ti_csi2rx_suspend(csi->dev);
-+		break;
-+	case PM_POST_SUSPEND:
-+	case PM_POST_HIBERNATION:
-+	case PM_POST_RESTORE:
-+		ti_csi2rx_resume(csi->dev);
-+		break;
-+	}
-+
-+	return NOTIFY_DONE;
-+}
-+
- static const struct dev_pm_ops ti_csi2rx_pm_ops = {
- 	RUNTIME_PM_OPS(ti_csi2rx_runtime_suspend, ti_csi2rx_runtime_resume,
- 		       NULL)
-@@ -1622,6 +1741,13 @@ static int ti_csi2rx_probe(struct platform_device *pdev)
- 		goto err_notifier;
- 	}
- 
-+	csi->pm_notifier.notifier_call = ti_csi2rx_pm_notifier;
-+	ret = register_pm_notifier(&csi->pm_notifier);
-+	if (ret) {
-+		dev_err(csi->dev, "Failed to create PM notifier: %d\n", ret);
-+		goto err_notifier;
-+	}
-+
- 	pm_runtime_set_active(csi->dev);
- 	pm_runtime_enable(csi->dev);
- 	pm_request_idle(csi->dev);
-@@ -1652,6 +1778,8 @@ static void ti_csi2rx_remove(struct platform_device *pdev)
- 		ti_csi2rx_cleanup_ctx(&csi->ctx[i]);
- 
- 	ti_csi2rx_cleanup_notifier(csi);
-+	unregister_pm_notifier(&csi->pm_notifier);
-+
- 	ti_csi2rx_cleanup_v4l2(csi);
- 	mutex_destroy(&csi->mutex);
- 	dma_free_coherent(csi->dev, csi->drain.len, csi->drain.vaddr,
--- 
-2.34.1
-
+Regards,
+Chintan.
