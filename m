@@ -1,118 +1,186 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 06980288537
-	for <linux-media@vger.kernel.org>; Wed, 12 Nov 2025 10:03:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AA95020FAAB;
+	Wed, 12 Nov 2025 10:17:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762941820; cv=none; b=fctQtYWqs4cH9zZfOyBaMfUqLz/7wwNv34EKvB5SmpnTzFNPtoos7QS03QTtCAmSKHpH7Cak8pSVdHrJiq7/sf9vSsjLuhja437Nbvsbfs8gqbFZ+ouuyCZpOEgGd590Z703Phbg3xCVnaR7iZvVgxL//nunnJECie3KiqYN4YE=
+	t=1762942665; cv=none; b=nmHu6AgIGGp1XzS2L2qa3XamfvjRaXrwIHCPnAV/nm01D1hB+6OZK5EWHvN0LSkXMY+G3c9CA8XMkhEFHBSqiQFoYbEJMFR/cr962q18BDpSUQMrz9YH3RRncls/MbZCoQbkyYT7CgmSu0OdmN6Aq4NmiIkWJVqRijPQ5ljL4sU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762941820; c=relaxed/simple;
-	bh=kqvWZyDMfPMWKmWrcbacIygTAJgFRaqXqBdfcngX7Cs=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=a9ca/J0wuug+mLvjmOlPe0UwlCfoWW7gSob3ziAz6xgtRLURjGLDpo7GWKo6wlyjXzBqQqAktq92rmHwsslUx62oeUabFo4xPLI+UPo59lVVHuMPsZwPbN4syTgfCM5AfqSyXSTUCfaOxtjY4ybWWW64SEBulZnoeUdKoFruEV4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Z0IyYow9; arc=none smtp.client-ip=192.198.163.11
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
+	s=arc-20240116; t=1762942665; c=relaxed/simple;
+	bh=WpoCcavivjMt+i1lFxpN8RV/2RXIDLiJO+mUz5517PE=;
+	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
+	 In-Reply-To:Content-Type; b=UAHgnGgTaOkbIDtDGsdUq4sdj6ypF6xGiK6ux0F7GXu2NdQotAG4grddeK6I6C5hZ2jbuT3rLVm0912XouEg1tw6QCEbt27XwAIakup5F3+v4ivwEzYRyH/8oU/AyQylfZQqiDMfG3VQMWk5TZ9c9+Rla1i7zvK7M7f7vuCvCPo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kAvbH9QI; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Z0IyYow9"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1762941819; x=1794477819;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=kqvWZyDMfPMWKmWrcbacIygTAJgFRaqXqBdfcngX7Cs=;
-  b=Z0IyYow9RiJOPjSjB6T6nmVoTE301t0UpHOMD8CSt80axqNa20vVenBD
-   rxkyXvD1F+5iQIIAM2AhhwOak1W3WykciWrbuLmSQi0/PPRCuk/Tis4K7
-   hp30nrkM3TvUKPfcpN2zby71n9J+0jTvvZC9GkStoYc2d04uH1usUU97b
-   B5Xu2OhHcHmiR/3/19YZptkA/UlnYP2nNecpuaVevIf1/+s4/8YOJB9uY
-   9pR2A5bgp5+iV2NnGwLtK5ZdjzSU1Ei+Ldph4ZRBu0Ph/MWHjeH5plC+S
-   77PKlbzUQ9xLvEuBiQF+96NE/TgU/xrHV3fBLUNoenLir32srr4dzhCBF
-   Q==;
-X-CSE-ConnectionGUID: AeEpfld4SMC0oZOgqn8UrQ==
-X-CSE-MsgGUID: CqELQuYhTGu/1eGCvxRC6g==
-X-IronPort-AV: E=McAfee;i="6800,10657,11610"; a="75616167"
-X-IronPort-AV: E=Sophos;i="6.19,299,1754982000"; 
-   d="scan'208";a="75616167"
-Received: from fmviesa003.fm.intel.com ([10.60.135.143])
-  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Nov 2025 02:03:38 -0800
-X-CSE-ConnectionGUID: 1V0gZ0l5TEGOPbuASMXObA==
-X-CSE-MsgGUID: rDYsMfqnTlKcFd6MD+uxIg==
-X-ExtLoop1: 1
-Received: from smoticic-mobl1.ger.corp.intel.com (HELO kekkonen.fi.intel.com) ([10.245.244.214])
-  by fmviesa003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Nov 2025 02:03:37 -0800
-Received: from punajuuri.localdomain (unknown [192.168.240.130])
-	by kekkonen.fi.intel.com (Postfix) with ESMTP id 8DCAD120852;
-	Wed, 12 Nov 2025 12:03:31 +0200 (EET)
-Received: from sailus by punajuuri.localdomain with local (Exim 4.98.2)
-	(envelope-from <sakari.ailus@linux.intel.com>)
-	id 1vJ7hN-00000000PJM-0m8u;
-	Wed, 12 Nov 2025 12:03:33 +0200
-Organization: Intel Finland Oy - BIC 0357606-4 - c/o Alberga Business Park, 6 krs, Bertel Jungin Aukio 5, 02600 Espoo
-From: Sakari Ailus <sakari.ailus@linux.intel.com>
-To: linux-media@vger.kernel.org
-Cc: laurent.pinchart@ideasonboard.com,
-	jacopo.mondi@ideasonboard.com,
-	=?UTF-8?q?Niklas=20S=C3=B6derlund?= <niklas.soderlund+renesas@ragnatech.se>,
-	Michael Riesch <michael.riesch@collabora.com>
-Subject: [PATCH 1/1] media: v4l2-fwnode: Allow passing NULL fwnode to endpoint parsers
-Date: Wed, 12 Nov 2025 12:03:33 +0200
-Message-ID: <20251112100333.97288-1-sakari.ailus@linux.intel.com>
-X-Mailer: git-send-email 2.47.3
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kAvbH9QI"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C8AD7C19423;
+	Wed, 12 Nov 2025 10:17:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1762942665;
+	bh=WpoCcavivjMt+i1lFxpN8RV/2RXIDLiJO+mUz5517PE=;
+	h=Date:Subject:To:References:From:In-Reply-To:From;
+	b=kAvbH9QIUdzmSkVElNofVh2FZDwu2fxI+yUY6QxCPV8uLo8eW30UpX0O27FE0cyRF
+	 i3aj5A/T0z2hljHsdvkJpW7k8EnD5re9Hm+80g2wwukdCPthcnpZLGiswEdMBqV91x
+	 g2s96s1fDiTijTZMqQtC5XOUbHumS+k/z4771f1PrA5ilF3MdydFoxZAzlzo4q9eGO
+	 +mIZVb9Y0Z+gRU7eb+9b6D99qYeFTd8icvAg+qv7nTfP0nXOc9SymwkUR+I8Vb/smp
+	 gdBZGwHu7lllWvlV3Z76yYrjUwtlopkuEU3nh+7z0bS7FqC17y/9huDPqbIHmgww1F
+	 A4ao26c1I6iBw==
+Message-ID: <e93388c4-4b85-4913-9063-6df3c912acae@kernel.org>
+Date: Wed, 12 Nov 2025 11:17:40 +0100
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 1/4] media: dt-bindings: adi,adv7180: add VPP and CSI
+ register maps
+To: Michael Tretter <m.tretter@pengutronix.de>,
+ Lars-Peter Clausen <lars@metafoo.de>,
+ =?UTF-8?Q?Niklas_S=C3=B6derlund?= <niklas.soderlund+renesas@ragnatech.se>,
+ Mauro Carvalho Chehab <mchehab@kernel.org>, Rob Herring <robh@kernel.org>,
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
+ <conor+dt@kernel.org>, linux-media@vger.kernel.org,
+ devicetree@vger.kernel.org, kernel@pengutronix.de
+References: <20251111-b4-adv7180-vpp-sub-device-v1-0-9877fe9f709b@pengutronix.de>
+ <20251111-b4-adv7180-vpp-sub-device-v1-1-9877fe9f709b@pengutronix.de>
+ <20251112-burrowing-funny-cobra-19705d@kuoka>
+ <aRRV0LXnoU4gjBgE@pengutronix.de>
+From: Krzysztof Kozlowski <krzk@kernel.org>
+Content-Language: en-US
+Autocrypt: addr=krzk@kernel.org; keydata=
+ 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 a/A=
+In-Reply-To: <aRRV0LXnoU4gjBgE@pengutronix.de>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-v4l2_fwnode_endpoint_parse() and v4l2_fwnode_endpoint_alloc_parse() take
-a fwnode as the first argument and leave it up to the caller to check a
-valid fwnode has been obtained through various means. Instead, add a check
-here so the callers won't need to do that anymore.
+On 12/11/2025 10:39, Michael Tretter wrote:
+> On Wed, 12 Nov 2025 09:05:14 +0100, Krzysztof Kozlowski wrote:
+>> On Tue, Nov 11, 2025 at 03:36:14PM +0100, Michael Tretter wrote:
+>>> The ADV7280 and ADV7280-M have up to three register maps for the VPP and
+>>> CSI. The address of these register maps may be programmed via registers
+>>> in the main register map.
+>>>
+>>> Allow to specify the addresses of the VPP and CSI in the device tree to
+>>> solve address conflicts on a board level.
+>>>
+>>> Signed-off-by: Michael Tretter <m.tretter@pengutronix.de>
+>>> ---
+>>>  .../devicetree/bindings/media/i2c/adi,adv7180.yaml | 44 ++++++++++++++++++++++
+>>>  1 file changed, 44 insertions(+)
+>>>
+>>> diff --git a/Documentation/devicetree/bindings/media/i2c/adi,adv7180.yaml b/Documentation/devicetree/bindings/media/i2c/adi,adv7180.yaml
+>>> index dee8ce7cb7ba..4bbdc812442b 100644
+>>> --- a/Documentation/devicetree/bindings/media/i2c/adi,adv7180.yaml
+>>> +++ b/Documentation/devicetree/bindings/media/i2c/adi,adv7180.yaml
+>>> @@ -138,6 +138,31 @@ allOf:
+>>>        required:
+>>>          - ports
+>>>  
+>>> +  - if:
+>>> +      properties:
+>>> +        compatible:
+>>> +          contains:
+>>> +            enum:
+>>> +              - adi,adv7280
+>>> +              - adi,adv7280-m
+>>> +    then:
+>>> +      properties:
+>>> +        reg:
+>>> +          minItems: 1
+>>> +          maxItems: 3
+>>
+>> This does not match top-level.
+> 
+> Ack. If I understand the error message by dt_bindings_check correctly, I
+> have to move the default from the top-level to the else branch of this
+> conditional expression. Right?
 
-Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
----
- drivers/media/v4l2-core/v4l2-fwnode.c | 3 +++
- include/media/v4l2-fwnode.h           | 4 ++--
- 2 files changed, 5 insertions(+), 2 deletions(-)
+Top-level should have widest constraints and in if:then: please narrow
+them per variant.
 
-diff --git a/drivers/media/v4l2-core/v4l2-fwnode.c b/drivers/media/v4l2-core/v4l2-fwnode.c
-index cb153ce42c45..22ec702a4567 100644
---- a/drivers/media/v4l2-core/v4l2-fwnode.c
-+++ b/drivers/media/v4l2-core/v4l2-fwnode.c
-@@ -465,6 +465,9 @@ static int __v4l2_fwnode_endpoint_parse(struct fwnode_handle *fwnode,
- 	enum v4l2_mbus_type mbus_type;
- 	int rval;
- 
-+	if (!fwnode)
-+		return -EINVAL;
-+
- 	pr_debug("===== begin parsing endpoint %pfw\n", fwnode);
- 
- 	fwnode_property_read_u32(fwnode, "bus-type", &bus_type);
-diff --git a/include/media/v4l2-fwnode.h b/include/media/v4l2-fwnode.h
-index f7c57c776589..299b60ce960b 100644
---- a/include/media/v4l2-fwnode.h
-+++ b/include/media/v4l2-fwnode.h
-@@ -182,7 +182,7 @@ enum v4l2_fwnode_bus_type {
- 
- /**
-  * v4l2_fwnode_endpoint_parse() - parse all fwnode node properties
-- * @fwnode: pointer to the endpoint's fwnode handle
-+ * @fwnode: pointer to the endpoint's fwnode handle (may be NULL)
-  * @vep: pointer to the V4L2 fwnode data structure
-  *
-  * This function parses the V4L2 fwnode endpoint specific parameters from the
-@@ -236,7 +236,7 @@ void v4l2_fwnode_endpoint_free(struct v4l2_fwnode_endpoint *vep);
- 
- /**
-  * v4l2_fwnode_endpoint_alloc_parse() - parse all fwnode node properties
-- * @fwnode: pointer to the endpoint's fwnode handle
-+ * @fwnode: pointer to the endpoint's fwnode handle (may be NULL)
-  * @vep: pointer to the V4L2 fwnode data structure
-  *
-  * This function parses the V4L2 fwnode endpoint specific parameters from the
--- 
-2.47.3
+> 
+>>
+>>> +          description:
+>>> +            The ADV7280 and ADV7280-M have up to three register maps, which can be
+>>> +            accessed via the I2C port. The main register map, the VPP register map,
+>>> +            and the CSI register map. The main register map is mandatory. The other
+>>> +            register maps are optional and the default is used unless specified.
 
+BTW, here should be list with description, instead of min/maxItems and
+above.
+
+>>> +
+>>> +        reg-names:
+>>> +          minItems: 1
+>>> +          items:
+>>> +            - const: main
+>>> +            - enum: [ csi, vpp ]
+>>> +            - enum: [ csi, vpp ]
+>>
+>> List must not be flexible. What does it mean "optional"? The device has
+>> them always or you disable them via some sort of efuse/OTP?
+> 
+> The flexible list is inspired by the binding for adi,adv748x.yaml. It
+> also has a main device and several optional slave devices, which remain
+> at the default address if not specified in the device tree.
+> 
+> The optional register maps depend on the variant of the chip, and the
+> driver may or may not use them. In case of the adv7280-m, the driver
+> currently always programs a hard-coded default address into the
+> hardware. Making the csi and vpp register map addresses as optional
+> would allow to preserve the current driver behavior in these cases.
+
+You can keep them optional for backwards compatibility and this should
+be explained in the commit msg. However description must speak about
+hardware and your last sentence felt as not speaking that - "register
+maps are optional and the default is used unless specified."
+
+If the device always has three register maps, then the three register
+maps shall be always defined. See also writing bindings doc.
+
+Best regards,
+Krzysztof
