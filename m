@@ -1,497 +1,417 @@
-Received: from lx20.hoststar.hosting (lx20.hoststar.hosting [168.119.41.54])
+Received: from BN1PR04CU002.outbound.protection.outlook.com (mail-eastus2azon11010023.outbound.protection.outlook.com [52.101.56.23])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 99B252F9980;
-	Wed, 12 Nov 2025 10:49:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=168.119.41.54
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762944586; cv=none; b=KNcx0JGcxAb48TiLgRYjLRnWk2ahNc4cQ4IRHQhvWssE6ozyd0S1VF/4ENfSkSF4akn1qDgHKoA0QtOy/HgFJXColQsM51wRfu8rhFb1iIORudBnoLMKNWhFiGwompRKhioABiw0wfRntyyi1Cdb/jPuKJ11KVtKU/DvmTX1G8I=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762944586; c=relaxed/simple;
-	bh=lJ0uNLhfLrA7LHCPlWiozKKuJyTV2jcZ9On951jTW9w=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=rBlsppMVXfHSoRj0Bha8KDKJORGzysM/mbCIPsj7dtnKwAvD9v3fusmLEHXCMJlW0rDvnzqDfhfGzToOmgl5WpmfCTJDvy4Pn6/BK2lj3bIQs/L7EWkNK/bIWg7tuyuBObbcSA9e0NOlM9g5dKt5sGBqmBEulaWwbmNMXEVMLDg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=emfend.at; spf=pass smtp.mailfrom=emfend.at; dkim=pass (1024-bit key) header.d=emfend.at header.i=@emfend.at header.b=Z63585R9; arc=none smtp.client-ip=168.119.41.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=emfend.at
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=emfend.at
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 46AC03148A1;
+	Wed, 12 Nov 2025 11:55:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.56.23
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1762948518; cv=fail; b=bh94JxHVfgFakQXQsJY+/fd3+YY5rzh2tP1uq1Lw9sdF93FeED7AFwoWwE52U1Y2hq3C319zyOYapZKfXQKhZj6Ww3xUVVxshOotn7wn8cdZPkHdGOJhVz/9SrMeDu1GL9VkwphKs/EIfNf2AtXNnKjmAQXRFRh8f+D8WFHJu4U=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1762948518; c=relaxed/simple;
+	bh=m731IOFGJzSg7wpVxOxAeaURUEIDX4Vm/YL2O28WKUU=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=NHfnOtyC1P0zHaduUKPyBLFvawjNLIMgU/B+ctnOrEqGaLeNmRxVBcjUPuAf9w6R77SRhiWYhEWWZNQlG/CNxzWliZLbstH5PKUWeqRWNxMjCXsTA6QvHL0bnmWCeUU/vUj6XqSPHt9cEwq5V6ZlljLfpKGai2WV7ADDnVvBXKU=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com; spf=pass smtp.mailfrom=ti.com; dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b=ghs86QX8; arc=fail smtp.client-ip=52.101.56.23
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ti.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=emfend.at header.i=@emfend.at header.b="Z63585R9"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=emfend.at;
-	 s=mail; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:References
-	:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:Content-ID:
-	Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-	:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
-	List-Post:List-Owner:List-Archive;
-	bh=dgGZ0Ls2Qnd1LKBBXRPbg7oJE3pekXxFEUky5palhQ4=; b=Z63585R9x3gpxZljpA0+0iAyGk
-	siMmnTMjKVHW0KKIig8MHRviCPehflbVqkSS21Fk6I9N7ZXVty9SPCegpSLpO6QgO1MpKFDqAlsDI
-	ZM9P6rdppInIwWAFFAbbQW1FIf9tFdBf6CTN3DEkOAmXkQDuezscNtg9UojsGOx0whNI=;
-Received: from 194-208-208-245.tele.net ([194.208.208.245]:57612 helo=[192.168.0.207])
-	by lx20.hoststar.hosting with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_CHACHA20_POLY1305_SHA256
-	(Exim 4.93)
-	(envelope-from <matthias.fend.oss@emfend.at>)
-	id 1vJ8Aa-000uap-Ks; Wed, 12 Nov 2025 11:33:45 +0100
-Message-ID: <85e049db-f7b6-4609-949d-3d93d2f3bb1e@emfend.at>
-Date: Wed, 12 Nov 2025 11:33:42 +0100
+	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="ghs86QX8"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=JafWhb5sIB4p24R0NqEsZ3l58l5yVgEByDc5BP9ZiIh1Cizg2ItolGGhPDkYwYdcI5M5Brjr/GuAQvUOfap3EZ6Y/dtZ97kP/iRKpSf3X+iEzkXGARs1k1Q3e/wOWEKEsN9QR6rxSAQkXby3uGUxpl+jfMMd+PTfhupruIjDg5c3PXCm4HPKVrmRbODmqzOUV1anzhIIOKiibR0q2BrOMiqPB+gSjDZU5jUNPI9ZkThTsTXt7FIXSXiG/YiB4eo3laqECvTmrZ+9BzIVyJATDB6DpHmBY2MuumHfvF7hF37epDFWWgkDEolAiaCw01uMyzrrALM3IZgmtJwsn9qykg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=fuxRsSXDgmk6tl9Pc4LPnHGl8bNRt0ZNKWH2Wb+I3Go=;
+ b=gWUW9KU/0qpfSmiFBkt3q0VvWAQ26icllsA8U4pANruPe5DctVch8m1rXrWjIFMSE7+qXuL14nFSGYZC53sAgniqDkKEIykRz2EUefhd6RHx8JT4e/g5R72lSta4wAng3g51Y/fjlHu6JqFCa3Ij2TEFs5Y4cVwd4obbFMYNwV1S4BqrrLbQ1+SrvfJqrmZGuqGu7FC/55z8D7CwsXT35CEQvKpAeUzgpVJbcSPlh3uqFEmcGQdIcxIv87dWwYqVgY4dGdLSct62p+1psohstuAlP6EzyEYvadIJ0Teyj2pZdclmCsrAe7MBpwdZ+qPzJHxR46qZnO3/WlIUzCp+5A==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 198.47.23.194) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=ti.com;
+ dmarc=pass (p=quarantine sp=none pct=100) action=none header.from=ti.com;
+ dkim=none (message not signed); arc=none (0)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=fuxRsSXDgmk6tl9Pc4LPnHGl8bNRt0ZNKWH2Wb+I3Go=;
+ b=ghs86QX8v3cvUlAGt4MkUoWn34XIa77MummaJLgqqrr+WjOUS7Dv3RwrJLxHWT3sZvPdWflL4d2fL7Up3aFU2BrMJnzzsoNW+hcqjjlbVmHgmwax7gBQ78G1bBnMKBaVaJh5+Se9FzRTRqW2Ms452ex+rXMXnAX2Ne1sjFWfPAw=
+Received: from MW4PR04CA0070.namprd04.prod.outlook.com (2603:10b6:303:6b::15)
+ by SA1PR10MB997582.namprd10.prod.outlook.com (2603:10b6:806:4b4::10) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9320.15; Wed, 12 Nov
+ 2025 11:55:12 +0000
+Received: from SJ1PEPF0000231A.namprd03.prod.outlook.com
+ (2603:10b6:303:6b:cafe::84) by MW4PR04CA0070.outlook.office365.com
+ (2603:10b6:303:6b::15) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.20.9320.17 via Frontend Transport; Wed,
+ 12 Nov 2025 11:55:12 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 198.47.23.194)
+ smtp.mailfrom=ti.com; dkim=none (message not signed) header.d=none;dmarc=pass
+ action=none header.from=ti.com;
+Received-SPF: Pass (protection.outlook.com: domain of ti.com designates
+ 198.47.23.194 as permitted sender) receiver=protection.outlook.com;
+ client-ip=198.47.23.194; helo=lewvzet200.ext.ti.com; pr=C
+Received: from lewvzet200.ext.ti.com (198.47.23.194) by
+ SJ1PEPF0000231A.mail.protection.outlook.com (10.167.242.231) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.9320.13 via Frontend Transport; Wed, 12 Nov 2025 11:55:12 +0000
+Received: from DLEE209.ent.ti.com (157.170.170.98) by lewvzet200.ext.ti.com
+ (10.4.14.103) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.20; Wed, 12 Nov
+ 2025 05:55:07 -0600
+Received: from DLEE203.ent.ti.com (157.170.170.78) by DLEE209.ent.ti.com
+ (157.170.170.98) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.20; Wed, 12 Nov
+ 2025 05:55:06 -0600
+Received: from lelvem-mr06.itg.ti.com (10.180.75.8) by DLEE203.ent.ti.com
+ (157.170.170.78) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.20 via Frontend
+ Transport; Wed, 12 Nov 2025 05:55:06 -0600
+Received: from ws.dhcp.ti.com (ws.dhcp.ti.com [172.24.233.149])
+	by lelvem-mr06.itg.ti.com (8.18.1/8.18.1) with ESMTP id 5ACBsxbo2638977;
+	Wed, 12 Nov 2025 05:55:00 -0600
+From: Rishikesh Donadkar <r-donadkar@ti.com>
+To: <jai.luthra@linux.dev>, <laurent.pinchart@ideasonboard.com>,
+	<mripard@kernel.org>
+CC: <r-donadkar@ti.com>, <y-abhilashchandra@ti.com>, <devarsht@ti.com>,
+	<s-jain1@ti.com>, <vigneshr@ti.com>, <mchehab@kernel.org>, <robh@kernel.org>,
+	<krzk+dt@kernel.org>, <p.zabel@pengutronix.de>, <conor+dt@kernel.org>,
+	<sakari.ailus@linux.intel.com>, <hverkuil-cisco@xs4all.nl>,
+	<tomi.valkeinen@ideasonboard.com>, <jai.luthra@ideasonboard.com>,
+	<changhuang.liang@starfivetech.com>, <jack.zhu@starfivetech.com>,
+	<sjoerd@collabora.com>, <dan.carpenter@linaro.org>,
+	<hverkuil+cisco@kernel.org>, <linux-kernel@vger.kernel.org>,
+	<linux-media@vger.kernel.org>, <devicetree@vger.kernel.org>
+Subject: [PATCH v8 00/18] media: cadence,ti: CSI2RX Multistream Support
+Date: Wed, 12 Nov 2025 17:24:41 +0530
+Message-ID: <20251112115459.2479225-1-r-donadkar@ti.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v5 2/2] media: i2c: add Himax HM1246 image sensor driver
-To: Sakari Ailus <sakari.ailus@linux.intel.com>,
- Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc: Matthias Fend <matthias.fend@emfend.at>,
- Mauro Carvalho Chehab <mchehab@kernel.org>, Rob Herring <robh@kernel.org>,
- Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
- <conor+dt@kernel.org>, Hans Verkuil <hverkuil@kernel.org>,
- Hans de Goede <hansg@kernel.org>, Ricardo Ribalda <ribalda@chromium.org>,
- =?UTF-8?Q?Andr=C3=A9_Apitzsch?= <git@apitzsch.eu>,
- Tarang Raval <tarang.raval@siliconsignals.io>,
- Benjamin Mugnier <benjamin.mugnier@foss.st.com>,
- Sylvain Petinot <sylvain.petinot@foss.st.com>,
- Dongcheng Yan <dongcheng.yan@intel.com>,
- Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
- Alan Stern <stern@rowland.harvard.edu>,
- Jingjing Xiong <jingjing.xiong@intel.com>,
- Heimir Thor Sverrisson <heimir.sverrisson@gmail.com>,
- Mehdi Djait <mehdi.djait@linux.intel.com>,
- Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>,
- Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
- Hardevsinh Palaniya <hardevsinh.palaniya@siliconsignals.io>,
- linux-media@vger.kernel.org, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org, Hao Yao <hao.yao@intel.com>,
- bsp-development.geo@leica-geosystems.com
-References: <20251104-hm1246-v5-0-97c8f25b5419@emfend.at>
- <20251104-hm1246-v5-2-97c8f25b5419@emfend.at>
- <aQn_lguAdP-ZwCzK@smile.fi.intel.com> <aRMqw_yGMatKS5mY@kekkonen.localdomain>
-Content-Language: de-DE
-From: Matthias Fend <matthias.fend.oss@emfend.at>
-In-Reply-To: <aRMqw_yGMatKS5mY@kekkonen.localdomain>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Score: 
-X-Spam-Bar: 
-X-Spam-Report: 
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-C2ProcessedOrg: 333ef613-75bf-4e12-a4b1-8e3623f5dcea
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: SJ1PEPF0000231A:EE_|SA1PR10MB997582:EE_
+X-MS-Office365-Filtering-Correlation-Id: 7c29bac8-8984-4642-c2ba-08de21e25600
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|1800799024|7416014|376014|82310400026|36860700013;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?JnCBBRWaA+r87SMdIk1dGFinh2s6MTQAEdcxshrPTaAxrd4gEDk0YD0RMobR?=
+ =?us-ascii?Q?yzIHCUP7c1x+c8+fNQ/ZpeNpr1L4L4ExswNbAN3EP8A05BXchhQNDcMdDXpZ?=
+ =?us-ascii?Q?hQHp8KSs2GpjDmXWHB1IpC5mAD0OSC+RF7cMVN1AvNFv6VeaB84t3ghknddn?=
+ =?us-ascii?Q?2gbsPZNEvYrHIMjr4ePnozIuodzeUqAqCLSAnBFXctN8sHUwDCYylkP+FBYT?=
+ =?us-ascii?Q?NSC/+tiYv2p/g70GwHVBtZEB2YeFV8IuvMnUzOvw2zECucyCu/LH2XkZ5nul?=
+ =?us-ascii?Q?zm73Li6y1dVRemVIAgOS5EHx4PbenPglhCkGREC1HiAtEJJjhl+bMmauH2jR?=
+ =?us-ascii?Q?mHbg1eUw0M0xT22Ctox9Ug7TXMlcKJe/5C0xUB0/LQcWuE/h4EROzSRunV/g?=
+ =?us-ascii?Q?ajHGqkAgFYsEovAUKSq0fVFn+eMVhD/EqlYwMS0aKLa4u/ymeoxYbCNon34Q?=
+ =?us-ascii?Q?yimjTZwTh0BnaOyXQP6Pt1yLVPWWxsPYX5cMRgOafd154YXTP/Seg5nI+EVa?=
+ =?us-ascii?Q?FcMOeuMs6XtDonTUdUcp+vlfDajCOWrxuzughBezoOik/iH37bNjihQIe3DC?=
+ =?us-ascii?Q?MZW1/HPiSJUNnPr5Tq0bGhc1jyHK1iATYafPmAIpJGehRmNYTUzC3cR4pT5P?=
+ =?us-ascii?Q?r80HrEzRGbDlX9iTfW9LBYLbwb1ZhB3xN8I5Y9tW34/p3OOrFDOvoXcUVxKX?=
+ =?us-ascii?Q?uPVbOc4dTv1nliIfDyCYDzAmRWCKi0yXH5w67tMmEVzs8J0j08pPPfZZdtxp?=
+ =?us-ascii?Q?63RsUrb0aVFBNb9eOY6LezLnyOBCalP08pRAomuOfDddQnFeaKL4+eoy1u6f?=
+ =?us-ascii?Q?lefzQi3z0fXT3O1V1wZBiLiuBt3PMjert+To6Xb6Lo9ABVvA/g9Yt0laYmCk?=
+ =?us-ascii?Q?iYqt4hOxeAyTzPj3n5FMaYW49gdkiy6bOG/CMaJ1fN5i/453jbqZezdewnzm?=
+ =?us-ascii?Q?EYMx4YcbRf5P7p8KOUcn6NNst5JE+g/4ybvXyHxEd6jZ3NVJgCW3Ot74ca0C?=
+ =?us-ascii?Q?4YLpfqzHW5kFanVLuc2n+9rpHgxAJYU1EeB2loAPSOiJt8vK7/cLsAv/bmDK?=
+ =?us-ascii?Q?H6HSCp5K+1wNBDM/flKo/E1bE5cxwryF+u0ToHiasNx9zUvdYMo5xcXPxvD8?=
+ =?us-ascii?Q?69LTOnLxvYWqcj21A/VLFLaITdFRePUBFv0hsXFpTu8ZbSi2QPI2VAQx7uK1?=
+ =?us-ascii?Q?RBDBWRfezsvwrXZzTRRIJZlY6+QP5V6z/AlD8U6mgWDVmIAsozw3R3Ph1U6m?=
+ =?us-ascii?Q?Xgwy9PZ9XMdW2rvGaU+ijxc1te+NFx4zyUXRB9S9wh21jv1rzwZQx2lYrHDR?=
+ =?us-ascii?Q?tmMG0XXbPjLyNqSIgofRRSJpGgW6kj71ATwv7MW/giSsg/qMfZFrs7bG2m42?=
+ =?us-ascii?Q?2yt8etopv8g/5jK+8asByncCY5c1XTFq84tU0tY8FWvLUEP7vIn8MuC1pokw?=
+ =?us-ascii?Q?qV+QB+o2ybGqcvmj+q5aLJBf3jICZI0+YKaxb0d66Ht1yXh0aZsEmV0ULqWn?=
+ =?us-ascii?Q?H69cZLCtDFoiS1DpxJn+pkvyqdUo8qK8u7kpIinm5LZCZk5Eho6UJUb+51Ax?=
+ =?us-ascii?Q?UiPBuE0HZu2Ke5grfi0=3D?=
+X-Forefront-Antispam-Report:
+	CIP:198.47.23.194;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:lewvzet200.ext.ti.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(1800799024)(7416014)(376014)(82310400026)(36860700013);DIR:OUT;SFP:1101;
+X-OriginatorOrg: ti.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Nov 2025 11:55:12.1353
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 7c29bac8-8984-4642-c2ba-08de21e25600
+X-MS-Exchange-CrossTenant-Id: e5b49634-450b-4709-8abb-1e2b19b982b7
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=e5b49634-450b-4709-8abb-1e2b19b982b7;Ip=[198.47.23.194];Helo=[lewvzet200.ext.ti.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	SJ1PEPF0000231A.namprd03.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA1PR10MB997582
 
-Hi Sakari,
+This series adds multi-stream support and PM support for Cadence CSI2RX
+and TI CSI2RX SHIM drivers.
 
-Am 11.11.2025 um 13:23 schrieb Sakari Ailus:
-> Hi Andy, Matthias,
-> 
-> On Tue, Nov 04, 2025 at 03:28:54PM +0200, Andy Shevchenko wrote:
->> On Tue, Nov 04, 2025 at 11:31:34AM +0100, Matthias Fend wrote:
->>> Add a V4L2 sub-device driver for Himax HM1246 image sensor.
->>>
->>> The Himax HM1246-AWD is a 1/3.7-Inch CMOS image sensor SoC with an active
->>> array size of 1296 x 976. It is programmable through an I2C interface and
->>> connected via parallel bus.
->>>
->>> The sensor has an internal ISP with a complete image processing pipeline
->>> including control loops. However, this driver uses the sensor in raw mode
->>> and the entire ISP is bypassed.
->>
+PM patches are picked from:
+https://lore.kernel.org/all/20250902-ti_csi_pm-v2-0-59a3be199940@ideasonboard.com/
 
-...
+PATCH 01 :    Remove word size alignment restriction on frame width
+PATCH 02-09:  Support multiple DMA contexts/video nodes in TI CSI2RX
+PATCH 10-11:  Use get_frame_desc to propagate virtual channel
+              information across Cadence and TI CSI-RX subdevs
+PATCH 12-13:  Use new multi-stream APIs across the drivers to support
+              multiplexed cameras from sources like UB960 (FPDLink)
+PATCH 14:     Optimize stream on by submitting all queued buffers to DMA
+PATCH 15:     Change the drain architecture to support multi-stream and
+              implement completion barriers for last drain.
+PATCH 16-18:  Runtime PM and System PM support for CSI-RX.
 
->>
->>> +static int hm1246_calc_pll(struct hm1246 *hm1246, u32 xclk, u32 link_freq,
->>> +			   u32 clocks_per_pixel, u8 *pll1, u8 *pll2, u8 *pll3)
->>> +{
->>> +	const u8 pclk_div_table[] = { 4, 5, 6, 7, 8, 12, 14, 16 };
->>> +	const u8 sysclk_div_table[] = { 1, 2, 3, 4 };
->>> +	const u8 post_div_table[] = { 1, 2, 4, 8 };
->>> +	const int sysclk_pclk_ratio = 3; /* Recommended value */
->>> +	u32 pclk, vco_out, best_vco_diff;
->>> +	int pclk_div_index, sysclk_div_index, post_div_index;
->>> +	u8 pre_div = 0, multiplier_h = 0, multiplier_l = 0;
->>> +
->>> +	if (link_freq < HM1246_PCLK_MIN || link_freq > HM1246_PCLK_MAX)
->>> +		return -EINVAL;
->>> +
->>> +	/*
->>> +	 * In raw mode (1 pixel per clock) the pixel clock is internally
->>> +	 * divided by two.
->>> +	 */
->>> +	pclk = 2 * link_freq / clocks_per_pixel;
->>> +
->>> +	/* Find suitable PCLK and SYSCLK dividers. */
->>> +	for (pclk_div_index = 0; pclk_div_index < ARRAY_SIZE(pclk_div_table);
->>> +	     pclk_div_index++) {
->>> +		for (sysclk_div_index = 0;
->>> +		     sysclk_div_index < ARRAY_SIZE(sysclk_div_table);
->>> +		     sysclk_div_index++) {
->>> +			if (sysclk_div_table[sysclk_div_index] *
->>> +				    sysclk_pclk_ratio ==
->>> +			    pclk_div_table[pclk_div_index])
->>
->>> +				goto sysclk_pclk_ratio_found;
->>
->>> +		}
->>> +	}
->>
->> And instead of this goto mess, factor out to a helper.
-> 
-> I think the above looks fine as-is: it's easier to understand what it does
-> when it's all in a single location. This isn't overly complicated, which
-> would be another reason to do that.
-> 
->>
->>> +	return -EINVAL;
-> 
-> I'd do:
-> 
-> 	if (sysclk_div_index == ARRAY_SIZE(sysclk_div_table))
-> 		return -EINVAL;
-> 
-> instead of using a goto.
+Testing for this series has been done on top of media tree with 4x IMX219
+camera modules connected to TI's AM62A using V3 Link fusion mini board.
 
-I don't think that will work. Once the matching divisors are found, the 
-inner and outer loop must break immediately. Otherwise, the 
-corresponding indices will be overwritten.
+Overlay and defconfig changes for the same can be found below:
+https://github.com/RISHI27-dot/linux/commits/u/multistream_v8
 
-In the initial version [1], I used a variable to terminate the outer 
-loop and check for success. I changed that to a goto statement, as you 
-suggested.
-Perhaps I should revert to the original version, which I don't consider 
-overly complicated either?
+v4l2-compliance results:
+https://gist.github.com/Rishikesh-D/c43ff1653ef59f2eb81ea76bd56780a4
 
-Thanks
-  ~Matthias
+---
+Changes in v8:
 
-[1] https://lore.kernel.org/all/20250403-hm1246-v1-2-30990d71bc42@emfend.at/
+# New patches in v8:
+[PATCH v8 07/18] media: cadence: csi2rx: Move to .enable/disable_streams API
+[PATCH v8 08/18] media: ti: j721e-csi2rx: Move to .enable/disable_streams API
+- Remove the s_stream API and use the enable/disable_streams API right
+  after adding the subdev for core device
 
-> 
->>
->>> +sysclk_pclk_ratio_found:
->>> +
->>> +	/* Determine an appropriate post divider. */
->>> +	for (post_div_index = 0; post_div_index < ARRAY_SIZE(post_div_table);
->>> +	     post_div_index++) {
->>> +		vco_out = pclk * pclk_div_table[pclk_div_index] *
->>> +			  post_div_table[post_div_index];
->>> +
->>> +		if (vco_out >= HM1246_PLL_VCO_MIN &&
->>> +		    vco_out <= HM1246_PLL_VCO_MAX)
->>> +			break;
->>> +	}
->>> +	if (post_div_index >= ARRAY_SIZE(post_div_table))
->>> +		return -EINVAL;
->>> +
->>> +	/* Find best pre-divider and multiplier values. */
->>> +	best_vco_diff = U32_MAX;
->>> +	for (u32 div = DIV_ROUND_UP(xclk, HM1246_PLL_INCLK_MAX);
->>> +	     div <= xclk / HM1246_PLL_INCLK_MIN; div++) {
->>> +		u32 multi, multi_h, multi_l, vco, diff;
->>> +
->>> +		multi = DIV_ROUND_CLOSEST_ULL((u64)vco_out * div, xclk);
->>> +		if (multi < HM1246_PLL_MULTI_MIN ||
->>> +		    multi > HM1246_PLL_MULTI_MAX)
->>> +			continue;
->>> +
->>> +		multi_h = multi / (HM1246_PLL_MULTI_H_MIN *
->>> +				   HM1246_PLL_MULTI_L_MAX) +
->>> +			  2;
->>> +		multi_l = multi / multi_h;
->>> +		vco = div_u64((u64)xclk * multi_h * multi_l, div);
->>> +
->>> +		diff = abs_diff(vco_out, vco);
->>> +
->>> +		if (diff < best_vco_diff) {
->>> +			best_vco_diff = diff;
->>> +			pre_div = div;
->>> +			multiplier_h = multi_h;
->>> +			multiplier_l = multi_l;
->>> +		}
->>> +
->>> +		if (!diff)
->>> +			break;
->>> +	}
->>> +
->>> +	if (best_vco_diff == U32_MAX)
->>> +		return -EINVAL;
->>> +
->>> +	*pll1 = HM1246_PLL1CFG_MULTIPLIER(multiplier_l - 1);
->>> +	*pll2 = HM1246_PLL2CFG_PRE_DIV(pre_div - 1) |
->>> +		HM1246_PLL2CFG_MULTIPLIER(multiplier_h - 2);
->>> +	*pll3 = HM1246_PLL3CFG_POST_DIV(post_div_index) |
->>> +		HM1246_PLL3CFG_SYSCLK_DIV(sysclk_div_index) |
->>> +		HM1246_PLL3CFG_PCLK_DIV(pclk_div_index);
->>> +
->>> +	return 0;
->>> +}
->>
->> ...
->>
->>> +static int hm1246_cci_write_pll(struct hm1246 *hm1246, u8 pll1, u8 pll2,
->>> +				u8 pll3)
->>> +{
->>> +	const struct cci_reg_sequence pll_regs[] = {
->>
->> static ?
->>
->>> +		{ HM1246_PLL1CFG_REG, pll1 },
->>> +		{ HM1246_PLL2CFG_REG, pll2 },
->>> +		{ HM1246_PLL3CFG_REG, pll3 },
->>> +		{ HM1246_SBC_CTRL_REG, HM1246_SBC_CTRL_PLL_EN },
->>> +	};
->>
->> I would even move it outside the function. Note, static const maybe located in
->> ro memory while w/o static it's just a guarantee that compiler doesn't change
->> the values. Hence there is no guarantee it will be in ro memory.
->>
->>> +	return cci_multi_reg_write(hm1246->regmap, pll_regs,
->>> +				   ARRAY_SIZE(pll_regs), NULL);
->>> +}
->>> +
->>> +static int hm1246_pll_check_locked(struct hm1246 *hm1246)
->>> +{
->>> +	u64 boot_ref2;
->>> +	int ret;
->>> +
->>> +	ret = cci_read(hm1246->regmap, HM1246_SBC_BOOT_REF2_REG, &boot_ref2,
->>> +		       NULL);
->>
->> Despite being longer 80 I still would put it on one line. It will increase readability.
-> 
-> I prefer it as-is.
-> 
->>
->> 	ret = cci_read(hm1246->regmap, HM1246_SBC_BOOT_REF2_REG, &boot_ref2, NULL);
->>
->> Another option is to define local regmap:
->>
->> 	struct regmap *map = hm1246->regmap;
->> 	...
->> 	ret = cci_read(map, HM1246_SBC_BOOT_REF2_REG, &boot_ref2, NULL);
->>
->> which will be most readable and satisfy 80 limit.
->>
->>
->>> +	if (ret)
->>> +		return ret;
->>> +
->>> +	return (boot_ref2 & HM1246_SBC_BOOT_REF2_PLL_LOCK) ? 0 : -EIO;
->>
->> Think about similar improvements elsewhere in this driver.
->>
->>> +}
->>
->> ...
->>
->>> +	/* PLL lock time: tpll typ. 100us */
->>
->> It's not a variable name, use proper English.
->>
->>> +	fsleep(200);
->>
->> ...
->>
->>> +static int hm1246_cci_write_test_pattern(struct hm1246 *hm1246, u8 mode, u16 r,
->>> +					 u16 g, u16 b)
->>
->> Use logical split.
->>
->> static int hm1246_cci_write_test_pattern(struct hm1246 *hm1246, u8 mode,
->> 					 u16 r, u16 g, u16 b)
->>
->> This applies to other similar places in the code.
->>
->> ...
->>
->>> +static int hm1246_test_pattern(struct hm1246 *hm1246, u32 index)
->>> +{
->>> +	const u16 RGBMIN = 0x0, RGBMAX = 0x3ff;
->>
->> 0 is enough (no need 0x).
->>
->>
->> So, the MAX is 10-bit, Can we use rather (BIT(10) - 1) to show this?
-> 
-> The above value likely comes from a sensor datasheet; I think 0x3ff is fine
-> as-is. If this was a bitmask with a row of bits set, I'd use GENMASK(), but
-> not BIT(10) - 1.
-> 
->>
->>> +	const struct tp {
->>> +		int pattern;
->>> +		u16 r, g, b;
->>> +	} tps[] = {
->>> +		/* 0 - Disabled */
->>
->> Instead of indices in the comment, make the code robust
->>
->>> +		{ .pattern = 0, .r = RGBMIN, .g = RGBMIN, .b = RGBMIN },
->>
->> 		[0] = { .pattern = 0, .r = RGBMIN, .g = RGBMIN, .b = RGBMIN },
->>
->> It even fit 80 characters.
->>
->>> +		/* 1 - Checkboard pattern */
->>> +		{ .pattern = 0, .r = RGBMIN, .g = RGBMIN, .b = RGBMIN },
->>> +		/* 2 - Ramp */
->>> +		{ .pattern = 1, .r = RGBMIN, .g = RGBMIN, .b = RGBMIN },
->>> +		/* 3 - Moving ones */
->>> +		{ .pattern = 2, .r = RGBMIN, .g = RGBMIN, .b = RGBMIN },
->>> +		/* 4 - Blending color bars */
->>> +		{ .pattern = 3, .r = RGBMIN, .g = RGBMIN, .b = RGBMIN },
->>> +		/* 5 - Color bars */
->>> +		{ .pattern = 4, .r = RGBMIN, .g = RGBMIN, .b = RGBMIN },
->>> +		/* 6 - Solid white */
->>> +		{ .pattern = 15, .r = RGBMAX, .g = RGBMAX, .b = RGBMAX },
->>> +		/* 7 - Solid black */
->>> +		{ .pattern = 15, .r = RGBMIN, .g = RGBMIN, .b = RGBMIN },
->>> +		/* 8 - Solid red */
->>> +		{ .pattern = 15, .r = RGBMAX, .g = RGBMIN, .b = RGBMIN },
->>> +		/* 9 - Solid green */
->>> +		{ .pattern = 15, .r = RGBMIN, .g = RGBMAX, .b = RGBMIN },
->>> +		/* 10- Solid blue */
->>> +		{ .pattern = 15, .r = RGBMIN, .g = RGBMIN, .b = RGBMAX },
->>> +	};
->>> +	u8 mode;
->>> +
->>> +	if (index >= ARRAY_SIZE(tps))
->>> +		return -EINVAL;
->>> +
->>> +	mode = HM1246_TEST_PATTERN_MODE_MODE(tps[index].pattern);
->>> +	if (index)
->>> +		mode |= HM1246_TEST_PATTERN_MODE_ENABLE;
->>> +
->>> +	return hm1246_cci_write_test_pattern(hm1246, mode, tps[index].r,
->>> +					     tps[index].g, tps[index].b);
->>> +}
->>
->> ...
->>
->>> +static int hm1246_set_ctrl(struct v4l2_ctrl *ctrl)
->>> +{
->>> +	struct hm1246 *hm1246 = container_of_const(ctrl->handler, struct hm1246,
->>> +						   ctrls);
->>
->> Why _const()?
->> Why not split it between lines like:
->>
->> 	struct hm1246 *hm1246 =
->> 		container_of_const(ctrl->handler, struct hm1246, ctrls);
->>
->>> +	struct v4l2_subdev_state *state;
->>> +	const struct v4l2_mbus_framefmt *format;
->>> +	u32 val;
->>> +	bool needs_cmu_update = true;
->>> +	int ret = 0;
->>> +
->>> +	state = v4l2_subdev_get_locked_active_state(&hm1246->sd);
->>> +	format = v4l2_subdev_state_get_format(state, 0);
->>> +
->>> +	if (ctrl->id == V4L2_CID_VBLANK) {
->>> +		s64 exposure_max;
->>> +
->>> +		exposure_max =
->>> +			format->height + ctrl->val - HM1246_COARSE_INTG_MARGIN;
->>> +		ret = __v4l2_ctrl_modify_range(hm1246->exposure_ctrl,
->>> +					       hm1246->exposure_ctrl->minimum,
->>> +					       exposure_max,
->>> +					       hm1246->exposure_ctrl->step,
->>> +					       exposure_max);
->>> +
->>> +		if (ret) {
->>> +			dev_err(hm1246->dev, "exposure ctrl range update failed\n");
->>> +			return ret;
->>> +		}
->>> +	}
->>
->>> +	if (!pm_runtime_get_if_active(hm1246->dev))
->>> +		return 0;
->>
->> Use ACQUIRE() and return directly where it makes sense.
-> 
-> That's interesting.
-> 
->>
->>> +	switch (ctrl->id) {
->>> +	case V4L2_CID_EXPOSURE:
->>> +		cci_write(hm1246->regmap, HM1246_COARSE_INTG_REG, ctrl->val,
->>> +			  &ret);
->>> +		break;
->>> +
->>> +	case V4L2_CID_ANALOGUE_GAIN:
->>> +		cci_write(hm1246->regmap, HM1246_ANALOG_GLOBAL_GAIN_REG,
->>> +			  ctrl->val, &ret);
->>> +		break;
->>> +
->>> +	case V4L2_CID_VBLANK:
->>> +		val = format->height + ctrl->val;
->>> +		cci_write(hm1246->regmap, HM1246_FRAME_LENGTH_LINES_REG, val,
->>> +			  &ret);
->>> +		break;
->>> +
->>> +	case V4L2_CID_HFLIP:
->>> +	case V4L2_CID_VFLIP:
->>> +		val = 0;
->>> +		if (hm1246->hflip_ctrl->val)
->>> +			val |= HM1246_IMAGE_ORIENTATION_HFLIP;
->>> +		if (hm1246->vflip_ctrl->val)
->>> +			val |= HM1246_IMAGE_ORIENTATION_VFLIP;
->>> +
->>> +		cci_write(hm1246->regmap, HM1246_IMAGE_ORIENTATION_REG, val,
->>> +			  &ret);
->>> +		break;
->>> +
->>> +	case V4L2_CID_TEST_PATTERN:
->>> +		ret = hm1246_test_pattern(hm1246, ctrl->val);
->>> +		needs_cmu_update = false;
->>
->> Like here, and you won't need needs_cmu_update anymore.
->>
->>> +		break;
->>> +
->>> +	default:
->>> +		ret = -EINVAL;
->>> +		needs_cmu_update = false;
->>> +		break;
->>> +	}
->>> +
->>> +	if (needs_cmu_update)
->>> +		cci_write(hm1246->regmap, HM1246_CMU_UPDATE_REG, 0, &ret);
->>> +
->>> +	pm_runtime_put(hm1246->dev);
->>> +
->>> +	return ret;
->>> +}
->>
->> ...
->>
->>> +static int hm1246_identify_module(struct hm1246 *hm1246)
->>
->> This is a singleton function, right?
->>
->> Check what once.h (or even once_lite.h) provides for you for such a case,
->> and drop unneeded "identified" variable.
-> 
-> Once for every device, so I don't think this applies.
-> 
->>
->>> +{
->>> +	u64 model_id;
->>> +	int ret;
->>> +
->>> +	if (hm1246->identified)
->>> +		return 0;
->>> +
->>> +	ret = cci_read(hm1246->regmap, HM1246_MODEL_ID_REG, &model_id, NULL);
->>> +	if (ret)
->>> +		return ret;
->>> +
->>> +	if (model_id != HM1246_MODEL_ID) {
->>> +		dev_err(hm1246->dev, "model id mismatch: 0x%llx!=0x%x\n",
->>> +			model_id, HM1246_MODEL_ID);
->>> +		return -ENXIO;
->>> +	}
->>> +
->>> +	hm1246->identified = true;
->>> +
->>> +	return 0;
->>> +}
-> 
+Changes:
+[PATCH v8 01/18] media: ti: j721e-csi2rx: Remove word size alignment on frame width
+- Remove define for PSIL_WORD_SIZE_BYTES.
+[PATCH v8 06/18] media: ti: j721e-csi2rx: add a subdev for the core device
+- Use v4l2_subdev_state_get_format() instead of using the get_fmt from the 
+  subdev pad ops in the ti_csi2rx_link_validate() function.
+[PATCH v8 11/18] media: ti: j721e-csi2rx: add support for processing virtual channels
+- Move routing support form this patch to PATCH 13/18.
+[PATCH v8 12/18] media: cadence: csi2rx: add multistream support
+- Move support for enable/disable_streams() API that was added in this patch to
+  PATCH 07/18 earlier in this series.
+- Remove the mutex from the driver
+[PATCH v8 13/18] media: ti: j721e-csi2rx: add multistream support
+- Move support for enable/disable_streams() API that was added in this patch to
+  PATCH 08/18 earlier in this series.
+- Remove csi->mutex protection inside enable/disable_streams() function calls to
+  solve circular locking dependency warning.
+- Mention that DT filtering is also supported in the commit message.
+
+Link to (v7):
+https://lore.kernel.org/all/20250911102832.1583440-1-r-donadkar@ti.com/#t
+
+---
+Changes in v7:
+
+[PATCH v6 03/16] media: ti: j721e-csi2rx: separate out device and context
+- Resolve bisect test fail because of undefined 'csi' variable
+- Resolve bisect test fail because of 'vdev' not being in scope when used
+[PATCH v6 07/16] media: ti: j721e-csi2rx: get number of contexts from device tree
+- Resolve compiler warning regarding missing error code 'ret'
+[PATCH v6 12/16] media: ti: j721e-csi2rx: Submit all available buffers
+- Remove unused variable
+
+Link to (v6):
+https://lore.kernel.org/all/20250908134729.3940366-1-r-donadkar@ti.com/
+
+---
+Changes in v6:
+
+# New patches in v6:
+
+[PATCH v6 14/16] media: cadence: csi2rx: Support runtime PM
+[PATCH v6 15/16] media: ti: j721e-csi2rx: Support runtime suspend
+[PATCH v6 16/16] media: ti: j721e-csi2rx: Support system suspend
+using pm_notifier
+
+# Changes in patches from v5:
+[PATCH v5 01/16] media: ti: j721e-csi2rx: Remove word size alignment
+on frame width
+- Remove restrictions on minimum frame width in ti_csi2rx_fill_fmt()
+- Add Reviewed-by from Abhilash
+[PATCH v5 02/16] dt-bindings: media: ti,j721e-csi2rx-shim: Support 32 dma chans
+- No change
+[PATCH v5 03/16] media: ti: j721e-csi2rx: separate out device and context
+- No change
+[PATCH v5 04/16] media: ti: j721e-csi2rx: prepare SHIM code for multiple contexts
+- No change
+[PATCH v5 05/16] media: ti: j721e-csi2rx: allocate DMA channel based on context index
+- No change
+[PATCH v5 06/16] media: ti: j721e-csi2rx: add a subdev for the core device
+- No change
+[PATCH v5 07/16] media: ti: j721e-csi2rx: get number of contexts from device tree
+- Solve compilation warnings
+[PATCH v5 08/16] media: cadence: csi2rx: add get_frame_desc wrapper
+- No change
+[PATCH v5 09/16] media: ti: j721e-csi2rx: add support for processing virtual channels
+- Remove unnecessary call to v4l2_unlock_state()
+[PATCH v5 10/16] media: cadence: csi2rx: add multistream support
+- No change
+[PATCH v5 11/16] media: ti: j721e-csi2rx: add multistream support
+- No change
+[PATCH v5 12/16] media: ti: j721e-csi2rx: Submit all available buffers
+- No change
+[PATCH v5 13/16] media: ti: j721e-csi2rx: Change the drain architecture for multistream
+- Squash implementation of completion barriers for last drain cycle
+- Make struct completion per ctx
+
+Link to (v5):
+https://lore.kernel.org/all/20250825142522.1826188-1-r-donadkar@ti.com/
+
+---
+Changes in v5:
+
+# New patches in v5:
+
+[PATCH v5 01/14] media: ti: j721e-csi2rx: Remove word size alignment
+[PATCH v5 14/14] media: ti: j721e-csi2rx: Wait for the last drain
+
+# Changes in patches from v4:
+
+[PATCH v4 01/12] dt-bindings: media: ti,j721e-csi2rx-shim: Support 32 dma chans
+- No change
+[PATCH v4 02/12] media: ti: j721e-csi2rx: separate out device and context
+- No change
+[PATCH v4 03/12] media: ti: j721e-csi2rx: prepare SHIM code for multiple contexts
+- No change
+[PATCH v4 04/12] media: ti: j721e-csi2rx: allocate DMA channel based on context index
+- No change
+[PATCH v4 05/12] media: ti: j721e-csi2rx: add a subdev for the core device
+- No change
+[PATCH v4 06/12] media: ti: j721e-csi2rx: get number of contexts from device tree
+- No change
+[PATCH v4 07/12] media: cadence: csi2rx: add get_frame_desc wrapper
+- No change
+[PATCH v4 08/12] media: ti: j721e-csi2rx: add support for processing virtual channels
+- No change
+[PATCH v4 09/12] media: cadence: csi2rx: add multistream support
+- No change
+[PATCH v4 10/12] media: ti: j721e-csi2rx: add multistream support
+- Serialize stream stop
+- Remove the break statement to avoid early return in the loop, as
+  reported by Sjoerd
+[PATCH v4 11/12] media: ti: j721e-csi2rx: Submit all available buffers
+- Delete the list node on DMA error to avoid kernel panic
+[PATCH v4 12/12] media: ti: j721e-csi2rx: Change the drain architecture for multistream
+- Mention about next frame after drain being bogus
+
+Link to (v4):
+  https://lore.kernel.org/all/20250514112527.1983068-1-r-donadkar@ti.com/
+
+Changes in v4:
+
+[PATCH 01/13] dt-bindings: media: ti,j721e-csi2rx-shim: Support 32 dma chans
+  - No change
+[PATCH 02/13] media: ti: j721e-csi2rx: separate out device and context
+  - Add ctx identifier in the dev_err() message
+  - No change
+[PATCH 03/13] media: ti: j721e-csi2rx: prepare SHIM code for multiple contexts
+  - Reduced the name string lenght from 32 chars to 5 chars
+[PATCH 04/13] media: ti: j721e-csi2rx: allocate DMA channel based on context index
+  - No change
+[PATCH 05/13] media: ti: j721e-csi2rx: add a subdev for the core device
+  - Add .enum_mbus_code callback
+  - Replace statically allocated struct with a global static const struct
+    v4l2_mbus_framefmt and used that in the _init_state() function
+[PATCH 06/13] media: ti: j721e-csi2rx: get number of contexts from device tree
+  - Fix the drain buffer being leaked
+  - If the shows more number of ctx than the TI_CSI2RX_MAX_CTX, return an error
+    instead of warning
+[PATCH 07/13] media: cadence: csi2rx: add get_frame_desc wrapper
+  - No change
+[PATCH 08/13] media: ti: j721e-csi2rx: add support for processing virtual channels
+  - Call ti_csi2rx_get_vc() only once on first stream start and cache the VC data in
+    the driver, use the corresponding VC in all subsequent stream starts.
+[PATCH 09/13] media: cadence: csi2rx: Use new enable stream APIs
+[PATCH 10/13] media: cadence: csi2rx: Enable multi-stream support
+  - Squash the above two patches into
+    [PATCH v4 09/12] media: cadence: csi2rx: add multistream support
+  - Use already obtained csi2rx->source_pad in enable_streams() and
+    disable_streams() call
+  - Update commit message with the reason for using a custom helper for s_stream
+    instead of v4l2_subdev_s_stream_helper()
+  - Use v4l2_get_link_freq() variant that takes pad of the source as its first
+    argument instead of the one that takes v4l2_ctrl_handler
+  - Call v4l2_get_link_freq() with bpp = 0 to prevent fallback to V4L2_CID_PIXEL_RATE
+    in multi-stream case
+  - Use lock guards to simplify error handling
+  - Call csi2rx_update_vc_select() at first stream start before enabling the controller
+[PATCH 11/13] media: ti: j721e-csi2rx: add multistream support
+  - No change
+[PATCH 12/13] media: ti: j721e-csi2rx: Submit all available buffers
+  - No change
+[PATCH 13/13] media: ti: j721e-csi2rx: Change the drain architecture for multistream
+  - Fix checkpatch warning
+  - Change commit message to give a better description of the patch
+
+Link to (v3):
+  https://lore.kernel.org/all/20250417065554.437541-1-r-donadkar@ti.com/
+
+Changes in v3:
+
+- Drop [PATCH v2 01/13] media: cadence: csi2rx: Support runtime PM from
+  v2, support for runtime PM will be added in a separate series:
+  https://lore.kernel.org/all/20250224-ti_csi_pm-v1-0-8f8c29ef646d@ideasonboard.com/
+- Change the drain architecture to prevent FIFO overflow in multistream
+  usecases.
+- With the new drain architecture, we don't need the the driver to wait
+  for userspace to start streaming on all "actively routed" video nodes
+  before starting streaming on the source. So, revert back to the capture
+  architecture where streams can be started and stopped independent
+  to each other.
+
+Link to (v2):
+  https://lore.kernel.org/r/20240627-multistream-v2-0-6ae96c54c1c3@ti.com
+
+Changes in v2:
+
+- Change the multi-camera capture architecture to be similar to that of
+  Tomi's RPi5 FE series, where the driver will wait for userspace to
+  start streaming on all "actively routed" video nodes before starting
+  streaming on the source. This simplifies things a lot from the HW
+  perspective, which might run into deadlocks due to a shared FIFO
+  between multiple DMA channels.
+
+- Drop a few fixes that were posted separately and are already merged
+- Fix dtschema warnings reported by Rob on [02/13]
+- Fix warnings for uninitialized `used_vc` variable in cdns-csi2rx.c
+- Return -EBUSY if someone updates routes for j721e-csi2rx subdev while
+  streaming
+- Only allow single-streams to be routed to the source pads (linked to
+  video nodes) of the j721e-csi2rx device
+- Squash the patches marked "SQUASH" in the v1 RFC series
+
+
+Changhuang Liang (1):
+  media: cadence: csi2rx: Support runtime PM
+
+Jai Luthra (9):
+  dt-bindings: media: ti,j721e-csi2rx-shim: Support 32 dma chans
+  media: ti: j721e-csi2rx: separate out device and context
+  media: ti: j721e-csi2rx: add a subdev for the core device
+  media: ti: j721e-csi2rx: add support for processing virtual channels
+  media: cadence: csi2rx: add multistream support
+  media: ti: j721e-csi2rx: add multistream support
+  media: ti: j721e-csi2rx: Submit all available buffers
+  media: ti: j721e-csi2rx: Support runtime suspend
+  media: ti: j721e-csi2rx: Support system suspend using pm_notifier
+
+Pratyush Yadav (4):
+  media: ti: j721e-csi2rx: prepare SHIM code for multiple contexts
+  media: ti: j721e-csi2rx: allocate DMA channel based on context index
+  media: ti: j721e-csi2rx: get number of contexts from device tree
+  media: cadence: csi2rx: add get_frame_desc wrapper
+
+Rishikesh Donadkar (4):
+  media: ti: j721e-csi2rx: Remove word size alignment on frame width
+  media: cadence: csi2rx: Move to .enable/disable_streams API
+  media: ti: j721e-csi2rx: Move to .enable/disable_streams API
+  media: ti: j721e-csi2rx: Change the drain architecture for multistream
+
+ .../bindings/media/ti,j721e-csi2rx-shim.yaml  |   39 +-
+ drivers/media/platform/cadence/Kconfig        |    1 +
+ drivers/media/platform/cadence/cdns-csi2rx.c  |  496 +++++--
+ drivers/media/platform/ti/Kconfig             |    1 +
+ .../platform/ti/j721e-csi2rx/j721e-csi2rx.c   | 1186 +++++++++++++----
+ 5 files changed, 1304 insertions(+), 419 deletions(-)
+
+-- 
+2.34.1
 
