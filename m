@@ -1,54 +1,65 @@
 Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0F2B134251C;
-	Wed, 12 Nov 2025 14:51:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 954E01339A4;
+	Wed, 12 Nov 2025 15:34:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.167.242.64
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762959118; cv=none; b=NiRLn3q9hQcoKARPq1RS7TVRCWf2QbLhYy9ztxMiE7YcI3pkGBtGp9X8Aj5gRzoaxk2HQv1d4zDPXDJ/UxUJa9B5oJRsww7PLicKgXNV0CAM7u34OBu2DQnGLuxmD7Ew/Qpo6AfcpHGLRMrsa/QzgBVKD92/8vvU/5fN13GgAQA=
+	t=1762961689; cv=none; b=EgLTPkZrITvym9iz6fjf4LhaWKqHAaeVzbd7+pDsxfgmPlkpkSj1X1flHhS2Dbg7ZkTE0s36mqSqiZOYseAXaZ+WfREy+isz54CngJs+AmQ9O6Slf8ahl/wXY9yfM00u3Z7SPGgy6uaW3NpmKdToKMThzGhKleZz0ThKrrSM0E0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762959118; c=relaxed/simple;
-	bh=aWeBdEfnTUEJjDdGlDTINxVDm9Ychxa2S0ZJDIUoXqo=;
-	h=Content-Type:MIME-Version:In-Reply-To:References:Subject:From:Cc:
-	 To:Date:Message-ID; b=d0PqmxF3Sg8i7nM37H7QpUsvVqyk+/m1uNQQ6SaqAghKNYcOCu0FI1raGTXyzkRyg9KqHkTYAQ6fl6xpNZoitfgCG/KhlwA5QbmSPZwWFKlxYQX3LQTfsHLUKgA1wVlW/GsunWA0dqNui1OYS3DUAG974zeowLR5DKURn+Ng0z4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ideasonboard.com; spf=pass smtp.mailfrom=ideasonboard.com; dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b=WmFyXDQj; arc=none smtp.client-ip=213.167.242.64
+	s=arc-20240116; t=1762961689; c=relaxed/simple;
+	bh=sGPrc2XGQVwIkB/KocdGZoVUlFLBAfHxUmZf51Yrgl4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=PBruOgL52uD7cDtaHWT6b1mVVWCCDMfcZND/XJvnq9ffuk3UY8CnyywwWT6732Y6hkTz+3/9baHb+gEJeqMrj0d8wfn39IxGQcBshMVfyPu27KpdndX2cuJ6K6DsT5HMSuY2TYfl3QiBjyOtPLczDLa/OPzpzyO5LwD4t9wKc98=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ideasonboard.com; spf=pass smtp.mailfrom=ideasonboard.com; dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b=hRrUoqDC; arc=none smtp.client-ip=213.167.242.64
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ideasonboard.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ideasonboard.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="WmFyXDQj"
-Received: from pendragon.ideasonboard.com (cpc89244-aztw30-2-0-cust6594.18-1.cable.virginm.net [86.31.185.195])
-	by perceval.ideasonboard.com (Postfix) with ESMTPSA id 35F0050A;
-	Wed, 12 Nov 2025 15:49:54 +0100 (CET)
+	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="hRrUoqDC"
+Received: from ideasonboard.com (mob-5-90-142-171.net.vodafone.it [5.90.142.171])
+	by perceval.ideasonboard.com (Postfix) with ESMTPSA id 27D59B0B;
+	Wed, 12 Nov 2025 16:32:43 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-	s=mail; t=1762958994;
-	bh=aWeBdEfnTUEJjDdGlDTINxVDm9Ychxa2S0ZJDIUoXqo=;
-	h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
-	b=WmFyXDQjTTbicemy8kC86RhVJBI7dGrF9hzwPWx5mM6s1++B3MndNphhFfqjIvqus
-	 Mmqd1a29AaqhNugKwq/BSYDaJQsY9exTpulRrBwXkfLdhO1XBLT40WdKgEK9+uXurQ
-	 FFT+qHcM2SA/9oZ1sKoLmFAgMpvTuynRf2xCK5FM=
-Content-Type: text/plain; charset="utf-8"
+	s=mail; t=1762961563;
+	bh=sGPrc2XGQVwIkB/KocdGZoVUlFLBAfHxUmZf51Yrgl4=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=hRrUoqDCgsp5EyW3VFJ8zcxSucRM7TAfvBR67AUKZ1Q6Cxt1l2PC7Myc4Tk8eNfJz
+	 sHHSYEZqhDelaMlM0TcKXm3M1qEue74sKo+KzqmJ/Jc7fAS/pcZTWjRKDMKefy6kNp
+	 CuKBNGMH2rTGBx2BHUsenwVXewjEPLsY/F76qOzk=
+Date: Wed, 12 Nov 2025 16:34:39 +0100
+From: Jacopo Mondi <jacopo.mondi@ideasonboard.com>
+To: Dave Stevenson <dave.stevenson@raspberrypi.com>
+Cc: Jai Luthra <jai.luthra@ideasonboard.com>, 
+	Jacopo Mondi <jacopo.mondi@ideasonboard.com>, Sakari Ailus <sakari.ailus@linux.intel.com>, 
+	Jacopo Mondi <jacopo@jmondi.org>, Mauro Carvalho Chehab <mchehab@kernel.org>, 
+	linux-media@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	Mauro Carvalho Chehab <mchehab+huawei@kernel.org>, Kieran Bingham <kieran.bingham@ideasonboard.com>, 
+	David Plowman <david.plowman@raspberrypi.com>, Laurent Pinchart <laurent.pinchart@ideasonboard.com>, 
+	Peter Robinson <pbrobinson@gmail.com>, Stefan Wahren <wahrenst@gmx.net>, 
+	"Ivan T. Ivanov" <iivanov@suse.de>
+Subject: Re: [PATCH 06/13] media: i2c: ov5647: Support HFLIP and VFLIP
+Message-ID: <5ajcga52vn5dt5qrqxnwdhnao4v7glggwo2k4ecr5bpcmxc5lf@cas744xfuwqt>
+References: <20251028-b4-rpi-ov5647-v1-0-098413454f5e@ideasonboard.com>
+ <20251028-b4-rpi-ov5647-v1-6-098413454f5e@ideasonboard.com>
+ <u5wdva6kk5n6q5myj3wuy4bxqhaqyhk2ngentrj4p3v5447y2a@3kujjl3nnwea>
+ <176294861029.13219.15475344635093672267@freya>
+ <CAPY8ntB3X47aX=4TKrsF-kGR5xT0dvi5KKofs+5z-XY3YCf4Qw@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 In-Reply-To: <CAPY8ntB3X47aX=4TKrsF-kGR5xT0dvi5KKofs+5z-XY3YCf4Qw@mail.gmail.com>
-References: <20251028-b4-rpi-ov5647-v1-0-098413454f5e@ideasonboard.com> <20251028-b4-rpi-ov5647-v1-6-098413454f5e@ideasonboard.com> <u5wdva6kk5n6q5myj3wuy4bxqhaqyhk2ngentrj4p3v5447y2a@3kujjl3nnwea> <176294861029.13219.15475344635093672267@freya> <CAPY8ntB3X47aX=4TKrsF-kGR5xT0dvi5KKofs+5z-XY3YCf4Qw@mail.gmail.com>
-Subject: Re: [PATCH 06/13] media: i2c: ov5647: Support HFLIP and VFLIP
-From: Kieran Bingham <kieran.bingham@ideasonboard.com>
-Cc: Jacopo Mondi <jacopo.mondi@ideasonboard.com>, Sakari Ailus <sakari.ailus@linux.intel.com>, Jacopo Mondi <jacopo@jmondi.org>, Mauro Carvalho Chehab <mchehab@kernel.org>, linux-media@vger.kernel.org, linux-kernel@vger.kernel.org, Mauro Carvalho Chehab <mchehab+huawei@kernel.org>, David Plowman <david.plowman@raspberrypi.com>, Laurent Pinchart <laurent.pinchart@ideasonboard.com>, Peter Robinson <pbrobinson@gmail.com>, Stefan Wahren <wahrenst@gmx.net>, Ivan T. Ivanov <iivanov@suse.de>
-To: Dave Stevenson <dave.stevenson@raspberrypi.com>, Jai Luthra <jai.luthra@ideasonboard.com>
-Date: Wed, 12 Nov 2025 14:51:50 +0000
-Message-ID: <176295911050.2141792.17985652989180570149@ping.linuxembedded.co.uk>
-User-Agent: alot/0.9.1
 
-Quoting Dave Stevenson (2025-11-12 14:35:49)
+Hi Jai, Dave
+
+On Wed, Nov 12, 2025 at 02:35:49PM +0000, Dave Stevenson wrote:
 > Hi Jai & Jacopo.
->=20
-> On Wed, 12 Nov 2025 at 11:56, Jai Luthra <jai.luthra@ideasonboard.com> wr=
-ote:
+>
+> On Wed, 12 Nov 2025 at 11:56, Jai Luthra <jai.luthra@ideasonboard.com> wrote:
 > >
 > > Hi Jacopo,
 > >
@@ -65,13 +76,11 @@ ote:
 > > > > Signed-off-by: David Plowman <david.plowman@raspberrypi.com>
 > > > > Signed-off-by: Jai Luthra <jai.luthra@ideasonboard.com>
 > > > > ---
-> > > >  drivers/media/i2c/ov5647.c | 77 ++++++++++++++++++++++++++++++++++=
-++++++++----
+> > > >  drivers/media/i2c/ov5647.c | 77 ++++++++++++++++++++++++++++++++++++++++++----
 > > > >  1 file changed, 71 insertions(+), 6 deletions(-)
 > > > >
 > > > > diff --git a/drivers/media/i2c/ov5647.c b/drivers/media/i2c/ov5647.c
-> > > > index 977b878b0d4b8cd5f39f510ebd8b33c9163f7da2..a33e2d8edc114d302e8=
-30639cb7cb161f16a6208 100644
+> > > > index 977b878b0d4b8cd5f39f510ebd8b33c9163f7da2..a33e2d8edc114d302e830639cb7cb161f16a6208 100644
 > > > > --- a/drivers/media/i2c/ov5647.c
 > > > > +++ b/drivers/media/i2c/ov5647.c
 > > > > @@ -54,6 +54,8 @@
@@ -92,8 +101,7 @@ ote:
 > > > >  };
 > > > >
 > > > >  static inline struct ov5647 *to_sensor(struct v4l2_subdev *sd)
-> > > > @@ -150,7 +154,7 @@ static struct regval_list ov5647_2592x1944_10bp=
-p[] =3D {
+> > > > @@ -150,7 +154,7 @@ static struct regval_list ov5647_2592x1944_10bpp[] = {
 > > > >       {0x3036, 0x69},
 > > > >       {0x303c, 0x11},
 > > > >       {0x3106, 0xf5},
@@ -103,12 +111,12 @@ p[] =3D {
 > > >
 > > > That's interesting, as the datasheet says that by default
 > > >
-> > >         3820 =3D 0x40
-> > >         3821 =3D 0x00
+> > >         3820 = 0x40
+> > >         3821 = 0x00
 > > >
 > > > And
-> > > - BIT[2] =3D flip ISP
-> > > - BIT[1] =3D flip SNR
+> > > - BIT[2] = flip ISP
+> > > - BIT[1] = flip SNR
 > > >
 > > > The implementation of ov5647_s_flip() toggles BIT(1) and ignores
 > > > BIT(2) while the modes definition have both (BIT(2) | BIT(1)) set
@@ -126,7 +134,7 @@ p[] =3D {
 > > without needing to modify the pixelarray layout.
 > >
 > > Will do that in v2.
->=20
+>
 > Are you going to update the rectangles reported by g_selection then?
 > The sensor can't magically change the filter colour of the pixels
 > being read out, therefore it must be reading different pixels.
@@ -134,37 +142,23 @@ p[] =3D {
 > active pixels, and we're reading out all of those. "The backend
 > processor can use the boundary pixels for additional processing", but
 > how? There are no details.
->=20
+>
 > Yes it's minor, but in using BIT(1) we know exactly what the sensor is
 > doing. Handling the change of Bayer order in the driver isn't that
 > involved, and is common to so many sensors that clients have to
 > support it anyway.
->=20
+>
 > None of the ISP features of OV5647 are used by this driver. I suspect
 > the bits mentioned in the datasheet are probably a hang-over from
 > OV5640 which is effectively the same sensor array with built-in ISP
 > processing to produce YUYV images.
->=20
+>
 > Just my two-cents.
 
-I'm also on this side of the fence. Any magic that keeps the bayer order
-- moves the picture, and unless we can report that accurately it's
-undesireable.
+Agreed, we have everything in place to handle the bayer permutations
+already, so no need to try to hide them
 
-It might be worth trying out the crop-detector in camshark to measure
-the movements and relative positions of the full raw captures and crops
-modes!
-
-For instance on the IMX283 and IMX335 - in the product we worked on for
-those sensors, the images are used for measurements - so even a single
-pixel offset matters!
-
---
-Kieran
-
-
-
->=20
+>
 > > >
 > > > Now, I admit I'm not sure what are the ISP functions on the ov5647 and
 > > > this patch is super-duper-tested as it comes from the RPi BSP, so if
@@ -173,8 +167,7 @@ Kieran
 > > >
 > > > >       {0x3827, 0xec},
 > > > >       {0x370c, 0x03},
-> > > > @@ -239,7 +243,7 @@ static struct regval_list ov5647_1080p30_10bpp[=
-] =3D {
+> > > > @@ -239,7 +243,7 @@ static struct regval_list ov5647_1080p30_10bpp[] = {
 > > > >       {0x3036, 0x62},
 > > > >       {0x303c, 0x11},
 > > > >       {0x3106, 0xf5},
@@ -183,8 +176,7 @@ Kieran
 > > > >       {0x3820, 0x00},
 > > > >       {0x3827, 0xec},
 > > > >       {0x370c, 0x03},
-> > > > @@ -403,7 +407,7 @@ static struct regval_list ov5647_2x2binned_10bp=
-p[] =3D {
+> > > > @@ -403,7 +407,7 @@ static struct regval_list ov5647_2x2binned_10bpp[] = {
 > > > >       {0x4800, 0x24},
 > > > >       {0x3503, 0x03},
 > > > >       {0x3820, 0x41},
@@ -193,8 +185,7 @@ p[] =3D {
 > > > >       {0x350a, 0x00},
 > > > >       {0x350b, 0x10},
 > > > >       {0x3500, 0x00},
-> > > > @@ -419,7 +423,7 @@ static struct regval_list ov5647_640x480_10bpp[=
-] =3D {
+> > > > @@ -419,7 +423,7 @@ static struct regval_list ov5647_640x480_10bpp[] = {
 > > > >       {0x3035, 0x11},
 > > > >       {0x3036, 0x46},
 > > > >       {0x303c, 0x11},
@@ -203,23 +194,21 @@ p[] =3D {
 > > > >       {0x3820, 0x41},
 > > > >       {0x370c, 0x03},
 > > > >       {0x3612, 0x59},
-> > > > @@ -935,6 +939,26 @@ static const struct v4l2_subdev_video_ops ov56=
-47_subdev_video_ops =3D {
-> > > >       .s_stream =3D             ov5647_s_stream,
+> > > > @@ -935,6 +939,26 @@ static const struct v4l2_subdev_video_ops ov5647_subdev_video_ops = {
+> > > >       .s_stream =             ov5647_s_stream,
 > > > >  };
 > > > >
 > > > > +/*
-> > > > + * This function returns the mbus code for the current settings of=
- the HFLIP
+> > > > + * This function returns the mbus code for the current settings of the HFLIP
 > > > > + * and VFLIP controls.
 > > > > + */
 > > > > +static u32 ov5647_get_mbus_code(struct v4l2_subdev *sd)
 > > > > +{
-> > > > +     struct ov5647 *sensor =3D to_sensor(sd);
+> > > > +     struct ov5647 *sensor = to_sensor(sd);
 > > > > +     /* The control values are only 0 or 1. */
-> > > > +     int index =3D  sensor->hflip->val | (sensor->vflip->val << 1);
+> > > > +     int index =  sensor->hflip->val | (sensor->vflip->val << 1);
 > > > > +
-> > > > +     static const u32 codes[4] =3D {
+> > > > +     static const u32 codes[4] = {
 > > > > +             MEDIA_BUS_FMT_SGBRG10_1X10,
 > > > > +             MEDIA_BUS_FMT_SBGGR10_1X10,
 > > > > +             MEDIA_BUS_FMT_SRGGB10_1X10,
@@ -231,68 +220,61 @@ p[] =3D {
 > > > > +
 > > > >  static int ov5647_enum_mbus_code(struct v4l2_subdev *sd,
 > > > >                                struct v4l2_subdev_state *sd_state,
-> > > >                                struct v4l2_subdev_mbus_code_enum *c=
-ode)
-> > > > @@ -942,7 +966,7 @@ static int ov5647_enum_mbus_code(struct v4l2_su=
-bdev *sd,
+> > > >                                struct v4l2_subdev_mbus_code_enum *code)
+> > > > @@ -942,7 +966,7 @@ static int ov5647_enum_mbus_code(struct v4l2_subdev *sd,
 > > > >       if (code->index > 0)
 > > > >               return -EINVAL;
 > > > >
-> > > > -     code->code =3D MEDIA_BUS_FMT_SBGGR10_1X10;
-> > > > +     code->code =3D ov5647_get_mbus_code(sd);
+> > > > -     code->code = MEDIA_BUS_FMT_SBGGR10_1X10;
+> > > > +     code->code = ov5647_get_mbus_code(sd);
 > > > >
 > > > >       return 0;
 > > > >  }
-> > > > @@ -953,7 +977,7 @@ static int ov5647_enum_frame_size(struct v4l2_s=
-ubdev *sd,
+> > > > @@ -953,7 +977,7 @@ static int ov5647_enum_frame_size(struct v4l2_subdev *sd,
 > > > >  {
 > > > >       const struct v4l2_mbus_framefmt *fmt;
 > > > >
-> > > > -     if (fse->code !=3D MEDIA_BUS_FMT_SBGGR10_1X10 ||
-> > > > +     if (fse->code !=3D ov5647_get_mbus_code(sd) ||
-> > > >           fse->index >=3D ARRAY_SIZE(ov5647_modes))
+> > > > -     if (fse->code != MEDIA_BUS_FMT_SBGGR10_1X10 ||
+> > > > +     if (fse->code != ov5647_get_mbus_code(sd) ||
+> > > >           fse->index >= ARRAY_SIZE(ov5647_modes))
 > > > >               return -EINVAL;
 > > > >
-> > > > @@ -986,6 +1010,8 @@ static int ov5647_get_pad_fmt(struct v4l2_subd=
-ev *sd,
+> > > > @@ -986,6 +1010,8 @@ static int ov5647_get_pad_fmt(struct v4l2_subdev *sd,
 > > > >       }
 > > > >
-> > > >       *fmt =3D *sensor_format;
+> > > >       *fmt = *sensor_format;
 > > > > +     /* The code we pass back must reflect the current h/vflips. */
-> > > > +     fmt->code =3D ov5647_get_mbus_code(sd);
+> > > > +     fmt->code = ov5647_get_mbus_code(sd);
 > > > >       mutex_unlock(&sensor->lock);
 > > > >
 > > > >       return 0;
-> > > > @@ -1033,6 +1059,8 @@ static int ov5647_set_pad_fmt(struct v4l2_sub=
-dev *sd,
+> > > > @@ -1033,6 +1059,8 @@ static int ov5647_set_pad_fmt(struct v4l2_subdev *sd,
 > > > >                                        exposure_def);
 > > > >       }
-> > > >       *fmt =3D mode->format;
+> > > >       *fmt = mode->format;
 > > > > +     /* The code we pass back must reflect the current h/vflips. */
-> > > > +     fmt->code =3D ov5647_get_mbus_code(sd);
+> > > > +     fmt->code = ov5647_get_mbus_code(sd);
 > > > >       mutex_unlock(&sensor->lock);
 > > > >
 > > > >       return 0;
-> > > > @@ -1208,6 +1236,25 @@ static int ov5647_s_exposure(struct v4l2_sub=
-dev *sd, u32 val)
+> > > > @@ -1208,6 +1236,25 @@ static int ov5647_s_exposure(struct v4l2_subdev *sd, u32 val)
 > > > >       return ov5647_write(sd, OV5647_REG_EXP_LO, (val & 0xf) << 4);
 > > > >  }
 > > > >
-> > > > +static int ov5647_s_flip(struct v4l2_subdev *sd, u16 reg, u32 ctrl=
-_val)
+> > > > +static int ov5647_s_flip(struct v4l2_subdev *sd, u16 reg, u32 ctrl_val)
 > > > > +{
 > > > > +     int ret;
 > > > > +     u8 reg_val;
 > > > > +
 > > > > +     /* Set or clear bit 1 and leave everything else alone. */
-> > > > +     ret =3D ov5647_read(sd, reg, &reg_val);
-> > > > +     if (ret =3D=3D 0) {
+> > > > +     ret = ov5647_read(sd, reg, &reg_val);
+> > > > +     if (ret == 0) {
 > > > > +             if (ctrl_val)
-> > > > +                     reg_val |=3D 2;
+> > > > +                     reg_val |= 2;
 > > > > +             else
-> > > > +                     reg_val &=3D ~2;
+> > > > +                     reg_val &= ~2;
 > > > > +
-> > > > +             ret =3D ov5647_write(sd, reg, reg_val);
+> > > > +             ret = ov5647_write(sd, reg, reg_val);
 > > > > +     }
 > > > > +
 > > > > +     return ret;
@@ -300,15 +282,13 @@ _val)
 > > > > +
 > > > >  static int ov5647_s_ctrl(struct v4l2_ctrl *ctrl)
 > > > >  {
-> > > >       struct ov5647 *sensor =3D container_of(ctrl->handler,
-> > > > @@ -1270,6 +1317,14 @@ static int ov5647_s_ctrl(struct v4l2_ctrl *c=
-trl)
+> > > >       struct ov5647 *sensor = container_of(ctrl->handler,
+> > > > @@ -1270,6 +1317,14 @@ static int ov5647_s_ctrl(struct v4l2_ctrl *ctrl)
 > > > >               /* Read-only, but we adjust it based on mode. */
 > > > >               break;
 > > > >
 > > > > +     case V4L2_CID_HFLIP:
-> > > > +             /* There's an in-built hflip in the sensor, so accoun=
-t for that here. */
+> > > > +             /* There's an in-built hflip in the sensor, so account for that here. */
 > > > > +             ov5647_s_flip(sd, OV5647_REG_HFLIP, !ctrl->val);
 > > > > +             break;
 > > > > +     case V4L2_CID_VFLIP:
@@ -317,17 +297,15 @@ t for that here. */
 > > >
 > > > The modes definition used to set
 > > >
-> > >         0x3820 =3D 0x00
-> > >         0x3821 =3D 0x06
+> > >         0x3820 = 0x00
+> > >         0x3821 = 0x06
 > > >
 > > > Is this the built-in hflip ?
 > > >
-> > > Or does it mean that setting the registers value to 1 'disabled' flip=
-s ?
+> > > Or does it mean that setting the registers value to 1 'disabled' flips ?
 > > >
 > >
-> > Yes, this particular sensor flips the image horizontally if 0x3820 =3D =
-0x00,
+> > Yes, this particular sensor flips the image horizontally if 0x3820 = 0x00,
 > > resulting in a mirrored image.
 > >
 > > But now that userspace can control flips, I am a bit confused on how to
@@ -336,20 +314,15 @@ s ?
 > > > > +
 > > > >       default:
 > > > >               dev_info(&client->dev,
-> > > >                        "Control (id:0x%x, val:0x%x) not supported\n=
-",
-> > > > @@ -1341,6 +1396,16 @@ static int ov5647_init_controls(struct ov564=
-7 *sensor, struct device *dev)
-> > > >                                    ARRAY_SIZE(ov5647_test_pattern_m=
-enu) - 1,
+> > > >                        "Control (id:0x%x, val:0x%x) not supported\n",
+> > > > @@ -1341,6 +1396,16 @@ static int ov5647_init_controls(struct ov5647 *sensor, struct device *dev)
+> > > >                                    ARRAY_SIZE(ov5647_test_pattern_menu) - 1,
 > > > >                                    0, 0, ov5647_test_pattern_menu);
 > > > >
-> > > > +     sensor->hflip =3D v4l2_ctrl_new_std(&sensor->ctrls, &ov5647_c=
-trl_ops,
+> > > > +     sensor->hflip = v4l2_ctrl_new_std(&sensor->ctrls, &ov5647_ctrl_ops,
 > > > > +                                       V4L2_CID_HFLIP, 0, 1, 1, 0);
 > > > > +     if (sensor->hflip)
-> > > > +             sensor->hflip->flags |=3D V4L2_CTRL_FLAG_MODIFY_LAYOU=
-T;
+> > > > +             sensor->hflip->flags |= V4L2_CTRL_FLAG_MODIFY_LAYOUT;
 > > >
 > > > I wonder if hflip is enabled by default we shouldn't register the
 > > > control with default value of 1 ?
@@ -357,45 +330,56 @@ T;
 > >
 > > My preference is to let the driver toggle the value for HFLIP before
 > > writing to the sensor, as it is done currently in this patch.
+
+As Jai reported
+- writing 1 = disable flip
+- writing 0 = enable flip
+
+So if the sensor is initialized with 0x3821[1] = 1 it means flip is
+disabled by default, so registering HFLIP as disabled is correct ?
+
 > >
 > > This makes this sensor behave like others, where you get a normal
-> > non-mirrored image when you set HFLIP =3D 0, and mirrored if HFLIP =3D =
-1.
+> > non-mirrored image when you set HFLIP = 0, and mirrored if HFLIP = 1.
 > >
-> > The alternative is to keep the driver transparent by reporting the regi=
-ster
-> > values as-is in the control. In that case, we should make horizontal_fl=
-ip =3D
+> > The alternative is to keep the driver transparent by reporting the register
+> > values as-is in the control. In that case, we should make horizontal_flip =
 > > 1 the default value for the control. But I'm not aware if any userspace
 > > applications will override the default value resulting in bad experience
 > > for the users.
 > >
 > > WDYT?
->=20
+>
 > My vote would be for the driver to invert the value before writing, as
 > this patch does.
->=20
+>
 > Making userspace have to call QUERYCTRL / QUERY_EXT_CTRL to get the
 > default before it can then work out that it needs to invert any flip
 > settings is additional overhead for zero gain.
->=20
+
+I was just wondering what the default status is (regardless of the
+actual register value). If hflip is disabled by default (confirmed by
+the fact 0x3821[1]=1) , then the control should be initialized with 0
+as default.
+
+Thanks
+  j
+
+>
 >   Dave
->=20
+>
 > > Thanks,
 > >     Jai
 > >
 > > > > +
-> > > > +     sensor->vflip =3D v4l2_ctrl_new_std(&sensor->ctrls, &ov5647_c=
-trl_ops,
+> > > > +     sensor->vflip = v4l2_ctrl_new_std(&sensor->ctrls, &ov5647_ctrl_ops,
 > > > > +                                       V4L2_CID_VFLIP, 0, 1, 1, 0);
 > > > > +     if (sensor->vflip)
-> > > > +             sensor->vflip->flags |=3D V4L2_CTRL_FLAG_MODIFY_LAYOU=
-T;
+> > > > +             sensor->vflip->flags |= V4L2_CTRL_FLAG_MODIFY_LAYOUT;
 > > > > +
 > > > >       v4l2_fwnode_device_parse(dev, &props);
 > > > >
-> > > >       v4l2_ctrl_new_fwnode_properties(&sensor->ctrls, &ov5647_ctrl_=
-ops,
+> > > >       v4l2_ctrl_new_fwnode_properties(&sensor->ctrls, &ov5647_ctrl_ops,
 > > > >
 > > > > --
 > > > > 2.51.0
