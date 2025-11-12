@@ -1,393 +1,338 @@
-Received: from SA9PR02CU001.outbound.protection.outlook.com (mail-southcentralusazon11013064.outbound.protection.outlook.com [40.93.196.64])
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5FB2331B11C;
-	Wed, 12 Nov 2025 11:56:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.93.196.64
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762948617; cv=fail; b=qRYRK0n6ABSCxKMcW4XGuU1e6HcKWxuJO6jtp/MEyyrxDICNOxsGLWNpg6WyUrFkdAdRskB9xekPgQRfTk2uJp34845vXnto2qjQO/o6PrO6v6ixYBNEGQt4cPT8zP8XMSFg4q9NYF73sdu1ahgMiiYtsRSxbSIDmzHpuoIcvzw=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762948617; c=relaxed/simple;
-	bh=jmr2wvftY/TL7QzAg4BG+2pC3zB5IyayEFK9oP+RPZc=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=MPJGJvrFM5WYGK0Wv5Vb5z0ThvIC9Irx58QAlzBXnrwenPHpNOTSd5iD9Q+FT/vWR582J7ypiWSXmrXG75VBgcNFaQcLLZkkHILwbV+gD2ppoNMhxGJyPjhob6ZEBPlX7CNib6kPegPkPqYGsVPBDhEW2Q7jvlwxSwSUF/tWmm8=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com; spf=pass smtp.mailfrom=ti.com; dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b=l70x5gjh; arc=fail smtp.client-ip=40.93.196.64
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ti.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CA0D831B809;
+	Wed, 12 Nov 2025 11:56:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.167.242.64
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1762948620; cv=none; b=crcNvTvEPHUllQh+LurtBpQO92qHcYUlLe4P6YnlL+beLwnRdqxuBASMDtKvfrOW6STmr/ckPfvAYOavWnt9hqVqZXRCFHTIoSqjTvZqkzjQ6opPu9bWQMGiZZ3S6PtNU8tEd7RKcWJFTch4ix9qz1DDnUzglwC3fMa84HHGW/Q=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1762948620; c=relaxed/simple;
+	bh=zTcg7shsgAiP9rYLs4tmSZysIL5InAg9GgS9Auum/1g=;
+	h=Content-Type:MIME-Version:In-Reply-To:References:Subject:From:Cc:
+	 To:Date:Message-ID; b=g9WeOvMeL54sPqPq/7BYH2Lh8AVCy3FsTgfyVxLmFhzKFilOLQONTjgZUXZs1Bolv8MzR6/RZb4oUYusCv3MYWqmsMO+gvJyZCIM1fyMs8JLaCIwHkkkIdBtPfjPyOAUuAVUkrI0L2tNxVgKfE4RKbShvzHslVCiVMsjvMrwtWQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ideasonboard.com; spf=pass smtp.mailfrom=ideasonboard.com; dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b=U+gzFIU/; arc=none smtp.client-ip=213.167.242.64
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ideasonboard.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ideasonboard.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="l70x5gjh"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=k5xecIngtHr2eh+wxqTn6UmR/4JPZX2m1iq5z1pG5U/EixrPPCmKLA5XCJJDYpbjvIKau8Irlb/JCKyI7+umCoJtA/fTJ+Gw65et1sxCYn9EzcLekc52gKIxRw7R3cLrUSECOj8lSEaOPKsz5hjApvba1kWhJefrdw9OU4VWwbvvlDb8QRSfQabhPC3THYG3RF/h8iFNv9enHukFsK0CM4WcDNclsZbPFNOKiJEs2yFIWhIgviEsPmYWJgovEdyxM9Fozg2OAHZ3iSHmjXYBQyR9mraWz+GTEdYIEgdbB3Ycw+EtKdNsffBmf7l6ACVLgUm7H95MaEo/WMmKIy5tRA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=QoGY6THN4dSbokYrFgNfFF/VaWvs2fCkBbrfI7lO0Yg=;
- b=h+Rh4P5jav4WBSWKQTxIjf569gMNkwR9O5lTbeOBSAQUaBGZcBgPf/WGwOnsHr2DMwd8z7GCnF2N7+Dsk8fijV2mCfLFJwmbAHfOw+CLlBE4eTSzA4WRrsb9c0zfyh4HzRxfnL4U2cO4l3hIMhDMPYibPYvmCKWQ5C5GFJASuX0B8/0ZUdhzcr0pN44m7FGfiSeLeyuopJx2QIt6UdjE8PpJ5YCo6HzmIpGIRdLYXinUSQ7KFmjKLwcDyuNhdZPGq/WPjsFsd2zky1rm9yvRNrntpSZmimyhmUhvfFVp3Mc6UtPQ7sqvC+WwWOrzXfXvAvAn2oGUp4q/cikqBl1ftA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 198.47.21.194) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=ti.com;
- dmarc=pass (p=quarantine sp=none pct=100) action=none header.from=ti.com;
- dkim=none (message not signed); arc=none (0)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=QoGY6THN4dSbokYrFgNfFF/VaWvs2fCkBbrfI7lO0Yg=;
- b=l70x5gjh6YNcK/Rh4X6rpPXwpuge9hMJ2fdav/XvwCSoE6krEZjHmttPkzxvKRSM+C0oUueznteF2SBkPI/mIHMyBSdxNQhrgA0AsvtbjMwmjUGKwL8U8BUQkHtFTjm1bRfJRRAiW4SqG9RMnwNhtfoCvCNxya3af13AiTohF20=
-Received: from MW4PR04CA0377.namprd04.prod.outlook.com (2603:10b6:303:81::22)
- by BL3PR10MB6020.namprd10.prod.outlook.com (2603:10b6:208:3b3::9) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9298.16; Wed, 12 Nov
- 2025 11:56:52 +0000
-Received: from MWH0EPF000971E3.namprd02.prod.outlook.com
- (2603:10b6:303:81:cafe::ae) by MW4PR04CA0377.outlook.office365.com
- (2603:10b6:303:81::22) with Microsoft SMTP Server (version=TLS1_3,
- cipher=TLS_AES_256_GCM_SHA384) id 15.20.9320.15 via Frontend Transport; Wed,
- 12 Nov 2025 11:56:50 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 198.47.21.194)
- smtp.mailfrom=ti.com; dkim=none (message not signed) header.d=none;dmarc=pass
- action=none header.from=ti.com;
-Received-SPF: Pass (protection.outlook.com: domain of ti.com designates
- 198.47.21.194 as permitted sender) receiver=protection.outlook.com;
- client-ip=198.47.21.194; helo=flwvzet200.ext.ti.com; pr=C
-Received: from flwvzet200.ext.ti.com (198.47.21.194) by
- MWH0EPF000971E3.mail.protection.outlook.com (10.167.243.70) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.9320.13 via Frontend Transport; Wed, 12 Nov 2025 11:56:51 +0000
-Received: from DFLE210.ent.ti.com (10.64.6.68) by flwvzet200.ext.ti.com
- (10.248.192.31) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.20; Wed, 12 Nov
- 2025 05:56:46 -0600
-Received: from DFLE204.ent.ti.com (10.64.6.62) by DFLE210.ent.ti.com
- (10.64.6.68) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.20; Wed, 12 Nov
- 2025 05:56:46 -0600
-Received: from lelvem-mr06.itg.ti.com (10.180.75.8) by DFLE204.ent.ti.com
- (10.64.6.62) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.20 via Frontend
- Transport; Wed, 12 Nov 2025 05:56:46 -0600
-Received: from ws.dhcp.ti.com (ws.dhcp.ti.com [172.24.233.149])
-	by lelvem-mr06.itg.ti.com (8.18.1/8.18.1) with ESMTP id 5ACBsxc52638977;
-	Wed, 12 Nov 2025 05:56:40 -0600
-From: Rishikesh Donadkar <r-donadkar@ti.com>
-To: <jai.luthra@linux.dev>, <laurent.pinchart@ideasonboard.com>,
-	<mripard@kernel.org>
-CC: <r-donadkar@ti.com>, <y-abhilashchandra@ti.com>, <devarsht@ti.com>,
-	<s-jain1@ti.com>, <vigneshr@ti.com>, <mchehab@kernel.org>, <robh@kernel.org>,
-	<krzk+dt@kernel.org>, <p.zabel@pengutronix.de>, <conor+dt@kernel.org>,
-	<sakari.ailus@linux.intel.com>, <hverkuil-cisco@xs4all.nl>,
-	<tomi.valkeinen@ideasonboard.com>, <jai.luthra@ideasonboard.com>,
-	<changhuang.liang@starfivetech.com>, <jack.zhu@starfivetech.com>,
-	<sjoerd@collabora.com>, <dan.carpenter@linaro.org>,
-	<hverkuil+cisco@kernel.org>, <linux-kernel@vger.kernel.org>,
-	<linux-media@vger.kernel.org>, <devicetree@vger.kernel.org>
-Subject: [PATCH v8 15/18] media: ti: j721e-csi2rx: Change the drain architecture for multistream
-Date: Wed, 12 Nov 2025 17:24:56 +0530
-Message-ID: <20251112115459.2479225-16-r-donadkar@ti.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20251112115459.2479225-1-r-donadkar@ti.com>
-References: <20251112115459.2479225-1-r-donadkar@ti.com>
+	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="U+gzFIU/"
+Received: from mail.ideasonboard.com (unknown [IPv6:2401:4900:1c66:d4c7:f5bd:b015:f4e9:fab0])
+	by perceval.ideasonboard.com (Postfix) with ESMTPSA id 4DB2810D;
+	Wed, 12 Nov 2025 12:54:55 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+	s=mail; t=1762948495;
+	bh=zTcg7shsgAiP9rYLs4tmSZysIL5InAg9GgS9Auum/1g=;
+	h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
+	b=U+gzFIU/u8sFPmIBKK580Od3XgB1TTGe311pWVIHJQv1b/Xg3sZA6ij3aqLlHJs6x
+	 G44f/fEwrqiNwYoHyzi3on6Z3MBATIcWOdOQxaevxGivOJGg3LyYqR/eVKrpnUDlOD
+	 uwnztIL1BOb3rSnlLUSFdO2XPhzmFE2sx7APFQdo=
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-C2ProcessedOrg: 333ef613-75bf-4e12-a4b1-8e3623f5dcea
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: MWH0EPF000971E3:EE_|BL3PR10MB6020:EE_
-X-MS-Office365-Filtering-Correlation-Id: 893590e2-8333-45dd-6c3c-08de21e29115
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|82310400026|7416014|376014|1800799024|36860700013;
-X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?yDcTEPA9Tjp67Xl6sSMrv26aSL50aVvXQ4DWCmbIuWLH+kMcsHJZDkbNBnGf?=
- =?us-ascii?Q?b0Exuf4ZhqZken7FsRpnapP0pZFis5PfAbOslrPEIVzJ11d48Kl/pNMTIXFU?=
- =?us-ascii?Q?qmV/c09ttmRp2FPqqoEPFxeoZod6lULrCuulNcAtkTHwbw6bCQpVXIIhp0oV?=
- =?us-ascii?Q?Ya+IqG7phOEOXJQw5qyYgKRLPpDvuWyYQGqZNHXR561zRexMGU9h9TMXeji8?=
- =?us-ascii?Q?UYHSocoYX4V0HYRmSPJPfsjrnW/GXhsbxNX3CvFL8rdHeLPVJGVsMNdqvzfx?=
- =?us-ascii?Q?LczN5g3o4xOLUqnL97m/sVFEokTS9IAy9tMptwfNL5BaMOChH3lk/paStW9N?=
- =?us-ascii?Q?k/vbiJPIkyECvd+QR68chhXDgDN77kJJbW0qtWvgnkhmWRdp1VecrxFYZRm0?=
- =?us-ascii?Q?JO8LQZGEa9CQRz7NM+7IIZV7QZETJPScpatSF301FC2R1tFITlHvnuw0NYal?=
- =?us-ascii?Q?5mDWLN8PUIgLSHcmBT62fqFMAqTvjSfmJ8JwDo7PYMlv2QZNSMf30g6rsCH1?=
- =?us-ascii?Q?/qWtemN1bDyvjhYSYkGXXA1yeggoxqLF51AJj9jOgTEQt26Ak3KtLYZgjQKs?=
- =?us-ascii?Q?lD42v4e7aQK38DOll7m4+1hZPrJD6FyljAWjbWnOdrA+NcvlAavpyQ9KZ+Ij?=
- =?us-ascii?Q?bqw+pN8vdVD/asBjI0aivw3DY8hw1gQ7/HfLDx0zqbH+lCtkvScc3LXJVhHh?=
- =?us-ascii?Q?ESIF51/5YJ+bXqUBcvaJ6w579yIr0bYXPUMv/GffWL9rNXwEKktYrVXjvHCo?=
- =?us-ascii?Q?XFHBp3G7YXlZwGMK1d65Nf+PtjJJZJmFIPeFQ+ouaJGcvbMM6s5+cGUIz6C+?=
- =?us-ascii?Q?+t7Lipb7lTO/FtEu4gwZOBRBhwxRMw9oGXgZvt12upNj1hSF5ddYaWQSRV9b?=
- =?us-ascii?Q?1gvFMhv+W3YZVow0dhYVAwDnSlEXzKE6AkFOH6ms0JVmgqMmRRX/kKT8hKb9?=
- =?us-ascii?Q?/qXPeDl00u6HWr6G1LtzxK3k+cXcY6UaExiS+eHGSlisDQB7ikbeCYitinkq?=
- =?us-ascii?Q?bIoqMg/Hdo+CG3dxvB/06C02Msj/pMvPXL03ptGIqKqMt99fOI6a+rTq/YaM?=
- =?us-ascii?Q?x3BARjM9MXMdSlAdrDPLC21gwCIRcR+P1jDQlwg0ALq1JdgNFSB8DVp4NIiS?=
- =?us-ascii?Q?yvolLDBLrwtCOK7sGLsTWcm/hAiUUUdjqmTuBD/9BgPXqwrIWJ/58tGcuW4w?=
- =?us-ascii?Q?tuAMMKdYYXQ2OpzQMZ08GYCVFfbu0jr/ZejQdEnmlLdCBxd1M3nnOZhk9uKy?=
- =?us-ascii?Q?TDrggTgKWObx/3Y8tA7TmaYX1W10QwyIT7AqteDMLzL/ixnq8NqbZ5oDD18s?=
- =?us-ascii?Q?SjL45I/Cc+BIonESp9mA6SpvHCom8uaMQQ0FmngAnZr/lbdPbPSn9b3y35L7?=
- =?us-ascii?Q?zGNkOyAPgLKdblWH+eEJM96DO8SoxpsVUJy1ne5fZ+8DdJdv7TjdjsygEJOZ?=
- =?us-ascii?Q?RWF3d0j7IP5qfe8guVMwBnYlLxQFtuQODOrroShWEWhfGiinbBNr1tFbgSYh?=
- =?us-ascii?Q?lIXEk984Ttp80yKWJ5oALdjgvfDZL3VUN84BlCplXyX10IHzE7bENwqPfJrq?=
- =?us-ascii?Q?koh4ewvux4EB8vNo9p0=3D?=
-X-Forefront-Antispam-Report:
-	CIP:198.47.21.194;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:flwvzet200.ext.ti.com;PTR:ErrorRetry;CAT:NONE;SFS:(13230040)(82310400026)(7416014)(376014)(1800799024)(36860700013);DIR:OUT;SFP:1101;
-X-OriginatorOrg: ti.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Nov 2025 11:56:51.2852
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 893590e2-8333-45dd-6c3c-08de21e29115
-X-MS-Exchange-CrossTenant-Id: e5b49634-450b-4709-8abb-1e2b19b982b7
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=e5b49634-450b-4709-8abb-1e2b19b982b7;Ip=[198.47.21.194];Helo=[flwvzet200.ext.ti.com]
-X-MS-Exchange-CrossTenant-AuthSource:
-	MWH0EPF000971E3.namprd02.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL3PR10MB6020
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <u5wdva6kk5n6q5myj3wuy4bxqhaqyhk2ngentrj4p3v5447y2a@3kujjl3nnwea>
+References: <20251028-b4-rpi-ov5647-v1-0-098413454f5e@ideasonboard.com> <20251028-b4-rpi-ov5647-v1-6-098413454f5e@ideasonboard.com> <u5wdva6kk5n6q5myj3wuy4bxqhaqyhk2ngentrj4p3v5447y2a@3kujjl3nnwea>
+Subject: Re: [PATCH 06/13] media: i2c: ov5647: Support HFLIP and VFLIP
+From: Jai Luthra <jai.luthra@ideasonboard.com>
+Cc: Sakari Ailus <sakari.ailus@linux.intel.com>, Dave Stevenson <dave.stevenson@raspberrypi.com>, Jacopo Mondi <jacopo@jmondi.org>, Mauro Carvalho Chehab <mchehab@kernel.org>, linux-media@vger.kernel.org, linux-kernel@vger.kernel.org, Mauro Carvalho Chehab <mchehab+huawei@kernel.org>, Kieran Bingham <kieran.bingham@ideasonboard.com>, David Plowman <david.plowman@raspberrypi.com>, Laurent Pinchart <laurent.pinchart@ideasonboard.com>, Peter Robinson <pbrobinson@gmail.com>, Stefan Wahren <wahrenst@gmx.net>, Ivan T. Ivanov <iivanov@suse.de>
+To: Jacopo Mondi <jacopo.mondi@ideasonboard.com>
+Date: Wed, 12 Nov 2025 17:26:50 +0530
+Message-ID: <176294861029.13219.15475344635093672267@freya>
+User-Agent: alot/0.12.dev28+gd2c823fe
 
-On buffer starvation the DMA is marked IDLE, and the stale data in the
-internal FIFOs gets drained only on the next VIDIOC_QBUF call from the
-userspace. This approach works fine for a single stream case.
+Hi Jacopo,
 
-But in multistream scenarios, buffer starvation for one stream i.e. one
-virtual channel, can block the shared HW FIFO of the CSI2RX IP. This can
-stall the pipeline for all other virtual channels, even if buffers are
-available for them.
+Thanks a lot for the review.
 
-This patch introduces a new architecture, that continuously drains data
-from the shared HW FIFO into a small (32KiB) buffer if no buffers are made
-available to the driver from the userspace. This ensures independence
-between different streams, where a slower downstream element for one
-camera does not block streaming for other cameras.
+Quoting Jacopo Mondi (2025-11-02 16:20:36)
+> Hi Jai
+>=20
+> On Tue, Oct 28, 2025 at 12:57:17PM +0530, Jai Luthra wrote:
+> > From: David Plowman <david.plowman@raspberrypi.com>
+> >
+> > Add missing controls for horizontal and vertical flipping.
+> >
+> > Signed-off-by: David Plowman <david.plowman@raspberrypi.com>
+> > Signed-off-by: Jai Luthra <jai.luthra@ideasonboard.com>
+> > ---
+> >  drivers/media/i2c/ov5647.c | 77 ++++++++++++++++++++++++++++++++++++++=
+++++----
+> >  1 file changed, 71 insertions(+), 6 deletions(-)
+> >
+> > diff --git a/drivers/media/i2c/ov5647.c b/drivers/media/i2c/ov5647.c
+> > index 977b878b0d4b8cd5f39f510ebd8b33c9163f7da2..a33e2d8edc114d302e83063=
+9cb7cb161f16a6208 100644
+> > --- a/drivers/media/i2c/ov5647.c
+> > +++ b/drivers/media/i2c/ov5647.c
+> > @@ -54,6 +54,8 @@
+> >  #define OV5647_REG_GAIN_LO           0x350b
+> >  #define OV5647_REG_VTS_HI            0x380e
+> >  #define OV5647_REG_VTS_LO            0x380f
+> > +#define OV5647_REG_VFLIP             0x3820
+> > +#define OV5647_REG_HFLIP             0x3821
+> >  #define OV5647_REG_FRAME_OFF_NUMBER  0x4202
+> >  #define OV5647_REG_MIPI_CTRL00               0x4800
+> >  #define OV5647_REG_MIPI_CTRL14               0x4814
+> > @@ -109,6 +111,8 @@ struct ov5647 {
+> >       struct v4l2_ctrl                *hblank;
+> >       struct v4l2_ctrl                *vblank;
+> >       struct v4l2_ctrl                *exposure;
+> > +     struct v4l2_ctrl                *hflip;
+> > +     struct v4l2_ctrl                *vflip;
+> >  };
+> >
+> >  static inline struct ov5647 *to_sensor(struct v4l2_subdev *sd)
+> > @@ -150,7 +154,7 @@ static struct regval_list ov5647_2592x1944_10bpp[] =
+=3D {
+> >       {0x3036, 0x69},
+> >       {0x303c, 0x11},
+> >       {0x3106, 0xf5},
+> > -     {0x3821, 0x06},
+> > +     {0x3821, 0x00},
+> >       {0x3820, 0x00},
+>=20
+> That's interesting, as the datasheet says that by default
+>=20
+>         3820 =3D 0x40
+>         3821 =3D 0x00
+>=20
+> And
+> - BIT[2] =3D flip ISP
+> - BIT[1] =3D flip SNR
+>=20
+> The implementation of ov5647_s_flip() toggles BIT(1) and ignores
+> BIT(2) while the modes definition have both (BIT(2) | BIT(1)) set
+>=20
+> More interestingly the datasheet says:
+>=20
+> In flip mode, the OV5647 does not need additional settings because the
+> ISP block will auto-detect whether the pixel is in the red line or
+> blue line and make the necessary adjustments
+>=20
+> Might this suggest that if we flip using BIT(2) we don't need to
+> change the bayer pattern ordering ?
 
-Additionally, after a drain is done for a VC, the next frame will be a
-partial frame, as a portion of its data will have already been drained
-before a valid buffer is queued by user space to the driver.
+Indeed! That was a great find, I am now able to set BIT(2) to get flips
+without needing to modify the pixelarray layout.
 
-Use wait for completion barrier to make sure the shared hardware FIFO
-is cleared of the data at the end of stream after the source has stopped
-sending data.
+Will do that in v2.
 
-Reviewed-by: Jai Luthra <jai.luthra@ideasonboard.com>
-Reviewed-by: Yemike Abhilash Chandra <y-abhilashchandra@ti.com>
-Signed-off-by: Rishikesh Donadkar <r-donadkar@ti.com>
----
- .../platform/ti/j721e-csi2rx/j721e-csi2rx.c   | 112 ++++++++----------
- 1 file changed, 50 insertions(+), 62 deletions(-)
+>=20
+> Now, I admit I'm not sure what are the ISP functions on the ov5647 and
+> this patch is super-duper-tested as it comes from the RPi BSP, so if
+> you don't have answers to the above questions, I'm fine with this
+> patch!
+>=20
+> >       {0x3827, 0xec},
+> >       {0x370c, 0x03},
+> > @@ -239,7 +243,7 @@ static struct regval_list ov5647_1080p30_10bpp[] =
+=3D {
+> >       {0x3036, 0x62},
+> >       {0x303c, 0x11},
+> >       {0x3106, 0xf5},
+> > -     {0x3821, 0x06},
+> > +     {0x3821, 0x00},
+> >       {0x3820, 0x00},
+> >       {0x3827, 0xec},
+> >       {0x370c, 0x03},
+> > @@ -403,7 +407,7 @@ static struct regval_list ov5647_2x2binned_10bpp[] =
+=3D {
+> >       {0x4800, 0x24},
+> >       {0x3503, 0x03},
+> >       {0x3820, 0x41},
+> > -     {0x3821, 0x07},
+> > +     {0x3821, 0x01},
+> >       {0x350a, 0x00},
+> >       {0x350b, 0x10},
+> >       {0x3500, 0x00},
+> > @@ -419,7 +423,7 @@ static struct regval_list ov5647_640x480_10bpp[] =
+=3D {
+> >       {0x3035, 0x11},
+> >       {0x3036, 0x46},
+> >       {0x303c, 0x11},
+> > -     {0x3821, 0x07},
+> > +     {0x3821, 0x01},
+> >       {0x3820, 0x41},
+> >       {0x370c, 0x03},
+> >       {0x3612, 0x59},
+> > @@ -935,6 +939,26 @@ static const struct v4l2_subdev_video_ops ov5647_s=
+ubdev_video_ops =3D {
+> >       .s_stream =3D             ov5647_s_stream,
+> >  };
+> >
+> > +/*
+> > + * This function returns the mbus code for the current settings of the=
+ HFLIP
+> > + * and VFLIP controls.
+> > + */
+> > +static u32 ov5647_get_mbus_code(struct v4l2_subdev *sd)
+> > +{
+> > +     struct ov5647 *sensor =3D to_sensor(sd);
+> > +     /* The control values are only 0 or 1. */
+> > +     int index =3D  sensor->hflip->val | (sensor->vflip->val << 1);
+> > +
+> > +     static const u32 codes[4] =3D {
+> > +             MEDIA_BUS_FMT_SGBRG10_1X10,
+> > +             MEDIA_BUS_FMT_SBGGR10_1X10,
+> > +             MEDIA_BUS_FMT_SRGGB10_1X10,
+> > +             MEDIA_BUS_FMT_SGRBG10_1X10
+> > +     };
+> > +
+> > +     return codes[index];
+> > +}
+> > +
+> >  static int ov5647_enum_mbus_code(struct v4l2_subdev *sd,
+> >                                struct v4l2_subdev_state *sd_state,
+> >                                struct v4l2_subdev_mbus_code_enum *code)
+> > @@ -942,7 +966,7 @@ static int ov5647_enum_mbus_code(struct v4l2_subdev=
+ *sd,
+> >       if (code->index > 0)
+> >               return -EINVAL;
+> >
+> > -     code->code =3D MEDIA_BUS_FMT_SBGGR10_1X10;
+> > +     code->code =3D ov5647_get_mbus_code(sd);
+> >
+> >       return 0;
+> >  }
+> > @@ -953,7 +977,7 @@ static int ov5647_enum_frame_size(struct v4l2_subde=
+v *sd,
+> >  {
+> >       const struct v4l2_mbus_framefmt *fmt;
+> >
+> > -     if (fse->code !=3D MEDIA_BUS_FMT_SBGGR10_1X10 ||
+> > +     if (fse->code !=3D ov5647_get_mbus_code(sd) ||
+> >           fse->index >=3D ARRAY_SIZE(ov5647_modes))
+> >               return -EINVAL;
+> >
+> > @@ -986,6 +1010,8 @@ static int ov5647_get_pad_fmt(struct v4l2_subdev *=
+sd,
+> >       }
+> >
+> >       *fmt =3D *sensor_format;
+> > +     /* The code we pass back must reflect the current h/vflips. */
+> > +     fmt->code =3D ov5647_get_mbus_code(sd);
+> >       mutex_unlock(&sensor->lock);
+> >
+> >       return 0;
+> > @@ -1033,6 +1059,8 @@ static int ov5647_set_pad_fmt(struct v4l2_subdev =
+*sd,
+> >                                        exposure_def);
+> >       }
+> >       *fmt =3D mode->format;
+> > +     /* The code we pass back must reflect the current h/vflips. */
+> > +     fmt->code =3D ov5647_get_mbus_code(sd);
+> >       mutex_unlock(&sensor->lock);
+> >
+> >       return 0;
+> > @@ -1208,6 +1236,25 @@ static int ov5647_s_exposure(struct v4l2_subdev =
+*sd, u32 val)
+> >       return ov5647_write(sd, OV5647_REG_EXP_LO, (val & 0xf) << 4);
+> >  }
+> >
+> > +static int ov5647_s_flip(struct v4l2_subdev *sd, u16 reg, u32 ctrl_val)
+> > +{
+> > +     int ret;
+> > +     u8 reg_val;
+> > +
+> > +     /* Set or clear bit 1 and leave everything else alone. */
+> > +     ret =3D ov5647_read(sd, reg, &reg_val);
+> > +     if (ret =3D=3D 0) {
+> > +             if (ctrl_val)
+> > +                     reg_val |=3D 2;
+> > +             else
+> > +                     reg_val &=3D ~2;
+> > +
+> > +             ret =3D ov5647_write(sd, reg, reg_val);
+> > +     }
+> > +
+> > +     return ret;
+> > +}
+> > +
+> >  static int ov5647_s_ctrl(struct v4l2_ctrl *ctrl)
+> >  {
+> >       struct ov5647 *sensor =3D container_of(ctrl->handler,
+> > @@ -1270,6 +1317,14 @@ static int ov5647_s_ctrl(struct v4l2_ctrl *ctrl)
+> >               /* Read-only, but we adjust it based on mode. */
+> >               break;
+> >
+> > +     case V4L2_CID_HFLIP:
+> > +             /* There's an in-built hflip in the sensor, so account fo=
+r that here. */
+> > +             ov5647_s_flip(sd, OV5647_REG_HFLIP, !ctrl->val);
+> > +             break;
+> > +     case V4L2_CID_VFLIP:
+> > +             ov5647_s_flip(sd, OV5647_REG_VFLIP, ctrl->val);
+> > +             break;
+>=20
+> The modes definition used to set
+>=20
+>         0x3820 =3D 0x00
+>         0x3821 =3D 0x06
+>=20
+> Is this the built-in hflip ?
+>=20
+> Or does it mean that setting the registers value to 1 'disabled' flips ?
+>=20
 
-diff --git a/drivers/media/platform/ti/j721e-csi2rx/j721e-csi2rx.c b/drivers/media/platform/ti/j721e-csi2rx/j721e-csi2rx.c
-index e439e9814c74d..528041ee78cf3 100644
---- a/drivers/media/platform/ti/j721e-csi2rx/j721e-csi2rx.c
-+++ b/drivers/media/platform/ti/j721e-csi2rx/j721e-csi2rx.c
-@@ -82,7 +82,6 @@ struct ti_csi2rx_buffer {
- 
- enum ti_csi2rx_dma_state {
- 	TI_CSI2RX_DMA_STOPPED,	/* Streaming not started yet. */
--	TI_CSI2RX_DMA_IDLE,	/* Streaming but no pending DMA operation. */
- 	TI_CSI2RX_DMA_ACTIVE,	/* Streaming and pending DMA operation. */
- };
- 
-@@ -110,6 +109,7 @@ struct ti_csi2rx_ctx {
- 	struct v4l2_format		v_fmt;
- 	struct ti_csi2rx_dma		dma;
- 	struct media_pad		pad;
-+	struct completion		drain_complete;
- 	u32				sequence;
- 	u32				idx;
- 	u32				vc;
-@@ -251,6 +251,10 @@ static const struct ti_csi2rx_fmt ti_csi2rx_formats[] = {
- static int ti_csi2rx_start_dma(struct ti_csi2rx_ctx *ctx,
- 			       struct ti_csi2rx_buffer *buf);
- 
-+/* Forward declarations needed by ti_csi2rx_drain_callback. */
-+static int ti_csi2rx_drain_dma(struct ti_csi2rx_ctx *ctx);
-+static int ti_csi2rx_dma_submit_pending(struct ti_csi2rx_ctx *ctx);
-+
- static const struct ti_csi2rx_fmt *find_format_by_fourcc(u32 pixelformat)
- {
- 	unsigned int i;
-@@ -617,9 +621,32 @@ static void ti_csi2rx_setup_shim(struct ti_csi2rx_ctx *ctx)
- 
- static void ti_csi2rx_drain_callback(void *param)
- {
--	struct completion *drain_complete = param;
-+	struct ti_csi2rx_ctx *ctx = param;
-+	struct ti_csi2rx_dma *dma = &ctx->dma;
-+	unsigned long flags;
-+
-+	spin_lock_irqsave(&dma->lock, flags);
-+
-+	if (dma->state == TI_CSI2RX_DMA_STOPPED) {
-+		complete(&ctx->drain_complete);
-+		spin_unlock_irqrestore(&dma->lock, flags);
-+		return;
-+	}
- 
--	complete(drain_complete);
-+	/*
-+	 * If dma->queue is empty, it indicates that no buffer has been
-+	 * provided by user space. In this case, initiate a transactions
-+	 * to drain the DMA. Since one drain of size DRAIN_BUFFER_SIZE
-+	 * will be done here, the subsequent frame will be a
-+	 * partial frame, with a size of frame_size - DRAIN_BUFFER_SIZE
-+	 */
-+	if (list_empty(&dma->queue)) {
-+		if (ti_csi2rx_drain_dma(ctx))
-+			dev_warn(ctx->csi->dev, "DMA drain failed\n");
-+	} else {
-+		ti_csi2rx_dma_submit_pending(ctx);
-+	}
-+	spin_unlock_irqrestore(&dma->lock, flags);
- }
- 
- /*
-@@ -637,12 +664,9 @@ static int ti_csi2rx_drain_dma(struct ti_csi2rx_ctx *ctx)
- {
- 	struct ti_csi2rx_dev *csi = ctx->csi;
- 	struct dma_async_tx_descriptor *desc;
--	struct completion drain_complete;
- 	dma_cookie_t cookie;
- 	int ret;
- 
--	init_completion(&drain_complete);
--
- 	desc = dmaengine_prep_slave_single(ctx->dma.chan, csi->drain.paddr,
- 					   csi->drain.len, DMA_DEV_TO_MEM,
- 					   DMA_PREP_INTERRUPT | DMA_CTRL_ACK);
-@@ -652,7 +676,7 @@ static int ti_csi2rx_drain_dma(struct ti_csi2rx_ctx *ctx)
- 	}
- 
- 	desc->callback = ti_csi2rx_drain_callback;
--	desc->callback_param = &drain_complete;
-+	desc->callback_param = ctx;
- 
- 	cookie = dmaengine_submit(desc);
- 	ret = dma_submit_error(cookie);
-@@ -661,13 +685,6 @@ static int ti_csi2rx_drain_dma(struct ti_csi2rx_ctx *ctx)
- 
- 	dma_async_issue_pending(ctx->dma.chan);
- 
--	if (!wait_for_completion_timeout(&drain_complete,
--					 msecs_to_jiffies(DRAIN_TIMEOUT_MS))) {
--		dmaengine_terminate_sync(ctx->dma.chan);
--		dev_dbg(csi->dev, "DMA transfer timed out for drain buffer\n");
--		ret = -ETIMEDOUT;
--		goto out;
--	}
- out:
- 	return ret;
- }
-@@ -716,9 +733,11 @@ static void ti_csi2rx_dma_callback(void *param)
- 
- 	ti_csi2rx_dma_submit_pending(ctx);
- 
--	if (list_empty(&dma->submitted))
--		dma->state = TI_CSI2RX_DMA_IDLE;
--
-+	if (list_empty(&dma->submitted)) {
-+		if (ti_csi2rx_drain_dma(ctx))
-+			dev_warn(ctx->csi->dev,
-+				 "DMA drain failed on one of the transactions\n");
-+	}
- 	spin_unlock_irqrestore(&dma->lock, flags);
- }
- 
-@@ -754,6 +773,7 @@ static int ti_csi2rx_start_dma(struct ti_csi2rx_ctx *ctx,
- static void ti_csi2rx_stop_dma(struct ti_csi2rx_ctx *ctx)
- {
- 	struct ti_csi2rx_dma *dma = &ctx->dma;
-+	struct ti_csi2rx_dev *csi = ctx->csi;
- 	enum ti_csi2rx_dma_state state;
- 	unsigned long flags;
- 	int ret;
-@@ -763,6 +783,8 @@ static void ti_csi2rx_stop_dma(struct ti_csi2rx_ctx *ctx)
- 	dma->state = TI_CSI2RX_DMA_STOPPED;
- 	spin_unlock_irqrestore(&dma->lock, flags);
- 
-+	init_completion(&ctx->drain_complete);
-+
- 	if (state != TI_CSI2RX_DMA_STOPPED) {
- 		/*
- 		 * Normal DMA termination does not clean up pending data on
-@@ -771,11 +793,20 @@ static void ti_csi2rx_stop_dma(struct ti_csi2rx_ctx *ctx)
- 		 * enforced before terminating DMA.
- 		 */
- 		ret = ti_csi2rx_drain_dma(ctx);
--		if (ret && ret != -ETIMEDOUT)
-+		if (ret)
- 			dev_warn(ctx->csi->dev,
- 				 "Failed to drain DMA. Next frame might be bogus\n");
- 	}
- 
-+	/* We wait for the drain to complete so that the stream stops
-+	 * cleanly, making sure the shared hardware FIFO is cleared of
-+	 * data from the current stream. No more data will be coming from
-+	 * the source after this.
-+	 */
-+	if (!wait_for_completion_timeout(&ctx->drain_complete,
-+					 msecs_to_jiffies(DRAIN_TIMEOUT_MS)))
-+		dev_dbg(csi->dev, "DMA transfer timed out for drain buffer\n");
-+
- 	ret = dmaengine_terminate_sync(ctx->dma.chan);
- 	if (ret)
- 		dev_err(ctx->csi->dev, "Failed to stop DMA: %d\n", ret);
-@@ -838,57 +869,14 @@ static void ti_csi2rx_buffer_queue(struct vb2_buffer *vb)
- 	struct ti_csi2rx_ctx *ctx = vb2_get_drv_priv(vb->vb2_queue);
- 	struct ti_csi2rx_buffer *buf;
- 	struct ti_csi2rx_dma *dma = &ctx->dma;
--	bool restart_dma = false;
- 	unsigned long flags = 0;
--	int ret;
- 
- 	buf = container_of(vb, struct ti_csi2rx_buffer, vb.vb2_buf);
- 	buf->ctx = ctx;
- 
- 	spin_lock_irqsave(&dma->lock, flags);
--	/*
--	 * Usually the DMA callback takes care of queueing the pending buffers.
--	 * But if DMA has stalled due to lack of buffers, restart it now.
--	 */
--	if (dma->state == TI_CSI2RX_DMA_IDLE) {
--		/*
--		 * Do not restart DMA with the lock held because
--		 * ti_csi2rx_drain_dma() might block for completion.
--		 * There won't be a race on queueing DMA anyway since the
--		 * callback is not being fired.
--		 */
--		restart_dma = true;
--		dma->state = TI_CSI2RX_DMA_ACTIVE;
--	} else {
--		list_add_tail(&buf->list, &dma->queue);
--	}
-+	list_add_tail(&buf->list, &dma->queue);
- 	spin_unlock_irqrestore(&dma->lock, flags);
--
--	if (restart_dma) {
--		/*
--		 * Once frames start dropping, some data gets stuck in the DMA
--		 * pipeline somewhere. So the first DMA transfer after frame
--		 * drops gives a partial frame. This is obviously not useful to
--		 * the application and will only confuse it. Issue a DMA
--		 * transaction to drain that up.
--		 */
--		ret = ti_csi2rx_drain_dma(ctx);
--		if (ret && ret != -ETIMEDOUT)
--			dev_warn(ctx->csi->dev,
--				 "Failed to drain DMA. Next frame might be bogus\n");
--
--		spin_lock_irqsave(&dma->lock, flags);
--		ret = ti_csi2rx_start_dma(ctx, buf);
--		if (ret) {
--			vb2_buffer_done(&buf->vb.vb2_buf, VB2_BUF_STATE_ERROR);
--			dma->state = TI_CSI2RX_DMA_IDLE;
--			spin_unlock_irqrestore(&dma->lock, flags);
--			dev_err(ctx->csi->dev, "Failed to start DMA: %d\n", ret);
--		} else {
--			list_add_tail(&buf->list, &dma->submitted);
--			spin_unlock_irqrestore(&dma->lock, flags);
--		}
--	}
- }
- 
- static int ti_csi2rx_get_route(struct ti_csi2rx_ctx *ctx)
--- 
-2.34.1
+Yes, this particular sensor flips the image horizontally if 0x3820 =3D 0x00,
+resulting in a mirrored image.
 
+But now that userspace can control flips, I am a bit confused on how to
+report this in the controls.
+
+> > +
+> >       default:
+> >               dev_info(&client->dev,
+> >                        "Control (id:0x%x, val:0x%x) not supported\n",
+> > @@ -1341,6 +1396,16 @@ static int ov5647_init_controls(struct ov5647 *s=
+ensor, struct device *dev)
+> >                                    ARRAY_SIZE(ov5647_test_pattern_menu)=
+ - 1,
+> >                                    0, 0, ov5647_test_pattern_menu);
+> >
+> > +     sensor->hflip =3D v4l2_ctrl_new_std(&sensor->ctrls, &ov5647_ctrl_=
+ops,
+> > +                                       V4L2_CID_HFLIP, 0, 1, 1, 0);
+> > +     if (sensor->hflip)
+> > +             sensor->hflip->flags |=3D V4L2_CTRL_FLAG_MODIFY_LAYOUT;
+>=20
+> I wonder if hflip is enabled by default we shouldn't register the
+> control with default value of 1 ?
+>=20
+
+My preference is to let the driver toggle the value for HFLIP before
+writing to the sensor, as it is done currently in this patch.
+
+This makes this sensor behave like others, where you get a normal
+non-mirrored image when you set HFLIP =3D 0, and mirrored if HFLIP =3D 1.
+
+The alternative is to keep the driver transparent by reporting the register
+values as-is in the control. In that case, we should make horizontal_flip =
+=3D
+1 the default value for the control. But I'm not aware if any userspace
+applications will override the default value resulting in bad experience
+for the users.
+
+WDYT?
+
+Thanks,
+    Jai
+
+> > +
+> > +     sensor->vflip =3D v4l2_ctrl_new_std(&sensor->ctrls, &ov5647_ctrl_=
+ops,
+> > +                                       V4L2_CID_VFLIP, 0, 1, 1, 0);
+> > +     if (sensor->vflip)
+> > +             sensor->vflip->flags |=3D V4L2_CTRL_FLAG_MODIFY_LAYOUT;
+> > +
+> >       v4l2_fwnode_device_parse(dev, &props);
+> >
+> >       v4l2_ctrl_new_fwnode_properties(&sensor->ctrls, &ov5647_ctrl_ops,
+> >
+> > --
+> > 2.51.0
+> >
