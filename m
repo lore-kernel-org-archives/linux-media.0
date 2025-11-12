@@ -1,145 +1,180 @@
-Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f54.google.com (mail-ed1-f54.google.com [209.85.208.54])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4A14F2264B8
-	for <linux-media@vger.kernel.org>; Wed, 12 Nov 2025 09:39:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C46AF2FE045
+	for <linux-media@vger.kernel.org>; Wed, 12 Nov 2025 09:39:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762940382; cv=none; b=aZpleMPiWGBbhADevC5YJ96Tkxqcyfwj2YfTP07Gx3oK2lz/jj5Xf/eiTQKICwfncwpLYH8Su/o44Kdc9IAdBNOogzQV8YxA0ivyWv3F3IjuzmVBrO5gN0+Ody1hcINAv4pVWQXYaiIcw1eXfus66VlDhPffw+leEk05gno8Kdc=
+	t=1762940389; cv=none; b=uxiAoo1cpR7+JrFtx0UjodGUm2ILzoqtigh04f0YPm3KiLdhyCzfmHbOnJ1fZWmInnyl4N5RnZfXcmjaDNCT4JQ75MbzcvY/UIVLUT35a5D4hEIUJ6ckEk+aVpZ3ayMIiSeUg18o4dORe4Sm2M5mVzoyEQ1SHrl6l+ZPavfVjIU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762940382; c=relaxed/simple;
-	bh=66XheiQirvHXrjkJwKOPTc9T1NbjeqEOaPeXSvH9nhE=;
+	s=arc-20240116; t=1762940389; c=relaxed/simple;
+	bh=XP3zVEDuJXzXClQ0do6m+eEmqEvNrjIuZbPC/rg0ds0=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=bNqZtbiYynGy75JCQSCSNo3v06/+D+u/eaLt9GpIpiRLQnXS4MO7ec5r7/EIKQwaHYRqXfTy0TVDBWGHVbvvyKQloQ0xJDyFCp18YzNnR3G8mY8mLX6/WSjnpcWyfm8ri4CSbi70Th3egsvCE59eulPtfcJEwKJT8soEJdCnrK8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-	(Exim 4.92)
-	(envelope-from <m.tretter@pengutronix.de>)
-	id 1vJ7K5-0002jm-Ln; Wed, 12 Nov 2025 10:39:29 +0100
-Received: from pty.whiteo.stw.pengutronix.de ([2a0a:edc0:2:b01:1d::c5])
-	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.96)
-	(envelope-from <m.tretter@pengutronix.de>)
-	id 1vJ7K4-0003l5-3A;
-	Wed, 12 Nov 2025 10:39:28 +0100
-Received: from mtr by pty.whiteo.stw.pengutronix.de with local (Exim 4.96)
-	(envelope-from <m.tretter@pengutronix.de>)
-	id 1vJ7K4-00GQes-2j;
-	Wed, 12 Nov 2025 10:39:28 +0100
-Date: Wed, 12 Nov 2025 10:39:28 +0100
-From: Michael Tretter <m.tretter@pengutronix.de>
-To: Krzysztof Kozlowski <krzk@kernel.org>
-Cc: Lars-Peter Clausen <lars@metafoo.de>,
-	Niklas =?utf-8?Q?S=C3=B6derlund?= <niklas.soderlund+renesas@ragnatech.se>,
-	Mauro Carvalho Chehab <mchehab@kernel.org>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>, linux-media@vger.kernel.org,
-	devicetree@vger.kernel.org, kernel@pengutronix.de
-Subject: Re: [PATCH 1/4] media: dt-bindings: adi,adv7180: add VPP and CSI
- register maps
-Message-ID: <aRRV0LXnoU4gjBgE@pengutronix.de>
-Mail-Followup-To: Michael Tretter <m.tretter@pengutronix.de>,
-	Krzysztof Kozlowski <krzk@kernel.org>,
-	Lars-Peter Clausen <lars@metafoo.de>,
-	Niklas =?utf-8?Q?S=C3=B6derlund?= <niklas.soderlund+renesas@ragnatech.se>,
-	Mauro Carvalho Chehab <mchehab@kernel.org>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>, linux-media@vger.kernel.org,
-	devicetree@vger.kernel.org, kernel@pengutronix.de
-References: <20251111-b4-adv7180-vpp-sub-device-v1-0-9877fe9f709b@pengutronix.de>
- <20251111-b4-adv7180-vpp-sub-device-v1-1-9877fe9f709b@pengutronix.de>
- <20251112-burrowing-funny-cobra-19705d@kuoka>
+	 Content-Type:Content-Disposition:In-Reply-To; b=YoHYMHbYHOfamBp8/6CpG948xM7ln3kLu4NwU+Q/HNdUEPB5g19Ja3SGBH2DrtIBTsaXqk8kQm2r2e2/8KK4zyotIs0UBy6s2/LqYZWzyiJcXT+FjJ76sbeniuMZN/oW9lshGXa+AiBuJl/AfIRZ1EbW42IsbkO+LNlNSOZfSr8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=ZRG+Ddoq; arc=none smtp.client-ip=209.85.208.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="ZRG+Ddoq"
+Received: by mail-ed1-f54.google.com with SMTP id 4fb4d7f45d1cf-640aaa89697so776791a12.3
+        for <linux-media@vger.kernel.org>; Wed, 12 Nov 2025 01:39:47 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=suse.com; s=google; t=1762940386; x=1763545186; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=VMF8ALsV864vheQzgDcfGk5BNkQop27BuXXH8eM/nR4=;
+        b=ZRG+Ddoqz/frIVZQVpDLof3VggCyZD5cXhoM1Vb1XxUWtYIbdg42+Da++jCiMxgloP
+         Gu2I2ESmXOm3UNoDfgR97cTtr85HeWH9h17q/qesQQ7LVh03wKO+w+iVcG6SUNE/YS5Q
+         hfe6qtgUG8Y77lzd9Hp87oAwjpKGYr/cFMNl8QQx63Foopc8MRd9+n+WcEIk96pCAZRk
+         u2DVGN92fKXC9o6pAQaFq5pyhI+D3K3nkfum4ZPnjoO50UTcYYU83anTMcRZbDNyv1xv
+         BvVrzbXVrYjv2+m3uTKnj06wdJnVFzYBLOvbWubSRval9zucwWvvki/r3m8AYyBGf5jr
+         qRFw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1762940386; x=1763545186;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=VMF8ALsV864vheQzgDcfGk5BNkQop27BuXXH8eM/nR4=;
+        b=CYckz6EveDAFGZxzDx13uSXeth+RnygweUCdKMas7QMBORo48BelEzeKTuRNqdw9WP
+         o7JpPfu/Nl6vhdze365gfk6wtrBlXGZ+Qc42Hsnyg3jBGFvZkXePvOQr6up3PsaBNke7
+         0jOOw3p6GuYWhuIVTr3rLscieTmEKoKZ3fFXTjfhXzHw9oKsdaVohmUROB/5yPhoO7hg
+         zNaYKKzKG4wRXSxAd/deW0qZtdYINLnSIGdrMmqB/yq0oOjUbZQcTrwoxxUV691sOypy
+         kvSpjLQt5oWeD49OSdGGK9jsBrskHrXWuJVvxHyHYyYyRSh6cakB56X/WjpvkFJ7zpRg
+         EBvw==
+X-Forwarded-Encrypted: i=1; AJvYcCXtSfwYirtIZyU158LkfblkP7cC+DrvXhspC19z19b+whk8OACmRSkpZxXsskxPKYNyTFIbXn6ox1QG2g==@vger.kernel.org
+X-Gm-Message-State: AOJu0YytDM+dNp0GvWK9kg1SFsKrFQQZL6UCHc9xn5yMNnPvCqZsoIM2
+	ul/t4+U2hDueuBBsWpId601ZGw92liMizRi1ZDHI2rj0qbWcIp4Ho0t+Dtk2radMD+I=
+X-Gm-Gg: ASbGncsPPVm4cCibjRRaQ73AKQit1c6UbrPk+2cEp4ZYKOO2pD+RGxR7AbvnwKRzPP1
+	loAihiIz9HTsShB1rJdDE7opOd6mfp6K0o6ZPlDvXfVXErY+ZQl1Bf8Ke5z2mGEPPKCtfeh1TIO
+	cb7V1Vm5p2oLr9ZlQuVJbPr1KrCd/eijurwx8dOC2kWrgi/vxuaQu3wowY+8VDJI29tW4+oTTST
+	FzvQHpsD1FNjR5jwFn1TDDq1vfy+aZx8EYb0hbhMJkmMRCV1RpfUjbsDSbm1JEmyfLK02jwvzBz
+	fZ0d/jKFLYZLtRasoUcdl3Hk3QfWA3EykqDmj2Ra8p6s0GiUwZ4860xTegO8CxWTMZtwOjBbkqB
+	LqvfJ+qI2iXC80K66i0W4hR5tDz52jc9ccnUOly7bs8JUCxHR+VzBbvcrYMtH6rMnRYD0Qzff06
+	wUXJ8=
+X-Google-Smtp-Source: AGHT+IHqkOBG3QT37sypafGY0arEyaeulcMIFbw4A7vB4hFyHSAIml6v9aGckPIeEnDDTFYftumN3A==
+X-Received: by 2002:a05:6402:2706:b0:640:b978:efdb with SMTP id 4fb4d7f45d1cf-6431a55e1e8mr1943716a12.25.1762940386139;
+        Wed, 12 Nov 2025 01:39:46 -0800 (PST)
+Received: from pathway.suse.cz ([176.114.240.130])
+        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-64166d06531sm9914810a12.27.2025.11.12.01.39.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 12 Nov 2025 01:39:45 -0800 (PST)
+Date: Wed, 12 Nov 2025 10:39:43 +0100
+From: Petr Mladek <pmladek@suse.com>
+To: Junrui Luo <moonafterrain@outlook.com>
+Cc: Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+	"rostedt@goodmis.org" <rostedt@goodmis.org>,
+	"tiwai@suse.com" <tiwai@suse.com>,
+	"perex@perex.cz" <perex@perex.cz>,
+	"linux-sound@vger.kernel.org" <linux-sound@vger.kernel.org>,
+	"mchehab@kernel.org" <mchehab@kernel.org>,
+	"awalls@md.metrocast.net" <awalls@md.metrocast.net>,
+	"linux-media@vger.kernel.org" <linux-media@vger.kernel.org>,
+	David Laight <david.laight.linux@gmail.com>,
+	"davem@davemloft.net" <davem@davemloft.net>,
+	"edumazet@google.com" <edumazet@google.com>,
+	"kuba@kernel.org" <kuba@kernel.org>,
+	"pabeni@redhat.com" <pabeni@redhat.com>,
+	"netdev@vger.kernel.org" <netdev@vger.kernel.org>
+Subject: Re: [PATCH 1/4] lib/sprintf: add scnprintf_append() helper function
+Message-ID: <aRRV3yo9KHZV7sBM@pathway.suse.cz>
+References: <20251107051616.21606-1-moonafterrain@outlook.com>
+ <SYBPR01MB788110A77D7F0F7A27F0974FAFC3A@SYBPR01MB7881.ausprd01.prod.outlook.com>
+ <20251106213833.546c8eaba8aec6aa6a5e30b6@linux-foundation.org>
+ <20251107091246.4e5900f4@pumpkin>
+ <aQ29Zzajef81E2DZ@smile.fi.intel.com>
+ <aQ3riwUO_3v3UOvj@pathway.suse.cz>
+ <20251107175123.70ded89e@pumpkin>
+ <aRHzJIFkgfHIilTl@pathway.suse.cz>
+ <SYBPR01MB788101676D637353D4E27F64AFCFA@SYBPR01MB7881.ausprd01.prod.outlook.com>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20251112-burrowing-funny-cobra-19705d@kuoka>
-X-Sent-From: Pengutronix Hildesheim
-X-URL: http://www.pengutronix.de/
-X-Accept-Language: de,en
-X-Accept-Content-Type: text/plain
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: m.tretter@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-media@vger.kernel.org
+In-Reply-To: <SYBPR01MB788101676D637353D4E27F64AFCFA@SYBPR01MB7881.ausprd01.prod.outlook.com>
 
-On Wed, 12 Nov 2025 09:05:14 +0100, Krzysztof Kozlowski wrote:
-> On Tue, Nov 11, 2025 at 03:36:14PM +0100, Michael Tretter wrote:
-> > The ADV7280 and ADV7280-M have up to three register maps for the VPP and
-> > CSI. The address of these register maps may be programmed via registers
-> > in the main register map.
+On Tue 2025-11-11 13:31:00, Junrui Luo wrote:
+> On Mon, Nov 10, 2025 at 03:13:56PM +0100, Petr Mladek wrote:
+> > On Fri 2025-11-07 17:51:23, David Laight wrote:
+> > > On Fri, 7 Nov 2025 13:52:27 +0100
+> > > Petr Mladek <pmladek@suse.com> wrote:
+> > > 
+> > > > On Fri 2025-11-07 11:35:35, Andy Shevchenko wrote:
+> > > > > On Fri, Nov 07, 2025 at 09:12:46AM +0000, David Laight wrote:  
+> > > > > > On Thu, 6 Nov 2025 21:38:33 -0800
+> > > > > > Andrew Morton <akpm@linux-foundation.org> wrote:  
+> > > > > > > On Fri,  7 Nov 2025 13:16:13 +0800 Junrui Luo <moonafterrain@outlook.com> wrote:  
+> > > > > 
+> > > > > ...
+> > > > >   
+> > > > > > That is true for all the snprintf() functions.
+> > > > > >   
+> > > > > > > I wonder if we should instead implement a kasprintf() version of this
+> > > > > > > which reallocs each time and then switch all the callers over to that.  
+> > > > > > 
+> > > > > > That adds the cost of a malloc, and I, like kasprintf() probably ends up
+> > > > > > doing all the work of snprintf twice.
+> > > > > > 
+> > > > > > I'd be tempted to avoid the strlen() by passing in the offset.
+> > > > > > So (say):
+> > > > > > #define scnprintf_at(buf, len, off, ...) \
+> > > > > > 	scnprintf((buf) + off, (len) - off, __VA_ARGS__)  
+> > > > 
+> > > > It does not handle correctly the situation when len < off.
+> > > > Othersise, it looks good.
+> > > 
+> > > That shouldn't happen unless the calling code is really buggy.
+> > > There is also a WARN_ON_ONCE() at the top of snprintf().
 > > 
-> > Allow to specify the addresses of the VPP and CSI in the device tree to
-> > solve address conflicts on a board level.
+> > Fair enough.
 > > 
-> > Signed-off-by: Michael Tretter <m.tretter@pengutronix.de>
-> > ---
-> >  .../devicetree/bindings/media/i2c/adi,adv7180.yaml | 44 ++++++++++++++++++++++
-> >  1 file changed, 44 insertions(+)
+> > BTW: I have found there exists a userspace library which implements
+> > this idea, the funtion is called vsnoprintf(), see
+> > https://arpa2.gitlab.io/arpa2common/group__snoprintf.html
 > > 
-> > diff --git a/Documentation/devicetree/bindings/media/i2c/adi,adv7180.yaml b/Documentation/devicetree/bindings/media/i2c/adi,adv7180.yaml
-> > index dee8ce7cb7ba..4bbdc812442b 100644
-> > --- a/Documentation/devicetree/bindings/media/i2c/adi,adv7180.yaml
-> > +++ b/Documentation/devicetree/bindings/media/i2c/adi,adv7180.yaml
-> > @@ -138,6 +138,31 @@ allOf:
-> >        required:
-> >          - ports
-> >  
-> > +  - if:
-> > +      properties:
-> > +        compatible:
-> > +          contains:
-> > +            enum:
-> > +              - adi,adv7280
-> > +              - adi,adv7280-m
-> > +    then:
-> > +      properties:
-> > +        reg:
-> > +          minItems: 1
-> > +          maxItems: 3
+> > I know that it is cryptic. But I like the name. The letters "no"
+> > match the ordering of the parameters "size, offset".
+> > 
+> > In our case, it would be scnoprintf() ...
+> > 
 > 
-> This does not match top-level.
-
-Ack. If I understand the error message by dt_bindings_check correctly, I
-have to move the default from the top-level to the else branch of this
-conditional expression. Right?
-
+> Thanks for the feedback. Based on the discussion above, I plan to prepare a v2 patch.
+> int scnprintf_append(char *buf, size_t size, const char *fmt, ...)
+> {
+> 	va_list args;
+> 	size_t len;
 > 
-> > +          description:
-> > +            The ADV7280 and ADV7280-M have up to three register maps, which can be
-> > +            accessed via the I2C port. The main register map, the VPP register map,
-> > +            and the CSI register map. The main register map is mandatory. The other
-> > +            register maps are optional and the default is used unless specified.
-> > +
-> > +        reg-names:
-> > +          minItems: 1
-> > +          items:
-> > +            - const: main
-> > +            - enum: [ csi, vpp ]
-> > +            - enum: [ csi, vpp ]
+> 	len = strnlen(buf, size);
+> 	if (len == size)
+> 		return len;
+> 	va_start(args, fmt);
+> 	len += vscnprintf(buf + len, size - len, fmt, args);
+> 	va_end(args);
+> 	return len;
+> }
+> EXPORT_SYMBOL(scnprintf_append);
+
+I am fine with this. Just please add a comment that that it can be
+inefficient when using massively because it does strlen().
+I see similar comment in "CAVEATS" section in man 3 strcat.
+
+> I agree that using a macro like David suggested, with an explicit offset, is a reasonable and efficient approach.
+> The `scnprintf_append()` function, however, does not require such a variable; though if used improperly, it could introduce an extra `strlen()` overhead.
 > 
-> List must not be flexible. What does it mean "optional"? The device has
-> them always or you disable them via some sort of efuse/OTP?
+> However, if the consensus is to prefer the macro approach, I can rework the series to use `scnoprintf()`, as suggested by Petr instead.
+> 
+> That said, I believe `scnprintf_append()` also has its merits:
+> it simplifies one-off string constructions and provides built-in bound checking for safety.
+> Some existing code that appends strings in the kernel lacks proper bound checks, and this function could serve as a graceful replacement.
+> The benefits were also demonstrated in other patches.
 
-The flexible list is inspired by the binding for adi,adv748x.yaml. It
-also has a main device and several optional slave devices, which remain
-at the default address if not specified in the device tree.
+I think that both functions might have their users. You might consider
+adding the other variant when doing the conversions.
 
-The optional register maps depend on the variant of the chip, and the
-driver may or may not use them. In case of the adv7280-m, the driver
-currently always programs a hard-coded default address into the
-hardware. Making the csi and vpp register map addresses as optional
-would allow to preserve the current driver behavior in these cases.
-
-I think this is necessary for backward compatibility.
-
-Michael
+Best Regards,
+Petr
