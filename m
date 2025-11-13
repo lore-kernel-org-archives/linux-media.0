@@ -1,80 +1,218 @@
-Received: from mail-il1-f200.google.com (mail-il1-f200.google.com [209.85.166.200])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C03921DDC0B
-	for <linux-media@vger.kernel.org>; Thu, 13 Nov 2025 00:45:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.200
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ACDE62248AF;
+	Thu, 13 Nov 2025 02:00:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.167.242.64
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762994705; cv=none; b=NfuVvmlamrrHn60tMFZL+vxZR+ged32EN8o3cq1HTb1i6TeCV13P6sSnHbnFQG/TM/zhEfF6hSaz3oOSdwjSU3UrTtrVAOg/XhQySX37zH4qiqnix4TymND3OtxmRTcgCJnsx5iuXKHoEDXR5wrbkgJBaX5Jx6/qJ2wHYZvluus=
+	t=1762999242; cv=none; b=WfY1iXm1RwM0SqlCC9O9uw8YAlVtfr6bU9BDdZps1g1LiyOX1xSwn7FEVrxaKxvLbbEgT39c9SRc+ZMAR+iCOXHRK+BnSqpBYcQ9VFnCye+lcFcFGT+WR1Zp7UMdKYEYpykAAtL2T/RZ9TESY6JC8GGxsvzVQrH6d3MCg2Rg4HY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762994705; c=relaxed/simple;
-	bh=akpD68FRXSgJ3UWTHxS/xTnoHxMdY2EKCElVcN8Lbrg=;
-	h=MIME-Version:Date:In-Reply-To:Message-ID:Subject:From:To:
-	 Content-Type; b=azvxUpzRxa5npGpEcJTMY7b76CwhcbBoopvCx5vzwxsPNF1OAuXVQfoypKU4+Xz83K7MX0ED9O5XNmBP8xWSIKLVEdohzRcRqZ8VM1mNSEzx+INdfIA74jI5ULvg6pEwcznPAB+vynmFp5HINUm/SVglXN7Z84VX7mg6rFhnD2w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.166.200
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
-Received: by mail-il1-f200.google.com with SMTP id e9e14a558f8ab-43322b98837so5575215ab.2
-        for <linux-media@vger.kernel.org>; Wed, 12 Nov 2025 16:45:03 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1762994703; x=1763599503;
-        h=to:from:subject:message-id:in-reply-to:date:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ItT12y+7wRZewvqvz8JD8QRcThWHmeWOgUeD7MW9ZBE=;
-        b=gPgn43MpcTvjFWvLr1oJRC8tW79UlncNycHcL44PI0rws72IsfTclA7aAK2Gzjfs1Z
-         WdjGtTH+ya0l8/PEU3OZkZZGyJkABlKxioQvwt1EwnabmuuMlx0YOETvzw0+5NvOXfGa
-         HgW9oujweYmrMNtHy1mLFH8+xK4TdjpvjfBg+cyRRLQoWCsLdjWdr9ZlICR7reUEOldI
-         t1GQm8paCTHKNMg9QkKUXp/MPBhb/m0aaHHDB7Kre89NusX/VQsUQWNSpFkwx/LFEsFH
-         +2scqzx+MiVCsjpTvfzY6orc+UPdH8Qp5BdvFeUqxb3wChsxGVWh/lbq3vG26rVpuIMn
-         Re/Q==
-X-Forwarded-Encrypted: i=1; AJvYcCXy8GjAoNMRF3VJzN6l4xVMznV8wN8p/IMSgwke4FOOTmRqHsVryuGIwoNIpy4ky3jdIuuhZek3ZAXNRw==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yzw0LZQtFE/1nuH5VA+8x8K0hb8ikIl9OQp1pvbC/QR44jfOxQp
-	lYLpGkMgH6OP9TJY7nwAvjxdBUnr8dGWCHQXm+PX7Pdx4yZp51aPnbh1xKUMATGvJI1l2sCIozM
-	bDxqaSWI0Gw3ZYztiaLjInUOnJA/iVD8rOelR/dmQrByvT+M+6CwFh9O0NMQ=
-X-Google-Smtp-Source: AGHT+IGN8F2oZ/myun0ZFiJtclNF/dwsR+aCXcHsOpDqPUh5c+bO9sOqP7+avnEYzEIhUZd1GBkc7xXp0tpc8n7mkAJgoufSiItk
+	s=arc-20240116; t=1762999242; c=relaxed/simple;
+	bh=m/JsSUuuwvDOeT9RQcGvgVZikLHJyfgvCRC/Km24WVM=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=AT1O9WgYTgm86RRIv/Vyke80QXYuhL0NI2UVzcNphHedL9xcsCloACGWJTS5ja1bqR9me9BCz3Yev0S9v6mvHMDEeeGSLJbRhQRxAB5sU/83ElRy8Is+G/sMml0x74BUp4sLztidkZz4D4YYJHHIQgvQd3+Iijp9BBtQ3IIPC14=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ideasonboard.com; spf=pass smtp.mailfrom=ideasonboard.com; dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b=Yrx0QE6l; arc=none smtp.client-ip=213.167.242.64
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ideasonboard.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ideasonboard.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="Yrx0QE6l"
+Received: from pendragon.ideasonboard.com (unknown [213.216.211.176])
+	by perceval.ideasonboard.com (Postfix) with UTF8SMTPSA id 8B042BD2;
+	Thu, 13 Nov 2025 02:58:38 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+	s=mail; t=1762999118;
+	bh=m/JsSUuuwvDOeT9RQcGvgVZikLHJyfgvCRC/Km24WVM=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=Yrx0QE6l81GKJpO7fUpDjtqnA5GrvpgVcKw12mkvhSUeNKwzoA5dm+f8PQQU/pHwQ
+	 pOTPOexPfTcmFKdY2Uv+IlpJCWsNnxJaxnQL0L+hG679KyV9uQqt3ii6BXKlD9jxR6
+	 eH9ydbOSbO4wdbNojVfBEQeCE5fR4cuG+zJarzCY=
+Date: Thu, 13 Nov 2025 04:00:27 +0200
+From: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To: Frank Li <Frank.li@nxp.com>
+Cc: Guoniu Zhou <guoniu.zhou@oss.nxp.com>,
+	Rui Miguel Silva <rmfrfs@gmail.com>,
+	Martin Kepplinger <martink@posteo.de>,
+	Purism Kernel Team <kernel@puri.sm>,
+	Mauro Carvalho Chehab <mchehab@kernel.org>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>, Shawn Guo <shawnguo@kernel.org>,
+	Sascha Hauer <s.hauer@pengutronix.de>,
+	Pengutronix Kernel Team <kernel@pengutronix.de>,
+	Fabio Estevam <festevam@gmail.com>,
+	Philipp Zabel <p.zabel@pengutronix.de>, linux-media@vger.kernel.org,
+	devicetree@vger.kernel.org, imx@lists.linux.dev,
+	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+	Guoniu Zhou <guoniu.zhou@nxp.com>,
+	Conor Dooley <conor.dooley@microchip.com>
+Subject: Re: [PATCH v7 1/5] media: dt-bindings: nxp,imx8mq-mipi-csi2: Add
+ i.MX8ULP compatible string
+Message-ID: <20251113020027.GE9135@pendragon.ideasonboard.com>
+References: <20251023-csi2_imx8ulp-v7-0-5ecb081ce79b@nxp.com>
+ <20251023-csi2_imx8ulp-v7-1-5ecb081ce79b@nxp.com>
+ <20251027000537.GM13023@pendragon.ideasonboard.com>
+ <aROg99ryy6RTZZIx@lizhi-Precision-Tower-5810>
+ <20251111211025.GA26805@pendragon.ideasonboard.com>
+ <aROzSqKEOXQgkWLz@lizhi-Precision-Tower-5810>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6e02:2148:b0:433:7abd:96d0 with SMTP id
- e9e14a558f8ab-43473cff5fbmr71591685ab.3.1762994703007; Wed, 12 Nov 2025
- 16:45:03 -0800 (PST)
-Date: Wed, 12 Nov 2025 16:45:02 -0800
-In-Reply-To: <67da6f4b.050a0220.3657bb.013b.GAE@google.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <69152a0e.a70a0220.3124cb.000f.GAE@google.com>
-Subject: Re: [syzbot] [usb?] [media?] WARNING in media_create_pad_link (2)
-From: syzbot <syzbot+701fc9cc0cb44e2b0fe9@syzkaller.appspotmail.com>
-To: cascardo@igalia.com, gshahrouzi@gmail.com, hansg@kernel.org, 
-	hdegoede@redhat.com, hverkuil+cisco@kernel.org, 
-	kernelmentees@lists.linuxfoundation.org, laurent.pinchart@ideasonboard.com, 
-	linux-kernel@vger.kernel.org, linux-media@vger.kernel.org, 
-	linux-usb@vger.kernel.org, mchehab@kernel.org, ribalda@chromium.org, 
-	sakari.ailus@linux.intel.com, skhan@linuxfoundation.org, 
-	syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <aROzSqKEOXQgkWLz@lizhi-Precision-Tower-5810>
 
-syzbot suspects this issue was fixed by commit:
+On Tue, Nov 11, 2025 at 05:06:02PM -0500, Frank Li wrote:
+> On Tue, Nov 11, 2025 at 11:10:25PM +0200, Laurent Pinchart wrote:
+> > On Tue, Nov 11, 2025 at 03:47:51PM -0500, Frank Li wrote:
+> > > On Mon, Oct 27, 2025 at 02:05:37AM +0200, Laurent Pinchart wrote:
+> > > > On Thu, Oct 23, 2025 at 05:19:42PM +0800, Guoniu Zhou wrote:
+> > > > > From: Guoniu Zhou <guoniu.zhou@nxp.com>
+> > > > >
+> > > > > The CSI-2 receiver in the i.MX8ULP is almost identical to the version
+> > > > > present in the i.MX8QXP/QM, but i.MX8ULP CSI-2 controller needs pclk
+> > > > > clock as the input clock for its APB interface of Control and Status
+> > > > > register(CSR). So add compatible string fsl,imx8ulp-mipi-csi2 and
+> > > > > increase maxItems of Clocks (clock-names) to 4 from 3.  And keep the
+> > > > > same restriction for existing compatible.
+> > > > >
+> > > > > Reviewed-by: Frank Li <Frank.Li@nxp.com>
+> > > > > Acked-by: Conor Dooley <conor.dooley@microchip.com>
+> > > > > Signed-off-by: Guoniu Zhou <guoniu.zhou@nxp.com>
+> > > > > ---
+> > > > >  .../bindings/media/nxp,imx8mq-mipi-csi2.yaml       | 41 ++++++++++++++++++++--
+> > > > >  1 file changed, 39 insertions(+), 2 deletions(-)
+> > > > >
+> > > > > diff --git a/Documentation/devicetree/bindings/media/nxp,imx8mq-mipi-csi2.yaml b/Documentation/devicetree/bindings/media/nxp,imx8mq-mipi-csi2.yaml
+> > > > > index 3389bab266a9adbda313c8ad795b998641df12f3..da3978da1cab75292ada3f24837443f7f4ab6418 100644
+> > > > > --- a/Documentation/devicetree/bindings/media/nxp,imx8mq-mipi-csi2.yaml
+> > > > > +++ b/Documentation/devicetree/bindings/media/nxp,imx8mq-mipi-csi2.yaml
+> > > > > @@ -20,6 +20,7 @@ properties:
+> > > > >        - enum:
+> > > > >            - fsl,imx8mq-mipi-csi2
+> > > > >            - fsl,imx8qxp-mipi-csi2
+> > > > > +          - fsl,imx8ulp-mipi-csi2
+> > > > >        - items:
+> > > > >            - const: fsl,imx8qm-mipi-csi2
+> > > > >            - const: fsl,imx8qxp-mipi-csi2
+> > > > > @@ -39,12 +40,16 @@ properties:
+> > > > >                       clock that the RX DPHY receives.
+> > > > >        - description: ui is the pixel clock (phy_ref up to 333Mhz).
+> > > > >                       See the reference manual for details.
+> > > > > +      - description: pclk is clock for csr APB interface.
+> > > > > +    minItems: 3
+> > > > >
+> > > > >    clock-names:
+> > > > >      items:
+> > > > >        - const: core
+> > > > >        - const: esc
+> > > > >        - const: ui
+> > > > > +      - const: pclk
+> > > > > +    minItems: 3
+> > > > >
+> > > > >    power-domains:
+> > > > >      maxItems: 1
+> > > > > @@ -130,19 +135,51 @@ allOf:
+> > > > >          compatible:
+> > > > >            contains:
+> > > > >              enum:
+> > > > > -              - fsl,imx8qxp-mipi-csi2
+> > > > > +              - fsl,imx8ulp-mipi-csi2
+> > > > > +    then:
+> > > > > +      properties:
+> > > > > +        reg:
+> > > > > +          minItems: 2
+> > > > > +        resets:
+> > > > > +          minItems: 2
+> > > > > +          maxItems: 2
+> > > > > +        clocks:
+> > > > > +          minItems: 4
+> > > > > +        clock-names:
+> > > > > +          minItems: 4
+> > > >
+> > > > Do we need the clock-names constraint ? The DT schemas will enforce that
+> > > > clocks and clock-names always have the same number of elements.
+> > >
+> > > clock-names list already restrict at top section
+> > >
+> > > clock-names:
+> > >   items:
+> > >     - const: core
+> > >     - const: esc
+> > >     - const: ui
+> > >     - const: pclk
+> > >   minItems: 3
+> > >
+> > > Here just restrict need 4 clocks, instead 3 clock for fsl,imx8ulp-mipi-csi2
+> >
+> > I understand that. My point was that the dt-schema will always verify
+> > that the number of clocks items is equal to the number of clock-names
+> > items. That's a constraint enforced by the core schemas. As
+> > clocks: minItems is set to 4, the clock-names: minItems constraint is
+> > redundant.
+> 
+> I am not sure when have such features. Previous comments from Rob require
+> clocks and clock-names keep the same at binding yaml.
+> 
+> https://lore.kernel.org/linux-devicetree/20251031000012.GA466250-robh@kernel.org/
+> 
+> Rob have not said that clock-names can be removed.
+> 
+> Do you have any thread, which inidicate we only need limit clocks at
+> if-else branch?
+> 
+> I also have not found related commit at
+> https://github.com/devicetree-org/dt-schema.git
 
-commit 0e2ee70291e64a30fe36960c85294726d34a103e
-Author: Thadeu Lima de Souza Cascardo <cascardo@igalia.com>
-Date:   Wed Aug 20 16:08:16 2025 +0000
+I think you're right. There are dependencies between clock-names and
+clocks described in the DT schemas, but I don't see any automatic
+dependency regarding the number of items. I seem to have dreamt this :-/
+Sorry about the noise.
 
-    media: uvcvideo: Mark invalid entities with id UVC_INVALID_ENTITY_ID
+> > > > > +
+> > > > > +  - if:
+> > > > > +      properties:
+> > > > > +        compatible:
+> > > > > +          contains:
+> > > > > +            const: fsl,imx8qxp-mipi-csi2
+> > > > >      then:
+> > > > >        properties:
+> > > > >          reg:
+> > > > >            minItems: 2
+> > > > >          resets:
+> > > > >            maxItems: 1
+> > > > > -    else:
+> > > > > +        clocks:
+> > > > > +          maxItems: 3
+> > > > > +        clock-names:
+> > > > > +          maxItems: 3
+> > > > > +
+> > > > > +  - if:
+> > > > > +      properties:
+> > > > > +        compatible:
+> > > > > +          contains:
+> > > > > +            enum:
+> > > > > +              - fsl,imx8mq-mipi-csi2
+> > > > > +    then:
+> > > > >        properties:
+> > > > >          reg:
+> > > > >            maxItems: 1
+> > > > >          resets:
+> > > > >            minItems: 3
+> > > > > +        clocks:
+> > > > > +          maxItems: 3
+> > > > > +        clock-names:
+> > > > > +          maxItems: 3
+> > > > >        required:
+> > > > >          - fsl,mipi-phy-gpr
+> > > > >
+> > > >
+> > > > Could you please sort those conditional blocks by alphabetical order of
+> > > > the compatible strings ?
 
-bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=13f0f0b4580000
-start commit:   07e27ad16399 Linux 6.17-rc7
-git tree:       upstream
-kernel config:  https://syzkaller.appspot.com/x/.config?x=4d8792ecb6308d0f
-dashboard link: https://syzkaller.appspot.com/bug?extid=701fc9cc0cb44e2b0fe9
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=12e38142580000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=12da427c580000
+-- 
+Regards,
 
-If the result looks correct, please mark the issue as fixed by replying with:
-
-#syz fix: media: uvcvideo: Mark invalid entities with id UVC_INVALID_ENTITY_ID
-
-For information about bisection process see: https://goo.gl/tpsmEJ#bisection
+Laurent Pinchart
