@@ -1,159 +1,117 @@
-Received: from lahtoruutu.iki.fi (lahtoruutu.iki.fi [185.185.170.37])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f48.google.com (mail-wm1-f48.google.com [209.85.128.48])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5D2F6244664
-	for <linux-media@vger.kernel.org>; Thu, 13 Nov 2025 09:10:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=185.185.170.37
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763025040; cv=pass; b=VGvxRtALlzW1utQvFz7lb22gET/AliQRHpCFj6KOgOzbP4WdLo8hdIuoYeK3ynVE+0A5BrKfOjzZPYoJomm5gqX4wO3qvrN6A3GuyuQGHdW9j/G/h0NzmAwmT0iGCxnFQqYDxUnjpey7+Cdkovx2U074WJOfdBczdQwL1ut1anA=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763025040; c=relaxed/simple;
-	bh=7RRUncs6hyLJQQD1HbCkiQu5UkVkLX1T6GNoWyLCSi4=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=pSuYwEVVivKLAz6FeHCHw2F6DWoufcOtUAlK+Gslyxm0VH/mzNLbaGrqdI49B/lAEzbZou53QGTAcU4lVmB6L2OcDmJLelTbXz79uLIj6c5sQLLA9V1sX2jHqW46cIY9o2xbqGNi9blIzD+3/VOIb8o5PWFx7iaw5s0nvTXLv0k=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=iki.fi; spf=pass smtp.mailfrom=iki.fi; dkim=pass (2048-bit key) header.d=iki.fi header.i=@iki.fi header.b=qNajYpA2; arc=pass smtp.client-ip=185.185.170.37
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=iki.fi
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iki.fi
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5BCF82D1F7B
+	for <linux-media@vger.kernel.org>; Thu, 13 Nov 2025 09:28:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.48
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1763026082; cv=none; b=rAwAtTYF5LpFHXReyyf/Ysg/MllgBO+omrwEvLCRM3ykjQjNYVLHEr8+CVGWIFblmU+bTFKPIE3gzhvApQtFiHoBk5/YaKxfobymsZhW3CkZWEIAhiONoFZ2YZqpJHdGcIzevTgv+bHObXTwW8UFfCRBGDR6E4pO7Q+u+cCSYYM=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1763026082; c=relaxed/simple;
+	bh=HMyGCJqQYh9ujkqmTBAdu4RGNFwSTELIZpj6aYBe4go=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=YZJitED35OyfCVwUjz+GjvjpIALyOnUsObJgHE55Xt7WP97WTPUAH3srMs5YysJrX7dZYkAEB2rC4SJJGUIKJ1WxhZxX/+Q/tYSKI3aI05a22nngayutO5AzoA8kjY9PXFmktWrf7FVVmLnIPqsm4ocNBO8qzHJ7LfymB/2vGL8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=hU7cUOsA; arc=none smtp.client-ip=209.85.128.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=iki.fi header.i=@iki.fi header.b="qNajYpA2"
-Received: from hillosipuli.retiisi.eu (91-158-51-183.elisa-laajakaista.fi [91.158.51.183])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: sailus)
-	by lahtoruutu.iki.fi (Postfix) with ESMTPSA id 4d6Z7B0CrXz49Pxv;
-	Thu, 13 Nov 2025 11:03:17 +0200 (EET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi; s=lahtoruutu;
-	t=1763024599;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type;
-	bh=rju+1j4jb2xgeikdI4gvvlHUq6DcU9RCwB96TzY3Nfo=;
-	b=qNajYpA2GHWWZ12IiQQ9Vt89BF0DhwosGyphk5LGsfzgeGSxrH8mulujTG6A+Eq+wIoLkM
-	x53j6HStJmL3HLl+vbOJkKVZrAMdfsVrQyIj2w6+6YymwMllfOj8RW24kGhqPOshQ/8YM/
-	9kyKsIXMyWOAWVKKzqYq06kKbDJ2Lsh1B9augfq0HkI5EjZ/tniCSyTobzERJj/xOD0cw5
-	jBv/c4eP6VZC0h6FIDI82933wLtLpdVHaXbN9nYask06fa2i7RSwnxVpzA5+WuW4BJjYHW
-	rnJbE7tPQRWpmHrS2ZqowI1Tx6kC8XPaLNQ6OxA2uMww6wdDWfETgH0yKD89JQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi;
-	s=lahtoruutu; t=1763024599;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type;
-	bh=rju+1j4jb2xgeikdI4gvvlHUq6DcU9RCwB96TzY3Nfo=;
-	b=A/QtWarQDAGqKGpn571rptE7GMNgnEuJZaT7gLYMNlzljTghoDDC7TXniA1oBRTEZwi/j+
-	q8+BiJ6VEwtB3oQ83qarnleekdRKj0Qs5NjYXfHP7mojmoUbwBAfiCg3J9b27WXyEjD8LZ
-	C+tOWCEbUG3BJZ13tOk6Sqa/RGw2zDQCfP90LaFIFt/rtPi5QYffA01dG7cCyz60yjRT9u
-	TqlEqnCbMpC2q4Q6p2vdFwSL8/nZzVjjq3I3GIcUP9q859jyWt1daQTzamCJBVlISr9rLS
-	gDXv/KfcMK73QBoJNPlUqtl6WZLunNVn3t4IiMdzzs+FsSATiNtbBtavLBtCiA==
-ARC-Authentication-Results: i=1;
-	ORIGINATING;
-	auth=pass smtp.auth=sailus smtp.mailfrom=sakari.ailus@iki.fi
-ARC-Seal: i=1; a=rsa-sha256; d=iki.fi; s=lahtoruutu; cv=none; t=1763024599;
-	b=RzwPgogh20Oxl4cucIoX26iHu9AsCV381eRL/OVw3KPMmnZ9Gkorb8sw7p2hz9UcLfCocf
-	+TkOM94jeRMQlKJeHni1YbqKMXcXaalHD6I4TYz8V4zJhyRqLn/cnwqlszBqkqNGtbIUzI
-	QiECel/LMxmGKQDr5hFJm0LH9SkLBDLUu9syBuZO3avUeIM1EZ883NT3JeT9rvp2j59oAo
-	WA/bgGB5UDSmwGI6aZMhjsXucoIR4FsPUBCFAIjlOnxUMLFR5PB4Y/2imPDMQxF7KBdfjK
-	tJba3kUaxdSOwClSwOwsuR18ooALK+m1k1/NwCfaEq56UxqbdvdXMpOiNW559Q==
-Received: from valkosipuli.retiisi.eu (valkosipuli.local [192.168.4.2])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange secp256r1 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by hillosipuli.retiisi.eu (Postfix) with ESMTPS id 7D706634C50;
-	Thu, 13 Nov 2025 11:03:17 +0200 (EET)
-Date: Thu, 13 Nov 2025 11:03:17 +0200
-From: Sakari Ailus <sakari.ailus@iki.fi>
-To: linux-media@vger.kernel.org
-Cc: hans@jjverkuil.nl
-Subject: [GIT PULL FOR v6.19] Fixes and cleanups
-Message-ID: <aRWe1S2iHSoN7TDj@valkosipuli.retiisi.eu>
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="hU7cUOsA"
+Received: by mail-wm1-f48.google.com with SMTP id 5b1f17b1804b1-47774d3536dso4821355e9.0
+        for <linux-media@vger.kernel.org>; Thu, 13 Nov 2025 01:28:00 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1763026079; x=1763630879; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:content-language:from
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=GUQ8rfJZk6stmc9Nrz3QsiJ1sN+nWeofSODQ5AvFLg0=;
+        b=hU7cUOsAMH4e6B81GtNyfTRHKV4ib1Hv1JlOZ3xrNriVG+s67XNrQcyRSnZAl0vuX6
+         nJt+9+lWMyoHna4b1KEtDnKlhFNfM3NUxfmehzGnO/vAzrE8Sv5Uh4N7cWb3PAlJhKVW
+         XGW+G+cVgYexV3gbLvYCQVGfjv745ebCofeKhPvqTKPAEkKoLi7+w9srI2Yu86u6vIlD
+         Zp6X1q5dNd9yO7l3Gr4aJO0kB03Wrfx77sq0NIZ64FcJhDJypM9byecx+nIsG+QUQn02
+         nL2kxARBNUoZ89Wf0ARRcQSSyxybjSXU5PyAbXksc8zuk4IxFfWDhP7nOWqp8W+fkIvJ
+         j/7Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1763026079; x=1763630879;
+        h=content-transfer-encoding:in-reply-to:content-language:from
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=GUQ8rfJZk6stmc9Nrz3QsiJ1sN+nWeofSODQ5AvFLg0=;
+        b=TnSL9F7zz8K2zSUlAUsg+DwBBAxrFrFrezXxm9ivDmGSZRKCuCftTkaJsGDFMaHXzd
+         tyyy9VEMNhVa89yrUcjz5nZDjHl2Ks0s498Xa5hqYjmwx3vcEPnok5cFmBmRTpEJFJoT
+         jbbLVvohwoezefx4L/NIlPY+8l4gkLdVwIhmMaDfRUSViyAnvMJotlc/1CPM/mk0+0QE
+         jdGYLK8Um9u96WZtSFcmeFiLdprnzwDOLAN11KkQM4KVALSk5PsdQPQqkatSqtH2XRgs
+         0tjxoAyAYqUeKbq4sQ4l6IBGuDg9cmsDu7M6ctEs0EuBS4dJG2fFqWLf9vDa9CoABB7+
+         NdNQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUBFcl8EMbR3bIkH5G8CwAoDhyN8ZAL9MoNp1OLqsRxsiaXW/BambO6t7Osy/hTLI/Sk/0ADxdKKDuFCA==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw8eo7ZpoHMWb/8FAuYtFr+3WNxJWRRz3fdey2ozRtsCnFD1lZZ
+	I3K2Qg2LU9Gq44+96+a5Qt51nORVaNKVYr4gb4XchmkgRPWdBvhmut2iFPNVLNO8JJk=
+X-Gm-Gg: ASbGncuIF+EUcriNlxc1NShsorGEfVj64+N5AlVpjPQUbo2w19OtuBbQGre36o7PWKa
+	qdejssb8QuHrepjpXU1wEMpOC07R8D8LZULUfMPuf18IbhzjVkfpoxqf+4GcueIKbOXg28EEX6/
+	wpZYwY7B/Ox+R9ILDkI1Eghf8H/OtxGGAf/InRwhdVIaasnwOOf7kvhMWNvucCk4Xm3FjYBV3kC
+	y7UxD88nEiWYNzjl8rhwK4i/jR7zmc9eLB53XYVG79itggxkpdaPu85nIYA1LRNnUmCPc5xdIk7
+	ZDI8GbIFMr3ozfPao/kXzEdlKgUJm/uRyxlRbUDYwotIWoaqh8vlqIpkAoBf3qbRPycRpzk9KsP
+	rHFCBiD7DeVeaJG+pGSjXS4aByPVxWD3fAxDCojcmavSxemBZ2JiwGao34J2zlXIJ8ciSofiKw7
+	6/FD42NUtLYCJxcUEe5+uDbHFPun2qXezO32rtWlwWsbrrDLjXDV/3
+X-Google-Smtp-Source: AGHT+IHw7L3XGmJDpxEV8oddbi9Yd4/43abEC2dbuAVSkqiGZ0o9fEeGz0V3OqaYUe1ZOfohrMWy9w==
+X-Received: by 2002:a7b:c350:0:b0:45f:29eb:2148 with SMTP id 5b1f17b1804b1-4778ca11b6cmr8011965e9.7.1763026078746;
+        Thu, 13 Nov 2025 01:27:58 -0800 (PST)
+Received: from [192.168.0.21] (188-141-3-146.dynamic.upc.ie. [188.141.3.146])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4778c850ca6sm23687815e9.6.2025.11.13.01.27.57
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 13 Nov 2025 01:27:58 -0800 (PST)
+Message-ID: <b1dc3644-8df0-4147-94ae-1cfed835b9a0@linaro.org>
+Date: Thu, 13 Nov 2025 09:27:57 +0000
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH RFC 2/8] media: qcom: camss: csiphy: Introduce C-PHY
+To: David Heidelberg <david@ixit.cz>, Robert Foss <rfoss@kernel.org>,
+ Todor Tomov <todor.too@gmail.com>,
+ Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>,
+ Mauro Carvalho Chehab <mchehab@kernel.org>,
+ Luca Weiss <luca.weiss@fairphone.com>, Petr Hodina <phodina@protonmail.com>,
+ Casey Connolly <casey.connolly@linaro.org>, "Dr. Git" <drgitx@gmail.com>
+Cc: Joel Selvaraj <foss@joelselvaraj.com>, linux-media@vger.kernel.org,
+ linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+ phone-devel@vger.kernel.org
+References: <20251109-qcom-cphy-v1-0-165f7e79b0e1@ixit.cz>
+ <20251109-qcom-cphy-v1-2-165f7e79b0e1@ixit.cz>
+ <26bc458f-1db1-44e3-937a-f3ee7c1027be@linaro.org>
+ <cf9fcb8e-b346-4589-910f-09bbcc58f9b7@ixit.cz>
+From: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+Content-Language: en-US
+In-Reply-To: <cf9fcb8e-b346-4589-910f-09bbcc58f9b7@ixit.cz>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-Hi Hans, Mauro,
+On 12/11/2025 16:15, David Heidelberg wrote:
+>> Should be an integer from
+>>
+>> include/dt-bindings/phy/phy.h
+>>
+>> - PHY_TYPE_DPHY
+>> - PHY_TYPE_CPHY
+>>
+>> this should be indicated in the dt and latched here.
+> 
+> Would it make sense to rather use the int from:
+> 
+> include/dt-bindings/media/video-interfaces.h
+> 
+>   - MEDIA_BUS_TYPE_CSI2_CPHY
+>   - MEDIA_BUS_TYPE_CSI2_DPHY
+>   - ...
+> 
+> ?
+Maybe, but surely you need to get the mode of the PHY from DT ?
 
-The following changes since commit 29ae148fa88934bfd81af2a616816f9e22559b7c:
+I'm fine with the MEDIA_BUS_TYPE but, I do think the logic must be DT 
+driven.
 
-  Merge tag 'v6.18-rc5' into media-next (2025-11-11 12:44:28 +0100)
-
-are available in the Git repository at:
-
-  git://linuxtv.org/sailus/media_tree.git tags/for-6.19-3-signed
-
-for you to fetch changes up to bd15c0456d3eb5e51f177899552ab805a3d247f6:
-
-  MAINTAINERS: adjust file entry in TDA1997x MEDIA DRIVER (2025-11-12 12:00:58 +0200)
-
-----------------------------------------------------------------
-V4L2 cleanups and fixes for 6.19
-- Sensor driver cleanups and improvements (imx335, imx219 and imx214)
-- MAINTAINERS file name fix for TDA1997x
-- Dynamic CSI-2 lane number configuration in v4l2-common, imx-mipi-csis
-- Monochrome format support in ipu6
-- IMX461 and OV05C10 added to IPU bridge (no drivers yet though)
-- DT bindings fix for fsl,imx6q-vdoa
-
-----------------------------------------------------------------
-Frank Li (1):
-      dt-bindings: media: fsl,imx6q-vdoa: remove redundant ""
-
-Hans de Goede (1):
-      media: ipu6: isys: Add support for monochrome media bus formats
-
-Hao Yao (1):
-      media: ipu-bridge: Add OV05C10 to the list of supported sensors
-
-Isaac Scott (4):
-      media: v4l: Add helper to get number of active lanes via a pad
-      media: imx-mipi-csis: Move redundant debug print in probe
-      media: imx-mipi-csis: Add num_data_lanes to mipi_csis_device
-      media: imx-mipi-csis: Support active data lanes differing from maximum
-
-Jai Luthra (6):
-      media: imx335: Update the native pixel array width
-      media: imx335: Update HBLANK range on mode change
-      media: imx335: Handle runtime PM in leaf functions
-      media: imx355: Use subdev active state
-      media: imx335: Support 2x2 binning
-      media: imx335: Switch to {enable,disable}_streams
-
-Jimmy Su (1):
-      media: ipu-bridge: Add IMX471 to the list of supported sensors
-
-Lukas Bulwahn (1):
-      MAINTAINERS: adjust file entry in TDA1997x MEDIA DRIVER
-
-Ricardo Ribalda (1):
-      media: i2c: imx214: Rearrange control initialization
-
-Tarang Raval (2):
-      media: i2c: imx219: Propagate errors from control range updates
-      media: i2c: imx219: Replace exposure magic value with named constant
-
-Umang Jain (2):
-      media: imx335: Rectify name of mode struct
-      media: imx335: Support vertical flip
-
- .../devicetree/bindings/media/fsl,imx6q-vdoa.yaml  |   2 +-
- MAINTAINERS                                        |   2 +-
- drivers/media/i2c/imx214.c                         |  15 +-
- drivers/media/i2c/imx219.c                         |  74 +--
- drivers/media/i2c/imx335.c                         | 509 ++++++++++++++-------
- drivers/media/pci/intel/ipu-bridge.c               |   4 +
- drivers/media/pci/intel/ipu6/ipu6-isys-csi2.c      |   4 +
- drivers/media/pci/intel/ipu6/ipu6-isys-subdev.c    |  34 +-
- drivers/media/pci/intel/ipu6/ipu6-isys-video.c     |  14 +
- drivers/media/platform/nxp/imx-mipi-csis.c         |  21 +-
- drivers/media/v4l2-core/v4l2-common.c              |  29 ++
- include/media/v4l2-common.h                        |  20 +
- 12 files changed, 505 insertions(+), 223 deletions(-)
-
-Please pull.
-
--- 
-Kind regrds,
-
-Sakari Ailus
+---
+bod
