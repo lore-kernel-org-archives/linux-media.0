@@ -1,128 +1,138 @@
-Received: from bali.collaboradmins.com (bali.collaboradmins.com [148.251.105.195])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5871823E23C
-	for <linux-media@vger.kernel.org>; Thu, 13 Nov 2025 13:56:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.251.105.195
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 36F1F29E116
+	for <linux-media@vger.kernel.org>; Thu, 13 Nov 2025 14:52:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763042186; cv=none; b=aTbEJEius4TjXQUULy8zgkULGkshE55JQKDIO9w+Iysx/mkCpNytq431JSBPOzJLjwhyX0sFM3xypi+u1fkZ+LHY9GKXtaEViPvXxaNPD8Hglvmk8Yv/h8lWnny3tIEbtkUjXTYUp/HwlPlVgMd3EtLq60/b3YpG8fJtYeFOVj0=
+	t=1763045568; cv=none; b=M1I5Z5Y6Yts8HRGtXvFnd19DOAmglmWf/hQo4JiWdwWW87m7Os0socTXHhlCk82ZuSQ4bu72OFNGUyx/TPCwlJk6Ms8BPMN1+9GN99qGFIy4+6n+ChVKlq83dOmvjDjqrNqU3xrxpXyGxPA99+Bq/rluqmXyqH+s9hEU8YISqEI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763042186; c=relaxed/simple;
-	bh=3dBlMJS05WiRtSY0yabWtz7N5sDIXptfdaP92jdowtM=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=mwVqhI46L771DtnISWEuzVOOC1KsVL8cR9bnI1sBRZAXPS75UiiNaSoetWlFTU54jYRZ5V/sco0XSbStb6uFE+yiAIIfjAQEkoV4hGYROCohcW/57Q5hMYFaxofcD95N0GWRh7x5bxocZF21IETWa3p6txuifK92r7donVexI3Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=R7//II1/; arc=none smtp.client-ip=148.251.105.195
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
+	s=arc-20240116; t=1763045568; c=relaxed/simple;
+	bh=N/1SlR78eU55vHGcDw0ENlh2XZ1xdL2itJ4pywjTBnY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=K8jfnv6Z92jtm+zoXjvpzX3+8BtlQbbeB30i/t+yuJFD1Hj6YCf193NyXUK7afBNk/pIgGhT15bZI1BUzcI21jAlu8c/pSTymNmqPGUEtnyF80B3Dyf9REZkHkC4zgd/XUgyKdXYpiwY6xULm0iz4VsD4ilv6XTnFAQlK670+ZY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=HJdd1e7e; arc=none smtp.client-ip=192.198.163.9
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="R7//II1/"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1763042182;
-	bh=3dBlMJS05WiRtSY0yabWtz7N5sDIXptfdaP92jdowtM=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=R7//II1/UjvNC5QmXJvgHYQRpwRHfxInUxsnoMOPwUws99r0xeQC8IUYBb16lq+5E
-	 gzjRV2YemUpv+ATliDS77cZnpBSVBRtHWv+rGwPKv9BPcxNe6ZvBBXX9F33dOo68Rh
-	 kGxsHYbEOj9Mivd5CF2IR6xCjggDtJMq1NYC+vEdfZD3RNyyvdn0ZMHFCygaYnN1g9
-	 LSgij30/pjcXc9Ts+7H6vRmRF3iSuuhmmtQyM+uU1AT4fv13zGlRR08ZBlB71G8ECb
-	 GT4ykf/7gtcyWf6SJrkmrWLRRxY1BimEGt3zFF8KBXyjDZ30Kd4T+Z6gSgLzCfXt2q
-	 Y+V8MEf+Wm4Fw==
-Received: from [10.40.0.100] (185-67-175-126.lampert.tv [185.67.175.126])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: mriesch)
-	by bali.collaboradmins.com (Postfix) with ESMTPSA id 4DB2F17E1340;
-	Thu, 13 Nov 2025 14:56:22 +0100 (CET)
-Message-ID: <54404cd0-2aae-489a-bb7d-771058b35aa5@collabora.com>
-Date: Thu, 13 Nov 2025 14:56:19 +0100
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="HJdd1e7e"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1763045563; x=1794581563;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=N/1SlR78eU55vHGcDw0ENlh2XZ1xdL2itJ4pywjTBnY=;
+  b=HJdd1e7e0GN7B8aIhbh4+pZG9xeAFfCHyEi/Cuz6ff/dq5bK1vaV5K/i
+   yfbYb9LMryeFkxyROLMi/YCHlgR7qrhQToMtMMmUp0ZblAY8IbqNBSscm
+   LhbNBCmI1RYm5TVmj45kvHWO5A8/XOMaI6VlpOme6W7W6gv22xGU831vd
+   XbvAxiUYivXGicc7IeW3D/fuaR9jEcx1xCfyUIYqtwo8bONJx8P6knns7
+   xqTz6L8aA09B4ECUHuHAGld7H2xfZ4wD6e+uHtMvCLOShYQOCvylqsPme
+   BI0g2+Y97vrxUn9bX69G5OLzjFmnZQQG18XQGnEMhtp3bZwSxwPVg6rfd
+   A==;
+X-CSE-ConnectionGUID: 7LeXHVKqSteQdYeVkaZiDw==
+X-CSE-MsgGUID: C5omVrWmS2WOPwAIxoqVpQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11612"; a="75805368"
+X-IronPort-AV: E=Sophos;i="6.19,302,1754982000"; 
+   d="scan'208";a="75805368"
+Received: from fmviesa006.fm.intel.com ([10.60.135.146])
+  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Nov 2025 06:52:43 -0800
+X-CSE-ConnectionGUID: 1qNwQ+B0RXmMyGZpcBRsfg==
+X-CSE-MsgGUID: yKcNISvGR1CjikNC2XFjzg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.19,302,1754982000"; 
+   d="scan'208";a="189356754"
+Received: from rvuia-mobl.ger.corp.intel.com (HELO kekkonen.fi.intel.com) ([10.245.245.89])
+  by fmviesa006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Nov 2025 06:52:41 -0800
+Received: from kekkonen.localdomain (localhost [IPv6:::1])
+	by kekkonen.fi.intel.com (Postfix) with ESMTP id 12C50121DDC;
+	Thu, 13 Nov 2025 16:52:39 +0200 (EET)
+Date: Thu, 13 Nov 2025 16:52:39 +0200
+Organization: Intel Finland Oy - BIC 0357606-4 - c/o Alberga Business Park, 6 krs, Bertel Jungin Aukio 5, 02600 Espoo
+From: Sakari Ailus <sakari.ailus@linux.intel.com>
+To: Michael Riesch <michael.riesch@collabora.com>
+Cc: linux-media@vger.kernel.org, laurent.pinchart@ideasonboard.com,
+	jacopo.mondi@ideasonboard.com,
+	Niklas =?iso-8859-1?Q?S=F6derlund?= <niklas.soderlund+renesas@ragnatech.se>
+Subject: Re: [PATCH 1/1] media: v4l2-fwnode: Allow passing NULL fwnode to
+ endpoint parsers
+Message-ID: <aRXwtyuOz76OUDD4@kekkonen.localdomain>
+References: <20251112100333.97288-1-sakari.ailus@linux.intel.com>
+ <54404cd0-2aae-489a-bb7d-771058b35aa5@collabora.com>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 1/1] media: v4l2-fwnode: Allow passing NULL fwnode to
- endpoint parsers
-To: Sakari Ailus <sakari.ailus@linux.intel.com>, linux-media@vger.kernel.org
-Cc: laurent.pinchart@ideasonboard.com, jacopo.mondi@ideasonboard.com,
- =?UTF-8?Q?Niklas_S=C3=B6derlund?= <niklas.soderlund+renesas@ragnatech.se>
-References: <20251112100333.97288-1-sakari.ailus@linux.intel.com>
-Content-Language: en-US
-From: Michael Riesch <michael.riesch@collabora.com>
-In-Reply-To: <20251112100333.97288-1-sakari.ailus@linux.intel.com>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <54404cd0-2aae-489a-bb7d-771058b35aa5@collabora.com>
 
-Hi Sakari,
+Hi Michael,
 
-Thanks for the patch!
-
-On 11/12/25 11:03, Sakari Ailus wrote:
-> v4l2_fwnode_endpoint_parse() and v4l2_fwnode_endpoint_alloc_parse() take
-> a fwnode as the first argument and leave it up to the caller to check a
-> valid fwnode has been obtained through various means. Instead, add a check
-> here so the callers won't need to do that anymore.
+On Thu, Nov 13, 2025 at 02:56:19PM +0100, Michael Riesch wrote:
+> Hi Sakari,
 > 
-> Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
-
-Reviewed-by: Michael Riesch <michael.riesch@collabora.com>
-
-LGTM, just one question...
-
-> ---
->  drivers/media/v4l2-core/v4l2-fwnode.c | 3 +++
->  include/media/v4l2-fwnode.h           | 4 ++--
->  2 files changed, 5 insertions(+), 2 deletions(-)
+> Thanks for the patch!
 > 
-> diff --git a/drivers/media/v4l2-core/v4l2-fwnode.c b/drivers/media/v4l2-core/v4l2-fwnode.c
-> index cb153ce42c45..22ec702a4567 100644
-> --- a/drivers/media/v4l2-core/v4l2-fwnode.c
-> +++ b/drivers/media/v4l2-core/v4l2-fwnode.c
-> @@ -465,6 +465,9 @@ static int __v4l2_fwnode_endpoint_parse(struct fwnode_handle *fwnode,
->  	enum v4l2_mbus_type mbus_type;
->  	int rval;
->  
-> +	if (!fwnode)
-> +		return -EINVAL;
-> +
->  	pr_debug("===== begin parsing endpoint %pfw\n", fwnode);
->  
->  	fwnode_property_read_u32(fwnode, "bus-type", &bus_type);
-> diff --git a/include/media/v4l2-fwnode.h b/include/media/v4l2-fwnode.h
-> index f7c57c776589..299b60ce960b 100644
-> --- a/include/media/v4l2-fwnode.h
-> +++ b/include/media/v4l2-fwnode.h
-> @@ -182,7 +182,7 @@ enum v4l2_fwnode_bus_type {
->  
->  /**
->   * v4l2_fwnode_endpoint_parse() - parse all fwnode node properties
-> - * @fwnode: pointer to the endpoint's fwnode handle
-> + * @fwnode: pointer to the endpoint's fwnode handle (may be NULL)
+> On 11/12/25 11:03, Sakari Ailus wrote:
+> > v4l2_fwnode_endpoint_parse() and v4l2_fwnode_endpoint_alloc_parse() take
+> > a fwnode as the first argument and leave it up to the caller to check a
+> > valid fwnode has been obtained through various means. Instead, add a check
+> > here so the callers won't need to do that anymore.
+> > 
+> > Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
+> 
+> Reviewed-by: Michael Riesch <michael.riesch@collabora.com>
 
-... isn't that addition a bit misleading? It says it may be NULL, but it
-returns an error in this case?
+Thank you.
 
-Checking for pointer == NULL in public functions is excellent practice,
-but I wouldn't say this needs to be emphasized in the argument
-documentation. But that's just my €0.02, I am fine either way.
+> 
+> LGTM, just one question...
+> 
+> > ---
+> >  drivers/media/v4l2-core/v4l2-fwnode.c | 3 +++
+> >  include/media/v4l2-fwnode.h           | 4 ++--
+> >  2 files changed, 5 insertions(+), 2 deletions(-)
+> > 
+> > diff --git a/drivers/media/v4l2-core/v4l2-fwnode.c b/drivers/media/v4l2-core/v4l2-fwnode.c
+> > index cb153ce42c45..22ec702a4567 100644
+> > --- a/drivers/media/v4l2-core/v4l2-fwnode.c
+> > +++ b/drivers/media/v4l2-core/v4l2-fwnode.c
+> > @@ -465,6 +465,9 @@ static int __v4l2_fwnode_endpoint_parse(struct fwnode_handle *fwnode,
+> >  	enum v4l2_mbus_type mbus_type;
+> >  	int rval;
+> >  
+> > +	if (!fwnode)
+> > +		return -EINVAL;
+> > +
+> >  	pr_debug("===== begin parsing endpoint %pfw\n", fwnode);
+> >  
+> >  	fwnode_property_read_u32(fwnode, "bus-type", &bus_type);
+> > diff --git a/include/media/v4l2-fwnode.h b/include/media/v4l2-fwnode.h
+> > index f7c57c776589..299b60ce960b 100644
+> > --- a/include/media/v4l2-fwnode.h
+> > +++ b/include/media/v4l2-fwnode.h
+> > @@ -182,7 +182,7 @@ enum v4l2_fwnode_bus_type {
+> >  
+> >  /**
+> >   * v4l2_fwnode_endpoint_parse() - parse all fwnode node properties
+> > - * @fwnode: pointer to the endpoint's fwnode handle
+> > + * @fwnode: pointer to the endpoint's fwnode handle (may be NULL)
+> 
+> ... isn't that addition a bit misleading? It says it may be NULL, but it
+> returns an error in this case?
+> 
+> Checking for pointer == NULL in public functions is excellent practice,
+> but I wouldn't say this needs to be emphasized in the argument
+> documentation. But that's just my €0.02, I am fine either way.
 
-Best regards,
-Michael
+Such wording is used elsewhere to signal NULL for something is acceptable.
+Obviously this leads to parsing failure in this case. I'll add an explicit
+note on this for -EINVAL code, how about that?
 
->   * @vep: pointer to the V4L2 fwnode data structure
->   *
->   * This function parses the V4L2 fwnode endpoint specific parameters from the
-> @@ -236,7 +236,7 @@ void v4l2_fwnode_endpoint_free(struct v4l2_fwnode_endpoint *vep);
->  
->  /**
->   * v4l2_fwnode_endpoint_alloc_parse() - parse all fwnode node properties
-> - * @fwnode: pointer to the endpoint's fwnode handle
-> + * @fwnode: pointer to the endpoint's fwnode handle (may be NULL)
+-- 
+Kind regards,
 
-PS.: Same here of course
-
->   * @vep: pointer to the V4L2 fwnode data structure
->   *
->   * This function parses the V4L2 fwnode endpoint specific parameters from the
-
+Sakari Ailus
