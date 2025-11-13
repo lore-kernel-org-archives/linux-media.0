@@ -1,164 +1,239 @@
-Received: from fhigh-a5-smtp.messagingengine.com (fhigh-a5-smtp.messagingengine.com [103.168.172.156])
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DC0872FB99D;
-	Thu, 13 Nov 2025 18:37:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.156
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4B2372F5311
+	for <linux-media@vger.kernel.org>; Thu, 13 Nov 2025 21:04:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.167.242.64
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763059039; cv=none; b=p89aNlZ4G+JRlGPF44ahpGAcpxbZ4mzi7WaOB0gAwo6m0oYLBCTMW4xkL96JynE2DpiMJWtee8nwuDmGqf6C6ShrYBa1vAxsEqxF5CEz9KSV9yvTYTh5kumYOis7w1XVKQhFytm8D/HLLqXL7J1FtW8sP7OzVV46K9jqcLrYlxM=
+	t=1763067859; cv=none; b=T9PaVxSWHE9smqSg1C3wlUSu/HD8vlqDXgbE6A/RhVjGC6jjHMthiGik4gu7KzNN6peJigGuviTUKV4rvrceOyuJoe++hqJ5ZYDeJvO3rrFr7f+15QPlloEPsBGagc4OrKxmX9kxrkDm9w56jr3hY6yzqjYkT/RLu5RHHZJytD8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763059039; c=relaxed/simple;
-	bh=aWTqQ0b/ReE8HFNlaVpuEgnmxSpa8WtJlYp2zYuVYjQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=Ghc+RbIO5od4kfqkGGHLt8Kn/Wb7WnmwA7RzXbsghXN5p/9I+Ex1IKETIF5ILUuS6atwsWQGyW5pGPezYAjemOEmsf2N2/iViljsG6I+dQahoL9p/fjvO1T5KaKdhIpSoSnfo9oJ4TBgh6nVLLo6lse7zsi46vB7LQILiz/sK4U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=shazbot.org; spf=pass smtp.mailfrom=shazbot.org; dkim=pass (2048-bit key) header.d=shazbot.org header.i=@shazbot.org header.b=P4bXbg4r; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=DpGygDWL; arc=none smtp.client-ip=103.168.172.156
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=shazbot.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=shazbot.org
+	s=arc-20240116; t=1763067859; c=relaxed/simple;
+	bh=6AVYao2iwJafhgW7lrO+gPL0uztrCDncIErDM5/MKyE=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=VK1y82V6kpu1q7/J0ipyCaYUec++aly1J07aBWk84dZmpT5O7CcLQh336hf1RF4Iq4YUlZtY8IUhgsg/Cz/tPndg2W9qG+rDMtBzecMs2GyJhZxB4TIY3QBGzBFnL7w0B5vaRYaj3aPnYEQuAHLsG+WDuktjTfwAHbhYWxQznhc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ideasonboard.com; spf=pass smtp.mailfrom=ideasonboard.com; dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b=R4xiIsZd; arc=none smtp.client-ip=213.167.242.64
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ideasonboard.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ideasonboard.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=shazbot.org header.i=@shazbot.org header.b="P4bXbg4r";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="DpGygDWL"
-Received: from phl-compute-01.internal (phl-compute-01.internal [10.202.2.41])
-	by mailfhigh.phl.internal (Postfix) with ESMTP id 2372C1400199;
-	Thu, 13 Nov 2025 13:37:16 -0500 (EST)
-Received: from phl-mailfrontend-01 ([10.202.2.162])
-  by phl-compute-01.internal (MEProxy); Thu, 13 Nov 2025 13:37:16 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=shazbot.org; h=
-	cc:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to; s=fm2; t=1763059036;
-	 x=1763145436; bh=BD/WhsB8e3Zqe/+8EjZIdOgAXRaXvGfr+f2jY+eE6qA=; b=
-	P4bXbg4r0oJBx/E1bztlF2B7BGiNEXyehLzephEvSFNUzMrTKBGd5gyYOihif0HP
-	r2++kCNOY3yWKZAG3q7Xb6ayZXXzR4AVyDalUfLi/iaqnWpJMSUtcLuxNkehfqHm
-	SnE/Ak+8J9AChVjgr7qsSBMZq9C4572WX2jxkU3XiVN9O52fhS/37VfPLpAt/tf/
-	1aeR0oBeUqFwezNgYxGArK2jGJDYFKq1ffGKg/pLQRElClNVjxdu3iCDvlBgfeJF
-	dVDI3dDNENZfredhGsVe+gNc8Ipt/QLOa77HOG2ezlCE0wqLjFRDpzM4dUVMIEIz
-	uXFnb8YqQiEXQrOGO26g1Q==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=1763059036; x=
-	1763145436; bh=BD/WhsB8e3Zqe/+8EjZIdOgAXRaXvGfr+f2jY+eE6qA=; b=D
-	pGygDWLC8Oe9G09LLQDBC1/TayHNtFRtvgmEhbZmDj9ch6Rr4nqbI6m6N4mcww+N
-	C41gypCxhkw6Pq0yRh1rzcPpt+qHtxQkLQdmG+Ie3KlDIeH5Cg2xPuS6Q/B16UfT
-	sb2YAXQ1NJZUMMaS+ZkebiPpAbjB3B6+LTY2C57ioXpbjPqCETISXVaVdhIWq+Bv
-	GGN04+Rs1E3gC6rdE65jYymY2wWx9ZfR3UZOVmPzpGraYfDXX4dxdgUSpffGY/B+
-	1wyHA5S7k7dmOC//sARsVdiaxMR2jwfOqQZtGT3MKQiicg0omH0+QBgPOxCZPWyF
-	u9fIjPnt4oOtYHKsVcHog==
-X-ME-Sender: <xms:WyUWaf__6D7GlE4G0lv0WEbX-j95a5x7mOnxVaAwbdgwZhVfnfxtsQ>
-    <xme:WyUWaQkNmUKHebBltm1E85FYBiO7HCC8Zb-6PJ8rL2Vg4CxJEk31n95aqfodpLZk5
-    qPratmr-ORczzCvsXYsJv9wMYLiqqeU-ZWTpQud7NKeAR8F6AvKBg>
-X-ME-Received: <xmr:WyUWaamzWAc2t2Li2SMxOVf_brfrgMMLf0weM2hGMK7azQEUHVR-6bDQ>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtdeggddvtdejieejucetufdoteggodetrf
-    dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfurfetoffkrfgpnffqhgenuceu
-    rghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujf
-    gurhepfffhvfevuffkjghfgggtgfesthejredttddtvdenucfhrhhomheptehlvgigucgh
-    ihhllhhirghmshhonhcuoegrlhgvgiesshhhrgiisghothdrohhrgheqnecuggftrfgrth
-    htvghrnhephedvtdeuveejudffjeefudfhueefjedvtefgffdtieeiudfhjeejhffhfeeu
-    vedunecuffhomhgrihhnpehkvghrnhgvlhdrohhrghenucevlhhushhtvghrufhiiigvpe
-    dtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrlhgvgiesshhhrgiisghothdrohhrghdp
-    nhgspghrtghpthhtohepvddvpdhmohguvgepshhmthhpohhuthdprhgtphhtthhopehjgh
-    hgsehnvhhiughirgdrtghomhdprhgtphhtthhopegthhhrihhsthhirghnrdhkohgvnhhi
-    ghesrghmugdrtghomhdprhgtphhtthhopegurhhiqdguvghvvghlsehlihhsthhsrdhfrh
-    gvvgguvghskhhtohhprdhorhhgpdhrtghpthhtohepihhomhhmuheslhhishhtshdrlhhi
-    nhhugidruggvvhdprhgtphhtthhopehjohhroheskegshihtvghsrdhorhhgpdhrtghpth
-    htohepkhgvvhhinhdrthhirghnsehinhhtvghlrdgtohhmpdhrtghpthhtohepkhhvmhes
-    vhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnrghrohdqmhhmqdhsih
-    hgsehlihhsthhsrdhlihhnrghrohdrohhrghdprhgtphhtthhopehlihhnuhigqdhkshgv
-    lhhfthgvshhtsehvghgvrhdrkhgvrhhnvghlrdhorhhg
-X-ME-Proxy: <xmx:WyUWadgknQxey309jF3XVJ2yKgO_IFBsYQySnm_8sUiOGolaMmVO4A>
-    <xmx:WyUWaTUZa3GLUPgwRWEoO0n0fsVxCgwAssYFOgb-oD5UOHMfbNyzPA>
-    <xmx:WyUWafigRYQ2beb6l2qAlk0v2X2ItqzkqklJoDhtMWHW48aYYXTUow>
-    <xmx:WyUWaX6ZoZ1wgcFp4eUYhhhHacpSfKtijoAlupBJPRUTroKQlcm1OA>
-    <xmx:XCUWaSI9FcHDO5EWV-LobXCtc85dMlQA7tlAtzmFdov-aHuxhe7QJja2>
-Feedback-ID: i03f14258:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
- 13 Nov 2025 13:37:13 -0500 (EST)
-Date: Thu, 13 Nov 2025 11:37:12 -0700
-From: Alex Williamson <alex@shazbot.org>
-To: Jason Gunthorpe <jgg@nvidia.com>
-Cc: Christian =?UTF-8?B?S8O2bmln?= <christian.koenig@amd.com>,
- dri-devel@lists.freedesktop.org, iommu@lists.linux.dev, Joerg Roedel
- <joro@8bytes.org>, Kevin Tian <kevin.tian@intel.com>, kvm@vger.kernel.org,
- linaro-mm-sig@lists.linaro.org, linux-kselftest@vger.kernel.org,
- linux-media@vger.kernel.org, Robin Murphy <robin.murphy@arm.com>, Shuah
- Khan <shuah@kernel.org>, Sumit Semwal <sumit.semwal@linaro.org>, Will
- Deacon <will@kernel.org>, Krishnakant Jaju <kjaju@nvidia.com>, Leon
- Romanovsky <leon@kernel.org>, Matt Ochs <mochs@nvidia.com>, Nicolin Chen
- <nicolinc@nvidia.com>, patches@lists.linux.dev, Simona Vetter
- <simona.vetter@ffwll.ch>, Vivek Kasireddy <vivek.kasireddy@intel.com>, Xu
- Yilun <yilun.xu@linux.intel.com>
-Subject: Re: [PATCH 0/9] Initial DMABUF support for iommufd
-Message-ID: <20251113113712.5691cbaf.alex@shazbot.org>
-In-Reply-To: <0-v1-af84a3ab44f5+f68-iommufd_buf_jgg@nvidia.com>
-References: <0-v1-af84a3ab44f5+f68-iommufd_buf_jgg@nvidia.com>
+	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="R4xiIsZd"
+Received: from pendragon.ideasonboard.com (82-203-165-222.bb.dnainternet.fi [82.203.165.222])
+	by perceval.ideasonboard.com (Postfix) with UTF8SMTPSA id D8558C67;
+	Thu, 13 Nov 2025 22:02:11 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+	s=mail; t=1763067732;
+	bh=6AVYao2iwJafhgW7lrO+gPL0uztrCDncIErDM5/MKyE=;
+	h=From:To:Cc:Subject:Date:From;
+	b=R4xiIsZdJ1iibjY1XO/5YKyCcvgEjUAeQNCl2UoybnggbijFKuX0HJeIlgYSsTDCA
+	 CiMzeZK4mIq1bJ4dn/cUEu7oboKKKUySd0U7mJp669lkWY5VrjJFgJVhvviaMhWOI2
+	 KhT4NqhPd0CD3dhHBRg090JsMcEMaC+Tm/PjSewQ=
+From: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To: linux-media@vger.kernel.org
+Cc: Ricardo Ribalda <ribalda@chromium.org>,
+	Hans Verkuil <hans@jjverkuil.nl>,
+	Hans de Goede <hansg@kernel.org>,
+	Lili Orosz <lily@floofy.city>
+Subject: [PATCH v4] media: uvcvideo: Create an ID namespace for streaming output terminals
+Date: Thu, 13 Nov 2025 23:04:00 +0200
+Message-ID: <20251113210400.28618-1-laurent.pinchart@ideasonboard.com>
+X-Mailer: git-send-email 2.51.0
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On Fri,  7 Nov 2025 12:49:32 -0400
-Jason Gunthorpe <jgg@nvidia.com> wrote:
+From: Ricardo Ribalda <ribalda@chromium.org>
 
-> This series is the start of adding full DMABUF support to
-> iommufd. Currently it is limited to only work with VFIO's DMABUF exporter.
-> It sits on top of Leon's series to add a DMABUF exporter to VFIO:
-> 
->   https://lore.kernel.org/r/20251106-dmabuf-vfio-v7-0-2503bf390699@nvidia.com
-> 
-> The existing IOMMU_IOAS_MAP_FILE is enhanced to detect DMABUF fd's, but
-> otherwise works the same as it does today for a memfd. The user can select
-> a slice of the FD to map into the ioas and if the underliyng alignment
-> requirements are met it will be placed in the iommu_domain.
-> 
-> Though limited, it is enough to allow a VMM like QEMU to connect MMIO BAR
-> memory from VFIO to an iommu_domain controlled by iommufd. This is used
-> for PCI Peer to Peer support in VMs, and is the last feature that the VFIO
-> type 1 container has that iommufd couldn't do.
-> 
-> The VFIO type1 version extracts raw PFNs from VMAs, which has no lifetime
-> control and is a use-after-free security problem.
-> 
-> Instead iommufd relies on revokable DMABUFs. Whenever VFIO thinks there
-> should be no access to the MMIO it can shoot down the mapping in iommufd
-> which will unmap it from the iommu_domain. There is no automatic remap,
-> this is a safety protocol so the kernel doesn't get stuck. Userspace is
-> expected to know it is doing something that will revoke the dmabuf and
-> map/unmap it around the activity. Eg when QEMU goes to issue FLR it should
-> do the map/unmap to iommufd.
-> 
-> Since DMABUF is missing some key general features for this use case it
-> relies on a "private interconnect" between VFIO and iommufd via the
-> vfio_pci_dma_buf_iommufd_map() call.
-> 
-> The call confirms the DMABUF has revoke semantics and delivers a phys_addr
-> for the memory suitable for use with iommu_map().
-> 
-> Medium term there is a desire to expand the supported DMABUFs to include
-> GPU drivers to support DPDK/SPDK type use cases so future series will work
-> to add a general concept of revoke and a general negotiation of
-> interconnect to remove vfio_pci_dma_buf_iommufd_map().
-> 
-> I also plan another series to modify iommufd's vfio_compat to
-> transparently pull a dmabuf out of a VFIO VMA to emulate more of the uAPI
-> of type1.
-> 
-> The latest series for interconnect negotation to exchange a phys_addr is:
->  https://lore.kernel.org/r/20251027044712.1676175-1-vivek.kasireddy@intel.com
+Some devices, such as the Grandstream GUV3100 and the LSK Meeting Eye
+for Business & Home, exhibit entity ID collisions between units and
+streaming output terminals.
 
-If this is in development, why are we pursuing a vfio specific
-temporary "private interconnect" here rather than building on that
-work?  What are the gaps/barriers/timeline?
+The UVC specification requires unit and terminal IDs to be unique, and
+uses the ID to reference entities:
 
-I don't see any uAPI changes here, is there any visibility to userspace
-whether IOMMUFD supports this feature or is it simply a try and fail
-approach?  The latter makes it difficult for management tools to select
-whether to choose a VM configuration based on IOMMUFD or legacy vfio if
-p2p DMA is a requirement.  Thanks,
+- In control requests, to identify the target entity
+- In the UVC units and terminals descriptors' bSourceID field, to
+  identify source entities
+- In the UVC input header descriptor's bTerminalLink, to identify the
+  terminal associated with a streaming interface
 
-Alex
+Entity ID collisions break accessing controls and make the graph
+description in the UVC descriptors ambiguous. However, collisions where
+one of the entities is a streaming output terminal and the other entity
+is not a streaming terminal are less severe. Streaming output terminals
+have no controls, and, as they are the final entity in pipelines, they
+are never referenced in descriptors as source entities. They are
+referenced by ID only from innput header descriptors, which by
+definition only reference streaming terminals.
+
+For these reasons, we can work around the collision by giving streaming
+output terminals their own ID namespace. Do so by setting bit
+UVC_TERM_OUTPUT (15) in the uvc_entity.id field, which is normally never
+set as the ID is a 8-bit value.
+
+This ID change doesn't affect the entity name in the media controller
+graph as the name isn't constructed from the ID, so there should not be
+any impact on the uAPI.
+
+Although this change handles some ID collisions automagically, keep
+printing an error in uvc_alloc_new_entity() when a camera has invalid
+descriptors. Hopefully this message will help vendors fix their invalid
+descriptors.
+
+This new method of handling ID collisions includes a revert of commit
+758dbc756aad ("media: uvcvideo: Use heuristic to find stream entity")
+that attempted to fix the problem urgently due to regression reports.
+
+Suggested-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
+Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Tested-by: Lili Orosz <lily@floofy.city>
+Co-developed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Signed-off-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+---
+Changes since v3:
+
+- Squash with revert of commit 758dbc756aad ("media: uvcvideo: Use
+  heuristic to find stream entity")
+
+Changes since v2:
+
+- Improve commit message and comment block
+
+Changes in v2:
+
+- Change Macro name
+- Apply quirk only to TT_STEAMING
+- Add missing suggested by
+- uvc_stream_for_terminal
+- Note, v2 has not been tested yet in real hardware, only v1.
+- Link to v1: https://lore.kernel.org/r/20251022-uvc-grandstream-laurent-v1-1-0925738a3484@chromium.org
+---
+ drivers/media/usb/uvc/uvc_driver.c | 54 ++++++++++++++++++------------
+ drivers/media/usb/uvc/uvcvideo.h   |  3 +-
+ 2 files changed, 35 insertions(+), 22 deletions(-)
+
+diff --git a/drivers/media/usb/uvc/uvc_driver.c b/drivers/media/usb/uvc/uvc_driver.c
+index ee4f54d68349..aa3e8d295e0f 100644
+--- a/drivers/media/usb/uvc/uvc_driver.c
++++ b/drivers/media/usb/uvc/uvc_driver.c
+@@ -165,28 +165,17 @@ static struct uvc_entity *uvc_entity_by_reference(struct uvc_device *dev,
+ 	return NULL;
+ }
+ 
+-static struct uvc_streaming *uvc_stream_by_id(struct uvc_device *dev, int id)
++static struct uvc_streaming *uvc_stream_for_terminal(struct uvc_device *dev,
++						     struct uvc_entity *term)
+ {
+-	struct uvc_streaming *stream, *last_stream;
+-	unsigned int count = 0;
++	u16 id = UVC_HARDWARE_ENTITY_ID(term->id);
++	struct uvc_streaming *stream;
+ 
+ 	list_for_each_entry(stream, &dev->streams, list) {
+-		count += 1;
+-		last_stream = stream;
+ 		if (stream->header.bTerminalLink == id)
+ 			return stream;
+ 	}
+ 
+-	/*
+-	 * If the streaming entity is referenced by an invalid ID, notify the
+-	 * user and use heuristics to guess the correct entity.
+-	 */
+-	if (count == 1 && id == UVC_INVALID_ENTITY_ID) {
+-		dev_warn(&dev->intf->dev,
+-			 "UVC non compliance: Invalid USB header. The streaming entity has an invalid ID, guessing the correct one.");
+-		return last_stream;
+-	}
+-
+ 	return NULL;
+ }
+ 
+@@ -823,10 +812,12 @@ static struct uvc_entity *uvc_alloc_new_entity(struct uvc_device *dev, u16 type,
+ 	}
+ 
+ 	/* Per UVC 1.1+ spec 3.7.2, the ID is unique. */
+-	if (uvc_entity_by_id(dev, id)) {
+-		dev_err(&dev->intf->dev, "Found multiple Units with ID %u\n", id);
++	if (uvc_entity_by_id(dev, UVC_HARDWARE_ENTITY_ID(id)))
++		dev_err(&dev->intf->dev, "Found multiple Units with ID %u\n",
++			UVC_HARDWARE_ENTITY_ID(id));
++
++	if (uvc_entity_by_id(dev, id))
+ 		id = UVC_INVALID_ENTITY_ID;
+-	}
+ 
+ 	extra_size = roundup(extra_size, sizeof(*entity->pads));
+ 	if (num_pads)
+@@ -982,6 +973,7 @@ static int uvc_parse_standard_control(struct uvc_device *dev,
+ 	struct usb_host_interface *alts = dev->intf->cur_altsetting;
+ 	unsigned int i, n, p, len;
+ 	const char *type_name;
++	unsigned int id;
+ 	u16 type;
+ 
+ 	switch (buffer[2]) {
+@@ -1120,8 +1112,28 @@ static int uvc_parse_standard_control(struct uvc_device *dev,
+ 			return 0;
+ 		}
+ 
++		id = buffer[3];
++
++		/*
++		 * Some devices, such as the Grandstream GUV3100, exhibit entity
++		 * ID collisions between units and streaming output terminals.
++		 * Move streaming output terminals to their own ID namespace by
++		 * setting bit UVC_TERM_OUTPUT (15), above the ID's 8-bit value.
++		 * The bit is ignored in uvc_stream_for_terminal() when looking
++		 * up the streaming interface for the terminal.
++		 *
++		 * This hack is safe to enable unconditionally, as the ID is not
++		 * used for any other purpose (streaming output terminals have
++		 * no controls and are never referenced as sources in UVC
++		 * descriptors). Other types output terminals can have controls,
++		 * so limit usage of this separate namespace to streaming output
++		 * terminals.
++		 */
++		if (type & UVC_TT_STREAMING)
++			id |= UVC_TERM_OUTPUT;
++
+ 		term = uvc_alloc_new_entity(dev, type | UVC_TERM_OUTPUT,
+-					    buffer[3], 1, 0);
++					    id, 1, 0);
+ 		if (IS_ERR(term))
+ 			return PTR_ERR(term);
+ 
+@@ -2118,8 +2130,8 @@ static int uvc_register_terms(struct uvc_device *dev,
+ 		if (UVC_ENTITY_TYPE(term) != UVC_TT_STREAMING)
+ 			continue;
+ 
+-		stream = uvc_stream_by_id(dev, term->id);
+-		if (stream == NULL) {
++		stream = uvc_stream_for_terminal(dev, term);
++		if (!stream) {
+ 			dev_info(&dev->intf->dev,
+ 				 "No streaming interface found for terminal %u.",
+ 				 term->id);
+diff --git a/drivers/media/usb/uvc/uvcvideo.h b/drivers/media/usb/uvc/uvcvideo.h
+index ed7bad31f75c..3f2e832025e7 100644
+--- a/drivers/media/usb/uvc/uvcvideo.h
++++ b/drivers/media/usb/uvc/uvcvideo.h
+@@ -41,7 +41,8 @@
+ #define UVC_EXT_GPIO_UNIT		0x7ffe
+ #define UVC_EXT_GPIO_UNIT_ID		0x100
+ 
+-#define UVC_INVALID_ENTITY_ID          0xffff
++#define UVC_HARDWARE_ENTITY_ID(id)	((id) & 0xff)
++#define UVC_INVALID_ENTITY_ID		0xffff
+ 
+ /* ------------------------------------------------------------------------
+  * Driver specific constants.
+
+base-commit: d363bdfa0ec6b19a4f40b572cec70430d5b13ad6
+-- 
+Regards,
+
+Laurent Pinchart
+
