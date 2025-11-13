@@ -1,386 +1,190 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1B94A27CB35;
-	Thu, 13 Nov 2025 10:05:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A986329BDB0
+	for <linux-media@vger.kernel.org>; Thu, 13 Nov 2025 10:09:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.167.242.64
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763028349; cv=none; b=tCw47kFK0a6D0Gv/qVoBwBWbjAz+nmT5VjOFQP40Fmbtlefdf3+IoV23ct0j4rCMcr+n3gzLV/o1Bg6YVhOoY0Pd5absn0haLhzCzCiws/jplCy2GjcNn5MCyZIuVlyjHenEDNRiggqi7SWJ/C9M9lH07yVoboipHcjmX60U06I=
+	t=1763028563; cv=none; b=qlpAZwuaaomJh9B76Uz2CZm3P+iRHTCAlzanc3zzbO8l09oxS9k5ha1fV20OioT7a+d3iLtl520SSIICbQ/13y/jawHddTJ1RnWxLEHDdqghm31U6N9Dr4KMnfTANIcoyx4SafVa3PMtzbpbkQkiGJeFzrIN+EHJS/dhspwhiHM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763028349; c=relaxed/simple;
-	bh=PMQMnmPZgMlRWEN0RltjMRZ0JKtiRryM3+4RCOACEXs=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=TiNlUf5Yy4bO3Y1EBxeTN4fwTXAnG2oeylvQrmDYKZM97NQtu3WoYLlhY8zm0Xu1gnc3iyUD+r8GpxSmHwG+y1G1ibZgVNcR2DkzOHv7KbU+6MUBQS/uxwgByr7oD7tneCti7SCEh2GlxtC8OSiHZJFRs8zkhhlJUBcXyLFmUJM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Al1xnPVZ; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1763028563; c=relaxed/simple;
+	bh=mQqOJjtYnIzoh/JmziHTm3Ymg3vYw09XLeEp7zlxn3w=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=chJW+A8olsGSHOe5zIjJ3br9AggjFtoCfMSDRdOffzYuVGFaSOiOPZxGWNog9lFNpb1+X02/5YEVCIXOS+0b987msZTCF6duFQtGuRsWBjQoLkxr6XKRziXwu761B1vd5Klp9/6w1TcW4IknSAl1u4yxlMQuQhlF1Sus46w+TKQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ideasonboard.com; spf=pass smtp.mailfrom=ideasonboard.com; dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b=GmyTPyqt; arc=none smtp.client-ip=213.167.242.64
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ideasonboard.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ideasonboard.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Al1xnPVZ"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F39C2C4CEF5;
-	Thu, 13 Nov 2025 10:05:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1763028348;
-	bh=PMQMnmPZgMlRWEN0RltjMRZ0JKtiRryM3+4RCOACEXs=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=Al1xnPVZen/r+bRREjjkwSIMIGWRNLrLgqcwqO9z9k3zhezrqOtbmm6n0KxSXrXFb
-	 EB+kxZBuPKnGBi7yFMwzUpwYt2/2ygJfXGHma6r+q2uBdVeLrgoWBzN1osgoGm3ZOF
-	 x2G6hs1v4EqpkIoBEHyGQB/TScfrZzDOUnhcOA0bMgXOygGwaWmGXsLAnr1WYMDvjc
-	 j0uSspS1ZaoItnRam9T3WeVxMeexdUoeHRGtnsKW3Vi3v4gkuDtj+eZ4EhgBBDmJMk
-	 wFLMzViQ1Xjo99tR0NFgxPh+ByacMx3fUjCaGri7YMKFcdIR9Ut9Yu/ST7s8E0Tf6P
-	 Q2MwvaBVz6/1Q==
-Message-ID: <e7a8c724-9938-4b03-b855-5a2e3152d36e@kernel.org>
-Date: Thu, 13 Nov 2025 10:05:44 +0000
+	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="GmyTPyqt"
+Received: from ideasonboard.com (93-61-96-190.ip145.fastwebnet.it [93.61.96.190])
+	by perceval.ideasonboard.com (Postfix) with ESMTPSA id A77E15B2;
+	Thu, 13 Nov 2025 11:07:18 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+	s=mail; t=1763028438;
+	bh=mQqOJjtYnIzoh/JmziHTm3Ymg3vYw09XLeEp7zlxn3w=;
+	h=Date:From:To:Cc:Subject:From;
+	b=GmyTPyqtVcW3csOll18HtDdBChVYkzNJnQHS9nEZV9x+VscQw9u8uhl3LVnyrtvBL
+	 S1cSVSi5tRWF9fHSGNaRsMaCSBU7RybxNZJ8mnzBUa6vQ/CehCFa9cWMSQ1GX/WOSS
+	 /BRNQO/PdD3So6+kuFO9OaPlIPTWnxawrtQ32lx0=
+Date: Thu, 13 Nov 2025 11:09:15 +0100
+From: Jacopo Mondi <jacopo.mondi@ideasonboard.com>
+To: linux-media@vger.kernel.org
+Cc: hans@jjverkuil.nl
+Subject: [GIT PULL FOR v6.19] Mali C55, v4l2-isp, Renesas IVC
+Message-ID: <mm3jbjexeqvgnolgdvkb6d3e5zt7b7ppttozjwey67ptta7k2h@fvon4edqkp2j>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v5 0/6] media: qcom: iris: encoder feature enhancements
-To: Wangao Wang <wangao.wang@oss.qualcomm.com>,
- Vikash Garodia <vikash.garodia@oss.qualcomm.com>,
- Dikshita Agarwal <dikshita.agarwal@oss.qualcomm.com>,
- Abhinav Kumar <abhinav.kumar@linux.dev>,
- Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc: linux-media@vger.kernel.org, linux-arm-msm@vger.kernel.org,
- linux-kernel@vger.kernel.org, Neil Armstrong <neil.armstrong@linaro.org>,
- quic_qiweil@quicinc.com, quic_renjiang@quicinc.com
-References: <_qCcVDgw74JJZnRLeyRvD2E58cceoefsZacP0u2-J04hcDEH3Sh1Aeglq-VSWqfWFEx1IdwZDcwsQeQOO4m8yA==@protonmail.internalid>
- <20251110-iris_encoder_enhancements-v5-0-1dbb19968bd5@oss.qualcomm.com>
-From: Bryan O'Donoghue <bod@kernel.org>
-Content-Language: en-US
-In-Reply-To: <20251110-iris_encoder_enhancements-v5-0-1dbb19968bd5@oss.qualcomm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 
-On 10/11/2025 10:23, Wangao Wang wrote:
-> Hi All,
-> 
-> This patch series introduces several enhancements to the Qualcomm Iris
-> encoder driver, improving support for V4L2 controls and enabling more
->   video encoding features.
-> 
-> All patches have been tested with v4l2-compliance, v4l2-ctl and
-> on QCS8300 for encoder.
-> 
-> Commands used for V4l2-ctl validation:
-> 
-> Scale:
-> v4l2-ctl --verbose -d /dev/video1 \
-> --set-fmt-video-out=width=1920,height=1080,pixelformat=NV12 \
-> --set-selection-output target=crop,width=1920,height=1080 \
-> --set-fmt-video=width=1280,height=720,pixelformat=H264 \
-> --stream-mmap --stream-out-mmap \
-> --stream-from=input_nv12_1080p.yuv \
-> --stream-to=output/scale_720p_output.h264
-> 
-> Flip:
-> v4l2-ctl --verbose -d /dev/video1 \
-> --set-fmt-video-out=width=1920,height=1080,pixelformat=NV12 \
-> --set-selection-output target=crop,width=1920,height=1080 \
-> --set-fmt-video=pixelformat=H264 --stream-mmap --stream-out-mmap \
-> --stream-from=input_nv12_1080p.yuv \
-> --stream-to=output/vertical_flip.h264 \
-> --set-ctrl vertical_flip=1
-> 
-> v4l2-ctl --verbose -d /dev/video1 \
-> --set-fmt-video-out=width=1920,height=1080,pixelformat=NV12 \
-> --set-selection-output target=crop,width=1920,height=1080 \
-> --set-fmt-video=pixelformat=H264 --stream-mmap --stream-out-mmap \
-> --stream-from=input_nv12_1080p.yuv \
-> --stream-to=output/horizontal_flip.h264 \
-> --set-ctrl horizontal_flip=1
-> 
-> Rotate:
-> v4l2-ctl --verbose -d /dev/video1 \
-> --set-fmt-video-out=width=1920,height=1080,pixelformat=NV12 \
-> --set-selection-output target=crop,width=1920,height=1080 \
-> --set-fmt-video=pixelformat=H264 --stream-mmap --stream-out-mmap \
-> --stream-from=input_nv12_1080p.yuv \
-> --stream-to=output/rotate90.h264 \
-> --set-ctrl rotate=90
-> 
-> v4l2-ctl --verbose -d /dev/video1 \
-> --set-fmt-video-out=width=1920,height=1080,pixelformat=NV12 \
-> --set-selection-output target=crop,width=1920,height=1080 \
-> --set-fmt-video=pixelformat=H264 --stream-mmap --stream-out-mmap \
-> --stream-from=input_nv12_1080p.yuv \
-> --stream-to=output/rotate180.h264 \
-> --set-ctrl rotate=180
-> 
-> v4l2-ctl --verbose -d /dev/video1 \
-> --set-fmt-video-out=width=1920,height=1080,pixelformat=NV12 \
-> --set-selection-output target=crop,width=1920,height=1080 \
-> --set-fmt-video=pixelformat=H264 --stream-mmap --stream-out-mmap \
-> --stream-from=input_nv12_1080p.yuv \
-> --stream-to=output/rotate270.h264 \
-> --set-ctrl rotate=270
-> 
-> Intra Refresh:
-> Testing of this feature requires the use of this application.
-> https://github.com/quic/v4l-video-test-app
-> 
-> The result of v4l2-compliance on QCS8300:
-> v4l2-compliance 1.31.0-5378, 64 bits, 64-bit time_t
-> v4l2-compliance SHA: 2ed8da243dd1 2025-06-30 08:18:40
-> 
-> Compliance test for iris_driver device /dev/video1:
-> 
-> Driver Info:
->          Driver name      : iris_driver
->          Card type        : Iris Encoder
->          Bus info         : platform:aa00000.video-codec
->          Driver version   : 6.17.0
->          Capabilities     : 0x84204000
->                  Video Memory-to-Memory Multiplanar
->                  Streaming
->                  Extended Pix Format
->                  Device Capabilities
->          Device Caps      : 0x04204000
->                  Video Memory-to-Memory Multiplanar
->                  Streaming
->                  Extended Pix Format
->          Detected Stateful Encoder
-> 
-> Required ioctls:
->          test VIDIOC_QUERYCAP: OK
->          test invalid ioctls: OK
-> 
-> Allow for multiple opens:
->          test second /dev/video1 open: OK
->          test VIDIOC_QUERYCAP: OK
->          test VIDIOC_G/S_PRIORITY: OK
->          test for unlimited opens: OK
-> 
-> Debug ioctls:
->          test VIDIOC_DBG_G/S_REGISTER: OK (Not Supported)
->          test VIDIOC_LOG_STATUS: OK (Not Supported)
-> 
-> Input ioctls:
->          test VIDIOC_G/S_TUNER/ENUM_FREQ_BANDS: OK (Not Supported)
->          test VIDIOC_G/S_FREQUENCY: OK (Not Supported)
->          test VIDIOC_S_HW_FREQ_SEEK: OK (Not Supported)
->          test VIDIOC_ENUMAUDIO: OK (Not Supported)
->          test VIDIOC_G/S/ENUMINPUT: OK (Not Supported)
->          test VIDIOC_G/S_AUDIO: OK (Not Supported)
->          Inputs: 0 Audio Inputs: 0 Tuners: 0
-> 
-> Output ioctls:
->          test VIDIOC_G/S_MODULATOR: OK (Not Supported)
->          test VIDIOC_G/S_FREQUENCY: OK (Not Supported)
->          test VIDIOC_ENUMAUDOUT: OK (Not Supported)
->          test VIDIOC_G/S/ENUMOUTPUT: OK (Not Supported)
->          test VIDIOC_G/S_AUDOUT: OK (Not Supported)
->          Outputs: 0 Audio Outputs: 0 Modulators: 0
-> 
-> Input/Output configuration ioctls:
->          test VIDIOC_ENUM/G/S/QUERY_STD: OK (Not Supported)
->          test VIDIOC_ENUM/G/S/QUERY_DV_TIMINGS: OK (Not Supported)
->          test VIDIOC_DV_TIMINGS_CAP: OK (Not Supported)
->          test VIDIOC_G/S_EDID: OK (Not Supported)
-> 
-> Control ioctls:
->          test VIDIOC_QUERY_EXT_CTRL/QUERYMENU: OK
->          test VIDIOC_QUERYCTRL: OK
->          test VIDIOC_G/S_CTRL: OK
->          test VIDIOC_G/S/TRY_EXT_CTRLS: OK
->          test VIDIOC_(UN)SUBSCRIBE_EVENT/DQEVENT: OK
->          test VIDIOC_G/S_JPEGCOMP: OK (Not Supported)
->          Standard Controls: 43 Private Controls: 0
-> 
-> Format ioctls:
->          test VIDIOC_ENUM_FMT/FRAMESIZES/FRAMEINTERVALS: OK
->          test VIDIOC_G/S_PARM: OK
->          test VIDIOC_G_FBUF: OK (Not Supported)
->          test VIDIOC_G_FMT: OK
->          test VIDIOC_TRY_FMT: OK
->          test VIDIOC_S_FMT: OK
->          test VIDIOC_G_SLICED_VBI_CAP: OK (Not Supported)
->          test Cropping: OK
->          test Composing: OK (Not Supported)
->          test Scaling: OK (Not Supported)
-> 
-> Codec ioctls:
->          test VIDIOC_(TRY_)ENCODER_CMD: OK
->          test VIDIOC_G_ENC_INDEX: OK (Not Supported)
->          test VIDIOC_(TRY_)DECODER_CMD: OK (Not Supported)
-> 
-> Buffer ioctls:
->          test VIDIOC_REQBUFS/CREATE_BUFS/QUERYBUF: OK
->          test CREATE_BUFS maximum buffers: OK
->          test VIDIOC_REMOVE_BUFS: OK
->          test VIDIOC_EXPBUF: OK
->          test Requests: OK (Not Supported)
->          test blocking wait: OK
-> 
-> Test input 0:
-> 
-> Streaming ioctls:
->          test read/write: OK (Not Supported)
->          Video Capture Multiplanar: Captured 61 buffers
->          test MMAP (select, REQBUFS): OK
->          Video Capture Multiplanar: Captured 61 buffers
->          test MMAP (epoll, REQBUFS): OK
->          Video Capture Multiplanar: Captured 61 buffers
->          test MMAP (select, CREATE_BUFS): OK
->          Video Capture Multiplanar: Captured 61 buffers
->          test MMAP (epoll, CREATE_BUFS): OK
->          test USERPTR (select): OK (Not Supported)
->          test DMABUF: Cannot test, specify --expbuf-device
-> 
-> Total for iris_driver device /dev/video1: 54, Succeeded: 54, Failed: 0, Warnings: 0
-> 
-> Signed-off-by: Wangao Wang <wangao.wang@oss.qualcomm.com>
-> ---
-> Changes in v5:
-> - Move crop_offset modification to 2nd patch.(Dikshita)
-> - Fix missing braces.(Dikshita)
-> - Link to v4: https://lore.kernel.org/r/20251106-iris_encoder_enhancements-v4-0-5d6cff963f1b@oss.qualcomm.com
-> 
-> Changes in v4:
-> - Split 'improve alignment' and 'crop offset' into two patches.(bod)
-> - Modify the comments for the enc_raw_* variables.(Vikash)
-> - Link to v3: https://lore.kernel.org/r/20251104-iris_encoder_enhancements-v3-0-63b0c431b4d0@oss.qualcomm.com
-> 
-> Changes in v3:
-> - Restore crop offset support for the input port.(Dikshita)
-> - Set the output port's left and top offset directly to 0.(Dikshita)
-> - fix the issue in iris_vpu_enc_line_size.(Neil Armstrong)
-> - Link to v2: https://lore.kernel.org/r/20251031-iris_encoder_enhancements-v2-0-319cd75cbb45@oss.qualcomm.com
-> 
-> Changes in v2:
-> - Split 'improve alignment' and 'enable scale' into two patches.(bod)
-> - HFI_PROP_RAW_RESOLUTION uses the actual YUV
->    resolution.(Vikash,Dikshita)
-> - Rename enc_bitstream_* to enc_scale_*.(Dikshita)
-> - Add comment for scale case.(Dikshita)
-> - Make the resolution assignment into an inline function.(bod)
-> - Shorten the long chain that checks whether scaling is enabled.(bod)
-> - Correct the handling of rotation in crop offsets.(Dikshita)
-> - Move VPSS buffer things into scale patch.(Dikshita)
-> - Link to v1: https://lore.kernel.org/r/20251015092708.3703-1-wangao.wang@oss.qualcomm.com
-> 
-> ---
-> Wangao Wang (6):
->        media: qcom: iris: Improve format alignment for encoder
->        media: qcom: iris: Improve crop_offset handling for encoder
->        media: qcom: iris: Add scale support for encoder
->        media: qcom: iris: Add rotation support for encoder
->        media: qcom: iris: Add flip support for encoder
->        media: qcom: iris: Add intra refresh support for encoder
-> 
->   drivers/media/platform/qcom/iris/iris_ctrls.c      | 95 ++++++++++++++++++++++
->   drivers/media/platform/qcom/iris/iris_ctrls.h      |  3 +
->   .../platform/qcom/iris/iris_hfi_gen2_command.c     | 56 ++++++++++---
->   .../platform/qcom/iris/iris_hfi_gen2_defines.h     | 19 +++++
->   .../platform/qcom/iris/iris_hfi_gen2_response.c    |  2 +
->   drivers/media/platform/qcom/iris/iris_instance.h   |  8 ++
->   .../platform/qcom/iris/iris_platform_common.h      |  5 ++
->   .../media/platform/qcom/iris/iris_platform_gen2.c  | 63 ++++++++++++++
->   drivers/media/platform/qcom/iris/iris_utils.c      |  6 ++
->   drivers/media/platform/qcom/iris/iris_utils.h      |  1 +
->   drivers/media/platform/qcom/iris/iris_venc.c       | 33 +++++++-
->   drivers/media/platform/qcom/iris/iris_vpu_buffer.c | 60 ++++++++------
->   12 files changed, 310 insertions(+), 41 deletions(-)
-> ---
-> base-commit: 13863a59e410cab46d26751941980dc8f088b9b3
-> change-id: 20251017-iris_encoder_enhancements-f2d1967b29f9
-> 
-> Best regards,
-> --
-> Wangao Wang <wangao.wang@oss.qualcomm.com>
-> 
+The following changes since commit 29ae148fa88934bfd81af2a616816f9e22559b7c:
 
-Please rebase
+  Merge tag 'v6.18-rc5' into media-next (2025-11-11 12:44:28 +0100)
 
-commit 29ae148fa88934bfd81af2a616816f9e22559b7c (HEAD -> 
-bod-media-commiters-next-25-11-13, media-committers/next, 
-media-committers/HEAD, bod-media-committers/next, 
-bod-media-committers/HEAD, media-committers/next-25-11-13)
-Merge: 97e8e73777ab2 e9a6fb0bcdd76
-Author: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-Date:   Tue Nov 11 12:44:28 2025 +0100
+are available in the Git repository at:
 
-     Merge tag 'v6.18-rc5' into media-next
+  https://gitlab.freedesktop.org/linux-media/users/jmondi.git tags/mali-c55-for-v6.19
 
-     Linux 6.18-rc5
+for you to fetch changes up to 64f5ff385db848a06c8d0dd46eb7fdc19218e39f:
 
-     * tag 'v6.18-rc5': (1016 commits)
-       Linux 6.18-rc5
-       kbuild: Let kernel-doc.py use PYTHON3 override
-       rtc: rx8025: fix incorrect register reference
-       Revert "drm/nouveau: set DMA mask before creating the flush page"
-       io_uring: fix regbuf vector size truncation
-       compiler_types: Move unused static inline functions warning to W=2
-       smb: client: validate change notify buffer before copy
-       tracing/tools: Fix incorrcet short option in usage text for --threads
-       drm/xe: Enforce correct user fence signaling order using
-       x86/microcode/AMD: Add more known models to entry sign checking
-       drm/xe: Do clean shutdown also when using flr
-       drm/xe: Move declarations under conditional branch
-       drm/xe/guc: Synchronize Dead CT worker with unbind
-       tracing: Fix memory leaks in create_field_var()
-       ring-buffer: Do not warn in ring_buffer_map_get_reader() when 
-reader catches up
-       tracing: tprobe-events: Fix to put tracepoint_user when disable 
-the tprobe
-       tracing: tprobe-events: Fix to register tracepoint correctly
-       gpio: tb10x: Drop unused tb10x_set_bits() function
-       drm/amd/display: Enable mst when it's detected but yet to be 
-initialized
-       drm/amdgpu: Fix wait after reset sequence in S3
+  MAINTAINERS: Add entry for rzv2h-ivc driver (2025-11-13 09:56:02 +0100)
 
+----------------------------------------------------------------
+v4l2-isp, Mali C55, Renesas IVC for v6.19
 
-  b4 shazam 
-20251110-iris_encoder_enhancements-v5-4-1dbb19968bd5@oss.qualcomm.com
-Looking up 
-https://lore.kernel.org/all/20251110-iris_encoder_enhancements-v5-4-1dbb19968bd5@oss.qualcomm.com/
-Grabbing thread from 
-lore.kernel.org/all/20251110-iris_encoder_enhancements-v5-4-1dbb19968bd5@oss.qualcomm.com/t.mbox.gz
-Checking for newer revisions
-Grabbing search results from lore.kernel.org
-Analyzing 13 messages in the thread
-Analyzing 36 code-review messages
-Checking attestation on all messages, may take a moment...
----
-   ✓ [PATCH v5 1/6] media: qcom: iris: Improve format alignment for encoder
-     + Reviewed-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org> (✓ 
-DKIM/kernel.org)
-     + Reviewed-by: Dikshita Agarwal <dikshita.agarwal@oss.qualcomm.com> 
-(✓ DKIM/oss.qualcomm.com)
-   ✓ [PATCH v5 2/6] media: qcom: iris: Improve crop_offset handling for 
-encoder
-     + Reviewed-by: Dikshita Agarwal <dikshita.agarwal@oss.qualcomm.com> 
-(✓ DKIM/oss.qualcomm.com)
-   ✓ [PATCH v5 3/6] media: qcom: iris: Add scale support for encoder
-     + Reviewed-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org> (✓ 
-DKIM/linaro.org)
-     + Reviewed-by: Dikshita Agarwal <dikshita.agarwal@oss.qualcomm.com> 
-(✓ DKIM/oss.qualcomm.com)
-   ✓ [PATCH v5 4/6] media: qcom: iris: Add rotation support for encoder
-   ✓ [PATCH v5 5/6] media: qcom: iris: Add flip support for encoder
-   ✓ [PATCH v5 6/6] media: qcom: iris: Add intra refresh support for encoder
-   ---
-   ✗ No key: ed25519/wangao.wang@oss.qualcomm.com
-   ✓ Signed: DKIM/oss.qualcomm.com
----
-Total patches: 6
----
-Applying: media: qcom: iris: Improve format alignment for encoder
-Applying: media: qcom: iris: Improve crop_offset handling for encoder
-Applying: media: qcom: iris: Add scale support for encoder
-Applying: media: qcom: iris: Add rotation support for encoder
-Applying: media: qcom: iris: Add flip support for encoder
-Applying: media: qcom: iris: Add intra refresh support for encoder
-Patch failed at 0006 media: qcom: iris: Add intra refresh support for 
-encoder
-error: patch failed: 
-drivers/media/platform/qcom/iris/iris_hfi_gen2_defines.h:108
-error: drivers/media/platform/qcom/iris/iris_hfi_gen2_defines.h: patch 
-does not apply
-hint: Use 'git am --show-current-patch=diff' to see the failed patch
-hint: When you have resolved this problem, run "git am --continue".
-hint: If you prefer to skip this patch, run "git am --skip" instead.
-hint: To restore the original branch and stop patching, run "git am 
---abort".
-hint: Disable this message with "git config set advice.mergeConflict false"
+- v4l2-isp helpers and uAPI
+- Mali C55 ISP driver (which use v4l2-isp)
+- Renesas IVC driver
 
+This PR introduces support for the Mali C55 ISP driver, which is used on
+Renesas RZ/V2H in combination with the IVC that performs memory access
+on behalf of the ISP.
+
+The Mali C55 driver uses the generic V4L2 ISP parameters format and helpers,
+which are part of this pull request as well.
+
+CI pipeline at:
+https://gitlab.freedesktop.org/linux-media/users/jmondi/-/pipelines/1546316
+
+Some checkpatch issues, but we can only trade alignment issues for long lines
+issues.
+----------------------------------------------------------------
+Daniel Scally (17):
+      media: uapi: Add MEDIA_BUS_FMT_RGB202020_1X60 format code
+      media: uapi: Add 20-bit bayer formats
+      dt-bindings: media: Add bindings for ARM mali-c55
+      media: uapi: Add controls for Mali-C55 ISP
+      media: mali-c55: Add Mali-C55 ISP driver
+      media: Documentation: Add Mali-C55 ISP Documentation
+      MAINTAINERS: Add entry for mali-c55 driver
+      media: Add MALI_C55_3A_STATS meta format
+      media: uapi: Add 3a stats buffer for mali-c55
+      media: platform: Add mali-c55 3a stats devnode
+      Documentation: mali-c55: Add Statistics documentation
+      media: uapi: Add parameters structs to mali-c55-config.h
+      media: platform: Add mali-c55 parameters video node
+      Documentation: mali-c55: Document the mali-c55 parameter setting
+      dt-bindings: media: Add bindings for the RZ/V2H(P) IVC block
+      media: platform: Add Renesas Input Video Control block driver
+      MAINTAINERS: Add entry for rzv2h-ivc driver
+
+Jacopo Mondi (9):
+      media: uapi: Introduce V4L2 generic ISP types
+      media: uapi: Convert RkISP1 to V4L2 extensible params
+      media: uapi: Convert Amlogic C3 to V4L2 extensible params
+      media: Documentation: uapi: Add V4L2 ISP documentation
+      media: v4l2-core: Introduce v4l2-isp.c
+      media: rkisp1: Use v4l2-isp for validation
+      media: amlogic-c3: Use v4l2-isp for validation
+      media: Documentation: kapi: Add v4l2 generic ISP support
+      media: mali-c55: Add image formats for Mali-C55 parameters buffer
+
+ Documentation/admin-guide/media/mali-c55-graph.dot |   19 +
+ Documentation/admin-guide/media/mali-c55.rst       |  413 +++++++
+ Documentation/admin-guide/media/v4l-drivers.rst    |    1 +
+ .../devicetree/bindings/media/arm,mali-c55.yaml    |   86 ++
+ .../bindings/media/renesas,r9a09g057-ivc.yaml      |  103 ++
+ Documentation/driver-api/media/v4l2-core.rst       |    1 +
+ Documentation/driver-api/media/v4l2-isp.rst        |   49 +
+ .../userspace-api/media/drivers/index.rst          |    1 +
+ .../userspace-api/media/drivers/mali-c55.rst       |   55 +
+ .../userspace-api/media/v4l/meta-formats.rst       |    2 +
+ .../media/v4l/metafmt-arm-mali-c55.rst             |   84 ++
+ .../userspace-api/media/v4l/subdev-formats.rst     |  420 ++++++-
+ Documentation/userspace-api/media/v4l/v4l2-isp.rst |   67 ++
+ MAINTAINERS                                        |   31 +
+ drivers/media/platform/Kconfig                     |    1 +
+ drivers/media/platform/Makefile                    |    1 +
+ drivers/media/platform/amlogic/c3/isp/Kconfig      |    1 +
+ .../media/platform/amlogic/c3/isp/c3-isp-params.c  |  165 +--
+ drivers/media/platform/arm/Kconfig                 |    5 +
+ drivers/media/platform/arm/Makefile                |    2 +
+ drivers/media/platform/arm/mali-c55/Kconfig        |   18 +
+ drivers/media/platform/arm/mali-c55/Makefile       |   11 +
+ .../media/platform/arm/mali-c55/mali-c55-capture.c |  961 ++++++++++++++++
+ .../media/platform/arm/mali-c55/mali-c55-common.h  |  310 ++++++
+ .../media/platform/arm/mali-c55/mali-c55-core.c    |  917 ++++++++++++++++
+ drivers/media/platform/arm/mali-c55/mali-c55-isp.c |  665 +++++++++++
+ .../media/platform/arm/mali-c55/mali-c55-params.c  |  817 ++++++++++++++
+ .../platform/arm/mali-c55/mali-c55-registers.h     |  449 ++++++++
+ .../media/platform/arm/mali-c55/mali-c55-resizer.c | 1156 ++++++++++++++++++++
+ .../media/platform/arm/mali-c55/mali-c55-stats.c   |  325 ++++++
+ drivers/media/platform/arm/mali-c55/mali-c55-tpg.c |  437 ++++++++
+ drivers/media/platform/renesas/Kconfig             |    1 +
+ drivers/media/platform/renesas/Makefile            |    1 +
+ drivers/media/platform/renesas/rzv2h-ivc/Kconfig   |   18 +
+ drivers/media/platform/renesas/rzv2h-ivc/Makefile  |    5 +
+ .../platform/renesas/rzv2h-ivc/rzv2h-ivc-dev.c     |  251 +++++
+ .../platform/renesas/rzv2h-ivc/rzv2h-ivc-subdev.c  |  376 +++++++
+ .../platform/renesas/rzv2h-ivc/rzv2h-ivc-video.c   |  533 +++++++++
+ .../media/platform/renesas/rzv2h-ivc/rzv2h-ivc.h   |  130 +++
+ drivers/media/platform/rockchip/rkisp1/Kconfig     |    1 +
+ .../media/platform/rockchip/rkisp1/rkisp1-params.c |  150 +--
+ drivers/media/v4l2-core/Kconfig                    |    4 +
+ drivers/media/v4l2-core/Makefile                   |    1 +
+ drivers/media/v4l2-core/v4l2-ioctl.c               |    2 +
+ drivers/media/v4l2-core/v4l2-isp.c                 |  132 +++
+ include/media/v4l2-isp.h                           |   91 ++
+ include/uapi/linux/media-bus-format.h              |    9 +-
+ include/uapi/linux/media/amlogic/c3-isp-config.h   |   92 +-
+ include/uapi/linux/media/arm/mali-c55-config.h     |  794 ++++++++++++++
+ include/uapi/linux/media/v4l2-isp.h                |  102 ++
+ include/uapi/linux/rkisp1-config.h                 |  107 +-
+ include/uapi/linux/v4l2-controls.h                 |    6 +
+ include/uapi/linux/videodev2.h                     |    4 +
+ 53 files changed, 9999 insertions(+), 384 deletions(-)
+ create mode 100644 Documentation/admin-guide/media/mali-c55-graph.dot
+ create mode 100644 Documentation/admin-guide/media/mali-c55.rst
+ create mode 100644 Documentation/devicetree/bindings/media/arm,mali-c55.yaml
+ create mode 100644 Documentation/devicetree/bindings/media/renesas,r9a09g057-ivc.yaml
+ create mode 100644 Documentation/driver-api/media/v4l2-isp.rst
+ create mode 100644 Documentation/userspace-api/media/drivers/mali-c55.rst
+ create mode 100644 Documentation/userspace-api/media/v4l/metafmt-arm-mali-c55.rst
+ create mode 100644 Documentation/userspace-api/media/v4l/v4l2-isp.rst
+ create mode 100644 drivers/media/platform/arm/Kconfig
+ create mode 100644 drivers/media/platform/arm/Makefile
+ create mode 100644 drivers/media/platform/arm/mali-c55/Kconfig
+ create mode 100644 drivers/media/platform/arm/mali-c55/Makefile
+ create mode 100644 drivers/media/platform/arm/mali-c55/mali-c55-capture.c
+ create mode 100644 drivers/media/platform/arm/mali-c55/mali-c55-common.h
+ create mode 100644 drivers/media/platform/arm/mali-c55/mali-c55-core.c
+ create mode 100644 drivers/media/platform/arm/mali-c55/mali-c55-isp.c
+ create mode 100644 drivers/media/platform/arm/mali-c55/mali-c55-params.c
+ create mode 100644 drivers/media/platform/arm/mali-c55/mali-c55-registers.h
+ create mode 100644 drivers/media/platform/arm/mali-c55/mali-c55-resizer.c
+ create mode 100644 drivers/media/platform/arm/mali-c55/mali-c55-stats.c
+ create mode 100644 drivers/media/platform/arm/mali-c55/mali-c55-tpg.c
+ create mode 100644 drivers/media/platform/renesas/rzv2h-ivc/Kconfig
+ create mode 100644 drivers/media/platform/renesas/rzv2h-ivc/Makefile
+ create mode 100644 drivers/media/platform/renesas/rzv2h-ivc/rzv2h-ivc-dev.c
+ create mode 100644 drivers/media/platform/renesas/rzv2h-ivc/rzv2h-ivc-subdev.c
+ create mode 100644 drivers/media/platform/renesas/rzv2h-ivc/rzv2h-ivc-video.c
+ create mode 100644 drivers/media/platform/renesas/rzv2h-ivc/rzv2h-ivc.h
+ create mode 100644 drivers/media/v4l2-core/v4l2-isp.c
+ create mode 100644 include/media/v4l2-isp.h
+ create mode 100644 include/uapi/linux/media/arm/mali-c55-config.h
+ create mode 100644 include/uapi/linux/media/v4l2-isp.h
