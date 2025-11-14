@@ -1,38 +1,37 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A4987328B68;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BDEFE328B7F;
 	Fri, 14 Nov 2025 14:51:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763131910; cv=none; b=e9uT4lxMg1DIiZySEnZ3XWcf+N73Ffmq1g18LHrZ4V94xtgxt/u4rIzL+aO4MRX6qVRckAStqotdc4TXE/UI/UMPKizfxPQ2GT2nTpFmemqekZlpgbzHoUOtshMuTW1zebV1ybT3sGvhuBHg1bYnpnjd4taPEwHgSRIV8M2vQMA=
+	t=1763131910; cv=none; b=slDS/+vbLhXmV3o29WtUXaelxIi4uR1ssXxRw4CE4dJXMYFcwXu+4mJLZ7VSZcCBNgMGwEm1YALlrkJLenO22MLsJrXSa7vzevdsYEN0IiswjHaV5d1ldKb46NrlZE6yYYaaNhUs4pT33aJTPYZAYhD0b10Od7rQIvH7+rOWT7M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1763131910; c=relaxed/simple;
-	bh=rwf+BTOaYV6jaCccofVk23Og3acZx66UqYrJ+5mCxQA=;
+	bh=QIJl9Jc+3F2X36qxkPDsQr+Jgp8AuZ1JRCNI4sNBtEg=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=XsLg1g8Uf484U6h8SpjrF2LrUCnWBzEt0UnngtxgsdcMPtKhGArH/rZAxWw8ZwlF7nj1rEvgf+HtxGAVyzSi/75UA5C4+HX6vh9Lt/NDVaw7VS4kGyRRYgt7LL1L/FkG896gL91AB1y35TGbqDBjBZlgk6KCvwOP+5MOaEEHn8w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=qSEBU2gH; arc=none smtp.client-ip=10.30.226.201
+	 In-Reply-To:To:Cc; b=As7nAJFAHwovaD2uODmnQP4ZG9Lh7HfEyt0TuEetv6G2p+U00R4PAfyE9sMjjag0lZeBKQCEBD+Lfv3sjfg6JxUCSigze9SRnLAaoZEzM6LEt7kaSPwzrpGFhOJwXB+Ibl3UdDNb1MlSe+7sMnQrYM7oiUtmf+WHY5eSnTlVpmo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=vBPQaSE0; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="qSEBU2gH"
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 60D37C2BC9E;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="vBPQaSE0"
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 9FD6AC4CEF1;
 	Fri, 14 Nov 2025 14:51:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1763131910;
-	bh=rwf+BTOaYV6jaCccofVk23Og3acZx66UqYrJ+5mCxQA=;
+	bh=QIJl9Jc+3F2X36qxkPDsQr+Jgp8AuZ1JRCNI4sNBtEg=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To:From;
-	b=qSEBU2gH45qWu5HqcFXm61mWN0lq8QNgISjeewjT2tfkt2d1YI5MHf9HGsrRMOiBb
-	 J2EWFoyioBchNYz8jjuwSFelnOm1zKbN7FUklT4uYiv2M62UsYH95lz1V6mGVTvSiv
-	 yNdf/d8zqAnu1PEReq4Gq2UznRT6Q7fRPLUVFaEec8j56er12eJ0GPQu5jkBoX0ft9
-	 oSbIhuqFBJeMCt1jEZv6PVlxLmwwLui81ggHveQIjz5PjLu7loFMOLoCjM6d5/cwAf
-	 EI/bhDYDl8JLSx8uDn918XkPjIO9PEZXQhuv3JG50lvVGDue8PWdWR3Hn3EchI2dY+
-	 WwFUcZk5gBbpw==
+	b=vBPQaSE0qTI/UYJBJ/VSn5QDgfI4E7br3ptFx9EDluMQ2XayYmqniajEYe6blgLGq
+	 dBI7gI4Yoj/D1i/6hnx0jkMBMLKFJldHuo2lBKp4kYeXcsFxFI49tVTLdxFFghseD+
+	 nKmk0S1odsKfIv6SlXkDWN3yX0NtY3C874384F/TpTV80zEuL0IbOC9O8JE5Olnsc6
+	 RHM0haHmstDEbFPU1zlxppRHsYSSFGt3/8gyN2cBVz7kYGnoF9Os/BD8qaOogCRvRj
+	 Hp+g4wQ7Mz88uOqcL7ARe1nKixDgeAQGGx2EGDef5eKidA5LKcHvV4LKQsoJnlmxG8
+	 OfyXjKWQ8cs8Q==
 Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 58920CE7B1E;
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 98854CE7B1E;
 	Fri, 14 Nov 2025 14:51:50 +0000 (UTC)
 From: Dumitru Ceclan via B4 Relay <devnull+dumitru.ceclan.analog.com@kernel.org>
-Date: Fri, 14 Nov 2025 16:51:53 +0200
-Subject: [PATCH v8 13/21] media: i2c: add Maxim GMSL2/3 serializer
- framework
+Date: Fri, 14 Nov 2025 16:51:56 +0200
+Subject: [PATCH v8 16/21] media: i2c: maxim-serdes: add MAX96724 driver
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
@@ -40,8 +39,8 @@ List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20251114-gmsl2-3_serdes-v8-13-47499d907990@analog.com>
+Content-Transfer-Encoding: 8bit
+Message-Id: <20251114-gmsl2-3_serdes-v8-16-47499d907990@analog.com>
 References: <20251114-gmsl2-3_serdes-v8-0-47499d907990@analog.com>
 In-Reply-To: <20251114-gmsl2-3_serdes-v8-0-47499d907990@analog.com>
 To: Tomi Valkeinen <tomi.valkeinen+renesas@ideasonboard.com>, 
@@ -54,13 +53,14 @@ To: Tomi Valkeinen <tomi.valkeinen+renesas@ideasonboard.com>,
 Cc: linux-media@vger.kernel.org, linux-kernel@vger.kernel.org, 
  devicetree@vger.kernel.org, linux-gpio@vger.kernel.org, 
  linux-staging@lists.linux.dev, linux-gpio@vger.kernel.org, 
- Cosmin Tanislav <demonsingur@gmail.com>
+ Cosmin Tanislav <demonsingur@gmail.com>, 
+ =?utf-8?q?Niklas_S=C3=B6derlund?= <niklas.soderlund+renesas@ragnatech.se>
 X-Mailer: b4 0.14.3
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1763131906; l=60243;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1763131906; l=39696;
  i=dumitru.ceclan@analog.com; s=20240313; h=from:subject:message-id;
- bh=J/zN8jE/JfNRwHH5Cc4t12VzxJhpPYfvncB35eUgwhA=;
- b=b3pE32JiUaO/N9uAc9KygQWGUGytbKk+ssDt6+Y3bnR3Imb+xmoTSWlwHpaUNAfYwObeLY75e
- VUGGIEes0BrCdWLnITTkiYbFj1DUgzIBGZlWoXjrneYgcdSbLVwa9RZ
+ bh=OAARVU2mVlpyrUs8Xfh0DdTXjnMnzq1IARVQIVLr1J4=;
+ b=B/HwVwREtmy28JyM1dvF0MOg0IJV+YpA9h+HIufKCJpS1jQ8YuFKuL4KfhhqwvcBfuVq6rbF9
+ 3AyNCtai0+uCJvMMwzq/YWGIYzck2JTMUJydph+HHG3lQbHHX41RW9J
 X-Developer-Key: i=dumitru.ceclan@analog.com; a=ed25519;
  pk=HdqMlVyrcazwoiai7oN6ghU+Bj1pusGUFRl30jhS7Bo=
 X-Endpoint-Received: by B4 Relay for dumitru.ceclan@analog.com/20240313
@@ -70,2338 +70,1240 @@ Reply-To: dumitru.ceclan@analog.com
 
 From: Cosmin Tanislav <demonsingur@gmail.com>
 
-These drivers are meant to be used as a common framework for Maxim
-GMSL2/3 serializers.
+Add a new MAX96724 driver that also supports MAX96712, MAX96724F
+and MAX96724R.
 
-This framework enables support for the following new features across
-all the chips:
- * Full Streams API support
- * .get_frame_desc()
- * .get_mbus_config()
- * I2C ATR
- * automatic GMSL link version negotiation
- * automatic stream id selection
- * automatic VC remapping
- * automatic pixel mode / tunnel mode selection
- * automatic double mode selection / data padding
- * logging of internal state and chip status registers via .log_status()
- * PHY modes
- * serializer pinctrl
- * TPG
+Integrate it with the common deserializer framework, while keeping
+compatibility with existing usecases, avoiding code duplication, and
+also enabling more features across all chips.
 
 Signed-off-by: Cosmin Tanislav <demonsingur@gmail.com>
+Tested-by: Niklas Söderlund <niklas.soderlund+renesas@ragnatech.se>
 ---
- drivers/media/i2c/maxim-serdes/Makefile  |    2 +-
- drivers/media/i2c/maxim-serdes/max_ser.c | 2138 ++++++++++++++++++++++++++++++
- drivers/media/i2c/maxim-serdes/max_ser.h |  147 ++
- 3 files changed, 2286 insertions(+), 1 deletion(-)
+ drivers/media/i2c/maxim-serdes/Kconfig    |   12 +
+ drivers/media/i2c/maxim-serdes/Makefile   |    1 +
+ drivers/media/i2c/maxim-serdes/max96724.c | 1184 +++++++++++++++++++++++++++++
+ 3 files changed, 1197 insertions(+)
 
+diff --git a/drivers/media/i2c/maxim-serdes/Kconfig b/drivers/media/i2c/maxim-serdes/Kconfig
+index ddbb5791e934..f060307e3de3 100644
+--- a/drivers/media/i2c/maxim-serdes/Kconfig
++++ b/drivers/media/i2c/maxim-serdes/Kconfig
+@@ -33,3 +33,15 @@ config VIDEO_MAX96717
+ 
+ 	  To compile this driver as a module, choose M here: the module
+ 	  will be called max96717.
++
++config VIDEO_MAX96724
++	tristate "Maxim MAX96724 Quad Deserializer support"
++	depends on I2C
++	select VIDEO_MAXIM_SERDES
++	help
++	  This driver supports the Maxim MAX96712, MAX96724, MAX96724F,
++	  MAX96724R Quad Deserializers, which convert from four GMSL2
++	  links to up to four MIPI D-PHY or C-PHY outputs.
++
++	  To compile this driver as a module, choose M here: the module
++	  will be called max96724.
 diff --git a/drivers/media/i2c/maxim-serdes/Makefile b/drivers/media/i2c/maxim-serdes/Makefile
-index 630fbb486bab..17511cb03369 100644
+index 04abda6a5437..b6d5aebfaee1 100644
 --- a/drivers/media/i2c/maxim-serdes/Makefile
 +++ b/drivers/media/i2c/maxim-serdes/Makefile
-@@ -1,3 +1,3 @@
- # SPDX-License-Identifier: GPL-2.0
--max-serdes-objs := max_serdes.o
-+max-serdes-objs := max_serdes.o max_ser.o
+@@ -2,3 +2,4 @@
+ max-serdes-objs := max_serdes.o max_ser.o max_des.o
  obj-$(CONFIG_VIDEO_MAXIM_SERDES) += max-serdes.o
-diff --git a/drivers/media/i2c/maxim-serdes/max_ser.c b/drivers/media/i2c/maxim-serdes/max_ser.c
+ obj-$(CONFIG_VIDEO_MAX96717) += max96717.o
++obj-$(CONFIG_VIDEO_MAX96724) += max96724.o
+diff --git a/drivers/media/i2c/maxim-serdes/max96724.c b/drivers/media/i2c/maxim-serdes/max96724.c
 new file mode 100644
-index 000000000000..2d3944dd19aa
+index 000000000000..e2d524b453b7
 --- /dev/null
-+++ b/drivers/media/i2c/maxim-serdes/max_ser.c
-@@ -0,0 +1,2138 @@
++++ b/drivers/media/i2c/maxim-serdes/max96724.c
+@@ -0,0 +1,1184 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
-+ * Maxim GMSL2 Serializer Driver
++ * Maxim MAX96724 Quad GMSL2 Deserializer Driver
 + *
 + * Copyright (C) 2025 Analog Devices Inc.
 + */
 +
++#include <linux/bitfield.h>
 +#include <linux/delay.h>
-+#include <linux/i2c-atr.h>
-+#include <linux/i2c-mux.h>
++#include <linux/gpio/consumer.h>
++#include <linux/i2c.h>
 +#include <linux/module.h>
++#include <linux/of_graph.h>
++#include <linux/regmap.h>
 +
-+#include <media/mipi-csi2.h>
-+#include <media/v4l2-ctrls.h>
-+#include <media/v4l2-fwnode.h>
-+#include <media/v4l2-subdev.h>
++#include "max_des.h"
 +
-+#include "max_ser.h"
-+#include "max_serdes.h"
++#define MAX96724_REG0				0x0
 +
-+#define MAX_SER_NUM_LINKS	1
-+#define MAX_SER_NUM_PHYS	1
++#define MAX96724_REG6				0x6
++#define MAX96724_REG6_LINK_EN			GENMASK(3, 0)
 +
-+struct max_ser_priv {
-+	struct max_ser *ser;
++#define MAX96724_DEBUG_EXTRA			0x9
++#define MAX96724_DEBUG_EXTRA_PCLK_SRC		GENMASK(1, 0)
++#define MAX96724_DEBUG_EXTRA_PCLK_SRC_25MHZ	0b00
++#define MAX96724_DEBUG_EXTRA_PCLK_SRC_75MHZ	0b01
++#define MAX96724_DEBUG_EXTRA_PCLK_SRC_USE_PIPE	0b10
++
++#define MAX96724_REG26(x)			(0x10 + (x) / 2)
++#define MAX96724_REG26_RX_RATE_PHY(x)		(GENMASK(1, 0) << (4 * ((x) % 2)))
++#define MAX96724_REG26_RX_RATE_3GBPS		0b01
++#define MAX96724_REG26_RX_RATE_6GBPS		0b10
++
++#define MAX96724_PWR1				0x13
++#define MAX96724_PWR1_RESET_ALL			BIT(6)
++
++#define MAX96724_CTRL1				0x18
++#define MAX96724_CTRL1_RESET_ONESHOT		GENMASK(3, 0)
++
++#define MAX96724_VIDEO_PIPE_SEL(p)		(0xf0 + (p) / 2)
++#define MAX96724_VIDEO_PIPE_SEL_STREAM(p)	(GENMASK(1, 0) << (4 * ((p) % 2)))
++#define MAX96724_VIDEO_PIPE_SEL_LINK(p)		(GENMASK(3, 2) << (4 * ((p) % 2)))
++
++#define MAX96724_VIDEO_PIPE_EN			0xf4
++#define MAX96724_VIDEO_PIPE_EN_MASK(p)		BIT(p)
++#define MAX96724_VIDEO_PIPE_EN_STREAM_SEL_ALL	BIT(4)
++
++#define MAX96724_VPRBS(p)			(0x1dc + (p) * 0x20)
++#define MAX96724_VPRBS_VIDEO_LOCK		BIT(0)
++#define MAX96724_VPRBS_PATGEN_CLK_SRC		BIT(7)
++#define MAX96724_VPRBS_PATGEN_CLK_SRC_150MHZ	0b0
++#define MAX96724_VPRBS_PATGEN_CLK_SRC_375MHZ	0b1
++
++#define MAX96724_BACKTOP12			0x40b
++#define MAX96724_BACKTOP12_CSI_OUT_EN		BIT(1)
++
++#define MAX96724_BACKTOP21(p)			(0x414 + (p) / 4 * 0x20)
++#define MAX96724_BACKTOP21_BPP8DBL(p)		BIT(4 + (p) % 4)
++
++#define MAX96724_BACKTOP22(x)			(0x415 + (x) * 0x3)
++#define MAX96724_BACKTOP22_PHY_CSI_TX_DPLL	GENMASK(4, 0)
++#define MAX96724_BACKTOP22_PHY_CSI_TX_DPLL_EN	BIT(5)
++
++#define MAX96724_BACKTOP24(p)			(0x417 + (p) / 4 * 0x20)
++#define MAX96724_BACKTOP24_BPP8DBL_MODE(p)	BIT(4 + (p) % 4)
++
++#define MAX96724_BACKTOP30(p)			(0x41d + (p) / 4 * 0x20)
++#define MAX96724_BACKTOP30_BPP10DBL3		BIT(4)
++#define MAX96724_BACKTOP30_BPP10DBL3_MODE	BIT(5)
++
++#define MAX96724_BACKTOP31(p)			(0x41e + (p) / 4 * 0x20)
++#define MAX96724_BACKTOP31_BPP10DBL2		BIT(6)
++#define MAX96724_BACKTOP31_BPP10DBL2_MODE	BIT(7)
++
++#define MAX96724_BACKTOP32(p)			(0x41f + (p) / 4 * 0x20)
++#define MAX96724_BACKTOP32_BPP12(p)		BIT(p)
++#define MAX96724_BACKTOP32_BPP10DBL0		BIT(4)
++#define MAX96724_BACKTOP32_BPP10DBL0_MODE	BIT(5)
++#define MAX96724_BACKTOP32_BPP10DBL1		BIT(6)
++#define MAX96724_BACKTOP32_BPP10DBL1_MODE	BIT(7)
++
++#define MAX96724_MIPI_PHY0			0x8a0
++#define MAX96724_MIPI_PHY0_PHY_CONFIG		GENMASK(4, 0)
++#define MAX96724_MIPI_PHY0_PHY_4X2		BIT(0)
++#define MAX96724_MIPI_PHY0_PHY_2X4		BIT(2)
++#define MAX96724_MIPI_PHY0_PHY_1X4A_2X2		BIT(3)
++#define MAX96724_MIPI_PHY0_PHY_1X4B_2X2		BIT(4)
++#define MAX96724_MIPI_PHY0_FORCE_CSI_OUT_EN	BIT(7)
++
++#define MAX96724_MIPI_PHY2			0x8a2
++#define MAX96724_MIPI_PHY2_PHY_STDB_N_4(x)	(GENMASK(5, 4) << ((x) / 2 * 2))
++#define MAX96724_MIPI_PHY2_PHY_STDB_N_2(x)	(BIT(4 + (x)))
++
++#define MAX96724_MIPI_PHY3(x)			(0x8a3 + (x) / 2)
++#define MAX96724_MIPI_PHY3_PHY_LANE_MAP_4	GENMASK(7, 0)
++#define MAX96724_MIPI_PHY3_PHY_LANE_MAP_2(x)	(GENMASK(3, 0) << (4 * ((x) % 2)))
++
++#define MAX96724_MIPI_PHY5(x)			(0x8a5 + (x) / 2)
++#define MAX96724_MIPI_PHY5_PHY_POL_MAP_4_0_1	GENMASK(1, 0)
++#define MAX96724_MIPI_PHY5_PHY_POL_MAP_4_2_3	GENMASK(4, 3)
++#define MAX96724_MIPI_PHY5_PHY_POL_MAP_4_CLK	BIT(5)
++#define MAX96724_MIPI_PHY5_PHY_POL_MAP_2(x)	(GENMASK(1, 0) << (3 * ((x) % 2)))
++#define MAX96724_MIPI_PHY5_PHY_POL_MAP_2_CLK(x)	BIT(2 + 3 * ((x) % 2))
++
++#define MAX96724_MIPI_PHY13			0x8ad
++#define MAX96724_MIPI_PHY13_T_T3_PREBEGIN	GENMASK(5, 0)
++#define MAX96724_MIPI_PHY13_T_T3_PREBEGIN_64X7	FIELD_PREP(MAX96724_MIPI_PHY13_T_T3_PREBEGIN, 63)
++
++#define MAX96724_MIPI_PHY14			0x8ae
++#define MAX96724_MIPI_PHY14_T_T3_PREP		GENMASK(1, 0)
++#define MAX96724_MIPI_PHY14_T_T3_PREP_55NS	FIELD_PREP(MAX96724_MIPI_PHY14_T_T3_PREP, 0b01)
++#define MAX96724_MIPI_PHY14_T_T3_POST		GENMASK(6, 2)
++#define MAX96724_MIPI_PHY14_T_T3_POST_32X7	FIELD_PREP(MAX96724_MIPI_PHY14_T_T3_POST, 31)
++
++#define MAX96724_MIPI_CTRL_SEL			0x8ca
++#define MAX96724_MIPI_CTRL_SEL_MASK(p)		(GENMASK(1, 0) << ((p) * 2))
++
++#define MAX96724_MIPI_PHY25(x)			(0x8d0 + (x) / 2)
++#define MAX96724_MIPI_PHY25_CSI2_TX_PKT_CNT(x)	(GENMASK(3, 0) << (4 * ((x) % 2)))
++
++#define MAX96724_MIPI_PHY27(x)			(0x8d2 + (x) / 2)
++#define MAX96724_MIPI_PHY27_PHY_PKT_CNT(x)	(GENMASK(3, 0) << (4 * ((x) % 2)))
++
++#define MAX96724_MIPI_TX3(x)			(0x903 + (x) * 0x40)
++#define MAX96724_MIPI_TX3_DESKEW_INIT_8X32K	FIELD_PREP(GENMASK(2, 0), 0b001)
++#define MAX96724_MIPI_TX3_DESKEW_INIT_AUTO	BIT(7)
++
++#define MAX96724_MIPI_TX4(x)			(0x904 + (x) * 0x40)
++#define MAX96724_MIPI_TX4_DESKEW_PER_2K		FIELD_PREP(GENMASK(2, 0), 0b001)
++#define MAX96724_MIPI_TX4_DESKEW_PER_AUTO	BIT(7)
++
++#define MAX96724_MIPI_TX10(x)			(0x90a + (x) * 0x40)
++#define MAX96724_MIPI_TX10_CSI2_CPHY_EN		BIT(5)
++#define MAX96724_MIPI_TX10_CSI2_LANE_CNT	GENMASK(7, 6)
++
++#define MAX96724_MIPI_TX11(p)			(0x90b + (p) * 0x40)
++#define MAX96724_MIPI_TX12(p)			(0x90c + (p) * 0x40)
++
++#define MAX96724_MIPI_TX13(p, x)		(0x90d + (p) * 0x40 + (x) * 0x2)
++#define MAX96724_MIPI_TX13_MAP_SRC_DT		GENMASK(5, 0)
++#define MAX96724_MIPI_TX13_MAP_SRC_VC		GENMASK(7, 6)
++
++#define MAX96724_MIPI_TX14(p, x)		(0x90e + (p) * 0x40 + (x) * 0x2)
++#define MAX96724_MIPI_TX14_MAP_DST_DT		GENMASK(5, 0)
++#define MAX96724_MIPI_TX14_MAP_DST_VC		GENMASK(7, 6)
++
++#define MAX96724_MIPI_TX45(p, x)		(0x92d + (p) * 0x40 + (x) / 4)
++#define MAX96724_MIPI_TX45_MAP_DPHY_DEST(x)	(GENMASK(1, 0) << (2 * ((x) % 4)))
++
++#define MAX96724_MIPI_TX51(x)			(0x933 + (x) * 0x40)
++#define MAX96724_MIPI_TX51_ALT_MEM_MAP_12	BIT(0)
++#define MAX96724_MIPI_TX51_ALT_MEM_MAP_8	BIT(1)
++#define MAX96724_MIPI_TX51_ALT_MEM_MAP_10	BIT(2)
++#define MAX96724_MIPI_TX51_ALT2_MEM_MAP_8	BIT(4)
++
++#define MAX96724_MIPI_TX54(x)			(0x936 + (x) * 0x40)
++#define MAX96724_MIPI_TX54_TUN_EN		BIT(0)
++
++#define MAX96724_MIPI_TX57(x)			(0x939 + (x) * 0x40)
++#define MAX96724_MIPI_TX57_TUN_DEST		GENMASK(5, 4)
++#define MAX96724_MIPI_TX57_DIS_AUTO_TUN_DET	BIT(6)
++#define MAX96724_DET(p)				BIT(p)
++
++#define MAX96724_PATGEN_0			0x1050
++#define MAX96724_PATGEN_0_VTG_MODE		GENMASK(1, 0)
++#define MAX96724_PATGEN_0_VTG_MODE_FREE_RUNNING	0b11
++#define MAX96724_PATGEN_0_DE_INV		BIT(2)
++#define MAX96724_PATGEN_0_HS_INV		BIT(3)
++#define MAX96724_PATGEN_0_VS_INV		BIT(4)
++#define MAX96724_PATGEN_0_GEN_DE		BIT(5)
++#define MAX96724_PATGEN_0_GEN_HS		BIT(6)
++#define MAX96724_PATGEN_0_GEN_VS		BIT(7)
++
++#define MAX96724_PATGEN_1			0x1051
++#define MAX96724_PATGEN_1_PATGEN_MODE		GENMASK(5, 4)
++#define MAX96724_PATGEN_1_PATGEN_MODE_DISABLED	0b00
++#define MAX96724_PATGEN_1_PATGEN_MODE_CHECKER	0b01
++#define MAX96724_PATGEN_1_PATGEN_MODE_GRADIENT	0b10
++
++#define MAX96724_VS_DLY_2			0x1052
++#define MAX96724_VS_HIGH_2			0x1055
++#define MAX96724_VS_LOW_2			0x1058
++#define MAX96724_V2H_2				0x105b
++#define MAX96724_HS_HIGH_1			0x105e
++#define MAX96724_HS_LOW_1			0x1060
++#define MAX96724_HS_CNT_1			0x1062
++#define MAX96724_V2D_2				0x1064
++#define MAX96724_DE_HIGH_1			0x1067
++#define MAX96724_DE_LOW_1			0x1069
++#define MAX96724_DE_CNT_1			0x106b
++#define MAX96724_GRAD_INCR			0x106d
++#define MAX96724_CHKR_COLOR_A_L			0x106e
++#define MAX96724_CHKR_COLOR_B_L			0x1071
++#define MAX96724_CHKR_RPT_A			0x1074
++#define MAX96724_CHKR_RPT_B			0x1075
++#define MAX96724_CHKR_ALT			0x1076
++
++#define MAX96724_DE_DET				0x11f0
++#define MAX96724_HS_DET				0x11f1
++#define MAX96724_VS_DET				0x11f2
++#define MAX96724_HS_POL				0x11f3
++#define MAX96724_VS_POL				0x11f4
++#define MAX96724_DET(p)				BIT(p)
++
++#define MAX96724_DPLL_0(x)			(0x1c00 + (x) * 0x100)
++#define MAX96724_DPLL_0_CONFIG_SOFT_RST_N	BIT(0)
++
++#define MAX96724_PHY1_ALT_CLOCK			5
++
++static const struct regmap_config max96724_i2c_regmap = {
++	.reg_bits = 16,
++	.val_bits = 8,
++	.max_register = 0x1f00,
++};
++
++struct max96724_priv {
++	struct max_des des;
++	const struct max96724_chip_info *info;
++
 +	struct device *dev;
 +	struct i2c_client *client;
++	struct regmap *regmap;
 +
-+	struct i2c_atr *atr;
-+	struct i2c_mux_core *mux;
-+
-+	struct media_pad *pads;
-+	struct max_serdes_source *sources;
-+	u64 *streams_masks;
-+	u32 double_bpps;
-+
-+	struct v4l2_subdev sd;
-+	struct v4l2_async_notifier nf;
-+	struct v4l2_ctrl_handler ctrl_handler;
++	struct gpio_desc *gpiod_enable;
 +};
 +
-+struct max_ser_route_hw {
-+	struct max_serdes_source *source;
-+	struct max_ser_pipe *pipe;
-+	struct v4l2_mbus_frame_desc_entry entry;
-+	bool is_tpg;
++struct max96724_chip_info {
++	unsigned int versions;
++	unsigned int modes;
++	bool supports_pipe_stream_autoselect;
++	unsigned int num_pipes;
++
++	int (*set_pipe_phy)(struct max_des *des, struct max_des_pipe *pipe,
++			    struct max_des_phy *phy);
++	int (*set_pipe_tunnel_phy)(struct max_des *des, struct max_des_pipe *pipe,
++				   struct max_des_phy *phy);
++	int (*set_pipe_tunnel_enable)(struct max_des *des, struct max_des_pipe *pipe,
++				      bool enable);
 +};
 +
-+static inline struct max_ser_priv *sd_to_priv(struct v4l2_subdev *sd)
++#define des_to_priv(_des) \
++	container_of(_des, struct max96724_priv, des)
++
++static int max96724_wait_for_device(struct max96724_priv *priv)
 +{
-+	return container_of(sd, struct max_ser_priv, sd);
++	unsigned int i;
++	int ret;
++
++	for (i = 0; i < 10; i++) {
++		unsigned int val;
++
++		ret = regmap_read(priv->regmap, MAX96724_REG0, &val);
++		if (!ret && val)
++			return 0;
++
++		msleep(100);
++
++		dev_err(priv->dev, "Retry %u waiting for deserializer: %d\n", i, ret);
++	}
++
++	return ret;
 +}
 +
-+static inline struct max_ser_priv *nf_to_priv(struct v4l2_async_notifier *nf)
++static int max96724_reset(struct max96724_priv *priv)
 +{
-+	return container_of(nf, struct max_ser_priv, nf);
++	int ret;
++
++	ret = max96724_wait_for_device(priv);
++	if (ret)
++		return ret;
++
++	ret = regmap_update_bits(priv->regmap, MAX96724_PWR1,
++				 MAX96724_PWR1_RESET_ALL,
++				 FIELD_PREP(MAX96724_PWR1_RESET_ALL, 1));
++	if (ret)
++		return ret;
++
++	fsleep(10000);
++
++	return max96724_wait_for_device(priv);
 +}
 +
-+static inline struct max_ser_priv *ctrl_to_priv(struct v4l2_ctrl_handler *handler)
++static int __maybe_unused max96724_reg_read(struct max_des *des, unsigned int reg,
++					    unsigned int *val)
 +{
-+	return container_of(handler, struct max_ser_priv, ctrl_handler);
++	struct max96724_priv *priv = des_to_priv(des);
++
++	return regmap_read(priv->regmap, reg, val);
 +}
 +
-+static inline bool max_ser_pad_is_sink(struct max_ser *ser, u32 pad)
++static int __maybe_unused max96724_reg_write(struct max_des *des, unsigned int reg,
++					     unsigned int val)
 +{
-+	return pad < ser->ops->num_phys;
++	struct max96724_priv *priv = des_to_priv(des);
++
++	return regmap_write(priv->regmap, reg, val);
 +}
 +
-+static inline bool max_ser_pad_is_source(struct max_ser *ser, u32 pad)
++static unsigned int max96724_phy_id(struct max_des *des, struct max_des_phy *phy)
 +{
-+	return pad >= ser->ops->num_phys &&
-+	       pad < ser->ops->num_phys + MAX_SER_NUM_LINKS;
-+}
++	unsigned int num_hw_data_lanes = max_des_phy_hw_data_lanes(des, phy);
 +
-+static inline u32 max_ser_source_pad(struct max_ser *ser)
-+{
-+	return ser->ops->num_phys;
-+}
++	/* PHY 1 is the master PHY when combining PHY 0 and PHY 1. */
++	if (phy->index == 0 && num_hw_data_lanes == 4)
++		return 1;
 +
-+static inline bool max_ser_pad_is_tpg(struct max_ser *ser, u32 pad)
-+{
-+	return pad >= ser->ops->num_phys + MAX_SER_NUM_LINKS;
-+}
++	if (phy->index == 1 && !des->phys[1].enabled)
++		return 0;
 +
-+static inline unsigned int max_ser_phy_to_pad(struct max_ser *ser,
-+					      struct max_ser_phy *phy)
-+{
 +	return phy->index;
 +}
 +
-+static inline unsigned int max_ser_num_pads(struct max_ser *ser)
++static int max96724_log_pipe_status(struct max_des *des,
++				    struct max_des_pipe *pipe)
 +{
-+	return ser->ops->num_phys + MAX_SER_NUM_LINKS +
-+	       (ser->ops->set_tpg ? 1 : 0);
-+}
-+
-+static struct max_ser_phy *max_ser_pad_to_phy(struct max_ser *ser, u32 pad)
-+{
-+	if (!max_ser_pad_is_sink(ser, pad))
-+		return NULL;
-+
-+	return &ser->phys[pad];
-+}
-+
-+static struct max_ser_pipe *
-+max_ser_find_phy_pipe(struct max_ser *ser, struct max_ser_phy *phy)
-+{
-+	unsigned int i;
-+
-+	for (i = 0; i < ser->ops->num_pipes; i++) {
-+		struct max_ser_pipe *pipe = &ser->pipes[i];
-+
-+		if (pipe->phy_id == phy->index)
-+			return pipe;
-+	}
-+
-+	return NULL;
-+}
-+
-+static struct max_serdes_source *
-+max_ser_get_phy_source(struct max_ser_priv *priv, struct max_ser_phy *phy)
-+{
-+	return &priv->sources[phy->index];
-+}
-+
-+static const struct max_serdes_tpg_entry *
-+max_ser_find_tpg_entry(struct max_ser *ser, u32 target_index,
-+		       u32 width, u32 height, u32 code,
-+		       u32 numerator, u32 denominator)
-+{
-+	const struct max_serdes_tpg_entry *entry;
-+	unsigned int index = 0;
-+	unsigned int i;
-+
-+	for (i = 0; i < ser->ops->tpg_entries.num_entries; i++) {
-+		entry = &ser->ops->tpg_entries.entries[i];
-+
-+		if ((width != 0 && width != entry->width) ||
-+		    (height != 0 && height != entry->height) ||
-+		    (code != 0 && code != entry->code) ||
-+		    (numerator != 0 && numerator != entry->interval.numerator) ||
-+		    (denominator != 0 && denominator != entry->interval.denominator))
-+			continue;
-+
-+		if (index == target_index)
-+			break;
-+
-+		index++;
-+	}
-+
-+	if (i == ser->ops->tpg_entries.num_entries)
-+		return NULL;
-+
-+	return &ser->ops->tpg_entries.entries[i];
-+}
-+
-+static const struct max_serdes_tpg_entry *
-+max_ser_find_state_tpg_entry(struct max_ser *ser, struct v4l2_subdev_state *state,
-+			     unsigned int pad)
-+{
-+	struct v4l2_mbus_framefmt *fmt;
-+	struct v4l2_fract *in;
-+
-+	fmt = v4l2_subdev_state_get_format(state, pad, MAX_SERDES_TPG_STREAM);
-+	if (!fmt)
-+		return NULL;
-+
-+	in = v4l2_subdev_state_get_interval(state, pad, MAX_SERDES_TPG_STREAM);
-+	if (!in)
-+		return NULL;
-+
-+	return max_ser_find_tpg_entry(ser, 0, fmt->width, fmt->height, fmt->code,
-+				      in->numerator, in->denominator);
-+}
-+
-+static int max_ser_get_tpg_fd_entry_state(struct max_ser *ser,
-+					  struct v4l2_subdev_state *state,
-+					  struct v4l2_mbus_frame_desc_entry *fd_entry,
-+					  unsigned int pad)
-+{
-+	const struct max_serdes_tpg_entry *entry;
-+
-+	entry = max_ser_find_state_tpg_entry(ser, state, pad);
-+	if (!entry)
-+		return -EINVAL;
-+
-+	fd_entry->stream = MAX_SERDES_TPG_STREAM;
-+	fd_entry->flags = V4L2_MBUS_FRAME_DESC_FL_LEN_MAX;
-+	fd_entry->length = entry->width * entry->height * entry->bpp / 8;
-+	fd_entry->pixelcode = entry->code;
-+	fd_entry->bus.csi2.vc = 0;
-+	fd_entry->bus.csi2.dt = entry->dt;
-+
-+	return 0;
-+}
-+
-+static int max_ser_tpg_route_to_hw(struct max_ser_priv *priv,
-+				   struct v4l2_subdev_state *state,
-+				   struct v4l2_subdev_route *route,
-+				   struct max_ser_route_hw *hw)
-+{
-+	struct max_ser *ser = priv->ser;
-+
-+	hw->pipe = &ser->pipes[0];
-+
-+	return max_ser_get_tpg_fd_entry_state(ser, state, &hw->entry,
-+					      route->sink_pad);
-+}
-+
-+static int max_ser_route_to_hw(struct max_ser_priv *priv,
-+			       struct v4l2_subdev_state *state,
-+			       struct v4l2_subdev_route *route,
-+			       struct max_ser_route_hw *hw)
-+{
-+	struct max_ser *ser = priv->ser;
-+	struct v4l2_mbus_frame_desc fd;
-+	struct max_ser_phy *phy;
-+	unsigned int i;
++	struct max96724_priv *priv = des_to_priv(des);
++	unsigned int index = pipe->index;
++	unsigned int val, mask;
 +	int ret;
 +
-+	memset(hw, 0, sizeof(*hw));
-+
-+	hw->is_tpg = max_ser_pad_is_tpg(ser, route->sink_pad);
-+	if (hw->is_tpg)
-+		return max_ser_tpg_route_to_hw(priv, state, route, hw);
-+
-+	phy = max_ser_pad_to_phy(ser, route->sink_pad);
-+	if (!phy)
-+		return -ENOENT;
-+
-+	hw->pipe = max_ser_find_phy_pipe(ser, phy);
-+	if (!hw->pipe)
-+		return -ENOENT;
-+
-+	hw->source = max_ser_get_phy_source(priv, phy);
-+	if (!hw->source->sd)
-+		return 0;
-+
-+	ret = v4l2_subdev_call(hw->source->sd, pad, get_frame_desc,
-+			       hw->source->pad, &fd);
++	ret = regmap_read(priv->regmap, MAX96724_VPRBS(index), &val);
 +	if (ret)
 +		return ret;
 +
-+	for (i = 0; i < fd.num_entries; i++)
-+		if (fd.entry[i].stream == route->sink_stream)
-+			break;
++	dev_info(priv->dev, "\tvideo_lock: %u\n",
++		 !!(val & MAX96724_VPRBS_VIDEO_LOCK));
 +
-+	if (i == fd.num_entries)
-+		return -ENOENT;
++	mask = MAX96724_DET(index);
 +
-+	hw->entry = fd.entry[i];
-+
-+	return 0;
-+}
-+
-+static int max_ser_phy_set_active(struct max_ser *ser, struct max_ser_phy *phy,
-+				  bool active)
-+{
-+	int ret;
-+
-+	if (ser->ops->set_phy_active) {
-+		ret = ser->ops->set_phy_active(ser, phy, active);
-+		if (ret)
-+			return ret;
-+	}
-+
-+	phy->active = active;
-+
-+	return 0;
-+}
-+
-+static int max_ser_set_pipe_dts(struct max_ser_priv *priv, struct max_ser_pipe *pipe,
-+				unsigned int *dts, unsigned int num_dts)
-+{
-+	struct max_ser *ser = priv->ser;
-+	unsigned int i;
-+	int ret;
-+
-+	if (!ser->ops->set_pipe_dt || !ser->ops->set_pipe_dt_en)
-+		return 0;
-+
-+	for (i = 0; i < num_dts; i++) {
-+		ret = ser->ops->set_pipe_dt(ser, pipe, i, dts[i]);
-+		if (ret)
-+			return ret;
-+
-+		ret = ser->ops->set_pipe_dt_en(ser, pipe, i, true);
-+		if (ret)
-+			return ret;
-+	}
-+
-+	if (num_dts == pipe->num_dts)
-+		return 0;
-+
-+	for (i = num_dts; i < ser->ops->num_dts_per_pipe; i++) {
-+		ret = ser->ops->set_pipe_dt_en(ser, pipe, i, false);
-+		if (ret)
-+			return ret;
-+	}
-+
-+	return 0;
-+}
-+
-+static int max_ser_set_pipe_mode(struct max_ser_priv *priv, struct max_ser_pipe *pipe,
-+				 struct max_ser_pipe_mode *mode)
-+{
-+	struct max_ser *ser = priv->ser;
-+
-+	if (mode->bpp == pipe->mode.bpp &&
-+	    mode->soft_bpp == pipe->mode.soft_bpp &&
-+	    mode->dbl8 == pipe->mode.dbl8 &&
-+	    mode->dbl10 == pipe->mode.dbl10 &&
-+	    mode->dbl12 == pipe->mode.dbl12)
-+		return 0;
-+
-+	if (!ser->ops->set_pipe_mode)
-+		return 0;
-+
-+	return ser->ops->set_pipe_mode(ser, pipe, mode);
-+}
-+
-+static int max_ser_i2c_atr_attach_addr(struct i2c_atr *atr, u32 chan_id,
-+				       u16 addr, u16 alias)
-+{
-+	struct max_serdes_i2c_xlate xlate = {
-+		.src = alias,
-+		.dst = addr,
-+		.en = true,
-+	};
-+	struct max_ser_priv *priv = i2c_atr_get_driver_data(atr);
-+	struct max_ser *ser = priv->ser;
-+	unsigned int i;
-+	int ret;
-+
-+	for (i = 0; i < ser->ops->num_i2c_xlates; i++)
-+		if (!ser->i2c_xlates[i].en)
-+			break;
-+
-+	if (i == ser->ops->num_i2c_xlates) {
-+		dev_err(priv->dev,
-+			"Reached maximum number of I2C translations\n");
-+		return -EINVAL;
-+	}
-+
-+	ret = ser->ops->set_i2c_xlate(ser, i, &xlate);
++	ret = regmap_read(priv->regmap, MAX96724_DE_DET, &val);
 +	if (ret)
 +		return ret;
 +
-+	ser->i2c_xlates[i] = xlate;
++	dev_info(priv->dev, "\tde_det: %u\n", !!(val & mask));
 +
-+	return 0;
-+}
-+
-+static void max_ser_i2c_atr_detach_addr(struct i2c_atr *atr, u32 chan_id, u16 addr)
-+{
-+	struct max_ser_priv *priv = i2c_atr_get_driver_data(atr);
-+	struct max_ser *ser = priv->ser;
-+	struct max_serdes_i2c_xlate xlate = { 0 };
-+	unsigned int i;
-+
-+	/* Find index of matching I2C translation. */
-+	for (i = 0; i < ser->ops->num_i2c_xlates; i++)
-+		if (ser->i2c_xlates[i].dst == addr)
-+			break;
-+
-+	WARN_ON(i == ser->ops->num_i2c_xlates);
-+
-+	ser->ops->set_i2c_xlate(ser, i, &xlate);
-+	ser->i2c_xlates[i] = xlate;
-+}
-+
-+static const struct i2c_atr_ops max_ser_i2c_atr_ops = {
-+	.attach_addr = max_ser_i2c_atr_attach_addr,
-+	.detach_addr = max_ser_i2c_atr_detach_addr,
-+};
-+
-+static void max_ser_i2c_atr_deinit(struct max_ser_priv *priv)
-+{
-+	/* Deleting adapters that haven't been added does no harm. */
-+	i2c_atr_del_adapter(priv->atr, 0);
-+
-+	i2c_atr_delete(priv->atr);
-+}
-+
-+static int max_ser_i2c_atr_init(struct max_ser_priv *priv)
-+{
-+	struct i2c_atr_adap_desc desc = {
-+		.chan_id = 0,
-+	};
-+
-+	if (!i2c_check_functionality(priv->client->adapter,
-+				     I2C_FUNC_SMBUS_WRITE_BYTE_DATA))
-+		return -ENODEV;
-+
-+	priv->atr = i2c_atr_new(priv->client->adapter, priv->dev,
-+				&max_ser_i2c_atr_ops, 1, 0);
-+	if (IS_ERR(priv->atr))
-+		return PTR_ERR(priv->atr);
-+
-+	i2c_atr_set_driver_data(priv->atr, priv);
-+
-+	return i2c_atr_add_adapter(priv->atr, &desc);
-+}
-+
-+static int max_ser_i2c_mux_select(struct i2c_mux_core *mux, u32 chan)
-+{
-+	return 0;
-+}
-+
-+static void max_ser_i2c_mux_deinit(struct max_ser_priv *priv)
-+{
-+	i2c_mux_del_adapters(priv->mux);
-+}
-+
-+static int max_ser_i2c_mux_init(struct max_ser_priv *priv)
-+{
-+	priv->mux = i2c_mux_alloc(priv->client->adapter, &priv->client->dev,
-+				  1, 0, I2C_MUX_LOCKED | I2C_MUX_GATE,
-+				  max_ser_i2c_mux_select, NULL);
-+	if (!priv->mux)
-+		return -ENOMEM;
-+
-+	return i2c_mux_add_adapter(priv->mux, 0, 0);
-+}
-+
-+static int max_ser_i2c_adapter_init(struct max_ser_priv *priv)
-+{
-+	if (device_get_named_child_node(priv->dev, "i2c-gate"))
-+		return max_ser_i2c_mux_init(priv);
-+	else
-+		return max_ser_i2c_atr_init(priv);
-+}
-+
-+static void max_ser_i2c_adapter_deinit(struct max_ser_priv *priv)
-+{
-+	if (device_get_named_child_node(priv->dev, "i2c-gate"))
-+		max_ser_i2c_mux_deinit(priv);
-+	else
-+		max_ser_i2c_atr_deinit(priv);
-+}
-+
-+static int max_ser_set_tpg_fmt(struct v4l2_subdev *sd,
-+			       struct v4l2_subdev_state *state,
-+			       struct v4l2_subdev_format *format)
-+{
-+	struct v4l2_mbus_framefmt *fmt = &format->format;
-+	struct max_ser_priv *priv = v4l2_get_subdevdata(sd);
-+	struct max_ser *ser = priv->ser;
-+	const struct max_serdes_tpg_entry *entry;
-+	struct v4l2_fract *in;
-+
-+	if (format->stream != MAX_SERDES_TPG_STREAM)
-+		return -EINVAL;
-+
-+	entry = max_ser_find_tpg_entry(ser, 0, fmt->width, fmt->height,
-+				       fmt->code, 0, 0);
-+	if (!entry)
-+		return -EINVAL;
-+
-+	in = v4l2_subdev_state_get_interval(state, format->pad, format->stream);
-+	if (!in)
-+		return -EINVAL;
-+
-+	in->numerator = entry->interval.numerator;
-+	in->denominator = entry->interval.denominator;
-+
-+	return 0;
-+}
-+
-+static int max_ser_set_fmt(struct v4l2_subdev *sd,
-+			   struct v4l2_subdev_state *state,
-+			   struct v4l2_subdev_format *format)
-+{
-+	struct max_ser_priv *priv = v4l2_get_subdevdata(sd);
-+	struct max_ser *ser = priv->ser;
-+	struct v4l2_mbus_framefmt *fmt;
-+	int ret;
-+
-+	if (format->which == V4L2_SUBDEV_FORMAT_ACTIVE && ser->active)
-+		return -EBUSY;
-+
-+	/* No transcoding, source and sink formats must match. */
-+	if (max_ser_pad_is_source(ser, format->pad))
-+		return v4l2_subdev_get_fmt(sd, state, format);
-+
-+	if (max_ser_pad_is_tpg(ser, format->pad)) {
-+		ret = max_ser_set_tpg_fmt(sd, state, format);
-+		if (ret)
-+			return ret;
-+	}
-+
-+	fmt = v4l2_subdev_state_get_format(state, format->pad, format->stream);
-+	if (!fmt)
-+		return -EINVAL;
-+
-+	*fmt = format->format;
-+
-+	fmt = v4l2_subdev_state_get_opposite_stream_format(state, format->pad,
-+							   format->stream);
-+	if (!fmt)
-+		return -EINVAL;
-+
-+	*fmt = format->format;
-+
-+	return 0;
-+}
-+
-+static int max_ser_log_status(struct v4l2_subdev *sd)
-+{
-+	struct max_ser_priv *priv = sd_to_priv(sd);
-+	struct max_ser *ser = priv->ser;
-+	unsigned int i, j;
-+	int ret;
-+
-+	v4l2_info(sd, "mode: %s\n", max_serdes_gmsl_mode_str(ser->mode));
-+	if (ser->ops->set_tpg) {
-+		const struct max_serdes_tpg_entry *entry = ser->tpg_entry;
-+
-+		if (entry) {
-+			v4l2_info(sd, "tpg: %ux%u@%u/%u, code: %u, dt: %u, bpp: %u\n",
-+				  entry->width, entry->height,
-+				  entry->interval.numerator,
-+				  entry->interval.denominator,
-+				  entry->code, entry->dt,  entry->bpp);
-+		} else {
-+			v4l2_info(sd, "tpg: disabled\n");
-+		}
-+	}
-+	if (ser->ops->log_status) {
-+		ret = ser->ops->log_status(ser);
-+		if (ret)
-+			return ret;
-+	}
-+	v4l2_info(sd, "i2c_xlates:\n");
-+	for (i = 0; i < ser->ops->num_i2c_xlates; i++) {
-+		v4l2_info(sd, "\ten: %u, src: 0x%02x dst: 0x%02x\n",
-+			  ser->i2c_xlates[i].en, ser->i2c_xlates[i].src,
-+			  ser->i2c_xlates[i].dst);
-+		if (!ser->i2c_xlates[i].en)
-+			break;
-+	}
-+	v4l2_info(sd, "\n");
-+	if (ser->ops->set_vc_remap) {
-+		v4l2_info(sd, "vc_remaps: %u\n", ser->num_vc_remaps);
-+		for (j = 0; j < ser->num_vc_remaps; j++) {
-+			v4l2_info(sd, "\tvc_remap: src: %u, dst: %u\n",
-+				  ser->vc_remaps[j].src, ser->vc_remaps[j].dst);
-+		}
-+	}
-+	v4l2_info(sd, "\n");
-+
-+	for (i = 0; i < ser->ops->num_pipes; i++) {
-+		struct max_ser_pipe *pipe = &ser->pipes[i];
-+
-+		v4l2_info(sd, "pipe: %u\n", pipe->index);
-+		v4l2_info(sd, "\tenabled: %u\n", pipe->enabled);
-+
-+		if (!pipe->enabled) {
-+			v4l2_info(sd, "\n");
-+			continue;
-+		}
-+
-+		v4l2_info(sd, "\tphy_id: %u\n", pipe->phy_id);
-+		v4l2_info(sd, "\tstream_id: %u\n", pipe->stream_id);
-+		if (ser->ops->set_pipe_phy)
-+			v4l2_info(sd, "\tphy_id: %u\n", pipe->phy_id);
-+		if (ser->ops->set_pipe_dt) {
-+			v4l2_info(sd, "\tdts: %u\n", pipe->num_dts);
-+			for (j = 0; j < pipe->num_dts; j++)
-+				v4l2_info(sd, "\t\tdt: 0x%02x\n", pipe->dts[j]);
-+		}
-+		if (ser->ops->set_pipe_vcs)
-+			v4l2_info(sd, "\tvcs: 0x%08x\n", pipe->vcs);
-+		if (ser->ops->set_pipe_mode) {
-+			v4l2_info(sd, "\tdbl8: %u\n", pipe->mode.dbl8);
-+			v4l2_info(sd, "\tdbl10: %u\n", pipe->mode.dbl10);
-+			v4l2_info(sd, "\tdbl12: %u\n", pipe->mode.dbl12);
-+			v4l2_info(sd, "\tsoft_bpp: %u\n", pipe->mode.soft_bpp);
-+			v4l2_info(sd, "\tbpp: %u\n", pipe->mode.bpp);
-+		}
-+		if (ser->ops->log_pipe_status) {
-+			ret = ser->ops->log_pipe_status(ser, pipe);
-+			if (ret)
-+				return ret;
-+		}
-+		v4l2_info(sd, "\n");
-+	}
-+
-+	for (i = 0; i < ser->ops->num_phys; i++) {
-+		struct max_ser_phy *phy = &ser->phys[i];
-+
-+		v4l2_info(sd, "phy: %u\n", phy->index);
-+		v4l2_info(sd, "\tenabled: %u\n", phy->enabled);
-+
-+		if (!phy->enabled) {
-+			v4l2_info(sd, "\n");
-+			continue;
-+		}
-+
-+		v4l2_info(sd, "\tactive: %u\n", phy->active);
-+		v4l2_info(sd, "\tnum_data_lanes: %u\n", phy->mipi.num_data_lanes);
-+		v4l2_info(sd, "\tclock_lane: %u\n", phy->mipi.clock_lane);
-+		v4l2_info(sd, "\tnoncontinuous_clock: %u\n",
-+			  !!(phy->mipi.flags & V4L2_MBUS_CSI2_NONCONTINUOUS_CLOCK));
-+		if (ser->ops->log_phy_status) {
-+			ret = ser->ops->log_phy_status(ser, phy);
-+			if (ret)
-+				return ret;
-+		}
-+		v4l2_info(sd, "\n");
-+	}
-+
-+	return 0;
-+}
-+
-+static int max_ser_s_ctrl(struct v4l2_ctrl *ctrl)
-+{
-+	struct max_ser_priv *priv = ctrl_to_priv(ctrl->handler);
-+	struct max_ser *ser = priv->ser;
-+
-+	switch (ctrl->id) {
-+	case V4L2_CID_TEST_PATTERN:
-+		ser->tpg_pattern = ctrl->val;
-+		return 0;
-+	}
-+
-+	return -EINVAL;
-+}
-+
-+static int max_ser_enum_frame_interval(struct v4l2_subdev *sd,
-+				       struct v4l2_subdev_state *state,
-+				       struct v4l2_subdev_frame_interval_enum *fie)
-+{
-+	struct max_ser_priv *priv = v4l2_get_subdevdata(sd);
-+	struct max_ser *ser = priv->ser;
-+	const struct max_serdes_tpg_entry *entry;
-+
-+	if (!max_ser_pad_is_tpg(ser, fie->pad) ||
-+	    fie->stream != MAX_SERDES_TPG_STREAM)
-+		return -ENOTTY;
-+
-+	entry = max_ser_find_tpg_entry(ser, fie->index, fie->width, fie->height,
-+				       fie->code, fie->interval.denominator,
-+				       fie->interval.numerator);
-+	if (!entry)
-+		return -EINVAL;
-+
-+	fie->interval.numerator = entry->interval.numerator;
-+	fie->interval.denominator = entry->interval.denominator;
-+
-+	return 0;
-+}
-+
-+static int max_ser_set_frame_interval(struct v4l2_subdev *sd,
-+				      struct v4l2_subdev_state *state,
-+				      struct v4l2_subdev_frame_interval *fi)
-+{
-+	struct max_ser_priv *priv = v4l2_get_subdevdata(sd);
-+	struct max_ser *ser = priv->ser;
-+	const struct max_serdes_tpg_entry *entry;
-+	struct v4l2_mbus_framefmt *fmt;
-+	struct v4l2_fract *in;
-+
-+	if (!max_ser_pad_is_tpg(ser, fi->pad) ||
-+	    fi->stream != MAX_SERDES_TPG_STREAM)
-+		return -ENOTTY;
-+
-+	if (fi->which == V4L2_SUBDEV_FORMAT_ACTIVE && ser->active)
-+		return -EBUSY;
-+
-+	fmt = v4l2_subdev_state_get_format(state, fi->pad, fi->stream);
-+	if (!fmt)
-+		return -EINVAL;
-+
-+	entry = max_ser_find_tpg_entry(ser, 0, fmt->width, fmt->height,
-+				       fmt->code, fi->interval.denominator,
-+				       fi->interval.numerator);
-+	if (!entry)
-+		return -EINVAL;
-+
-+	in = v4l2_subdev_state_get_interval(state, fi->pad, fi->stream);
-+	if (!in)
-+		return -EINVAL;
-+
-+	in->numerator = fi->interval.numerator;
-+	in->denominator = fi->interval.denominator;
-+
-+	return 0;
-+}
-+
-+static int max_ser_get_frame_desc_state(struct v4l2_subdev *sd,
-+					struct v4l2_subdev_state *state,
-+					struct v4l2_mbus_frame_desc *fd,
-+					unsigned int pad)
-+{
-+	struct max_ser_priv *priv = sd_to_priv(sd);
-+	struct max_ser *ser = priv->ser;
-+	struct v4l2_subdev_route *route;
-+	int ret;
-+
-+	if (!max_ser_pad_is_source(ser, pad))
-+		return -ENOENT;
-+
-+	fd->type = V4L2_MBUS_FRAME_DESC_TYPE_CSI2;
-+
-+	for_each_active_route(&state->routing, route) {
-+		struct max_ser_route_hw hw;
-+
-+		if (pad != route->source_pad)
-+			continue;
-+
-+		ret = max_ser_route_to_hw(priv, state, route, &hw);
-+		if (ret)
-+			return ret;
-+
-+		hw.entry.stream = route->source_stream;
-+
-+		fd->entry[fd->num_entries++] = hw.entry;
-+	}
-+
-+	return 0;
-+}
-+
-+static int max_ser_get_frame_desc(struct v4l2_subdev *sd, unsigned int pad,
-+				  struct v4l2_mbus_frame_desc *fd)
-+{
-+	struct max_ser_priv *priv = sd_to_priv(sd);
-+	struct v4l2_subdev_state *state;
-+	int ret;
-+
-+	state = v4l2_subdev_lock_and_get_active_state(&priv->sd);
-+
-+	ret = max_ser_get_frame_desc_state(sd, state, fd, pad);
-+
-+	v4l2_subdev_unlock_state(state);
-+
-+	return ret;
-+}
-+
-+static int max_ser_set_tpg_routing(struct v4l2_subdev *sd,
-+				   struct v4l2_subdev_state *state,
-+				   struct v4l2_subdev_krouting *routing)
-+{
-+	struct max_ser_priv *priv = sd_to_priv(sd);
-+	struct max_ser *ser = priv->ser;
-+	const struct max_serdes_tpg_entry *entry;
-+	struct v4l2_mbus_framefmt fmt = { 0 };
-+	int ret;
-+
-+	ret = max_serdes_validate_tpg_routing(routing);
++	ret = regmap_read(priv->regmap, MAX96724_HS_DET, &val);
 +	if (ret)
 +		return ret;
 +
-+	entry = &ser->ops->tpg_entries.entries[0];
++	dev_info(priv->dev, "\ths_det: %u\n", !!(val & mask));
 +
-+	fmt.width = entry->width;
-+	fmt.height = entry->height;
-+	fmt.code = entry->code;
-+
-+	return v4l2_subdev_set_routing_with_fmt(sd, state, routing, &fmt);
-+}
-+
-+static int __max_ser_set_routing(struct v4l2_subdev *sd,
-+				 struct v4l2_subdev_state *state,
-+				 struct v4l2_subdev_krouting *routing)
-+{
-+	struct max_ser_priv *priv = sd_to_priv(sd);
-+	struct max_ser *ser = priv->ser;
-+	struct v4l2_subdev_route *route;
-+	bool is_tpg = false;
-+	int ret;
-+
-+	ret = v4l2_subdev_routing_validate(sd, routing,
-+					   V4L2_SUBDEV_ROUTING_ONLY_1_TO_1 |
-+					   V4L2_SUBDEV_ROUTING_NO_SINK_STREAM_MIX);
++	ret = regmap_read(priv->regmap, MAX96724_VS_DET, &val);
 +	if (ret)
 +		return ret;
 +
-+	for_each_active_route(routing, route) {
-+		if (max_ser_pad_is_tpg(ser, route->sink_pad)) {
-+			is_tpg = true;
-+			break;
-+		}
-+	}
++	dev_info(priv->dev, "\tvs_det: %u\n", !!(val & mask));
 +
-+	if (is_tpg)
-+		return max_ser_set_tpg_routing(sd, state, routing);
-+
-+	static const struct v4l2_mbus_framefmt format = {
-+			.code = MEDIA_BUS_FMT_Y8_1X8,
-+			.field = V4L2_FIELD_NONE,
-+			.width = 640,
-+			.height = 480,
-+		};
-+
-+	return v4l2_subdev_set_routing_with_fmt(sd, state, routing, &format);
-+}
-+
-+static int max_ser_set_routing(struct v4l2_subdev *sd,
-+			       struct v4l2_subdev_state *state,
-+			       enum v4l2_subdev_format_whence which,
-+			       struct v4l2_subdev_krouting *routing)
-+{
-+	struct max_ser_priv *priv = sd_to_priv(sd);
-+	struct max_ser *ser = priv->ser;
-+
-+	if (which == V4L2_SUBDEV_FORMAT_ACTIVE && ser->active)
-+		return -EBUSY;
-+
-+	return __max_ser_set_routing(sd, state, routing);
-+}
-+
-+static int max_ser_get_pipe_vcs_dts(struct max_ser_priv *priv,
-+				    struct v4l2_subdev_state *state,
-+				    struct max_ser_pipe *pipe,
-+				    unsigned int *vcs,
-+				    unsigned int *dts, unsigned int *num_dts,
-+				    u64 *streams_masks)
-+{
-+	struct v4l2_subdev_route *route;
-+	struct max_ser *ser = priv->ser;
-+	unsigned int i;
-+	int ret;
-+
-+	*vcs = 0;
-+	*num_dts = 0;
-+
-+	if (ser->mode != MAX_SERDES_GMSL_PIXEL_MODE)
-+		return 0;
-+
-+	for_each_active_route(&state->routing, route) {
-+		struct max_ser_route_hw hw;
-+		unsigned int vc, dt;
-+
-+		if (!(BIT_ULL(route->sink_stream) & streams_masks[route->sink_pad]))
-+			continue;
-+
-+		ret = max_ser_route_to_hw(priv, state, route, &hw);
-+		if (ret)
-+			return ret;
-+
-+		if (hw.pipe != pipe)
-+			continue;
-+
-+		vc = hw.entry.bus.csi2.vc;
-+		dt = hw.entry.bus.csi2.dt;
-+
-+		if (vc >= MAX_SERDES_VC_ID_NUM)
-+			return -E2BIG;
-+
-+		*vcs |= BIT(vc);
-+
-+		/* Skip already added DT. */
-+		for (i = 0; i < *num_dts; i++)
-+			if (dts[i] == dt)
-+				break;
-+
-+		if (i < *num_dts)
-+			continue;
-+
-+		dts[*num_dts] = dt;
-+		(*num_dts)++;
-+	}
-+
-+	/*
-+	 * Hardware cannot distinguish between different pairs of VC and DT,
-+	 * issue a warning.
-+	 */
-+	for_each_active_route(&state->routing, route) {
-+		struct max_ser_route_hw hw;
-+		unsigned int vc, dt;
-+
-+		/*
-+		 * Skip enabled streams, we only want to check for leaks
-+		 * among the disabled streams.
-+		 */
-+		if ((BIT_ULL(route->sink_stream) & streams_masks[route->sink_pad]))
-+			continue;
-+
-+		ret = max_ser_route_to_hw(priv, state, route, &hw);
-+		if (ret)
-+			return ret;
-+
-+		if (hw.pipe != pipe)
-+			continue;
-+
-+		vc = hw.entry.bus.csi2.vc;
-+		dt = hw.entry.bus.csi2.dt;
-+
-+		if (vc >= MAX_SERDES_VC_ID_NUM)
-+			return -E2BIG;
-+
-+		if (!(*vcs & BIT(vc)))
-+			continue;
-+
-+		for (i = 0; i < *num_dts; i++)
-+			if (dts[i] == dt)
-+				break;
-+
-+		if (i == *num_dts)
-+			continue;
-+
-+		dev_warn(priv->dev, "Leaked disabled stream %u:%u with VC: %u, DT: %u",
-+			 route->source_pad, route->source_stream, vc, dt);
-+	}
-+
-+	return 0;
-+}
-+
-+static int max_ser_get_pipe_mode(struct max_ser_priv *priv,
-+				 struct v4l2_subdev_state *state,
-+				 struct max_ser_pipe *pipe,
-+				 struct max_ser_pipe_mode *mode)
-+{
-+	struct v4l2_subdev_route *route;
-+	struct max_ser *ser = priv->ser;
-+	bool force_set_bpp = false;
-+	unsigned int doubled_bpp;
-+	unsigned int min_bpp;
-+	unsigned int max_bpp;
-+	u32 bpps = 0;
-+	int ret;
-+
-+	if (ser->mode != MAX_SERDES_GMSL_PIXEL_MODE)
-+		return 0;
-+
-+	for_each_active_route(&state->routing, route) {
-+		struct max_ser_route_hw hw;
-+		unsigned int bpp;
-+
-+		ret = max_ser_route_to_hw(priv, state, route, &hw);
-+		if (ret)
-+			return ret;
-+
-+		if (hw.pipe != pipe)
-+			continue;
-+
-+		if (hw.is_tpg)
-+			force_set_bpp = true;
-+
-+		ret = max_serdes_get_fd_bpp(&hw.entry, &bpp);
-+		if (ret)
-+			return ret;
-+
-+		bpps |= BIT(bpp);
-+	}
-+
-+	ret = max_serdes_process_bpps(priv->dev, bpps, priv->double_bpps, &doubled_bpp);
++	ret = regmap_read(priv->regmap, MAX96724_HS_POL, &val);
 +	if (ret)
 +		return ret;
 +
-+	if (doubled_bpp == 8)
-+		mode->dbl8 = true;
-+	else if (doubled_bpp == 10)
-+		mode->dbl10 = true;
-+	else if (doubled_bpp == 12)
-+		mode->dbl12 = true;
++	dev_info(priv->dev, "\ths_pol: %u\n", !!(val & mask));
 +
-+	if (doubled_bpp) {
-+		bpps &= ~BIT(doubled_bpp);
-+		bpps |= BIT(doubled_bpp * 2);
-+	}
-+
-+	min_bpp = __ffs(bpps);
-+	max_bpp = __fls(bpps);
-+
-+	if (doubled_bpp)
-+		mode->soft_bpp = min_bpp;
-+
-+	if (min_bpp != max_bpp || force_set_bpp)
-+		mode->bpp = max_bpp;
-+
-+	return 0;
-+}
-+
-+static int max_ser_update_pipe_enable(struct max_ser_priv *priv,
-+				      struct max_ser_pipe *pipe,
-+				      struct v4l2_subdev_state *state,
-+				      u64 *streams_masks)
-+{
-+	struct max_ser *ser = priv->ser;
-+	struct v4l2_subdev_route *route;
-+	bool enable = false;
-+	int ret;
-+
-+	for_each_active_route(&state->routing, route) {
-+		struct max_ser_route_hw hw;
-+
-+		if (!(BIT_ULL(route->sink_stream) & streams_masks[route->sink_pad]))
-+			continue;
-+
-+		ret = max_ser_route_to_hw(priv, state, route, &hw);
-+		if (ret)
-+			return ret;
-+
-+		if (hw.pipe != pipe)
-+			continue;
-+
-+		enable = true;
-+		break;
-+	}
-+
-+	if (enable == pipe->enabled)
-+		return 0;
-+
-+	ret = ser->ops->set_pipe_enable(ser, pipe, enable);
++	ret = regmap_read(priv->regmap, MAX96724_VS_POL, &val);
 +	if (ret)
 +		return ret;
 +
-+	pipe->enabled = enable;
++	dev_info(priv->dev, "\tvs_pol: %u\n", !!(val & mask));
 +
 +	return 0;
 +}
 +
-+static int max_ser_update_pipe(struct max_ser_priv *priv,
-+			       struct max_ser_pipe *pipe,
-+			       struct v4l2_subdev_state *state,
-+			       u64 *streams_masks)
++static int max96724_log_phy_status(struct max_des *des,
++				   struct max_des_phy *phy)
 +{
-+	struct max_ser *ser = priv->ser;
-+	struct max_ser_pipe_mode mode = { 0 };
-+	unsigned int num_dts;
-+	unsigned int *dts;
-+	unsigned int vcs;
-+	int ret;
-+
-+	if (!ser->ops->num_dts_per_pipe)
-+		return 0;
-+
-+	dts = devm_kcalloc(priv->dev, ser->ops->num_dts_per_pipe, sizeof(*dts),
-+			   GFP_KERNEL);
-+	if (!dts)
-+		return -ENOMEM;
-+
-+	ret = max_ser_get_pipe_vcs_dts(priv, state, pipe, &vcs, dts, &num_dts,
-+				       streams_masks);
-+	if (ret)
-+		goto err_free_dts;
-+
-+	ret = max_ser_get_pipe_mode(priv, state, pipe, &mode);
-+	if (ret)
-+		goto err_free_dts;
-+
-+	if (ser->ops->set_pipe_vcs) {
-+		ret = ser->ops->set_pipe_vcs(ser, pipe, vcs);
-+		if (ret)
-+			goto err_free_dts;
-+	}
-+
-+	ret = max_ser_set_pipe_mode(priv, pipe, &mode);
-+	if (ret)
-+		goto err_revert_vcs;
-+
-+	ret = max_ser_set_pipe_dts(priv, pipe, dts, num_dts);
-+	if (ret)
-+		goto err_revert_mode;
-+
-+	pipe->vcs = vcs;
-+	pipe->mode = mode;
-+
-+	if (pipe->dts)
-+		devm_kfree(priv->dev, pipe->dts);
-+
-+	pipe->dts = dts;
-+	pipe->num_dts = num_dts;
-+
-+	return 0;
-+
-+err_revert_mode:
-+	max_ser_set_pipe_mode(priv, pipe, &pipe->mode);
-+
-+err_revert_vcs:
-+	if (ser->ops->set_pipe_vcs)
-+		ser->ops->set_pipe_vcs(ser, pipe, pipe->vcs);
-+
-+err_free_dts:
-+	devm_kfree(priv->dev, dts);
-+
-+	return ret;
-+}
-+
-+static int max_ser_update_phy(struct max_ser_priv *priv,
-+			      struct v4l2_subdev_state *state,
-+			      struct max_ser_phy *phy, u64 *streams_masks)
-+{
-+	struct max_ser *ser = priv->ser;
-+	u32 pad = max_ser_phy_to_pad(ser, phy);
-+	bool enable_changed = !streams_masks[pad] != !priv->streams_masks[pad];
-+	bool enable = !!streams_masks[pad];
-+	struct max_ser_pipe *pipe;
-+	int ret;
-+
-+	pipe = max_ser_find_phy_pipe(ser, phy);
-+	if (!pipe)
-+		return -ENOENT;
-+
-+	if (!enable && enable_changed) {
-+		ret = max_ser_phy_set_active(ser, phy, enable);
-+		if (ret)
-+			return ret;
-+	}
-+
-+	ret = max_ser_update_pipe(priv, pipe, state, streams_masks);
-+	if (ret)
-+		goto err_revert_phy_disable;
-+
-+	ret = max_ser_update_pipe_enable(priv, pipe, state, streams_masks);
-+	if (ret)
-+		goto err_revert_pipe_update;
-+
-+	if (enable && enable_changed) {
-+		ret = max_ser_phy_set_active(ser, phy, enable);
-+		if (ret)
-+			goto err_revert_update_pipe_enable;
-+	}
-+
-+	return 0;
-+
-+err_revert_update_pipe_enable:
-+	max_ser_update_pipe_enable(priv, pipe, state, priv->streams_masks);
-+
-+err_revert_pipe_update:
-+	max_ser_update_pipe(priv, pipe, state, priv->streams_masks);
-+
-+err_revert_phy_disable:
-+	if (!enable && enable_changed)
-+		max_ser_phy_set_active(ser, phy, !enable);
-+
-+	return ret;
-+}
-+
-+static int max_ser_update_phys(struct max_ser_priv *priv,
-+			       struct v4l2_subdev_state *state,
-+			       u64 *streams_masks)
-+{
-+	struct max_ser *ser = priv->ser;
-+	unsigned int failed_update_phy_id = ser->ops->num_phys;
-+	unsigned int i;
-+	int ret;
-+
-+	for (i = 0; i < ser->ops->num_phys; i++) {
-+		struct max_ser_phy *phy = &ser->phys[i];
-+
-+		ret = max_ser_update_phy(priv, state, phy, streams_masks);
-+		if (ret) {
-+			failed_update_phy_id = i;
-+			goto err;
-+		}
-+	}
-+
-+	return 0;
-+
-+err:
-+	for (i = 0; i < failed_update_phy_id; i++) {
-+		struct max_ser_phy *phy = &ser->phys[i];
-+
-+		max_ser_update_phy(priv, state, phy, priv->streams_masks);
-+	}
-+
-+	return ret;
-+}
-+
-+static int max_ser_enable_disable_streams(struct max_ser_priv *priv,
-+					  struct v4l2_subdev_state *state,
-+					  u32 pad, u64 updated_streams_mask,
-+					  bool enable)
-+{
-+	struct max_ser *ser = priv->ser;
-+
-+	return max_serdes_xlate_enable_disable_streams(priv->sources, 0, state,
-+						       pad, updated_streams_mask, 0,
-+						       ser->ops->num_phys, enable);
-+}
-+
-+static bool max_ser_is_tpg_routed(struct max_ser_priv *priv,
-+				  struct v4l2_subdev_state *state)
-+{
-+	struct v4l2_subdev_route *route;
-+	int ret;
-+
-+	for_each_active_route(&state->routing, route) {
-+		struct max_ser_route_hw hw;
-+
-+		ret = max_ser_route_to_hw(priv, state, route, &hw);
-+		if (ret)
-+			return false;
-+
-+		if (hw.is_tpg)
-+			return true;
-+	}
-+
-+	return false;
-+}
-+
-+static int max_ser_update_tpg(struct max_ser_priv *priv,
-+			      struct v4l2_subdev_state *state,
-+			      u64 *streams_masks)
-+{
-+	const struct max_serdes_tpg_entry *entry = NULL;
-+	struct max_ser *ser = priv->ser;
-+	struct v4l2_subdev_route *route;
-+	int ret;
-+
-+	for_each_active_route(&state->routing, route) {
-+		struct max_ser_route_hw hw;
-+
-+		if (!(BIT_ULL(route->sink_stream) & streams_masks[route->sink_pad]))
-+			continue;
-+
-+		ret = max_ser_route_to_hw(priv, state, route, &hw);
-+		if (ret)
-+			return ret;
-+
-+		if (!hw.is_tpg)
-+			continue;
-+
-+		entry = max_ser_find_state_tpg_entry(ser, state, route->sink_pad);
-+		break;
-+	}
-+
-+	if (entry == ser->tpg_entry)
-+		return 0;
-+
-+	ret = ser->ops->set_tpg(ser, entry);
-+	if (ret)
-+		return ret;
-+
-+	ser->tpg_entry = entry;
-+
-+	return 0;
-+}
-+
-+static int max_ser_update_streams(struct v4l2_subdev *sd,
-+				  struct v4l2_subdev_state *state,
-+				  u32 pad, u64 updated_streams_mask, bool enable)
-+{
-+	struct max_ser_priv *priv = v4l2_get_subdevdata(sd);
-+	struct max_ser *ser = priv->ser;
-+	unsigned int num_pads = max_ser_num_pads(ser);
-+	u64 *streams_masks;
-+	int ret;
-+
-+	ret = max_serdes_get_streams_masks(priv->dev, state, pad, updated_streams_mask,
-+					   num_pads, priv->streams_masks, &streams_masks,
-+					   enable);
-+	if (ret)
-+		return ret;
-+
-+	if (!enable) {
-+		ret = max_ser_enable_disable_streams(priv, state, pad,
-+						     updated_streams_mask, enable);
-+		if (ret)
-+			goto err_free_streams_masks;
-+	}
-+
-+	ret = max_ser_update_tpg(priv, state, streams_masks);
-+	if (ret)
-+		goto err_revert_streams_disable;
-+
-+	ret = max_ser_update_phys(priv, state, streams_masks);
-+	if (ret)
-+		goto err_revert_update_tpg;
-+
-+	if (enable) {
-+		ret = max_ser_enable_disable_streams(priv, state, pad,
-+						     updated_streams_mask, enable);
-+		if (ret)
-+			goto err_revert_phys_update;
-+	}
-+
-+	devm_kfree(priv->dev, priv->streams_masks);
-+	priv->streams_masks = streams_masks;
-+	ser->active = !!streams_masks[pad];
-+
-+	return 0;
-+
-+err_revert_phys_update:
-+	max_ser_update_phys(priv, state, priv->streams_masks);
-+
-+err_revert_update_tpg:
-+	max_ser_update_tpg(priv, state, priv->streams_masks);
-+
-+err_revert_streams_disable:
-+	if (!enable)
-+		max_ser_enable_disable_streams(priv, state, pad,
-+					       updated_streams_mask, !enable);
-+
-+err_free_streams_masks:
-+	devm_kfree(priv->dev, streams_masks);
-+
-+	return ret;
-+}
-+
-+static int max_ser_enable_streams(struct v4l2_subdev *sd,
-+				  struct v4l2_subdev_state *state,
-+				  u32 pad, u64 streams_mask)
-+{
-+	return max_ser_update_streams(sd, state, pad, streams_mask, true);
-+}
-+
-+static int max_ser_disable_streams(struct v4l2_subdev *sd,
-+				   struct v4l2_subdev_state *state,
-+				   u32 pad, u64 streams_mask)
-+{
-+	return max_ser_update_streams(sd, state, pad, streams_mask, false);
-+}
-+
-+static int max_ser_init_state(struct v4l2_subdev *sd,
-+			      struct v4l2_subdev_state *state)
-+{
-+	struct v4l2_subdev_route routes[MAX_SER_NUM_PHYS] = { 0 };
-+	struct v4l2_subdev_krouting routing = {
-+		.routes = routes,
-+	};
-+	struct max_ser_priv *priv = v4l2_get_subdevdata(sd);
-+	struct max_ser *ser = priv->ser;
-+	unsigned int stream = 0;
-+	unsigned int i;
-+
-+	for (i = 0; i < ser->ops->num_phys; i++) {
-+		struct max_ser_phy *phy = &ser->phys[i];
-+
-+		if (!phy->enabled)
-+			continue;
-+
-+		routing.routes[routing.num_routes++] = (struct v4l2_subdev_route) {
-+			.sink_pad = max_ser_phy_to_pad(ser, phy),
-+			.sink_stream = 0,
-+			.source_pad = max_ser_source_pad(ser),
-+			.source_stream = stream,
-+			.flags = V4L2_SUBDEV_ROUTE_FL_ACTIVE,
-+		};
-+		stream++;
-+
-+		/*
-+		 * The Streams API is an experimental feature.
-+		 * If multiple routes are provided here, userspace will not be
-+		 * able to configure them unless the Streams API is enabled.
-+		 * Provide a single route until it is enabled.
-+		 */
-+		break;
-+	}
-+
-+	return __max_ser_set_routing(sd, state, &routing);
-+}
-+
-+#ifdef CONFIG_VIDEO_ADV_DEBUG
-+static int max_ser_g_register(struct v4l2_subdev *sd,
-+			      struct v4l2_dbg_register *reg)
-+{
-+	struct max_ser_priv *priv = sd_to_priv(sd);
-+	struct max_ser *ser = priv->ser;
++	struct max96724_priv *priv = des_to_priv(des);
++	unsigned int index = max96724_phy_id(des, phy);
 +	unsigned int val;
 +	int ret;
 +
-+	ret = ser->ops->reg_read(ser, reg->reg, &val);
++	ret = regmap_read(priv->regmap, MAX96724_MIPI_PHY25(index), &val);
 +	if (ret)
 +		return ret;
 +
-+	reg->val = val;
-+	reg->size = 1;
++	dev_info(priv->dev, "\tcsi2_pkt_cnt: %lu\n",
++		 field_get(MAX96724_MIPI_PHY25_CSI2_TX_PKT_CNT(index), val));
++
++	ret = regmap_read(priv->regmap, MAX96724_MIPI_PHY27(index), &val);
++	if (ret)
++		return ret;
++
++	dev_info(priv->dev, "\tphy_pkt_cnt: %lu\n",
++		 field_get(MAX96724_MIPI_PHY27_PHY_PKT_CNT(index), val));
 +
 +	return 0;
 +}
 +
-+static int max_ser_s_register(struct v4l2_subdev *sd,
-+			      const struct v4l2_dbg_register *reg)
++static int max96724_set_enable(struct max_des *des, bool enable)
 +{
-+	struct max_ser_priv *priv = sd_to_priv(sd);
-+	struct max_ser *ser = priv->ser;
++	struct max96724_priv *priv = des_to_priv(des);
 +
-+	return ser->ops->reg_write(ser, reg->reg, reg->val);
++	return regmap_assign_bits(priv->regmap, MAX96724_BACKTOP12,
++				  MAX96724_BACKTOP12_CSI_OUT_EN, enable);
 +}
-+#endif
 +
-+static const struct v4l2_subdev_core_ops max_ser_core_ops = {
-+	.log_status = max_ser_log_status,
-+#ifdef CONFIG_VIDEO_ADV_DEBUG
-+	.g_register = max_ser_g_register,
-+	.s_register = max_ser_s_register,
-+#endif
++static const unsigned int max96724_phys_configs_reg_val[] = {
++	MAX96724_MIPI_PHY0_PHY_1X4A_2X2,
++	MAX96724_MIPI_PHY0_PHY_2X4,
++
++	MAX96724_MIPI_PHY0_PHY_4X2,
++	MAX96724_MIPI_PHY0_PHY_1X4A_2X2,
++	MAX96724_MIPI_PHY0_PHY_1X4B_2X2,
++	MAX96724_MIPI_PHY0_PHY_2X4,
 +};
 +
-+static const struct v4l2_ctrl_ops max_ser_ctrl_ops = {
-+	.s_ctrl = max_ser_s_ctrl,
++static const struct max_serdes_phys_config max96724_phys_configs[] = {
++	/*
++	 * PHY 1 can be in 4-lane mode (combining lanes of PHY 0 and PHY 1)
++	 * but only use the data lanes of PHY0, while continuing to use the
++	 * clock lane of PHY 1.
++	 * Specifying clock-lanes as 5 turns on alternate clocking mode.
++	 */
++	{ { 2, 0, 2, 2 }, { MAX96724_PHY1_ALT_CLOCK, 0, 0, 0 } },
++	{ { 2, 0, 4, 0 }, { MAX96724_PHY1_ALT_CLOCK, 0, 0, 0 } },
++
++	/*
++	 * When combining PHY 0 and PHY 1 to make them function in 4-lane mode,
++	 * PHY 1 is the master PHY, but we use PHY 0 here to maintain
++	 * compatibility.
++	 */
++	{ { 2, 2, 2, 2 } },
++	{ { 4, 0, 2, 2 } },
++	{ { 2, 2, 4, 0 } },
++	{ { 4, 0, 4, 0 } },
 +};
 +
-+static const struct v4l2_subdev_pad_ops max_ser_pad_ops = {
-+	.enable_streams = max_ser_enable_streams,
-+	.disable_streams = max_ser_disable_streams,
-+
-+	.set_routing = max_ser_set_routing,
-+	.get_frame_desc = max_ser_get_frame_desc,
-+
-+	.get_fmt = v4l2_subdev_get_fmt,
-+	.set_fmt = max_ser_set_fmt,
-+
-+	.enum_frame_interval = max_ser_enum_frame_interval,
-+	.get_frame_interval = v4l2_subdev_get_frame_interval,
-+	.set_frame_interval = max_ser_set_frame_interval,
-+};
-+
-+static const struct v4l2_subdev_ops max_ser_subdev_ops = {
-+	.core = &max_ser_core_ops,
-+	.pad = &max_ser_pad_ops,
-+};
-+
-+static const struct v4l2_subdev_internal_ops max_ser_internal_ops = {
-+	.init_state = &max_ser_init_state,
-+};
-+
-+static const struct media_entity_operations max_ser_media_ops = {
-+	.get_fwnode_pad = v4l2_subdev_get_fwnode_pad_1_to_1,
-+	.has_pad_interdep = v4l2_subdev_has_pad_interdep,
-+	.link_validate = v4l2_subdev_link_validate,
-+};
-+
-+static int max_ser_init(struct max_ser_priv *priv)
++static int max96724_init_tpg(struct max_des *des)
 +{
-+	struct max_ser *ser = priv->ser;
++	const struct reg_sequence regs[] = {
++		{ MAX96724_GRAD_INCR, MAX_SERDES_GRAD_INCR },
++		REG_SEQUENCE_3_LE(MAX96724_CHKR_COLOR_A_L,
++				  MAX_SERDES_CHECKER_COLOR_A),
++		REG_SEQUENCE_3_LE(MAX96724_CHKR_COLOR_B_L,
++				  MAX_SERDES_CHECKER_COLOR_B),
++		{ MAX96724_CHKR_RPT_A, MAX_SERDES_CHECKER_SIZE },
++		{ MAX96724_CHKR_RPT_B, MAX_SERDES_CHECKER_SIZE },
++		{ MAX96724_CHKR_ALT, MAX_SERDES_CHECKER_SIZE },
++	};
++	struct max96724_priv *priv = des_to_priv(des);
++
++	return regmap_multi_reg_write(priv->regmap, regs, ARRAY_SIZE(regs));
++}
++
++static int max96724_init(struct max_des *des)
++{
++	struct max96724_priv *priv = des_to_priv(des);
 +	unsigned int i;
 +	int ret;
 +
-+	if (ser->ops->init) {
-+		ret = ser->ops->init(ser);
-+		if (ret)
-+			return ret;
-+	}
-+
-+	if (ser->ops->set_tunnel_enable) {
-+		ret = ser->ops->set_tunnel_enable(ser, false);
-+		if (ret)
-+			return ret;
-+	}
-+
-+	for (i = 0; i < ser->ops->num_phys; i++) {
-+		struct max_ser_phy *phy = &ser->phys[i];
-+
-+		if (phy->enabled) {
-+			ret = ser->ops->init_phy(ser, phy);
-+			if (ret)
-+				return ret;
-+		}
-+
-+		if (ser->ops->set_phy_active) {
-+			ret = ser->ops->set_phy_active(ser, phy, false);
++	if (priv->info->set_pipe_tunnel_enable) {
++		for (i = 0; i < des->ops->num_pipes; i++) {
++			ret = regmap_set_bits(priv->regmap, MAX96724_MIPI_TX57(i),
++					      MAX96724_MIPI_TX57_DIS_AUTO_TUN_DET);
 +			if (ret)
 +				return ret;
 +		}
 +	}
 +
-+	for (i = 0; i < ser->ops->num_pipes; i++) {
-+		struct max_ser_pipe *pipe = &ser->pipes[i];
-+		struct max_ser_phy *phy = &ser->phys[pipe->phy_id];
-+
-+		ret = ser->ops->set_pipe_enable(ser, pipe, false);
-+		if (ret)
-+			return ret;
-+
-+		if (ser->ops->set_pipe_stream_id) {
-+			ret = ser->ops->set_pipe_stream_id(ser, pipe, pipe->stream_id);
-+			if (ret)
-+				return ret;
-+		}
-+
-+		if (ser->ops->set_pipe_phy) {
-+			ret = ser->ops->set_pipe_phy(ser, pipe, phy);
-+			if (ret)
-+				return ret;
-+		}
-+
-+		if (ser->ops->set_pipe_vcs) {
-+			ret = ser->ops->set_pipe_vcs(ser, pipe, 0);
-+			if (ret)
-+				return ret;
-+		}
-+
-+		if (ser->ops->set_pipe_mode) {
-+			ret = ser->ops->set_pipe_mode(ser, pipe, &pipe->mode);
-+			if (ret)
-+				return ret;
-+		}
-+
-+		ret = max_ser_set_pipe_dts(priv, pipe, NULL, 0);
++	if (priv->info->supports_pipe_stream_autoselect) {
++		/* Enable stream autoselect. */
++		ret = regmap_set_bits(priv->regmap, MAX96724_VIDEO_PIPE_EN,
++				      MAX96724_VIDEO_PIPE_EN_STREAM_SEL_ALL);
 +		if (ret)
 +			return ret;
 +	}
 +
-+	return 0;
-+}
-+
-+static int max_ser_notify_bound(struct v4l2_async_notifier *nf,
-+				struct v4l2_subdev *subdev,
-+				struct v4l2_async_connection *base_asc)
-+{
-+	struct max_ser_priv *priv = nf_to_priv(nf);
-+	struct max_serdes_asc *asc = asc_to_max(base_asc);
-+	struct max_serdes_source *source = asc->source;
-+	u32 pad = source->index;
-+	int ret;
-+
-+	ret = media_entity_get_fwnode_pad(&subdev->entity,
-+					  source->ep_fwnode,
-+					  MEDIA_PAD_FL_SOURCE);
-+	if (ret < 0) {
-+		dev_err(priv->dev, "Failed to find pad for %s\n", subdev->name);
++	/* Set PHY mode. */
++	ret = regmap_update_bits(priv->regmap, MAX96724_MIPI_PHY0,
++				 MAX96724_MIPI_PHY0_PHY_CONFIG,
++				 max96724_phys_configs_reg_val[des->phys_config]);
++	if (ret)
 +		return ret;
-+	}
 +
-+	source->sd = subdev;
-+	source->pad = ret;
-+
-+	ret = media_create_pad_link(&source->sd->entity, source->pad,
-+				    &priv->sd.entity, pad,
-+				    MEDIA_LNK_FL_ENABLED |
-+				    MEDIA_LNK_FL_IMMUTABLE);
-+	if (ret) {
-+		dev_err(priv->dev, "Unable to link %s:%u -> %s:%u\n",
-+			source->sd->name, source->pad, priv->sd.name, pad);
-+		return ret;
-+	}
-+
-+	return 0;
++	return max96724_init_tpg(des);
 +}
 +
-+static void max_ser_notify_unbind(struct v4l2_async_notifier *nf,
-+				  struct v4l2_subdev *subdev,
-+				  struct v4l2_async_connection *base_asc)
++static int max96724_init_phy(struct max_des *des, struct max_des_phy *phy)
 +{
-+	struct max_serdes_asc *asc = asc_to_max(base_asc);
-+	struct max_serdes_source *source = asc->source;
-+
-+	source->sd = NULL;
-+}
-+
-+static const struct v4l2_async_notifier_operations max_ser_notify_ops = {
-+	.bound = max_ser_notify_bound,
-+	.unbind = max_ser_notify_unbind,
-+};
-+
-+static int max_ser_v4l2_notifier_register(struct max_ser_priv *priv)
-+{
-+	struct max_ser *ser = priv->ser;
++	struct max96724_priv *priv = des_to_priv(des);
++	bool is_cphy = phy->bus_type == V4L2_MBUS_CSI2_CPHY;
++	unsigned int num_data_lanes = phy->mipi.num_data_lanes;
++	unsigned int dpll_freq = phy->link_frequency * 2;
++	unsigned int num_hw_data_lanes;
++	unsigned int index;
++	unsigned int used_data_lanes = 0;
++	unsigned int val, mask;
 +	unsigned int i;
 +	int ret;
 +
-+	v4l2_async_subdev_nf_init(&priv->nf, &priv->sd);
++	index = max96724_phy_id(des, phy);
++	num_hw_data_lanes = max_des_phy_hw_data_lanes(des, phy);
 +
-+	for (i = 0; i < ser->ops->num_phys; i++) {
-+		struct max_ser_phy *phy = &ser->phys[i];
-+		struct max_serdes_source *source;
-+		struct max_serdes_asc *asc;
-+
-+		source = max_ser_get_phy_source(priv, phy);
-+		if (!source->ep_fwnode)
-+			continue;
-+
-+		asc = v4l2_async_nf_add_fwnode(&priv->nf, source->ep_fwnode,
-+					       struct max_serdes_asc);
-+		if (IS_ERR(asc)) {
-+			dev_err(priv->dev,
-+				"Failed to add subdev for source %u: %pe", i,
-+				asc);
-+
-+			v4l2_async_nf_cleanup(&priv->nf);
-+
-+			return PTR_ERR(asc);
-+		}
-+
-+		asc->source = source;
-+	}
-+
-+	priv->nf.ops = &max_ser_notify_ops;
-+
-+	ret = v4l2_async_nf_register(&priv->nf);
-+	if (ret) {
-+		dev_err(priv->dev, "Failed to register subdev notifier");
-+		v4l2_async_nf_cleanup(&priv->nf);
++	ret = regmap_update_bits(priv->regmap, MAX96724_MIPI_TX10(index),
++				 MAX96724_MIPI_TX10_CSI2_LANE_CNT,
++				 FIELD_PREP(MAX96724_MIPI_TX10_CSI2_LANE_CNT,
++					    num_data_lanes - 1));
++	if (ret)
 +		return ret;
-+	}
 +
-+	return 0;
-+}
++	ret = regmap_assign_bits(priv->regmap, MAX96724_MIPI_TX10(index),
++				 MAX96724_MIPI_TX10_CSI2_CPHY_EN, is_cphy);
++	if (ret)
++		return ret;
 +
-+static void max_ser_v4l2_notifier_unregister(struct max_ser_priv *priv)
-+{
-+	v4l2_async_nf_unregister(&priv->nf);
-+	v4l2_async_nf_cleanup(&priv->nf);
-+}
++	/* Configure lane mapping. */
++	val = 0;
++	for (i = 0; i < num_hw_data_lanes ; i++) {
++		unsigned int map;
 +
-+static int max_ser_v4l2_register(struct max_ser_priv *priv)
-+{
-+	struct v4l2_subdev *sd = &priv->sd;
-+	struct max_ser *ser = priv->ser;
-+	void *data = i2c_get_clientdata(priv->client);
-+	unsigned int num_pads = max_ser_num_pads(ser);
-+	unsigned int i;
-+	int ret;
-+
-+	v4l2_i2c_subdev_init(sd, priv->client, &max_ser_subdev_ops);
-+	i2c_set_clientdata(priv->client, data);
-+	sd->internal_ops = &max_ser_internal_ops;
-+	sd->entity.function = MEDIA_ENT_F_VID_IF_BRIDGE;
-+	sd->entity.ops = &max_ser_media_ops;
-+	sd->flags |= V4L2_SUBDEV_FL_HAS_DEVNODE | V4L2_SUBDEV_FL_STREAMS;
-+
-+	priv->pads = devm_kcalloc(priv->dev, num_pads, sizeof(*priv->pads), GFP_KERNEL);
-+	if (!priv->pads)
-+		return -ENOMEM;
-+
-+	for (i = 0; i < num_pads; i++) {
-+		if (max_ser_pad_is_sink(ser, i))
-+			priv->pads[i].flags = MEDIA_PAD_FL_SINK;
-+		else if (max_ser_pad_is_source(ser, i))
-+			priv->pads[i].flags = MEDIA_PAD_FL_SOURCE;
-+		else if (max_ser_pad_is_tpg(ser, i))
-+			priv->pads[i].flags = MEDIA_PAD_FL_SINK |
-+					      MEDIA_PAD_FL_INTERNAL;
++		if (i < num_data_lanes)
++			map = phy->mipi.data_lanes[i] - 1;
 +		else
-+			return -EINVAL;
++			map = ffz(used_data_lanes);
++
++		val |= map << (i * 2);
++		used_data_lanes |= BIT(map);
 +	}
 +
-+	v4l2_set_subdevdata(sd, priv);
++	if (num_hw_data_lanes == 4)
++		mask = MAX96724_MIPI_PHY3_PHY_LANE_MAP_4;
++	else
++		mask = MAX96724_MIPI_PHY3_PHY_LANE_MAP_2(index);
 +
-+	if (ser->ops->tpg_patterns) {
-+		v4l2_ctrl_handler_init(&priv->ctrl_handler, 1);
-+		priv->sd.ctrl_handler = &priv->ctrl_handler;
-+
-+		v4l2_ctrl_new_std_menu_items(&priv->ctrl_handler,
-+					     &max_ser_ctrl_ops,
-+					     V4L2_CID_TEST_PATTERN,
-+					     MAX_SERDES_TPG_PATTERN_MAX,
-+					     ~ser->ops->tpg_patterns,
-+					     __ffs(ser->ops->tpg_patterns),
-+					     max_serdes_tpg_patterns);
-+		if (priv->ctrl_handler.error) {
-+			ret = priv->ctrl_handler.error;
-+			goto err_free_ctrl;
-+		}
-+	}
-+
-+	ret = media_entity_pads_init(&sd->entity, num_pads, priv->pads);
++	ret = regmap_update_bits(priv->regmap, MAX96724_MIPI_PHY3(index),
++				 mask, field_prep(mask, val));
 +	if (ret)
-+		goto err_free_ctrl;
-+
-+	ret = max_ser_v4l2_notifier_register(priv);
-+	if (ret)
-+		goto err_media_entity_cleanup;
-+
-+	ret = v4l2_subdev_init_finalize(sd);
-+	if (ret)
-+		goto err_nf_cleanup;
-+
-+	ret = v4l2_async_register_subdev(sd);
-+	if (ret)
-+		goto err_sd_cleanup;
-+
-+	return 0;
-+
-+err_sd_cleanup:
-+	v4l2_subdev_cleanup(sd);
-+err_nf_cleanup:
-+	max_ser_v4l2_notifier_unregister(priv);
-+err_media_entity_cleanup:
-+	media_entity_cleanup(&sd->entity);
-+err_free_ctrl:
-+	v4l2_ctrl_handler_free(&priv->ctrl_handler);
-+
-+	return ret;
-+}
-+
-+static void max_ser_v4l2_unregister(struct max_ser_priv *priv)
-+{
-+	struct v4l2_subdev *sd = &priv->sd;
-+
-+	max_ser_v4l2_notifier_unregister(priv);
-+	v4l2_async_unregister_subdev(sd);
-+	v4l2_subdev_cleanup(sd);
-+	media_entity_cleanup(&sd->entity);
-+}
-+
-+static int max_ser_parse_sink_dt_endpoint(struct max_ser_priv *priv,
-+					  struct max_ser_phy *phy,
-+					  struct max_serdes_source *source,
-+					  struct fwnode_handle *fwnode)
-+{
-+	struct max_ser *ser = priv->ser;
-+	u32 pad = max_ser_phy_to_pad(ser, phy);
-+	struct v4l2_fwnode_endpoint v4l2_ep = { .bus_type = V4L2_MBUS_CSI2_DPHY };
-+	struct fwnode_handle *ep;
-+	int ret;
-+
-+	ep = fwnode_graph_get_endpoint_by_id(fwnode, pad, 0, 0);
-+	if (!ep)
-+		return 0;
-+
-+	source->ep_fwnode = fwnode_graph_get_remote_endpoint(ep);
-+	if (!source->ep_fwnode) {
-+		dev_err(priv->dev,
-+			"Failed to get remote endpoint on port %u\n", pad);
-+		return -EINVAL;
-+	}
-+
-+	ret = v4l2_fwnode_endpoint_parse(ep, &v4l2_ep);
-+	fwnode_handle_put(ep);
-+	if (ret) {
-+		dev_err(priv->dev, "Could not parse endpoint on port %u\n", pad);
 +		return ret;
-+	}
 +
-+	phy->mipi = v4l2_ep.bus.mipi_csi2;
-+	phy->enabled = true;
++	/* Configure lane polarity. */
++	for (i = 0, val = 0; i < num_data_lanes; i++)
++		if (phy->mipi.lane_polarities[i + 1])
++			val |= BIT(i);
 +
-+	return 0;
-+}
++	if (num_hw_data_lanes == 4) {
++		ret = regmap_update_bits(priv->regmap, MAX96724_MIPI_PHY5(index),
++					 MAX96724_MIPI_PHY5_PHY_POL_MAP_4_0_1 |
++					 MAX96724_MIPI_PHY5_PHY_POL_MAP_4_2_3,
++					 FIELD_PREP(MAX96724_MIPI_PHY5_PHY_POL_MAP_4_0_1,
++						    val) |
++					 FIELD_PREP(MAX96724_MIPI_PHY5_PHY_POL_MAP_4_2_3,
++						    val >> 2));
++		if (ret)
++			return ret;
 +
-+static int max_ser_find_phys_config(struct max_ser_priv *priv)
-+{
-+	struct max_ser *ser = priv->ser;
-+	const struct max_serdes_phys_configs *configs = &ser->ops->phys_configs;
-+	struct max_ser_phy *phy;
-+	unsigned int i, j;
++		ret = regmap_assign_bits(priv->regmap, MAX96724_MIPI_PHY5(index),
++					 MAX96724_MIPI_PHY5_PHY_POL_MAP_4_CLK,
++					 phy->mipi.lane_polarities[0]);
++		if (ret)
++			return ret;
++	} else {
++		ret = regmap_update_bits(priv->regmap, MAX96724_MIPI_PHY5(index),
++					 MAX96724_MIPI_PHY5_PHY_POL_MAP_2(index),
++					 field_prep(MAX96724_MIPI_PHY5_PHY_POL_MAP_2(index), val));
++		if (ret)
++			return ret;
 +
-+	if (!configs->num_configs)
-+		return 0;
-+
-+	for (i = 0; i < configs->num_configs; i++) {
-+		const struct max_serdes_phys_config *config = &configs->configs[i];
-+		bool matching = true;
-+
-+		for (j = 0; j < ser->ops->num_phys; j++) {
-+			phy = &ser->phys[j];
-+
-+			if (!phy->enabled)
-+				continue;
-+
-+			if (phy->mipi.num_data_lanes <= config->lanes[j])
-+				continue;
-+
-+			matching = false;
-+
-+			break;
-+		}
-+
-+		if (matching)
-+			break;
-+	}
-+
-+	if (i == configs->num_configs) {
-+		dev_err(priv->dev, "Invalid lane configuration\n");
-+		return -EINVAL;
-+	}
-+
-+	ser->phys_config = i;
-+
-+	return 0;
-+}
-+
-+static int max_ser_parse_dt(struct max_ser_priv *priv)
-+{
-+	struct fwnode_handle *fwnode = dev_fwnode(priv->dev);
-+	struct max_ser *ser = priv->ser;
-+	struct max_ser_pipe *pipe;
-+	struct max_ser_phy *phy;
-+	unsigned int i;
-+	int ret;
-+
-+	for (i = 0; i < ser->ops->num_phys; i++) {
-+		phy = &ser->phys[i];
-+		phy->index = i;
-+	}
-+
-+	for (i = 0; i < ser->ops->num_pipes; i++) {
-+		pipe = &ser->pipes[i];
-+		pipe->index = i;
-+		pipe->phy_id = i % ser->ops->num_phys;
-+		pipe->stream_id = i % MAX_SERDES_STREAMS_NUM;
-+	}
-+
-+	for (i = 0; i < ser->ops->num_phys; i++) {
-+		struct max_ser_phy *phy = &ser->phys[i];
-+		struct max_serdes_source *source;
-+
-+		source = max_ser_get_phy_source(priv, phy);
-+		source->index = i;
-+
-+		ret = max_ser_parse_sink_dt_endpoint(priv, phy, source, fwnode);
++		ret = regmap_assign_bits(priv->regmap, MAX96724_MIPI_PHY5(index),
++					 MAX96724_MIPI_PHY5_PHY_POL_MAP_2_CLK(index),
++					 phy->mipi.lane_polarities[0]);
 +		if (ret)
 +			return ret;
 +	}
 +
-+	return max_ser_find_phys_config(priv);
++	if (!is_cphy && dpll_freq > 1500000000ull) {
++		/* Enable initial deskew with 2 x 32k UI. */
++		ret = regmap_write(priv->regmap, MAX96724_MIPI_TX3(index),
++				   MAX96724_MIPI_TX3_DESKEW_INIT_AUTO |
++				   MAX96724_MIPI_TX3_DESKEW_INIT_8X32K);
++		if (ret)
++			return ret;
++
++		/* Enable periodic deskew with 2 x 1k UI.. */
++		ret = regmap_write(priv->regmap, MAX96724_MIPI_TX4(index),
++				   MAX96724_MIPI_TX4_DESKEW_PER_AUTO |
++				   MAX96724_MIPI_TX4_DESKEW_PER_2K);
++		if (ret)
++			return ret;
++	} else {
++		/* Disable initial deskew. */
++		ret = regmap_write(priv->regmap, MAX96724_MIPI_TX3(index), 0x0);
++		if (ret)
++			return ret;
++
++		/* Disable periodic deskew. */
++		ret = regmap_write(priv->regmap, MAX96724_MIPI_TX4(index), 0x0);
++		if (ret)
++			return ret;
++	}
++
++	if (is_cphy) {
++		/* Configure C-PHY timings. */
++		ret = regmap_write(priv->regmap, MAX96724_MIPI_PHY13,
++				   MAX96724_MIPI_PHY13_T_T3_PREBEGIN_64X7);
++		if (ret)
++			return ret;
++
++		ret = regmap_write(priv->regmap, MAX96724_MIPI_PHY14,
++				   MAX96724_MIPI_PHY14_T_T3_PREP_55NS |
++				   MAX96724_MIPI_PHY14_T_T3_POST_32X7);
++		if (ret)
++			return ret;
++	}
++
++	/* Put DPLL block into reset. */
++	ret = regmap_clear_bits(priv->regmap, MAX96724_DPLL_0(index),
++				MAX96724_DPLL_0_CONFIG_SOFT_RST_N);
++	if (ret)
++		return ret;
++
++	/* Set DPLL frequency. */
++	ret = regmap_update_bits(priv->regmap, MAX96724_BACKTOP22(index),
++				 MAX96724_BACKTOP22_PHY_CSI_TX_DPLL,
++				 FIELD_PREP(MAX96724_BACKTOP22_PHY_CSI_TX_DPLL,
++					    div_u64(dpll_freq, 100000000)));
++	if (ret)
++		return ret;
++
++	/* Enable DPLL frequency. */
++	ret = regmap_set_bits(priv->regmap, MAX96724_BACKTOP22(index),
++			      MAX96724_BACKTOP22_PHY_CSI_TX_DPLL_EN);
++	if (ret)
++		return ret;
++
++	/* Pull DPLL block out of reset. */
++	return regmap_set_bits(priv->regmap, MAX96724_DPLL_0(index),
++			       MAX96724_DPLL_0_CONFIG_SOFT_RST_N);
 +}
 +
-+static int max_ser_allocate(struct max_ser_priv *priv)
++static int max96724_set_phy_mode(struct max_des *des, struct max_des_phy *phy,
++				 struct max_des_phy_mode *mode)
 +{
-+	struct max_ser *ser = priv->ser;
-+	unsigned int num_pads = max_ser_num_pads(ser);
++	struct max96724_priv *priv = des_to_priv(des);
++	unsigned int index = max96724_phy_id(des, phy);
++	int ret;
 +
-+	ser->phys = devm_kcalloc(priv->dev, ser->ops->num_phys,
-+				 sizeof(*ser->phys), GFP_KERNEL);
-+	if (!ser->phys)
-+		return -ENOMEM;
++	/* Set alternate memory map modes. */
++	ret = regmap_assign_bits(priv->regmap, MAX96724_MIPI_TX51(index),
++				 MAX96724_MIPI_TX51_ALT_MEM_MAP_12,
++				 mode->alt_mem_map12);
++	if (ret)
++		return ret;
 +
-+	ser->pipes = devm_kcalloc(priv->dev, ser->ops->num_pipes,
-+				  sizeof(*ser->pipes), GFP_KERNEL);
-+	if (!ser->pipes)
-+		return -ENOMEM;
++	ret = regmap_assign_bits(priv->regmap, MAX96724_MIPI_TX51(index),
++				 MAX96724_MIPI_TX51_ALT_MEM_MAP_8,
++				 mode->alt_mem_map8);
++	if (ret)
++		return ret;
 +
-+	ser->vc_remaps = devm_kcalloc(priv->dev, ser->ops->num_vc_remaps,
-+				      sizeof(*ser->vc_remaps), GFP_KERNEL);
-+	if (!ser->vc_remaps)
-+		return -ENOMEM;
++	ret = regmap_assign_bits(priv->regmap, MAX96724_MIPI_TX51(index),
++				 MAX96724_MIPI_TX51_ALT_MEM_MAP_10,
++				 mode->alt_mem_map10);
++	if (ret)
++		return ret;
 +
-+	ser->i2c_xlates = devm_kcalloc(priv->dev, ser->ops->num_i2c_xlates,
-+				       sizeof(*ser->i2c_xlates), GFP_KERNEL);
-+	if (!ser->i2c_xlates)
-+		return -ENOMEM;
++	return regmap_assign_bits(priv->regmap, MAX96724_MIPI_TX51(index),
++				  MAX96724_MIPI_TX51_ALT2_MEM_MAP_8,
++				  mode->alt2_mem_map8);
++}
 +
-+	priv->sources = devm_kcalloc(priv->dev, ser->ops->num_phys,
-+				     sizeof(*priv->sources), GFP_KERNEL);
-+	if (!priv->sources)
-+		return -ENOMEM;
++static int max96724_set_phy_enable(struct max_des *des, struct max_des_phy *phy,
++				   bool enable)
++{
++	struct max96724_priv *priv = des_to_priv(des);
++	unsigned int index = max96724_phy_id(des, phy);
++	unsigned int num_hw_data_lanes;
++	unsigned int mask;
 +
-+	priv->streams_masks = devm_kcalloc(priv->dev, num_pads,
-+					   sizeof(*priv->streams_masks),
-+					   GFP_KERNEL);
-+	if (!priv->streams_masks)
-+		return -ENOMEM;
++	num_hw_data_lanes = max_des_phy_hw_data_lanes(des, phy);
++
++	if (num_hw_data_lanes == 4)
++		/* PHY 1 -> bits [1:0] */
++		/* PHY 2 -> bits [3:2] */
++		mask = MAX96724_MIPI_PHY2_PHY_STDB_N_4(index);
++	else
++		mask = MAX96724_MIPI_PHY2_PHY_STDB_N_2(index);
++
++	return regmap_assign_bits(priv->regmap, MAX96724_MIPI_PHY2, mask, enable);
++}
++
++static int max96724_set_pipe_remap(struct max_des *des,
++				   struct max_des_pipe *pipe,
++				   unsigned int i,
++				   struct max_des_remap *remap)
++{
++	struct max96724_priv *priv = des_to_priv(des);
++	struct max_des_phy *phy = &des->phys[remap->phy];
++	unsigned int phy_id = max96724_phy_id(des, phy);
++	unsigned int index = pipe->index;
++	int ret;
++
++	/* Set source Data Type and Virtual Channel. */
++	/* TODO: implement extended Virtual Channel. */
++	ret = regmap_write(priv->regmap, MAX96724_MIPI_TX13(index, i),
++			   FIELD_PREP(MAX96724_MIPI_TX13_MAP_SRC_DT,
++				      remap->from_dt) |
++			   FIELD_PREP(MAX96724_MIPI_TX13_MAP_SRC_VC,
++				      remap->from_vc));
++	if (ret)
++		return ret;
++
++	/* Set destination Data Type and Virtual Channel. */
++	/* TODO: implement extended Virtual Channel. */
++	ret = regmap_write(priv->regmap, MAX96724_MIPI_TX14(index, i),
++			   FIELD_PREP(MAX96724_MIPI_TX14_MAP_DST_DT,
++				      remap->to_dt) |
++			   FIELD_PREP(MAX96724_MIPI_TX14_MAP_DST_VC,
++				      remap->to_vc));
++	if (ret)
++		return ret;
++
++	/* Set destination PHY. */
++	return regmap_update_bits(priv->regmap, MAX96724_MIPI_TX45(index, i),
++				  MAX96724_MIPI_TX45_MAP_DPHY_DEST(i),
++				  field_prep(MAX96724_MIPI_TX45_MAP_DPHY_DEST(i),
++					     phy_id));
++}
++
++static int max96724_set_pipe_remaps_enable(struct max_des *des,
++					   struct max_des_pipe *pipe,
++					   unsigned int mask)
++{
++	struct max96724_priv *priv = des_to_priv(des);
++	unsigned int index = pipe->index;
++	int ret;
++
++	ret = regmap_write(priv->regmap, MAX96724_MIPI_TX11(index), mask);
++	if (ret)
++		return ret;
++
++	return regmap_write(priv->regmap, MAX96724_MIPI_TX12(index), mask >> 8);
++}
++
++static int max96724_set_pipe_tunnel_phy(struct max_des *des,
++					struct max_des_pipe *pipe,
++					struct max_des_phy *phy)
++{
++	struct max96724_priv *priv = des_to_priv(des);
++	unsigned int phy_index = max96724_phy_id(des, phy);
++
++	return regmap_update_bits(priv->regmap, MAX96724_MIPI_TX57(pipe->index),
++				  MAX96724_MIPI_TX57_TUN_DEST,
++				  FIELD_PREP(MAX96724_MIPI_TX57_TUN_DEST,
++					     phy_index));
++}
++
++static int max96724_set_pipe_phy(struct max_des *des, struct max_des_pipe *pipe,
++				 struct max_des_phy *phy)
++{
++	struct max96724_priv *priv = des_to_priv(des);
++	unsigned int phy_index = max96724_phy_id(des, phy);
++
++	return regmap_update_bits(priv->regmap, MAX96724_MIPI_CTRL_SEL,
++				  MAX96724_MIPI_CTRL_SEL_MASK(pipe->index),
++				  field_prep(MAX96724_MIPI_CTRL_SEL_MASK(pipe->index),
++					     phy_index));
++}
++
++static int max96724_set_pipe_enable(struct max_des *des, struct max_des_pipe *pipe,
++				    bool enable)
++{
++	struct max96724_priv *priv = des_to_priv(des);
++	unsigned int index = pipe->index;
++
++	return regmap_assign_bits(priv->regmap, MAX96724_VIDEO_PIPE_EN,
++				  MAX96724_VIDEO_PIPE_EN_MASK(index), enable);
++}
++
++static int max96724_set_pipe_stream_id(struct max_des *des, struct max_des_pipe *pipe,
++				       unsigned int stream_id)
++{
++	struct max96724_priv *priv = des_to_priv(des);
++	unsigned int index = pipe->index;
++
++	return regmap_update_bits(priv->regmap, MAX96724_VIDEO_PIPE_SEL(index),
++				  MAX96724_VIDEO_PIPE_SEL_STREAM(index),
++				  field_prep(MAX96724_VIDEO_PIPE_SEL_STREAM(index),
++					     stream_id));
++}
++
++static int max96724_set_pipe_link(struct max_des *des, struct max_des_pipe *pipe,
++				  struct max_des_link *link)
++{
++	struct max96724_priv *priv = des_to_priv(des);
++	unsigned int index = pipe->index;
++
++	return regmap_update_bits(priv->regmap, MAX96724_VIDEO_PIPE_SEL(index),
++				  MAX96724_VIDEO_PIPE_SEL_LINK(index),
++				  field_prep(MAX96724_VIDEO_PIPE_SEL_LINK(index),
++					     link->index));
++}
++
++static int max96724_set_pipe_mode(struct max_des *des,
++				  struct max_des_pipe *pipe,
++				  struct max_des_pipe_mode *mode)
++{
++	struct max96724_priv *priv = des_to_priv(des);
++	unsigned int index = pipe->index;
++	unsigned int reg, mask, mode_mask;
++	int ret;
++
++	/* Set 8bit double mode. */
++	ret = regmap_assign_bits(priv->regmap, MAX96724_BACKTOP21(index),
++				 MAX96724_BACKTOP21_BPP8DBL(index), mode->dbl8);
++	if (ret)
++		return ret;
++
++	ret = regmap_assign_bits(priv->regmap, MAX96724_BACKTOP24(index),
++				 MAX96724_BACKTOP24_BPP8DBL_MODE(index),
++				 mode->dbl8mode);
++	if (ret)
++		return ret;
++
++	/* Set 10bit double mode. */
++	if (index % 4 == 3) {
++		reg = MAX96724_BACKTOP30(index);
++		mask = MAX96724_BACKTOP30_BPP10DBL3;
++		mode_mask = MAX96724_BACKTOP30_BPP10DBL3_MODE;
++	} else if (index % 4 == 2) {
++		reg = MAX96724_BACKTOP31(index);
++		mask = MAX96724_BACKTOP31_BPP10DBL2;
++		mode_mask = MAX96724_BACKTOP31_BPP10DBL2_MODE;
++	} else if (index % 4 == 1) {
++		reg = MAX96724_BACKTOP32(index);
++		mask = MAX96724_BACKTOP32_BPP10DBL1;
++		mode_mask = MAX96724_BACKTOP32_BPP10DBL1_MODE;
++	} else {
++		reg = MAX96724_BACKTOP32(index);
++		mask = MAX96724_BACKTOP32_BPP10DBL0;
++		mode_mask = MAX96724_BACKTOP32_BPP10DBL0_MODE;
++	}
++
++	ret = regmap_assign_bits(priv->regmap, reg, mask, mode->dbl10);
++	if (ret)
++		return ret;
++
++	ret = regmap_assign_bits(priv->regmap, reg, mode_mask, mode->dbl10mode);
++	if (ret)
++		return ret;
++
++	/* Set 12bit double mode. */
++	return regmap_assign_bits(priv->regmap, MAX96724_BACKTOP32(index),
++				  MAX96724_BACKTOP32_BPP12(index), mode->dbl12);
++}
++
++static int max96724_set_pipe_tunnel_enable(struct max_des *des,
++					   struct max_des_pipe *pipe, bool enable)
++{
++	struct max96724_priv *priv = des_to_priv(des);
++
++	return regmap_assign_bits(priv->regmap, MAX96724_MIPI_TX54(pipe->index),
++				  MAX96724_MIPI_TX54_TUN_EN, enable);
++}
++
++static int max96724_select_links(struct max_des *des, unsigned int mask)
++{
++	struct max96724_priv *priv = des_to_priv(des);
++	int ret;
++
++	ret = regmap_update_bits(priv->regmap, MAX96724_REG6, MAX96724_REG6_LINK_EN,
++				 field_prep(MAX96724_REG6_LINK_EN, mask));
++	if (ret)
++		return ret;
++
++	ret = regmap_set_bits(priv->regmap, MAX96724_CTRL1,
++			      MAX96724_CTRL1_RESET_ONESHOT);
++	if (ret)
++		return ret;
++
++	msleep(60);
 +
 +	return 0;
 +}
 +
-+int max_ser_probe(struct i2c_client *client, struct max_ser *ser)
++static int max96724_set_link_version(struct max_des *des,
++				     struct max_des_link *link,
++				     enum max_serdes_gmsl_version version)
++{
++	struct max96724_priv *priv = des_to_priv(des);
++	unsigned int index = link->index;
++	unsigned int val;
++
++	if (version == MAX_SERDES_GMSL_2_6GBPS)
++		val = MAX96724_REG26_RX_RATE_6GBPS;
++	else
++		val = MAX96724_REG26_RX_RATE_3GBPS;
++
++	return regmap_update_bits(priv->regmap, MAX96724_REG26(index),
++				  MAX96724_REG26_RX_RATE_PHY(index),
++				  field_prep(MAX96724_REG26_RX_RATE_PHY(index), val));
++}
++
++static int max96724_set_tpg_timings(struct max96724_priv *priv,
++				    const struct max_serdes_tpg_timings *tm)
++{
++	const struct reg_sequence regs[] = {
++		REG_SEQUENCE_3(MAX96724_VS_DLY_2, tm->vs_dly),
++		REG_SEQUENCE_3(MAX96724_VS_HIGH_2, tm->vs_high),
++		REG_SEQUENCE_3(MAX96724_VS_LOW_2, tm->vs_low),
++		REG_SEQUENCE_3(MAX96724_V2H_2, tm->v2h),
++		REG_SEQUENCE_2(MAX96724_HS_HIGH_1, tm->hs_high),
++		REG_SEQUENCE_2(MAX96724_HS_LOW_1, tm->hs_low),
++		REG_SEQUENCE_2(MAX96724_HS_CNT_1, tm->hs_cnt),
++		REG_SEQUENCE_3(MAX96724_V2D_2, tm->v2d),
++		REG_SEQUENCE_2(MAX96724_DE_HIGH_1, tm->de_high),
++		REG_SEQUENCE_2(MAX96724_DE_LOW_1, tm->de_low),
++		REG_SEQUENCE_2(MAX96724_DE_CNT_1, tm->de_cnt),
++	};
++	int ret;
++
++	ret = regmap_multi_reg_write(priv->regmap, regs, ARRAY_SIZE(regs));
++	if (ret)
++		return ret;
++
++	return regmap_write(priv->regmap, MAX96724_PATGEN_0,
++			    FIELD_PREP(MAX96724_PATGEN_0_VTG_MODE,
++				       MAX96724_PATGEN_0_VTG_MODE_FREE_RUNNING) |
++			    FIELD_PREP(MAX96724_PATGEN_0_DE_INV, tm->de_inv) |
++			    FIELD_PREP(MAX96724_PATGEN_0_HS_INV, tm->hs_inv) |
++			    FIELD_PREP(MAX96724_PATGEN_0_VS_INV, tm->vs_inv) |
++			    FIELD_PREP(MAX96724_PATGEN_0_GEN_DE, tm->gen_de) |
++			    FIELD_PREP(MAX96724_PATGEN_0_GEN_HS, tm->gen_hs) |
++			    FIELD_PREP(MAX96724_PATGEN_0_GEN_VS, tm->gen_vs));
++}
++
++static int max96724_set_tpg_clk(struct max96724_priv *priv, u32 clock)
++{
++	bool patgen_clk_src = 0;
++	u8 pclk_src;
++	int ret;
++
++	switch (clock) {
++	case 25000000:
++		pclk_src = MAX96724_DEBUG_EXTRA_PCLK_SRC_25MHZ;
++		break;
++	case 75000000:
++		pclk_src = MAX96724_DEBUG_EXTRA_PCLK_SRC_75MHZ;
++		break;
++	case 150000000:
++		pclk_src = MAX96724_DEBUG_EXTRA_PCLK_SRC_USE_PIPE;
++		patgen_clk_src = MAX96724_VPRBS_PATGEN_CLK_SRC_150MHZ;
++		break;
++	case 375000000:
++		pclk_src = MAX96724_DEBUG_EXTRA_PCLK_SRC_USE_PIPE;
++		patgen_clk_src = MAX96724_VPRBS_PATGEN_CLK_SRC_375MHZ;
++		break;
++	case 0:
++		return 0;
++	default:
++		return -EINVAL;
++	}
++
++	/*
++	 * TPG data is always injected on link 0, which is always routed to
++	 * pipe 0.
++	 */
++	ret = regmap_update_bits(priv->regmap, MAX96724_VPRBS(0),
++				 MAX96724_VPRBS_PATGEN_CLK_SRC,
++				 FIELD_PREP(MAX96724_VPRBS_PATGEN_CLK_SRC,
++					    patgen_clk_src));
++	if (ret)
++		return ret;
++
++	return regmap_update_bits(priv->regmap, MAX96724_DEBUG_EXTRA,
++				  MAX96724_DEBUG_EXTRA_PCLK_SRC,
++				  FIELD_PREP(MAX96724_DEBUG_EXTRA_PCLK_SRC,
++					     pclk_src));
++}
++
++static int max96724_set_tpg_mode(struct max96724_priv *priv, bool enable)
++{
++	unsigned int patgen_mode;
++
++	switch (priv->des.tpg_pattern) {
++	case MAX_SERDES_TPG_PATTERN_GRADIENT:
++		patgen_mode = MAX96724_PATGEN_1_PATGEN_MODE_GRADIENT;
++		break;
++	case MAX_SERDES_TPG_PATTERN_CHECKERBOARD:
++		patgen_mode = MAX96724_PATGEN_1_PATGEN_MODE_CHECKER;
++		break;
++	default:
++		return -EINVAL;
++	}
++
++	return regmap_update_bits(priv->regmap, MAX96724_PATGEN_1,
++				  MAX96724_PATGEN_1_PATGEN_MODE,
++				  FIELD_PREP(MAX96724_PATGEN_1_PATGEN_MODE,
++					     enable ? patgen_mode
++						    : MAX96724_PATGEN_1_PATGEN_MODE_DISABLED));
++}
++
++static int max96724_set_tpg(struct max_des *des,
++			    const struct max_serdes_tpg_entry *entry)
++{
++	struct max96724_priv *priv = des_to_priv(des);
++	struct max_serdes_tpg_timings timings = { 0 };
++	int ret;
++
++	ret = max_serdes_get_tpg_timings(entry, &timings);
++	if (ret)
++		return ret;
++
++	ret = max96724_set_tpg_timings(priv, &timings);
++	if (ret)
++		return ret;
++
++	ret = max96724_set_tpg_clk(priv, timings.clock);
++	if (ret)
++		return ret;
++
++	ret = max96724_set_tpg_mode(priv, entry);
++	if (ret)
++		return ret;
++
++	return regmap_assign_bits(priv->regmap, MAX96724_MIPI_PHY0,
++				  MAX96724_MIPI_PHY0_FORCE_CSI_OUT_EN, !!entry);
++}
++
++static const struct max_serdes_tpg_entry max96724_tpg_entries[] = {
++	MAX_TPG_ENTRY_640X480P60_RGB888,
++	MAX_TPG_ENTRY_1920X1080P30_RGB888,
++	MAX_TPG_ENTRY_1920X1080P60_RGB888,
++};
++
++static const struct max_des_ops max96724_ops = {
++	.num_phys = 4,
++	.num_links = 4,
++	.num_remaps_per_pipe = 16,
++	.phys_configs = {
++		.num_configs = ARRAY_SIZE(max96724_phys_configs),
++		.configs = max96724_phys_configs,
++	},
++	.tpg_entries = {
++		.num_entries = ARRAY_SIZE(max96724_tpg_entries),
++		.entries = max96724_tpg_entries,
++	},
++	.tpg_mode = MAX_SERDES_GMSL_PIXEL_MODE,
++	.tpg_patterns = BIT(MAX_SERDES_TPG_PATTERN_CHECKERBOARD) |
++			BIT(MAX_SERDES_TPG_PATTERN_GRADIENT),
++	.use_atr = true,
++#ifdef CONFIG_VIDEO_ADV_DEBUG
++	.reg_read = max96724_reg_read,
++	.reg_write = max96724_reg_write,
++#endif
++	.log_pipe_status = max96724_log_pipe_status,
++	.log_phy_status = max96724_log_phy_status,
++	.set_enable = max96724_set_enable,
++	.init = max96724_init,
++	.init_phy = max96724_init_phy,
++	.set_phy_mode = max96724_set_phy_mode,
++	.set_phy_enable = max96724_set_phy_enable,
++	.set_pipe_stream_id = max96724_set_pipe_stream_id,
++	.set_pipe_link = max96724_set_pipe_link,
++	.set_pipe_enable = max96724_set_pipe_enable,
++	.set_pipe_remap = max96724_set_pipe_remap,
++	.set_pipe_remaps_enable = max96724_set_pipe_remaps_enable,
++	.set_pipe_mode = max96724_set_pipe_mode,
++	.set_tpg = max96724_set_tpg,
++	.select_links = max96724_select_links,
++	.set_link_version = max96724_set_link_version,
++};
++
++static const struct max96724_chip_info max96724_info = {
++	.versions = BIT(MAX_SERDES_GMSL_2_3GBPS) |
++		    BIT(MAX_SERDES_GMSL_2_6GBPS),
++	.modes = BIT(MAX_SERDES_GMSL_PIXEL_MODE) |
++		 BIT(MAX_SERDES_GMSL_TUNNEL_MODE),
++	.set_pipe_tunnel_enable = max96724_set_pipe_tunnel_enable,
++	.set_pipe_phy = max96724_set_pipe_phy,
++	.set_pipe_tunnel_phy = max96724_set_pipe_tunnel_phy,
++	.supports_pipe_stream_autoselect = true,
++	.num_pipes = 4,
++};
++
++static const struct max96724_chip_info max96724f_info = {
++	.versions = BIT(MAX_SERDES_GMSL_2_3GBPS),
++	.modes = BIT(MAX_SERDES_GMSL_PIXEL_MODE) |
++		 BIT(MAX_SERDES_GMSL_TUNNEL_MODE),
++	.set_pipe_tunnel_enable = max96724_set_pipe_tunnel_enable,
++	.set_pipe_phy = max96724_set_pipe_phy,
++	.set_pipe_tunnel_phy = max96724_set_pipe_tunnel_phy,
++	.supports_pipe_stream_autoselect = true,
++	.num_pipes = 4,
++};
++
++static const struct max96724_chip_info max96712_info = {
++	.versions = BIT(MAX_SERDES_GMSL_2_3GBPS) |
++		    BIT(MAX_SERDES_GMSL_2_6GBPS),
++	.modes = BIT(MAX_SERDES_GMSL_PIXEL_MODE),
++	.num_pipes = 8,
++};
++
++static int max96724_probe(struct i2c_client *client)
 +{
 +	struct device *dev = &client->dev;
-+	struct max_ser_priv *priv;
++	struct max96724_priv *priv;
++	struct max_des_ops *ops;
 +	int ret;
-+
-+	if (ser->ops->num_phys > MAX_SER_NUM_PHYS)
-+		return -E2BIG;
 +
 +	priv = devm_kzalloc(dev, sizeof(*priv), GFP_KERNEL);
 +	if (!priv)
 +		return -ENOMEM;
 +
-+	priv->client = client;
++	ops = devm_kzalloc(dev, sizeof(*ops), GFP_KERNEL);
++	if (!ops)
++		return -ENOMEM;
++
++	priv->info = device_get_match_data(dev);
++	if (!priv->info) {
++		dev_err(dev, "Failed to get match data\n");
++		return -ENODEV;
++	}
++
 +	priv->dev = dev;
-+	priv->ser = ser;
-+	ser->priv = priv;
-+	ser->mode = __ffs(ser->ops->modes);
++	priv->client = client;
++	i2c_set_clientdata(client, priv);
 +
-+	ret = max_ser_allocate(priv);
-+	if (ret)
-+		return ret;
++	priv->regmap = devm_regmap_init_i2c(client, &max96724_i2c_regmap);
++	if (IS_ERR(priv->regmap))
++		return PTR_ERR(priv->regmap);
 +
-+	ret = max_ser_parse_dt(priv);
-+	if (ret)
-+		return ret;
++	priv->gpiod_enable = devm_gpiod_get_optional(&client->dev, "enable",
++						     GPIOD_OUT_LOW);
++	if (IS_ERR(priv->gpiod_enable))
++		return PTR_ERR(priv->gpiod_enable);
 +
-+	ret = max_ser_init(priv);
-+	if (ret)
-+		return ret;
++	if (priv->gpiod_enable) {
++		/* PWDN must be held for 1us for reset */
++		udelay(1);
 +
-+	ret = max_ser_i2c_adapter_init(priv);
-+	if (ret)
-+		return ret;
++		gpiod_set_value_cansleep(priv->gpiod_enable, 1);
 +
-+	ret = max_ser_v4l2_register(priv);
-+	if (ret)
-+		goto err_i2c_adapter_deinit;
-+
-+	return 0;
-+
-+err_i2c_adapter_deinit:
-+	max_ser_i2c_adapter_deinit(priv);
-+
-+	return ret;
-+}
-+EXPORT_SYMBOL_NS_GPL(max_ser_probe, "MAX_SERDES");
-+
-+int max_ser_remove(struct max_ser *ser)
-+{
-+	struct max_ser_priv *priv = ser->priv;
-+
-+	max_ser_v4l2_unregister(priv);
-+
-+	max_ser_i2c_adapter_deinit(priv);
-+
-+	return 0;
-+}
-+EXPORT_SYMBOL_NS_GPL(max_ser_remove, "MAX_SERDES");
-+
-+int max_ser_set_double_bpps(struct v4l2_subdev *sd, u32 double_bpps)
-+{
-+	struct max_ser_priv *priv = sd_to_priv(sd);
-+
-+	priv->double_bpps = double_bpps;
-+
-+	return 0;
-+}
-+
-+int max_ser_set_stream_id(struct v4l2_subdev *sd, unsigned int stream_id)
-+{
-+	struct max_ser_priv *priv = sd_to_priv(sd);
-+	struct max_ser *ser = priv->ser;
-+	struct max_ser_pipe *pipe = &ser->pipes[0];
-+
-+	if (!ser->ops->set_pipe_stream_id)
-+		return -EOPNOTSUPP;
-+
-+	return ser->ops->set_pipe_stream_id(ser, pipe, stream_id);
-+}
-+
-+int max_ser_get_stream_id(struct v4l2_subdev *sd, unsigned int *stream_id)
-+{
-+	struct max_ser_priv *priv = sd_to_priv(sd);
-+	struct max_ser *ser = priv->ser;
-+	struct max_ser_pipe *pipe = &ser->pipes[0];
-+
-+	if (!ser->ops->get_pipe_stream_id)
-+		return -EOPNOTSUPP;
-+
-+	*stream_id = ser->ops->get_pipe_stream_id(ser, pipe);
-+
-+	return 0;
-+}
-+
-+unsigned int max_ser_get_supported_modes(struct v4l2_subdev *sd)
-+{
-+	struct max_ser_priv *priv = sd_to_priv(sd);
-+	struct max_ser *ser = priv->ser;
-+	struct v4l2_subdev_state *state;
-+	unsigned int modes = ser->ops->modes;
-+
-+	state = v4l2_subdev_lock_and_get_active_state(&priv->sd);
-+
-+	if (max_ser_is_tpg_routed(priv, state))
-+		modes = BIT(ser->ops->tpg_mode);
-+
-+	v4l2_subdev_unlock_state(state);
-+
-+	return modes;
-+}
-+
-+bool max_ser_supports_vc_remap(struct v4l2_subdev *sd)
-+{
-+	struct max_ser_priv *priv = sd_to_priv(sd);
-+	struct max_ser *ser = priv->ser;
-+
-+	return !!ser->ops->set_vc_remap;
-+}
-+
-+int max_ser_set_mode(struct v4l2_subdev *sd, enum max_serdes_gmsl_mode mode)
-+{
-+	struct max_ser_priv *priv = sd_to_priv(sd);
-+	struct max_ser *ser = priv->ser;
-+	int ret;
-+
-+	if (!(ser->ops->modes & BIT(mode)))
-+		return -EINVAL;
-+
-+	if (ser->mode == mode)
-+		return 0;
-+
-+	if (ser->ops->set_tunnel_enable) {
-+		bool tunnel_enable = mode == MAX_SERDES_GMSL_TUNNEL_MODE;
-+
-+		ret = ser->ops->set_tunnel_enable(ser, tunnel_enable);
-+		if (ret)
-+			return ret;
++		/* Maximum power-up time (tLOCK) 4ms */
++		usleep_range(4000, 5000);
 +	}
 +
-+	ser->mode = mode;
++	*ops = max96724_ops;
++	ops->versions = priv->info->versions;
++	ops->modes = priv->info->modes;
++	ops->num_pipes = priv->info->num_pipes;
++	ops->set_pipe_tunnel_enable = priv->info->set_pipe_tunnel_enable;
++	ops->set_pipe_phy = priv->info->set_pipe_phy;
++	ops->set_pipe_tunnel_phy = priv->info->set_pipe_tunnel_phy;
++	priv->des.ops = ops;
 +
-+	return 0;
-+}
-+
-+int max_ser_set_vc_remaps(struct v4l2_subdev *sd,
-+			  struct max_serdes_vc_remap *vc_remaps,
-+			  int num_vc_remaps)
-+{
-+	struct max_ser_priv *priv = sd_to_priv(sd);
-+	struct max_ser *ser = priv->ser;
-+	unsigned int mask = 0;
-+	unsigned int i;
-+	int ret;
-+
-+	if (!ser->ops->set_vc_remap)
-+		return -EOPNOTSUPP;
-+
-+	if (num_vc_remaps > ser->ops->num_vc_remaps)
-+		return -E2BIG;
-+
-+	for (i = 0; i < num_vc_remaps; i++) {
-+		ret = ser->ops->set_vc_remap(ser, i, &vc_remaps[i]);
-+		if (ret)
-+			return ret;
-+
-+		mask |= BIT(i);
-+	}
-+
-+	ret = ser->ops->set_vc_remaps_enable(ser, mask);
++	ret = max96724_reset(priv);
 +	if (ret)
 +		return ret;
 +
-+	for (i = 0; i < num_vc_remaps; i++)
-+		ser->vc_remaps[i] = vc_remaps[i];
-+
-+	ser->num_vc_remaps = num_vc_remaps;
-+
-+	return 0;
++	return max_des_probe(client, &priv->des);
 +}
 +
-+static int max_ser_read_reg(struct i2c_adapter *adapter, u8 addr,
-+			    u16 reg, u8 *val)
++static void max96724_remove(struct i2c_client *client)
 +{
-+	u8 buf[2] = { reg >> 8, reg & 0xff };
-+	struct i2c_msg msg[2] = {
-+		{
-+			.addr = addr,
-+			.flags = 0,
-+			.buf = buf,
-+			.len = sizeof(buf),
-+		},
-+		{
-+			.addr = addr,
-+			.flags = I2C_M_RD,
-+			.buf = buf,
-+			.len = 1,
-+		},
-+	};
-+	int ret;
++	struct max96724_priv *priv = i2c_get_clientdata(client);
 +
-+	ret = i2c_transfer(adapter, msg, ARRAY_SIZE(msg));
-+	if (ret < 0)
-+		return ret;
++	max_des_remove(&priv->des);
 +
-+	*val = buf[0];
-+
-+	return 0;
++	gpiod_set_value_cansleep(priv->gpiod_enable, 0);
 +}
 +
-+static int max_ser_write_reg(struct i2c_adapter *adapter, u8 addr,
-+			     u16 reg, u8 val)
-+{
-+	u8 buf[3] = { reg >> 8, reg & 0xff, val };
-+	struct i2c_msg msg[1] = {
-+		{
-+			.addr = addr,
-+			.flags = 0,
-+			.buf = buf,
-+			.len = sizeof(buf),
-+		},
-+	};
-+	int ret;
++static const struct of_device_id max96724_of_table[] = {
++	{ .compatible = "maxim,max96712", .data = &max96712_info },
++	{ .compatible = "maxim,max96724", .data = &max96724_info },
++	{ .compatible = "maxim,max96724f", .data = &max96724f_info },
++	{ .compatible = "maxim,max96724r", .data = &max96724f_info },
++	{ },
++};
++MODULE_DEVICE_TABLE(of, max96724_of_table);
 +
-+	ret = i2c_transfer(adapter, msg, ARRAY_SIZE(msg));
-+	if (ret < 0)
-+		return ret;
++static struct i2c_driver max96724_i2c_driver = {
++	.driver	= {
++		.name = "max96724",
++		.of_match_table	= max96724_of_table,
++	},
++	.probe = max96724_probe,
++	.remove = max96724_remove,
++};
 +
-+	return 0;
-+}
++module_i2c_driver(max96724_i2c_driver);
 +
-+int max_ser_reset(struct i2c_adapter *adapter, u8 addr)
-+{
-+	int ret;
-+	u8 val;
-+
-+	ret = max_ser_read_reg(adapter, addr, MAX_SER_CTRL0, &val);
-+	if (ret)
-+		return ret;
-+
-+	val |= MAX_SER_CTRL0_RESET_ALL;
-+
-+	return max_ser_write_reg(adapter, addr, MAX_SER_CTRL0, val);
-+}
-+
-+int max_ser_wait_for_multiple(struct i2c_adapter *adapter, u8 *addrs,
-+			      unsigned int num_addrs, u8 *current_addr)
-+{
-+	unsigned int i, j;
-+	int ret = 0;
-+	u8 val;
-+
-+	for (i = 0; i < 10; i++) {
-+		for (j = 0; j < num_addrs; j++) {
-+			ret = max_ser_read_reg(adapter, addrs[j], MAX_SER_REG0, &val);
-+			if (!ret && val) {
-+				*current_addr = addrs[j];
-+				return 0;
-+			}
-+
-+			msleep(100);
-+		}
-+	}
-+
-+	return ret;
-+}
-+
-+int max_ser_wait(struct i2c_adapter *adapter, u8 addr)
-+{
-+	u8 current_addr;
-+
-+	return max_ser_wait_for_multiple(adapter, &addr, 1, &current_addr);
-+}
-+
-+int max_ser_fix_tx_ids(struct i2c_adapter *adapter, u8 addr)
-+{
-+	unsigned int addr_regs[] = {
-+		MAX_SER_CFGI_INFOFR_TR3,
-+		MAX_SER_CFGL_SPI_TR3,
-+		MAX_SER_CFGC_CC_TR3,
-+		MAX_SER_CFGC_GPIO_TR3,
-+		MAX_SER_CFGL_IIC_X_TR3,
-+		MAX_SER_CFGL_IIC_Y_TR3,
-+	};
-+	unsigned int i;
-+	int ret;
-+
-+	for (i = 0; i < ARRAY_SIZE(addr_regs); i++) {
-+		ret = max_ser_write_reg(adapter, addr, addr_regs[i], addr);
-+		if (ret)
-+			return ret;
-+	}
-+
-+	return 0;
-+}
-+
-+int max_ser_change_address(struct i2c_adapter *adapter, u8 addr, u8 new_addr)
-+{
-+	u8 val = FIELD_PREP(MAX_SER_REG0_DEV_ADDR, new_addr);
-+
-+	return max_ser_write_reg(adapter, addr, MAX_SER_REG0, val);
-+}
-+
++MODULE_IMPORT_NS("MAX_SERDES");
++MODULE_DESCRIPTION("Maxim MAX96724 Quad GMSL2 Deserializer Driver");
++MODULE_AUTHOR("Cosmin Tanislav <cosmin.tanislav@analog.com>");
 +MODULE_LICENSE("GPL");
-+MODULE_IMPORT_NS("I2C_ATR");
-diff --git a/drivers/media/i2c/maxim-serdes/max_ser.h b/drivers/media/i2c/maxim-serdes/max_ser.h
-new file mode 100644
-index 000000000000..a9365be5e62d
---- /dev/null
-+++ b/drivers/media/i2c/maxim-serdes/max_ser.h
-@@ -0,0 +1,147 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+/*
-+ * Copyright (C) 2025 Analog Devices Inc.
-+ */
-+
-+#ifndef MAX_SER_H
-+#define MAX_SER_H
-+
-+#include <linux/i2c.h>
-+
-+#include <media/v4l2-mediabus.h>
-+
-+#include "max_serdes.h"
-+
-+#define MAX_SER_REG0				0x0
-+#define MAX_SER_REG0_DEV_ADDR			GENMASK(7, 1)
-+
-+#define MAX_SER_CTRL0				0x10
-+#define MAX_SER_CTRL0_RESET_ALL			BIT(7)
-+
-+#define MAX_SER_CFGI_INFOFR_TR3			0x7b
-+#define MAX_SER_CFGL_SPI_TR3			0x83
-+#define MAX_SER_CFGC_CC_TR3			0x8b
-+#define MAX_SER_CFGC_GPIO_TR3			0x93
-+#define MAX_SER_CFGL_IIC_X_TR3			0xa3
-+#define MAX_SER_CFGL_IIC_Y_TR3			0xab
-+
-+struct max_ser_phy {
-+	unsigned int index;
-+	struct v4l2_mbus_config_mipi_csi2 mipi;
-+	bool enabled;
-+	bool active;
-+};
-+
-+struct max_ser_pipe_mode {
-+	unsigned int soft_bpp;
-+	unsigned int bpp;
-+	bool dbl8;
-+	bool dbl10;
-+	bool dbl12;
-+};
-+
-+struct max_ser_pipe {
-+	unsigned int index;
-+	unsigned int phy_id;
-+	unsigned int stream_id;
-+	unsigned int *dts;
-+	unsigned int num_dts;
-+	unsigned int vcs;
-+	struct max_ser_pipe_mode mode;
-+	bool enabled;
-+};
-+
-+struct max_ser;
-+
-+struct max_ser_ops {
-+	unsigned int modes;
-+	unsigned int num_pipes;
-+	unsigned int num_dts_per_pipe;
-+	unsigned int num_phys;
-+	unsigned int num_i2c_xlates;
-+	unsigned int num_vc_remaps;
-+
-+	struct max_serdes_phys_configs phys_configs;
-+	struct max_serdes_tpg_entries tpg_entries;
-+	enum max_serdes_gmsl_mode tpg_mode;
-+	unsigned int tpg_patterns;
-+
-+#ifdef CONFIG_VIDEO_ADV_DEBUG
-+	int (*reg_read)(struct max_ser *ser, unsigned int reg, unsigned int *val);
-+	int (*reg_write)(struct max_ser *ser, unsigned int reg, unsigned int val);
-+#endif
-+	int (*log_status)(struct max_ser *ser);
-+	int (*log_pipe_status)(struct max_ser *ser, struct max_ser_pipe *pipe);
-+	int (*log_phy_status)(struct max_ser *ser, struct max_ser_phy *phy);
-+	int (*init)(struct max_ser *ser);
-+	int (*set_i2c_xlate)(struct max_ser *ser, unsigned int i,
-+			     struct max_serdes_i2c_xlate *i2c_xlate);
-+	int (*set_tunnel_enable)(struct max_ser *ser, bool enable);
-+	int (*set_tpg)(struct max_ser *ser, const struct max_serdes_tpg_entry *entry);
-+	int (*init_phy)(struct max_ser *ser, struct max_ser_phy *phy);
-+	int (*set_phy_active)(struct max_ser *ser, struct max_ser_phy *phy,
-+			      bool enable);
-+	int (*set_pipe_enable)(struct max_ser *ser, struct max_ser_pipe *pipe,
-+			       bool enable);
-+	int (*set_pipe_dt)(struct max_ser *ser, struct max_ser_pipe *pipe,
-+			   unsigned int i, unsigned int dt);
-+	int (*set_pipe_dt_en)(struct max_ser *ser, struct max_ser_pipe *pipe,
-+			      unsigned int i, bool enable);
-+	int (*set_pipe_vcs)(struct max_ser *ser, struct max_ser_pipe *pipe,
-+			    unsigned int vcs);
-+	int (*set_pipe_mode)(struct max_ser *ser, struct max_ser_pipe *pipe,
-+			     struct max_ser_pipe_mode *mode);
-+	int (*set_vc_remap)(struct max_ser *ser, unsigned int i,
-+			    struct max_serdes_vc_remap *vc_remap);
-+	int (*set_vc_remaps_enable)(struct max_ser *ser, unsigned int mask);
-+	int (*set_pipe_stream_id)(struct max_ser *ser, struct max_ser_pipe *pipe,
-+				  unsigned int stream_id);
-+	unsigned int (*get_pipe_stream_id)(struct max_ser *ser, struct max_ser_pipe *pipe);
-+	int (*set_pipe_phy)(struct max_ser *ser, struct max_ser_pipe *pipe,
-+			    struct max_ser_phy *phy);
-+};
-+
-+struct max_ser_priv;
-+
-+struct max_ser {
-+	struct max_ser_priv *priv;
-+
-+	const struct max_ser_ops *ops;
-+
-+	struct max_serdes_i2c_xlate *i2c_xlates;
-+
-+	struct max_ser_phy *phys;
-+	struct max_ser_pipe *pipes;
-+	const struct max_serdes_tpg_entry *tpg_entry;
-+	enum max_serdes_tpg_pattern tpg_pattern;
-+
-+	struct max_serdes_vc_remap *vc_remaps;
-+	unsigned int num_vc_remaps;
-+
-+	unsigned int phys_config;
-+	unsigned int active;
-+	enum max_serdes_gmsl_mode mode;
-+};
-+
-+int max_ser_probe(struct i2c_client *client, struct max_ser *ser);
-+
-+int max_ser_remove(struct max_ser *ser);
-+
-+int max_ser_set_double_bpps(struct v4l2_subdev *sd, u32 double_bpps);
-+unsigned int max_ser_get_supported_modes(struct v4l2_subdev *sd);
-+int max_ser_set_mode(struct v4l2_subdev *sd, enum max_serdes_gmsl_mode mode);
-+bool max_ser_supports_vc_remap(struct v4l2_subdev *sd);
-+int max_ser_set_stream_id(struct v4l2_subdev *sd, unsigned int stream_id);
-+int max_ser_get_stream_id(struct v4l2_subdev *sd, unsigned int *stream_id);
-+int max_ser_set_vc_remaps(struct v4l2_subdev *sd, struct max_serdes_vc_remap *vc_remaps,
-+			  int num_vc_remaps);
-+
-+int max_ser_reset(struct i2c_adapter *adapter, u8 addr);
-+int max_ser_wait(struct i2c_adapter *adapter, u8 addr);
-+int max_ser_wait_for_multiple(struct i2c_adapter *adapter, u8 *addrs,
-+			      unsigned int num_addrs, u8 *current_addr);
-+
-+int max_ser_change_address(struct i2c_adapter *adapter, u8 addr, u8 new_addr);
-+int max_ser_fix_tx_ids(struct i2c_adapter *adapter, u8 addr);
-+
-+#endif // MAX_SER_H
 
 -- 
 2.43.0
