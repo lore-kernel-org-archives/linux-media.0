@@ -1,38 +1,37 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 39496330B3B;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 51E2C331201;
 	Fri, 14 Nov 2025 15:20:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763133620; cv=none; b=s4ucfJtItryUPxSe9w1HSh3HGIu2zMseN/Q1tbHKxx4rfzCztxCZ5yRIEXvYXtFv01g3FbWh9z2d9GNs5SQArHNYFzE/9oumK6pdBCZMtbcDqT1bhf5KklUjrsQ8qQOh+DmX7LN40c0la5ssSfw3SGkPC0BwwLIHbrhXVMMDpyA=
+	t=1763133620; cv=none; b=aP0evVmP5ihSiftLgN40L4T+ACC9jFXZ2+nt2qbbH7zxXsktWbRWb+o6gnra8fItvBqTIpv+72heLs2RFTnCAE+ricsFXltS3LNg2Afy9uFLIYuXAVZKWPWxIAWwztl4TXvSUl8ogg+l4XMMqN/5QLqauTpp9aR6vtG7OdxmXaY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1763133620; c=relaxed/simple;
-	bh=X/qSIGjNpstppc3cO7WlUXDDm9zEONg8uCFoJGVo9oU=;
+	bh=/1TF0zRtt7mWqpVWSJRUWVsD14mKx+O9cA7oSvQ2GAg=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=A+s7Ow8bTdPw+6FgxA0kboHXKEqpBjsaWjMgVFNczzPBglACPxdMRZciC/GAY7jNbmaTpnd9JlAsxNXL1Fen9IDk1FOJgVkRfwVV+tTQFFYUMxgCSJwflnv4axbBItngK8Ua+gowjaghOFM8ANBeFObSqjufkYBPiAAVLpe9vII=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=POnOo+m/; arc=none smtp.client-ip=10.30.226.201
+	 In-Reply-To:To:Cc; b=cDiqJUwTfUi7FHTVcPuNH8TKvcdMVhpT81sbQeqAOscETLK1lx+Z3cHZxSWcz4HxxCMiObnyDhUS3zXJ5yEmL+nEAhouOWLeCqrjuZ+ZMPfva2MBprrdhEb8hONWsKxgJMd2se+GxZO8YREvxReH7ECWl30e0BjO/Yle2TUR8E4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=S1/5XHKn; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="POnOo+m/"
-Received: by smtp.kernel.org (Postfix) with ESMTPS id E6A37C4CEFB;
-	Fri, 14 Nov 2025 15:20:19 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="S1/5XHKn"
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 12CBCC2BC9E;
+	Fri, 14 Nov 2025 15:20:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1763133620;
-	bh=X/qSIGjNpstppc3cO7WlUXDDm9zEONg8uCFoJGVo9oU=;
+	bh=/1TF0zRtt7mWqpVWSJRUWVsD14mKx+O9cA7oSvQ2GAg=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To:From;
-	b=POnOo+m/g94N6HSqtk+fUHzwFFhlVauDbW05op0kw1HN18RQ5+AgmrcAzwdtmgFsw
-	 SFjy1TgBfNat3n6qbV63NDHytKs5aDCkWiDbGGI/x+PSdIHFeovmqZLcm3InQaSavo
-	 84v237RqN/dhJ06HuY7+Fedjvsmcp3MAYLbmjalipfIixyI/xfoahyHgc1DOrVGKt8
-	 Q/nGiRR4DnT61h0N5z37p7oBwq35JXeZJDVG6lLtogDmyE3Ff9Jjy0EF/4dqO1jbbW
-	 RwY5uS3aJ6A+HDWXBy08ibxksE+lQogay7Ev3gqp5RqxL0U4HtkoKPj+/Zuo+pYOdW
-	 Zu5Zmq2E8dp5w==
+	b=S1/5XHKnnrphtqYGq9lCjBr49FveJYMd5UZGbfmfFtnTEPbueAi/CJpOsM4bWPIvS
+	 lDDFB/r7kxMy3fU+275iWD95x0UgRe8eymu7Ki1T1oHZtU8rDaYdkfILa1hPuzNTmA
+	 JkcnmC3cuMQlJUOR3w4ZAYLca4MvZQtkjY26JhvXXXbfrnuDRb2reSxWUPIWzxkgyP
+	 iEh4OaDg5BSL/F2pD4wDipzTd07ReX3ptNMwq1q8h2MFjikgShrHE/Af4q27vE5S2Y
+	 Y5WpMcIJawEji7Y0aZ7IzR6gzIYHLqRCeZ665ZJRHaB4/aQciA95SjVunkAPyc8BPx
+	 UrKYKtgCiK8cg==
 Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D1CF0CE7B1F;
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EFA87CE8D43;
 	Fri, 14 Nov 2025 15:20:19 +0000 (UTC)
 From: Michael Riesch via B4 Relay <devnull+michael.riesch.collabora.com@kernel.org>
-Date: Fri, 14 Nov 2025 16:20:12 +0100
-Subject: [PATCH v15 01/14] Documentation: admin-guide: media: add rockchip
- camera interface
+Date: Fri, 14 Nov 2025 16:20:14 +0100
+Subject: [PATCH v15 03/14] media: dt-bindings: add rockchip px30 vip
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
@@ -41,7 +40,7 @@ List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20240220-rk3568-vicap-v15-1-8f4915ee365d@collabora.com>
+Message-Id: <20240220-rk3568-vicap-v15-3-8f4915ee365d@collabora.com>
 References: <20240220-rk3568-vicap-v15-0-8f4915ee365d@collabora.com>
 In-Reply-To: <20240220-rk3568-vicap-v15-0-8f4915ee365d@collabora.com>
 To: Mehdi Djait <mehdi.djait@linux.intel.com>, 
@@ -68,13 +67,14 @@ Cc: linux-media@vger.kernel.org, devicetree@vger.kernel.org,
  linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
  linux-rockchip@lists.infradead.org, 
  Michael Riesch <michael.riesch@collabora.com>, 
- Michael Riesch <michael.riesch@collabora.com>
+ Michael Riesch <michael.riesch@collabora.com>, 
+ Mehdi Djait <mehdi.djait@bootlin.com>
 X-Mailer: b4 0.12.0
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1763133617; l=5914;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1763133617; l=4457;
  i=michael.riesch@collabora.com; s=20250410; h=from:subject:message-id;
- bh=U7iKC5Z7rC7C53Ap0NfSIOxBMvV/vyD4bqRRxsyBYTE=;
- b=s1irjTmQEJpMU0CABC09HN/+7EB35RhcbFy4muTxn0ZqmjeWz4B8bFTmn3c2LatGR6p1JqPjh
- SAVx9byzIizAAs0P33o1M4mpXI1rXzrQQJtO91n5kbhvXWxYSx4Clcz
+ bh=vRqzxW1KzAytWflPY3j+Yj6I1g337dXGa/YElJym2cw=;
+ b=0PIYjY2wJvJu2FEKF5O56pai9bLH+sWRzzYwY6P39UtUXDgpAhEYmudSpJWzGiGDJs+MF7fFg
+ bk+tpQFVd6NDOYVOleCSmn/zOvoWgOEA0dRuWWnK4wqn7XIBNKDgdhl
 X-Developer-Key: i=michael.riesch@collabora.com; a=ed25519;
  pk=+MWX1fffLFZtTPG/I6XdYm/+OSvpRE8D9evQaWbiN04=
 X-Endpoint-Received: by B4 Relay for michael.riesch@collabora.com/20250410
@@ -82,152 +82,163 @@ X-Endpoint-Received: by B4 Relay for michael.riesch@collabora.com/20250410
 X-Original-From: Michael Riesch <michael.riesch@collabora.com>
 Reply-To: michael.riesch@collabora.com
 
-From: Michael Riesch <michael.riesch@collabora.com>
+From: Mehdi Djait <mehdi.djait@bootlin.com>
 
-Add a document that describes the different variants of the Rockchip
-Camera Interface (CIF), their hardware layout, as well as their
-representation in the media controller centric rkcif device driver,
-which is located under drivers/media/platform/rockchip/rkcif.
+Add documentation for the Rockchip PX30 Video Input Processor (VIP).
 
-Reviewed-by: Heiko Stuebner <heiko@sntech.de>
+Signed-off-by: Mehdi Djait <mehdi.djait@bootlin.com>
+[revised description]
+Reviewed-by: Rob Herring (Arm) <robh@kernel.org>
+Signed-off-by: Michael Riesch <michael.riesch@wolfvision.net>
 Reviewed-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
 Signed-off-by: Michael Riesch <michael.riesch@collabora.com>
 ---
- .../admin-guide/media/rkcif-rk3568-vicap.dot       |  8 +++
- Documentation/admin-guide/media/rkcif.rst          | 79 ++++++++++++++++++++++
- Documentation/admin-guide/media/v4l-drivers.rst    |  1 +
- MAINTAINERS                                        |  7 ++
- 4 files changed, 95 insertions(+)
+ .../bindings/media/rockchip,px30-vip.yaml          | 124 +++++++++++++++++++++
+ MAINTAINERS                                        |   1 +
+ 2 files changed, 125 insertions(+)
 
-diff --git a/Documentation/admin-guide/media/rkcif-rk3568-vicap.dot b/Documentation/admin-guide/media/rkcif-rk3568-vicap.dot
+diff --git a/Documentation/devicetree/bindings/media/rockchip,px30-vip.yaml b/Documentation/devicetree/bindings/media/rockchip,px30-vip.yaml
 new file mode 100644
-index 000000000000..3fac59335459
+index 000000000000..cc08ce94bef7
 --- /dev/null
-+++ b/Documentation/admin-guide/media/rkcif-rk3568-vicap.dot
-@@ -0,0 +1,8 @@
-+digraph board {
-+        rankdir=TB
-+        n00000001 [label="{{<port0> 0} | rkcif-dvp0\n/dev/v4l-subdev0 | {<port1> 1}}", shape=Mrecord, style=filled, fillcolor=green]
-+        n00000001:port1 -> n00000004
-+        n00000004 [label="rkcif-dvp0-id0\n/dev/video0", shape=box, style=filled, fillcolor=yellow]
-+        n00000025 [label="{{} | it6801 2-0048\n/dev/v4l-subdev1 | {<port0> 0}}", shape=Mrecord, style=filled, fillcolor=green]
-+        n00000025:port0 -> n00000001:port0
-+}
-diff --git a/Documentation/admin-guide/media/rkcif.rst b/Documentation/admin-guide/media/rkcif.rst
-new file mode 100644
-index 000000000000..2558c121abc4
---- /dev/null
-+++ b/Documentation/admin-guide/media/rkcif.rst
-@@ -0,0 +1,79 @@
-+.. SPDX-License-Identifier: GPL-2.0
++++ b/Documentation/devicetree/bindings/media/rockchip,px30-vip.yaml
+@@ -0,0 +1,124 @@
++# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/media/rockchip,px30-vip.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
 +
-+=========================================
-+Rockchip Camera Interface (CIF)
-+=========================================
++title: Rockchip PX30 Video Input Processor (VIP)
 +
-+Introduction
-+============
++maintainers:
++  - Mehdi Djait <mehdi.djait@linux.intel.com>
++  - Michael Riesch <michael.riesch@collabora.com>
 +
-+The Rockchip Camera Interface (CIF) is featured in many Rockchip SoCs in
-+different variants.
-+The different variants are combinations of common building blocks, such as
++description:
++  The Rockchip PX30 Video Input Processor (VIP) receives the data from a camera
++  sensor or CCIR656 encoder and transfers it into system main memory by AXI bus.
 +
-+* INTERFACE blocks of different types, namely
++properties:
++  compatible:
++    const: rockchip,px30-vip
 +
-+  * the Digital Video Port (DVP, a parallel data interface)
-+  * the interface block for the MIPI CSI-2 receiver
++  reg:
++    maxItems: 1
 +
-+* CROP units
++  interrupts:
++    maxItems: 1
 +
-+* MIPI CSI-2 receiver (not available on all variants): This unit is referred
-+  to as MIPI CSI HOST in the Rockchip documentation.
-+  Technically, it is a separate hardware block, but it is strongly coupled to
-+  the CIF and therefore included here.
++  clocks:
++    items:
++      - description: ACLK
++      - description: HCLK
++      - description: PCLK
 +
-+* MUX units (not available on all variants) that pass the video data to an
-+  image signal processor (ISP)
++  clock-names:
++    items:
++      - const: aclk
++      - const: hclk
++      - const: pclk
 +
-+* SCALE units (not available on all variants)
++  resets:
++    items:
++      - description: AXI
++      - description: AHB
++      - description: PCLK IN
 +
-+* DMA engines that transfer video data into system memory using a
-+  double-buffering mechanism called ping-pong mode
++  reset-names:
++    items:
++      - const: axi
++      - const: ahb
++      - const: pclkin
 +
-+* Support for four streams per INTERFACE block (not available on all
-+  variants), e.g., for MIPI CSI-2 Virtual Channels (VCs)
++  power-domains:
++    maxItems: 1
 +
-+This document describes the different variants of the CIF, their hardware
-+layout, as well as their representation in the media controller centric rkcif
-+device driver, which is located under drivers/media/platform/rockchip/rkcif.
++  ports:
++    $ref: /schemas/graph.yaml#/properties/ports
 +
-+Variants
-+========
++    properties:
++      port@0:
++        $ref: /schemas/graph.yaml#/$defs/port-base
++        unevaluatedProperties: false
++        description: input port on the parallel interface
 +
-+Rockchip PX30 Video Input Processor (VIP)
-+-----------------------------------------
++        properties:
++          endpoint:
++            $ref: video-interfaces.yaml#
++            unevaluatedProperties: false
 +
-+The PX30 Video Input Processor (VIP) features a digital video port that accepts
-+parallel video data or BT.656.
-+Since these protocols do not feature multiple streams, the VIP has one DMA
-+engine that transfers the input video data into system memory.
++            properties:
++              bus-type:
++                enum:
++                  - 5 # MEDIA_BUS_TYPE_PARALLEL
++                  - 6 # MEDIA_BUS_TYPE_BT656
 +
-+The rkcif driver represents this hardware variant by exposing one V4L2 subdevice
-+(the DVP INTERFACE/CROP block) and one V4L2 device (the DVP DMA engine).
++            required:
++              - bus-type
 +
-+Rockchip RK3568 Video Capture (VICAP)
-+-------------------------------------
++    required:
++      - port@0
 +
-+The RK3568 Video Capture (VICAP) unit features a digital video port and a MIPI
-+CSI-2 receiver that can receive video data independently.
-+The DVP accepts parallel video data, BT.656 and BT.1120.
-+Since the BT.1120 protocol may feature more than one stream, the RK3568 VICAP
-+DVP features four DMA engines that can capture different streams.
-+Similarly, the RK3568 VICAP MIPI CSI-2 receiver features four DMA engines to
-+handle different Virtual Channels (VCs).
++required:
++  - compatible
++  - reg
++  - interrupts
++  - clocks
++  - ports
 +
-+The rkcif driver represents this hardware variant by exposing up the following
-+V4L2 subdevices:
++additionalProperties: false
 +
-+* rkcif-dvp0: INTERFACE/CROP block for the DVP
++examples:
++  - |
++    #include <dt-bindings/clock/px30-cru.h>
++    #include <dt-bindings/interrupt-controller/arm-gic.h>
++    #include <dt-bindings/media/video-interfaces.h>
++    #include <dt-bindings/power/px30-power.h>
 +
-+and the following video devices:
++    soc {
++        #address-cells = <2>;
++        #size-cells = <2>;
 +
-+* rkcif-dvp0-id0: The support for multiple streams on the DVP is not yet
-+  implemented, as it is hard to find test hardware. Thus, this video device
-+  represents the first DMA engine of the RK3568 DVP.
++        video-capture@ff490000 {
++            compatible = "rockchip,px30-vip";
++            reg = <0x0 0xff490000 0x0 0x200>;
++            interrupts = <GIC_SPI 69 IRQ_TYPE_LEVEL_HIGH>;
++            clocks = <&cru ACLK_CIF>, <&cru HCLK_CIF>, <&cru PCLK_CIF>;
++            clock-names = "aclk", "hclk", "pclk";
++            power-domains = <&power PX30_PD_VI>;
++            resets = <&cru SRST_CIF_A>, <&cru SRST_CIF_H>, <&cru SRST_CIF_PCLKIN>;
++            reset-names = "axi", "ahb", "pclkin";
 +
-+.. kernel-figure:: rkcif-rk3568-vicap.dot
-+    :alt:   Topology of the RK3568 Video Capture (VICAP) unit
-+    :align: center
-diff --git a/Documentation/admin-guide/media/v4l-drivers.rst b/Documentation/admin-guide/media/v4l-drivers.rst
-index 3bac5165b134..694fad685ff5 100644
---- a/Documentation/admin-guide/media/v4l-drivers.rst
-+++ b/Documentation/admin-guide/media/v4l-drivers.rst
-@@ -25,6 +25,7 @@ Video4Linux (V4L) driver-specific documentation
- 	qcom_camss
- 	raspberrypi-pisp-be
- 	rcar-fdp1
-+	rkcif
- 	rkisp1
- 	raspberrypi-rp1-cfe
- 	saa7134
++            ports {
++                #address-cells = <1>;
++                #size-cells = <0>;
++
++                port@0 {
++                    reg = <0>;
++
++                    cif_in: endpoint {
++                        remote-endpoint = <&tw9900_out>;
++                        bus-type = <MEDIA_BUS_TYPE_BT656>;
++                    };
++                };
++            };
++        };
++    };
 diff --git a/MAINTAINERS b/MAINTAINERS
-index 42b20f33f3bb..2e1f959bb5f4 100644
+index 2e1f959bb5f4..3fa175e2b61f 100644
 --- a/MAINTAINERS
 +++ b/MAINTAINERS
-@@ -22242,6 +22242,13 @@ S:	Maintained
- F:	Documentation/devicetree/bindings/net/can/rockchip,rk3568v2-canfd.yaml
- F:	drivers/net/can/rockchip/
+@@ -22248,6 +22248,7 @@ M:	Michael Riesch <michael.riesch@collabora.com>
+ L:	linux-media@vger.kernel.org
+ S:	Maintained
+ F:	Documentation/admin-guide/media/rkcif*
++F:	Documentation/devicetree/bindings/media/rockchip,px30-vip.yaml
  
-+ROCKCHIP CAMERA INTERFACE (RKCIF) DRIVER
-+M:	Mehdi Djait <mehdi.djait@linux.intel.com>
-+M:	Michael Riesch <michael.riesch@collabora.com>
-+L:	linux-media@vger.kernel.org
-+S:	Maintained
-+F:	Documentation/admin-guide/media/rkcif*
-+
  ROCKCHIP CRYPTO DRIVERS
  M:	Corentin Labbe <clabbe@baylibre.com>
- L:	linux-crypto@vger.kernel.org
 
 -- 
 2.39.5
