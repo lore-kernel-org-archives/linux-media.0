@@ -1,38 +1,38 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2F838342145;
-	Fri, 14 Nov 2025 15:20:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EBBED340D81;
+	Fri, 14 Nov 2025 15:20:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763133621; cv=none; b=HgjB43z6Q0nuZRG606+uGtZJ9VDL7IDebJVOG5uCQln3vSz2HUjDr7lvNRv2x2oFm4Vq3K+ZBr14qhULlerQ12hLB7pFV1jgF5qIQuOKIJDLOq8qxicJpyf9JuG746OVFt5AOjb7WOUx58DGwHcbrxZYiJf29WM+7xdnyl9iZLs=
+	t=1763133621; cv=none; b=OQUviqhYn+E9Hr9ql4K8NIE7B7VYSdPgu1QuULrzRs5dXYkeikY8Qk/W1kApjr4gY1ozwoU5kpSR93lE8OeSUqX1lTWg7DaTcw7SmDa+jdOWZ+NeM0vs934UKXs3ouHa7DJtYIy5dU2EGcman+tPijVyUDzwkmhVTc16M+hHuRI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1763133621; c=relaxed/simple;
-	bh=Zl4Mel46TcR7AjpUnvtEjIgKxbaBwJflcYSmq34rCyA=;
+	bh=69R/dgMaUTHNQDK0PKLoCtuW6EWBImqfW0Ki7yZtLCQ=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=DPX41qjauz73DhSCmft6eKegELSoxeNO8goExu6rYH9kj3Tl4fdbU0E5uu1/zPvGYYbOAoSeNQ4oP3GEjy9uHeAfwjO8T9cSH/nFlw9UlMomQEoepYy2lb6ez+9slN+bEPRcwjB4LkK7R6mws7Bf4OpJAqvr7SyABLCV/RRCOls=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=iAfQvPfi; arc=none smtp.client-ip=10.30.226.201
+	 In-Reply-To:To:Cc; b=dLdu+PlEfUbYSff/rGNfJb8CNhem7l2vY3LstqP0EHBHYuIq65fcyZTg3X1v1cOHI1VtN4dkuFe16YaJeCUGNpInFlhkWh6R+L4v9XbDmpSD8oC57C3NphT3ufhcRueQQzslbjDWtkE9y/V0dHBCH71MgLyaRHf1r2DPUjppAkM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ahrcm51L; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="iAfQvPfi"
-Received: by smtp.kernel.org (Postfix) with ESMTPS id E57B1C4CEF5;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ahrcm51L"
+Received: by smtp.kernel.org (Postfix) with ESMTPS id B7B78C2BC86;
 	Fri, 14 Nov 2025 15:20:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1763133621;
-	bh=Zl4Mel46TcR7AjpUnvtEjIgKxbaBwJflcYSmq34rCyA=;
+	s=k20201202; t=1763133620;
+	bh=69R/dgMaUTHNQDK0PKLoCtuW6EWBImqfW0Ki7yZtLCQ=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To:From;
-	b=iAfQvPfi5SEADkrlUNoOM6I8Of1LYP0FGLct8zWunHT6+ytKuGxV8cnXyPGEyvXMQ
-	 t5jTYgBnFuRUumcwcf7D2AHe4F44j+LxRFhOL7nR8e0GLwuWPWYIgAL49WTzCGN3wO
-	 1htSQfWSMwzxcQdVjGPiU0hNwfuenZNJMxFJiL7Ua8So64KaO/1J1bJIJY58OYbgq6
-	 Epz3MJxDVjFUXRrx8pUZsyCAIqC4x5M3NAb9tM8Mmas9ZVtSIL2s8Z8d8ERWFfHFJL
-	 xN6At0nQ96mcBVN/pLGEDAB9vj07PQzCb+wS2DRnWO5xNT750op7wy3l43WpBnJNVE
-	 1PLbFMtQx3LFg==
+	b=ahrcm51LkfcCHcXoT18vtAmjUDZ7WIQT4LgocHiEvHSpiyqjg/uBDVKY7K0pdMkCJ
+	 9isXaKj6D884axODt2xgFdSVesE1ARikgWH4BoRm4pgIac4GSYzTXWWDc6KwQu2QY9
+	 fY02Rg5zgJ+qr5MgDn6vnHIxSCzTICsApph+Npz+R724g0LakAbOhgeNcdEhjVn5GY
+	 Yt91bNZ4ew5WItwiTRewHCQij4KKuOPY9zQRM4jmY+sIB7eK20R9O7PGXGfi9qNEUc
+	 IYMTyIX4cNjKGzaTCuEbtLR6F3GB9THsRGB+I/raUEe+mxCnRaYw58KojXGfZ1DZOa
+	 S/Z8RLH+2ke8Q==
 Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DE98CCE8D40;
+	by smtp.lore.kernel.org (Postfix) with ESMTP id ADDB5CE8D43;
 	Fri, 14 Nov 2025 15:20:20 +0000 (UTC)
 From: Michael Riesch via B4 Relay <devnull+michael.riesch.collabora.com@kernel.org>
-Date: Fri, 14 Nov 2025 16:20:25 +0100
-Subject: [PATCH v15 14/14] arm64: dts: rockchip: enable vicap dvp on
- wolfvision pf5 io expander
+Date: Fri, 14 Nov 2025 16:20:22 +0100
+Subject: [PATCH v15 11/14] arm64: defconfig: enable rockchip camera
+ interface
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
@@ -41,7 +41,7 @@ List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20240220-rk3568-vicap-v15-14-8f4915ee365d@collabora.com>
+Message-Id: <20240220-rk3568-vicap-v15-11-8f4915ee365d@collabora.com>
 References: <20240220-rk3568-vicap-v15-0-8f4915ee365d@collabora.com>
 In-Reply-To: <20240220-rk3568-vicap-v15-0-8f4915ee365d@collabora.com>
 To: Mehdi Djait <mehdi.djait@linux.intel.com>, 
@@ -70,11 +70,11 @@ Cc: linux-media@vger.kernel.org, devicetree@vger.kernel.org,
  Michael Riesch <michael.riesch@collabora.com>, 
  Michael Riesch <michael.riesch@collabora.com>
 X-Mailer: b4 0.12.0
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1763133617; l=1721;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1763133617; l=877;
  i=michael.riesch@collabora.com; s=20250410; h=from:subject:message-id;
- bh=0H9SWagLsWuudSJ0hjW87B9xG48FbT9CuvPeqAKM5fI=;
- b=ON8s1W20TM2jD3yggSPiBMjn3TVdy681hETUmgkXMbCzQ5bIRhnbvJJbaQ2nq4R7R+7KYcocC
- kcQo4gi6jRWDuQiwLMpSjUDm9L/HBnw6KmYYdm+LkgOlG3FcDZKi8dm
+ bh=81ZusjM5KxQyAL7FhST8rDN6grI5hqe9TzQy093k8Zs=;
+ b=RW7xkBfdpjnMhr7/Hx6W3YWCs+IWWdQTvAweKZv3hlffRomiucTLdUfNVz04g7cNrEMhUm6fU
+ YKDhbBi1//ICPToB2UvT9GnVxGDlveCnEG71Sc0VN8IgWX0G8KqI2Tb
 X-Developer-Key: i=michael.riesch@collabora.com; a=ed25519;
  pk=+MWX1fffLFZtTPG/I6XdYm/+OSvpRE8D9evQaWbiN04=
 X-Endpoint-Received: by B4 Relay for michael.riesch@collabora.com/20250410
@@ -84,55 +84,29 @@ Reply-To: michael.riesch@collabora.com
 
 From: Michael Riesch <michael.riesch@collabora.com>
 
-The Digital Video Port (DVP, the 16-bit variant) of the RK3568 VICAP
-is broken out to the PF5 mainboard expansion header.
-Enable it in the device tree overlay for the WolfVision PF5 IO
-Expander board.
+The Rockchip Camera Interface (CIF) is featured in many Rockchip SoCs
+in different variations.
+Enable the driver for it in the default configuration.
 
-Signed-off-by: Michael Riesch <michael.riesch@wolfvision.net>
-Reviewed-by: Gerald Loacker <gerald.loacker@wolfvision.net>
-Tested-by: Gerald Loacker <gerald.loacker@wolfvision.net>
 Reviewed-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+Reviewed-by: Mehdi Djait <mehdi.djait@linux.intel.com>
 Signed-off-by: Michael Riesch <michael.riesch@collabora.com>
 ---
- .../rockchip/rk3568-wolfvision-pf5-io-expander.dtso  | 20 ++++++++++++++++++++
- 1 file changed, 20 insertions(+)
+ arch/arm64/configs/defconfig | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/arch/arm64/boot/dts/rockchip/rk3568-wolfvision-pf5-io-expander.dtso b/arch/arm64/boot/dts/rockchip/rk3568-wolfvision-pf5-io-expander.dtso
-index 048933de2943..8cfce71dd318 100644
---- a/arch/arm64/boot/dts/rockchip/rk3568-wolfvision-pf5-io-expander.dtso
-+++ b/arch/arm64/boot/dts/rockchip/rk3568-wolfvision-pf5-io-expander.dtso
-@@ -11,6 +11,7 @@
- #include <dt-bindings/clock/rk3568-cru.h>
- #include <dt-bindings/gpio/gpio.h>
- #include <dt-bindings/interrupt-controller/irq.h>
-+#include <dt-bindings/media/video-interfaces.h>
- #include <dt-bindings/pinctrl/rockchip.h>
- 
- &{/} {
-@@ -134,3 +135,22 @@ &usb2phy0_host {
- 	phy-supply = <&usb_host_vbus>;
- 	status = "okay";
- };
-+
-+&vicap {
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&cif_clk &cif_dvp_clk &cif_dvp_bus16>;
-+	status = "okay";
-+};
-+
-+&vicap_dvp {
-+	vicap_dvp_input: endpoint {
-+		bus-type = <MEDIA_BUS_TYPE_BT656>;
-+		bus-width = <16>;
-+		pclk-sample = <MEDIA_PCLK_SAMPLE_DUAL_EDGE>;
-+		rockchip,dvp-clk-delay = <10>;
-+	};
-+};
-+
-+&vicap_mmu {
-+	status = "okay";
-+};
+diff --git a/arch/arm64/configs/defconfig b/arch/arm64/configs/defconfig
+index e3a2d37bd104..8eae6c70bfdf 100644
+--- a/arch/arm64/configs/defconfig
++++ b/arch/arm64/configs/defconfig
+@@ -883,6 +883,7 @@ CONFIG_VIDEO_RENESAS_FCP=m
+ CONFIG_VIDEO_RENESAS_FDP1=m
+ CONFIG_VIDEO_RENESAS_VSP1=m
+ CONFIG_VIDEO_RCAR_DRIF=m
++CONFIG_VIDEO_ROCKCHIP_CIF=m
+ CONFIG_VIDEO_ROCKCHIP_RGA=m
+ CONFIG_VIDEO_SAMSUNG_EXYNOS_GSC=m
+ CONFIG_VIDEO_SAMSUNG_S5P_JPEG=m
 
 -- 
 2.39.5
