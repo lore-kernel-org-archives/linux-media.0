@@ -1,114 +1,95 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EBBED340D81;
-	Fri, 14 Nov 2025 15:20:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD1BD32D7F4;
+	Fri, 14 Nov 2025 15:28:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763133621; cv=none; b=OQUviqhYn+E9Hr9ql4K8NIE7B7VYSdPgu1QuULrzRs5dXYkeikY8Qk/W1kApjr4gY1ozwoU5kpSR93lE8OeSUqX1lTWg7DaTcw7SmDa+jdOWZ+NeM0vs934UKXs3ouHa7DJtYIy5dU2EGcman+tPijVyUDzwkmhVTc16M+hHuRI=
+	t=1763134109; cv=none; b=seiJb/Zt9V1ZSGahdLcJ25Sn30yVtrSkOkadnhaVJ2W4fH23Y7TyL7BEsBsvg6f25opQZ9RGCPVvbHjHN6rHN9Ti7VBai5JoJ2pVWLhq8VN9+N+QzZG/rWMf4FkAZ5F6JzxQrWmvOm8aZiYKtRQU0IbjbjJyi96sNffbiPwmPTE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763133621; c=relaxed/simple;
-	bh=69R/dgMaUTHNQDK0PKLoCtuW6EWBImqfW0Ki7yZtLCQ=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=dLdu+PlEfUbYSff/rGNfJb8CNhem7l2vY3LstqP0EHBHYuIq65fcyZTg3X1v1cOHI1VtN4dkuFe16YaJeCUGNpInFlhkWh6R+L4v9XbDmpSD8oC57C3NphT3ufhcRueQQzslbjDWtkE9y/V0dHBCH71MgLyaRHf1r2DPUjppAkM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ahrcm51L; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1763134109; c=relaxed/simple;
+	bh=z8lCr3fSbWR0YaeRJvRwXvQNpYW9CE1zd/Fm1bcIsCE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=n6cQTe+uiXpEMSkHRusag5G6cBvW5w6tqV+YjlmcbYc0KkZYhviZarRl/m91AJrhLG445SO0XqFoE4dE382mtJo/Pw+nK7BcoGXTNVpBI+i5hs1ceCIeWz2NwzXST9trVdnMrZ87ZldSJ+gQCbgzP4tlY3WjWHu0D9duekY/ncA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=LkjbqH06; arc=none smtp.client-ip=192.198.163.9
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ahrcm51L"
-Received: by smtp.kernel.org (Postfix) with ESMTPS id B7B78C2BC86;
-	Fri, 14 Nov 2025 15:20:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1763133620;
-	bh=69R/dgMaUTHNQDK0PKLoCtuW6EWBImqfW0Ki7yZtLCQ=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To:From;
-	b=ahrcm51LkfcCHcXoT18vtAmjUDZ7WIQT4LgocHiEvHSpiyqjg/uBDVKY7K0pdMkCJ
-	 9isXaKj6D884axODt2xgFdSVesE1ARikgWH4BoRm4pgIac4GSYzTXWWDc6KwQu2QY9
-	 fY02Rg5zgJ+qr5MgDn6vnHIxSCzTICsApph+Npz+R724g0LakAbOhgeNcdEhjVn5GY
-	 Yt91bNZ4ew5WItwiTRewHCQij4KKuOPY9zQRM4jmY+sIB7eK20R9O7PGXGfi9qNEUc
-	 IYMTyIX4cNjKGzaTCuEbtLR6F3GB9THsRGB+I/raUEe+mxCnRaYw58KojXGfZ1DZOa
-	 S/Z8RLH+2ke8Q==
-Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id ADDB5CE8D43;
-	Fri, 14 Nov 2025 15:20:20 +0000 (UTC)
-From: Michael Riesch via B4 Relay <devnull+michael.riesch.collabora.com@kernel.org>
-Date: Fri, 14 Nov 2025 16:20:22 +0100
-Subject: [PATCH v15 11/14] arm64: defconfig: enable rockchip camera
- interface
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="LkjbqH06"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1763134108; x=1794670108;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=z8lCr3fSbWR0YaeRJvRwXvQNpYW9CE1zd/Fm1bcIsCE=;
+  b=LkjbqH063u0pq5dYjXDf++VVJnwUmyFcHaX/9V4RECDnUMJL9FNB/Bv2
+   Mcz8jDM5RW+xp69OHg/NpzShe51fercrdgPMfcU+5TwgWwdQ//36XnYv7
+   AxeYPFMMouHhCbWcQcusPIfFXpKhbKrJI3ld4/Ol+azuxaxZObwlDYcGI
+   QaFV73UfBzX3OIi5SAgKv1JOqxsVHOt4i0e76BTh2hpaZCae3CVtQ9hKJ
+   OYtgpruwqQKxyIubZRf9e7ho6+cdFVfJBJ8TCdwvvjpUtCXJ1Py/xbCSP
+   DJL3PDb9+F1yjoi9eFXr/9E0aoFcPKHfUq46HfqBmLGRh/F7hlAFRXq1e
+   Q==;
+X-CSE-ConnectionGUID: d3Cr80r0R4+qvXxfKnozeg==
+X-CSE-MsgGUID: Q5eqjIEsRuWhdUHDqlg9wg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11613"; a="75909789"
+X-IronPort-AV: E=Sophos;i="6.19,305,1754982000"; 
+   d="scan'208";a="75909789"
+Received: from fmviesa007.fm.intel.com ([10.60.135.147])
+  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Nov 2025 07:28:27 -0800
+X-CSE-ConnectionGUID: 82XteTvSQDqJSy/t7iUKSw==
+X-CSE-MsgGUID: Ypb8ALdmRFS6MgEOugSKQg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.19,305,1754982000"; 
+   d="scan'208";a="189450717"
+Received: from ijarvine-desk1.ger.corp.intel.com (HELO kekkonen.fi.intel.com) ([10.245.244.53])
+  by fmviesa007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Nov 2025 07:28:24 -0800
+Received: from kekkonen.localdomain (localhost [IPv6:::1])
+	by kekkonen.fi.intel.com (Postfix) with SMTP id 606D5121DDE;
+	Fri, 14 Nov 2025 17:28:23 +0200 (EET)
+Date: Fri, 14 Nov 2025 17:28:23 +0200
+Organization: Intel Finland Oy - BIC 0357606-4 - c/o Alberga Business Park, 6 krs, Bertel Jungin Aukio 5, 02600 Espoo
+From: Sakari Ailus <sakari.ailus@linux.intel.com>
+To: Jacopo Mondi <jacopo.mondi@ideasonboard.com>
+Cc: Daniel Scally <dan.scally@ideasonboard.com>,
+	linux-media@vger.kernel.org, devicetree@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org, Anthony.McGivern@arm.com,
+	nayden.kanchev@arm.com, robh+dt@kernel.org, mchehab@kernel.org,
+	krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
+	jerome.forissier@linaro.org, kieran.bingham@ideasonboard.com,
+	laurent.pinchart@ideasonboard.com,
+	Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Subject: Re: [PATCH v13 15/15] Documentation: mali-c55: Document the mali-c55
+ parameter setting
+Message-ID: <aRdKlwosRv-80_KN@kekkonen.localdomain>
+References: <20251111-c55-v13-0-3dc581355e3a@ideasonboard.com>
+ <20251111-c55-v13-15-3dc581355e3a@ideasonboard.com>
+ <2n4sn2aakwl7k2qvcefb7m2zzllytj7i4nup55xex2ggdngfkd@gwpxbpmlupko>
+ <aRdBbn4cpdn_7H0v@kekkonen.localdomain>
+ <umslyxkmj4gnr743c6ixsykay5w2seoeiy2hzidg6lb3fcizep@dglvrn7l7a4q>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20240220-rk3568-vicap-v15-11-8f4915ee365d@collabora.com>
-References: <20240220-rk3568-vicap-v15-0-8f4915ee365d@collabora.com>
-In-Reply-To: <20240220-rk3568-vicap-v15-0-8f4915ee365d@collabora.com>
-To: Mehdi Djait <mehdi.djait@linux.intel.com>, 
- Maxime Chevallier <maxime.chevallier@bootlin.com>, 
- =?utf-8?q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>, 
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>, 
- Gerald Loacker <gerald.loacker@wolfvision.net>, 
- Bryan O'Donoghue <bryan.odonoghue@linaro.org>, 
- Markus Elfring <Markus.Elfring@web.de>, 
- Laurent Pinchart <laurent.pinchart@ideasonboard.com>, 
- Mauro Carvalho Chehab <mchehab@kernel.org>, 
- Rob Herring <robh+dt@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
- Conor Dooley <conor+dt@kernel.org>, Heiko Stuebner <heiko@sntech.de>, 
- Kever Yang <kever.yang@rock-chips.com>, 
- Nicolas Dufresne <nicolas.dufresne@collabora.com>, 
- Sebastian Reichel <sebastian.reichel@collabora.com>, 
- Collabora Kernel Team <kernel@collabora.com>, 
- Paul Kocialkowski <paulk@sys-base.io>, 
- Alexander Shiyan <eagle.alexander923@gmail.com>, 
- Val Packett <val@packett.cool>, Rob Herring <robh@kernel.org>, 
- Philipp Zabel <p.zabel@pengutronix.de>, 
- Sakari Ailus <sakari.ailus@linux.intel.com>
-Cc: linux-media@vger.kernel.org, devicetree@vger.kernel.org, 
- linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
- linux-rockchip@lists.infradead.org, 
- Michael Riesch <michael.riesch@collabora.com>, 
- Michael Riesch <michael.riesch@collabora.com>
-X-Mailer: b4 0.12.0
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1763133617; l=877;
- i=michael.riesch@collabora.com; s=20250410; h=from:subject:message-id;
- bh=81ZusjM5KxQyAL7FhST8rDN6grI5hqe9TzQy093k8Zs=;
- b=RW7xkBfdpjnMhr7/Hx6W3YWCs+IWWdQTvAweKZv3hlffRomiucTLdUfNVz04g7cNrEMhUm6fU
- YKDhbBi1//ICPToB2UvT9GnVxGDlveCnEG71Sc0VN8IgWX0G8KqI2Tb
-X-Developer-Key: i=michael.riesch@collabora.com; a=ed25519;
- pk=+MWX1fffLFZtTPG/I6XdYm/+OSvpRE8D9evQaWbiN04=
-X-Endpoint-Received: by B4 Relay for michael.riesch@collabora.com/20250410
- with auth_id=371
-X-Original-From: Michael Riesch <michael.riesch@collabora.com>
-Reply-To: michael.riesch@collabora.com
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <umslyxkmj4gnr743c6ixsykay5w2seoeiy2hzidg6lb3fcizep@dglvrn7l7a4q>
 
-From: Michael Riesch <michael.riesch@collabora.com>
+Hi Jacopo,
 
-The Rockchip Camera Interface (CIF) is featured in many Rockchip SoCs
-in different variations.
-Enable the driver for it in the default configuration.
+On Fri, Nov 14, 2025 at 03:57:21PM +0100, Jacopo Mondi wrote:
+> Hi Sakari,
+>    can't say timing is what we excel the most at.
+> 
+> Afaik Hans has applied the PR, and as all comments here are on ...
+> comments, they will be addressed with patches on top
 
-Reviewed-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-Reviewed-by: Mehdi Djait <mehdi.djait@linux.intel.com>
-Signed-off-by: Michael Riesch <michael.riesch@collabora.com>
----
- arch/arm64/configs/defconfig | 1 +
- 1 file changed, 1 insertion(+)
+This is just sample code, changing it later on will be fine.
 
-diff --git a/arch/arm64/configs/defconfig b/arch/arm64/configs/defconfig
-index e3a2d37bd104..8eae6c70bfdf 100644
---- a/arch/arm64/configs/defconfig
-+++ b/arch/arm64/configs/defconfig
-@@ -883,6 +883,7 @@ CONFIG_VIDEO_RENESAS_FCP=m
- CONFIG_VIDEO_RENESAS_FDP1=m
- CONFIG_VIDEO_RENESAS_VSP1=m
- CONFIG_VIDEO_RCAR_DRIF=m
-+CONFIG_VIDEO_ROCKCHIP_CIF=m
- CONFIG_VIDEO_ROCKCHIP_RGA=m
- CONFIG_VIDEO_SAMSUNG_EXYNOS_GSC=m
- CONFIG_VIDEO_SAMSUNG_S5P_JPEG=m
+Thanks.
 
 -- 
-2.39.5
+Kind regards,
 
-
+Sakari Ailus
