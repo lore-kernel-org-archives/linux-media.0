@@ -1,210 +1,174 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6CBF8325738;
-	Fri, 14 Nov 2025 14:49:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E491C325727;
+	Fri, 14 Nov 2025 14:51:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763131765; cv=none; b=d23GXq/YlfdCpY9SO6ex3JKfQcDBUyeO4Ccu/05AVHS0IoBWKjyoAi1e+M1HapVOJP/DYH0AYs5GOWHaiAa7ML4u/NFUnByRtaLM+2NjHQn1YHsj2fp0HOkzx49CzVFCjqS8RKUUOrV5DW3si8NeEEYg4T7PccBlIhriQHTyE9c=
+	t=1763131910; cv=none; b=cYqgWKsTLVmgW7y9rAktfAMfcW2hsyqJtJTXzsM5fLkeq0AkAj8nmHsqgUH2pXuldUsy9KJdMN71HKVKakh09IP5YoESPkVDlG4ZKytveodOogmXCGut4rfOqjyZDcW7bAFGU8hSzERyGpxTl2Z289ai1PYMloMvYvStenTfI5o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763131765; c=relaxed/simple;
-	bh=zzzDKvrqSISBzTJB9sBIHCzKA9T2rntBBfYNwPbniKE=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=NVzLztHM+J/a1kRfWX9diRXAd2FLlghjHAkyl9BlhYOZ3oi2D+EAjWSbFB2dSWYSdQY56A5MZvH5P85UNNN0c/6rg5/VMplcVrlVP1svs+6KALQnXrGo5JPcFAXM+gTnH+RudQTMJLl0kTAPW+Gwx+103dY0K/JyCbLwmUM1wug=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=L+rDBs7a; arc=none smtp.client-ip=198.175.65.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
+	s=arc-20240116; t=1763131910; c=relaxed/simple;
+	bh=OPt82ZBHchgqRMLxdrE9G+AkTOfdZSAoSGrKziuZV8Q=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=pEIaCiwfkgfmC6nHD0yeVtPROTF0HOb9TfMN5xue/F1SVj1vZTZyOPwAHeO/bCHmX0awcqqfUINFPWUSW189hx7i9xnB/1jPLmTOg4wR1QTQeDwJ1opRCKiYZ7+7G+AbR/YMjKBAmgKS9P9CgPgz2JPZkXB6zNJ4F43AF4PXLTY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TwxaSYwH; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="L+rDBs7a"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1763131764; x=1794667764;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=zzzDKvrqSISBzTJB9sBIHCzKA9T2rntBBfYNwPbniKE=;
-  b=L+rDBs7aSFqTEISglQ6+I8IUctMqMJUZSPi7oA893xvP2KsEjVFhKH3I
-   jP0+/SMYP67TXCSkG+pFpxVCt+5xaJA4U0Jam8XlYiXQMYMT/qRvLrmSj
-   iR7pKXrarGzMsMACnC2aKQD1QVeFdONbMNox5eLZkDx26oIIUHMKPFY9W
-   S3FCJZowejOx4D/sWzjNUs4fTsSze/Ss1dEN8BZ9GwQ5Xh6lIBm0zovkw
-   jSlAQwRv+HVp3TFUg1HO9t+1ajJ0ENdg87Fq2XSsMtuhPioFKMwcWPjF7
-   rjEcvuTp7i/sW8GCG0cz7FU6fXucArRViYezfOzIjsD0UlfHIHB9d/9Vp
-   g==;
-X-CSE-ConnectionGUID: zi1j5/uJR+aIABa1bPdUrQ==
-X-CSE-MsgGUID: 8yOfaDTtRNKP3q9nJQTpGQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11613"; a="76687608"
-X-IronPort-AV: E=Sophos;i="6.19,305,1754982000"; 
-   d="scan'208";a="76687608"
-Received: from fmviesa006.fm.intel.com ([10.60.135.146])
-  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Nov 2025 06:49:23 -0800
-X-CSE-ConnectionGUID: G8e9kQE9T2+LJH1L+zE0gg==
-X-CSE-MsgGUID: XktjOyHjQTSdrcKtNxk3Tw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.19,305,1754982000"; 
-   d="scan'208";a="189636120"
-Received: from ijarvine-desk1.ger.corp.intel.com (HELO kekkonen.fi.intel.com) ([10.245.244.53])
-  by fmviesa006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Nov 2025 06:49:19 -0800
-Received: from kekkonen.localdomain (localhost [IPv6:::1])
-	by kekkonen.fi.intel.com (Postfix) with SMTP id 8C624121DDE;
-	Fri, 14 Nov 2025 16:49:18 +0200 (EET)
-Date: Fri, 14 Nov 2025 16:49:18 +0200
-Organization: Intel Finland Oy - BIC 0357606-4 - c/o Alberga Business Park, 6 krs, Bertel Jungin Aukio 5, 02600 Espoo
-From: Sakari Ailus <sakari.ailus@linux.intel.com>
-To: Jacopo Mondi <jacopo.mondi@ideasonboard.com>
-Cc: Daniel Scally <dan.scally@ideasonboard.com>,
-	linux-media@vger.kernel.org, devicetree@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org, Anthony.McGivern@arm.com,
-	nayden.kanchev@arm.com, robh+dt@kernel.org, mchehab@kernel.org,
-	krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
-	jerome.forissier@linaro.org, kieran.bingham@ideasonboard.com,
-	laurent.pinchart@ideasonboard.com,
-	Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Subject: Re: [PATCH v13 15/15] Documentation: mali-c55: Document the mali-c55
- parameter setting
-Message-ID: <aRdBbn4cpdn_7H0v@kekkonen.localdomain>
-References: <20251111-c55-v13-0-3dc581355e3a@ideasonboard.com>
- <20251111-c55-v13-15-3dc581355e3a@ideasonboard.com>
- <2n4sn2aakwl7k2qvcefb7m2zzllytj7i4nup55xex2ggdngfkd@gwpxbpmlupko>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TwxaSYwH"
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 91F55C116B1;
+	Fri, 14 Nov 2025 14:51:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1763131909;
+	bh=OPt82ZBHchgqRMLxdrE9G+AkTOfdZSAoSGrKziuZV8Q=;
+	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To:From;
+	b=TwxaSYwHmpM37qK9ptJ3IFhvABI5aiwkzD4YfLRbQRXU302qmem0IxoKbv7nAD0aU
+	 1IplkEf2MmosSUHHrYpwovl1exS659sl/51D2Km9zpkGaJxD5BMCBWS2OZR62twclK
+	 kZ4VuBJ7DcXvb8YxVh0M52KPnvv+g91rpTD1O1BVghvsM/qBzpFxyFXopw6a3xYV+G
+	 5Y4eWmywUYfwAh61E7MFn/fa1G7NUmQ64HaKgDeedqxFbJ9PGxMaDCNxAG/tlirBay
+	 palbFz8dShBRCauuo61/A1IAYSeov1bVcegx9vXSuB1FFtUk3uPmxdZ6uDXm/s7TwW
+	 YaDDAB6SF11Sg==
+Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 85192CE7AEF;
+	Fri, 14 Nov 2025 14:51:49 +0000 (UTC)
+From: Dumitru Ceclan via B4 Relay <devnull+dumitru.ceclan.analog.com@kernel.org>
+Date: Fri, 14 Nov 2025 16:51:41 +0200
+Subject: [PATCH v8 01/21] media: mc: Add INTERNAL pad flag
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <2n4sn2aakwl7k2qvcefb7m2zzllytj7i4nup55xex2ggdngfkd@gwpxbpmlupko>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20251114-gmsl2-3_serdes-v8-1-47499d907990@analog.com>
+References: <20251114-gmsl2-3_serdes-v8-0-47499d907990@analog.com>
+In-Reply-To: <20251114-gmsl2-3_serdes-v8-0-47499d907990@analog.com>
+To: Tomi Valkeinen <tomi.valkeinen+renesas@ideasonboard.com>, 
+ Mauro Carvalho Chehab <mchehab@kernel.org>, 
+ Sakari Ailus <sakari.ailus@linux.intel.com>, 
+ Laurent Pinchart <laurent.pinchart@ideasonboard.com>, 
+ Julien Massot <julien.massot@collabora.com>, Rob Herring <robh@kernel.org>, 
+ =?utf-8?q?Niklas_S=C3=B6derlund?= <niklas.soderlund@ragnatech.se>, 
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: linux-media@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ devicetree@vger.kernel.org, linux-gpio@vger.kernel.org, 
+ linux-staging@lists.linux.dev, linux-gpio@vger.kernel.org, 
+ Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
+X-Mailer: b4 0.14.3
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1763131906; l=4211;
+ i=dumitru.ceclan@analog.com; s=20240313; h=from:subject:message-id;
+ bh=oSo9FXS/slxHHe0PZVvfQeDjB+z2quoSfmn/Ud/nCVI=;
+ b=O12cgHgIkP+LsPvTk6qpaSt1JoZSKcuorzXBVYDJbSyw3P3yXJPszvLHsrlq6W7D5hTYW2lFC
+ KsFmuaV9YQLDk2o3ckb6VszzKw2aHEEJIPUFY2ItPgAqzzoswq2HJ55
+X-Developer-Key: i=dumitru.ceclan@analog.com; a=ed25519;
+ pk=HdqMlVyrcazwoiai7oN6ghU+Bj1pusGUFRl30jhS7Bo=
+X-Endpoint-Received: by B4 Relay for dumitru.ceclan@analog.com/20240313
+ with auth_id=140
+X-Original-From: Dumitru Ceclan <dumitru.ceclan@analog.com>
+Reply-To: dumitru.ceclan@analog.com
 
-Hi Jacopo,
+From: Sakari Ailus <sakari.ailus@linux.intel.com>
 
-On Thu, Nov 13, 2025 at 09:39:37AM +0100, Jacopo Mondi wrote:
-> > +the data member with the blocks that need to be configured by the driver, but
-> > +need not populate it with **all** the blocks, or indeed with any at all if there
-> > +are no configuration changes to make. Populated blocks **must** be consecutive
-> > +in the buffer. To assist both userspace and the driver in identifying the
-> > +blocks each block-specific struct embeds :c:type:`v4l2_params_block_header` as
-> > +its first member and userspace must populate the type member with a value from
-> > +:c:type:`mali_c55_param_block_type`. Once the blocks have been populated
-> > +into the data buffer, the combined size of all populated blocks shall be set in
-> > +the data_size member of :c:type:`v4l2_params_buffer`. For example:
-> > +
-> > +.. code-block:: c
-> > +
-> > +	struct v4l2_params_buffer *params =
-> > +		(struct v4l2_params_buffer *)buffer;
-> > +
-> > +	params->version = MALI_C55_PARAM_BUFFER_V1;
-> > +	params->data_size = 0;
-> > +
-> > +	void *data = (void *)params->data;
-> > +
-> > +	struct mali_c55_params_awb_gains *gains =
-> > +		(struct mali_c55_params_awb_gains *)data;
-> > +
-> > +	gains->header.type = MALI_C55_PARAM_BLOCK_AWB_GAINS;
-> > +	gains->header.flags |= V4L2_PARAMS_FL_BLOCK_ENABLE;
-> > +	gains->header.size = sizeof(struct mali_c55_params_awb_gains);
-> > +
-> > +	gains->gain00 = 256;
-> > +	gains->gain00 = 256;
-> > +	gains->gain00 = 256;
-> > +	gains->gain00 = 256;
-> > +
-> > +	data += sizeof(struct mali_c55_params_awb_gains);
-> > +	params->data_size += sizeof(struct mali_c55_params_awb_gains);
-> > +
-> > +	struct mali_c55_params_sensor_off_preshading *blc =
-> > +		(struct mali_c55_params_sensor_off_preshading *)data;
-> > +
-> > +	blc->header.type = MALI_C55_PARAM_BLOCK_SENSOR_OFFS;
-> > +	blc->header.flags |= V4L2_PARAMS_FL_BLOCK_ENABLE;
-> > +	blc->header.size = sizeof(struct mali_c55_params_sensor_off_preshading);
-> > +
-> > +	blc->chan00 = 51200;
-> > +	blc->chan01 = 51200;
-> > +	blc->chan10 = 51200;
-> > +	blc->chan11 = 51200;
-> > +
-> > +	params->total_size += sizeof(struct mali_c55_params_sensor_off_preshading);
-> 
-> s/total_size/data_size
-> 
-> And I've also updated it to use the v4l2-isp types
-> 
-> +.. code-block:: c
-> +
-> +       struct v4l2_isp_params_buffer *params =
-> +               (struct v4l2_isp_params_buffer *)buffer;
+Internal sink pads will be used as routing endpoints in V4L2 [GS]_ROUTING
+IOCTLs, to indicate that the stream begins in the entity. Internal sink
+pads are pads that have both SINK and INTERNAL flags set.
 
-What's the type of buffer here? If it's void, you can drop the cast.
+Also prevent creating links to pads that have been flagged as internal and
+initialising SOURCE pads with INTERNAL flag set.
 
-> +
-> +       params->version = MALI_C55_PARAM_BUFFER_V1;
-> +       params->data_size = 0;
-> +
-> +       void *data = (void *)params->data;
+Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
+Reviewed-by: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
+Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+---
+ .../userspace-api/media/mediactl/media-types.rst          |  9 +++++++++
+ drivers/media/mc/mc-entity.c                              | 15 ++++++++++++---
+ include/uapi/linux/media.h                                |  1 +
+ 3 files changed, 22 insertions(+), 3 deletions(-)
 
-No need for a cast here.
-
-> +
-> +       struct mali_c55_params_awb_gains *gains =
-> +               (struct mali_c55_params_awb_gains *)data;
-
-Ditto.
-
-Unless, I guess, you use C++. :-)
-
-> +
-> +       gains->header.type = MALI_C55_PARAM_BLOCK_AWB_GAINS;
-> +       gains->header.flags |= V4L2_ISP_PARAMS_FL_BLOCK_ENABLE;
-> +       gains->header.size = sizeof(struct mali_c55_params_awb_gains);
-> +
-> +       gains->gain00 = 256;
-> +       gains->gain00 = 256;
-> +       gains->gain00 = 256;
-> +       gains->gain00 = 256;
-> +
-> +       data += sizeof(struct mali_c55_params_awb_gains);
-
-	data += sizeof(*gains);
-
-?
-
-> +       params->data_size += sizeof(struct mali_c55_params_awb_gains);
-
-Ditto.
-
-> +
-> +       struct mali_c55_params_sensor_off_preshading *blc =
-> +               (struct mali_c55_params_sensor_off_preshading *)data;
-> +
-> +       blc->header.type = MALI_C55_PARAM_BLOCK_SENSOR_OFFS;
-> +       blc->header.flags |= V4L2_ISP_PARAMS_FL_BLOCK_ENABLE;
-> +       blc->header.size = sizeof(struct mali_c55_params_sensor_off_preshading);
-> +
-> +       blc->chan00 = 51200;
-> +       blc->chan01 = 51200;
-> +       blc->chan10 = 51200;
-> +       blc->chan11 = 51200;
-> +
-> +       params->data_size += sizeof(struct mali_c55_params_sensor_off_preshading);
-
-	... += sizeof(*blc);
-
-?
-
-> 
-> With your ack, I'll apply the following changes before sending the PR.
-> 
-> Thanks
->   j
-> 
-> > +
-> >  Arm Mali-C55 uAPI data types
-> >  ============================
-> >
-> >
+diff --git a/Documentation/userspace-api/media/mediactl/media-types.rst b/Documentation/userspace-api/media/mediactl/media-types.rst
+index 6332e8395263..200c37a1da26 100644
+--- a/Documentation/userspace-api/media/mediactl/media-types.rst
++++ b/Documentation/userspace-api/media/mediactl/media-types.rst
+@@ -361,6 +361,7 @@ Types and flags used to represent the media graph elements
+ .. _MEDIA-PAD-FL-SINK:
+ .. _MEDIA-PAD-FL-SOURCE:
+ .. _MEDIA-PAD-FL-MUST-CONNECT:
++.. _MEDIA-PAD-FL-INTERNAL:
+ 
+ .. flat-table:: Media pad flags
+     :header-rows:  0
+@@ -381,6 +382,14 @@ Types and flags used to represent the media graph elements
+ 	  enabled links even when this flag isn't set; the absence of the flag
+ 	  doesn't imply there is none.
+ 
++    *  -  ``MEDIA_PAD_FL_INTERNAL``
++       -  The internal flag indicates an internal pad that has no external
++	  connections. As they are internal to entities, internal pads shall not
++	  be connected with links.
++
++	  The internal flag may currently be present only in a sink pad where it
++	  indicates that the :ref:``stream <media-glossary-stream>`` originates
++	  from within the entity.
+ 
+ One and only one of ``MEDIA_PAD_FL_SINK`` and ``MEDIA_PAD_FL_SOURCE``
+ must be set for every pad.
+diff --git a/drivers/media/mc/mc-entity.c b/drivers/media/mc/mc-entity.c
+index 9519a537bfa2..df20356fa98b 100644
+--- a/drivers/media/mc/mc-entity.c
++++ b/drivers/media/mc/mc-entity.c
+@@ -209,11 +209,16 @@ int media_entity_pads_init(struct media_entity *entity, u16 num_pads,
+ 		mutex_lock(&mdev->graph_mutex);
+ 
+ 	media_entity_for_each_pad(entity, iter) {
++		const u32 pad_flags = iter->flags & (MEDIA_PAD_FL_SINK |
++						     MEDIA_PAD_FL_SOURCE |
++						     MEDIA_PAD_FL_INTERNAL);
++
+ 		iter->entity = entity;
+ 		iter->index = i++;
+ 
+-		if (hweight32(iter->flags & (MEDIA_PAD_FL_SINK |
+-					     MEDIA_PAD_FL_SOURCE)) != 1) {
++		if (pad_flags != MEDIA_PAD_FL_SINK &&
++		    pad_flags != (MEDIA_PAD_FL_SINK | MEDIA_PAD_FL_INTERNAL) &&
++		    pad_flags != MEDIA_PAD_FL_SOURCE) {
+ 			ret = -EINVAL;
+ 			break;
+ 		}
+@@ -1118,7 +1123,8 @@ int media_get_pad_index(struct media_entity *entity, u32 pad_type,
+ 
+ 	for (i = 0; i < entity->num_pads; i++) {
+ 		if ((entity->pads[i].flags &
+-		     (MEDIA_PAD_FL_SINK | MEDIA_PAD_FL_SOURCE)) != pad_type)
++		     (MEDIA_PAD_FL_SINK | MEDIA_PAD_FL_SOURCE |
++		      MEDIA_PAD_FL_INTERNAL)) != pad_type)
+ 			continue;
+ 
+ 		if (entity->pads[i].sig_type == sig_type)
+@@ -1148,6 +1154,9 @@ media_create_pad_link(struct media_entity *source, u16 source_pad,
+ 		return -EINVAL;
+ 	if (WARN_ON(!(sink->pads[sink_pad].flags & MEDIA_PAD_FL_SINK)))
+ 		return -EINVAL;
++	if (WARN_ON(source->pads[source_pad].flags & MEDIA_PAD_FL_INTERNAL) ||
++	    WARN_ON(sink->pads[sink_pad].flags & MEDIA_PAD_FL_INTERNAL))
++		return -EINVAL;
+ 
+ 	link = media_add_link(&source->links);
+ 	if (link == NULL)
+diff --git a/include/uapi/linux/media.h b/include/uapi/linux/media.h
+index 1c80b1d6bbaf..80cfd12a43fc 100644
+--- a/include/uapi/linux/media.h
++++ b/include/uapi/linux/media.h
+@@ -208,6 +208,7 @@ struct media_entity_desc {
+ #define MEDIA_PAD_FL_SINK			(1U << 0)
+ #define MEDIA_PAD_FL_SOURCE			(1U << 1)
+ #define MEDIA_PAD_FL_MUST_CONNECT		(1U << 2)
++#define MEDIA_PAD_FL_INTERNAL			(1U << 3)
+ 
+ struct media_pad_desc {
+ 	__u32 entity;		/* entity ID */
 
 -- 
-Regards,
+2.43.0
 
-Sakari Ailus
+
