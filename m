@@ -1,218 +1,153 @@
-Received: from bali.collaboradmins.com (bali.collaboradmins.com [148.251.105.195])
+Received: from fhigh-a6-smtp.messagingengine.com (fhigh-a6-smtp.messagingengine.com [103.168.172.157])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 44566333437;
-	Mon, 17 Nov 2025 13:50:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.251.105.195
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B727027280A;
+	Mon, 17 Nov 2025 15:36:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.157
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763387447; cv=none; b=OXB+BMLngMkPApdNFYQYOP4TXs5GQOHWxcpP7xAamJvxSi1Z4ayIdsKJ3sZU7SErdOJSanZ1XwZkFyvEuV8Wx6CWNiLFA7wFHGe/Tgwpr6yQM//GUt7mOlTq8nbFs0n1eByjmODWGNAJSBL/JOLNZLS626YMUR8IQynUelmTgOU=
+	t=1763393790; cv=none; b=aAoxtY3CTGDP933OoZ3oRBZZBgvuTdWTFR0QjvA679C4CZj0l1xw2Ms3+e5gTcafYTEAd54r7yecG2XHmfMRv21w1R3aKkDvriraqnxhSHKMCpv5mHlS+uw8yj4P6eV5/20o3YwLXR67XP6ZSAohz+AeehnfWgxjWcydqRGCAZ0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763387447; c=relaxed/simple;
-	bh=kZPqi0k0MGFfxWKAZ65XVPpcfPk/d6isOabL0EwpwQ4=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=mq0CArjxMLl2zp3lkgl+LSSipQTB6fFng08zkmPP0hp0e79y1xOrEiyZEEyQ1Wk6+/6DbFEEDnwT+yEavd/Xv5qyki2LcJVpnE+PyX5jJ58okZeZ0VTtz4sZHnh01CDC2lihJXE/6IXdhJRJw+ftt4vtjSlFf0A7yZ2aCCUGijE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=SbwR21Qj; arc=none smtp.client-ip=148.251.105.195
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
+	s=arc-20240116; t=1763393790; c=relaxed/simple;
+	bh=e4u3eYmUgkB0Kz0goGsy4ER6DXTGROhUPStI4UwkDYo=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=ozb81FXn+kkJiga9NZiPgvMZd27FZEXzh2QIDaxI4T5ufaR8NN9Eb51laINM1HZT3Q7KyBVmafKWyYq2nycYsRLdIPrDkUSSslrk/+8rT1dW0w1q7pj7BDuu75seInUsyhAV4PwX3UCzAZgm130QkqXI2MVvzFE7mQNgZy52nL0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=shazbot.org; spf=pass smtp.mailfrom=shazbot.org; dkim=pass (2048-bit key) header.d=shazbot.org header.i=@shazbot.org header.b=bTgByaG4; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=a3V3ZZ/H; arc=none smtp.client-ip=103.168.172.157
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=shazbot.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=shazbot.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="SbwR21Qj"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1763387443;
-	bh=kZPqi0k0MGFfxWKAZ65XVPpcfPk/d6isOabL0EwpwQ4=;
-	h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-	b=SbwR21QjXr8ute5gjB2cDaqhN10GkLocN2bq79QQB4J+4F7t5MZBMsla1cGbpoyFn
-	 mBm1CgzzNt9q31pO6dBSPVFqapt0WE+RORWAdXQ9jWTu/9175UIgFvjoSN6eWFCmUT
-	 yU1Iqj7YXdp7ZRbJ01NNfNHBw1wj+ReVwu70rYDqU2lcHz5ZAydXio+zZvuRQ8L5Wz
-	 zRtQyadV1BcOwEplo2DdO3ipILoGztiOtBle1sV7oGOU6Tcg2yNP0jSbZCYPdNHNMT
-	 oEGHmJCWHSGgXNUxroxZqB1UEfaugSnOM/MPE4hDzSR34YHk/oHbzZj5X+xogvengs
-	 NtwFtq5zehe4w==
-Received: from [IPv6:2606:6d00:17:7b4b::5ac] (unknown [IPv6:2606:6d00:17:7b4b::5ac])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits))
-	(No client certificate requested)
-	(Authenticated sender: nicolas)
-	by bali.collaboradmins.com (Postfix) with ESMTPSA id CDE9C17E0B85;
-	Mon, 17 Nov 2025 14:50:40 +0100 (CET)
-Message-ID: <511f43bd76f48730900207403b90566d7e6c4f07.camel@collabora.com>
-Subject: Re: [PATCH v5 5/8] media: mediatek: vcodec: fix vp9 4096x2176 fail
- for profile2
-From: Nicolas Dufresne <nicolas.dufresne@collabora.com>
-To: Kyrie Wu =?UTF-8?Q?=28=E5=90=B4=E6=99=97=29?= <Kyrie.Wu@mediatek.com>, 
- "linux-kernel@vger.kernel.org"	 <linux-kernel@vger.kernel.org>,
- "linux-mediatek@lists.infradead.org"	 <linux-mediatek@lists.infradead.org>,
- George Sun =?UTF-8?Q?=28=E5=AD=99=E6=9E=97=29?=	 <George.Sun@mediatek.com>,
- Tiffany Lin =?UTF-8?Q?=28=E6=9E=97=E6=85=A7=E7=8F=8A=29?=	
- <tiffany.lin@mediatek.com>, "nhebert@chromium.org" <nhebert@chromium.org>, 
- "linux-media@vger.kernel.org"	 <linux-media@vger.kernel.org>,
- "devicetree@vger.kernel.org"	 <devicetree@vger.kernel.org>,
- "mchehab@kernel.org" <mchehab@kernel.org>,  "hverkuil@xs4all.nl"	
- <hverkuil@xs4all.nl>, Yunfei Dong
- =?UTF-8?Q?=28=E8=91=A3=E4=BA=91=E9=A3=9E=29?=	 <Yunfei.Dong@mediatek.com>,
- "conor+dt@kernel.org" <conor+dt@kernel.org>,  Irui Wang
- =?UTF-8?Q?=28=E7=8E=8B=E7=91=9E=29?=	 <Irui.Wang@mediatek.com>,
- "robh@kernel.org" <robh@kernel.org>, 
- "linux-arm-kernel@lists.infradead.org"	
- <linux-arm-kernel@lists.infradead.org>, Yilong Zhou
- =?UTF-8?Q?=28=E5=91=A8=E6=98=93=E9=BE=99=29?=	 <Yilong.Zhou@mediatek.com>,
- "matthias.bgg@gmail.com" <matthias.bgg@gmail.com>,  "krzk+dt@kernel.org"	
- <krzk+dt@kernel.org>, "arnd@arndb.de" <arnd@arndb.de>, Andrew-CT Chen
- =?UTF-8?Q?=28=E9=99=B3=E6=99=BA=E8=BF=AA=29?=	
- <Andrew-CT.Chen@mediatek.com>, AngeloGioacchino Del Regno	
- <angelogioacchino.delregno@collabora.com>
-Cc: "andrzejtp2010@gmail.com" <andrzejtp2010@gmail.com>, 
- "neil.armstrong@linaro.org"
-	 <neil.armstrong@linaro.org>
-Date: Mon, 17 Nov 2025 08:50:39 -0500
-In-Reply-To: <dea9519e6b72c12ea15760fc3bd7c7746dbfd5de.camel@mediatek.com>
-References: <20251106061323.2193-1-kyrie.wu@mediatek.com>
-		 <20251106061323.2193-6-kyrie.wu@mediatek.com>
-		 <bd2f63265df829ec9bb3498c83126827415c2ebf.camel@collabora.com>
-	 <dea9519e6b72c12ea15760fc3bd7c7746dbfd5de.camel@mediatek.com>
-Autocrypt: addr=nicolas.dufresne@collabora.com; prefer-encrypt=mutual;
- keydata=mDMEaCN2ixYJKwYBBAHaRw8BAQdAM0EHepTful3JOIzcPv6ekHOenE1u0vDG1gdHFrChD
- /e0J05pY29sYXMgRHVmcmVzbmUgPG5pY29sYXNAbmR1ZnJlc25lLmNhPoicBBMWCgBEAhsDBQsJCA
- cCAiICBhUKCQgLAgQWAgMBAh4HAheABQkJZfd1FiEE7w1SgRXEw8IaBG8S2UGUUSlgcvQFAmibrjo
- CGQEACgkQ2UGUUSlgcvQlQwD/RjpU1SZYcKG6pnfnQ8ivgtTkGDRUJ8gP3fK7+XUjRNIA/iXfhXMN
- abIWxO2oCXKf3TdD7aQ4070KO6zSxIcxgNQFtDFOaWNvbGFzIER1ZnJlc25lIDxuaWNvbGFzLmR1Z
- nJlc25lQGNvbGxhYm9yYS5jb20+iJkEExYKAEECGwMFCwkIBwICIgIGFQoJCAsCBBYCAwECHgcCF4
- AWIQTvDVKBFcTDwhoEbxLZQZRRKWBy9AUCaCyyxgUJCWX3dQAKCRDZQZRRKWBy9ARJAP96pFmLffZ
- smBUpkyVBfFAf+zq6BJt769R0al3kHvUKdgD9G7KAHuioxD2v6SX7idpIazjzx8b8rfzwTWyOQWHC
- AAS0LU5pY29sYXMgRHVmcmVzbmUgPG5pY29sYXMuZHVmcmVzbmVAZ21haWwuY29tPoiZBBMWCgBBF
- iEE7w1SgRXEw8IaBG8S2UGUUSlgcvQFAmibrGYCGwMFCQll93UFCwkIBwICIgIGFQoJCAsCBBYCAw
- ECHgcCF4AACgkQ2UGUUSlgcvRObgD/YnQjfi4+L8f4fI7p1pPMTwRTcaRdy6aqkKEmKsCArzQBAK8
- bRLv9QjuqsE6oQZra/RB4widZPvphs78H0P6NmpIJ
-Organization: Collabora Canada
-Content-Type: multipart/signed; micalg="pgp-sha512";
-	protocol="application/pgp-signature"; boundary="=-6tSADsOpIKtvYSE7Vx5O"
-User-Agent: Evolution 3.58.1 (3.58.1-1.fc43) 
+	dkim=pass (2048-bit key) header.d=shazbot.org header.i=@shazbot.org header.b="bTgByaG4";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="a3V3ZZ/H"
+Received: from phl-compute-04.internal (phl-compute-04.internal [10.202.2.44])
+	by mailfhigh.phl.internal (Postfix) with ESMTP id AEDCD14001CD;
+	Mon, 17 Nov 2025 10:36:26 -0500 (EST)
+Received: from phl-mailfrontend-01 ([10.202.2.162])
+  by phl-compute-04.internal (MEProxy); Mon, 17 Nov 2025 10:36:26 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=shazbot.org; h=
+	cc:cc:content-transfer-encoding:content-type:content-type:date
+	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to; s=fm2; t=1763393786;
+	 x=1763480186; bh=dumULOFDFktDrAv/FEHp3FtDy5iDmeMi8WaBMWjFFc0=; b=
+	bTgByaG40HRwAAQHrZmUb1QxjoIKG692YfpeDBRFe9Iu6ybe//AfCHpW3mIPsM1M
+	WYnkzK8lh2vXojzl2+qseUFiMvxqQKr0IYjFET9zskLG20I8YPQxfkYQYgftEyWx
+	jeD3gXXQIl0ubwQsOnRCneY9Ee+d3+FyAnOe8/ZEXTNbJBdR9zsD/Uqm6CFnrieJ
+	60m+mV6mdpdJNLWAtv0sUtz2nkHnAVCeUhvAsXprKWeJ9SeFuthsuY3OGDw1Tpsw
+	ZMjmSiwEFqUDMvWqfBkZB2f2ikmXmb74OaRGArj1p0panyj3vvVWtNAew6f7EjEB
+	kku47rytqu0faY0bmEgdRA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to:x-me-proxy
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=1763393786; x=
+	1763480186; bh=dumULOFDFktDrAv/FEHp3FtDy5iDmeMi8WaBMWjFFc0=; b=a
+	3V3ZZ/HrTsgG7BZQp9uEsbe6TdQbscGPUzzV1ucmE75P+RX148fjF6z3+eDtfxE/
+	+LIsnQGcry5t2eP9DsugDIxSRuHjQL4Pa48vQlCFL4Aj9/mvHNagLk5oliXqjZiN
+	P7d9HhnMs2X2J530B8bl9/HIJt7CTkAoGK83TiPn4Am8w3vpm2woXXyidHxnjDmy
+	AoDIYJqVBQO7kNTSKqZlkxYHdKM38pK6DV5BLhEpHopJc14gJ9bdwbzb1CECdFQ4
+	29UG0a8x0Qak4XNvR1lJ563e3TxaNlVHCoAPZmYQcpWw6cJWVjhYMw/XcXCtUO7+
+	0XyIT5kl1gHE9x0NMHR1g==
+X-ME-Sender: <xms:-EAbaWyQ-WAwnluLWHzIZSr0mg8fK4EjRWclwqn4UadFrYR9CFAq3A>
+    <xme:-EAbaYnO_OBUD04HGAVXLl5Y0sdGgCgZ0LkU9JWquhPnnfcmXV8ZdkOcf5KlVUEak
+    U9OYBBXPjLciDkkfhjTYgSLsu-_gFaVGAR6arDrg1_4BpjJyD5n4g>
+X-ME-Received: <xmr:-EAbaeV7CxOi5NsfI_0iHooQtOGJov1ufXfnaa1D97FrNVc9zEAX-2Uc>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtdeggddvudekkeegucetufdoteggodetrf
+    dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfurfetoffkrfgpnffqhgenuceu
+    rghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujf
+    gurhepfffhvfevuffkjghfgggtgfesthhqredttddtjeenucfhrhhomheptehlvgigucgh
+    ihhllhhirghmshhonhcuoegrlhgvgiesshhhrgiisghothdrohhrgheqnecuggftrfgrth
+    htvghrnhepgffggfegffffhffhhefftdeikedtueefkefghfehledtkedvvddtieehveej
+    fffgnecuffhomhgrihhnpehkvghrnhgvlhdrohhrghenucevlhhushhtvghrufhiiigvpe
+    dtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrlhgvgiesshhhrgiisghothdrohhrghdp
+    nhgspghrtghpthhtohepfeehpdhmohguvgepshhmthhpohhuthdprhgtphhtthhopegthh
+    hrihhsthhirghnrdhkohgvnhhighesrghmugdrtghomhdprhgtphhtthhopehlvghonhes
+    khgvrhhnvghlrdhorhhgpdhrtghpthhtohepsghhvghlghgrrghssehgohhoghhlvgdrtg
+    homhdprhgtphhtthhopehlohhgrghnghesuggvlhhtrghtvggvrdgtohhmpdhrtghpthht
+    oheprgigsghovgeskhgvrhhnvghlrdgukhdprhgtphhtthhopehrohgsihhnrdhmuhhrph
+    hhhiesrghrmhdrtghomhdprhgtphhtthhopehjohhroheskegshihtvghsrdhorhhgpdhr
+    tghpthhtohepfihilhhlsehkvghrnhgvlhdrohhrghdprhgtphhtthhopehmrdhsiiihph
+    hrohifshhkihesshgrmhhsuhhnghdrtghomh
+X-ME-Proxy: <xmx:-EAbaZ0fTJm_ATpV97jWOpcVupVrX5qYHi8qRNGt3G3rqeBOTipOKQ>
+    <xmx:-EAbaekY7TK2z-tERLv9vPNj8oV4GTGLaugTF_hEpglIkqI0gqjajw>
+    <xmx:-EAbaQEqElQCUqBqS26kmOTvil5W3KYOkdSQUnH2TTqyeLc7k0jBCw>
+    <xmx:-EAbabl0qbHJHfqmS6yt46qZ4Q6MuXUoWNyxiao6TOaw-x3l0mdFoA>
+    <xmx:-kAbaVsEtsMVur8JcMzBXoqZTmuBVUtCij-s3rV4asHdXPXnRrkBls7n>
+Feedback-ID: i03f14258:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
+ 17 Nov 2025 10:36:22 -0500 (EST)
+Date: Mon, 17 Nov 2025 08:36:20 -0700
+From: Alex Williamson <alex@shazbot.org>
+To: Christian =?UTF-8?B?S8O2bmln?= <christian.koenig@amd.com>
+Cc: Leon Romanovsky <leon@kernel.org>, Bjorn Helgaas <bhelgaas@google.com>,
+ Logan Gunthorpe <logang@deltatee.com>, Jens Axboe <axboe@kernel.dk>,
+ Robin Murphy <robin.murphy@arm.com>, Joerg Roedel <joro@8bytes.org>,
+ Will Deacon <will@kernel.org>,
+ Marek Szyprowski <m.szyprowski@samsung.com>,
+ Jason Gunthorpe <jgg@ziepe.ca>,
+ Andrew Morton <akpm@linux-foundation.org>,
+ Jonathan Corbet <corbet@lwn.net>, Sumit Semwal <sumit.semwal@linaro.org>,
+ Kees Cook <kees@kernel.org>,
+ "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+ Ankit Agrawal <ankita@nvidia.com>, Yishai Hadas <yishaih@nvidia.com>,
+ Shameer Kolothum <skolothumtho@nvidia.com>,
+ Kevin Tian <kevin.tian@intel.com>, Krishnakant Jaju <kjaju@nvidia.com>,
+ Matt Ochs <mochs@nvidia.com>, linux-pci@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-block@vger.kernel.org,
+ iommu@lists.linux.dev, linux-mm@kvack.org, linux-doc@vger.kernel.org,
+ linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
+ linaro-mm-sig@lists.linaro.org, kvm@vger.kernel.org,
+ linux-hardening@vger.kernel.org, Alex Mastro <amastro@fb.com>,
+ Nicolin Chen <nicolinc@nvidia.com>,
+ Vivek Kasireddy <vivek.kasireddy@intel.com>
+Subject: Re: [PATCH v7 00/11] vfio/pci: Allow MMIO regions to be exported
+ through dma-buf
+Message-ID: <20251117083620.4660081a.alex@shazbot.org>
+In-Reply-To: <da399efa-ad5b-4bdc-964d-b6cc4a4fc55d@amd.com>
+References: <20251106-dmabuf-vfio-v7-0-2503bf390699@nvidia.com>
+	<20251110134218.5e399b0f.alex@shazbot.org>
+	<da399efa-ad5b-4bdc-964d-b6cc4a4fc55d@amd.com>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-
-
---=-6tSADsOpIKtvYSE7Vx5O
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: quoted-printable
 
+On Tue, 11 Nov 2025 09:54:22 +0100
+Christian K=C3=B6nig <christian.koenig@amd.com> wrote:
 
-Hi Kyrie,
-
-make sure to reply in plain text, I know the mailing list may drop messaged=
- in HTML form.
-
-Le lundi 17 novembre 2025 =C3=A0 07:36 +0000, Kyrie Wu (=E5=90=B4=E6=99=97)=
- a =C3=A9crit=C2=A0:
->=20
-> On Thu, 2025-11-06 at 10:17 -0500, Nicolas Dufresne wrote:
-> > Hi,
+> On 11/10/25 21:42, Alex Williamson wrote:
+> > On Thu,  6 Nov 2025 16:16:45 +0200
+> > Leon Romanovsky <leon@kernel.org> wrote:
+> >  =20
+> >> Changelog:
+> >> v7:
+> >>  * Dropped restore_revoke flag and added vfio_pci_dma_buf_move
+> >>    to reverse loop.
+> >>  * Fixed spelling errors in documentation patch.
+> >>  * Rebased on top of v6.18-rc3.
+> >>  * Added include to stddef.h to vfio.h, to keep uapi header file indep=
+endent. =20
 > >=20
-> > Le jeudi 06 novembre 2025 =C3=A0 14:13 +0800, Kyrie Wu a =C3=A9crit :
-> > > The dram addr of vp9 decoder tile number, which use dram mode
-> > > to set tile information, may reach to 36bits for 4096x2176.
-> > > It needs to get the highest 4bit of tile buffer address to
-> > > set tile buffer address.
-> >=20
-> > An after thought, I don't see any call to
-> > vb2_dma_contig_set_max_seg_size() or
-> > dma_set_coherent_mask() with DMA_BIT_MASK(32)/DMA_BIT_MASK(36) in
-> > this driver.
-> > How do you control this ?
-> >=20
-> > Nicolas
+> > I think we're winding down on review comments.  It'd be great to get
+> > p2pdma and dma-buf acks on this series.  Otherwise it's been posted
+> > enough that we'll assume no objections.  Thanks, =20
 >=20
-> Dear Nicolas,
+> Already have it on my TODO list to take a closer look, but no idea when t=
+hat will be.
 >=20
-> The tile buffer is handled in VCP, not in kernel driver. We only
-> get the full correct address in kernel.
+> This patch set is on place 4 or 5 on a rather long list of stuff to revie=
+w/finish.
 
-Thank you, I could not figure-out otherwise.
+Hi Christian,
 
-Nicolas
+Gentle nudge.  Leon posted v8[1] last week, which is not drawing any
+new comments.  Do you foresee having time for review that I should
+still hold off merging for v6.19 a bit longer?  Thanks,
 
->=20
-> Thanks.
->=20
-> Regards,
-> Kyrie
-> >=20
-> > >=20
-> > > Fixes: 5d418351ca8f1 ("media: mediatek: vcodec: support stateless
-> > > VP9
-> > > decoding")
-> > >=20
-> > > Signed-off-by: Kyrie Wu <kyrie.wu@mediatek.com>
-> > > Reviewed-by: AngeloGioacchino Del Regno
-> > > <angelogioacchino.delregno@collabora.com>
-> > > ---
-> > > =C2=A0.../mediatek/vcodec/decoder/vdec/vdec_vp9_req_lat_if.c       | =
-5
-> > > ++++-
-> > > =C2=A01 file changed, 4 insertions(+), 1 deletion(-)
-> > >=20
-> > > diff --git
-> > > a/drivers/media/platform/mediatek/vcodec/decoder/vdec/vdec_vp9_req_
-> > > lat_if.c
-> > > b/drivers/media/platform/mediatek/vcodec/decoder/vdec/vdec_vp9_req_
-> > > lat_if.c
-> > > index d966914db4b9..91c563c049bd 100644
-> > > ---
-> > > a/drivers/media/platform/mediatek/vcodec/decoder/vdec/vdec_vp9_req_
-> > > lat_if.c
-> > > +++
-> > > b/drivers/media/platform/mediatek/vcodec/decoder/vdec/vdec_vp9_req_
-> > > lat_if.c
-> > > @@ -1156,7 +1156,10 @@ static int
-> > > vdec_vp9_slice_setup_tile_buffer(struct
-> > > vdec_vp9_slice_instance *inst
-> > > =C2=A0tiles->size[i][j] =3D size;
-> > > =C2=A0if (tiles->mi_rows[i]) {
-> > > =C2=A0*tb++ =3D (size << 3) + ((offset << 3) &
-> > > 0x7f);
-> > > -*tb++ =3D pa & ~0xf;
-> > > +*tb =3D pa & ~0xf;
-> > > +if
-> > > (IS_ENABLED(CONFIG_ARCH_DMA_ADDR_T_64BIT))
-> > > +*tb |=3D (pa >> 32) & 0xf;
-> > > +tb++;
-> > > =C2=A0*tb++ =3D (pa << 3) & 0x7f;
-> > > =C2=A0mi_row =3D (tiles->mi_rows[i] - 1) &
-> > > 0x1ff;
-> > > =C2=A0mi_col =3D (tiles->mi_cols[j] - 1) &
-> > > 0x3f;
->=20
-> ************* MEDIATEK Confidentiality Notice
-> =C2=A0********************
-> The information contained in this e-mail message (including any=20
-> attachments) may be confidential, proprietary, privileged, or otherwise
-> exempt from disclosure under applicable laws. It is intended to be=20
-> conveyed only to the designated recipient(s). Any use, dissemination,=20
-> distribution, printing, retaining or copying of this e-mail (including it=
-s=20
-> attachments) by unintended recipient(s) is strictly prohibited and may=
-=20
-> be unlawful. If you are not an intended recipient of this e-mail, or beli=
-eve
-> =C2=A0
-> that you have received this e-mail in error, please notify the sender=20
-> immediately (by replying to this e-mail), delete any and all copies of=
-=20
-> this e-mail (including any attachments) from your system, and do not
-> disclose the content of this e-mail to any other person. Thank you!
+Alex
 
---=-6tSADsOpIKtvYSE7Vx5O
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-Description: This is a digitally signed message part
-Content-Transfer-Encoding: 7bit
 
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQTvDVKBFcTDwhoEbxLZQZRRKWBy9AUCaRsoLwAKCRDZQZRRKWBy
-9FEEAP0QmN9fJMwFd/HLagqwIalTR2GPmwLUWA8dX94WrKm9ewEAypyL1RO/CPwW
-/H199X9i5A2iH2yPuMNCmEkyJtON5AQ=
-=1SZz
------END PGP SIGNATURE-----
-
---=-6tSADsOpIKtvYSE7Vx5O--
+[1]https://lore.kernel.org/all/20251111-dmabuf-vfio-v8-0-fd9aa5df478f@nvidi=
+a.com/
