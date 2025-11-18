@@ -1,184 +1,266 @@
-Received: from mail-wm1-f54.google.com (mail-wm1-f54.google.com [209.85.128.54])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B20D32E888C
-	for <linux-media@vger.kernel.org>; Tue, 18 Nov 2025 07:16:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.54
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763450211; cv=none; b=d26JfW1pzaOiTIa2+QkvMqUwNDrWt0bqi1nj3vvmyD1954tN6BedySiAaHp6dCuGCykEEHEkogukYrE6ewtzUmC+1zewIppIRuqbBTrHtZelDcor1EPL7rERokxzm21m4CGbJE03jXsITqrrUQFj70dk/cv68ptJd+Y0426xC4w=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763450211; c=relaxed/simple;
-	bh=q0yJJiKn+zBrJd/u9eWfOIOO7+WxsjyO1+iLD/6tDPM=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=rHqAfCcytTvKVn72at5sQGnw4tvwFauQAt8WvoJ0pTG7QrVWBk0AfdkiaiARxatNWGp6KkxlD+Ss01H3nhPAC3VxExgtfH+fEixU4dQt6WrC4LDtFTSSOsntSebrRTG2K7FOh1KC72WKH+I0Tx6+ZmsXnYENDuopPT6E7bUTVMM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=R4t/2FgM; arc=none smtp.client-ip=209.85.128.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 980733009F2;
+	Tue, 18 Nov 2025 07:22:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=210.61.82.184
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1763450549; cv=fail; b=qDR3aZcrh67tNgjY9c5+fbHP2yV3AOUjBBBp7WZFXZB9Sk4Zb+YOAFgm2AyiErHy2HT0foURp9SYYf7E58REH4NRe92Rw4g9fzHobDXt8m4KNtWyRpm3WxkDWsbQpSO0HGCq7nC2DzWKWEXtzzc3ACKIPFQt4B0PSwxe9eWdjkw=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1763450549; c=relaxed/simple;
+	bh=yaxmMLrXe4UpYYSZhfTUkOGF4bRGPDB6l40FJHwPVJg=;
+	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
+	 Content-Type:MIME-Version; b=tfN9lUB8VfSgbhi9xa4VBBMi4iYbB2NTBMgKLJXUWzdOkoySH+U7jycHQqxY2L3UxFrm6KGq7MRjoTXM0QywsQoTKiIHm74Swqf5mbwxpaaxX9ZtpneZwGgbbtqGCYicJakCiQ/5ah1Cb0ltkVWci/Yhn7sWCX8S4o1DNmZb9Po=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mediatek.com; spf=pass smtp.mailfrom=mediatek.com; dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b=IJsaXDKg; dkim=pass (1024-bit key) header.d=mediateko365.onmicrosoft.com header.i=@mediateko365.onmicrosoft.com header.b=IUmvEd8y; arc=fail smtp.client-ip=210.61.82.184
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mediatek.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mediatek.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="R4t/2FgM"
-Received: by mail-wm1-f54.google.com with SMTP id 5b1f17b1804b1-47796a837c7so17924285e9.0
-        for <linux-media@vger.kernel.org>; Mon, 17 Nov 2025 23:16:48 -0800 (PST)
+	dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b="IJsaXDKg";
+	dkim=pass (1024-bit key) header.d=mediateko365.onmicrosoft.com header.i=@mediateko365.onmicrosoft.com header.b="IUmvEd8y"
+X-UUID: 4f949436c44f11f0b33aeb1e7f16c2b6-20251118
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+	h=MIME-Version:Content-Transfer-Encoding:Content-ID:Content-Type:In-Reply-To:References:Message-ID:Date:Subject:CC:To:From; bh=yaxmMLrXe4UpYYSZhfTUkOGF4bRGPDB6l40FJHwPVJg=;
+	b=IJsaXDKgfKnDWUl5UAahv4v8FBX+aPfMLW3yfrDr4+gfZ2qLuYOMdL3jiHHehe5GvN9GtPO+roFVQzuqNpqoP5oySKgnUzetT8vDFffMV0dGdPIW5b8pt+f3aD3rhZ48sFeVP/azg0ouac8C8EZwJRfhAGeE6kQUNxoJYPVcQII=;
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.3.6,REQID:bd333673-761d-4575-8f62-daad4f417ed0,IP:0,UR
+	L:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:r
+	elease,TS:0
+X-CID-META: VersionHash:a9d874c,CLOUDID:a81bc582-b6af-4b29-9981-6bf838f9504d,B
+	ulkID:nil,BulkQuantity:0,Recheck:0,SF:80|81|82|83|102|110|111|836|888|898,
+	TC:-5,Content:0|15|50,EDM:-3,IP:nil,URL:0,File:130,RT:0,Bulk:nil,QS:nil,BE
+	C:nil,COL:0,OSI:0,OSA:0,AV:0,LES:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0,ARC:0
+X-CID-BVR: 2,SSN|SDN
+X-CID-BAS: 2,SSN|SDN,0,_
+X-CID-FACTOR: TF_CID_SPAM_SNR
+X-CID-RHF: D41D8CD98F00B204E9800998ECF8427E
+X-UUID: 4f949436c44f11f0b33aeb1e7f16c2b6-20251118
+Received: from mtkmbs11n1.mediatek.inc [(172.21.101.185)] by mailgw02.mediatek.com
+	(envelope-from <kyrie.wu@mediatek.com>)
+	(Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+	with ESMTP id 363306411; Tue, 18 Nov 2025 15:22:16 +0800
+Received: from mtkmbs10n2.mediatek.inc (172.21.101.183) by
+ MTKMBS14N1.mediatek.inc (172.21.101.75) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1748.26; Tue, 18 Nov 2025 15:22:14 +0800
+Received: from SI4PR04CU002.outbound.protection.outlook.com (172.21.101.237)
+ by mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server id
+ 15.2.1748.26 via Frontend Transport; Tue, 18 Nov 2025 15:22:14 +0800
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=dG7w5Xodf8QS/+MondFnc83Gmkgmq6gQvuQOFXb0wB5qk2jIC4b67ufbpQr3Hn7KDmP5CVj7sCJel+uv8s5kXfLKhQsiwFM/oT6wFTHAGGMUfQ6sd7toIuwcYDoR3AlpYGuBT3T89kde6aaPwHO9RRrpGydm1vLJ9RmHE3zZCE094EqAy++JRnWx0omV3OpM6cRk3t2fdyjmyuvDOnMbp5XmiF0++EDp3lEoBNNO4YV6oFw4K5B/R2lMLePY9Dc7osVYZdXAJhkwTK4Xg+8tOZ839FeXnWvHLAjGNFm/IcJb4CuoqJLRensb61LLCiVgf6XL/eDpdNJAYbwU0o9JtA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=yaxmMLrXe4UpYYSZhfTUkOGF4bRGPDB6l40FJHwPVJg=;
+ b=y4+stMa5UEL2Gvdz4maNCcYXldF5CFoDfL3tcsnw8TQxp+7S6GJHUKxVc8INIEY07LB+5TNOKpMmSSbr+7SxLUBV+yArm5Y/PDZjdEtzrosU47rC7zIX7dIrlQawO1ADAd3q3cMKgvwDCkQRLLMoOf6i1XUIKWlHHN9ByS8vgex214BurVLzbsiYkLbBVY+ggTKtA1RJucqFG2u82FUX9uwFX8d/0eKKqaPxhKpX2p8MBgLYR2OF21XdIh4TfNaoPK+kSv054Xk/ztgwDAAG3YkGkTvwlbtIC52pMVpLbFFKUp3meQKdl8rnbXLQPfkKpENVkNpnit1nnr77/Rko6A==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=mediatek.com; dmarc=pass action=none header.from=mediatek.com;
+ dkim=pass header.d=mediatek.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1763450207; x=1764055007; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=/KTXy4LYc+3eURkyFEtAu5JtRy+tCU0zvqdQk5bTLU0=;
-        b=R4t/2FgMTUTR90N9SzH5jIksYlYDJAlh7aH7COqLT8bhG5Goq+TNvCiYHooM/YEXiD
-         oUcyIk9e6R7Ux0sIw/xifhYgY5NpDu7Sx+HAz6l+zOqflD+gPhWDJrLvgcLDx8G3e/og
-         mcNPzQ6mk0C22bmSFUiPdYXykvhsejic75MeIHWTYc/0A+CN1JeWysaqEDX3JCoLKAV1
-         EM/JZAQxaLzbj9w5p9cpCgYmBKwYfF2eVR5B5jF3fZlg/Af+yyZgB/x9abbRt5Xseywy
-         9LWnH8FS1vGuTFyUPUrOvBlzMAIX0Zxxhl0eu2zOWHalKOTDAEZkx1gEvLhqJmcXk3OW
-         za4g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1763450207; x=1764055007;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=/KTXy4LYc+3eURkyFEtAu5JtRy+tCU0zvqdQk5bTLU0=;
-        b=k8BxQ6mx6d7m3+305u8NvZfWGGOThF0eMherR7Kw3RwjPbd4QjIxKH531SpG/Y5SMO
-         OxfErW47Bhn4haWLh2X6Z+4fBTyxPP1mU+k6i1iE4VqgEfzTsTOkil/40jvphXsnQrk9
-         utddSF1k/57AhNve1K7iJJ6xRvbvF0LFYLpvqSLEFcIZtjuPu1YQTGsffHqdDnRZMZG2
-         8c9iBoIyaufQGdpk8zZWRhmBBRV/tbQ+JMABgRMQN2quPRFixmI9bv2QFK5+nSVtatyg
-         Nqu4Oe/j8Y4oX2caJJ/+HEpr1vhTjBWLGhn1CyAAyMZksul2DKE2CjdJ9raUSinLSW2k
-         G1Iw==
-X-Forwarded-Encrypted: i=1; AJvYcCWHIJA5bnGRP68QjWDsQnxIeCex9jfB38YmlurhgFph4mdtRzKDwdN9RLs16Ueyh/LPgLKqD6532uTc4g==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy/AdodoAOE3JfONhL+fmONLKhZLfHW1BbmWHs/4EXWIVi4folP
-	cfEHtlSzS3hRymF2LAhVbEEbrpxUZ4wXp4v/jd+gfn/aMh72HNxHR8az6v6FQGJDGV5k+kUfL/c
-	vvKaTija3k5IYyORbc9LjegJCVzLoL4g=
-X-Gm-Gg: ASbGncti8+1t5WlI+Md5xNGi1pLMUczDj2t9+TWoJnAVYuaakW/Iv0rnjXQ1dSdOJ35
-	SG5phG1OoaUe1O3q0hu2CbN9jZGvrgxgHsO18JltGJsFUS8gkloTI1d2MzZdN0nZ53EPD9WdfC1
-	W2mo5vYDnKZugG0ZWSxnV8/Zd8MT1FZktLWFFJx+Q7+1Z/loH6DJrCbxM0afQlGDO9LnqhQhQCh
-	RdT7uSXmpICq9GqcyDTF/Xm7vUl1NAe5x8Mnq6BrLYHbzY3+Nd+xgbPm+36RsGU7m2tiqq1cl/O
-	LesxV/I=
-X-Google-Smtp-Source: AGHT+IE8eWHTzx3ciz5rS3jZUxmLAR3nOWJrIZLlZT32SvvuGpdP8yMosOXzwXWHhwq5spIUyYIVyvJj9viWhF5Bm9Y=
-X-Received: by 2002:a05:600c:3587:b0:477:79f8:daa8 with SMTP id
- 5b1f17b1804b1-4778fe7e760mr152755075e9.17.1763450206831; Mon, 17 Nov 2025
- 23:16:46 -0800 (PST)
+ d=mediateko365.onmicrosoft.com; s=selector2-mediateko365-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=yaxmMLrXe4UpYYSZhfTUkOGF4bRGPDB6l40FJHwPVJg=;
+ b=IUmvEd8yKCq1CxrBWGr7s/9C/aXYomkFmsHTuU2nbv8VDhuJqoSk1vwcllFOyhZvo1dSLZY+gxCaRWsY/f4C0yZPNKDZLZWvwPLnNM0rqMdc8IDO7VxvIaVeFNSOYTvXipDeEDKgXGiOZ1AXopQgxWFckWrbwRyLKKhW27k3eDw=
+Received: from PUZPR03MB6186.apcprd03.prod.outlook.com (2603:1096:301:b9::5)
+ by TYQPR03MB9432.apcprd03.prod.outlook.com (2603:1096:405:2ff::13) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9320.19; Tue, 18 Nov
+ 2025 07:22:09 +0000
+Received: from PUZPR03MB6186.apcprd03.prod.outlook.com
+ ([fe80::a013:f3b3:a461:8ece]) by PUZPR03MB6186.apcprd03.prod.outlook.com
+ ([fe80::a013:f3b3:a461:8ece%4]) with mapi id 15.20.9320.018; Tue, 18 Nov 2025
+ 07:22:09 +0000
+From: =?utf-8?B?S3lyaWUgV3UgKOWQtOaZlyk=?= <Kyrie.Wu@mediatek.com>
+To: "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+	"linux-mediatek@lists.infradead.org" <linux-mediatek@lists.infradead.org>,
+	=?utf-8?B?R2VvcmdlIFN1biAo5a2Z5p6XKQ==?= <George.Sun@mediatek.com>,
+	=?utf-8?B?VGlmZmFueSBMaW4gKOael+aFp+ePiik=?= <tiffany.lin@mediatek.com>,
+	"nhebert@chromium.org" <nhebert@chromium.org>, "linux-media@vger.kernel.org"
+	<linux-media@vger.kernel.org>, "devicetree@vger.kernel.org"
+	<devicetree@vger.kernel.org>, "mchehab@kernel.org" <mchehab@kernel.org>,
+	"nicolas.dufresne@collabora.com" <nicolas.dufresne@collabora.com>,
+	"hverkuil@xs4all.nl" <hverkuil@xs4all.nl>,
+	=?utf-8?B?S3lyaWUgV3UgKOWQtOaZlyk=?= <Kyrie.Wu@mediatek.com>,
+	=?utf-8?B?WXVuZmVpIERvbmcgKOiRo+S6kemjnik=?= <Yunfei.Dong@mediatek.com>,
+	"conor+dt@kernel.org" <conor+dt@kernel.org>,
+	=?utf-8?B?SXJ1aSBXYW5nICjnjovnkZ4p?= <Irui.Wang@mediatek.com>,
+	"robh@kernel.org" <robh@kernel.org>, "linux-arm-kernel@lists.infradead.org"
+	<linux-arm-kernel@lists.infradead.org>,
+	=?utf-8?B?WWlsb25nIFpob3UgKOWRqOaYk+m+mSk=?= <Yilong.Zhou@mediatek.com>,
+	"matthias.bgg@gmail.com" <matthias.bgg@gmail.com>, "krzk+dt@kernel.org"
+	<krzk+dt@kernel.org>, "arnd@arndb.de" <arnd@arndb.de>,
+	=?utf-8?B?QW5kcmV3LUNUIENoZW4gKOmZs+aZuui/qik=?=
+	<Andrew-CT.Chen@mediatek.com>, AngeloGioacchino Del Regno
+	<angelogioacchino.delregno@collabora.com>
+CC: "andrzejtp2010@gmail.com" <andrzejtp2010@gmail.com>,
+	"neil.armstrong@linaro.org" <neil.armstrong@linaro.org>
+Subject: Re: [PATCH v5 2/8] media: mediatek: vcodec: add decoder compatible to
+ support MT8189
+Thread-Topic: [PATCH v5 2/8] media: mediatek: vcodec: add decoder compatible
+ to support MT8189
+Thread-Index: AQHcTuSklIk//JfNJkCBwdHYebyIArTls6IAgBJmrQA=
+Date: Tue, 18 Nov 2025 07:22:09 +0000
+Message-ID: <e2558247735964e2c50a8535017805353b4b8a58.camel@mediatek.com>
+References: <20251106061323.2193-1-kyrie.wu@mediatek.com>
+	 <20251106061323.2193-3-kyrie.wu@mediatek.com>
+	 <49d55e669473bef7b08882916095f10f409c85a0.camel@collabora.com>
+In-Reply-To: <49d55e669473bef7b08882916095f10f409c85a0.camel@collabora.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach:
+X-MS-TNEF-Correlator:
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=mediatek.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: PUZPR03MB6186:EE_|TYQPR03MB9432:EE_
+x-ms-office365-filtering-correlation-id: b7cda15e-6990-4065-04fc-08de26732f8a
+x-ld-processed: a7687ede-7a6b-4ef6-bace-642f677fbe31,ExtAddr
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;ARA:13230040|7416014|376014|1800799024|366016|38070700021|921020;
+x-microsoft-antispam-message-info: =?utf-8?B?YmJ5VEJJeG5hOVVXL3lrQWZBWC94LzlvSlpLY08reDU4VGlOa2NBVExiRXcv?=
+ =?utf-8?B?VlhTc0hxem40Szg2alNvMEd3QmJueWx2c0tqQmM1ZEcxKzI5Q0ZnbGg4dEZN?=
+ =?utf-8?B?cTVNTCt1OVpOdG9wdThyYlR2SDg2c3Y0NG9NczZVaTdHUUhqY3YzcHltMzM0?=
+ =?utf-8?B?bndRNmdCbjY3UWpwWWVJNy92a2p3eE9IVE9acUxvQ202MHJCQVZiQTIwQk1I?=
+ =?utf-8?B?VkxGbkszcGJ6TU83ZU93Q254T2hIcW9lQllnTDY4U3NTdjdVSi9hSkg0K0dC?=
+ =?utf-8?B?N2IwWHpRa1VYN2xBRE1YRGl4RllCZm9kSnp3b1hkT0o0dStIVDI4RjQrQVo0?=
+ =?utf-8?B?YUVmQ2x0U1lLRm5Gb0ZtaDRJelZwTWdmNjJIdWlnSU4zRTFLNk5leHhveHNw?=
+ =?utf-8?B?N2ZaMlcrVFZ1RGtLUHlWRWtFWTBvSThwcEIxTGRPdytqeFMzTk91Zm14czFt?=
+ =?utf-8?B?MXVPV2ZRK3dma1EybW13cXhvN1Y3L2FhRjI2UjVsRXY0cUpVV2doNW9ZWk9S?=
+ =?utf-8?B?d0ZNa25kS3lJeHZhTS9sUDRuanpqYmJJbXdBSWNDR2x1dThsWmp2clhiMjl4?=
+ =?utf-8?B?Uytpejh0NjUvdytyeWY4WVJJQTY2K3RkaFRKU3Faa0Z0MEd2TlZraGthLzZ5?=
+ =?utf-8?B?SE4wQS8rWUZib2RRKzZ2ZWpidGo1Si9xRENHMEJwZy9SMU5xYkZKN2JiUmk3?=
+ =?utf-8?B?SE5waHQ1cHMycVRtNDNlSFhjRWxCZHRpTmE3eHNGMWpnQWR3MkxMNUxrNEJ1?=
+ =?utf-8?B?bW5tQ3F2bllQbExIeERDVjhIQmRYTGIwTGU5a0tVK1dzcVFaTHAxaitpVC9h?=
+ =?utf-8?B?MkxBV1BtWjNoOVp4Z1BKM3gzUnIxcHRJU2pDMlBqSjFIdlZ0bExEQzQxZ01u?=
+ =?utf-8?B?aTh5Um1aZ0lhU0FLM1VlYzA5Z2toSXhjWjk5dVJMSkQwdER2U1Q1aGkrdXdv?=
+ =?utf-8?B?QTZvWDJOMW54UG10RWxRUGJpa0ZrWnJsbGR6eW5OZGU0REVHVEJrdzNRdndQ?=
+ =?utf-8?B?WXNuM2hwTzRxblg2YXZNamhNNk9qTGZ1aXRsRTFmZm5yMFVrVjdpbGhqMU9V?=
+ =?utf-8?B?VjA0Rit0YnR2Z0Fxbk9nY1NacWx3RFExSnZsM0J5OWtlZWNucXU0aSt4djB2?=
+ =?utf-8?B?RTZaY3F2RkZtZ1FUSUNRakVralR5K3h1cDlYdTBWckNjVURhUFRRSC9OYURi?=
+ =?utf-8?B?R2I0ZmZnRVdTcHdMRVByOHRhSDFYRDFTL1hONXdmbUVXb1NZZDVaZkxDRzBC?=
+ =?utf-8?B?WjdmSmkxM1hXTzR5WTlxU0pOMFRIYlNBYWtoQUhGM1M4cHVPQk1BdkpiN2NI?=
+ =?utf-8?B?aTVEcjhnYWVWNzVMTjhVR0IyZ0lPVlhNUG9ZcXJocTkzcnJWc0ZDZkZlWGY4?=
+ =?utf-8?B?RjRuLzlnM3B2cjBzQ3NZOEhEWmxQT0ZrdlRJMm10dDZIMEpLc3krZ2JWaURT?=
+ =?utf-8?B?U2xhdzZhbG8yd0EwYlVhQmZscWpOY1padnpBVjVEdTBqanZJZFpYOEFDN0w0?=
+ =?utf-8?B?aHlHcnN3Q1RRcmN4NGt1c3RFMFVwT1UyRGlQMEpHdFlIQUYyblR3cnFLYWdw?=
+ =?utf-8?B?ektSVW8rSG9tQ0lBTk9TVGI2c1NuRElTaXduTk5sRVRkaFNzdUo1TEpWbTE5?=
+ =?utf-8?B?UFRqdVhqNnBYVzJzZXhwTklaa3NRdlE1bmEzMzhVS05kekRTWXZ2Yi9LTU9q?=
+ =?utf-8?B?b050UytQWDdtVEcwSDBSbVcxRUJ5Nml1ZVVKVC9HaFpBdXg1UG1uUHY5QzBm?=
+ =?utf-8?B?cjJkT0xmTEJqc0pHYWlYdXlBV01GYkZzMmhXcHhtNWhLZFpMbE1JMXNackFW?=
+ =?utf-8?B?REViSENROWlMVzB3eWswRVVZVWttMUNKaCsyNis2eittS2pXVGkvczBuOG81?=
+ =?utf-8?B?VWdqSkNNODFjNTkrcHdYOWNrL3lzRm9URjNIemdialV0TGV3K0VLWmhaYldu?=
+ =?utf-8?B?blltMGdFTUVzWlQ1VUFkb0YwNldiRW82cDdpb0ozaFNIREJpSzlsNlY4eUJL?=
+ =?utf-8?B?VWIzeXRCb0JWWW05NU9aZTBaYzQ5YXgwSFFsUVJHaWxXYnZwYzYvVEYxeDF6?=
+ =?utf-8?B?SmdzWURpN0h3UmlTck5xL1FlZEZpWmo5QVVvdz09?=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PUZPR03MB6186.apcprd03.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(7416014)(376014)(1800799024)(366016)(38070700021)(921020);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?VHBQdjV2Yjk2WUNUYTZUcW8wcEY2cmtWMzVicVZYODFmc1FqRVBZN2hGc2Z1?=
+ =?utf-8?B?VWFKNjYyMzdxY3ZBR05zMkQ3YWY2cjRoeFQ2VTV6UHA4UnQ3MUJ2ck1KQnpN?=
+ =?utf-8?B?U3VSM2l1ODR0N1pBd3l0cmJ5TitnMGs5eHVLQnNrV3MzL0o0bFdoOWZKbi9n?=
+ =?utf-8?B?eGt4RHhMZmJ4ZkprNHVodkVBdXMrQkduM3RZbG9Qd0cxYUJneVZBQUo0UG9y?=
+ =?utf-8?B?cFB5ZGJkQmszbEZZT3ZCYTlDR0I0cHE5eEd2TktZOG4rZjNXUG5yYzRXTFlx?=
+ =?utf-8?B?c01OaWtIQWtuWXAvVlVja0d1UnNnV3g4YjZoa1ZSdENmOGhwTS9kcTk2djZx?=
+ =?utf-8?B?d3BKVnllYXZ6SXZLTmtwMzRiSVdaU05CTEVyQ2wwcmpEZWJmd2VNSGNkNXFx?=
+ =?utf-8?B?bUMxc2U2aUNLanBnb0w1MXprNmNtMkkxaFJ0RFBEYUo0eERIUmFEYmxZRFBM?=
+ =?utf-8?B?Y1hrWjBFR2lqUXhWMHN2QTgwdHllQ0g4SXhCUnZYcytUMW1QVkpONU5mZ3Rm?=
+ =?utf-8?B?TlJOUjAwbDZUd2M0Z1pUUHZqR2dXTVp1bDQ4OHkvRFdORkU3R1JzejNQcENI?=
+ =?utf-8?B?ZE5oTzExejFGVmxXRzMrSTRYVXBTODR0N0hUdno1TzVwZ2NsRHY2UUJBMHNQ?=
+ =?utf-8?B?TEJXWTJsNjM1N0llNUtYVE9aK1Q3WG8yWjFXR2Vwb2xpRllVZzVhWTE4bW45?=
+ =?utf-8?B?cEI1RjlMNndPdXlQQnJNZDZDVTNOZzRINUtSWjVPdXRYMUlkakg2VXVDZy82?=
+ =?utf-8?B?bHpzNkdzZ1prUXQwTGtpb0FkR21FdUc2QkNWUHFBWms3dVZjSStKODVqVDha?=
+ =?utf-8?B?b2t2TE0xOHhuZytLYWtCdi9mRm96MFZuU1hKOXZsaUtkdGtRMkFOdmErT2lY?=
+ =?utf-8?B?VmlyZk5tNEpjSzlqbzFBUlNLZ3hQRUpZSFJIclNrQk42a3dZN01qc3NyQW9S?=
+ =?utf-8?B?d3JUbWJ6QmVGem5GTUJEYlJiRmIxQXlEcitFYXR3a09SNy9sM2dxeFJuYXVW?=
+ =?utf-8?B?L2lscTVxTnJ5NTNDaHhBZHlRSWtLMXVHNXQxV1A1cXVZWW1TVVoxNWZEZEVD?=
+ =?utf-8?B?NE41djJ3VWVtVkUxOVViY0Z5MndaNFRvOVFhM2p4cHFqYUg4eTIzcXdsQ1Jl?=
+ =?utf-8?B?VDBIV25LUjJTYUhtMHhyOUErY0Uvb0pVcThKSkZPT0hhOFVKZVpEbXdKSXdp?=
+ =?utf-8?B?NHE4WTRUYU1uSlBNZEQ3MkRpUk8wbUhBanhTT0tMQTFQZlkwSUhKU3gvYTdT?=
+ =?utf-8?B?Y2F0T2lXTGNhSEF0R1k1a1pkQi9lWDRRNHRxM2JyS3YxZi9PK2NkdlN2QUJQ?=
+ =?utf-8?B?ZE1pQ25TazZRdGlhM2N6NVo4QVpZS0Rpd3d1VEdRc0ZkNzVlU01PRGFNbFdx?=
+ =?utf-8?B?Qk5EbjF2aGZwT1BZZTRVemc0MXFkZ0ZzV21TUHlYb3ZFcXdMdkR5dlpFUWdv?=
+ =?utf-8?B?QUJrcVRjeC9pTlVTYTZ0Z3pWVXZFczJPMW9pTXdCVXFBdG4yWExjazJFejFP?=
+ =?utf-8?B?Wk5XMTFsS1VMMFRZbVdTR0dXTHI0MzAvcnNScmJveEsrTWZ5SXhpSW1TZ2F2?=
+ =?utf-8?B?YzRLdjdVZTBwdTBHdWx3S2piL2tGUlA2N2YyRFMvN1R3TTZscHZZVzcvbG81?=
+ =?utf-8?B?cmlHVmdZcnIrNlhjTXJzOGd6QXVkQkg5M0ZGZzQ5ZjYycDVxQ1gxRlkwN2Mz?=
+ =?utf-8?B?MlRFTkIyRzEvbWdXWmVNd1hRL2duTjEvVnBuNHZHOE54TEVzMVNyWFEwYXU2?=
+ =?utf-8?B?MHNPSXd0SkQ2QXcwK3lqc2tiRks1NFUyeVdFU05tdHdEZTJKcUhleUV4Rmlu?=
+ =?utf-8?B?REJqSVFGaE1GaWcxeFAvNWkyUkRWRDBkRHpiTW5pQkZPMlRabmVLalFpWk5B?=
+ =?utf-8?B?ckZaRDg2N1FCcTk5TmNPdHNQNGc1MjFsd3ZBL1dFOVNLRjVnSEp5ZWtUOFpW?=
+ =?utf-8?B?ZXJaRkR6NG9OQWc1ZWtJY0ZhNGFEckU0K1l3VVpuTGtVbkswSytqbGV0RkxO?=
+ =?utf-8?B?Tm9uWVR1Y094YXdmY2krV1JFcWZFeHpTdy83WjJCNXE1dkdFK3Nxb1FMU3lK?=
+ =?utf-8?B?TVdaUG1mOEU5MlNFWi9YTGhGOHJZcm42b3JnaTVoM0psTElncGRlQk1BeERQ?=
+ =?utf-8?Q?C2oabC51Uah6kOtV4eGRmGFSK?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <243525CC618F7B40A27DCFF0B78EB29A@apcprd03.prod.outlook.com>
+Content-Transfer-Encoding: base64
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20251022144930.73272-1-clamor95@gmail.com> <20251022144930.73272-3-clamor95@gmail.com>
- <mzapp3ekwj3xdzqjjwkwn2hdfunf75fnd3wwxfsr5nce5guhoa@k2dgiw4sngrd>
-In-Reply-To: <mzapp3ekwj3xdzqjjwkwn2hdfunf75fnd3wwxfsr5nce5guhoa@k2dgiw4sngrd>
-From: Svyatoslav Ryhel <clamor95@gmail.com>
-Date: Tue, 18 Nov 2025 09:16:35 +0200
-X-Gm-Features: AWmQ_bkV8027WSudecPgIokkxJAlJtxrZFbDhKQAoi57jFryZZw6HtTknmXqldw
-Message-ID: <CAPVz0n0fkMYV-O4xWTBELd6HtKR83wrs+DS1wTVDOXdWuAK2OA@mail.gmail.com>
-Subject: Re: [PATCH v5 23/23] staging: media: tegra-video: add CSI support for
- Tegra20 and Tegra30
-To: Thierry Reding <thierry.reding@gmail.com>
-Cc: Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, Maxime Ripard <mripard@kernel.org>, 
-	Thomas Zimmermann <tzimmermann@suse.de>, David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>, 
-	Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Jonathan Hunter <jonathanh@nvidia.com>, Sowjanya Komatineni <skomatineni@nvidia.com>, 
-	Luca Ceresoli <luca.ceresoli@bootlin.com>, Prashant Gaikwad <pgaikwad@nvidia.com>, 
-	Michael Turquette <mturquette@baylibre.com>, Stephen Boyd <sboyd@kernel.org>, 
-	Mikko Perttunen <mperttunen@nvidia.com>, Mauro Carvalho Chehab <mchehab@kernel.org>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, =?UTF-8?Q?Jonas_Schw=C3=B6bel?= <jonasschwoebel@yahoo.de>, 
-	Dmitry Osipenko <digetx@gmail.com>, Charan Pedumuru <charan.pedumuru@gmail.com>, 
-	Diogo Ivo <diogo.ivo@tecnico.ulisboa.pt>, Aaron Kling <webgeek1234@gmail.com>, 
-	Arnd Bergmann <arnd@arndb.de>, dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org, 
-	linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-media@vger.kernel.org, linux-clk@vger.kernel.org, 
-	linux-staging@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: PUZPR03MB6186.apcprd03.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: b7cda15e-6990-4065-04fc-08de26732f8a
+X-MS-Exchange-CrossTenant-originalarrivaltime: 18 Nov 2025 07:22:09.3584
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: a7687ede-7a6b-4ef6-bace-642f677fbe31
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: NVyIlhIcZN1pEOBdofX2OGULYrsWwk4VCO/6W5SZVgkVkApi6ui4JmCABXxHaS2qX/AZvrKaGEWbssl3ZcTnJw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: TYQPR03MB9432
 
-=D0=BF=D0=BD, 17 =D0=BB=D0=B8=D1=81=D1=82. 2025=E2=80=AF=D1=80. =D0=BE 13:5=
-6 Thierry Reding <thierry.reding@gmail.com> =D0=BF=D0=B8=D1=88=D0=B5:
->
-> On Wed, Oct 22, 2025 at 05:49:30PM +0300, Svyatoslav Ryhel wrote:
-> > Add support for MIPI CSI device and calibration logic found in Tegra20 =
-and
-> > Tegra30 SoC.
-> >
-> > To get CSI operational, an additional syncpoint was allocated to serve =
-as
-> > the CSI frame counter. Both VIP and CSI use an existing syncpoint for V=
-I
-> > frame start events. That said, the frame capture function was refactore=
-d
-> > to reflect the addition of the CSI syncpoint, and the CSI-specific
-> > configuration is guarded by the presence of a passed CSI channel struct=
-ure
-> > pointer.
-> >
-> > The camera capture setup's configuration was reconsidered: the first tw=
-o
-> > writes must be done before tegra_channel_set_stream for MIPI calibratio=
-n
-> > to work properly; the third write was moved to VIP/CSI-specific functio=
-ns
-> > since it must be source-specific; the function was placed after
-> > tegra_channel_set_stream so the initial sequence is preserved and expan=
-ded.
-> >
-> > CSI configuration sequences were added based on downstream 3.1 kernel
-> > sources and adjusted to the existing video-tegra framework. Although
-> > Tegra20 and Tegra30 have the same set of configurations, they differ by
-> > the number of clocks used by CSI.
-> >
-> > Dropped the software syncpoint counters in favor of reading syncpoints
-> > directly and passing the incremented value to the polling function. If =
-the
-> > syncpoint increase fails, the PP is reset. This change should prevent
-> > possible race conditions.
-> >
-> > MIPI calibration logic was registered in CSI since Tegra20 and Tegra30
-> > have no dedicated hardware block for these operations and use CSI. Thes=
-e
-> > calls are used for both CSI and DSI to work properly, which is why MIPI
-> > calibration cannot be contained within CSI. The pads passed to the
-> > calibration calls resemble CSI PORT_A (0), CSI PORT_B (1), DSI-A (3) an=
-d
-> > DSI-B (4).
-> >
-> > Co-developed-by: Jonas Schw=C3=B6bel <jonasschwoebel@yahoo.de>
-> > Signed-off-by: Jonas Schw=C3=B6bel <jonasschwoebel@yahoo.de>
-> > Signed-off-by: Svyatoslav Ryhel <clamor95@gmail.com>
-> > ---
-> >  drivers/staging/media/tegra-video/csi.c     |  23 +
-> >  drivers/staging/media/tegra-video/csi.h     |   4 +
-> >  drivers/staging/media/tegra-video/tegra20.c | 620 ++++++++++++++++++--
-> >  drivers/staging/media/tegra-video/vi.h      |   2 -
-> >  drivers/staging/media/tegra-video/video.c   |   6 +
-> >  5 files changed, 608 insertions(+), 47 deletions(-)
->
-> Sorry, didn't realize that this was supposed to be part of the earlier
-> series that contains the opsification since it shows up as separate
-> patch series. Admittedly the numbering should've given it away... Thanks
-> Mikko for pointing that out.
->
-> Anyway, most of my objections remain. You can implement this here just
-> the same even without most of the extra churn in the prior patch. No
-> need for moving things to a different header, just keep adding the new
-> ops stuff to the existing one, which all drivers that need the
-> calibration functionality already include anyway (including this). Also
-
-So you propose to bloat host1x header with more mipi calibration stuff
-just because someone placed those functions in there, instead of
-creating a dedicated mipi calibration header. Even though mipi
-calibration has NOTING to do with host1x, in case of Tegra114+ it is a
-dedicated hw block not connected with host1x at all, and in
-Tegra20/Tegra30 it is integrated part of CSI and not a direct hw block
-on host1x. Having a dedicated header for mipi calibration seems more
-logical then continue bloating host1x with unrelated stuff decreasing
-its maintainability.
-
-> no need to split out the SoC specific bits from the mipi.c file since,
-> like I said, it's not going to grow anymore and can just remain as it
-> is.
->
-
-I proposed in that patch to separate mipi calibration framework which
-is used by all Tegra SoC generations from SoC specific parts used by
-Tegra114+ if form of dedicated hw block and Tegra20/Tegra30 as a part
-of CSI. This enhances maintainability and improves transparency, while
-you propose to squash everything into a single file making it a
-maintainers hell.
-
-> Thierry
+T24gVGh1LCAyMDI1LTExLTA2IGF0IDA5OjIxIC0wNTAwLCBOaWNvbGFzIER1ZnJlc25lIHdyb3Rl
+Og0KPiBIaSwNCj4gDQo+IExlIGpldWRpIDA2IG5vdmVtYnJlIDIwMjUgw6AgMTQ6MTMgKzA4MDAs
+IEt5cmllIFd1IGEgw6ljcml0IDoNCj4gPiBNVDgxODkgaXMgcHVyZSBzaW5nbGUgY29yZSBhcmNo
+aXRlY3R1cmUuIFN1cHBvcnQgaXRzIGNvbXBhdGlibGUgYW5kDQo+ID4gdXNlIGBtdGtfdmRlY19z
+aW5nbGVfY29yZV9wZGF0YWAgdG8gaW5pdGlhbGl6ZSBwbGF0Zm9ybSBkYXRhLg0KPiA+IA0KPiA+
+IFNpZ25lZC1vZmYtYnk6IEt5cmllIFd1IDxreXJpZS53dUBtZWRpYXRlay5jb20+DQo+ID4gUmV2
+aWV3ZWQtYnk6IEFuZ2Vsb0dpb2FjY2hpbm8gRGVsIFJlZ25vIDwNCj4gPiBhbmdlbG9naW9hY2No
+aW5vLmRlbHJlZ25vQGNvbGxhYm9yYS5jb20+DQo+ID4gLS0tDQo+ID4gIC4uLi9wbGF0Zm9ybS9t
+ZWRpYXRlay92Y29kZWMvZGVjb2Rlci9tdGtfdmNvZGVjX2RlY19kcnYuYyAgIHwgNg0KPiA+ICsr
+KysrKw0KPiA+ICAuLi4vcGxhdGZvcm0vbWVkaWF0ZWsvdmNvZGVjL2RlY29kZXIvbXRrX3Zjb2Rl
+Y19kZWNfZHJ2LmggICB8IDEgKw0KPiA+ICAyIGZpbGVzIGNoYW5nZWQsIDcgaW5zZXJ0aW9ucygr
+KQ0KPiA+IA0KPiA+IGRpZmYgLS1naXQNCj4gPiBhL2RyaXZlcnMvbWVkaWEvcGxhdGZvcm0vbWVk
+aWF0ZWsvdmNvZGVjL2RlY29kZXIvbXRrX3Zjb2RlY19kZWNfZHJ2DQo+ID4gLmMNCj4gPiBiL2Ry
+aXZlcnMvbWVkaWEvcGxhdGZvcm0vbWVkaWF0ZWsvdmNvZGVjL2RlY29kZXIvbXRrX3Zjb2RlY19k
+ZWNfZHJ2DQo+ID4gLmMNCj4gPiBpbmRleCA2ZmIwNWJiMDA2NDEuLmZjYTYwZTgxZTNjNyAxMDA2
+NDQNCj4gPiAtLS0NCj4gPiBhL2RyaXZlcnMvbWVkaWEvcGxhdGZvcm0vbWVkaWF0ZWsvdmNvZGVj
+L2RlY29kZXIvbXRrX3Zjb2RlY19kZWNfZHJ2DQo+ID4gLmMNCj4gPiArKysNCj4gPiBiL2RyaXZl
+cnMvbWVkaWEvcGxhdGZvcm0vbWVkaWF0ZWsvdmNvZGVjL2RlY29kZXIvbXRrX3Zjb2RlY19kZWNf
+ZHJ2DQo+ID4gLmMNCj4gPiBAQCAtMzQ3LDYgKzM0Nyw4IEBAIHN0YXRpYyB2b2lkIG10a192Y29k
+ZWNfZGVjX2dldF9jaGlwX25hbWUoc3RydWN0DQo+ID4gbXRrX3Zjb2RlY19kZWNfZGV2ICp2ZGVj
+X2RldikNCj4gPiAgCQl2ZGVjX2Rldi0+Y2hpcF9uYW1lID0gTVRLX1ZERUNfTVQ4MTg4Ow0KPiA+
+ICAJZWxzZSBpZiAob2ZfZGV2aWNlX2lzX2NvbXBhdGlibGUoZGV2LT5vZl9ub2RlLA0KPiA+ICJt
+ZWRpYXRlayxtdDgxOTYtdmNvZGVjLWRlYyIpKQ0KPiA+ICAJCXZkZWNfZGV2LT5jaGlwX25hbWUg
+PSBNVEtfVkRFQ19NVDgxOTY7DQo+ID4gKwllbHNlIGlmIChvZl9kZXZpY2VfaXNfY29tcGF0aWJs
+ZShkZXYtPm9mX25vZGUsDQo+ID4gIm1lZGlhdGVrLG10ODE4OS12Y29kZWMtZGVjIikpDQo+ID4g
+KwkJdmRlY19kZXYtPmNoaXBfbmFtZSA9IE1US19WREVDX01UODE4OTsNCj4gPiAgCWVsc2UNCj4g
+PiAgCQl2ZGVjX2Rldi0+Y2hpcF9uYW1lID0gTVRLX1ZERUNfSU5WQUw7DQo+ID4gIH0NCj4gPiBA
+QCAtNTc0LDYgKzU3NiwxMCBAQCBzdGF0aWMgY29uc3Qgc3RydWN0IG9mX2RldmljZV9pZA0KPiA+
+IG10a192Y29kZWNfbWF0Y2hbXSA9IHsNCj4gPiAgCQkuY29tcGF0aWJsZSA9ICJtZWRpYXRlayxt
+dDgxOTYtdmNvZGVjLWRlYyIsDQo+ID4gIAkJLmRhdGEgPSAmbXRrX2xhdF9zaWdfY29yZV9wZGF0
+YSwNCj4gPiAgCX0sDQo+ID4gKwl7DQo+ID4gKwkJLmNvbXBhdGlibGUgPSAibWVkaWF0ZWssbXQ4
+MTg5LXZjb2RlYy1kZWMiLA0KPiA+ICsJCS5kYXRhID0gJm10a192ZGVjX3NpbmdsZV9jb3JlX3Bk
+YXRhLA0KPiA+ICsJfSwNCj4gDQo+IE1heWJlIGl0cyBqdXN0IG1lLCBidXQgaXRzIGFubm95aW5n
+IHRoYXQgeW91IG1hdGNoIHRoZSBjb21wYXRpYmxlDQo+IHR3aWNlLiBJdCBpcw0KPiBvZiBjb3Vy
+c2UgbW9yZSB3b3JrIHRvIGFkZCB5ZXQgYW5vdGhlciBpbmRpcmVjdGlvbiBmb3IgdGhlIGNoaXBf
+bmFtZSwNCj4gYnV0DQo+IGNvbnNpZGVyaW5nIHlvdSBkbyAyIHNvYyAvIHllYXIgKGFuZCBzb21l
+dGltZXMgbW9yZSkgdGhpcyB3aWxsIGtlZXANCj4gZ3Jvd2luZy4NCj4gDQo+IE9waW5pb25zID8g
+SSdkIGRvbid0IHdhbnQgdG8gYmxvY2sgdGhpcyBmb3JldmVyLCBidXQgSSdkIGxpa2UgdG8gc2Vl
+DQo+IHNvbWUNCj4gY2xlYW51cCBvZiB0aGlzIGRyaXZlciBoYXBwZW5pbmcgaW4gdGhlIGxvbmcg
+dGVybS4NCj4gDQo+IE5pY29sYXMNCg0KRGVhciBOaWNvbGFzLA0KDQpJIHdpbGwgYWRkIHRoaXMg
+c2V0dGluZyB0byBjb21waXRhYmxlIHBkYXRhIGluIHRoZSBuZXh0IHZlcnNpb24uDQoNClRoYW5r
+cy4NCg0KUmVnYXJkcywNCkt5cmllDQo+IA0KPiA+ICAJe30sDQo+ID4gIH07DQo+ID4gIA0KPiA+
+IGRpZmYgLS1naXQNCj4gPiBhL2RyaXZlcnMvbWVkaWEvcGxhdGZvcm0vbWVkaWF0ZWsvdmNvZGVj
+L2RlY29kZXIvbXRrX3Zjb2RlY19kZWNfZHJ2DQo+ID4gLmgNCj4gPiBiL2RyaXZlcnMvbWVkaWEv
+cGxhdGZvcm0vbWVkaWF0ZWsvdmNvZGVjL2RlY29kZXIvbXRrX3Zjb2RlY19kZWNfZHJ2DQo+ID4g
+LmgNCj4gPiBpbmRleCA0MjliMzI5NTIxOTQuLjk0MjFmZDRmZGExZCAxMDA2NDQNCj4gPiAtLS0N
+Cj4gPiBhL2RyaXZlcnMvbWVkaWEvcGxhdGZvcm0vbWVkaWF0ZWsvdmNvZGVjL2RlY29kZXIvbXRr
+X3Zjb2RlY19kZWNfZHJ2DQo+ID4gLmgNCj4gPiArKysNCj4gPiBiL2RyaXZlcnMvbWVkaWEvcGxh
+dGZvcm0vbWVkaWF0ZWsvdmNvZGVjL2RlY29kZXIvbXRrX3Zjb2RlY19kZWNfZHJ2DQo+ID4gLmgN
+Cj4gPiBAQCAtMjUsNiArMjUsNyBAQCBlbnVtIG10a192Y29kZWNfZGVjX2NoaXBfbmFtZSB7DQo+
+ID4gIAlNVEtfVkRFQ19NVDgxODMgPSA4MTgzLA0KPiA+ICAJTVRLX1ZERUNfTVQ4MTg2ID0gODE4
+NiwNCj4gPiAgCU1US19WREVDX01UODE4OCA9IDgxODgsDQo+ID4gKwlNVEtfVkRFQ19NVDgxODkg
+PSA4MTg5LA0KPiA+ICAJTVRLX1ZERUNfTVQ4MTkyID0gODE5MiwNCj4gPiAgCU1US19WREVDX01U
+ODE5NSA9IDgxOTUsDQo+ID4gIAlNVEtfVkRFQ19NVDgxOTYgPSA4MTk2LA0K
