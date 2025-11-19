@@ -1,93 +1,96 @@
-Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D7E7A34E75A
-	for <linux-media@vger.kernel.org>; Wed, 19 Nov 2025 16:26:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 530EE366DAF;
+	Wed, 19 Nov 2025 16:33:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763569571; cv=none; b=lcaSX4ACWl/zvu2wSO8U9XLIvC9PYoMPKRCrwuf9jxM2lr1y6Rv+7VFU6uga9VKIHZGyua1F5JC40EdwkNkih2ZsdapJ5MPKssi3EVMFV73H/bhbW8PzABuUEF1Oe1zrJI+Xowq2YtXYWrKnV9zZFpRjZp0cMb1vg23/2Sd08qs=
+	t=1763570012; cv=none; b=U51JieKwrHARvUpu+V6rWx7tBOASc8FMgAWfzbfKWCIvx3z8QEpGBDCN9PyZS0W3jWsOtV8bYkskPRvbsb3MtLMve5VpK/XcO1ibYF+qqH5cURaHVNt43rqCO9K/O0XlHwunFa6xL/Qso1J2nZlz0oeKQzInhZuH+VzFaoE3Gxs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763569571; c=relaxed/simple;
-	bh=b9qktNJ9iJQGlZT7ZQunwDLMCxQROqNWIzuG+9SbK70=;
-	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=M47IMaNBDybl+FHCx0ArfXBWjRIG5NKDgggnO/V7fV2ostcxuUaxDcTppttQjaotzYfUhicAzeSTWGrcwgssLkHswVGcVHOnaP754GBSlpdb0HIK3oJIES5oXDCcyUajW9l93cM4mP4u9h78BV4XC/GSiy/r+jbTPvcOi92oth4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
-Received: from dude05.red.stw.pengutronix.de ([2a0a:edc0:0:1101:1d::54])
-	by metis.whiteo.stw.pengutronix.de with esmtp (Exim 4.92)
-	(envelope-from <m.tretter@pengutronix.de>)
-	id 1vLl0L-0000aE-4S; Wed, 19 Nov 2025 17:26:01 +0100
-From: Michael Tretter <m.tretter@pengutronix.de>
-Subject: [PATCH v2 0/4] media: adv7180: make VPP handling more flexible
-Date: Wed, 19 Nov 2025 17:25:50 +0100
-Message-Id: <20251119-b4-adv7180-vpp-sub-device-v2-0-86a7790b63ab@pengutronix.de>
+	s=arc-20240116; t=1763570012; c=relaxed/simple;
+	bh=SQB43V1lcm01gCfrVBWXeZWkfWYzDLNLnZu9KWeWJcg=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=mWVcMbYRgRQ0OxvJt5Q2L1zzYl59np6SjBhwVxDw4WjuLxelLFVtRQzu3BbLVx0QMpzBE5Jc/EFv6pZgX+iBz1EzJhZqFRn6l+x4dAck7hnLLnG3J0Um6sX6K/qia/WLgO0SiV6gevGzh6cfZLjbc2PpuMeiTKWSqO6xFAIFIgQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mafG8ZOF; arc=none smtp.client-ip=10.30.226.201
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mafG8ZOF"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 48D05C116B1;
+	Wed, 19 Nov 2025 16:33:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1763570012;
+	bh=SQB43V1lcm01gCfrVBWXeZWkfWYzDLNLnZu9KWeWJcg=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=mafG8ZOF8WzHpM0Ap0HV10HNQ+V26iii16RmNEh8xlVGt/3Fyif1MM/ooh0K/pfIz
+	 szK/RWtsKgEJUAwJCF4Ei2amklh14ZMnM9irxppUQrCUJkvt/EZVFJcbPn28NcqEGY
+	 H5mQcoOTZFTUtioKEvXhb//Hd+eC/e25r6Py2bHgQa/vmQ3b9ezpxZIBWcXV9ncmwt
+	 7e2asxChIzWsMtQIBzyz1HCL0UngdmumU3R+J6sfLJMWs0oS7ZF4iSIBsph8VRgCK0
+	 +t4iS375piSkus/kTsSOX82JCK0IrwbeeJvL9xKC8TF2BvGIttU+8sQ9kfioC2gTlg
+	 KCxDuQf1gZvsw==
+Date: Wed, 19 Nov 2025 18:33:26 +0200
+From: Leon Romanovsky <leon@kernel.org>
+To: Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>
+Cc: Bjorn Helgaas <bhelgaas@google.com>,
+	Logan Gunthorpe <logang@deltatee.com>, Jens Axboe <axboe@kernel.dk>,
+	Robin Murphy <robin.murphy@arm.com>, Joerg Roedel <joro@8bytes.org>,
+	Will Deacon <will@kernel.org>,
+	Marek Szyprowski <m.szyprowski@samsung.com>,
+	Jason Gunthorpe <jgg@ziepe.ca>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Sumit Semwal <sumit.semwal@linaro.org>, Kees Cook <kees@kernel.org>,
+	"Gustavo A. R. Silva" <gustavoars@kernel.org>,
+	Ankit Agrawal <ankita@nvidia.com>,
+	Yishai Hadas <yishaih@nvidia.com>,
+	Shameer Kolothum <skolothumtho@nvidia.com>,
+	Kevin Tian <kevin.tian@intel.com>,
+	Alex Williamson <alex@shazbot.org>,
+	Krishnakant Jaju <kjaju@nvidia.com>, Matt Ochs <mochs@nvidia.com>,
+	linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-block@vger.kernel.org, iommu@lists.linux.dev,
+	linux-mm@kvack.org, linux-doc@vger.kernel.org,
+	linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
+	linaro-mm-sig@lists.linaro.org, kvm@vger.kernel.org,
+	linux-hardening@vger.kernel.org, Alex Mastro <amastro@fb.com>,
+	Nicolin Chen <nicolinc@nvidia.com>
+Subject: Re: [Linaro-mm-sig] [PATCH v8 06/11] dma-buf: provide phys_vec to
+ scatter-gather mapping routine
+Message-ID: <20251119163326.GL18335@unreal>
+References: <20251111-dmabuf-vfio-v8-0-fd9aa5df478f@nvidia.com>
+ <20251111-dmabuf-vfio-v8-6-fd9aa5df478f@nvidia.com>
+ <8a11b605-6ac7-48ac-8f27-22df7072e4ad@amd.com>
+ <20251119134245.GD18335@unreal>
+ <6714dc49-6b5c-4d58-9a43-95bb95873a97@amd.com>
+ <20251119145007.GJ18335@unreal>
+ <26d7ecab-33ed-4aab-82d5-954b0d1d1718@amd.com>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-B4-Tracking: v=1; b=H4sIAI/vHWkC/42NQQ6DIBBFr2Jm3WnAapCueo/GBcios0ECSmyMd
- y/1BP2795P3/wGJIlOCZ3VApMyJF1+gvlUwzMZPhOwKQy3qVpagbdC4rGQnMIeAabPoijcQ2sE
- 9WmWUabSE4odII+/X9rsvPHNal/i5rrL8tf+sZokCdafUSHpUQttXID9ta1w873dH0J/n+QUPt
- Ts/xwAAAA==
-X-Change-ID: 20251111-b4-adv7180-vpp-sub-device-bcd357a7a491
-To: Lars-Peter Clausen <lars@metafoo.de>, 
- =?utf-8?q?Niklas_S=C3=B6derlund?= <niklas.soderlund+renesas@ragnatech.se>, 
- Mauro Carvalho Chehab <mchehab@kernel.org>, Rob Herring <robh@kernel.org>, 
- Krzysztof Kozlowski <krzk+dt@kernel.org>, 
- Conor Dooley <conor+dt@kernel.org>
-Cc: linux-media@vger.kernel.org, devicetree@vger.kernel.org, 
- kernel@pengutronix.de, Michael Tretter <m.tretter@pengutronix.de>, 
- Thorsten Schmelzer <tschmelzer@topcon.com>
-X-Mailer: b4 0.14.3
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:1101:1d::54
-X-SA-Exim-Mail-From: m.tretter@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-media@vger.kernel.org
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <26d7ecab-33ed-4aab-82d5-954b0d1d1718@amd.com>
 
-The adv7280 and adv7280-m have a Video Post Processor (VPP) unit that is
-able to de-interlace the video signal.
+On Wed, Nov 19, 2025 at 03:53:30PM +0100, Christian König wrote:
 
-This series makes the handling of the VPP more flexible. Furthermore, it
-fixes the reported frame interval if the VPP is enabled.
+<...>
 
-Patches 1 and 2 add the device tree bindings and driver handling to
-specify the (programmable) I2C address of the VPP (and CSI) slave device
-via device tree.
+> >>>>> +struct sg_table *dma_buf_map(struct dma_buf_attachment *attach,
+> >>>>
+> >>>> That is clearly not a good name for this function. We already have overloaded the term *mapping* with something completely different.
+> >>>
+> >>> This function performs DMA mapping, so what name do you suggest instead of dma_buf_map()?
+> >>
+> >> Something like dma_buf_phys_vec_to_sg_table(). I'm not good at naming either.
+> > 
+> > Can I call it simply dma_buf_mapping() as I plan to put that function in dma_buf_mapping.c
+> > file per-your request.
+> 
+> No, just completely drop the term "mapping" here. This is about phys_vector to sg_table conversion and nothing else.
 
-Patch 3 exposes the registers of the adv via CONFIG_VIDEO_ADV_DEBUG to
-user space for improved debugging capabilities.
+In order to progress, I renamed these functions to be
+dma_buf_phys_vec_to_sgt() and dma_buf_free_sgt(), and put everything in dma_buf_mapping.c file.
 
-Patch 4 fixes the frame interval that is reported by the driver if the
-de-interlacing is active.
-
-Signed-off-by: Michael Tretter <m.tretter@pengutronix.de>
----
-Changes in v2:
-- fix and rewrite device tree bindings definition
-- simplify calculation of frame interval in progressive mode
-- Link to v1: https://patch.msgid.link/20251111-b4-adv7180-vpp-sub-device-v1-0-9877fe9f709b@pengutronix.de
-
----
-Michael Tretter (1):
-      media: dt-bindings: adi,adv7180: add VPP and CSI register maps
-
-Thorsten Schmelzer (3):
-      media: adv7180: add support for ancillary devices
-      media: adv7180: implement g_register and s_register
-      media: adv7180: fix frame interval in progressive mode
-
- .../devicetree/bindings/media/i2c/adi,adv7180.yaml | 93 +++++++++++++++++++++-
- drivers/media/i2c/adv7180.c                        | 55 +++++++++++--
- 2 files changed, 139 insertions(+), 9 deletions(-)
----
-base-commit: d363bdfa0ec6b19a4f40b572cec70430d5b13ad6
-change-id: 20251111-b4-adv7180-vpp-sub-device-bcd357a7a491
-
-Best regards,
--- 
-Michael Tretter <m.tretter@pengutronix.de>
-
+Thanks
