@@ -1,77 +1,81 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mx.gpxsee.org (mx.gpxsee.org [37.205.14.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 332AD33BBAC;
-	Thu, 20 Nov 2025 13:14:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8F42022B8D0;
+	Thu, 20 Nov 2025 13:15:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=37.205.14.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763644484; cv=none; b=EOwk2ycL3CXz2Gmi3O9H+36UGmsTvhWMUFmM2eF7cS1D1zcn1LzuTX1XnFLr3KwyXLeAG2IzrvjrNDogjo747Xh5pgCCO3qcMwrqillnPXnvuv/g30f7BC/mizAlytMjaBS8NpN3lnLzG6aRyPM3RTikCnVfTmdqsYWLi3Zz1hc=
+	t=1763644547; cv=none; b=OUbrKuq47GlIN8aGPa9nQbxIgj1BcEZjK5WFCf9f24iZJewDNvmgHkEsUieR2BrMYepCl6niOV1g9FOtVFJlFwzm6LLMYh//rSWGDrhg89dtAPkXnKuixvzR/oWvYEDkKjVME1YuQza2WTg7daPrQ7D277ydJbyYtc/7SQnk3QI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763644484; c=relaxed/simple;
-	bh=690R1aIqXEsiV77CfJMMMfFWoAn24bRFYzdx8kvtixM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=tyX5aHGI5mlR7LcKqjEQJXhC46xy1yV4x8a9/DL+EhXpHEQMuFxGy2knm9UKTwRw/NPRi/uea4EI710zX0TUxwQFVou7ArWZoU/bKU0sLazygff6iYrCLPk8iloQVozGFLLZXv4SJ3vBp78UoE0A2NigY9qqfa+x4Pc6iLpPj4k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=NQU99WBs; arc=none smtp.client-ip=10.30.226.201
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NQU99WBs"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B8643C4CEF1;
-	Thu, 20 Nov 2025 13:14:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1763644483;
-	bh=690R1aIqXEsiV77CfJMMMfFWoAn24bRFYzdx8kvtixM=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=NQU99WBs2qEKt6naghA1nCIHyeEQ8pr6t2TvmQ1rUMQvca0y8a34RlFqHlH0ijsLe
-	 hKqPJvaWHza2aI6+rV6Yqw/59GMmhbY/5OmT9UhCrS1znroxyYwXMhujsi2MPFOqr+
-	 DaukWIRw6WlW2gklO9cjrBEkzlBFNL97/IuDGZ4wV/L6gRrkir/9S5MrtIJUsXdBL3
-	 0qFZcCwVfoCL9VHMs7fch7vC4gauFl3f4VDYYUIc5wXb8O6v5bLUQbK0McESRSMZRI
-	 tmfVpOHfs1mPxENo8XIWci+ZtrVWJgL+MmD2SMW2IvnVo+cXxu7udsZZDQm8KORF62
-	 jNMknfrlaktug==
-Received: from johan by xi.lan with local (Exim 4.98.2)
-	(envelope-from <johan@kernel.org>)
-	id 1vM4Um-000000003n1-05j9;
-	Thu, 20 Nov 2025 14:14:44 +0100
-Date: Thu, 20 Nov 2025 14:14:44 +0100
-From: Johan Hovold <johan@kernel.org>
-To: Minghsiu Tsai <minghsiu.tsai@mediatek.com>,
-	Houlong Wei <houlong.wei@mediatek.com>,
-	Andrew-CT Chen <andrew-ct.chen@mediatek.com>
-Cc: Mauro Carvalho Chehab <mchehab@kernel.org>,
-	Matthias Brugger <matthias.bgg@gmail.com>,
-	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
-	Tiffany Lin <tiffany.lin@mediatek.com>,
-	Yunfei Dong <yunfei.dong@mediatek.com>,
-	Nicolas Dufresne <nicolas@ndufresne.ca>,
-	linux-media@vger.kernel.org, linux-mediatek@lists.infradead.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 0/2] media: mediatek: fix VPU device leaks on probe
-Message-ID: <aR8URPPYRBuVCdDk@hovoldconsulting.com>
-References: <20251028100454.4086-1-johan@kernel.org>
+	s=arc-20240116; t=1763644547; c=relaxed/simple;
+	bh=rN2MIiZpEc7tvyZLRwdhaNJop8sP3ciBFaRBnYldgZg=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=lodpOhwWkW15DpT7bxrWXeyCTtmaFD5Ywvm7OMZJSdXZhRvQ35WfFj/RUkzuV2IQx2awXdNtd38XRe2vQyJ7K/N27OUUCRmQOkXc3LjklW/IiUCI+aOZP/iif96Z5ETdwxCDI0H1qg1CJ2sVJqSTfR1wYCEjee6/vzk73enBEfs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=gpxsee.org; spf=pass smtp.mailfrom=gpxsee.org; arc=none smtp.client-ip=37.205.14.76
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=gpxsee.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gpxsee.org
+Received: from mgb4.digiteq.red (unknown [62.77.71.229])
+	by mx.gpxsee.org (Postfix) with ESMTPSA id 69AF434381;
+	Thu, 20 Nov 2025 14:08:37 +0100 (CET)
+From: tumic@gpxsee.org
+To: Mauro Carvalho Chehab <mchehab@kernel.org>,
+	Hans Verkuil <hverkuil@xs4all.nl>
+Cc: linux-media@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	=?UTF-8?q?Martin=20T=C5=AFma?= <martin.tuma@digiteqautomotive.com>
+Subject: [PATCH v3 3/3] Documentation: admin-guide: media: mgb4: Add GMSL1 & GMSL3-coax modules info
+Date: Thu, 20 Nov 2025 14:08:27 +0100
+Message-ID: <20251120130827.1882-4-tumic@gpxsee.org>
+X-Mailer: git-send-email 2.51.2
+In-Reply-To: <20251120130827.1882-1-tumic@gpxsee.org>
+References: <20251120130827.1882-1-tumic@gpxsee.org>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20251028100454.4086-1-johan@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-On Tue, Oct 28, 2025 at 11:04:52AM +0100, Johan Hovold wrote:
-> This series fixes VPU device leaks during probe of the mdp driver.
-> 
-> Included is also a minor documentation update to make it clear that the
-> VPU lookup helper returns the device with an incremented refcount.
+From: Martin Tůma <martin.tuma@digiteqautomotive.com>
 
-> Changes in v2
->  - drop incorrect vcodec patch since that reference leak has already
->    been fixed by commit bf1d556ad4e0 ("media: mtk-vcodec: abstract
->    firmware interface") which added the codec release callback
-> 
-> 
-> Johan Hovold (2):
->   media: mediatek: mdp: fix device leak on probe
->   media: mediatek: amend vpu_get_plat_device() documentation
+Add the mgb4 GMSL1 and GMSL3-coax modules info.
 
-Can these be picked up for 6.19?
+Signed-off-by: Martin Tůma <martin.tuma@digiteqautomotive.com>
+---
+ Documentation/admin-guide/media/mgb4.rst | 11 +++++++----
+ 1 file changed, 7 insertions(+), 4 deletions(-)
 
-Johan
+diff --git a/Documentation/admin-guide/media/mgb4.rst b/Documentation/admin-guide/media/mgb4.rst
+index 5ac69b833a7a..0a8a56e837f7 100644
+--- a/Documentation/admin-guide/media/mgb4.rst
++++ b/Documentation/admin-guide/media/mgb4.rst
+@@ -31,9 +31,11 @@ Global (PCI card) parameters
+ 
+     | 0 - No module present
+     | 1 - FPDL3
+-    | 2 - GMSL (one serializer, two daisy chained deserializers)
+-    | 3 - GMSL (one serializer, two deserializers)
+-    | 4 - GMSL (two deserializers with two daisy chain outputs)
++    | 2 - GMSL3 (one serializer, two daisy chained deserializers)
++    | 3 - GMSL3 (one serializer, two deserializers)
++    | 4 - GMSL3 (two deserializers with two daisy chain outputs)
++    | 6 - GMSL1
++    | 8 - GMSL3 coax
+ 
+ **module_version** (R):
+     Module version number. Zero in case of a missing module.
+@@ -42,7 +44,8 @@ Global (PCI card) parameters
+     Firmware type.
+ 
+     | 1 - FPDL3
+-    | 2 - GMSL
++    | 2 - GMSL3
++    | 3 - GMSL1
+ 
+ **fw_version** (R):
+     Firmware version number.
+-- 
+2.51.2
+
