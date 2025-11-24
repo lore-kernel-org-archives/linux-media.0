@@ -1,87 +1,120 @@
-Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D8A692AE99;
-	Mon, 24 Nov 2025 03:08:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=124.126.103.232
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DA5B12853F7;
+	Mon, 24 Nov 2025 03:32:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763953689; cv=none; b=myyt2zSWHvU8974z2cCe+avtBUOtNrbCOVzQBrChLneMmpmaPKf9K6bWabXZEVZDOkxUJPHPybBRB86M9+uyaKZwu24MJGE6pi1jFtirSeFg+jQoV2w87WCim7jjGdgrJFCFwwHjqf2KuAgul5HF55x1REPQnIcQl3wQFqESxSk=
+	t=1763955155; cv=none; b=OMlcFKOqP6KLCzDDfhmqmAMLtx7DDjr3qaO8gMol3iJLeiZ530ZrZczyLzGIwczBP4jlEEz5PqluwSPbqqK5NAD48OBWrfbpd4DxYEodXF3WUsk4zWskB0b+/QyxtG5040PvDa43GINVCutchoSsX8x/545vtTPffqVbnS+yCHc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763953689; c=relaxed/simple;
-	bh=WBJBraH7ij9f0E8GbN1wQmQwBY1CtOewIEqOf2BhQm8=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=d6p0m6H4i3dzjKbtbimy2sw8t5XdgHKP/Easr6e/H4D/A7tk+ViKKnfIMC/rI3+i9p2bzMQVDL6ifp/2lxzFGMr7N9EeaRJKnMi81jvY+2DMqdpDW5MVT/MccFiFD0r0IhQEXvYWthJLO5/n0RwVOjLodiNVKCJatQI0lPubkjc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=kylinos.cn; arc=none smtp.client-ip=124.126.103.232
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kylinos.cn
-X-UUID: c1818594c8e211f0a38c85956e01ac42-20251124
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.3.6,REQID:d257366e-b160-43ca-a251-d85b8d18a924,IP:0,UR
-	L:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:r
-	elease,TS:0
-X-CID-META: VersionHash:a9d874c,CLOUDID:8c217c8d7ce7a578902d021e2b06887c,BulkI
-	D:nil,BulkQuantity:0,Recheck:0,SF:80|81|82|83|102|898,TC:nil,Content:0|15|
-	52,EDM:-3,IP:nil,URL:1,File:nil,RT:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0
-	,OSA:0,AV:0,LES:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0,ARC:0
-X-CID-BVR: 2,SSN|SDN
-X-CID-BAS: 2,SSN|SDN,0,_
-X-CID-FACTOR: TF_CID_SPAM_SNR,TF_CID_SPAM_ULS
-X-CID-RHF: D41D8CD98F00B204E9800998ECF8427E
-X-UUID: c1818594c8e211f0a38c85956e01ac42-20251124
-X-User: dengjie03@kylinos.cn
-Received: from [10.42.12.246] [(10.44.16.150)] by mailgw.kylinos.cn
-	(envelope-from <dengjie03@kylinos.cn>)
-	(Generic MTA with TLSv1.3 TLS_AES_128_GCM_SHA256 128/128)
-	with ESMTP id 83680748; Mon, 24 Nov 2025 11:07:48 +0800
-Message-ID: <65a0e74c-a9ee-4237-b8c9-9863e4de64b5@kylinos.cn>
-Date: Mon, 24 Nov 2025 11:07:45 +0800
+	s=arc-20240116; t=1763955155; c=relaxed/simple;
+	bh=nQMpas0P68zqe+jsuAUQuc78OljFGZeSHfJ158LMKlg=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=bB76r+S2ypRz3M712p7iKKJMFE3MA6Yu7DhILUDz42Nb6NCCoJlXZ9SkrcSbJU03uCll7S1VsdVcuD8FYZGqbUROVn4ppszHtDQfbe8jvpRGzxFNj+QqRhoGNWdo1kEjYhvn8YsHqYkKCKWQbTTdbdITVhYmvck6g+ZaN3moqcc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=LIvqdsee; arc=none smtp.client-ip=10.30.226.201
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="LIvqdsee"
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 94261C2BC9E;
+	Mon, 24 Nov 2025 03:32:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1763955154;
+	bh=nQMpas0P68zqe+jsuAUQuc78OljFGZeSHfJ158LMKlg=;
+	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To:From;
+	b=LIvqdsee1woYL1Q8LlyGqPI8UWC+R3TubGMryLxV0Lbrjw1PUqH1+0rJGHSYq1tzW
+	 eDifwaEwSBYALohqMjo5p22/686Mjw832VBupIP5TTaoZtBobhGXBLaAftNEjtFIco
+	 dX5gzqMTJxLrX2RrCe1r+154pMsLSTq0Is4iJPJ9K7vm1I1fDlSw3Iu567FfLMI9N2
+	 OoNfNVbVdk2YMATkWV2uyfnW7+vyqnaGpvhI0K2dTG39slf9Mw9tFBCKXOEZ1yRDwk
+	 05P/M7Mfirm+JfS8T2VyNAcKtQVFyZEVfqAS+qgUJnEMyhdg352PJA+QpsmmO8+lqT
+	 BT3og9flY3swA==
+Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8685BCFD31F;
+	Mon, 24 Nov 2025 03:32:34 +0000 (UTC)
+From: Zhentao Guo via B4 Relay <devnull+zhentao.guo.amlogic.com@kernel.org>
+Date: Mon, 24 Nov 2025 11:32:19 +0800
+Subject: [PATCH RFC v2 3/3] arm64: dts: amlogic: Add video decoder driver
+ support for S4 SOCs
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2] media: usb: uvc: Fix NULL pointer dereference during
- USB device hot-unplug
-To: Ricardo Ribalda <ribalda@chromium.org>
-Cc: laurent.pinchart@ideasonboard.com, hansg@kernel.org, mchehab@kernel.org,
- kieran.bingham@ideasonboard.com, linux-media@vger.kernel.org,
- linux-kernel@vger.kernel.org
-References: <20251122072558.2604753-1-dengjie03@kylinos.cn>
- <CANiDSCuJZU9di2T_zQbk7NVr0--JyPUZkXGur11HKZF8qe3N2Q@mail.gmail.com>
-From: Jie Deng <dengjie03@kylinos.cn>
-In-Reply-To: <CANiDSCuJZU9di2T_zQbk7NVr0--JyPUZkXGur11HKZF8qe3N2Q@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20251124-b4-s4-vdec-upstream-v2-3-bdbbce3f11a6@amlogic.com>
+References: <20251124-b4-s4-vdec-upstream-v2-0-bdbbce3f11a6@amlogic.com>
+In-Reply-To: <20251124-b4-s4-vdec-upstream-v2-0-bdbbce3f11a6@amlogic.com>
+To: Mauro Carvalho Chehab <mchehab@kernel.org>, 
+ Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+ Conor Dooley <conor+dt@kernel.org>, 
+ Neil Armstrong <neil.armstrong@linaro.org>, 
+ Kevin Hilman <khilman@baylibre.com>, Jerome Brunet <jbrunet@baylibre.com>, 
+ Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+Cc: linux-media@vger.kernel.org, devicetree@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+ linux-amlogic@lists.infradead.org, Zhentao Guo <zhentao.guo@amlogic.com>
+X-Mailer: b4 0.14.3
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1763955152; l=1441;
+ i=zhentao.guo@amlogic.com; s=20251024; h=from:subject:message-id;
+ bh=ipvSyoCuAjlj5iGd/O8ZvsuGOB2B3dXxp1S6BN3SOc4=;
+ b=+1wPmnRCbaMUs0SfXj44FPENcjNu8W4k/F7Tgy5s0bjQiMcfnJkYcBKCv5+xdb+cSPZT7jend
+ eHRRpV6VIQSA8ZOxSqEmAJO5YdnW3ZVx3xXwZdX4csth3oNHl+54ezg
+X-Developer-Key: i=zhentao.guo@amlogic.com; a=ed25519;
+ pk=5yfDKrjreXwcAoEUsdtWafy6YN500upXp/CgtnXjLVU=
+X-Endpoint-Received: by B4 Relay for zhentao.guo@amlogic.com/20251024 with
+ auth_id=555
+X-Original-From: Zhentao Guo <zhentao.guo@amlogic.com>
+Reply-To: zhentao.guo@amlogic.com
 
-Hi Ricardo
+From: Zhentao Guo <zhentao.guo@amlogic.com>
 
-Thank you for your reply
+Add vcodec node to enable Amlogic V4L2 stateless video decoder
+support.
 
-在 2025/11/22 16:17, Ricardo Ribalda 写道:
-> Hi Jie
->
-> On Sat, 22 Nov 2025 at 08:26, Jie Deng <dengjie03@kylinos.cn> wrote:
->> Add safety checks to prevent kernel panic during the race window in
->> USB device disconnection.
-> Can you share the kernel version that you are using?
-The kernel version I'm using is 5.4.18
->
-> This patch
-> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=c93d73c9c2cfa7658f7100d201a47c4856746222
-> Should prevent the race that you are describing.
->
->
-> In your trace you have a reference to uvc_queue_streamoff that was
-> deleted by that patch
+Signed-off-by: Zhentao Guo <zhentao.guo@amlogic.com>
+---
+ arch/arm64/boot/dts/amlogic/meson-s4.dtsi | 27 +++++++++++++++++++++++++++
+ 1 file changed, 27 insertions(+)
 
-This patch may indeed eliminate the problem I described.
+diff --git a/arch/arm64/boot/dts/amlogic/meson-s4.dtsi b/arch/arm64/boot/dts/amlogic/meson-s4.dtsi
+index 9d99ed2994df..80f1b92492a5 100644
+--- a/arch/arm64/boot/dts/amlogic/meson-s4.dtsi
++++ b/arch/arm64/boot/dts/amlogic/meson-s4.dtsi
+@@ -853,5 +853,32 @@ emmc: mmc@fe08c000 {
+ 			no-sd;
+ 			status = "disabled";
+ 		};
++
++		canvas: video-lut@fe036048 {
++			compatible = "amlogic,canvas";
++			reg = <0x0 0xfe036048 0x0 0x14>;
++		};
++
++		video-codec@fe320000 {
++			compatible = "amlogic,s4-vcodec-dec";
++			reg = <0x0 0xfe320000 0x0 0x10000>,
++			      <0x0 0xfe036000 0x0 0x20>;
++			amlogic,canvas = <&canvas>;
++			reg-names = "dos",
++				    "dmc";
++			interrupts = <GIC_SPI 91 IRQ_TYPE_EDGE_RISING>,
++				     <GIC_SPI 92 IRQ_TYPE_EDGE_RISING>,
++				     <GIC_SPI 93 IRQ_TYPE_EDGE_RISING>;
++			clocks = <&clkc_periphs CLKID_DOS>,
++				 <&clkc_periphs CLKID_VDEC_SEL>,
++				 <&clkc_periphs CLKID_HEVCF_SEL>;
++			clock-names = "vdec",
++				      "clk_vdec_mux",
++				      "clk_hevcf_mux";
++			power-domains = <&pwrc PWRC_S4_DOS_VDEC_ID>,
++					<&pwrc PWRC_S4_DOS_HEVC_ID>;
++			power-domain-names = "vdec",
++					     "hevc";
++		};
+ 	};
+ };
 
-The 5.4 longterm version should not have synchronized this patch？
+-- 
+2.42.0
 
-
-Thanks,
-
-Jie Deng
 
