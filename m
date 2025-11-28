@@ -1,80 +1,78 @@
-Received: from mail-pj1-f47.google.com (mail-pj1-f47.google.com [209.85.216.47])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from PH7PR06CU001.outbound.protection.outlook.com (mail-westus3azon11010031.outbound.protection.outlook.com [52.101.201.31])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 939E42DF151
-	for <linux-media@vger.kernel.org>; Fri, 28 Nov 2025 08:53:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.47
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764319993; cv=none; b=uYUW+ytfWbrN+Tf9q8q2hXR3i8Ep4EaCF+SJxNlUEK/KUnwEhrufnZ6E6VNKShl8Ba7h+oLt0KI3AlGnza9UMmUIMu7mwfEcrRBjTSUyYfDiaYSoZGPsUkzcBc9s16VxiON5muqXE6AeKkyyKuTyUOsZPPyOO6uYQJX6Gg/+cC0=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764319993; c=relaxed/simple;
-	bh=yf/N3q8A0ZS1jptQxIjufR78F3K9pXD3/Vrasv6ztBM=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=Hnq/Lem2Z0ShdJNFIZSxg6IrgQamDBE+9RSb1x5EaOZjPwW3Qe4a5T4l4it+V1EXlHQvpW+4QJJf+vgvlAqGB44YONbTsBF+aQ/+5E0dFg1EMkkUXioZ+KUe/3gEMFZmdlFCs0B6wYonbMELIhMcjVjxj5Oi0gKfxpl5LE6q0Ow=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=jgHiR29Q; arc=none smtp.client-ip=209.85.216.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9A1E9302153;
+	Fri, 28 Nov 2025 09:19:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.201.31
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1764321601; cv=fail; b=r8Ffs4s+IDebYFhYrot0Zp7wkhiHgGQ7HQRP5/AmslEHXxnaTFyzGxYYlwY/dbKo5Xeuv7ys/dWt4xsNTiVJu+gfq01UMBUghWqNGHcYBf83M53Thz/EUj/zeo7Po0BaUy4qZlnz2/3/4I+PlgBJepCODhSqvE20SzSjQT9lO50=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1764321601; c=relaxed/simple;
+	bh=PfP2GvTbSLHPGvt05bzXJfE8KculNHxBEFUt8G9hXbA=;
+	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=LcuD7djH0FMbCQeKhLnSPTUTq+YqpApjmggh9S8lNraGt8rvPpIlX9R+4mITPjinQ3yrfkaIUsBO1R4FfMmW9eJtb9IeY6J1TK4QIE+pcsea1VcnPzp6ndXTapnnqUvgoWwlNiaTHDasuo5evKXi1WOXGRcPkYnff18huG8FEAU=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=YQ1Dw20e; arc=fail smtp.client-ip=52.101.201.31
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jgHiR29Q"
-Received: by mail-pj1-f47.google.com with SMTP id 98e67ed59e1d1-341988c720aso1385508a91.3
-        for <linux-media@vger.kernel.org>; Fri, 28 Nov 2025 00:53:11 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1764319991; x=1764924791; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=eL0U7zmB1gT10wwBCtl159d+vX25hEIj58mzemed9/Q=;
-        b=jgHiR29QK9nT9M/EDrTB7aUDjWj4eZS2JmgFsNfIWQrOACj08N5Ww/DfeSIIf+UlfW
-         +kTK2xdW/Yk17CVyTwluDIA4EzCgho1L7A0qneyv+PkXfR5TSNm2KZ5Hhxa9CbzGSHa1
-         JxLwMdeXE3qmZlTxpA2bL58JRm9nyfKosI4tWJm5JICWjD8DujHX56CSug9qKAbzfWTl
-         4YuBPNbtLn//GONsFZVjAGqEpIm2KtSVaMHoX2xybykSJqnmvbc+06v25Kyg82bhAUAi
-         5MOUCcZYl95m8zaoodHgS+pymyhdGACPU43ZEPoqM64VIp2k3r92I6YicZpIw2b1Yh5w
-         Ftiw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1764319991; x=1764924791;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=eL0U7zmB1gT10wwBCtl159d+vX25hEIj58mzemed9/Q=;
-        b=e26lqGOGUZNGSk1785eVXQKV0DAbCYmpaMWp9hgc7B/rxJVY+JT1JeZpAGYuDMBE9a
-         6qtrs3UjkKcnyPWU4+hZ4GmgQMxlhvnTRiyhPjT3HSXi6tZ8PH4YOvIUhpPuSKSnamN3
-         Mw/vGrr1/g1TiqEoDf5fuks7q3Edt0DioTf4PgwbZXrKBaE+XArcFfeXJoXNy5ZevUnj
-         ZN/RidfBsFNLh360lOSVIPWW9ISoig4pgImx0I8R3JxEeO/V2PAO7q9CnxgrK8Agb1ni
-         LzkLHOVfi7Ft//Q0Fae9AsMghwZJ6Anv+iNIHSv2hp0qniY1pBde3ZnQL2qAK7axJHSK
-         /JIA==
-X-Gm-Message-State: AOJu0Yyuyxieth1TpKnmLBsDUv7wDjW6PnMvm5M/7+nnC6gBp5mpxvgr
-	A0uzytcJSeGOgpqNwDVYCzW4dzlD7tabxKZhNHXzG+AyPDr6J4pEWTwK
-X-Gm-Gg: ASbGnctpUQPvwjPNsRQxSIoxqvFoguOS8W1XTJWNeQuf2O23d9YVPepoJ7p/TNjXoi4
-	AH4ag1dY7Ds8ckiBYB6g2Fu3Q7gSQb6AUaHwcC3iE1Cn9hWbR7efe9UBkby7rYSHEtf1hnYkzuH
-	0sSJKlOjRIasvXXL5wpmlMdlC8s9HrHgaEDr3e8RrRgPXrpyAjrBMT+eIje1RLHIoF3sDkKjZzt
-	dVX3Rr0KKVGTfSCkWjYOTRiZHTleDQPU+DhpE4f0Y/klJMPkDKoqHYLvu78tp2KwdpDFWnVEit7
-	knhaqfWnhJN5/3DEB88VhitJ8ustPnP46EzB9mBqoHvq/EnGoMN+LVBaxAp/WvYj6F6l7/zl1TV
-	3e8xXTg98qnKUnf+JAA6rBrv3CWuhBrZQ0wufMMd72Ls6c1xo3TyYbChrpS5Uq8TRITjDMYmbqz
-	CtWTg/4ESGvrPmOe1ys9f3
-X-Google-Smtp-Source: AGHT+IGhvbpVFcjEpLATAzAUhW5W40T3P1QD6+AfVb9g4d1Wfoo3l+g8ulGKiN+/KZRkWEKYmuoAzw==
-X-Received: by 2002:a17:90a:d00c:b0:340:e529:5572 with SMTP id 98e67ed59e1d1-34733e6cac7mr23773546a91.8.1764319990845;
-        Fri, 28 Nov 2025 00:53:10 -0800 (PST)
-Received: from xiao.mioffice.cn ([43.224.245.230])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3477b74b8f1sm4081125a91.14.2025.11.28.00.53.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 28 Nov 2025 00:53:10 -0800 (PST)
-From: Xiang Gao <gxxa03070307@gmail.com>
-To: sumit.semwal@linaro.org,
-	christian.koenig@amd.com,
-	rostedt@goodmis.org,
-	mhiramat@kernel.org
-Cc: linux-media@vger.kernel.org,
-	dri-devel@lists.freedesktop.org,
-	linux-kernel@vger.kernel.org,
-	mathieu.desnoyers@efficios.com,
-	dhowells@redhat.com,
-	kuba@kernel.org,
-	brauner@kernel.org,
-	akpm@linux-foundation.org,
-	linux-trace-kernel@vger.kernel.org,
-	gaoxiang17 <gaoxiang17@xiaomi.com>
-Subject: [PATCH v4] dma-buf: add some tracepoints to debug.
-Date: Fri, 28 Nov 2025 16:52:15 +0800
-Message-Id: <20251128085215.550100-1-gxxa03070307@gmail.com>
+	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="YQ1Dw20e"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=dXCPNS7myPbVeVgKvFZDc1RHnZXB3wBYfUx1qdWSxTQwWwcvBeuQtqb52oSAXoKjw+BNNcSNeArXlYC35zqZqs6HPWlUqTdDtuxuBBYNEw2X2tbJVxBJgMaduiyNTpAOot4qxpdTDV7UBsgQYstZlbzwr+o9OF5vaExhhleDzSoxcjgT1ARNntMTYcPI1SCdNrq7aPA9qsoCXZx5gwFJ6J72ZZy2W5gwasqIywm+PEr3DSelpYwGrNuOjEkHvE7onu5edB7Hv5x/aHjAJE43MmEyeP1o80hHkJaSEtCpJBZyImm4xBuF/IZbXZvW2RHVsSdN8jJ9M1a1/FdH9iATXA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=6vYzQkMw3Xt5OP1js+7rghf8V+3mYS6DxET3w4KX3do=;
+ b=I19h/ys4VHPc5xnkGcP05ZNX5mQ4Q3yaagiiYUbuGmNrQ8APRI3JRHzjkGRTUajxC9RG6B0vG6aiQAtxc1WGQya+KuYOvTxitpC+d2IUqmrzbdxEnGbZLg3IaxqwUBLGWlz2YIxAeHTBvGMlk/lrk8RHhQB+DZtzBn8XzYNSjilUytVlb0vcxaTuEdllfgkDjsx4CIFhI2zlMjZdN6zoSsAQMatvtbCZonEgZZe2Zk0Qjgf9JGhc4SN0AEeD15cRCQMQCcPubqd9ScXc3uVv5G9XDRaopuw8Nup6OSa03g+B2CauaUvjefLB2SxwS4cBT3cTCFhGTHbm7Lr91xI1xw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=kernel.org smtp.mailfrom=amd.com; dmarc=pass
+ (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
+ dkim=none (message not signed); arc=none (0)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=6vYzQkMw3Xt5OP1js+7rghf8V+3mYS6DxET3w4KX3do=;
+ b=YQ1Dw20ervmUxzvsbF9irVJi5Fvh6LP5uK4B6EvEiuQNp2oD8Iop3y7CtN8+7/XYHMnSFVgMgrAJljHwVAmz7FcDYiDbMA1gRKzpUSIIL8hZTRffYIppgm+ZVjYlzes2Ac4a7r9yQo9we9RaBI4168pZLHTb881MXLDjmr13RMA=
+Received: from SJ0PR05CA0190.namprd05.prod.outlook.com (2603:10b6:a03:330::15)
+ by IA0PR12MB7555.namprd12.prod.outlook.com (2603:10b6:208:43d::5) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9366.14; Fri, 28 Nov
+ 2025 09:19:55 +0000
+Received: from SJ5PEPF000001F1.namprd05.prod.outlook.com
+ (2603:10b6:a03:330:cafe::f6) by SJ0PR05CA0190.outlook.office365.com
+ (2603:10b6:a03:330::15) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.20.9388.4 via Frontend Transport; Fri,
+ 28 Nov 2025 09:19:52 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=satlexmb07.amd.com; pr=C
+Received: from satlexmb07.amd.com (165.204.84.17) by
+ SJ5PEPF000001F1.mail.protection.outlook.com (10.167.242.69) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.9366.7 via Frontend Transport; Fri, 28 Nov 2025 09:19:55 +0000
+Received: from 555e2b870847.amd.com (10.180.168.240) by satlexmb07.amd.com
+ (10.181.42.216) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.17; Fri, 28 Nov
+ 2025 03:19:49 -0600
+From: Bin Du <Bin.Du@amd.com>
+To: <mchehab@kernel.org>, <hverkuil@xs4all.nl>,
+	<laurent.pinchart+renesas@ideasonboard.com>, <bryan.odonoghue@linaro.org>,
+	<sakari.ailus@linux.intel.com>, <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+	<linux-media@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+	<sultan@kerneltoast.com>
+CC: <pratap.nirujogi@amd.com>, <benjamin.chan@amd.com>, <king.li@amd.com>,
+	<gjorgji.rosikopulos@amd.com>, <Phil.Jawich@amd.com>,
+	<Dominic.Antony@amd.com>, <mario.limonciello@amd.com>,
+	<richard.gong@amd.com>, <anson.tsao@amd.com>, <bin.du@amd.com>, Bin Du
+	<Bin.Du@amd.com>, Svetoslav Stoilov <Svetoslav.Stoilov@amd.com>, "Mario
+ Limonciello" <superm1@kernel.org>, Alexey Zagorodnikov <xglooom@gmail.com>
+Subject: [PATCH v6 1/7] media: platform: amd: Introduce amd isp4 capture driver
+Date: Fri, 28 Nov 2025 17:19:23 +0800
+Message-ID: <20251128091929.165272-2-Bin.Du@amd.com>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20251128091929.165272-1-Bin.Du@amd.com>
+References: <20251128091929.165272-1-Bin.Du@amd.com>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
@@ -82,316 +80,349 @@ List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: satlexmb08.amd.com (10.181.42.217) To satlexmb07.amd.com
+ (10.181.42.216)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: SJ5PEPF000001F1:EE_|IA0PR12MB7555:EE_
+X-MS-Office365-Filtering-Correlation-Id: f957f764-a02d-49cc-a928-08de2e5f4b6c
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|36860700013|376014|7416014|1800799024|82310400026;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?qtoFM7DyRbDc/p8bGB2CUFnGAc8u/YZbPi5qDG6Wo5whJNw10SMcoToIQfbd?=
+ =?us-ascii?Q?elf+2NNitZOg/F39mdHHpDtGANSaNVvtawo/2mxqSmlzIKS0w6PS2sqXfZXj?=
+ =?us-ascii?Q?FLQ72RKSuzXh87UR5R1Kd16EMpqAD+34Yz2TC86Ic/SMi/LdNM4WVe6iFdeJ?=
+ =?us-ascii?Q?NatGQx4v8GrALkB5e4iYyCPlK5r7bzLmJaCPG0T3gCDckjKv7xMpFuo2G5ps?=
+ =?us-ascii?Q?9qyYFbW3oj1R7MoZLdoqPNaWMwabsF5q813KLdqk4UAjpp0OOp5oW74QQEan?=
+ =?us-ascii?Q?Nb6Kl5c7kiEdPOhca9/m5cQ190Kyicd3wE1amZwYNguMdJVhrXVZdsfN5lB6?=
+ =?us-ascii?Q?k25ESeJVtEJqy9GgfxeDr5EgsUpcqJtI5eJYCkpwQeNDHrzByvKe8Qqs0kDe?=
+ =?us-ascii?Q?JsnTD7kEZFrV90N0Z5PMsO1Y9loiHSz9/qJMuL8FWHpkHeTwrUCX7Ax/O/6x?=
+ =?us-ascii?Q?E+Lb6lu9jBlG85fE69Ip8pSX0bFp8VKPvn9z1s2pqNNofCNpbvRub2oQOkKD?=
+ =?us-ascii?Q?z1SA0YSZBDYzsGv/Cu980g38R6akr4lwzhWnxpVGM4DxsJx6AN1LRYa08Q6c?=
+ =?us-ascii?Q?zfrts3NGkRF/z+Kxp20pSUzE89fzD4AysKoA8+32rRc6S/8rdusjQ9KwKOYj?=
+ =?us-ascii?Q?QeHpAPHm4Za1jZ/Mzz3RrOmY1kcSiSPbQsQm/+UYHLbHOnOeWOXgQlsMDNz9?=
+ =?us-ascii?Q?PTgzI3C4RzW4S8AoqlAOm7mXlfkmp03p8skkTKylU74JvTFohGam5GKK2z5W?=
+ =?us-ascii?Q?dwYM8RVRUM5ay0M9my0JBJW/FAYSFM/xGPeoEpr42t9GaEUFix5SoInmUXzX?=
+ =?us-ascii?Q?SR93C3UTmAo0cD+RTlpRZATJQ9V354xlj3eSUpUSBbUAEQe+6THF25dIZqcI?=
+ =?us-ascii?Q?nFdxo5DMldCFFKVMQKq6YIkkg0mqL3tso1n22ICtR1GAdn9+kpPvbRWJimH7?=
+ =?us-ascii?Q?mY//SFxgJReKVX/F/2qH7HQPFN3qQn+AJAiYukl4hJgdhfpzxykzlmnB/h6c?=
+ =?us-ascii?Q?Bm/5CgzZy6XXVcHrCJAiFPgwUzGwPOkB6dA7uY/SABrjkKy8mEJv4ZlwbvXo?=
+ =?us-ascii?Q?9F5or+Tdir1jF7IvrTMIWFRfC9C1MfPQDdLsRPapPy7i8XSZnvRMsLJnO2O8?=
+ =?us-ascii?Q?ZtzpBlOg8taZUZIU5nwxXklgrn6yYnqUzwSEZZXJmOcrDh5GouIZBobKKtaj?=
+ =?us-ascii?Q?Jp0lqwAkWX8IZkmgPxdn/7lRjmwovxpFmxLjycLoM58Qd7LoEWONrm3EDNh/?=
+ =?us-ascii?Q?pVy8Afu0VPHJN2c4sh+nYj9HSuYMiXyVxWVDK1hGyC7pz4JJYNxvycIHx7Iw?=
+ =?us-ascii?Q?ixfi9+cExKW4qnkopQwhfWKKB/0XQBT29v0woln/qX/oWxFbl6uEMYEAKx/M?=
+ =?us-ascii?Q?dmaLNHUwFLjP6JIQSerr+3HJYbumiEpXqyYOFOlityp/D2gmwEQD8vGB1TUU?=
+ =?us-ascii?Q?u1DJpJfI9xun8Hx0poU8C4c/CqiY3R33ZE+7ayNwlwM/7Gbvom2XPNI1wRDK?=
+ =?us-ascii?Q?5fMYTRFWMHD0uQWqHF0PJ24xUFg07SC/S4YcX+Yrw4bjrAVOEhMJh8evoJDE?=
+ =?us-ascii?Q?DZChn8jP8wxcJQ3995A=3D?=
+X-Forefront-Antispam-Report:
+	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:satlexmb07.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(36860700013)(376014)(7416014)(1800799024)(82310400026);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 Nov 2025 09:19:55.4035
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: f957f764-a02d-49cc-a928-08de2e5f4b6c
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[satlexmb07.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	SJ5PEPF000001F1.namprd05.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA0PR12MB7555
 
-From: gaoxiang17 <gaoxiang17@xiaomi.com>
+AMD isp4 capture is a v4l2 media device which implements media controller
+interface. It has one sub-device (AMD ISP4 sub-device) endpoint which can
+be connected to a remote CSI2 TX endpoint. It supports only one physical
+interface for now. Also add ISP4 driver related entry info into the
+MAINTAINERS file
 
-I want to track the status of dmabuf in real time in the production environment.
-But now we can only check it by traversing the fd in the process or dmabuf_list.
-
-For example:
-   binder:3031_4-18348   [005] ...1.   545.568275: dma_buf_export: exp_name=qcom,system name=(null) size=217088 ino=2750
-   binder:3031_4-18348   [005] ...1.   545.568284: dma_buf_fd: exp_name=qcom,system name=(null) size=217088 ino=2750 fd=8
-   binder:3031_4-18348   [005] ...1.   545.568399: dma_buf_mmap_internal: exp_name=qcom,system name=qcom,system size=28672 ino=2751
-     kworker/5:1-130     [005] ...1.   545.570193: dma_buf_put: exp_name=qcom,system name=ab size=28672 ino=2751
-    RenderThread-18891   [005] ...1.   545.602994: dma_buf_get: exp_name=qcom,system name=ab size=217088 ino=2750 fd=1087
-    RenderThread-9409    [000] .n.1.   545.745004: dma_buf_dynamic_attach: exp_name=qcom,system name=ab size=217088 ino=2750 is_dynamic=0 dev_name=kgsl-3d0
-    RenderThread-9409    [005] ...1.   545.747802: dma_buf_detach: exp_name=qcom,system name=bq size=12771328 ino=2764 is_dynamic=0 dev_name=kgsl-3d0
-
-Signed-off-by: Xiang Gao <gaoxiang17@xiaomi.com>
+Co-developed-by: Sultan Alsawaf <sultan@kerneltoast.com>
+Signed-off-by: Sultan Alsawaf <sultan@kerneltoast.com>
+Co-developed-by: Svetoslav Stoilov <Svetoslav.Stoilov@amd.com>
+Signed-off-by: Svetoslav Stoilov <Svetoslav.Stoilov@amd.com>
+Signed-off-by: Bin Du <Bin.Du@amd.com>
+Reviewed-by: Mario Limonciello (AMD) <superm1@kernel.org>
+Tested-by: Alexey Zagorodnikov <xglooom@gmail.com>
 ---
- drivers/dma-buf/dma-buf.c      |  48 +++++++++-
- include/trace/events/dma_buf.h | 160 +++++++++++++++++++++++++++++++++
- 2 files changed, 207 insertions(+), 1 deletion(-)
- create mode 100644 include/trace/events/dma_buf.h
+ MAINTAINERS                              |  13 +++
+ drivers/media/platform/Kconfig           |   1 +
+ drivers/media/platform/Makefile          |   1 +
+ drivers/media/platform/amd/Kconfig       |   3 +
+ drivers/media/platform/amd/Makefile      |   3 +
+ drivers/media/platform/amd/isp4/Kconfig  |  14 +++
+ drivers/media/platform/amd/isp4/Makefile |   6 ++
+ drivers/media/platform/amd/isp4/isp4.c   | 132 +++++++++++++++++++++++
+ drivers/media/platform/amd/isp4/isp4.h   |  17 +++
+ 9 files changed, 190 insertions(+)
+ create mode 100644 drivers/media/platform/amd/Kconfig
+ create mode 100644 drivers/media/platform/amd/Makefile
+ create mode 100644 drivers/media/platform/amd/isp4/Kconfig
+ create mode 100644 drivers/media/platform/amd/isp4/Makefile
+ create mode 100644 drivers/media/platform/amd/isp4/isp4.c
+ create mode 100644 drivers/media/platform/amd/isp4/isp4.h
 
-diff --git a/drivers/dma-buf/dma-buf.c b/drivers/dma-buf/dma-buf.c
-index 2bcf9ceca997..6e04e12f149e 100644
---- a/drivers/dma-buf/dma-buf.c
-+++ b/drivers/dma-buf/dma-buf.c
-@@ -35,6 +35,9 @@
+diff --git a/MAINTAINERS b/MAINTAINERS
+index cd7ff55b5d32..3640a1e3262c 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -1133,6 +1133,19 @@ T:	git git://git.kernel.org/pub/scm/linux/kernel/git/iommu/linux.git
+ F:	drivers/iommu/amd/
+ F:	include/linux/amd-iommu.h
  
- #include "dma-buf-sysfs-stats.h"
- 
-+#define CREATE_TRACE_POINTS
-+#include <trace/events/dma_buf.h>
++AMD ISP4 DRIVER
++M:	Bin Du <bin.du@amd.com>
++M:	Nirujogi Pratap <pratap.nirujogi@amd.com>
++L:	linux-media@vger.kernel.org
++S:	Maintained
++T:	git git://linuxtv.org/media.git
++F:	drivers/media/platform/amd/Kconfig
++F:	drivers/media/platform/amd/Makefile
++F:	drivers/media/platform/amd/isp4/Kconfig
++F:	drivers/media/platform/amd/isp4/Makefile
++F:	drivers/media/platform/amd/isp4/isp4.c
++F:	drivers/media/platform/amd/isp4/isp4.h
 +
- static inline int is_dma_buf_file(struct file *);
+ AMD KFD
+ M:	Felix Kuehling <Felix.Kuehling@amd.com>
+ L:	amd-gfx@lists.freedesktop.org
+diff --git a/drivers/media/platform/Kconfig b/drivers/media/platform/Kconfig
+index 9287faafdce5..772c70665510 100644
+--- a/drivers/media/platform/Kconfig
++++ b/drivers/media/platform/Kconfig
+@@ -63,6 +63,7 @@ config VIDEO_MUX
  
- static DEFINE_MUTEX(dmabuf_list_mutex);
-@@ -220,6 +223,11 @@ static int dma_buf_mmap_internal(struct file *file, struct vm_area_struct *vma)
- 	    dmabuf->size >> PAGE_SHIFT)
- 		return -EINVAL;
- 
-+	if (trace_dma_buf_mmap_internal_enabled()) {
-+		guard(spinlock)(&dmabuf->name_lock);
-+		trace_dma_buf_mmap_internal(dmabuf);
-+	}
-+
- 	return dmabuf->ops->mmap(dmabuf, vma);
- }
- 
-@@ -745,6 +753,11 @@ struct dma_buf *dma_buf_export(const struct dma_buf_export_info *exp_info)
- 
- 	__dma_buf_list_add(dmabuf);
- 
-+	if (trace_dma_buf_export_enabled()) {
-+		guard(spinlock)(&dmabuf->name_lock);
-+		trace_dma_buf_export(dmabuf);
-+	}
-+
- 	return dmabuf;
- 
- err_dmabuf:
-@@ -779,6 +792,11 @@ int dma_buf_fd(struct dma_buf *dmabuf, int flags)
- 
- 	fd_install(fd, dmabuf->file);
- 
-+	if (trace_dma_buf_fd_enabled()) {
-+		guard(spinlock)(&dmabuf->name_lock);
-+		trace_dma_buf_fd(dmabuf, fd);
-+	}
-+
- 	return fd;
- }
- EXPORT_SYMBOL_NS_GPL(dma_buf_fd, "DMA_BUF");
-@@ -794,6 +812,7 @@ EXPORT_SYMBOL_NS_GPL(dma_buf_fd, "DMA_BUF");
- struct dma_buf *dma_buf_get(int fd)
- {
- 	struct file *file;
-+	struct dma_buf *dmabuf;
- 
- 	file = fget(fd);
- 
-@@ -805,7 +824,14 @@ struct dma_buf *dma_buf_get(int fd)
- 		return ERR_PTR(-EINVAL);
- 	}
- 
--	return file->private_data;
-+	dmabuf = file->private_data;
-+
-+	if (trace_dma_buf_get_enabled()) {
-+		guard(spinlock)(&dmabuf->name_lock);
-+		trace_dma_buf_get(dmabuf, fd);
-+	}
-+
-+	return dmabuf;
- }
- EXPORT_SYMBOL_NS_GPL(dma_buf_get, "DMA_BUF");
- 
-@@ -825,6 +851,11 @@ void dma_buf_put(struct dma_buf *dmabuf)
- 		return;
- 
- 	fput(dmabuf->file);
-+
-+	if (trace_dma_buf_put_enabled()) {
-+		guard(spinlock)(&dmabuf->name_lock);
-+		trace_dma_buf_put(dmabuf);
-+	}
- }
- EXPORT_SYMBOL_NS_GPL(dma_buf_put, "DMA_BUF");
- 
-@@ -979,6 +1010,11 @@ dma_buf_dynamic_attach(struct dma_buf *dmabuf, struct device *dev,
- 	list_add(&attach->node, &dmabuf->attachments);
- 	dma_resv_unlock(dmabuf->resv);
- 
-+	if (trace_dma_buf_dynamic_attach_enabled()) {
-+		guard(spinlock)(&dmabuf->name_lock);
-+		trace_dma_buf_dynamic_attach(dmabuf, dma_buf_attachment_is_dynamic(attach), dev);
-+	}
-+
- 	return attach;
- 
- err_attach:
-@@ -1023,6 +1059,11 @@ void dma_buf_detach(struct dma_buf *dmabuf, struct dma_buf_attachment *attach)
- 	if (dmabuf->ops->detach)
- 		dmabuf->ops->detach(dmabuf, attach);
- 
-+	if (trace_dma_buf_detach_enabled()) {
-+		guard(spinlock)(&dmabuf->name_lock);
-+		trace_dma_buf_detach(dmabuf, dma_buf_attachment_is_dynamic(attach), attach->dev);
-+	}
-+
- 	kfree(attach);
- }
- EXPORT_SYMBOL_NS_GPL(dma_buf_detach, "DMA_BUF");
-@@ -1488,6 +1529,11 @@ int dma_buf_mmap(struct dma_buf *dmabuf, struct vm_area_struct *vma,
- 	vma_set_file(vma, dmabuf->file);
- 	vma->vm_pgoff = pgoff;
- 
-+	if (trace_dma_buf_mmap_enabled()) {
-+		guard(spinlock)(&dmabuf->name_lock);
-+		trace_dma_buf_mmap(dmabuf);
-+	}
-+
- 	return dmabuf->ops->mmap(dmabuf, vma);
- }
- EXPORT_SYMBOL_NS_GPL(dma_buf_mmap, "DMA_BUF");
-diff --git a/include/trace/events/dma_buf.h b/include/trace/events/dma_buf.h
+ # Platform drivers - Please keep it alphabetically sorted
+ source "drivers/media/platform/allegro-dvt/Kconfig"
++source "drivers/media/platform/amd/Kconfig"
+ source "drivers/media/platform/amlogic/Kconfig"
+ source "drivers/media/platform/amphion/Kconfig"
+ source "drivers/media/platform/aspeed/Kconfig"
+diff --git a/drivers/media/platform/Makefile b/drivers/media/platform/Makefile
+index 6fd7db0541c7..b207bd8d8022 100644
+--- a/drivers/media/platform/Makefile
++++ b/drivers/media/platform/Makefile
+@@ -6,6 +6,7 @@
+ # Place here, alphabetically sorted by directory
+ # (e. g. LC_ALL=C sort Makefile)
+ obj-y += allegro-dvt/
++obj-y += amd/
+ obj-y += amlogic/
+ obj-y += amphion/
+ obj-y += aspeed/
+diff --git a/drivers/media/platform/amd/Kconfig b/drivers/media/platform/amd/Kconfig
 new file mode 100644
-index 000000000000..f4b6ba5241fa
+index 000000000000..25af49f246b2
 --- /dev/null
-+++ b/include/trace/events/dma_buf.h
-@@ -0,0 +1,160 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+#undef TRACE_SYSTEM
-+#define TRACE_SYSTEM dma_buf
++++ b/drivers/media/platform/amd/Kconfig
+@@ -0,0 +1,3 @@
++# SPDX-License-Identifier: GPL-2.0+
 +
-+#if !defined(_TRACE_DMA_BUF_H) || defined(TRACE_HEADER_MULTI_READ)
-+#define _TRACE_DMA_BUF_H
++source "drivers/media/platform/amd/isp4/Kconfig"
+diff --git a/drivers/media/platform/amd/Makefile b/drivers/media/platform/amd/Makefile
+new file mode 100644
+index 000000000000..8bfc1955f22e
+--- /dev/null
++++ b/drivers/media/platform/amd/Makefile
+@@ -0,0 +1,3 @@
++# SPDX-License-Identifier: GPL-2.0+
 +
-+#include <linux/dma-buf.h>
-+#include <linux/tracepoint.h>
++obj-y += isp4/
+diff --git a/drivers/media/platform/amd/isp4/Kconfig b/drivers/media/platform/amd/isp4/Kconfig
+new file mode 100644
+index 000000000000..d4e4ad436600
+--- /dev/null
++++ b/drivers/media/platform/amd/isp4/Kconfig
+@@ -0,0 +1,14 @@
++# SPDX-License-Identifier: GPL-2.0+
 +
-+DECLARE_EVENT_CLASS(dma_buf,
++config AMD_ISP4
++	tristate "AMD ISP4 and camera driver"
++	depends on DRM_AMD_ISP && VIDEO_DEV
++	select VIDEOBUF2_CORE
++	select VIDEOBUF2_MEMOPS
++	select VIDEOBUF2_V4L2
++	select VIDEO_V4L2_SUBDEV_API
++	help
++	  This is support for AMD ISP4 and camera subsystem driver.
++	  Say Y here to enable the ISP4 and camera device for video capture.
++	  To compile this driver as a module, choose M here. The module will
++	  be called amd_capture.
+diff --git a/drivers/media/platform/amd/isp4/Makefile b/drivers/media/platform/amd/isp4/Makefile
+new file mode 100644
+index 000000000000..de0092dad26f
+--- /dev/null
++++ b/drivers/media/platform/amd/isp4/Makefile
+@@ -0,0 +1,6 @@
++# SPDX-License-Identifier: GPL-2.0+
++#
++# Copyright (C) 2025 Advanced Micro Devices, Inc.
 +
-+	TP_PROTO(struct dma_buf *dmabuf),
++obj-$(CONFIG_AMD_ISP4) += amd_capture.o
++amd_capture-objs := isp4.o
+diff --git a/drivers/media/platform/amd/isp4/isp4.c b/drivers/media/platform/amd/isp4/isp4.c
+new file mode 100644
+index 000000000000..e77713e4ea56
+--- /dev/null
++++ b/drivers/media/platform/amd/isp4/isp4.c
+@@ -0,0 +1,132 @@
++// SPDX-License-Identifier: GPL-2.0+
++/*
++ * Copyright (C) 2025 Advanced Micro Devices, Inc.
++ */
 +
-+	TP_ARGS(dmabuf),
++#include <linux/pm_runtime.h>
++#include <linux/vmalloc.h>
++#include <media/v4l2-ioctl.h>
 +
-+	TP_STRUCT__entry(
-+		__string(exp_name, dmabuf->exp_name)
-+		__string(name, dmabuf->name)
-+		__field(size_t, size)
-+		__field(ino_t, ino)
-+	),
++#include "isp4.h"
 +
-+	TP_fast_assign(
-+		__assign_str(exp_name);
-+		__assign_str(name);
-+		__entry->size = dmabuf->size;
-+		__entry->ino = dmabuf->file->f_inode->i_ino;
-+	),
++#define VIDEO_BUF_NUM 5
 +
-+	TP_printk("exp_name=%s name=%s size=%zu ino=%lu",
-+		  __get_str(exp_name),
-+		  __get_str(name),
-+		  __entry->size,
-+		  __entry->ino)
-+);
++#define ISP4_DRV_NAME "amd_isp_capture"
 +
-+DECLARE_EVENT_CLASS(dma_buf_attach_dev,
++static const struct {
++	const char *name;
++	u32 status_mask;
++	u32 en_mask;
++	u32 ack_mask;
++	u32 rb_int_num;
++} isp4_irq[] = {
++	/* The IRQ order is aligned with the isp4_subdev.fw_resp_thread order */
++	{
++		.name = "isp_irq_global",
++		.rb_int_num = 4, /* ISP_4_1__SRCID__ISP_RINGBUFFER_WPT12 */
++	},
++	{
++		.name = "isp_irq_stream1",
++		.rb_int_num = 0, /* ISP_4_1__SRCID__ISP_RINGBUFFER_WPT9 */
++	},
++};
 +
-+	TP_PROTO(struct dma_buf *dmabuf, bool is_dynamic, struct device *dev),
++static irqreturn_t isp4_irq_handler(int irq, void *arg)
++{
++	return IRQ_HANDLED;
++}
 +
-+	TP_ARGS(dmabuf, is_dynamic, dev),
++static int isp4_capture_probe(struct platform_device *pdev)
++{
++	struct device *dev = &pdev->dev;
++	int irq[ARRAY_SIZE(isp4_irq)];
++	struct isp4_device *isp_dev;
++	size_t i;
++	int ret;
 +
-+	TP_STRUCT__entry(
-+		__string(dev_name, dev_name(dev))
-+		__string(exp_name, dmabuf->exp_name)
-+		__string(name, dmabuf->name)
-+		__field(size_t, size)
-+		__field(ino_t, ino)
-+		__field(bool, is_dynamic)
-+	),
++	isp_dev = devm_kzalloc(dev, sizeof(*isp_dev), GFP_KERNEL);
++	if (!isp_dev)
++		return -ENOMEM;
 +
-+	TP_fast_assign(
-+		__assign_str(dev_name);
-+		__assign_str(exp_name);
-+		__assign_str(name);
-+		__entry->size = dmabuf->size;
-+		__entry->ino = dmabuf->file->f_inode->i_ino;
-+		__entry->is_dynamic = is_dynamic;
-+	),
++	dev->init_name = ISP4_DRV_NAME;
 +
-+	TP_printk("exp_name=%s name=%s size=%zu ino=%lu is_dynamic=%d dev_name=%s",
-+		  __get_str(exp_name),
-+		  __get_str(name),
-+		  __entry->size,
-+		  __entry->ino,
-+		  __entry->is_dynamic,
-+		  __get_str(dev_name))
-+);
++	for (i = 0; i < ARRAY_SIZE(isp4_irq); i++) {
++		irq[i] = platform_get_irq(pdev, isp4_irq[i].rb_int_num);
++		if (irq[i] < 0)
++			return dev_err_probe(dev, irq[i], "fail to get irq %d\n",
++					     isp4_irq[i].rb_int_num);
 +
-+DECLARE_EVENT_CLASS(dma_buf_fd,
++		ret = devm_request_irq(dev, irq[i], isp4_irq_handler,
++				       IRQF_NO_AUTOEN, isp4_irq[i].name, dev);
++		if (ret)
++			return dev_err_probe(dev, ret, "fail to req irq %d\n", irq[i]);
++	}
 +
-+	TP_PROTO(struct dma_buf *dmabuf, int fd),
++	/* Link the media device within the v4l2_device */
++	isp_dev->v4l2_dev.mdev = &isp_dev->mdev;
 +
-+	TP_ARGS(dmabuf, fd),
++	/* Initialize media device */
++	strscpy(isp_dev->mdev.model, "amd_isp41_mdev", sizeof(isp_dev->mdev.model));
++	snprintf(isp_dev->mdev.bus_info, sizeof(isp_dev->mdev.bus_info),
++		 "platform:%s", ISP4_DRV_NAME);
++	isp_dev->mdev.dev = dev;
++	media_device_init(&isp_dev->mdev);
 +
-+	TP_STRUCT__entry(
-+		__string(exp_name, dmabuf->exp_name)
-+		__string(name, dmabuf->name)
-+		__field(size_t, size)
-+		__field(ino_t, ino)
-+		__field(int, fd)
-+	),
++	/* register v4l2 device */
++	snprintf(isp_dev->v4l2_dev.name, sizeof(isp_dev->v4l2_dev.name),
++		 "AMD-V4L2-ROOT");
++	ret = v4l2_device_register(dev, &isp_dev->v4l2_dev);
++	if (ret) {
++		dev_err_probe(dev, ret, "fail register v4l2 device\n");
++		goto err_clean_media;
++	}
 +
-+	TP_fast_assign(
-+		__assign_str(exp_name);
-+		__assign_str(name);
-+		__entry->size = dmabuf->size;
-+		__entry->ino = dmabuf->file->f_inode->i_ino;
-+		__entry->fd = fd;
-+	),
++	pm_runtime_set_suspended(dev);
++	pm_runtime_enable(dev);
++	ret = media_device_register(&isp_dev->mdev);
++	if (ret) {
++		dev_err_probe(dev, ret, "fail to register media device\n");
++		goto err_isp4_deinit;
++	}
 +
-+	TP_printk("exp_name=%s name=%s size=%zu ino=%lu fd=%d",
-+		  __get_str(exp_name),
-+		  __get_str(name),
-+		  __entry->size,
-+		  __entry->ino,
-+		  __entry->fd)
-+);
++	platform_set_drvdata(pdev, isp_dev);
 +
-+DEFINE_EVENT(dma_buf, dma_buf_export,
++	return 0;
 +
-+	TP_PROTO(struct dma_buf *dmabuf),
++err_isp4_deinit:
++	pm_runtime_disable(dev);
++	v4l2_device_unregister(&isp_dev->v4l2_dev);
++err_clean_media:
++	media_device_cleanup(&isp_dev->mdev);
 +
-+	TP_ARGS(dmabuf)
-+);
++	return ret;
++}
 +
-+DEFINE_EVENT(dma_buf, dma_buf_mmap_internal,
++static void isp4_capture_remove(struct platform_device *pdev)
++{
++	struct isp4_device *isp_dev = platform_get_drvdata(pdev);
++	struct device *dev = &pdev->dev;
 +
-+	TP_PROTO(struct dma_buf *dmabuf),
++	media_device_unregister(&isp_dev->mdev);
++	v4l2_device_unregister(&isp_dev->v4l2_dev);
++	media_device_cleanup(&isp_dev->mdev);
++	pm_runtime_disable(dev);
++}
 +
-+	TP_ARGS(dmabuf)
-+);
++static struct platform_driver isp4_capture_drv = {
++	.probe = isp4_capture_probe,
++	.remove = isp4_capture_remove,
++	.driver = {
++		.name = ISP4_DRV_NAME,
++	}
++};
 +
-+DEFINE_EVENT(dma_buf, dma_buf_mmap,
++module_platform_driver(isp4_capture_drv);
 +
-+	TP_PROTO(struct dma_buf *dmabuf),
++MODULE_ALIAS("platform:" ISP4_DRV_NAME);
++MODULE_IMPORT_NS("DMA_BUF");
 +
-+	TP_ARGS(dmabuf)
-+);
++MODULE_DESCRIPTION("AMD ISP4 Driver");
++MODULE_AUTHOR("Bin Du <bin.du@amd.com>");
++MODULE_AUTHOR("Pratap Nirujogi <pratap.nirujogi@amd.com>");
++MODULE_LICENSE("GPL");
+diff --git a/drivers/media/platform/amd/isp4/isp4.h b/drivers/media/platform/amd/isp4/isp4.h
+new file mode 100644
+index 000000000000..7f2db0dfa2d9
+--- /dev/null
++++ b/drivers/media/platform/amd/isp4/isp4.h
+@@ -0,0 +1,17 @@
++/* SPDX-License-Identifier: GPL-2.0+ */
++/*
++ * Copyright (C) 2025 Advanced Micro Devices, Inc.
++ */
 +
-+DEFINE_EVENT(dma_buf, dma_buf_put,
++#ifndef _ISP4_H_
++#define _ISP4_H_
 +
-+	TP_PROTO(struct dma_buf *dmabuf),
++#include <media/v4l2-device.h>
++#include <media/videobuf2-memops.h>
 +
-+	TP_ARGS(dmabuf)
-+);
++struct isp4_device {
++	struct v4l2_device v4l2_dev;
++	struct media_device mdev;
++};
 +
-+DEFINE_EVENT(dma_buf_attach_dev, dma_buf_dynamic_attach,
-+
-+	TP_PROTO(struct dma_buf *dmabuf, bool is_dynamic, struct device *dev),
-+
-+	TP_ARGS(dmabuf, is_dynamic, dev)
-+);
-+
-+DEFINE_EVENT(dma_buf_attach_dev, dma_buf_detach,
-+
-+	TP_PROTO(struct dma_buf *dmabuf, bool is_dynamic, struct device *dev),
-+
-+	TP_ARGS(dmabuf, is_dynamic, dev)
-+);
-+
-+DEFINE_EVENT(dma_buf_fd, dma_buf_fd,
-+
-+	TP_PROTO(struct dma_buf *dmabuf, int fd),
-+
-+	TP_ARGS(dmabuf, fd)
-+);
-+
-+DEFINE_EVENT(dma_buf_fd, dma_buf_get,
-+
-+	TP_PROTO(struct dma_buf *dmabuf, int fd),
-+
-+	TP_ARGS(dmabuf, fd)
-+);
-+
-+#endif /* _TRACE_DMA_BUF_H */
-+
-+/* This part must be outside protection */
-+#include <trace/define_trace.h>
++#endif /* _ISP4_H_ */
 -- 
 2.34.1
 
