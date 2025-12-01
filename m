@@ -1,136 +1,185 @@
-Received: from mail.mainlining.org (mail.mainlining.org [5.75.144.95])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9F2262D949E;
-	Mon,  1 Dec 2025 12:41:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=5.75.144.95
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5E71B30C371
+	for <linux-media@vger.kernel.org>; Mon,  1 Dec 2025 12:42:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.8
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764592894; cv=none; b=ZwkjNxPEMErX9XlLGyCG7EDeBxz+QHHos2DNVurujl/X2KvaslU76tF3kJZgCU70lnTy4Ltjd7CyujqK4ZyPVlrQWEXfHEO8bYr/veErGIY7LBmtAssEutlnhCN5fyIeAyQyfN5vEV0E9jYqnhZKrOIGYRJcNRunL+VFuBlgHvk=
+	t=1764592931; cv=none; b=Hn5HaKZ6MBPNJ2YX0zQBx4fmcUCwqisvhv8A0U592fuHrRaih6X3upqrXnQte5XX1sp+MyxNtWrFXNIJ9fxE743sM55FyUFKHGp31IBRAb1CJjjrG4AeUxOGn2mxFian/Q548s6hlf51R153iZcVnZ9xHUCdXwU1dOJ3Dh0grUg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764592894; c=relaxed/simple;
-	bh=jX7R4zqULy2ZtpmBelEfGiXBpgw4Bf6JuN5dlkcVu3I=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=o7im9UYUy7s/vPXl9yQFM6r5kTx6UMjJnK6XPSyVPJgyXVzxsTngTYWLwSLUWUpPGhNTzfkw5WJ2T1wDNik47YInCBgBPBNdxk8woSZ9Z2WxxkkmWIKYjK0WwPVQ+2XAxP2iU8QBHyq6NMA7GqCyVgztvmKOjpu8RsGITDHOaOI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=mainlining.org; spf=pass smtp.mailfrom=mainlining.org; dkim=pass (2048-bit key) header.d=mainlining.org header.i=@mainlining.org header.b=Gp8OrIvA; dkim=permerror (0-bit key) header.d=mainlining.org header.i=@mainlining.org header.b=T+Z3GGVX; arc=none smtp.client-ip=5.75.144.95
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=mainlining.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mainlining.org
+	s=arc-20240116; t=1764592931; c=relaxed/simple;
+	bh=GI5TA8anaH8m+59FVKd2pHzex/xs6dYZH9mPeYS120g=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=do5We+EZF0qTwi95r6o1USVJcMsrKm/NEZIsdLQMfIuvc8jAGtztTWzLa/ef66DK9Q5fG2oXwKCFeD1cktCd5vwnGYQm8AmYgxZP5azIjYmMSG90nsmymGPAn4AEF1if4/7M42l/kQLT37Y5G1lMiDRFk08Qy5Zwhl+msMbbqwg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=d1hTeajN; arc=none smtp.client-ip=192.198.163.8
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=mainlining.org header.i=@mainlining.org header.b="Gp8OrIvA";
-	dkim=permerror (0-bit key) header.d=mainlining.org header.i=@mainlining.org header.b="T+Z3GGVX"
-DKIM-Signature: v=1; a=rsa-sha256; s=202507r; d=mainlining.org; c=relaxed/relaxed;
-	h=To:Message-Id:Subject:Date:From; t=1764592856; bh=To6GQbR7FsdWDXvPxvJdkiU
-	jxIvPgbRBWHqMm4aMzFo=; b=Gp8OrIvASXXhFYoEBrnOggFU5bNamZNFmvwK7p1aOgzerG5yxI
-	UMc7x1f/ChXkYLxN15xYyia/P1AhqXPW4Bsm+hLUY6d2qIoHCHhP0iPrbJ5/3pg8JHEwJPw67Fi
-	On6JaqCToWWtsGA8QoWzA6sjX/bu+fFw+sXSHGz33eaziUpjdusZOpx4LJgwSEHJFsghpyZJTVo
-	t63UVn3cfEQuXyDXUhOrs44GcLTEnD8K83n3hgbIoprhH9I7CRhAdVcaEwHVPJR+gz9zgqSN+V/
-	EaH94bo3Yq47D/WdDtTdK7x3jUN2efj8GmQ3hSjcIpXLsJz5LpsrCyGejf/p+FFftwQ==;
-DKIM-Signature: v=1; a=ed25519-sha256; s=202507e; d=mainlining.org; c=relaxed/relaxed;
-	h=To:Message-Id:Subject:Date:From; t=1764592856; bh=To6GQbR7FsdWDXvPxvJdkiU
-	jxIvPgbRBWHqMm4aMzFo=; b=T+Z3GGVX8RSWbznnulXKSuAxpprIFF4FTuKnrLExXrhNI3uKW6
-	mhMCNI5/2CP6uWFqoAtSicYaVgrOuxN0LTCQ==;
-From: Vasiliy Doylov <nekocwd@mainlining.org>
-Date: Mon, 01 Dec 2025 15:40:43 +0300
-Subject: [PATCH v3 1/3] media: dt-bindings: Add LC898217XC documentation
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="d1hTeajN"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1764592929; x=1796128929;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=GI5TA8anaH8m+59FVKd2pHzex/xs6dYZH9mPeYS120g=;
+  b=d1hTeajNNNVU6f3pGsoPeDk7i+sVtlQzwc97AVpnaV4v+nL7y6KmkXEN
+   QwVURZcuER/8SjEWri/CfbZ3f1DMRIvy0JF+Ujwz83QVhdz0JAqNZitlA
+   oTYKbUBhpBTz3gP6xCiwvZSMEKHtFHAsL/lK22gA1PLg7Gpk03eBjl4tQ
+   V6tOdu30egQrAQ03aZBIQ07X0t1LzlJy8V77N+H+3eRp9MrisD+PsIQKW
+   +e02G1WrZJUPsRcB7xRjU5Y9smOZfC0fb9xweMk8AQBDAwmjlr9mwve2p
+   UJFXqU8Wgeyde/cVo43lFF0IzdylB8zaXzH6K6iTT5SbwrwXgixNTKKn/
+   A==;
+X-CSE-ConnectionGUID: 8ohI3BicRGibwmDwwsi+Xw==
+X-CSE-MsgGUID: JZWFlr7WTAK/HTUiyHu4Gg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11629"; a="84133223"
+X-IronPort-AV: E=Sophos;i="6.20,240,1758610800"; 
+   d="scan'208";a="84133223"
+Received: from orviesa008.jf.intel.com ([10.64.159.148])
+  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Dec 2025 04:42:07 -0800
+X-CSE-ConnectionGUID: Toar6IUbRJOucNs/85gS2Q==
+X-CSE-MsgGUID: E8LtxOGSTsur9NrX8q8Ptg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.20,240,1758610800"; 
+   d="scan'208";a="194168869"
+Received: from pgcooper-mobl3.ger.corp.intel.com (HELO kekkonen.fi.intel.com) ([10.245.245.162])
+  by orviesa008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Dec 2025 04:42:07 -0800
+Received: from kekkonen.localdomain (localhost [IPv6:::1])
+	by kekkonen.fi.intel.com (Postfix) with SMTP id 3CC2B11FA74;
+	Mon, 01 Dec 2025 14:42:08 +0200 (EET)
+Date: Mon, 1 Dec 2025 14:42:08 +0200
+Organization: Intel Finland Oy - BIC 0357606-4 - c/o Alberga Business Park, 6 krs, Bertel Jungin Aukio 5, 02600 Espoo
+From: Sakari Ailus <sakari.ailus@linux.intel.com>
+To: Hans Verkuil <hverkuil+cisco@kernel.org>
+Cc: linux-media@vger.kernel.org, laurent.pinchart@ideasonboard.com
+Subject: Re: [PATCH 07/14] media: omap3isp: rework isp_video_try/set_format
+Message-ID: <aS2NIKUsroOnpxvY@kekkonen.localdomain>
+References: <cover.1760707611.git.hverkuil+cisco@kernel.org>
+ <679d80346bef43fab642342ab9de407c132b62ed.1760707611.git.hverkuil+cisco@kernel.org>
+ <aPiQAwEa4_fN-LIt@kekkonen.localdomain>
+ <7beb5330-10a7-485b-ba55-dca70f990073@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20251201-media-i2c-lc898217xc-initial-driver-v3-1-46e23897e921@mainlining.org>
-References: <20251201-media-i2c-lc898217xc-initial-driver-v3-0-46e23897e921@mainlining.org>
-In-Reply-To: <20251201-media-i2c-lc898217xc-initial-driver-v3-0-46e23897e921@mainlining.org>
-To: Mauro Carvalho Chehab <mchehab@kernel.org>, 
- Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
- Conor Dooley <conor+dt@kernel.org>, david@ixit.cz
-Cc: linux-media@vger.kernel.org, devicetree@vger.kernel.org, 
- linux-kernel@vger.kernel.org, phone-devel@vger.kernel.org, 
- Vitalii Skorkin <nikroks@mainlining.org>, 
- Antonio Rische <nt8r@protonmail.com>, 
- Vasiliy Doylov <nekocwd@mainlining.org>, 
- Krzysztof Kozlowski <krzk@kernel.org>
-X-Mailer: b4 0.14.3
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2022;
- i=nekocwd@mainlining.org; h=from:subject:message-id;
- bh=jX7R4zqULy2ZtpmBelEfGiXBpgw4Bf6JuN5dlkcVu3I=;
- b=owGbwMvMwCXGd//xporA/cmMp9WSGDJ1e64zrH9vHOzElLXJYo42496AeN6SLNETmf6vrOZ8t
- 388a4NoRykLgxgXg6yYIst/w0VyB24oe9blpj6DmcPKBDaEi1MAJhKygOF/WuoE268Xe5a/Lb7f
- ujh10mGjpGvXku7L7Kg7kp/grqzIw8jQyJ9wbYv9PatgHf1Zx2criH2PD736m7NVYcPT38eVBTb
- yAAA=
-X-Developer-Key: i=nekocwd@mainlining.org; a=openpgp;
- fpr=FF31A21EC0D823497E6D65E60EDFE3B27851BF63
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <7beb5330-10a7-485b-ba55-dca70f990073@kernel.org>
 
-Add device tree bindings documentation for ON Semiconductor
-LC898217XC voice coil motor.
+Hi Hans,
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Signed-off-by: Vasiliy Doylov <nekocwd@mainlining.org>
----
- .../bindings/media/i2c/onnn,lc898217xc.yaml        | 53 ++++++++++++++++++++++
- 1 file changed, 53 insertions(+)
+On Mon, Dec 01, 2025 at 09:48:42AM +0100, Hans Verkuil wrote:
+> On 22/10/2025 10:04, Sakari Ailus wrote:
+> > Hi Hans,
+> > 
+> > On Fri, Oct 17, 2025 at 03:26:44PM +0200, Hans Verkuil wrote:
+> >> isp_video_set_format now calls isp_video_try_format first, ensuring
+> >> consistent behavior and removing duplicate code in both functions.
+> >>
+> >> This fixes an v4l2-compliance error:
+> >>
+> >> 	fail: v4l2-test-formats.cpp(519): !pix.sizeimage
+> >> test VIDIOC_S_FMT: FAIL
+> >>
+> >> Signed-off-by: Hans Verkuil <hverkuil+cisco@kernel.org>
+> >> ---
+> >>  drivers/media/platform/ti/omap3isp/ispvideo.c | 60 +++++++++----------
+> >>  1 file changed, 30 insertions(+), 30 deletions(-)
+> >>
+> >> diff --git a/drivers/media/platform/ti/omap3isp/ispvideo.c b/drivers/media/platform/ti/omap3isp/ispvideo.c
+> >> index d3fe28506fb0..69d17e4dcd36 100644
+> >> --- a/drivers/media/platform/ti/omap3isp/ispvideo.c
+> >> +++ b/drivers/media/platform/ti/omap3isp/ispvideo.c
+> >> @@ -701,11 +701,15 @@ isp_video_get_format(struct file *file, void *fh, struct v4l2_format *format)
+> >>  }
+> >>  
+> >>  static int
+> >> -isp_video_set_format(struct file *file, void *fh, struct v4l2_format *format)
+> >> +isp_video_try_format(struct file *file, void *fh, struct v4l2_format *format)
+> >>  {
+> >> -	struct isp_video_fh *vfh = file_to_isp_video_fh(file);
+> >>  	struct isp_video *video = video_drvdata(file);
+> >> -	struct v4l2_mbus_framefmt fmt;
+> >> +	struct v4l2_subdev_format fmt = {
+> >> +		.which = V4L2_SUBDEV_FORMAT_ACTIVE,
+> >> +	};
+> >> +	struct v4l2_subdev *subdev;
+> >> +	u32 pad;
+> >> +	int ret;
+> >>  
+> >>  	if (format->type != video->type)
+> >>  		return -EINVAL;
+> >> @@ -745,32 +749,11 @@ isp_video_set_format(struct file *file, void *fh, struct v4l2_format *format)
+> >>  		break;
+> >>  	}
+> >>  
+> >> -	/* Fill the bytesperline and sizeimage fields by converting to media bus
+> >> -	 * format and back to pixel format.
+> >> -	 */
+> >> -	isp_video_pix_to_mbus(&format->fmt.pix, &fmt);
+> >> -	isp_video_mbus_to_pix(video, &fmt, &format->fmt.pix);
+> >> -
+> >> -	mutex_lock(&video->mutex);
+> >> -	vfh->format = *format;
+> >> -	mutex_unlock(&video->mutex);
+> >> -
+> >> -	return 0;
+> >> -}
+> >> -
+> >> -static int
+> >> -isp_video_try_format(struct file *file, void *fh, struct v4l2_format *format)
+> >> -{
+> >> -	struct isp_video *video = video_drvdata(file);
+> >> -	struct v4l2_subdev_format fmt = {
+> >> -		.which = V4L2_SUBDEV_FORMAT_ACTIVE,
+> >> -	};
+> >> -	struct v4l2_subdev *subdev;
+> >> -	u32 pad;
+> >> -	int ret;
+> >> -
+> >> -	if (format->type != video->type)
+> >> -		return -EINVAL;
+> >> +	if (video->type == V4L2_BUF_TYPE_VIDEO_OUTPUT) {
+> >> +		isp_video_pix_to_mbus(&format->fmt.pix, &fmt.format);
+> >> +		isp_video_mbus_to_pix(video, &fmt.format, &format->fmt.pix);
+> >> +		return 0;
+> >> +	}
+> >>  
+> >>  	subdev = isp_video_remote_subdev(video, &pad);
+> >>  	if (subdev == NULL)
+> >> @@ -781,12 +764,29 @@ isp_video_try_format(struct file *file, void *fh, struct v4l2_format *format)
+> >>  	fmt.pad = pad;
+> >>  	ret = v4l2_subdev_call(subdev, pad, get_fmt, NULL, &fmt);
+> >>  	if (ret)
+> >> -		return ret == -ENOIOCTLCMD ? -ENOTTY : ret;
+> >> +		return ret == -ENOIOCTLCMD ? -EINVAL : ret;
+> > 
+> > I believe -ENOTTY was right. Yet this should not happen (albeit I haven't
+> > checked) as all omap3isp sub-device drivers with connected video devices
+> > presumably implement get_fmt.
+> 
+> If this returns -ENOTTY, then that indicates that the TRY_FMT ioctl is not supported.
+> But that's not the case, it is, but something else is wrong.
 
-diff --git a/Documentation/devicetree/bindings/media/i2c/onnn,lc898217xc.yaml b/Documentation/devicetree/bindings/media/i2c/onnn,lc898217xc.yaml
-new file mode 100644
-index 000000000000..cadd14c4381f
---- /dev/null
-+++ b/Documentation/devicetree/bindings/media/i2c/onnn,lc898217xc.yaml
-@@ -0,0 +1,53 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+# Copyright 2025 Vasiliy Doylov <nekocwd@mainlining.org>
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/media/i2c/onnn,lc898217xc.yaml##
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: ON Semiconductor LC898217XC Voice Coil Motor (VCM) Lens
-+
-+maintainers:
-+  - Vasiliy Doylov <nekocwd@mainlining.org>
-+
-+description:
-+  The LC898217XC is a 11-bit digital-to-analog (DAC) converter.
-+  VCM current is controlled with a linear mode driver.The DAC is controlled
-+  via a 2-wire (I2C-compatible) serial interface that operates at clock
-+  rates up to 1MHz. This chip integrates Advanced Actuator Control (AAC)
-+  technology and is intended for driving voice coil lenses in camera modules.
-+
-+properties:
-+  compatible:
-+    enum:
-+      - onnn,lc898217xc
-+
-+  reg:
-+    maxItems: 1
-+
-+  vcc-supply:
-+    description:
-+      Definition of the regulator used as voltage supply.
-+
-+required:
-+  - compatible
-+  - reg
-+  - vcc-supply
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    i2c {
-+        #address-cells = <1>;
-+        #size-cells = <0>;
-+
-+        camera-lens@74 {
-+            compatible = "onnn,lc898217xc";
-+            reg = <0x74>;
-+
-+            vcc-supply = <&mt6358_vcamio_reg>;
-+        };
-+    };
-+
-+...
+The try_format sub-device pad op is used as a backend here. If that's not
+implemented, I'd use -ENOTTY to signal that. But as I said I don't think
+this happens. So why change it to something that's more opaque?
+
+> 
+> Given the fact that this function also returns -EINVAL if subdev == NULL,
+> I don't think returning -ENOTTY is the right thing to do.
+
+I don't think that happens either in practice: it'd require a driver bug
+for that to happen.
+
+> 
+> An alternative to -EINVAL might be to return -ENODEV if subdev == NULL or the
+> get_fmt op is not present.
+
+Sounds good.
 
 -- 
-2.52.0
+Kind regards,
 
+Sakari Ailus
