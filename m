@@ -1,143 +1,146 @@
-Received: from mail-wm1-f51.google.com (mail-wm1-f51.google.com [209.85.128.51])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 17DC42C0F7B
-	for <linux-media@vger.kernel.org>; Mon,  1 Dec 2025 08:27:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 12DBC33985
+	for <linux-media@vger.kernel.org>; Mon,  1 Dec 2025 08:41:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764577680; cv=none; b=oAFliq2Qp4yZY1JetvDRZsNw+440Rdj1mRNjQWKNOreHk90vH6+B8rwq3ZAXF/NDhwSUJuQxrLcxku41h5W1Uj+gzEaLX0NgWgWbGJ17bsuGOdLaqRbvznThBJBhFlMYeaoBGoFj/ikvD+zX10LbeNBK5RPBHjWKwA/4AElASmY=
+	t=1764578462; cv=none; b=eSp9gl8O/UizBX8akaJiyvp7tIF64uz2EcZwwwLpoTC2TOx69aKd2hEbsI+CEPPh7FZisAaLra1rxwUiTMoBEW5yFC6IvJXOM+4wUhTEPINE8+ubuIdXN7U8AGAn+1dMwAzM5aQO8sEdSFGsIQYAQTrbskSBdzj+VOMd0Sd5p+s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764577680; c=relaxed/simple;
-	bh=eEoSQ0b5NORRs6uPdVGQQrmSALQwqG3Y+GUxtmz9chI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=B01uBxM8pQGKifBj9VgGiobNAZHK+Kowe7EsHGCWFjntGdE4PLni5G7MYzKrfMl649OKpyM1TTkKTzbYAJ0XROsFJW/sfIYgip8W8YKkDoG3dCTLkxylu58OXu0Yyp003aNbxO2iq9FBqIj4v7kz1dcQ+GaCjslaLgjup1zgqAs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=DNwABYXb; arc=none smtp.client-ip=209.85.128.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+	s=arc-20240116; t=1764578462; c=relaxed/simple;
+	bh=o4jy+qzQneLroLHV0jSTCegOykenZZvD9onAZZsUmyI=;
+	h=Message-ID:Date:MIME-Version:From:Subject:To:Cc:References:
+	 In-Reply-To:Content-Type; b=TZ+RRhqMal0PLdF7RTEQBlIdsmoKWtuYBNTl64AmgLfjbrhdZzR8y9KRz29XoFD9LjnHZNmAqNToUhO2UlcyVfYm0XbhsDcoMCDgaWUBJYmTebtGkfYxBnzhKFrwVbJuMMB1NAhfCA1DuIUEBQkiKKqS4zF3CQli0hLG/YesJBU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=rkbeof+Q; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="DNwABYXb"
-Received: by mail-wm1-f51.google.com with SMTP id 5b1f17b1804b1-477563e28a3so25791095e9.1
-        for <linux-media@vger.kernel.org>; Mon, 01 Dec 2025 00:27:57 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1764577676; x=1765182476; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=+iv/uRpoYQ3jNb66g8IdDziqX74VNHPD/V1XeMoW6kM=;
-        b=DNwABYXbKcyeGxHsZ+QxiFBg/vD7IW1vlNx49VB+YBCITytN7CB6/fQ+FyXMZ3xhWI
-         QQH9Pe0SyNllHpVgsNhVbkDC1ieBUjC7WC79WbxB/WvdJ/gV2Yyn9oPu7eLFBZfP9gpO
-         3NXXj85LbEOzdWMEgxFScIeYmrT9xEHZGvOLaHwIwqLn3xZM3SLYxSpV2To0k0eUGqS5
-         4s1bKn/f3PN7/2hrDFiN0xNZb3wUNDIJvaYJhwB2oqL1O7QSu1PwxQ6ZJzvUcWnvXt8z
-         /RoPUglvHSpxTW7nF8C943nZMGJ/IM4LDNpYGuGv3/JsXp0577HMUwMq1rg+aGwDJ7zv
-         QzAg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1764577676; x=1765182476;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=+iv/uRpoYQ3jNb66g8IdDziqX74VNHPD/V1XeMoW6kM=;
-        b=Djn72JdFOeI0jQxSeNJ7vCHMATatuoLpGkGJwDGctxI5EsChZ7+PJ3ip+owxPbsZpx
-         GFHLZygruH8F3k9OZTC+kkG0Z1qB7ZSBfIRmoiRS9xaqn3LyDk0dcmHt2Z5lYhkJMuf9
-         bxbDrsSzmiIJ3jjT0F2FknM9kNxWEzAKKKlBCikANOwLc9Wh6fqGZ2uYoZ4D1mNQkM+T
-         BtkH0aKUbYomXTZkElx00CeD5kfnlfBMQ9/n0GRcnj+vwl+sqx05FwuoARo23wcUNEGk
-         zx476aJs3b+O/dmZRHt9y76t7L02Y1OKRmpitDIm7E07SKWxY9cd2GlEmXLyfbFK0tj1
-         K+vA==
-X-Forwarded-Encrypted: i=1; AJvYcCUe6nuuLos0tCZr+KTITHOcx7uXO6vWjBJ4lRUL4I57+724go57x1RwdDUeOk4PrB2LY2gtwV+IzFmiyQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0YyHQu8TnGB0H3R/jsTNSJwHtGJqqGbPwUowWHj2YwYfZeqzUdgi
-	nuwFr7Lsy45CvVdTOW6GZwrWAPJwoO95XDrELGsJGWx7Ad4ZaTWW4lilvdABvRY0yMY=
-X-Gm-Gg: ASbGncviZKxF6nRbJ1rISHQ0+FP6Ij8X/0s26DsCMpMNFBO76TUryC3nzan/NCbu7IU
-	+jTsy37awwolsXkzpUNBbRvzuJrS1N6sW8QzdJdT2CzMZaTz2yZmXbnxznqDKHu6PKN5x31iREo
-	rPGSbAXMcrOwKdVyuHceuTzUOB0Z2eRq0+1zcV6V+eulY5ct4oIt3IbopWBVrwkCfnHdqp7JOx8
-	etsT/0sp8f+XzosWTww6paUJ+p935KW17AFchiOyb1bCwAtqkjUZuSWDDt3JRz71pveRRpBP36G
-	hcbqiRlL1hCdvHAucviDcSW7KQByOuZFfUkF79Xsl8dwSGJvl4B2ATZSqLEHaAkj3LNjMyAxpm0
-	0F0n/pAfCtsNkfxy+O6gGRglAfzJbwaIr4YMnBJidJUI4f0tyFWozKVrSSIXSzmH2KkGw4ybCls
-	QtMYLO5KJZ5lwoX4Rz
-X-Google-Smtp-Source: AGHT+IHCEcneb6wrPByOAXguQtQiX6hdvT6IODI4Yv+qdHDOjDKNWh5+fiulBgY0bAjJg9dKf47UyQ==
-X-Received: by 2002:a05:600c:4eca:b0:46f:a2ba:581f with SMTP id 5b1f17b1804b1-477c0540a68mr417279155e9.16.1764577676131;
-        Mon, 01 Dec 2025 00:27:56 -0800 (PST)
-Received: from localhost ([196.207.164.177])
-        by smtp.gmail.com with UTF8SMTPSA id 5b1f17b1804b1-47905303963sm153680685e9.7.2025.12.01.00.27.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 01 Dec 2025 00:27:55 -0800 (PST)
-Date: Mon, 1 Dec 2025 11:27:51 +0300
-From: Dan Carpenter <dan.carpenter@linaro.org>
-To: Ricardo Ribalda <ribalda@chromium.org>
-Cc: Uros Bizjak <ubizjak@gmail.com>,
-	Linux Media Mailing List <linux-media@vger.kernel.org>,
-	Hans Verkuil <hverkuil@kernel.org>
-Subject: Re: sparse: Lots of (erroneous?) "different address space" errrors
- in new version
-Message-ID: <aS1RhxHtknHzZE3Z@stanley.mountain>
-References: <CANiDSCuizbMt77XfrzGPMa3Biai5TF1vcs+C5qdhYoLrP=9b3g@mail.gmail.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="rkbeof+Q"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DA989C4CEF1;
+	Mon,  1 Dec 2025 08:40:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1764578460;
+	bh=o4jy+qzQneLroLHV0jSTCegOykenZZvD9onAZZsUmyI=;
+	h=Date:From:Subject:To:Cc:References:In-Reply-To:From;
+	b=rkbeof+QDh+exQHAptaXqHiKeZZbVxI8jLmH24Fl21mjq0VPChSS8Ov8jKJROkCX1
+	 WSRboarXuq3Ytvry2e4BHFxbT6pcy1laRcmu8FRubhtvzzU6ukqJbCcCZYvSwAwVDM
+	 jPfzCbLULnpClFnClwsdKayy5Gi4I9E6HToLAJ9bYFLfIPcz5aXgJ3snsHvkUCBGyY
+	 54Ije4ceiHv82TOUUuRRWJabmlIoRCsmjDc81RoJu1PCqZJt2QP+kJZm/zkK1RWYdw
+	 Tx+lfc6BsVxJZGYhW6ECnkOy3hXiKAwbBmKjJuNOmRggApNjijmDTVxmVBYHwg0mE8
+	 m7nqeSoBOqE3Q==
+Message-ID: <9cd8b533-95fb-4495-a67b-bdf5c7774a74@kernel.org>
+Date: Mon, 1 Dec 2025 09:40:58 +0100
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CANiDSCuizbMt77XfrzGPMa3Biai5TF1vcs+C5qdhYoLrP=9b3g@mail.gmail.com>
+User-Agent: Mozilla Thunderbird
+From: Hans Verkuil <hverkuil+cisco@kernel.org>
+Subject: Re: [PATCH 04/14] media: omap3isp: implement enum_fmt_vid_cap/out
+To: Sakari Ailus <sakari.ailus@linux.intel.com>
+Cc: linux-media@vger.kernel.org, laurent.pinchart@ideasonboard.com
+References: <cover.1760707611.git.hverkuil+cisco@kernel.org>
+ <30813a3e81f2d8a6f42f637eba6fba2481b535cf.1760707611.git.hverkuil+cisco@kernel.org>
+ <aPiOIoe24l5NNz6z@kekkonen.localdomain>
+Content-Language: en-US, nl
+In-Reply-To: <aPiOIoe24l5NNz6z@kekkonen.localdomain>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Mon, Nov 24, 2025 at 09:55:18AM +0100, Ricardo Ribalda wrote:
-> Hi Dan
+On 22/10/2025 09:56, Sakari Ailus wrote:
+> Hi Hans,
 > 
-> Every week we bump the smatch/sparse version used by Linux-media's CI.
+> On Fri, Oct 17, 2025 at 03:26:41PM +0200, Hans Verkuil wrote:
+>> Add missing ioctls. This makes v4l2-compliance happier:
+>>
+>> fail: v4l2-test-formats.cpp(516): pixelformat 59565955 (UYVY) for buftype 1 not reported by ENUM_FMT
+>> 	test VIDIOC_G_FMT: FAIL
+>> fail: v4l2-test-formats.cpp(516): pixelformat 59565955 (UYVY) for buftype 1 not reported by ENUM_FMT
+>> 	test VIDIOC_TRY_FMT: FAIL
+>> fail: v4l2-test-formats.cpp(516): pixelformat 56595559 (YUYV) for buftype 1 not reported by ENUM_FMT
+>> 	test VIDIOC_S_FMT: FAIL
+>>
+>> Signed-off-by: Hans Verkuil <hverkuil+cisco@kernel.org>
+>> ---
+>>  drivers/media/platform/ti/omap3isp/ispvideo.c | 34 +++++++++++++++++++
+>>  1 file changed, 34 insertions(+)
+>>
+>> diff --git a/drivers/media/platform/ti/omap3isp/ispvideo.c b/drivers/media/platform/ti/omap3isp/ispvideo.c
+>> index 864d38140b87..77beea00d507 100644
+>> --- a/drivers/media/platform/ti/omap3isp/ispvideo.c
+>> +++ b/drivers/media/platform/ti/omap3isp/ispvideo.c
+>> @@ -652,6 +652,38 @@ isp_video_querycap(struct file *file, void *fh, struct v4l2_capability *cap)
+>>  	return 0;
+>>  }
+>>  
+>> +static int
+>> +isp_video_enum_format(struct file *file, void *fh, struct v4l2_fmtdesc *f)
+>> +{
+>> +	struct isp_video *video = video_drvdata(file);
+>> +	unsigned int i, j;
+>> +	unsigned int skip_last_fmts = 1;
+>> +
+>> +	if (f->type != video->type)
+>> +		return -EINVAL;
+>> +
+>> +	/*
+>> +	 * The last two formats have the same pixelformat as the two
+>> +	 * formats before them, but they do have different mediabus
+>> +	 * codes. So to avoid reporting duplicate pixelformats we skip
+>> +	 * those two, provided f->mbus_code is 0.
+>> +	 */
+>> +	if (!f->mbus_code)
+>> +		skip_last_fmts += 2;
+>> +	for (i = 0, j = 0; i < ARRAY_SIZE(formats) - skip_last_fmts; i++) {
+>> +		if (f->mbus_code && formats[i].code != f->mbus_code)
+>> +			continue;
 > 
-> We were almost error free, but the last version has introduced a huge
-> amount of errors:
-> https://linux-media.pages.freedesktop.org/-/users/ci/-/jobs/88441453/artifacts/junit/test-sparse.log.txt
+> How about, instead of the skip_last_fmts thingy, using this:
 > 
-> (It is also reproducible with linus/master)
-> 
-> 
-> I have bisected your tool and it seems like they were introduced by:
-> commit e53027a4e816a772403baafa83c09e4a94c1cb8f (HEAD)
-> Author: Dan Carpenter <dan.carpenter@linaro.org>
-> Date:   Sat Oct 18 12:31:01 2025 +0300
-> 
->     symbol: preserver address space qualifiers with typeof()
-> 
->     When we're parsing typeof(var) we should preserve the address space
->     qualifiers as well.
-> 
->     Reported-by: Uros Bizjak <ubizjak@gmail.com>
->     Signed-off-by: Dan Carpenter <dan.carpenter@linaro.org>
-> 
-> 
-> One example of the new error found is:
-> 
-> make -i W=1 C=1 CHECK="sparse" CF="-D__CHECK_ENDIAN__
-> -fmemcpy-max-count=11000000" KCFLAGS="-Wmaybe-uninitialized"
-> drivers/media/v4l2-core/v4l2-compat-ioctl32.o
-> drivers/media/v4l2-core/v4l2-compat-ioctl32.c:763:13: warning:
-> incorrect type in argument 2 (different address spaces)
-> 09:08 drivers/media/v4l2-core/v4l2-compat-ioctl32.c:763:13: expected
-> void const *from
-> 09:08 drivers/media/v4l2-core/v4l2-compat-ioctl32.c:763:13: got
-> unsigned int __user *
-> 
-> 
-> static int put_v4l2_event32_time32(struct v4l2_event *p64,
->                                    struct v4l2_event32_time32 __user *p32)
-> {
->         if (put_user(p64->type, &p32->type)
-> 
-> 
-> Seems like if we would like to fix the error, put_user should be modified....
-> 
-> Maybe it would be better to revert `symbol: preserver address space
-> qualifiers with typeof()` until the codebase is ready for it?
+> 		/* Weed out pixelformats with the same mbus code. */
+> 		if (i && formats[i - 1].code == formats[i].code)
+> 			continue;
 
-Huh.  Sorry, I don't know how I missed your email last week.
+Good idea, but it should be this:
 
-The do_put_user_call() is doing this:
+               /* Weed out duplicate pixelformats with different mbus codes */
+               if (!f->mbus_code && i &&
+                   formats[i - 1].pixelformat == formats[i].pixelformat)
+                       continue;
 
-	__typeof__(*(ptr)) __x = (x); /* eval x once */
+And the duplicate pixelformats in the formats array must be together in the
+array for this to work. Easy enough to change.
 
-And ptr is the __user pointer so Sparse is doing the correct thing.
-We could change the __typeof__ to __typeof_unqual__.  It silences the
-warning.  I'll rebuild the entire kernel to see if it causes any other
-issues...
+Regards,
 
-regards,
-dan carpenter
+	Hans
+
+> 
+>> +
+>> +		if (j == f->index) {
+>> +			f->pixelformat = formats[i].pixelformat;
+>> +			return 0;
+>> +		}
+>> +		j++;
+>> +	}
+>> +
+>> +	return -EINVAL;
+>> +}
+>> +
+>>  static int
+>>  isp_video_get_format(struct file *file, void *fh, struct v4l2_format *format)
+>>  {
+>> @@ -1258,9 +1290,11 @@ isp_video_s_input(struct file *file, void *fh, unsigned int input)
+>>  
+>>  static const struct v4l2_ioctl_ops isp_video_ioctl_ops = {
+>>  	.vidioc_querycap		= isp_video_querycap,
+>> +	.vidioc_enum_fmt_vid_cap	= isp_video_enum_format,
+>>  	.vidioc_g_fmt_vid_cap		= isp_video_get_format,
+>>  	.vidioc_s_fmt_vid_cap		= isp_video_set_format,
+>>  	.vidioc_try_fmt_vid_cap		= isp_video_try_format,
+>> +	.vidioc_enum_fmt_vid_out	= isp_video_enum_format,
+>>  	.vidioc_g_fmt_vid_out		= isp_video_get_format,
+>>  	.vidioc_s_fmt_vid_out		= isp_video_set_format,
+>>  	.vidioc_try_fmt_vid_out		= isp_video_try_format,
+> 
+
