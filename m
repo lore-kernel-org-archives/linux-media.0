@@ -1,37 +1,36 @@
 Received: from mail.mainlining.org (mail.mainlining.org [5.75.144.95])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BCC102550AF;
-	Mon,  1 Dec 2025 12:41:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0A23A30C373;
+	Mon,  1 Dec 2025 12:41:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=5.75.144.95
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764592885; cv=none; b=E9eSkkzrTgDZKdP5bmalk5rTs1/zjMDzsc0MZdxlanQG3n5OehYr6gmYov4G8IAXLbdV+B4FDuZND37GgWGxy5oSTVi81isxTWsSKCErLbfcACcDzMLm+YrYtChB2xVMnCVZcufsiaTwuYH+qHAMlvPB7hOu/ao6AyuLRbx2upM=
+	t=1764592888; cv=none; b=APpoabY+AOh0gCrrsAgTO8DcTv5XukQBLtCU2luFw4DbM5kKb93YRCf6aO0/qJV8l+uMmL082yx2pMDWunONvjPqSzB7zcOYRNgzSosKP7X6OOS0NZiGsG6+1euibyB2WS5IPLwlNJwHG5CD6kGMlWen/1huSduRZy40u+XeOG8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764592885; c=relaxed/simple;
-	bh=iYqrlYK75CmMlF5MP8d8/qU+BFPZKFn68XuoE9ljf1E=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=rhvv26lfViaK4496gKZ/tGSI0DBHKzjRLcNLj2EjbniVWPRUNqvS9ZVia5O9o+KOM/zrNpWFqKrJFBVQYxKMGFRdFRHs0tsnxMd8/qqRFAoMkFyRDP7NNcsmMT6ylf11j7Gff2odg4hgOBruN/y0YOiSoR2ZCsaEC9zkoFxYGYU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=mainlining.org; spf=pass smtp.mailfrom=mainlining.org; dkim=pass (2048-bit key) header.d=mainlining.org header.i=@mainlining.org header.b=CqT9sYgt; dkim=permerror (0-bit key) header.d=mainlining.org header.i=@mainlining.org header.b=zpX5eeDo; arc=none smtp.client-ip=5.75.144.95
+	s=arc-20240116; t=1764592888; c=relaxed/simple;
+	bh=+6R2Dm3f0PWsrFTZH6ZutnaKbYK6hSXwOT1Aim7DcUg=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=XQjzHZ/hm11kyV6f0SwqIxCahV1CS8RW6qwQ/zzn8cvYx0kv7Ks0LobI/U1dROKs/dLR8ttK/W65h/v1TD0g2V+N/fB+hlj92MjaEV5V+nQvR3xmyK2gkDXm6UGph1OXSqhRogcSaaA7QRhyzmCdsy47DaXTIV6kHo8xBKs9iVY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=mainlining.org; spf=pass smtp.mailfrom=mainlining.org; dkim=pass (2048-bit key) header.d=mainlining.org header.i=@mainlining.org header.b=hIL5Dqc7; dkim=permerror (0-bit key) header.d=mainlining.org header.i=@mainlining.org header.b=0oKmwJ/v; arc=none smtp.client-ip=5.75.144.95
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=mainlining.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mainlining.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=mainlining.org header.i=@mainlining.org header.b="CqT9sYgt";
-	dkim=permerror (0-bit key) header.d=mainlining.org header.i=@mainlining.org header.b="zpX5eeDo"
+	dkim=pass (2048-bit key) header.d=mainlining.org header.i=@mainlining.org header.b="hIL5Dqc7";
+	dkim=permerror (0-bit key) header.d=mainlining.org header.i=@mainlining.org header.b="0oKmwJ/v"
 DKIM-Signature: v=1; a=rsa-sha256; s=202507r; d=mainlining.org; c=relaxed/relaxed;
-	h=To:Message-Id:Subject:Date:From; t=1764592857; bh=REo7ODwV8ajMnQtMZi6zlDs
-	o2DVrquSY/dQ2qFb5zO0=; b=CqT9sYgtRTQ+J8CPqqIClt7A8md0TPuESaaGPG6sh0AIg2ZiYM
-	gylbblMLXoM5DNlz8K9OMBSBHY8lkNRX1ACiqgVUQUs7LBmtvaCMDgQpC2hjV2lY9jT0ndXPDWR
-	PQhXwIXEU/0Gl2gWWvZeHbzt7DP4y9aPLGuvSxpV8fFDlKAtf7lgqdybUf+CxuNgSFyiIzqh8w6
-	HT3WNJH/WISUijB7njd7fHbidPZR39w9JKh4TTVem9jZ48omqgsdagv6Y8sw4+ZyUQaPGM2bbHE
-	QSMyMNTLp8PW3KUAZDhw4yozjwbhHHCTARYWrYTn3UzMhwpYT+YUTu8/FGtJthfVNig==;
+	h=To:Message-Id:Date:Subject:From; t=1764592855; bh=sZSoiCqr6jnkXFHZB09/EO6
+	ISHkyMj98KPx4jfDfSHQ=; b=hIL5Dqc7Ax0vnHw4rtOzg8J1GUk32G02PYL+cjMaOR07vvYZGd
+	kft54/SSQ9TFHBBR+pZuvEGkjMi/diEPNdTNCBNQ25N1D2yxhkX/wM1bdzTo1YBt1TnHdEhj1wE
+	hwkUGANPKykfs8/Y2FDXkPU0tXDMXvb979Kvn1bFHzaEtOYA+hA0VIimuRijw52GoHQdOXnOv0G
+	NwdPiSWk0Sg8UNQkD1qud5Vg2MJFk2ypuGgvS3tKoN3iiyd3icdFdAh+TAWm5x9zIeP2s5B+UiQ
+	tY//lgGotKn8O9Pa6qImpJzmC5dqtl9Mm24Edv4SRJl+s3oAoY/EiVC3qdxQA4aFDyg==;
 DKIM-Signature: v=1; a=ed25519-sha256; s=202507e; d=mainlining.org; c=relaxed/relaxed;
-	h=To:Message-Id:Subject:Date:From; t=1764592857; bh=REo7ODwV8ajMnQtMZi6zlDs
-	o2DVrquSY/dQ2qFb5zO0=; b=zpX5eeDouHCEsxluDTvotfyDrqufQMM4CuRQg0CjT35U/hlMsV
-	SR367Fg6rFzBZRDmPdDLt/MetL0q3bqlYkDw==;
+	h=To:Message-Id:Date:Subject:From; t=1764592855; bh=sZSoiCqr6jnkXFHZB09/EO6
+	ISHkyMj98KPx4jfDfSHQ=; b=0oKmwJ/vk1Im2g9WGsDi2X+OOVgWoaRxACBHQPENcfhvNawBVR
+	/hh4wiNSF+Bj9fRzODRYYrZtZsuPVkkPeHBw==;
 From: Vasiliy Doylov <nekocwd@mainlining.org>
-Date: Mon, 01 Dec 2025 15:40:45 +0300
-Subject: [PATCH v3 3/3] MAINTAINERS: Add entry for Onsemi LC898217XC lens
- voice coil driver
+Subject: [PATCH v3 0/3] media: i2c: lc898217xc: initial driver
+Date: Mon, 01 Dec 2025 15:40:42 +0300
+Message-Id: <20251201-media-i2c-lc898217xc-initial-driver-v3-0-46e23897e921@mainlining.org>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
@@ -40,9 +39,11 @@ List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20251201-media-i2c-lc898217xc-initial-driver-v3-3-46e23897e921@mainlining.org>
-References: <20251201-media-i2c-lc898217xc-initial-driver-v3-0-46e23897e921@mainlining.org>
-In-Reply-To: <20251201-media-i2c-lc898217xc-initial-driver-v3-0-46e23897e921@mainlining.org>
+X-B4-Tracking: v=1; b=H4sIAMqMLWkC/53NQQ6CMBCF4auYrh1TphTQlfcwLko7hUmwmEIaj
+ eHuFly6MS7fZPL9LzFRZJrEafcSkRJPPIY81H4nbG9CR8Aub4EStUSs4UaODTBaGGxzbLCoHxY
+ 48MxmABc5UQRXt1qaQmlLWmTpHsnzY6tcrnn3PM1jfG7RhOv14ytZ/uQnBAmVKStlySsyzflmO
+ Az5K3SHMXZijaTiD7jIMKH3Dlv0TtMXvCzLGwpr9oE0AQAA
+X-Change-ID: 20250227-media-i2c-lc898217xc-initial-driver-d7b50a135ce5
 To: Mauro Carvalho Chehab <mchehab@kernel.org>, 
  Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
  Conor Dooley <conor+dt@kernel.org>, david@ixit.cz
@@ -50,43 +51,61 @@ Cc: linux-media@vger.kernel.org, devicetree@vger.kernel.org,
  linux-kernel@vger.kernel.org, phone-devel@vger.kernel.org, 
  Vitalii Skorkin <nikroks@mainlining.org>, 
  Antonio Rische <nt8r@protonmail.com>, 
- Vasiliy Doylov <nekocwd@mainlining.org>
+ Vasiliy Doylov <nekocwd@mainlining.org>, 
+ Krzysztof Kozlowski <krzk@kernel.org>
 X-Mailer: b4 0.14.3
-X-Developer-Signature: v=1; a=openpgp-sha256; l=758; i=nekocwd@mainlining.org;
- h=from:subject:message-id; bh=iYqrlYK75CmMlF5MP8d8/qU+BFPZKFn68XuoE9ljf1E=;
- b=owGbwMvMwCXGd//xporA/cmMp9WSGDJ1e67/bF05Z7k7t8T2rQLqnhGzP8bPuHh4W9SEWX9yl
- ypYSYtu7yhlYRDjYpAVU2T5b7hI7sANZc+63NRnMHNYmUCGMHBxCsBEDrxhZHgltmwG4ywNt/Ct
- 6zV0brGo3jhbq3c+Tnue7kNBdpk7J+oZfrMk6cZ9joqJm/bwaWfzkczy3xe+31r59O9MhmvfF7Y
- 8OM4EAA==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1903;
+ i=nekocwd@mainlining.org; h=from:subject:message-id;
+ bh=+6R2Dm3f0PWsrFTZH6ZutnaKbYK6hSXwOT1Aim7DcUg=;
+ b=owGbwMvMwCXGd//xporA/cmMp9WSGDJ1e64f+H1orZNsQvimk/NUWL4G8PzW5EyOcln27d6sE
+ J/MeayLOkpZGMS4GGTFFFn+Gy6SO3BD2bMuN/UZzBxWJpAhDFycAjARsY+MDDc1J8i9eubE0iLl
+ 693wb7nLIqE398wjLyjEpOU4na30n8jwz4bL038+R2i714WOC91SBzZcrPFfFbzm3hqOKYsS/XQ
+ 1GAA=
 X-Developer-Key: i=nekocwd@mainlining.org; a=openpgp;
  fpr=FF31A21EC0D823497E6D65E60EDFE3B27851BF63
 
-Add entry for Onsemi LC898217XC lens voice coil driver
+LX898217XC is a 11 bit DAC, designed for linear control
+of voice coil motor. This driver creates a V4L2 subdevice
+and provides control to set the desired focus.
 
+Tested on Oneplus 6 (oneplus-enchilada)
+
+Co-developed-by: Vitalii Skorkin <nikroks@mainlining.org>
+Signed-off-by: Vitalii Skorkin <nikroks@mainlining.org>
+Co-developed-by: Antonio Rische <nt8r@protonmail.com>
+Signed-off-by: Antonio Rische <nt8r@protonmail.com>
 Signed-off-by: Vasiliy Doylov <nekocwd@mainlining.org>
 ---
- MAINTAINERS | 7 +++++++
- 1 file changed, 7 insertions(+)
+Changes in v3:
+- Fixed MAINTAINERS (Krzysztof)
+- Reordered commits (Krzysztof)
+- Removed blank line from device-tree documentation (Krzysztof)
+- Refactored to use CCI regmap
+- Refactored to use dev_err_probe in probe
+- Link to v2: https://lore.kernel.org/all/20250304-media-i2c-lc898217xc-initial-driver-v2-0-6a463cef3ea8@mainlining.org/
+Changes in v2:
+- PM functions annotated as __maybe_unused.
+- Fixed dt bindings documentation commit message
+- Added v4l2 events (now v4l2-compliance shows no failed tests)
+- Link to v1: https://lore.kernel.org/r/20250304-media-i2c-lc898217xc-initial-driver-v1-0-e2ffd2b2fd5e@mainlining.org
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 80dcd13687e6..004ff1ab535b 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -19501,6 +19501,13 @@ S:	Supported
- W:	http://www.onsemi.com
- F:	drivers/net/phy/ncn*
- 
-+ONSEMI LC898217XC LENS VOICE COIL DRIVER
-+M:	Vasiliy Doylov <nekocwd@mainlining.org>
-+L:	linux-media@vger.kernel.org
-+S:	Maintained
-+F:	Documentation/devicetree/bindings/media/i2c/onnn,lc898217xc.yaml
-+F:	drivers/media/i2c/lc898217xc.c
-+
- OP-TEE DRIVER
- M:	Jens Wiklander <jens.wiklander@linaro.org>
- L:	op-tee@lists.trustedfirmware.org
+---
+Vasiliy Doylov (3):
+      media: dt-bindings: Add LC898217XC documentation
+      media: i2c: Add driver for LC898217XC VCM
+      MAINTAINERS: Add entry for Onsemi LC898217XC lens voice coil driver
 
+ .../bindings/media/i2c/onnn,lc898217xc.yaml        |  53 +++++
+ MAINTAINERS                                        |   7 +
+ drivers/media/i2c/Kconfig                          |   9 +
+ drivers/media/i2c/Makefile                         |   1 +
+ drivers/media/i2c/lc898217xc.c                     | 254 +++++++++++++++++++++
+ 5 files changed, 324 insertions(+)
+---
+base-commit: 7d31f578f3230f3b7b33b0930b08f9afd8429817
+change-id: 20250227-media-i2c-lc898217xc-initial-driver-d7b50a135ce5
+
+Best regards,
 -- 
-2.52.0
+Vasiliy Doylov <nekocwd@mainlining.org>
 
