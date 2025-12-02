@@ -1,331 +1,189 @@
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+Received: from SN4PR2101CU001.outbound.protection.outlook.com (mail-southcentralusazon11012058.outbound.protection.outlook.com [40.93.195.58])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 797EC312801;
-	Tue,  2 Dec 2025 09:48:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=60.244.123.138
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764668902; cv=none; b=Oz3UtaeZhU9HhzeQ6rdL3gzyUXx9Cvqazanpvs0MieI+6kXTu3bDmQWewsFp/NCXA7RM2mbafLUOqNIG/CDeAd7lP74czbiV19c7oTAT96eHOV0bvToITfI0EJWUeMVLoHSq2xucEhWg7qqH6JxQeh0pJ3lb287VZaKhFT9N+LQ=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764668902; c=relaxed/simple;
-	bh=wUr2HpwIJuST4uB++UPSkdMlaO8+9jx9c+ZnYzBf2io=;
-	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=Um4coff7mHsc6dHT2qruW+PzZ0fg35Y30/BUwCy0DqN3mULs806c9R91zmofRqLC5MC9px9kK1s85kPzO4UgtX4IMzljD8KbC6qPz6tPxQaAz4+10uDXW3SMsjkHtCLkBiT0Xy2S7PFlWjuy3KkxzJ19VuvHaIAdrfTyJlVhAxw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mediatek.com; spf=pass smtp.mailfrom=mediatek.com; dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b=tNfOMlSe; arc=none smtp.client-ip=60.244.123.138
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mediatek.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mediatek.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5A0CA30B508;
+	Tue,  2 Dec 2025 09:49:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.93.195.58
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1764668948; cv=fail; b=oZOqkOyMVepR2/oUCcpnBncBYwT9/RxRslwXVcoxNgGDS181+HRJ7Btwxxl56bwB/PGfQvhEUfFr1wr3ZaKbvuISL5KN/yYlkEvJ/hWV8l9bWzg5DDJvJXSIPb9JeZYUH0OyRtOWy+Vu6hcVkKJtsjhMpwRpG6aWv5iD6WoO+1I=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1764668948; c=relaxed/simple;
+	bh=JB/KuuAmAlxAA1Mn9qNnJxj/0JGj+YL6KisQXwRNQcg=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=vGXwdHYPoJxDHTwHgpvb1wOru8NWsNHA3nlNUWKQauJXw21vmI+NUNEhlrRuXoKP9ow+urH9Bv/6FcXQpPswu322I3ctL6IX9AbklgSl9ONJW2a1pSyQhCEPKZmpM9mMHTLldYWB3oxORLGp8bu4GqYjld5m9ffd0ona4opOxxs=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=rL3Bjg5D; arc=fail smtp.client-ip=40.93.195.58
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b="tNfOMlSe"
-X-UUID: 05152310cf6411f0b2bf0b349165d6e0-20251202
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-	h=Content-Type:Content-Transfer-Encoding:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:To:From; bh=IuxrjQGkPURWMxOhrzqIZDhazzA4UeBlX38l8eJK1zg=;
-	b=tNfOMlSeuoBxFpg9aFDwM4uu9OVLPVqWy63MLZRWWGSE4Y7GtS3uK4Dal/o36xx5Mx6AQ4LXesxq6yeuzXwDlHsxjGRXe4p6TOIG2zwZW+N1SIi2gwrN8AmIMTiQ3F56Y9dFsVWvKKyfvzkEN1psfVHP6H2aIG1YkfugW58kIfg=;
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.3.6,REQID:07600075-f341-4cc8-a7e9-3caf11a67b59,IP:0,UR
-	L:0,TC:0,Content:0,EDM:-20,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION
-	:release,TS:-20
-X-CID-META: VersionHash:a9d874c,CLOUDID:7c455002-1fa9-44eb-b231-4afc61466396,B
-	ulkID:nil,BulkQuantity:0,Recheck:0,SF:81|82|102|836|888|898,TC:-5,Content:
-	0|15|50,EDM:1,IP:nil,URL:0,File:130,RT:0,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI
-	:0,OSA:0,AV:0,LES:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0,ARC:0
-X-CID-BVR: 2,SSN|SDN
-X-CID-BAS: 2,SSN|SDN,0,_
-X-CID-FACTOR: TF_CID_SPAM_SNR
-X-CID-RHF: D41D8CD98F00B204E9800998ECF8427E
-X-UUID: 05152310cf6411f0b2bf0b349165d6e0-20251202
-Received: from mtkmbs14n1.mediatek.inc [(172.21.101.75)] by mailgw01.mediatek.com
-	(envelope-from <kyrie.wu@mediatek.com>)
-	(Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-	with ESMTP id 88952954; Tue, 02 Dec 2025 17:48:13 +0800
-Received: from mtkmbs13n2.mediatek.inc (172.21.101.108) by
- mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
+	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="rL3Bjg5D"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=Riqm10c42eA1sNNlj3lUPTFONIofZj+mTE+BXip0wHYwIOac3Vgfz/2SS74wWtln81HbG4Epp5s5PvI33yZhwWh/S3Oo6Y9PU5gW38E7K3lEaDBCxCEKYAWp0kEJ2Ndh8oR9PCaoSB6npHSYkNsp/fLpwyJ8FMqB6vK48wFXoWKYT40KyGS7/mtRI2xuc5Xg3yUIe4cQP8lHdqm2QiCbURAKDPXfUuFY+aDxrDOX2oI5p1BLvIH95GwDzWZVyOcIb/KQmVlGswi1lih8x0f9MjT6Ow+lgxDgo308eEgUxtfyPXuGYaO5klZuhkvmkQ+Q7+DkwZu4YdupRnIg/Md5cw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=jF3dRtfvMEVsQX7S4SoN7R/ZvkiVjaxyDa8dCNpr920=;
+ b=CEQysSBX9WrkYmoKyd0EtlFUZ79qn9Calf/UF2ad0A25uqYfcT5+k+ATQZp6w3/vKvN8OB/TuwHPHiFT+jQvst7+G+VWRWcmgOVIqJQyqHZ45AOIEClzKHrBhNEqZRUQhdpvNyIGwO8k5ThTp4wYXQlz+6zYPGYhOeptd02kAaqNQstTQX+e9/OwR8RIuZRISF3EHLnwohvE/bv0s1MrOxiDg5mPleajMwbUsTXbAHXMQsHQ3B6mlCvlRIdDOtzoHJCuZYAhKeRxfVetQradZx0mK3CrA4PBBQcqHVrLcY/IrgUgYnWpJjUfym+sRZMZcO2IU9Ac6/stF0YDTGT/uQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=gmail.com smtp.mailfrom=amd.com; dmarc=pass
+ (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
+ dkim=none (message not signed); arc=none (0)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=jF3dRtfvMEVsQX7S4SoN7R/ZvkiVjaxyDa8dCNpr920=;
+ b=rL3Bjg5DEJQljPLJ7iI4xheOcNVTUXi8DWSuUcqStpI5QbSH+5TY1S27FuB6DboCwddMDs6Drj8TpmX2wbHqaFKqn6cIOaXw+C562zwnH3Gz1IdIjyWU/+W8tahuDF2vdvvY2FqBOtaXeKAyeolBSjq8YFcjdLONiOkU5qqa9sM=
+Received: from BY3PR05CA0018.namprd05.prod.outlook.com (2603:10b6:a03:254::23)
+ by CY5PR12MB6550.namprd12.prod.outlook.com (2603:10b6:930:42::6) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9366.17; Tue, 2 Dec
+ 2025 09:48:59 +0000
+Received: from MWH0EPF000A6731.namprd04.prod.outlook.com
+ (2603:10b6:a03:254:cafe::36) by BY3PR05CA0018.outlook.office365.com
+ (2603:10b6:a03:254::23) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.20.9388.9 via Frontend Transport; Tue, 2
+ Dec 2025 09:48:56 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=satlexmb07.amd.com; pr=C
+Received: from satlexmb07.amd.com (165.204.84.17) by
+ MWH0EPF000A6731.mail.protection.outlook.com (10.167.249.23) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.9388.8 via Frontend Transport; Tue, 2 Dec 2025 09:48:58 +0000
+Received: from FRAPPELLOUX01-WSLPUB.amd.com (10.180.168.240) by
+ satlexmb07.amd.com (10.181.42.216) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1748.26; Tue, 2 Dec 2025 17:48:12 +0800
-Received: from mhfsdcap04.gcn.mediatek.inc (10.17.3.154) by
- mtkmbs13n2.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
- 15.2.1748.26 via Frontend Transport; Tue, 2 Dec 2025 17:48:11 +0800
-From: Kyrie Wu <kyrie.wu@mediatek.com>
-To: Hans Verkuil <hverkuil-cisco@xs4all.nl>, Mauro Carvalho Chehab
-	<mchehab@kernel.org>, Rob Herring <robh@kernel.org>, Krzysztof Kozlowski
-	<krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, Matthias Brugger
-	<matthias.bgg@gmail.com>, AngeloGioacchino Del Regno
-	<angelogioacchino.delregno@collabora.com>, Kyrie Wu <kyrie.wu@mediatek.com>,
-	<linux-media@vger.kernel.org>, <devicetree@vger.kernel.org>,
-	<linux-kernel@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
-	<linux-mediatek@lists.infradead.org>
-Subject: [PATCH v11 12/12] media: mediatek: jpeg: add jpeg smmu sid setting
-Date: Tue, 2 Dec 2025 17:48:00 +0800
-Message-ID: <20251202094800.6140-13-kyrie.wu@mediatek.com>
-X-Mailer: git-send-email 2.46.0
-In-Reply-To: <20251202094800.6140-1-kyrie.wu@mediatek.com>
-References: <20251202094800.6140-1-kyrie.wu@mediatek.com>
+ 15.2.2562.17; Tue, 2 Dec 2025 03:48:50 -0600
+From: Pierre-Eric Pelloux-Prayer <pierre-eric.pelloux-prayer@amd.com>
+To:
+CC: Pierre-Eric Pelloux-Prayer <pierre-eric.pelloux-prayer@amd.com>,
+	=?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>, Alex Deucher
+	<alexander.deucher@amd.com>, David Airlie <airlied@gmail.com>, Felix Kuehling
+	<Felix.Kuehling@amd.com>, Simona Vetter <simona@ffwll.ch>, Sumit Semwal
+	<sumit.semwal@linaro.org>, <amd-gfx@lists.freedesktop.org>,
+	<dri-devel@lists.freedesktop.org>, <linaro-mm-sig@lists.linaro.org>,
+	<linux-kernel@vger.kernel.org>, <linux-media@vger.kernel.org>
+Subject: [PATCH v4 00/13] drm/amdgpu: preparation patchs for the use all SDMA instances series
+Date: Tue, 2 Dec 2025 10:47:10 +0100
+Message-ID: <20251202094738.15614-1-pierre-eric.pelloux-prayer@amd.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-MTK: N
+X-ClientProxiedBy: satlexmb07.amd.com (10.181.42.216) To satlexmb07.amd.com
+ (10.181.42.216)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: MWH0EPF000A6731:EE_|CY5PR12MB6550:EE_
+X-MS-Office365-Filtering-Correlation-Id: b28aeca4-07b5-41cc-cbae-08de318803f2
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|36860700013|376014|1800799024|82310400026|13003099007;
+X-Microsoft-Antispam-Message-Info:
+	=?utf-8?B?NG04aG44cGdZdzhQdDVPbkxwd29hQ0E4alBMRnBzTmY1NUowcGEvUTdlR29t?=
+ =?utf-8?B?TnVENzg4VDJHeUVXNDUwMk9NQng1M3pwVFVaOC9GazBCK0lJNnZmVWFsVVlW?=
+ =?utf-8?B?QmpKOHhsaG8ycHowNGdSMTAyclRhb2M1V2dkRWg4UmdtbGFjMC81K2lYOXdS?=
+ =?utf-8?B?c2FEd1FSY3VMS255RXI0aWdIR0REc0FhK1JCT3dMMFprZU1meG9INjdPdDJr?=
+ =?utf-8?B?NU9WZXpvU3RDc2JJUDRhTFRibk5PYlI5UU5WblZHLzRkZjhFN3FDVnBGNSty?=
+ =?utf-8?B?SWVPV0hYVHhvV1VFVjkwUDY5UFUwQkVYNEppM1JlQXFtUWtpUkhQaEtoV3BN?=
+ =?utf-8?B?bkVvbVlJK1VweGJObjhKNTN6RjNpK3Nmc1p0ekF1T2UzaTZua2Q1ajE0M0FN?=
+ =?utf-8?B?bVlmMktmMkZNbThReVpqWmNRRllTSVVKUFI3R1QyTktGWWppeUxYbDBkSit1?=
+ =?utf-8?B?aW16ZUgvcllGcCthVFN6azhIeVZzTnlrYm5DVjV5ZVF0S3dJU1RDZXZnb2Ny?=
+ =?utf-8?B?Y2t1cURlNFNTZnVyQ1pFTWlOZkNiZkRWall2OUxOalNqdGdtNWMvV3dtNlds?=
+ =?utf-8?B?YVlHVWZrelBQa0Q5UFg4dkFqSWVnV3hhVmZiZGY5TjVKWmNKbzM5YVNRQ1J6?=
+ =?utf-8?B?U1hrSHZIVUtJWCtXNEdKcEp5eWh3dmZjaU9Od0Jrd1BZSlJBZXhWUzM0ZGNL?=
+ =?utf-8?B?TkEvTlExRmlkc0M4SFJoaUlqbHgvZzZMVmFuSUw0S2p6SDZ0cHhtUWtRL3Fp?=
+ =?utf-8?B?a1NZMWM4QXIvY0JxT2tCZE1FdU9ra0lLMTBLOFErTXRyS3N6c25ZNTJKeUJl?=
+ =?utf-8?B?cUZjdXdMc1h0cWNHSksxUkZxTVV0WnBzSGg3NFlrTEd0UG5OOFVFdXovSXZ4?=
+ =?utf-8?B?WEowVnU5UWhlSE1xcTFmWVJoQU44TFhpbUJKNmg2U2R6a25rQ3ZWUVczSXJh?=
+ =?utf-8?B?OEdSdHBRb0N4VldzVG9LTGxSemJtMnN2UEVpMitpeVdGd3Bwc2lKUEZrRVpN?=
+ =?utf-8?B?TVpCeFNiSi9EcWlCdVFVc1lTamFuQjZwdnRLcHlZeitzZjdJeDZ0aXRYTHN3?=
+ =?utf-8?B?RlNZa082YmtnZVQ4L050SkUrb2g1L0hYRnZmYTMyZmdlUytldjU5VGlRRTlT?=
+ =?utf-8?B?MFFROXV6aC8xOEJjdlFwb1lFOTRibEo2RE9qcTFWSGpkOEFVSlZHRkZnaFgw?=
+ =?utf-8?B?RVQrS0ZRVzlkS3NYd09JVGg0UlJhQ3EyazVmWGNxeUowNzFPaUp6T2FNaXY2?=
+ =?utf-8?B?V0JOcENLNU9RNlBkMzFoSjZrVEpXWXRlYlYrQjNwc3ZLbmNKbDdFTUMzMUJF?=
+ =?utf-8?B?YmtPZ2l3Mnk5TWRYcDBwY1R1NitXMkZkWU02bUc3b1dxYkR6K0J1WFlCOXBT?=
+ =?utf-8?B?SkRYamhWSGFKWVl5ak9VV3BIUlJQZEZ2c0pOTDZTdHBiN0FTQ1YyWXRqUy9y?=
+ =?utf-8?B?WXVQd1VnM2F6SVh0aG5ETHFJNmVraSsyRzU5US9PNEtleHJlaTllRlBMa0F5?=
+ =?utf-8?B?V0tKdGw1K3MrcUt0WXowUkxieDJXVHdtY2xNdXlJL0ZFWGdFOWNLdEtQcngy?=
+ =?utf-8?B?Z256a09FSFZuR2dhNkgyb0doREpKUXVVdDNIODBhMHh1SVNmSkNkTHFNbFA2?=
+ =?utf-8?B?N3lNOW8rMGZRdzBwNGdqenlPMm9zOCs0cElZL1ZacndVb2podVYxQkw1TzIy?=
+ =?utf-8?B?TFhidm5lcEs2Y1JjUTZDb2NmeTd5NHZyWkkzdG1mSEZWSzNIeDZHRXp2QXk0?=
+ =?utf-8?B?elorTFA2eFFvVGV3SmZiR3FEK0RNOW13Ylc3L214Mkw4M2pLUlNqRXZ4QjJi?=
+ =?utf-8?B?Y0tTNnk5c2sxWFRPWGdlWVlsYmJiam1hVVRsNHdlb3R0SlNLY2pnZ2JubWJL?=
+ =?utf-8?B?dEFNVTJBMWNFZGFnVnZZQ3pBWmdyT2NHUlM4OUUxMmJPU0hCaEFYUWtINDAw?=
+ =?utf-8?B?ZmhpRVpLYUlJTUZacWlINGZobWwvNjZZaXlJZzljNFo0TG9sSi9wN2VrbDdv?=
+ =?utf-8?B?eXRPK1h6dTRKWHJvUWU4N0gxb0xMUTJvWCtPNkJoQlg4N003WDdpcldwN21q?=
+ =?utf-8?B?WHdTQWcya1R1VzlqNWJjVytyYkRuRmFjVmxNcjN0R1FVVmpPRWRuZ3Q4TUs4?=
+ =?utf-8?Q?Zp5c=3D?=
+X-Forefront-Antispam-Report:
+	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:satlexmb07.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(36860700013)(376014)(1800799024)(82310400026)(13003099007);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 Dec 2025 09:48:58.3429
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: b28aeca4-07b5-41cc-cbae-08de318803f2
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[satlexmb07.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	MWH0EPF000A6731.namprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY5PR12MB6550
 
-Add a configuration to set jpeg dec & enc smmu sid
+This series is a subset of the "use all SDMA instances" series.
+It starts at the first modified patch and ends at the last patch
+before the drm/ttm patch that got merged through drm-misc-next.
 
-Signed-off-by: Kyrie Wu <kyrie.wu@mediatek.com>
----
- .../platform/mediatek/jpeg/mtk_jpeg_core.c    | 37 +++++++++++++++++++
- .../platform/mediatek/jpeg/mtk_jpeg_core.h    | 15 ++++++++
- .../platform/mediatek/jpeg/mtk_jpeg_dec_hw.c  | 23 ++++++++++++
- .../platform/mediatek/jpeg/mtk_jpeg_enc_hw.c  | 23 ++++++++++++
- 4 files changed, 98 insertions(+)
+v3 of the full series:
+  https://lists.freedesktop.org/archives/dri-devel/2025-November/537830.html
 
-diff --git a/drivers/media/platform/mediatek/jpeg/mtk_jpeg_core.c b/drivers/media/platform/mediatek/jpeg/mtk_jpeg_core.c
-index 10a588b92e76..625dfa8468e1 100644
---- a/drivers/media/platform/mediatek/jpeg/mtk_jpeg_core.c
-+++ b/drivers/media/platform/mediatek/jpeg/mtk_jpeg_core.c
-@@ -15,6 +15,7 @@
- #include <linux/of_platform.h>
- #include <linux/platform_device.h>
- #include <linux/pm_runtime.h>
-+#include <linux/regmap.h>
- #include <linux/slab.h>
- #include <linux/spinlock.h>
- #include <media/v4l2-event.h>
-@@ -1613,6 +1614,20 @@ static irqreturn_t mtk_jpeg_enc_done(struct mtk_jpeg_dev *jpeg)
- 	return IRQ_HANDLED;
- }
- 
-+static void mtk_jpeg_enc_set_smmu_sid(struct mtk_jpegenc_comp_dev *jpeg)
-+{
-+	struct mtk_jpeg_dev *mjpeg = jpeg->master_dev;
-+
-+	if (!mjpeg->variant->support_smmu || !jpeg->smmu_regmap)
-+		return;
-+
-+	regmap_update_bits(jpeg->smmu_regmap, JPEG_ENC_SMMU_SID,
-+			   JPG_REG_GUSER_ID_MASK <<
-+			   JPG_REG_ENC_GUSER_ID_SHIFT,
-+			   JPG_REG_GUSER_ID_ENC_SID <<
-+			   JPG_REG_ENC_GUSER_ID_SHIFT);
-+}
-+
- static void mtk_jpegenc_worker(struct work_struct *work)
- {
- 	struct mtk_jpegenc_comp_dev *comp_jpeg[MTK_JPEGENC_HW_MAX];
-@@ -1674,6 +1689,9 @@ static void mtk_jpegenc_worker(struct work_struct *work)
- 	jpeg_dst_buf->frame_num = ctx->total_frame_num;
- 	ctx->total_frame_num++;
- 	mtk_jpeg_enc_reset(comp_jpeg[hw_id]->reg_base);
-+
-+	mtk_jpeg_enc_set_smmu_sid(comp_jpeg[hw_id]);
-+
- 	mtk_jpeg_set_enc_dst(ctx,
- 			     comp_jpeg[hw_id]->reg_base,
- 			     &dst_buf->vb2_buf);
-@@ -1701,6 +1719,20 @@ static void mtk_jpegenc_worker(struct work_struct *work)
- 	v4l2_m2m_job_finish(jpeg->m2m_dev, ctx->fh.m2m_ctx);
- }
- 
-+static void mtk_jpeg_dec_set_smmu_sid(struct mtk_jpegdec_comp_dev *jpeg)
-+{
-+	struct mtk_jpeg_dev *mjpeg = jpeg->master_dev;
-+
-+	if (!mjpeg->variant->support_smmu || !jpeg->smmu_regmap)
-+		return;
-+
-+	regmap_update_bits(jpeg->smmu_regmap, JPEG_DEC_SMMU_SID,
-+			   JPG_REG_GUSER_ID_MASK <<
-+			   JPG_REG_DEC_GUSER_ID_SHIFT,
-+			   JPG_REG_GUSER_ID_DEC_SID <<
-+			   JPG_REG_DEC_GUSER_ID_SHIFT);
-+}
-+
- static void mtk_jpegdec_worker(struct work_struct *work)
- {
- 	struct mtk_jpeg_ctx *ctx = container_of(work, struct mtk_jpeg_ctx,
-@@ -1784,6 +1816,9 @@ static void mtk_jpegdec_worker(struct work_struct *work)
- 	jpeg_dst_buf->frame_num = ctx->total_frame_num;
- 	ctx->total_frame_num++;
- 	mtk_jpeg_dec_reset(comp_jpeg[hw_id]->reg_base);
-+
-+	mtk_jpeg_dec_set_smmu_sid(comp_jpeg[hw_id]);
-+
- 	mtk_jpeg_dec_set_config(comp_jpeg[hw_id]->reg_base,
- 				jpeg->variant->support_34bit,
- 				&jpeg_src_buf->dec_param,
-@@ -1943,6 +1978,7 @@ static struct mtk_jpeg_variant mtk8196_jpegenc_drvdata = {
- 	.cap_q_default_fourcc = V4L2_PIX_FMT_JPEG,
- 	.multi_core = true,
- 	.jpeg_worker = mtk_jpegenc_worker,
-+	.support_smmu = true,
- };
- 
- static const struct mtk_jpeg_variant mtk8195_jpegdec_drvdata = {
-@@ -1969,6 +2005,7 @@ static const struct mtk_jpeg_variant mtk8196_jpegdec_drvdata = {
- 	.cap_q_default_fourcc = V4L2_PIX_FMT_YUV420M,
- 	.multi_core = true,
- 	.jpeg_worker = mtk_jpegdec_worker,
-+	.support_smmu = true,
- };
- 
- static const struct of_device_id mtk_jpeg_match[] = {
-diff --git a/drivers/media/platform/mediatek/jpeg/mtk_jpeg_core.h b/drivers/media/platform/mediatek/jpeg/mtk_jpeg_core.h
-index 33f7fbc4ca5e..6e8304680393 100644
---- a/drivers/media/platform/mediatek/jpeg/mtk_jpeg_core.h
-+++ b/drivers/media/platform/mediatek/jpeg/mtk_jpeg_core.h
-@@ -11,6 +11,7 @@
- 
- #include <linux/clk.h>
- #include <linux/interrupt.h>
-+#include <linux/mfd/syscon.h>
- #include <media/v4l2-ctrls.h>
- #include <media/v4l2-device.h>
- #include <media/v4l2-fh.h>
-@@ -34,6 +35,14 @@
- 
- #define MTK_JPEG_MAX_EXIF_SIZE	(64 * 1024)
- 
-+#define JPEG_DEC_SMMU_SID				0
-+#define JPEG_ENC_SMMU_SID				0
-+#define JPG_REG_GUSER_ID_MASK			0x7
-+#define JPG_REG_GUSER_ID_DEC_SID		0x4
-+#define JPG_REG_GUSER_ID_ENC_SID		0x5
-+#define JPG_REG_DEC_GUSER_ID_SHIFT		8
-+#define JPG_REG_ENC_GUSER_ID_SHIFT		4
-+
- #define MTK_JPEG_ADDR_MASK GENMASK(1, 0)
- 
- /**
-@@ -65,6 +74,7 @@ enum mtk_jpeg_ctx_state {
-  * @multi_core:		mark jpeg hw is multi_core or not
-  * @jpeg_worker:		jpeg dec or enc worker
-  * @support_34bit:	flag to check support for 34-bit DMA address
-+ * @support_smmu:	flag to check if support smmu
-  */
- struct mtk_jpeg_variant {
- 	struct clk_bulk_data *clks;
-@@ -82,6 +92,7 @@ struct mtk_jpeg_variant {
- 	bool multi_core;
- 	void (*jpeg_worker)(struct work_struct *work);
- 	bool support_34bit;
-+	bool support_smmu;
- };
- 
- struct mtk_jpeg_src_buf {
-@@ -150,6 +161,7 @@ struct mtk_jpegdec_clk {
-  * @hw_param:		jpeg encode hw parameters
-  * @hw_state:		record hw state
-  * @hw_lock:		spinlock protecting the hw device resource
-+ * @smmu_regmap:	SMMU registers mapping
-  */
- struct mtk_jpegenc_comp_dev {
- 	struct device *dev;
-@@ -163,6 +175,7 @@ struct mtk_jpegenc_comp_dev {
- 	enum mtk_jpeg_hw_state hw_state;
- 	/* spinlock protecting the hw device resource */
- 	spinlock_t hw_lock;
-+	struct regmap *smmu_regmap;
- };
- 
- /**
-@@ -177,6 +190,7 @@ struct mtk_jpegenc_comp_dev {
-  * @hw_param:			jpeg decode hw parameters
-  * @hw_state:			record hw state
-  * @hw_lock:			spinlock protecting hw
-+ * @smmu_regmap:		SMMU registers mapping
-  */
- struct mtk_jpegdec_comp_dev {
- 	struct device *dev;
-@@ -190,6 +204,7 @@ struct mtk_jpegdec_comp_dev {
- 	enum mtk_jpeg_hw_state hw_state;
- 	/* spinlock protecting the hw device resource */
- 	spinlock_t hw_lock;
-+	struct regmap *smmu_regmap;
- };
- 
- /**
-diff --git a/drivers/media/platform/mediatek/jpeg/mtk_jpeg_dec_hw.c b/drivers/media/platform/mediatek/jpeg/mtk_jpeg_dec_hw.c
-index e453a1634f33..da753a636eaa 100644
---- a/drivers/media/platform/mediatek/jpeg/mtk_jpeg_dec_hw.c
-+++ b/drivers/media/platform/mediatek/jpeg/mtk_jpeg_dec_hw.c
-@@ -624,6 +624,25 @@ static int mtk_jpegdec_hw_init_irq(struct mtk_jpegdec_comp_dev *dev)
- 	return 0;
- }
- 
-+static int mtk_jpegdec_smmu_init(struct mtk_jpegdec_comp_dev *dev)
-+{
-+	struct mtk_jpeg_dev *master_dev = dev->master_dev;
-+
-+	if (!master_dev->variant->support_smmu)
-+		return 0;
-+
-+	dev->smmu_regmap =
-+		syscon_regmap_lookup_by_phandle(dev->plat_dev->dev.of_node,
-+						"mediatek,smmu-config");
-+	if (IS_ERR(dev->smmu_regmap)) {
-+		return dev_err_probe(dev->dev, PTR_ERR(dev->smmu_regmap),
-+				     "mmap smmu_base failed(%ld)\n",
-+				     PTR_ERR(dev->smmu_regmap));
-+	}
-+
-+	return 0;
-+}
-+
- static int mtk_jpegdec_hw_probe(struct platform_device *pdev)
- {
- 	struct mtk_jpegdec_clk *jpegdec_clk;
-@@ -677,6 +696,10 @@ static int mtk_jpegdec_hw_probe(struct platform_device *pdev)
- 	dev->master_dev = master_dev;
- 	master_dev->max_hw_count++;
- 
-+	ret = mtk_jpegdec_smmu_init(dev);
-+	if (ret)
-+		return ret;
-+
- 	platform_set_drvdata(pdev, dev);
- 	pm_runtime_enable(&pdev->dev);
- 	ret = devm_clk_bulk_get(dev->dev,
-diff --git a/drivers/media/platform/mediatek/jpeg/mtk_jpeg_enc_hw.c b/drivers/media/platform/mediatek/jpeg/mtk_jpeg_enc_hw.c
-index b30c728c3712..8a61d5537315 100644
---- a/drivers/media/platform/mediatek/jpeg/mtk_jpeg_enc_hw.c
-+++ b/drivers/media/platform/mediatek/jpeg/mtk_jpeg_enc_hw.c
-@@ -348,6 +348,25 @@ static int mtk_jpegenc_hw_init_irq(struct mtk_jpegenc_comp_dev *dev)
- 	return 0;
- }
- 
-+static int mtk_jpegenc_smmu_init(struct mtk_jpegenc_comp_dev *dev)
-+{
-+	struct mtk_jpeg_dev *master_dev = dev->master_dev;
-+
-+	if (!master_dev->variant->support_smmu)
-+		return 0;
-+
-+	dev->smmu_regmap =
-+		syscon_regmap_lookup_by_phandle(dev->plat_dev->dev.of_node,
-+						"mediatek,smmu-config");
-+	if (IS_ERR(dev->smmu_regmap)) {
-+		return dev_err_probe(dev->dev, PTR_ERR(dev->smmu_regmap),
-+				     "mmap smmu_base failed(%ld)\n",
-+				     PTR_ERR(dev->smmu_regmap));
-+	}
-+
-+	return 0;
-+}
-+
- static int mtk_jpegenc_hw_probe(struct platform_device *pdev)
- {
- 	struct mtk_jpegenc_clk *jpegenc_clk;
-@@ -399,6 +418,10 @@ static int mtk_jpegenc_hw_probe(struct platform_device *pdev)
- 	dev->master_dev = master_dev;
- 	master_dev->max_hw_count++;
- 
-+	ret = mtk_jpegenc_smmu_init(dev);
-+	if (ret)
-+		return ret;
-+
- 	platform_set_drvdata(pdev, dev);
- 	pm_runtime_enable(&pdev->dev);
- 	ret = devm_clk_bulk_get(dev->dev,
+Pierre-Eric Pelloux-Prayer (13):
+  drm/amdgpu: introduce amdgpu_ttm_buffer_entity
+  drm/amdgpu: add amdgpu_ttm_job_submit helper
+  drm/amdgpu: fix error handling in amdgpu_copy_buffer
+  drm/amdgpu: pass the entity to use to amdgpu_ttm_map_buffer
+  drm/amdgpu: pass the entity to use to ttm public functions
+  drm/amdgpu: statically assign gart windows to ttm entities
+  drm/amdgpu: remove AMDGPU_GTT_NUM_TRANSFER_WINDOWS
+  drm/amdgpu: add missing lock in amdgpu_benchmark_do_move
+  drm/amdgpu: check entity lock is held in amdgpu_ttm_job_submit
+  drm/amdgpu: double AMDGPU_GTT_MAX_TRANSFER_SIZE
+  drm/amdgpu: use larger gart window when possible
+  drm/amdgpu: introduce amdgpu_sdma_set_vm_pte_scheds
+  drm/amdgpu: move sched status check inside
+    amdgpu_ttm_set_buffer_funcs_status
+
+ drivers/gpu/drm/amd/amdgpu/amdgpu.h           |   2 +
+ drivers/gpu/drm/amd/amdgpu/amdgpu_benchmark.c |   5 +-
+ drivers/gpu/drm/amd/amdgpu/amdgpu_device.c    |  13 +-
+ drivers/gpu/drm/amd/amdgpu/amdgpu_gmc.c       |   8 +-
+ drivers/gpu/drm/amd/amdgpu/amdgpu_gtt_mgr.c   |   8 +-
+ drivers/gpu/drm/amd/amdgpu/amdgpu_object.c    |   4 +-
+ drivers/gpu/drm/amd/amdgpu/amdgpu_ttm.c       | 295 ++++++++++++------
+ drivers/gpu/drm/amd/amdgpu/amdgpu_ttm.h       |  54 +++-
+ drivers/gpu/drm/amd/amdgpu/amdgpu_vce.c       |   6 +-
+ drivers/gpu/drm/amd/amdgpu/amdgpu_vce.h       |   3 +-
+ drivers/gpu/drm/amd/amdgpu/amdgpu_vm.c        |  17 +
+ drivers/gpu/drm/amd/amdgpu/cik_sdma.c         |  31 +-
+ drivers/gpu/drm/amd/amdgpu/sdma_v2_4.c        |  31 +-
+ drivers/gpu/drm/amd/amdgpu/sdma_v3_0.c        |  31 +-
+ drivers/gpu/drm/amd/amdgpu/sdma_v4_0.c        |  35 +--
+ drivers/gpu/drm/amd/amdgpu/sdma_v4_4_2.c      |  35 +--
+ drivers/gpu/drm/amd/amdgpu/sdma_v5_0.c        |  31 +-
+ drivers/gpu/drm/amd/amdgpu/sdma_v5_2.c        |  31 +-
+ drivers/gpu/drm/amd/amdgpu/sdma_v6_0.c        |  29 +-
+ drivers/gpu/drm/amd/amdgpu/sdma_v7_0.c        |  29 +-
+ drivers/gpu/drm/amd/amdgpu/si_dma.c           |  31 +-
+ drivers/gpu/drm/amd/amdgpu/vce_v1_0.c         |  12 +-
+ drivers/gpu/drm/amd/amdkfd/kfd_migrate.c      |  25 +-
+ 23 files changed, 381 insertions(+), 385 deletions(-)
+
 -- 
-2.45.2
+2.43.0
 
