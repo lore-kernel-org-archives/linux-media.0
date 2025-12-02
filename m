@@ -1,48 +1,33 @@
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9E78A4594A;
-	Tue,  2 Dec 2025 07:36:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D276A3FF1
+	for <linux-media@vger.kernel.org>; Tue,  2 Dec 2025 07:40:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764660972; cv=none; b=lf4g2bq/SzBBxrqQtuQkFKD9e0jv0v/YSXCzBz4u1dsvya97tQpVcEGlvSq0gUxIoA90QMcoLGg9BFxpUC8E7I4Xs7VwWXSbtVtzIHIkpUOGttlW3Nsp1q8io1BOnKNZgtelrGJxdp0lS+77Ba1wlUg5UbRzeOqPqTzntrSa7oQ=
+	t=1764661247; cv=none; b=j+VJCQucN/AT+91xAhlZEtfLXA0IARPX3k6tpSeBFbvPycCXkH3qdM9yye76P5zMVVVNXeIyov/zDrG2szjwHpjiAwC8k6ohUEHei+VkMD1NM2Urj4Z32VrRVdeb3yfqOKP6uvRruyrXdMcfvymOXebJg2smRkdkY/C8glxxito=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764660972; c=relaxed/simple;
-	bh=OuCY/niLmpmQulo1ZfCPrRb85Ew/nPqxWMoyL0eBSLA=;
-	h=Message-ID:Date:MIME-Version:Subject:References:From:To:CC:
-	 In-Reply-To:Content-Type; b=ojCSHZczAoz4Nny3ChjbY8M5mTKRNNielDGzylzLiwyFd3zokFJrCUWOxBied9k1nIJ1i7Mx/1fTYl0D2AkFFb88k8WEOLod4Wo7uervIwtMx1hpRORFsboOvpz8uUL8Ig4q/OW7TQt4wiBji178VWONu9QZ70v5kWluwcZ3a7g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=YPdnqScd; arc=none smtp.client-ip=205.220.168.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+	s=arc-20240116; t=1764661247; c=relaxed/simple;
+	bh=BWl3Wyb39JP+eI9kf6mWZoSqRE/nXw1ixlSIuEmBDAY=;
+	h=Message-ID:Date:MIME-Version:From:Subject:To:Cc:References:
+	 In-Reply-To:Content-Type; b=bWB+LRfV9kNJLH9cXk22L2li2eSuHzUy1zCw+S7Su4MQWu72Tx4yuyoj+2ACGn0QC72anVmcTaDXSpMhQMbSSFCfdjZY7BIglIrvn5/pKnlV1e/ZNDgmB8FMHZW8JraeCLAh8/y3GvZlM4e8bFaqOfXCbFZFTZsi1P8A/xF/ID8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=C3D653Dq; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="YPdnqScd"
-Received: from pps.filterd (m0279864.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 5B24CIFh1590754;
-	Tue, 2 Dec 2025 07:36:00 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	AWJFndHajcSihw89TvKE2v/cuACaYcbNWEULCywGGHI=; b=YPdnqScdQ+uRh4yb
-	+bWqqEk27APvALgnIomOKqBXICP760k84+M5/vNNofyGv3ahn+pEQ3apiZ1zUikS
-	Ad/2woiPLit3QLNhE/yacR16h+IITdVZVW3Kh/zrQDTnEoPjqrJrdzO0tbdkTg7H
-	hGlCWY+MbezGtxhOd3eITLbt4Z1XJs7ixEnaApXSd8PgPVwQkK0ah9qPuYHBSuqZ
-	Im4yW3d5Nkbw/GmpjSxBdiXLT5M78uUujdj3q/GiFMdmv/WEkxOeBymd7NxKTctf
-	F/k+jjL5voHO5Ew9cpDTe4K3ticaEENTPWlIJnsRxyiMu+Lyc6/YhxXGS3EJHUFG
-	0BscEw==
-Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4asrvr8htt-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 02 Dec 2025 07:36:00 +0000 (GMT)
-Received: from nalasex01c.na.qualcomm.com (nalasex01c.na.qualcomm.com [10.47.97.35])
-	by NALASPPMTA01.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 5B27Zx0d023017
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 2 Dec 2025 07:35:59 GMT
-Received: from [10.216.33.247] (10.80.80.8) by nalasex01c.na.qualcomm.com
- (10.47.97.35) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.17; Mon, 1 Dec
- 2025 23:35:52 -0800
-Message-ID: <3f1dbf91-f967-44dc-bb21-25fdcbbc8db2@quicinc.com>
-Date: Tue, 2 Dec 2025 13:05:35 +0530
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="C3D653Dq"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2137EC4CEF1;
+	Tue,  2 Dec 2025 07:40:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1764661246;
+	bh=BWl3Wyb39JP+eI9kf6mWZoSqRE/nXw1ixlSIuEmBDAY=;
+	h=Date:From:Subject:To:Cc:References:In-Reply-To:From;
+	b=C3D653DqFG1ZoMZ0NzvNcslb5uV17T91yZ6fBLvRLu4exVkcTqkcNfuT/6EznOeDC
+	 RKlSC4X9qr7oyMqFGmhO0H7lX8feGDrvLIXGFEGGu4X+FyfnmlhmHm2wQ1VD09uUFD
+	 oLr6xMNBm+ZprPeb2E1Wk4tDMTkscyfg5+Lxt3FRPXfwQPI5D6h3egnJBmcI1LkiQy
+	 WmkvGl6vu5YGskJefUkhEuUYbtAMaImRcSfPUDdGYXBsKJVIcFmQ+AjLwgCeURe2sE
+	 zjFw2AFyxcKoOCqf8qJBCu55WhJ/63/f+SPoMx14rlzRRVAk3eeHkFxcgVkbMsJfi8
+	 Y1vyCaGX2n/fw==
+Message-ID: <c1fe9d2e-1a2c-4ba2-b188-343b34a15e7b@kernel.org>
+Date: Tue, 2 Dec 2025 08:40:43 +0100
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
@@ -50,107 +35,124 @@ List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v6 2/3] arm64: dts: qcom: qcs8300: Add CCI definitions
-References: <DS0PR02MB11311CE33DFFE0739BE747590E3D8A@DS0PR02MB11311.namprd02.prod.outlook.com>
- <d49920eb-0b4e-4042-b0c6-28d1ba348ddc@quicinc.com>
-Content-Language: en-US
-From: Nihal Kumar Gupta <quic_nihalkum@quicinc.com>
-To: Vikram Sharma <quic_vikramsa@quicinc.com>,
-        Konrad Dybcio
-	<konrad.dybcio@oss.qualcomm.com>
-CC: <bryan.odonoghue@linaro.org>, <mchehab@kernel.org>, <robh@kernel.org>,
-        <krzk+dt@kernel.org>, <conor+dt@kernel.org>, <andersson@kernel.org>,
-        <konradybcio@kernel.org>, <hverkuil-cisco@xs4all.nl>,
-        <cros-qcom-dts-watchers@chromium.org>, <catalin.marinas@arm.com>,
-        <will@kernel.org>, <linux-arm-kernel@lists.infradead.org>,
-        <quic_svankada@quicinc.com>, <linux-media@vger.kernel.org>,
-        <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        Ravi Shankar <quic_rshankar@quicinc.com>,
-        Vishal Verma <quic_vishverm@quicinc.com>
-In-Reply-To: <d49920eb-0b4e-4042-b0c6-28d1ba348ddc@quicinc.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01c.na.qualcomm.com (10.47.97.35)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Authority-Analysis: v=2.4 cv=D5VK6/Rj c=1 sm=1 tr=0 ts=692e96e0 cx=c_pps
- a=ouPCqIW2jiPt+lZRy3xVPw==:117 a=ouPCqIW2jiPt+lZRy3xVPw==:17
- a=GEpy-HfZoHoA:10 a=IkcTkHD0fZMA:10 a=wP3pNCr1ah4A:10
- a=VkNPw1HP01LnGYTKEx00:22 a=COk6AnOGAAAA:8 a=yv61VyXJEuW5_bWReSAA:9
- a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10 a=TjNXssC_j7lpFel5tvFf:22
-X-Proofpoint-ORIG-GUID: 2IAK7mSb01TDkoV9MhbyA1W5jNtyE3u2
-X-Proofpoint-GUID: 2IAK7mSb01TDkoV9MhbyA1W5jNtyE3u2
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUxMjAyMDA1OSBTYWx0ZWRfX/vpbMyslI4p8
- 8E4vAY6on/WYnN6cpNLwRsYklKt1m8wXuD0w/NFAIv80E9g4cnJ9fzDgkhKpZau2IoX6Ye+pIcj
- DCjyruI9UYr1D5ADHga6NmprfZcG2gamAz46NIO7KMCbhK1S82xz1EznUYzTtPoXmr1EF59Wltj
- ZME+wKNu05Jt72XCfa0bugsq/j502odGRDQwCom3Pg/S+AXb4YDipr9cMn5QlbLGQWs6LhOx4hS
- OmELr85DbSJmPGKfu8rLtCIFLLnBnpbOffShRrBZ8fjdfvvxNbdDc100VDBejrmhjJhu5r5wWi/
- Ng/Wyy9iKDDYbVWvUHx5K/1i8JMXMlSXQkycnbdw3z5erAnlM6/MhTyaT60CWG0fDkxXyObzDqT
- K4PB3yIQGkt6wIbY20raeNVfoOpymQ==
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.9,FMLib:17.12.100.49
- definitions=2025-11-28_08,2025-11-27_02,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- bulkscore=0 phishscore=0 suspectscore=0 malwarescore=0 spamscore=0
- adultscore=0 clxscore=1011 lowpriorityscore=0 priorityscore=1501
- impostorscore=0 classifier=typeunknown authscore=0 authtc= authcc=
- route=outbound adjust=0 reason=mlx scancount=1 engine=8.22.0-2510240001
- definitions=main-2512020059
+From: Hans Verkuil <hverkuil+cisco@kernel.org>
+Subject: Re: [PATCHv2] media: v4l2-event: keep place in event list when
+ combining events
+To: Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+ Sakari Ailus <sakari.ailus@linux.intel.com>
+Cc: Linux Media Mailing List <linux-media@vger.kernel.org>,
+ Nicolas Dufresne <nicolas.dufresne@collabora.com>,
+ Mauro Carvalho Chehab <mchehab@kernel.org>
+References: <d4319e94-15c5-43a6-9bab-b9eb1d6c0d7c@kernel.org>
+ <aQMl32qFeMNmG598@kekkonen.localdomain>
+ <79f4a4f2-a7b9-4ee6-af29-6e9970d2ed7a@kernel.org>
+ <aQMyNttmOOVCBRym@kekkonen.localdomain>
+ <20251201154646.GB32430@pendragon.ideasonboard.com>
+Content-Language: en-US, nl
+In-Reply-To: <20251201154646.GB32430@pendragon.ideasonboard.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-
-
-On 11/26/25 9:10 AM, Vikram Sharma wrote:
->> From: Nihal Kumar Gupta <quic_nihalkum@quicinc.com>
->>
->> Qualcomm QCS8300 SoC contains three Camera Control Interface (CCI).
->> Compared to Lemans, the key difference is in SDA/SCL GPIO assignments
->> and number of CCIs.
-> [...]
+On 01/12/2025 16:46, Laurent Pinchart wrote:
+> On Thu, Oct 30, 2025 at 11:39:02AM +0200, Sakari Ailus wrote:
+>> On Thu, Oct 30, 2025 at 10:07:49AM +0100, Hans Verkuil wrote:
+>>> On 10/30/25 09:46, Sakari Ailus wrote:
+>>>> On Fri, Oct 10, 2025 at 01:35:02PM +0200, Hans Verkuil wrote:
+>>>>> When subscribing to an event a fixed circular buffer of N (N >= 1) events
+>>>>> is allocated for that file handle.
+>>>>>
+>>>>> New events of the same type are added to that buffer and eventually the
+>>>>> oldest event is removed from the buffer when VIDIOC_DQEVENT is called.
+>>>>>
+>>>>> If the circular buffer is full, then the event framework will
+>>>>> merge the two oldest events (what 'merge' means is event type
+>>>>> specific).
+>>>>>
+>>>>> So far, so good.
+>>>>>
+>>>>> There is also a per-filehandle list of pending events for all event
+>>>>> types. VIDIOC_DQEVENT always dequeues the oldest of that event list,
+>>>>> and that event is removed from the corresponding circular buffer.
+>>>>>
+>>>>> The problem occurs when the circular buffer is full and a new event
+>>>>> arrives. Then the two oldest events are merged, but instead of
+>>>>> keeping the position in the list of pending events, the merged
+>>>>> event is added to the *end* of the list of pending events.
+>>>>>
+>>>>> So if a lot of events are generated, then events can continually
+>>>>> be pushed to the end of the list of pending events, and so are never
+>>>>> or much later dequeued by the application.
+>>>>>
+>>>>> Effectively this is a denial-of-service situation were the
+>>>>> event is never seen by the application even though there are
+>>>>> actually a lot of events.
+>>>>>
+>>>>> So if you subscribe to events from control A and B, then
+>>>>> change control A, then change control B, then change control A
+>>>>> again, and now call VIDIOC_DQEVENT, you will get the event from
+>>>>> control B followed by A, even though A was changed first.
+>>>>>
+>>>>> This patch keeps the oldest event in its place in the 'pending
+>>>>> events' list rather then moving it to the end, and in the test
+>>>>> above you will now receive the event from control A first.
+>>>>
+>>>> Typically events are queued faster than they're generated, it is an
+>>>
+>>> You mean 'dequeued' instead of 'queued'?
+>>>
+>>>> exception when they are not. The application certainly won't work very well
+>>>> if it consumes events slower than they're produced, whether or not the
+>>>> ordering of events fits for the use case.
+>>>
+>>> The problem isn't the application, the problem is that with the current
+>>> code events never reach the application, they can be continuously pushed
+>>> back to the end of the queue. This is not theory, it's how I discovered
+>>> something was wrong. Some events were delayed by seconds.
 > 
->> @@ -5071,6 +5182,240 @@ tlmm: pinctrl@f100000 {
->>                       #interrupt-cells = <2>;
->>                       wakeup-parent = <&pdc>;
->>
->> +                     cam0_avdd_2v8_en_default: cam0-avdd-2v8-en-state {
->> +                             pins = "gpio73";
->> +                             function = "gpio";
->> +                             drive-strength = <2>;
->> +                             bias-disable;
->> +                     };
-> I'm not sure whether I was unclear, but my intention was to ask you to move the MCLK pin definitions to the SoC DTSI, because that comes from the design of the platform and doesn't vary between end products.
+> But that's still related to applications not dequeuing events fast
+> enough, isn't it ? If there's enough space in the events queue for new
+> events, would the problem still occur ?
 > 
-> GPIO_73 being related to a voltage regulator is strictly a property of the EVK.
+>>>> For instance, for frame sync events, the latest event is more relevant than
+>>>> than earlier such events and the latest event should be kept instead of an
+>>>> earlier event.
+> 
+> Sure, but I don't think this patch prevents that, does it ? When merging
+> frame sync events we can drop the older event and keep the newer one
+> while storing the newer event in the position of the old one in the
+> queue, can't we ?
+> 
+>>>> I wouldn't change this, or alternatively I'd make it
+>>>> dependent on the event type, but in I wonder if that's worth the
+>>>> complexity.
+>>>
+>>> This might be an option. Another option is to extend struct v4l2_event_subscription:
+>>> a flag that says how to handle this specific case (drop the oldest event or
+>>> update the contents of the oldest event), and a field to set the size of the
+>>> queue for that event.
+> 
+> Unless I'm missing something, this problem seems solvable without having
+> to increase the completexity of the UAPI.
+> 
+>>> Right now the number of events for a (type, id) tuple is set by the driver,
+>>> but for situations like this it can be useful to be able to configure it by
+>>> the application.
+>>>
+>>> It would certainly help if I can configure this for the specific use-case I am
+>>> dealing with.
+>>
+>> Sounds good to me, implementation-wise. But to benefit from that,
+>> applications would need to set the flag. If that's enough, then we don't
+>> need e.g. defaults per event type (and don't need another flag).
+> 
 
-MCLK pin definitions are already present under the tlmm block in SoC dtsi(monaco.dtsi) as required by the pinctrl subsystem(qcom,qcs8300-tlmm.yaml).
-Are you suggesting they shouldn’t be part of TLMM in the SoC DTSI? This doesn’t align with the YAML file.
+I plan to rework this, once I find some more time. Allowing userspace to set the
+size of the event queue will help a lot, and that's actually a trivial change.
 
-Regarding GPIO_73: Noted. I will move it to monaco-evk.dts under the tlmm section.
+In the end it comes down to what to do when a new event arrives and the queue is
+full: do you want to drop the oldest event or the new event? That depends on
+what event it is. Allowing the driver to make that choice would be nice.
 
-Below are the example snippets:
-In monaco.dtsi (SoC level):
-tlmm: pinctrl@... {
-    cam_mclk0_default: cam-mclk0-default-state {
-        pins = "gpio67"; 
-        function = "cam_mclk";
-        drive-strength = <2>;
-    };
-    ....
-};
-
-In monaco-evk.dts (Board level):
-&tlmm {
-    cam0_avdd_2v8_en_default: cam0-avdd-2v8-en-state {
-        pins = "gpio73";
-        function = "gpio";
-        drive-strength = <2>;
-        bias-disable;
-    };
-    ...
-};
-
--- 
 Regards,
-Nihal Kumar Gupta
 
+	Hans
