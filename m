@@ -1,325 +1,182 @@
-Received: from CO1PR03CU002.outbound.protection.outlook.com (mail-westus2azon11010018.outbound.protection.outlook.com [52.101.46.18])
+Received: from PH0PR06CU001.outbound.protection.outlook.com (mail-westus3azon11011019.outbound.protection.outlook.com [40.107.208.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EA4A1277C86;
-	Tue,  2 Dec 2025 09:50:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.46.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3D9C11E9B3D;
+	Tue,  2 Dec 2025 10:22:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.208.19
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764669036; cv=fail; b=O8Kril/2sqcdXsxsm21MlYXMXABD2OHJFjxOBfmSha2FH6hJ8IfdYI0Z7QiHKwUfosTaXjQzzCLmEPjZ0NvDL3+KRd4fnPCzjsPc4IaEqJMf6PUvzpxWxrbhjX7+8qFC83912dWgADzkL/UY4NqKlfMYe9s7bbIiLEuxAulpJAU=
+	t=1764670951; cv=fail; b=BBHF564cBHN0r3fs3EAPmI1enO6l6Jj6vsuuAK3XoB9UdolUfrBJNn/PHYHBViWaoiVUZPanAISYgRg/InZCBJEZoSQfOO+2a1u3NJU/SaiOuKW83VItCknR0uWmPnl3Xq8foTgni60HQ89liuLAv3D9YRRiDIXZZSPAJWfK+jU=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764669036; c=relaxed/simple;
-	bh=mljtoojYxBwkXSVzzztFt8RFWz6zwxWwECyckPmOG78=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=EYLAgDWn0sr9l8dw8Dtc29qxJmSbsjLwhXXQQzBt3i2VRn5Asqda1Z4+lBPtxXyoP/V8ksmCMOTzPBhyj+ezWVaw/Vxu29v8XNdgZ5G3MqoA1SdaPU0pfLRC7FDZprjeYdHDMUw+Oir0dPvzW6FjFGh7LJRicSswkVnfOz7vXsk=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=N0SJe3W1; arc=fail smtp.client-ip=52.101.46.18
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
+	s=arc-20240116; t=1764670951; c=relaxed/simple;
+	bh=2VgFyZf3brvp2+fj2KyVP1xmRg5io1llAELyt5gnjOo=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=Iwvq+1zLz0xk7Cn6BQcsXEK15c4PMiiLBRmhylHGGd/EfoNHC+pll9ffCCaxfCDC7WPVoT2r1Eg8zbQBBsa3k9zqRVbwAtHwAg7KCT2pEB6ABbBX3enjz3iJTYHd7tqIkOdX/MElBqZ8d9MZgNALRP8geWUw3pD/rcecwck737w=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com; spf=pass smtp.mailfrom=ti.com; dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b=LnmjGyoy; arc=fail smtp.client-ip=40.107.208.19
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ti.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="N0SJe3W1"
+	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="LnmjGyoy"
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=oLxRNq5Su0BuVozzMaGd7ShM5u4FOOS8E74pqF2q+8/xJx1bujKodXH58eR6F18cW/wLb+ZvAh2vDr/373Eeck/y74xYd+wzeoyB4OAOua/JcCMpJkHIIOcz8MmlB0qR9RZO73qkLb4h2S7RxL+LiSmYQ0huB7xty3fP5jlSUNyyRjVsavMNGwQXIt5cRiFM1iZfDuuUzmsrCKQdrHCPr0hlDEOJdhEWzahRM0HwxIDwSOIcpfbrVp7pOmTRxdo+hegWOQv7cOQWn+1EO7H2hNzgxrbLLsD4DtLqqLdkaUqaDukG8c8atKi5xLyTYtrenmDP728+q+ee583ERXJYZw==
+ b=RgI+lMwNp6rFBiHZPbgIrBvhObcC5Et8LqWc823R2zddX8KrA1jrdDm3rTQ7My4mSrsXO9vyniKdFJWEG++hBOY9HZxVUrNjnSWy++QYJ0TK9eLl+U9kwWbUiNXoBKlQh20zPO7W457fMEqTn1yhB0DT4XdJv3NDQ6H0lEAzX0v/8mEWnrmlMVPZXzDc58kGfTFw07z6b3tbTEAa2igUqdgHVO7shsEfC/IXN0QWZjos6aUiUyBqvjXVEQKI4wy0t1xzd9X+SFSPKfukxliJblxKtD2XJ5yox99lkTEtRt5gWT7nsgPMLFxC4DQv3PNZfgTlosI0FaXzhkpRmHy5CA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=LffYM3hmBUdv7peVjQA/bmRVkai2shIYvofF4EqTcGY=;
- b=YiwfiqUfVIR+0/fp9gN1x/sgYQiLi15gxamWd1aXWFssNhQpVuEH4WxQFoLMnhsGUsqT2vQlp17xoOQebGeAr7h6Lz51DqWg1eeWaOc1URZgjUDeZrgcN63H+vpNDfY9ygMzqEmdMqJld5bJSbWUowYgmWWx/a3x4jyHWGly42fezXnUojWnM0Af+xf5prx4lLBPwYNy+POmD6njYGUq2DIOwm9CExZ/z5zNBTAu6Dc7tTcmYkVFzKuNsNOGoVX1vGtefiPQZ1QbqhTTwmqRgnmnADDxuw1L9eDmXuPRcQ7wva4M+pF1n+RKdcoWlcQUwdY/MzQf4XsLGhyQBdPF7w==
+ bh=gmcS6vPulqWlvbjXKirL4AcC8RUILI97lsKtLPXHGhE=;
+ b=UHiVPcdyX9rNgxmlwlLB/Gie0CR+Om93ptqxnru2EnE4ifqkTVBkznE4XkOqKiHOqNBZCKcnyKBpq04v2+t+PsxjSGI7lLPVD1L/N0vhRXjKM4VNR6R2d4u1hXvyHbqGEoD3B/5dV+cmIoJtMkhDek+QcPCbslOuFKv3NklKGgC1kZW+qXcLZSOd+D4BvGVOfiJw/BuehEDYvdE0dBHi0GY0fL4TPbuE6hF6QkxOAI4Vwhp2hn3MpKJGnQpJIEoC9/WH18vw4SwuoJ/RVmpM9IMoCnQryq7afJyt788dmigOV9kHrKRfygwIWzcB6qvO8123v4BKE2znBguLLvOUtQ==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=gmail.com smtp.mailfrom=amd.com; dmarc=pass
- (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
+ 198.47.21.195) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=ti.com;
+ dmarc=pass (p=quarantine sp=none pct=100) action=none header.from=ti.com;
  dkim=none (message not signed); arc=none (0)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=LffYM3hmBUdv7peVjQA/bmRVkai2shIYvofF4EqTcGY=;
- b=N0SJe3W19Cha1PSGETECFavMQJ5eHm2MPBcnu1gW1EImiSFgr8ApXmRBMd+FlxZJGo0xlQ/nrRkpVgYh/oZZxxR4Us1FhvjeZ1sb747NuVOuRudiWVDMk1b5Cc/uNmh8HflIVCTDQgNgRt8bRodWsi/O7zXojeBsKkkbfZ9SPDY=
-Received: from BY3PR05CA0029.namprd05.prod.outlook.com (2603:10b6:a03:254::34)
- by SA0PR12MB4447.namprd12.prod.outlook.com (2603:10b6:806:9b::23) with
+ bh=gmcS6vPulqWlvbjXKirL4AcC8RUILI97lsKtLPXHGhE=;
+ b=LnmjGyoyntQtdJiBcsQX8hFNB6cazOTYL42eXtgcYdn79kHG+0EfI/ykA97VmYd5KOSJImrp8cBFuZ66Vq/lD6OQZfgh1h4glnh0A+S6k9atDVSbtCbyaigww0c/FZ6/ovlhUgRoh46mxwOJTbotGaCpuJuLr84vRUnJGJD4ZeM=
+Received: from MN2PR05CA0050.namprd05.prod.outlook.com (2603:10b6:208:236::19)
+ by SJ0PR10MB4510.namprd10.prod.outlook.com (2603:10b6:a03:2d6::22) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9388.9; Tue, 2 Dec
- 2025 09:50:30 +0000
-Received: from MWH0EPF000A6731.namprd04.prod.outlook.com
- (2603:10b6:a03:254:cafe::52) by BY3PR05CA0029.outlook.office365.com
- (2603:10b6:a03:254::34) with Microsoft SMTP Server (version=TLS1_3,
- cipher=TLS_AES_256_GCM_SHA384) id 15.20.9388.8 via Frontend Transport; Tue, 2
- Dec 2025 09:50:22 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=satlexmb07.amd.com; pr=C
-Received: from satlexmb07.amd.com (165.204.84.17) by
- MWH0EPF000A6731.mail.protection.outlook.com (10.167.249.23) with Microsoft
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9366.17; Tue, 2 Dec
+ 2025 10:22:25 +0000
+Received: from BL02EPF0001A102.namprd05.prod.outlook.com
+ (2603:10b6:208:236:cafe::9b) by MN2PR05CA0050.outlook.office365.com
+ (2603:10b6:208:236::19) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.20.9388.9 via Frontend Transport; Tue, 2
+ Dec 2025 10:22:13 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 198.47.21.195)
+ smtp.mailfrom=ti.com; dkim=none (message not signed) header.d=none;dmarc=pass
+ action=none header.from=ti.com;
+Received-SPF: Pass (protection.outlook.com: domain of ti.com designates
+ 198.47.21.195 as permitted sender) receiver=protection.outlook.com;
+ client-ip=198.47.21.195; helo=flwvzet201.ext.ti.com; pr=C
+Received: from flwvzet201.ext.ti.com (198.47.21.195) by
+ BL02EPF0001A102.mail.protection.outlook.com (10.167.241.134) with Microsoft
  SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.9388.8 via Frontend Transport; Tue, 2 Dec 2025 09:50:30 +0000
-Received: from FRAPPELLOUX01-WSLPUB.amd.com (10.180.168.240) by
- satlexmb07.amd.com (10.181.42.216) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.2562.17; Tue, 2 Dec 2025 03:50:19 -0600
-From: Pierre-Eric Pelloux-Prayer <pierre-eric.pelloux-prayer@amd.com>
-To: Alex Deucher <alexander.deucher@amd.com>,
-	=?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>, David Airlie
-	<airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>, Felix Kuehling
-	<Felix.Kuehling@amd.com>, Sumit Semwal <sumit.semwal@linaro.org>
-CC: Pierre-Eric Pelloux-Prayer <pierre-eric.pelloux-prayer@amd.com>, "Felix
- Kuehling" <felix.kuehling@amd.com>, <amd-gfx@lists.freedesktop.org>,
-	<dri-devel@lists.freedesktop.org>, <linux-kernel@vger.kernel.org>,
-	<linux-media@vger.kernel.org>, <linaro-mm-sig@lists.linaro.org>
-Subject: [PATCH v4 05/13] drm/amdgpu: pass the entity to use to ttm public functions
-Date: Tue, 2 Dec 2025 10:47:15 +0100
-Message-ID: <20251202094738.15614-6-pierre-eric.pelloux-prayer@amd.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20251202094738.15614-1-pierre-eric.pelloux-prayer@amd.com>
-References: <20251202094738.15614-1-pierre-eric.pelloux-prayer@amd.com>
+ 15.20.9388.8 via Frontend Transport; Tue, 2 Dec 2025 10:22:23 +0000
+Received: from DFLE207.ent.ti.com (10.64.6.65) by flwvzet201.ext.ti.com
+ (10.248.192.32) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.20; Tue, 2 Dec
+ 2025 04:22:19 -0600
+Received: from DFLE209.ent.ti.com (10.64.6.67) by DFLE207.ent.ti.com
+ (10.64.6.65) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.20; Tue, 2 Dec
+ 2025 04:22:19 -0600
+Received: from lelvem-mr05.itg.ti.com (10.180.75.9) by DFLE209.ent.ti.com
+ (10.64.6.67) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.20 via Frontend
+ Transport; Tue, 2 Dec 2025 04:22:19 -0600
+Received: from abhilash-HP.dhcp.ti.com (abhilash-hp.dhcp.ti.com [10.24.68.198])
+	by lelvem-mr05.itg.ti.com (8.18.1/8.18.1) with ESMTP id 5B2AMDKP2072084;
+	Tue, 2 Dec 2025 04:22:14 -0600
+From: Yemike Abhilash Chandra <y-abhilashchandra@ti.com>
+To: <tomi.valkeinen@ideasonboard.com>, <mchehab@kernel.org>,
+	<robh@kernel.org>, <krzk+dt@kernel.org>, <conor+dt@kernel.org>,
+	<hverkuil@xs4all.nl>, <sakari.ailus@linux.intel.com>,
+	<laurent.pinchart@ideasonboard.com>
+CC: <hansg@kernel.org>, <mehdi.djait@linux.intel.com>, <ribalda@chromium.org>,
+	<git@apitzsch.eu>, <vladimir.zapolskiy@linaro.org>,
+	<benjamin.mugnier@foss.st.com>, <dongcheng.yan@intel.com>, <u-kumar1@ti.com>,
+	<jai.luthra@linux.dev>, <linux-media@vger.kernel.org>,
+	<devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+	<y-abhilashchandra@ti.com>
+Subject: [PATCH V2 0/4] Add support for DS90UB954-Q1
+Date: Tue, 2 Dec 2025 15:52:04 +0530
+Message-ID: <20251202102208.80713-1-y-abhilashchandra@ti.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: satlexmb07.amd.com (10.181.42.216) To satlexmb07.amd.com
- (10.181.42.216)
+Content-Type: text/plain
+X-C2ProcessedOrg: 333ef613-75bf-4e12-a4b1-8e3623f5dcea
 X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: MWH0EPF000A6731:EE_|SA0PR12MB4447:EE_
-X-MS-Office365-Filtering-Correlation-Id: 958b039e-1ff6-4659-3b51-08de31883ab8
+X-MS-TrafficTypeDiagnostic: BL02EPF0001A102:EE_|SJ0PR10MB4510:EE_
+X-MS-Office365-Filtering-Correlation-Id: def63466-726b-4c8f-06a3-08de318caf23
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|376014|1800799024|36860700013|82310400026;
+	BCL:0;ARA:13230040|7416014|36860700013|82310400026|376014|1800799024;
 X-Microsoft-Antispam-Message-Info:
-	=?utf-8?B?cXdtMVdRS3RWLzlFcmttWktaYkZEdUw5R1hTc2tJVTRJbis3QUIzekN3MzVQ?=
- =?utf-8?B?M3RRenA0eHoveXZ5c0dhb0Q3QlhNdkdyMFNWSHRnRTVjancyWVJFNnIzWStZ?=
- =?utf-8?B?MDRLVDg5aWNvMTBjUEVrZFg1bjVkN1hVbTBDS2p5bnhCMmlhUTRTdTNKeGhj?=
- =?utf-8?B?SmVqNzltOFhzaU5BNE1zaHZxWTdkYjFPVFQwdi9hZTc1TlA2S2JzSUJ5UGZ3?=
- =?utf-8?B?OUpUdEhZMWl3TGR2Q3VLeDJ1b0k5eWlxNU5FNGFPL0VjRVM3ZDNsMG4yRU5l?=
- =?utf-8?B?L09JWkhIL0pCWGtXM0hUQ0Q4SHRyeEhkYzhHRndGR09EMGZaODNiRTJRS0Iw?=
- =?utf-8?B?S1hLcWhsdzRQbDA1elBQSHNVQ20vQkpDT3lzVkZSTGhGSjdiOFVkajV3UWJy?=
- =?utf-8?B?K3RhNENzc2grSmd5aFJPZUROL0F4T0Zxa3c3dm5BeFZQRnJpOWdpQWxVTEpM?=
- =?utf-8?B?ODduNU8wcUZmazEzYVV0cERRRXdCeHE0c0hoRnFkZnVjNTEzdC9nUmNxcS83?=
- =?utf-8?B?a2ZIRTNMYlhwVDdINFhoNkFJd3c4L1ZRTlBJQnRaWVpub0JvVWowZkFmQUg2?=
- =?utf-8?B?SThjRy9hc25GYkpxaTRnVi9UaUs1aHVSaUVKaUVzcVpoS2NvZmErUlA0RHVI?=
- =?utf-8?B?M1Y2VG4rSWZDb3gvZTZvR1FTZ3pJNmVQNGRCWjNRckU4aXdXNTJvaXFSS1Zv?=
- =?utf-8?B?RWtoSXBsN2pEUEhxMVFhWGIreWk5YmlhanpJRVVPektSWGRWVWMyRCs5VS8z?=
- =?utf-8?B?Wi9OZEJ5U2RQNkwwY1QyWmVXZ1lKcS93RVV0N1p4REhYaGFBMXNJV0ZwR0NX?=
- =?utf-8?B?T0p4UVVZZXk3cmZwOTdPSGR0SmNOY2htY0pLSnh0RFQwR0wyTTE5enNQYXJ5?=
- =?utf-8?B?RW0wWnIzSDU2Z1RSZHJyWDFFYVNremNSaGc4MU9EU05NZStyVkI3aVQ0aDVy?=
- =?utf-8?B?cjVER0F6WnN4MVpEaldGb3FKWTU3VnJ6NExCWmJiRjZOMWZWWkIwRExZaGRQ?=
- =?utf-8?B?NUtvUTBQdXUzMVg4NUpKWVNVbDlqRG00U2h3S0pPNGxCYWVuUkE0dzA3b1Rk?=
- =?utf-8?B?MUxIY2M3QTM0MWFPVmV0Y3ovallFUVF4RXloaGJNSTF3RHV3eDZqbUpiUGRU?=
- =?utf-8?B?SVZITnZiQzZ5SjcycWtXNDI1Zzl3cWpROUQrUlRvZEU0bW1xT01ZMXR0b2Fn?=
- =?utf-8?B?YS8vMkJIRTY5NURkUDk2WW1UNVZDSGoxTys0aklheGNORmpZNTd1MkcrWHVE?=
- =?utf-8?B?VDcwZU0wSTVLWEI2aTNTbTVVMDRPVXg0T21vdmc4QTVFb2xwRUMvOTlDbDBZ?=
- =?utf-8?B?L0NZN1pvT2VFaVZJZTY0dVU5VVdOWnMzNFBTMVE4dmZlSDVHRjkwbXluOXl2?=
- =?utf-8?B?NHZObXA0Nmk5S3h4cGVQcUZlNGwyT05uTEF3ZkNrQWozTk5BM1F3RDV3eGZH?=
- =?utf-8?B?UlB3K25zTXI2TDUxUmUwaWp3YlF4TjNCZW1XeUY1S0NSTkpxMHdTZGhiOHBT?=
- =?utf-8?B?Z0dZd3d3a3FOSTRYYzJUaCtmME9pSWY0Zk1iRHZjd2FNZi9NT2YxYStxS3VH?=
- =?utf-8?B?TzU3QlVUdkV2RDF1ZXptc29YQlRtMER6SUNzRi85VUNUNVZXMFNyUU9xS3Zl?=
- =?utf-8?B?RENiUkt5MlAzNlRLRzQ0aXF5OVB4ZVFVZFJSeG5JZjNsdGF4WktraTNVcXo2?=
- =?utf-8?B?K0dlc2lNTmljUWY3MDl2clRPcEpuOEFWcHRhL0cyZ0MvREtrdFJkbTg1WVlN?=
- =?utf-8?B?VmEycFVGTGUrbU9mWUtjQVVrbUpvM2p3Z3Q3NFdtQzNzZktWMjZJM1FMTzhU?=
- =?utf-8?B?TXJDNXFib3d6SWZsb0JjTHp6RzdsWGZqOWlxYko5dGhDY3Jjd0NLWHVYdGJ6?=
- =?utf-8?B?YUk5NWtZTWt4MHN1ejNmTHhwVFNhL0ZidXArNEZCbVh6VnlGUlFvVzNGUkVQ?=
- =?utf-8?B?RUJacW0yaktGNi9RVmVHdXg4b291RTZUem4rU3AzZCt5NVZNRFZuSTlKZHMy?=
- =?utf-8?B?U1BqVVBpb1h6dUtLWVVQU1FEZHJmeTRnZURDUmluaW5QZ0FBWkJ6QXhDbExQ?=
- =?utf-8?B?dm9BRTNRTUNiWXFPblM0azlKUWV5OE0vZ1BHNWVzYnVjbmxJMGJBOWR0RGdK?=
- =?utf-8?Q?CTsc=3D?=
+	=?us-ascii?Q?+DcehsaQNqIqTPDQFxSbv9RENGOXUHS3xBvjZvj81/+sTNh4xAfbRk+SAEz/?=
+ =?us-ascii?Q?Rn4at1CvDD1u52YrCGPWCNzzfBhMB+6Yx5pqF6Dy5m8eyFuB4rciLR6/H8GU?=
+ =?us-ascii?Q?yeKqsqLt6Tomjy4coa9U9tuXQqHClb1XzT1lsWIQPqYoTiqZ32B8dsiEFwz8?=
+ =?us-ascii?Q?eAeLMBd5whrPn2zxxOa+1cekGCavXdhKvgRu2Wh53zWLFRVRiklPPHzXG6Js?=
+ =?us-ascii?Q?nXFSOIzObIg4WsbP387FrjLFTBfA0yM1QqOBmJqg/rm3tk13hb9lzvkUc72e?=
+ =?us-ascii?Q?+Lv+RKMZWj2nYOYgahKwytlboDGrRmvT+z0kOCc1YISJ68iAYOs4O5MfsWJ9?=
+ =?us-ascii?Q?ux7uO9uGTdzS/vJHhjkNymqiZUQ+pH+a1MPBnTA0F/ID6LGjKMZtJUSpbmdr?=
+ =?us-ascii?Q?0u3MfJg46RBs4bfidJd2Yt6vXZX6p1l7jlBc/8rlo/xanH8PlSMQaWUWsMmk?=
+ =?us-ascii?Q?WKbnJ1gIXWAjIFamn3IMB62CY6uGEA1H06RT4DvBgpqjpd7K49BsFJRI2cRU?=
+ =?us-ascii?Q?YLkeGiEvAcRysgzplwqNcChhp3fP/8yeaBZPrRugc/fGrfuXwhzMGMkt+47K?=
+ =?us-ascii?Q?X7SclDNk1ezhiUQd4PdfPWfiYdXOozf4RFs4nwaXq7HGc5lvAFfP51wP9Rp+?=
+ =?us-ascii?Q?ThSh/g3GbPxguhLZFrlt2FtUtt4vbyas2xoFhc8H9xc0caPVIefbYcjBF6y1?=
+ =?us-ascii?Q?SE9JWCKoi7e8i5zCLrHJXST2Ph6rjJq27xWjulH5khYEI9us4QD7jUbaTjUE?=
+ =?us-ascii?Q?ACshHwdOlzf9gnsspG2NfYuum4uV7sDveHwZ/FhtmVI/JNYir4FhVck+PjBU?=
+ =?us-ascii?Q?PnUBzGTAv6QquZB64oPP75ceJG7BWhl4e6a/fvxOm+FKqcY5VgFcpCZl+Nkc?=
+ =?us-ascii?Q?SSMiNo+wypxI1QEFiFngzFMNrP4IVOxHMLdAzTp3yeL2YbG3YtsH8g5yqZyu?=
+ =?us-ascii?Q?v+hTl19TJpKKxoGIcGMsLKpYy1Lk4l0eN/hc0oIV/Hm8kY9jGNyy9NJ501r1?=
+ =?us-ascii?Q?f7zhJZq2CWGcXNISkiUrqfW7qdS1M4qNdYGA1rJ+zbCRYGRy72UlmLj8808h?=
+ =?us-ascii?Q?vHvXst7yc30Zuhc2feSvdP4GcGhEyaXEDwdDO3yB63pCkIZxfESxt2QWuGP+?=
+ =?us-ascii?Q?x4SLWZgJwsFl9KnJ4iUNOhWqDvkniMuIEcKnvA6LcNyRl/JNUfbTRnQW0haB?=
+ =?us-ascii?Q?mdheVevogiLttbvaqBUkeYktcZ4nE1xmtD+KUiIUwjLUBzqHxXQuOHrclWjm?=
+ =?us-ascii?Q?bEMR6UvMKJ2akv2U0R4GFzgkAs+dBVi2SZ9AAupZnqiy1loJCPp+MItb7nqo?=
+ =?us-ascii?Q?2gunvKnZRtg4GeAArok31Ld9WAJO/4PsSpSVkCpdCf6bJKDmGQX1b4fU6A4U?=
+ =?us-ascii?Q?hvgmO7EkK2XQg6Nxj+YyYLEp/OvW3Y8a/NfLXzmvhPZloi4ZTXah4qvKtVzF?=
+ =?us-ascii?Q?+i8fIgq43ylRRIYryseI++n2NJAFLwR//BMn/BVaQTajFEWu9DTmDVIpXdIo?=
+ =?us-ascii?Q?VNN/n3L4IEsW7lH6kuuKL+TRxjhg2P2thAK49wlbcIILIex+1dJS5As9ABRA?=
+ =?us-ascii?Q?ZdnYovkI+I2uk97Baq4=3D?=
 X-Forefront-Antispam-Report:
-	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:satlexmb07.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(376014)(1800799024)(36860700013)(82310400026);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 Dec 2025 09:50:30.2319
+	CIP:198.47.21.195;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:flwvzet201.ext.ti.com;PTR:ErrorRetry;CAT:NONE;SFS:(13230040)(7416014)(36860700013)(82310400026)(376014)(1800799024);DIR:OUT;SFP:1101;
+X-OriginatorOrg: ti.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 Dec 2025 10:22:23.5590
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 958b039e-1ff6-4659-3b51-08de31883ab8
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[satlexmb07.amd.com]
+X-MS-Exchange-CrossTenant-Network-Message-Id: def63466-726b-4c8f-06a3-08de318caf23
+X-MS-Exchange-CrossTenant-Id: e5b49634-450b-4709-8abb-1e2b19b982b7
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=e5b49634-450b-4709-8abb-1e2b19b982b7;Ip=[198.47.21.195];Helo=[flwvzet201.ext.ti.com]
 X-MS-Exchange-CrossTenant-AuthSource:
-	MWH0EPF000A6731.namprd04.prod.outlook.com
+	BL02EPF0001A102.namprd05.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Anonymous
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA0PR12MB4447
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR10MB4510
 
-This way the caller can select the one it wants to use.
+DS90UB954-Q1 is an FPDLink-III deserializer that is mostly register
+compatible with DS90UB960-Q1. The main difference is that it supports
+half of the RX and TX ports, i.e. 2x FPDLink RX ports and 1x CSI TX
+port. Therefore, add support for DS90UB954 within the existing DS90UB960
+bindings and the driver.
 
-Signed-off-by: Pierre-Eric Pelloux-Prayer <pierre-eric.pelloux-prayer@amd.com>
-Reviewed-by: Christian König <christian.koenig@amd.com>
-Acked-by: Felix Kuehling <felix.kuehling@amd.com>
----
- drivers/gpu/drm/amd/amdgpu/amdgpu_benchmark.c |  3 +-
- drivers/gpu/drm/amd/amdgpu/amdgpu_object.c    |  4 +--
- drivers/gpu/drm/amd/amdgpu/amdgpu_ttm.c       | 35 +++++++++----------
- drivers/gpu/drm/amd/amdgpu/amdgpu_ttm.h       | 16 +++++----
- drivers/gpu/drm/amd/amdkfd/kfd_migrate.c      |  3 +-
- 5 files changed, 32 insertions(+), 29 deletions(-)
+Changelog:
+Changes in v2:
+- Refactor the port definitions in the DT bindings and then add support for the DS90UB954.
+- Use enums for the chip type and chip family.
+- Some status registers are reserved on the DS90UB954 and always read as zero in log_status.
+  Skip these registers.
+- Move the link-frequency check for the DS90UB954 into the existing block that validates
+  allowed link frequencies for the DS90UB960, and check for DS90UB954 first and then 1200 MHz
+  next, as this ordering is more logical to readers.
+- The strobe setting registers differ slightly between the DS90UB960 and the DS90UB954. Update
+  the code to accommodate these differences.
+- Although REFCLK_FREQ measurement is not synchronized on the DS90UB954, a single read is
+  practically sufficient. Remove the loop that performs two reads.
+- Fix a few minor issues in the Kconfig description and code comments.
 
-diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_benchmark.c b/drivers/gpu/drm/amd/amdgpu/amdgpu_benchmark.c
-index 3636b757c974..a050167e76a4 100644
---- a/drivers/gpu/drm/amd/amdgpu/amdgpu_benchmark.c
-+++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_benchmark.c
-@@ -37,7 +37,8 @@ static int amdgpu_benchmark_do_move(struct amdgpu_device *adev, unsigned size,
- 
- 	stime = ktime_get();
- 	for (i = 0; i < n; i++) {
--		r = amdgpu_copy_buffer(adev, saddr, daddr, size, NULL, &fence,
-+		r = amdgpu_copy_buffer(adev, &adev->mman.default_entity,
-+				       saddr, daddr, size, NULL, &fence,
- 				       false, 0);
- 		if (r)
- 			goto exit_do_move;
-diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_object.c b/drivers/gpu/drm/amd/amdgpu/amdgpu_object.c
-index 926a3f09a776..858eb9fa061b 100644
---- a/drivers/gpu/drm/amd/amdgpu/amdgpu_object.c
-+++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_object.c
-@@ -1322,8 +1322,8 @@ void amdgpu_bo_release_notify(struct ttm_buffer_object *bo)
- 	if (r)
- 		goto out;
- 
--	r = amdgpu_fill_buffer(abo, 0, &bo->base._resv, &fence, true,
--			       AMDGPU_KERNEL_JOB_ID_CLEAR_ON_RELEASE);
-+	r = amdgpu_fill_buffer(&adev->mman.clear_entity, abo, 0, &bo->base._resv,
-+			       &fence, AMDGPU_KERNEL_JOB_ID_CLEAR_ON_RELEASE);
- 	if (WARN_ON(r))
- 		goto out;
- 
-diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_ttm.c b/drivers/gpu/drm/amd/amdgpu/amdgpu_ttm.c
-index cc4e0aaa5ffa..a5048cd8e10d 100644
---- a/drivers/gpu/drm/amd/amdgpu/amdgpu_ttm.c
-+++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_ttm.c
-@@ -356,7 +356,7 @@ static int amdgpu_ttm_copy_mem_to_mem(struct amdgpu_device *adev,
- 							     write_compress_disable));
- 		}
- 
--		r = amdgpu_copy_buffer(adev, from, to, cur_size, resv,
-+		r = amdgpu_copy_buffer(adev, entity, from, to, cur_size, resv,
- 				       &next, true, copy_flags);
- 		if (r)
- 			goto error;
-@@ -411,8 +411,9 @@ static int amdgpu_move_blit(struct ttm_buffer_object *bo,
- 	    (abo->flags & AMDGPU_GEM_CREATE_VRAM_WIPE_ON_RELEASE)) {
- 		struct dma_fence *wipe_fence = NULL;
- 
--		r = amdgpu_fill_buffer(abo, 0, NULL, &wipe_fence,
--				       false, AMDGPU_KERNEL_JOB_ID_MOVE_BLIT);
-+		r = amdgpu_fill_buffer(&adev->mman.move_entity,
-+				       abo, 0, NULL, &wipe_fence,
-+				       AMDGPU_KERNEL_JOB_ID_MOVE_BLIT);
- 		if (r) {
- 			goto error;
- 		} else if (wipe_fence) {
-@@ -2255,7 +2256,9 @@ static int amdgpu_ttm_prepare_job(struct amdgpu_device *adev,
- 						   DMA_RESV_USAGE_BOOKKEEP);
- }
- 
--int amdgpu_copy_buffer(struct amdgpu_device *adev, uint64_t src_offset,
-+int amdgpu_copy_buffer(struct amdgpu_device *adev,
-+		       struct amdgpu_ttm_buffer_entity *entity,
-+		       uint64_t src_offset,
- 		       uint64_t dst_offset, uint32_t byte_count,
- 		       struct dma_resv *resv,
- 		       struct dma_fence **fence,
-@@ -2279,7 +2282,7 @@ int amdgpu_copy_buffer(struct amdgpu_device *adev, uint64_t src_offset,
- 	max_bytes = adev->mman.buffer_funcs->copy_max_bytes;
- 	num_loops = DIV_ROUND_UP(byte_count, max_bytes);
- 	num_dw = ALIGN(num_loops * adev->mman.buffer_funcs->copy_num_dw, 8);
--	r = amdgpu_ttm_prepare_job(adev, &adev->mman.move_entity, num_dw,
-+	r = amdgpu_ttm_prepare_job(adev, entity, num_dw,
- 				   resv, vm_needs_flush, &job,
- 				   AMDGPU_KERNEL_JOB_ID_TTM_COPY_BUFFER);
- 	if (r)
-@@ -2408,22 +2411,18 @@ int amdgpu_ttm_clear_buffer(struct amdgpu_bo *bo,
- 	return r;
- }
- 
--int amdgpu_fill_buffer(struct amdgpu_bo *bo,
--			uint32_t src_data,
--			struct dma_resv *resv,
--			struct dma_fence **f,
--			bool delayed,
--			u64 k_job_id)
-+int amdgpu_fill_buffer(struct amdgpu_ttm_buffer_entity *entity,
-+		       struct amdgpu_bo *bo,
-+		       uint32_t src_data,
-+		       struct dma_resv *resv,
-+		       struct dma_fence **f,
-+		       u64 k_job_id)
- {
- 	struct amdgpu_device *adev = amdgpu_ttm_adev(bo->tbo.bdev);
--	struct amdgpu_ttm_buffer_entity *entity;
- 	struct dma_fence *fence = NULL;
- 	struct amdgpu_res_cursor dst;
- 	int r;
- 
--	entity = delayed ? &adev->mman.clear_entity :
--			   &adev->mman.move_entity;
--
- 	if (!adev->mman.buffer_funcs_enabled) {
- 		dev_err(adev->dev,
- 			"Trying to clear memory with ring turned off.\n");
-@@ -2440,13 +2439,13 @@ int amdgpu_fill_buffer(struct amdgpu_bo *bo,
- 		/* Never fill more than 256MiB at once to avoid timeouts */
- 		cur_size = min(dst.size, 256ULL << 20);
- 
--		r = amdgpu_ttm_map_buffer(&adev->mman.default_entity,
--					  &bo->tbo, bo->tbo.resource, &dst,
-+		r = amdgpu_ttm_map_buffer(entity, &bo->tbo, bo->tbo.resource, &dst,
- 					  1, false, &cur_size, &to);
- 		if (r)
- 			goto error;
- 
--		r = amdgpu_ttm_fill_mem(adev, entity, src_data, to, cur_size, resv,
-+		r = amdgpu_ttm_fill_mem(adev, entity,
-+					src_data, to, cur_size, resv,
- 					&next, true, k_job_id);
- 		if (r)
- 			goto error;
-diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_ttm.h b/drivers/gpu/drm/amd/amdgpu/amdgpu_ttm.h
-index 41bbc25680a2..9288599c9c46 100644
---- a/drivers/gpu/drm/amd/amdgpu/amdgpu_ttm.h
-+++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_ttm.h
-@@ -167,7 +167,9 @@ int amdgpu_ttm_init(struct amdgpu_device *adev);
- void amdgpu_ttm_fini(struct amdgpu_device *adev);
- void amdgpu_ttm_set_buffer_funcs_status(struct amdgpu_device *adev,
- 					bool enable);
--int amdgpu_copy_buffer(struct amdgpu_device *adev, uint64_t src_offset,
-+int amdgpu_copy_buffer(struct amdgpu_device *adev,
-+		       struct amdgpu_ttm_buffer_entity *entity,
-+		       uint64_t src_offset,
- 		       uint64_t dst_offset, uint32_t byte_count,
- 		       struct dma_resv *resv,
- 		       struct dma_fence **fence,
-@@ -175,12 +177,12 @@ int amdgpu_copy_buffer(struct amdgpu_device *adev, uint64_t src_offset,
- int amdgpu_ttm_clear_buffer(struct amdgpu_bo *bo,
- 			    struct dma_resv *resv,
- 			    struct dma_fence **fence);
--int amdgpu_fill_buffer(struct amdgpu_bo *bo,
--			uint32_t src_data,
--			struct dma_resv *resv,
--			struct dma_fence **fence,
--			bool delayed,
--			u64 k_job_id);
-+int amdgpu_fill_buffer(struct amdgpu_ttm_buffer_entity *entity,
-+		       struct amdgpu_bo *bo,
-+		       uint32_t src_data,
-+		       struct dma_resv *resv,
-+		       struct dma_fence **f,
-+		       u64 k_job_id);
- 
- int amdgpu_ttm_alloc_gart(struct ttm_buffer_object *bo);
- void amdgpu_ttm_recover_gart(struct ttm_buffer_object *tbo);
-diff --git a/drivers/gpu/drm/amd/amdkfd/kfd_migrate.c b/drivers/gpu/drm/amd/amdkfd/kfd_migrate.c
-index ade1d4068d29..9c76f1ba0e55 100644
---- a/drivers/gpu/drm/amd/amdkfd/kfd_migrate.c
-+++ b/drivers/gpu/drm/amd/amdkfd/kfd_migrate.c
-@@ -157,7 +157,8 @@ svm_migrate_copy_memory_gart(struct amdgpu_device *adev, dma_addr_t *sys,
- 			goto out_unlock;
- 		}
- 
--		r = amdgpu_copy_buffer(adev, gart_s, gart_d, size * PAGE_SIZE,
-+		r = amdgpu_copy_buffer(adev, entity,
-+				       gart_s, gart_d, size * PAGE_SIZE,
- 				       NULL, &next, true, 0);
- 		if (r) {
- 			dev_err(adev->dev, "fail %d to copy memory\n", r);
+Note: I did not collect the ACK from Conor since there is significant change in the bindings in v2.
+
+Test logs: https://gist.github.com/Yemike-Abhilash-Chandra/ca582375fe682221c6597e60f247d92f
+DT binding check results: https://gist.github.com/Yemike-Abhilash-Chandra/bd6050d021f72a78ac82b3b342e923f2
+Link for v1: https://lore.kernel.org/all/20250523083655.3876005-1-y-abhilashchandra@ti.com/
+
+Yemike Abhilash Chandra (4):
+  media: dt-bindings: ti,ds90ub960: Refactor port definitions
+  media: i2c: ds90ub960: Use enums for chip type and chip family
+  media: dt-bindings: ti,ds90ub960: Add support for DS90UB954-Q1
+  media: i2c: ds90ub960: Add support for DS90UB954-Q1
+
+ .../bindings/media/i2c/ti,ds90ub960.yaml      | 400 +++++++++++++-----
+ drivers/media/i2c/Kconfig                     |   4 +-
+ drivers/media/i2c/ds90ub960.c                 | 221 +++++++---
+ 3 files changed, 461 insertions(+), 164 deletions(-)
+
 -- 
-2.43.0
+2.34.1
 
