@@ -1,297 +1,168 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qk1-f178.google.com (mail-qk1-f178.google.com [209.85.222.178])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A07B128640F;
-	Wed,  3 Dec 2025 18:04:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=198.175.65.10
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764785063; cv=fail; b=FNwlen1IkxIuc3F39mVihvFabwALBk6UBkTa85F/T0iYPOSaZCXNFw8lkaCtOijA74YnHllEWKxUa+6n0OMmEhb/SCIDP5noHmIlgPo5bkAOd81gJJwrt3bwGBA0EeyLhyelsqZVJqU1I2kQdXDCJhpSa0887zT4KBElxxPc8WM=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764785063; c=relaxed/simple;
-	bh=Hk7ZBIer0Cb1SUGRRHLT4ypGZNrcZB9z3tpH3rdoTtw=;
-	h=Date:From:To:CC:Subject:Message-ID:References:Content-Type:
-	 Content-Disposition:In-Reply-To:MIME-Version; b=KlOVT4wG/sGOhBrrxZxWYU+rZ0gKHIJK6DZl71gFfqE30NQmXfXozYARA245iMOSFW1eZvo9atNeGdtY+W2ySFG/17h0cKDc5dBJqUzM7nv+DwLxZvmDR82aVNaJkzjstP5X+VeXefqy+EE1Yb+rmGYlNXNX/mDRoSdb59UHVc0=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=bMaZ5OZu; arc=fail smtp.client-ip=198.175.65.10
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ED1562D949E
+	for <linux-media@vger.kernel.org>; Wed,  3 Dec 2025 18:11:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.178
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1764785468; cv=none; b=ENLF8D3xC5ePNwhZLST2YPlz9lL2121BKiq+6OvHjArjF3722BMcyeP398KSrA6mQpX7MjoiM69ay8wTFKkbEZNKr//Oeq8NcMyfwIJApZsmkqRNrPgMYZiZ5GUO6gMsg+1vjn3KnGJLHvwl/y9ePt4zqt8oFRu1DgDkm1Ozvr4=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1764785468; c=relaxed/simple;
+	bh=1IrJiXDgyU4C8dSO1PbGNsu61VWYAfgOJPUSXjYihOQ=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=Ax6cYUTJdOeoJWnwc/XWOFd+JsgVvSAwBRnx+bXqIQMrBHJYMsJCNa0B4K5llaNEm3uefI07MOhczoBhaBUhTYSNWaun9k8bQT4UXZiBBLxLe7eflOo7m4PvkxEPVSDGDPjmSuQ++mAJ4WGUqOqW9QNeKj0qJRuh/WsYlKL70S0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ndufresne.ca; spf=pass smtp.mailfrom=ndufresne.ca; dkim=pass (2048-bit key) header.d=ndufresne-ca.20230601.gappssmtp.com header.i=@ndufresne-ca.20230601.gappssmtp.com header.b=yKO33AvT; arc=none smtp.client-ip=209.85.222.178
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ndufresne.ca
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ndufresne.ca
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="bMaZ5OZu"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1764785057; x=1796321057;
-  h=date:from:to:cc:subject:message-id:references:
-   content-transfer-encoding:in-reply-to:mime-version;
-  bh=Hk7ZBIer0Cb1SUGRRHLT4ypGZNrcZB9z3tpH3rdoTtw=;
-  b=bMaZ5OZubRuOzJlNTBOjKkkO7AVFXOf5lQXShGcfu8TC3FwtxRjPiR8V
-   tfvbj4b/KLlXvMTdWn7FFrREQXOlBuplXlBEivRnErpHSWC4o7bB5seAu
-   T10gB5gxKM64b3SUYfzsBmzqzz2Iv/jjX6VYb9k//7da3HO6RUQ82X7YW
-   E3XzUmaTk/UVrtAoLLM3ozkQJ48pi4+GEbkTcPDU4sfXGZah6vnNNJeQw
-   UksWH8Jy6ykq1XpE36g1wVt5FVRm67HyCJAtt8rL7TBlM5EnCvsyqsmaS
-   IdCllu0jJPWbkVzj+FfxxjTlubfGqi+4n+8nrIvGOjrSd5TZLUFEuTVwP
-   Q==;
-X-CSE-ConnectionGUID: F3MUVpAGTg+l/smnXdfgsw==
-X-CSE-MsgGUID: AMgB18QRT6S+WAwgGG2zkg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11631"; a="84187230"
-X-IronPort-AV: E=Sophos;i="6.20,246,1758610800"; 
-   d="scan'208";a="84187230"
-Received: from fmviesa006.fm.intel.com ([10.60.135.146])
-  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Dec 2025 10:03:59 -0800
-X-CSE-ConnectionGUID: +ArR03XTRrailFF9c5pVVg==
-X-CSE-MsgGUID: O7QWorwQSpCvz7+FLW3tNg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.20,246,1758610800"; 
-   d="scan'208";a="194674524"
-Received: from fmsmsx902.amr.corp.intel.com ([10.18.126.91])
-  by fmviesa006.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Dec 2025 10:03:53 -0800
-Received: from FMSMSX901.amr.corp.intel.com (10.18.126.90) by
- fmsmsx902.amr.corp.intel.com (10.18.126.91) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.2562.29; Wed, 3 Dec 2025 09:31:31 -0800
-Received: from fmsedg902.ED.cps.intel.com (10.1.192.144) by
- FMSMSX901.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.2562.29 via Frontend Transport; Wed, 3 Dec 2025 09:31:31 -0800
-Received: from CY3PR05CU001.outbound.protection.outlook.com (40.93.201.24) by
- edgegateway.intel.com (192.55.55.82) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.2562.29; Wed, 3 Dec 2025 09:31:30 -0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=XLFgekbl8RrUBlVGVovBoTEPAnd8ZFJYUVZZCIzKMEm26+e4BWaUuIwoBrnDWtZq9QvyCdlsB7i/8SJTMEsi/Ksgwx2Y4SDUlRFESoQAgwSyVT4z+VH0psiY0Hc7lg3Yf0j8T8uqh+kiBuLR1ITyIZFVbiLjBKgl+Uf7MQt6XsAN3zXaXPBXmqdgjakp/6+7EIaIZZJ0VbDMKMY1FJYXPjkTeqnnYBH0my6D/TrAshOcxRIgPgwgy2iD5bKsZPMyUh//gHP5i/CEKUFO3pw4OaYxca2e9ifWAhyJZTUHY9/By3LwlM8UfpcuvAGRWAUzLpJ+clIAtAMxDvnkM1FYHg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=6xS8Qk1ssKLEurp4tyoe0dmiinN+D3yTkAew8cAif1g=;
- b=CjoW/fYS/DAJd6WdxUHSCVtJKsnl8NAqycsW2mPFiK0yPDAqGxiwKTfz52FirefEPacf16jGe6o7nB7GBc4TwbUVUqb0rhKckdHzKXOX3/XCvok3pZCH6u7Yvjbo3dEibN26abjSQDrJ56aE66KbDkU5SxZiYL5NGwQcIX/8MQK4W+r3kfV1/MM/MjB9WWEuMtic+tmrD+/HRiGMy517e9CBHelNbVfny/wee4L8+YS/9Xx2G2XmivBR/reo1hfCJoCkMw6vYqJInE5ituuzFAolCN4UjdKkMbDYv9SBiR6sZdQVEHBuQ+Mq9J+3RDcg1Q3FQIGdIiR0rKR0XzDsSQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from PH7PR11MB6522.namprd11.prod.outlook.com (2603:10b6:510:212::12)
- by CYYPR11MB8431.namprd11.prod.outlook.com (2603:10b6:930:c7::17) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9388.9; Wed, 3 Dec
- 2025 17:31:28 +0000
-Received: from PH7PR11MB6522.namprd11.prod.outlook.com
- ([fe80::9e94:e21f:e11a:332]) by PH7PR11MB6522.namprd11.prod.outlook.com
- ([fe80::9e94:e21f:e11a:332%7]) with mapi id 15.20.9388.003; Wed, 3 Dec 2025
- 17:31:28 +0000
-Date: Wed, 3 Dec 2025 09:31:25 -0800
-From: Matthew Brost <matthew.brost@intel.com>
-To: Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>
-CC: <phasta@kernel.org>, Sumit Semwal <sumit.semwal@linaro.org>, "Gustavo
- Padovan" <gustavo@padovan.org>, Felix Kuehling <Felix.Kuehling@amd.com>,
-	"Alex Deucher" <alexander.deucher@amd.com>, David Airlie <airlied@gmail.com>,
-	"Simona Vetter" <simona@ffwll.ch>, Jani Nikula <jani.nikula@linux.intel.com>,
-	"Joonas Lahtinen" <joonas.lahtinen@linux.intel.com>, Rodrigo Vivi
-	<rodrigo.vivi@intel.com>, Tvrtko Ursulin <tursulin@ursulin.net>, Huang Rui
-	<ray.huang@amd.com>, Matthew Auld <matthew.auld@intel.com>, Maarten Lankhorst
-	<maarten.lankhorst@linux.intel.com>, Maxime Ripard <mripard@kernel.org>,
-	Thomas Zimmermann <tzimmermann@suse.de>, Lucas De Marchi
-	<lucas.demarchi@intel.com>, Thomas =?iso-8859-1?Q?Hellstr=F6m?=
-	<thomas.hellstrom@linux.intel.com>, <linux-media@vger.kernel.org>,
-	<dri-devel@lists.freedesktop.org>, <linux-kernel@vger.kernel.org>,
-	<amd-gfx@lists.freedesktop.org>, <intel-gfx@lists.freedesktop.org>,
-	<intel-xe@lists.freedesktop.org>
-Subject: Re: [PATCH v2 8/8] drm/xe: Use dma_fence_test_signaled_flag()
-Message-ID: <aTBz7UTCoPvzyJcA@lstrano-desk.jf.intel.com>
-References: <20251201105011.19386-2-phasta@kernel.org>
- <20251201105011.19386-10-phasta@kernel.org>
- <e67b12d1-111f-484a-8374-4152d3b9f328@amd.com>
- <a4655788feddd883f70aa374e4315cfaee59a88c.camel@mailbox.org>
- <d7b6efe8-5343-45a7-b16e-441da15145cd@amd.com>
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <d7b6efe8-5343-45a7-b16e-441da15145cd@amd.com>
-X-ClientProxiedBy: MW4PR04CA0249.namprd04.prod.outlook.com
- (2603:10b6:303:88::14) To PH7PR11MB6522.namprd11.prod.outlook.com
- (2603:10b6:510:212::12)
+	dkim=pass (2048-bit key) header.d=ndufresne-ca.20230601.gappssmtp.com header.i=@ndufresne-ca.20230601.gappssmtp.com header.b="yKO33AvT"
+Received: by mail-qk1-f178.google.com with SMTP id af79cd13be357-8b2dec4d115so2436485a.0
+        for <linux-media@vger.kernel.org>; Wed, 03 Dec 2025 10:11:01 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ndufresne-ca.20230601.gappssmtp.com; s=20230601; t=1764785460; x=1765390260; darn=vger.kernel.org;
+        h=mime-version:user-agent:autocrypt:references:in-reply-to:date:cc:to
+         :from:subject:message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=1IrJiXDgyU4C8dSO1PbGNsu61VWYAfgOJPUSXjYihOQ=;
+        b=yKO33AvTh7fgAstI+6c4xYAaApG47YqQqBqYcIrAGtNAVBWi8SOPJ91v8M0GF/Cl3C
+         PK6Sk91A4h8wwm0UFGiO0mq6HjwIhbVRuWQs69Hqqj2Ho1UgqR8VwE3klasHG7mg5rBc
+         3ui1hhaSBQ3EsuxEM6ntIeWU8gVGRT0WWbI56dQbbuZxHlgk5+4L+GZq2Ih6/u98mQQm
+         f9+P8Eceop13F4hQaIZpvgFrsD0gYnwqUM/R7U/i46/xIEFiE6Sagw5qBb4iQlnbDgYP
+         6iyxqZryn0hZePx+AvTmeexgjJtV7ObQ1hwfphAt3/boBkOY7so87moLbPNwX3JwXR0c
+         BdXw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1764785460; x=1765390260;
+        h=mime-version:user-agent:autocrypt:references:in-reply-to:date:cc:to
+         :from:subject:message-id:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=1IrJiXDgyU4C8dSO1PbGNsu61VWYAfgOJPUSXjYihOQ=;
+        b=WyHhdHkYpo6wTUMGSmiFUcRt5iWltY7+8StQ80m4qpMemGRY7K6I/q/JFv2ppiUFB2
+         WIA5VLaWVV2jEDzpycNPdTF2Msnqa8Rc9USikFcDJ3uGCASV2U6ZyT0qJ5zIbMUuQt2+
+         H+xyajCMENAP45lm09dNQACAEc5bDWjSN1Zw7BHGWrtI7ERhQ++nB9MkQO9AetiG7Btl
+         gaWcu5ZkNAkknoUDA1/8xJQZUNSh0lkhk5z2Tj5rZ6asVHK3j1T5rTL8q9uS7Y7zZ7Rq
+         Z4yFxDC39tIOohF7ljnd+AtggIvsO9xalzAyiei4W1483Enmzu6F4lrmwH2XFnXGFOz5
+         mAxQ==
+X-Gm-Message-State: AOJu0YyHvBZeThaNdZLxABbqX9dR0eBEJJLeAFIfIQ67p685mnrutv7L
+	pB+wlp9dOVbPUcGeko1gkFyZb1evXgxKVTl6ECpg5bi/1WMtaNjxv9IQ/FtsNgIelOhugsdzEpB
+	ocwkXfGY=
+X-Gm-Gg: ASbGncvOIPbPcFrRHL3dgeRs7Y75jHC/rZPDM2TKAagYw5MMQFDc6xg5aZl10ur8hh0
+	cklsb7DUqHTy6oxOCSG5Cs50M80u4RYD2g2vJrvMCzc5+aG08jb667qJnLMkvO6AGQhlZ5Df3W5
+	z9PK2H0yqdjQXNn02vyzPHndMZ8qGe9SFZA+rYGDFOkwlJXR7Pm2h7Wxoh9/Y6un9kFGNjN0n57
+	tQyKtnZq+rLHEKcaEt2lUaJQ9Bxmo1u2Zh8HsZIb5HsuoqHvlP3Q39wZ6qGLcJu8ak7wgJCms/T
+	GxAHpLktgq3xDuIuVQ1XyvlBg2gFGZ6nah9pzeHc5r8XlTWT5F/I8PbC40NcNYavbfQJyl4w+xj
+	9N957exuLsyCYmqCv66Jvt5KSFzNlX/sqmE7WfpmyXY8Sulsgu05bLGvRmCRVSOZZifqqd4Whch
+	Y0O7/4jPbzKYZqXUHc
+X-Google-Smtp-Source: AGHT+IEaOEQhBqOZedIgKibmGORWzjoSJ4nDUCWPm8yIQS9LJdxFOttTpzKAq2HUEnCPE22SYVxHqQ==
+X-Received: by 2002:a05:622a:314:b0:4e8:b2df:fe1f with SMTP id d75a77b69052e-4f017576c94mr39864301cf.28.1764785460344;
+        Wed, 03 Dec 2025 10:11:00 -0800 (PST)
+Received: from ?IPv6:2606:6d00:17:7b4b::5ac? ([2606:6d00:17:7b4b::5ac])
+        by smtp.gmail.com with ESMTPSA id d75a77b69052e-4f0230b8dd6sm1706421cf.29.2025.12.03.10.10.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 03 Dec 2025 10:10:59 -0800 (PST)
+Message-ID: <519cdc6933469378086e97d11d31552d76ddd9d6.camel@ndufresne.ca>
+Subject: Re: [PATCH 0/3] media: wave5: Fix critical issues in driver remove
+ path
+From: Nicolas Dufresne <nicolas@ndufresne.ca>
+To: Xulin Sun <xulin.sun@windriver.com>, nas.chung@chipsnmedia.com, 
+	jackson.lee@chipsnmedia.com, mchehab@kernel.org
+Cc: linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
+Date: Wed, 03 Dec 2025 13:10:58 -0500
+In-Reply-To: <20251203040935.2685490-1-xulin.sun@windriver.com>
+References: <20251203040935.2685490-1-xulin.sun@windriver.com>
+Autocrypt: addr=nicolas@ndufresne.ca; prefer-encrypt=mutual;
+ keydata=mDMEaCN2ixYJKwYBBAHaRw8BAQdAM0EHepTful3JOIzcPv6ekHOenE1u0vDG1gdHFrChD
+ /e0J05pY29sYXMgRHVmcmVzbmUgPG5pY29sYXNAbmR1ZnJlc25lLmNhPoicBBMWCgBEAhsDBQsJCA
+ cCAiICBhUKCQgLAgQWAgMBAh4HAheABQkJZfd1FiEE7w1SgRXEw8IaBG8S2UGUUSlgcvQFAmibrjo
+ CGQEACgkQ2UGUUSlgcvQlQwD/RjpU1SZYcKG6pnfnQ8ivgtTkGDRUJ8gP3fK7+XUjRNIA/iXfhXMN
+ abIWxO2oCXKf3TdD7aQ4070KO6zSxIcxgNQFtDFOaWNvbGFzIER1ZnJlc25lIDxuaWNvbGFzLmR1Z
+ nJlc25lQGNvbGxhYm9yYS5jb20+iJkEExYKAEECGwMFCwkIBwICIgIGFQoJCAsCBBYCAwECHgcCF4
+ AWIQTvDVKBFcTDwhoEbxLZQZRRKWBy9AUCaCyyxgUJCWX3dQAKCRDZQZRRKWBy9ARJAP96pFmLffZ
+ smBUpkyVBfFAf+zq6BJt769R0al3kHvUKdgD9G7KAHuioxD2v6SX7idpIazjzx8b8rfzwTWyOQWHC
+ AAS0LU5pY29sYXMgRHVmcmVzbmUgPG5pY29sYXMuZHVmcmVzbmVAZ21haWwuY29tPoiZBBMWCgBBF
+ iEE7w1SgRXEw8IaBG8S2UGUUSlgcvQFAmibrGYCGwMFCQll93UFCwkIBwICIgIGFQoJCAsCBBYCAw
+ ECHgcCF4AACgkQ2UGUUSlgcvRObgD/YnQjfi4+L8f4fI7p1pPMTwRTcaRdy6aqkKEmKsCArzQBAK8
+ bRLv9QjuqsE6oQZra/RB4widZPvphs78H0P6NmpIJ
+Content-Type: multipart/signed; micalg="pgp-sha512";
+	protocol="application/pgp-signature"; boundary="=-8wd1bXvUSgRz2Q/bde/e"
+User-Agent: Evolution 3.58.2 (3.58.2-1.fc43) 
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PH7PR11MB6522:EE_|CYYPR11MB8431:EE_
-X-MS-Office365-Filtering-Correlation-Id: aa977513-a7bf-4dca-6fe2-08de3291caa8
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230040|376014|7416014|1800799024|366016|7053199007;
-X-Microsoft-Antispam-Message-Info: =?iso-8859-1?Q?Gg7NWhi+05k68ex7+HSKK+0LsX5a5jXM1863imNl11HlcNrZMSuccHgAfv?=
- =?iso-8859-1?Q?bLkCPGpxRqDEqBbWrrtqgMMolLRsrDFj7xE8LHeY4sVWVQuHe9VsArWEOR?=
- =?iso-8859-1?Q?16yVNG4v2vi1H1h7xpGHyvMNB6lmvPm8s1gIutmyFEzpN1Dsjvyf9RFYkb?=
- =?iso-8859-1?Q?G1qCITKTpSxUZCQT5T6CFEJMd6yIcwEjBEIiNvIuGCGDimqba1Tvm0L4d3?=
- =?iso-8859-1?Q?ziRVcvEHIm2ZsE6uutCUS6e809qN2qvTipweDPxoHBBce1rSe52RBDrGSO?=
- =?iso-8859-1?Q?ir84eIX4ZbKM/0PyhveHk+PC33Rj/KD5CEnm8JuuQ8f25HNvD+Yjy3Hi8b?=
- =?iso-8859-1?Q?dFplD8nYzxqqw46gVAu2NOD5nKl+qHZRKY9XQWiYYqsWrjm+4UOA43LrZl?=
- =?iso-8859-1?Q?pVcovK3SlAP8w/HaYzysqTbkM7l5dyL00fRYfigzEgwHUE96VviBcBXFoI?=
- =?iso-8859-1?Q?FHfCqMGvwQE9M1Fc1vJcZSRu//fbsgTeGoxvJ7fTLVKGuq0kG1tRR6m4q5?=
- =?iso-8859-1?Q?QnqSmmzLUHEbgD0CmVO/MdTAydSTCJRudmqtcw8k6SLF1qQt9+GGUo8pjg?=
- =?iso-8859-1?Q?rzliWcs2rZ0k0H8/zhI2ELDXnXb40byP/Cx62nPp+YtKWIfTYeCP1LTa8q?=
- =?iso-8859-1?Q?RKPQAyLsm7ya9W+osv0YJmJ2U+lCnAMGVQvQHdVJTGuXJZ2s55elFi4z9k?=
- =?iso-8859-1?Q?8cLe4ZQnDTR52c/fNgvBoP1i5ETjDuYQ8y5nEvoTzfTVlb4V/kdeg87M/Q?=
- =?iso-8859-1?Q?PhKWXq8LyvZSI2aAp7z6+KmnLcSC3Qg8mjUJShd3Snq9Lzorf5iUuPvYLN?=
- =?iso-8859-1?Q?buAVhaQq5iJywRwK2NWKeG93vjFfLs9BXZl985TYxowwMSkmENxocDzvnz?=
- =?iso-8859-1?Q?X/R09of1yg/8lzGiip3kdyD8LdXgcmXoA+2ouqiL68o2Ax7bYS2+Dm/5Bb?=
- =?iso-8859-1?Q?KuzBuk+S6HESG6FfHJXa5ONGskQJfWc2rBfBMhhDDNMoDgp9aJl2xjOIKC?=
- =?iso-8859-1?Q?00XFc1eP2yLkPfpnj6REAHFgCc5JRFGRdXv+LTrwIZ96LnuZY+Z70uKqqv?=
- =?iso-8859-1?Q?UYB8kGXKtmS5fGz2TbHBJ8HhIgVZP2Lfk8kzoUtsaiAuj7q7xWz7nUDq0p?=
- =?iso-8859-1?Q?mxfGAQ6KyOPYMz4+3F5Ksypf287z0P2sq1wAF7fXXxdS2aDMMOA6jOj+Ia?=
- =?iso-8859-1?Q?Xs0dOFI4qGBho755cRdhJVLX3RoIFZJ2NkETdNjutXrZGw68l5auRuqdhu?=
- =?iso-8859-1?Q?+j50l/TzFQLjyUxNPt2qj6mHla2RmasYH5+6FQKQ+XES74RgvjpRdgvVRl?=
- =?iso-8859-1?Q?0QmypQNWFelhKHDO/7aWJ48WqyOjHvA4y1lQXenrD3muBtl86PLueDZ8Ql?=
- =?iso-8859-1?Q?ohEZQjIFwtkboF9anz08Gl1gTu2ylmtMVdEQbKIE0xoP0Etr5ICctx6ZT3?=
- =?iso-8859-1?Q?/JAGxLhflHnO4HJLpR2feWkxmhWPJQbasfzePNOtr5QkUFfbk/qHwqEyq7?=
- =?iso-8859-1?Q?rm2T+IVxzFKgb+2DyuTuHh?=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH7PR11MB6522.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(7416014)(1800799024)(366016)(7053199007);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?iso-8859-1?Q?dAYv9SZk28+nhOb1HLzuaPIIKrfzFJ87Nw1AM/Hvt44JwdvBoJut5wxvhm?=
- =?iso-8859-1?Q?CtBX0YKOHVvll5scng3z5rfYvJ2GmsEqwICxoZvXe1zZ1odtXOS5HvhAOt?=
- =?iso-8859-1?Q?D2oMq1Kwy3MXIHV/PE14+gTSPKpXDWNww54YafWPkoA5FmdPOTXybmlOkF?=
- =?iso-8859-1?Q?TwKUwQi7JtSIZkeygfeksbtMUBolrXv9EcBZoTrtHByrOAuJUByORhiq0q?=
- =?iso-8859-1?Q?l7PsJLf4l8Nyj5hXDyQpA4LS14MlYTlTCw2poRwf5buA6BkiO73w5CRznP?=
- =?iso-8859-1?Q?639cEom+Yj6MZExq7wd3VFgDHfNccTSq/3N07A+4TJxk9yodLwFCG6h2RC?=
- =?iso-8859-1?Q?0CVaPg/MltA22y4Ltnzmib45JO1Srdky7DZJOEXwww0dgHcF8fR7OxASGz?=
- =?iso-8859-1?Q?opmgQmx0IUFPnvXz6vht44roXP1A86UlQ9WnsZ7Ji6KCob+1smKur1zICa?=
- =?iso-8859-1?Q?7aMorGNcpl4Yxmalpe9Y9zWIE5MVZTan96KJt4hxkfyBaaTej54CDylgVg?=
- =?iso-8859-1?Q?vgz1D4HCaVuT7YESr/g221i3ACWj6zg9VeC1GSYTCfcxJNCMAezFDhn2sN?=
- =?iso-8859-1?Q?gNSLlxoIOj972+h4ygMHwi+iJZrgbG/E/8qoeKmRsXZXgabroWqeN6FKDj?=
- =?iso-8859-1?Q?TL/6+g5Ed+WVCpiPIbeNrb+vEg9hMr1lXnr/xIxeBKGu2hdczO0mosw5Le?=
- =?iso-8859-1?Q?6pHLaVx9D0nac+JAbJJqFAo8VQudKmYJ8bwHDffG9IRze3GIazqZhsQ48b?=
- =?iso-8859-1?Q?6EPgf7Tieu8N5Gf8HRDcQuNodTz2aobms2mUf3v6znyLdsdDUgTpW0+ow2?=
- =?iso-8859-1?Q?tjTZDQ0v3vXRnYRwfhiWnCQ+uLpUn6z1bvmiR9CuJeqCXLQrnWB1+i0IOw?=
- =?iso-8859-1?Q?edPl1H1mYAVkclm8hDTz9EfV+URpgoNGRdAZNnOHC5y/u3lxlaWGpRbsXI?=
- =?iso-8859-1?Q?1fSPMJRVenC3cE1Qq+Ou+xrR8s8+PDVrXp8bN8icYhFSVFiYPaL/cju+t0?=
- =?iso-8859-1?Q?skWNZvTUehBbmvT48LD4xgVGyzfn1DyMJLmvt+eiGTUJxeAT5S1LACnfVO?=
- =?iso-8859-1?Q?tCgWljI1xH+/9IhPqnX+kPry2MgKG7canoy0jLCT3vDg9JNm/I57TCPaHX?=
- =?iso-8859-1?Q?7rnBhSahYbeM/pvAy7Sjr+0p1Htheye+INcGJPmE1w5ef/HhvIAuXtizFA?=
- =?iso-8859-1?Q?HEC8V6RpSDjqn3uH3Oqa7zt0mKXN39GVPzPeKvO4QCF3XDGyTxB3Yj64pn?=
- =?iso-8859-1?Q?TgmSo1wTAcxKAxe5GqeZX1AVwe4+yQhGgXMAFF71IvsQGIaDO0Shyi5QdR?=
- =?iso-8859-1?Q?ydN/DhespEW8QpbBCNHMGIaQKuBAocn35OikLZeeXR+MYiLknp76/tLp63?=
- =?iso-8859-1?Q?/O2OcdTCvAu+CNSmntDBEOtcTyjnMfkijVPgRkd44ZQm9+Nd5n1koPL7d5?=
- =?iso-8859-1?Q?LEbjfcLZDtGerpcuYdiymLX5MCtsgAVHa3mm0Wu8RIhaWrIO6IdHUTPvPV?=
- =?iso-8859-1?Q?uuzqObdq5I0BA2SP+TLxiMsecUslsfzAYEpMMWw9yYhswtPdSIf2KBrZUl?=
- =?iso-8859-1?Q?/muZ54G2hmb14xeK+DbTGRnQzgpUJnjgMp9R9tgWwPXII1wgIAIMzF2zdf?=
- =?iso-8859-1?Q?yTAmBiabQ3pmDLTaw1ZUuYWfv/UJy5yonnJjPOFI4tNgFNBWuKELqIrg?=
- =?iso-8859-1?Q?=3D=3D?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: aa977513-a7bf-4dca-6fe2-08de3291caa8
-X-MS-Exchange-CrossTenant-AuthSource: PH7PR11MB6522.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 03 Dec 2025 17:31:28.5924
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: j7hHitfz/IZQsBBWTEDlXixzcc3lVKyerVChXRD480uwaiXTnqnNl9xpu20t25sxfXrJT+XlBIzOeEFcVUXP7Q==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CYYPR11MB8431
-X-OriginatorOrg: intel.com
 
-On Wed, Dec 03, 2025 at 04:24:26PM +0100, Christian König wrote:
-> On 12/3/25 16:18, Philipp Stanner wrote:
-> > On Wed, 2025-12-03 at 14:15 +0100, Christian König wrote:
-> >> On 12/1/25 11:50, Philipp Stanner wrote:
-> >>> There is a new dma_fence helper which simplifies testing for a fence's
-> >>> signaled_flag. Use it in xe.
-> >>>
-> >>> Signed-off-by: Philipp Stanner <phasta@kernel.org>
-> >>
-> >> Acked-by: Christian König <christian.koenig@amd.com>
-> > 
-> > This series would then be completely reviewed, it seems. So one could
-> > push it. Question is just who and where, and what to do about the merge
-> > conflict with intel.
-> 
-> I think as long as it isn't a major merge conflict push it to drm-misc-next and make sure that drm-tip had the correct conflict resolution.
-> 
-> > Matthew?
-> 
-> Should have the last word on this when it's an XE merge conflict.
-> 
 
-It isn't pressing to get this patch into Xe as it is just an addition
-compared to patch 4 which I believe is actually required for
-functionality in Xe. So to avoid conflicts maybe just push the first 7
-and for patch 8 once these patches propagate to drm-xe-next, I'll rebase
-the last patch and push it into our tree.
+--=-8wd1bXvUSgRz2Q/bde/e
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Matt
+Hi,
 
-> Christian.
-> 
-> > 
-> > 
-> > P.
-> > 
-> >>
-> >>> ---
-> >>>  drivers/gpu/drm/xe/xe_exec_queue.c | 9 +++------
-> >>>  drivers/gpu/drm/xe/xe_pt.c         | 3 +--
-> >>>  drivers/gpu/drm/xe/xe_sched_job.c  | 2 +-
-> >>>  3 files changed, 5 insertions(+), 9 deletions(-)
-> >>>
-> >>> diff --git a/drivers/gpu/drm/xe/xe_exec_queue.c b/drivers/gpu/drm/xe/xe_exec_queue.c
-> >>> index cb5f204c08ed..06736f52fbaa 100644
-> >>> --- a/drivers/gpu/drm/xe/xe_exec_queue.c
-> >>> +++ b/drivers/gpu/drm/xe/xe_exec_queue.c
-> >>> @@ -1037,8 +1037,7 @@ struct dma_fence *xe_exec_queue_last_fence_get(struct xe_exec_queue *q,
-> >>>  
-> >>>  	xe_exec_queue_last_fence_lockdep_assert(q, vm);
-> >>>  
-> >>> -	if (q->last_fence &&
-> >>> -	    test_bit(DMA_FENCE_FLAG_SIGNALED_BIT, &q->last_fence->flags))
-> >>> +	if (q->last_fence && dma_fence_test_signaled_flag(q->last_fence))
-> >>>  		xe_exec_queue_last_fence_put(q, vm);
-> >>>  
-> >>>  	fence = q->last_fence ? q->last_fence : dma_fence_get_stub();
-> >>> @@ -1064,8 +1063,7 @@ struct dma_fence *xe_exec_queue_last_fence_get_for_resume(struct xe_exec_queue *
-> >>>  
-> >>>  	lockdep_assert_held_write(&q->hwe->hw_engine_group->mode_sem);
-> >>>  
-> >>> -	if (q->last_fence &&
-> >>> -	    test_bit(DMA_FENCE_FLAG_SIGNALED_BIT, &q->last_fence->flags))
-> >>> +	if (q->last_fence && dma_fence_test_signaled_flag(q->last_fence))
-> >>>  		xe_exec_queue_last_fence_put_unlocked(q);
-> >>>  
-> >>>  	fence = q->last_fence ? q->last_fence : dma_fence_get_stub();
-> >>> @@ -1106,8 +1104,7 @@ int xe_exec_queue_last_fence_test_dep(struct xe_exec_queue *q, struct xe_vm *vm)
-> >>>  
-> >>>  	fence = xe_exec_queue_last_fence_get(q, vm);
-> >>>  	if (fence) {
-> >>> -		err = test_bit(DMA_FENCE_FLAG_SIGNALED_BIT, &fence->flags) ?
-> >>> -			0 : -ETIME;
-> >>> +		err = dma_fence_test_signaled_flag(fence) ? 0 : -ETIME;
-> >>>  		dma_fence_put(fence);
-> >>>  	}
-> >>>  
-> >>> diff --git a/drivers/gpu/drm/xe/xe_pt.c b/drivers/gpu/drm/xe/xe_pt.c
-> >>> index 07f96bda638a..1ca2dec18e51 100644
-> >>> --- a/drivers/gpu/drm/xe/xe_pt.c
-> >>> +++ b/drivers/gpu/drm/xe/xe_pt.c
-> >>> @@ -1208,8 +1208,7 @@ static bool no_in_syncs(struct xe_sync_entry *syncs, u32 num_syncs)
-> >>>  	for (i = 0; i < num_syncs; i++) {
-> >>>  		struct dma_fence *fence = syncs[i].fence;
-> >>>  
-> >>> -		if (fence && !test_bit(DMA_FENCE_FLAG_SIGNALED_BIT,
-> >>> -				       &fence->flags))
-> >>> +		if (fence && !dma_fence_test_signaled_flag(fence))
-> >>>  			return false;
-> >>>  	}
-> >>>  
-> >>> diff --git a/drivers/gpu/drm/xe/xe_sched_job.c b/drivers/gpu/drm/xe/xe_sched_job.c
-> >>> index d21bf8f26964..1c9ba49a325b 100644
-> >>> --- a/drivers/gpu/drm/xe/xe_sched_job.c
-> >>> +++ b/drivers/gpu/drm/xe/xe_sched_job.c
-> >>> @@ -188,7 +188,7 @@ static bool xe_fence_set_error(struct dma_fence *fence, int error)
-> >>>  	bool signaled;
-> >>>  
-> >>>  	spin_lock_irqsave(fence->lock, irq_flags);
-> >>> -	signaled = test_bit(DMA_FENCE_FLAG_SIGNALED_BIT, &fence->flags);
-> >>> +	signaled = dma_fence_test_signaled_flag(fence);
-> >>>  	if (!signaled)
-> >>>  		dma_fence_set_error(fence, error);
-> >>>  	spin_unlock_irqrestore(fence->lock, irq_flags);
-> >>
-> > 
-> 
+
+Le mercredi 03 d=C3=A9cembre 2025 =C3=A0 12:09 +0800, Xulin Sun a =C3=A9cri=
+t=C2=A0:
+> This patch series fixes three critical issues in the wave5 VPU driver's
+> remove path that cause kernel warnings and system crashes.
+>=20
+> The issues were discovered and consistently reproduced on kernel 6.12.58-=
+rt6
+> with the TI AM62A platform. While testing on kernel 6.18 shows the issues
+> are harder to trigger, the underlying logic problems still exist in the c=
+ode.
+>=20
+> Patch 1: Fixes PM runtime reference count underflow
+> Patch 2: Fixes kthread worker destruction warning=C2=A0=20
+> Patch 3: Fixes kernel panic due to incorrect cleanup order
+
+Thanks, applicable to all your patches, please reformat your commits messag=
+e to
+follow the guidelines. Avoid the "Symptoms:/Root cause:/Fix:" titles, reade=
+r can
+figure-out what this is. And then reverse the order, what is fixed in the f=
+irst
+paragraph, explanation of the root cause in the second and what users would=
+ get
+(symptoms) at the end.
+
+Also for all your patches, add the missing Fixes: tags, these are important=
+ for
+backports.
+
+>=20
+> All patches have been tested with 50+ consecutive encoding operations and
+> multiple modprobe/rmmod cycles without any warnings or crashes on 6.12.58=
+-rt6.
+
+I don't think its going to be a big deal, but please, retest on media-
+committers/next (currently 6.18-rc5) branch and report.
+
+With all this covered, you can add my Rb to your v2.
+
+Reviewed-by: Nicolas Dufresne <nicolas.dufresne@collabora.com>
+
+regards,
+Nicolas
+
+>=20
+> Xulin Sun (3):
+> =C2=A0 media: wave5: Fix PM runtime usage count underflow
+> =C2=A0 media: wave5: Fix kthread worker destruction in polling mode
+> =C2=A0 media: wave5: Fix device cleanup order to prevent kernel panic
+>=20
+> =C2=A0drivers/media/platform/chips-media/wave5/wave5-vpu.c | 12 +++++++--=
+---
+> =C2=A01 file changed, 7 insertions(+), 5 deletions(-)
+
+--=-8wd1bXvUSgRz2Q/bde/e
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-Description: This is a digitally signed message part
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQTvDVKBFcTDwhoEbxLZQZRRKWBy9AUCaTB9MgAKCRDZQZRRKWBy
+9JBkAQDzO7dKDJwxGvAC1U1QbDRZm6qI4LvLIrK1/KgEtePhwgEAsJrrDM6poglz
+eO19J1mgcdm0bocG0rt9pSG6/Am+hgE=
+=+5SC
+-----END PGP SIGNATURE-----
+
+--=-8wd1bXvUSgRz2Q/bde/e--
