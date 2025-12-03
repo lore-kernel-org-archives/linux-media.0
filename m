@@ -1,26 +1,27 @@
 Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1FD45338F4D
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 05FFF338929
 	for <linux-media@vger.kernel.org>; Wed,  3 Dec 2025 15:53:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764777241; cv=none; b=HzN4CASQqFQCN9h0wFN3J0ok708A5ZeZSYWfq3KHQL0jVHRg0M3eX8FIYs+P/4PTlubaulfcNEIEf49cv0gbTFCGwu2tmaLEvt5rMAghHcwDWZJSOKD1SFF1VWOtwc80wAj7qBNt9dONSIvPEP6gDYBMh2wnVRtEig7hJ5Ja5sI=
+	t=1764777241; cv=none; b=UzvQEkT690AM4JTqqnzj+bYo9bA1P7jPvKe1kmIBVQ+yvWZ7x9hUugS35K9XQegn7vCAzqk/XPLnhRRc/HLLPVF1ohZiNjhk7ZYvx5CqYfk4pevDV7UlZf3oIQbI9NRRKO2hTjwpv4M2zUnym2rE7hXj2Sf8D1h1yTKlmHP0iI8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1764777241; c=relaxed/simple;
-	bh=/JWmeTmO5hiwoa9aiMgEtTQMM3FwFfPwkO3+4OKaRK4=;
+	bh=nKPE+BniHikaOszlaAzaMCcbSRBJixVgm76ov0nKXKY=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=UqnFnu+0SDN7YXcRoHrxQpBNagx3rTqxV7OMiK698fEcyNeAHXHU343UpJ73TnJXKsqmL5Ql0UyGyG+8qhfY9+PZVmXfA3F94sK4KccQuRCorO5GwO5sYXMaHqIQN3RI3w4OIZGP7tdn+1qZBHII1Z3DuJtgkRMxBB8q3SLqIJs=
+	 In-Reply-To:To:Cc; b=n6d3giw4eTol0MBC427iwPqA6xB1XYe4K4k3xSx2cmDtQRUm+GBx3NYB712VxqhtvY09lCM+CeB5sgIU+FG0GMKAg7kLVg0Y7DgPqrZMbClK4z8V07Bp1ptykXvOQftnESr6EdAO5dk9oU69lKVsmFOZNX4fkJr970jjoJ3IWLo=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
 Received: from ptz.office.stw.pengutronix.de ([2a0a:edc0:0:900:1d::77] helo=peter.mobile.pengutronix.de)
 	by metis.whiteo.stw.pengutronix.de with esmtp (Exim 4.92)
 	(envelope-from <s.pueschel@pengutronix.de>)
-	id 1vQpAf-0007dW-4Q; Wed, 03 Dec 2025 16:53:37 +0100
+	id 1vQpAd-0007dW-Se; Wed, 03 Dec 2025 16:53:35 +0100
 From: =?utf-8?q?Sven_P=C3=BCschel?= <s.pueschel@pengutronix.de>
-Date: Wed, 03 Dec 2025 16:52:44 +0100
-Subject: [PATCH v2 22/22] arm64: dts: rockchip: add rga3 dt nodes
+Date: Wed, 03 Dec 2025 16:52:35 +0100
+Subject: [PATCH v2 13/22] media: rockchip: rga: change offset to
+ dma_addresses
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
@@ -29,7 +30,7 @@ List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Message-Id: <20251203-spu-rga3-v2-22-989a67947f71@pengutronix.de>
+Message-Id: <20251203-spu-rga3-v2-13-989a67947f71@pengutronix.de>
 References: <20251203-spu-rga3-v2-0-989a67947f71@pengutronix.de>
 In-Reply-To: <20251203-spu-rga3-v2-0-989a67947f71@pengutronix.de>
 To: Jacob Chen <jacob-chen@iotwrt.com>, 
@@ -48,84 +49,287 @@ X-SA-Exim-Mail-From: s.pueschel@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
 X-PTX-Original-Recipient: linux-media@vger.kernel.org
 
-Add devicetree nodes for the RGA3 (Raster Graphics Acceleration 3)
-peripheral in the RK3588.
+Change the offset to dma_addresses, as the current naming is misleading.
+The offset naming comes from the fact that it references the offset in
+the mapped iommu address space. But from the hardware point of view this
+is an address, as also pointed out by the register naming
+(e.g. RGA_DST_Y_RGB_BASE_ADDR). Therefore also change the type to
+dma_addr_t, as with an external iommu driver this would also be the
+correct type.
 
-The existing rga node refers to the RGA2 peripheral. The RK3588
-contains one RGA2 core and two RGA3 cores. Both feature a similar
-functionality of scaling, cropping and rotating of up to two input
-images into one output image. Key differences of the RGA3 are:
-
-- supports 10bit YUV output formats
-- supports 8x8 tiles and FBCD as inputs and outputs
-- supports BT2020 color space conversion
-- max output resolution of (8192-64)x(8192-64)
-- MMU can map up to 32G DDR RAM
-- fully planar formats (3 planes) are not supported
-- max scale up/down factor of 8
+This change is a preparation for the RGA3 support, which uses an external
+iommu and therefore just gets an dma_addr_t for each buffer. The field
+renaming allows to reuse the existing fields of rga_vb_buffer to store
+these values.
 
 Signed-off-by: Sven Püschel <s.pueschel@pengutronix.de>
 ---
- arch/arm64/boot/dts/rockchip/rk3588-base.dtsi | 46 +++++++++++++++++++++++++++
- 1 file changed, 46 insertions(+)
+ drivers/media/platform/rockchip/rga/rga-buf.c |  12 +--
+ drivers/media/platform/rockchip/rga/rga-hw.c  | 105 +++++++++++++-------------
+ drivers/media/platform/rockchip/rga/rga.h     |  12 +--
+ 3 files changed, 64 insertions(+), 65 deletions(-)
 
-diff --git a/arch/arm64/boot/dts/rockchip/rk3588-base.dtsi b/arch/arm64/boot/dts/rockchip/rk3588-base.dtsi
-index e2500e31c434a..11bad1f41a864 100644
---- a/arch/arm64/boot/dts/rockchip/rk3588-base.dtsi
-+++ b/arch/arm64/boot/dts/rockchip/rk3588-base.dtsi
-@@ -1273,6 +1273,52 @@ rga: rga@fdb80000 {
- 		power-domains = <&power RK3588_PD_VDPU>;
+diff --git a/drivers/media/platform/rockchip/rga/rga-buf.c b/drivers/media/platform/rockchip/rga/rga-buf.c
+index 0c59a4d330888..8845e1f894f29 100644
+--- a/drivers/media/platform/rockchip/rga/rga-buf.c
++++ b/drivers/media/platform/rockchip/rga/rga-buf.c
+@@ -118,7 +118,7 @@ static int rga_buf_prepare(struct vb2_buffer *vb)
+ 	size_t curr_desc = 0;
+ 	int i;
+ 	const struct v4l2_format_info *info;
+-	unsigned int offsets[VIDEO_MAX_PLANES];
++	unsigned int dma_addrs[VIDEO_MAX_PLANES];
+ 
+ 	if (IS_ERR(f))
+ 		return PTR_ERR(f);
+@@ -142,18 +142,18 @@ static int rga_buf_prepare(struct vb2_buffer *vb)
+ 				 "Failed to map video buffer to RGA\n");
+ 			return n_desc;
+ 		}
+-		offsets[i] = curr_desc << PAGE_SHIFT;
++		dma_addrs[i] = curr_desc << PAGE_SHIFT;
+ 		curr_desc += n_desc;
+ 	}
+ 
+ 	/* Fill the remaining planes */
+ 	info = v4l2_format_info(f->fmt->fourcc);
+ 	for (i = info->mem_planes; i < info->comp_planes; i++)
+-		offsets[i] = get_plane_offset(f, info, i);
++		dma_addrs[i] = dma_addrs[0] + get_plane_offset(f, info, i);
+ 
+-	rbuf->offset.y_off = offsets[0];
+-	rbuf->offset.u_off = offsets[1];
+-	rbuf->offset.v_off = offsets[2];
++	rbuf->dma_addrs.y_addr = dma_addrs[0];
++	rbuf->dma_addrs.u_addr = dma_addrs[1];
++	rbuf->dma_addrs.v_addr = dma_addrs[2];
+ 
+ 	return 0;
+ }
+diff --git a/drivers/media/platform/rockchip/rga/rga-hw.c b/drivers/media/platform/rockchip/rga/rga-hw.c
+index 8953960d33bc5..fe6f518aedd4e 100644
+--- a/drivers/media/platform/rockchip/rga/rga-hw.c
++++ b/drivers/media/platform/rockchip/rga/rga-hw.c
+@@ -16,11 +16,11 @@ enum e_rga_start_pos {
+ 	RB = 3,
+ };
+ 
+-struct rga_corners_addr_offset {
+-	struct rga_addr_offset left_top;
+-	struct rga_addr_offset right_top;
+-	struct rga_addr_offset left_bottom;
+-	struct rga_addr_offset right_bottom;
++struct rga_corners_addrs {
++	struct rga_addrs left_top;
++	struct rga_addrs right_top;
++	struct rga_addrs left_bottom;
++	struct rga_addrs right_bottom;
+ };
+ 
+ static unsigned int rga_get_scaling(unsigned int src, unsigned int dst)
+@@ -36,48 +36,47 @@ static unsigned int rga_get_scaling(unsigned int src, unsigned int dst)
+ 	return (src > dst) ? ((dst << 16) / src) : ((src << 16) / dst);
+ }
+ 
+-static struct rga_corners_addr_offset
+-rga_get_addr_offset(struct rga_frame *frm, struct rga_addr_offset *offset,
+-		    unsigned int x, unsigned int y, unsigned int w, unsigned int h)
++static struct rga_corners_addrs
++rga_get_corner_addrs(struct rga_frame *frm, struct rga_addrs *addrs,
++		     unsigned int x, unsigned int y, unsigned int w, unsigned int h)
+ {
+-	struct rga_corners_addr_offset offsets;
+-	struct rga_addr_offset *lt, *lb, *rt, *rb;
++	struct rga_corners_addrs corner_addrs;
++	struct rga_addrs *lt, *lb, *rt, *rb;
+ 	unsigned int x_div = 0,
+ 		     y_div = 0, uv_stride = 0, pixel_width = 0;
+ 
+-	lt = &offsets.left_top;
+-	lb = &offsets.left_bottom;
+-	rt = &offsets.right_top;
+-	rb = &offsets.right_bottom;
++	lt = &corner_addrs.left_top;
++	lb = &corner_addrs.left_bottom;
++	rt = &corner_addrs.right_top;
++	rb = &corner_addrs.right_bottom;
+ 
+ 	x_div = frm->fmt->x_div;
+ 	y_div = frm->fmt->y_div;
+ 	uv_stride = frm->stride / x_div;
+ 	pixel_width = frm->stride / frm->pix.width;
+ 
+-	lt->y_off = offset->y_off + y * frm->stride + x * pixel_width;
+-	lt->u_off = offset->u_off + (y / y_div) * uv_stride + x / x_div;
+-	lt->v_off = offset->v_off + (y / y_div) * uv_stride + x / x_div;
++	lt->y_addr = addrs->y_addr + y * frm->stride + x * pixel_width;
++	lt->u_addr = addrs->u_addr + (y / y_div) * uv_stride + x / x_div;
++	lt->v_addr = addrs->v_addr + (y / y_div) * uv_stride + x / x_div;
+ 
+-	lb->y_off = lt->y_off + (h - 1) * frm->stride;
+-	lb->u_off = lt->u_off + (h / y_div - 1) * uv_stride;
+-	lb->v_off = lt->v_off + (h / y_div - 1) * uv_stride;
++	lb->y_addr = lt->y_addr + (h - 1) * frm->stride;
++	lb->u_addr = lt->u_addr + (h / y_div - 1) * uv_stride;
++	lb->v_addr = lt->v_addr + (h / y_div - 1) * uv_stride;
+ 
+-	rt->y_off = lt->y_off + (w - 1) * pixel_width;
+-	rt->u_off = lt->u_off + w / x_div - 1;
+-	rt->v_off = lt->v_off + w / x_div - 1;
++	rt->y_addr = lt->y_addr + (w - 1) * pixel_width;
++	rt->u_addr = lt->u_addr + w / x_div - 1;
++	rt->v_addr = lt->v_addr + w / x_div - 1;
+ 
+-	rb->y_off = lb->y_off + (w - 1) * pixel_width;
+-	rb->u_off = lb->u_off + w / x_div - 1;
+-	rb->v_off = lb->v_off + w / x_div - 1;
++	rb->y_addr = lb->y_addr + (w - 1) * pixel_width;
++	rb->u_addr = lb->u_addr + w / x_div - 1;
++	rb->v_addr = lb->v_addr + w / x_div - 1;
+ 
+-	return offsets;
++	return corner_addrs;
+ }
+ 
+-static struct rga_addr_offset *rga_lookup_draw_pos(struct
+-		rga_corners_addr_offset
+-		* offsets, u32 rotate_mode,
+-		u32 mirr_mode)
++static struct rga_addrs *rga_lookup_draw_pos(struct rga_corners_addrs *corner_addrs,
++					     u32 rotate_mode,
++					     u32 mirr_mode)
+ {
+ 	static enum e_rga_start_pos rot_mir_point_matrix[4][4] = {
+ 		{
+@@ -94,18 +93,18 @@ static struct rga_addr_offset *rga_lookup_draw_pos(struct
+ 		},
  	};
  
-+	rga3_core0: rga@fdb60000 {
-+		compatible = "rockchip,rk3588-rga3";
-+		reg = <0x0 0xfdb60000 0x0 0x200>;
-+		interrupts = <GIC_SPI 114 IRQ_TYPE_LEVEL_HIGH 0>;
-+		interrupt-names = "rga3_core0_irq";
-+		clocks = <&cru ACLK_RGA3_0>, <&cru HCLK_RGA3_0>, <&cru CLK_RGA3_0_CORE>;
-+		clock-names = "aclk", "hclk", "sclk";
-+		resets = <&cru SRST_RGA3_0_CORE>, <&cru SRST_A_RGA3_0>, <&cru SRST_H_RGA3_0>;
-+		reset-names = "core", "axi", "ahb";
-+		power-domains = <&power RK3588_PD_RGA30>;
-+		iommus = <&rga3_0_mmu>;
-+	};
-+
-+	rga3_0_mmu: iommu@fdb60f00 {
-+		compatible = "rockchip,rk3588-iommu", "rockchip,rk3568-iommu";
-+		reg = <0x0 0xfdb60f00 0x0 0x100>;
-+		interrupts = <GIC_SPI 114 IRQ_TYPE_LEVEL_HIGH 0>;
-+		clocks = <&cru ACLK_RGA3_0>, <&cru HCLK_RGA3_0>;
-+		clock-names = "aclk", "iface";
-+		#iommu-cells = <0>;
-+		power-domains = <&power RK3588_PD_RGA30>;
-+	};
-+
-+	rga3_core1: rga@fdb70000 {
-+		compatible = "rockchip,rk3588-rga3";
-+		reg = <0x0 0xfdb70000 0x0 0x200>;
-+		interrupts = <GIC_SPI 115 IRQ_TYPE_LEVEL_HIGH 0>;
-+		interrupt-names = "rga3_core1_irq";
-+		clocks = <&cru ACLK_RGA3_1>, <&cru HCLK_RGA3_1>, <&cru CLK_RGA3_1_CORE>;
-+		clock-names = "aclk", "hclk", "sclk";
-+		resets = <&cru SRST_RGA3_1_CORE>, <&cru SRST_A_RGA3_1>, <&cru SRST_H_RGA3_1>;
-+		reset-names = "core", "axi", "ahb";
-+		power-domains = <&power RK3588_PD_RGA31>;
-+		iommus = <&rga3_1_mmu>;
-+	};
-+
-+	rga3_1_mmu: iommu@fdb70f00 {
-+		compatible = "rockchip,rk3588-iommu", "rockchip,rk3568-iommu";
-+		reg = <0x0 0xfdb70f00 0x0 0x100>;
-+		interrupts = <GIC_SPI 115 IRQ_TYPE_LEVEL_HIGH 0>;
-+		clocks = <&cru ACLK_RGA3_1>, <&cru HCLK_RGA3_1>;
-+		clock-names = "aclk", "iface";
-+		#iommu-cells = <0>;
-+		power-domains = <&power RK3588_PD_RGA31>;
-+	};
-+
- 	vepu121_0: video-codec@fdba0000 {
- 		compatible = "rockchip,rk3588-vepu121";
- 		reg = <0x0 0xfdba0000 0x0 0x800>;
+-	if (!offsets)
++	if (!corner_addrs)
+ 		return NULL;
+ 
+ 	switch (rot_mir_point_matrix[rotate_mode][mirr_mode]) {
+ 	case LT:
+-		return &offsets->left_top;
++		return &corner_addrs->left_top;
+ 	case LB:
+-		return &offsets->left_bottom;
++		return &corner_addrs->left_bottom;
+ 	case RT:
+-		return &offsets->right_top;
++		return &corner_addrs->right_top;
+ 	case RB:
+-		return &offsets->right_bottom;
++		return &corner_addrs->right_bottom;
+ 	}
+ 
+ 	return NULL;
+@@ -307,9 +306,9 @@ static void rga_cmd_set_trans_info(struct rga_ctx *ctx)
+ }
+ 
+ static void rga_cmd_set_src_info(struct rga_ctx *ctx,
+-				 struct rga_addr_offset *offset)
++				 struct rga_addrs *addrs)
+ {
+-	struct rga_corners_addr_offset src_offsets;
++	struct rga_corners_addrs src_corner_addrs;
+ 	u32 *dest = ctx->cmdbuf_virt;
+ 	unsigned int src_h, src_w, src_x, src_y;
+ 
+@@ -321,22 +320,22 @@ static void rga_cmd_set_src_info(struct rga_ctx *ctx,
+ 	/*
+ 	 * Calculate the source framebuffer base address with offset pixel.
+ 	 */
+-	src_offsets = rga_get_addr_offset(&ctx->in, offset,
+-					  src_x, src_y, src_w, src_h);
++	src_corner_addrs = rga_get_corner_addrs(&ctx->in, addrs,
++						src_x, src_y, src_w, src_h);
+ 
+ 	dest[(RGA_SRC_Y_RGB_BASE_ADDR - RGA_MODE_BASE_REG) >> 2] =
+-		src_offsets.left_top.y_off;
++		src_corner_addrs.left_top.y_addr;
+ 	dest[(RGA_SRC_CB_BASE_ADDR - RGA_MODE_BASE_REG) >> 2] =
+-		src_offsets.left_top.u_off;
++		src_corner_addrs.left_top.u_addr;
+ 	dest[(RGA_SRC_CR_BASE_ADDR - RGA_MODE_BASE_REG) >> 2] =
+-		src_offsets.left_top.v_off;
++		src_corner_addrs.left_top.v_addr;
+ }
+ 
+ static void rga_cmd_set_dst_info(struct rga_ctx *ctx,
+-				 struct rga_addr_offset *offset)
++				 struct rga_addrs *addrs)
+ {
+-	struct rga_addr_offset *dst_offset;
+-	struct rga_corners_addr_offset offsets;
++	struct rga_addrs *dst_addrs;
++	struct rga_corners_addrs corner_addrs;
+ 	u32 *dest = ctx->cmdbuf_virt;
+ 	unsigned int dst_h, dst_w, dst_x, dst_y;
+ 	unsigned int mir_mode = 0;
+@@ -370,15 +369,15 @@ static void rga_cmd_set_dst_info(struct rga_ctx *ctx,
+ 	/*
+ 	 * Configure the dest framebuffer base address with pixel offset.
+ 	 */
+-	offsets = rga_get_addr_offset(&ctx->out, offset, dst_x, dst_y, dst_w, dst_h);
+-	dst_offset = rga_lookup_draw_pos(&offsets, rot_mode, mir_mode);
++	corner_addrs = rga_get_corner_addrs(&ctx->out, addrs, dst_x, dst_y, dst_w, dst_h);
++	dst_addrs = rga_lookup_draw_pos(&corner_addrs, rot_mode, mir_mode);
+ 
+ 	dest[(RGA_DST_Y_RGB_BASE_ADDR - RGA_MODE_BASE_REG) >> 2] =
+-		dst_offset->y_off;
++		dst_addrs->y_addr;
+ 	dest[(RGA_DST_CB_BASE_ADDR - RGA_MODE_BASE_REG) >> 2] =
+-		dst_offset->u_off;
++		dst_addrs->u_addr;
+ 	dest[(RGA_DST_CR_BASE_ADDR - RGA_MODE_BASE_REG) >> 2] =
+-		dst_offset->v_off;
++		dst_addrs->v_addr;
+ }
+ 
+ static void rga_cmd_set_mode(struct rga_ctx *ctx)
+@@ -417,8 +416,8 @@ static void rga_cmd_set(struct rga_ctx *ctx,
+ 
+ 	rga_cmd_set_dst_addr(ctx, dst->dma_desc_pa);
+ 
+-	rga_cmd_set_src_info(ctx, &src->offset);
+-	rga_cmd_set_dst_info(ctx, &dst->offset);
++	rga_cmd_set_src_info(ctx, &src->dma_addrs);
++	rga_cmd_set_dst_info(ctx, &dst->dma_addrs);
+ 
+ 	rga_write(rga, RGA_CMD_BASE, ctx->cmdbuf_phy);
+ 
+diff --git a/drivers/media/platform/rockchip/rga/rga.h b/drivers/media/platform/rockchip/rga/rga.h
+index ee50f7f3ed601..772f7dff9a8e5 100644
+--- a/drivers/media/platform/rockchip/rga/rga.h
++++ b/drivers/media/platform/rockchip/rga/rga.h
+@@ -98,10 +98,10 @@ struct rockchip_rga {
+ 	const struct rga_hw *hw;
+ };
+ 
+-struct rga_addr_offset {
+-	unsigned int y_off;
+-	unsigned int u_off;
+-	unsigned int v_off;
++struct rga_addrs {
++	dma_addr_t y_addr;
++	dma_addr_t u_addr;
++	dma_addr_t v_addr;
+ };
+ 
+ struct rga_vb_buffer {
+@@ -113,8 +113,8 @@ struct rga_vb_buffer {
+ 	dma_addr_t dma_desc_pa;
+ 	size_t n_desc;
+ 
+-	/* Plane offsets of this buffer into the mapping */
+-	struct rga_addr_offset offset;
++	/* Plane DMA addresses after the MMU mapping of the buffer */
++	struct rga_addrs dma_addrs;
+ };
+ 
+ static inline struct rga_vb_buffer *vb_to_rga(struct vb2_v4l2_buffer *vb)
 
 -- 
 2.52.0
