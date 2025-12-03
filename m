@@ -1,26 +1,26 @@
 Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EBDAC3396E5
-	for <linux-media@vger.kernel.org>; Wed,  3 Dec 2025 15:53:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1FD45338F4D
+	for <linux-media@vger.kernel.org>; Wed,  3 Dec 2025 15:53:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764777241; cv=none; b=AjEzb2OPffX5LwFxXKunoZrA5wWeUPeNVzd/DeIvApNrFodj5sXnNouSzQazOG24UGu5qBteeXgXZahSAwolIm+CH+MD8dIH9SWo29EdKKytguxzA6RlNW5dufip/J5wdS98vWYoB1J0eoydHrpsrHv1L7M4YME0Q7vTsaQNFDA=
+	t=1764777241; cv=none; b=HzN4CASQqFQCN9h0wFN3J0ok708A5ZeZSYWfq3KHQL0jVHRg0M3eX8FIYs+P/4PTlubaulfcNEIEf49cv0gbTFCGwu2tmaLEvt5rMAghHcwDWZJSOKD1SFF1VWOtwc80wAj7qBNt9dONSIvPEP6gDYBMh2wnVRtEig7hJ5Ja5sI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1764777241; c=relaxed/simple;
-	bh=rRA5vK2kyldTpiHys/maiuTnUpy5Q8j0TDl7dGgM8b8=;
+	bh=/JWmeTmO5hiwoa9aiMgEtTQMM3FwFfPwkO3+4OKaRK4=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=sFYcsird7VhoxyXppA1LM95yC6gT5/gkLpBekrnlJAvWrmN5oXskENxSSca4Q+edSaauoKCWiecGi+4lNb2ZZj/iS0t2APxFmvZ0DcHne/q3vN7CY8UbeWirIYrnM6PLZiw4YLlrf4BzYd/My/Zs/Ha4pijQVXxBVSxPGmar6CY=
+	 In-Reply-To:To:Cc; b=UqnFnu+0SDN7YXcRoHrxQpBNagx3rTqxV7OMiK698fEcyNeAHXHU343UpJ73TnJXKsqmL5Ql0UyGyG+8qhfY9+PZVmXfA3F94sK4KccQuRCorO5GwO5sYXMaHqIQN3RI3w4OIZGP7tdn+1qZBHII1Z3DuJtgkRMxBB8q3SLqIJs=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
 Received: from ptz.office.stw.pengutronix.de ([2a0a:edc0:0:900:1d::77] helo=peter.mobile.pengutronix.de)
 	by metis.whiteo.stw.pengutronix.de with esmtp (Exim 4.92)
 	(envelope-from <s.pueschel@pengutronix.de>)
-	id 1vQpAe-0007dW-OX; Wed, 03 Dec 2025 16:53:36 +0100
+	id 1vQpAf-0007dW-4Q; Wed, 03 Dec 2025 16:53:37 +0100
 From: =?utf-8?q?Sven_P=C3=BCschel?= <s.pueschel@pengutronix.de>
-Date: Wed, 03 Dec 2025 16:52:41 +0100
-Subject: [PATCH v2 19/22] media: rockchip: rga: add feature flags
+Date: Wed, 03 Dec 2025 16:52:44 +0100
+Subject: [PATCH v2 22/22] arm64: dts: rockchip: add rga3 dt nodes
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
@@ -29,7 +29,7 @@ List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Message-Id: <20251203-spu-rga3-v2-19-989a67947f71@pengutronix.de>
+Message-Id: <20251203-spu-rga3-v2-22-989a67947f71@pengutronix.de>
 References: <20251203-spu-rga3-v2-0-989a67947f71@pengutronix.de>
 In-Reply-To: <20251203-spu-rga3-v2-0-989a67947f71@pengutronix.de>
 To: Jacob Chen <jacob-chen@iotwrt.com>, 
@@ -48,109 +48,84 @@ X-SA-Exim-Mail-From: s.pueschel@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
 X-PTX-Original-Recipient: linux-media@vger.kernel.org
 
-In preparation to the RGA3 addition add feature flags, which can limit
-the exposed feature set of the video device, like rotating or selection
-support. This is necessary as the RGA3 doesn't initially implement the
-full feature set currently exposed by the driver.
+Add devicetree nodes for the RGA3 (Raster Graphics Acceleration 3)
+peripheral in the RK3588.
+
+The existing rga node refers to the RGA2 peripheral. The RK3588
+contains one RGA2 core and two RGA3 cores. Both feature a similar
+functionality of scaling, cropping and rotating of up to two input
+images into one output image. Key differences of the RGA3 are:
+
+- supports 10bit YUV output formats
+- supports 8x8 tiles and FBCD as inputs and outputs
+- supports BT2020 color space conversion
+- max output resolution of (8192-64)x(8192-64)
+- MMU can map up to 32G DDR RAM
+- fully planar formats (3 planes) are not supported
+- max scale up/down factor of 8
 
 Signed-off-by: Sven Püschel <s.pueschel@pengutronix.de>
 ---
- drivers/media/platform/rockchip/rga/rga-hw.c |  4 ++++
- drivers/media/platform/rockchip/rga/rga.c    | 23 +++++++++++++++--------
- drivers/media/platform/rockchip/rga/rga.h    |  7 +++++++
- 3 files changed, 26 insertions(+), 8 deletions(-)
+ arch/arm64/boot/dts/rockchip/rk3588-base.dtsi | 46 +++++++++++++++++++++++++++
+ 1 file changed, 46 insertions(+)
 
-diff --git a/drivers/media/platform/rockchip/rga/rga-hw.c b/drivers/media/platform/rockchip/rga/rga-hw.c
-index a868a34a1452e..0d1cf911af0d5 100644
---- a/drivers/media/platform/rockchip/rga/rga-hw.c
-+++ b/drivers/media/platform/rockchip/rga/rga-hw.c
-@@ -658,6 +658,10 @@ const struct rga_hw rga2_hw = {
- 	.max_height = MAX_HEIGHT,
- 	.max_scaling_factor = MAX_SCALING_FACTOR,
- 	.stride_alignment = 4,
-+	.features = RGA_FEATURE_FLIP
-+		  | RGA_FEATURE_ROTATE
-+		  | RGA_FEATURE_BG_COLOR
-+		  | RGA_FEATURE_SELECTION,
+diff --git a/arch/arm64/boot/dts/rockchip/rk3588-base.dtsi b/arch/arm64/boot/dts/rockchip/rk3588-base.dtsi
+index e2500e31c434a..11bad1f41a864 100644
+--- a/arch/arm64/boot/dts/rockchip/rk3588-base.dtsi
++++ b/arch/arm64/boot/dts/rockchip/rk3588-base.dtsi
+@@ -1273,6 +1273,52 @@ rga: rga@fdb80000 {
+ 		power-domains = <&power RK3588_PD_VDPU>;
+ 	};
  
- 	.setup_cmdbuf = rga_hw_setup_cmdbuf,
- 	.start = rga_hw_start,
-diff --git a/drivers/media/platform/rockchip/rga/rga.c b/drivers/media/platform/rockchip/rga/rga.c
-index c991cc64b4b7f..3958e71b8987d 100644
---- a/drivers/media/platform/rockchip/rga/rga.c
-+++ b/drivers/media/platform/rockchip/rga/rga.c
-@@ -162,17 +162,21 @@ static int rga_setup_ctrls(struct rga_ctx *ctx)
- 
- 	v4l2_ctrl_handler_init(&ctx->ctrl_handler, 4);
- 
--	v4l2_ctrl_new_std(&ctx->ctrl_handler, &rga_ctrl_ops,
--			  V4L2_CID_HFLIP, 0, 1, 1, 0);
-+	if (rga->hw->features & RGA_FEATURE_FLIP) {
-+		v4l2_ctrl_new_std(&ctx->ctrl_handler, &rga_ctrl_ops,
-+				  V4L2_CID_HFLIP, 0, 1, 1, 0);
- 
--	v4l2_ctrl_new_std(&ctx->ctrl_handler, &rga_ctrl_ops,
--			  V4L2_CID_VFLIP, 0, 1, 1, 0);
-+		v4l2_ctrl_new_std(&ctx->ctrl_handler, &rga_ctrl_ops,
-+				  V4L2_CID_VFLIP, 0, 1, 1, 0);
-+	}
- 
--	v4l2_ctrl_new_std(&ctx->ctrl_handler, &rga_ctrl_ops,
--			  V4L2_CID_ROTATE, 0, 270, 90, 0);
-+	if (rga->hw->features & RGA_FEATURE_ROTATE)
-+		v4l2_ctrl_new_std(&ctx->ctrl_handler, &rga_ctrl_ops,
-+				  V4L2_CID_ROTATE, 0, 270, 90, 0);
- 
--	v4l2_ctrl_new_std(&ctx->ctrl_handler, &rga_ctrl_ops,
--			  V4L2_CID_BG_COLOR, 0, 0xffffffff, 1, 0);
-+	if (rga->hw->features & RGA_FEATURE_BG_COLOR)
-+		v4l2_ctrl_new_std(&ctx->ctrl_handler, &rga_ctrl_ops,
-+				  V4L2_CID_BG_COLOR, 0, 0xffffffff, 1, 0);
- 
- 	if (ctx->ctrl_handler.error) {
- 		int err = ctx->ctrl_handler.error;
-@@ -489,6 +493,9 @@ static int vidioc_s_selection(struct file *file, void *priv,
- 	struct rga_frame *f;
- 	int ret = 0;
- 
-+	if (!(rga->hw->features & RGA_FEATURE_SELECTION))
-+		return -EINVAL;
++	rga3_core0: rga@fdb60000 {
++		compatible = "rockchip,rk3588-rga3";
++		reg = <0x0 0xfdb60000 0x0 0x200>;
++		interrupts = <GIC_SPI 114 IRQ_TYPE_LEVEL_HIGH 0>;
++		interrupt-names = "rga3_core0_irq";
++		clocks = <&cru ACLK_RGA3_0>, <&cru HCLK_RGA3_0>, <&cru CLK_RGA3_0_CORE>;
++		clock-names = "aclk", "hclk", "sclk";
++		resets = <&cru SRST_RGA3_0_CORE>, <&cru SRST_A_RGA3_0>, <&cru SRST_H_RGA3_0>;
++		reset-names = "core", "axi", "ahb";
++		power-domains = <&power RK3588_PD_RGA30>;
++		iommus = <&rga3_0_mmu>;
++	};
 +
- 	f = rga_get_frame(ctx, s->type);
- 	if (IS_ERR(f))
- 		return PTR_ERR(f);
-diff --git a/drivers/media/platform/rockchip/rga/rga.h b/drivers/media/platform/rockchip/rga/rga.h
-index 980f70f842317..b9c75b5fda4dc 100644
---- a/drivers/media/platform/rockchip/rga/rga.h
-+++ b/drivers/media/platform/rockchip/rga/rga.h
-@@ -6,6 +6,7 @@
- #ifndef __RGA_H__
- #define __RGA_H__
- 
-+#include <linux/bits.h>
- #include <linux/clk.h>
- #include <linux/platform_device.h>
- #include <media/videobuf2-v4l2.h>
-@@ -132,6 +133,11 @@ static inline void rga_mod(struct rockchip_rga *rga, u32 reg, u32 val, u32 mask)
- 	rga_write(rga, reg, temp);
- };
- 
-+#define RGA_FEATURE_FLIP	BIT(0)
-+#define RGA_FEATURE_ROTATE	BIT(1)
-+#define RGA_FEATURE_BG_COLOR	BIT(2)
-+#define RGA_FEATURE_SELECTION	BIT(3)
++	rga3_0_mmu: iommu@fdb60f00 {
++		compatible = "rockchip,rk3588-iommu", "rockchip,rk3568-iommu";
++		reg = <0x0 0xfdb60f00 0x0 0x100>;
++		interrupts = <GIC_SPI 114 IRQ_TYPE_LEVEL_HIGH 0>;
++		clocks = <&cru ACLK_RGA3_0>, <&cru HCLK_RGA3_0>;
++		clock-names = "aclk", "iface";
++		#iommu-cells = <0>;
++		power-domains = <&power RK3588_PD_RGA30>;
++	};
 +
- struct rga_hw {
- 	const char *card_type;
- 	bool has_internal_iommu;
-@@ -140,6 +146,7 @@ struct rga_hw {
- 	u32 max_width, max_height;
- 	u8 max_scaling_factor;
- 	u8 stride_alignment;
-+	u8 features;
- 
- 	void (*setup_cmdbuf)(struct rga_ctx *ctx);
- 	void (*start)(struct rockchip_rga *rga,
++	rga3_core1: rga@fdb70000 {
++		compatible = "rockchip,rk3588-rga3";
++		reg = <0x0 0xfdb70000 0x0 0x200>;
++		interrupts = <GIC_SPI 115 IRQ_TYPE_LEVEL_HIGH 0>;
++		interrupt-names = "rga3_core1_irq";
++		clocks = <&cru ACLK_RGA3_1>, <&cru HCLK_RGA3_1>, <&cru CLK_RGA3_1_CORE>;
++		clock-names = "aclk", "hclk", "sclk";
++		resets = <&cru SRST_RGA3_1_CORE>, <&cru SRST_A_RGA3_1>, <&cru SRST_H_RGA3_1>;
++		reset-names = "core", "axi", "ahb";
++		power-domains = <&power RK3588_PD_RGA31>;
++		iommus = <&rga3_1_mmu>;
++	};
++
++	rga3_1_mmu: iommu@fdb70f00 {
++		compatible = "rockchip,rk3588-iommu", "rockchip,rk3568-iommu";
++		reg = <0x0 0xfdb70f00 0x0 0x100>;
++		interrupts = <GIC_SPI 115 IRQ_TYPE_LEVEL_HIGH 0>;
++		clocks = <&cru ACLK_RGA3_1>, <&cru HCLK_RGA3_1>;
++		clock-names = "aclk", "iface";
++		#iommu-cells = <0>;
++		power-domains = <&power RK3588_PD_RGA31>;
++	};
++
+ 	vepu121_0: video-codec@fdba0000 {
+ 		compatible = "rockchip,rk3588-vepu121";
+ 		reg = <0x0 0xfdba0000 0x0 0x800>;
 
 -- 
 2.52.0
