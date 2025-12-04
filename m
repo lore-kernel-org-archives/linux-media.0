@@ -1,138 +1,183 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.10])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f202.google.com (mail-pl1-f202.google.com [209.85.214.202])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 62C022566E9;
-	Wed,  3 Dec 2025 21:46:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.10
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 23328EAE7
+	for <linux-media@vger.kernel.org>; Thu,  4 Dec 2025 00:05:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.202
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764798401; cv=none; b=nnp9TtA5X6B3Usr5uKu4HTd31PbaIshWfOitYO9TfB6mVeRXXHgi7ZjBmEaaEeIBXWtO5XALY5CiqKTltL5VFXETQZwY7O2duErGuVylPoJX8JGs7Wc6KH1Zh2gEJvI13/klsG3VNKE4dYw96LIs8YeWO6xMrw7ItDg3TaPREWE=
+	t=1764806724; cv=none; b=AQ4X30nZHjm7dIYbNGBlU4EbIKo/CihkBWoWLIn0a/kZiZruZ7kDjEXTwmlneqDno5nhwqo1NK+/9dJMUYvH7fHzObRJPxGtCwr2crtCvt4nTJmVjvSpyyfyZ59dfqeBGDCuSThfPTtFBOqlCMuw+Gra4VTCJCsilsyD1NOeTnM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764798401; c=relaxed/simple;
-	bh=rKF7qiTP7ByQAwRp02xxNApztqUA1IF+VqvGoxJ0Z88=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=MdLRh5bWOau00lQGzvtncL51PcgJnPwp6jp9PHMeWN3KzBpGAnbgmmJMWxTeuNdfTbNprYdZk6fCj8hnilbQ5Jvg9KCLiLiyFlovKzAGjVBLDYvUmS6hYjBdzwSHRU5ULwYAVQHlgEnp1IL4i8J6w961fla/PrtU45WTMSh0Beg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=gn+C2vnh; arc=none smtp.client-ip=192.198.163.10
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1764806724; c=relaxed/simple;
+	bh=Ng2mAL+3jbbmbK2kdWqTVXksLagXb5kbG5DAQ3Lamwo=;
+	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=alfOraI6iIgkqx9ESrM0o9JLdyEfJWB5daCLLrX8RND2IgDfrNFtoIitq30KI6QML72534TCGpUHdUuVIJkcgBsEdJoTZ6WZvBKlgcrxeY63617ukNRDLn99uPwQ3srsyOPxAzeJq/Da7WRshgtyIPNIq7ojhzHc6MVfGzHFYdQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--tjmercier.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=fJrWGvgF; arc=none smtp.client-ip=209.85.214.202
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--tjmercier.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="gn+C2vnh"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1764798399; x=1796334399;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=rKF7qiTP7ByQAwRp02xxNApztqUA1IF+VqvGoxJ0Z88=;
-  b=gn+C2vnhSpkvlPDPiQFaZJkCp6qKgfHYCHjbtKYIbquEs1Ft0/b5p65q
-   50QTfO1ajgbddWo4I0M8lNIdDmGtUkryifChk2T/Y5HscDtIwUR1qKDEp
-   kZL0ZICyWusjH1GeC+YEUB9qLjAQZ5Xpz6LN8VbYdXsYLCWIDOEvd1G+e
-   NSLMwNeAegXT+Tc0ut+zv9viyHqnYTCYinhmW4eNmoWtiZHQAP0wZUI5u
-   AQIPLwj7OmI1NbAJz5YEVksxdNotfEBwIBOMsqYARfnYRu2XqM1UjMGv2
-   UAnx7OH20b7dvaCoUQ3aB2ezrlpP8utsqKgb+x4bg762HaXdGOSALcqIm
-   g==;
-X-CSE-ConnectionGUID: 7SCOP0djSjyWxqJXjr3c9g==
-X-CSE-MsgGUID: WtXsyiKZTAKRLtE1zKfL/Q==
-X-IronPort-AV: E=McAfee;i="6800,10657,11631"; a="78159435"
-X-IronPort-AV: E=Sophos;i="6.20,247,1758610800"; 
-   d="scan'208";a="78159435"
-Received: from orviesa005.jf.intel.com ([10.64.159.145])
-  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Dec 2025 13:46:39 -0800
-X-CSE-ConnectionGUID: YJX5cxpaRFGTIdQ9q8I2tA==
-X-CSE-MsgGUID: r2+ADqXMQiy4dStaUFcV5w==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.20,247,1758610800"; 
-   d="scan'208";a="199928360"
-Received: from lkp-server01.sh.intel.com (HELO 4664bbef4914) ([10.239.97.150])
-  by orviesa005.jf.intel.com with ESMTP; 03 Dec 2025 13:46:34 -0800
-Received: from kbuild by 4664bbef4914 with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1vQugC-00000000DBR-0dEO;
-	Wed, 03 Dec 2025 21:46:32 +0000
-Date: Thu, 4 Dec 2025 05:45:39 +0800
-From: kernel test robot <lkp@intel.com>
-To: Guoniu Zhou <guoniu.zhou@oss.nxp.com>,
-	Mauro Carvalho Chehab <mchehab@kernel.org>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>, Shawn Guo <shawnguo@kernel.org>,
-	Sascha Hauer <s.hauer@pengutronix.de>,
-	Pengutronix Kernel Team <kernel@pengutronix.de>,
-	Fabio Estevam <festevam@gmail.com>,
-	Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-	Frank Li <frank.li@nxp.com>
-Cc: oe-kbuild-all@lists.linux.dev, linux-media@vger.kernel.org,
-	imx@lists.linux.dev, devicetree@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-	Guoniu Zhou <guoniu.zhou@nxp.com>
-Subject: Re: [PATCH 2/2] media: nxp: Add i.MX9 CSI pixel formatter v4l2 driver
-Message-ID: <202512040513.mvgeYlO0-lkp@intel.com>
-References: <20251203-csi_formatter-v1-2-eb9e1147b49e@nxp.com>
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="fJrWGvgF"
+Received: by mail-pl1-f202.google.com with SMTP id d9443c01a7336-29845b18d1aso5604015ad.1
+        for <linux-media@vger.kernel.org>; Wed, 03 Dec 2025 16:05:20 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1764806720; x=1765411520; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=tG99E2G74NBlCqMFEbuJyuFU682bdGjo6IlyusySJck=;
+        b=fJrWGvgFndxNAVZtqHcyVqORi0lZgFmg2RoMxlGwmkVMrZQdthVaYR1hFC6Ly5dzQP
+         /O334Uc9hzQbXTaBJBDQpxUV8fClAuQyV+mSvhXft49O5xvrscyOD0tIVtaeER892oz/
+         bCrMwusGyc1YxMFNHWfEpA9kvAeVWAG+8WlcWq+/ksmsqkeTuAVDfFQDRKFGmuzsJBvL
+         e9UvbzJE/bDfImjPR7c25dS1Wf0t60WB+zUp053+8sdPqxIeXAnUJRwMDmfuuPRk9kh4
+         GnB/l58IokpUZO1K7nsuloIUNbGVR2Ys4IGebn4jXvNZI9iXbbkOpBftOM93oV8woYmW
+         ZBfA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1764806720; x=1765411520;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=tG99E2G74NBlCqMFEbuJyuFU682bdGjo6IlyusySJck=;
+        b=ZH4WtQk/3HP4h5jsnFjPjgk3FXKWzi+MUEXtRbAqSn/YalqIYBd2ueIv8DpGJr+gvI
+         kJuE9U8IGZRDnP7ligCgn/3H9qcxUfIcWpPjSFzrFvIxortMQLVEW7bVsu+NJehoelOk
+         3+OK8vXoyVYmrSWZgaFBxPU26rqN8pvE8hF1Iuzn+qZut79JjSUYp8um0CdqyDhdHaAK
+         pwkHxs/3zudAuf6rrT7OQwP9FEaXFmaaEk/CmMU5yNq7l5uH7+IrK0Ly000m3EDye53x
+         fIrCZjHbGtOCHvUvyR23kGTvTouvLTTiIzy+vpZG+yI5JqqDDlPFvbMxAGmvUD0/uETa
+         w3XQ==
+X-Forwarded-Encrypted: i=1; AJvYcCWQurAKwEEL4Hydc0Jmdr9XCYl25ZR9kEOMiSahraWjfB1bxBS31e9PpApM6ohljukEO30xtWHB6mWwbQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0YylewmX2pa3zCOe1jdOYTdBxbmShnY7IXXm3oH4hdMbD4xevY0D
+	ZM7tDKei232TtlAsYCpI8/XjerYB4kBi0L3GYofdakmCnNwosALNFrduDX5KWc6ujrVB5QYJi0A
+	tots/PKgT4rEL9MZGAQ==
+X-Google-Smtp-Source: AGHT+IGeC714EhBu/T29Z7FIKq0MljnotPa6j758d1YJabmaYRlvO/lv9fc69gFjzEtkHLe56aPYXjQBQYBtJtQ=
+X-Received: from plbbb9.prod.google.com ([2002:a17:902:bc89:b0:29d:5afa:2c4])
+ (user=tjmercier job=prod-delivery.src-stubby-dispatcher) by
+ 2002:a17:902:e943:b0:296:5ea8:ed7c with SMTP id d9443c01a7336-29d68344bf3mr55170825ad.17.1764806720435;
+ Wed, 03 Dec 2025 16:05:20 -0800 (PST)
+Date: Wed,  3 Dec 2025 16:03:47 -0800
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20251203-csi_formatter-v1-2-eb9e1147b49e@nxp.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.52.0.177.g9f829587af-goog
+Message-ID: <20251204000348.1413593-1-tjmercier@google.com>
+Subject: [PATCH bpf 1/2] bpf: Fix truncated dmabuf iterator reads
+From: "T.J. Mercier" <tjmercier@google.com>
+To: yonghong.song@linux.dev, ast@kernel.org, daniel@iogearbox.net, 
+	andrii@kernel.org, martin.lau@linux.dev, eddyz87@gmail.com, song@kernel.org, 
+	john.fastabend@gmail.com, kpsingh@kernel.org, sdf@fomichev.me, 
+	haoluo@google.com, jolsa@kernel.org, shuah@kernel.org, bpf@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	android-mm@google.com
+Cc: christian.koenig@amd.com, sumit.semwal@linaro.org, 
+	linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org, 
+	linaro-mm-sig@lists.linaro.org, "T.J. Mercier" <tjmercier@google.com>
+Content-Type: text/plain; charset="UTF-8"
 
-Hi Guoniu,
+If there is a large number (hundreds) of dmabufs allocated, the text
+output generated from dmabuf_iter_seq_show can exceed common user buffer
+sizes (e.g. PAGE_SIZE) necessitating multiple start/stop cycles to
+iterate through all dmabufs. However the dmabuf iterator currently
+returns NULL in dmabuf_iter_seq_start for all non-zero pos values, which
+results in the truncation of the output before all dmabufs are handled.
 
-kernel test robot noticed the following build warnings:
+After dma_buf_iter_begin / dma_buf_iter_next, the refcount of the buffer
+is elevated so that the BPF iterator program can run without holding any
+locks. When a stop occurs, instead of immediately dropping the reference
+on the buffer, stash a pointer to the buffer in seq->priv until
+either start is called or the iterator is released. This also enables
+the resumption of iteration without first walking through the list of
+dmabufs based on the pos value.
 
-[auto build test WARNING on 1f2353f5a1af995efbf7bea44341aa0d03460b28]
+Fixes: 76ea95534995 ("bpf: Add dmabuf iterator")
+Signed-off-by: T.J. Mercier <tjmercier@google.com>
+---
+ kernel/bpf/dmabuf_iter.c | 56 +++++++++++++++++++++++++++++++++++-----
+ 1 file changed, 49 insertions(+), 7 deletions(-)
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Guoniu-Zhou/media-dt-bindings-Add-CSI-Pixel-Formatter-DT-bindings/20251203-143208
-base:   1f2353f5a1af995efbf7bea44341aa0d03460b28
-patch link:    https://lore.kernel.org/r/20251203-csi_formatter-v1-2-eb9e1147b49e%40nxp.com
-patch subject: [PATCH 2/2] media: nxp: Add i.MX9 CSI pixel formatter v4l2 driver
-config: m68k-allyesconfig (https://download.01.org/0day-ci/archive/20251204/202512040513.mvgeYlO0-lkp@intel.com/config)
-compiler: m68k-linux-gcc (GCC) 15.1.0
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251204/202512040513.mvgeYlO0-lkp@intel.com/reproduce)
+diff --git a/kernel/bpf/dmabuf_iter.c b/kernel/bpf/dmabuf_iter.c
+index 4dd7ef7c145c..cd500248abd9 100644
+--- a/kernel/bpf/dmabuf_iter.c
++++ b/kernel/bpf/dmabuf_iter.c
+@@ -6,10 +6,33 @@
+ #include <linux/kernel.h>
+ #include <linux/seq_file.h>
+ 
++struct dmabuf_iter_priv {
++	/*
++	 * If this pointer is non-NULL, the buffer's refcount is elevated to
++	 * prevent destruction between stop/start. If reading is not resumed and
++	 * start is never called again, then dmabuf_iter_seq_fini drops the
++	 * reference when the iterator is released.
++	 */
++	struct dma_buf *dmabuf;
++};
++
+ static void *dmabuf_iter_seq_start(struct seq_file *seq, loff_t *pos)
+ {
+-	if (*pos)
+-		return NULL;
++	struct dmabuf_iter_priv *p = seq->private;
++
++	if (*pos) {
++		struct dma_buf *dmabuf = p->dmabuf;
++
++		if (!dmabuf)
++			return NULL;
++
++		/*
++		 * Always resume from where we stopped, regardless of the value
++		 * of pos.
++		 */
++		p->dmabuf = NULL;
++		return dmabuf;
++	}
+ 
+ 	return dma_buf_iter_begin();
+ }
+@@ -54,8 +77,11 @@ static void dmabuf_iter_seq_stop(struct seq_file *seq, void *v)
+ {
+ 	struct dma_buf *dmabuf = v;
+ 
+-	if (dmabuf)
+-		dma_buf_put(dmabuf);
++	if (dmabuf) {
++		struct dmabuf_iter_priv *p = seq->private;
++
++		p->dmabuf = dmabuf;
++	}
+ }
+ 
+ static const struct seq_operations dmabuf_iter_seq_ops = {
+@@ -71,11 +97,27 @@ static void bpf_iter_dmabuf_show_fdinfo(const struct bpf_iter_aux_info *aux,
+ 	seq_puts(seq, "dmabuf iter\n");
+ }
+ 
++static int dmabuf_iter_seq_init(void *priv, struct bpf_iter_aux_info *aux)
++{
++	struct dmabuf_iter_priv *p = (struct dmabuf_iter_priv *)priv;
++
++	p->dmabuf = NULL;
++	return 0;
++}
++
++static void dmabuf_iter_seq_fini(void *priv)
++{
++	struct dmabuf_iter_priv *p = (struct dmabuf_iter_priv *)priv;
++
++	if (p->dmabuf)
++		dma_buf_put(p->dmabuf);
++}
++
+ static const struct bpf_iter_seq_info dmabuf_iter_seq_info = {
+ 	.seq_ops		= &dmabuf_iter_seq_ops,
+-	.init_seq_private	= NULL,
+-	.fini_seq_private	= NULL,
+-	.seq_priv_size		= 0,
++	.init_seq_private	= dmabuf_iter_seq_init,
++	.fini_seq_private	= dmabuf_iter_seq_fini,
++	.seq_priv_size		= sizeof(struct dmabuf_iter_priv),
+ };
+ 
+ static struct bpf_iter_reg bpf_dmabuf_reg_info = {
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202512040513.mvgeYlO0-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
->> drivers/media/platform/nxp/imx9-csi-formatter.c:786:12: warning: 'csi_formatter_runtime_resume' defined but not used [-Wunused-function]
-     786 | static int csi_formatter_runtime_resume(struct device *dev)
-         |            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
->> drivers/media/platform/nxp/imx9-csi-formatter.c:776:12: warning: 'csi_formatter_runtime_suspend' defined but not used [-Wunused-function]
-     776 | static int csi_formatter_runtime_suspend(struct device *dev)
-         |            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/media/platform/nxp/imx9-csi-formatter.c:763:12: warning: 'csi_formatter_system_resume' defined but not used [-Wunused-function]
-     763 | static int csi_formatter_system_resume(struct device *dev)
-         |            ^~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/media/platform/nxp/imx9-csi-formatter.c:758:12: warning: 'csi_formatter_system_suspend' defined but not used [-Wunused-function]
-     758 | static int csi_formatter_system_suspend(struct device *dev)
-         |            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-
-vim +/csi_formatter_runtime_resume +786 drivers/media/platform/nxp/imx9-csi-formatter.c
-
-   775	
- > 776	static int csi_formatter_runtime_suspend(struct device *dev)
-   777	{
-   778		struct v4l2_subdev *sd = dev_get_drvdata(dev);
-   779		struct csi_formatter *formatter = sd_to_formatter(sd);
-   780	
-   781		clk_disable_unprepare(formatter->clk);
-   782	
-   783		return 0;
-   784	}
-   785	
- > 786	static int csi_formatter_runtime_resume(struct device *dev)
-   787	{
-   788		struct v4l2_subdev *sd = dev_get_drvdata(dev);
-   789		struct csi_formatter *formatter = sd_to_formatter(sd);
-   790	
-   791		return clk_prepare_enable(formatter->clk);
-   792	}
-   793	
-
+base-commit: 30f09200cc4aefbd8385b01e41bde2e4565a6f0e
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+2.52.0.177.g9f829587af-goog
+
