@@ -1,17 +1,18 @@
-Received: from invmail4.hynix.com (exvmail4.skhynix.com [166.125.252.92])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5510D327C19;
-	Fri,  5 Dec 2025 07:21:03 +0000 (UTC)
+Received: from invmail4.hynix.com (exvmail4.hynix.com [166.125.252.92])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C3E42313E30;
+	Fri,  5 Dec 2025 07:21:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=166.125.252.92
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764919284; cv=none; b=n7AwQmfqhSdqkYbqA1hixagoivR0b9IH1pxgrapD7R1HJGcv7dmVA3uS73KnAxF4OF1LcT84dj2DP+iRAHuzDWuIWYpNUsWEB3SJmLVpPkEikZqGtz890bMGKaaXoPFLW4Yf+qSCb6mx6pIzJL7ALmf1cm+Vf698iEzhz61xODM=
+	t=1764919306; cv=none; b=lmdvrrAEbsOD7iNhw4zp+iQaTUyffl8n8U/xKfvTQ3fXOapJTQ3QzuK3Z0XAU8oYKP0Wmr8PGD4MKo5pY0dbLpYoRdKoXxc+1K97CU1ALPeXiiRydQFmqQCPIuuwkCXD268O/+xbn3W0Ak1uI+kLd2DeBF8k6kRw8Nw/wwHDq8c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764919284; c=relaxed/simple;
-	bh=Vj5gFQhrZ6G/CwdWvsAMyxS9WmcbVQk6wQ8WAinYldk=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References; b=FZE8RX7lm4ZyJk6bGwq43rkrAfQ5Ob2AeDDQN+sXO03txUIDlaHpqH6lUfH/46Drw8j7e5jgPrBBG0PApQVcnvPfZgshk8CMUY0SaX4/0Z8MAEaM7JgmjFJx98f24S3NQoU2uHxiqWVYvFuX4jRWLc6rNO/50M2QmD+LGayih0U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sk.com; spf=pass smtp.mailfrom=sk.com; arc=none smtp.client-ip=166.125.252.92
+	s=arc-20240116; t=1764919306; c=relaxed/simple;
+	bh=jhmrpwTM08yBA9ZoPplcfQMQcK3SVeR5SdyXR0h1+Bo=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=FvtSEuk+/XSUPUkoo4SMVsMptQlfQEmNBIZFCcOj9K+ilKNIuvW6HHi5yZrnhoDIB4E/bverop/xc0Keg2wDhICt4LBAfH2orBBrgk9qeT1f/QFVHEpAMApz6IlLpD+Ec0N+VtYWUZPmrdkCS0g4cvFTh0wQTeCT59JGs9b/Iq4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sk.com; spf=fail smtp.mailfrom=sk.com; arc=none smtp.client-ip=166.125.252.92
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sk.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sk.com
-X-AuditID: a67dfc5b-c45ff70000001609-23-69328773bf67
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=sk.com
+X-AuditID: a67dfc5b-c45ff70000001609-dd-69328776b787
 From: Byungchul Park <byungchul@sk.com>
 To: linux-kernel@vger.kernel.org
 Cc: kernel_team@skhynix.com,
@@ -178,174 +179,113 @@ Cc: kernel_team@skhynix.com,
 	aliceryhl@google.com,
 	tmgross@umich.edu,
 	rust-for-linux@vger.kernel.org
-Subject: [PATCH v18 35/42] dept: introduce event_site() to disable event tracking if it's recoverable
-Date: Fri,  5 Dec 2025 16:18:48 +0900
-Message-Id: <20251205071855.72743-36-byungchul@sk.com>
+Subject: [PATCH v18 41/42] SUNRPC: relocate struct rcu_head to the first field of struct rpc_xprt
+Date: Fri,  5 Dec 2025 16:18:54 +0900
+Message-Id: <20251205071855.72743-42-byungchul@sk.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20251205071855.72743-1-byungchul@sk.com>
 References: <20251205071855.72743-1-byungchul@sk.com>
-X-Brightmail-Tracker: H4sIAAAAAAAAAzWSfUwTdxzG/d397npUGi8dZCdkovUtcZvzfV+RLMYZc4m6zLgYoi5yg5tc
-	LOBa5EVdBghSmCASC9o2UIdikVYIVcM0zK5qAwNikUyaDsE3ujmoRmYlFgpCp/9888nz5Hm+
-	/zwMqfyLimGk9ExRky6oVbQcy/2R5z7VFq+SVox0rQdd0U9wP9+BIfBKh8HUZKWhva8Ag/ty
-	I4LBgA7B2LiRhFClSwZVPZUkWK/kE/Bf8yQN1c/yMRh8Rhn4B29QUP90koCnjmIEoaoDMN59
-	l4RqvRvB6LOHCK64BhC0WQpoGKq4SkKH/mca/D0mAp4302AuaKOgp2sYgc/bRsCxuiYaeoYn
-	COivqiSgsWU7DNb78PQ/GozVx4jp8w8BetsNArrq+jEYu3speGwxyGDKnAEPTuoxXPbfpaBj
-	4D4F1hM+EnTXAxjOHT+P4WxNPw260CsEvddNNJxovkrBgHWKgjzjGAX3Gt0Ymv72ENDpasfQ
-	YWjA8OihhwJ7dxcJr8tjwX2qjAJPxRDamMKPFZVj/pL9GsEX3QvRvLXGivjxYCXib428IPlC
-	ezZ/oXOE5oOBP2n+j184/nxJkOB/NTyQ8YW/eWW8ueUQX3jbT/F2y7KvP94tT0gR1VKWqPns
-	iyR5am8oSB18Mi/nxUAZzkMXuFIUwXDsGu7m6Gn6PdtKamQzTLNLOY/nDTnDUex8zl7mo0qR
-	nCHZ3jiu+E152PiAFTnT6X/DAcwu5gJ9w2Fdwa7jXl70viuN4xqbHWE9YlrX9wXDrGTXcrWl
-	Y+FSjq2N4Nprq9D/gbnc7xYPrkAKM5p1CSml9Kw0QVKvWZ6amy7lLE/OSGtB05Or/3FiTysa
-	de90IpZBqkiFI3ulpKSELG1umhNxDKmKUoyoV0hKRYqQe1jUZOzTHFKLWieKZbDqQ8Wq19kp
-	Sna/kCkeEMWDoua9SzARMXlI+51l0RKVtClo0x1vNczPa1195/vtXxqir8lMs7NMnwi+BT8Q
-	sbP33JmIjk+K+WbW55lbmKH49tXOts0Lv+p05G9d6/h235zEyaKkI7uiPrqZsMO0IOfohm0b
-	CqgjLkVJ6aMzHlukvc660ZWc6Cy0xYY6vd5h8954XT0hHE1uiL4lqbA2VVi5jNRohbcR2gwh
-	bgMAAA==
-X-Brightmail-Tracker: H4sIAAAAAAAAAzWSe0hTcRTH+93XrqPlZQldCixGkfS0JweSyCi6BEX0TyH0GHbJi5vKZj6i
-	h9OGZvlotWlOzayt8FGmVpqMhpFkZW6tmlhLpWXZNMuctum0teifw/d8vud7OH8cGpe2kAtp
-	ISmVVyXJFTJKTIj3bslZrc5dL0R/tc6DPO1Z+NDnJuGdxkqAdzyPgPK7dRQEjA9FkNd4lYRn
-	zmwCbHdqEfR58xBMThlx0LbOEhDQdYhg3PdeBHoNgllLBwKDXYdDj+0xDnXNGgx+NcxQ4Hky
-	hkA/4KagZEhDwKj5IoKyQaMIhp7ugpG+NhJmXV8wcE4MIzC7ZzBwW3MRBAyJcK26KRg3/KBg
-	qqsbhxK9DcH1ARcOY0P9CJo7PiKw3M6m4HPxfRwc7nnwxjtKQaf+AgUj9nIMvjdQUJVtIcH+
-	0oOgwqhDMNhrwSDnxl0KDBWNBLT2PxKB3TONwQeDDoPaxj3QZx4k4EVxNRY8Nzh1bwEYS3Kw
-	YPmKgb6+DQOfuUa0zYS4SW0hwdU0PcA47esAxdVV1iFuyq9D3LgpB+e0xcH2yfAozp1rSudM
-	L4Ypzu99S3GWiSqCe17NcjfP+zHuUtdqrrXMJdoXGyeOOcYrhDRetXbrUXGCI+AnUz5FZox+
-	LCCykInNR2E0y2xk689Xiv5qilnO9vT48L86glnCNhUMkvlITOOMYzGb6ysMGfMZni2/8i0U
-	IJhlrNfpCXEJs5n9eauX+rd0MVvbYA3xsCDXO/0hLWU2sdfyJ8liJK5Cc2pQhJCUppQLik1r
-	1IkJmUlCxpr4ZGUjCv6T+fT0pRY07tjVjhgayeZKrOnrBCkpT1NnKtsRS+OyCMmwIlqQSo7J
-	M0/yquQjqhMKXt2OFtGEbIFk9wH+qJQ5Lk/lE3k+hVf9dzE6bGEWshzOmLDEHhcKpk/cj+l+
-	WFi2YYcp+/ISl+9df1T4mbiE3wM7iqoziravOjIWV7T0YvNkVn1vvG95aaTnW+erzfG/04Sd
-	j1qe3oq64kgdGslvO5B50KSMfnNopsu0Ni71qnlamRxT2qI2O7u9tm7XfqMmnV6199TKiMdE
-	zA17abgtUUaoE+TrVuAqtfwPz1lkY0sDAAA=
-X-CFilter-Loop: Reflected
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Brightmail-Tracker: H4sIAAAAAAAAA02SbUxTdxSH87/vrXa5rSTcQSJbM2M0G1PCtvNhW7bsxZu9OOO+Tc12t95J
+	QylYkMqWJUVwCmGswZSFlkGF2UHpRtcOURRFDChpmVScFKTlZaWEtYwMKQ0ouhZi5rcnv/N7
+	zvlyGFxRT6Uxam2RqNMKGiUlJaTzm8+8oD+Zpd7lDGAwPhEi4U5pDwGxpVMErFk6abgxcpyA
+	+H0LDksrd2kwlSLwD13BwfF7KQb3nA8pME2FKDCHLTTM9e2BkeUoAlvoIQZrtbnQ2OSm4P7g
+	TRxmjB04DIeegtuxBQrmffUYWI93k+DzRhCEx7oxKGtup6D2RxcBFya7aPBFHmDQ5voQJmxh
+	AjzGJgx+mEsUfksF0y8XMfA2jxNgM2yD6RYzDY+s+dDfNktD4HsTAb/O3yRhIHiHhEi4hoKJ
+	69+S0GmYpME12ofAURXGoa5hnIJTa0sI+s9PYzDcVU9BlbODhKDjEQkGS5yEoR4PCe2zfgw8
+	/TcIGDC3EjA16SfBPejFYbk6HfzGGfSGio+fqCZ4u/scxjsaHIi/Fl3A+XK3nj/riVL8auxP
+	iv+pYhXjL5gDNG91HeXdLTv55ktzGH9mMUbyY5HXeJe9guJdizX0vuc/kb6qEjXqYlH34uuf
+	SXO8rW8WdMuPldccMqAFWSWSMBybzU1f+QM95r+dY1iSKXY75/ev4ElOYZ/h3N+FyUokZXB2
+	OIM7uVK9PtjCCtzcvSiVZILdxi0Gp4gky9iXudHTS9jG0gyuzdmz3pckctPI6jor2Je4xso4
+	udGXcwN1oYTLJA5s59obFMkYT6hlHRY8eZdjgxLu0q1z+MbOp7mrLX7CiFjzE7r5f938hG5F
+	uB0p1NriPEGtyc7MKdGqj2V+kZ/nQomftX3z4MB5tDj0cS9iGaTcLOvR71YrSKG4sCSvF3EM
+	rkyRRTW71AqZSij5StTlf6o7qhELe1E6QyhTZVnLepWCPSwUibmiWCDqHk8xRpJmQKp9FUY2
+	MOvuaw6+n1tl7NrkkRf/tXX43UzrkfKmt9575x/5+N66xlbFs+lyH+/W2gfT8ss+t8Vb7qr0
+	t4/Ud2c5A7Tl360nDp5OPXx571mfcOBt+3VJ7ZfZWT8ve82X93R+7dg/WvZB0abIoQrjrbqu
+	mdhHzy3YUjKEkmCBVxHa8YqSKMwRdu/EdYXCfxdbNeSvAwAA
+X-Brightmail-Tracker: H4sIAAAAAAAAA02SbUxTVxjHPffce3tpvHrtSLhTo67GuJjoZBnLE3VGv+h1UdRkyYzZJo29
+	SkMB0zKERaNQKxXUYJcWvbWIKI2WbmDxDU21gQ3n1AyGGy8TgaQyC8VOaMHyIt5iFv1y8jvP
+	8/uf83x4GKyaoOYyuqwc0ZCl0atpJalMXW1anlv0qW5lo5MCi/kQPOkOUPB3gZ+EaMRCwtka
+	Dw2TjhsKsHjPUPBbWyEJzT9XI+iOWhCMjjswmOunSJi0NikgEvtHAbYCBFO+JgT2FiuG9ua7
+	GDxXCwgYrn1Nw0DjEAJbb4CGsmABCWHXcQRSn0MBwV83wmD3bQqmuv4loG0khMAVeE1AwF+E
+	YNKeAecq6+S4/T8axh/9gaHM1ozgfG8XhqFgD4KrTU8R+C4V0vCs9BqG1sAseBwN03DfVkLD
+	YMtZAl7U0lBR6KOg5eEAAqfDiqCv00eA6UINDXanl4T6nlsKaBmYIOCJ3UpAtXcLdLv6SHhQ
+	WknI48rWlSRwlJkI+XhOgO2n2wTEXG7FuiokjJpPkoK77johmP+cpAVPuQcJ42NWJESqTFgw
+	l8rXxlAYC0fq9gtVD0K0MBb9ixZ8IxWk8HslL1w8NkYIpx4tF+qlLsW29TuVa7SiXpcrGj5Z
+	m6ZMf3h5/T7fnLwj1m8PozBbjBIYnvuM76/tJOJMc0v59vYYjnMit4ivO9FHFSMlg7nWhXxR
+	7OR04wNOwweHQ3ScSW4JP/S0l4wzy33Od/wYId4+upCvrvVP+wly3dY2Ns0qLoU/VzxKvfXn
+	8PfPBOQsI3+wlK8pV8XLWI6arjlwKWKl9yzpnSW9Z1Ug7EaJuqzcTI1On7LCmJGen6XLW7E7
+	O9OL5J10HZw4dRNFWjc2II5B6pmsf3+yTkVpco35mQ2IZ7A6kQ3pV+pUrFaT/4NoyN5l+F4v
+	GhvQPIZUJ7Fffi2mqbi9mhwxQxT3iYb/uwSTMPcw6nyV8UV2dJOpavTjjus7FvRfvPO415oz
+	Q5JubnC+7J+f73U74cqqxJLsj/Zou0La4VUWIe/Od4de+ljX7JgntXzmL5ulo+7kA5sstxbv
+	Zi8ot4bX4CTvV3vd1L00NlV6Vfbssn173uDd537tYOuinmPf6MV789pHSj48vTiYXjnUqCaN
+	6ZrkZdhg1LwBtNOU7o8DAAA=
+X-CFilter-Loop: Reflected
 
-With multi event sites for a single wait, dept allows to skip tracking
-an event that is recoverable by other recover paths.
+While compiling Linux kernel with DEPT on, the following error was
+observed:
 
-Introduce an API, event_site(), to skip tracking the event in the case.
+   ./include/linux/rcupdate.h:1084:17: note: in expansion of macro
+   ‘BUILD_BUG_ON’
+   1084 | BUILD_BUG_ON(offsetof(typeof(*(ptr)), rhf) >= 4096);	\
+        | ^~~~~~~~~~~~
+   ./include/linux/rcupdate.h:1047:29: note: in expansion of macro
+   'kvfree_rcu_arg_2'
+   1047 | #define kfree_rcu(ptr, rhf) kvfree_rcu_arg_2(ptr, rhf)
+        |                             ^~~~~~~~~~~~~~~~
+   net/sunrpc/xprt.c:1856:9: note: in expansion of macro 'kfree_rcu'
+   1856 | kfree_rcu(xprt, rcu);
+        | ^~~~~~~~~
+    CC net/kcm/kcmproc.o
+   make[4]: *** [scripts/Makefile.build:203: net/sunrpc/xprt.o] Error 1
 
+Since kfree_rcu() assumes 'offset of struct rcu_head in a rcu-managed
+struct < 4096', the offest of struct rcu_head in struct rpc_xprt should
+not exceed 4096 but does, due to the debug information added by DEPT.
+
+Relocate struct rcu_head to the first field of struct rpc_xprt from an
+arbitrary location to avoid the issue and meet the assumption.
+
+Reported-by: Yunseong Kim <ysk@kzalloc.com>
 Signed-off-by: Byungchul Park <byungchul@sk.com>
 ---
- include/linux/dept.h     | 30 ++++++++++++++++++++++++++++++
- include/linux/sched.h    |  6 ++++++
- kernel/dependency/dept.c | 20 ++++++++++++++++++++
- 3 files changed, 56 insertions(+)
+ include/linux/sunrpc/xprt.h | 9 ++++++++-
+ 1 file changed, 8 insertions(+), 1 deletion(-)
 
-diff --git a/include/linux/dept.h b/include/linux/dept.h
-index c796cdceb04e..7b822caee874 100644
---- a/include/linux/dept.h
-+++ b/include/linux/dept.h
-@@ -239,6 +239,31 @@ extern void dept_task_exit(struct task_struct *t);
- extern void dept_free_range(void *start, unsigned int sz);
- extern void dept_mark_event_site_used(void *start, void *end);
+diff --git a/include/linux/sunrpc/xprt.h b/include/linux/sunrpc/xprt.h
+index f46d1fb8f71a..666e42a17a31 100644
+--- a/include/linux/sunrpc/xprt.h
++++ b/include/linux/sunrpc/xprt.h
+@@ -211,6 +211,14 @@ enum xprt_transports {
  
-+extern void disable_event_track(void);
-+extern void enable_event_track(void);
-+
-+#define event_site(es, evt_func, ...)					\
-+do {									\
-+	unsigned long _flags;						\
-+	bool _disable;							\
-+									\
-+	local_irq_save(_flags);						\
-+	dept_event_site_used(es);					\
-+	/*								\
-+	 * If !list_empty(&(es)->dept_head), the event site can be	\
-+	 * recovered by others.  Do not track event dependency if so.	\
-+	 */								\
-+	_disable = !list_empty(&(es)->dep_head);			\
-+	if (_disable)							\
-+		disable_event_track();					\
-+									\
-+	evt_func(__VA_ARGS__);						\
-+									\
-+	if (_disable)							\
-+		enable_event_track();					\
-+	local_irq_restore(_flags);					\
-+} while (0)
-+
- extern void dept_map_init(struct dept_map *m, struct dept_key *k, int sub_u, const char *n);
- extern void dept_map_reinit(struct dept_map *m, struct dept_key *k, int sub_u, const char *n);
- extern void dept_ext_wgen_init(struct dept_ext_wgen *ewg);
-@@ -302,6 +327,11 @@ struct dept_event_site { };
- #define dept_task_exit(t)				do { } while (0)
- #define dept_free_range(s, sz)				do { } while (0)
- #define dept_mark_event_site_used(s, e)			do { } while (0)
-+#define event_site(es, evt_func, ...)					\
-+do {									\
-+	(void)(es);							\
-+	evt_func(__VA_ARGS__);						\
-+} while (0)
- 
- #define dept_map_init(m, k, su, n)			do { (void)(n); (void)(k); } while (0)
- #define dept_map_reinit(m, k, su, n)			do { (void)(n); (void)(k); } while (0)
-diff --git a/include/linux/sched.h b/include/linux/sched.h
-index 5834555a3d09..a1737631ff54 100644
---- a/include/linux/sched.h
-+++ b/include/linux/sched.h
-@@ -879,6 +879,11 @@ struct dept_task {
- 	 */
- 	int				missing_ecxt;
- 
+ struct rpc_sysfs_xprt;
+ struct rpc_xprt {
 +	/*
-+	 * not to track events
++	 * Place struct rcu_head within the first 4096 bytes of struct
++	 * rpc_xprt if sizeof(struct rpc_xprt) > 4096, so that
++	 * kfree_rcu() can simply work assuming that.  See the comment
++	 * in kfree_rcu().
 +	 */
-+	int				disable_event_track_cnt;
++	struct rcu_head		rcu;
 +
- 	/*
- 	 * for tracking IRQ-enable state
- 	 */
-@@ -916,6 +921,7 @@ struct dept_task {
- 	.stage_wait_stack = NULL,				\
- 	.stage_lock = (arch_spinlock_t)__ARCH_SPIN_LOCK_UNLOCKED,\
- 	.missing_ecxt = 0,					\
-+	.disable_event_track_cnt = 0,				\
- 	.hardirqs_enabled = false,				\
- 	.softirqs_enabled = false,				\
- 	.task_exit = false,					\
-diff --git a/kernel/dependency/dept.c b/kernel/dependency/dept.c
-index 07d883579269..3c3ec2701bd6 100644
---- a/kernel/dependency/dept.c
-+++ b/kernel/dependency/dept.c
-@@ -2573,6 +2573,23 @@ static void __dept_wait(struct dept_map *m, unsigned long w_f,
- 	}
- }
- 
-+void disable_event_track(void)
-+{
-+	dept_task()->disable_event_track_cnt++;
-+}
-+EXPORT_SYMBOL_GPL(disable_event_track);
-+
-+void enable_event_track(void)
-+{
-+	dept_task()->disable_event_track_cnt--;
-+}
-+EXPORT_SYMBOL_GPL(enable_event_track);
-+
-+static bool event_track_disabled(void)
-+{
-+	return !!dept_task()->disable_event_track_cnt;
-+}
-+
- /*
-  * Called between dept_enter() and dept_exit().
-  */
-@@ -2585,6 +2602,9 @@ static void __dept_event(struct dept_map *m, struct dept_map *real_m,
- 	struct dept_key *k;
- 	int e;
- 
-+	if (event_track_disabled())
-+		return;
-+
- 	e = find_first_bit(&e_f, DEPT_MAX_SUBCLASSES_EVT);
- 
- 	if (DEPT_WARN_ON(e >= DEPT_MAX_SUBCLASSES_EVT))
+ 	struct kref		kref;		/* Reference count */
+ 	const struct rpc_xprt_ops *ops;		/* transport methods */
+ 	unsigned int		id;		/* transport id */
+@@ -317,7 +325,6 @@ struct rpc_xprt {
+ #if IS_ENABLED(CONFIG_SUNRPC_DEBUG)
+ 	struct dentry		*debugfs;		/* debugfs directory */
+ #endif
+-	struct rcu_head		rcu;
+ 	const struct xprt_class	*xprt_class;
+ 	struct rpc_sysfs_xprt	*xprt_sysfs;
+ 	bool			main; /*mark if this is the 1st transport */
 -- 
 2.17.1
 
