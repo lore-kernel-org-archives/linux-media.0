@@ -1,17 +1,17 @@
-Received: from invmail4.hynix.com (exvmail4.hynix.com [166.125.252.92])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C233332863E;
-	Fri,  5 Dec 2025 07:20:54 +0000 (UTC)
+Received: from invmail4.hynix.com (exvmail4.skhynix.com [166.125.252.92])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 19D032F5A2C;
+	Fri,  5 Dec 2025 07:21:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=166.125.252.92
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764919280; cv=none; b=GJK3kdWVfED9u3f/APf4Me4dk3MA1STzE/9IjeTG3Fep7bmQ/7dBNdDjdq0FKJJoU1nBYnn/zNEQGpAa1xOa+nYnPe4v6l4dWuviaPgGDT01/jVRJDJFVBcdIXm1Sbxs/OP/SHoSUZ6HMJALlyxU1xqXH1K9i1vnSwN9t2vk7Xo=
+	t=1764919286; cv=none; b=Du83Mem3c6hPZqfRX9GDTO1lZUaESvLBT4w9xmN9436BVYnCvPIUo2xynE69IJkOyx9oi5Ea7u3l8n0SYQRNgVW5vagzUyShgWh5gAuE+t2yiCFD1CxrojZdYLL2EAOOBua0p620nH+OP1b9sNDp7hsQSMYvccsSx4zK34tTPgg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764919280; c=relaxed/simple;
-	bh=dXg8e2rzh2H4gF0Ka72kAtPI7B/nYlWBuWkbjIw85zc=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References; b=ZPnkitRl+nD370CVQn6i46tMtsGPlWpoL3P0oJ6xvsgLaxtch2kAc0CSX7JnaZgXB74VrRcYU9b9zo+WAk8NeJw+CpEqEHm9XXc+WqqwANFJQ91bUjP9lJt7OEJZykmrZwczSjBP5TZwjmfLAWhibqt8/hqXjV2Cy0y76KtOC1E=
+	s=arc-20240116; t=1764919286; c=relaxed/simple;
+	bh=WkwOYApaGg3/M39sydY8TnrOsGAaoUUQ67vebZbS0wQ=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References; b=deWsGOii+wqWlEwFcAFSHBNJu5m6AuYWcZ4NtnmwnlLbHX5rYss+jwP1W3PKKaN2Jd+vClzVUKB+rEGCzzptviFC2+nJA/fvXzLUZMR+MBn/XzHe//M7dN7oMkMrs8ZLP2r+Mm0B1dEDp4s6ivnl4VbXeYtGnx3daHXP+GKg2C4=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sk.com; spf=pass smtp.mailfrom=sk.com; arc=none smtp.client-ip=166.125.252.92
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sk.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sk.com
-X-AuditID: a67dfc5b-c2dff70000001609-8b-693287728c9f
+X-AuditID: a67dfc5b-c45ff70000001609-41-693287730e8e
 From: Byungchul Park <byungchul@sk.com>
 To: linux-kernel@vger.kernel.org
 Cc: kernel_team@skhynix.com,
@@ -178,45 +178,45 @@ Cc: kernel_team@skhynix.com,
 	aliceryhl@google.com,
 	tmgross@umich.edu,
 	rust-for-linux@vger.kernel.org
-Subject: [PATCH v18 30/42] dept: make dept stop from working on debug_locks_off()
-Date: Fri,  5 Dec 2025 16:18:43 +0900
-Message-Id: <20251205071855.72743-31-byungchul@sk.com>
+Subject: [PATCH v18 36/42] dept: implement a basic unit test for dept
+Date: Fri,  5 Dec 2025 16:18:49 +0900
+Message-Id: <20251205071855.72743-37-byungchul@sk.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20251205071855.72743-1-byungchul@sk.com>
 References: <20251205071855.72743-1-byungchul@sk.com>
-X-Brightmail-Tracker: H4sIAAAAAAAAAzWSbUxTdxjF97/3/m8v1ZqbqvEKOE1l0ZGJVEWfbGow2ZK7GDK3+UkTXQM3
-	Ui0FW0VxIVoBQQYMWcSEDsQiL0KFWkTRgRRQ1BoUeSktIlLFTkOpGwMctYVBzb79cs5zTp4P
-	hyGldhzMKNVHBI1aoZLRYko8ttCwTpO5QRn5e3coDL4YwWDTWSh40H+agq7aGgTvP+hJmG3u
-	QFD4tICE0fZxBOedIzRceKujoMilF8HYiz8wVIzMEOAvPAQXDfU0jBb+RcP1jiEEr/MbSPCY
-	aCg93YyhWF+AwDXQTEBaWR0NhcVmCp6O+gioMcfAo3wDAT6nHGZLE6F27AkGs+MegoleJwHG
-	HBcJ5lc2DFn+CQQdjS8JyDE1YOiyPMLwsOgKBU9uX8XgHLZjmMoLgd88LgSOC24RuPrOEGBK
-	LxJBQ0sGgvHLUxTcz7UQUD7hIaFT/xjDmcvXCLiTNUzA3bqbBNS52kkorxrDYH3+jwi8lXNf
-	WL1WAvS6PASmvytpSB+Mgqt+GwL9vSFRdDSf0e2neWOJEfET5Wkkn5E/R+3udyTvneyjeauB
-	4891ruNvFT0X8el3BkR8qfkoX18Vzpc1vSX4gdFtvLn6LM0P2proXav3iLfGCSplsqBZv/0n
-	cbzX94xMckqOFxScxadQ8YJsFMRw7CbO0GtG2YgJcJYxdF6m2TWc3T5NzvMSdhVXn+vC2UjM
-	kGzPSi5zOi9gLGa/54xNjdR8lmI/4xoei+ZlCbuZc7T24I/1K7kakyVwHjSnn+/3BljKRnEX
-	s98HOjm2LIh7Pd1Gfwws51qr7FQ+kpSiT6qRVKlOTlAoVZsi4lPUyuMRsYkJZjS3t4pU395G
-	NN71YxtiGSRbKLEckyulWJGsTUloQxxDypZI3KpIpVQSp0g5IWgS92uOqgRtGwphKNkyyYap
-	Y3FS9oDiiHBIEJIEzf8uwQQFn0LyHd8GJ0cR0y/Tshy3LJmrb9pzk3759aHulXjRlrB9YQdN
-	J+UluyNjbkylNr/52bvoz2t4RUtsS69nZmfOl+c6fd9MTmasKLH6N+qC1bw87IdL0Tsca4d3
-	fvpFXe2HNand31Xu9gjU4b6KeltsWvXS8E5a+3nMm6+N/65yf7XdnZIwMy6jtPEKeTip0Sr+
-	A/FUX/JrAwAA
-X-Brightmail-Tracker: H4sIAAAAAAAAAzWSe0hTcRTH+93XrqvFZQreLDJGDwrUjB4njSyivARF9U8PAl12y+V8tJVl
-	EPloOdeDeWOTWqZpjtBVplmajUzLUntsWWmPZdZaiZY9Ns3ptCn0z+Fzvg84fxwal94iQ2hF
-	ygFelSJXyigxId4YnRO2P3eRYmHRieWg1RyD911OEl5nNRDgcWsJuHDdQoHPdFsE2qpzJDzu
-	yCbAdq0CQZdHi2Bw2ISDpm6MAJ/QLAL30DsRGLIQjFmbERjtAg6dtns4WG5mYfCncpSC3qbf
-	CAzdTgoKerII6DefQnDeZRJBz8NY+N5VT8KY4ysGHQN9CMzOUQycDbkIfMYkKCqp9teNPykY
-	fvochwKDDcGlbgcOv3s+IrjZ/AGB9Uo2BV/0NTi0O6fCS08/BS2GkxR8t1/A4EclBcXZVhLs
-	T3oRFJoEBK63VgxySq9TYCysIqDu4x0R2HtHMHhvFDCoqNoAXWYXAW36Esx/rj91IxhMBTmY
-	f3zDwHC1HoMhc7loVRniBjVnCK68+hbGaV74KM5y0YK4Ya+AOHdZDs5p9P61qa8f545XH+LK
-	2voozut5RXHWgWKCay1huct5XozLfxrG1Z13iDat3iFesZtXKtJ5VcTKeHGid+QdntYtOSwI
-	eWQmKpysQzTNMotZrWWGDgXQFDOP7ewcwsc5iJnFVp92kTokpnGmPZTNHTozYQQym1nL3Vpi
-	vEswc9iaZ6JxWcIsZd/cbyfHmWVC2YrKhol4gF83dHgnWMosYYt0g6QeiYvRpHIUpEhJT5Yr
-	lEvC1UmJGSmKw+EJqclVyP9N5qMj+bXI3R7biBgayaZIGg5FKqSkPF2dkdyIWBqXBUn6lAsV
-	UsluecYRXpUapzqo5NWNaDpNyIIl67fy8VJmr/wAn8Tzabzqv4vRASGZ6FOuRx+1LDg1L06Y
-	Vhj76+ze0GjnhuiZMZFcRIJ0135HZtRz2zpX/WhZ3d/YmCO+uX/rY6Jaz32+lscHTgoocr/V
-	F+swtDi1Bp3etpKcvjbOs2PngwH79tbA/HzDAluE8Ge7M7zUl/jAkdEy40NIz/zh1Vvmp+n3
-	qOKa2H3q2WseyQh1ojxyAa5Sy/8BP5Wpp0kDAAA=
+X-Brightmail-Tracker: H4sIAAAAAAAAAzWSe0xTZxjG/c75zoWGmmOn8aAxurpLQqYCweWNTreZmJ1pzC5mWcKyuGY9
+	jiMFTEEKZhrEC6VDygilscVRGDS1IHSteCE064jiiDJkMGnQOiBFxgqOKZRQKAxq9t8vz/O+
+	z/PPw5KKQWoDK2XlitoslUZJy7BsMr5uW25xipQ0aoyHh2d8GGam9RiqW5poiFpvMKB3X6Lg
+	14EiDA+aGxGcv7WEIVrRycCStxPBC9ciDebxMxgsT63LWmCMgIHwBAJ7cJGAoK8YQbQqA0JV
+	UzTUDgdIeD4+hMDrKKJhtLyVhL7gauif+YeGLtN3NEz2VhPwzEWDrchLQe/9EILe0AIBj6sq
+	CLhXXkcsV9FgNZ8lYM7uZMDa3UfBiMPCwMJwMizZsqGzcYyBgNGEoXmyh4KuJw8p+PPuBQpu
+	FA4xMN0/TIC+bQZD7YV6DO3eLgz66DSCUlcrBYXWWQpaxvwEdFmuYHjUbWSgp+0qBQ0DvQR4
+	uu+TEC7bCP7yUQRXn9XREArbSXD8a6beUwuz58uw4PRcJ4SmH5qQMB+pQMI5j05ouDdBC5GZ
+	P2jBG7Zhob4kQgi3LAFGsLlPCB5HovBj+zghDIb2CG5nCS3Uzv9FfpyYJntHLWqkPFG7Y+9X
+	svS/7fPk8coP8pt7hshCdGe3AbEsz6Xyzql0A4qLoTsaYlaY5t7k/f45coXXclt4z8WnlAHJ
+	WJLr28wXz5XFjFe4/bx5cJRaYcy9zo/c/R2vsJx7m28qWqRfhm7mG12+2H3csm4aiMRYwe3k
+	awyzsVCeq4njb7eamJcPCfwvDj8uR3IbWuVECikrL1MlaVK3pxdkSfnbv87OdKPlxdlPLXxx
+	Ez1/cLgDcSxSxst9umRJQanycgoyOxDPksq18glNkqSQq1UFJ0Vt9hHtCY2Y04E2sli5Xp4S
+	1qkV3DeqXDFDFI+L2v9dgo3bUIgOV0uH2velDWUYDV/erDTNpRavDui27fvt9lL3wV3fv1vx
+	kfzVHbo1loSWt3bVnz7nuqLI5nfu9h5brw5+XvpTsM53+tPU9xdN4ZQ1I5suH7jccfGzT/qT
+	JttLzUdOLpSckq9LaDAYjU+OXjuW+Fpaf35katMbH6Lcbz3Xt1Zeq/5Zf7StRolz0lXJiaQ2
+	R/Ufv5ccA20DAAA=
+X-Brightmail-Tracker: H4sIAAAAAAAAAzWSa0iTcRTG+7+3zdHiZQm9GJKMIggqtYwTVhiRvhRl5YfIL7rqpQ2nxZa3
+	IErX8tZFR5vkKs1ylS612U1tJdPMNMmppWi2GXNlzgxTl1vTptGXw++c5zkP58Ph46LnZBBf
+	lnKaU6RI5GJKQAj2R6rWK3PCZaGPrgZDrvocfLI5SPiY1UTA9FQuATdqjBT49M94kGu6TkJb
+	XzYBXdVVCGzTuQjcXj0O6vp5AnyaVh5MzQ7yQJuFYN7cikBn1eDQ3/UKB+PjLAx+1c5RMNY8
+	iUA77KCgeDSLgAnDJQQlTj0PRl/HwLitkYT5oa8Y9M24EBgccxg4mnIQ+HRJUFpe51/X/aTA
+	2/keh2JtF4Lbw0M4TI7aETxu/YzAfD+bgpHCJzj0OJZB7/QEBW+1BRSMW29g8KOWgrJsMwnW
+	d2MIbuo1CJwDZgxUd2oo0N00EVBvb+CBdewPBp90GgyqTPvAZnAS0FFYjvnP9bserQB9sQrz
+	l28YaB82YjBrqORFVSDWrb5CsJV1TzFW3e2jWOMtI2K9Hg1ipypUOKsu9LfNrgmcvVCXzlZ0
+	uCjWM/2BYs0zZQTbXs6wd/M8GFvUuZ6tLxniHdgZL9h2nJPL0jjFxh2JAul3gxc/dS0mo/q9
+	HT+PXkfmowA+Q29mTL4x3gJT9Fqmv38WX+BAOoSpu+wk85GAj9M9q5ic2SuLwnJ6N1M8MEIu
+	MEGvYb686SYWWEhvYYzZc9S/0FVMVW3Toj/AP9f2eRZZREcwpflushAJytCSShQoS0lLlsjk
+	ERuUSdLMFFnGhmMnk03I/0+Gs3+KnqOpnhgLovlIvFTYlB4mE5GSNGVmsgUxfFwcKHTJQ2Ui
+	4XFJ5hlOcTJBkSrnlBa0kk+IVwj3HOYSRfQJyWkuieNOcYr/KsYPCDqPSowZMfFtR4PO9TVq
+	HDlzNULVxWB7EX31d4E0YfJQ+B3HcFt/nG2v27W8RHhpbcvq+yPt1W9NEW40E5p6tAHt6UJS
+	Z+rB2MjWn3pHwomIe7HWhryM+FhvHDXYe+zljmUqz64DO6NfGEMCLFH2Zx2qBy2W6Hp92vZd
+	sDW9pvLIJjGhlErC1uEKpeQvv2O8gEsDAAA=
 X-CFilter-Loop: Reflected
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
@@ -224,66 +224,350 @@ List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 
-For many reasons, debug_locks_off() is called to stop lock debuging
-feature e.g. on panic().  dept should also stop it in the conditions.
+Implement CONFIG_DEPT_UNIT_TEST introducing a kernel module that runs
+basic unit test for dept.
 
 Signed-off-by: Byungchul Park <byungchul@sk.com>
 ---
- include/linux/dept.h     | 2 ++
- kernel/dependency/dept.c | 6 ++++++
- lib/debug_locks.c        | 2 ++
- 3 files changed, 10 insertions(+)
+ include/linux/dept_unit_test.h     |  67 +++++++++++
+ kernel/dependency/Makefile         |   1 +
+ kernel/dependency/dept.c           |  12 ++
+ kernel/dependency/dept_unit_test.c | 173 +++++++++++++++++++++++++++++
+ lib/Kconfig.debug                  |  12 ++
+ 5 files changed, 265 insertions(+)
+ create mode 100644 include/linux/dept_unit_test.h
+ create mode 100644 kernel/dependency/dept_unit_test.c
 
-diff --git a/include/linux/dept.h b/include/linux/dept.h
-index bbcb48f6140a..8b41f7a65abb 100644
---- a/include/linux/dept.h
-+++ b/include/linux/dept.h
-@@ -142,6 +142,7 @@ struct dept_ext_wgen {
- 	unsigned int wgen;
- };
+diff --git a/include/linux/dept_unit_test.h b/include/linux/dept_unit_test.h
+new file mode 100644
+index 000000000000..7612b4e97e69
+--- /dev/null
++++ b/include/linux/dept_unit_test.h
+@@ -0,0 +1,67 @@
++// SPDX-License-Identifier: GPL-2.0+
++/*
++ * DEPT unit test
++ *
++ * Started by Byungchul Park <max.byungchul.park@gmail.com>:
++ *
++ *  Copyright (c) 2025 SK hynix, Inc., Byungchul Park
++ */
++
++#ifndef __LINUX_DEPT_UNIT_TEST_H
++#define __LINUX_DEPT_UNIT_TEST_H
++
++#if defined(CONFIG_DEPT_UNIT_TEST) || defined(CONFIG_DEPT_UNIT_TEST_MODULE)
++struct dept_ut {
++	bool circle_detected;
++	bool recover_circle_detected;
++
++	int ecxt_stack_total_cnt;
++	int wait_stack_total_cnt;
++	int evnt_stack_total_cnt;
++	int ecxt_stack_valid_cnt;
++	int wait_stack_valid_cnt;
++	int evnt_stack_valid_cnt;
++};
++
++extern struct dept_ut dept_ut_results;
++
++static inline void dept_ut_circle_detect(void)
++{
++	dept_ut_results.circle_detected = true;
++}
++static inline void dept_ut_recover_circle_detect(void)
++{
++	dept_ut_results.recover_circle_detected = true;
++}
++static inline void dept_ut_ecxt_stack_account(bool valid)
++{
++	dept_ut_results.ecxt_stack_total_cnt++;
++
++	if (valid)
++		dept_ut_results.ecxt_stack_valid_cnt++;
++}
++static inline void dept_ut_wait_stack_account(bool valid)
++{
++	dept_ut_results.wait_stack_total_cnt++;
++
++	if (valid)
++		dept_ut_results.wait_stack_valid_cnt++;
++}
++static inline void dept_ut_evnt_stack_account(bool valid)
++{
++	dept_ut_results.evnt_stack_total_cnt++;
++
++	if (valid)
++		dept_ut_results.evnt_stack_valid_cnt++;
++}
++#else
++struct dept_ut {};
++
++#define dept_ut_circle_detect() do { } while (0)
++#define dept_ut_recover_circle_detect() do { } while (0)
++#define dept_ut_ecxt_stack_account(v) do { } while (0)
++#define dept_ut_wait_stack_account(v) do { } while (0)
++#define dept_ut_evnt_stack_account(v) do { } while (0)
++
++#endif
++#endif /* __LINUX_DEPT_UNIT_TEST_H */
+diff --git a/kernel/dependency/Makefile b/kernel/dependency/Makefile
+index 92f165400187..fc584ca87124 100644
+--- a/kernel/dependency/Makefile
++++ b/kernel/dependency/Makefile
+@@ -2,3 +2,4 @@
  
-+extern void dept_stop_emerg(void);
- extern void dept_on(void);
- extern void dept_off(void);
- extern void dept_init(void);
-@@ -194,6 +195,7 @@ struct dept_ext_wgen { };
- 
- #define DEPT_MAP_INITIALIZER(n, k) { }
- 
-+#define dept_stop_emerg()				do { } while (0)
- #define dept_on()					do { } while (0)
- #define dept_off()					do { } while (0)
- #define dept_init()					do { } while (0)
+ obj-$(CONFIG_DEPT) += dept.o
+ obj-$(CONFIG_DEPT) += dept_proc.o
++obj-$(CONFIG_DEPT_UNIT_TEST) += dept_unit_test.o
 diff --git a/kernel/dependency/dept.c b/kernel/dependency/dept.c
-index a0eb4b108de0..1de61306418b 100644
+index 3c3ec2701bd6..0f4464657288 100644
 --- a/kernel/dependency/dept.c
 +++ b/kernel/dependency/dept.c
-@@ -187,6 +187,12 @@ static void dept_unlock(void)
- 	arch_spin_unlock(&dept_spin);
+@@ -78,8 +78,12 @@
+ #include <linux/workqueue.h>
+ #include <linux/irq_work.h>
+ #include <linux/vmalloc.h>
++#include <linux/dept_unit_test.h>
+ #include "dept_internal.h"
+ 
++struct dept_ut dept_ut_results;
++EXPORT_SYMBOL_GPL(dept_ut_results);
++
+ static int dept_stop;
+ static int dept_per_cpu_ready;
+ 
+@@ -826,6 +830,10 @@ static void print_dep(struct dept_dep *d)
+ 			pr_warn("(wait to wake up)\n");
+ 			print_ip_stack(0, e->ewait_stack);
+ 		}
++
++		dept_ut_ecxt_stack_account(valid_stack(e->ecxt_stack));
++		dept_ut_wait_stack_account(valid_stack(w->wait_stack));
++		dept_ut_evnt_stack_account(valid_stack(e->event_stack));
+ 	}
  }
  
-+void dept_stop_emerg(void)
+@@ -920,6 +928,8 @@ static void print_circle(struct dept_class *c)
+ 	dump_stack();
+ 
+ 	dept_outworld_exit();
++
++	dept_ut_circle_detect();
+ }
+ 
+ /*
+@@ -1021,6 +1031,8 @@ static void print_recover_circle(struct dept_event_site *es)
+ 	dump_stack();
+ 
+ 	dept_outworld_exit();
++
++	dept_ut_recover_circle_detect();
+ }
+ 
+ static void bfs_init_recover(void *node, void *in, void **out)
+diff --git a/kernel/dependency/dept_unit_test.c b/kernel/dependency/dept_unit_test.c
+new file mode 100644
+index 000000000000..88e846b9f876
+--- /dev/null
++++ b/kernel/dependency/dept_unit_test.c
+@@ -0,0 +1,173 @@
++// SPDX-License-Identifier: GPL-2.0+
++/*
++ * DEPT unit test
++ *
++ * Started by Byungchul Park <max.byungchul.park@gmail.com>:
++ *
++ *  Copyright (c) 2025 SK hynix, Inc., Byungchul Park
++ */
++
++#include <linux/module.h>
++#include <linux/spinlock.h>
++#include <linux/mutex.h>
++#include <linux/dept.h>
++#include <linux/dept_unit_test.h>
++
++MODULE_DESCRIPTION("DEPT unit test");
++MODULE_LICENSE("GPL");
++MODULE_AUTHOR("Byungchul Park <max.byungchul.park@sk.com>");
++
++struct unit {
++	const char *name;
++	bool (*func)(void);
++	bool result;
++};
++
++static DEFINE_SPINLOCK(s1);
++static DEFINE_SPINLOCK(s2);
++static bool test_spin_lock_deadlock(void)
 +{
-+	WRITE_ONCE(dept_stop, 1);
++	dept_ut_results.circle_detected = false;
++
++	spin_lock(&s1);
++	spin_lock(&s2);
++	spin_unlock(&s2);
++	spin_unlock(&s1);
++
++	spin_lock(&s2);
++	spin_lock(&s1);
++	spin_unlock(&s1);
++	spin_unlock(&s2);
++
++	return dept_ut_results.circle_detected;
 +}
-+EXPORT_SYMBOL_GPL(dept_stop_emerg);
 +
- enum bfs_ret {
- 	BFS_CONTINUE,
- 	BFS_DONE,
-diff --git a/lib/debug_locks.c b/lib/debug_locks.c
-index a75ee30b77cb..14a965914a8f 100644
---- a/lib/debug_locks.c
-+++ b/lib/debug_locks.c
-@@ -38,6 +38,8 @@ EXPORT_SYMBOL_GPL(debug_locks_silent);
-  */
- int debug_locks_off(void)
- {
-+	dept_stop_emerg();
++static DEFINE_MUTEX(m1);
++static DEFINE_MUTEX(m2);
++static bool test_mutex_lock_deadlock(void)
++{
++	dept_ut_results.circle_detected = false;
 +
- 	if (debug_locks && __debug_locks_off()) {
- 		if (!debug_locks_silent) {
- 			console_verbose();
++	mutex_lock(&m1);
++	mutex_lock(&m2);
++	mutex_unlock(&m2);
++	mutex_unlock(&m1);
++
++	mutex_lock(&m2);
++	mutex_lock(&m1);
++	mutex_unlock(&m1);
++	mutex_unlock(&m2);
++
++	return dept_ut_results.circle_detected;
++}
++
++static bool test_wait_event_deadlock(void)
++{
++	struct dept_map dmap1;
++	struct dept_map dmap2;
++
++	sdt_map_init(&dmap1);
++	sdt_map_init(&dmap2);
++
++	dept_ut_results.circle_detected = false;
++
++	sdt_request_event(&dmap1); /* [S] */
++	sdt_wait(&dmap2); /* [W] */
++	sdt_event(&dmap1); /* [E] */
++
++	sdt_request_event(&dmap2); /* [S] */
++	sdt_wait(&dmap1); /* [W] */
++	sdt_event(&dmap2); /* [E] */
++
++	return dept_ut_results.circle_detected;
++}
++
++static void dummy_event(void)
++{
++	/* Do nothing. */
++}
++
++static DEFINE_DEPT_EVENT_SITE(es1);
++static DEFINE_DEPT_EVENT_SITE(es2);
++static bool test_recover_deadlock(void)
++{
++	dept_ut_results.recover_circle_detected = false;
++
++	dept_recover_event(&es1, &es2);
++	dept_recover_event(&es2, &es1);
++
++	event_site(&es1, dummy_event);
++	event_site(&es2, dummy_event);
++
++	return dept_ut_results.recover_circle_detected;
++}
++
++static struct unit units[] = {
++	{
++		.name = "spin lock deadlock test",
++		.func = test_spin_lock_deadlock,
++	},
++	{
++		.name = "mutex lock deadlock test",
++		.func = test_mutex_lock_deadlock,
++	},
++	{
++		.name = "wait event deadlock test",
++		.func = test_wait_event_deadlock,
++	},
++	{
++		.name = "event recover deadlock test",
++		.func = test_recover_deadlock,
++	},
++};
++
++static int __init dept_ut_init(void)
++{
++	int i;
++
++	lockdep_off();
++
++	dept_ut_results.ecxt_stack_valid_cnt = 0;
++	dept_ut_results.ecxt_stack_total_cnt = 0;
++	dept_ut_results.wait_stack_valid_cnt = 0;
++	dept_ut_results.wait_stack_total_cnt = 0;
++	dept_ut_results.evnt_stack_valid_cnt = 0;
++	dept_ut_results.evnt_stack_total_cnt = 0;
++
++	for (i = 0; i < ARRAY_SIZE(units); i++)
++		units[i].result = units[i].func();
++
++	pr_info("\n");
++	pr_info("******************************************\n");
++	pr_info("DEPT unit test results\n");
++	pr_info("******************************************\n");
++	for (i = 0; i < ARRAY_SIZE(units); i++) {
++		pr_info("(%s) %s\n", units[i].result ? "pass" : "fail",
++				units[i].name);
++	}
++	pr_info("ecxt stack valid count = %d/%d\n",
++			dept_ut_results.ecxt_stack_valid_cnt,
++			dept_ut_results.ecxt_stack_total_cnt);
++	pr_info("wait stack valid count = %d/%d\n",
++			dept_ut_results.wait_stack_valid_cnt,
++			dept_ut_results.wait_stack_total_cnt);
++	pr_info("event stack valid count = %d/%d\n",
++			dept_ut_results.evnt_stack_valid_cnt,
++			dept_ut_results.evnt_stack_total_cnt);
++	pr_info("******************************************\n");
++	pr_info("\n");
++
++	lockdep_on();
++
++	return 0;
++}
++
++static void dept_ut_cleanup(void)
++{
++	/*
++	 * Do nothing for now.
++	 */
++}
++
++module_init(dept_ut_init);
++module_exit(dept_ut_cleanup);
+diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
+index 540583425d8e..86e26b9708fa 100644
+--- a/lib/Kconfig.debug
++++ b/lib/Kconfig.debug
+@@ -1404,6 +1404,18 @@ config DEPT_AGGRESSIVE_TIMEOUT_WAIT
+ 	  that timeout is used to avoid a deadlock. Say N if you'd like
+ 	  to avoid verbose reports.
+ 
++config DEPT_UNIT_TEST
++	tristate "unit test for DEPT"
++	depends on DEBUG_KERNEL && DEPT
++	default n
++	help
++	  This option provides a kernel module that runs unit test for
++	  DEPT.
++
++	  Say Y if you want DEPT unit test to be built into the kernel.
++	  Say M if you want DEPT unit test to build as a module.
++	  Say N if you are unsure.
++
+ config LOCK_DEBUGGING_SUPPORT
+ 	bool
+ 	depends on TRACE_IRQFLAGS_SUPPORT && STACKTRACE_SUPPORT && LOCKDEP_SUPPORT
 -- 
 2.17.1
 
