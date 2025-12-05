@@ -1,39 +1,39 @@
 Received: from ixit.cz (ip-94-112-25-9.bb.vodafone.cz [94.112.25.9])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8FF042C027B;
-	Fri,  5 Dec 2025 12:03:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2DF3031A046;
+	Fri,  5 Dec 2025 12:11:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=94.112.25.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764936200; cv=none; b=UavOn4u5fb2iS3mzxDsyDUWESJJ5ZBwmSuvr8UGxEO6azlPim6FDbSsfWoE4GXDHmtRNQhJIQJkvpB6WTP5fDqTTk5/5KL+Vjeg54hy6I1RkpcWKz70QIebLFPqMhGPU5f/XYsTO0R6vRFflGlkurLwsRfm/SDbuWz6s7wx1QWk=
+	t=1764936704; cv=none; b=pTFzD3ocU/Wmmz43mqWfLWSmM3FL3aMP7PBvjblZVRQGLcNl+GPKNM/WqozoY0XoXjKOwz1MmwcRtysV/OdBTvCOKavRuQ/LX23ufzf4L0jFCsFFCDt56JJcXywzgXChUcIib0BH7IQjdhyWnu3HEs3fDJrETCz0JOTaBuCwgUU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764936200; c=relaxed/simple;
-	bh=WOlQCXinGaB4iAljSEK4J/5flasv5OaR5WalNI1693w=;
+	s=arc-20240116; t=1764936704; c=relaxed/simple;
+	bh=48k4AgX+q3IBIkf0IGLJcXM2KiZiFNbkddmehWxWCIo=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=uF7TylBxYwn5Yj8o58FH/hFo9v4snP1/84C+9TdgngaEKG2FWdlCkoYbULsu4KabTWBZowhCsa2rlt1MfkknlF0M2DuFPQAmviYs15vomOA073OH3C74ad1UbkJ0Wyd/07+hgXG1BHp2HywZ3+W/r1jKIKp7JMdPk5qG6lP90UM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ixit.cz; spf=pass smtp.mailfrom=ixit.cz; dkim=pass (1024-bit key) header.d=ixit.cz header.i=@ixit.cz header.b=KIqmwyoK; arc=none smtp.client-ip=94.112.25.9
+	 In-Reply-To:Content-Type; b=KdtmHM+iJ0uquDKnovSlWir+p3/D75r4yl/JFo5djInt5BRhhswoRK28ZDWpEOjSI8WR/TZdxk4lVbkjh8xbt4fCD2Op22QXeTO0IjxQK6Mbghr//TIQdekBWLBIfMtLlVMYI8kX5CXszowsQQCfq3wD4riFB9atXT4Cb/zUul4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ixit.cz; spf=pass smtp.mailfrom=ixit.cz; dkim=pass (1024-bit key) header.d=ixit.cz header.i=@ixit.cz header.b=ZbgpSJWp; arc=none smtp.client-ip=94.112.25.9
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ixit.cz
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ixit.cz
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ixit.cz header.i=@ixit.cz header.b="KIqmwyoK"
+	dkim=pass (1024-bit key) header.d=ixit.cz header.i=@ixit.cz header.b="ZbgpSJWp"
 Received: from [10.0.0.200] (unknown [10.0.0.1])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange x25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by ixit.cz (Postfix) with ESMTPSA id 0E7D65340CA1;
-	Fri, 05 Dec 2025 12:56:16 +0100 (CET)
+	by ixit.cz (Postfix) with ESMTPSA id 4EAA653400DF;
+	Fri, 05 Dec 2025 13:11:37 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ixit.cz; s=dkim;
-	t=1764935776;
+	t=1764936697;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=meFCyDuprjVE+jc4Sjs7pYJr+2hQmHIrdJPBx8t8Z94=;
-	b=KIqmwyoKZD0rxs4etg8hSDmLGFzFRi7ng58cy9xohyC144toNLSJxCEhQnJ9sy0MrAlRH5
-	WpmI7++FO0lYZOkJsERzMnT+TSTY9UTw4OnMrNBklf4DQQrZHcTNkyuELnSgIeDTSzK7sq
-	2ExzfJAHbrYp9v5OYfbx3fHvwGWEg1M=
-Message-ID: <03c137aa-bd31-43d7-aea8-489ec0102ab3@ixit.cz>
-Date: Fri, 5 Dec 2025 12:56:15 +0100
+	bh=9K3BaIAz1YO5eT1F/Xdh0sXF5lL51JkibNNOPjMJcng=;
+	b=ZbgpSJWpOBwS4UeAc0/p6zmcwnX+1JzC94XEZoFKNFCfqR19SzV+PWWHzZi0D0+KTEmRG3
+	9ffTmXDX73KnoswkhtzNK3a7liIqCMhgPA202Y3tWFBiXL46Ey4ylMGUuzle4nui977W/j
+	0vEpEI3qGjX4naySG+Y6MWZCvip8eDs=
+Message-ID: <df1ce093-163d-4d80-a27a-fe42e5cfea53@ixit.cz>
+Date: Fri, 5 Dec 2025 13:11:37 +0100
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
@@ -58,6 +58,8 @@ Cc: Joel Selvaraj <foss@joelselvaraj.com>,
 References: <20251204-qcom-cphy-v2-0-6b35ef8b071e@ixit.cz>
  <20251204-qcom-cphy-v2-5-6b35ef8b071e@ixit.cz>
  <b7fac86c-15fd-400b-955a-c331c8bc681d@oss.qualcomm.com>
+ <03c137aa-bd31-43d7-aea8-489ec0102ab3@ixit.cz>
+ <f04d27a2-88c9-44ac-b4fa-33059a9806b2@oss.qualcomm.com>
 Content-Language: en-US
 From: David Heidelberg <david@ixit.cz>
 Autocrypt: addr=david@ixit.cz; keydata=
@@ -103,70 +105,87 @@ Autocrypt: addr=david@ixit.cz; keydata=
  zRKcgRumz2Tc1ouHj6qINlzEe3a5ldctIn/dvR1l2Ko7GBTG+VGp9U5NOAEkGpxHG9yg6eeY
  fFYnMme51H/HKiyUlFiE3yd5LSmv8Dhbf+vsI4x6BOOOq4Iyop/Exavj1owGxW0hpdUGcCl1
  ovlwVPO/6l/XLAmSGwdnGqok5eGZQzSst0tj9RC9O0dXO1TZocOsf0tJ8dR2egX4kxM=
-In-Reply-To: <b7fac86c-15fd-400b-955a-c331c8bc681d@oss.qualcomm.com>
+In-Reply-To: <f04d27a2-88c9-44ac-b4fa-33059a9806b2@oss.qualcomm.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On 05/12/2025 10:54, Konrad Dybcio wrote:
-> On 12/4/25 5:32 PM, David Heidelberg via B4 Relay wrote:
->> From: Casey Connolly <casey.connolly@linaro.org>
+On 05/12/2025 13:00, Konrad Dybcio wrote:
+> On 12/5/25 12:56 PM, David Heidelberg wrote:
+>> On 05/12/2025 10:54, Konrad Dybcio wrote:
+>>> On 12/4/25 5:32 PM, David Heidelberg via B4 Relay wrote:
+>>>> From: Casey Connolly <casey.connolly@linaro.org>
+>>>>
+>>>> Add a PHY configuration sequence for the sdm845 which uses a Qualcomm
+>>>> Gen 2 version 1.1 CSI-2 PHY.
+>>>>
+>>>> The PHY can be configured as two phase or three phase in C-PHY or D-PHY
+>>>> mode. This configuration supports three-phase C-PHY mode.
+>>>>
+>>>> Signed-off-by: Casey Connolly <casey.connolly@linaro.org>
+>>>> Reviewed-by: Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>
+>>>> Reviewed-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+>>>> Co-developed-by: David Heidelberg <david@ixit.cz>
+>>>> Signed-off-by: David Heidelberg <david@ixit.cz>
+>>>> ---
+>>>>    .../platform/qcom/camss/camss-csiphy-3ph-1-0.c     | 74 +++++++++++++++++++++-
+>>>>    1 file changed, 72 insertions(+), 2 deletions(-)
+>>>>
+>>>> diff --git a/drivers/media/platform/qcom/camss/camss-csiphy-3ph-1-0.c b/drivers/media/platform/qcom/camss/camss-csiphy-3ph-1-0.c
+>>>> index 3d30cdce33f96..7121aa97a19c4 100644
+>>>> --- a/drivers/media/platform/qcom/camss/camss-csiphy-3ph-1-0.c
+>>>> +++ b/drivers/media/platform/qcom/camss/camss-csiphy-3ph-1-0.c
+>>>> @@ -145,6 +145,7 @@ csiphy_lane_regs lane_regs_sa8775p[] = {
+>>>>    };
+>>>>      /* GEN2 1.0 2PH */
+>>>> +/* 5 entries: clock + 4 lanes */
+>>>>    static const struct
+>>>>    csiphy_lane_regs lane_regs_sdm845[] = {
+>>>>        {0x0004, 0x0C, 0x00, CSIPHY_DEFAULT_PARAMS},
+>>>> @@ -219,6 +220,69 @@ csiphy_lane_regs lane_regs_sdm845[] = {
+>>>>        {0x0664, 0x7F, 0x00, CSIPHY_DEFAULT_PARAMS},
+>>>>    };
+>>>>    +/* GEN2 1.0 3PH */
+>>>> +/* 3 entries: 3 lanes (C-PHY) */
+>>>> +static const struct
+>>>> +csiphy_lane_regs lane_regs_sdm845_3ph[] = {
+>>>
+>>> Here's a downstream snippet which seems to have more up-to-date settings
+>>> (checked against a doc and it seems to have changes made at the time of
+>>> the last edit of the doc)
+>>>
+>>> You'll notice it's split into 3 arrays of register sets - that's because
+>>> it applies setting for each lane.. something to keep in mind we could
+>>> optimize upstream data storage for (they are identical per lane in this
+>>> instance) one day
 >>
->> Add a PHY configuration sequence for the sdm845 which uses a Qualcomm
->> Gen 2 version 1.1 CSI-2 PHY.
+>> see 87c2c2716523 ("media: qcom: camss: csiphy-3ph: Remove redundant PHY init sequence control loop")
 >>
->> The PHY can be configured as two phase or three phase in C-PHY or D-PHY
->> mode. This configuration supports three-phase C-PHY mode.
+>> for the reason to flatten the regs array (thou outside the scope of this patchset).
 >>
->> Signed-off-by: Casey Connolly <casey.connolly@linaro.org>
->> Reviewed-by: Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>
->> Reviewed-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
->> Co-developed-by: David Heidelberg <david@ixit.cz>
->> Signed-off-by: David Heidelberg <david@ixit.cz>
->> ---
->>   .../platform/qcom/camss/camss-csiphy-3ph-1-0.c     | 74 +++++++++++++++++++++-
->>   1 file changed, 72 insertions(+), 2 deletions(-)
+>> Regarding to the different value, I can test them, can you point to docs regarding why these regs has been changed and what the values means?
 >>
->> diff --git a/drivers/media/platform/qcom/camss/camss-csiphy-3ph-1-0.c b/drivers/media/platform/qcom/camss/camss-csiphy-3ph-1-0.c
->> index 3d30cdce33f96..7121aa97a19c4 100644
->> --- a/drivers/media/platform/qcom/camss/camss-csiphy-3ph-1-0.c
->> +++ b/drivers/media/platform/qcom/camss/camss-csiphy-3ph-1-0.c
->> @@ -145,6 +145,7 @@ csiphy_lane_regs lane_regs_sa8775p[] = {
->>   };
->>   
->>   /* GEN2 1.0 2PH */
->> +/* 5 entries: clock + 4 lanes */
->>   static const struct
->>   csiphy_lane_regs lane_regs_sdm845[] = {
->>   	{0x0004, 0x0C, 0x00, CSIPHY_DEFAULT_PARAMS},
->> @@ -219,6 +220,69 @@ csiphy_lane_regs lane_regs_sdm845[] = {
->>   	{0x0664, 0x7F, 0x00, CSIPHY_DEFAULT_PARAMS},
->>   };
->>   
->> +/* GEN2 1.0 3PH */
->> +/* 3 entries: 3 lanes (C-PHY) */
->> +static const struct
->> +csiphy_lane_regs lane_regs_sdm845_3ph[] = {
+>> I thought it's some default seq, but as you show there is multiple versions, it make sense to properly document what these regs do.
 > 
-> Here's a downstream snippet which seems to have more up-to-date settings
-> (checked against a doc and it seems to have changes made at the time of
-> the last edit of the doc)
+> I'll make that point to the relevant folks when they get around to refreshing
+> this driver, I'm not sure I can just tell you what all the magic sequences do..
 > 
-> You'll notice it's split into 3 arrays of register sets - that's because
-> it applies setting for each lane.. something to keep in mind we could
-> optimize upstream data storage for (they are identical per lane in this
-> instance) one day
+> The high-level description for all post-release PHY sequence updates is pretty
+> much always improves robustness as a result of "more better" electrical tuning.
+> It's also the case this time around.
 
-see 87c2c2716523 ("media: qcom: camss: csiphy-3ph: Remove redundant PHY 
-init sequence control loop")
+Since the original version works, but maybe it could work better (I'll 
+do testing), I would do "upgrade" commit, so at least we know tho regs 
+setups which works and someone can try deduct or document it in the future.
 
-for the reason to flatten the regs array (thou outside the scope of this 
-patchset).
+If you try to poke the right people, that would be awesome.
 
-Regarding to the different value, I can test them, can you point to docs 
-regarding why these regs has been changed and what the values means?
-
-I thought it's some default seq, but as you show there is multiple 
-versions, it make sense to properly document what these regs do.
+Thank you for noticing the new regs! :)
 
 David
-[...]
+
+> 
+> Konrad
+
+-- 
+David Heidelberg
+
