@@ -1,239 +1,225 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9B51122083;
-	Mon,  8 Dec 2025 15:32:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6411222173A;
+	Mon,  8 Dec 2025 15:49:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765207956; cv=none; b=iQSti9phJcvpLYHHEkPvUndfy3M8lKDFhUvHLZakkFimTQvlyEbke5iwNK71S698eTGnSZR+wWQJ7fFGklMSEqyh02zpm6MHkl1wlfLybayHt66hWRJDdpYNaeSymbr/Et7i91f8KjFb/RNtLOW54yK+JN7KrlEmhM+srceURx8=
+	t=1765208976; cv=none; b=NooPS260hhZSm7I7wgvhDkMq923wbrOjZToAuO25Jf8wpwJRKPRhFsD/p6yx0m6jg2hqEDM1XttmvLK/MYie9BCN67lcMjwajlKztoBspEwZ6Q3GLZBfl2njSr445LLSrJZdoSYxb9OggXvo0CN+G3V8s7kSP9iL6QzAHLd8jQk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765207956; c=relaxed/simple;
-	bh=PusM7xeaT4yaiEWhML+9RyjteBA0D5MBEKjOaZ0q/cE=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=I+WVTqbn5RapR/4GPuxOV+snE4lPxvZPPYG8u2qeTaaq61+0C+G9XsI7QSVJ10UWSwbRlOjFm3houD+BB8IesLdG0Lp+6Wl0KOp4Ga9QTCISDm3CbTXnJZpx6TMPzndV16f3lKZ+4aTn52MSGbHb4C4mOvHRBI96LvR5xbMyyAo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=LWtvTX12; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1765208976; c=relaxed/simple;
+	bh=YWAbsKFCm/k94ljlvwa1UnSGizH5yIeZ3FUV5/0lLZg=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=Gv9iQo0Sf1WIurUdWFfI67uFMYmngx99eBSmGQMh26f3HIpB7R0q0fS6NNBedy1le7CPgBiuzrvSHZNR2lZm9kSC2Uk/YHkOg0ZTFQ1bE31IvyRF0UsA0/j6HwxrYCHpkolMk/eeKOLcw1/cAUzzaR1Sa7ZnBEnaNW0BUqNCZmM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fNWX6ZEW; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="LWtvTX12"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AE04DC4CEF1;
-	Mon,  8 Dec 2025 15:32:35 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fNWX6ZEW"
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 0AF8BC116B1;
+	Mon,  8 Dec 2025 15:49:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1765207956;
-	bh=PusM7xeaT4yaiEWhML+9RyjteBA0D5MBEKjOaZ0q/cE=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=LWtvTX12a6NA/QFJ37apLDY4QIYn5XYRmzp1svMB81nbDnuZziFSifX/p5vMWJoRG
-	 g9vFU6FuC7FJRlbw27YxlrxrURihM8pGEdGaA4L1P2g87EQ2/pAc4mAawodV4idWtt
-	 OR58sT6Zhusl9hiH6Qtojc+c47cltvH4YoJ/szzq27Tp0oGsUqdfpqtKNXpmC6HcjL
-	 mJRXhQF+GxQn47xudfs7mJrt8HcUHzE+Ewd0yUDj7fU+ddxy6xeqbSI3cphDIoOKlr
-	 fbJe2JBlYHoO6C4TxiHMePPXaSTdl2Nv0QsyR609JYkL+xa8TP+i5Of5XCRhghCeL8
-	 +O1neeSNKhr7A==
-Date: Mon, 8 Dec 2025 16:32:33 +0100
-From: Maxime Ripard <mripard@kernel.org>
-To: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Cc: Mauro Carvalho Chehab <mchehab@kernel.org>, 
-	Mats Randgaard <matrandg@cisco.com>, Alain Volmat <alain.volmat@foss.st.com>, 
-	Sakari Ailus <sakari.ailus@linux.intel.com>, Hans Verkuil <hverkuil@kernel.org>, linux-media@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, Hans Verkuil <hans.verkuil@cisco.com>, 
-	Dave Stevenson <dave.stevenson@raspberrypi.com>
-Subject: Re: [PATCH v4 2/4] media: uapi: Introduce MEDIA_BUS_FMT_BGR565_1X16
-Message-ID: <20251208-powerful-penguin-of-reputation-ffdc5c@houat>
-References: <20251013-csi-bgr-rgb-v4-0-55eab2caa69f@kernel.org>
- <20251013-csi-bgr-rgb-v4-2-55eab2caa69f@kernel.org>
- <20251026231553.GB9719@pendragon.ideasonboard.com>
- <20251026233308.GC9719@pendragon.ideasonboard.com>
+	s=k20201202; t=1765208976;
+	bh=YWAbsKFCm/k94ljlvwa1UnSGizH5yIeZ3FUV5/0lLZg=;
+	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To:From;
+	b=fNWX6ZEWjj7D2R1L2IQN3AJX1SEbfzk1awHuJ6maj6uYBs59THIq3qFh6XdnKaLyU
+	 c3Tjv+cGrPJ3ktD5YwNvR0fjcNZ12EXfUPkbhgRWcVteHJUPhQHoZ7YwGxkUF6ZpZo
+	 0xL8R71re9SWHafrErt/sC4TtAILyXzVAB8VJ1UDJbM5S4X32F3KwKgZnPwUh8iqxO
+	 weG9F3XZfNr3KCrT/MywWgDKSX40BdZzUCgi2/Sw6/sbY01IZL+1Eom0YGbeFNvfAU
+	 LAosX5S6Mc1Klr8CcXXtCukayanQejjdutFfatzjftzkuX/zteM3YYqHAPXgJ582Z7
+	 /KNgJwLQmxFNg==
+Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id F3CC9D3B7F3;
+	Mon,  8 Dec 2025 15:49:35 +0000 (UTC)
+From: Yassine Ouaissa via B4 Relay <devnull+yassine.ouaissa.allegrodvt.com@kernel.org>
+Date: Mon, 08 Dec 2025 16:49:16 +0100
+Subject: [PATCH RESEND v6 1/4] media: allegro-dvt: Move the current driver
+ to a subdirectory
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha384;
-	protocol="application/pgp-signature"; boundary="dx6cc6brlqxwpezc"
-Content-Disposition: inline
-In-Reply-To: <20251026233308.GC9719@pendragon.ideasonboard.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20251208-allegro_dvt_al300_dec_driver-v6-1-128956555677@allegrodvt.com>
+References: <20251208-allegro_dvt_al300_dec_driver-v6-0-128956555677@allegrodvt.com>
+In-Reply-To: <20251208-allegro_dvt_al300_dec_driver-v6-0-128956555677@allegrodvt.com>
+To: Mauro Carvalho Chehab <mchehab@kernel.org>, 
+ Michael Tretter <m.tretter@pengutronix.de>, 
+ Pengutronix Kernel Team <kernel@pengutronix.de>, 
+ Michal Simek <michal.simek@amd.com>, Rob Herring <robh@kernel.org>, 
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+ Conor Dooley <conor+dt@kernel.org>, 
+ Yassine OUAISSA <yassine.ouaissa@allegrodvt.com>, 
+ Nicolas Dufresne <nicolas@ndufresne.ca>
+Cc: linux-kernel@vger.kernel.org, linux-media@vger.kernel.org, 
+ linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org, 
+ Nicolas Dufresne <nicolas.dufresne@collabora.com>
+X-Mailer: b4 0.14.3
+X-Developer-Signature: v=1; a=openpgp-sha256; l=7014;
+ i=yassine.ouaissa@allegrodvt.com; h=from:subject:message-id;
+ bh=U9+FhDgZb/FiAEVct668YZQhiLAVBrhpMNqOhBE24PU=;
+ b=owGbwMvMwCV2oHftXqU9jLMZT6slMWSafe6xs797pVM9WVXr4/PTeY9+aWpHN2Qtaj/bveDvj
+ JLXG7e/7ShlYRDjYpAVU2T5YLD02Re2Gp8ZLWzzYeawMoEMYeDiFICJTPjPyDDzVk6mB8fh6LYt
+ X/esXZn7W+nnSr9XOquqvRQ8I6yPm/kzMnRUhwccnpDa8jqJTy132drVO3xFu79XuPU9CJQ7kPk
+ 4nxkA
+X-Developer-Key: i=yassine.ouaissa@allegrodvt.com; a=openpgp;
+ fpr=B0CE218FC8E89064DAED6179042F935CFB3AD0CC
+X-Endpoint-Received: by B4 Relay for yassine.ouaissa@allegrodvt.com/default
+ with auth_id=423
+X-Original-From: Yassine Ouaissa <yassine.ouaissa@allegrodvt.com>
+Reply-To: yassine.ouaissa@allegrodvt.com
+
+From: Yassine Ouaissa <yassine.ouaissa@allegrodvt.com>
+
+In preparation for the upcoming driver update, we need to relocate the
+current driver.
+This will help ensure a clean transition and avoid any potential
+conflicts with the new driver.
+This patch is crucial for keeping our directory organized and
+facilitating a smooth integration of the new driver.
+
+Reviewed-by: Nicolas Dufresne <nicolas.dufresne@collabora.com>
+Signed-off-by: Yassine Ouaissa <yassine.ouaissa@allegrodvt.com>
+---
+ MAINTAINERS                                             |  2 +-
+ drivers/media/platform/allegro-dvt/Kconfig              | 16 +---------------
+ drivers/media/platform/allegro-dvt/Makefile             |  5 +----
+ drivers/media/platform/allegro-dvt/zynqmp/Kconfig       | 17 +++++++++++++++++
+ drivers/media/platform/allegro-dvt/zynqmp/Makefile      |  6 ++++++
+ .../platform/allegro-dvt/{ => zynqmp}/allegro-core.c    |  0
+ .../platform/allegro-dvt/{ => zynqmp}/allegro-mail.c    |  0
+ .../platform/allegro-dvt/{ => zynqmp}/allegro-mail.h    |  0
+ .../media/platform/allegro-dvt/{ => zynqmp}/nal-h264.c  |  0
+ .../media/platform/allegro-dvt/{ => zynqmp}/nal-h264.h  |  0
+ .../media/platform/allegro-dvt/{ => zynqmp}/nal-hevc.c  |  0
+ .../media/platform/allegro-dvt/{ => zynqmp}/nal-hevc.h  |  0
+ .../media/platform/allegro-dvt/{ => zynqmp}/nal-rbsp.c  |  0
+ .../media/platform/allegro-dvt/{ => zynqmp}/nal-rbsp.h  |  0
+ 14 files changed, 26 insertions(+), 20 deletions(-)
+
+diff --git a/MAINTAINERS b/MAINTAINERS
+index d701a4d5b00e..dc56841fa5e5 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -838,7 +838,7 @@ R:	Pengutronix Kernel Team <kernel@pengutronix.de>
+ L:	linux-media@vger.kernel.org
+ S:	Maintained
+ F:	Documentation/devicetree/bindings/media/allegro,al5e.yaml
+-F:	drivers/media/platform/allegro-dvt/
++F:	drivers/media/platform/allegro-dvt/zynqmp
+ 
+ ALLIED VISION ALVIUM CAMERA DRIVER
+ M:	Tommaso Merciai <tomm.merciai@gmail.com>
+diff --git a/drivers/media/platform/allegro-dvt/Kconfig b/drivers/media/platform/allegro-dvt/Kconfig
+index 2182e1277568..e9008614c27b 100644
+--- a/drivers/media/platform/allegro-dvt/Kconfig
++++ b/drivers/media/platform/allegro-dvt/Kconfig
+@@ -2,18 +2,4 @@
+ 
+ comment "Allegro DVT media platform drivers"
+ 
+-config VIDEO_ALLEGRO_DVT
+-	tristate "Allegro DVT Video IP Core"
+-	depends on V4L_MEM2MEM_DRIVERS
+-	depends on VIDEO_DEV
+-	depends on ARCH_ZYNQMP || COMPILE_TEST
+-	select V4L2_MEM2MEM_DEV
+-	select VIDEOBUF2_DMA_CONTIG
+-	select REGMAP_MMIO
+-	help
+-	  Support for the encoder video IP core by Allegro DVT. This core is
+-	  found for example on the Xilinx ZynqMP SoC in the EV family and is
+-	  called VCU in the reference manual.
+-
+-	  To compile this driver as a module, choose M here: the module
+-	  will be called allegro.
++source "drivers/media/platform/allegro-dvt/zynqmp/Kconfig"
+diff --git a/drivers/media/platform/allegro-dvt/Makefile b/drivers/media/platform/allegro-dvt/Makefile
+index 66108a303774..d2aa6875edcf 100644
+--- a/drivers/media/platform/allegro-dvt/Makefile
++++ b/drivers/media/platform/allegro-dvt/Makefile
+@@ -1,6 +1,3 @@
+ # SPDX-License-Identifier: GPL-2.0
+ 
+-allegro-objs := allegro-core.o allegro-mail.o
+-allegro-objs += nal-rbsp.o nal-h264.o nal-hevc.o
+-
+-obj-$(CONFIG_VIDEO_ALLEGRO_DVT) += allegro.o
++obj-y += zynqmp/
+diff --git a/drivers/media/platform/allegro-dvt/zynqmp/Kconfig b/drivers/media/platform/allegro-dvt/zynqmp/Kconfig
+new file mode 100644
+index 000000000000..0a0a697c420d
+--- /dev/null
++++ b/drivers/media/platform/allegro-dvt/zynqmp/Kconfig
+@@ -0,0 +1,17 @@
++# SPDX-License-Identifier: GPL-2.0-only
++
++config VIDEO_ALLEGRO_DVT
++	tristate "Allegro DVT Video IP Core for ZynqMP"
++	depends on V4L_MEM2MEM_DRIVERS
++	depends on VIDEO_DEV
++	depends on ARCH_ZYNQMP || COMPILE_TEST
++	select V4L2_MEM2MEM_DEV
++	select VIDEOBUF2_DMA_CONTIG
++	select REGMAP_MMIO
++	help
++	  Support for the encoder video IP core by Allegro DVT. This core is
++	  found for example on the Xilinx ZynqMP SoC in the EV family and is
++	  called VCU in the reference manual.
++
++	  To compile this driver as a module, choose M here: the module
++	  will be called allegro.
+diff --git a/drivers/media/platform/allegro-dvt/zynqmp/Makefile b/drivers/media/platform/allegro-dvt/zynqmp/Makefile
+new file mode 100644
+index 000000000000..66108a303774
+--- /dev/null
++++ b/drivers/media/platform/allegro-dvt/zynqmp/Makefile
+@@ -0,0 +1,6 @@
++# SPDX-License-Identifier: GPL-2.0
++
++allegro-objs := allegro-core.o allegro-mail.o
++allegro-objs += nal-rbsp.o nal-h264.o nal-hevc.o
++
++obj-$(CONFIG_VIDEO_ALLEGRO_DVT) += allegro.o
+diff --git a/drivers/media/platform/allegro-dvt/allegro-core.c b/drivers/media/platform/allegro-dvt/zynqmp/allegro-core.c
+similarity index 100%
+rename from drivers/media/platform/allegro-dvt/allegro-core.c
+rename to drivers/media/platform/allegro-dvt/zynqmp/allegro-core.c
+diff --git a/drivers/media/platform/allegro-dvt/allegro-mail.c b/drivers/media/platform/allegro-dvt/zynqmp/allegro-mail.c
+similarity index 100%
+rename from drivers/media/platform/allegro-dvt/allegro-mail.c
+rename to drivers/media/platform/allegro-dvt/zynqmp/allegro-mail.c
+diff --git a/drivers/media/platform/allegro-dvt/allegro-mail.h b/drivers/media/platform/allegro-dvt/zynqmp/allegro-mail.h
+similarity index 100%
+rename from drivers/media/platform/allegro-dvt/allegro-mail.h
+rename to drivers/media/platform/allegro-dvt/zynqmp/allegro-mail.h
+diff --git a/drivers/media/platform/allegro-dvt/nal-h264.c b/drivers/media/platform/allegro-dvt/zynqmp/nal-h264.c
+similarity index 100%
+rename from drivers/media/platform/allegro-dvt/nal-h264.c
+rename to drivers/media/platform/allegro-dvt/zynqmp/nal-h264.c
+diff --git a/drivers/media/platform/allegro-dvt/nal-h264.h b/drivers/media/platform/allegro-dvt/zynqmp/nal-h264.h
+similarity index 100%
+rename from drivers/media/platform/allegro-dvt/nal-h264.h
+rename to drivers/media/platform/allegro-dvt/zynqmp/nal-h264.h
+diff --git a/drivers/media/platform/allegro-dvt/nal-hevc.c b/drivers/media/platform/allegro-dvt/zynqmp/nal-hevc.c
+similarity index 100%
+rename from drivers/media/platform/allegro-dvt/nal-hevc.c
+rename to drivers/media/platform/allegro-dvt/zynqmp/nal-hevc.c
+diff --git a/drivers/media/platform/allegro-dvt/nal-hevc.h b/drivers/media/platform/allegro-dvt/zynqmp/nal-hevc.h
+similarity index 100%
+rename from drivers/media/platform/allegro-dvt/nal-hevc.h
+rename to drivers/media/platform/allegro-dvt/zynqmp/nal-hevc.h
+diff --git a/drivers/media/platform/allegro-dvt/nal-rbsp.c b/drivers/media/platform/allegro-dvt/zynqmp/nal-rbsp.c
+similarity index 100%
+rename from drivers/media/platform/allegro-dvt/nal-rbsp.c
+rename to drivers/media/platform/allegro-dvt/zynqmp/nal-rbsp.c
+diff --git a/drivers/media/platform/allegro-dvt/nal-rbsp.h b/drivers/media/platform/allegro-dvt/zynqmp/nal-rbsp.h
+similarity index 100%
+rename from drivers/media/platform/allegro-dvt/nal-rbsp.h
+rename to drivers/media/platform/allegro-dvt/zynqmp/nal-rbsp.h
+
+-- 
+2.50.1
 
 
---dx6cc6brlqxwpezc
-Content-Type: text/plain; protected-headers=v1; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-Subject: Re: [PATCH v4 2/4] media: uapi: Introduce MEDIA_BUS_FMT_BGR565_1X16
-MIME-Version: 1.0
-
-Hi Laurent,
-
-On Mon, Oct 27, 2025 at 01:33:08AM +0200, Laurent Pinchart wrote:
-> On Mon, Oct 27, 2025 at 01:15:54AM +0200, Laurent Pinchart wrote:
-> > On Mon, Oct 13, 2025 at 01:01:34PM +0200, Maxime Ripard wrote:
-> > > MIPI-CSI2 sends its RGB format on the wire with the blue component
-> > > first, then green, then red. MIPI calls that format "RGB", but by v4l2
-> > > conventions it would be BGR.
-> > >=20
-> > > MIPI-CSI2 supports three RGB variants: 444, 555, 565, 666 and 888.
-> > >=20
-> > > We already have BGR666 and BGR888 media bus formats, we don't have any
-> > > CSI transceivers using the 444 and 555 variants, but some transceivers
-> > > use the CSI RGB565 format, while using the RGB565 media bus code.
-> > >=20
-> > > That's a mistake, but since we don't have a BGR565 media bus code we
-> > > need to introduce one before fixing it.
-> > >=20
-> > > Signed-off-by: Maxime Ripard <mripard@kernel.org>
-> > > ---
-> > >  .../userspace-api/media/v4l/subdev-formats.rst     | 37 ++++++++++++=
-++++++++++
-> > >  include/uapi/linux/media-bus-format.h              |  3 +-
-> > >  2 files changed, 39 insertions(+), 1 deletion(-)
-> > >=20
-> > > diff --git a/Documentation/userspace-api/media/v4l/subdev-formats.rst=
- b/Documentation/userspace-api/media/v4l/subdev-formats.rst
-> > > index 8e92f784abd8123f9ea950f954a60af56ee76dbe..def0d24ef6cdb1a2ec939=
-5af1468f56adf31a8de 100644
-> > > --- a/Documentation/userspace-api/media/v4l/subdev-formats.rst
-> > > +++ b/Documentation/userspace-api/media/v4l/subdev-formats.rst
-> > > @@ -625,10 +625,47 @@ The following tables list existing packed RGB f=
-ormats.
-> > >        - b\ :sub:`4`
-> > >        - b\ :sub:`3`
-> > >        - b\ :sub:`2`
-> > >        - b\ :sub:`1`
-> > >        - b\ :sub:`0`
-> > > +    * .. _MEDIA-BUS-FMT-BGR565-1X16:
-> > > +
-> > > +      - MEDIA_BUS_FMT_BGR565_1X16
-> > > +      - 0x1028
-> > > +      -
-> > > +      -
-> > > +      -
-> > > +      -
-> > > +      -
-> > > +      -
-> > > +      -
-> > > +      -
-> > > +      -
-> > > +      -
-> > > +      -
-> > > +      -
-> > > +      -
-> > > +      -
-> > > +      -
-> > > +      -
-> > > +      -
-> > > +      - b\ :sub:`4`
-> > > +      - b\ :sub:`3`
-> > > +      - b\ :sub:`2`
-> > > +      - b\ :sub:`1`
-> > > +      - b\ :sub:`0`
-> > > +      - g\ :sub:`5`
-> > > +      - g\ :sub:`4`
-> > > +      - g\ :sub:`3`
-> > > +      - g\ :sub:`2`
-> > > +      - g\ :sub:`1`
-> > > +      - g\ :sub:`0`
-> > > +      - r\ :sub:`4`
-> > > +      - r\ :sub:`3`
-> > > +      - r\ :sub:`2`
-> > > +      - r\ :sub:`1`
-> > > +      - r\ :sub:`0`
-> >=20
-> > We're definitely in convention territory, because this is not how 16-bit
-> > RGB data is transmitted over CSI-2. CSI-2 transmits blue first, but
-> > starts with bit 0, not bit 4.
-> >=20
-> > Have you explored the alternative of picking the parallel bus code that
-> > matches the serial order when transmitted with the least significant bit
-> > first ? That would be MEDIA_BUS_FMT_RGB565_1X16 here, and
-> > MEDIA_BUS_FMT_RGB888_1X24 for 24-bit RGB.
->=20
-> To be clear, media bus codes are a matter of conventions. Some
-> conventions would be easier to explain that others, and can also be more
-> consistent with pixel format namings, but at the end of the day they're
-> all conventions. While saying "pick the media bus code that transmits a
-> pixel in one clock sample, with the bit order matching LSB-first
-> transmission" could be the simplest to document, there will be a
-> mismatch in component orders between the media bus code and the pixel
-> format in some cases. There may also be more drivers implementing other
-> conventions, making the transition more difficult.
->=20
-> I'll be very busy the upcoming week and will likely not be able to
-> participate in this discussion in the near future.
-
-For the record, we've discussed it on IRC recently.
-
-The suggestion to have all CSI Data Formats as MEDIA_BUS_FMT_RGB*_1X*
-variants make sense to me. And we can easily document it, because we
-could match the first bit transmitted with the least significant bit
-of a media bus code indeed.
-
-Thus a sensor using RGB888 would register MEDIA_BUS_FMT_RGB888_1X24.
-That's indeed the case right now with tc358743:
-https://elixir.bootlin.com/linux/v6.18/source/drivers/media/i2c/tc358743.c#=
-L1775
-
-Unicam however hardcodes (and validates) that the v4l2 format codes
-matches the media bus code of the other end:
-
-https://elixir.bootlin.com/linux/v6.18/source/drivers/media/platform/broadc=
-om/bcm2835-unicam.c#L1333
-
-That alone makes total sense, but it has an association between
-V4l2_PIX_FMT_RGB24 and MEDIA_BUS_FMT_RGB888_1X24, and between
-V4L2_PIX_FMT_BGR24 and MEDIA_BUS_FMT_BGR888_1X24
-
-https://elixir.bootlin.com/linux/v6.18/source/drivers/media/platform/broadc=
-om/bcm2835-unicam.c#L343
-
-Using the convention you suggested, this association is wrong, and
-V4L2_PIX_FMT_BGR24 should be associated MEDIA_BUS_FMT_RGB888_1X24. Thus,
-the red and blue color components are mixed up.
-
-I initially tried to fix it in my v1 by removing the RGB24 support
-https://lore.kernel.org/all/20250606-rpi-unicam-rgb-bgr-fix-v1-1-9930b963f3=
-eb@kernel.org/
-
-This was shot down (rightfully) because it would still be broken.
-
-The second version changed the media bus tc358743 reported:
-https://lore.kernel.org/all/20250612-csi-bgr-rgb-v1-0-dc8a309118f8@kernel.o=
-rg/
-
-Dave was against it because it would potentially break userspace, citing
-Linus that we shouldn't break userspace ever. I understand and somewhat
-agree with his point, but having two drivers reporting the same data
-format but with a different meaning is also a way of breaking userspace.
-
-Anyway. It was then suggested to support both in the tc358743. That's
-what the second, third and fourth that you commented on worked towards.
-
-https://lore.kernel.org/all/20250911-csi-bgr-rgb-v2-0-e6c6b10c1040@kernel.o=
-rg/
-https://lore.kernel.org/all/20250917-csi-bgr-rgb-v3-0-0145571b3aa4@kernel.o=
-rg/
-https://lore.kernel.org/all/20251013-csi-bgr-rgb-v4-0-55eab2caa69f@kernel.o=
-rg/
-
-In order to implement your suggestion, I wouldn't to modify tc358743,
-but would need to modify the association between the v4l2 format and
-media bus code that unicam has. In a way, it's very similar to my first
-version that got shot down, and suffers from the same flaws: we could
-have a userspace application out there hardcoding formats and codes that
-will get an error.
-
-So I'm not sure your suggestion really works, unless we reevaluate what
-we mean by breaking userspace. Either way, I don't care, I just want to
-get pixels in the expected (and documented!) order when using unicam.
-
-Maxime
-
---dx6cc6brlqxwpezc
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iJUEABMJAB0WIQTkHFbLp4ejekA/qfgnX84Zoj2+dgUCaTbvjAAKCRAnX84Zoj2+
-dgJ3AX99vwu5gYj1cljZfrhA96X4G0eBdwJigkADmkZ7g9com6yc2xX9CFddObyx
-JeSus+wBgPSs+t3U6RVwp9touNn/Zs6laE5HiNneP0oVliuusRSI29ruNQh5sSJK
-QOMxSlAYiw==
-=+oyh
------END PGP SIGNATURE-----
-
---dx6cc6brlqxwpezc--
