@@ -1,135 +1,191 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5E4E92F0686;
-	Tue,  9 Dec 2025 22:44:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EBBC82FE56E
+	for <linux-media@vger.kernel.org>; Tue,  9 Dec 2025 23:11:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765320292; cv=none; b=r3BBq5E6Vm0T4cjZplnt4barFc5a4ygHyDHjZam97Z9pUdjZe45lITiPOHNecLbHwYQk+VCB9Yo6j3/j4ZYoYdh0PjAc+WKu8P7SsVKUnBzjeomHLbcRNWIAh11roOiGxWBXoTtCu1nPmOjwYjItIsT98qFzotVrnMNB8PTlAzQ=
+	t=1765321870; cv=none; b=C0pPrMN4zdBmiJB2ajXv5iEdrewFHW4XPzb3LuD4nCum5hc1pF+2ngvNSVtW6kdNO9k6mPhNdAK/4J3bBL5Axpl7Fd+NXIABQcF+nERbxk6tsXr/wJSJmCXChJE1MjxkPamSQhho8caDxb2wvKYaN654yDTCUbdvNWKx9tahc6k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765320292; c=relaxed/simple;
-	bh=ygvVtpR0X7zyUAS2i7/ot2H6udVXFUOAiwzQzpah+74=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=iL/CvYUKT+e+oV50wjjmOSmHweDr0OC32an59Z+7aeLSJsSpmUys6RdbHaaVSKs1R/x159bllPthD8k8NvstB0SOrqklbjTtm9dfktzParDpJuU5dUsnbZfTfUEyX/4uc+Rz5wdJlVn4SAcldWjfB/MbDpHy64bwT2JVf3GRnn8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=qyBro07O; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1765321870; c=relaxed/simple;
+	bh=MhkpASt5l10aurNOjDLlz2wtvPKwrcC1uBpOQPScKDc=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=lGH+NT1LOYAllVVQda//ScXGRpsKpu/MpTSzFPRgH2+M4XGJEHiQNEIA7Fzg1ZlBj6Tvp6B7e+zXXMej+u9FWy4gFxWLttBljX+SPzzdi/J6ay4bm2vRQcHgIoFUcYaePu7EY61yjy41rZ9gURWj1a9KpAeVsqUXxG8UXy3jir8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=bZbS+9a5; dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b=W2IybT3o; arc=none smtp.client-ip=205.220.180.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="qyBro07O"
-Received: by smtp.kernel.org (Postfix) with ESMTPS id E238BC19423;
-	Tue,  9 Dec 2025 22:44:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux.dev; s=korg;
-	t=1765320291; bh=ygvVtpR0X7zyUAS2i7/ot2H6udVXFUOAiwzQzpah+74=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=qyBro07O1MkwlO2LlL/rCTcrIn4+6IkFP6ifYiSg03I/6opq0waBaG8jmpk5NiSr1
-	 KZLrxepImOLgm8F7srFxf+Yl7rQ/YWhuzQD0PSmVeWoSfC75hsM6cFiKvGRJsoOPDn
-	 Kt5/ikJ0+V97boolLLWwS2NYBCOJORHnGRgRt6sM=
-Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D8DCED3B9AB;
-	Tue,  9 Dec 2025 22:44:51 +0000 (UTC)
-From: Richard Leitner <richard.leitner@linux.dev>
-Date: Tue, 09 Dec 2025 23:44:40 +0100
-Subject: [PATCH v10 5/8] media: i2c: ov9282: add strobe output enable v4l2
- control
+	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="bZbS+9a5";
+	dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b="W2IybT3o"
+Received: from pps.filterd (m0279872.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 5B9NAonh1209299
+	for <linux-media@vger.kernel.org>; Tue, 9 Dec 2025 23:11:05 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
+	cc:content-type:date:from:in-reply-to:message-id:mime-version
+	:references:subject:to; s=qcppdkim1; bh=1MVhjZYrpu5/DsI2NAerOjuK
+	7CbZ8xrgWcGB0Hd1TE4=; b=bZbS+9a57SEBakknRS9vyt3UomhB4knWJz0A0U+2
+	6pzz9vTHZIVGvzmrPkL1MawjkS0uohVuwQW9KeD0oXTiwwOCPGRV38z4CcKNBlln
+	XFIEvHSb+ySlzEeu5Z+yRuc/aqnAAAutuDcKezzk+7qOossF1ruTJP/jVUWZExDn
+	4q7VWyxhyDLSbmzjHZs6dU6tLDvG3PIHGueW48+eZYXEVqOAOyxLy0u2Wjt7xPkT
+	JLq76qS9zJs4agBZ93xcrvDNZRuCuwsTrtk0lw4kw5fDx2kXlBukZOzYWYN7LJWL
+	Y5U4qm9R06PpTrIbdeFRMcT6rqDvRFZsm5X/kjtpyrsPRQ==
+Received: from mail-qt1-f198.google.com (mail-qt1-f198.google.com [209.85.160.198])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4axvm6842p-1
+	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
+	for <linux-media@vger.kernel.org>; Tue, 09 Dec 2025 23:11:05 +0000 (GMT)
+Received: by mail-qt1-f198.google.com with SMTP id d75a77b69052e-4eff973c491so139118931cf.1
+        for <linux-media@vger.kernel.org>; Tue, 09 Dec 2025 15:11:05 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=oss.qualcomm.com; s=google; t=1765321864; x=1765926664; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=1MVhjZYrpu5/DsI2NAerOjuK7CbZ8xrgWcGB0Hd1TE4=;
+        b=W2IybT3o8ULHuNXLDzRlTmxEglFGUhlbOiqr1zOyA4TkLA1Y5yOA7+LsIv7AcOXT98
+         XRGGZ/NsYuzwv+CMTwqDJbR5SG+kjauKiIZmOcLabkbnSxfR593BA2Qxu59h6o/wXTft
+         hu/GG7eCY0E8oT8rpakwNy2i6kqqH/IHvacF2Q0ZsGUYiSEKQDxkGm9tuDpJPfD+0iAh
+         HKBcEVF0Qb2I02s6AVhiUqPZtafddyZsy5OEzkdU/FyNObnvEQUjlEi3TyY169sGvrxK
+         eamdcdL9l+0/n0zJeWsOl6v5nCrv8Np+jLwEfMRpXMI2mbjxkFA+I3WGfP2X1fokbmDM
+         b+tQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1765321864; x=1765926664;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=1MVhjZYrpu5/DsI2NAerOjuK7CbZ8xrgWcGB0Hd1TE4=;
+        b=a9WxxrvBT33Bs8N7Qcg+z1MeSHJPbrId4rwosiOJGUBflChGmtqajy2jIpsum79ZEG
+         3v2jn/9DwEGm2PuWWleooMqwSmPvDSmdgzWyewLFFArb6hUmKkMdZHFVSSNhL4BYT//Y
+         nXUzWd8/y8WtLnMUyNcZ5peTz8VXRZS73TZQyJz4cWAWOIfLm7yvo0uLrdItFre/Lj1D
+         EmFkD4MXXqDMimbJBsTElrT06uuk+PVF8aUx8/t20MHamPEFqBBRy24rJqiY/h7rXClt
+         S8ANzqUXBH2znRkdEpV/uKsNc8UXbF+VrYnrmJ80vJAMo8FtR8YRF4QD9MW8cIJFB86j
+         SnYA==
+X-Forwarded-Encrypted: i=1; AJvYcCVPP44hAzLJOvlyHruFtlzxs8w0XnnWwaDUm5mSTePdCy5YcilJzIQvjL5kbvFY7ykaz8uOjNekOAJ3ng==@vger.kernel.org
+X-Gm-Message-State: AOJu0YxynIrRgQJZGagTStioYK1aIsz9hAo5Y3GRAfe6EpCSZSGXrCKJ
+	/pX3fGl3YHRyAqefnppPn4qLCkGAEi51X825/Zds7qEMRT0oLBmS7f6LNGZFXoUp60TmqDQdqtF
+	V1DisVClEbTqrizbpfgiE7lAMTjrIASVl4V2Xh7u9WpKmsthg6fujPNF5/KkLJt3tcO2q423HJA
+	==
+X-Gm-Gg: ASbGncsuRBIGQSLDSxsOvVUJmMvl+CX5L7kZ3zB89v+Rlfn3KMmSP9B+TKFmnd0XJFp
+	q2jK7RqY6BGJSHCvzBKDKmHnzKR/w1ZCmiq4A12nTrswarg6dJM18O3HHKT+KWsMVrxbpjcJ8L8
+	DyS8cxY34licX8yxHZGu4HJaJncdtInbo7mINVP+3/80y24MWHqoRO0M79aIoJ0RtPmDPuQ1O15
+	OE551IvmCIOE07Nc26TrEbmtbpqsEXbwo/xjGcyGcJNk26sE6wwNzcYir/icDH0Z2bTelpHN5rZ
+	rGp+z75YittH0noPy7uNYDCZJpDyWoBR4gFWhj/cjKRKcUxAuZ1W3BXDZD9FMdznjnhtBoAeRAR
+	YcECYO9+L6qGpFxXZMxE3UiFzeO8POx90XM12bdAc4fPzc3EV8gt7b9r7pLDBHifB4hvx9KzCOF
+	QzRbS6FbGUGGnLjVuBWeHFcoQ=
+X-Received: by 2002:a05:622a:4a10:b0:4ed:2ec5:acbf with SMTP id d75a77b69052e-4f1b1a1a4dbmr5920681cf.24.1765321864392;
+        Tue, 09 Dec 2025 15:11:04 -0800 (PST)
+X-Google-Smtp-Source: AGHT+IGXI7sFNjhsMYecIBhESAaEYvQvz8XHBF8ROwChrDsch1ulMb/mCCpMe5XarDLV1JMkjfWong==
+X-Received: by 2002:a05:622a:4a10:b0:4ed:2ec5:acbf with SMTP id d75a77b69052e-4f1b1a1a4dbmr5920361cf.24.1765321863970;
+        Tue, 09 Dec 2025 15:11:03 -0800 (PST)
+Received: from umbar.lan (2001-14ba-a073-af00-264b-feff-fe8b-be8a.rev.dnainternet.fi. [2001:14ba:a073:af00:264b:feff:fe8b:be8a])
+        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-598dedf4912sm3420625e87.76.2025.12.09.15.11.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 09 Dec 2025 15:11:02 -0800 (PST)
+Date: Wed, 10 Dec 2025 01:11:00 +0200
+From: Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>
+To: Renjiang Han <renjiang.han@oss.qualcomm.com>
+Cc: Vikash Garodia <vikash.garodia@oss.qualcomm.com>,
+        Dikshita Agarwal <dikshita.agarwal@oss.qualcomm.com>,
+        Bryan O'Donoghue <bod@kernel.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        linux-media@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] media: venus: vdec: fix error state assignment for
+ zero bytesused
+Message-ID: <bqu2hcyy6nbjlzcrowcq4i4bwdycfidgl5l4ocbr4rcanhsi3l@lsyb6h3sn55b>
+References: <20251208-fix-error-state-v2-1-255b62ee2eb6@oss.qualcomm.com>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20251209-ov9282-flash-strobe-v10-5-0117cab82e2d@linux.dev>
-References: <20251209-ov9282-flash-strobe-v10-0-0117cab82e2d@linux.dev>
-In-Reply-To: <20251209-ov9282-flash-strobe-v10-0-0117cab82e2d@linux.dev>
-To: Sakari Ailus <sakari.ailus@linux.intel.com>, 
- Dave Stevenson <dave.stevenson@raspberrypi.com>, 
- Mauro Carvalho Chehab <mchehab@kernel.org>, Lee Jones <lee@kernel.org>, 
- Pavel Machek <pavel@kernel.org>, 
- Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Cc: linux-media@vger.kernel.org, linux-kernel@vger.kernel.org, 
- linux-leds@vger.kernel.org, Richard Leitner <richard.leitner@linux.dev>, 
- Hans Verkuil <hverkuil@kernel.org>
-X-Mailer: b4 0.15-dev-a3fc8
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1765320290; l=2317;
- i=richard.leitner@linux.dev; s=20250225; h=from:subject:message-id;
- bh=ygvVtpR0X7zyUAS2i7/ot2H6udVXFUOAiwzQzpah+74=;
- b=on0jrDyM3MHEBRW5S8YwXhXht9WNphiLjiq0nvc6skvbGxozGglTUzgL7vgDLsHDknT5N2ED0
- xwkk/nHMz/ACmXpF4Vu6BeBoPwe3+6NV75NjEwsrsnuZxb3CdgfjcRR
-X-Developer-Key: i=richard.leitner@linux.dev; a=ed25519;
- pk=8hZNyyyQFqZ5ruVJsSGBSPIrmJpfDm5HwHU4QVOP1Pk=
-X-Endpoint-Received: by B4 Relay for richard.leitner@linux.dev/20250225
- with auth_id=350
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20251208-fix-error-state-v2-1-255b62ee2eb6@oss.qualcomm.com>
+X-Proofpoint-GUID: L8fli7mqiZKjZ8Gol0hN1TjZHssvYwQS
+X-Proofpoint-ORIG-GUID: L8fli7mqiZKjZ8Gol0hN1TjZHssvYwQS
+X-Authority-Analysis: v=2.4 cv=Ztbg6t7G c=1 sm=1 tr=0 ts=6938ac89 cx=c_pps
+ a=mPf7EqFMSY9/WdsSgAYMbA==:117 a=xqWC_Br6kY4A:10 a=kj9zAlcOel0A:10
+ a=wP3pNCr1ah4A:10 a=s4-Qcg_JpJYA:10 a=VkNPw1HP01LnGYTKEx00:22
+ a=VwQbUJbxAAAA:8 a=EUspDBNiAAAA:8 a=hygMGN85jNpciXajp_8A:9 a=CjuIK1q_8ugA:10
+ a=dawVfQjAaf238kedN5IG:22
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUxMjA5MDE4MiBTYWx0ZWRfX3PacZFAasBpg
+ KVIEP+q0CHtDE7hircTEL1izUOpWxywTNKM9ZlCMXLUB7yENFfRzgYGKEXWDUZawaNh0qpvjiD9
+ jYqId1rtg5hpy6jl7GPFBd5C8qEB0niKqC/Fu6vRCwBovJicDKqIj1CfXxl8BjFZzvr0Z8wleSW
+ 2cn1kkqD+V+j5PcH/jYwcFtQFYfrWcVw90CurKKVmjEh91sQt+bIYrAgXit+WpFR859ZpmNWI1E
+ v1NvaDQDTF+KJaMPxF2E1IAs/6z/6dkRikoTg5itkup5z9dFgYtQERgvwYOFX1L0be6vSbS9FoD
+ x5E9VC1atnb3BajTT1ZRbtYIawzBubp1uH3V8bT9bn4+RKOpMmQFOP5XGAsAc/nPybQIs7X/oW8
+ GKmvD2eCQ35ZHZ1RQ+lufR3GpFgkXA==
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.9,FMLib:17.12.100.49
+ definitions=2025-12-09_05,2025-12-09_03,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ adultscore=0 clxscore=1015 impostorscore=0 suspectscore=0 spamscore=0
+ malwarescore=0 priorityscore=1501 bulkscore=0 phishscore=0 lowpriorityscore=0
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.22.0-2510240001 definitions=main-2512090182
 
-Add V4L2_CID_FLASH_STROBE_OE enable/disable support using the
-"strobe output enable" feature of the sensor.
+On Mon, Dec 08, 2025 at 09:03:42AM +0530, Renjiang Han wrote:
+> When hfi_session_flush is issued, all queued buffers are returned to
+> the V4L2 driver. Some of these buffers are not processed and have
+> bytesused = 0. Currently, the driver marks such buffers as error even
+> during drain operations, which can incorrectly flag EOS buffers.
+> 
+> This patch moves the zero-bytesused check inside the non-EOS branch
 
-All values are based on the OV9281 datasheet v1.53 (january 2019) and
-tested using an ov9281 VisionComponents module.
+Documentation/process/submitting-patches.rst, "This patch".
 
-Signed-off-by: Richard Leitner <richard.leitner@linux.dev>
----
- drivers/media/i2c/ov9282.c | 26 +++++++++++++++++++++++++-
- 1 file changed, 25 insertions(+), 1 deletion(-)
+> so that only capture buffers with zero payload (and not EOS) are
+> marked with VB2_BUF_STATE_ERROR.
+> 
+> Fixes: 51df3c81ba10b ("media: venus: vdec: Mark flushed buffers with error state")
+> 
+> Signed-off-by: Renjiang Han <renjiang.han@oss.qualcomm.com>
 
-diff --git a/drivers/media/i2c/ov9282.c b/drivers/media/i2c/ov9282.c
-index e67cff6c30ffa..6afce803a049d 100644
---- a/drivers/media/i2c/ov9282.c
-+++ b/drivers/media/i2c/ov9282.c
-@@ -670,6 +670,23 @@ static int ov9282_set_ctrl_vflip(struct ov9282 *ov9282, int value)
- 				current_val);
- }
- 
-+static int ov9282_set_ctrl_flash_strobe_oe(struct ov9282 *ov9282, bool enable)
-+{
-+	u32 current_val;
-+	int ret;
-+
-+	ret = ov9282_read_reg(ov9282, OV9282_REG_OUTPUT_ENABLE6, 1, &current_val);
-+	if (ret)
-+		return ret;
-+
-+	if (enable)
-+		current_val |= OV9282_OUTPUT_ENABLE6_STROBE;
-+	else
-+		current_val &= ~OV9282_OUTPUT_ENABLE6_STROBE;
-+
-+	return ov9282_write_reg(ov9282, OV9282_REG_OUTPUT_ENABLE6, 1, current_val);
-+}
-+
- /**
-  * ov9282_set_ctrl() - Set subdevice control
-  * @ctrl: pointer to v4l2_ctrl structure
-@@ -736,6 +753,9 @@ static int ov9282_set_ctrl(struct v4l2_ctrl *ctrl)
- 		ret = ov9282_write_reg(ov9282, OV9282_REG_TIMING_HTS, 2,
- 				       (ctrl->val + ov9282->cur_mode->width) >> 1);
- 		break;
-+	case V4L2_CID_FLASH_STROBE_OE:
-+		ret = ov9282_set_ctrl_flash_strobe_oe(ov9282, ctrl->val);
-+		break;
- 	default:
- 		dev_err(ov9282->dev, "Invalid control %d", ctrl->id);
- 		ret = -EINVAL;
-@@ -1325,7 +1345,7 @@ static int ov9282_init_controls(struct ov9282 *ov9282)
- 	u32 lpfr;
- 	int ret;
- 
--	ret = v4l2_ctrl_handler_init(ctrl_hdlr, 10);
-+	ret = v4l2_ctrl_handler_init(ctrl_hdlr, 11);
- 	if (ret)
- 		return ret;
- 
-@@ -1390,6 +1410,10 @@ static int ov9282_init_controls(struct ov9282 *ov9282)
- 						OV9282_TIMING_HTS_MAX - mode->width,
- 						1, hblank_min);
- 
-+	/* Flash/Strobe controls */
-+	v4l2_ctrl_new_std(ctrl_hdlr, &ov9282_ctrl_ops,
-+			  V4L2_CID_FLASH_STROBE_OE, 0, 1, 1, 0);
-+
- 	ret = v4l2_fwnode_device_parse(ov9282->dev, &props);
- 	if (!ret) {
- 		/* Failure sets ctrl_hdlr->error, which we check afterwards anyway */
+No empty lines between tags.
+
+> ---
+> This patch refines the error state assignment logic in the Venus vdec
+> driver for Qualcomm platforms. Specifically, it ensures that the buffer
+> state is only set to VB2_BUF_STATE_ERROR for non-EOS capture buffers
+> with zero bytesused, preventing false error reporting during drain
+> operations.
+> ---
+> Changes in v2:
+> - 1. Update commit message.
+> - 2. Add a Fixes tag.
+> - Link to v1: https://lore.kernel.org/r/20251126-fix-error-state-v1-1-34f943a8b165@oss.qualcomm.com
+> ---
+>  drivers/media/platform/qcom/venus/vdec.c | 6 +++---
+>  1 file changed, 3 insertions(+), 3 deletions(-)
+> 
+> diff --git a/drivers/media/platform/qcom/venus/vdec.c b/drivers/media/platform/qcom/venus/vdec.c
+> index 4a6641fdffcf79705893be58c7ec5cf485e2fab9..d0bd2d86a31f9a18cb68b08ba66affdf8fc5092d 100644
+> --- a/drivers/media/platform/qcom/venus/vdec.c
+> +++ b/drivers/media/platform/qcom/venus/vdec.c
+> @@ -1440,10 +1440,10 @@ static void vdec_buf_done(struct venus_inst *inst, unsigned int buf_type,
+>  				inst->drain_active = false;
+>  				inst->codec_state = VENUS_DEC_STATE_STOPPED;
+>  			}
+> +		} else {
+> +			if (!bytesused)
+> +				state = VB2_BUF_STATE_ERROR;
+>  		}
+> -
+> -		if (!bytesused)
+> -			state = VB2_BUF_STATE_ERROR;
+>  	} else {
+>  		vbuf->sequence = inst->sequence_out++;
+>  	}
+> 
+> ---
+> base-commit: 663d0d1af3faefe673cabf4b6b077149a87ad71f
+> change-id: 20251126-fix-error-state-24183a8538cd
+> 
+> Best regards,
+> -- 
+> Renjiang Han <renjiang.han@oss.qualcomm.com>
+> 
 
 -- 
-2.47.3
-
-
+With best wishes
+Dmitry
