@@ -1,201 +1,148 @@
-Received: from mail-pj1-f43.google.com (mail-pj1-f43.google.com [209.85.216.43])
+Received: from mail-pf1-f170.google.com (mail-pf1-f170.google.com [209.85.210.170])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7D50C336ECE
-	for <linux-media@vger.kernel.org>; Mon, 15 Dec 2025 11:48:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 82CAB3242D6
+	for <linux-media@vger.kernel.org>; Mon, 15 Dec 2025 12:08:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765799327; cv=none; b=P8HFviHK+CHy5+vL+N3waoHEIUBpXPOT68vQWOmd8JOXRZw/ZKEtdR8JfNUKv3DlbOxLdpPpMSxw/g2/Cw4n3FdxT/NVWNI55rPXu7l4WOwmlAqlTz6gilzW20/RG4ToQcYW4UkOYXHqAEM66DsaVgJaDsABzaaQK+4KoQtqKLI=
+	t=1765800509; cv=none; b=HQ45JBpc5CQzUh//u2R2NZb9xiGtNgJ5D8OJvkSbw2cHoL0CaeezBkNrff4dPr9vH4xyQ9OaEGvCflNrZ1ycokWJfb3Sy8MnUoS9C1V7UhlXHVoVKzBNcYpYGlsRmEeY0/iiqOBY2w/Byr/r/heLk82wmgHv3O57pZAYDVOTbhE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765799327; c=relaxed/simple;
-	bh=j4BXJJMKUhATWUahdKX0lx9i399WYlQDn9Ep3/iweMY=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=o7WZ62QFLfJIaeBGa0uZoxHtJwluy6rP0YH1ss4z24qzXMadOCZo3lgtWudiah46PGVaq9QG6SszOestU86e3iLdn5lT9znIfr6qJVYX2pDn6Pr/bafHy+N/etRSdLbrvmLiq8StOUmWk4kZZd1WmYn8skzlG82hccld2ExJ/5w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=jugKXGms; arc=none smtp.client-ip=209.85.216.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1765800509; c=relaxed/simple;
+	bh=Ov8cS5KYxzY2mYfh/O4WmV6Fp6bmcasgAm++BTdClYU=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=LIjiVnae8EhWnfrWqYVvaBz6BqxYolhM2xhNmtu1DZ/Ccx0fpDKW9a//ocIQVgMdrb4/yKXHeGEQ22OMz6W5U/ZWrrjKLDSGqRySDCMiE6WgKxoN6IXOKXnvVlp/j0Jza7/2k1bSVhWZw1kjDguidExa1tCD0BsgAmAUSS0H//4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=q1qPQIc4; arc=none smtp.client-ip=209.85.210.170
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jugKXGms"
-Received: by mail-pj1-f43.google.com with SMTP id 98e67ed59e1d1-34c2f52585fso2095625a91.1
-        for <linux-media@vger.kernel.org>; Mon, 15 Dec 2025 03:48:45 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="q1qPQIc4"
+Received: by mail-pf1-f170.google.com with SMTP id d2e1a72fcca58-7acd9a03ba9so3599823b3a.1
+        for <linux-media@vger.kernel.org>; Mon, 15 Dec 2025 04:08:22 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1765799325; x=1766404125; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=HPi/WFWmImBnVQgsxNvJvJyvieXM1xBFzKoWis67Gg4=;
-        b=jugKXGms55KjI7dm+Ngj5mkaNRmEES0y5Y4XUHHbi0cafbA7zcE3YYjZANhHpp1mNX
-         udPxqSNE9bs8fKuDobrDGOQLjqo5sy93hhb+2yTKDIgHzvN/UYLLbvE874kCNAROCX8u
-         xK/ZZHstkmWGuuoNqrknGGmGQE0C4oCK7t8tegdv2wy7W8Yf7eV92nwqyet9rcFRZlLx
-         RPV6oFJl3KZB9hOrZRnX7eyF/t43UWIdx4ZwYg7ty4R3z97ccbApd5GjB2a0zLj3yfWE
-         vRs5Vu7vSGjCB954n8oagczLg3R5uNMOc1hF1lN5KqMqFsjQUFzFuxvjGdKOSCaHfXn3
-         ML0Q==
+        d=google.com; s=20230601; t=1765800501; x=1766405301; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=+DGkbwvSveRrQtSlxFukYMul6SfDciYSPOsqEu5ZQPQ=;
+        b=q1qPQIc4ugqGGvmnFRqQUZIooNx9pvIAzURJ8G8Yj3T8j1o7OyytcjgA0nJuxoZIR8
+         0giWXtJ5+Ca9OavO3Cwt+jH9M1sx2y+Huldeoru1TkG2/lNq61NzufEYyPVbxWlGVs8g
+         N2tt3rovceiPQMtxC1tBrTs+EO8bBsdWcDWCOU6R5kkAlUBTXQf+V0AKyxwfRfbYqEbi
+         3tQfq2GetmwYRkCFCYdCfIZtOYCTeaRCoruys44WPGjvV+LoMnspsVJrmvCtynu87o7H
+         JAcAGRW7hO+T/ttk8eZE4G3Uz7xc16gnxZmGdKJqRqztiMDY7Lm/ujLJGecz7Jw9dIsy
+         TKAQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1765799325; x=1766404125;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=HPi/WFWmImBnVQgsxNvJvJyvieXM1xBFzKoWis67Gg4=;
-        b=vemDTp9Cai/2LfDTT6r2+VyLWZeXvktlMQ11vfn8HGOzqIa3GmczaiFHKdyjG7DGQi
-         nanBWERZiQyHwBu4cmjZZR9q6tDXsU+h7jiv41qXHHr1bxfJgI3+jEUzPuICqW5+DSBL
-         ib9nxjnN8oGHNNAZk5NWcd/o7dSg9D2zfKd8p2CfiPhI/fdej9ah9iAQZJNku7US2tGa
-         E1z0h0DrIqB/Kk6JWp10R2Wwc6Zs8/bIObvDB0YliR7quHmEPiW1dQuAZ1uJ6Clj0oHe
-         kOW5xnN1vH88+lVv4RyMYxkJzmGNU5zN4yWwDkPjoYhmTfyCntm8/zPwS6ATiPOZXrVb
-         W73Q==
-X-Forwarded-Encrypted: i=1; AJvYcCXYUwtl0nTlAs+mzM4iUk6bAmGKNjpmHG+JG39YcQHi1jzVfK0lskFuVHeccud5HwdCDfiGEvCt2Uukuw==@vger.kernel.org
-X-Gm-Message-State: AOJu0YwmgXSQLGvOSmmIKHXt0Htx3tFBTOqDA9xSdQbe4o+V0+8UIQ1A
-	Bnv9T0I/P8wujotMwEJJxyQDhciuwua0uk05tx+6qDCJY9zJIUdA+3uy
-X-Gm-Gg: AY/fxX6Agv5wGVwYh3OfBXU0isssccLUAC9nQCaA7FBiu9D1nqFlwuwV0Z+5MdCq4y3
-	j0x7KlGPeSZY8RWREX1LAPL115jzgAur+pSovXPDN22H5z3E4/6eysRgodm+GnkUyKi4Rs/Ii1u
-	YE69RWE/KpB2YXD3nt6uz9x1uhQUMdQGqX4ekSsGn72JHycFc2tc+UkGwLbRuCuidDJkQyXwSag
-	D4SPAv+3rW3oJUQLP3l5JvhGvNRVS6wJBFfHAG/rVLB2jvGpAG9GNLggCiIMgSScZlPEyKipWem
-	kewS1KKDtjJZVT6r/le8JyvqDgnVnsBSNXoKimQjz35SNYUZIUOQ/UVs2L5fTfBjID2PbUjdaWi
-	pMnzcnaU685ZYE/+j1o1OpZzXsXx9gAXtqSSV3xhuHPVmPAYF6RxzS/HyBaa0hcKoA2vmqbMDBF
-	W0RgrfvBXrE8JseO1eUEqz1Q==
-X-Google-Smtp-Source: AGHT+IHySr1buuGxwyvRmyNwB1yX2aGVZnCno4j9FG3NSChYg8gy/QOhSf79+qyZQv+BzWWdtgvcAQ==
-X-Received: by 2002:a17:90b:388a:b0:340:be40:fe0c with SMTP id 98e67ed59e1d1-34abe4a6b3amr9032481a91.36.1765799324639;
-        Mon, 15 Dec 2025 03:48:44 -0800 (PST)
-Received: from archie.me ([210.87.74.117])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-34abe3ba59bsm9003471a91.7.2025.12.15.03.48.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 15 Dec 2025 03:48:42 -0800 (PST)
-Received: by archie.me (Postfix, from userid 1000)
-	id 60C6F447330B; Mon, 15 Dec 2025 18:39:07 +0700 (WIB)
-From: Bagas Sanjaya <bagasdotme@gmail.com>
-To: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-	Linux AMDGPU <amd-gfx@lists.freedesktop.org>,
-	Linux DRI Development <dri-devel@lists.freedesktop.org>,
-	Linux Filesystems Development <linux-fsdevel@vger.kernel.org>,
-	Linux Media <linux-media@vger.kernel.org>,
-	linaro-mm-sig@lists.linaro.org,
-	kasan-dev@googlegroups.com,
-	Linux Virtualization <virtualization@lists.linux.dev>,
-	Linux Memory Management List <linux-mm@kvack.org>,
-	Linux Network Bridge <bridge@lists.linux.dev>,
-	Linux Networking <netdev@vger.kernel.org>
-Cc: Harry Wentland <harry.wentland@amd.com>,
-	Leo Li <sunpeng.li@amd.com>,
-	Rodrigo Siqueira <siqueira@igalia.com>,
-	Alex Deucher <alexander.deucher@amd.com>,
-	=?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
-	David Airlie <airlied@gmail.com>,
-	Simona Vetter <simona@ffwll.ch>,
-	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-	Maxime Ripard <mripard@kernel.org>,
-	Thomas Zimmermann <tzimmermann@suse.de>,
-	Matthew Brost <matthew.brost@intel.com>,
-	Danilo Krummrich <dakr@kernel.org>,
-	Philipp Stanner <phasta@kernel.org>,
-	Alexander Viro <viro@zeniv.linux.org.uk>,
-	Christian Brauner <brauner@kernel.org>,
-	Jan Kara <jack@suse.cz>,
-	Sumit Semwal <sumit.semwal@linaro.org>,
-	Alexander Potapenko <glider@google.com>,
-	Marco Elver <elver@google.com>,
-	Dmitry Vyukov <dvyukov@google.com>,
-	"Michael S. Tsirkin" <mst@redhat.com>,
-	Jason Wang <jasowang@redhat.com>,
-	Xuan Zhuo <xuanzhuo@linux.alibaba.com>,
-	=?UTF-8?q?Eugenio=20P=C3=A9rez?= <eperezma@redhat.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Uladzislau Rezki <urezki@gmail.com>,
-	Nikolay Aleksandrov <razor@blackwall.org>,
-	Ido Schimmel <idosch@nvidia.com>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Paolo Abeni <pabeni@redhat.com>,
-	Simon Horman <horms@kernel.org>,
-	Taimur Hassan <Syed.Hassan@amd.com>,
-	Wayne Lin <Wayne.Lin@amd.com>,
-	Alex Hung <alex.hung@amd.com>,
-	Aurabindo Pillai <aurabindo.pillai@amd.com>,
-	Dillon Varone <Dillon.Varone@amd.com>,
-	George Shen <george.shen@amd.com>,
-	Aric Cyr <aric.cyr@amd.com>,
-	Cruise Hung <Cruise.Hung@amd.com>,
-	Mario Limonciello <mario.limonciello@amd.com>,
-	Sunil Khatri <sunil.khatri@amd.com>,
-	Dominik Kaszewski <dominik.kaszewski@amd.com>,
-	Bagas Sanjaya <bagasdotme@gmail.com>,
-	David Hildenbrand <david@kernel.org>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
-	Max Kellermann <max.kellermann@ionos.com>,
-	"Nysal Jan K.A." <nysal@linux.ibm.com>,
-	Ryan Roberts <ryan.roberts@arm.com>,
-	Alexey Skidanov <alexey.skidanov@intel.com>,
-	Vlastimil Babka <vbabka@suse.cz>,
-	Kent Overstreet <kent.overstreet@linux.dev>,
-	Vitaly Wool <vitaly.wool@konsulko.se>,
-	Harry Yoo <harry.yoo@oracle.com>,
-	Mateusz Guzik <mjguzik@gmail.com>,
-	NeilBrown <neil@brown.name>,
-	Amir Goldstein <amir73il@gmail.com>,
-	Jeff Layton <jlayton@kernel.org>,
-	Ivan Lipski <ivan.lipski@amd.com>,
-	Tao Zhou <tao.zhou1@amd.com>,
-	YiPeng Chai <YiPeng.Chai@amd.com>,
-	Hawking Zhang <Hawking.Zhang@amd.com>,
-	Lyude Paul <lyude@redhat.com>,
-	Daniel Almeida <daniel.almeida@collabora.com>,
-	Luben Tuikov <luben.tuikov@amd.com>,
-	Matthew Auld <matthew.auld@intel.com>,
-	Roopa Prabhu <roopa@cumulusnetworks.com>,
-	Mao Zhu <zhumao001@208suo.com>,
-	Shaomin Deng <dengshaomin@cdjrlc.com>,
-	Charles Han <hanchunchao@inspur.com>,
-	Jilin Yuan <yuanjilin@cdjrlc.com>,
-	Swaraj Gaikwad <swarajgaikwad1925@gmail.com>,
-	George Anthony Vernon <contact@gvernon.com>
-Subject: [PATCH 13/14] drm/gpusvm: Fix drm_gpusvm_pages_valid_unlocked() kernel-doc comment
-Date: Mon, 15 Dec 2025 18:39:01 +0700
-Message-ID: <20251215113903.46555-14-bagasdotme@gmail.com>
-X-Mailer: git-send-email 2.52.0
-In-Reply-To: <20251215113903.46555-1-bagasdotme@gmail.com>
-References: <20251215113903.46555-1-bagasdotme@gmail.com>
+        d=1e100.net; s=20230601; t=1765800501; x=1766405301;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=+DGkbwvSveRrQtSlxFukYMul6SfDciYSPOsqEu5ZQPQ=;
+        b=btz6S4IB/WgyTjmwkHlU03aSVUWWiNtLzn7S1GaRzkwvAMiAFogAlUxv3hn3JXKaOB
+         Y6H4rcUsYiYjpGhOi0yyA6ztJJaZz/u690n1UYBcny/Cfb2FvM7R1LPHmGtxWj5SnB4F
+         kMhgUNbHqt1bPB2vA/UgEpZkOuK/Xu+KjQSwOi3Zt6xp7nZBvBuucqs67ahQaOP+I5t4
+         DpJRRhDrIdzLDwv+pSvX6u192cettU27oDBWcKEl9i1Mhs6J9oVioPoA2WVzVrwH3UuE
+         CM1HPNUThqXWJ0+/afCaent+6Wv0xLsAf6R/oGjP3EelEcE7TQz5d7WxWosQXDcwuW5o
+         gMlg==
+X-Forwarded-Encrypted: i=1; AJvYcCV8CiwO/Z3V1Zx6moFjJxyycrUhCLTzKEEmhSwT4B30WqWtSU9f/5Nlhiq4/i09GgJvtJyE+wHxIrjdVA==@vger.kernel.org
+X-Gm-Message-State: AOJu0YyLjvWKiRVIw+JAyNUAHgZlB408H6Ctn0k1PGfniF36u6T15Fgg
+	AXofGhgCUQ7Jz4YnVIg3KPzNUDYyfWc9x8hdsdtsKmb5yzvRGgNPunblAkZ2sJwDNuPyEg5clpx
+	T4/YKtwbtuHe6b9BEAoZLkFhiL/epI0+qTHRY9+zQ
+X-Gm-Gg: AY/fxX5UNCupzVfySGIFLorClFLmAduOn1x3ZXSo1prQ5x3JRUPMY5OBilfpKbV/wat
+	VppMrLDQbCwIW7btL31/0qnArP3FDmgk/mnPsxIWs6TqreUdFPODEPi3n2brFKeRhdLZv+gKpjB
+	NvSL+FSMGnNmPMBK/5o0XAyrokzRx5baYAll3HC807rY2hi+9h3rsb0Xyx3I01R7TmXin6cnhqc
+	/gRvLr7byZraoqEVxtmiyUH/RXupOszLKRJqDe8D9Lki5sExwCqPk2AbUZmAgwc1R+lD6RSZwF0
+	6WOjvPt5Llp3M0zb4qzpmPtDwR6D5eba/hKQ
+X-Google-Smtp-Source: AGHT+IEBC+acRqtjaBBJQBmhlbonF1wwGFrMO77Zlp8D2bmspUQHM2nItV5HpI3KRFKcy27LH5o2hYak0ysa4tYnvE8=
+X-Received: by 2002:a05:701a:ca0d:b0:11b:8fc9:9f5d with SMTP id
+ a92af1059eb24-11f34c4d15emr7306064c88.30.1765800500924; Mon, 15 Dec 2025
+ 04:08:20 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1611; i=bagasdotme@gmail.com; h=from:subject; bh=j4BXJJMKUhATWUahdKX0lx9i399WYlQDn9Ep3/iweMY=; b=owGbwMvMwCX2bWenZ2ig32LG02pJDJn2n0OumS5gNW5/3GqYe0vV4BnvxdVlFyqnrRPWP9PpP u3FMcecjlIWBjEuBlkxRZZJiXxNp3cZiVxoX+sIM4eVCWQIAxenAEykPJ/hF9Pft9/+BqzKa/W8 rdg9vSMz5a6N4PnTByKYzgTJnWZ/P5Hhn+aKvLS4vrtB9w7NNb77cZZgzZ2+T776O+w93L/xls2 5xAgA
-X-Developer-Key: i=bagasdotme@gmail.com; a=openpgp; fpr=701B806FDCA5D3A58FFB8F7D7C276C64A5E44A1D
-Content-Transfer-Encoding: 8bit
+References: <20251215113903.46555-1-bagasdotme@gmail.com> <20251215113903.46555-6-bagasdotme@gmail.com>
+In-Reply-To: <20251215113903.46555-6-bagasdotme@gmail.com>
+From: Marco Elver <elver@google.com>
+Date: Mon, 15 Dec 2025 13:07:43 +0100
+X-Gm-Features: AQt7F2pEt11ob6m3jn_EvmNyiM9lcI5ir1gIqaEopvbMbWpYo3dEgZbn6PIAiFk
+Message-ID: <CANpmjNNrHYCPp19A_FPeFY1kSTuyS0W_zjo21AUrmjqjqcYa0A@mail.gmail.com>
+Subject: Re: [PATCH 05/14] mm, kfence: Describe @slab parameter in __kfence_obj_info()
+To: Bagas Sanjaya <bagasdotme@gmail.com>
+Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, 
+	Linux AMDGPU <amd-gfx@lists.freedesktop.org>, 
+	Linux DRI Development <dri-devel@lists.freedesktop.org>, 
+	Linux Filesystems Development <linux-fsdevel@vger.kernel.org>, Linux Media <linux-media@vger.kernel.org>, 
+	linaro-mm-sig@lists.linaro.org, kasan-dev@googlegroups.com, 
+	Linux Virtualization <virtualization@lists.linux.dev>, 
+	Linux Memory Management List <linux-mm@kvack.org>, Linux Network Bridge <bridge@lists.linux.dev>, 
+	Linux Networking <netdev@vger.kernel.org>, Harry Wentland <harry.wentland@amd.com>, 
+	Leo Li <sunpeng.li@amd.com>, Rodrigo Siqueira <siqueira@igalia.com>, 
+	Alex Deucher <alexander.deucher@amd.com>, =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>, 
+	David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>, 
+	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, Maxime Ripard <mripard@kernel.org>, 
+	Thomas Zimmermann <tzimmermann@suse.de>, Matthew Brost <matthew.brost@intel.com>, 
+	Danilo Krummrich <dakr@kernel.org>, Philipp Stanner <phasta@kernel.org>, 
+	Alexander Viro <viro@zeniv.linux.org.uk>, Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>, 
+	Sumit Semwal <sumit.semwal@linaro.org>, Alexander Potapenko <glider@google.com>, 
+	Dmitry Vyukov <dvyukov@google.com>, "Michael S. Tsirkin" <mst@redhat.com>, Jason Wang <jasowang@redhat.com>, 
+	Xuan Zhuo <xuanzhuo@linux.alibaba.com>, =?UTF-8?Q?Eugenio_P=C3=A9rez?= <eperezma@redhat.com>, 
+	Andrew Morton <akpm@linux-foundation.org>, Uladzislau Rezki <urezki@gmail.com>, 
+	Nikolay Aleksandrov <razor@blackwall.org>, Ido Schimmel <idosch@nvidia.com>, 
+	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, 
+	Taimur Hassan <Syed.Hassan@amd.com>, Wayne Lin <Wayne.Lin@amd.com>, Alex Hung <alex.hung@amd.com>, 
+	Aurabindo Pillai <aurabindo.pillai@amd.com>, Dillon Varone <Dillon.Varone@amd.com>, 
+	George Shen <george.shen@amd.com>, Aric Cyr <aric.cyr@amd.com>, 
+	Cruise Hung <Cruise.Hung@amd.com>, Mario Limonciello <mario.limonciello@amd.com>, 
+	Sunil Khatri <sunil.khatri@amd.com>, Dominik Kaszewski <dominik.kaszewski@amd.com>, 
+	David Hildenbrand <david@kernel.org>, Peter Zijlstra <peterz@infradead.org>, 
+	Lorenzo Stoakes <lorenzo.stoakes@oracle.com>, Max Kellermann <max.kellermann@ionos.com>, 
+	"Nysal Jan K.A." <nysal@linux.ibm.com>, Ryan Roberts <ryan.roberts@arm.com>, 
+	Alexey Skidanov <alexey.skidanov@intel.com>, Vlastimil Babka <vbabka@suse.cz>, 
+	Kent Overstreet <kent.overstreet@linux.dev>, Vitaly Wool <vitaly.wool@konsulko.se>, 
+	Harry Yoo <harry.yoo@oracle.com>, Mateusz Guzik <mjguzik@gmail.com>, NeilBrown <neil@brown.name>, 
+	Amir Goldstein <amir73il@gmail.com>, Jeff Layton <jlayton@kernel.org>, 
+	Ivan Lipski <ivan.lipski@amd.com>, Tao Zhou <tao.zhou1@amd.com>, 
+	YiPeng Chai <YiPeng.Chai@amd.com>, Hawking Zhang <Hawking.Zhang@amd.com>, 
+	Lyude Paul <lyude@redhat.com>, Daniel Almeida <daniel.almeida@collabora.com>, 
+	Luben Tuikov <luben.tuikov@amd.com>, Matthew Auld <matthew.auld@intel.com>, 
+	Roopa Prabhu <roopa@cumulusnetworks.com>, Mao Zhu <zhumao001@208suo.com>, 
+	Shaomin Deng <dengshaomin@cdjrlc.com>, Charles Han <hanchunchao@inspur.com>, 
+	Jilin Yuan <yuanjilin@cdjrlc.com>, Swaraj Gaikwad <swarajgaikwad1925@gmail.com>, 
+	George Anthony Vernon <contact@gvernon.com>
+Content-Type: text/plain; charset="UTF-8"
 
-Commit 6364afd532bcab ("drm/gpusvm: refactor core API to use pages struct")
-renames drm_gpusvm_range_pages_valid_unlocked() to
-drm_gpusvm_pages_valid_unlocked(), but its kernel-doc comment gets
-stale, hence kernel-doc complains:
+On Mon, 15 Dec 2025 at 12:39, Bagas Sanjaya <bagasdotme@gmail.com> wrote:
+>
+> Sphinx reports kernel-doc warning:
+>
+> WARNING: ./include/linux/kfence.h:220 function parameter 'slab' not described in '__kfence_obj_info'
+>
+> Fix it by describing @slab parameter.
+>
+> Fixes: 2dfe63e61cc31e ("mm, kfence: support kmem_dump_obj() for KFENCE objects")
+> Signed-off-by: Bagas Sanjaya <bagasdotme@gmail.com>
 
-WARNING: ./drivers/gpu/drm/drm_gpusvm.c:1229 function parameter 'svm_pages' not described in 'drm_gpusvm_pages_valid_unlocked'
-WARNING: ./drivers/gpu/drm/drm_gpusvm.c:1229 expecting prototype for drm_gpusvm_range_pages_valid_unlocked(). Prototype was for drm_gpusvm_pages_valid_unlocked() instead
+Acked-by: Marco Elver <elver@google.com>
 
-Fix them up.
+Thanks!
 
-Fixes: 6364afd532bcab ("drm/gpusvm: refactor core API to use pages struct")
-Signed-off-by: Bagas Sanjaya <bagasdotme@gmail.com>
----
- drivers/gpu/drm/drm_gpusvm.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/gpu/drm/drm_gpusvm.c b/drivers/gpu/drm/drm_gpusvm.c
-index 73e550c8ff8c98..fcfbe8c062bf6d 100644
---- a/drivers/gpu/drm/drm_gpusvm.c
-+++ b/drivers/gpu/drm/drm_gpusvm.c
-@@ -1216,9 +1216,9 @@ bool drm_gpusvm_range_pages_valid(struct drm_gpusvm *gpusvm,
- EXPORT_SYMBOL_GPL(drm_gpusvm_range_pages_valid);
- 
- /**
-- * drm_gpusvm_range_pages_valid_unlocked() - GPU SVM range pages valid unlocked
-+ * drm_gpusvm_pages_valid_unlocked() - GPU SVM range pages valid unlocked
-  * @gpusvm: Pointer to the GPU SVM structure
-- * @range: Pointer to the GPU SVM range structure
-+ * @svm_pages: Pointer to the GPU SVM pages
-  *
-  * This function determines if a GPU SVM range pages are valid. Expected be
-  * called without holding gpusvm->notifier_lock.
--- 
-An old man doll... just what I always wanted! - Clara
-
+> ---
+>  include/linux/kfence.h | 1 +
+>  1 file changed, 1 insertion(+)
+>
+> diff --git a/include/linux/kfence.h b/include/linux/kfence.h
+> index 0ad1ddbb8b996a..e5822f6e7f2794 100644
+> --- a/include/linux/kfence.h
+> +++ b/include/linux/kfence.h
+> @@ -211,6 +211,7 @@ struct kmem_obj_info;
+>   * __kfence_obj_info() - fill kmem_obj_info struct
+>   * @kpp: kmem_obj_info to be filled
+>   * @object: the object
+> + * @slab: the slab
+>   *
+>   * Return:
+>   * * false - not a KFENCE object
+> --
+> An old man doll... just what I always wanted! - Clara
+>
