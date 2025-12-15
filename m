@@ -1,66 +1,66 @@
-Received: from mail-pf1-f180.google.com (mail-pf1-f180.google.com [209.85.210.180])
+Received: from mail-pj1-f50.google.com (mail-pj1-f50.google.com [209.85.216.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 991AE330B31
-	for <linux-media@vger.kernel.org>; Mon, 15 Dec 2025 11:39:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BE5B33314A0
+	for <linux-media@vger.kernel.org>; Mon, 15 Dec 2025 11:39:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765798757; cv=none; b=gh5ffLRNm3E1d36wZg3Sevwmk1QHQTA5hgiT5+s6+ZBX+HVpwFrwLDlNddsNAGsVFZpuM/N3om0Mgot9++w1crOLmwL394EjaNBtR2RkCjHxaZPEOSReMJMSvYFFTOG5I1V2iXXm11TLDD2Gco0HbkEpzH6MHHVYZSGxX4y8YWQ=
+	t=1765798759; cv=none; b=Aq9+yWYgRTAMgsSxodXxyY4a6rHXv5Ehjp/tmnEtaQs6k2x0XYCR2ptXpatiKB2o8CiTCxwb/TQDug6zUWnLBYozt6YLSaEpbRVz6C9PlnlLhVs3D2bbqYl47Ou8+GAmha/bWbpYUsub0gGJEBnqm7vJm9qwa2FxiJcV2DbMPyk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765798757; c=relaxed/simple;
-	bh=sT1prVB7LRNvf/W4XodTbc9bjm2B3700BxVWkrXUues=;
+	s=arc-20240116; t=1765798759; c=relaxed/simple;
+	bh=bVwk3E00Ao0/BsL4XlONNDCfpFF0qzpzGvJu4GqJ/kY=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=bAkqymz+uqsS1W70FyuyhSJ8LzmnoHNOEeuehjuvDiziT7LsZanRoPswCyHLYVKrmWCnEx5987mJm/vGOXoi87DVFmr1DZHxO3Ai/oSWD7r+R3Puh++ifpHHnWM02WEoPKOdUip3NwTULtCKZX/X0gvtegZM6nlJBh5OSnAE3ec=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=RRfwwMLw; arc=none smtp.client-ip=209.85.210.180
+	 MIME-Version; b=NBiIH3VK0BV5dHzacPbW8cGNB4eJ2p/406piiKuDgGO0bPPLGnbnsDKq4XN27UWk9OhEbnYEo3fpjhElgoH+cYSiCXcWcpd8hMURO1sj612Oxdz2qMEyCojkQRjBGnkOVWOEaYPfA9CvowCt6xmcGGXqotacpodWxqJ4Uc/qOpg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=amKR7JsN; arc=none smtp.client-ip=209.85.216.50
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="RRfwwMLw"
-Received: by mail-pf1-f180.google.com with SMTP id d2e1a72fcca58-7acd9a03ba9so3571853b3a.1
-        for <linux-media@vger.kernel.org>; Mon, 15 Dec 2025 03:39:14 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="amKR7JsN"
+Received: by mail-pj1-f50.google.com with SMTP id 98e67ed59e1d1-34c1d98ba11so2665500a91.3
+        for <linux-media@vger.kernel.org>; Mon, 15 Dec 2025 03:39:16 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1765798754; x=1766403554; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1765798756; x=1766403556; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=yYIA++CxPIcYPKgHl3oGianXtJJpe/hDcX33067gP64=;
-        b=RRfwwMLw3zaa5wZ5fx7VBbwTe8OfC5Cv2aJtWvQtM2OWYw6wL6PW+2/kfpHE0V6apy
-         p4y6NyeCE6qzUR8yaVY/xeA0VMa6UoBl+GuetBBuFr3vpU8RD3eKqGB+52wd3NLvxVSF
-         qAhQhiwKbXXVr+6lweELCgmt5Uclu/r6g5r/VCSj+5Xl4l/0OI64sEgIvGFqDSFn1Y4m
-         42RErcDkREEz4QoSGQSGzdBGJxGiLv6MfIZto+GCgBNauQ0vHAGWngpHttKUbZKLHada
-         QyZhPYzQXozSYcnEgFZiT6/AXRNrXSdUZ5dfBvcI69xPMo83ro6XXOs2N0QWbmlngP9c
-         SZ7Q==
+        bh=9thXFyBI9wECeAoZwvjVxFD8Ol9j6G4X/I1qZGpsX1M=;
+        b=amKR7JsNW/OlGqjwVvJKVpPH5D9UwZJBut96t2CI1nfWa8ulByQB4Nw4BT2+1E1zBk
+         Dwh5hYPmfbvSAI3cP4Tyf3x3gOXDrFMxHlgsDRP4FIhnR+94V0wDWR5WZGvaeXycPfPV
+         GjqHr9pjAjtLsVaXucSt8IV+WgNJJT3NJe1/j/ajTs4nA0xgJPtOSXC2fKLO2vKoJv3J
+         yDDwIa25NNWGaVFnoQNIZN9RnURsBd+eNlQiLk76rtVahrSyCdaXDUI1Gir0ch1I7oC3
+         E39czRgaYHT+B6L2iv4n2lcsrNyAovpEIeWMkQkBTL9/mHxuJh6LhW8YXeJ//HxbUjOw
+         AUBA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1765798754; x=1766403554;
+        d=1e100.net; s=20230601; t=1765798756; x=1766403556;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=yYIA++CxPIcYPKgHl3oGianXtJJpe/hDcX33067gP64=;
-        b=G/s3sZbmSlVoubibwn3sAY0Bj2OyXB6mBReB63pi2YNj3n0eCIAsNDOBDwCFRfXT8m
-         u9uxCn7kdHxQ33DO6zbRE9sURhf8ZCc868is3gbY7qYD8dysYLeb0yeIXG/8CHdhofdD
-         ek0UhuKcnuImpcqn7ljjlmFc0Kazrb5Xxz5qLCaJvffRMIn54P9wtH3Rsdrrp61ZK//V
-         Fyfg3lcEBQMdBNLm4VjNqviUjeHpxyOpxS6zQFWnQM8goQXTptvAoHk3wa3wbiJylu9/
-         nZj5ZapH8qhlGVV95Z1ROvoN17lK31CJeYA8/Ha9shb7eqI4AAkhVHeENuP27WukaKw2
-         XuJw==
-X-Forwarded-Encrypted: i=1; AJvYcCVc9PGpeUoqjGfZUFktASKgSJ+3ltXelwG0nER05ng6U+jW5qU03YCNbJu0NrWdyo9ww9bMI4LYJq2BJA==@vger.kernel.org
-X-Gm-Message-State: AOJu0YxyR544fQIHecrPiWUB6QtcvgofU4VP3hhwp4zRJfxKpb9pxRRC
-	/X3wSdRVsRk7wBYMsR3ZQ23HccgdxEXi3Hj1qe4+ep6B/uBMUKWVJ0Ev
-X-Gm-Gg: AY/fxX5wK6okkDH4TuQaM5Ww15pgHcrq6Dx62oITckMH2iJZ/YLE8cAn9Vo26Lk4FMx
-	vS7IwzJ2AsUt828mbO/0PHNiAPIlKFwLx0IuaKWN8fKg+3e09/CjJ6DQQNJ4n7kcE5qNRcxoNWD
-	kZXCA3lWwWmkyzMqhVpUDJvFUt4A5ZBcYDFysB9kkrWbHKCFoU1xVgLjQEGNR9L1YcFN63ePUoO
-	c7KyXzqr/N63Ae2VfTSmSFTFepqKDMUJZad5OrgxPTRRWpyM4O3JDl0Tnswa0/tY7CMlbLDGEgM
-	l6LUq3I4GmZmk/vakVWBMv4TIZj24OHRIFDrNJigHkO2hO6rZ7xbOj40S5eGSB9dROiTmme1mlz
-	tGjCBu4lbktbMR0uFUGb0l72UgmsHm9KvBW38u5WXe284WFHj9HxtKBFYBFueQE5ixacO0AM8FT
-	JL7SC79iOci1Q=
-X-Google-Smtp-Source: AGHT+IHZqxApH7RH4SvWeJJw7f7kzbBWfG87+pyKENlTOJ0etjJH+97jX9IVf9ZouLQDPcaXmCZT+w==
-X-Received: by 2002:a05:6a20:3d8b:b0:35e:11ff:45b4 with SMTP id adf61e73a8af0-369adfb3407mr9418258637.21.1765798753761;
-        Mon, 15 Dec 2025 03:39:13 -0800 (PST)
+        bh=9thXFyBI9wECeAoZwvjVxFD8Ol9j6G4X/I1qZGpsX1M=;
+        b=n5JegBvSRphZWjpbKYXGY6lsFJrRYGJncwI+pGEfaFVwMhlm0XnTSQ8F0YrcGbwRw2
+         8UOO5d/iMlY8f9l3N5ukLtM/T7vXSArP4+dOQGNs832r45YZ5YAgf3XMSgymIx9Jg3yu
+         WdmVAdSpslmqXYU3pwHUquCZNFo7j5wwHdVU9SY6mRRYvnvh7dzofG030mwrq4xhGC6o
+         zwwVxKv090Clo2TTinzo7zbWuWpP7IXsHSpRCyhfIwg3I/aNZR7VaOIJAke58A2oLZVx
+         IeAzrHQcZweaNkc6jdFI0ofsusQ/FLYqreo7soBqaYJrFfExXQSnK/YT3KTmbcQJHOa6
+         lCMw==
+X-Forwarded-Encrypted: i=1; AJvYcCXhpDD67feLYwAWC+z9yih+iwtxKm6Z3HN84miE+3/KwNNYj+G8qFJzcS5LOcuk/bjYKRHQZ1K555crtw==@vger.kernel.org
+X-Gm-Message-State: AOJu0YztCKxkCl8gIhFZbaJh0awNkbGLb0ZhW+P6CHdSc+RoJV7DInD0
+	kE/b7Du89/5oVRHa7TPKf/Kf85mGAExMnvg4PlpQ+KKGJiOsloe6ppSr
+X-Gm-Gg: AY/fxX6p/jNcS99VNjZxkRbYyjLKHmeAeUmhqLgT011rwpTrqqPIjI1auc/4dXFwCfZ
+	lPA8odYjf8DZAUp1h0sgZtmNenU18s1mEBFBOIPTC4F/tpDlXE2ECUAOt5ubD+nEBxeX4S0f4cd
+	p1JMGasxXsuczVxmMDcV8EqUr9hI5awx0/eFffJJhPpTnjkurWPmEOeMyx+nfitmVFNUwdt6Ego
+	ZsKJigZRO5sGYnvgCDT6Y+7OXwH6mfNw5D54sIeOpNSVKRszH4aLMRG6jftZLbwcuJQkJ0RnTTX
+	Hy4hcpzB7qP4BchUhD0xmLUxkWytcxcHsA+SeQKrkFVHDv8B6xVifNkpkKRGGSHgFCAZ1MWLYr0
+	tow+21WoYBst+HElW1SPNwfLXnMWTfSdmdIIxRbeUBFjQq3rCtR4iMarYaKL0zFXttNRS1a4zyv
+	Zi9QgFEONHH7A=
+X-Google-Smtp-Source: AGHT+IE3LQMlInYBtZW6kVYJLJE4CFzfJfm+/f5olU3OmDWyxxykzQlHP1rsXKl8Sxl863J3gFT+2A==
+X-Received: by 2002:a17:90b:4b47:b0:33b:8ac4:1ac4 with SMTP id 98e67ed59e1d1-34abd78051dmr11974090a91.35.1765798755860;
+        Mon, 15 Dec 2025 03:39:15 -0800 (PST)
 Received: from archie.me ([210.87.74.117])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-c0c26eb0f6bsm12221315a12.14.2025.12.15.03.39.11
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-34abe294892sm8918293a91.10.2025.12.15.03.39.11
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
         Mon, 15 Dec 2025 03:39:12 -0800 (PST)
 Received: by archie.me (Postfix, from userid 1000)
-	id 70D25444B393; Mon, 15 Dec 2025 18:39:05 +0700 (WIB)
+	id 9EFFF444B395; Mon, 15 Dec 2025 18:39:06 +0700 (WIB)
 From: Bagas Sanjaya <bagasdotme@gmail.com>
 To: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
 	Linux AMDGPU <amd-gfx@lists.freedesktop.org>,
@@ -148,9 +148,9 @@ Cc: Harry Wentland <harry.wentland@amd.com>,
 	Jilin Yuan <yuanjilin@cdjrlc.com>,
 	Swaraj Gaikwad <swarajgaikwad1925@gmail.com>,
 	George Anthony Vernon <contact@gvernon.com>
-Subject: [PATCH 04/14] mm: vmalloc: Fix up vrealloc_node_align() kernel-doc macro name
-Date: Mon, 15 Dec 2025 18:38:52 +0700
-Message-ID: <20251215113903.46555-5-bagasdotme@gmail.com>
+Subject: [PATCH 06/14] virtio: Describe @map and @vmap members in virtio_device struct
+Date: Mon, 15 Dec 2025 18:38:54 +0700
+Message-ID: <20251215113903.46555-7-bagasdotme@gmail.com>
 X-Mailer: git-send-email 2.52.0
 In-Reply-To: <20251215113903.46555-1-bagasdotme@gmail.com>
 References: <20251215113903.46555-1-bagasdotme@gmail.com>
@@ -160,35 +160,41 @@ List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1025; i=bagasdotme@gmail.com; h=from:subject; bh=sT1prVB7LRNvf/W4XodTbc9bjm2B3700BxVWkrXUues=; b=owGbwMvMwCX2bWenZ2ig32LG02pJDJn2n4OyyibMaS/TcJdL00op76xZei7L2Pv7hFORU9uuV vT80n3YUcrCIMbFICumyDIpka/p9C4jkQvtax1h5rAygQxh4OIUgInIP2BkeHzeo3teoLm8pE9N cXOPl0J5QO7s9Yesjvev3nrjTaKBPiND/5K7Lkx+c2t1WS5sWq6V/2tGhSPf8dA5nnLdX2fcuhb OBwA=
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1385; i=bagasdotme@gmail.com; h=from:subject; bh=bVwk3E00Ao0/BsL4XlONNDCfpFF0qzpzGvJu4GqJ/kY=; b=owGbwMvMwCX2bWenZ2ig32LG02pJDJn2n4N3qByLSAtcbrWEYbHxfzPeVTVyK4Naco81fnbf9 sGw4M+ujlIWBjEuBlkxRZZJiXxNp3cZiVxoX+sIM4eVCWQIAxenAEwk4Ckjw37unJpIS7sDggaL LUJm/L7quGjlN51XE6JFNZoPynqvOsvIsMhqy5y4fbtebC8768S8lM/yytfC9QdFWExtD//Srpa 6yQYA
 X-Developer-Key: i=bagasdotme@gmail.com; a=openpgp; fpr=701B806FDCA5D3A58FFB8F7D7C276C64A5E44A1D
 Content-Transfer-Encoding: 8bit
 
-Sphinx reports kernel-doc warning:
+Sphinx reports kernel-doc warnings:
 
-WARNING: ./mm/vmalloc.c:4284 expecting prototype for vrealloc_node_align_noprof(). Prototype was for vrealloc_node_align() instead
+WARNING: ./include/linux/virtio.h:181 struct member 'map' not described in 'virtio_device'
+WARNING: ./include/linux/virtio.h:181 struct member 'vmap' not described in 'virtio_device'
 
-Fix the macro name in vrealloc_node_align_noprof() kernel-doc comment.
+Describe these members.
 
-Fixes: 4c5d3365882dbb ("mm/vmalloc: allow to set node and align in vrealloc")
+Fixes: bee8c7c24b7373 ("virtio: introduce map ops in virtio core")
 Signed-off-by: Bagas Sanjaya <bagasdotme@gmail.com>
 ---
- mm/vmalloc.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ include/linux/virtio.h | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/mm/vmalloc.c b/mm/vmalloc.c
-index ecbac900c35f9c..2c3db9fefeb7ab 100644
---- a/mm/vmalloc.c
-+++ b/mm/vmalloc.c
-@@ -4248,7 +4248,7 @@ void *vzalloc_node_noprof(unsigned long size, int node)
- EXPORT_SYMBOL(vzalloc_node_noprof);
- 
- /**
-- * vrealloc_node_align_noprof - reallocate virtually contiguous memory; contents
-+ * vrealloc_node_align - reallocate virtually contiguous memory; contents
-  * remain unchanged
-  * @p: object to reallocate memory for
-  * @size: the size to reallocate
+diff --git a/include/linux/virtio.h b/include/linux/virtio.h
+index 132a474e59140a..68ead8fda9c921 100644
+--- a/include/linux/virtio.h
++++ b/include/linux/virtio.h
+@@ -150,11 +150,13 @@ struct virtio_admin_cmd {
+  * @id: the device type identification (used to match it with a driver).
+  * @config: the configuration ops for this device.
+  * @vringh_config: configuration ops for host vrings.
++ * @map: configuration ops for device's mapping buffer
+  * @vqs: the list of virtqueues for this device.
+  * @features: the 64 lower features supported by both driver and device.
+  * @features_array: the full features space supported by both driver and
+  *		    device.
+  * @priv: private pointer for the driver's use.
++ * @vmap: device virtual map
+  * @debugfs_dir: debugfs directory entry.
+  * @debugfs_filter_features: features to be filtered set by debugfs.
+  */
 -- 
 An old man doll... just what I always wanted! - Clara
 
