@@ -1,66 +1,66 @@
-Received: from mail-pl1-f178.google.com (mail-pl1-f178.google.com [209.85.214.178])
+Received: from mail-pl1-f180.google.com (mail-pl1-f180.google.com [209.85.214.180])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 804743314C8
-	for <linux-media@vger.kernel.org>; Mon, 15 Dec 2025 11:48:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AE5863358CA
+	for <linux-media@vger.kernel.org>; Mon, 15 Dec 2025 11:48:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765799323; cv=none; b=TTrmgeAlHPP6c5fI9ngiFX21W1Jlab3orftkIj01eF3aioyR6UeBwMrsHzAxXNrkAh3vv9dPsnQcyAq8qdbDuxCePaPBf8DE4Ep17UCXOXRjvohJ9Zbhk15Fnrx8RFNghszXtfaJQeE05UHnKQZNowjDZxVKEfHrNTlHTm2QHVY=
+	t=1765799324; cv=none; b=iC+UDhPECoz9/B9p0IGyGnRdNx4Q7H8JmcbJiGWie6dWXkN/F4kub6zrVpkmFfwhESLV0YHa82fk4+cM9Sfqw9V3uFC0RlPmzQPEiETaxwlI6WcNRXRJG1Yx/6iqr/1l2cEFJTSXaNmA0nI65g6SfOFRjCznvXqazMBx3ZrW34c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765799323; c=relaxed/simple;
-	bh=kdwYayfiPuGdbX+6/rKZkI1jkonQkDY24KG3T7ZKuZA=;
+	s=arc-20240116; t=1765799324; c=relaxed/simple;
+	bh=UEs/C9BYSnit6YUYNsXI/TPVZ8wlbVWtOoMfZCt2Czk=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=F0YG8/XaLonhj+snt4wqZaP2V/7snRi0hOtoeEY4OZoCcmILgoaHHb2xm+R8wyEPUyXCfVluj+dWASVNBBOx3kWGVAJxDhkZTTA1whJCMHS7R+jm7SsqYshIA9RGsLZdKMMlUBYKI80ziRLQs+eFoxwg6JQwnWRp8jmjXoyp3fU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=MAd6h6l4; arc=none smtp.client-ip=209.85.214.178
+	 MIME-Version; b=LJBrxAyd56BVptGIW/Opr16cKnqfGNVRXXal6z5j4Dj2Tx7jIPMI7Z/JqHS2MhaRqNCvSy9hN+keSsQrFCntC6h8prB97LADW5bO6/E0a+ol85fmmNLL7lcGmB/6DKKZxed86CLHOcVMwZ/fJ2roccEkF3xLYCCojYsWWJG/E/k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=OweAlaqf; arc=none smtp.client-ip=209.85.214.180
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="MAd6h6l4"
-Received: by mail-pl1-f178.google.com with SMTP id d9443c01a7336-2a081c163b0so20802485ad.0
-        for <linux-media@vger.kernel.org>; Mon, 15 Dec 2025 03:48:40 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="OweAlaqf"
+Received: by mail-pl1-f180.google.com with SMTP id d9443c01a7336-29844c68068so41128435ad.2
+        for <linux-media@vger.kernel.org>; Mon, 15 Dec 2025 03:48:42 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1765799320; x=1766404120; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1765799322; x=1766404122; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=JUAs+7T6aM5YvKJFQXSXqoVkTtSxZtzq470O+YaXF94=;
-        b=MAd6h6l4/YKSc10LnEFfm3OhEEbVLEKRuYqfPLONcXog2pLTf6OojvodUTKSpLiJCk
-         hJm9lRC4I6IyLOPZy4uZz7WzMI9zvRoeGHTOvJdgXYWcY4SZPosskSgjiLKoHz7zUFh6
-         bQhz1MNPYg1GHlpA+j8THPjt1R5oGeKktMBTQHBFR1q+a+mpKcSg902hA92IYeEqpenf
-         KYyg3sXuv6N4qdzs2XOq7uXib2ucnunNa8MyP9z7TODJagWiisdYEhT3inIPSTtsAF6l
-         n3MkoL0gMOOGDYLeqch/50JvIBVgu3YXwwjQUWzGsq6kdI+nrFMWHijpbp8gMrB082St
-         p92g==
+        bh=6HauKBmXABfepG7VVzo5pWgXSZcUBePm/ZvLfsSGC9U=;
+        b=OweAlaqfINL7xdPdmKk7yZe4PNrDwsXB/WguG+W6yGXU/N4FmmQsaiJTz9UcZNvddq
+         oyD5s+xq1SoElPYVq1NfOAf8IoJjyaqPlhsHryoMSo8e0CPsDCuBCb/4lW8uDPMctSky
+         LE8GBndKHvLKRarKfht22U+rMUvkYsBLNOdBg2YV06C4a+ZeoilpdlpmSPzLY5IGnZPC
+         5ygciS5mbNeWYspdSVCiVqHLNsu6g0wWEVTGR9tF14j5GdVW4qK8VljQDH0TF3JD5ND/
+         7mOGw3PJrznkPFe/ifku14nsvF/qjiOI2lGEJxErhHzfBb2VyPT280arSuUDg7ivq7Pl
+         jAHw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1765799320; x=1766404120;
+        d=1e100.net; s=20230601; t=1765799322; x=1766404122;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=JUAs+7T6aM5YvKJFQXSXqoVkTtSxZtzq470O+YaXF94=;
-        b=eP5NTm9w4RyNmakm1fLpo4zRFdet35OfsscH1mwLba81jlh73D+CmlxU9Xqi3rO9bK
-         5lpschLHeeO2opSYHHoCEZau2VjHWEZat4yeAEr5aO1dGhzndpZTeofHkCyRQ3myfLiA
-         hNjvWOUA0YPDGn7im6dqOA3Slt+6vZXKd0wlEAvodgn8FnbWT4Fk5IvYisCbenEJL4UN
-         yIBrltCNxCCzg7JPmCiBaeb0BIcPSbN4vVInmNwCXFIotvjlGgpyrIkBtPwT1+zaREHq
-         K+o13xlwZePgpHbNy1VVuffCnHfWxdb2mzQjFF/MTPrxIb+fPfmzjXxJCBD2uJW1eMs7
-         yI9A==
-X-Forwarded-Encrypted: i=1; AJvYcCU8PEHKAqdsKaQl/9P5XIqULp8hLMit1B108ha7+C1VLAk1LUQPMoabv/58BUHq7uQ7vC3r372VTA6k2A==@vger.kernel.org
-X-Gm-Message-State: AOJu0YyPLqBS45OOMRlyQkaJnmC9YwoglecBE33bFx7haWIP21YwwNsl
-	b7ZcMqpQxxjWQ7psVZVQNmMZWrVTodIAlh3plFNMQzQ+e62YOgBLKTwr
-X-Gm-Gg: AY/fxX4iDgBk/Gn0OxhCH2UoHfqO0/EdfPcrxbvaWnqn8on4bSlduZqJzqYkHY0mSWz
-	5KscVYbMroumkptcCpOyQ3rUiGc9PbRYJ7/0Ymm0XvQA7H024F6VcnT3+gYk3Ht0JIBF0jm3eHb
-	vNEWpdbNPXiHCD4ytPMAOtIpGaCrWiX9JcCSye1AaEMYsOF7YX2GvFIRO25OKgE7/u9BOX78uqa
-	iECbOCgBc4VEBxQ53xF5drxqJZuwdKZ/fxsqLKNzcgObxNYIeVvRydrcz9sd6QFKaNUzUZzs5L/
-	f9tmxQJEBjLAiDPLMtMdwavIzPiIfwHjmgAcg5N5UubbDXBkwebQYiwR7d+cTxjQLabFo08YlOA
-	K2qkzx9wiSmQyFCVqiMUmlAp4cK5+JVHbzUtsCwGN5kUBoVonAB0/I6C6P6ul7Dnuc0fxs64tBS
-	QKGsIcWMIHZz0=
-X-Google-Smtp-Source: AGHT+IEA4ldqjntSU1IZe10aX19mQKLjoCVDqCMnCNeqo44SOanRLtLHyqhQX8MxC8RVHbAWKM2xrg==
-X-Received: by 2002:a17:903:1a2e:b0:2a0:b02b:2105 with SMTP id d9443c01a7336-2a0b02b228amr63659225ad.56.1765799319837;
-        Mon, 15 Dec 2025 03:48:39 -0800 (PST)
+        bh=6HauKBmXABfepG7VVzo5pWgXSZcUBePm/ZvLfsSGC9U=;
+        b=YtpDUFEXMK+jCnIyZQcvT49+MuM4R+dFsyNT84YoXDII/dJh09/s69EFAhcQo25H3D
+         Nm2oFnYO4c8xoYri+km+lEVrpQQqrLF4k4vqpR/CQQtL+ZUZ66F34MthasVvQP9CtbYb
+         gGNgZIqZce2jXhSqUWESaq+dcQaRMohDCJiLewdpa+hJZuCrR/HanlooiTGJDGUDipf0
+         Hc6ZishjkinSC+I7jpOF7993guC9qJiWmFGEbFHUfUEAt9VZySNB6PyVWKtA3SOhtRFC
+         DSJJKnze7BWERG+Aq2xhdMjzu0JpCwThHB6b7Zou78/pkemk1TGYZynDKAn8j6O9YZO3
+         YKFA==
+X-Forwarded-Encrypted: i=1; AJvYcCXE1/qfHCRM7rJgDL0NdldhxENH9QqS+Yra8ryedmcTgTNpCEfjIy0YpdG9SDbpy5Bl1yRZM9LFTpp6lg==@vger.kernel.org
+X-Gm-Message-State: AOJu0YwmMJ7Wr5FUbYzA88xpm2gFgypXbPXzvK0wtECare90owtM9gIF
+	4P/r5yTUf3VDED1b117EBHlJ0zsgd6E81ELaNtS757BbA9CIpGoALini
+X-Gm-Gg: AY/fxX7hjvIm3+o0/IxpvpCDNx1C+vbAD8jQezfpcs7MApsRrf0tta+sbdgk+uR0EWZ
+	RNitHMu8ZFOGJQi+rHouZsBYoa2xiwz4A43iZJMwIlJni3EhoXYywqUUjBtSeYtyX0lBp1zOh+q
+	OKZDN+eXuek7tChYWfNrBXMZfF77GcWT6xmKYMRIm1EIivjqgKnn8nF5mDFSZlFZxj8dQyoL4L7
+	YDWLnwCMNHKgXiodFLlPqB29aqFgxbGkGjlDfUkXykvHiSb8Gnqtz6RuFsYO5YSDPjTw+KWuBId
+	rs/70JjyrLfyDLRie6z0IrdTr0LE1IlfdkYizRc5wG/7iorA6xg4jtG0r3xQfLwN1nAfzguMPS3
+	CQ+UZsmugQZu7NBgJ4ckBxcIs4K6r+YKl8VIwMpsQNrAIefWXJgrzRLA5A7JkYHyDRKR0Gdczn6
+	24Ebn7Az7eJj0=
+X-Google-Smtp-Source: AGHT+IHfPz2x7Vw5nYSquN5rdr59IqpuimzSW/oHADfYTkii49T/33BfFck+CRU3WD2YFqFgGY1MBw==
+X-Received: by 2002:a17:902:ccc8:b0:2a0:823f:4da6 with SMTP id d9443c01a7336-2a0823f4e6bmr66287715ad.50.1765799322057;
+        Mon, 15 Dec 2025 03:48:42 -0800 (PST)
 Received: from archie.me ([210.87.74.117])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2a0867ebe9dsm77190525ad.40.2025.12.15.03.48.39
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-29f271bc8a0sm97458185ad.92.2025.12.15.03.48.41
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 15 Dec 2025 03:48:39 -0800 (PST)
+        Mon, 15 Dec 2025 03:48:41 -0800 (PST)
 Received: by archie.me (Postfix, from userid 1000)
-	id 46E2D447330A; Mon, 15 Dec 2025 18:39:06 +0700 (WIB)
+	id 1E64B44588D7; Mon, 15 Dec 2025 18:39:06 +0700 (WIB)
 From: Bagas Sanjaya <bagasdotme@gmail.com>
 To: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
 	Linux AMDGPU <amd-gfx@lists.freedesktop.org>,
@@ -148,9 +148,9 @@ Cc: Harry Wentland <harry.wentland@amd.com>,
 	Jilin Yuan <yuanjilin@cdjrlc.com>,
 	Swaraj Gaikwad <swarajgaikwad1925@gmail.com>,
 	George Anthony Vernon <contact@gvernon.com>
-Subject: [PATCH 12/14] drm/scheduler: Describe @result in drm_sched_job_done()
-Date: Mon, 15 Dec 2025 18:39:00 +0700
-Message-ID: <20251215113903.46555-13-bagasdotme@gmail.com>
+Subject: [PATCH 10/14] drm/amdgpu: Describe @AMD_IP_BLOCK_TYPE_RAS in amd_ip_block_type enum
+Date: Mon, 15 Dec 2025 18:38:58 +0700
+Message-ID: <20251215113903.46555-11-bagasdotme@gmail.com>
 X-Mailer: git-send-email 2.52.0
 In-Reply-To: <20251215113903.46555-1-bagasdotme@gmail.com>
 References: <20251215113903.46555-1-bagasdotme@gmail.com>
@@ -160,34 +160,34 @@ List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=982; i=bagasdotme@gmail.com; h=from:subject; bh=kdwYayfiPuGdbX+6/rKZkI1jkonQkDY24KG3T7ZKuZA=; b=owGbwMvMwCX2bWenZ2ig32LG02pJDJn2n4Pfzvv2aMJ6/2fiW3RmVPTpTFSM/fBW4Nu0ikdP3 J/+EMyq6ShlYRDjYpAVU2SZlMjXdHqXkciF9rWOMHNYmUCGMHBxCsBENP8y/FN2WnBW9dYhDc+y QzUe+4R7v/wRO/L/c0NDkJC4klf71CqG3yyrLnq/ur5px+nadXME75rW9sxVOp7eMOmL58xwZZ6 TlnwA
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1065; i=bagasdotme@gmail.com; h=from:subject; bh=UEs/C9BYSnit6YUYNsXI/TPVZ8wlbVWtOoMfZCt2Czk=; b=owGbwMvMwCX2bWenZ2ig32LG02pJDJn2n4P/rZd71fJeeea2Y6ze7l+/BUWfvZxbPVvJ7FLhc b8Ca2nfjlIWBjEuBlkxRZZJiXxNp3cZiVxoX+sIM4eVCWQIAxenAEzkQCXDH065v1Nu7J+SJNXm fKBEpbzzpEZrbklCWe8WSUFLrulTkhn+J33s75ffwvJ3fu98iUql0+pnUqJKXmg5a8ursxTsZFv IBQA=
 X-Developer-Key: i=bagasdotme@gmail.com; a=openpgp; fpr=701B806FDCA5D3A58FFB8F7D7C276C64A5E44A1D
 Content-Transfer-Encoding: 8bit
 
 Sphinx reports kernel-doc warning:
 
-WARNING: ./drivers/gpu/drm/scheduler/sched_main.c:367 function parameter 'result' not described in 'drm_sched_job_done'
+WARNING: ./drivers/gpu/drm/amd/include/amd_shared.h:113 Enum value 'AMD_IP_BLOCK_TYPE_RAS' not described in enum 'amd_ip_block_type'
 
-Describe @result parameter to fix it.
+Describe the value to fix it.
 
-Fixes: 539f9ee4b52a8b ("drm/scheduler: properly forward fence errors")
+Fixes: 7169e706c82d7b ("drm/amdgpu: Add ras module ip block to amdgpu discovery")
 Signed-off-by: Bagas Sanjaya <bagasdotme@gmail.com>
 ---
- drivers/gpu/drm/scheduler/sched_main.c | 1 +
+ drivers/gpu/drm/amd/include/amd_shared.h | 1 +
  1 file changed, 1 insertion(+)
 
-diff --git a/drivers/gpu/drm/scheduler/sched_main.c b/drivers/gpu/drm/scheduler/sched_main.c
-index 1d4f1b822e7b76..4f844087fd48eb 100644
---- a/drivers/gpu/drm/scheduler/sched_main.c
-+++ b/drivers/gpu/drm/scheduler/sched_main.c
-@@ -361,6 +361,7 @@ static void drm_sched_run_free_queue(struct drm_gpu_scheduler *sched)
- /**
-  * drm_sched_job_done - complete a job
-  * @s_job: pointer to the job which is done
-+ * @result: job result
-  *
-  * Finish the job's fence and resubmit the work items.
-  */
+diff --git a/drivers/gpu/drm/amd/include/amd_shared.h b/drivers/gpu/drm/amd/include/amd_shared.h
+index 17945094a13834..d8ed3799649172 100644
+--- a/drivers/gpu/drm/amd/include/amd_shared.h
++++ b/drivers/gpu/drm/amd/include/amd_shared.h
+@@ -89,6 +89,7 @@ enum amd_apu_flags {
+ * @AMD_IP_BLOCK_TYPE_VPE: Video Processing Engine
+ * @AMD_IP_BLOCK_TYPE_UMSCH_MM: User Mode Scheduler for Multimedia
+ * @AMD_IP_BLOCK_TYPE_ISP: Image Signal Processor
++* @AMD_IP_BLOCK_TYPE_RAS: RAS
+ * @AMD_IP_BLOCK_TYPE_NUM: Total number of IP block types
+ */
+ enum amd_ip_block_type {
 -- 
 An old man doll... just what I always wanted! - Clara
 
