@@ -1,66 +1,66 @@
-Received: from mail-pf1-f172.google.com (mail-pf1-f172.google.com [209.85.210.172])
+Received: from mail-pl1-f172.google.com (mail-pl1-f172.google.com [209.85.214.172])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4BA8932B9BE
-	for <linux-media@vger.kernel.org>; Mon, 15 Dec 2025 11:39:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 78011332EB9
+	for <linux-media@vger.kernel.org>; Mon, 15 Dec 2025 11:39:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765798762; cv=none; b=ZxCymJab+XEJ5q/Q7f8oDGFHb9HJaBGxDZQVo2/ajfWjsbiHeBHiFIJ7WKdonUw+I2U0N3vwsg999YS/JVuo003UF2Tor7kAOQ/El3bzEJ42xwryF53yKzNxhAaImu1w21ro7mnFnJTEBVx8K+bBogpFsp5sMV6w1V6JHkJXhlw=
+	t=1765798766; cv=none; b=gr9YMfr+DiF51Ks8OGtn+A/xWDm85G1TNhRoIr0fIVVPJ8cG/FNbzmZ2Ou4FTYi3XVBrJVTxV41CPD+FMDyUdr+6otgPWOEIJNMBo9iNOiP3HJtoils2JmsIdBnW+KKY9r6J2FGVVbirNV0yFGmdL6XBTlwcc0xqws89tLgl9WI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765798762; c=relaxed/simple;
-	bh=ZF9oIk+6VfTU18bKiromuOjnT5V3QoMoKRjEOTmh6aM=;
+	s=arc-20240116; t=1765798766; c=relaxed/simple;
+	bh=NBybN5/snlW67CYY0LDf5z9mjlB8/ZE5MQWmfMjzEtk=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=lm1F5c9s6ehiWixOnq5QgqkoYX8z8WbuZ6EpFWAuJ9fVpkn5Jaa9xU0c3TNazsxeJ8m9y9TLb2vZeKgY6I65nXgNr9HZH/GoCDBYQyXFPeJPxIju/yXyRDEADqbzFuRZuUOpNeMS1EsYbWNohHgZ5UTrkz182LykVZyuIYKTs8A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=bdmUpkgj; arc=none smtp.client-ip=209.85.210.172
+	 MIME-Version; b=PV8t7oz8Af+ZCX+rAX8F2/wZOI4r7DjTkUoLb2dtnIdknx+Q2tChih6K9hCmAU0EIymES6mWS8ioTxJnAbIHxsaF3kLOAJucHqPT+0jUJMnDfhfJjSwwUpscqLmVSSc2wqTpOBcEj+P0fJv2KAQVZi30EWcZkkpPZ5kytis84Vc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=i0JdnHzO; arc=none smtp.client-ip=209.85.214.172
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="bdmUpkgj"
-Received: by mail-pf1-f172.google.com with SMTP id d2e1a72fcca58-7b9c17dd591so2678774b3a.3
-        for <linux-media@vger.kernel.org>; Mon, 15 Dec 2025 03:39:19 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="i0JdnHzO"
+Received: by mail-pl1-f172.google.com with SMTP id d9443c01a7336-2a09d981507so12622655ad.1
+        for <linux-media@vger.kernel.org>; Mon, 15 Dec 2025 03:39:24 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1765798759; x=1766403559; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1765798763; x=1766403563; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=XhdWc9MI61x0CV5VCAtcSDjXy8TDKlNky9k0yGxBSF0=;
-        b=bdmUpkgjG3A8l3BasLLFRqyXr+2XJuYbch+Hq+yAEPrg7wpPcdx7I/jpNbylqYdiqk
-         3QsRYHXpwqH14EvQeUgpUY+RquV1E9+wIqG7bSiJgDLRspYNZqwv5fzFfmUKIaOwAWmN
-         eLkDuwWlqL7hbu/WzWFB20S6jwEKdHSVObJFYOvUC3m7rHiH6j6lPeFp5rqtjRAGCuRi
-         Ck7gGIzrxXlCEO07uvcLgrev8tblGfHnErPfzxxyib6DQvy6vLfHOpHQhov4ZVVHi7tn
-         rawLwpf17tCFUfq7t1FORzuEApjYZxJNEx/qktof7BEDr2R/5IGdYpfl5R9W8jfCsvI1
-         85eQ==
+        bh=TrKHAwDmwEWPzZzAT0wzFml+5He+R0bXqVhPFRZE9SA=;
+        b=i0JdnHzO8tyN9GvqycuvJXYYalEvDT2ihAk/0j99Lm51m82sZlG/haWENYXR2kwwld
+         InrABQQZ5B1sdm/rIqnFsoSJEEFJdFax3yY/dCjhEtHQYHS9pr/HGerZFPuv3rsoaSSs
+         zq2rSKZ+O4ZXugp8Mx7d6izDQtTySetmXXB3roID++o0wj1E74+vlc9vMCUiu6IaC5IT
+         u6VWyXKCNySGGQR9N9QcmUAnbE8j0IZF74luX7sYKOgqpIoLnMwtsLC0lzm4mXjUOosD
+         N3IL3oFUS0rRXWMwvyagU/h6RP5/I5ufUU4zTO+JMKakiTNR8AvH3pV6Z5qciPMd2KaN
+         fy7w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1765798759; x=1766403559;
+        d=1e100.net; s=20230601; t=1765798763; x=1766403563;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=XhdWc9MI61x0CV5VCAtcSDjXy8TDKlNky9k0yGxBSF0=;
-        b=r/fYapTaCeLOLa2WRatrLm2oRd4bqZPyrSmz85vlArG7a+LLS/LpHkzndiLnJbd815
-         B25+7R5TlNnduN3B9nhsIhmNhthCIUd+vEaakYRqE4PfU3r5OhNN7u+1GHhPTwJznZpn
-         2q1A6pi0vwH8T2EdIEXtZx9e3LXZPSx+TTH8Uap08AhE7AeNYq9SDQymTCcH/oSzGmpL
-         EPpE5KfTqRfZFAUYnXYbBOTnMUx64n5WqpyChGK6h96j/PkicjkghM9KyLZbYHWboWB/
-         zoWpiWBDYuzdMtQ4TbKuyLpNoYssgdVvLVE+hGZ24SyvIik2hJuaOaOh9XLXOT3kG3Dk
-         6+6g==
-X-Forwarded-Encrypted: i=1; AJvYcCXbiT8Id/kIyinSnWDOyy4sufTDhAJLCsVfAETRlaq5JtoByauoRspOz2dbn58SFtP7q2UyJH9XK40Oiw==@vger.kernel.org
-X-Gm-Message-State: AOJu0YzIaTH12nMJf3rLScVcFcrJkEbYQyITcQwOLrPOsHhmggCkhYvo
-	PDEeAycOvyfbiNq+vHjGSW2G7s1N086sPkKK+TaPPaosPWgFN7j0K7gI
-X-Gm-Gg: AY/fxX4VqdC321vX7BzZoh4gwEzNkaWnQVMpsrwBzIEvjKGB9PhSQn+RpKT2EfywAcp
-	xMWNwcvPaOrewS6HoDeikEIFkPC64/cgJHxLf9CuajgYmoJwLJWB62rnCDG4Y1whQN/ur92E+QU
-	vzmmx6rEVNIVxO/EKNkNiroNEnCiryaxqMn9lHO0LaTMth5Uap96wJiHsBdvdK96q3oG84aLwKj
-	rwvtVuDqGNTbsK+48cFZbBY9idbe8IwOxw51EQThrQ05GHRvAhwwL9lPw6YMW1/xKweCgM9cglV
-	Bq+/tg9uuCX7BfnzGC+AKfMIcEdSV6nlU0RBXgInWA73ylzTUXk3cB9R8eZ5EgCC/0uAuGj4CkB
-	r/W3bOZz5ZsoGxkLylY0DxYGIONUMmUEspvSp4z5WTcgTiRJ91mqEEYlVIJRnvuPamTkQRp3LFh
-	s0ZxYvlGHKwQE=
-X-Google-Smtp-Source: AGHT+IEml9qI+VrrnmRfetIj/W3ZZs/y3fpGJeeY3YNSfL1Lp+Ud1G2wHo5sReKCb7zM9fF8T1soPQ==
-X-Received: by 2002:a05:6a00:4211:b0:7e8:4587:e8c8 with SMTP id d2e1a72fcca58-7f669c8ea65mr9926386b3a.59.1765798758916;
-        Mon, 15 Dec 2025 03:39:18 -0800 (PST)
+        bh=TrKHAwDmwEWPzZzAT0wzFml+5He+R0bXqVhPFRZE9SA=;
+        b=GDYQ2q7O6huSlj5mSDZAUzpe/kdCRQFDq+Km0j8eQ9yzKSBiuVzxIdaEyOZY94K2+G
+         arzfo3dax9VxDLH+UpPqoNovR9L9yOwFOgwS7yJyh+MihUn+UDZEwJtDJvR/HI16Yx5U
+         Pj/pBIsyWf99jwVMxjop6LBQxSq4218DTfKcohxew85dh6pKqD1p19HvV3JWwoMWJqVa
+         JPi3MJCrcogQPQkWbxGcL64rbW3YD8kTqwJMx5cV28mKGdIKArjtd6FDKOZ5OpRlY8hs
+         //5LpqBmgcpmVcZVCdSSmgBf6e70x56tGq6WIO2MlX+a7ZBw0UOkOF4zoIOT5ngAiWcf
+         L4ZQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXzyZDrXVNczSNTn4ZAelHMnx6Gontgdyj92njMdlXFt2TrSObrNM6olk6KC9zOwYhDsNyxl+hzsE/Niw==@vger.kernel.org
+X-Gm-Message-State: AOJu0YzG5L8OFFzhHtU8v7iAoo4TJiP3zd8s0vJkrrseBznKRk9SByaY
+	xEI0cxISGTJSpgBAEAZkuHvYyyWxAnOSXkc75qdNoGpMd9AT7YUA+KP1
+X-Gm-Gg: AY/fxX4MuohPRjXsOh2igFaiH6f1Dbue5A7YopPrYY/yNBbh+36smDREZ7B3NPdVEi/
+	aYwwjAcNl2tD2r5mNCtZINl4HBaSKyCvvEUH6QZfUWd4yua6DLnUmOlyPe4Gz7NIACWmIOjIuo4
+	yO8r7hDdbBqmule0f9OI3gG9ThuCZ+gXSaIeuWHH1z77v7QQpoc32evhFEV1M+c+H1pc29bx8CA
+	hiJ/AuFHhMaaVUzsSp23b1KZfvDrvUwNNUExqVjTLLy4Q+maAw6lDnGVizcmaC634RQNH4Q2uBs
+	7IJUDdHOpmL4oM63yu0NVwFzkbcCwnFN8C09AxHx3xzhTjU2XuoJsVOMtbqr1LM9d0PP0udCOXS
+	GnIo8Sun85BuW+1SeTMJRq7kEysS5GLI0hX8dSYYOrUrKm2zhi2JGpU3wIbZvhYBKZ9MYyKnyM2
+	/fTAv7BD2bZwg=
+X-Google-Smtp-Source: AGHT+IGEKo7pUOqZ/Msgj5pboeIPXCGG8SyTdVwEqd2zfEZHqjnoFfxwhdJcfbexnC7zJuC88ktUrA==
+X-Received: by 2002:a17:903:1988:b0:2a0:d0ae:454d with SMTP id d9443c01a7336-2a0d0ae4b49mr35282785ad.22.1765798763267;
+        Mon, 15 Dec 2025 03:39:23 -0800 (PST)
 Received: from archie.me ([210.87.74.117])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-7f4c566c7cfsm12487742b3a.67.2025.12.15.03.39.13
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2a0f58d7c27sm27523715ad.24.2025.12.15.03.39.14
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
         Mon, 15 Dec 2025 03:39:18 -0800 (PST)
 Received: by archie.me (Postfix, from userid 1000)
-	id BCD48444B396; Mon, 15 Dec 2025 18:39:06 +0700 (WIB)
+	id 357B044588D8; Mon, 15 Dec 2025 18:39:06 +0700 (WIB)
 From: Bagas Sanjaya <bagasdotme@gmail.com>
 To: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
 	Linux AMDGPU <amd-gfx@lists.freedesktop.org>,
@@ -148,9 +148,9 @@ Cc: Harry Wentland <harry.wentland@amd.com>,
 	Jilin Yuan <yuanjilin@cdjrlc.com>,
 	Swaraj Gaikwad <swarajgaikwad1925@gmail.com>,
 	George Anthony Vernon <contact@gvernon.com>
-Subject: [PATCH 07/14] fs: Describe @isnew parameter in ilookup5_nowait()
-Date: Mon, 15 Dec 2025 18:38:55 +0700
-Message-ID: <20251215113903.46555-8-bagasdotme@gmail.com>
+Subject: [PATCH 11/14] drm/gem/shmem: Describe @shmem and @size parameters
+Date: Mon, 15 Dec 2025 18:38:59 +0700
+Message-ID: <20251215113903.46555-12-bagasdotme@gmail.com>
 X-Mailer: git-send-email 2.52.0
 In-Reply-To: <20251215113903.46555-1-bagasdotme@gmail.com>
 References: <20251215113903.46555-1-bagasdotme@gmail.com>
@@ -160,34 +160,37 @@ List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=946; i=bagasdotme@gmail.com; h=from:subject; bh=ZF9oIk+6VfTU18bKiromuOjnT5V3QoMoKRjEOTmh6aM=; b=owGbwMvMwCX2bWenZ2ig32LG02pJDJn2n4NPZboGqi8J0lGIEPx09J91+O5zYvcmVc9uCnNeq KyqY9/YUcrCIMbFICumyDIpka/p9C4jkQvtax1h5rAygQxh4OIUgIloczEyXFE5FS25V7U4nF3s wsyajN23tv7S0jlgc8jW4LrtPJ7fvYwMd203HZvEp7U3/4W850Q53mn2BsnZf49w2jwWklnFefM GBwA=
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1239; i=bagasdotme@gmail.com; h=from:subject; bh=NBybN5/snlW67CYY0LDf5z9mjlB8/ZE5MQWmfMjzEtk=; b=owGbwMvMwCX2bWenZ2ig32LG02pJDJn2n4OX/nxidPxCa7t5fuOD8HMfrQSuP1hub/O7ZcKpR 3k2jWdLOkpZGMS4GGTFFFkmJfI1nd5lJHKhfa0jzBxWJpAhDFycAjCRtAcM/yunTjs9ydWYJypu wYcH6cfFNi1X5dYSuyPxxuv3me1JcpKMDBs+vU9uutHzrUbncPwy+73MjZlbOwIfHrr54bGU4uz aOwwA
 X-Developer-Key: i=bagasdotme@gmail.com; a=openpgp; fpr=701B806FDCA5D3A58FFB8F7D7C276C64A5E44A1D
 Content-Transfer-Encoding: 8bit
 
-Sphinx reports kernel-doc warning:
+Sphinx reports kernel-doc warnings:
 
-WARNING: ./fs/inode.c:1607 function parameter 'isnew' not described in 'ilookup5_nowait'
+WARNING: ./drivers/gpu/drm/drm_gem_shmem_helper.c:104 function parameter 'shmem' not described in 'drm_gem_shmem_init'
+WARNING: ./drivers/gpu/drm/drm_gem_shmem_helper.c:104 function parameter 'size' not described in 'drm_gem_shmem_init'
 
-Describe the parameter.
+Describe the parameters.
 
-Fixes: a27628f4363435 ("fs: rework I_NEW handling to operate without fences")
+Fixes: e3f4bdaf2c5bfe ("drm/gem/shmem: Extract drm_gem_shmem_init() from drm_gem_shmem_create()")
 Signed-off-by: Bagas Sanjaya <bagasdotme@gmail.com>
 ---
- fs/inode.c | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/gpu/drm/drm_gem_shmem_helper.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/fs/inode.c b/fs/inode.c
-index 521383223d8a45..2f4beda7bb8841 100644
---- a/fs/inode.c
-+++ b/fs/inode.c
-@@ -1593,6 +1593,7 @@ EXPORT_SYMBOL(igrab);
-  * @hashval:	hash value (usually inode number) to search for
-  * @test:	callback used for comparisons between inodes
-  * @data:	opaque data pointer to pass to @test
-+ * @isnew:	whether the inode is new or not
+diff --git a/drivers/gpu/drm/drm_gem_shmem_helper.c b/drivers/gpu/drm/drm_gem_shmem_helper.c
+index 93b9cff89080f9..7f73900abcbb9d 100644
+--- a/drivers/gpu/drm/drm_gem_shmem_helper.c
++++ b/drivers/gpu/drm/drm_gem_shmem_helper.c
+@@ -96,7 +96,8 @@ static int __drm_gem_shmem_init(struct drm_device *dev, struct drm_gem_shmem_obj
+ /**
+  * drm_gem_shmem_init - Initialize an allocated object.
+  * @dev: DRM device
+- * @obj: The allocated shmem GEM object.
++ * @shmem: The allocated shmem GEM object.
++ * @size: shmem GEM object size
   *
-  * Search for the inode specified by @hashval and @data in the inode cache.
-  * If the inode is in the cache, the inode is returned with an incremented
+  * Returns:
+  * 0 on success, or a negative error code on failure.
 -- 
 An old man doll... just what I always wanted! - Clara
 
