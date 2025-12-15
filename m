@@ -1,199 +1,79 @@
-Received: from mail-pj1-f46.google.com (mail-pj1-f46.google.com [209.85.216.46])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 75742332EB8
-	for <linux-media@vger.kernel.org>; Mon, 15 Dec 2025 11:39:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6CFC73358C1;
+	Mon, 15 Dec 2025 11:47:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.11.138.130
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765798768; cv=none; b=hw6aYtP/3ZTLCil357OKO5Peg4JQ84b5lGt9FqKKvrLY5dXACYR+v3+gEPFlP/bcY2jmdAUe8q6GtCF5ix3093gxlhwUrfchsY8h1WhNsFU0KTVLMWK3MWkzOTLp3UTo2RVxdFv6ChjAbxiqal9UcNg6ZAHtoQdK/EMR8B6vAYo=
+	t=1765799267; cv=none; b=CdZgsW1QQ19f/S2NL1j5run0EdBIl8cRbU0jA7OYFB9MQ5PU/aSak/pMKKCJ7rb9uzfSCKPJ5kROcEJsvzNLQYFavnM0DpuibkxRByI1FCMsj9kMwoqCHI9NMoV7TPzbZFnAhnLB5NNHutlzfYWlaXMy5vWSkkiy8VWutPXPQXQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765798768; c=relaxed/simple;
-	bh=XiWwx/yBvL5qhtur1OJ6r0Qtve5kN/UAKMQDFDv8Kk4=;
+	s=arc-20240116; t=1765799267; c=relaxed/simple;
+	bh=0SEq/x8X0QFfkPvW8BGjCa3AjDAXeaQG4E5hn3lfYkk=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=FK0M+3qriAhkY6VXLanNe4kotdsGhz3aza36LF2vXGaMiCDZAMO2NTIv/J6dDf8UUU48HUvw5+573V3FxaEp83stzrqQ6ZI3oYG5pgogSddzRe+WGt7yOca/jdiBgxuVX0TybQwfyDsJxJPh4b9p0e8FfirAKdt6tieNvQooAxM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=XytzJRAR; arc=none smtp.client-ip=209.85.216.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	 MIME-Version:Content-Type; b=YHZMxMRpVL2jorQoLCuYS+DcrofxzNY52p5qcSg1HbalSIlAtkKSXUu2gL63AWYx6K/EmmRQj/ouD8CUkr0tABjj3DgFzd7hJwxn6hhaS2MZi8cK2xi0SjEkUfh4BypiiJEFRz/wwghstEzwyHje995N2haGESHpwR5JB3H/cn4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sntech.de; spf=pass smtp.mailfrom=sntech.de; dkim=pass (2048-bit key) header.d=sntech.de header.i=@sntech.de header.b=2Dzjn248; arc=none smtp.client-ip=185.11.138.130
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sntech.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sntech.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="XytzJRAR"
-Received: by mail-pj1-f46.google.com with SMTP id 98e67ed59e1d1-34c84dc332cso993283a91.0
-        for <linux-media@vger.kernel.org>; Mon, 15 Dec 2025 03:39:24 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1765798763; x=1766403563; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=KFsNe5Gu995f8GfU2RxaYzwbXM91ZCVhfkD06BV90tM=;
-        b=XytzJRARBFCGn2wkwkzcKGcQxZVspcyrUETa6kb4/Whu+HngPYUDtnXiVcnTNT5THM
-         tluZeafaX/Xu1YjXUj24bBzkauectMVxvfK1wrNtyoTxDAq6YXy5+hoBXfQs8gvFEwQg
-         U2fHhiSAHyiD+0ZHdIsr5XmZTQC/lIbr+scipAN2wO9fBcVQ4az5nIXC2jGSKfefSfJj
-         NJFlRmb6++Mh6N7y4i5xPsgvP4eb31RqyGiy5BjroqqwnZxxThie3Fb8gKJW1slA1ZgK
-         t/b5xtdMAq9prQMyUHZOd/u8JquiqUYMUo6WPyjWxhAn8vTzCvKzNa4q0/BytzCGMVm2
-         8K+Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1765798763; x=1766403563;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=KFsNe5Gu995f8GfU2RxaYzwbXM91ZCVhfkD06BV90tM=;
-        b=HPjfj/HPe+lhIrhScpKD6xDmbmKew3QRx14+xOlhw2Dc2MPQos5J/WRH+LF9I1tB6t
-         KKUuchSdmlQrj6kHyh4rNqDUNSmC7+BoVoBvukjXEw8TzswPgNFysSGKSluME3DfVnSq
-         wLYQo3QUe/wqtAQDzaC8YRIg+8rgYuMku9t7Lt3C179q1krCrAhm6bEjYs7FLufIR5h5
-         XSZ8A7Fra8vZIW3pHOfUDiwTxpnGk23kfRqYU+rF3c2CAp3tfYKGMwyYA7fzOjJW1iDG
-         82sAXDSjXZn9Y+mUf1PMDxvcIopgW/cC0T0R5CqRPnpm5cMcTZ4Ft8/beDDpnb0fc3YW
-         UU6w==
-X-Forwarded-Encrypted: i=1; AJvYcCV9VboExS1qRkNfj8rca5bFFtu8R/sC/kzUvgMzU/aNDTQjCPeI6YY++Z8XtgOQyfilaHb9d3Zf3M0BCQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0YwARlhLzP6ip9FD7B/N46q9+ApVikF6KWePJNEZyv4ebIjKeArT
-	qiDehGgAiyMnjLWhUTb+4pmbu2qgWSJ6bYUgYXUJi74APjmkedEdfwjJ
-X-Gm-Gg: AY/fxX5gimIRolpojkfT6/loVqJx7hxVLS6173KqYokq3SYdNZoUP357hp84JKOwk+7
-	pCLLWJRSmjpwKW20pY+vY0eyk9qUHae+b2eaTjv1GuUYEOm2fvPt0IMSPyOJ0lQ60wTg713+qxi
-	PVVeusXKn/rnD1NKCDpI72pPYJdqBENZKcTm2Cl99wVcBYBd9Dh3n8yYp1Zi05Wzw6XOvkVPfQg
-	xkZySFKyVKFYGetxMA+4CJYC8vgTh+M6oYRXRNm6zcdfBWMIpnFxZVSVOfwRYi8gabEqhO+g5oX
-	6236GGXXYFTk+cJGM48LgE+p79O1UDjJ/THYONDoiLu7hFtkv3nZY1Ls1ekz3kgnuvLIze9sEpg
-	LuwyzHyY6zbdT5o+ADa/gFMP/UV8mlcLxPwN1rH9czzd88nw8/sUTC4YIE3fksvpPrdNCpFdjGh
-	LrfWOecQ/AIb4=
-X-Google-Smtp-Source: AGHT+IEy2tcNugFFoZ/L1b/kwWL3FdgAjYD+lvIJBPYKZMY6hs2UzwV9S1AhT0ES6IDo2vtVEhI5ug==
-X-Received: by 2002:a17:90b:2811:b0:340:bb51:17eb with SMTP id 98e67ed59e1d1-34abd6d35c0mr9572904a91.15.1765798763360;
-        Mon, 15 Dec 2025 03:39:23 -0800 (PST)
-Received: from archie.me ([210.87.74.117])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-34abe2f34c7sm2908684a91.9.2025.12.15.03.39.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 15 Dec 2025 03:39:18 -0800 (PST)
-Received: by archie.me (Postfix, from userid 1000)
-	id CA7C1444B397; Mon, 15 Dec 2025 18:39:06 +0700 (WIB)
-From: Bagas Sanjaya <bagasdotme@gmail.com>
-To: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-	Linux AMDGPU <amd-gfx@lists.freedesktop.org>,
-	Linux DRI Development <dri-devel@lists.freedesktop.org>,
-	Linux Filesystems Development <linux-fsdevel@vger.kernel.org>,
-	Linux Media <linux-media@vger.kernel.org>,
-	linaro-mm-sig@lists.linaro.org,
-	kasan-dev@googlegroups.com,
-	Linux Virtualization <virtualization@lists.linux.dev>,
-	Linux Memory Management List <linux-mm@kvack.org>,
-	Linux Network Bridge <bridge@lists.linux.dev>,
-	Linux Networking <netdev@vger.kernel.org>
-Cc: Harry Wentland <harry.wentland@amd.com>,
-	Leo Li <sunpeng.li@amd.com>,
-	Rodrigo Siqueira <siqueira@igalia.com>,
-	Alex Deucher <alexander.deucher@amd.com>,
-	=?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
-	David Airlie <airlied@gmail.com>,
-	Simona Vetter <simona@ffwll.ch>,
-	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-	Maxime Ripard <mripard@kernel.org>,
-	Thomas Zimmermann <tzimmermann@suse.de>,
-	Matthew Brost <matthew.brost@intel.com>,
-	Danilo Krummrich <dakr@kernel.org>,
-	Philipp Stanner <phasta@kernel.org>,
-	Alexander Viro <viro@zeniv.linux.org.uk>,
-	Christian Brauner <brauner@kernel.org>,
-	Jan Kara <jack@suse.cz>,
-	Sumit Semwal <sumit.semwal@linaro.org>,
-	Alexander Potapenko <glider@google.com>,
-	Marco Elver <elver@google.com>,
-	Dmitry Vyukov <dvyukov@google.com>,
-	"Michael S. Tsirkin" <mst@redhat.com>,
-	Jason Wang <jasowang@redhat.com>,
-	Xuan Zhuo <xuanzhuo@linux.alibaba.com>,
-	=?UTF-8?q?Eugenio=20P=C3=A9rez?= <eperezma@redhat.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Uladzislau Rezki <urezki@gmail.com>,
-	Nikolay Aleksandrov <razor@blackwall.org>,
-	Ido Schimmel <idosch@nvidia.com>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Paolo Abeni <pabeni@redhat.com>,
-	Simon Horman <horms@kernel.org>,
-	Taimur Hassan <Syed.Hassan@amd.com>,
-	Wayne Lin <Wayne.Lin@amd.com>,
-	Alex Hung <alex.hung@amd.com>,
-	Aurabindo Pillai <aurabindo.pillai@amd.com>,
-	Dillon Varone <Dillon.Varone@amd.com>,
-	George Shen <george.shen@amd.com>,
-	Aric Cyr <aric.cyr@amd.com>,
-	Cruise Hung <Cruise.Hung@amd.com>,
-	Mario Limonciello <mario.limonciello@amd.com>,
-	Sunil Khatri <sunil.khatri@amd.com>,
-	Dominik Kaszewski <dominik.kaszewski@amd.com>,
-	Bagas Sanjaya <bagasdotme@gmail.com>,
-	David Hildenbrand <david@kernel.org>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
-	Max Kellermann <max.kellermann@ionos.com>,
-	"Nysal Jan K.A." <nysal@linux.ibm.com>,
-	Ryan Roberts <ryan.roberts@arm.com>,
-	Alexey Skidanov <alexey.skidanov@intel.com>,
-	Vlastimil Babka <vbabka@suse.cz>,
-	Kent Overstreet <kent.overstreet@linux.dev>,
-	Vitaly Wool <vitaly.wool@konsulko.se>,
-	Harry Yoo <harry.yoo@oracle.com>,
-	Mateusz Guzik <mjguzik@gmail.com>,
-	NeilBrown <neil@brown.name>,
-	Amir Goldstein <amir73il@gmail.com>,
-	Jeff Layton <jlayton@kernel.org>,
-	Ivan Lipski <ivan.lipski@amd.com>,
-	Tao Zhou <tao.zhou1@amd.com>,
-	YiPeng Chai <YiPeng.Chai@amd.com>,
-	Hawking Zhang <Hawking.Zhang@amd.com>,
-	Lyude Paul <lyude@redhat.com>,
-	Daniel Almeida <daniel.almeida@collabora.com>,
-	Luben Tuikov <luben.tuikov@amd.com>,
-	Matthew Auld <matthew.auld@intel.com>,
-	Roopa Prabhu <roopa@cumulusnetworks.com>,
-	Mao Zhu <zhumao001@208suo.com>,
-	Shaomin Deng <dengshaomin@cdjrlc.com>,
-	Charles Han <hanchunchao@inspur.com>,
-	Jilin Yuan <yuanjilin@cdjrlc.com>,
-	Swaraj Gaikwad <swarajgaikwad1925@gmail.com>,
-	George Anthony Vernon <contact@gvernon.com>
-Subject: [PATCH 08/14] VFS: fix __start_dirop() kernel-doc warnings
-Date: Mon, 15 Dec 2025 18:38:56 +0700
-Message-ID: <20251215113903.46555-9-bagasdotme@gmail.com>
-X-Mailer: git-send-email 2.52.0
-In-Reply-To: <20251215113903.46555-1-bagasdotme@gmail.com>
-References: <20251215113903.46555-1-bagasdotme@gmail.com>
+	dkim=pass (2048-bit key) header.d=sntech.de header.i=@sntech.de header.b="2Dzjn248"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=sntech.de;
+	s=gloria202408; h=Content-Transfer-Encoding:Content-Type:MIME-Version:
+	References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:Reply-To;
+	bh=cDCAdTgs2P3VG3lCGDQQe/McF+oPTUo+A/A40/PgerU=; b=2Dzjn248o/8afFCxkZtum0p2YK
+	UeeI0k6+K3TX+bhvV4nXMAl0Tdupum+oSRjVFAuyILhnSbylG2RUPmjGTz1JRGzgkaLAyZ8nlHNLr
+	E74vxWg27sFGhmXD/VpHmzqNH/yZ8uBUu+mZQLihafhQANSQUkJZo6x14UOUrXXd6XspUqwOganxy
+	ITCUq33LKI2lNOrCCGmUb8UCYqpLMPCjkh9Rln6ogMG5UpRE1k4xalNHY58Og9p5LCM1aOyaHBdVT
+	Dv2Dvd69Cs/qhMiGIN0xfFRR6SDPzAh09oS7S9Ybbem3rPaKdGJw4mUis4QjL/clKv9spKBeEa598
+	dMRqw7JA==;
+Received: from [192.76.154.237] (helo=phil.dip.tu-dresden.de)
+	by gloria.sntech.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.94.2)
+	(envelope-from <heiko@sntech.de>)
+	id 1vV73A-0000On-Pb; Mon, 15 Dec 2025 12:47:36 +0100
+From: Heiko Stuebner <heiko@sntech.de>
+To: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
+	Detlev Casanova <detlev.casanova@collabora.com>,
+	Mauro Carvalho Chehab <mchehab@kernel.org>,
+	Jonas Karlman <jonas@kwiboo.se>
+Cc: Heiko Stuebner <heiko@sntech.de>,
+	Alex Bee <knaerzche@gmail.com>,
+	Nicolas Dufresne <nicolas.dufresne@collabora.com>,
+	linux-media@vger.kernel.org,
+	linux-rockchip@lists.infradead.org,
+	devicetree@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: (subset) [PATCH v3 0/7] media: rkvdec: Add HEVC backend
+Date: Mon, 15 Dec 2025 12:47:33 +0100
+Message-ID: <176579924020.1404176.16613704782665436214.b4-ty@sntech.de>
+X-Mailer: git-send-email 2.47.2
+In-Reply-To: <20250905161942.3759717-1-jonas@kwiboo.se>
+References: <20250905161942.3759717-1-jonas@kwiboo.se>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1286; i=bagasdotme@gmail.com; h=from:subject; bh=XiWwx/yBvL5qhtur1OJ6r0Qtve5kN/UAKMQDFDv8Kk4=; b=owGbwMvMwCX2bWenZ2ig32LG02pJDJn2n4O3vI8WDrMwXuvBLq8mNivp3ZeuaVYeu+cJXRZ0u 9ehPPdrRykLgxgXg6yYIsukRL6m07uMRC60r3WEmcPKBDKEgYtTACbSG8vI8EpCRPb0s1m/77E2 hv9V7O9IOeS06tfyqjLP7/lK/+xuKjL8zzy7NtZA+f5K8VWm3d9utqf1737naLT7ZsEzs3nvY45 PYQUA
-X-Developer-Key: i=bagasdotme@gmail.com; a=openpgp; fpr=701B806FDCA5D3A58FFB8F7D7C276C64A5E44A1D
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 
-Sphinx report kernel-doc warnings:
 
-WARNING: ./fs/namei.c:2853 function parameter 'state' not described in '__start_dirop'
-WARNING: ./fs/namei.c:2853 expecting prototype for start_dirop(). Prototype was for __start_dirop() instead
+On Fri, 05 Sep 2025 16:19:18 +0000, Jonas Karlman wrote:
+> This series add a HEVC backend to the Rockchip Video Decoder driver.
+> 
+> With the dependent H.264 High 10 and 4:2:2 profile support series
+> finally merged there is finally time to send a v2 with minor changes and
+> a suggested code style fix of this series. v1 of this series has been
+> fully functional up until recent unstaging of the rkvdec driver.
+> 
+> [...]
 
-Fix them up.
+Applied, thanks!
 
-Fixes: ff7c4ea11a05c8 ("VFS: add start_creating_killable() and start_removing_killable()")
-Signed-off-by: Bagas Sanjaya <bagasdotme@gmail.com>
----
- fs/namei.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+[7/7] ARM: dts: rockchip: Add vdec node for RK3288
+      commit: e74470cf3101da79666f20186c9406192223e9a8
 
-diff --git a/fs/namei.c b/fs/namei.c
-index bf0f66f0e9b92c..91fd3a786704e2 100644
---- a/fs/namei.c
-+++ b/fs/namei.c
-@@ -2836,10 +2836,11 @@ static int filename_parentat(int dfd, struct filename *name,
- }
- 
- /**
-- * start_dirop - begin a create or remove dirop, performing locking and lookup
-+ * __start_dirop - begin a create or remove dirop, performing locking and lookup
-  * @parent:       the dentry of the parent in which the operation will occur
-  * @name:         a qstr holding the name within that parent
-  * @lookup_flags: intent and other lookup flags.
-+ * @state:        task state bitmask
-  *
-  * The lookup is performed and necessary locks are taken so that, on success,
-  * the returned dentry can be operated on safely.
+Best regards,
 -- 
-An old man doll... just what I always wanted! - Clara
-
+Heiko Stuebner <heiko@sntech.de>
