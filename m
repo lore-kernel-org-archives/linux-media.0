@@ -1,37 +1,38 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A62B63328E3;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C2B5F350A39;
 	Tue, 16 Dec 2025 12:24:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765887893; cv=none; b=cbZ+b3Jug4FLTFTiPhsbcOwFpcyJC/UyknC70O5HlQWPESBtAM1gKhyYq6Yd97yW11zL3eTnFSvy2COLbDaOAGwzxxpCuU2Yhq/WpiSx8pjV6A0MAYTFANOdQU4pDxziE7M3uneKbi5ysbljMq47sEtwkgwxJwNfNStlsZp9vdA=
+	t=1765887893; cv=none; b=Qb5L9buqhZ6cbKbJB813o9wM7SgP/hFuyUlA2J2nGCWu0geddrwqKsQa7LKnX9IHcsUWavSL7ri0LJI3j4qHHNG3N9HyzxNArbEz9mKGaEuLYDOV8B7iNaaUvYz/lNjvrDzAjAmmfLs7aKf+JfaNRRG1crb4vE46D1zgcZaX/r4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1765887893; c=relaxed/simple;
-	bh=ioJNJf6E3iqakh89UOBaktoghK6qUOL79hbpE/KqCRI=;
-	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=F5RddJzbb2a2ePAFz6GLYduLab1clCZha/Re9WAIZ1SWGmMUnUJ/Z42SJ0+CRJR/no6e3TEo4B5/6cJ1+hN0mwOp63LxXeY47Qh/zDhLt4jXz+6erW2zD38JAPJMeFeikwF6TltF+6uwpIaw3oJoUKNaPHVlIq/aaF5GVNJWgqY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=eYrmsmXJ; arc=none smtp.client-ip=10.30.226.201
+	bh=KZBaluwWEWCoOA0MTwAvw3NkS3dSPqsemF9OPT/NLR4=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=kB+Vgrr6XFmVlV6jxzxr79dhcIoeQTC9H8qSHXYrnSGqR1J5Cx2W9tNzg+Mslc67Q2feyGgVKtAPhi7dlR1XUXlJZJF8dwg6ATsaSCw00HusC467suCfbZtnBwkEs4RAhdPiBsAL2DD/Qqe5FG2uL/EGJFtm+wnAiDZWYUY5LU4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=h8McZcRd; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="eYrmsmXJ"
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 67597C4CEF5;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="h8McZcRd"
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 93BF8C2BC9E;
 	Tue, 16 Dec 2025 12:24:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1765887893;
-	bh=ioJNJf6E3iqakh89UOBaktoghK6qUOL79hbpE/KqCRI=;
-	h=From:Subject:Date:To:Cc:Reply-To:From;
-	b=eYrmsmXJifQuq4tgipaOUEU8ck88EbTH1a7FpxV4cejyxKWqy9C39HDdEkKu9YKTk
-	 oRdD9QTjY7j8gDpIcxS/M08FWuUlDlZuRpdePc++W9pyvEjLy/QLG3PKlem1Cv+UVM
-	 93a475B1A7cBZJ/kSnwB+UQLmg9OGskZKLMEzHAIjDlIWP5lpuhI5wFVXAAfVGES53
-	 /Mc/mJYo4iPJW4bky5Cq2Izzxb3mqe3fGHt79H3VI+Itc1yIu0Eem5h5DIiJSHf7Fz
-	 ytdsYjwh1KG7CBZks7Xz0g0Ls0IBDtbAthBSuKt1iQj/FNATXWqnEm3/LQvJYMFcqX
-	 yJ/afCWPIxErA==
+	bh=KZBaluwWEWCoOA0MTwAvw3NkS3dSPqsemF9OPT/NLR4=;
+	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To:From;
+	b=h8McZcRdQdIQDd1nkxcvJQTto+JWp+mq9KLBZ5KNBUPuEuzgpLglOr1KSboeCniaF
+	 K0P8LrZHHexxxPbO41MghY+wRhqDQ37ykzfxv/HDPYrS3WO4ZUKKLbhkgXFRNW1Pdi
+	 FObEpOvv9mldjWDHjG1BZvPGGwQ4mtULfoLpVq/r4dOjsc1z/xOzwBPm6ZJzOiBZkb
+	 1/qcCqXjpvuLIrLvHvEIlwQcU7YYfE59ErBPSmK4DepDa/w7CtAx6UvtP+paoG43oK
+	 9JfWVz+QxGjn3yzbh9O6XwJ4wUcwrHkiHOpZJyeBc6xT2fRRPm9k1q1Gv/OgfWFYU7
+	 kQu1Sh5QFG5NA==
 Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5A755D5E127;
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8A570D5E147;
 	Tue, 16 Dec 2025 12:24:53 +0000 (UTC)
 From: David Heidelberg via B4 Relay <devnull+david.ixit.cz@kernel.org>
-Subject: [PATCH v3 0/2] Improve older camss supply descriptions
-Date: Tue, 16 Dec 2025 13:24:49 +0100
-Message-Id: <20251216-docs-camss-fixes-v3-0-c238b6810771@ixit.cz>
+Date: Tue, 16 Dec 2025 13:24:51 +0100
+Subject: [PATCH v3 2/2] media: dt-bindings: Update camss VDDA PHY supply
+ description
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
@@ -40,11 +41,9 @@ List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-B4-Tracking: v=1; b=H4sIAJFPQWkC/33Nuw7CMAwF0F+pMhMUuzWvif9ADFEe1AMtiquoU
- PXfSbvAgBjvtc71pCQkDqJO1aRSyCzcdyXUm0q51na3oNmXrNAgAQJq3zvRzt5FdOQxiDbREhL
- u4UigCnuksB6KulxLblmGPj3XDxmW9s9YBg2anAEgQzHS8cwjD1v3UstUxm9e/+BYuD3Yxjeew
- O3ch8/z/AbQIwE67QAAAA==
-X-Change-ID: 20251212-docs-camss-fixes-0fa525271951
+Message-Id: <20251216-docs-camss-fixes-v3-2-c238b6810771@ixit.cz>
+References: <20251216-docs-camss-fixes-v3-0-c238b6810771@ixit.cz>
+In-Reply-To: <20251216-docs-camss-fixes-v3-0-c238b6810771@ixit.cz>
 To: Robert Foss <rfoss@kernel.org>, Todor Tomov <todor.too@gmail.com>, 
  Bryan O'Donoghue <bryan.odonoghue@linaro.org>, 
  Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>, 
@@ -60,58 +59,136 @@ Cc: linux-media@vger.kernel.org, linux-arm-msm@vger.kernel.org,
  devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
  phone-devel@vger.kernel.org, David Heidelberg <david@ixit.cz>
 X-Mailer: b4 0.14.3
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1412; i=david@ixit.cz;
+X-Developer-Signature: v=1; a=openpgp-sha256; l=4654; i=david@ixit.cz;
  h=from:subject:message-id;
- bh=ioJNJf6E3iqakh89UOBaktoghK6qUOL79hbpE/KqCRI=;
- b=owEBbQKS/ZANAwAIAWACP8TTSSByAcsmYgBpQU+TMUrOS2fCW3hRVB4ctdcSTSInlnWDipJxy
- arm18T5D3+JAjMEAAEIAB0WIQTXegnP7twrvVOnBHRgAj/E00kgcgUCaUFPkwAKCRBgAj/E00kg
- cky3D/0fHzJJ6PiAsMbr8iHCykuCUboqMdggD8hCafYdDg3D4dDCYClmeqPNtWlbKDVZwnKGtok
- 0++tHUtd4Z+RyUrtvbjAhzDEvF7OV0WXMaohedlw7XDUU8LOSrrXLErERNPdpVSoPfVho/LJ0zp
- c0iDJ/P7PMQ6RyV6ctFeLrBvCZc9USaSqsdcRgrxJJ8hPbSP1B83VTCkFfQ6zBgtXc0c0gqJEFa
- 8G50D/iAL0Ut5MW8mcrH1MYDscmRblwVNwED/BSV7Pkwx6I9Az30up5geEssGP16pD9DfnUrW9R
- r9vsxuMbYHJ2QXv0wHEKmvIVmrjjqop2ShRzdo8fOORg+4fL13QvJZgxnh+nDaMfBMonYlJJ0sx
- 5XMHbox4r3sgddBPb4NNR0X0b/Xrzh7yaYstXa+ap8aHfPHaNkcb+vuz9CLEvpecnwCYYD8kXW6
- 5vpkQxbaEOIJnv8+LyengGEnnm+WxCr2d6Of55fU5Yfc737k2Fd8bUNyzeCyK7Q8q+0sEvS6T4n
- YBtXS4zmph7I4iskyLGncjLJ5SOXbGuCQwWyRqMscxCxr6MwzXVc60cN+hekVEOLWhDN6nVqHsa
- QmPM7yaK4kiigAYdiuWVymAx0pbI+CcC5xRgV3uwPjeX7FVloHkieRk6FNCU1hY41kcfBygUnzM
- l8GGUskxXUixapQ==
+ bh=o1IfeCH1kmeD2AhyVITFGOuHp+cmCoNcTXwNN5CzHC8=;
+ b=owEBbQKS/ZANAwAIAWACP8TTSSByAcsmYgBpQU+TCQCkeAwPZxBE4aO4Kvntr0ZpqW67e00yt
+ 8/hn00TxP2JAjMEAAEIAB0WIQTXegnP7twrvVOnBHRgAj/E00kgcgUCaUFPkwAKCRBgAj/E00kg
+ cnS0D/9DRSPnbyyoxLGDn1Qbp04226Ye5x4C3MVK1Y0svTT+7G5T+dH4y+jDAgb8YwhznZAZOoY
+ +H3xpRZgLSLikqgHLNFy0QbA6LNMPKzZSMq3fpx0mPL1EBu0ZJ/B9E3FTKEHIyo4/YXhP1iEaWg
+ oOUN9NpTbjWow2kZ2XA+PuFCEeibN2gR2I4pVeK0YEobjyemGfnTawI6NmgZa0JcY+w/lV2I1c9
+ efu8y3ImppLbDKKXiNmPq6u2eql3DaBqwffo6pURqLiRW9BKzRPEcXqNYIgFhnZdVUwrAT3iiId
+ Zq6qFf7D1C34gMLKuMW+DkcY+PXZBDFthP0MRuo8h2cwAqv3z7VlUR6iyiRVxsYo1H3yD9hAa1n
+ ciFCA+xKRIJ/cqq848mOnzJ7h+MT25JV38kDIWMAbXy+Kmo0C1P0nUn/A2V06a+v7TpKrteOcAO
+ N5KyZgX21m4dtUWBPR2e8tqBDzVpBbSr0v0pYJeUDeVPtlqkmah318PJFSAXIAa68svqWSBW5Jo
+ 5yCysxL9VsEe8JfX3cttE51zdPU472W2z2xbc//V06D1JjQFE5omqMAJmaBdWrNKJCKczbOl7dY
+ ZICftkTR/+bJSPl8Utew/Ge24REJ0TeyK9k5qmcEujSMaCb/BrComsfX4VKWRRVht2rU8/fBoNX
+ eFSxtU65zlTvjiA==
 X-Developer-Key: i=david@ixit.cz; a=openpgp;
  fpr=D77A09CFEEDC2BBD53A7047460023FC4D3492072
 X-Endpoint-Received: by B4 Relay for david@ixit.cz/default with auth_id=355
 X-Original-From: David Heidelberg <david@ixit.cz>
 Reply-To: david@ixit.cz
 
+From: David Heidelberg <david@ixit.cz>
+
+Usually, the supply is around 0.875 - 0.88 V. Include the information
+same as is already done for more recent camss dt-bindings.
+
 Signed-off-by: David Heidelberg <david@ixit.cz>
 ---
-Changes in v3:
-- Add commit improving vdda-phy-supply description to match more recent
-  bindings.
-- Double-checked and specified it's 1.2 V vdda-pll-supply. (Vladimir)
-- Link to v2: https://lore.kernel.org/r/20251213-docs-camss-fixes-v2-1-a8a4d4d51c6c@ixit.cz
-
-Changes in v2:
-- Applied suggestion to clarify the description. (Krzysztof)
-- Link to v1: https://lore.kernel.org/r/20251212-docs-camss-fixes-v1-1-5c011505ff59@ixit.cz
-
----
-David Heidelberg (2):
-      media: dt-bindings: Correct camss VDDA PLL supply description
-      media: dt-bindings: Update camss VDDA PHY supply description
-
- Documentation/devicetree/bindings/media/qcom,sa8775p-camss.yaml  | 4 ++--
- Documentation/devicetree/bindings/media/qcom,sc7280-camss.yaml   | 4 ++--
- Documentation/devicetree/bindings/media/qcom,sc8280xp-camss.yaml | 4 ++--
- Documentation/devicetree/bindings/media/qcom,sdm670-camss.yaml   | 4 ++--
- Documentation/devicetree/bindings/media/qcom,sdm845-camss.yaml   | 4 ++--
- Documentation/devicetree/bindings/media/qcom,sm8250-camss.yaml   | 4 ++--
+ Documentation/devicetree/bindings/media/qcom,sa8775p-camss.yaml  | 2 +-
+ Documentation/devicetree/bindings/media/qcom,sc7280-camss.yaml   | 2 +-
+ Documentation/devicetree/bindings/media/qcom,sc8280xp-camss.yaml | 2 +-
+ Documentation/devicetree/bindings/media/qcom,sdm670-camss.yaml   | 2 +-
+ Documentation/devicetree/bindings/media/qcom,sdm845-camss.yaml   | 2 +-
+ Documentation/devicetree/bindings/media/qcom,sm8250-camss.yaml   | 2 +-
  Documentation/devicetree/bindings/media/qcom,sm8550-camss.yaml   | 2 +-
- 7 files changed, 13 insertions(+), 13 deletions(-)
----
-base-commit: 563c8dd425b59e44470e28519107b1efc99f4c7b
-change-id: 20251212-docs-camss-fixes-0fa525271951
+ 7 files changed, 7 insertions(+), 7 deletions(-)
 
-Best regards,
+diff --git a/Documentation/devicetree/bindings/media/qcom,sa8775p-camss.yaml b/Documentation/devicetree/bindings/media/qcom,sa8775p-camss.yaml
+index 4986d18d1a2da..5c47a2cf220fb 100644
+--- a/Documentation/devicetree/bindings/media/qcom,sa8775p-camss.yaml
++++ b/Documentation/devicetree/bindings/media/qcom,sa8775p-camss.yaml
+@@ -126,7 +126,7 @@ properties:
+ 
+   vdda-phy-supply:
+     description:
+-      Phandle to a regulator supply to PHY core block.
++      0.88V regulator supply to CSIPHY IP blocks.
+ 
+   vdda-pll-supply:
+     description:
+diff --git a/Documentation/devicetree/bindings/media/qcom,sc7280-camss.yaml b/Documentation/devicetree/bindings/media/qcom,sc7280-camss.yaml
+index e4b0b7ffdc336..7d180e9cb6fa9 100644
+--- a/Documentation/devicetree/bindings/media/qcom,sc7280-camss.yaml
++++ b/Documentation/devicetree/bindings/media/qcom,sc7280-camss.yaml
+@@ -125,7 +125,7 @@ properties:
+ 
+   vdda-phy-supply:
+     description:
+-      Phandle to a regulator supply to PHY core block.
++      0.88V regulator supply to CSIPHY IP blocks.
+ 
+   vdda-pll-supply:
+     description:
+diff --git a/Documentation/devicetree/bindings/media/qcom,sc8280xp-camss.yaml b/Documentation/devicetree/bindings/media/qcom,sc8280xp-camss.yaml
+index 9cba6e0819fb1..cd5e4948b97fc 100644
+--- a/Documentation/devicetree/bindings/media/qcom,sc8280xp-camss.yaml
++++ b/Documentation/devicetree/bindings/media/qcom,sc8280xp-camss.yaml
+@@ -264,7 +264,7 @@ properties:
+ 
+   vdda-phy-supply:
+     description:
+-      Phandle to a regulator supply to PHY core block.
++      0.88V regulator supply to CSIPHY IP blocks.
+ 
+   vdda-pll-supply:
+     description:
+diff --git a/Documentation/devicetree/bindings/media/qcom,sdm670-camss.yaml b/Documentation/devicetree/bindings/media/qcom,sdm670-camss.yaml
+index 61222839556bd..56346b650d21e 100644
+--- a/Documentation/devicetree/bindings/media/qcom,sdm670-camss.yaml
++++ b/Documentation/devicetree/bindings/media/qcom,sdm670-camss.yaml
+@@ -91,7 +91,7 @@ properties:
+ 
+   vdda-phy-supply:
+     description:
+-      Phandle to a regulator supply to PHY core block.
++      0.88V regulator supply to CSIPHY IP blocks.
+ 
+   vdda-pll-supply:
+     description:
+diff --git a/Documentation/devicetree/bindings/media/qcom,sdm845-camss.yaml b/Documentation/devicetree/bindings/media/qcom,sdm845-camss.yaml
+index 03b9b34460b0a..008a739a0018a 100644
+--- a/Documentation/devicetree/bindings/media/qcom,sdm845-camss.yaml
++++ b/Documentation/devicetree/bindings/media/qcom,sdm845-camss.yaml
+@@ -207,7 +207,7 @@ properties:
+ 
+   vdda-phy-supply:
+     description:
+-      Phandle to a regulator supply to PHY core block.
++      0.88V regulator supply to CSIPHY IP blocks.
+ 
+   vdda-pll-supply:
+     description:
+diff --git a/Documentation/devicetree/bindings/media/qcom,sm8250-camss.yaml b/Documentation/devicetree/bindings/media/qcom,sm8250-camss.yaml
+index acf9c54682107..db5029d521291 100644
+--- a/Documentation/devicetree/bindings/media/qcom,sm8250-camss.yaml
++++ b/Documentation/devicetree/bindings/media/qcom,sm8250-camss.yaml
+@@ -296,7 +296,7 @@ properties:
+ 
+   vdda-phy-supply:
+     description:
+-      Phandle to a regulator supply to PHY core block.
++      0.88V regulator supply to CSIPHY IP blocks.
+ 
+   vdda-pll-supply:
+     description:
+diff --git a/Documentation/devicetree/bindings/media/qcom,sm8550-camss.yaml b/Documentation/devicetree/bindings/media/qcom,sm8550-camss.yaml
+index cd34f14916b42..ebf82a8c423bc 100644
+--- a/Documentation/devicetree/bindings/media/qcom,sm8550-camss.yaml
++++ b/Documentation/devicetree/bindings/media/qcom,sm8550-camss.yaml
+@@ -134,7 +134,7 @@ properties:
+ 
+   vdda-phy-supply:
+     description:
+-      Phandle to a regulator supply to PHY core block.
++      0.88V regulator supply to CSIPHY IP blocks.
+ 
+   vdda-pll-supply:
+     description:
+
 -- 
-David Heidelberg <david@ixit.cz>
+2.51.0
 
 
