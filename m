@@ -1,200 +1,196 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from bali.collaboradmins.com (bali.collaboradmins.com [148.251.105.195])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 78D3D2248A4
-	for <linux-media@vger.kernel.org>; Wed, 17 Dec 2025 17:01:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 678E722156B;
+	Wed, 17 Dec 2025 17:41:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.251.105.195
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765990917; cv=none; b=h0GjoZJUZhJK9W1ZiciJ44FfipyoMF8uN51aVoIFL9nfVCk68PqRzt+QlaQIZTz4huqzr/McTkDbE6A8o+FOidTN+qzLV9C0NjyJrVgMZGq2ZfqRlpH/nwjaVcfFTVGVyZlHM7T6RaWyumKyCWv6Nqyh4k5LmHDyq2Y4XQ5utm4=
+	t=1765993314; cv=none; b=KEM0zIfstCz2C7yOqAiXvgNdooPps1KDE1VLl7hgIPYn0fcmoJHz6/3gC6VVEOAsNDBXYg1D5XBQgqT0loXPWQoS0WXNd4dmtBJmQ3WMGInOH40xyzgcHEPCsiDhSA/HUcepYVcGvVdzki5yKlXwjv2NU/CqZxzyDVUzIfV2hiI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765990917; c=relaxed/simple;
-	bh=2D02SqJKD+nsCsJr8M1rCApsCcKMVZUyPH+0iU3i6ZA=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=o0/8Y7PiF1hjV3mMSuXwAmlsQVkx4qSxLWJVQNn+cnQOF0i+GvCNnjKUlZ7IbHKTsaG1MYiEBqArMN/hMiG1cVm2dvG8dVre97CsphjjlNQV5sWjAzgcv9TUIZDe80+gMC7IynDSqC26Vuq8E7tS9bRd7bpCvRNV/Mm1Cp/phok=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=GgiOi410; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=KfWGWoVB; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1765993314; c=relaxed/simple;
+	bh=uIx6rpuY349cjHZs9AppHINVb5Am8ttDplbT+JXUw2o=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=ACIqzhkbC+WJio0o3iCjGL+3st4hUFKSyt3qqvC19fwYRNTV5w+EgS9Axz6JoFsb8sj9EVYexIn/BwjSslKPhPepVfMjG4n+0apYztcgzYreTCxfRIBnMZ15XE6R5JSiol7Pe+5eG8ask2KdLz5rYPhrlaiY1apdiCtCLQ2UaWw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=prUebE5K; arc=none smtp.client-ip=148.251.105.195
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="GgiOi410";
-	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="KfWGWoVB"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1765990914;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=dD5nFNFh+CHq/nzULmKKE12yIQGGBSkgJsl56ofghHQ=;
-	b=GgiOi410rEbM5qoh/XTgGkX/2ZM8cxiJKvdhhAKca+n703m1yATjSO+iiMY2hgCJKLcD5a
-	V6l0XS3C+3vZuVAUcvzCfeypZy+oofZloa0xYY92M8/He1rFiEZuBZyzZrrjmLE10itg4U
-	KHfAHiuKHBEkz2e3Jdv7x7RwgmQkozQ=
-Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
- [209.85.221.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-682-6bxBhuKWMLKbzFNfxA3ORQ-1; Wed, 17 Dec 2025 12:01:52 -0500
-X-MC-Unique: 6bxBhuKWMLKbzFNfxA3ORQ-1
-X-Mimecast-MFC-AGG-ID: 6bxBhuKWMLKbzFNfxA3ORQ_1765990912
-Received: by mail-wr1-f72.google.com with SMTP id ffacd0b85a97d-430ffa9fccaso3040728f8f.1
-        for <linux-media@vger.kernel.org>; Wed, 17 Dec 2025 09:01:52 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=redhat.com; s=google; t=1765990911; x=1766595711; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=dD5nFNFh+CHq/nzULmKKE12yIQGGBSkgJsl56ofghHQ=;
-        b=KfWGWoVB/l6mxGUtQdYJe6v0cGKG6MK4aIQ45f5K4IPOpgUkWjKS5X7i4dZgAg+fPi
-         +QhOK3g56CelitpLkjJ4o77TeDMC9OoT5AExk9Iq3SL2XUAxZLCtB2xQbi2wPjVNZeFq
-         VPA4UnXxe6s7uB4qiV2SUPoPIRmYgcJYTp1xS9NyHhI2ql0oyQRFxUEF6+QTETg0akif
-         5qTKrt7DywoVakjGzvhSFMpgLqiUacbdk1eX6loJbrfqhfFVTf74j872IUymPYcoO3On
-         vKAi8kWiPDcPjT5oKxfuc+V+BC0Dl0wKz3s9zLGYJyTaxQILAF8UgHwTOLvrvLvivk6o
-         xZpQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1765990911; x=1766595711;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=dD5nFNFh+CHq/nzULmKKE12yIQGGBSkgJsl56ofghHQ=;
-        b=ScPaJWKzZWqfMFRQQvBf9JoOii/9BLlJbBmtdyIGPYYpsD36PQX0CDPbEbkrADbgtO
-         IppV7Fv/aTzP57O7BzmSGRzMGm9brt8r+jbepyugAsWoLyzTyLlpTMkXrT4bTMnLcwbh
-         /eb7+gx4t8BC3WBZ+GXHTETV5QFQ/vP6BAISBL6d8fAmgAqPYbNWPVTQj1Eh0vxzuvdn
-         Lqx0UVsQeKTlP9a1ajT+KoU3ifvcW6gKJubNl853FEeSezYXog2AhLAVrQNn9lo8qcfO
-         FChhvME0BAEqLG8ULDlZfqr/YCDOY+g+WsxjRX0BZA6arjqrEsqUu0zb54IIhtO0AQ4R
-         POLg==
-X-Forwarded-Encrypted: i=1; AJvYcCX+1ANBAHtXPCseiz1iisBm2N/Li615fpYlCFjB3uR4j38IkO6JvojOhjbNqzAnId7hOTniXGTWdn58SQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0YxyvOAnSWVpLDMR3op12H9tcdyhbALojXzZdpCKZ+4at35jd5JN
-	qf0rI20dFqZ588gTripICnDNaNdcY8E3QNZ++0MLvqE3oHTa+BWDxok8Zv38TqpqwjivDf/78pP
-	z72/75KIUGH1U91bCxVzyDfcv4xcHw52okVh9JjTlY6XAdNHfUK7vfQNWUh/8+UkF
-X-Gm-Gg: AY/fxX5RHdR41aVZ5ItC4955I2FhNecJq041Aq9s8/ljWSggMUTTM0Y5waSd8mevvqx
-	60/4q0HLmMKihwHXXMGTPvkKmssICma8bqa3gTRdspOlXPaxrBAujGTBxb9bX1+GiQnzg8Vmm6k
-	WuI3P2fzrjNN6Y0srExUDvS6fKPazOzHV2vscVRXDN643qaIXNVtPL/Bv9EWlMN5y8kxVFC2Aie
-	mpuqfRFVFIqBoaQ4Z14DLWKZD6TTFADiF2VeB+dJ+3NlWIDPFFO+HHGw/3PDmeGWpYaJdI9ewjS
-	q1Zfjw0newGzSj5Sl91eYqOUefvLz2sV+PlPoYqkmShccViiLiS3XlwTJiC7B7m84SEkoDgPpqo
-	zQshfvMBTK1+kmRFXndOeUuDJHsGHz50Ap7gpkTTjN2LICXrF
-X-Received: by 2002:a5d:64e6:0:b0:430:f5c3:39fe with SMTP id ffacd0b85a97d-430f5c33c72mr16059968f8f.4.1765990911411;
-        Wed, 17 Dec 2025 09:01:51 -0800 (PST)
-X-Google-Smtp-Source: AGHT+IH7naa2xfBN81UFldN7VJ60YMv46kr3qq+t2tP1xJU0lrdjUCzUiNloJ8sGrQh5v79JlM1s8w==
-X-Received: by 2002:a5d:64e6:0:b0:430:f5c3:39fe with SMTP id ffacd0b85a97d-430f5c33c72mr16059928f8f.4.1765990910912;
-        Wed, 17 Dec 2025 09:01:50 -0800 (PST)
-Received: from ?IPV6:2a01:e0a:280:24f0:9db0:474c:ff43:9f5c? ([2a01:e0a:280:24f0:9db0:474c:ff43:9f5c])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-43244949ba6sm34714f8f.19.2025.12.17.09.01.49
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 17 Dec 2025 09:01:50 -0800 (PST)
-Message-ID: <9d06837d-7aed-43ef-87c2-1ce4f921dff2@redhat.com>
-Date: Wed, 17 Dec 2025 18:01:48 +0100
+	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="prUebE5K"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+	s=mail; t=1765993304;
+	bh=uIx6rpuY349cjHZs9AppHINVb5Am8ttDplbT+JXUw2o=;
+	h=From:To:Cc:Subject:Date:From;
+	b=prUebE5K7LuqqRwFXAkRvqbt5ufMeQZR2EgSBoZbtiYg6ZDgiscpoN27cfSQDUYvT
+	 DFyy4zcK+caT0xRqQ2wrXjLwYhxUBICVDrjQzb0gmB4+e6j0pg/mnpGFa8zlo8CLJb
+	 /oD1hJE4RQQdX6F68RNj6dkeUsTV4CqkNBk9l9EFdWkJhSF64PFFj42O4mFjcWSBwj
+	 h1orBUGtj6qbmtCsN4oNBj889NSVEpDQuTWL0o7yjdK1XMsr0yfdqbRF1tSJE5D2t0
+	 /4vFY6dcCvn35BNnWTNbHc2TJNYQnErjne0uO4jqH7nxyF4N43OOEEvPsTDJiKePon
+	 /8EfOOKOu1sYA==
+Received: from trenzalore (modemcable014.2-22-96.mc.videotron.ca [96.22.2.14])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: detlev)
+	by bali.collaboradmins.com (Postfix) with ESMTPSA id EF04D17E1321;
+	Wed, 17 Dec 2025 18:41:41 +0100 (CET)
+From: Detlev Casanova <detlev.casanova@collabora.com>
+To: linux-kernel@vger.kernel.org
+Cc: Mauro Carvalho Chehab <mchehab@kernel.org>,
+	Detlev Casanova <detlev.casanova@collabora.com>,
+	Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
+	Heiko Stuebner <heiko@sntech.de>,
+	Daniel Almeida <daniel.almeida@collabora.com>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Ricardo Ribalda <ribalda@chromium.org>,
+	Hans Verkuil <hverkuil@kernel.org>,
+	Yunke Cao <yunkec@google.com>,
+	Hans de Goede <hansg@kernel.org>,
+	Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+	Nicolas Dufresne <nicolas.dufresne@collabora.com>,
+	Sakari Ailus <sakari.ailus@linux.intel.com>,
+	Pavan Bobba <opensource206@gmail.com>,
+	James Cowgill <james.cowgill@blaize.com>,
+	linux-media@vger.kernel.org,
+	linux-rockchip@lists.infradead.org,
+	linux-arm-kernel@lists.infradead.org,
+	kernel@collabora.com
+Subject: [PATCH v6 00/17] media: rkvdec: Add support for VDPU381 and VDPU383 
+Date: Wed, 17 Dec 2025 12:40:37 -0500
+Message-ID: <20251217174059.1341784-1-detlev.casanova@collabora.com>
+X-Mailer: git-send-email 2.52.0
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v6 00/11] vfio/pci: Allow MMIO regions to be exported
- through dma-buf
-To: Nicolin Chen <nicolinc@nvidia.com>, Leon Romanovsky <leon@kernel.org>
-Cc: Bjorn Helgaas <bhelgaas@google.com>, Logan Gunthorpe
- <logang@deltatee.com>, Jens Axboe <axboe@kernel.dk>,
- Robin Murphy <robin.murphy@arm.com>, Joerg Roedel <joro@8bytes.org>,
- Will Deacon <will@kernel.org>, Marek Szyprowski <m.szyprowski@samsung.com>,
- Jason Gunthorpe <jgg@ziepe.ca>, Andrew Morton <akpm@linux-foundation.org>,
- Jonathan Corbet <corbet@lwn.net>, Sumit Semwal <sumit.semwal@linaro.org>,
- =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
- Alex Williamson <alex.williamson@redhat.com>, Kees Cook <kees@kernel.org>,
- "Gustavo A. R. Silva" <gustavoars@kernel.org>,
- Ankit Agrawal <ankita@nvidia.com>, Yishai Hadas <yishaih@nvidia.com>,
- Shameer Kolothum <skolothumtho@nvidia.com>, Kevin Tian
- <kevin.tian@intel.com>, Krishnakant Jaju <kjaju@nvidia.com>,
- Matt Ochs <mochs@nvidia.com>, linux-pci@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-block@vger.kernel.org,
- iommu@lists.linux.dev, linux-mm@kvack.org, linux-doc@vger.kernel.org,
- linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
- linaro-mm-sig@lists.linaro.org, kvm@vger.kernel.org,
- linux-hardening@vger.kernel.org, Vivek Kasireddy <vivek.kasireddy@intel.com>
-References: <20251102-dmabuf-vfio-v6-0-d773cff0db9f@nvidia.com>
- <aQpRz74RurfhZK15@Asurada-Nvidia>
-Content-Language: en-US, fr
-From: =?UTF-8?Q?C=C3=A9dric_Le_Goater?= <clg@redhat.com>
-Autocrypt: addr=clg@redhat.com; keydata=
- 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
- uVKe8BVz4atMOoktmt0GWTOC8P4=
-In-Reply-To: <aQpRz74RurfhZK15@Asurada-Nvidia>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-Hello Nicolin,
+These variants are found respectively in the RK3588 and RK3576 SoCs.
+This patch only adds support for H264 and H265 in both variants.
 
-On 11/4/25 20:19, Nicolin Chen wrote:
-> On Sun, Nov 02, 2025 at 10:00:48AM +0200, Leon Romanovsky wrote:
->> Changelog:
->> v6:
->>   * Fixed wrong error check from pcim_p2pdma_init().
->>   * Documented pcim_p2pdma_provider() function.
->>   * Improved commit messages.
->>   * Added VFIO DMA-BUF selftest.
->>   * Added __counted_by(nr_ranges) annotation to struct vfio_device_feature_dma_buf.
->>   * Fixed error unwind when dma_buf_fd() fails.
->>   * Document latest changes to p2pmem.
->>   * Removed EXPORT_SYMBOL_GPL from pci_p2pdma_map_type.
->>   * Moved DMA mapping logic to DMA-BUF.
->>   * Removed types patch to avoid dependencies between subsystems.
->>   * Moved vfio_pci_dma_buf_move() in err_undo block.
->>   * Added nvgrace patch.
-> 
-> I have verified this v6 using Jason's iommufd dmabuf branch:
-> https://github.com/jgunthorpe/linux/commits/iommufd_dmabuf/
-> 
-> by drafting a QEMU patch on top of Shameer's vSMMU v5 series:
-> https://github.com/nicolinc/qemu/commits/wip/iommufd_dmabuf/
-> 
-> with that, I see GPU BAR memory be correctly fetched in the QEMU:
-> vfio_region_dmabuf Device 0009:01:00.0, region "0009:01:00.0 BAR 0", offset: 0x0, size: 0x1000000
-> vfio_region_dmabuf Device 0009:01:00.0, region "0009:01:00.0 BAR 2", offset: 0x0, size: 0x44f00000
-> vfio_region_dmabuf Device 0009:01:00.0, region "0009:01:00.0 BAR 4", offset: 0x0, size: 0x17a0000000
-> 
-> Tested-by: Nicolin Chen <nicolinc@nvidia.com>
+As there is a considerable part of the code that can be shared with the
+already supported rkvdec decoder driver, the support for these variants
+is added here rather than writing a new driver.
 
-Do you plan to provide P2P support with IOMMUFD for QEMU ?
+This patch set uses the newly introduced hevc_ext_sps_[ls]t_rps v4l2
+controls for HEVC.
+Therefore, a patched version of userpace tools is needed for HEVC
+support (added for GStreamer[1] and in an early stage for FFmpeg[2]).
 
-Thanks,
+The DTS changes can be found in another patch set: [3]
 
-C.
+[1]: https://gitlab.freedesktop.org/gstreamer/gstreamer/-/merge_requests/9355
+[2]: https://gitlab.collabora.com/detlev/ffmpeg
+[3]: https://lore.kernel.org/all/20251020212009.8852-1-detlev.casanova@collabora.com/
+
+Changes since v5:
+- Extract multicore management in separate commit
+- Move variant specific functions to an ops struct
+- Fix a typo and "h264" -> "hevc" copy/paste mistakes
+- Move RKVDEC_*_PIXELS to rkvdec.h
+- Drop VDPU383_*_PIXELS, use the the RKVDEC ones instead
+- Change RKVDEC_1080P_PIXELS value to 1920 * 1088
+- Long and short term ref sets extend controls:
+  - Add them in visl traces
+  - Reword documentation to specify SPS extension and use
+  - Mention Vulkan Video API similarity
+  - Specify behavior for empty array values
+  - Reorder struct fields to ensure fixed compiled size
+  - Remove the mention of V4L2_CTRL_FLAG_DYNAMIC_ARRAY flag
+
+Changes since v4:
+ - Add basic ext_sps_[ls]t_rps validation (flags only)
+ - Add missing copyright in new common files
+ - Rename num_coded_fmts, rcb_num, clk_count
+ - Avoid allocating RCB config when not needed
+ - Merge rkvdec_config into rkvdec_variant
+ - Keep rkvdec_hevc_get_image_fmt per variant
+
+Changes since v3:
+ - Rebased on latest next (ea299a216426) + HEVC support for rk3399
+
+Changes since v2:
+ - Rebased on Kwiboo's HEVC support for rk3399
+ - Include hevc_ext_sps_[ls]t_rps v4l2 controls commits
+ - Remove empty lines at end of files
+ - Rename RKVDEC2_ALLOC_* to RKVDEC_ALLOC_*
+ - Set min_with and min_height to 64
+ - Remove vdpu38x_fill_pixfmt_mp() function
+ - Handle userspace not supporting hevc_ext_sps_[ls]t_rps
+ - Make all config structs static const
+
+Changes since v1:
+ - Add parsing of the short and long term ref frame sets from the new v4l2
+   controls
+ - Add RPS cache to avoid parsing the same data again
+ - Fix HEVC pixel formats selection
+ - Fix multiple indentation errors
+
+Detlev Casanova (17):
+  media: uapi: HEVC: Add v4l2_ctrl_hevc_ext_sps_[ls]t_rps controls
+  media: v4l2-ctrls: Add hevc_ext_sps_[ls]t_rps controls
+  media: visl: Add HEVC short and long term RPS sets
+  media: rkvdec: Switch to using structs instead of writel
+  media: rkvdec: Move cabac tables to their own source file
+  media: rkvdec: Use structs to represent the HW RPS
+  media: rkvdec: Move h264 functions to common file
+  media: rkvdec: Move hevc functions to common file
+  media: rkvdec: Add variant specific coded formats list
+  media: rkvdec: Add RCB and SRAM support
+  media: rkvdec: Support per-variant interrupt handler
+  media: rkvdec: Enable all clocks without naming them
+  media: rkvdec: Disable multicore support
+  media: rkvdec: Add H264 support for the VDPU381 variant
+  media: rkvdec: Add H264 support for the VDPU383 variant
+  media: rkvdec: Add HEVC support for the VDPU381 variant
+  media: rkvdec: Add HEVC support for the VDPU383 variant
+
+ .../media/v4l/ext-ctrls-codec-stateless.rst   | 120 +++
+ .../media/v4l/videodev2.h.rst.exceptions      |   2 +
+ .../media/v4l/vidioc-queryctrl.rst            |  12 +
+ .../media/platform/rockchip/rkvdec/Kconfig    |   1 +
+ .../media/platform/rockchip/rkvdec/Makefile   |  14 +-
+ .../{rkvdec-hevc-data.c => rkvdec-cabac.c}    | 506 +++++++++-
+ .../rockchip/rkvdec/rkvdec-h264-common.c      | 258 +++++
+ .../rockchip/rkvdec/rkvdec-h264-common.h      |  89 ++
+ .../platform/rockchip/rkvdec/rkvdec-h264.c    | 891 ++----------------
+ .../rockchip/rkvdec/rkvdec-hevc-common.c      | 488 ++++++++++
+ .../rockchip/rkvdec/rkvdec-hevc-common.h      | 108 +++
+ .../platform/rockchip/rkvdec/rkvdec-hevc.c    | 257 +----
+ .../platform/rockchip/rkvdec/rkvdec-rcb.c     | 178 ++++
+ .../platform/rockchip/rkvdec/rkvdec-rcb.h     |  29 +
+ .../platform/rockchip/rkvdec/rkvdec-regs.h    | 571 +++++++----
+ .../rockchip/rkvdec/rkvdec-vdpu381-h264.c     | 469 +++++++++
+ .../rockchip/rkvdec/rkvdec-vdpu381-hevc.c     | 641 +++++++++++++
+ .../rockchip/rkvdec/rkvdec-vdpu381-regs.h     | 424 +++++++++
+ .../rockchip/rkvdec/rkvdec-vdpu383-h264.c     | 582 ++++++++++++
+ .../rockchip/rkvdec/rkvdec-vdpu383-hevc.c     | 736 +++++++++++++++
+ .../rockchip/rkvdec/rkvdec-vdpu383-regs.h     | 281 ++++++
+ .../platform/rockchip/rkvdec/rkvdec-vp9.c     | 231 ++---
+ .../media/platform/rockchip/rkvdec/rkvdec.c   | 542 ++++++++++-
+ .../media/platform/rockchip/rkvdec/rkvdec.h   |  43 +
+ drivers/media/test-drivers/visl/visl-dec.c    |   7 +
+ drivers/media/test-drivers/visl/visl-dec.h    |   3 +
+ .../media/test-drivers/visl/visl-trace-hevc.h |  59 ++
+ drivers/media/v4l2-core/v4l2-ctrls-core.c     |  28 +
+ drivers/media/v4l2-core/v4l2-ctrls-defs.c     |  10 +
+ include/uapi/linux/v4l2-controls.h            |  61 ++
+ include/uapi/linux/videodev2.h                |   2 +
+ 31 files changed, 6230 insertions(+), 1413 deletions(-)
+ rename drivers/media/platform/rockchip/rkvdec/{rkvdec-hevc-data.c => rkvdec-cabac.c} (86%)
+ create mode 100644 drivers/media/platform/rockchip/rkvdec/rkvdec-h264-common.c
+ create mode 100644 drivers/media/platform/rockchip/rkvdec/rkvdec-h264-common.h
+ create mode 100644 drivers/media/platform/rockchip/rkvdec/rkvdec-hevc-common.c
+ create mode 100644 drivers/media/platform/rockchip/rkvdec/rkvdec-hevc-common.h
+ create mode 100644 drivers/media/platform/rockchip/rkvdec/rkvdec-rcb.c
+ create mode 100644 drivers/media/platform/rockchip/rkvdec/rkvdec-rcb.h
+ create mode 100644 drivers/media/platform/rockchip/rkvdec/rkvdec-vdpu381-h264.c
+ create mode 100644 drivers/media/platform/rockchip/rkvdec/rkvdec-vdpu381-hevc.c
+ create mode 100644 drivers/media/platform/rockchip/rkvdec/rkvdec-vdpu381-regs.h
+ create mode 100644 drivers/media/platform/rockchip/rkvdec/rkvdec-vdpu383-h264.c
+ create mode 100644 drivers/media/platform/rockchip/rkvdec/rkvdec-vdpu383-hevc.c
+ create mode 100644 drivers/media/platform/rockchip/rkvdec/rkvdec-vdpu383-regs.h
+
+-- 
+2.52.0
 
