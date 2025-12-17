@@ -1,38 +1,38 @@
 Received: from bali.collaboradmins.com (bali.collaboradmins.com [148.251.105.195])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 76EA71D619F;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9B2FC223DEA;
 	Wed, 17 Dec 2025 17:41:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.251.105.195
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765993316; cv=none; b=o2vygriAh6SuLq6eWLwe200i1hYOjvOKBpJlmiarng8hIuKLiM132xxw8vxYd0QNw8AF7b/5NBd2ZaC9lAVxQlzzTsSSa3dDAiAqnUJlD9zmQWyhp/xO+rxy9p0pJHeztpejIZHf5Su0fbNds3pPdUR0vHJ/Nu/uRrAsA+341Rw=
+	t=1765993317; cv=none; b=PVeH8ezC9V380W2m12OUuKNe2xZPFKxITI6s1ZAmNQeRL6dmy4VTBP+q71DbKmJ2Tglk/vz6INwG9JFpADIiEMhpNF34SOF/fs6TvEauDwu19xgOdAgLxulqMeZlVlVgNjaLLZCtxH/ka1YpRbJxDgaf23x9XWQsaytNQ3stw9I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765993316; c=relaxed/simple;
-	bh=p+kuCGdXK/6j2iTBeIRSLPfGIialDQlPSZDcqO4rm2Q=;
+	s=arc-20240116; t=1765993317; c=relaxed/simple;
+	bh=KN6WCxoejBYygP26/moPKA4uarW1i0gTvkOVqr0dMYg=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=bn0Ksd8xhUGiJU8TldoglYyz0h2RO6dOTvyo4bxzTv0c/sTRYfwJ8bChLpHuReTn/LAwTB5osSHjDhETnFaEk4/q2d4DTYKlwFiFH+itFwJasqN1BF7r1DnwS4u7aZXBzoA/TnkeJz4VIuPd1FvgTFvjtxw09pbadBNVgiIVrRg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=o/F9uSrP; arc=none smtp.client-ip=148.251.105.195
+	 MIME-Version; b=HXmUWEN1FKt2sc3Q6o+1RELbe22lH/s+6xGVNBscsNYMZ5Hk+pN2O51grlmkygyYK5tIfhWW94Y7VA92M9ZosZkMHSFpAl/LzGol9KS9Dru4+21sST1UaP85shUfHgGetlZuqmT6G66oZZ8pDpNIxUcfgpf7TuOcgPctiTiMX44=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=OPEDheXe; arc=none smtp.client-ip=148.251.105.195
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="o/F9uSrP"
+	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="OPEDheXe"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1765993307;
-	bh=p+kuCGdXK/6j2iTBeIRSLPfGIialDQlPSZDcqO4rm2Q=;
+	s=mail; t=1765993313;
+	bh=KN6WCxoejBYygP26/moPKA4uarW1i0gTvkOVqr0dMYg=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=o/F9uSrP7y72Da8aEE5K7fHSpjHAR1X31OgsA0cutLZEhVLQc5HP+Xy0x2q+sKHVX
-	 o2awMu5KiwzLxWg5nHoWhHMahzjzgthRi3Kt9VCaz/RY/j0hteDgK/sK0mS1v3AvDR
-	 TjLH1iaC3kDHhClNrslyVQIiN3N+0OK2QJDXaDXPLqdmrI37Tgjd5SESBHQPrpyeBe
-	 N/+zYzk1wYIpLu96bZWFEWz/dXqt6w+FpixWojGyTEMKPH8RU9OL7uvp5bPMekM/hd
-	 fdM1cFiyTQsP3dZlkko0QI/64ZLZBtTcT5SREP9ZMLBW8tuJQIOaUyHB2SsHn5vN8A
-	 tH2YbYqh8iAWA==
+	b=OPEDheXeuZZ4OLdomFc0okM/hpem5fPb4u4QC6uSySXAYZ1Cgu4J/dO2qpddsIltb
+	 AnmhnlNo3QYKxlAItkaezWJiJqIkGEtKCXnLtFOW9lppRvEGZ2LOR9FtxoppgUfC1Z
+	 +xurikUKQCaywcPJkX6GUaBesKaTUk48YAXA1PzBd/gLiYgGK1rh2tPwR7ulaJsjdM
+	 Mga0kOa5hfHM202dhBQnqhZ97QbQCYXlp2bCp/mb9nppNPgfLVFe/CXGomSMXOELD7
+	 sCyLft65tiHd5Kms+xdlZ4/DvFZayt9RDeZ/R1xDYx1wDfC7GjXHYOxAvP/Tar7nzT
+	 7HSG1kaWWTSzg==
 Received: from trenzalore (modemcable014.2-22-96.mc.videotron.ca [96.22.2.14])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
 	(Authenticated sender: detlev)
-	by bali.collaboradmins.com (Postfix) with ESMTPSA id C768117E1398;
-	Wed, 17 Dec 2025 18:41:44 +0100 (CET)
+	by bali.collaboradmins.com (Postfix) with ESMTPSA id 75E2A17E13F9;
+	Wed, 17 Dec 2025 18:41:50 +0100 (CET)
 From: Detlev Casanova <detlev.casanova@collabora.com>
 To: linux-kernel@vger.kernel.org
 Cc: Mauro Carvalho Chehab <mchehab@kernel.org>,
@@ -54,9 +54,9 @@ Cc: Mauro Carvalho Chehab <mchehab@kernel.org>,
 	linux-rockchip@lists.infradead.org,
 	linux-arm-kernel@lists.infradead.org,
 	kernel@collabora.com
-Subject: [PATCH v6 01/17] media: uapi: HEVC: Add v4l2_ctrl_hevc_ext_sps_[ls]t_rps controls
-Date: Wed, 17 Dec 2025 12:40:38 -0500
-Message-ID: <20251217174059.1341784-2-detlev.casanova@collabora.com>
+Subject: [PATCH v6 03/17] media: visl: Add HEVC short and long term RPS sets
+Date: Wed, 17 Dec 2025 12:40:40 -0500
+Message-ID: <20251217174059.1341784-4-detlev.casanova@collabora.com>
 X-Mailer: git-send-email 2.52.0
 In-Reply-To: <20251217174059.1341784-1-detlev.casanova@collabora.com>
 References: <20251217174059.1341784-1-detlev.casanova@collabora.com>
@@ -68,193 +68,144 @@ List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Some hardware (e.g.: Rockchip's rk3588 hevc decoder) need to fully parse
-the slice header, which cannot be passed with the current controls.
-There is also no skip method similar as to what can be found in
-verisilicon HW.
-
-The SPS is therefore extended through these 2 new controls, providing the
-long and short term reference information from the slice header for HEVC
-decoding.
-
-These now controls are similar as what is passed in the Vulkan Video API
-with the StdVideoH265ShortTermRefPicSet and StdVideoH265LongTermRefPicsSps
-structures embedded in the SPS struct.
+Log the recently added v4l2 controls to set HEVC short and long term RPS
+sets with 2 new ftrace entries.
 
 Signed-off-by: Detlev Casanova <detlev.casanova@collabora.com>
 ---
- .../media/v4l/ext-ctrls-codec-stateless.rst   | 120 ++++++++++++++++++
- .../media/v4l/videodev2.h.rst.exceptions      |   2 +
- .../media/v4l/vidioc-queryctrl.rst            |  12 ++
- 3 files changed, 134 insertions(+)
+ drivers/media/test-drivers/visl/visl-dec.c    |  7 +++
+ drivers/media/test-drivers/visl/visl-dec.h    |  3 +
+ .../media/test-drivers/visl/visl-trace-hevc.h | 59 +++++++++++++++++++
+ 3 files changed, 69 insertions(+)
 
-diff --git a/Documentation/userspace-api/media/v4l/ext-ctrls-codec-stateless.rst b/Documentation/userspace-api/media/v4l/ext-ctrls-codec-stateless.rst
-index 497ae74379f6..3b1e05c6eb13 100644
---- a/Documentation/userspace-api/media/v4l/ext-ctrls-codec-stateless.rst
-+++ b/Documentation/userspace-api/media/v4l/ext-ctrls-codec-stateless.rst
-@@ -2959,6 +2959,126 @@ This structure contains all loop filter related parameters. See sections
-       - 0x00000004
-       -
+diff --git a/drivers/media/test-drivers/visl/visl-dec.c b/drivers/media/test-drivers/visl/visl-dec.c
+index d90b79de8384..6bbf93757047 100644
+--- a/drivers/media/test-drivers/visl/visl-dec.c
++++ b/drivers/media/test-drivers/visl/visl-dec.c
+@@ -547,6 +547,9 @@ static void visl_trace_ctrls(struct visl_ctx *ctx, struct visl_run *run)
+ 			trace_v4l2_hevc_dpb_entry(&run->hevc.dpram->dpb[i]);
  
-+``V4L2_CID_STATELESS_HEVC_EXT_SPS_LT_RPS (struct)``
-+    Subset of the :c:type:`v4l2_ctrl_hevc_sps` control.
-+    It extends it with the list of Long-term reference sets parameters.
-+    These parameters are defined according to :ref:`hevc`.
-+    They are described in section 7.4.3.2.1 "General sequence parameter set
-+    RBSP semantics" of the specification.
-+    This control is a dynamically sized 1-dimensional array.
-+    The values in the array should be ignored when either
-+    num_long_term_ref_pics_sps is 0 or the
-+    V4L2_HEVC_SPS_FLAG_LONG_TERM_REF_PICS_PRESENT flag is not set in
-+    :c:type:`v4l2_ctrl_hevc_sps`.
+ 		trace_v4l2_hevc_pred_weight_table(&run->hevc.spram->pred_weight_table);
++		trace_v4l2_ctrl_hevc_ext_sps_lt_rps(run->hevc.rps_lt);
++		trace_v4l2_ctrl_hevc_ext_sps_st_rps(run->hevc.rps_st);
 +
-+.. c:type:: v4l2_ctrl_hevc_ext_sps_lt_rps
-+
-+.. cssclass:: longtable
-+
-+.. flat-table:: struct v4l2_ctrl_hevc_ext_sps_lt_rps
-+    :header-rows:  0
-+    :stub-columns: 0
-+    :widths:       1 1 2
-+
-+    * - __u16
-+      - ``lt_ref_pic_poc_lsb_sps``
-+      - Long term reference picture order count as described in section 7.4.3.2.1
-+        "General sequence parameter set RBSP semantics" of the specification.
-+    * - __u16
-+      - ``flags``
-+      - See :ref:`Extended Long-Term RPS Flags <hevc_ext_sps_lt_rps_flags>`
-+
-+.. _hevc_ext_sps_lt_rps_flags:
-+
-+``Extended SPS Long-Term RPS Flags``
-+
-+.. cssclass:: longtable
-+
-+.. flat-table::
-+    :header-rows:  0
-+    :stub-columns: 0
-+    :widths:       1 1 2
-+
-+    * - ``V4L2_HEVC_EXT_SPS_LT_RPS_FLAG_USED_LT``
-+      - 0x00000001
-+      - Specifies if the long-term reference picture is used 7.4.3.2.1 "General sequence parameter
-+        set RBSP semantics" of the specification.
-+
-+``V4L2_CID_STATELESS_HEVC_EXT_SPS_ST_RPS (struct)``
-+    Subset of the :c:type:`v4l2_ctrl_hevc_sps` control.
-+    It extends it with the list of Short-term reference sets parameters.
-+    These parameters are defined according to :ref:`hevc`.
-+    They are described in section 7.4.8 "Short-term reference picture set
-+    semantics" of the specification.
-+    This control is a dynamically sized 1-dimensional array.
-+    The values in the array should be ignored when
-+    num_short_term_ref_pic_sets is 0.
-+
-+.. c:type:: v4l2_ctrl_hevc_ext_sps_st_rps
-+
-+.. cssclass:: longtable
-+
-+.. flat-table:: struct v4l2_ctrl_hevc_ext_sps_st_rps
-+    :header-rows:  0
-+    :stub-columns: 0
-+    :widths:       1 1 2
-+
-+    * - __u8
-+      - ``delta_idx_minus1``
-+      - Specifies the delta compare to the index. See details in section 7.4.8 "Short-term
-+        reference picture set semantics" of the specification.
-+    * - __u8
-+      - ``delta_rps_sign``
-+      - Sign of the delta as specified in section 7.4.8 "Short-term reference picture set
-+        semantics" of the specification.
-+    * - __u8
-+      - ``num_negative_pics``
-+      - Number of short-term RPS entries that have picture order count values less than the
-+        picture order count value of the current picture.
-+    * - __u8
-+      - ``num_positive_pics``
-+      - Number of short-term RPS entries that have picture order count values greater than the
-+        picture order count value of the current picture.
-+    * - __u32
-+      - ``used_by_curr_pic``
-+      - Bit i specifies if short-term RPS i is used by the current picture.
-+    * - __u32
-+      - ``use_delta_flag``
-+      - Bit i specifies if short-term RPS i is included in the short-term RPS entries.
-+    * - __u16
-+      - ``abs_delta_rps_minus1``
-+      - Absolute delta RPS as specified in section 7.4.8 "Short-term reference picture set
-+        semantics" of the specification.
-+    * - __u16
-+      - ``delta_poc_s0_minus1[16]``
-+      - Specifies the negative picture order count delta for the i-th entry in the short-term RPS.
-+        See details in section 7.4.8 "Short-term reference picture set semantics" of the
-+        specification.
-+    * - __u16
-+      - ``delta_poc_s1_minus1[16]``
-+      - Specifies the positive picture order count delta for the i-th entry in the short-term RPS.
-+        See details in section 7.4.8 "Short-term reference picture set semantics" of the
-+        specification.
-+    * - __u16
-+      - ``flags``
-+      - See :ref:`Extended Short-Term RPS Flags <hevc_ext_sps_st_rps_flags>`
-+
-+.. _hevc_ext_sps_st_rps_flags:
-+
-+``Extended SPS Short-Term RPS Flags``
-+
-+.. cssclass:: longtable
-+
-+.. flat-table::
-+    :header-rows:  0
-+    :stub-columns: 0
-+    :widths:       1 1 2
-+
-+    * - ``V4L2_HEVC_EXT_SPS_ST_RPS_FLAG_INTER_REF_PIC_SET_PRED``
-+      - 0x00000001
-+      - Specifies if the short-term RPS is predicted from another short term RPS. See details in
-+        section 7.4.8 "Short-term reference picture set semantics" of the specification.
-+
- .. _v4l2-codec-stateless-av1:
+ 		break;
+ 	case VISL_CODEC_AV1:
+ 		trace_v4l2_ctrl_av1_sequence(run->av1.seq);
+@@ -611,6 +614,10 @@ void visl_device_run(void *priv)
+ 		run.hevc.spram = visl_find_control_data(ctx, V4L2_CID_STATELESS_HEVC_SLICE_PARAMS);
+ 		run.hevc.sm = visl_find_control_data(ctx, V4L2_CID_STATELESS_HEVC_SCALING_MATRIX);
+ 		run.hevc.dpram = visl_find_control_data(ctx, V4L2_CID_STATELESS_HEVC_DECODE_PARAMS);
++		run.hevc.rps_lt = visl_find_control_data(ctx,
++							 V4L2_CID_STATELESS_HEVC_EXT_SPS_LT_RPS);
++		run.hevc.rps_st = visl_find_control_data(ctx,
++							 V4L2_CID_STATELESS_HEVC_EXT_SPS_ST_RPS);
+ 		break;
+ 	case VISL_CODEC_AV1:
+ 		run.av1.seq = visl_find_control_data(ctx, V4L2_CID_STATELESS_AV1_SEQUENCE);
+diff --git a/drivers/media/test-drivers/visl/visl-dec.h b/drivers/media/test-drivers/visl/visl-dec.h
+index c2c2ef3a8798..6e7562e555bb 100644
+--- a/drivers/media/test-drivers/visl/visl-dec.h
++++ b/drivers/media/test-drivers/visl/visl-dec.h
+@@ -7,6 +7,7 @@
+ #ifndef _VISL_DEC_H_
+ #define _VISL_DEC_H_
  
- ``V4L2_CID_STATELESS_AV1_SEQUENCE (struct)``
-diff --git a/Documentation/userspace-api/media/v4l/videodev2.h.rst.exceptions b/Documentation/userspace-api/media/v4l/videodev2.h.rst.exceptions
-index c41693115db6..6182b4e2d2ee 100644
---- a/Documentation/userspace-api/media/v4l/videodev2.h.rst.exceptions
-+++ b/Documentation/userspace-api/media/v4l/videodev2.h.rst.exceptions
-@@ -150,6 +150,8 @@ replace symbol V4L2_CTRL_TYPE_H264_SCALING_MATRIX :c:type:`V4L.v4l2_ctrl_type`
- replace symbol V4L2_CTRL_TYPE_H264_PRED_WEIGHTS :c:type:`V4L.v4l2_ctrl_type`
- replace symbol V4L2_CTRL_TYPE_H264_SLICE_PARAMS :c:type:`V4L.v4l2_ctrl_type`
- replace symbol V4L2_CTRL_TYPE_H264_DECODE_PARAMS :c:type:`V4L.v4l2_ctrl_type`
-+replace symbol V4L2_CTRL_TYPE_HEVC_EXT_SPS_ST_RPS :c:type:`V4L.v4l2_ctrl_type`
-+replace symbol V4L2_CTRL_TYPE_HEVC_EXT_SPS_LT_RPS :c:type:`V4L.v4l2_ctrl_type`
- replace symbol V4L2_CTRL_TYPE_HEVC_SPS :c:type:`V4L.v4l2_ctrl_type`
- replace symbol V4L2_CTRL_TYPE_HEVC_PPS :c:type:`V4L.v4l2_ctrl_type`
- replace symbol V4L2_CTRL_TYPE_HEVC_SLICE_PARAMS :c:type:`V4L.v4l2_ctrl_type`
-diff --git a/Documentation/userspace-api/media/v4l/vidioc-queryctrl.rst b/Documentation/userspace-api/media/v4l/vidioc-queryctrl.rst
-index c8baa9430c14..82c8b52e771c 100644
---- a/Documentation/userspace-api/media/v4l/vidioc-queryctrl.rst
-+++ b/Documentation/userspace-api/media/v4l/vidioc-queryctrl.rst
-@@ -531,6 +531,18 @@ See also the examples in :ref:`control`.
-       - n/a
-       - A struct :c:type:`v4l2_ctrl_hevc_decode_params`, containing HEVC
- 	decoding parameters for stateless video decoders.
-+    * - ``V4L2_CTRL_TYPE_HEVC_EXT_SPS_LT_RPS``
-+      - n/a
-+      - n/a
-+      - n/a
-+      - A struct :c:type:`v4l2_ctrl_hevc_ext_sps_lt_rps`, containing HEVC
-+	extended Long-Term RPS for stateless video decoders.
-+    * - ``V4L2_CTRL_TYPE_HEVC_EXT_SPS_ST_RPS``
-+      - n/a
-+      - n/a
-+      - n/a
-+      - A struct :c:type:`v4l2_ctrl_hevc_ext_sps_st_rps`, containing HEVC
-+	extended Short-Term RPS for stateless video decoders.
-     * - ``V4L2_CTRL_TYPE_VP9_COMPRESSED_HDR``
-       - n/a
-       - n/a
++#include "linux/v4l2-controls.h"
+ #include "visl.h"
+ 
+ struct visl_fwht_run {
+@@ -43,6 +44,8 @@ struct visl_hevc_run {
+ 	const struct v4l2_ctrl_hevc_slice_params *spram;
+ 	const struct v4l2_ctrl_hevc_scaling_matrix *sm;
+ 	const struct v4l2_ctrl_hevc_decode_params *dpram;
++	const struct v4l2_ctrl_hevc_ext_sps_lt_rps *rps_lt;
++	const struct v4l2_ctrl_hevc_ext_sps_st_rps *rps_st;
+ };
+ 
+ struct visl_av1_run {
+diff --git a/drivers/media/test-drivers/visl/visl-trace-hevc.h b/drivers/media/test-drivers/visl/visl-trace-hevc.h
+index 837b8ec12e97..e1e702f5f4cf 100644
+--- a/drivers/media/test-drivers/visl/visl-trace-hevc.h
++++ b/drivers/media/test-drivers/visl/visl-trace-hevc.h
+@@ -1,4 +1,5 @@
+ /* SPDX-License-Identifier: GPL-2.0+ */
++#include "linux/v4l2-controls.h"
+ #if !defined(_VISL_TRACE_HEVC_H_) || defined(TRACE_HEADER_MULTI_READ)
+ #define _VISL_TRACE_HEVC_H_
+ 
+@@ -343,6 +344,54 @@ DECLARE_EVENT_CLASS(v4l2_ctrl_hevc_decode_params_tmpl,
+ 	))
+ );
+ 
++DECLARE_EVENT_CLASS(v4l2_ctrl_hevc_ext_sps_lt_rps_tmpl,
++	TP_PROTO(const struct v4l2_ctrl_hevc_ext_sps_lt_rps *lt),
++	TP_ARGS(lt),
++	TP_STRUCT__entry(__field_struct(struct v4l2_ctrl_hevc_ext_sps_lt_rps, lt)),
++	TP_fast_assign(__entry->lt = *lt),
++	TP_printk("\nflags %s\n"
++		  "lt_ref_pic_poc_lsb_sps %x\n",
++		__print_flags(__entry->lt.flags, "|",
++		{V4L2_HEVC_EXT_SPS_LT_RPS_FLAG_USED_LT, "USED_LT"}
++		  ),
++		__entry->lt.lt_ref_pic_poc_lsb_sps
++	)
++)
++
++DECLARE_EVENT_CLASS(v4l2_ctrl_hevc_ext_sps_st_rps_tmpl,
++	TP_PROTO(const struct v4l2_ctrl_hevc_ext_sps_st_rps *st),
++	TP_ARGS(st),
++	TP_STRUCT__entry(__field_struct(struct v4l2_ctrl_hevc_ext_sps_st_rps, st)),
++	TP_fast_assign(__entry->st = *st),
++	TP_printk("\nflags %s\n"
++		  "delta_idx_minus1: %u\n"
++		  "delta_rps_sign: %u\n"
++		  "abs_delta_rps_minus1: %u\n"
++		  "num_negative_pics: %u\n"
++		  "num_positive_pics: %u\n"
++		  "used_by_curr_pic: %08x\n"
++		  "use_delta_flag: %08x\n"
++		  "delta_poc_s0_minus1: %s\n"
++		  "delta_poc_s1_minus1: %s\n",
++		  __print_flags(__entry->st.flags, "|",
++		    {V4L2_HEVC_EXT_SPS_ST_RPS_FLAG_INTER_REF_PIC_SET_PRED, "INTER_REF_PIC_SET_PRED"}
++		  ),
++		  __entry->st.delta_idx_minus1,
++		  __entry->st.delta_rps_sign,
++		  __entry->st.abs_delta_rps_minus1,
++		  __entry->st.num_negative_pics,
++		  __entry->st.num_positive_pics,
++		  __entry->st.used_by_curr_pic,
++		  __entry->st.use_delta_flag,
++		  __print_array(__entry->st.delta_poc_s0_minus1,
++				ARRAY_SIZE(__entry->st.delta_poc_s0_minus1),
++				sizeof(__entry->st.delta_poc_s0_minus1[0])),
++		  __print_array(__entry->st.delta_poc_s1_minus1,
++				ARRAY_SIZE(__entry->st.delta_poc_s1_minus1),
++				sizeof(__entry->st.delta_poc_s1_minus1[0]))
++	)
++)
++
+ 
+ DECLARE_EVENT_CLASS(v4l2_hevc_dpb_entry_tmpl,
+ 	TP_PROTO(const struct v4l2_hevc_dpb_entry *e),
+@@ -391,6 +440,16 @@ DEFINE_EVENT(v4l2_ctrl_hevc_decode_params_tmpl, v4l2_ctrl_hevc_decode_params,
+ 	TP_ARGS(d)
+ );
+ 
++DEFINE_EVENT(v4l2_ctrl_hevc_ext_sps_lt_rps_tmpl, v4l2_ctrl_hevc_ext_sps_lt_rps,
++	TP_PROTO(const struct v4l2_ctrl_hevc_ext_sps_lt_rps *lt),
++	TP_ARGS(lt)
++);
++
++DEFINE_EVENT(v4l2_ctrl_hevc_ext_sps_st_rps_tmpl, v4l2_ctrl_hevc_ext_sps_st_rps,
++	TP_PROTO(const struct v4l2_ctrl_hevc_ext_sps_st_rps *st),
++	TP_ARGS(st)
++);
++
+ DEFINE_EVENT(v4l2_hevc_dpb_entry_tmpl, v4l2_hevc_dpb_entry,
+ 	TP_PROTO(const struct v4l2_hevc_dpb_entry *e),
+ 	TP_ARGS(e)
 -- 
 2.52.0
 
