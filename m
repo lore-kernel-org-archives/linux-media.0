@@ -1,76 +1,76 @@
-Received: from mx07-00178001.pphosted.com (mx07-00178001.pphosted.com [185.132.182.106])
+Received: from mx07-00178001.pphosted.com (mx08-00178001.pphosted.com [91.207.212.93])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C8E2930B501;
-	Thu, 18 Dec 2025 18:45:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=185.132.182.106
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AC5DB331225;
+	Thu, 18 Dec 2025 18:45:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=91.207.212.93
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1766083526; cv=fail; b=LstyeVfPk3hHaa+LeofhORgGpF7RFRuR6tIuUt8IAB1rZRlP0xjPcrZrLNa5Qlei5+N2jfudb1Rpznz1r4fuBFnszgjXRN0PDtp7PiXRLj/Ymif2oxiN2wzKQb0soeBPcpVeXE22ejzO41r5ywfj7g/8K1bAvrsbFJrqF0IS18M=
+	t=1766083529; cv=fail; b=dIN/ISmuEAUTLgfLUhqp5fMG9IefvNRTQEinSJeiOG5qh1cbnCq9DgKHGqFeNehJ4plRfrMRp12abrFwItkuQpOu8ug2fDqVQ48DAcjIZBbS29ErIM/+aoxnwiZChMqIWbwAJZk2LOYSnzx7/hhxNhGil72ATUXkUOE+QpqEkTk=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1766083526; c=relaxed/simple;
-	bh=s+NxkBxwhT4AevIUoTG9uzQTZP+BE3rjvmKizZBfEV8=;
+	s=arc-20240116; t=1766083529; c=relaxed/simple;
+	bh=uELMUwhkfDs4nXGTkCUl4LbbWBv7Y73emzFAe+l6FKM=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-ID:References:
-	 In-Reply-To:To:CC; b=muhxlWhllwYAYOLga/WdD/Ua/+7X1PGcIDYQJta8BdcR+nA54fp49UgktJiw/5RXIn0+6rEEhJ0ZCyN+McbDYilVu/U7icTKlOSApCkoY980mDksGfhI4T9Ps5yiQq7RzFTGvQU9oGiobOdaD9Xdh5vPqLgY0cgJjUTOXpoqRbo=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foss.st.com; spf=pass smtp.mailfrom=foss.st.com; dkim=pass (2048-bit key) header.d=foss.st.com header.i=@foss.st.com header.b=I3euPhxH; arc=fail smtp.client-ip=185.132.182.106
+	 In-Reply-To:To:CC; b=UZ9MujLvc3vKuN9YGqveHS4KZM4OKflaLQxvPAQQVteF16BjeIyns8/2XdW90qLUdeGH+xK84oo2U+xD6Px0ZKW2T7lOxold55HMQ22+SGTy+98syrVi9eZcHBv3/cg0Q3RsSO7KRWR/AiX32iL7hUw9CI7/bSM5M5HzR4iFp2U=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foss.st.com; spf=pass smtp.mailfrom=foss.st.com; dkim=pass (2048-bit key) header.d=foss.st.com header.i=@foss.st.com header.b=bXMOSJYT; arc=fail smtp.client-ip=91.207.212.93
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foss.st.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=foss.st.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=foss.st.com header.i=@foss.st.com header.b="I3euPhxH"
-Received: from pps.filterd (m0369458.ppops.net [127.0.0.1])
-	by mx07-00178001.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 5BIIQWOA2504132;
-	Thu, 18 Dec 2025 19:45:02 +0100
-Received: from am0pr83cu005.outbound.protection.outlook.com (mail-westeuropeazon11010050.outbound.protection.outlook.com [52.101.69.50])
-	by mx07-00178001.pphosted.com (PPS) with ESMTPS id 4b4esu269n-1
+	dkim=pass (2048-bit key) header.d=foss.st.com header.i=@foss.st.com header.b="bXMOSJYT"
+Received: from pps.filterd (m0046661.ppops.net [127.0.0.1])
+	by mx07-00178001.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 5BIIgOln2977349;
+	Thu, 18 Dec 2025 19:45:09 +0100
+Received: from osppr02cu001.outbound.protection.outlook.com (mail-norwayeastazon11013061.outbound.protection.outlook.com [40.107.159.61])
+	by mx07-00178001.pphosted.com (PPS) with ESMTPS id 4b4780bqp7-1
 	(version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
-	Thu, 18 Dec 2025 19:45:02 +0100 (CET)
+	Thu, 18 Dec 2025 19:45:09 +0100 (CET)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=Ke86cgQsgPU2G/KlBmstcWgI0bm9PVRRoFr5ERVWStbr5VIpS137VEnauCy7D7eMb94y/iFu+w2a5d1TIiCye2s3YLa3uzwCO0nwSLog9vSa2Jz9EMzyeFUx/ScDI/yXyd2bhlM0GrYROHbFXMvjyoJj26Nl/Q9SIRkHZX4okmSFCUIJjqMAvuzFYXNsg7NEF9ieDSzdD/aFgVZySBN0zkncivZgFUESrEcjtSz8elbz24vLNcEf0b+iLvAZyNfNfLjhoQIp9B+f7i4DbSTjlDFf5CEVA8UckcpWf+UbKntLcQ0kLnlkQxcoIQL+MvMDM2UaDnn5bSJ96DAH2dTlVg==
+ b=IxDAK+7fh1cOLd81EGe37fKP/AzjzTxFjd/ZS7OY5zkeX+istcMiXtO5R0+gkdfdf9WAgdTpYrtiTdq0ZvfrNXculShX+hj4kxeYKd55Y8hnbKFZVNF3T4IYB+rGzKnUIDzOq4xDGpwEl8ictlv8gIuyHUmMDiZ8J2C/pR1JXGbXOQsxm3zSL3NHcEViyZPfIR6MlIuZgGUS90IiOaCVnqFc+9FwXXFnfiQ8RDBeJoi+hhEolaBQ2ZsYNiW38ZJZFKFiIGc25xwQtocqnDRl5m3TTLdbY4M5Epd9ZCbaW/mMmv3RExdd+YPfzWALZGqOT/2EBlVrjZy2dFvV4zQZHw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=muSHh3KI6m9hVwhxmNS6rfIJgipi0u253tGfIeU5H+Y=;
- b=oRBEvCINIXaNBTde3wJZj3n24jrT/Y0mEanW9Yeuxot5qRz4MirIgE8KtdftSTNB65LNM457VfKvdcYmjyI047E46Fm+cro3KQvqeOEr3WW36z2QJ2taTmdR5bZDjwra/FubX9M9ZBPr5032ssB7wQrkM75QIAuyDE7nT26HsyvrvTB5pQejPaUHPdTRoI5rfis32qzTf7EmoFM+yaR54/fVIjWl8//7Jjj5eYjX/jMeFN3dNGvseblotQAbsnJkozDb37py8lpgLxgWX634NLta3mM/fkKAEKIJm3VnpdfZP97nLDrOpD5cnNTPs2cTuCUEhJjPRdDHE9LU45O9mw==
+ bh=f+UmFbYYN3CxlFK8VsJ+1lfir2OVAP9Ro5yh0yhCoTM=;
+ b=qJ/asqaG1wab+vd4KQrSF9OIdAwRB7WbuNDowikRA+F8scM4V3L9sumfy1oF3k0C1wO1qV3w7sfAt5RjgSeYlPN10XS8tsv87cVRFbiyi7xVcqrO9GdEcalL5WxSKLtCiLHYLNOqEnQSVjO/ncnH3+z/G1oFIP+GJ39TaPmEPcL3c0JHH+54WgU0eV1zZWdsYEJYK15uufmwN+g08ZAPubu8q3Ht6E7vEmdbMmunYsrmIR1VB1JkRWCTtPaU8H0tHT6rLnAZQYRPXkdLjyCydxyvmyVZ9WkNMa+IrwaMEji141cm5+6CUyxUpr5xvU5GnoY8GaK/0Vrar4qZPw1mUw==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=fail (sender ip is
- 164.130.1.59) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=foss.st.com;
+ 164.130.1.60) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=foss.st.com;
  dmarc=fail (p=none sp=none pct=100) action=none header.from=foss.st.com;
  dkim=none (message not signed); arc=none (0)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com;
  s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=muSHh3KI6m9hVwhxmNS6rfIJgipi0u253tGfIeU5H+Y=;
- b=I3euPhxH0/SWlY/6MukXFsKxcgUs3/2bqqB8LRZqsci2lxbdSgdEvQBdER7lwF5stTZLdYZadBx0yeAHFJKilihDozE5CXCZ5rSCOXzogwYIQDV6jD6Jjf5tmmNpGl8BX81z2qMw/O7SGiOwB4cIkN8Ux3Aah9SNYpv957g1N9A/7xszZ1QLyEwszqAn+piU9HdI4AJCVqZgRaK88BxFTm0YZ4gq++ZYe6JOsMXVFIM81S9VYPI0F8pVuPCBk3H9EIAqwKf0wbZheskTDmpFukWNaDxtuwbg74cSTPszn0vgdInXesFCI1+SfChvrvsKsToFpeA+QyehfaLbODrL4g==
-Received: from DUZPR01CA0062.eurprd01.prod.exchangelabs.com
- (2603:10a6:10:3c2::15) by DB9PR10MB7995.EURPRD10.PROD.OUTLOOK.COM
- (2603:10a6:10:39e::20) with Microsoft SMTP Server (version=TLS1_2,
+ bh=f+UmFbYYN3CxlFK8VsJ+1lfir2OVAP9Ro5yh0yhCoTM=;
+ b=bXMOSJYT/d2b0HsoWVYr+rdFsng/U0Sui6b4Wtn2OkskHUwpXWc6VUjKFRXQs3Ol8Jc4cTEyUOrLTpCztkfVw797zyH4v8kOnoSFdc2xhFXr0JGewu2TaeK224rfaaEAIozuMqL9G+S79V1a2wgqolg7NfGQzWhNjJNB8TM2fn8TY4TqM3nM6Gl6B+03C0YfqKBaB86r21IjSKfsvCBPWcgvFs1DWMrnwKNwKrOLAhMoKjDC7zM8+s66fEJHyGXkTq6qjxdfqMtgqwrFR2hH2undzTg2yYEro7nSO49NEIuo1/aGIux0yLHLcRWygeC5vvrsAE0/Z+NaE7IHI1/w9Q==
+Received: from CWLP265CA0299.GBRP265.PROD.OUTLOOK.COM (2603:10a6:401:5d::23)
+ by DB9PR10MB7625.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:10:338::17) with
+ Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9434.8; Thu, 18 Dec
- 2025 18:44:59 +0000
-Received: from DB5PEPF00014B8E.eurprd02.prod.outlook.com
- (2603:10a6:10:3c2:cafe::46) by DUZPR01CA0062.outlook.office365.com
- (2603:10a6:10:3c2::15) with Microsoft SMTP Server (version=TLS1_3,
- cipher=TLS_AES_256_GCM_SHA384) id 15.20.9434.8 via Frontend Transport; Thu,
- 18 Dec 2025 18:45:23 +0000
-X-MS-Exchange-Authentication-Results: spf=fail (sender IP is 164.130.1.59)
+ 2025 18:45:04 +0000
+Received: from AMS0EPF00000190.eurprd05.prod.outlook.com
+ (2603:10a6:401:5d:cafe::f9) by CWLP265CA0299.outlook.office365.com
+ (2603:10a6:401:5d::23) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.20.9434.7 via Frontend Transport; Thu,
+ 18 Dec 2025 18:45:05 +0000
+X-MS-Exchange-Authentication-Results: spf=fail (sender IP is 164.130.1.60)
  smtp.mailfrom=foss.st.com; dkim=none (message not signed)
  header.d=none;dmarc=fail action=none header.from=foss.st.com;
 Received-SPF: Fail (protection.outlook.com: domain of foss.st.com does not
- designate 164.130.1.59 as permitted sender) receiver=protection.outlook.com;
- client-ip=164.130.1.59; helo=smtpO365.st.com;
-Received: from smtpO365.st.com (164.130.1.59) by
- DB5PEPF00014B8E.mail.protection.outlook.com (10.167.8.202) with Microsoft
+ designate 164.130.1.60 as permitted sender) receiver=protection.outlook.com;
+ client-ip=164.130.1.60; helo=smtpO365.st.com;
+Received: from smtpO365.st.com (164.130.1.60) by
+ AMS0EPF00000190.mail.protection.outlook.com (10.167.16.213) with Microsoft
  SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.9434.6 via Frontend Transport; Thu, 18 Dec 2025 18:44:59 +0000
-Received: from STKDAG1NODE2.st.com (10.75.128.133) by smtpo365.st.com
- (10.250.44.71) with Microsoft SMTP Server (version=TLS1_2,
+ 15.20.9434.6 via Frontend Transport; Thu, 18 Dec 2025 18:45:04 +0000
+Received: from STKDAG1NODE2.st.com (10.75.128.133) by smtpO365.st.com
+ (10.250.44.72) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.17; Thu, 18 Dec
- 2025 19:45:46 +0100
+ 2025 19:45:45 +0100
 Received: from localhost (10.252.25.7) by STKDAG1NODE2.st.com (10.75.128.133)
  with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.17; Thu, 18 Dec
- 2025 19:44:57 +0100
+ 2025 19:44:59 +0100
 From: Alain Volmat <alain.volmat@foss.st.com>
-Date: Thu, 18 Dec 2025 19:44:47 +0100
-Subject: [PATCH 07/12] media: stm32: dcmi: use dmaengine_terminate_async in
- irq context
+Date: Thu, 18 Dec 2025 19:44:50 +0100
+Subject: [PATCH 10/12] media: stm32: dcmi: addition of DMA-MDMA chaining
+ support
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
@@ -79,7 +79,7 @@ List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-ID: <20251218-stm32-dcmi-dma-chaining-v1-7-39948ca6cbf6@foss.st.com>
+Message-ID: <20251218-stm32-dcmi-dma-chaining-v1-10-39948ca6cbf6@foss.st.com>
 References: <20251218-stm32-dcmi-dma-chaining-v1-0-39948ca6cbf6@foss.st.com>
 In-Reply-To: <20251218-stm32-dcmi-dma-chaining-v1-0-39948ca6cbf6@foss.st.com>
 To: Hugues Fruchet <hugues.fruchet@foss.st.com>,
@@ -104,132 +104,537 @@ X-ClientProxiedBy: STKCAS1NODE1.st.com (10.75.128.134) To STKDAG1NODE2.st.com
  (10.75.128.133)
 X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DB5PEPF00014B8E:EE_|DB9PR10MB7995:EE_
-X-MS-Office365-Filtering-Correlation-Id: 5dd85864-a521-4581-7801-08de3e658bd6
+X-MS-TrafficTypeDiagnostic: AMS0EPF00000190:EE_|DB9PR10MB7625:EE_
+X-MS-Office365-Filtering-Correlation-Id: 8bf97c6e-faca-4521-2d4e-08de3e658f2a
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|376014|7416014|82310400026|36860700013|1800799024;
+	BCL:0;ARA:13230040|36860700013|1800799024|82310400026|7416014|376014;
 X-Microsoft-Antispam-Message-Info:
-	=?utf-8?B?TFczbkYxV2hYWm5ib2FJWFQ3ODVySHRObHM1RHZkQ056dlJkU0pjd1BvL2tD?=
- =?utf-8?B?ZUM2UG1uN3Z6RW1SM0hxdHFRd2l4N1RXYk5jM1lvVDZqNjVGYmtmOFZJcC9K?=
- =?utf-8?B?TFBFSTRzNHg5aDlwUVFhdFBDeEh5UzB2QVBNRzg5anB6Z2psbldoYS91RC9q?=
- =?utf-8?B?cStYVVQ1bC9Tb3VVT3lCVFhibTBJbkt0cFo4bVZQdCthaGJCeGc5UnZMazEv?=
- =?utf-8?B?M1JxbGJoajJGcm9yZ2o1SzlHcm1WeDBRbS9RcjlwdmcxZVp2U2t0MENGamRS?=
- =?utf-8?B?eGh3R0hsbDkyMUZseDBkd3A3c2hkZWhidHlLaEFEUHRJSFZHWW5EdEVqVDE2?=
- =?utf-8?B?WEVKWmlRbVJ4WFhGYjdTNWVsYXkwTXRkZUZpVUFJREFkd0JhSFNnc1B3MWdn?=
- =?utf-8?B?ZHQ4Um5JK2QzZG1Zc0pnUzlFVlF4dzNyeCtXWGhndm9lTTQvU3ptalhtcThz?=
- =?utf-8?B?NWJIeGlxbXkzTFpNZW1UeTdZcS9XbEhrdXAwQzEyaWpFa25hQWlQTG5nUjh1?=
- =?utf-8?B?R1FWcC9wN3lUV0lHSHlRZE1KZDJFVys5UEVibVBYMGxQWkVSeHBuQzRMaWg4?=
- =?utf-8?B?TlNTVkNjSjI2QncwUjVkZzgzcmlBaVFSSDVjMzN2SzN3NEVpLzhCTHZxdUJE?=
- =?utf-8?B?ZU1UZUdROVI1dGYyTkQvMXZCQUU2Wk43RDRVWG41NThkNVQ0ZUE0UmpNQzVv?=
- =?utf-8?B?YWFDY250RFhBN1BBalBCdFlncUZLS1kzc3p6KzZIM1ZhNVR3cWNZZmtraUl5?=
- =?utf-8?B?WGpTelFiYzJmWHhBU1pKK0JUajFHY1lEdG41N1VMUkN5bG01WFU1SzZlSnQv?=
- =?utf-8?B?OS8ySjJIcE11bCtiTTVEOVpybFZyMFBVSGRiNEFZcUE4dmcwTHN0OWdxSDU0?=
- =?utf-8?B?NDJzUVh1UWlzeEhSQmVDYnhGWUQ3Ri9kSlJaUUVTRGFXYUZRWHNXclkyUkdm?=
- =?utf-8?B?WFBQRUV3ZnBNZ0lacGcwbUdpQ05CcnY4a0VTcDdIQ1N6SVN0RUZyaVF5bFNV?=
- =?utf-8?B?cDNyZER3YTlJcVlMcUpFV0JTVFg4UjNPSE5xaWVzMWF0d092N3lpODQ4ZlJB?=
- =?utf-8?B?bDJ2citBMjB3a04xa3l1VEdra2JqMWNYNEFtbEh0TjRUQkhDY0xyVFN0Uzhn?=
- =?utf-8?B?ZWUzemZzRXRhYzk3NURrbXRFTGUrcXVrUGh0SmJaRDkwOWxyMTNoUUovdkZi?=
- =?utf-8?B?NWRhT0tIc1pEMkE2cUo2aFc3ak9EVS9hbURpeC9TY2hiMjBkanJZOW5Wbm5l?=
- =?utf-8?B?R1pWeVRGZTIwOTczWVVLd0toS292ZlRtZzZCM0FmcjdhaVhiYWNFRXF5TVZm?=
- =?utf-8?B?Sm0rdTd0ZEhOMXRuNkdjK3c5Rnhla1JZSU5xUEVRUmNMT0k0NEhBNlJpZnFq?=
- =?utf-8?B?REZRWjdVK1lKTHNjS3J5WG0xSGZ0dkVQSUJSeTVrNno2UzU2YjlkSklsSXNp?=
- =?utf-8?B?NWhPSXRPZjdEaithRDdyT3NqL1lieEIxM3BwMmswRkw2WXpCSkVRaG9xWVRl?=
- =?utf-8?B?bFpUU2hvcWxwd0J6NGFmdUZLaUZXL3UwNUg1Q1NrM3dkNVJaQTFQVktsMUZo?=
- =?utf-8?B?L096b0xhQWV3V2FCcHBXU0xteTBFaHNDMk9RSUNIa0t5TXZlSjhjMXdzeVgv?=
- =?utf-8?B?dzYwcnFmV2tSSzd3am1zcmQ3azNGQW9lQTQxSXc0Z2U5OVBwanBQeHlucFVw?=
- =?utf-8?B?VW9HaXBqS1M0MWwwT2JsZ1o2cm5EZ0xuOGJ4b25Jc0pCM2kwNEZweTVpY2hT?=
- =?utf-8?B?MitjVm5rUDNVZFVwb25kN0pkSkxUbzNXZlR5Qy9jbEZmUFRYQmg0dTVxcGdR?=
- =?utf-8?B?TXBsS1BTcWt2Mmowa0laZFdFYXR6RjRRZjJJNEd1bFpCOHlTaWN2TlBMcTR2?=
- =?utf-8?B?Q2tYdDJtSXMvSFRQK3VZSDR3N3l3b2MveGhHQmVUUEZXVTRwQmVYUk5LNExa?=
- =?utf-8?B?SlR3eitsMW5aQ0JlMTdWVmhHNFhaOXFlOHU4ZnpXTVgwMzRaRUdXTEJCaGpX?=
- =?utf-8?B?Mi9NRkdkcDJkMnljcVR5U3BiUFZNeGJZQ241QjFYa2hIUVFobW03MnZLeFU2?=
- =?utf-8?B?TFI2L2dFcVF1dldCblB6ZWdDbEZVOFEyK1ZWTzdiU0lPTzE2SDFVbFlaQytq?=
- =?utf-8?Q?I00k=3D?=
+	=?utf-8?B?MkpkOG4zcHpTSnRuOG1Jem9LajR3QUZ5Nnd4ZGpnUGFMQ25yK0VUeGZSTDUr?=
+ =?utf-8?B?ZllPc29mT2Y2SkREeklpeVN1RVZuTGdpM0tWRGFiK1R5SzEwVTZZREVUNEd2?=
+ =?utf-8?B?ZGNYWVpBK1BlTkpTMk1GMlhrWTlsUGhHSWRPdVBWdisvN2ZlNm1yRk1EZmp2?=
+ =?utf-8?B?MlpZT29GQzIrNEZrOTNpdXJBbHA0clMweTlOb2U3MS9RVW11NEFLeit4aHRw?=
+ =?utf-8?B?QnJVYzRvVVJWWVFmeVRvSGlCSHB2MTVINHg4aWVCNlM2MDNQYzAyeWdJa2ZU?=
+ =?utf-8?B?UjAvdGZOeXJ6VGJ2SUhFZ29PMTB0azNWUnFIWkhWZ3hnb21vdEZpb0NWb3h1?=
+ =?utf-8?B?M0ZYNGg2Z1I4WUh2V0xzSmVYdkM3N0g1ZE9PZXpORFdRaHVRUE1qS0VJV0da?=
+ =?utf-8?B?TEU0SGRCQmtZMzVreTd5djhNaGk4UUxvTU5MY2tLVDZzY3E5Y2txdnJUb1Z4?=
+ =?utf-8?B?b1NTNFRuak1Ld291WkIxc2QyeXVZNG42Y09XL3d5MUdJVDcxbUczQ0kxOFJ6?=
+ =?utf-8?B?bWlIaXVjOUpGd29vZ0hCTW43WGpBSWtKc2pWQ0pVTzZ4SXl2emdTMk42K0Vj?=
+ =?utf-8?B?YmlXZjNKSHFHOWVNcWk0VEV0cEU2aDNDbWw3ZDRQRXppWE9sZmRvQXgzNWgr?=
+ =?utf-8?B?N3NSbi9rdnJkWnRVb1JsSHFNVTdBN0t4bTUvdjhFazV1UjRrdXluYU5WbkdX?=
+ =?utf-8?B?VDFLVFArQ3FoTEJ3dmtCMkVsNFdYYWtzb1I3U2Npa3N1YVlVZzBFaTFXcS9E?=
+ =?utf-8?B?Z0tRNERsOFArbFUwRWlkdjI1N3Q4bUxSMU5KbVRQUzc5VldYbjRjT09OMGR6?=
+ =?utf-8?B?NThTeDNjRndIdzExMlJxS0hxMHE1eFpqZzhMcitncytPVTZHUitSUTNXOGl6?=
+ =?utf-8?B?a3V5RVpwT3ZBZlNoNXp2aGE0c0NlejJia3BKbzdrbEN1ZWVFUlBET2RNOFNl?=
+ =?utf-8?B?Y2E2eEFGbWRpZWhHYXRuR3ppTXZVL2pwenNZOS92dVN6dFdkMVdhL2c5UVky?=
+ =?utf-8?B?eE9zaHlRdHU4Tld4MURBSEdSbSszaDc1RkhkMDE3WW94UmpHaXdzbnVQQzVT?=
+ =?utf-8?B?NllpTFBFZ29VNkxEM2dzaTBYTXlNRFNodHRGK3M0S1BoT2dDMlN6bGgwVVlh?=
+ =?utf-8?B?bXQwTzFuaTJlbkRMSU9kYnBvdFZkbGNkbmhHNDA0QWFLRGVXVHhYYWhBL3Fh?=
+ =?utf-8?B?MjlWRXd5Ri91bEtNN3BhUlo2TVljYXV2OEdoN05BTlpsRExpQ1lvRUp3SCtV?=
+ =?utf-8?B?V21udFR3ZSs2ZHFiQ2VCUys3SUdGV0svajVOOGFaZTJqdFVGYWMrdUh0bEJ3?=
+ =?utf-8?B?dTRFdEVZc0JHNUx0VktqR005MEYrVnZScmpBdmdmbmQ4R3dLSkJlRmxHK2hx?=
+ =?utf-8?B?amFXMjZlbFREbTJhSDFBeHNtU2czb08vTk8zOEJvZ05uOGoxendrSjdWWnJt?=
+ =?utf-8?B?aXRuVWZ1aEttQUFTQmpzUDltcWFIWGlBT3RmWisxeDVsY0FSNmZOTmJWMXhC?=
+ =?utf-8?B?Y3NtWTdXNkJUYk9zUy8wcUR1YkRGR2RoaitwSnd3dUtycDgyVll5eDZMZ3Jn?=
+ =?utf-8?B?MERWSnR2YldzY1lVZHo2NnJQcXN6N0xpMU05ZzdFZWRiR2toVHRnVjJISkw4?=
+ =?utf-8?B?NHcvU01XYWhERXBVT1pFVG5FbUpoN2J3dUJVSS9yNGJKSDA1TEkveENmdGdJ?=
+ =?utf-8?B?TzdQdGt5aXVDYVM3MlByRkNJa0cwWXZ0MllkaEwyRGdXazJJdVYvd3M4Wlg5?=
+ =?utf-8?B?SGhKV2VOS2o2Y04za1E5Vm1RMlpaSjZBbWVzNXR0Smx0ZFBXQ1pvOFVDa1pU?=
+ =?utf-8?B?WCtaTXNnQnhDdGJ5MFp0S1F3ZlBTcTVIY1ozeEluajE5SVJ3bUtaZFlidEs3?=
+ =?utf-8?B?Y0Jod0lJQllBRlVieVgzcTN2aHg4WkpwZjdURUZzU2QzWjRKdm5FK3dKL3FD?=
+ =?utf-8?B?cTR1SjV0R2hNUFMwTUVLeloxZTFJVW04YXdaTzQxRjQxL3VFZGF6alNYaXVM?=
+ =?utf-8?B?emhRQVlRTkVnVXRNOGMvQjN6L0JETlc1STZnU21HS1pmdTNSb1RaNlVQcUpp?=
+ =?utf-8?B?Q3BRRENlbnhENXJCWWM0Rm5NZTNncVpKWmlVWWsxTXRQaEo2OHhib1BNMTlz?=
+ =?utf-8?Q?HuFo=3D?=
 X-Forefront-Antispam-Report:
-	CIP:164.130.1.59;CTRY:IT;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:smtpO365.st.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(376014)(7416014)(82310400026)(36860700013)(1800799024);DIR:OUT;SFP:1101;
+	CIP:164.130.1.60;CTRY:IT;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:smtpO365.st.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(36860700013)(1800799024)(82310400026)(7416014)(376014);DIR:OUT;SFP:1101;
 X-OriginatorOrg: foss.st.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Dec 2025 18:44:59.0799
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Dec 2025 18:45:04.6701
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 5dd85864-a521-4581-7801-08de3e658bd6
+X-MS-Exchange-CrossTenant-Network-Message-Id: 8bf97c6e-faca-4521-2d4e-08de3e658f2a
 X-MS-Exchange-CrossTenant-Id: 75e027c9-20d5-47d5-b82f-77d7cd041e8f
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=75e027c9-20d5-47d5-b82f-77d7cd041e8f;Ip=[164.130.1.59];Helo=[smtpO365.st.com]
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=75e027c9-20d5-47d5-b82f-77d7cd041e8f;Ip=[164.130.1.60];Helo=[smtpO365.st.com]
 X-MS-Exchange-CrossTenant-AuthSource:
-	DB5PEPF00014B8E.eurprd02.prod.outlook.com
+	AMS0EPF00000190.eurprd05.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Anonymous
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB9PR10MB7995
-X-Proofpoint-ORIG-GUID: QHK4hNAkEVgc34QA2Qm1aLNkmtixluSK
-X-Authority-Analysis: v=2.4 cv=EeLFgfmC c=1 sm=1 tr=0 ts=69444bae cx=c_pps
- a=gXrl5TodGbHmua8ggoz7cw==:117 a=d6reE3nDawwanmLcZTMRXA==:17
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB9PR10MB7625
+X-Proofpoint-ORIG-GUID: RW_rGFsSHQKAhglntLsS1tjoQ4TyD44H
+X-Authority-Analysis: v=2.4 cv=PuqergM3 c=1 sm=1 tr=0 ts=69444bb5 cx=c_pps
+ a=T8SiPzmgzFXCf1C+o6d1PA==:117 a=uCuRqK4WZKO1kjFMGfU4lQ==:17
  a=6eWqkTHjU83fiwn7nKZWdM+Sl24=:19 a=HjypFGx7bZcA:10 a=IkcTkHD0fZMA:10
  a=wP3pNCr1ah4A:10 a=s63m1ICgrNkA:10 a=KrXZwBdWH7kA:10
- a=VkNPw1HP01LnGYTKEx00:22 a=8b9GpE9nAAAA:8 a=gAtnOOuIUh8xv9oTcPAA:9
+ a=VkNPw1HP01LnGYTKEx00:22 a=8b9GpE9nAAAA:8 a=lfp9Q9lF5-ry6RQ8HC8A:9
  a=QEXdDO2ut3YA:10 a=T3LWEMljR5ZiDmsYVIUa:22
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUxMjE4MDE1NSBTYWx0ZWRfX3YEtdtVDFjOf
- LzLk6WkcHGsX/VmXHV4x2VhGHZfIKzqjcwOLWberk2Iw9ET8UNpcOVFXda9aM8LOAmnNmJeouLP
- H+qWwcWOoz+VSPecp77R4gXLcCSXNj+1b8NfHgItR2vTUT88dlQXSyUgcZJwa3A7Y37SUa1DvVE
- avxiE8SMnlo15reGE8HIbOjRL2pNeDrSOoHL4SH1+10anYeJo6iaZljX50MrHF3l5fbF7Dx7Q9g
- bA8RUzFku3nF9SZg1wZ+rLDZjt0Bj5TGCUNOlDZJKmCPwVQu1sQfwUeAZv/CVRGGKjamskV3GEq
- F8kc54I+BSZ/xKDPCchhT1C0v/qxRKuOnlxkOwm5iVhe86RP435Q3b1agynSsICuRNP50pSePfQ
- YGEEjwx4LaM7sVKR5isv/dI5Bfx0Jw==
-X-Proofpoint-GUID: QHK4hNAkEVgc34QA2Qm1aLNkmtixluSK
+X-Proofpoint-GUID: RW_rGFsSHQKAhglntLsS1tjoQ4TyD44H
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUxMjE4MDE1NSBTYWx0ZWRfX1UfLTuVv3yOH
+ mEnAMtxlQewnWwYBdcIQido2QAWiJ/vdEhXSkVlLHGIxCIflVse8gthCK/9E6GWIoaqvm7fc+M2
+ d18AvHMna/kMfOTBQPsr810BqE/pLDB+jUaJ3bERxbkYPPopNF+ih/IrpMCRzA6ft4hBJq9xtzc
+ PyCCBuj3eda+YAvDM5rteDQqV5YeokOm9P70ZlvcuZXV8whkSbCOnEieAsum2rHXV0q3vl6n3EM
+ KJQx3GnLIcQ5/rOCSm3mzPQxPySgeUKJK6C8MKZeLfnYVXGrIAbNLBiqwBrJZjUnfaeV+XpDjBr
+ fUjt3cAHD+gEZ9DqARLeKqU2MjgUB+uiZxq+TbvIBiarU2DaI2p7BR3swtJwqyDQUWbcPkz5X+v
+ 4fPYHZN5SuQ+C4jraLNpdkMzspyMYA==
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.9,FMLib:17.12.100.49
  definitions=2025-12-18_02,2025-12-17_02,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 bulkscore=0
- priorityscore=1501 clxscore=1015 phishscore=0 adultscore=0 suspectscore=0
- spamscore=0 malwarescore=0 lowpriorityscore=0 impostorscore=0
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0
+ priorityscore=1501 adultscore=0 malwarescore=0 clxscore=1015 phishscore=0
+ spamscore=0 bulkscore=0 suspectscore=0 impostorscore=0 lowpriorityscore=0
  classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
  reason=mlx scancount=1 engine=8.22.0-2510240001 definitions=main-2512180155
 
-Whenever receiving an OVERRUN event or an end of frame, the driver stops
-currently ongoing DMA transfer since the DCMI stops sending data to dma.
-Not doing this would lead to having DMA & DCMI no more synchronized in term
-of expected data to be copied.
-Since this is done in irq handler context, it is not possible to make any
-call that would lead to scheduling hence dmaengine_terminate_sync are not
-possible.
-Since the dcmi driver is NOT using dma callbacks, it is possible thus to
-call instead dmaengine_terminate_async (aka without synchronize) and call
-again right after a new dmaengine_submit to setup again a new transfer.
-And since this is now a dmaengine_submit_async, there is no need to release
-the spinlock around calls to the dmaengine_submit_async.
+Add possibility to rely on an additional MDMA channel and chain
+the DMA and MDMA channels allowing to achieve faster capture.
+Indeed, on the MP15 platform, the MDMA engine has an higher
+bandwidth to the DDR than the DMA engine.  Relying on that
+it is possible to capture frames from the DCMI IP into the DDR
+by using two channels as follow:
+
+  DCMI -> (DMA) -> SRAM -> (MDMA) -> DDR
+
+The DMA is able by himself to trigger a MDMA request hence, once
+properly configured, the DCMI IP can simply trigger the DMA in order
+to have the data pushed up to the DDR (via the SRAM and a MDMA
+channel).
+
+This behavior is detailed in the document
+Documentation/arch/arm/stm32/stm32-dma-mdma-chaining.rst
 
 Signed-off-by: Alain Volmat <alain.volmat@foss.st.com>
 ---
- drivers/media/platform/st/stm32/stm32-dcmi.c | 8 ++------
- 1 file changed, 2 insertions(+), 6 deletions(-)
+ drivers/media/platform/st/stm32/stm32-dcmi.c | 250 +++++++++++++++++++++++----
+ 1 file changed, 220 insertions(+), 30 deletions(-)
 
 diff --git a/drivers/media/platform/st/stm32/stm32-dcmi.c b/drivers/media/platform/st/stm32/stm32-dcmi.c
-index 06b66095844b..25e95ba2ca84 100644
+index 4c0f8ed0f87e..e4a9f96a989b 100644
 --- a/drivers/media/platform/st/stm32/stm32-dcmi.c
 +++ b/drivers/media/platform/st/stm32/stm32-dcmi.c
-@@ -334,10 +334,8 @@ static void dcmi_process_frame(struct stm32_dcmi *dcmi)
- 		dcmi_buffer_done(dcmi, buf, 0, -EIO);
+@@ -15,6 +15,7 @@
+ #include <linux/completion.h>
+ #include <linux/delay.h>
+ #include <linux/dmaengine.h>
++#include <linux/genalloc.h>
+ #include <linux/init.h>
+ #include <linux/interrupt.h>
+ #include <linux/kernel.h>
+@@ -113,7 +114,9 @@ struct dcmi_buf {
+ 	struct vb2_v4l2_buffer	vb;
+ 	bool			prepared;
+ 	struct sg_table		sgt;
++	struct sg_table		sgt_mdma;
+ 	struct dma_async_tx_descriptor *dma_desc;
++	struct dma_async_tx_descriptor *mdma_desc;
+ 	size_t			size;
+ 	struct list_head	list;
+ };
+@@ -159,6 +162,15 @@ struct stm32_dcmi {
+ 	struct dma_chan			*dma_chan;
+ 	dma_cookie_t			dma_cookie;
+ 	u32				dma_max_burst;
++
++	/* Elements for the MDMA - DMA chaining */
++	struct gen_pool			*sram_pool;
++	struct dma_chan			*mdma_chan;
++	void				*sram_buf;
++	u32				sram_buf_size;
++	dma_addr_t			sram_dma_buf;
++	dma_cookie_t			mdma_cookie;
++
+ 	u32				misr;
+ 	int				errors_count;
+ 	int				overrun_count;
+@@ -247,12 +259,22 @@ static int dcmi_start_dma(struct stm32_dcmi *dcmi,
+ 			  struct dcmi_buf *buf)
+ {
+ 	/* Push current DMA transaction in the pending queue */
++	if (dcmi->mdma_chan) {
++		dcmi->mdma_cookie = dmaengine_submit(buf->mdma_desc);
++		if (dma_submit_error(dcmi->mdma_cookie)) {
++			dev_err(dcmi->dev, "%s: MDMA submission failed\n", __func__);
++			return -ENXIO;
++		}
++	}
++
+ 	dcmi->dma_cookie = dmaengine_submit(buf->dma_desc);
+ 	if (dma_submit_error(dcmi->dma_cookie)) {
+ 		dev_err(dcmi->dev, "%s: DMA submission failed\n", __func__);
+ 		return -ENXIO;
  	}
  
++	if (dcmi->mdma_chan)
++		dma_async_issue_pending(dcmi->mdma_chan);
+ 	dma_async_issue_pending(dcmi->dma_chan);
+ 
+ 	return 0;
+@@ -301,7 +323,9 @@ static void dcmi_set_crop(struct stm32_dcmi *dcmi)
+ 
+ static void dcmi_process_frame(struct stm32_dcmi *dcmi)
+ {
+-	struct dma_tx_state state;
++	struct dma_tx_state state, state_dma;
++	size_t bytes_used;
++
+ 	enum dma_status status;
+ 	struct dcmi_buf *buf = dcmi->active;
+ 
+@@ -309,23 +333,36 @@ static void dcmi_process_frame(struct stm32_dcmi *dcmi)
+ 		return;
+ 
+ 	/*
+-	 * At the time FRAME interrupt is received, all dma req have been sent to the DMA,
+-	 * however DMA might still be transferring data hence first synchronize prior to
+-	 * getting the status of the DMA transfer.
+-	 * Then DMA tx status gives the amount of data transferred to memory, which is then
+-	 * returned to V4L2 through the active buffer payload.
++	 * Pause the DMA transfer, leading to trigger of the MDMA channel read while
++	 * keeping a valid residue value on the dma channel
+ 	 */
++	if (dcmi->mdma_chan) {
++		spin_unlock_irq(&dcmi->irqlock);
++		dmaengine_pause(dcmi->dma_chan);
++		spin_lock_irq(&dcmi->irqlock);
++
++		do {
++			status = dmaengine_tx_status(dcmi->mdma_chan, dcmi->mdma_cookie, &state);
++			cpu_relax();
++		} while (status != DMA_ERROR && status != DMA_COMPLETE &&
++			 state.residue && state.in_flight_bytes);
++	} else {
++		status = dmaengine_tx_status(dcmi->dma_chan, dcmi->dma_cookie, &state);
++	}
+ 
 -	spin_unlock_irq(&dcmi->irqlock);
- 	/* Abort DMA operation */
--	dmaengine_terminate_sync(dcmi->dma_chan);
+-	/* Drain DMA */
+-	dmaengine_synchronize(dcmi->dma_chan);
 -	spin_lock_irq(&dcmi->irqlock);
-+	dmaengine_terminate_async(dcmi->dma_chan);
+-
+-	/* Get DMA status and residue size */
+-	status = dmaengine_tx_status(dcmi->dma_chan, dcmi->dma_cookie, &state);
+ 	if (status != DMA_ERROR && state.residue < buf->size) {
++		bytes_used = buf->size - state.residue;
++
++		if (state.residue && dcmi->mdma_chan) {
++			dmaengine_tx_status(dcmi->dma_chan, dcmi->dma_cookie, &state_dma);
++			/* Getting full size residue equal to no residue */
++			if (state_dma.residue == dcmi->sram_buf_size)
++				state_dma.residue = 0;
++			bytes_used -= state_dma.residue;
++		}
++
+ 		/* Return buffer to V4L2 with received data size */
+-		dcmi_buffer_done(dcmi, buf, buf->size - state.residue, 0);
++		dcmi_buffer_done(dcmi, buf, bytes_used, 0);
+ 	} else {
+ 		dcmi->errors_count++;
+ 		dev_err(dcmi->dev, "%s: DMA error. status: 0x%x, residue: %d\n",
+@@ -336,6 +373,8 @@ static void dcmi_process_frame(struct stm32_dcmi *dcmi)
+ 
+ 	/* Abort DMA operation */
+ 	dmaengine_terminate_async(dcmi->dma_chan);
++	if (dcmi->mdma_chan)
++		dmaengine_terminate_async(dcmi->mdma_chan);
  }
  
  static irqreturn_t dcmi_irq_thread(int irq, void *arg)
-@@ -355,10 +353,8 @@ static irqreturn_t dcmi_irq_thread(int irq, void *arg)
- 		if (dcmi->overrun_count > OVERRUN_ERROR_THRESHOLD)
+@@ -354,13 +393,15 @@ static irqreturn_t dcmi_irq_thread(int irq, void *arg)
  			dcmi->errors_count++;
  
--		spin_unlock_irq(&dcmi->irqlock);
--		dmaengine_terminate_sync(dcmi->dma_chan);
-+		dmaengine_terminate_async(dcmi->dma_chan);
+ 		dmaengine_terminate_async(dcmi->dma_chan);
++		if (dcmi->mdma_chan)
++			dmaengine_terminate_async(dcmi->mdma_chan);
  
--		spin_lock_irq(&dcmi->irqlock);
  		if (dcmi_restart_capture(dcmi))
  			dev_err(dcmi->dev, "%s: Cannot restart capture\n", __func__);
  		spin_unlock_irq(&dcmi->irqlock);
+-
+ 		return IRQ_HANDLED;
+ 	}
++
+ 	if (dcmi->misr & IT_ERR)
+ 		dcmi->errors_count++;
+ 
+@@ -447,28 +488,70 @@ static int dcmi_buf_prepare(struct vb2_buffer *vb)
+ 	vb2_set_plane_payload(vb, 0, size);
+ 
+ 	if (!buf->prepared) {
++		u32 max_size = dcmi->dma_max_burst;
++		unsigned int dma_nents;
++
+ 		/* Get memory addresses */
+ 		buf->size = vb2_plane_size(&buf->vb.vb2_buf, 0);
+-		if (buf->size > dcmi->dma_max_burst)
+-			num_sgs = DIV_ROUND_UP(buf->size, dcmi->dma_max_burst);
++		if (dcmi->mdma_chan)
++			max_size = dcmi->sram_buf_size / 2;
+ 
+-		ret = sg_alloc_table(&buf->sgt, num_sgs, GFP_ATOMIC);
++		if (buf->size > max_size)
++			num_sgs = DIV_ROUND_UP(buf->size, max_size);
++
++		/*
++		 * If we use MDMA chaining, DMA is used in cyclic mode and the scatterlist
++		 * maximum size is thus 2
++		 */
++		dma_nents = num_sgs;
++		if (dcmi->mdma_chan)
++			dma_nents = min_t(unsigned int, num_sgs, 2);
++
++		ret = sg_alloc_table(&buf->sgt, dma_nents, GFP_ATOMIC);
+ 		if (ret) {
+-			dev_err(dcmi->dev, "sg table alloc failed\n");
++			dev_err(dcmi->dev, "sg table alloc failed for DMA\n");
+ 			return ret;
+ 		}
+ 
++		if (dcmi->mdma_chan) {
++			ret = sg_alloc_table(&buf->sgt_mdma, num_sgs, GFP_ATOMIC);
++			if (ret) {
++				dev_err(dcmi->dev, "sg table alloc failed for MDMA\n");
++				return ret;
++			}
++		}
++
+ 		dma_buf = vb2_dma_contig_plane_dma_addr(&buf->vb.vb2_buf, 0);
+ 
+ 		dev_dbg(dcmi->dev, "buffer[%d] phy=%pad size=%zu\n",
+ 			vb->index, &dma_buf, buf->size);
+ 
+-		for_each_sg(buf->sgt.sgl, sg, num_sgs, i) {
+-			size_t bytes = min_t(size_t, size, dcmi->dma_max_burst);
++		for_each_sg(buf->sgt.sgl, sg, dma_nents, i) {
++			size_t bytes = min_t(size_t, size, max_size);
++
++			if (!dcmi->mdma_chan) {
++				sg_dma_address(sg) = dma_buf;
++				dma_buf += bytes;
++			} else {
++				/* Targets the beginning = first half of the sram_buf */
++				sg_dma_address(sg) = dcmi->sram_dma_buf;
++				/*
++				 * Targets the second half of the sram_bubf
++				 * for odd indexes of the item of the sg_list
++				 */
++				if (i & 1)
++					sg->dma_address += (dcmi->sram_buf_size / 2);
++			}
++			/*
++			 * In case of DMA-MDMA chaining, since the DMA is working in cyclic mode,
++			 * we need to provide two linked-list node of same size in order to have
++			 * a correct residue value computed.
++			 */
++			if (!dcmi->mdma_chan)
++				sg_dma_len(sg) = bytes;
++			else
++				sg_dma_len(sg) = dcmi->sram_buf_size / 2;
+ 
+-			sg_dma_address(sg) = dma_buf;
+-			sg_dma_len(sg) = bytes;
+-			dma_buf += bytes;
+ 			size -= bytes;
+ 		}
+ 
+@@ -480,6 +563,8 @@ static int dcmi_buf_prepare(struct vb2_buffer *vb)
+ 							DMA_PREP_INTERRUPT);
+ 		if (!buf->dma_desc) {
+ 			dev_err(dcmi->dev, "%s: DMA dmaengine_prep_slave_sg failed\n", __func__);
++			if (dcmi->mdma_chan)
++				sg_free_table(&buf->sgt_mdma);
+ 			sg_free_table(&buf->sgt);
+ 			return -EIO;
+ 		}
+@@ -489,10 +574,48 @@ static int dcmi_buf_prepare(struct vb2_buffer *vb)
+ 		if (ret) {
+ 			dev_err(dcmi->dev, "%s: DMA dmaengine_desc_set_reuse failed\n", __func__);
+ 			dmaengine_desc_free(buf->dma_desc);
++			if (dcmi->mdma_chan)
++				sg_free_table(&buf->sgt_mdma);
+ 			sg_free_table(&buf->sgt);
+ 			return -EIO;
+ 		}
+ 
++		if (dcmi->mdma_chan) {
++			size = dcmi->fmt.fmt.pix.sizeimage;
++			for_each_sg(buf->sgt_mdma.sgl, sg, num_sgs, i) {
++				size_t bytes = min_t(size_t, size, max_size);
++
++				sg_dma_address(sg) = dma_buf;
++				sg_dma_len(sg) = bytes;
++				dma_buf += bytes;
++				size -= bytes;
++			}
++
++			buf->mdma_desc = dmaengine_prep_slave_sg(dcmi->mdma_chan, buf->sgt_mdma.sgl,
++								 buf->sgt_mdma.nents,
++								 DMA_DEV_TO_MEM,
++								 DMA_PREP_INTERRUPT);
++			if (!buf->mdma_desc) {
++				dev_err(dcmi->dev, "%s: failed dmaengine_prep_slave_sg for MDMA\n",
++					__func__);
++				dmaengine_desc_free(buf->dma_desc);
++				sg_free_table(&buf->sgt_mdma);
++				sg_free_table(&buf->sgt);
++				return -EIO;
++			}
++
++			ret = dmaengine_desc_set_reuse(buf->mdma_desc);
++			if (ret) {
++				dev_err(dcmi->dev, "%s: failed to set reuse for mdma desc\n",
++					__func__);
++				dmaengine_desc_free(buf->mdma_desc);
++				dmaengine_desc_free(buf->dma_desc);
++				sg_free_table(&buf->sgt_mdma);
++				sg_free_table(&buf->sgt);
++				return -EIO;
++			}
++		}
++
+ 		buf->prepared = true;
+ 
+ 		vb2_set_plane_payload(&buf->vb.vb2_buf, 0, buf->size);
+@@ -511,6 +634,14 @@ static void dcmi_buf_cleanup(struct vb2_buffer *vb)
+ 	if (!buf->prepared)
+ 		return;
+ 
++	if (dcmi->mdma_chan) {
++		ret = dmaengine_desc_free(buf->mdma_desc);
++		if (ret)
++			dev_err(dcmi->dev, "%s: Failed to free the mdma descriptor (0x%x)\n",
++				__func__, ret);
++		sg_free_table(&buf->sgt_mdma);
++	}
++
+ 	ret = dmaengine_desc_free(buf->dma_desc);
+ 	if (ret)
+ 		dev_err(dcmi->dev, "%s: Failed to free the mdma descriptor (0x%x)\n",
+@@ -816,6 +947,8 @@ static void dcmi_stop_streaming(struct vb2_queue *vq)
+ 
+ 	/* Stop all pending DMA operations */
+ 	dmaengine_terminate_sync(dcmi->dma_chan);
++	if (dcmi->mdma_chan)
++		dmaengine_terminate_sync(dcmi->mdma_chan);
+ 
+ 	pm_runtime_put(dcmi->dev);
+ 
+@@ -1824,9 +1957,9 @@ static int dcmi_probe(struct platform_device *pdev)
+ 	struct v4l2_fwnode_endpoint ep = { .bus_type = 0 };
+ 	struct stm32_dcmi *dcmi;
+ 	struct vb2_queue *q;
+-	struct dma_chan *chan;
++	struct dma_chan *chan, *mdma_chan;
+ 	struct dma_slave_caps caps;
+-	struct dma_slave_config dma_config;
++	struct dma_slave_config dma_config, mdma_config;
+ 	struct clk *mclk;
+ 	int ret = 0;
+ 
+@@ -1888,15 +2021,21 @@ static int dcmi_probe(struct platform_device *pdev)
+ 		return dev_err_probe(&pdev->dev, PTR_ERR(chan),
+ 				     "Failed to request DMA channel\n");
+ 
+-	dcmi->dma_max_burst = UINT_MAX;
+-	ret = dma_get_slave_caps(chan, &caps);
+-	if (!ret && caps.max_sg_burst)
+-		dcmi->dma_max_burst = caps.max_sg_burst	* DMA_SLAVE_BUSWIDTH_4_BYTES;
++	mdma_chan = dma_request_chan(&pdev->dev, "mdma_tx");
++	if (IS_ERR(mdma_chan)) {
++		ret = PTR_ERR(mdma_chan);
++		if (ret != -ENODEV)
++			return dev_err_probe(&pdev->dev, ret, "Failed to request MDMA channel\n");
++		mdma_chan = NULL;
++	}
+ 
++	/* Configure the DMA channel */
+ 	memset(&dma_config, 0, sizeof(dma_config));
+ 
+ 	dma_config.src_addr = (dma_addr_t)dcmi->res->start + DCMI_DR;
+ 	dma_config.src_addr_width = DMA_SLAVE_BUSWIDTH_4_BYTES;
++	if (mdma_chan)
++		dma_config.peripheral_size = 1; /* Indicates chaining */
+ 
+ 	/* Configure DMA channel */
+ 	ret = dmaengine_slave_config(chan, &dma_config);
+@@ -1906,6 +2045,47 @@ static int dcmi_probe(struct platform_device *pdev)
+ 		goto err_dma_slave_config;
+ 	}
+ 
++	/* If we want MDMA, we also need a sram pool */
++	if (mdma_chan) {
++		dcmi->sram_pool = of_gen_pool_get(pdev->dev.of_node, "sram", 0);
++		if (!dcmi->sram_pool) {
++			dev_info(&pdev->dev, "No SRAM pool, can't use MDMA chaining\n");
++			goto err_dma_slave_config;
++		}
++
++		dev_info(&pdev->dev, "SRAM pool: %zu KiB for DMA/MDMA chaining\n",
++			 gen_pool_size(dcmi->sram_pool) / 1024);
++
++		dcmi->sram_buf_size = gen_pool_size(dcmi->sram_pool);
++		dcmi->sram_buf = gen_pool_dma_zalloc(dcmi->sram_pool, dcmi->sram_buf_size,
++						     &dcmi->sram_dma_buf);
++		if (!dcmi->sram_buf) {
++			dev_err(dcmi->dev, "Failed to allocate from SRAM\n");
++			goto err_dma_slave_config;
++		}
++
++		/* Configure the MDMA Channel */
++		memset(&mdma_config, 0, sizeof(mdma_config));
++		mdma_config.direction = DMA_DEV_TO_MEM;
++		mdma_config.src_addr = dcmi->sram_dma_buf;
++		mdma_config.peripheral_size = dma_config.peripheral_size;
++		mdma_config.peripheral_config = dma_config.peripheral_config;
++		ret = dmaengine_slave_config(mdma_chan, &mdma_config);
++		if (ret < 0) {
++			dev_err(dcmi->dev, "%s: MDMA channel config failed (%d)\n",
++				__func__, ret);
++			goto err_mdma_slave_config;
++		}
++	}
++
++	dcmi->dma_max_burst = UINT_MAX;
++	/* In case of using DMA-MDMA chaining we consider the maximum infini */
++	if (!mdma_chan) {
++		ret = dma_get_slave_caps(chan, &caps);
++		if (!ret && caps.max_sg_burst)
++			dcmi->dma_max_burst = caps.max_sg_burst * DMA_SLAVE_BUSWIDTH_4_BYTES;
++	}
++
+ 	spin_lock_init(&dcmi->irqlock);
+ 	mutex_init(&dcmi->lock);
+ 	init_completion(&dcmi->complete);
+@@ -1915,6 +2095,7 @@ static int dcmi_probe(struct platform_device *pdev)
+ 	dcmi->mclk = mclk;
+ 	dcmi->state = STOPPED;
+ 	dcmi->dma_chan = chan;
++	dcmi->mdma_chan = mdma_chan;
+ 
+ 	q = &dcmi->queue;
+ 
+@@ -2023,8 +2204,13 @@ static int dcmi_probe(struct platform_device *pdev)
+ 	v4l2_device_unregister(&dcmi->v4l2_dev);
+ err_media_device_cleanup:
+ 	media_device_cleanup(&dcmi->mdev);
++err_mdma_slave_config:
++	if (dcmi->mdma_chan)
++		gen_pool_free(dcmi->sram_pool, (unsigned long)dcmi->sram_buf, dcmi->sram_buf_size);
+ err_dma_slave_config:
+ 	dma_release_channel(dcmi->dma_chan);
++	if (dcmi->mdma_chan)
++		dma_release_channel(mdma_chan);
+ 
+ 	return ret;
+ }
+@@ -2042,6 +2228,10 @@ static void dcmi_remove(struct platform_device *pdev)
+ 	media_device_cleanup(&dcmi->mdev);
+ 
+ 	dma_release_channel(dcmi->dma_chan);
++	if (dcmi->mdma_chan) {
++		gen_pool_free(dcmi->sram_pool, (unsigned long)dcmi->sram_buf, dcmi->sram_buf_size);
++		dma_release_channel(dcmi->mdma_chan);
++	}
+ }
+ 
+ static int dcmi_runtime_suspend(struct device *dev)
 
 -- 
 2.34.1
