@@ -1,83 +1,76 @@
-Received: from flow-a5-smtp.messagingengine.com (flow-a5-smtp.messagingengine.com [103.168.172.140])
+Received: from mx07-00178001.pphosted.com (mx07-00178001.pphosted.com [185.132.182.106])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C41C426CE2C;
-	Fri, 19 Dec 2025 14:10:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.140
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1766153422; cv=none; b=GHPYSUcEuNASy4m9fU4yaJNiwxPF7NhHi0oxzzdnKIius8K/5aSKOUEuRs6t/ryY/L+JucdPvoI4sHXXNxpaX4AEDZ3rbL13wO5akzEVT5b610PEMLl0rawE9bDooRftNHFQnPMT9GECOy3aWXbFf/qkC+jK94jwSMdv+DsfGJw=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1766153422; c=relaxed/simple;
-	bh=tiYUY0BguT1Uj9ZmpFK1OrCOijuZ1ZWVEj/jOV3n8lw=;
-	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=YOMVe3WuOS0kvXbnn45oKd6EKMmtkSJmsHPujLbI17+cl2ERyIWtryZnGd/Ka2fR8hI7vQ4Vhzz50IXjbDGnNNyN79W5GOQJMIEYZs/yLcHFe+z5S0Same4mCRsQODzyio+tb4hcjQqENUY9T4WpkSQU12z93YHeYtlYGRI/kn4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=schnwalter.eu; spf=pass smtp.mailfrom=schnwalter.eu; dkim=pass (2048-bit key) header.d=schnwalter.eu header.i=@schnwalter.eu header.b=TtPgvYu2; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=q1XRd9cE; arc=none smtp.client-ip=103.168.172.140
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=schnwalter.eu
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=schnwalter.eu
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6B9D13375CB;
+	Fri, 19 Dec 2025 14:31:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=185.132.182.106
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1766154684; cv=fail; b=llabe2Ge+qPPMWirMx5U3Y3plrZPdFvo1Dr+gfIKCSmbBcAHeo1jKo4lIVImsLreG2K5TBsKuwMD3dDwaLW8uctbRBxJQRvOVU3+syKbkxkUopitfpvueSPDnpM/qQ6hV0FtDRBCoNRoNMJQpbxkC1ZB2RVU4FMtgpTI0jaVGDY=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1766154684; c=relaxed/simple;
+	bh=XDpAn+Sv2oeyfFZ6SiLUsllftEnl9g19NsOjqu/L4L8=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-ID:References:
+	 In-Reply-To:To:CC; b=YV/0BoNrwWELEL2fZ+xiiasm2N4mDHVsuOXpV3TGDltxzB22L3Y870K5RXDgypDVjXJIAFLqS73qtECZEkrmKHBbDsAFke4C+mQ6g+Yn2WzONO8x/YmwwRI978jNu2Wa2bZvpdTkaEC5WPY/UO1b3TfYIXpI2OCgC7wYLPTWo80=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foss.st.com; spf=pass smtp.mailfrom=foss.st.com; dkim=pass (2048-bit key) header.d=foss.st.com header.i=@foss.st.com header.b=LLYntKS3; arc=fail smtp.client-ip=185.132.182.106
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foss.st.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=foss.st.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=schnwalter.eu header.i=@schnwalter.eu header.b="TtPgvYu2";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="q1XRd9cE"
-Received: from phl-compute-04.internal (phl-compute-04.internal [10.202.2.44])
-	by mailflow.phl.internal (Postfix) with ESMTP id 8E55F1380104;
-	Fri, 19 Dec 2025 09:08:28 -0500 (EST)
-Received: from phl-frontend-03 ([10.202.2.162])
-  by phl-compute-04.internal (MEProxy); Fri, 19 Dec 2025 09:08:28 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=schnwalter.eu;
-	 h=cc:cc:content-transfer-encoding:content-type:content-type
-	:date:date:from:from:in-reply-to:message-id:mime-version
-	:reply-to:subject:subject:to:to; s=fm2; t=1766153308; x=
-	1766160508; bh=koYLabjQOrhDbXlPsvIb4+RxqrircKynM1lOeT4TWD4=; b=T
-	tPgvYu2BLVgHlVKVReJ7QG6VzoiwUDcjyecFnHhuIQjy4KKcg71zjTVCpOw2sPmd
-	Tr3/sEo4p1q7ZHe8RMTSDprIokqg9WUaCXqC4RVij89vl7LcvdG1Z4RvC42h1HVy
-	6R32L7UZCe/EKyfo9CcJ0/71YUZyzQtIbpXaG6gAa7jICPmxWbgXO0L8h7IElvJD
-	aRE3agdlkPzK9VDaL1PA7sLTrNX3PFJY/LQDJZ2QdXiHTDt7R3a0sIgwSkGZ1FEc
-	HGYTm2cTA93+Y8L26sUvct5R+Lmxdq7eTvAyAMY8KrX515JUY8fYQAwlqQsDW66h
-	QL+AmDTrYNYJXkpB//hDw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:message-id:mime-version:reply-to:subject
-	:subject:to:to:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-	fm1; t=1766153308; x=1766160508; bh=koYLabjQOrhDbXlPsvIb4+Rxqrir
-	cKynM1lOeT4TWD4=; b=q1XRd9cEs0zx+2b0Oa98TpUjJ26yXXiKVhYpjzGBdwiL
-	jzgonEk0zebpZ+bcgmKrpplQx8Twf/p4rDBRO+70NCFLzf8ZpBqC9HzBkqbAbc2S
-	4HmolWReXwozI1cl9tRo62aK9jY/AmX9F2PBl6Z7aS5uP1tKjPPDlixXUIb3f0ua
-	OBsfqr4o1D0hFfhIZIgiLmJe1Rf+rRf0eBN/D0QDy7BWd11DGUhsnFhIpURr6bSn
-	3+WnNyma11SB+O3xNCqiNu0c9ylZJ2gj1sSyF3oYmGw+WyN8tlzj9XALkJaoyHLq
-	f3hO/hUOtG94yIMucWzpq/ESN57YgbAXo/EzPv9dPw==
-X-ME-Sender: <xms:XFxFaYdNwYb6uJxvW66lGpmnVhY16D_TueHfoe6qvxi1CgWYjsN-2A>
-    <xme:XFxFaSZd21g2zDq-CGyHFl44tNo_Fx9h0HxckVw0CySPZXV12v7nHRVWFAKyz3NvK
-    EcV57KrXuLcjwD4yxAqSzhqyV-KeDGGb4-Iu4wP6LxFNibtLpXTrg>
-X-ME-Received: <xmr:XFxFaVGPmUd2lTNCKZZLRi4Aqg240j5Gt5BidIt2R7Zc003jmmIONatLLSAwE6s>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefgedrtddtgdegkeehtdcutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpuffrtefokffrpgfnqfghnecuuegr
-    ihhlohhuthemuceftddtnecurfhhihhshhhinhhgqdfkkffrpghrthculdeitdejmdenuc
-    fjughrpefhufffkfggtgfgvfevofesthejredtredtjeenucfhrhhomhephggrlhhtvghr
-    ucghvghrnhgvrhcuufgthhhnvghiuggvrhcuoegtohhnthgrtghtsehstghhnhifrghlth
-    gvrhdrvghuqeenucggtffrrghtthgvrhhnpeeiteefudduffdvfeevueeffefhvdfhjedu
-    vedvieelgeeijefhfeetgfefffelveenucffohhmrghinhepkhgvrhhnvghlrdhorhhgne
-    cuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheptghonhht
-    rggtthesshgthhhnfigrlhhtvghrrdgvuhdpnhgspghrtghpthhtohepuddtpdhmohguvg
-    epshhmthhpohhuthdprhgtphhtthhopegtohhnthgrtghtsehstghhnhifrghlthgvrhdr
-    vghupdhrtghpthhtoheprhhosghhsehkvghrnhgvlhdrohhrghdprhgtphhtthhopeguvg
-    hvihgtvghtrhgvvgesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopegtohhn
-    ohhrodgutheskhgvrhhnvghlrdhorhhgpdhrtghpthhtohepkhhriihkodgutheskhgvrh
-    hnvghlrdhorhhgpdhrtghpthhtohepmhgthhgvhhgrsgeskhgvrhhnvghlrdhorhhgpdhr
-    tghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhgpd
-    hrtghpthhtohepjhgrtghophhordhmohhnughisehiuggvrghsohhnsghorghrugdrtgho
-    mhdprhgtphhtthhopehsrghkrghrihdrrghilhhusheslhhinhhugidrihhnthgvlhdrtg
-    homh
-X-ME-Proxy: <xmx:XFxFaYlRSTJ70gPi80xGtWJLlSfPTfCFvoRzA9TRHDX2Q9sSAn6-lQ>
-    <xmx:XFxFaQcREzifWzqu_ufLv6bDvL5MZW_XUZ0LQzGAAZLb574ntN-jhw>
-    <xmx:XFxFaeFcw7wtR-abLxTi8N4zp57t69qSUkV_IqC450FB0LhwkMwemA>
-    <xmx:XFxFaejM13ECcZ84I5Ik2qoAnF7LOJCLOlEfj1xWkGa1WSCfJVemwA>
-    <xmx:XFxFaer_QqB9cPboirgXz3JvdrYIqrkPVmS6t-fzdsVmffGx_1E9Zn8N>
-Feedback-ID: i455149b6:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
- 19 Dec 2025 09:08:26 -0500 (EST)
-From: Walter Werner Schneider <contact@schnwalter.eu>
-Subject: [PATCH v3 0/2] media: i2c: Add ov2732 image sensor driver
-Date: Fri, 19 Dec 2025 16:08:07 +0200
-Message-Id: <20251219-ov2732-driver-v3-0-579d175e929e@schnwalter.eu>
+	dkim=pass (2048-bit key) header.d=foss.st.com header.i=@foss.st.com header.b="LLYntKS3"
+Received: from pps.filterd (m0369458.ppops.net [127.0.0.1])
+	by mx07-00178001.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 5BJE6MJU449819;
+	Fri, 19 Dec 2025 15:30:53 +0100
+Received: from as8pr04cu009.outbound.protection.outlook.com (mail-westeuropeazon11011042.outbound.protection.outlook.com [52.101.70.42])
+	by mx07-00178001.pphosted.com (PPS) with ESMTPS id 4b4r31bp0h-1
+	(version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
+	Fri, 19 Dec 2025 15:30:53 +0100 (CET)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=BQRWg9V/MIeH7svnXLIBxs7Oyj6n4kWK8mmPmvD/7Jfxm/B9zQOnfT/mGZNg03NDbH82I4WCpU0y9MABTHMcUeJYZgxVdSCF/hYuPg1zvkpnSzQOoAx6TkFCxLECYASSGohNfh4Q0mqEJEVZ7J9k3+dOXgd7O/TbibafpX1w3sR0BYBjThvkeJIOynpUsP+ezlAHjH+mJw0N1C5HTye4rTh0IQHHyMImugSmnfYpurzGNWdE5Ytwy6Lvxguj//ZdFx81NX3cURr63c+nBA3yBhHf6SJFfYfy0RDrUTP/YyT+LSZ/runIX/2vz88HZVUrqoq9V2So3hHVjhjB+je2lQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=csNo7wVFl5X8AavvKBJRxL88T+QyATwTlRtYkNnS5eU=;
+ b=kEFa0ZDEDa3vOMwbsc0e4WmIZV8UYqGLVSOixN0O5D9k8jRKfwnyhYZbwJHQ93QG7BFay3kfbOdd9UI2ylU3qFNoRAsAs5VsGHF9gt0K+Ppzxs1PrPeA2hjo0Z7+2v9ffgZkIp97txdPA0zqK0ZOGJeoTUvtU602ShKzZRMrlVQFt3Pp/pw9jwgWIshrQ4D50X7LNZ+zChBkDdKFGWyz/weTnAoiozIsK9h138Mpnzv4iQW+Q+ntxf6FpI0CI7GaTC2lpPQzAahNGdEQSw85QbJoFTxgY20sRYPBE44lPPjWYlE5p86yvcUg1x1eW8aEDBspbS0xl3ySojeUCpVCQw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=fail (sender ip is
+ 164.130.1.59) smtp.rcpttodomain=st-md-mailman.stormreply.com
+ smtp.mailfrom=foss.st.com; dmarc=fail (p=none sp=none pct=100) action=none
+ header.from=foss.st.com; dkim=none (message not signed); arc=none (0)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=csNo7wVFl5X8AavvKBJRxL88T+QyATwTlRtYkNnS5eU=;
+ b=LLYntKS3lPxG+1V04JHmSFT8HQpcDSIViA0uFkbf/sGwKSWCH3FJ+JQHUsUSfGZ+SF2UhiR8IFQOMX312FD/ZuHGcq7S1LzSoHWuxjKr1aiA1rm3o+Uf3lLIW/d/06H+7YxCwJ3G3RR8SDYBui/AUkyzrrPo7DgF5TwI69vdgnTMxt3IwQpW+SyH1OyD2Ejb21V4/hXrIaVNXzbzko0zcyYvKtGPbpCF8jmqj/4CyK0kY2zJ89zkW3lCxYqiOPX29zonjPPqR+0EYYxNQ5rk+VFJJZoTnb57BIuTiCRrrGUWdYszBLLXn/adcFvWmp/6l8ma0cBtzUZ59dDWK9oyDw==
+Received: from AS9PR06CA0017.eurprd06.prod.outlook.com (2603:10a6:20b:462::13)
+ by AM0PR10MB3156.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:208:17e::16) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9434.6; Fri, 19 Dec
+ 2025 14:30:51 +0000
+Received: from AMS0EPF000001A5.eurprd05.prod.outlook.com
+ (2603:10a6:20b:462:cafe::7a) by AS9PR06CA0017.outlook.office365.com
+ (2603:10a6:20b:462::13) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.20.9434.8 via Frontend Transport; Fri,
+ 19 Dec 2025 14:30:51 +0000
+X-MS-Exchange-Authentication-Results: spf=fail (sender IP is 164.130.1.59)
+ smtp.mailfrom=foss.st.com; dkim=none (message not signed)
+ header.d=none;dmarc=fail action=none header.from=foss.st.com;
+Received-SPF: Fail (protection.outlook.com: domain of foss.st.com does not
+ designate 164.130.1.59 as permitted sender) receiver=protection.outlook.com;
+ client-ip=164.130.1.59; helo=smtpO365.st.com;
+Received: from smtpO365.st.com (164.130.1.59) by
+ AMS0EPF000001A5.mail.protection.outlook.com (10.167.16.232) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.9434.6 via Frontend Transport; Fri, 19 Dec 2025 14:30:51 +0000
+Received: from STKDAG1NODE2.st.com (10.75.128.133) by smtpo365.st.com
+ (10.250.44.71) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.17; Fri, 19 Dec
+ 2025 15:31:40 +0100
+Received: from localhost (10.130.74.193) by STKDAG1NODE2.st.com
+ (10.75.128.133) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.17; Fri, 19 Dec
+ 2025 15:30:50 +0100
+From: Alain Volmat <alain.volmat@foss.st.com>
+Date: Fri, 19 Dec 2025 15:30:36 +0100
+Subject: [PATCH 2/6] media: stm32: dcmipp: byteproc: disable compose for
+ all bayers
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
@@ -86,164 +79,136 @@ List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-B4-Tracking: v=1; b=H4sIAEdcRWkC/33MQQ6CMBCF4auQWVvTTqGgK+9hXEA7yCQGSItVQ
- 7i7hcQNC5f/S943QyDPFOCczeApcuChT6EPGdiu7u8k2KUGlFgoVKUYIpYahfMcyQukiqwsnG5
- sAekzemr5vXnXW+qOwzT4z8ZHta4/qdpJUQkppCVqT2hzqcwl2K5/1Y+J/JGesGoR/wqYhLYpj
- TZ57gzavbAsyxcvpgPK8AAAAA==
-X-Change-ID: 20251217-ov2732-driver-2e8ec05d3bc5
-To: linux-media@vger.kernel.org, 
- Jacopo Mondi <jacopo.mondi@ideasonboard.com>, 
- Mauro Carvalho Chehab <mchehab@kernel.org>, Rob Herring <robh@kernel.org>, 
- Krzysztof Kozlowski <krzk+dt@kernel.org>, 
- Conor Dooley <conor+dt@kernel.org>, 
- Sakari Ailus <sakari.ailus@linux.intel.com>
-Cc: devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
- Walter Werner Schneider <contact@schnwalter.eu>
-X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1766153306; l=5393;
- i=contact@schnwalter.eu; s=20251106; h=from:subject:message-id;
- bh=tiYUY0BguT1Uj9ZmpFK1OrCOijuZ1ZWVEj/jOV3n8lw=;
- b=Wry85EdsWDRnBUH/XNIHDmSBTSPKUNb+/uWAywtBNvHgMw7FI/1Ya3qIFzHKSmcpNrdBzuroY
- tkeMvMAeHPkC+xX1o69GEWeRUvPkVoIv051dtsJhLjyzDp2gsWokCG6
-X-Developer-Key: i=contact@schnwalter.eu; a=ed25519;
- pk=OoafUGtB7zQJLYhKA7ALCjqddXAaem/uP/eb3GGNkTI=
+Message-ID: <20251219-stm32-dcmipp-enhancements-v1-2-e2f8d46f022c@foss.st.com>
+References: <20251219-stm32-dcmipp-enhancements-v1-0-e2f8d46f022c@foss.st.com>
+In-Reply-To: <20251219-stm32-dcmipp-enhancements-v1-0-e2f8d46f022c@foss.st.com>
+To: Hugues Fruchet <hugues.fruchet@foss.st.com>,
+        Mauro Carvalho Chehab
+	<mchehab@kernel.org>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        "Alexandre
+ Torgue" <alexandre.torgue@foss.st.com>,
+        Sakari Ailus
+	<sakari.ailus@linux.intel.com>,
+        Hans Verkuil <hverkuil@kernel.org>
+CC: <linux-media@vger.kernel.org>, <linux-stm32@st-md-mailman.stormreply.com>,
+        <linux-arm-kernel@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
+        "Alain Volmat" <alain.volmat@foss.st.com>
+X-Mailer: b4 0.14.3
+X-ClientProxiedBy: STKCAS1NODE1.st.com (10.75.128.134) To STKDAG1NODE2.st.com
+ (10.75.128.133)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: AMS0EPF000001A5:EE_|AM0PR10MB3156:EE_
+X-MS-Office365-Filtering-Correlation-Id: 450c2ca2-2afb-41d3-a92a-08de3f0b35f9
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|82310400026|36860700013|376014|1800799024;
+X-Microsoft-Antispam-Message-Info:
+	=?utf-8?B?cCt3dDNsYnM3bnM1ZjJIdTRRL0E1M1lrTTF5RFRZbUhva3JFNE1VS1RhUDNR?=
+ =?utf-8?B?T0E2WnhkSDdSQVFHZnNLY3BMcVFOQXJnMUxVWk5HVjRZWkNrRVBpSkZ4ai85?=
+ =?utf-8?B?L2o3MlZSWlFKelZsZFNpVmRqTXY2R0VYVXpsNDFENlNVUW1nUlpoemNqN1lZ?=
+ =?utf-8?B?UWJ0L1E5K1NpVTlGSUs0N3VBZ2hKczRkcFBmRmJ6SUJydWFoNStlNzFWWW5R?=
+ =?utf-8?B?bW9HekhmNEplMzNyNFRONTkxeHBHWE5aYitMdjFDZTk2VHVxS3RvOG5IVUxU?=
+ =?utf-8?B?OTBCd3ZUTjRBY3Y2dmMxM2tMVmhEb0w0djk4UGkwMUp2NkdSSmNlM2NUbjd6?=
+ =?utf-8?B?Q3BMNGY1UHl4RTlaZEJOZ3pTdXlDbElGakp1U21YbUtzRGt4aDNYd0ZFU2x5?=
+ =?utf-8?B?UnJmMVZSTFNyUnQvZ2Z3bCthemV5WW9aNkhrMUV4eU56YU9vZTZrcEJZazFG?=
+ =?utf-8?B?cUhqOWlRZHNOczZqYWNQYU40YldqZFEyR005bFh1VTBWRit6ZjFzeDlObnU2?=
+ =?utf-8?B?RDlIRGJjdzlkV0NvTjFaWUFzb3VCVVFvT1JDa1B3bEdyTVZReW8zeXN2dzNB?=
+ =?utf-8?B?WDNWRmlMcm9ocmlJaUE4aFpvdVdYZzlEYk5GNmlKL0V1Uk1lOGVNUGdoQmt4?=
+ =?utf-8?B?QUFpS2RxY2pEbi9jcnE5MGFEd0FhZGdIZEJjb05uMWg3UGpVYVQrWUhFSGRo?=
+ =?utf-8?B?bmNGZE1lTWs0cjdZMmtTRE9CaTRPNjkvSWVqVXVKanFqSlBVeGl5QWw5NVFh?=
+ =?utf-8?B?eUcwUXJMSnNXSnd0UEVWUDd1eVFIV0hIU0xwdjdwaEZNWEdZRW1lOE1HQzZ3?=
+ =?utf-8?B?L2dxekdEb1dEYnJtdzMzclk4NFhNR2NRSkQyNHBTSWFpd2VwMFAraVpOaGN0?=
+ =?utf-8?B?TVk3eVVieVpSaC8rUVZ1ZmZJNThoRjZ4SHlhODdaeEtVQ0d5YzlmL3l1YWo0?=
+ =?utf-8?B?UzhGVXI3NEMzbSthamlLMXJtZTF2SGUvUFA5T2JqQWhUUytJc2k0bUFHaitI?=
+ =?utf-8?B?SWtsZjJ6Q3AyOXhKL1hORVJyN0Y4OUV0N3RFYmc1RUtzc1I5cGdtRzZGZUpG?=
+ =?utf-8?B?cmhUL2NPZjBZRlppSVdIQ29XbEdZQ3F4QlFQa2pUZnVKSDRpcmNDSVZjLzZL?=
+ =?utf-8?B?UzVMakw2YTNkR1BHM0VSaU80SGdzVU9MZ0U3UFRlUjQxRk5LVFRyOFNYQ0pC?=
+ =?utf-8?B?dm1GVHVBTHozSVRZRTZyL0dtKzVuZzhVbmJ2NlZvd1lqVitQQ2xVVEdNZWQ4?=
+ =?utf-8?B?MTNpK280SGhWeE11MEpGYzY0S1QyYkhUblo0clYrUUllbVRGUk9aak5jeXFO?=
+ =?utf-8?B?MWF1d0RwYU1ndFFxNU9rNDVzb0hYcWNzemQ2cW5pdUZ2b25VN3dEdmUyT0E1?=
+ =?utf-8?B?ZUwwMmQrZVZxa2ozb0svSFhoTmlZakQ2a216dGNWaUZXWEh2Q2EyTENYTExx?=
+ =?utf-8?B?eUhtc2xtVE1VVnJ2N1pwVitMZm1yTEJoeWZoZ2Y4ajhrYlErUWk3d0NTZXE4?=
+ =?utf-8?B?eFprQW1VZTF6Q0dEbVFGR2R0MlNhNkZ5d1I2TUJ1bmErY1pNWHJ0a2J1azJw?=
+ =?utf-8?B?VEwxY1FoeWlVMzcxdVErT2N0KzdjdzU5NUd0am1MOFNWUTIyZldCd08wUGFJ?=
+ =?utf-8?B?ZmZzMVByZU5WUytSbnFzQ3RkYU0rcnY1QTNUeHZndGhOUFM4Q1UralZ1eEtq?=
+ =?utf-8?B?VDVWczg5aEt6YXdWbURsQzIwYlR1NThGK0VwT1hqbHl5aGY4YVc2Mk5wb1dn?=
+ =?utf-8?B?VloraTcxT2U2RFVXclMrSVJjMjNWcWczUE5BWW9qNHMwRjlhWG0wQnQ5Qi9H?=
+ =?utf-8?B?N2RBZ2dNVGMwMDZVWEJHOFRxU3FnRzA5RmFLL3ZZVjAzSmhsNTdHVmVXcVpW?=
+ =?utf-8?B?TFBuMjJPbEdndW5vV0lxOUtDUFB2R3dTUFdhNmpJWnZtNjdUcFJJTGVMelFl?=
+ =?utf-8?B?WE4zd2hkTnZhQVl6L0FKejlIeUxiVHpWZ3RieWVjMjBjSjdVbmllU0txbXc1?=
+ =?utf-8?B?bmpwVFBPdUtqZHhQNzVOZWZvQlp0eUVUK0lVVGpIa3BRWk56OS9kQjlKWTRE?=
+ =?utf-8?B?UDV4NjJJZkRocG5ES1BKM2YxUks4UURjSzVlQ1lSdDFjSE43UWhmU01qVHN1?=
+ =?utf-8?Q?kArQ=3D?=
+X-Forefront-Antispam-Report:
+	CIP:164.130.1.59;CTRY:IT;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:smtpO365.st.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(82310400026)(36860700013)(376014)(1800799024);DIR:OUT;SFP:1101;
+X-OriginatorOrg: foss.st.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 Dec 2025 14:30:51.5068
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 450c2ca2-2afb-41d3-a92a-08de3f0b35f9
+X-MS-Exchange-CrossTenant-Id: 75e027c9-20d5-47d5-b82f-77d7cd041e8f
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=75e027c9-20d5-47d5-b82f-77d7cd041e8f;Ip=[164.130.1.59];Helo=[smtpO365.st.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	AMS0EPF000001A5.eurprd05.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM0PR10MB3156
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUxMjE5MDEyMSBTYWx0ZWRfX/CZngveaZJab
+ Yq4C+zpJ7tXvuHS9sWczDTNbRnzfzYVK2r2HVNa+8qzxHSWhbeG19XyGJ9aoWxmKoeHy9BPX1/r
+ MvpyepYmA4yqlTzvT+v6svg0oBfbq0IlucoxcysDi19ybz/lN4KsH4Yu37W5/TPo/ekkTDKCBnL
+ zIg8z6E2H0vmKymJyDTK+Axn2hxy2Lui33KHbaXpuF3jSuBWBGaTPNTtMjv/yoeBdXf5I8Kiu9G
+ ib2augGEaj+Pf4Vs6ce2aY0nbhdL78+/AjCNRIjEVa0MzlrRd7a9W1HG0DHyXMzC+Iakd999zRB
+ Gbu3qMQ4L5I7B8iYycVu04g5OB3KrUWFWa9KMEFpdQ0/xmgMeWJ8VoPOdDJzvbYmgM3DJjWne04
+ bnO/j2klgKW4DRfL3sc68vgM2s16E3vusRuevZpFDMiZw1OwZzEtlvzrUsMSsDJvPXWi9vikD3r
+ sPfgTQ4SU4+OUvwSLsA==
+X-Authority-Analysis: v=2.4 cv=e9ALiKp/ c=1 sm=1 tr=0 ts=6945619d cx=c_pps
+ a=OdbLnzhLelEqtRUqioBy+g==:117 a=d6reE3nDawwanmLcZTMRXA==:17
+ a=6eWqkTHjU83fiwn7nKZWdM+Sl24=:19 a=wL9PcE0S0AMA:10 a=IkcTkHD0fZMA:10
+ a=wP3pNCr1ah4A:10 a=s63m1ICgrNkA:10 a=KrXZwBdWH7kA:10
+ a=VkNPw1HP01LnGYTKEx00:22 a=8b9GpE9nAAAA:8 a=Pp28VEXKKhAU6vDGe-QA:9
+ a=QEXdDO2ut3YA:10 a=T3LWEMljR5ZiDmsYVIUa:22
+X-Proofpoint-ORIG-GUID: FFj0-GD6ROgG7nBYMPbEe0mqZckp9e79
+X-Proofpoint-GUID: FFj0-GD6ROgG7nBYMPbEe0mqZckp9e79
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.9,FMLib:17.12.100.49
+ definitions=2025-12-19_05,2025-12-17_02,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0
+ malwarescore=0 adultscore=0 impostorscore=0 phishscore=0 bulkscore=0
+ priorityscore=1501 clxscore=1011 lowpriorityscore=0 suspectscore=0
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.22.0-2512120000 definitions=main-2512190121
 
-This patch series introduces a new driver for the OmniVision OV2732 image
-sensor.
+Avoid possibility to perform compose on all frames which mbus code is
+within the bayer range or jpeg format.
 
-The driver was written from scratch using modern V4L2 APIs, taking
-inspiration from existing camera sensor drivers like the Sony IMX219 and
-with help from the libcamera folks on IRC.
+Fixes: 822c72eb1519 ("media: stm32: dcmipp: add bayer 10~14 bits formats")
 
-This initial version provides basic support for the sensor, future patches
-will add additional features.
-
-I'm new to all this, so feel free to point out anything that can be
-improved.
-
-v4l2-compliance 1.28.1-5233, 64 bits, 64-bit time_t
-v4l2-compliance SHA: fc15e229d9d3 2024-07-23 19:22:15
-
-Compliance test for device /dev/v4l-subdev4:
-
-Driver Info:
-        Driver version   : 6.18.0
-        Capabilities     : 0x00000000
-        Client Capabilities: 0x0000000000000002
-interval-uses-which 
-Required ioctls:
-        test VIDIOC_SUDBEV_QUERYCAP: OK
-        test invalid ioctls: OK
-
-Allow for multiple opens:
-        test second /dev/v4l-subdev4 open: OK
-        test VIDIOC_SUBDEV_QUERYCAP: OK
-        test for unlimited opens: OK
-
-Debug ioctls:
-        test VIDIOC_LOG_STATUS: OK (Not Supported)
-
-Input ioctls:
-        test VIDIOC_G/S_TUNER/ENUM_FREQ_BANDS: OK (Not Supported)
-        test VIDIOC_G/S_FREQUENCY: OK (Not Supported)
-        test VIDIOC_S_HW_FREQ_SEEK: OK (Not Supported)
-        test VIDIOC_ENUMAUDIO: OK (Not Supported)
-        test VIDIOC_G/S/ENUMINPUT: OK (Not Supported)
-        test VIDIOC_G/S_AUDIO: OK (Not Supported)
-        Inputs: 0 Audio Inputs: 0 Tuners: 0
-
-Output ioctls:
-        test VIDIOC_G/S_MODULATOR: OK (Not Supported)
-        test VIDIOC_G/S_FREQUENCY: OK (Not Supported)
-        test VIDIOC_ENUMAUDOUT: OK (Not Supported)
-        test VIDIOC_G/S/ENUMOUTPUT: OK (Not Supported)
-        test VIDIOC_G/S_AUDOUT: OK (Not Supported)
-        Outputs: 0 Audio Outputs: 0 Modulators: 0
-
-Input/Output configuration ioctls:
-        test VIDIOC_ENUM/G/S/QUERY_STD: OK (Not Supported)
-        test VIDIOC_ENUM/G/S/QUERY_DV_TIMINGS: OK (Not Supported)
-        test VIDIOC_DV_TIMINGS_CAP: OK (Not Supported)
-        test VIDIOC_G/S_EDID: OK (Not Supported)
-
-Control ioctls:
-        test VIDIOC_QUERY_EXT_CTRL/QUERYMENU: OK
-        test VIDIOC_QUERYCTRL: OK
-        test VIDIOC_G/S_CTRL: OK
-        test VIDIOC_G/S/TRY_EXT_CTRLS: OK
-        test VIDIOC_(UN)SUBSCRIBE_EVENT/DQEVENT: OK
-        test VIDIOC_G/S_JPEGCOMP: OK (Not Supported)
-        Standard Controls: 14 Private Controls: 0
-
-Format ioctls:
-        test VIDIOC_ENUM_FMT/FRAMESIZES/FRAMEINTERVALS: OK (Not Supported)
-        test VIDIOC_G/S_PARM: OK (Not Supported)
-        test VIDIOC_G_FBUF: OK (Not Supported)
-        test VIDIOC_G_FMT: OK (Not Supported)
-        test VIDIOC_TRY_FMT: OK (Not Supported)
-        test VIDIOC_S_FMT: OK (Not Supported)
-        test VIDIOC_G_SLICED_VBI_CAP: OK (Not Supported)
-        test Cropping: OK (Not Supported)
-        test Composing: OK (Not Supported)
-        test Scaling: OK (Not Supported)
-
-Codec ioctls:
-        test VIDIOC_(TRY_)ENCODER_CMD: OK (Not Supported)
-        test VIDIOC_G_ENC_INDEX: OK (Not Supported)
-        test VIDIOC_(TRY_)DECODER_CMD: OK (Not Supported)
-
-Buffer ioctls:
-        test VIDIOC_REQBUFS/CREATE_BUFS/QUERYBUF: OK (Not Supported)
-        test CREATE_BUFS maximum buffers: OK
-        test VIDIOC_REMOVE_BUFS: OK
-        test VIDIOC_EXPBUF: OK (Not Supported)
-        test Requests: OK (Not Supported)
-
-Total for device /dev/v4l-subdev4: 45, Succeeded: 45, Failed: 0, Warnings: 0
-
-P.S. I only tried this as an out-of-tree module against the 6.18.0 kernel in
-a Yocto project, I'm not sure how to test it against 6.19-rc1. But I did
-compile it with 6.19-rc1 and ran dt_binding_check and checkpatch.
-
-P.S.2 Thanks you for the reviews.
-
-Signed-off-by: Walter Werner Schneider <contact@schnwalter.eu>
+Signed-off-by: Alain Volmat <alain.volmat@foss.st.com>
 ---
-Changes in v3:
-- Cleanup state of GPIO.
-- Renamed pwdn GPIO to powerdown.
-- Removed unused format variable from ov2732_set_fmt.
-- Removed properties from DT bindings.
-- Replaced the two 1ms delays with a doubling of the 8192 cycles delay.
-- Link to v2: https://lore.kernel.org/r/20251218-ov2732-driver-v2-0-fb763644d62c@schnwalter.eu
+ drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-byteproc.c | 7 ++-----
+ 1 file changed, 2 insertions(+), 5 deletions(-)
 
-Changes in v2:
-- Adjusted delays in power up, power down and start of stream. Only a
-  single 10ms sleep remains, looks like I've read the datasheet wrong.
-- The intermittent communication errors are solved by a single 1ms sleep
-  in the right place.
-- Added missing format values in ov2732_init_state.
-- Set default GPIO pin state in ov2732_probe.
-- Other small changes: comments, name capitalization, removed unused.
-  variables.
-- Link to v1: https://lore.kernel.org/r/20251218-ov2732-driver-v1-0-0ceef92c4016@schnwalter.eu
+diff --git a/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-byteproc.c b/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-byteproc.c
+index db76a02a1848..ec1d773d5ad1 100644
+--- a/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-byteproc.c
++++ b/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-byteproc.c
+@@ -130,11 +130,8 @@ static void dcmipp_byteproc_adjust_compose(struct v4l2_rect *r,
+ 	r->left = 0;
+ 
+ 	/* Compose is not possible for JPEG or Bayer formats */
+-	if (fmt->code == MEDIA_BUS_FMT_JPEG_1X8 ||
+-	    fmt->code == MEDIA_BUS_FMT_SBGGR8_1X8 ||
+-	    fmt->code == MEDIA_BUS_FMT_SGBRG8_1X8 ||
+-	    fmt->code == MEDIA_BUS_FMT_SGRBG8_1X8 ||
+-	    fmt->code == MEDIA_BUS_FMT_SRGGB8_1X8) {
++	if (fmt->code >= MEDIA_BUS_FMT_SBGGR8_1X8 &&
++	    fmt->code <= MEDIA_BUS_FMT_JPEG_1X8) {
+ 		r->width = fmt->width;
+ 		r->height = fmt->height;
+ 		return;
 
----
-Walter Werner Schneider (2):
-      dt-bindings: media: i2c: Add ov2732 image sensor
-      media: i2c: Add ov2732 image sensor driver
-
- .../devicetree/bindings/media/i2c/ovti,ov2732.yaml | 108 +++
- MAINTAINERS                                        |   7 +
- drivers/media/i2c/Kconfig                          |  13 +
- drivers/media/i2c/Makefile                         |   1 +
- drivers/media/i2c/ov2732.c                         | 787 +++++++++++++++++++++
- 5 files changed, 916 insertions(+)
----
-base-commit: b70886ff5833cf499e77af77d2324ce8f68b60ce
-change-id: 20251217-ov2732-driver-2e8ec05d3bc5
-
-Best regards,
 -- 
-Walter Werner Schneider <contact@schnwalter.eu>
+2.34.1
 
