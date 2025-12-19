@@ -1,54 +1,54 @@
 Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8FE892F5492
-	for <linux-media@vger.kernel.org>; Fri, 19 Dec 2025 09:58:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2664A2F5A25
+	for <linux-media@vger.kernel.org>; Fri, 19 Dec 2025 09:58:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1766138321; cv=none; b=KYWQKtr7JX0Tt3gHm2fQ89YZHqaMAUqzm8PeZAt9el6/b8iEvHFdVTCf1aCuzzDeqFMVKLQaeowrYaaCEHwb9+3RNdpJYDz9I/SkPqF/8eQ19/zA4kcpiPdKivgnLh63/MQym8224X88eBooSc51mfmPOCVVz7cUfteFae5thZo=
+	t=1766138322; cv=none; b=d5i4TZ0enJHi1om0FJIfb2bdv0Q5igvvIlvV6xqyBvTFRNGIFTSUIKOmIuw1SRv9VrFblH4uR7RmfjhxCdCssPkB+NqJvd8BLk8/poj/3KLgHKrrroNcyTjE57gFLgp75CCcAwBHxIqQtWVj09iOdTeQ/kSX8GSVMqB1mxtIeF8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1766138321; c=relaxed/simple;
-	bh=lakatMwLuiUGM/200WhL8SUhz6xRcSamUgWk1KEoGeo=;
+	s=arc-20240116; t=1766138322; c=relaxed/simple;
+	bh=oNqbvdMhedklJpaoH/qcQJPFXf8zQ/3v4j1cEu56h/Y=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=IysuYb6iKH9u1g4woYdNMRDEvPBcjvJMuDQzLymNunTQclFml55pp100VTmLajBzLYhgdSYuIcGPWznP2qm25mkeuMQ65bbGOr46C7ZljQvYmvHrA9sPzgpbsLmZuEze9kQFGH7jjwo0EJVkGpU54Jv+fellzX+V6FMmHQUfKPk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=hgZniDmW; arc=none smtp.client-ip=198.175.65.14
+	 MIME-Version; b=cQVpEQopXZ4CX4yqBQQgDYTcXermleNV26IcpG7MGlAfv+x4Tzxa2z42IFQJZcC1Ydl/Gz06FCuZBoQIkNI6BQAORhJAnw4WI3Mw4hfhijc8cTFC7TrsOH2lDQPrup6dnWn9LcyMXo9LltK55G0A9k8lS6iQvBwvXmDbg8wYg+U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=NwhLyZSp; arc=none smtp.client-ip=198.175.65.14
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="hgZniDmW"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="NwhLyZSp"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1766138319; x=1797674319;
+  t=1766138321; x=1797674321;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=lakatMwLuiUGM/200WhL8SUhz6xRcSamUgWk1KEoGeo=;
-  b=hgZniDmWluZZMFyRCMyKv5AEDYrv41FfmzuNvcf1mzBccJ7T6w5qA3TD
-   xrETUXd95cZEqdQp2gRYmJ4Rtef/ScltZkD0YoHr4hmAzAmK0YIzkVIuE
-   STA7zIq/RX2UtgFLPHEshffp9YqnO6j3tq7a/WsJADJUhV1qbAPPapMMi
-   ixK3h3/6HSqOpDKi8jmuJ4zqa32362Ytefqah/mcsf9vcpgRoL/y7ddjO
-   x7zNaxdOUGKrSP0h+lmRZGYxOIkvWi/OsxN3ezQLNoLOWIdMka9YMLpnr
-   sFLzHhgQX+VMxyt/wwDwj1++/WhPkXmVTaaatUm9f1z69gfymIAX2sJzt
+  bh=oNqbvdMhedklJpaoH/qcQJPFXf8zQ/3v4j1cEu56h/Y=;
+  b=NwhLyZSplzgQnoL4cXk0IkvYMDFV8wv4CjyAlnNAFTDH7cxbfhD+ANz+
+   UGV8VmdGMTovO84Cfvt/BhOQ+CBJEEkXvH0E5E0maNCIOMH4G4ZTFtTnf
+   yWdhshXSm+jctV7NIdj+8zoZvJK+vFe2UQLDMcEzS8IrNIGJqpf00bU9k
+   8uP7qrFSJQglU8Isc+7ToppC3bZsQLeAVl8QXwJDOuFIp7S34owKtZE5u
+   J+Dx6kMrQsfvVIXeBU98y16VgKOev1QIorxrpOpvXr9IidLpJNt00V78W
+   qh88UMMeFOrolJdbjW9DYVXhmIhLq4dkmYYf0qzWul1ZJzIFmz0cgsIXl
    A==;
-X-CSE-ConnectionGUID: 8hPk6gB8QmipHpyM3znpNg==
-X-CSE-MsgGUID: PdfGmDdAQ8qJmw0gFunDLg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11646"; a="71945159"
+X-CSE-ConnectionGUID: aeYzDAP6QiOPazgSc2nTcg==
+X-CSE-MsgGUID: cjvWWOkYRmuXfOV0lfnkwg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11646"; a="71945162"
 X-IronPort-AV: E=Sophos;i="6.21,161,1763452800"; 
-   d="scan'208";a="71945159"
+   d="scan'208";a="71945162"
 Received: from orviesa006.jf.intel.com ([10.64.159.146])
-  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Dec 2025 01:58:34 -0800
-X-CSE-ConnectionGUID: KzkU+mhmQ4yz5M8TnZDKUA==
-X-CSE-MsgGUID: B3UkKNwZSH6rdchR1OfR0g==
+  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Dec 2025 01:58:37 -0800
+X-CSE-ConnectionGUID: ocU3rUZxT8OPczg5mfqBsQ==
+X-CSE-MsgGUID: Dkl0cQQTRfC8PhfL3Nyb5g==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.21,161,1763452800"; 
-   d="scan'208";a="197973376"
+   d="scan'208";a="197973390"
 Received: from rvuia-mobl.ger.corp.intel.com (HELO kekkonen.fi.intel.com) ([10.245.244.226])
-  by orviesa006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Dec 2025 01:58:33 -0800
+  by orviesa006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Dec 2025 01:58:36 -0800
 Received: from punajuuri.localdomain (unknown [192.168.240.130])
-	by kekkonen.fi.intel.com (Postfix) with ESMTP id 019FA121DA4;
+	by kekkonen.fi.intel.com (Postfix) with ESMTP id 121E3121DB5;
 	Fri, 19 Dec 2025 11:58:31 +0200 (EET)
 Received: from sailus by punajuuri.localdomain with local (Exim 4.98.2)
 	(envelope-from <sakari.ailus@linux.intel.com>)
-	id 1vWXFl-0000000BsRY-2mox;
+	id 1vWXFl-0000000BsS1-3DS8;
 	Fri, 19 Dec 2025 11:58:29 +0200
 Organization: Intel Finland Oy - BIC 0357606-4 - c/o Alberga Business Park, 6 krs, Bertel Jungin Aukio 5, 02600 Espoo
 From: Sakari Ailus <sakari.ailus@linux.intel.com>
@@ -57,9 +57,9 @@ Cc: bingbu.cao@linux.intel.com,
 	tian.shu.qiu@intel.com,
 	antti.laakso@linux.intel.com,
 	mehdi.djait@linux.intel.com
-Subject: [PATCH 03/13] media: ipu6: Remove redundant driver data checks
-Date: Fri, 19 Dec 2025 11:58:19 +0200
-Message-ID: <20251219095829.2830843-4-sakari.ailus@linux.intel.com>
+Subject: [PATCH 09/13] media: ipu6: Obtain remote pad using media_pad_remote_pad_unique()
+Date: Fri, 19 Dec 2025 11:58:25 +0200
+Message-ID: <20251219095829.2830843-10-sakari.ailus@linux.intel.com>
 X-Mailer: git-send-email 2.47.3
 In-Reply-To: <20251219095829.2830843-1-sakari.ailus@linux.intel.com>
 References: <20251219095829.2830843-1-sakari.ailus@linux.intel.com>
@@ -71,44 +71,27 @@ List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Both runtime PM resume and suspend callbacks check whether the driver's
-data is set for the device. This is done in probe(); drop the redundant
-checks.
+There's no reason to use media_entity_remote_source_pad_unique() as we
+know our pads. Use media_pad_remote_pad_unique() instead.
 
 Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
 ---
- drivers/media/pci/intel/ipu6/ipu6-isys.c | 9 +--------
- 1 file changed, 1 insertion(+), 8 deletions(-)
+ drivers/media/pci/intel/ipu6/ipu6-isys-csi2.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/media/pci/intel/ipu6/ipu6-isys.c b/drivers/media/pci/intel/ipu6/ipu6-isys.c
-index eb45544a9f05..4855eeb24980 100644
---- a/drivers/media/pci/intel/ipu6/ipu6-isys.c
-+++ b/drivers/media/pci/intel/ipu6/ipu6-isys.c
-@@ -857,9 +857,6 @@ static int isys_runtime_pm_resume(struct device *dev)
- 	unsigned long flags;
- 	int ret;
+diff --git a/drivers/media/pci/intel/ipu6/ipu6-isys-csi2.c b/drivers/media/pci/intel/ipu6/ipu6-isys-csi2.c
+index 43a2a16a3c2a..7e539a0c6c92 100644
+--- a/drivers/media/pci/intel/ipu6/ipu6-isys-csi2.c
++++ b/drivers/media/pci/intel/ipu6/ipu6-isys-csi2.c
+@@ -88,7 +88,7 @@ s64 ipu6_isys_csi2_get_link_freq(struct ipu6_isys_csi2 *csi2)
+ 	if (!csi2)
+ 		return -EINVAL;
  
--	if (!isys)
--		return 0;
--
- 	ret = ipu6_mmu_hw_init(adev->mmu);
- 	if (ret)
- 		return ret;
-@@ -884,13 +881,9 @@ static int isys_runtime_pm_resume(struct device *dev)
- static int isys_runtime_pm_suspend(struct device *dev)
- {
- 	struct ipu6_bus_device *adev = to_ipu6_bus_device(dev);
--	struct ipu6_isys *isys;
-+	struct ipu6_isys *isys = dev_get_drvdata(dev);
- 	unsigned long flags;
- 
--	isys = dev_get_drvdata(dev);
--	if (!isys)
--		return 0;
--
- 	spin_lock_irqsave(&isys->power_lock, flags);
- 	isys->power = 0;
- 	spin_unlock_irqrestore(&isys->power_lock, flags);
+-	src_pad = media_entity_remote_source_pad_unique(&csi2->asd.sd.entity);
++	src_pad = media_pad_remote_pad_unique(&csi2->asd.sd.entity.pads[CSI2_PAD_SINK]);
+ 	if (IS_ERR(src_pad)) {
+ 		dev_err(&csi2->isys->adev->auxdev.dev,
+ 			"can't get source pad of %s (%pe)\n",
 -- 
 2.47.3
 
