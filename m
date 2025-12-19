@@ -1,485 +1,252 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
+Received: from fhigh-a3-smtp.messagingengine.com (fhigh-a3-smtp.messagingengine.com [103.168.172.154])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 962D11DED57;
-	Fri, 19 Dec 2025 14:07:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DB9E4328624;
+	Fri, 19 Dec 2025 14:08:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.154
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1766153272; cv=none; b=uZjGHV0ILv6m2Tjy4p/1oLs3Y/Aykk0QabYVe+tQXXcPXGdpsZO6OBkLkBeLZTy4ZOJKgaluV0IODBt+oijCAxHHQ52CK4+eUwpqwNmCEuVWzDB++rqMt2O2tTR04EaGfthAxifk3zHJMpl2/sLjzob22xacYG6sSsVR+rgjeM4=
+	t=1766153317; cv=none; b=S87zgRrybdWIvmCx43HXbj1EJFO/Ayaij5CeMSgjGz6RVQSJZso7Nw67yGnR4fjzjxvyPFaRuMLjgLOWBd5/t0YiPak7GwtDp1LJQuazFDjh/wuzfONrM9t+6H0dIDnHCY3j33eR1NaLqurRKKrUyTHVDugKfjDnNj3r9R5IaCs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1766153272; c=relaxed/simple;
-	bh=IytLNYkjuFlNMe8IVwgNkH5Pyqqd5XXVr7rm7cfa1hQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Sy7yriiD3/ca7rpyYaHghieeF0iu7E8pXVkwRDEvGRDw2I1mZP94vP9gj/3R4KRPTAoJC6ISXOiw+TpV278zEDDv1aOWX2bjBXXXrHWXRZbaki28EyyaJqEmczlc5+bml29wvULvtvcXT2RW4v78CA7MkQSNCq1FQmWpXiH6ESY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=EcBS3Omw; arc=none smtp.client-ip=192.198.163.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
+	s=arc-20240116; t=1766153317; c=relaxed/simple;
+	bh=UaRehn1/rOkl/aL6j5i1dFkeHFNgoTAIpiXnnJHp3bw=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=JUJsmz2D3eMPAGyrgcQY3rL/ehcNMotvzIBx3MTVMIATFu8lg6NV3Zz79DcuZCjDj4Hr/OfHfHRx9ATRq3HuXxKs3OQk8JACaG9+RE6u39WTGIYysJpSY6IjA/iSK4o+c3o2n2YExn4E7wdWIe6BrVdvm63JtY0JPq41MbIOQFk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=schnwalter.eu; spf=pass smtp.mailfrom=schnwalter.eu; dkim=pass (2048-bit key) header.d=schnwalter.eu header.i=@schnwalter.eu header.b=ovw3Blnr; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=gr8pg5d9; arc=none smtp.client-ip=103.168.172.154
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=schnwalter.eu
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=schnwalter.eu
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="EcBS3Omw"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1766153269; x=1797689269;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=IytLNYkjuFlNMe8IVwgNkH5Pyqqd5XXVr7rm7cfa1hQ=;
-  b=EcBS3OmwKU8ndPenvJw5TVNUPMbwswZmUQZ18WTU+vw+3r1rjhd3zUof
-   6qCIic8O+MN+kcWKl+gPLXsj4tX3s4/U1qhT6+/iS/nucHxiHkx+8xPiT
-   mGwjSNAEbMqg8riaa3L7CTqQLPQaE6QqXGhqwfrMn0OAy5vdm5bgrEPJf
-   V9dcfogeH7g7CQihi+NLUnDTnCDWKsUlSvBMH01oIfDiRhVVv3icyy25x
-   qolpW/kUpedfUJpgKY0vC0zu7hWzO5oZRHdlczr+//Dbj02OyGiulTcoz
-   8bJl6eU6kBVhCKL4XtRHsANNhu3hOsWrr+I2rXWJweqjtbipwZ/cBzzlG
-   w==;
-X-CSE-ConnectionGUID: 2Lw4Ivg3Qy63sOFOxImwUA==
-X-CSE-MsgGUID: ytImkN9uSYet4sj0H21srA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11646"; a="71973438"
-X-IronPort-AV: E=Sophos;i="6.21,161,1763452800"; 
-   d="scan'208";a="71973438"
-Received: from fmviesa002.fm.intel.com ([10.60.135.142])
-  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Dec 2025 06:07:48 -0800
-X-CSE-ConnectionGUID: SFy4u1FXTd2s4YfOWxgHCQ==
-X-CSE-MsgGUID: m5cBbL1eQjyToH+Aiys/mQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.21,161,1763452800"; 
-   d="scan'208";a="222288722"
-Received: from bergbenj-mobl1.ger.corp.intel.com (HELO mdjait-mobl) ([10.245.245.34])
-  by fmviesa002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Dec 2025 06:07:44 -0800
-Date: Fri, 19 Dec 2025 15:07:37 +0100
-From: Mehdi Djait <mehdi.djait@linux.intel.com>
-To: Himanshu Bhavani <himanshu.bhavani@siliconsignals.io>
-Cc: robh@kernel.org, krzk+dt@kernel.org, sakari.ailus@linux.intel.com, 
-	Elgin Perumbilly <elgin.perumbilly@siliconsignals.io>, Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>, 
-	Mauro Carvalho Chehab <mchehab@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Hans Verkuil <hverkuil@kernel.org>, Hans de Goede <hansg@kernel.org>, 
-	Laurent Pinchart <laurent.pinchart@ideasonboard.com>, =?utf-8?B?QW5kcsOp?= Apitzsch <git@apitzsch.eu>, 
-	Benjamin Mugnier <benjamin.mugnier@foss.st.com>, Sylvain Petinot <sylvain.petinot@foss.st.com>, 
-	Dongcheng Yan <dongcheng.yan@intel.com>, Svyatoslav Ryhel <clamor95@gmail.com>, 
-	Jingjing Xiong <jingjing.xiong@intel.com>, Heimir Thor Sverrisson <heimir.sverrisson@gmail.com>, 
-	linux-media@vger.kernel.org, devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v6 2/2] media: i2c: add os05b10 image sensor driver
-Message-ID: <7p46ga3lc5ky2234q6c222gz5ftpcaqfvax5ouysr4cj5sczlf@47ukejyhblbq>
-References: <20251219084526.22841-1-himanshu.bhavani@siliconsignals.io>
- <20251219084526.22841-3-himanshu.bhavani@siliconsignals.io>
+	dkim=pass (2048-bit key) header.d=schnwalter.eu header.i=@schnwalter.eu header.b="ovw3Blnr";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="gr8pg5d9"
+Received: from phl-compute-05.internal (phl-compute-05.internal [10.202.2.45])
+	by mailfhigh.phl.internal (Postfix) with ESMTP id D1CFA14000B2;
+	Fri, 19 Dec 2025 09:08:30 -0500 (EST)
+Received: from phl-frontend-03 ([10.202.2.162])
+  by phl-compute-05.internal (MEProxy); Fri, 19 Dec 2025 09:08:30 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=schnwalter.eu;
+	 h=cc:cc:content-transfer-encoding:content-type:content-type
+	:date:date:from:from:in-reply-to:in-reply-to:message-id
+	:mime-version:references:reply-to:subject:subject:to:to; s=fm2;
+	 t=1766153310; x=1766239710; bh=qb5gVRO9DfUFU0aQRCIg+7QiRU/KOee2
+	e9hSIVhT7xM=; b=ovw3BlnrGec8dKb6e5e8ibr3ue6gqgXGVHDwMeUjw/ztFMnM
+	q1RCMAv4P/oEL4QMYo4Y1h7U6N4ZBnDSBZl5rvKodhZgIXoiWIQYGhD7tKqItgLq
+	byOp88agOBRXlpbfhaaKecIFtXgr/l4a8Ow793IQYeS8g6tMWQY2EkjhKmaICmNR
+	ivszEL3gzvX2zp4rHQfQ7C+fsO6RRaAuM1XZ/DusFoqPz+WvVMtG+PQpRagJxitQ
+	bdkuE9FzsMnER3T4txKQB6qwJkE9QDQTY9D6yBVSO0OUQEy7V4xNQyoAcyG1/xwV
+	9tFBD4MKTaBRN4q8N7LPmLX2Y1F8KAmw1JaG5w==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to:x-me-proxy
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1766153310; x=
+	1766239710; bh=qb5gVRO9DfUFU0aQRCIg+7QiRU/KOee2e9hSIVhT7xM=; b=g
+	r8pg5d9fxni3WLVbb96i6m1WU9vvzCFpdS7PYB8lOFTbLOz6Gv1fGDsCB68GEpX5
+	HuMbEdc6Dxa7b+sEE1b0qD5tkVxdbOp90YXXtJEayqVw2i1byszSGWcPVgYmXHNQ
+	Unx6XRn8W9PReFcRZ+VLr8l61VB2u9bwSIrssrETYaWHky5mDsIRtxwcs7NCpxNm
+	xttUZeXblrBN/n6HPrJPsy11K2orEVFNBIv1eG5A5B+VLTkuF1TEA4KNDkw1z6cK
+	+rsKMSN1QGN/uhr8Ai0s8zZ9CZF5yDypS7eb47WFNafi0a5M46VWG08I/yr7Aqux
+	JZlCqcP/WXVILp/XpCEfA==
+X-ME-Sender: <xms:XlxFafU_82UZl2iMsSvSvBv_EYg7zB7mozZYx7BRqSl03Yk8guF6rA>
+    <xme:XlxFafxpViLuN28pa7Ypmv5uOJaKLKjplDPHWKGn8IReOfozK3qp7gUjehSX-hrG_
+    c3hkVwufCSeAX3VWfpUlAz5dtjixabEToFGWuWyFfeVq-0Ru9om7g>
+X-ME-Received: <xmr:XlxFaW9Kzgfyei10XO5DdR8CwozYOsA2NuIcUz9tvg4fCfeAcPdVK0rzgxaUvQc>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefgedrtddtgdegkeehtdcutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpuffrtefokffrpgfnqfghnecuuegr
+    ihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjug
+    hrpefhfffugggtgffkfhgjvfevofesthejredtredtjeenucfhrhhomhephggrlhhtvghr
+    ucghvghrnhgvrhcuufgthhhnvghiuggvrhcuoegtohhnthgrtghtsehstghhnhifrghlth
+    gvrhdrvghuqeenucggtffrrghtthgvrhhnpefhtdehhfegheetjedthfeigeeltdeghfei
+    udeikeeiffekuddtlefffeekheelfeenucffohhmrghinhepuggvvhhitggvthhrvggvrd
+    horhhgpdhlihhnuhigthhvrdhorhhgnecuvehluhhsthgvrhfuihiivgeptdenucfrrghr
+    rghmpehmrghilhhfrhhomheptghonhhtrggtthesshgthhhnfigrlhhtvghrrdgvuhdpnh
+    gspghrtghpthhtohepuddtpdhmohguvgepshhmthhpohhuthdprhgtphhtthhopegtohhn
+    thgrtghtsehstghhnhifrghlthgvrhdrvghupdhrtghpthhtoheprhhosghhsehkvghrnh
+    gvlhdrohhrghdprhgtphhtthhopeguvghvihgtvghtrhgvvgesvhhgvghrrdhkvghrnhgv
+    lhdrohhrghdprhgtphhtthhopegtohhnohhrodgutheskhgvrhhnvghlrdhorhhgpdhrtg
+    hpthhtohepkhhriihkodgutheskhgvrhhnvghlrdhorhhgpdhrtghpthhtohepmhgthhgv
+    hhgrsgeskhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlse
+    hvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtohepjhgrtghophhordhmohhnughi
+    sehiuggvrghsohhnsghorghrugdrtghomhdprhgtphhtthhopehsrghkrghrihdrrghilh
+    husheslhhinhhugidrihhnthgvlhdrtghomh
+X-ME-Proxy: <xmx:XlxFaU_xgezb4FFrmLmrjCTD_jvcQbvh2rtyWK2aUwnZKZk66ItOGw>
+    <xmx:XlxFaVX8QmDjJKklaqrqraqfzz5dds0fp3Uayu3jCPYbYWm6K3uNPg>
+    <xmx:XlxFaRehenYqDTPlC1Nzo2bHlbTfQo2BgmIXUycaLbB21ZufRefnQQ>
+    <xmx:XlxFaeZb8OE6yY5DZQu2doG2-UVqBL1QPZP9ofH66n2Y1vRqDiSr4w>
+    <xmx:XlxFaTDQ3UsbhL2SytnozK2kviB92if-n4kI1TYeGd03wosya5LywPHq>
+Feedback-ID: i455149b6:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
+ 19 Dec 2025 09:08:28 -0500 (EST)
+From: Walter Werner Schneider <contact@schnwalter.eu>
+Date: Fri, 19 Dec 2025 16:08:08 +0200
+Subject: [PATCH v3 1/2] dt-bindings: media: i2c: Add ov2732 image sensor
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20251219084526.22841-3-himanshu.bhavani@siliconsignals.io>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20251219-ov2732-driver-v3-1-579d175e929e@schnwalter.eu>
+References: <20251219-ov2732-driver-v3-0-579d175e929e@schnwalter.eu>
+In-Reply-To: <20251219-ov2732-driver-v3-0-579d175e929e@schnwalter.eu>
+To: linux-media@vger.kernel.org, 
+ Jacopo Mondi <jacopo.mondi@ideasonboard.com>, 
+ Mauro Carvalho Chehab <mchehab@kernel.org>, Rob Herring <robh@kernel.org>, 
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+ Conor Dooley <conor+dt@kernel.org>, 
+ Sakari Ailus <sakari.ailus@linux.intel.com>
+Cc: devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ Walter Werner Schneider <contact@schnwalter.eu>
+X-Mailer: b4 0.14.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1766153306; l=3957;
+ i=contact@schnwalter.eu; s=20251106; h=from:subject:message-id;
+ bh=UaRehn1/rOkl/aL6j5i1dFkeHFNgoTAIpiXnnJHp3bw=;
+ b=UXZKr9qm8jtwGXxox60gd8Dxkf1qTozMU/+a4Y/mmhonqVvlHk+O7VXtx0EYXjGdeiff7YbR6
+ 4RhREpy8fRcDKUCjrFgAAMqe1r1Tr/igQ2dY6HFYv7QYoy8870wsh+S
+X-Developer-Key: i=contact@schnwalter.eu; a=ed25519;
+ pk=OoafUGtB7zQJLYhKA7ALCjqddXAaem/uP/eb3GGNkTI=
 
-Hello Himanshu,
+Add bindings for OmniVision OV2732 image sensor.
 
-Thank you for the patch!
+Signed-off-by: Walter Werner Schneider <contact@schnwalter.eu>
+---
+ .../devicetree/bindings/media/i2c/ovti,ov2732.yaml | 108 +++++++++++++++++++++
+ MAINTAINERS                                        |   6 ++
+ 2 files changed, 114 insertions(+)
 
-On Fri, Dec 19, 2025 at 02:15:19PM +0530, Himanshu Bhavani wrote:
-> Add a v4l2 subdevice driver for the Omnivision OS05B10 sensor.
-> 
-> The Omnivision OS05B10 image sensor with an active
-> array size of 2592 x 1944.
-> 
-> The following features are supported:
-> - Manual exposure an gain control support
-> - vblank/hblank control support
-> - Supported resolution: 2592 x 1944 @ 60fps (SBGGR10)
-> 
-> Co-developed-by: Elgin Perumbilly <elgin.perumbilly@siliconsignals.io>
-> Signed-off-by: Elgin Perumbilly <elgin.perumbilly@siliconsignals.io>
-> Signed-off-by: Himanshu Bhavani <himanshu.bhavani@siliconsignals.io>
-> Reviewed-by: Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>
+diff --git a/Documentation/devicetree/bindings/media/i2c/ovti,ov2732.yaml b/Documentation/devicetree/bindings/media/i2c/ovti,ov2732.yaml
+new file mode 100644
+index 0000000000000000000000000000000000000000..57041d1dc012b88db4bf3eefbd3d1ee96fde777c
+--- /dev/null
++++ b/Documentation/devicetree/bindings/media/i2c/ovti,ov2732.yaml
+@@ -0,0 +1,108 @@
++# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/media/i2c/ovti,ov2732.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: OmniVision OV2732 Image Sensor
++
++maintainers:
++  - Walter Werner Schneider <contact@schnwalter.eu>
++
++description:
++  The OmniVision OV2732 is a 2MP (1920x1080) color CMOS image sensor controlled
++  through an I2C-compatible SCCB bus.
++
++properties:
++  compatible:
++    const: ovti,ov2732
++
++  reg:
++    maxItems: 1
++
++  clocks:
++    items:
++      - description: XVCLK clock
++
++  clock-names:
++    const: xvclk
++
++  avdd-supply:
++    description: Analog Domain Power Supply
++
++  dovdd-supply:
++    description: I/O Domain Power Supply
++
++  dvdd-supply:
++    description: Digital Domain Power Supply
++
++  powerdown-gpios:
++    maxItems: 1
++    description: Reference to the GPIO connected to the pwdn pin. Active low.
++
++  reset-gpios:
++    maxItems: 1
++    description: Reference to the GPIO connected to the reset pin. Active low.
++
++  port:
++    description: MIPI CSI-2 transmitter port
++    $ref: /schemas/graph.yaml#/$defs/port-base
++    additionalProperties: false
++
++    properties:
++      endpoint:
++        $ref: /schemas/media/video-interfaces.yaml#
++        unevaluatedProperties: false
++
++        properties:
++          data-lanes:
++            items:
++              - const: 1
++              - const: 2
++
++        required:
++          - data-lanes
++          - link-frequencies
++
++required:
++  - compatible
++  - reg
++  - clocks
++  - clock-names
++  - avdd-supply
++  - dovdd-supply
++  - dvdd-supply
++  - port
++
++additionalProperties: false
++
++examples:
++  - |
++    #include <dt-bindings/gpio/gpio.h>
++
++    i2c {
++        #address-cells = <1>;
++        #size-cells = <0>;
++
++        ov2732: camera@36 {
++            compatible = "ovti,ov2732";
++            reg = <0x36>;
++            clocks = <&ov2732_clk>;
++            clock-names = "xvclk";
++
++            avdd-supply = <&ov2732_avdd>;
++            dovdd-supply = <&ov2732_dovdd>;
++            dvdd-supply = <&ov2732_dvdd>;
++
++            powerdown-gpios = <&gpio0 13 GPIO_ACTIVE_LOW>;
++            reset-gpios = <&gpio0 8 GPIO_ACTIVE_LOW>;
++
++            port {
++                camera_out: endpoint {
++                  data-lanes = <1 2>;
++                  link-frequencies = /bits/ 64 <360000000>;
++                  remote-endpoint = <&mipi_in_camera>;
++                };
++            };
++        };
++    };
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 5b11839cba9de1e9e43f63787578edd8c429ca39..231d5b8df21bc5f3dc6ee5d765ed4027c9772f9a 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -19308,6 +19308,12 @@ T:	git git://linuxtv.org/media.git
+ F:	Documentation/devicetree/bindings/media/i2c/ovti,ov2685.yaml
+ F:	drivers/media/i2c/ov2685.c
+ 
++OMNIVISION OV2732 SENSOR DRIVER
++M:	Walter Werner Schneider <contact@schnwalter.eu>
++L:	linux-media@vger.kernel.org
++S:	Maintained
++F:	Documentation/devicetree/bindings/media/i2c/ovti,ov2732.yaml
++
+ OMNIVISION OV2735 SENSOR DRIVER
+ M:	Hardevsinh Palaniya <hardevsinh.palaniya@siliconsignals.io>
+ M:	Himanshu Bhavani <himanshu.bhavani@siliconsignals.io>
 
-[...]
+-- 
+2.51.1
 
-> +static const struct cci_reg_sequence os05b10_common_regs[] = {
-> +	{ CCI_REG8(0x0301), 0x44 },
-> +	{ CCI_REG8(0x0303), 0x02 },
-> +	{ CCI_REG8(0x0305), 0x32 },
-> +	{ CCI_REG8(0x0306), 0x00 },
-> +	{ CCI_REG8(0x0325), 0x3b },
-> +	{ CCI_REG8(0x3002), 0x21 },
-> +	{ CCI_REG8(0x3016), 0x72 },
-> +	{ CCI_REG8(0x301e), 0xb4 },
-> +	{ CCI_REG8(0x301f), 0xd0 },
-> +	{ CCI_REG8(0x3021), 0x03 },
-> +	{ CCI_REG8(0x3022), 0x01 },
-> +	{ CCI_REG8(0x3107), 0xa1 },
-> +	{ CCI_REG8(0x3108), 0x7d },
-> +	{ CCI_REG8(0x3109), 0xfc },
-> +	{ CCI_REG8(0x3500), 0x00 },
-> +	{ CCI_REG8(0x3501), 0x07 },
-> +	{ CCI_REG8(0x3502), 0xb6 },
-> +	{ CCI_REG8(0x3503), 0x88 },
-> +	{ CCI_REG8(0x3508), 0x00 },
-> +	{ CCI_REG8(0x3509), 0x80 },
-> +	{ CCI_REG8(0x350a), 0x04 },
-> +	{ CCI_REG8(0x350b), 0x00 },
-> +	{ CCI_REG8(0x350c), 0x00 },
-> +	{ CCI_REG8(0x350d), 0x80 },
-> +	{ CCI_REG8(0x350e), 0x04 },
-> +	{ CCI_REG8(0x350f), 0x00 },
-> +	{ CCI_REG8(0x3510), 0x00 },
-> +	{ CCI_REG8(0x3511), 0x00 },
-> +	{ CCI_REG8(0x3512), 0x20 },
-> +	{ CCI_REG8(0x3600), 0x4d },
-> +	{ CCI_REG8(0x3601), 0x08 },
-> +	{ CCI_REG8(0x3610), 0x87 },
-> +	{ CCI_REG8(0x3611), 0x24 },
-> +	{ CCI_REG8(0x3614), 0x4c },
-> +	{ CCI_REG8(0x3620), 0x0c },
-> +	{ CCI_REG8(0x3632), 0x80 },
-> +	{ CCI_REG8(0x3633), 0x00 },
-> +	{ CCI_REG8(0x3636), 0xcc },
-> +	{ CCI_REG8(0x3637), 0x27 },
-> +	{ CCI_REG8(0x3660), 0x00 },
-> +	{ CCI_REG8(0x3662), 0x10 },
-> +	{ CCI_REG8(0x3665), 0x00 },
-> +	{ CCI_REG8(0x3666), 0x00 },
-> +	{ CCI_REG8(0x366a), 0x14 },
-> +	{ CCI_REG8(0x3670), 0x0b },
-> +	{ CCI_REG8(0x3671), 0x0b },
-> +	{ CCI_REG8(0x3672), 0x0b },
-> +	{ CCI_REG8(0x3673), 0x0b },
-> +	{ CCI_REG8(0x3678), 0x2b },
-> +	{ CCI_REG8(0x367a), 0x11 },
-> +	{ CCI_REG8(0x367b), 0x11 },
-> +	{ CCI_REG8(0x367c), 0x11 },
-> +	{ CCI_REG8(0x367d), 0x11 },
-> +	{ CCI_REG8(0x3681), 0xff },
-> +	{ CCI_REG8(0x3682), 0x86 },
-> +	{ CCI_REG8(0x3683), 0x44 },
-> +	{ CCI_REG8(0x3684), 0x24 },
-> +	{ CCI_REG8(0x3685), 0x00 },
-> +	{ CCI_REG8(0x368a), 0x00 },
-> +	{ CCI_REG8(0x368d), 0x2b },
-> +	{ CCI_REG8(0x368e), 0x2b },
-> +	{ CCI_REG8(0x3690), 0x00 },
-> +	{ CCI_REG8(0x3691), 0x0b },
-> +	{ CCI_REG8(0x3692), 0x0b },
-> +	{ CCI_REG8(0x3693), 0x0b },
-> +	{ CCI_REG8(0x3694), 0x0b },
-> +	{ CCI_REG8(0x369d), 0x68 },
-> +	{ CCI_REG8(0x369e), 0x34 },
-> +	{ CCI_REG8(0x369f), 0x1b },
-> +	{ CCI_REG8(0x36a0), 0x0f },
-> +	{ CCI_REG8(0x36a1), 0x77 },
-> +	{ CCI_REG8(0x36b0), 0x30 },
-> +	{ CCI_REG8(0x36b2), 0x00 },
-> +	{ CCI_REG8(0x36b3), 0x00 },
-> +	{ CCI_REG8(0x36b4), 0x00 },
-> +	{ CCI_REG8(0x36b5), 0x00 },
-> +	{ CCI_REG8(0x36b6), 0x00 },
-> +	{ CCI_REG8(0x36b7), 0x00 },
-> +	{ CCI_REG8(0x36b8), 0x00 },
-> +	{ CCI_REG8(0x36b9), 0x00 },
-> +	{ CCI_REG8(0x36ba), 0x00 },
-> +	{ CCI_REG8(0x36bb), 0x00 },
-> +	{ CCI_REG8(0x36bc), 0x00 },
-> +	{ CCI_REG8(0x36bd), 0x00 },
-> +	{ CCI_REG8(0x36be), 0x00 },
-> +	{ CCI_REG8(0x36bf), 0x00 },
-> +	{ CCI_REG8(0x36c0), 0x01 },
-> +	{ CCI_REG8(0x36c1), 0x00 },
-> +	{ CCI_REG8(0x36c2), 0x00 },
-> +	{ CCI_REG8(0x36c3), 0x00 },
-> +	{ CCI_REG8(0x36c4), 0x00 },
-> +	{ CCI_REG8(0x36c5), 0x00 },
-> +	{ CCI_REG8(0x36c6), 0x00 },
-> +	{ CCI_REG8(0x36c7), 0x00 },
-> +	{ CCI_REG8(0x36c8), 0x00 },
-> +	{ CCI_REG8(0x36c9), 0x00 },
-> +	{ CCI_REG8(0x36ca), 0x0e },
-> +	{ CCI_REG8(0x36cb), 0x0e },
-> +	{ CCI_REG8(0x36cc), 0x0e },
-> +	{ CCI_REG8(0x36cd), 0x0e },
-> +	{ CCI_REG8(0x36ce), 0x0c },
-> +	{ CCI_REG8(0x36cf), 0x0c },
-> +	{ CCI_REG8(0x36d0), 0x0c },
-> +	{ CCI_REG8(0x36d1), 0x0c },
-> +	{ CCI_REG8(0x36d2), 0x00 },
-> +	{ CCI_REG8(0x36d3), 0x08 },
-> +	{ CCI_REG8(0x36d4), 0x10 },
-> +	{ CCI_REG8(0x36d5), 0x10 },
-> +	{ CCI_REG8(0x36d6), 0x00 },
-> +	{ CCI_REG8(0x36d7), 0x08 },
-> +	{ CCI_REG8(0x36d8), 0x10 },
-> +	{ CCI_REG8(0x36d9), 0x10 },
-> +	{ CCI_REG8(0x3701), 0x1d },
-> +	{ CCI_REG8(0x3703), 0x2a },
-> +	{ CCI_REG8(0x3704), 0x05 },
-> +	{ CCI_REG8(0x3709), 0x57 },
-> +	{ CCI_REG8(0x370b), 0x63 },
-> +	{ CCI_REG8(0x3706), 0x28 },
-> +	{ CCI_REG8(0x370a), 0x00 },
-> +	{ CCI_REG8(0x370b), 0x63 },
-> +	{ CCI_REG8(0x370e), 0x0c },
-> +	{ CCI_REG8(0x370f), 0x1c },
-> +	{ CCI_REG8(0x3710), 0x00 },
-> +	{ CCI_REG8(0x3713), 0x00 },
-> +	{ CCI_REG8(0x3714), 0x24 },
-> +	{ CCI_REG8(0x3716), 0x24 },
-> +	{ CCI_REG8(0x371a), 0x1e },
-> +	{ CCI_REG8(0x3724), 0x09 },
-> +	{ CCI_REG8(0x3725), 0xb2 },
-> +	{ CCI_REG8(0x372b), 0x54 },
-> +	{ CCI_REG8(0x3730), 0xe1 },
-> +	{ CCI_REG8(0x3735), 0x80 },
-> +	{ CCI_REG8(0x3739), 0x10 },
-> +	{ CCI_REG8(0x373f), 0xb0 },
-> +	{ CCI_REG8(0x3740), 0x28 },
-> +	{ CCI_REG8(0x3741), 0x21 },
-> +	{ CCI_REG8(0x3742), 0x21 },
-> +	{ CCI_REG8(0x3743), 0x21 },
-> +	{ CCI_REG8(0x3744), 0x63 },
-> +	{ CCI_REG8(0x3745), 0x5a },
-> +	{ CCI_REG8(0x3746), 0x5a },
-> +	{ CCI_REG8(0x3747), 0x5a },
-> +	{ CCI_REG8(0x3748), 0x00 },
-> +	{ CCI_REG8(0x3749), 0x00 },
-> +	{ CCI_REG8(0x374a), 0x00 },
-> +	{ CCI_REG8(0x374b), 0x00 },
-> +	{ CCI_REG8(0x3756), 0x00 },
-> +	{ CCI_REG8(0x3757), 0x0e },
-> +	{ CCI_REG8(0x375d), 0x84 },
-> +	{ CCI_REG8(0x3760), 0x11 },
-> +	{ CCI_REG8(0x3767), 0x08 },
-> +	{ CCI_REG8(0x376f), 0x42 },
-> +	{ CCI_REG8(0x3771), 0x00 },
-> +	{ CCI_REG8(0x3773), 0x01 },
-> +	{ CCI_REG8(0x3774), 0x02 },
-> +	{ CCI_REG8(0x3775), 0x12 },
-> +	{ CCI_REG8(0x3776), 0x02 },
-> +	{ CCI_REG8(0x377b), 0x40 },
-> +	{ CCI_REG8(0x377c), 0x00 },
-> +	{ CCI_REG8(0x377d), 0x0c },
-> +	{ CCI_REG8(0x3782), 0x02 },
-> +	{ CCI_REG8(0x3787), 0x24 },
-> +	{ CCI_REG8(0x378a), 0x01 },
-> +	{ CCI_REG8(0x378d), 0x00 },
-> +	{ CCI_REG8(0x3790), 0x1f },
-> +	{ CCI_REG8(0x3791), 0x58 },
-> +	{ CCI_REG8(0x3795), 0x24 },
-> +	{ CCI_REG8(0x3796), 0x01 },
-> +	{ CCI_REG8(0x3798), 0x40 },
-> +	{ CCI_REG8(0x379c), 0x00 },
-> +	{ CCI_REG8(0x379d), 0x00 },
-> +	{ CCI_REG8(0x379e), 0x00 },
-> +	{ CCI_REG8(0x379f), 0x01 },
-> +	{ CCI_REG8(0x37a1), 0x10 },
-> +	{ CCI_REG8(0x37a6), 0x00 },
-> +	{ CCI_REG8(0x37ab), 0x0e },
-> +	{ CCI_REG8(0x37ac), 0xa0 },
-> +	{ CCI_REG8(0x37be), 0x0a },
-> +	{ CCI_REG8(0x37bf), 0x05 },
-> +	{ CCI_REG8(0x37bb), 0x02 },
-> +	{ CCI_REG8(0x37bf), 0x05 },
-> +	{ CCI_REG8(0x37c2), 0x04 },
-> +	{ CCI_REG8(0x37c4), 0x11 },
-> +	{ CCI_REG8(0x37c5), 0x80 },
-> +	{ CCI_REG8(0x37c6), 0x14 },
-> +	{ CCI_REG8(0x37c7), 0x08 },
-> +	{ CCI_REG8(0x37c8), 0x42 },
-> +	{ CCI_REG8(0x37cd), 0x17 },
-> +	{ CCI_REG8(0x37ce), 0x01 },
-> +	{ CCI_REG8(0x37d8), 0x02 },
-> +	{ CCI_REG8(0x37d9), 0x08 },
-> +	{ CCI_REG8(0x37dc), 0x01 },
-> +	{ CCI_REG8(0x37e0), 0x0c },
-> +	{ CCI_REG8(0x37e1), 0x20 },
-> +	{ CCI_REG8(0x37e2), 0x10 },
-> +	{ CCI_REG8(0x37e3), 0x04 },
-> +	{ CCI_REG8(0x37e4), 0x28 },
-> +	{ CCI_REG8(0x37e5), 0x02 },
-> +	{ CCI_REG8(0x37ef), 0x00 },
-> +	{ CCI_REG8(0x37f4), 0x00 },
-> +	{ CCI_REG8(0x37f5), 0x00 },
-> +	{ CCI_REG8(0x37f6), 0x00 },
-> +	{ CCI_REG8(0x37f7), 0x00 },
-> +	{ CCI_REG8(0x3800), 0x01 },
-> +	{ CCI_REG8(0x3801), 0x30 },
-> +	{ CCI_REG8(0x3802), 0x00 },
-> +	{ CCI_REG8(0x3803), 0x00 },
-> +	{ CCI_REG8(0x3804), 0x0b },
-> +	{ CCI_REG8(0x3805), 0x5f },
-> +	{ CCI_REG8(0x3806), 0x07 },
-> +	{ CCI_REG8(0x3807), 0xa7 },
-> +	{ CCI_REG8(0x3808), 0x0a },
-> +	{ CCI_REG8(0x3809), 0x20 },
-> +	{ CCI_REG8(0x380a), 0x07 },
-> +	{ CCI_REG8(0x380b), 0x98 },
-> +	{ CCI_REG8(0x380c), 0x06 },
-> +	{ CCI_REG8(0x380d), 0xd0 },
-> +	{ CCI_REG8(0x380e), 0x07 },
-> +	{ CCI_REG8(0x380f), 0xd6 },
-> +	{ CCI_REG8(0x3810), 0x00 },
-> +	{ CCI_REG8(0x3811), 0x08 },
-> +	{ CCI_REG8(0x3812), 0x00 },
-> +	{ CCI_REG8(0x3813), 0x08 },
-> +	{ CCI_REG8(0x3814), 0x01 },
-> +	{ CCI_REG8(0x3815), 0x01 },
-> +	{ CCI_REG8(0x3816), 0x01 },
-> +	{ CCI_REG8(0x3817), 0x01 },
-> +	{ CCI_REG8(0x3818), 0x00 },
-> +	{ CCI_REG8(0x3819), 0x00 },
-> +	{ CCI_REG8(0x381a), 0x00 },
-> +	{ CCI_REG8(0x381b), 0x01 },
-> +	{ CCI_REG8(0x3820), 0x88 },
-> +	{ CCI_REG8(0x3821), 0x00 },
-> +	{ CCI_REG8(0x3822), 0x12 },
-> +	{ CCI_REG8(0x3823), 0x08 },
-> +	{ CCI_REG8(0x3824), 0x00 },
-> +	{ CCI_REG8(0x3825), 0x20 },
-> +	{ CCI_REG8(0x3826), 0x00 },
-> +	{ CCI_REG8(0x3827), 0x08 },
-> +	{ CCI_REG8(0x3829), 0x03 },
-> +	{ CCI_REG8(0x382a), 0x00 },
-> +	{ CCI_REG8(0x382b), 0x00 },
-> +	{ CCI_REG8(0x3832), 0x08 },
-> +	{ CCI_REG8(0x3838), 0x00 },
-> +	{ CCI_REG8(0x3839), 0x00 },
-> +	{ CCI_REG8(0x383a), 0x00 },
-> +	{ CCI_REG8(0x383b), 0x00 },
-> +	{ CCI_REG8(0x383d), 0x01 },
-> +	{ CCI_REG8(0x383e), 0x00 },
-> +	{ CCI_REG8(0x383f), 0x00 },
-> +	{ CCI_REG8(0x3843), 0x00 },
-> +	{ CCI_REG8(0x3880), 0x16 },
-> +	{ CCI_REG8(0x3881), 0x00 },
-> +	{ CCI_REG8(0x3882), 0x08 },
-> +	{ CCI_REG8(0x389a), 0x00 },
-> +	{ CCI_REG8(0x389b), 0x00 },
-> +	{ CCI_REG8(0x38a2), 0x02 },
-> +	{ CCI_REG8(0x38a3), 0x02 },
-> +	{ CCI_REG8(0x38a4), 0x02 },
-> +	{ CCI_REG8(0x38a5), 0x02 },
-> +	{ CCI_REG8(0x38a7), 0x04 },
-> +	{ CCI_REG8(0x38b8), 0x02 },
-> +	{ CCI_REG8(0x3c80), 0x3e },
-> +	{ CCI_REG8(0x3c86), 0x01 },
-> +	{ CCI_REG8(0x3c87), 0x02 },
-> +	{ CCI_REG8(0x389c), 0x00 },
-> +	{ CCI_REG8(0x3ca2), 0x0c },
-> +	{ CCI_REG8(0x3d85), 0x1b },
-> +	{ CCI_REG8(0x3d8c), 0x01 },
-> +	{ CCI_REG8(0x3d8d), 0xe2 },
-> +	{ CCI_REG8(0x3f00), 0xcb },
-> +	{ CCI_REG8(0x3f03), 0x08 },
-> +	{ CCI_REG8(0x3f9e), 0x07 },
-> +	{ CCI_REG8(0x3f9f), 0x04 },
-> +	{ CCI_REG8(0x4000), 0xf3 },
-> +	{ CCI_REG8(0x4002), 0x00 },
-> +	{ CCI_REG8(0x4003), 0x40 },
-> +	{ CCI_REG8(0x4008), 0x02 },
-> +	{ CCI_REG8(0x4009), 0x0d },
-> +	{ CCI_REG8(0x400a), 0x01 },
-> +	{ CCI_REG8(0x400b), 0x00 },
-> +	{ CCI_REG8(0x4040), 0x00 },
-> +	{ CCI_REG8(0x4041), 0x07 },
-> +	{ CCI_REG8(0x4090), 0x14 },
-> +	{ CCI_REG8(0x40b0), 0x01 },
-> +	{ CCI_REG8(0x40b1), 0x01 },
-> +	{ CCI_REG8(0x40b2), 0x30 },
-> +	{ CCI_REG8(0x40b3), 0x04 },
-> +	{ CCI_REG8(0x40b4), 0xe8 },
-> +	{ CCI_REG8(0x40b5), 0x01 },
-> +	{ CCI_REG8(0x40b7), 0x07 },
-> +	{ CCI_REG8(0x40b8), 0xff },
-> +	{ CCI_REG8(0x40b9), 0x00 },
-> +	{ CCI_REG8(0x40ba), 0x00 },
-> +	{ CCI_REG8(0x4300), 0xff },
-> +	{ CCI_REG8(0x4301), 0x00 },
-> +	{ CCI_REG8(0x4302), 0x0f },
-> +	{ CCI_REG8(0x4303), 0x20 },
-> +	{ CCI_REG8(0x4304), 0x20 },
-> +	{ CCI_REG8(0x4305), 0x83 },
-> +	{ CCI_REG8(0x4306), 0x21 },
-> +	{ CCI_REG8(0x430d), 0x00 },
-> +	{ CCI_REG8(0x4505), 0xc4 },
-> +	{ CCI_REG8(0x4506), 0x00 },
-> +	{ CCI_REG8(0x4507), 0x60 },
-> +	{ CCI_REG8(0x4803), 0x00 },
-> +	{ CCI_REG8(0x4809), 0x8e },
-> +	{ CCI_REG8(0x480e), 0x00 },
-> +	{ CCI_REG8(0x4813), 0x00 },
-> +	{ CCI_REG8(0x4814), 0x2a },
-> +	{ CCI_REG8(0x481b), 0x40 },
-> +	{ CCI_REG8(0x481f), 0x30 },
-> +	{ CCI_REG8(0x4825), 0x34 },
-> +	{ CCI_REG8(0x4829), 0x64 },
-> +	{ CCI_REG8(0x4837), 0x12 },
-> +	{ CCI_REG8(0x484b), 0x07 },
-> +	{ CCI_REG8(0x4883), 0x36 },
-> +	{ CCI_REG8(0x4885), 0x03 },
-> +	{ CCI_REG8(0x488b), 0x00 },
-> +	{ CCI_REG8(0x4d06), 0x01 },
-> +	{ CCI_REG8(0x4e00), 0x2a },
-> +	{ CCI_REG8(0x4e0d), 0x00 },
-> +	{ CCI_REG8(0x5000), 0xf9 },
-> +	{ CCI_REG8(0x5001), 0x09 },
-> +	{ CCI_REG8(0x5004), 0x00 },
-> +	{ CCI_REG8(0x5005), 0x0e },
-> +	{ CCI_REG8(0x5036), 0x00 },
-> +	{ CCI_REG8(0x5080), 0x04 },
-> +	{ CCI_REG8(0x5082), 0x00 },
-> +	{ CCI_REG8(0x5180), 0x00 },
-> +	{ CCI_REG8(0x5181), 0x10 },
-> +	{ CCI_REG8(0x5182), 0x01 },
-> +	{ CCI_REG8(0x5183), 0xdf },
-> +	{ CCI_REG8(0x5184), 0x02 },
-> +	{ CCI_REG8(0x5185), 0x6c },
-> +	{ CCI_REG8(0x5189), 0x48 },
-> +	{ CCI_REG8(0x520a), 0x03 },
-> +	{ CCI_REG8(0x520b), 0x0f },
-> +	{ CCI_REG8(0x520c), 0x3f },
-> +	{ CCI_REG8(0x580b), 0x03 },
-> +	{ CCI_REG8(0x580d), 0x00 },
-> +	{ CCI_REG8(0x580f), 0x00 },
-> +	{ CCI_REG8(0x5820), 0x00 },
-> +	{ CCI_REG8(0x5821), 0x00 },
-> +	{ CCI_REG8(0x3222), 0x03 },
-> +	{ CCI_REG8(0x3208), 0x06 },
-> +	{ CCI_REG8(0x3701), 0x1d },
-> +	{ CCI_REG8(0x37ab), 0x01 },
-> +	{ CCI_REG8(0x3790), 0x21 },
-> +	{ CCI_REG8(0x38be), 0x00 },
-> +	{ CCI_REG8(0x3791), 0x5a },
-> +	{ CCI_REG8(0x37bf), 0x1c },
-> +	{ CCI_REG8(0x3610), 0x37 },
-> +	{ CCI_REG8(0x3208), 0x16 },
-> +	{ CCI_REG8(0x3208), 0x07 },
-> +	{ CCI_REG8(0x3701), 0x1d },
-> +	{ CCI_REG8(0x37ab), 0x0e },
-> +	{ CCI_REG8(0x3790), 0x21 },
-> +	{ CCI_REG8(0x38be), 0x00 },
-> +	{ CCI_REG8(0x3791), 0x5a },
-> +	{ CCI_REG8(0x37bf), 0x0a },
-> +	{ CCI_REG8(0x3610), 0x87 },
-> +	{ CCI_REG8(0x3208), 0x17 },
-> +	{ CCI_REG8(0x3208), 0x08 },
-> +	{ CCI_REG8(0x3701), 0x1d },
-> +	{ CCI_REG8(0x37ab), 0x0e },
-> +	{ CCI_REG8(0x3790), 0x21 },
-> +	{ CCI_REG8(0x38be), 0x00 },
-> +	{ CCI_REG8(0x3791), 0x5a },
-> +	{ CCI_REG8(0x37bf), 0x0a },
-> +	{ CCI_REG8(0x3610), 0x87 },
-> +	{ CCI_REG8(0x3208), 0x18 },
-> +	{ CCI_REG8(0x3208), 0x09 },
-> +	{ CCI_REG8(0x3701), 0x1d },
-> +	{ CCI_REG8(0x37ab), 0x0e },
-> +	{ CCI_REG8(0x3790), 0x28 },
-> +	{ CCI_REG8(0x38be), 0x00 },
-> +	{ CCI_REG8(0x3791), 0x63 },
-> +	{ CCI_REG8(0x37bf), 0x0a },
-> +	{ CCI_REG8(0x3610), 0x87 },
-> +	{ CCI_REG8(0x3208), 0x19 },
-> +};
-
-If you can go the extra mile and document some of these registers like in the
-imx219 driver, that would be nice!
-
-Reviewed-by: Mehdi Djait <mehdi.djait@linux.intel.com>
-
---
-Kind Regards
-Mehdi Djait
