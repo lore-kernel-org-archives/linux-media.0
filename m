@@ -1,54 +1,54 @@
 Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6D67F2F49EC
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8FE892F5492
 	for <linux-media@vger.kernel.org>; Fri, 19 Dec 2025 09:58:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1766138321; cv=none; b=uIAzgrh9igui2q8lGo88ENlRUaYbYp85vRPMhubIp7GUKFyiILea9epLWtLrMwJX5X5LWtN/pWhPwzNztczOnpaXNETI9IPGC/7djmqMn7OhXup6MDZS8q6u83gbevApEG3yl2bzHG9KPl4RC2FB1vViCfxcs+iYYHmkX1hUjm0=
+	t=1766138321; cv=none; b=KYWQKtr7JX0Tt3gHm2fQ89YZHqaMAUqzm8PeZAt9el6/b8iEvHFdVTCf1aCuzzDeqFMVKLQaeowrYaaCEHwb9+3RNdpJYDz9I/SkPqF/8eQ19/zA4kcpiPdKivgnLh63/MQym8224X88eBooSc51mfmPOCVVz7cUfteFae5thZo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1766138321; c=relaxed/simple;
-	bh=hiXOv+a298U6PB4qaWZUNE+2c2NsLnFUImG695+hPJU=;
+	bh=lakatMwLuiUGM/200WhL8SUhz6xRcSamUgWk1KEoGeo=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=b5QDc3E8hy5uhBrdB+dfm9w0sYmOnJIQVr5s6abxbdKJ3P3ZWQtx+DEOxZ1ZbI3HEPwcgeybdQgKcwj7v4TDtmHaa6mJ+7/LygfoBHsI0ZpN9mqEatmEw8nXn3lfKjnNzF4fGecHQFx3aXch0UnQxRSu2vV/XuNUUkqevRK7sz8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=M4UbCddB; arc=none smtp.client-ip=198.175.65.14
+	 MIME-Version; b=IysuYb6iKH9u1g4woYdNMRDEvPBcjvJMuDQzLymNunTQclFml55pp100VTmLajBzLYhgdSYuIcGPWznP2qm25mkeuMQ65bbGOr46C7ZljQvYmvHrA9sPzgpbsLmZuEze9kQFGH7jjwo0EJVkGpU54Jv+fellzX+V6FMmHQUfKPk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=hgZniDmW; arc=none smtp.client-ip=198.175.65.14
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="M4UbCddB"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="hgZniDmW"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
   t=1766138319; x=1797674319;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=hiXOv+a298U6PB4qaWZUNE+2c2NsLnFUImG695+hPJU=;
-  b=M4UbCddBZHxWD8r8yytdB2IZMeNxjX1n1GFF5+s+HTq5o3tRH1mtw5Rx
-   sHxnCxdXTVRGI0PRcTKZHjls7TKporNskdOb9DkwM51/pcC8poRDgQO1T
-   YLMk87gcF7FlhtsxPPSP6GPzyhmpbpgYphWDSPooe4Iy4En0wQ3zPVevh
-   dMBvqYoqfXhZGiIiheRbOonoHjDO6reMC9udzLsnCoNBd5/0rZHt6YmV4
-   og1U+CAst6DxODdTC9J84NE8CNf/Nx+mU810MiWSqsV1h7Cnfm7i1umg3
-   XFqwAdUtWm+8uuEvGXR129Bj5e1GuHfY2VZYXoJcM8NMws1ndGbFAOIB1
+  bh=lakatMwLuiUGM/200WhL8SUhz6xRcSamUgWk1KEoGeo=;
+  b=hgZniDmWluZZMFyRCMyKv5AEDYrv41FfmzuNvcf1mzBccJ7T6w5qA3TD
+   xrETUXd95cZEqdQp2gRYmJ4Rtef/ScltZkD0YoHr4hmAzAmK0YIzkVIuE
+   STA7zIq/RX2UtgFLPHEshffp9YqnO6j3tq7a/WsJADJUhV1qbAPPapMMi
+   ixK3h3/6HSqOpDKi8jmuJ4zqa32362Ytefqah/mcsf9vcpgRoL/y7ddjO
+   x7zNaxdOUGKrSP0h+lmRZGYxOIkvWi/OsxN3ezQLNoLOWIdMka9YMLpnr
+   sFLzHhgQX+VMxyt/wwDwj1++/WhPkXmVTaaatUm9f1z69gfymIAX2sJzt
    A==;
-X-CSE-ConnectionGUID: VJFY/81ATGaXSooj+gstVQ==
-X-CSE-MsgGUID: LYZcoFWzT3CVX1uck1QeMA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11646"; a="71945161"
+X-CSE-ConnectionGUID: 8hPk6gB8QmipHpyM3znpNg==
+X-CSE-MsgGUID: PdfGmDdAQ8qJmw0gFunDLg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11646"; a="71945159"
 X-IronPort-AV: E=Sophos;i="6.21,161,1763452800"; 
-   d="scan'208";a="71945161"
+   d="scan'208";a="71945159"
 Received: from orviesa006.jf.intel.com ([10.64.159.146])
-  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Dec 2025 01:58:37 -0800
-X-CSE-ConnectionGUID: sXzcB6gaQHSTL2VApU3NAA==
-X-CSE-MsgGUID: A5mMc+WbSX60Yh6Ss9VAcQ==
+  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Dec 2025 01:58:34 -0800
+X-CSE-ConnectionGUID: KzkU+mhmQ4yz5M8TnZDKUA==
+X-CSE-MsgGUID: B3UkKNwZSH6rdchR1OfR0g==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.21,161,1763452800"; 
-   d="scan'208";a="197973388"
+   d="scan'208";a="197973376"
 Received: from rvuia-mobl.ger.corp.intel.com (HELO kekkonen.fi.intel.com) ([10.245.244.226])
-  by orviesa006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Dec 2025 01:58:36 -0800
+  by orviesa006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Dec 2025 01:58:33 -0800
 Received: from punajuuri.localdomain (unknown [192.168.240.130])
-	by kekkonen.fi.intel.com (Postfix) with ESMTP id 094EC121DAA;
+	by kekkonen.fi.intel.com (Postfix) with ESMTP id 019FA121DA4;
 	Fri, 19 Dec 2025 11:58:31 +0200 (EET)
 Received: from sailus by punajuuri.localdomain with local (Exim 4.98.2)
 	(envelope-from <sakari.ailus@linux.intel.com>)
-	id 1vWXFl-0000000BsRk-2zWL;
+	id 1vWXFl-0000000BsRY-2mox;
 	Fri, 19 Dec 2025 11:58:29 +0200
 Organization: Intel Finland Oy - BIC 0357606-4 - c/o Alberga Business Park, 6 krs, Bertel Jungin Aukio 5, 02600 Espoo
 From: Sakari Ailus <sakari.ailus@linux.intel.com>
@@ -57,9 +57,9 @@ Cc: bingbu.cao@linux.intel.com,
 	tian.shu.qiu@intel.com,
 	antti.laakso@linux.intel.com,
 	mehdi.djait@linux.intel.com
-Subject: [PATCH 06/13] media: ipu6: Don't check pipeline in stream_start
-Date: Fri, 19 Dec 2025 11:58:22 +0200
-Message-ID: <20251219095829.2830843-7-sakari.ailus@linux.intel.com>
+Subject: [PATCH 03/13] media: ipu6: Remove redundant driver data checks
+Date: Fri, 19 Dec 2025 11:58:19 +0200
+Message-ID: <20251219095829.2830843-4-sakari.ailus@linux.intel.com>
 X-Mailer: git-send-email 2.47.3
 In-Reply-To: <20251219095829.2830843-1-sakari.ailus@linux.intel.com>
 References: <20251219095829.2830843-1-sakari.ailus@linux.intel.com>
@@ -71,39 +71,44 @@ List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-A pipeline exists when start_streaming has returned so the check for
-start_streaming_called is equivalent to having media_pipeline. Use
-vb2_start_streaming_called() to perform the check.
+Both runtime PM resume and suspend callbacks check whether the driver's
+data is set for the device. This is done in probe(); drop the redundant
+checks.
 
 Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
 ---
- drivers/media/pci/intel/ipu6/ipu6-isys-queue.c | 6 ++----
- 1 file changed, 2 insertions(+), 4 deletions(-)
+ drivers/media/pci/intel/ipu6/ipu6-isys.c | 9 +--------
+ 1 file changed, 1 insertion(+), 8 deletions(-)
 
-diff --git a/drivers/media/pci/intel/ipu6/ipu6-isys-queue.c b/drivers/media/pci/intel/ipu6/ipu6-isys-queue.c
-index fdf41b3cf60e..dcad6aafee29 100644
---- a/drivers/media/pci/intel/ipu6/ipu6-isys-queue.c
-+++ b/drivers/media/pci/intel/ipu6/ipu6-isys-queue.c
-@@ -355,8 +355,6 @@ static void buf_queue(struct vb2_buffer *vb)
- 		vb2_buffer_to_ipu6_isys_video_buffer(vvb);
- 	struct ipu6_isys_buffer *ib = &ivb->ib;
- 	struct device *dev = &av->isys->adev->auxdev.dev;
--	struct media_pipeline *media_pipe =
--		media_entity_pipeline(&av->vdev.entity);
- 	struct ipu6_fw_isys_frame_buff_set_abi *buf = NULL;
- 	struct ipu6_isys_stream *stream = av->stream;
- 	struct ipu6_isys_buffer_list bl;
-@@ -374,8 +372,8 @@ static void buf_queue(struct vb2_buffer *vb)
- 	list_add(&ib->head, &aq->incoming);
- 	spin_unlock_irqrestore(&aq->lock, flags);
+diff --git a/drivers/media/pci/intel/ipu6/ipu6-isys.c b/drivers/media/pci/intel/ipu6/ipu6-isys.c
+index eb45544a9f05..4855eeb24980 100644
+--- a/drivers/media/pci/intel/ipu6/ipu6-isys.c
++++ b/drivers/media/pci/intel/ipu6/ipu6-isys.c
+@@ -857,9 +857,6 @@ static int isys_runtime_pm_resume(struct device *dev)
+ 	unsigned long flags;
+ 	int ret;
  
--	if (!media_pipe || !vb->vb2_queue->start_streaming_called) {
--		dev_dbg(dev, "media pipeline is not ready for %s\n",
-+	if (!vb2_start_streaming_called(vb->vb2_queue)) {
-+		dev_dbg(dev, "start_streaming hasn't been called yet on %s\n",
- 			av->vdev.name);
- 		return;
- 	}
+-	if (!isys)
+-		return 0;
+-
+ 	ret = ipu6_mmu_hw_init(adev->mmu);
+ 	if (ret)
+ 		return ret;
+@@ -884,13 +881,9 @@ static int isys_runtime_pm_resume(struct device *dev)
+ static int isys_runtime_pm_suspend(struct device *dev)
+ {
+ 	struct ipu6_bus_device *adev = to_ipu6_bus_device(dev);
+-	struct ipu6_isys *isys;
++	struct ipu6_isys *isys = dev_get_drvdata(dev);
+ 	unsigned long flags;
+ 
+-	isys = dev_get_drvdata(dev);
+-	if (!isys)
+-		return 0;
+-
+ 	spin_lock_irqsave(&isys->power_lock, flags);
+ 	isys->power = 0;
+ 	spin_unlock_irqrestore(&isys->power_lock, flags);
 -- 
 2.47.3
 
