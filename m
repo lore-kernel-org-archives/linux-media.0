@@ -1,220 +1,165 @@
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DB65430DD1A;
-	Mon, 22 Dec 2025 10:00:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2FFF82FE04E
+	for <linux-media@vger.kernel.org>; Mon, 22 Dec 2025 10:05:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1766397615; cv=none; b=AbouyyYzBRmfUASk+ZQcnEJa+wFhHy6cjjgFxzPB+9qI56TeZrQNpUVAsgwDfrL0Vhwl6pFEWMI8A84L68b85iZ0R4uBS7XxRO5wrZMbYicPnEuqbrrFtLXsDCElczO8x9ezkufO2svadaxORcfnZxQA25OgvvX9bxW0Yspg5ME=
+	t=1766397904; cv=none; b=LZujyvlXbgeim43Tc3kD7sVkTbWndfDs2qo76oJCUb9gUqMtRhd8bNPq62eeK0ArA2H2yTAxc49BTFn9yNI1B1kwTA9rfxKlKI7IHxf2ZcXQ5s+aBpZoxLjNP/NbigQWz5V7jArzfPTZ44wBAzlbVvlbPYf+sR02nT6UdylnoS4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1766397615; c=relaxed/simple;
-	bh=Cz3nyorbx/6nHeP3KH78ms1oC3DTt7rz5FBTkFNgMAo=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=k6/BEQ3/zoUPPKNJlKGQf9eeCtsiPNBT9akEYUQtIRGZl4wQCFM63S6Lh8nF4l864dgpIoRGeptmdJ9+sQJp8l9twjsUgcDAAwAurwKeO8+yk9f+4SL/stzp9uUSvuPnOS220mCJAwRhXjqdhbqj0/Wiq6fiNnk63iISfAk27Tk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=SuJtGtDT; arc=none smtp.client-ip=205.220.168.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+	s=arc-20240116; t=1766397904; c=relaxed/simple;
+	bh=TnVIu1G583zix3qS76hXzhAhRv2T1aMP8Tr2wtuwX6s=;
+	h=Subject:To:Cc:References:From:Message-ID:Date:MIME-Version:
+	 In-Reply-To:Content-Type; b=ulAMHjl5O+rBvXWoVc0rqdVw8ljmx04/a4SSOMFXosrdvTHC6rAljLWLb1CjDyMJp+FmhrRFnND6sAv9vIXz9fmeYJs+QAWsRzABVUG5T4Gig+ynXUraa9Zd5DKvIlcL0XxOY/lefPDB9HJqRj+M0MY1rhpGl7wFj9o7Y74gjK4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=bgvw0Zwe; arc=none smtp.client-ip=192.198.163.14
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="SuJtGtDT"
-Received: from pps.filterd (m0279862.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 5BM7Yvjm3762876;
-	Mon, 22 Dec 2025 10:00:04 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	p58K4XZOqz0oNtNa5uRPf+AR9hdFFuWFEc5K2o4vlmM=; b=SuJtGtDTQgOfgmgt
-	Od5ysDhJRimyfYPSTbVIoVGzumlw2MfHG/05fRSKnpiaGryJK1BZtFpGxw9u/cw9
-	gVe7oi1LPxGSj00w+ydsvZpQp+qlRdVrPHxgn1jiwcladats3Q7psGQXAEh9VYMq
-	UQC0iJuf2yeimDYiXddJORlvOCt5fkl43j6th+CWwpLKxW/jdXI/wGJrbqkIgzKm
-	b67DcnOiKEg0qdCFwsoLLKhzqd0G6NYUHKKiablzGvbxgv26a2BjzjSacTP4Dl60
-	u6uWhV63Af72xnrm4cV9x77t7NIfikxeEstlRKdP9588TWf6XK67OUrGdl0R0QgD
-	zSl4MQ==
-Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4b5mru4jur-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 22 Dec 2025 10:00:04 +0000 (GMT)
-Received: from nalasex01c.na.qualcomm.com (nalasex01c.na.qualcomm.com [10.47.97.35])
-	by NALASPPMTA02.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 5BMA02ts011294
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 22 Dec 2025 10:00:03 GMT
-Received: from hu-nihalkum-hyd.qualcomm.com (10.80.80.8) by
- nalasex01c.na.qualcomm.com (10.47.97.35) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.2562.17; Mon, 22 Dec 2025 01:59:56 -0800
-From: Nihal Kumar Gupta <quic_nihalkum@quicinc.com>
-To: <bryan.odonoghue@linaro.org>, <mchehab@kernel.org>, <robh@kernel.org>,
-        <krzk+dt@kernel.org>, <conor+dt@kernel.org>, <andersson@kernel.org>,
-        <konradybcio@kernel.org>, <hverkuil-cisco@xs4all.nl>,
-        <cros-qcom-dts-watchers@chromium.org>, <catalin.marinas@arm.com>,
-        <will@kernel.org>
-CC: <linux-arm-kernel@lists.infradead.org>, <quic_svankada@quicinc.com>,
-        <linux-media@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        Ravi Shankar
-	<quic_rshankar@quicinc.com>,
-        Vishal Verma <quic_vishverm@quicinc.com>,
-        Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>
-Subject: [PATCH v8 5/5] arm64: dts: qcom: monaco-evk-camera: Add DT overlay
-Date: Mon, 22 Dec 2025 15:29:14 +0530
-Message-ID: <20251222095914.1995041-6-quic_nihalkum@quicinc.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20251222095914.1995041-1-quic_nihalkum@quicinc.com>
-References: <20251222095914.1995041-1-quic_nihalkum@quicinc.com>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="bgvw0Zwe"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1766397902; x=1797933902;
+  h=subject:to:cc:references:from:message-id:date:
+   mime-version:in-reply-to:content-transfer-encoding;
+  bh=TnVIu1G583zix3qS76hXzhAhRv2T1aMP8Tr2wtuwX6s=;
+  b=bgvw0ZwehsFZL7EdwVXG0tsl+liM2HuGG4oJBTQjjG/gtPeNu7qpU72Q
+   +kGStrp3Vy5SI1Jiii96qf80YxSyuYCpezJGpx9QaznmsZX6Eb/SrBLZF
+   JpkxuAjhBZPypeYeb9unI85YgsJXKe/QCRHUl4MrkySdaaOSbeHHR1tt/
+   jz4Cv+C99F0FMQJjz4q9S/Awc3npLtHX6n7t+yqhvfns3d8ZH+li5SI0d
+   g0i8uoPJcdoTXE0IAWTS+IMeNJIeIoqxki0zA8C86vCzYneoeAtP7Jtw4
+   JWrEPKVs0zzGk0Je/vsrV3ZHQ3TppgBtWSFHQ3btyetNM6u6v2so2/cib
+   g==;
+X-CSE-ConnectionGUID: 5431kgw0SBu2GgChZqKIsw==
+X-CSE-MsgGUID: 8s1SgPzuS8WEPaT1oSFBSA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11649"; a="68296116"
+X-IronPort-AV: E=Sophos;i="6.21,167,1763452800"; 
+   d="scan'208";a="68296116"
+Received: from fmviesa003.fm.intel.com ([10.60.135.143])
+  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Dec 2025 02:05:02 -0800
+X-CSE-ConnectionGUID: meL5y6FJT0Gk8XuFAkxEUA==
+X-CSE-MsgGUID: Db2esa7bSCiZVc/XTy1hZA==
+X-ExtLoop1: 1
+Received: from ipu5-build.bj.intel.com (HELO [10.238.153.130]) ([10.238.153.130])
+  by fmviesa003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Dec 2025 02:05:00 -0800
+Subject: Re: [PATCH v2 1/4] media: staging/ipu7: ignore interrupts when device
+ is suspended
+To: Sakari Ailus <sakari.ailus@linux.intel.com>, bingbu.cao@intel.com
+Cc: linux-media@vger.kernel.org, antti.laakso@linux.intel.com,
+ mehdi.djait@linux.intel.com
+References: <20251222070629.2018807-1-bingbu.cao@intel.com>
+ <20251222070629.2018807-2-bingbu.cao@intel.com>
+ <aUkEvwTNjfcNtysn@kekkonen.localdomain>
+From: Bingbu Cao <bingbu.cao@linux.intel.com>
+Message-ID: <fc34210b-9c55-618b-5fbe-9fd98ea46fb5@linux.intel.com>
+Date: Mon, 22 Dec 2025 17:56:25 +0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01c.na.qualcomm.com (10.47.97.35)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUxMjIyMDA5MCBTYWx0ZWRfXygVga24SYgwJ
- +gBz9anhGc44tFrd6no4mcivtlmrutINROZWjelxBezYqSxg1g/GPrFBiPgiK0C/kDrXPJVK/1Z
- BdxrgDLLcjMZ4pAk3mL2iOlxly2Wy0Pre8PjyJjeQ8hUElfOFhTIQdqjPHP/MDzLE9GNjzJYu4s
- S8xPupQB6amrshh7sQxXtmIE8ySB32S1pvXHjHzS7fJSqTXO10MJddgT5fDH5fVna+EvnJV32iI
- nreFrNN8YZgupcEWOODeGsqfgMfSlcYLigkBmSRbIp6y5Ns/c+beq6AN0vSgGMtz9QzmR2wXGS/
- yBu+sVE30VZeLk0eoIBfbnakjKB6bfZxOSEdrui5oupUndSLszov6y9sTG0plFXfyB19uAnYaKy
- oDslBQdzALenQwykArVS01E0LAidf9gpD9elwPjsv11sDIPnuv6lUI8D/68+cgmYN9Kl0yrGB/U
- ohNw+9MAyRVtwUnby1A==
-X-Authority-Analysis: v=2.4 cv=VMnQXtPX c=1 sm=1 tr=0 ts=694916a4 cx=c_pps
- a=ouPCqIW2jiPt+lZRy3xVPw==:117 a=ouPCqIW2jiPt+lZRy3xVPw==:17
- a=GEpy-HfZoHoA:10 a=wP3pNCr1ah4A:10 a=VkNPw1HP01LnGYTKEx00:22
- a=COk6AnOGAAAA:8 a=KKAkSRfTAAAA:8 a=8jGGn9Z0z0XTtIQmd1MA:9
- a=TjNXssC_j7lpFel5tvFf:22 a=cvBusfyB2V15izCimMoJ:22
-X-Proofpoint-ORIG-GUID: dXfqHyJxh4-odQKNpFrY19Wku_c5FNji
-X-Proofpoint-GUID: dXfqHyJxh4-odQKNpFrY19Wku_c5FNji
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.9,FMLib:17.12.100.49
- definitions=2025-12-21_05,2025-12-19_02,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- clxscore=1015 malwarescore=0 phishscore=0 suspectscore=0 lowpriorityscore=0
- spamscore=0 adultscore=0 priorityscore=1501 impostorscore=0 bulkscore=0
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.22.0-2512120000 definitions=main-2512220090
+In-Reply-To: <aUkEvwTNjfcNtysn@kekkonen.localdomain>
+Content-Type: text/plain; charset=windows-1252
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 
-Monaco EVK board does not include a camera sensor in its default hardware
-configuration. Introducing a device tree overlay to support optional
-integration of the IMX577 sensor via CSIPHY1.
+Sakari,
 
-Camera reset is handled through an I2C expander, and power is enabled
-via TLMM GPIO74.
+Thanks for the review.
 
-An example media-ctl pipeline for the imx577 is:
+On 12/22/25 4:43 PM, Sakari Ailus wrote:
+> Hi Bingbu,
+> 
+> On Mon, Dec 22, 2025 at 03:06:26PM +0800, bingbu.cao@intel.com wrote:
+>> From: Bingbu Cao <bingbu.cao@intel.com>
+>>
+>> IPU7 devices have shared interrupts with others. In some case when
+>> IPU7 device is suspended, driver get unexpected interrupt and invalid
+>> irq status 0xffffffff from ISR_STATUS and PB LOCAL_STATUS
+>> registers as interrupt is triggered from other device on shared
+>> irq line.
+>>
+>> In order to avoid this issue use pm_runtime_get_if_active() to check
+>> if IPU7 device is resumed, ignore the invalid irq status and use
+>> synchronize_irq() in suspend.
+>>
+>> Cc: Stable@vger.kernel.org
+>> Fixes: b7fe4c0019b1 ("media: staging/ipu7: add Intel IPU7 PCI device driver")
+>> Signed-off-by: Bingbu Cao <bingbu.cao@intel.com>
+>> ---
+>>  drivers/staging/media/ipu7/ipu7-buttress.c | 12 ++++++++++--
+>>  drivers/staging/media/ipu7/ipu7.c          |  4 ++++
+>>  2 files changed, 14 insertions(+), 2 deletions(-)
+>>
+>> diff --git a/drivers/staging/media/ipu7/ipu7-buttress.c b/drivers/staging/media/ipu7/ipu7-buttress.c
+>> index e5707f5e300b..e4328cafe91d 100644
+>> --- a/drivers/staging/media/ipu7/ipu7-buttress.c
+>> +++ b/drivers/staging/media/ipu7/ipu7-buttress.c
+>> @@ -342,14 +342,22 @@ irqreturn_t ipu_buttress_isr(int irq, void *isp_ptr)
+>>  	u32 disable_irqs = 0;
+>>  	u32 irq_status;
+>>  	unsigned int i;
+>> +	int active;
+>>  
+>> -	pm_runtime_get_noresume(dev);
+>> +	active = pm_runtime_get_if_active(dev);
+>> +	if (active <= 0)
+>> +		return IRQ_NONE;
+>>  
+>>  	pb_irq = readl(isp->pb_base + INTERRUPT_STATUS);
+>>  	writel(pb_irq, isp->pb_base + INTERRUPT_STATUS);
+>>  
+>>  	/* check btrs ATS, CFI and IMR errors, BIT(0) is unused for IPU */
+>>  	pb_local_irq = readl(isp->pb_base + BTRS_LOCAL_INTERRUPT_MASK);
+>> +	if (WARN_ON_ONCE(pb_local_irq == 0xffffffff)) {
+>> +		pm_runtime_put_noidle(dev);
+>> +		return IRQ_NONE;
+>> +	}
+>> +
+>>  	if (pb_local_irq & ~BIT(0)) {
+>>  		dev_warn(dev, "PB interrupt status 0x%x local 0x%x\n", pb_irq,
+>>  			 pb_local_irq);
+>> @@ -365,7 +373,7 @@ irqreturn_t ipu_buttress_isr(int irq, void *isp_ptr)
+>>  	}
+>>  
+>>  	irq_status = readl(isp->base + BUTTRESS_REG_IRQ_STATUS);
+>> -	if (!irq_status) {
+>> +	if (!irq_status || WARN_ON_ONCE(irq_status == 0xffffffff)) {
+>>  		pm_runtime_put_noidle(dev);
+>>  		return IRQ_NONE;
+> 
+> Doesn't this apply to the ipu6 driver as well? E.g. on my Alder lake system
+> the interrupt is shared with i801_smbus and processor_thermal_device_pci.
+> It may be no interrupts are generated by those devices at inconvenient
+> times for ipu6, but the ipu driver can't assume that.
 
-media-ctl --reset
-media-ctl -V '"imx577 3-001a":0[fmt:SRGGB10/4056x3040 field:none]'
-media-ctl -V '"msm_csiphy1":0[fmt:SRGGB10/4056x3040]'
-media-ctl -V '"msm_csid0":0[fmt:SRGGB10/4056x3040]'
-media-ctl -V '"msm_vfe0_rdi0":0[fmt:SRGGB10/4056x3040]'
-media-ctl -l '"msm_csiphy1":1->"msm_csid0":0[1]'
-media-ctl -l '"msm_csid0":1->"msm_vfe0_rdi0":0[1]'
-yavta -B capture-mplane -c -I -n 5 -f SRGGB10P -s 4056x3040 -F /dev/video1
+I remember that Stanislaw made a fix for IPU6.
+> 
+> Is the WARN_ON_ONCE() necessary? I'd use dev_warn_once() here if you'd like
+> to write a message to the log.
+>
+I will update that, dev_warn_once() makes more sense.
 
-Signed-off-by: Nihal Kumar Gupta <quic_nihalkum@quicinc.com>
-Co-developed-by: Ravi Shankar <quic_rshankar@quicinc.com>
-Signed-off-by: Ravi Shankar <quic_rshankar@quicinc.com>
-Co-developed-by: Vishal Verma <quic_vishverm@quicinc.com>
-Signed-off-by: Vishal Verma <quic_vishverm@quicinc.com>
-Signed-off-by: Vikram Sharma <quic_vikramsa@quicinc.com>
-Reviewed-by: Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>
-Reviewed-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
----
- arch/arm64/boot/dts/qcom/Makefile             |  4 ++
- .../dts/qcom/monaco-evk-camera-imx577.dtso    | 66 +++++++++++++++++++
- 2 files changed, 70 insertions(+)
- create mode 100644 arch/arm64/boot/dts/qcom/monaco-evk-camera-imx577.dtso
+>>  	}
+>> diff --git a/drivers/staging/media/ipu7/ipu7.c b/drivers/staging/media/ipu7/ipu7.c
+>> index 5cddc09c72bf..6c8c3eea44ac 100644
+>> --- a/drivers/staging/media/ipu7/ipu7.c
+>> +++ b/drivers/staging/media/ipu7/ipu7.c
+>> @@ -2684,6 +2684,10 @@ static void ipu7_pci_reset_done(struct pci_dev *pdev)
+>>   */
+>>  static int ipu7_suspend(struct device *dev)
+>>  {
+>> +	struct pci_dev *pdev = to_pci_dev(dev);
+>> +
+>> +	synchronize_irq(pdev->irq);
+>> +
+>>  	return 0;
+>>  }
+>>  
+> 
 
-diff --git a/arch/arm64/boot/dts/qcom/Makefile b/arch/arm64/boot/dts/qcom/Makefile
-index 76cf0115a00a..5cf72bdff0b6 100644
---- a/arch/arm64/boot/dts/qcom/Makefile
-+++ b/arch/arm64/boot/dts/qcom/Makefile
-@@ -40,6 +40,10 @@ lemans-evk-camera-dtbs	:= lemans-evk.dtb lemans-evk-camera.dtbo
- dtb-$(CONFIG_ARCH_QCOM)	+= lemans-evk-camera-csi1-imx577.dtb
- dtb-$(CONFIG_ARCH_QCOM)	+= lemans-evk-camera.dtb
- dtb-$(CONFIG_ARCH_QCOM)	+= monaco-evk.dtb
-+
-+monaco-evk-camera-imx577-dtbs	:= monaco-evk.dtb monaco-evk-camera-imx577.dtbo
-+dtb-$(CONFIG_ARCH_QCOM)	+= monaco-evk-camera-imx577.dtb
-+
- dtb-$(CONFIG_ARCH_QCOM)	+= msm8216-samsung-fortuna3g.dtb
- dtb-$(CONFIG_ARCH_QCOM)	+= msm8916-acer-a1-724.dtb
- dtb-$(CONFIG_ARCH_QCOM)	+= msm8916-alcatel-idol347.dtb
-diff --git a/arch/arm64/boot/dts/qcom/monaco-evk-camera-imx577.dtso b/arch/arm64/boot/dts/qcom/monaco-evk-camera-imx577.dtso
-new file mode 100644
-index 000000000000..0d5ccd020e6e
---- /dev/null
-+++ b/arch/arm64/boot/dts/qcom/monaco-evk-camera-imx577.dtso
-@@ -0,0 +1,66 @@
-+// SPDX-License-Identifier: BSD-3-Clause
-+/*
-+ * Copyright (c) Qualcomm Technologies, Inc. and/or its subsidiaries.
-+ */
-+
-+/dts-v1/;
-+/plugin/;
-+
-+#include <dt-bindings/clock/qcom,sa8775p-camcc.h>
-+#include <dt-bindings/gpio/gpio.h>
-+
-+&camss {
-+	vdda-phy-supply = <&vreg_l4a>;
-+	vdda-pll-supply = <&vreg_l5a>;
-+
-+	status = "okay";
-+
-+	ports {
-+		#address-cells = <1>;
-+		#size-cells = <0>;
-+
-+		port@1 {
-+			reg = <1>;
-+
-+			csiphy1_ep: endpoint {
-+				data-lanes = <0 1 2 3>;
-+				remote-endpoint = <&imx577_ep1>;
-+			};
-+		};
-+	};
-+};
-+
-+&cci1 {
-+	pinctrl-0 = <&cci1_0_default>;
-+	pinctrl-1 = <&cci1_0_sleep>;
-+
-+	status = "okay";
-+};
-+
-+&cci1_i2c0 {
-+	#address-cells = <1>;
-+	#size-cells = <0>;
-+
-+	camera@1a {
-+		compatible = "sony,imx577";
-+		reg = <0x1a>;
-+
-+		reset-gpios = <&expander2 1 GPIO_ACTIVE_LOW>;
-+		pinctrl-0 = <&cam1_default>;
-+		pinctrl-names = "default";
-+
-+		clocks = <&camcc CAM_CC_MCLK1_CLK>;
-+		assigned-clocks = <&camcc CAM_CC_MCLK1_CLK>;
-+		assigned-clock-rates = <24000000>;
-+
-+		avdd-supply = <&vreg_cam1_2p8>;
-+
-+		port {
-+			imx577_ep1: endpoint {
-+				link-frequencies = /bits/ 64 <600000000>;
-+				data-lanes = <1 2 3 4>;
-+				remote-endpoint = <&csiphy1_ep>;
-+			};
-+		};
-+	};
-+};
 -- 
-2.34.1
-
+Best regards,
+Bingbu Cao
