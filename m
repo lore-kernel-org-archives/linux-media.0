@@ -1,48 +1,48 @@
 Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AFD2FBE5E
-	for <linux-media@vger.kernel.org>; Mon, 22 Dec 2025 02:48:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 03BE32BE7DC
+	for <linux-media@vger.kernel.org>; Mon, 22 Dec 2025 02:48:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1766371692; cv=none; b=px/rHQcUjz2QolU2Wjflqi03SDLxSFjImEmpbMHO4W6UOFxCXRlJeCSHmKQCfupFhHsoTsmEp4x0dnDH+gBn7SUauckl35jlgi/TQYvvWAEQsWHoUqamtGXFFdsPYferCdk4UPfno58F10DOVlzQZmjQle2fwpbfoouwgTZiG+k=
+	t=1766371693; cv=none; b=lPHh24nFfaPuZUpbmw6sbq0wxALKY7EFLv1Wa3FmWO6NuILSf2FH2/8TDxkBm8ooHkKhNVXNel76fFvyUrx+EDLmkXH5AOxeSky6C/ZAJtNanLUgFAHT6tsEKLMBqxFa2BJCoMxPFW2J75RM9VxdXo3VMF1tXoDNb2E9eAZ3mN8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1766371692; c=relaxed/simple;
-	bh=0PSl3LS2TrNiwEFuWD2y6zEF4qz293YpdedYRZf0NgE=;
+	s=arc-20240116; t=1766371693; c=relaxed/simple;
+	bh=1fPBULAvpFS8rUswOx5LQ0Tk0d80hYqs4NCqUSqz3mo=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=P27jOPDfiZs7usJz7OxtR/4EQfkgZZBRaXTt3TSjTljedIHioS1BtRwbSeGRSXh3yOlG2NesyZKaPmCzgutDUU81KeLXkyM2+dpSMQ83+kLj6lCmQTak50Vc+JyHwy/7merNNAYo2PsHqdns1GPYhiu4HmEs9ue3te4wYeiWFE0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=eoLV0voT; arc=none smtp.client-ip=192.198.163.7
+	 MIME-Version; b=LzkLdVDufcq1k3BveBCFhbkfSV8+iH14p2sgQRA7Je04ZcT57RsyAvYLDNoImyfdOiwkWkn83/3wf/wJbca7Ke1ZFYaCKEb2oFB+zuqeCqJq4UYifllsH4PCvmsgLZN+vJex+owFMlXzNsAIauAQOhdqdPF1cmqUeR2/QfceZQg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=BSQaFJac; arc=none smtp.client-ip=192.198.163.7
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="eoLV0voT"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="BSQaFJac"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1766371691; x=1797907691;
+  t=1766371692; x=1797907692;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=0PSl3LS2TrNiwEFuWD2y6zEF4qz293YpdedYRZf0NgE=;
-  b=eoLV0voTT980bNQe17CyYpskSJTHzsSikiyox/u7IEPcMdy9JSPkNWHI
-   lkZC9KP0cbUvj3XvjrXFnM1VG0NF8XkLrS8ZI+CMcX7fJ8B8bmty94r7n
-   /3b67fC9SRfOQadXeR7z/YWWqVdC6qz7CdQN0TTD8WqWZpkXqKozUIYr9
-   fuQLBeCyFkjB/eDmCRnmm5vMLAR3vglsW8Ax28HAJWr2gioPWIZNpAvLN
-   /C6Irkje2NYHwDSp/D2rJ2RnahnVLGEISYPsKjpncXvOqMfxBEJ1ZYpf+
-   AMSTklrt3hOpwq2lGpk+QMJc+tvrTmeNy5ajwP4c+GzNk5Nq/uWIBWyGu
-   w==;
-X-CSE-ConnectionGUID: 2LpyKXg/TtaqBwkw1U0XJA==
-X-CSE-MsgGUID: a8tZJN1uTYmcfywNosMZ7g==
-X-IronPort-AV: E=McAfee;i="6800,10657,11649"; a="93701891"
+  bh=1fPBULAvpFS8rUswOx5LQ0Tk0d80hYqs4NCqUSqz3mo=;
+  b=BSQaFJacTF+irWi/7CySU7swdjzT+jHkBAPismuniSIFoSD1RI0DvA/A
+   3ekM8zgsWn4qPt2SRA6kD65eXU5H+aWOadVozpk/zKr7mJhOMtU+6kMF5
+   txYhKJ736yYXpShZyJLPWSszklCdlgVP6NKr9W84bMlxILgR3NMNqRfAA
+   t9e/YbGLd/KXmclsOA9JIZvoSRKRU//PKy4/AMJygYTS8gt2bspxuQVqH
+   S+G99SVXJnV6f1NakQ/BXH2UlwOj4rDtHvQ3XAdm8gIo/K0mxhDLroQCR
+   z1gYjzMMv46/uPboh0TNgGVIs8N9DASCtkClC/pb1zu7Q+T8qDTy+y/Fa
+   g==;
+X-CSE-ConnectionGUID: b17OW0zvTRafFL6GNPc+ZA==
+X-CSE-MsgGUID: +vpr0AKxT72XOIiDuw0Uag==
+X-IronPort-AV: E=McAfee;i="6800,10657,11649"; a="93701903"
 X-IronPort-AV: E=Sophos;i="6.21,167,1763452800"; 
-   d="scan'208";a="93701891"
+   d="scan'208";a="93701903"
 Received: from orviesa003.jf.intel.com ([10.64.159.143])
-  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Dec 2025 18:48:08 -0800
-X-CSE-ConnectionGUID: 8hzCDPUZS8Ok11h9u1m3Og==
-X-CSE-MsgGUID: VWPDR62NTyu5qhDYey5y+Q==
+  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Dec 2025 18:48:12 -0800
+X-CSE-ConnectionGUID: 6GoB6KBOST24+A6o9VkBpA==
+X-CSE-MsgGUID: rYGCPE06SHafAyhcq5a2vQ==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.21,167,1763452800"; 
-   d="scan'208";a="203545231"
+   d="scan'208";a="203545253"
 Received: from vtg-chrome.bj.intel.com ([172.16.116.150])
-  by orviesa003.jf.intel.com with ESMTP; 21 Dec 2025 18:48:06 -0800
+  by orviesa003.jf.intel.com with ESMTP; 21 Dec 2025 18:48:10 -0800
 From: bingbu.cao@intel.com
 To: linux-media@vger.kernel.org,
 	sakari.ailus@linux.intel.com
@@ -50,9 +50,9 @@ Cc: bingbu.cao@intel.com,
 	bingbu.cao@linux.intel.com,
 	antti.laakso@linux.intel.com,
 	mehdi.djait@linux.intel.com
-Subject: [PATCH 1/4] media: staging/ipu7: ignore interrupts when device is suspended
-Date: Mon, 22 Dec 2025 10:47:59 +0800
-Message-Id: <20251222024802.1253754-2-bingbu.cao@intel.com>
+Subject: [PATCH 3/4] media: ipu7: update CDPHY register settings
+Date: Mon, 22 Dec 2025 10:48:01 +0800
+Message-Id: <20251222024802.1253754-4-bingbu.cao@intel.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20251222024802.1253754-1-bingbu.cao@intel.com>
 References: <20251222024802.1253754-1-bingbu.cao@intel.com>
@@ -66,76 +66,74 @@ Content-Transfer-Encoding: 8bit
 
 From: Bingbu Cao <bingbu.cao@intel.com>
 
-IPU7 devices have shared interrupts with others. In some case when
-IPU7 device is suspended, driver get unexpected interrupt and invalid
-irq status 0xffffffff from ISR_STATUS and PB LOCAL_STATUS
-registers as interrupt is triggered from other device on shared
-irq line.
-
-In order to avoid this issue use pm_runtime_get_if_active() to check
-if IPU7 device is resumed, ignore the invalid irq status and use
-synchronize_irq() in suspend.
+Some CPHY settings needs to updated according to the latest
+guide from SNPS. Program 45ohm for tuning resistance to fix
+CPHY problem and update the ITMINRX and GMODE for CPHY.
 
 Cc: Stable@vger.kernel.org
-Fixes: b7fe4c0019b1 ("media: staging/ipu7: add Intel IPU7 PCI device driver")
+Fixes: a516d36bdc3d ("media: staging/ipu7: add IPU7 input system device driver")
 Signed-off-by: Bingbu Cao <bingbu.cao@intel.com>
 ---
- drivers/staging/media/ipu7/ipu7-buttress.c | 12 ++++++++++--
- drivers/staging/media/ipu7/ipu7.c          |  4 ++++
- 2 files changed, 14 insertions(+), 2 deletions(-)
+ drivers/staging/media/ipu7/ipu7-isys-csi-phy.c | 15 +++++++++++----
+ 1 file changed, 11 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/staging/media/ipu7/ipu7-buttress.c b/drivers/staging/media/ipu7/ipu7-buttress.c
-index e5707f5e300b..e4328cafe91d 100644
---- a/drivers/staging/media/ipu7/ipu7-buttress.c
-+++ b/drivers/staging/media/ipu7/ipu7-buttress.c
-@@ -342,14 +342,22 @@ irqreturn_t ipu_buttress_isr(int irq, void *isp_ptr)
- 	u32 disable_irqs = 0;
- 	u32 irq_status;
- 	unsigned int i;
-+	int active;
+diff --git a/drivers/staging/media/ipu7/ipu7-isys-csi-phy.c b/drivers/staging/media/ipu7/ipu7-isys-csi-phy.c
+index 2d5717883518..75369dd9d9b7 100644
+--- a/drivers/staging/media/ipu7/ipu7-isys-csi-phy.c
++++ b/drivers/staging/media/ipu7/ipu7-isys-csi-phy.c
+@@ -124,6 +124,7 @@ static const struct cdr_fbk_cap_prog_params table7[] = {
+ 	{ 1350, 1589, 4 },
+ 	{ 1590, 1949, 5 },
+ 	{ 1950, 2499, 6 },
++	{ 2500, 3500, 7 },
+ 	{ }
+ };
  
--	pm_runtime_get_noresume(dev);
-+	active = pm_runtime_get_if_active(dev);
-+	if (active <= 0)
-+		return IRQ_NONE;
+@@ -730,7 +731,7 @@ static void ipu7_isys_cphy_config(struct ipu7_isys *isys, u8 id, u8 lanes,
+ 	u16 deass_thresh;
+ 	u16 delay_thresh;
+ 	u16 reset_thresh;
+-	u16 cap_prog = 6U;
++	u16 cap_prog;
+ 	u16 reg;
+ 	u16 val;
+ 	u32 i;
+@@ -838,9 +839,10 @@ static void ipu7_isys_cphy_config(struct ipu7_isys *isys, u8 id, u8 lanes,
+ 		dwc_phy_write_mask(isys, id, reg + 0x400 * i,
+ 				   reset_thresh, 9, 11);
  
- 	pb_irq = readl(isp->pb_base + INTERRUPT_STATUS);
- 	writel(pb_irq, isp->pb_base + INTERRUPT_STATUS);
++	/* Tuning ITMINRX to 2 for CPHY */
+ 	reg = CORE_DIG_CLANE_0_RW_LP_0;
+ 	for (i = 0; i < trios; i++)
+-		dwc_phy_write_mask(isys, id, reg + 0x400 * i, 1, 12, 15);
++		dwc_phy_write_mask(isys, id, reg + 0x400 * i, 2, 12, 15);
  
- 	/* check btrs ATS, CFI and IMR errors, BIT(0) is unused for IPU */
- 	pb_local_irq = readl(isp->pb_base + BTRS_LOCAL_INTERRUPT_MASK);
-+	if (WARN_ON_ONCE(pb_local_irq == 0xffffffff)) {
-+		pm_runtime_put_noidle(dev);
-+		return IRQ_NONE;
-+	}
-+
- 	if (pb_local_irq & ~BIT(0)) {
- 		dev_warn(dev, "PB interrupt status 0x%x local 0x%x\n", pb_irq,
- 			 pb_local_irq);
-@@ -365,7 +373,7 @@ irqreturn_t ipu_buttress_isr(int irq, void *isp_ptr)
- 	}
+ 	reg = CORE_DIG_CLANE_0_RW_LP_2;
+ 	for (i = 0; i < trios; i++)
+@@ -860,7 +862,11 @@ static void ipu7_isys_cphy_config(struct ipu7_isys *isys, u8 id, u8 lanes,
+ 	for (i = 0; i < (lanes + 1); i++) {
+ 		reg = CORE_DIG_IOCTRL_RW_AFE_LANE0_CTRL_2_9 + 0x400 * i;
+ 		dwc_phy_write_mask(isys, id, reg, 4U, 0, 2);
+-		dwc_phy_write_mask(isys, id, reg, 0U, 3, 4);
++		/* Set GMODE to 2 when CPHY >= 1.5Gsps */
++		if (mbps >= 1500)
++			dwc_phy_write_mask(isys, id, reg, 2U, 3, 4);
++		else
++			dwc_phy_write_mask(isys, id, reg, 0U, 3, 4);
  
- 	irq_status = readl(isp->base + BUTTRESS_REG_IRQ_STATUS);
--	if (!irq_status) {
-+	if (!irq_status || WARN_ON_ONCE(irq_status == 0xffffffff)) {
- 		pm_runtime_put_noidle(dev);
- 		return IRQ_NONE;
- 	}
-diff --git a/drivers/staging/media/ipu7/ipu7.c b/drivers/staging/media/ipu7/ipu7.c
-index 5cddc09c72bf..6c8c3eea44ac 100644
---- a/drivers/staging/media/ipu7/ipu7.c
-+++ b/drivers/staging/media/ipu7/ipu7.c
-@@ -2684,6 +2684,10 @@ static void ipu7_pci_reset_done(struct pci_dev *pdev)
-  */
- static int ipu7_suspend(struct device *dev)
- {
-+	struct pci_dev *pdev = to_pci_dev(dev);
-+
-+	synchronize_irq(pdev->irq);
-+
- 	return 0;
- }
+ 		reg = CORE_DIG_IOCTRL_RW_AFE_LANE0_CTRL_2_7 + 0x400 * i;
+ 		dwc_phy_write_mask(isys, id, reg, cap_prog, 10, 12);
+@@ -930,8 +936,9 @@ static int ipu7_isys_phy_config(struct ipu7_isys *isys, u8 id, u8 lanes,
+ 			   7, 12, 14);
+ 	dwc_phy_write_mask(isys, id, CORE_DIG_IOCTRL_RW_AFE_CB_CTRL_2_7,
+ 			   0, 8, 10);
++	/* resistance tuning: 1 for 45ohm, 0 for 50ohm */
+ 	dwc_phy_write_mask(isys, id, CORE_DIG_IOCTRL_RW_AFE_CB_CTRL_2_5,
+-			   0, 8, 8);
++			   1, 8, 8);
  
+ 	if (aggregation)
+ 		phy_mode = isys->csi2[0].phy_mode;
 -- 
 2.34.1
 
