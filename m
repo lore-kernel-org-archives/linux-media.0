@@ -1,212 +1,254 @@
-Received: from mail-yw1-f175.google.com (mail-yw1-f175.google.com [209.85.128.175])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from fhigh-a8-smtp.messagingengine.com (fhigh-a8-smtp.messagingengine.com [103.168.172.159])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8F23826B2AD
-	for <linux-media@vger.kernel.org>; Mon, 22 Dec 2025 14:17:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C55CF2D5C91;
+	Mon, 22 Dec 2025 14:38:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.159
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1766413024; cv=none; b=oWUxnFOnL8adMi1JH7t97C+QboHiihO1txHmQX/OTeuHVpsexUqIAHXVPEZcs1LXdKomgc1ePg90Ao7g/UzfZXQsQZ3c32SgszUFRZAzvyhdVBDy0PboWELemmwL6jZVQrII44t9y2ZMQ8EWMq+NS/M6AIa9R3HHCpanJK6mhtY=
+	t=1766414286; cv=none; b=RXW6P9saxWg2Avl36jjBcNFL0NufCZoz8wd6KM2l5fs+b0T/SSEtzdER4CURlPmgL4orX/huGXyhoZ4Nm3KBawd4i30MwDyqhYAjGmB0gxEzZbeDDDZlU9nJlx6mFRLdiWLzemGDnuWnNArsFS0wMjn3gipAhPb8Zu7BLBoy3uk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1766413024; c=relaxed/simple;
-	bh=ADP0V/e0lB7hrxNre1IA6Ut/hQzma0pk/aLgLdl+oic=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=bU4tAi2eIi7ttkIOGE3Aq68TUx/ESZVPl2VrtY+H+LUCtS+PQPFc1IB/8DCqwVx8N3mSzDY4qMX6Gtm5GbvhyQ7cRAS2VyB4lmRF1MI5Qo9899ZG8S7Ti3lCdZQTIe2RFV8tgMFcQaG6Hh8A3r8szGB+HyXXy7sayFn12WaAWrU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=raspberrypi.com; spf=pass smtp.mailfrom=raspberrypi.com; dkim=pass (2048-bit key) header.d=raspberrypi.com header.i=@raspberrypi.com header.b=VzeRHv7J; arc=none smtp.client-ip=209.85.128.175
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=raspberrypi.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=raspberrypi.com
+	s=arc-20240116; t=1766414286; c=relaxed/simple;
+	bh=eh/VXrH3wk7Uvu8NFrwWCb59xvRePFoO6+fYqR3Q1d8=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=Y8l3s5AX18vaDtYRZXmHCTnUfinNaKfF7bPsVWnJVeeJpjvcYvzqFTXZX01qaAAAk+3onkpRSnBT0Tu3sHwsOLaTKDWG22de6CNhwo5AyMtb+RPZETHLzFAonc1PsYT3JUGfgf0yRMgURv8rEQsbbgM5hxeXWMKJowjYFNrnjcw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=schnwalter.eu; spf=pass smtp.mailfrom=schnwalter.eu; dkim=pass (2048-bit key) header.d=schnwalter.eu header.i=@schnwalter.eu header.b=M80qAdjx; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=YRroF94j; arc=none smtp.client-ip=103.168.172.159
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=schnwalter.eu
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=schnwalter.eu
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=raspberrypi.com header.i=@raspberrypi.com header.b="VzeRHv7J"
-Received: by mail-yw1-f175.google.com with SMTP id 00721157ae682-78c66bdf675so32886787b3.2
-        for <linux-media@vger.kernel.org>; Mon, 22 Dec 2025 06:17:01 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=raspberrypi.com; s=google; t=1766413020; x=1767017820; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=GwY4dLSBmxV8Qa7Uu3Z1V/HTwaemSNvD3NMeFEXkxjs=;
-        b=VzeRHv7Je8k3urI44zezOK9a8DWA05IvcUUa0VZPQdHWtffaFnPFwG164ICh6Xmu2m
-         kVo5Y3XX2nPW/ZmXckspFtH2SFISJv9pEtxKd2zRvLz3S09PKeMvjjQT89cXy1KcrCmQ
-         T2zUgGH+tn/LqUAB6PrnzdQG79J/vrdZVmqtdQ2xDIzKytpBXihumRxwKOJJoH8s6BIs
-         icat5naepRDvwtE5LBt+zFtdD5NS6rDzacfBGSKf2krXi+yMltbG16nw4MyhzjWXg8/Q
-         S0xiVYxnpT5j1ssBd/j5nFNAS+SBb1TYDphC2rkLjZtx1QmbPHXcmymVcHDNJJxpUr6A
-         JLxw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1766413020; x=1767017820;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=GwY4dLSBmxV8Qa7Uu3Z1V/HTwaemSNvD3NMeFEXkxjs=;
-        b=ol+VvU0dlVpSzVO/9ud+d9Vxwg9niJOc/k9UgcZCoGiNdamFfaMhkCyl9Pb+bpxGjx
-         z63B3jvIfJ4I+s1Xsprjo5keTDrJw6W6YNcUV2ZxGMlyuTdIurFHG/BOOn1IfTdn7XC6
-         LKXVyG0Nho27T+PSll4Wgw0NA4gIrLKrzIK2oqGGVUKGGydSEoZfk6hi4BNcCh17zBAM
-         LxEXXL2ukCsNwANpiqII/5Mz4DEivN9DZH30tGFeQEHzUg877WLq3VXMNXYNjYXgC08T
-         awcUeg1XYvu9km2TH5WYRuCgoDPzqn8XxrCM3Jj1a4JjMEHHGoHykILJzSEM4elS7Z5+
-         0/Gg==
-X-Forwarded-Encrypted: i=1; AJvYcCVKqoZzQDkatLkfLR9eW5q/6iqrIkNsepbd+wG2SAeS4NyICfrYmJ1CTzsmsxl95TdEAEUtC8l+DQ0afA==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw/rZARSVCno627xC+IVNdjYWm6YUP8d8rvoPuBOsiSDBIqvBj7
-	Qiq10HExkxiAhggCA4kTty3mWSaoI97bMWc4oJL2uwp0RRIFxX5s34ESeaa024Zlq4ZkwmjDqOC
-	Ouplhx36kX9KkiVChrBDeYsbkyPALlbVxz5f4e977KDiJQZI2BEwE9FU=
-X-Gm-Gg: AY/fxX6Ja92G+OLdVD1UVNgWxSsYJ9/ZxiZE41x8fQbQQBHFmLqYkxjH4NlEJ7R+CJU
-	ydAMLJtwqCIo20fMV1KHqBTPhmB5KLIwNuf2he5nrTOZZNf1kACKLAyyQm+dUK8uDauS6YvykYc
-	9ZhoVdV7C0OVv1/SZKd8OsGhOs1fFb7WnY5hJJOdRxYHon96D53aZcHFoegXDyRmgZ093W/yE+z
-	/Gj3zFy8pS9O3a5I5567bv2vo+UbnKF5KhEiS8U2kfKx/UdwTieRUsp78EED3PjR4ad8N5tIq8g
-	CHjfsyWNTT66+XHiKtLha+vyn1w=
-X-Google-Smtp-Source: AGHT+IGeqCH8UBjWK2+dcoFWbu8LXb1Bgoh6BlDOq/kTeTCnIbaq3/N8NTv8+w2ZbH7GaJV8NJMaU67sVs0Ndqncbu8=
-X-Received: by 2002:a05:690c:f92:b0:786:45ce:9bd3 with SMTP id
- 00721157ae682-78fb4146acbmr98350247b3.34.1766413020423; Mon, 22 Dec 2025
- 06:17:00 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=schnwalter.eu header.i=@schnwalter.eu header.b="M80qAdjx";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="YRroF94j"
+Received: from phl-compute-01.internal (phl-compute-01.internal [10.202.2.41])
+	by mailfhigh.phl.internal (Postfix) with ESMTP id E64C614000B6;
+	Mon, 22 Dec 2025 09:38:03 -0500 (EST)
+Received: from phl-frontend-03 ([10.202.2.162])
+  by phl-compute-01.internal (MEProxy); Mon, 22 Dec 2025 09:38:03 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=schnwalter.eu;
+	 h=cc:cc:content-transfer-encoding:content-type:content-type
+	:date:date:from:from:in-reply-to:in-reply-to:message-id
+	:mime-version:references:reply-to:subject:subject:to:to; s=fm2;
+	 t=1766414283; x=1766500683; bh=MxKVlSFwRYrkWuGtzQgkCWBo4OynWJ7B
+	IJI3FcmxYQk=; b=M80qAdjx/dGsmU0uCodV5ksFvykmh4XFOpar20+QcRknwndo
+	IatTAkzwFxhiEXpCG7tDlxsJqhggyVbpZGNs97L8yhwAHpZ+eHnOgQfAXOhAj9Hp
+	GsEjtQ6hjLDoYhyIsHKcVZxQ+Cxi1b0MzJAWg0dLeYBXb5lF8xz37el6pXoKA14I
+	u0X9+h16sl5ytW4e3Z70Vqdd8lXDN9PobsSBGxYJSAGT4fcHMYxp3rDh2J2ACTPl
+	6bYdo3ZLmdimSOnahoneT9ZuFgOxqjT0nsOGyy/GFmys/W4ZEgpwicOFgcJTYe/E
+	ghmTRxnb7ceG27UuNZ7VY0AasoS9cmzIBPD28g==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to:x-me-proxy
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1766414283; x=
+	1766500683; bh=MxKVlSFwRYrkWuGtzQgkCWBo4OynWJ7BIJI3FcmxYQk=; b=Y
+	RroF94jSdEPz4gsTphA2zBozAn1/frE/zf+qiIJ4hLrUD56mVutftkYHkaou0IrR
+	oG40KakmlP147uzu+RV3+zzzqV1S1jyz+u7jm+0s+FFoNUIzkbvcsz8NOUJvQ3Y/
+	XPiRF8b/78sJhn3QlFOiomRgHp2hRgYf9SNT1Do8jbIiKMB2zrjUHi55kCHhqD43
+	Eq37IQkKzjG3xqNfOmL4cyxLKwZApoYhoqBokt50KKGnrlhZEjfYQW3rEY0e0Mmi
+	nalN0nR1ohNwzYnWSl1eytDJPdOZGD4KbWLnW3Jv1lanT+1l6ZRLQzNrzsYtZJrK
+	/iUt1dZqTmfGOzYRmd++Q==
+X-ME-Sender: <xms:y1dJaeJsFbjAZKzKJTx7mPvNDxQxqGWp-sclUu8k8q7qxGLEsjZIUw>
+    <xme:y1dJaXul-C_8TZcg-vyilwpZfN3vPEWQ-DMPsjlzczTfIFC10xJgqsghmwzQZWsgB
+    O--6Bvk1ChY0w5RdF5fcbL3qxpr5FE0jTw0TjbcfXUo2Sy_1G5btQ>
+X-ME-Received: <xmr:y1dJad-NeU-acD8RZnNYrqNJggxCCOxDJ-p0VPJlTrj6aAqvfpgFzuKDwq4RBTA>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefgedrtddtgdehjedvtdcutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpuffrtefokffrpgfnqfghnecuuegr
+    ihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjug
+    hrpefhfffugggtgffkfhgjvfevofesthejredtredtjeenucfhrhhomhephggrlhhtvghr
+    ucghvghrnhgvrhcuufgthhhnvghiuggvrhcuoegtohhnthgrtghtsehstghhnhifrghlth
+    gvrhdrvghuqeenucggtffrrghtthgvrhhnpefhtdehhfegheetjedthfeigeeltdeghfei
+    udeikeeiffekuddtlefffeekheelfeenucffohhmrghinhepuggvvhhitggvthhrvggvrd
+    horhhgpdhlihhnuhigthhvrdhorhhgnecuvehluhhsthgvrhfuihiivgeptdenucfrrghr
+    rghmpehmrghilhhfrhhomheptghonhhtrggtthesshgthhhnfigrlhhtvghrrdgvuhdpnh
+    gspghrtghpthhtohepuddupdhmohguvgepshhmthhpohhuthdprhgtphhtthhopehrohgs
+    hheskhgvrhhnvghlrdhorhhgpdhrtghpthhtoheptghonhhtrggtthesshgthhhnfigrlh
+    htvghrrdgvuhdprhgtphhtthhopegtohhnohhrodgutheskhgvrhhnvghlrdhorhhgpdhr
+    tghpthhtohepkhhriihkodgutheskhgvrhhnvghlrdhorhhgpdhrtghpthhtohepjhgrtg
+    hophhordhmohhnughisehiuggvrghsohhnsghorghrugdrtghomhdprhgtphhtthhopehk
+    rhiihihsiihtohhfrdhkohiilhhofihskhhisehoshhsrdhquhgrlhgtohhmmhdrtghomh
+    dprhgtphhtthhopehlihhnuhigqdhmvgguihgrsehvghgvrhdrkhgvrhhnvghlrdhorhhg
+    pdhrtghpthhtohepmhgthhgvhhgrsgeskhgvrhhnvghlrdhorhhgpdhrtghpthhtohepsh
+    grkhgrrhhirdgrihhluhhssehlihhnuhigrdhinhhtvghlrdgtohhm
+X-ME-Proxy: <xmx:y1dJaZ2TymLVkvJn9JtnD4bnmVtnAswFG44jBM4U2ByPiwZMxazlag>
+    <xmx:y1dJaaj1NBWv2woQjuVOdDJKn5V0jW0FdorLOrawDy53ujg-tGsTrA>
+    <xmx:y1dJaRYHjBVyypGizsAiVmAcV1xto0Pvyml8VZuBKFUcA12K17OMpw>
+    <xmx:y1dJaeXpNBR97ymZ0eGp1SuhuoJHGlZ7YQMGUhCXkb3P10QUXQdlSQ>
+    <xmx:y1dJad-M-WdQFByb2kjAEmXHGgm8xwxpvmP0KdDLve_N20XUGcB667tA>
+Feedback-ID: i455149b6:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
+ 22 Dec 2025 09:38:01 -0500 (EST)
+From: Walter Werner Schneider <contact@schnwalter.eu>
+Date: Mon, 22 Dec 2025 16:37:10 +0200
+Subject: [PATCH v4 1/2] dt-bindings: media: i2c: Add ov2732 image sensor
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20251222-imx412-v1-1-51c7e724b376@oss.qualcomm.com>
- <aUkLKECix4vohyTB@kekkonen.localdomain> <bbf6dbc9-42b5-4dd6-9346-c8f38e460709@oss.qualcomm.com>
- <CAPY8ntD9GO_Y13K=Ko5kxz-o1edaocJP=Ns50rUheJP0iJ9fNg@mail.gmail.com> <ffa7b849-51da-42f7-be1d-c3c7e1903e6e@oss.qualcomm.com>
-In-Reply-To: <ffa7b849-51da-42f7-be1d-c3c7e1903e6e@oss.qualcomm.com>
-From: Dave Stevenson <dave.stevenson@raspberrypi.com>
-Date: Mon, 22 Dec 2025 14:16:44 +0000
-X-Gm-Features: AQt7F2rp1lTwfmWwe9R0yd38-_1IhZQnrUP41X1Kntj2OmhXo4g2Ddu5R-r6JE8
-Message-ID: <CAPY8ntDAiJcJiixo2mTqcb898UC3AR-+NVPFPS6EtrGoEWKewg@mail.gmail.com>
-Subject: Re: [PATCH] media: i2c: imx412: Extend the power-on waiting time
-To: Wenmeng Liu <wenmeng.liu@oss.qualcomm.com>
-Cc: Sakari Ailus <sakari.ailus@linux.intel.com>, 
-	Mauro Carvalho Chehab <mchehab@kernel.org>, linux-media@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, Wenmeng Liu <quic_wenmliu@quicinc.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20251222-ov2732-driver-v4-1-843652e59990@schnwalter.eu>
+References: <20251222-ov2732-driver-v4-0-843652e59990@schnwalter.eu>
+In-Reply-To: <20251222-ov2732-driver-v4-0-843652e59990@schnwalter.eu>
+To: linux-media@vger.kernel.org, 
+ Jacopo Mondi <jacopo.mondi@ideasonboard.com>, 
+ Mauro Carvalho Chehab <mchehab@kernel.org>, Rob Herring <robh@kernel.org>, 
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+ Conor Dooley <conor+dt@kernel.org>, 
+ Sakari Ailus <sakari.ailus@linux.intel.com>
+Cc: devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ Walter Werner Schneider <contact@schnwalter.eu>, 
+ Krzysztof Kozlowski <krzysztof.kozlowski@oss.qualcomm.com>
+X-Mailer: b4 0.14.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1766414278; l=4030;
+ i=contact@schnwalter.eu; s=20251106; h=from:subject:message-id;
+ bh=eh/VXrH3wk7Uvu8NFrwWCb59xvRePFoO6+fYqR3Q1d8=;
+ b=Cd2/uKgV6cx+BUQUSy7qoFzPk71SeyP9p8j3g4D0bswgvm/kc0pTBntauMpec2qud4TpC1Ged
+ WaeVBGhBzMNChY/C9/0xlrk/p0pkqnIFoG+2w0MGTTelZDD8heH3OE+
+X-Developer-Key: i=contact@schnwalter.eu; a=ed25519;
+ pk=OoafUGtB7zQJLYhKA7ALCjqddXAaem/uP/eb3GGNkTI=
 
-Hi Wenmeng
+Add bindings for OmniVision OV2732 image sensor.
 
-On Mon, 22 Dec 2025 at 12:20, Wenmeng Liu <wenmeng.liu@oss.qualcomm.com> wr=
-ote:
->
->
->
-> On 12/22/2025 8:11 PM, Dave Stevenson wrote:
-> > Hi Wenmeng & Sakari
-> >
-> > On Mon, 22 Dec 2025 at 09:35, Wenmeng Liu <wenmeng.liu@oss.qualcomm.com=
-> wrote:
-> >>
-> >>
-> >>
-> >>
-> >>>>
-> >>>> The Arducam IMX577 module requires a longer reset time than the 1000=
-=C2=B5s
-> >>>> configured in the current driver. Increase the wait time after power=
--on
-> >>>> to ensure proper initialization.
-> >>>
-> >>> Is this somehow specific to the Arducam module? If so, what's there i=
-n the
-> >>> module that requires this?
-> >>>
-> >>
-> >>
-> >> Yes, This issue occurred on the Arducam 22-pin IMX577 module.
-> >> I have tried changing the sequence of regulator, reset, and clock, and
-> >> found that this module must wait a sufficient amount of time after res=
-et
-> >> before registers can be written (10 ms is a safe duration). This issue
-> >> did not occur when using other IMX577 modules.
-> >
-> > Is it the probe that fails, or starting streaming?
-> >
-> > Google has found me a datasheet for IMX577 at [1]. I'm hoping you have
-> > an official datasheet, so do correct the following if that has any
-> > updates.
-> > Section 7-2-2 on page 30 for the startup sequence.
-> >
-> > The sequence is meant to be regulators, INCK, and then XCLR. The
-> > driver does XCLR before clock, so that would appear to be wrong.
-> >
-> > It also states that T6 as the time from XCLR to being able to read the
-> > version register is min 0.6ms, but T7 as the time before you can send
-> > "Streaming Commmand" is min 8ms "To complete reading all parameters
-> > from NVM".
-> > That would be a difference between probe and start_streaming, although
-> > admittedly sending the mode and control setup I2C commands will take
-> > up some of that time.
-> >
-> > Plausibly the other set of modules don't have the NVM programmed and
-> > hence they are ready sooner. Either way I'd say that does mean the
-> > driver currently isn't following the defined power up sequence, and
-> > the patch looks reasonable for IMX577.
-> > However as this is a shared driver does IMX412 have this restriction
-> > too? I can't find a datasheet for that one to check. For the sake of
-> > ~9ms it's not going to make a huge difference though.
-> >
-> >    Dave
-> >
-> > [1] https://en.sunnywale.com/uploadfile/2021/1222/IMX577-AACK-C(Awin).p=
-df
-> >
->
-> Hi Dave,
->
-> this issue appears in the write register when streamon
-> imx412_write_regs.  poweron->streamon.
->
-> static int imx412_start_streaming(struct imx412 *imx412)
-> {
->          const struct imx412_reg_list *reg_list;
->          int ret;
->
->          /* Write sensor mode registers */
->          reg_list =3D &imx412->cur_mode->reg_list;
->          ret =3D imx412_write_regs(imx412, reg_list->regs,
->                                  reg_list->num_of_regs);
->          if (ret) {
->                  dev_err(imx412->dev, "fail to write initial registers\n"=
-);
->                  return ret;
->          }
->
->          /* Setup handler will write actual exposure and gain */
->          ret =3D  __v4l2_ctrl_handler_setup(imx412->sd.ctrl_handler);
->          if (ret) {
->                  dev_err(imx412->dev, "fail to setup handler\n");
->                  return ret;
->          }
->
->          /* Delay is required before streaming*/
->          usleep_range(7400, 8000);
->
->          /* Start streaming */
->          ret =3D imx412_write_reg(imx412, IMX412_REG_MODE_SELECT,
->                                 1, IMX412_MODE_STREAMING);
->          if (ret) {
->                  dev_err(imx412->dev, "fail to start streaming\n");
->                  return ret;
->          }
->
->          return 0;
-> }
->  > but T7 as the time before you can send "Streaming Commmand" is min 8ms=
- "
-> I think the usleep_range(7400, 8000) represents the 8ms duration
-> required by T7.
+Signed-off-by: Walter Werner Schneider <contact@schnwalter.eu>
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@oss.qualcomm.com>
+---
+ .../devicetree/bindings/media/i2c/ovti,ov2732.yaml | 108 +++++++++++++++++++++
+ MAINTAINERS                                        |   6 ++
+ 2 files changed, 114 insertions(+)
 
-I'd missed that one.
-If you've delayed for 10-12ms between coming out of reset and sending
-the first command, then does the Arducam module still require another
-8ms here, or can that be removed as you've already complied with T7?
+diff --git a/Documentation/devicetree/bindings/media/i2c/ovti,ov2732.yaml b/Documentation/devicetree/bindings/media/i2c/ovti,ov2732.yaml
+new file mode 100644
+index 0000000000000000000000000000000000000000..57041d1dc012b88db4bf3eefbd3d1ee96fde777c
+--- /dev/null
++++ b/Documentation/devicetree/bindings/media/i2c/ovti,ov2732.yaml
+@@ -0,0 +1,108 @@
++# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/media/i2c/ovti,ov2732.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: OmniVision OV2732 Image Sensor
++
++maintainers:
++  - Walter Werner Schneider <contact@schnwalter.eu>
++
++description:
++  The OmniVision OV2732 is a 2MP (1920x1080) color CMOS image sensor controlled
++  through an I2C-compatible SCCB bus.
++
++properties:
++  compatible:
++    const: ovti,ov2732
++
++  reg:
++    maxItems: 1
++
++  clocks:
++    items:
++      - description: XVCLK clock
++
++  clock-names:
++    const: xvclk
++
++  avdd-supply:
++    description: Analog Domain Power Supply
++
++  dovdd-supply:
++    description: I/O Domain Power Supply
++
++  dvdd-supply:
++    description: Digital Domain Power Supply
++
++  powerdown-gpios:
++    maxItems: 1
++    description: Reference to the GPIO connected to the pwdn pin. Active low.
++
++  reset-gpios:
++    maxItems: 1
++    description: Reference to the GPIO connected to the reset pin. Active low.
++
++  port:
++    description: MIPI CSI-2 transmitter port
++    $ref: /schemas/graph.yaml#/$defs/port-base
++    additionalProperties: false
++
++    properties:
++      endpoint:
++        $ref: /schemas/media/video-interfaces.yaml#
++        unevaluatedProperties: false
++
++        properties:
++          data-lanes:
++            items:
++              - const: 1
++              - const: 2
++
++        required:
++          - data-lanes
++          - link-frequencies
++
++required:
++  - compatible
++  - reg
++  - clocks
++  - clock-names
++  - avdd-supply
++  - dovdd-supply
++  - dvdd-supply
++  - port
++
++additionalProperties: false
++
++examples:
++  - |
++    #include <dt-bindings/gpio/gpio.h>
++
++    i2c {
++        #address-cells = <1>;
++        #size-cells = <0>;
++
++        ov2732: camera@36 {
++            compatible = "ovti,ov2732";
++            reg = <0x36>;
++            clocks = <&ov2732_clk>;
++            clock-names = "xvclk";
++
++            avdd-supply = <&ov2732_avdd>;
++            dovdd-supply = <&ov2732_dovdd>;
++            dvdd-supply = <&ov2732_dvdd>;
++
++            powerdown-gpios = <&gpio0 13 GPIO_ACTIVE_LOW>;
++            reset-gpios = <&gpio0 8 GPIO_ACTIVE_LOW>;
++
++            port {
++                camera_out: endpoint {
++                  data-lanes = <1 2>;
++                  link-frequencies = /bits/ 64 <360000000>;
++                  remote-endpoint = <&mipi_in_camera>;
++                };
++            };
++        };
++    };
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 5b11839cba9de1e9e43f63787578edd8c429ca39..231d5b8df21bc5f3dc6ee5d765ed4027c9772f9a 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -19308,6 +19308,12 @@ T:	git git://linuxtv.org/media.git
+ F:	Documentation/devicetree/bindings/media/i2c/ovti,ov2685.yaml
+ F:	drivers/media/i2c/ov2685.c
+ 
++OMNIVISION OV2732 SENSOR DRIVER
++M:	Walter Werner Schneider <contact@schnwalter.eu>
++L:	linux-media@vger.kernel.org
++S:	Maintained
++F:	Documentation/devicetree/bindings/media/i2c/ovti,ov2732.yaml
++
+ OMNIVISION OV2735 SENSOR DRIVER
+ M:	Hardevsinh Palaniya <hardevsinh.palaniya@siliconsignals.io>
+ M:	Himanshu Bhavani <himanshu.bhavani@siliconsignals.io>
 
-Have you asked Arducam as to why their module takes longer? I can't
-find an IMX577 module listed on their product pages so presumably it's
-discontinued. There are a few links for a Luxonis Oak DepthAI board
-[1] which is made by Arducam and is using IMX577, so is it that one?
-Generally I've not encountered an issue with Arducam adding any weird
-delay circuits on their sensor boards.
+-- 
+2.51.1
 
-  Dave
-
-[1] https://shop.luxonis.com/products/oak-ffc-imx577-m12
-
-> Thanks,
-> Wenmeng
->
->
