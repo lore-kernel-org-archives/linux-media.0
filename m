@@ -1,33 +1,33 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5164F31AA90;
-	Thu, 25 Dec 2025 10:36:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C41233126A9;
+	Thu, 25 Dec 2025 10:36:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1766658988; cv=none; b=f5l94G1DIHSLUnWPW1jtrhuFwmCTTbuHXKL2Dq8og20HhAX8nTzvBG4jRgxR/Rr/ZU2XeMqtu3zGiTPvPK16KU3a3UkXhWMCjKfBumjvm7jwzyZdz0HujjWwedrQ77CTmmO4ejjdpsFOTMHp/U5X6l10ky66egimOMasy82dEcA=
+	t=1766658987; cv=none; b=CuhJwt72VfyUjHYPD+rpvoPFI65WhjS9Xeok10B+yNAGMvTyq2carsi4m/zHWZ7DNZsLX8amX2R07jUGuAqghgkYTxuP6RFxncnehwUxOoD8GG/RDYrbEGYJ0lmhWatjDBnlACzbEXhmwzgA3FV7CX8KpV1QBog/8wkkc1Gtutk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1766658988; c=relaxed/simple;
-	bh=Wnej8lp3sfTvoHmjM9oQ6EDAn3bLLsAcYX0vOVkdUxk=;
+	s=arc-20240116; t=1766658987; c=relaxed/simple;
+	bh=ubywY0Cd6f05tTAqgCRIM7FpmCrB3B8Rsio5nl4gyuc=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=WMJPR1G+3XNQfis8y4fjkC91fF3F06pLuuGfMbcDBhgGg5K7JUPs/mw1o8CiAlbUONfmGUCdcU4KXiJG5pwIISXC56z/IOVDu9NwCNu2o5X8aeQBImNUqZ/IX587W0cVQMO1PWP20hUcsVwOuOI0yHvxJ+fSjvdElTOAa0uWUeA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Vb+uaqns; arc=none smtp.client-ip=10.30.226.201
+	 MIME-Version; b=lnFwJFFdtFediGnFDNlntb3T9z28B/5XxUOIiCUEIPJknQvORLDpAXKcAoBHIH7oHKDoclRlFNacGQxXi4+rbeaTNPXs+3RWUXmuh9Pu00/Ag4IsqodjHt/lHbiTGPE+D1Q4tOWg7sszYp7gHSg2tzQqFRc+ZdGcZaAJwn0azHs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kq1QTjvk; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Vb+uaqns"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 018FDC4CEF1;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kq1QTjvk"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 06F97C4AF0C;
 	Thu, 25 Dec 2025 10:36:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1766658985;
-	bh=Wnej8lp3sfTvoHmjM9oQ6EDAn3bLLsAcYX0vOVkdUxk=;
+	bh=ubywY0Cd6f05tTAqgCRIM7FpmCrB3B8Rsio5nl4gyuc=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=Vb+uaqnsr6r6Zd5qTv3gI+ZXKEqtL/T9SFOPcODTMtlPjoTvhKfaMrp/8eoA4pvif
-	 Ln0qXh3V1t9rof7jqhZ7MK8DLg20Gku6GdeGlNb4Mj+cfRzEqpYnvWxxJwNxLJmCPw
-	 Xm08rjFFXcd8j5Es3JHYMC5PI403BkbvL+FfNKjcMHlYHBKGcYNVzO+fnfNitcAvn7
-	 J00ahNSy4goKsohUZSR0zTRPPow00qYJCVYpH8W04vviDPnR1L45jjGNOT6PfI40iI
-	 JUZl8v7te/PouRKN47jnfQDa9YnQmUnP2qUDX8IhE5TYpWCksuQJE51gJZhFC6O8YL
-	 iQzY8Ga3X9Rjw==
+	b=kq1QTjvkZYgk/ImDvp5YiKcucNu6g05gsVwqUC3LdnhLrxiI/nfUgzKIvI/TRpPeT
+	 6mqyUz5cOSTiwA1YuuRfJKkKbX8pz0x0oWhurq2FCb/4Yg9G787cjDvd8WeKTN1kJ5
+	 nfCOQWshjvudaVTwpIKPqvXqd3bA5rlsNhSi2d4LAc/Jdj6Kp3S1PBJ987vZcqeEPG
+	 h2/QFpGg7rS+krL/gjDEICEYhShK11jMLxe5rjpzV+8gA6zNbb9zrCS8PspIB2TmLl
+	 xCaxf/A8OSme7k8wYxZftpap2foRuxo+/2TgFAjrHrIk5bbfrVb63PCNVuPFj4BG/T
+	 cY4m6p3JJQ+3A==
 Received: by wens.tw (Postfix, from userid 1000)
-	id 54BFC5FA9D; Thu, 25 Dec 2025 18:36:22 +0800 (CST)
+	id 661295FEC0; Thu, 25 Dec 2025 18:36:22 +0800 (CST)
 From: Chen-Yu Tsai <wens@kernel.org>
 To: Rob Herring <robh@kernel.org>,
 	Krzysztof Kozlowski <krzk+dt@kernel.org>,
@@ -42,10 +42,11 @@ Cc: devicetree@vger.kernel.org,
 	linux-gpio@vger.kernel.org,
 	linux-media@vger.kernel.org,
 	linux-arm-kernel@lists.infradead.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH 1/4] dt-bindings: media: sun4i-a10-video-engine: Add interconnect properties
-Date: Thu, 25 Dec 2025 18:36:12 +0800
-Message-ID: <20251225103616.3203473-2-wens@kernel.org>
+	linux-kernel@vger.kernel.org,
+	Hans de Goede <hdegoede@redhat.com>
+Subject: [PATCH 3/4] ARM: dts: allwinner: sun5i-a13-utoo-p66: delete "power-gpios" property
+Date: Thu, 25 Dec 2025 18:36:14 +0800
+Message-ID: <20251225103616.3203473-4-wens@kernel.org>
 X-Mailer: git-send-email 2.47.3
 In-Reply-To: <20251225103616.3203473-1-wens@kernel.org>
 References: <20251225103616.3203473-1-wens@kernel.org>
@@ -57,38 +58,39 @@ List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-The Allwinner video engine sits behind the MBUS that is represented as
-an interconnect.
+The P66's device tree includes the reference design dtsi files, which
+defines a node and properties for the touchpanel in the common design.
+The P66 dts file then overrides all the properties to match its own
+design, but as the touchpanel model is different, a different schema
+is matched. This other schema uses a different name for the GPIO.
 
-Make sure that the interconnect properties are valid in the binding.
+The original submission added the correct GPIO property, but did not
+delete the one inherited from the reference design, causing validation
+errors.
 
-Fixes: d41662e52a03 ("media: dt-bindings: media: allwinner,sun4i-a10-video-engine: Add R40 compatible")
+Explicitly delete the incorrect GPIO property.
+
+Fixes: 2a53aff27236 ("ARM: dts: sun5i: Enable touchscreen on Utoo P66")
 Signed-off-by: Chen-Yu Tsai <wens@kernel.org>
----
- .../media/allwinner,sun4i-a10-video-engine.yaml        | 10 ++++++++++
- 1 file changed, 10 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/media/allwinner,sun4i-a10-video-engine.yaml b/Documentation/devicetree/bindings/media/allwinner,sun4i-a10-video-engine.yaml
-index 541325f900a1..01f2afa023f0 100644
---- a/Documentation/devicetree/bindings/media/allwinner,sun4i-a10-video-engine.yaml
-+++ b/Documentation/devicetree/bindings/media/allwinner,sun4i-a10-video-engine.yaml
-@@ -63,6 +63,16 @@ properties:
-       CMA pool to use for buffers allocation instead of the default
-       CMA pool.
- 
-+  # FIXME: This should be made required eventually once every SoC will
-+  # have the MBUS declared.
-+  interconnects:
-+    maxItems: 1
-+
-+  # FIXME: This should be made required eventually once every SoC will
-+  # have the MBUS declared.
-+  interconnect-names:
-+    const: dma-mem
-+
- required:
-   - compatible
-   - reg
+---
+Cc: Hans de Goede <hdegoede@redhat.com>
+---
+ arch/arm/boot/dts/allwinner/sun5i-a13-utoo-p66.dts | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/arch/arm/boot/dts/allwinner/sun5i-a13-utoo-p66.dts b/arch/arm/boot/dts/allwinner/sun5i-a13-utoo-p66.dts
+index be486d28d04f..428cab5a0e90 100644
+--- a/arch/arm/boot/dts/allwinner/sun5i-a13-utoo-p66.dts
++++ b/arch/arm/boot/dts/allwinner/sun5i-a13-utoo-p66.dts
+@@ -102,6 +102,7 @@ &touchscreen {
+ 	/* The P66 uses a different EINT then the reference design */
+ 	interrupts = <6 9 IRQ_TYPE_EDGE_FALLING>; /* EINT9 (PG9) */
+ 	/* The icn8318 binding expects wake-gpios instead of power-gpios */
++	/delete-property/ power-gpios;
+ 	wake-gpios = <&pio 1 3 GPIO_ACTIVE_HIGH>; /* PB3 */
+ 	touchscreen-size-x = <800>;
+ 	touchscreen-size-y = <480>;
 -- 
 2.47.3
 
