@@ -1,142 +1,134 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.19])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 21E742A1BA;
-	Tue, 30 Dec 2025 13:00:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.19
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6DCC8214813
+	for <linux-media@vger.kernel.org>; Tue, 30 Dec 2025 13:10:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767099630; cv=none; b=ToPTS8Ku7tgLFGhFqczosYzwegy8rdQ5qJiKv4L4z8g9hPV5l/dfgx22C0wNllym3CHLmAXtjyqkCEJH6pQKTXHjIVLcx0Yr+sVIIQMjrKQt93x/2ZJFwJemSkvHCEuE3FUFNRmosJTYN7BH3vgkV2XZOspVomaAp8o2HTF8ztA=
+	t=1767100210; cv=none; b=mTwrFG7h5MRnetSLa6eqW1f1g43COGa1+ZqjRTP/cuStWFXdsicM8v9su6FEySz86VTcK+gq3PoZKH4jIcijFN3poFIqcG03FEK/j6SthtHVHR1oFiIvBUNkSI111uJdHGpOnHvws1eDRwuXM6l+kowzzS5KG9egPsLJ26QgiOc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767099630; c=relaxed/simple;
-	bh=wsaEBEU0KaTY/m1emqX+BkzhdU2R4YEFP/thKfk41pw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ekxHu4L7AgDmXOciRRc+DmOF4pHPGdJPlJ5JO5vcDV9kvg9jjTnBqux6d/Ud1rI4JVMELC3P2TwnUHPGONnTVGTmyEn2rq1gu1osXHCoG+CUyg/wyhPsd3kPRA//CV+n7ur9F+Ggho9Dk4nm6v2+EKmPxtUJ1tj9uWv9ynCN0tU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=fFLv40WJ; arc=none smtp.client-ip=192.198.163.19
+	s=arc-20240116; t=1767100210; c=relaxed/simple;
+	bh=0U+WRwMcIku8TKMGPl19rhckCfREHU4LkFf0GXSAhjo=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=TmpbCbMEDhzlcou+et4J03Y8Lj1Pe7kpxO9dDAoNrNszwELhdPJTOjJKdh0ricTWIY/oD/xNH5mW+Nfr6V4VdYA53IEigCakE7dgji27RDkS+LLVbaw9oc+TTSwul/wXeTZHtAUgOCPlNMhE7tJ+UhvdXUvzkV13eMcaeT1wU4o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=XfyeAqrr; arc=none smtp.client-ip=198.175.65.13
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="fFLv40WJ"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="XfyeAqrr"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1767099628; x=1798635628;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=wsaEBEU0KaTY/m1emqX+BkzhdU2R4YEFP/thKfk41pw=;
-  b=fFLv40WJBsM7Zz+OvgdCaRBn5eijNsCutOrr4esxjoXaJ3AVBCitjKNN
-   74ZOSUTikN0W8+xkwK01Qjc8ceg+QYC+k4kR0ULImrzioptpq7Qxjj+P3
-   Ci1YucQPqfVY6kIQA1k98JoMBbutDeEqY9xHgfwZ50iFne9+V2examks4
-   R/yjupt7HBP5C5edWYhk9Nx9B5ZJkRvpYZKaEhjz0KqG5Do4kooP+nYlz
-   BUoke6nzoYLOrqvwdpDQmek2lQy6ss3RrKYfDEf87nnJil7oHW1IPxnPT
-   DjevMZasXBY5t1jOZXP0i5DbW3VlcU+aMU0Mhof8CU6vyE/mWgol5/q5g
-   Q==;
-X-CSE-ConnectionGUID: 19Wjqtn6S5a3bMo+DeZ/nw==
-X-CSE-MsgGUID: axXC8VRXQHylr6IAIHaaeQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11656"; a="67692122"
+  t=1767100208; x=1798636208;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=0U+WRwMcIku8TKMGPl19rhckCfREHU4LkFf0GXSAhjo=;
+  b=XfyeAqrrGVt408d6QYQyvOW4qBLHfTslbXz7HuUhuX3qUQEmEm+gKqQ9
+   AYr/ARiHMiL7DibsxvGKKUFN6K26Lg7vST4pZoFCPzUImiUf4cPWjdWmC
+   u6SkC21BchHIePzXeEieEf1iTHnPVIZxAIpndEgXQGebOqb1ABpcstcEx
+   7ZqSQr8YuU7OwnvzmYsn3kzMMh/iK0jDehrSlAKflyscooVmFC/NXV8pm
+   n/Tlv4xMv4PV6C9KofJREe9MfBWR2Jj2iNElvHLBBIiL5BbcBKWs5NBof
+   Y+JP1DvfsPEGw1b4jEP3sS3hT/pySHu70SPA0RFe4victishd1PK+QRFP
+   w==;
+X-CSE-ConnectionGUID: tkPZppfrQ5WI0HJupQNu3w==
+X-CSE-MsgGUID: ZRAwz2kxQ6e1e2yk/9Nhcw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11656"; a="79808036"
 X-IronPort-AV: E=Sophos;i="6.21,188,1763452800"; 
-   d="scan'208";a="67692122"
-Received: from fmviesa003.fm.intel.com ([10.60.135.143])
-  by fmvoesa113.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Dec 2025 05:00:28 -0800
-X-CSE-ConnectionGUID: 3lG7u4/1TnedmqZg9w+XQA==
-X-CSE-MsgGUID: Pu3tfONdQ+6kB3Y3btQTbA==
+   d="scan'208";a="79808036"
+Received: from fmviesa002.fm.intel.com ([10.60.135.142])
+  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Dec 2025 05:10:07 -0800
+X-CSE-ConnectionGUID: nouw31KHQPKAbXg9jfgYrQ==
+X-CSE-MsgGUID: RA2u3iNXQwmMAyIOQ7NCAQ==
 X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.21,188,1763452800"; 
+   d="scan'208";a="224710697"
 Received: from egrumbac-mobl6.ger.corp.intel.com (HELO kekkonen.fi.intel.com) ([10.245.245.96])
-  by fmviesa003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Dec 2025 05:00:26 -0800
-Received: from kekkonen.localdomain (localhost [IPv6:::1])
-	by kekkonen.fi.intel.com (Postfix) with SMTP id 176AC11F8E7;
-	Tue, 30 Dec 2025 15:00:34 +0200 (EET)
-Date: Tue, 30 Dec 2025 15:00:34 +0200
+  by fmviesa002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Dec 2025 05:10:06 -0800
+Received: from punajuuri.localdomain (unknown [192.168.240.130])
+	by kekkonen.fi.intel.com (Postfix) with ESMTP id 94AD4121D87;
+	Tue, 30 Dec 2025 15:10:14 +0200 (EET)
+Received: from sailus by punajuuri.localdomain with local (Exim 4.98.2)
+	(envelope-from <sakari.ailus@linux.intel.com>)
+	id 1vaZUL-00000000Jbn-13Ss;
+	Tue, 30 Dec 2025 15:10:13 +0200
 Organization: Intel Finland Oy - BIC 0357606-4 - c/o Alberga Business Park, 6 krs, Bertel Jungin Aukio 5, 02600 Espoo
 From: Sakari Ailus <sakari.ailus@linux.intel.com>
-To: Krzysztof Kozlowski <krzysztof.kozlowski@oss.qualcomm.com>
-Cc: Hans Verkuil <hverkuil@kernel.org>,
-	Mauro Carvalho Chehab <mchehab@kernel.org>,
-	Pavel Machek <pavel@kernel.org>, linux-media@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] media: i2c: Add note to prevent buggy code re-use
-Message-ID: <aVPM8vPySNFMUI5s@kekkonen.localdomain>
-References: <20251230083435.26267-2-krzysztof.kozlowski@oss.qualcomm.com>
- <aVOV2QrFvoCVQSrA@kekkonen.localdomain>
- <462e5ec1-cc26-4003-ac5c-adde2c243959@oss.qualcomm.com>
+To: linux-media@vger.kernel.org
+Cc: bingbu.cao@linux.intel.com,
+	tian.shu.qiu@intel.com,
+	antti.laakso@linux.intel.com,
+	mehdi.djait@linux.intel.com
+Subject: [PATCH v3 01/13] media: ipu6: Ensure stream_mutex is acquired when dealing with node list
+Date: Tue, 30 Dec 2025 15:10:01 +0200
+Message-ID: <20251230131013.75338-2-sakari.ailus@linux.intel.com>
+X-Mailer: git-send-email 2.47.3
+In-Reply-To: <20251230131013.75338-1-sakari.ailus@linux.intel.com>
+References: <20251230131013.75338-1-sakari.ailus@linux.intel.com>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <462e5ec1-cc26-4003-ac5c-adde2c243959@oss.qualcomm.com>
+Content-Transfer-Encoding: 8bit
 
-On Tue, Dec 30, 2025 at 10:35:28AM +0100, Krzysztof Kozlowski wrote:
-> On 30/12/2025 10:05, Sakari Ailus wrote:
-> > Hi Krzysztof,
-> > 
-> > Thanks for the patch.
-> > 
-> > On Tue, Dec 30, 2025 at 09:34:36AM +0100, Krzysztof Kozlowski wrote:
-> >> adv7604 and et8ek8 sensor drivers have mixed up logical and line level
-> >> for reset/powerdown signal.  They call it a reset signal (it indeed
-> >> behaves like that), but drivers assert the reset to operate which is
-> >> clearly incorrect and relies on wrong ACTIVE_HIGH flag in the DTS.
-> >>
-> >> People in discussions copy existing poor code and claim they can repeat
-> >> same mistake, so add a note to prevent that.
-> >>
-> >> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@oss.qualcomm.com>
-> >>
-> >> ---
-> >>
-> >> Similar to my commit 9d108d226224 ("media: i2c: imx: Add note to prevent
-> >> buggy code re-use"). I went through rest of i2c drivers and found only
-> >> these two doing it incorrectly.
-> >> ---
-> >>  drivers/media/i2c/adv7604.c              | 8 +++++++-
-> >>  drivers/media/i2c/et8ek8/et8ek8_driver.c | 4 ++++
-> >>  2 files changed, 11 insertions(+), 1 deletion(-)
-> >>
-> >> diff --git a/drivers/media/i2c/adv7604.c b/drivers/media/i2c/adv7604.c
-> >> index 516553fb17e9..67116a4ef134 100644
-> >> --- a/drivers/media/i2c/adv7604.c
-> >> +++ b/drivers/media/i2c/adv7604.c
-> >> @@ -3453,7 +3453,13 @@ static int configure_regmaps(struct adv76xx_state *state)
-> >>  static void adv76xx_reset(struct adv76xx_state *state)
-> >>  {
-> >>  	if (state->reset_gpio) {
-> >> -		/* ADV76XX can be reset by a low reset pulse of minimum 5 ms. */
-> >> +		/*
-> >> +		 * Note: Misinterpretation of reset assertion - do not re-use
-> >> +		 * this code.  The reset pin is using incorrect (for a reset
-> >> +		 * signal) logical level.
-> >> +		 *
-> >> +		 * ADV76XX can be reset by a low reset pulse of minimum 5 ms.
-> >> +		 */
-> >>  		gpiod_set_value_cansleep(state->reset_gpio, 0);
-> >>  		usleep_range(5000, 10000);
-> >>  		gpiod_set_value_cansleep(state->reset_gpio, 1);
-> >> diff --git a/drivers/media/i2c/et8ek8/et8ek8_driver.c b/drivers/media/i2c/et8ek8/et8ek8_driver.c
-> >> index 2cb7b718782b..50121c3e5b48 100644
-> >> --- a/drivers/media/i2c/et8ek8/et8ek8_driver.c
-> >> +++ b/drivers/media/i2c/et8ek8/et8ek8_driver.c
-> >> @@ -835,6 +835,10 @@ static int et8ek8_power_on(struct et8ek8_sensor *sensor)
-> >>  
-> >>  	udelay(10); /* I wish this is a good value */
-> >>  
-> >> +	/*
-> >> +	 * Note: Misinterpretation of reset assertion - do not re-use this code.
-> >> +	 * The reset pin is using incorrect (for a reset signal) logical level.
-> >> +	 */
-> >>  	gpiod_set_value(sensor->reset, 1);
-> >>  
-> >>  	msleep(5000 * 1000 / sensor->xclk_freq + 1); /* Wait 5000 cycles */
-> > 
-> > Related to the topic, would you be able to comment on the discussion
-> > related to <20251114133822.434171-2-loic.poulain@oss.qualcomm.com>? I
-> > believe you're cc'd, with your @kernel.org address.
-> 
-> I don't have it in my inbox (it's limited to ~10k of messages, so the
-> roll out of inbox after 1 month usually).
+The ipu6 isys driver maintains the list of video buffer queues related to
+a stream (in ipu6 context streams on the same CSI-2 virtual channel) and
+this list is modified through VIDIOC_STREAMON and VIDIOC_STREAMOFF IOCTLs.
+Ensure the common mutex is acquired when accessing the linked list, i.e.
+the isys device context's stream_mutex.
 
-I just bounced the thread to you...
+Add a lockdep assert to ipu6_isys_get_buffer_list() and switch to guard()
+while at it as the error handling becomes more simple this way.
 
+Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
+---
+ drivers/media/pci/intel/ipu6/ipu6-isys-queue.c | 8 +++++---
+ 1 file changed, 5 insertions(+), 3 deletions(-)
+
+diff --git a/drivers/media/pci/intel/ipu6/ipu6-isys-queue.c b/drivers/media/pci/intel/ipu6/ipu6-isys-queue.c
+index aa2cf7287477..8f05987cdb4e 100644
+--- a/drivers/media/pci/intel/ipu6/ipu6-isys-queue.c
++++ b/drivers/media/pci/intel/ipu6/ipu6-isys-queue.c
+@@ -3,6 +3,7 @@
+  * Copyright (C) 2013--2024 Intel Corporation
+  */
+ #include <linux/atomic.h>
++#include <linux/cleanup.h>
+ #include <linux/bug.h>
+ #include <linux/device.h>
+ #include <linux/list.h>
+@@ -201,6 +202,8 @@ static int buffer_list_get(struct ipu6_isys_stream *stream,
+ 	unsigned long flags;
+ 	unsigned long buf_flag = IPU6_ISYS_BUFFER_LIST_FL_INCOMING;
+ 
++	lockdep_assert_held(&stream->mutex);
++
+ 	bl->nbufs = 0;
+ 	INIT_LIST_HEAD(&bl->head);
+ 
+@@ -294,9 +297,8 @@ static int ipu6_isys_stream_start(struct ipu6_isys_video *av,
+ 	struct ipu6_isys_buffer_list __bl;
+ 	int ret;
+ 
+-	mutex_lock(&stream->isys->stream_mutex);
++	guard(mutex)(&stream->isys->stream_mutex);
+ 	ret = ipu6_isys_video_set_streaming(av, 1, bl);
+-	mutex_unlock(&stream->isys->stream_mutex);
+ 	if (ret)
+ 		goto out_requeue;
+ 
+@@ -637,10 +639,10 @@ static void stop_streaming(struct vb2_queue *q)
+ 	mutex_lock(&av->isys->stream_mutex);
+ 	if (stream->nr_streaming == stream->nr_queues && stream->streaming)
+ 		ipu6_isys_video_set_streaming(av, 0, NULL);
++	list_del(&aq->node);
+ 	mutex_unlock(&av->isys->stream_mutex);
+ 
+ 	stream->nr_streaming--;
+-	list_del(&aq->node);
+ 	stream->streaming = 0;
+ 	mutex_unlock(&stream->mutex);
+ 
 -- 
-Sakari Ailus
+2.47.3
+
