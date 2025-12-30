@@ -1,251 +1,232 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7394B2E22AA
-	for <linux-media@vger.kernel.org>; Tue, 30 Dec 2025 10:52:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 03EAB322A;
+	Tue, 30 Dec 2025 11:33:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767091949; cv=none; b=GC4SXdZLJ3pdNWEsrfB0ZAMTMY/MSnDE7Kl7Vf06dCYqFWAljIjkIfIYvoCIkeP9IV7tnRJ7etU9SO8JUu29lNye1Eu54iUxbn1PXcmIPMzv8xCSvvOzxE6quoSUyDfmvmHbnpEpGNyS5v5onxQPVVK93lcqWBu4Ylnt43wRnAI=
+	t=1767094430; cv=none; b=RHYIp7YO2KRFI7thLXeqfBNIy4pjQVVJ9H70Cw1SG+yYp3VePOovXabOGJ2IDr72pe0jIRIBxwehjgPF3Ai0JFwk63zXSQ6iYqIhwW4pYpLhdgOsWdfVic0S919EoRocAAykRIWl+YQn9aWjODteQ0HHyDyPiDWoh1l23ip95Xo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767091949; c=relaxed/simple;
-	bh=fE2My8g3bPqbQcbt3WP62L8w6Mwg60NeJzHWIPyvjUA=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=poG43x2yfyI87pEhHTCl7RAFqdQbm3kfI2CPNQftQciTRjNgfpCjCmjRvyA8XFZK8EtAKo+EDgVimj/tSGulUtF2x32YCrYAyyFDaTTBO0r121xBnvg47eEjVnvw1VhfBahoopr8uIJjKQeJLIuD4uKwXkwAxNePIg/n1L5AZ2A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=gy5T3r2K; arc=none smtp.client-ip=192.198.163.7
+	s=arc-20240116; t=1767094430; c=relaxed/simple;
+	bh=8Vy8cVqw6HmNeCJEQEZyD/S5VG8nBCUbYU8MQraPgIA=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=rCdawgjld7YnI1fxYWqnY6Wu+LWQHQMBFAiM8w68mU8JQO13HQwYoja9JEgvBIIsBUXiEaKabqckA4Qldbr7qXI5gla/+dGG/EdIUxuIrCDf8rBMcLT6J5owzdIObbZvx6OSxGiATt3HNRDlHLPG2igJrSnGdpE0Gc1OrDaBcRE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=IOk7k8w0; arc=none smtp.client-ip=198.175.65.9
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="gy5T3r2K"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="IOk7k8w0"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1767091948; x=1798627948;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=fE2My8g3bPqbQcbt3WP62L8w6Mwg60NeJzHWIPyvjUA=;
-  b=gy5T3r2KCBBXZLgjnsrLjScF77DFpcs9nQDXYeQ0mdRj9nRSguM2Mn/j
-   VEWooQr0KcNuQuHnldV9/dsA3+LOl7mRLNCejLb9MMkmGQChVhUS1sFai
-   ZlGsnr1EGU6vlP8teuFLaSB+IHKt3w0+xmFE5Z/zZje3xo/MEXKXTlQRW
-   D4H4KXhhutEoPEZPXdVwjq26CCGbx03MOw7LBMQD4QerzdyqrTmaJx1hf
-   6JVkzz9Ob7xd+byzcTsfvYmwsrbkC4YF+fZskQFAZReEerWJzqqJOnJNZ
-   e/fumxPLGHLnaYNJCiGCAoq1QS1+cjNsMaVETJ2yQAwKc1QHopl+Q1LOs
+  t=1767094428; x=1798630428;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=8Vy8cVqw6HmNeCJEQEZyD/S5VG8nBCUbYU8MQraPgIA=;
+  b=IOk7k8w0W3C3Qkmr6R7aUtb1cTARe9AO1MsdO4fhOi54tp+HsGFHmnHa
+   Dgu4aFiMqxQZ1pqXt+nG5bL8y2rsSLPQBWHJZZW4GsRtEfpRrWqY4L4Vh
+   35bRwSBuBhLCSRdyoCPTgXbpjfYBX7jQ/vyQpa2DWtYArR3+wbbqt+enW
+   58LNRh/MBiaQaeDMV3C8hJNyOC5iD30c44d6wpPnC6ED4SHjE5xYdF0ba
+   KwCJMudA/T8JA3EcEx7pxGUXUKr5MCY6V9BK3Fd3xvxyOjR5fsYDR9yDG
+   +QwQsp+34JdIvKFSSECyn103dwdp4hwIDGi1RoaC7racxodCUsFM6uB4F
    A==;
-X-CSE-ConnectionGUID: JPInIBbiQsytlVRZPq982g==
-X-CSE-MsgGUID: 0S0iGntBQo2lEAnINHOmnA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11656"; a="94148733"
+X-CSE-ConnectionGUID: IekCfUR9Rhea7kRXLPRQlA==
+X-CSE-MsgGUID: kJ4S7ixGRPy3vzYMV1puQQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11656"; a="91337751"
 X-IronPort-AV: E=Sophos;i="6.21,188,1763452800"; 
-   d="scan'208";a="94148733"
-Received: from orviesa007.jf.intel.com ([10.64.159.147])
-  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Dec 2025 02:52:21 -0800
-X-CSE-ConnectionGUID: hgVPfZ1DS4WFsAp5L45ITg==
-X-CSE-MsgGUID: ep+r4lMvT4WowL7gAkFVHw==
+   d="scan'208";a="91337751"
+Received: from fmviesa005.fm.intel.com ([10.60.135.145])
+  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Dec 2025 03:33:48 -0800
+X-CSE-ConnectionGUID: u01a9WM5TB+SAHPUivj5Lg==
+X-CSE-MsgGUID: gHzmzJXZTjCb5nWRS0AoTw==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.21,188,1763452800"; 
-   d="scan'208";a="201186930"
+   d="scan'208";a="205676778"
 Received: from egrumbac-mobl6.ger.corp.intel.com (HELO kekkonen.fi.intel.com) ([10.245.245.96])
-  by orviesa007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Dec 2025 02:52:19 -0800
-Received: from punajuuri.localdomain (unknown [192.168.240.130])
-	by kekkonen.fi.intel.com (Postfix) with ESMTP id 9A114121E70;
-	Tue, 30 Dec 2025 12:52:23 +0200 (EET)
-Received: from sailus by punajuuri.localdomain with local (Exim 4.98.2)
-	(envelope-from <sakari.ailus@linux.intel.com>)
-	id 1vaXKw-0000000FQYn-1OCz;
-	Tue, 30 Dec 2025 12:52:22 +0200
+  by fmviesa005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Dec 2025 03:33:45 -0800
+Received: from kekkonen.localdomain (localhost [IPv6:::1])
+	by kekkonen.fi.intel.com (Postfix) with ESMTP id 60C26121D81;
+	Tue, 30 Dec 2025 13:33:53 +0200 (EET)
+Date: Tue, 30 Dec 2025 13:33:53 +0200
 Organization: Intel Finland Oy - BIC 0357606-4 - c/o Alberga Business Park, 6 krs, Bertel Jungin Aukio 5, 02600 Espoo
 From: Sakari Ailus <sakari.ailus@linux.intel.com>
-To: linux-media@vger.kernel.org
-Cc: bingbu.cao@linux.intel.com,
-	tian.shu.qiu@intel.com,
-	antti.laakso@linux.intel.com,
-	mehdi.djait@linux.intel.com
-Subject: [PATCH v2 12/13] media: ipu6: Drop custom functions to obtain sd state information
-Date: Tue, 30 Dec 2025 12:52:21 +0200
-Message-ID: <20251230105222.3676928-13-sakari.ailus@linux.intel.com>
-X-Mailer: git-send-email 2.47.3
-In-Reply-To: <20251230105222.3676928-1-sakari.ailus@linux.intel.com>
-References: <20251230105222.3676928-1-sakari.ailus@linux.intel.com>
+To: Wenmeng Liu <wenmeng.liu@oss.qualcomm.com>
+Cc: Dave Stevenson <dave.stevenson@raspberrypi.com>,
+	Mauro Carvalho Chehab <mchehab@kernel.org>,
+	linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+	Wenmeng Liu <quic_wenmliu@quicinc.com>
+Subject: Re: [PATCH] media: i2c: imx412: Extend the power-on waiting time
+Message-ID: <aVO4oX2I-FEuR4WS@kekkonen.localdomain>
+References: <20251222-imx412-v1-1-51c7e724b376@oss.qualcomm.com>
+ <aUkLKECix4vohyTB@kekkonen.localdomain>
+ <bbf6dbc9-42b5-4dd6-9346-c8f38e460709@oss.qualcomm.com>
+ <CAPY8ntD9GO_Y13K=Ko5kxz-o1edaocJP=Ns50rUheJP0iJ9fNg@mail.gmail.com>
+ <ffa7b849-51da-42f7-be1d-c3c7e1903e6e@oss.qualcomm.com>
+ <CAPY8ntDAiJcJiixo2mTqcb898UC3AR-+NVPFPS6EtrGoEWKewg@mail.gmail.com>
+ <88bcd810-872e-4705-91c0-df2a35f4a3b9@oss.qualcomm.com>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <88bcd810-872e-4705-91c0-df2a35f4a3b9@oss.qualcomm.com>
 
-Drop the custom functions that are used to obtain information from the
-sub-device state.
+Hi Wenmeng,
 
-Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
----
- .../media/pci/intel/ipu6/ipu6-isys-queue.c    | 17 ++++++---
- .../media/pci/intel/ipu6/ipu6-isys-subdev.c   | 36 -------------------
- .../media/pci/intel/ipu6/ipu6-isys-subdev.h   |  4 ---
- .../media/pci/intel/ipu6/ipu6-isys-video.c    | 33 +++++++----------
- 4 files changed, 24 insertions(+), 66 deletions(-)
+On Tue, Dec 23, 2025 at 02:19:18PM +0800, Wenmeng Liu wrote:
+> 
+> 
+> On 12/22/2025 10:16 PM, Dave Stevenson wrote:
+> > Hi Wenmeng
+> > 
+> > On Mon, 22 Dec 2025 at 12:20, Wenmeng Liu <wenmeng.liu@oss.qualcomm.com> wrote:
+> > > 
+> > > 
+> > > 
+> > > On 12/22/2025 8:11 PM, Dave Stevenson wrote:
+> > > > Hi Wenmeng & Sakari
+> > > > 
+> > > > On Mon, 22 Dec 2025 at 09:35, Wenmeng Liu <wenmeng.liu@oss.qualcomm.com> wrote:
+> > > > > 
+> > > > > 
+> > > > > 
+> > > > > 
+> > > > > > > 
+> > > > > > > The Arducam IMX577 module requires a longer reset time than the 1000µs
+> > > > > > > configured in the current driver. Increase the wait time after power-on
+> > > > > > > to ensure proper initialization.
+> > > > > > 
+> > > > > > Is this somehow specific to the Arducam module? If so, what's there in the
+> > > > > > module that requires this?
+> > > > > > 
+> > > > > 
+> > > > > 
+> > > > > Yes, This issue occurred on the Arducam 22-pin IMX577 module.
+> > > > > I have tried changing the sequence of regulator, reset, and clock, and
+> > > > > found that this module must wait a sufficient amount of time after reset
+> > > > > before registers can be written (10 ms is a safe duration). This issue
+> > > > > did not occur when using other IMX577 modules.
+> > > > 
+> > > > Is it the probe that fails, or starting streaming?
+> > > > 
+> > > > Google has found me a datasheet for IMX577 at [1]. I'm hoping you have
+> > > > an official datasheet, so do correct the following if that has any
+> > > > updates.
+> > > > Section 7-2-2 on page 30 for the startup sequence.
+> > > > 
+> > > > The sequence is meant to be regulators, INCK, and then XCLR. The
+> > > > driver does XCLR before clock, so that would appear to be wrong.
+> > > > 
+> > > > It also states that T6 as the time from XCLR to being able to read the
+> > > > version register is min 0.6ms, but T7 as the time before you can send
+> > > > "Streaming Commmand" is min 8ms "To complete reading all parameters
+> > > > from NVM".
+> > > > That would be a difference between probe and start_streaming, although
+> > > > admittedly sending the mode and control setup I2C commands will take
+> > > > up some of that time.
+> > > > 
+> > > > Plausibly the other set of modules don't have the NVM programmed and
+> > > > hence they are ready sooner. Either way I'd say that does mean the
+> > > > driver currently isn't following the defined power up sequence, and
+> > > > the patch looks reasonable for IMX577.
+> > > > However as this is a shared driver does IMX412 have this restriction
+> > > > too? I can't find a datasheet for that one to check. For the sake of
+> > > > ~9ms it's not going to make a huge difference though.
+> > > > 
+> > > >     Dave
+> > > > 
+> > > > [1] https://en.sunnywale.com/uploadfile/2021/1222/IMX577-AACK-C(Awin).pdf
+> > > > 
+> > > 
+> > > Hi Dave,
+> > > 
+> > > this issue appears in the write register when streamon
+> > > imx412_write_regs.  poweron->streamon.
+> > > 
+> > > static int imx412_start_streaming(struct imx412 *imx412)
+> > > {
+> > >           const struct imx412_reg_list *reg_list;
+> > >           int ret;
+> > > 
+> > >           /* Write sensor mode registers */
+> > >           reg_list = &imx412->cur_mode->reg_list;
+> > >           ret = imx412_write_regs(imx412, reg_list->regs,
+> > >                                   reg_list->num_of_regs);
+> > >           if (ret) {
+> > >                   dev_err(imx412->dev, "fail to write initial registers\n");
+> > >                   return ret;
+> > >           }
+> > > 
+> > >           /* Setup handler will write actual exposure and gain */
+> > >           ret =  __v4l2_ctrl_handler_setup(imx412->sd.ctrl_handler);
+> > >           if (ret) {
+> > >                   dev_err(imx412->dev, "fail to setup handler\n");
+> > >                   return ret;
+> > >           }
+> > > 
+> > >           /* Delay is required before streaming*/
+> > >           usleep_range(7400, 8000);
+> > > 
+> > >           /* Start streaming */
+> > >           ret = imx412_write_reg(imx412, IMX412_REG_MODE_SELECT,
+> > >                                  1, IMX412_MODE_STREAMING);
+> > >           if (ret) {
+> > >                   dev_err(imx412->dev, "fail to start streaming\n");
+> > >                   return ret;
+> > >           }
+> > > 
+> > >           return 0;
+> > > }
+> > >   > but T7 as the time before you can send "Streaming Commmand" is min 8ms "
+> > > I think the usleep_range(7400, 8000) represents the 8ms duration
+> > > required by T7.
+> > 
+> > I'd missed that one.
+> > If you've delayed for 10-12ms between coming out of reset and sending
+> > the first command, then does the Arducam module still require another
+> > 8ms here, or can that be removed as you've already complied with T7?
+> > 
+> > Have you asked Arducam as to why their module takes longer? I can't
+> > find an IMX577 module listed on their product pages so presumably it's
+> > discontinued. There are a few links for a Luxonis Oak DepthAI board
+> > [1] which is made by Arducam and is using IMX577, so is it that one?
+> > Generally I've not encountered an issue with Arducam adding any weird
+> > delay circuits on their sensor boards.
+> > 
+> >    Dave
+> > 
+> > [1] https://shop.luxonis.com/products/oak-ffc-imx577-m12
+> > 
+> > > Thanks,
+> > > Wenmeng
+> > > 
+> > > 
+> 
+> Hi Dave,
+> 
+> Based on my testing, moving usleep_range(7400, 8000); to the beginning of
+> the imx412_start_streaming function allows the Arducam IMX577 module to work
+> properly. In contrast, other IMX577 sensors do not require this delay. I
+> believe this corresponds to the T7 timing requirement. I have not yet
+> confirmed this with Arducam, and I plan to compare once I receive another
+> type Arducam IMX577 sensor.
 
-diff --git a/drivers/media/pci/intel/ipu6/ipu6-isys-queue.c b/drivers/media/pci/intel/ipu6/ipu6-isys-queue.c
-index 347b5df4813f..622cd28f5cf8 100644
---- a/drivers/media/pci/intel/ipu6/ipu6-isys-queue.c
-+++ b/drivers/media/pci/intel/ipu6/ipu6-isys-queue.c
-@@ -423,7 +423,7 @@ static void buf_queue(struct vb2_buffer *vb)
- 
- static int ipu6_isys_link_fmt_validate(struct ipu6_isys_queue *aq)
- {
--	struct v4l2_mbus_framefmt format;
-+	struct v4l2_mbus_framefmt format, *__format;
- 	struct ipu6_isys_video *av = ipu6_isys_queue_to_video(aq);
- 	struct device *dev = &av->isys->adev->auxdev.dev;
- 	struct media_pad *remote_pad =
-@@ -438,13 +438,20 @@ static int ipu6_isys_link_fmt_validate(struct ipu6_isys_queue *aq)
- 	sd = media_entity_to_v4l2_subdev(remote_pad->entity);
- 	r_stream = ipu6_isys_get_src_stream_by_src_pad(sd, remote_pad->index);
- 
--	ret = ipu6_isys_get_stream_pad_fmt(sd, remote_pad->index, r_stream,
--					   &format);
-+	struct v4l2_subdev_state *state =
-+		v4l2_subdev_lock_and_get_active_state(sd);
- 
--	if (ret) {
-+	__format = v4l2_subdev_state_get_format(state, remote_pad->index,
-+						r_stream);
-+	if (__format)
-+		format = *__format;
-+
-+	v4l2_subdev_unlock_state(state);
-+
-+	if (!__format) {
- 		dev_dbg(dev, "failed to get %s: pad %d, stream:%d format\n",
- 			sd->entity.name, remote_pad->index, r_stream);
--		return ret;
-+		return -EPIPE;
- 	}
- 
- 	if (format.width != ipu6_isys_get_frame_width(av) ||
-diff --git a/drivers/media/pci/intel/ipu6/ipu6-isys-subdev.c b/drivers/media/pci/intel/ipu6/ipu6-isys-subdev.c
-index 869e7d4ba572..dbd6f76a066d 100644
---- a/drivers/media/pci/intel/ipu6/ipu6-isys-subdev.c
-+++ b/drivers/media/pci/intel/ipu6/ipu6-isys-subdev.c
-@@ -265,42 +265,6 @@ static int subdev_set_routing(struct v4l2_subdev *sd,
- 	return v4l2_subdev_set_routing_with_fmt(sd, state, routing, &format);
- }
- 
--int ipu6_isys_get_stream_pad_fmt(struct v4l2_subdev *sd, u32 pad, u32 stream,
--				 struct v4l2_mbus_framefmt *format)
--{
--	struct v4l2_mbus_framefmt *fmt;
--	struct v4l2_subdev_state *state;
--
--	if (!sd || !format)
--		return -EINVAL;
--
--	state = v4l2_subdev_lock_and_get_active_state(sd);
--	fmt = v4l2_subdev_state_get_format(state, pad, stream);
--	if (fmt)
--		*format = *fmt;
--	v4l2_subdev_unlock_state(state);
--
--	return fmt ? 0 : -EINVAL;
--}
--
--int ipu6_isys_get_stream_pad_crop(struct v4l2_subdev *sd, u32 pad, u32 stream,
--				  struct v4l2_rect *crop)
--{
--	struct v4l2_subdev_state *state;
--	struct v4l2_rect *rect;
--
--	if (!sd || !crop)
--		return -EINVAL;
--
--	state = v4l2_subdev_lock_and_get_active_state(sd);
--	rect = v4l2_subdev_state_get_crop(state, pad, stream);
--	if (rect)
--		*crop = *rect;
--	v4l2_subdev_unlock_state(state);
--
--	return rect ? 0 : -EINVAL;
--}
--
- u32 ipu6_isys_get_src_stream_by_src_pad(struct v4l2_subdev *sd, u32 pad)
- {
- 	struct v4l2_subdev_state *state;
-diff --git a/drivers/media/pci/intel/ipu6/ipu6-isys-subdev.h b/drivers/media/pci/intel/ipu6/ipu6-isys-subdev.h
-index 268dfa01e903..35069099c364 100644
---- a/drivers/media/pci/intel/ipu6/ipu6-isys-subdev.h
-+++ b/drivers/media/pci/intel/ipu6/ipu6-isys-subdev.h
-@@ -38,10 +38,6 @@ int ipu6_isys_subdev_enum_mbus_code(struct v4l2_subdev *sd,
- 				    struct v4l2_subdev_mbus_code_enum
- 				    *code);
- u32 ipu6_isys_get_src_stream_by_src_pad(struct v4l2_subdev *sd, u32 pad);
--int ipu6_isys_get_stream_pad_fmt(struct v4l2_subdev *sd, u32 pad, u32 stream,
--				 struct v4l2_mbus_framefmt *format);
--int ipu6_isys_get_stream_pad_crop(struct v4l2_subdev *sd, u32 pad, u32 stream,
--				  struct v4l2_rect *crop);
- int ipu6_isys_subdev_set_routing(struct v4l2_subdev *sd,
- 				 struct v4l2_subdev_state *state,
- 				 enum v4l2_subdev_format_whence which,
-diff --git a/drivers/media/pci/intel/ipu6/ipu6-isys-video.c b/drivers/media/pci/intel/ipu6/ipu6-isys-video.c
-index 141f0e72c5c8..c7f9f888c46d 100644
---- a/drivers/media/pci/intel/ipu6/ipu6-isys-video.c
-+++ b/drivers/media/pci/intel/ipu6/ipu6-isys-video.c
-@@ -455,6 +455,7 @@ static int ipu6_isys_fw_pin_cfg(struct ipu6_isys_video *av,
- {
- 	struct media_pad *src_pad = media_pad_remote_pad_first(&av->pad);
- 	struct v4l2_subdev *sd = media_entity_to_v4l2_subdev(src_pad->entity);
-+	struct v4l2_subdev_state *state = v4l2_subdev_get_locked_active_state(sd);
- 	struct ipu6_fw_isys_input_pin_info_abi *input_pin;
- 	struct ipu6_fw_isys_output_pin_info_abi *output_pin;
- 	struct ipu6_isys_stream *stream = av->stream;
-@@ -464,26 +465,13 @@ static int ipu6_isys_fw_pin_cfg(struct ipu6_isys_video *av,
- 		ipu6_isys_get_isys_format(ipu6_isys_get_format(av), 0);
- 	struct v4l2_rect v4l2_crop;
- 	struct ipu6_isys *isys = av->isys;
--	struct device *dev = &isys->adev->auxdev.dev;
- 	int input_pins = cfg->nof_input_pins++;
- 	int output_pins;
- 	u32 src_stream;
--	int ret;
- 
- 	src_stream = ipu6_isys_get_src_stream_by_src_pad(sd, src_pad->index);
--	ret = ipu6_isys_get_stream_pad_fmt(sd, src_pad->index, src_stream,
--					   &fmt);
--	if (ret < 0) {
--		dev_err(dev, "can't get stream format (%d)\n", ret);
--		return ret;
--	}
--
--	ret = ipu6_isys_get_stream_pad_crop(sd, src_pad->index, src_stream,
--					    &v4l2_crop);
--	if (ret < 0) {
--		dev_err(dev, "can't get stream crop (%d)\n", ret);
--		return ret;
--	}
-+	fmt = *v4l2_subdev_state_get_format(state, src_pad->index, src_stream);
-+	v4l2_crop = *v4l2_subdev_state_get_crop(state, src_pad->index, src_stream);
- 
- 	input_pin = &cfg->input_pins[input_pins];
- 	input_pin->input_res.width = fmt.width;
-@@ -784,13 +772,16 @@ void ipu6_isys_configure_stream_watermark(struct ipu6_isys_video *av,
- 	csi2 = ipu6_isys_subdev_to_csi2(av->stream->asd);
- 	link_freq = ipu6_isys_csi2_get_link_freq(csi2);
- 	if (link_freq > 0) {
-+		struct v4l2_subdev_state *state =
-+			v4l2_subdev_lock_and_get_active_state(&csi2->asd.sd);
-+
- 		lanes = csi2->nlanes;
--		ret = ipu6_isys_get_stream_pad_fmt(&csi2->asd.sd, 0,
--						   av->source_stream, &format);
--		if (!ret) {
--			bpp = ipu6_isys_mbus_code_to_bpp(format.code);
--			pixel_rate = mul_u64_u32_div(link_freq, lanes * 2, bpp);
--		}
-+		format = *v4l2_subdev_state_get_format(state, 0,
-+						       av->source_stream);
-+		bpp = ipu6_isys_mbus_code_to_bpp(format.code);
-+		pixel_rate = mul_u64_u32_div(link_freq, lanes * 2, bpp);
-+
-+		v4l2_subdev_unlock_state(state);
- 	}
- 
- 	av->watermark.pixel_rate = pixel_rate;
+Thanks for investigating this.
+
+Have you checked how long it actually takes elsewhere (where the sensor
+works) before the mode related registers are written (and when they start
+being written) on systems where it actually works? As I²C writes require
+sleeping and depend on a process getting scheduled a large number of times,
+this might play a role here.
+
+These patches might be useful in sensor drivers at large (but won't address
+this problem)
+<URL:https://git.retiisi.eu/?p=~sailus/linux.git;a=shortlog;h=refs/heads/pm-resume-delay>.
+
 -- 
-2.47.3
+Kind regards,
 
+Sakari Ailus
