@@ -1,38 +1,38 @@
 Received: from bali.collaboradmins.com (bali.collaboradmins.com [148.251.105.195])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B665F30DED4;
-	Wed,  7 Jan 2026 10:10:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EE04830FC2A;
+	Wed,  7 Jan 2026 10:10:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.251.105.195
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767780619; cv=none; b=ckZns3qoDIe61zE88qJOlpQDhxoNm9KjpfuY+mYcu3kVbq4mDhxXo9A9r1kxSyIh/ke9ONw02yGgGkFUZPTF1eZrccu0QbeieTqyWHEwEaZLhsNw62U8C1kNJ+nuvdBfWOIuqvsReNi6z7DgVRJouAPj03BrbxLpi1K9S5ou9uM=
+	t=1767780621; cv=none; b=ffb1Cf2P+Om2MBvX+4NAQLGWJl5gyVAnfWcY8uXpbylKYsOv3LbOkPVQsZSLe4JG2Q/hvx4qc7zffGWym2Rlyst63Zr5WMVTHmD9AnrjZAtBAxurBERhr61jZos2HnQoG3x7d0asjuCY5uMBsx5lkzB8e6jGTlhnhc9urLpaNHU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767780619; c=relaxed/simple;
-	bh=heh+k/1ODoaxXv2R5HPjXJm6oybJcbQZVD3EyshC35g=;
+	s=arc-20240116; t=1767780621; c=relaxed/simple;
+	bh=WA6auRFS5Bfnp0uakdsPfWC/OFowwBAKHJjwEBGZtZY=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=ThB9Q/Z/aoooY3SIP3l1RW4iryp7LCApTGTX/W5hY84oKjhJ1aB8j2NNpwYqjYQ0WdEw9Jr+5BoPGP85eU3l/Okb0tcxn4YMEuj2ibLY5GHvQIU4eJJGOYO7+o5uHepFigd7GdkkA/vV8fNsfKcUG+pCr3viWJex898LPZXvXhA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=g3drNsqC; arc=none smtp.client-ip=148.251.105.195
+	 MIME-Version; b=PFFoS4MwmIZkNjhvTgDEBQxptHsmA6XVF4oftAmY7H8c+9zR31FsAo9d5MPYrq0DW7pSey2TS8UHkHB41RCrFL8Q2aGCcQR4Po80ylEWFFIZz4zKMttohqRC6yyPwYoJY48/lHpjdo27Zgb98/hXrtHsebjJSIfgXMET0Gh/b/U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=jmpkTyQh; arc=none smtp.client-ip=148.251.105.195
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="g3drNsqC"
+	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="jmpkTyQh"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1767780616;
-	bh=heh+k/1ODoaxXv2R5HPjXJm6oybJcbQZVD3EyshC35g=;
+	s=mail; t=1767780617;
+	bh=WA6auRFS5Bfnp0uakdsPfWC/OFowwBAKHJjwEBGZtZY=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=g3drNsqCfLOG4CMOxQngKvicV6GqzdiWPcHhxGLuVfk4uGgRmb7pFD9JS3hmjw8Mz
-	 cxCthxs2rq04xvO1hIGiw4q2NQtljENHBaKifBl/tXC6VtpYyaDJUhylHUkMGnKv2o
-	 WaILfC65aUypDXHqxLvXmGf6p/Tpl3uTiAgDrolXsOcyiPITOZMNdIvHBw+SExopnX
-	 UQp2A6SGDG/BH0zpvPMArDny11buqefzjtjSdNvVgj5Uhp02lQWk9mJ15oa42hM5dP
-	 93U/T6cDw6lsscRbGmNTJVOAwIop2GcaLDBcGDeqI2RjHQckJ1XYNJuc4L7bEI149L
-	 HKWn/qY89U8Gg==
+	b=jmpkTyQhF6IjrPhTHQY6R+1A52SAiMX/zCayQz6gJ8yYs+JLLbI3Hmmr/dVBHjbPU
+	 4Fcl+R1uK6E/AJEF0MVvVxFfePQBEROGy7nR9SDExYt8eDywhiJFr81MeUMtP7aXrL
+	 6qqmjA8Bw5posKOtWIjYbzdkmw9uINdiwgxFFWa6+rG5drID8kfTPHHodavUNkzYZE
+	 0P443Wsc8p7/XPLp0NCc5ThRnxfQn8+rOytUGP4AHrRQIJsJzErUBlP2pnGF8KARAn
+	 8j8nmIJSz6q1UodSfXJKTCqoIb3n2O4FZ23Qk0SVOgUSt6dJSCfh430R+R1/YMxRPo
+	 i2GkzHveQkgrQ==
 Received: from benjamin-XPS-13-9310.. (unknown [IPv6:2a01:e0a:120:3210:7e36:2305:d47f:6e43])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
 	(Authenticated sender: benjamin.gaignard)
-	by bali.collaboradmins.com (Postfix) with ESMTPSA id 9D8A717E1514;
-	Wed,  7 Jan 2026 11:10:15 +0100 (CET)
+	by bali.collaboradmins.com (Postfix) with ESMTPSA id D7F2E17E35C6;
+	Wed,  7 Jan 2026 11:10:16 +0100 (CET)
 From: Benjamin Gaignard <benjamin.gaignard@collabora.com>
 To: joro@8bytes.org,
 	will@kernel.org,
@@ -51,11 +51,10 @@ Cc: iommu@lists.linux.dev,
 	linux-rockchip@lists.infradead.org,
 	linux-media@vger.kernel.org,
 	kernel@collabora.com,
-	Benjamin Gaignard <benjamin.gaignard@collabora.com>,
-	Conor Dooley <conor.dooley@microchip.com>
-Subject: [PATCH v11 2/7] dt-bindings: iommu: verisilicon: Add binding for VSI IOMMU
-Date: Wed,  7 Jan 2026 11:09:52 +0100
-Message-ID: <20260107101005.84039-3-benjamin.gaignard@collabora.com>
+	Benjamin Gaignard <benjamin.gaignard@collabora.com>
+Subject: [PATCH v11 4/7] MAINTAINERS: Add entry for Verisilicon IOMMU driver
+Date: Wed,  7 Jan 2026 11:09:54 +0100
+Message-ID: <20260107101005.84039-5-benjamin.gaignard@collabora.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20260107101005.84039-1-benjamin.gaignard@collabora.com>
 References: <20260107101005.84039-1-benjamin.gaignard@collabora.com>
@@ -67,94 +66,32 @@ List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Add a device tree binding for the Verisilicon (VSI) IOMMU.
-This IOMMU sits in front of hardware encoder and decoder
-blocks on SoCs using Verisilicon IP, such as the Rockchip RK3588.
+Add maintainer for Verisilicon iommu driver.
 
 Signed-off-by: Benjamin Gaignard <benjamin.gaignard@collabora.com>
-Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
 ---
- .../bindings/iommu/verisilicon,iommu.yaml     | 71 +++++++++++++++++++
- 1 file changed, 71 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/iommu/verisilicon,iommu.yaml
+ MAINTAINERS | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/iommu/verisilicon,iommu.yaml b/Documentation/devicetree/bindings/iommu/verisilicon,iommu.yaml
-new file mode 100644
-index 000000000000..d3ce9e603b61
---- /dev/null
-+++ b/Documentation/devicetree/bindings/iommu/verisilicon,iommu.yaml
-@@ -0,0 +1,71 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/iommu/verisilicon,iommu.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
+diff --git a/MAINTAINERS b/MAINTAINERS
+index a0dd762f5648..baf09a3d60b2 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -27315,6 +27315,14 @@ F:	drivers/media/v4l2-core/v4l2-isp.c
+ F:	include/media/v4l2-isp.h
+ F:	include/uapi/linux/media/v4l2-isp.h
+ 
++VERISILICON IOMMU DRIVER
++M:	Benjamin Gaignard <benjamin.gaignard@collabora.com>
++L:	iommu@lists.linux.dev
++S:	Maintained
++F:	Documentation/devicetree/bindings/iommu/verisilicon,iommu.yaml
++F:	drivers/iommu/vsi-iommu.c
++F:	include/linux/vsi-iommu.h
 +
-+title: Verisilicon IOMMU
-+
-+maintainers:
-+  - Benjamin Gaignard <benjamin.gaignard@collabora.com>
-+
-+description: |+
-+  A Versilicon iommu translates io virtual addresses to physical addresses for
-+  its associated video decoder.
-+
-+properties:
-+  compatible:
-+    items:
-+      - const: rockchip,rk3588-av1-iommu
-+      - const: verisilicon,iommu-1.2
-+
-+  reg:
-+    maxItems: 1
-+
-+  interrupts:
-+    maxItems: 1
-+
-+  clocks:
-+    items:
-+      - description: Core clock
-+      - description: Interface clock
-+
-+  clock-names:
-+    items:
-+      - const: core
-+      - const: iface
-+
-+  "#iommu-cells":
-+    const: 0
-+
-+  power-domains:
-+    maxItems: 1
-+
-+required:
-+  - compatible
-+  - reg
-+  - interrupts
-+  - clocks
-+  - clock-names
-+  - "#iommu-cells"
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    #include <dt-bindings/clock/rockchip,rk3588-cru.h>
-+    #include <dt-bindings/interrupt-controller/arm-gic.h>
-+
-+    bus {
-+      #address-cells = <2>;
-+      #size-cells = <2>;
-+
-+      iommu@fdca0000 {
-+        compatible = "rockchip,rk3588-av1-iommu","verisilicon,iommu-1.2";
-+        reg = <0x0 0xfdca0000 0x0 0x600>;
-+        interrupts = <GIC_SPI 109 IRQ_TYPE_LEVEL_HIGH 0>;
-+        clocks = <&cru ACLK_AV1>, <&cru PCLK_AV1>;
-+        clock-names = "core", "iface";
-+        #iommu-cells = <0>;
-+      };
-+    };
+ VF610 NAND DRIVER
+ M:	Stefan Agner <stefan@agner.ch>
+ L:	linux-mtd@lists.infradead.org
 -- 
 2.43.0
 
