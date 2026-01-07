@@ -1,100 +1,155 @@
-Received: from mail-wr1-f42.google.com (mail-wr1-f42.google.com [209.85.221.42])
+Received: from mail-qk1-f172.google.com (mail-qk1-f172.google.com [209.85.222.172])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B024A332ED1
-	for <linux-media@vger.kernel.org>; Wed,  7 Jan 2026 14:22:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B51883469E7
+	for <linux-media@vger.kernel.org>; Wed,  7 Jan 2026 14:24:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767795730; cv=none; b=TALMXCeTCby2Sm+//d+Bwbd/KvOiLgumpQGJjPlq6mBFBaC09kMBmNuK9LFWK6HpIT76EeCZX1yxiwzGHOc9BECssjIlz5Dwt6USf1B2F5Qzv4JshjiA4G1NzWKNppjKPCfNOnD0cA+yAkktOa5EWsKRdv7a4AHYQ6ZM0zZPJ8o=
+	t=1767795870; cv=none; b=GdaRayihEsMqo9iqBogdkcvx+YvghadjXyjn4YAEXlpCUzaRYTs3iOYyfbVVnGeN2D+aH8dPbaN0qEOVCd5YBHbmMZssQdPDLQR9kQW0582wU50EHSimq1lnfgqrdpZ1iOSkODa8EuXWA0+iJpwR3W0o5BoaV20hc4/nrwzpq5I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767795730; c=relaxed/simple;
-	bh=0U9koCOJzgH9JvfmV6YnkoehTxq2ubIy486JlKUz+Eg=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=s8MEuiyC0MiM5GPfT+TOxcBOqZjcEm5NWH9TTY7gaAIFhP2PLzTAKMjg3PoO79dTW07mc2I47yWyIRH2W9XPl4ZnRKQtnGoVhk4GMtBOzHs6UQg4lnOyegI/KPVOhfiBGsDeAli42pz6TueZ1Pdy5EzSrdU/3Iq2Rus0u0M94uI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=BZtTwTaC; arc=none smtp.client-ip=209.85.221.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+	s=arc-20240116; t=1767795870; c=relaxed/simple;
+	bh=DIOKffkjUEV8oncdVsGhQS7d2PpHY8DcNSUF9DqBttg=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=jWv+DlSK+vfxpiL0gCnh/GLiMsA2T1clCoLDcqB7TiqHMvsCSV9CnOBnw7oOkDUkwybFzrlm2JNEq4G5tRJ7vMhG1h3zgPU7n0edPy4YavXbb7ZJOqiRV05WwmoQASgxRH0tPAJ92PhZu9Rat/sr1STV+fUawtXWp5+hf8oAu8s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ndufresne.ca; spf=pass smtp.mailfrom=ndufresne.ca; dkim=pass (2048-bit key) header.d=ndufresne-ca.20230601.gappssmtp.com header.i=@ndufresne-ca.20230601.gappssmtp.com header.b=qoKLF0ib; arc=none smtp.client-ip=209.85.222.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ndufresne.ca
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ndufresne.ca
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="BZtTwTaC"
-Received: by mail-wr1-f42.google.com with SMTP id ffacd0b85a97d-432777da980so1144291f8f.0
-        for <linux-media@vger.kernel.org>; Wed, 07 Jan 2026 06:22:08 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=ndufresne-ca.20230601.gappssmtp.com header.i=@ndufresne-ca.20230601.gappssmtp.com header.b="qoKLF0ib"
+Received: by mail-qk1-f172.google.com with SMTP id af79cd13be357-8c0d16bb24dso180350185a.0
+        for <linux-media@vger.kernel.org>; Wed, 07 Jan 2026 06:24:28 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1767795727; x=1768400527; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=gOW2y+VKVeFQcfSJXk3+EmObS/JtRwV2ILjhb679FFA=;
-        b=BZtTwTaCPYKN4U1ENrTg4NY7bqn4GtsEg59zPMvRl88uj+UDjB4cukY8HoOvcttVdi
-         rDn+TAbKVcmdp+bm23AoqHSC9j9EDsTSmfSHKqnaDKzp1ennDNux6SDOQ9EDlXQS3k+i
-         3sSTdu7pONZ7AtA+MCks4m+d40YPl7jI7vr3EAeGgulCOa264tHaxaOYb2971CZX/g3Z
-         djQdb3KqljT3iSP9VxeVfummGeOpzZBx8cjcH794WmUQtcjIWHhmPOhvXaFOfhbhjvCY
-         9dg1U/XrXTbgO0DCm/onRieAUGHp/oKqXrx1sEITkkuFCbUKndWz361facKz6a3HC5rw
-         evrg==
+        d=ndufresne-ca.20230601.gappssmtp.com; s=20230601; t=1767795868; x=1768400668; darn=vger.kernel.org;
+        h=mime-version:user-agent:autocrypt:references:in-reply-to:date:cc:to
+         :from:subject:message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=fNFVme+dR9u7zl7Ngrlb7Wgf4zjZ10+VPmUyii4JMEM=;
+        b=qoKLF0ib/LCqtXoZzr7sD4L2WU9leyPlX0o54AbZ5ozYQckr4h/DgSLRqy2BWJWzcM
+         guK6FLRpEDtS8V2t/ezT+fTbAzqX4ZGd3UH+2yfvbiih9QnlIVySUUDw++2IDuQvgOz+
+         o2JaAZTl4XjWwejpQ/bVAafat2NBwZ/Vv4Y6wTxfO23flvzR4mPKQItyW+9VmPGMZZza
+         4Kthg0ngejkRAa5SBMl5R2hjCW3/SgNBkAdvt+JeNC4ppbyolfyBo6tNP3Cqw2eHOjpp
+         yXgZqT6wIrguEtLgd47kaZ76Q8lZX7T0/y573AFiPovT/JAW+M9LAZ6L9wgQu5HPSYpd
+         cp1A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1767795727; x=1768400527;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20230601; t=1767795868; x=1768400668;
+        h=mime-version:user-agent:autocrypt:references:in-reply-to:date:cc:to
+         :from:subject:message-id:x-gm-gg:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=gOW2y+VKVeFQcfSJXk3+EmObS/JtRwV2ILjhb679FFA=;
-        b=Te4jF91F8CseEasVo7rAajbkuaYgYorD7bwqV32bka0tNOLBkRaab5pVvmjU4AkJT3
-         gXy1xDQ5eh4A4YmoNOqnzPLa4nqGPJlcSdQ1/84NYwLhv6vK1SWntqSiCE7l+QkbPT0i
-         zYmaTSyvKA5AxKXEqWhkBtbBA+YHtLP1apF3DhDPOvnK6UuOuVFb21Z7rTjBBFjeJFK1
-         aq5mnJa30RAYY2IFV/TSkHDh+hRoM3NwnY+vquGlaT9pe/YstomjbHSC49DIHXTu+MEQ
-         zRSq7eQ4J9mX8wl//kNlT7bye4Kds4awzOXk1bcLgTXGo/aSeVLvgGITSz+6J3HP/hdi
-         XQCg==
-X-Forwarded-Encrypted: i=1; AJvYcCX1kw9Zpxdl9rP7Cxq/gJs9Jl+jl071fx/FCjoIjThmOzb224j8/EQlMi/I6ftyMuwPhj/8HP+pTSv1Qg==@vger.kernel.org
-X-Gm-Message-State: AOJu0YyQkBv3+X0oNFEMrGh2awzj+DXVUp2PCn3iG+sjmaeWgLwns7L/
-	iBYP6jQofdCOo6ltvLrYjwUni+C2MCdgjvic02xBNC9/7kwrc2QIAY5fcgO/ZQl7DDs=
-X-Gm-Gg: AY/fxX67gCJaOwL1C50H/ut1UiWx+Ndoy6QFq3zPIztkzr4p2TC+FFHVx/6UjWFQZMf
-	dwU69uyKwzC1Zv0Vo8SBwEM20sFijtRBnBe+hzF+awSMwtAKPEnP8ep2Z94Oy0uslnK0Gth8R32
-	BW2aRssFu2YcX16QDPCkvAx89/kJLqoGSoAXvkkrtomGRaT+JAOt4uHPm17fHm2RxCMCh8ficZ4
-	7mLy2bsorzTPKNX9cnxNcsm8bf1M1OM6ctCW6uD86YJgfL8tyMG3Na46Qp66R2t5I9lMNhPmyM1
-	n8QaHzCZgCtPfSMNvD3VQjsOyeHH0uhD4oyoTs+ZSpuosLhDvT77ylj/TkroMFxiKmUhTrUPWXY
-	8nnNHu/26CtXVS9ZcznnenSEAFhMJ67pMO0H/fsEYgrZPKNCJ7n9kXeKl+T2Hi4nxUDKqrpWTmD
-	4j/agRWYJhCY90gLHf
-X-Google-Smtp-Source: AGHT+IFJwknu9uPiQ2jlGnRv7HuAdmdncQ8NphWGfQ7jlTeHbYr70BvYEzG8mcTbKTU43DrbU8ZoXw==
-X-Received: by 2002:a05:6000:2204:b0:430:ff41:5c87 with SMTP id ffacd0b85a97d-432c3775a44mr3337365f8f.60.1767795726838;
-        Wed, 07 Jan 2026 06:22:06 -0800 (PST)
-Received: from localhost ([196.207.164.177])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-432bd0dad8bsm10912638f8f.8.2026.01.07.06.22.06
+        bh=fNFVme+dR9u7zl7Ngrlb7Wgf4zjZ10+VPmUyii4JMEM=;
+        b=JjXC37XTI0eBo0wDeNueJBh5P214Rxnlf+Xu5l0BgmerdXlrEEewp5/3N/xJckjqSa
+         Ax5o4T4xkXZDQvTbeweNwmHSsr7FLcRDEB9VrPY5G7nK0M8gEtXIdY3aV35rizC/fUXM
+         CvxV7qiIzs3tTiG+DQb/+dQuD7F6KAqfJ12cCXJuH/RsopR4sEeAUvZ7S/i/1MKLg0VX
+         hdrEJT4v6IEcTF1+Zp4kW+d52xXfEL8y3pYcyYAsooUk66vFY6UAxRzubKZVKrGg9wer
+         hmd5HKbJOsFzgjuuH16MPLwSvcC/96y4tS9rD9PsZl9pk1xg9/Z6PgB6fNftIUJ6RIq+
+         kCyA==
+X-Gm-Message-State: AOJu0Yx6ngk21rQ2Q03rwOwXGEchC0XNUnMxDp4m3zDgOzyLj5P3tM5A
+	07LyQEcavBmlu6h7Gb1z7QdL+0tZ+N42kq+Fu1bksJjj4v0CuyrzDgIB47gv2MU3EAk=
+X-Gm-Gg: AY/fxX7Hh0GfGL+F5W4oU57+GTnBQz0cEebs/9vt/ooZkdkPvreNitQDzycPSWj1ffU
+	XbClQsAuHvrOyVcMmxQ+hUD30gm61lKHTjduudDN0cXz6LY4oknatrtK0gm5X2jUhQG12QmEwu+
+	T2qCYimZ7A3X5a5TIHoWWMxoyTGTMTX+bmZG+moCt/QVv6ttqdDyUn+BsuxYtVaV9VnBCdZfwf9
+	tXtdduy5uaQNMY04y9LceUnX5YoMomE0dJfZDYb9nldsqevIMxtpNYi60E5OMKPaAE4LzMgCSpw
+	WZxMJE1CLY6G69D0XK6hiS49cQlNZwmG+gfqPzcVgjwkucWLe+E2i6OAu0Ha5tJwWMmhxQ8qvAh
+	0uJQIFL+l+iSaLQyrvNrZXKSkgPiK0pbrSUDwjFGJ4z13QyXYKihrFYdlMfUgKz2CacprsuXv0b
+	mHKxgWPcGOGRj4XXa8dDdHM0/ojJ8=
+X-Google-Smtp-Source: AGHT+IErN6Om+JnV7pt2OrE10wjhOwwk29EHITTsHyDdmu04Aosymy91WagJFYJDt0O/0Sn51dCh5w==
+X-Received: by 2002:a05:622a:1189:b0:4ee:1dd0:5a53 with SMTP id d75a77b69052e-4ffb4a657aemr30278291cf.78.1767795867495;
+        Wed, 07 Jan 2026 06:24:27 -0800 (PST)
+Received: from ?IPv6:2606:6d00:17:7b4b::5ac? ([2606:6d00:17:7b4b::5ac])
+        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-8907726f1f1sm33493346d6.52.2026.01.07.06.24.25
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 07 Jan 2026 06:22:06 -0800 (PST)
-Date: Wed, 7 Jan 2026 17:22:03 +0300
-From: Dan Carpenter <dan.carpenter@linaro.org>
-To: Karthikey D Kadati <karthikey3608@gmail.com>
-Cc: Hans de Goede <hansg@kernel.org>,
-	Mauro Carvalho Chehab <mchehab@kernel.org>,
-	Sakari Ailus <sakari.ailus@linux.intel.com>,
-	linux-media@vger.kernel.org, linux-staging@lists.linux.dev,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 RESEND 0/3] media: atomisp: refactoring and fixes for
- V4L2 compliance
-Message-ID: <aV5sC_udoJ3qdjBD@stanley.mountain>
-References: <81e2d12c-342b-4b88-88a0-3e24115541aa@kernel.org>
- <20260107134844.68074-1-karthikey3608@gmail.com>
+        Wed, 07 Jan 2026 06:24:26 -0800 (PST)
+Message-ID: <11c7e1c0f9e71978d9dea6b1af067e38d9a2509a.camel@ndufresne.ca>
+Subject: Re: [PATCH v2 14/22] media: rockchip: rga: support external iommus
+From: Nicolas Dufresne <nicolas@ndufresne.ca>
+To: Sven =?ISO-8859-1?Q?P=FCschel?= <s.pueschel@pengutronix.de>, Jacob Chen
+	 <jacob-chen@iotwrt.com>, Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>, 
+ Mauro Carvalho Chehab
+	 <mchehab@kernel.org>, Heiko Stuebner <heiko@sntech.de>, Rob Herring
+	 <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
+	 <conor+dt@kernel.org>
+Cc: linux-media@vger.kernel.org, linux-rockchip@lists.infradead.org, 
+	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, 
+	devicetree@vger.kernel.org, kernel@pengutronix.de
+Date: Wed, 07 Jan 2026 09:24:25 -0500
+In-Reply-To: <b4b1a113-a8dc-4ed7-b395-eaa0deb6a957@pengutronix.de>
+References: <20251203-spu-rga3-v2-0-989a67947f71@pengutronix.de>
+	 <20251203-spu-rga3-v2-14-989a67947f71@pengutronix.de>
+	 <c5b6707e3e6748bf923aaf34db1ae231c7e121ad.camel@ndufresne.ca>
+	 <b4b1a113-a8dc-4ed7-b395-eaa0deb6a957@pengutronix.de>
+Autocrypt: addr=nicolas@ndufresne.ca; prefer-encrypt=mutual;
+ keydata=mDMEaCN2ixYJKwYBBAHaRw8BAQdAM0EHepTful3JOIzcPv6ekHOenE1u0vDG1gdHFrChD
+ /e0J05pY29sYXMgRHVmcmVzbmUgPG5pY29sYXNAbmR1ZnJlc25lLmNhPoicBBMWCgBEAhsDBQsJCA
+ cCAiICBhUKCQgLAgQWAgMBAh4HAheABQkJZfd1FiEE7w1SgRXEw8IaBG8S2UGUUSlgcvQFAmibrjo
+ CGQEACgkQ2UGUUSlgcvQlQwD/RjpU1SZYcKG6pnfnQ8ivgtTkGDRUJ8gP3fK7+XUjRNIA/iXfhXMN
+ abIWxO2oCXKf3TdD7aQ4070KO6zSxIcxgNQFtDFOaWNvbGFzIER1ZnJlc25lIDxuaWNvbGFzLmR1Z
+ nJlc25lQGNvbGxhYm9yYS5jb20+iJkEExYKAEECGwMFCwkIBwICIgIGFQoJCAsCBBYCAwECHgcCF4
+ AWIQTvDVKBFcTDwhoEbxLZQZRRKWBy9AUCaCyyxgUJCWX3dQAKCRDZQZRRKWBy9ARJAP96pFmLffZ
+ smBUpkyVBfFAf+zq6BJt769R0al3kHvUKdgD9G7KAHuioxD2v6SX7idpIazjzx8b8rfzwTWyOQWHC
+ AAS0LU5pY29sYXMgRHVmcmVzbmUgPG5pY29sYXMuZHVmcmVzbmVAZ21haWwuY29tPoiZBBMWCgBBF
+ iEE7w1SgRXEw8IaBG8S2UGUUSlgcvQFAmibrGYCGwMFCQll93UFCwkIBwICIgIGFQoJCAsCBBYCAw
+ ECHgcCF4AACgkQ2UGUUSlgcvRObgD/YnQjfi4+L8f4fI7p1pPMTwRTcaRdy6aqkKEmKsCArzQBAK8
+ bRLv9QjuqsE6oQZra/RB4widZPvphs78H0P6NmpIJ
+Content-Type: multipart/signed; micalg="pgp-sha512";
+	protocol="application/pgp-signature"; boundary="=-5UuRc+BcCZ/5WnhbhpYA"
+User-Agent: Evolution 3.58.2 (3.58.2-1.fc43) 
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260107134844.68074-1-karthikey3608@gmail.com>
 
-When you're sending v2, it's better to just start a new thread.  We stopped
-sending them as a reply years ago.  It makes threads too confusing.
 
-On Wed, Jan 07, 2026 at 07:18:41PM +0530, Karthikey D Kadati wrote:
-> This patch series addresses maintainer feedback and fixes build errors
-> in the atomisp driver.
-> 
-> Patch 1: Standardizes the 'Bridge' structs significantly by using v4l2_rect instead of custom shadow structs and aligning ia_css_region members with V4L2 conventions.
-> Patch 2: Introduces a helper function for statistics buffer allocation to reduce code duplication and centralize error handling logic.
-> Patch 3: Adds missing error propagation for IRQ enable and XNR configuration to improve robustness.
-> 
+--=-5UuRc+BcCZ/5WnhbhpYA
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Please line wrap your emails at 72 characters.
+Hi,
 
-regards,
-dan carpenter
+Le mercredi 07 janvier 2026 =C3=A0 15:19 +0100, Sven P=C3=BCschel a =C3=A9c=
+rit=C2=A0:
+> > > @@ -95,13 +96,16 @@ queue_init(void *priv, struct vb2_queue *src_vq,
+> > > struct vb2_queue *dst_vq)
+> > > =C2=A0 =C2=A0	src_vq->io_modes =3D VB2_MMAP | VB2_DMABUF;
+> > > =C2=A0 =C2=A0	src_vq->drv_priv =3D ctx;
+> > > =C2=A0 =C2=A0	src_vq->ops =3D &rga_qops;
+> > > -	src_vq->mem_ops =3D &vb2_dma_sg_memops;
+> > > +	src_vq->mem_ops =3D &vb2_dma_contig_memops;
+> > That's a bit I'm less knowledgeable here, since I never used the sg_mem=
+ops
+> > in
+> > any of my work, but what is the consequence ? (appart from gaining exte=
+rnal
+> > iommu support)
+>=20
+> This is only for the external iommu support, which uses the=20
+> vb2_dma_contig_plane_dma_addr function to get a single linear address=20
+> (instead of vb2_dma_sg_plane_desc used for the manual iommu mapping).
+>=20
+> Without an external iommu the value is overridden afterwards to=20
+> vb2_dma_sg_memops. I probably should move the if up to make clear that=
+=20
+> this is only set for the external iommu case.
+>=20
+> Or did I misunderstand your question?
 
+That was it, I read quickly thinking it was always vb2_dma_contig_memops no=
+w,
+regardless which iommu implementation is used. If you can make it clearer t=
+hat
+the ops depends on the context, that would be great.
+
+Nicolas
+
+--=-5UuRc+BcCZ/5WnhbhpYA
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-Description: This is a digitally signed message part
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQTvDVKBFcTDwhoEbxLZQZRRKWBy9AUCaV5smQAKCRDZQZRRKWBy
+9PM4AQCBafMXk9xMtDHVflNbiu2lwVtsblKMfDzInz3cl5dvOwEA0FMg25ztMD+h
+KzEXKxEk4Tw15/oxoq0BpUevHamk4w4=
+=81M/
+-----END PGP SIGNATURE-----
+
+--=-5UuRc+BcCZ/5WnhbhpYA--
