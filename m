@@ -1,84 +1,176 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f42.google.com (mail-wr1-f42.google.com [209.85.221.42])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B3F7333971D
-	for <linux-media@vger.kernel.org>; Wed,  7 Jan 2026 14:13:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 511DC3081AD
+	for <linux-media@vger.kernel.org>; Wed,  7 Jan 2026 14:20:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767795211; cv=none; b=t4I3JAOBILEuVdXOOenGw0uc8BdI1OCE9d5nUVzubxspuucq0M9rJhJqzMRnfYeqVva1Wed/yUoNWgw2cZaDeN6zC6ZXBbt0tCftTgxejzMjqaaWeCVemmN20oW6dCeRYASYfWQM4N4qSw4QIqINM01Tbf2pJybzU/OEWD3owBk=
+	t=1767795614; cv=none; b=LplqU7psqdvyd64/oiBdnBYbp8G3oyHve3mKR7P5rDIxqnQoFnQ6bB6kIRITiPQ02XEgvL7zbWWaafsVFZhFIZLZ6ObIGrNfeMET0RXTqkVKUkxlNAccTaohaxQPAxhd+p2A8zGvPtCUUlsc4gxYjRLzZvRMDxi9EjvdULMZdak=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767795211; c=relaxed/simple;
-	bh=vPUhQO/bJfTutZapkC7lSFc2q9gKbGxYafUo+Xs/Plc=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=GNH3giFgHrNUgly65CTRvp3qN/qYN1R4u6oPfbcTp2F777FV0809sNpuJxd93GEyJfbo6Fu0vwIBTYYoQrH+v+d2U4bdc1LX/t48V/+PgEw6C2sqkf1WENIN0+vkQeB0G+QU2MIh9PZH3hGxwirCiJa1tn6I4yNO8J5qBdPIxFk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=LxpUqBSC; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1767795614; c=relaxed/simple;
+	bh=RP6yrOmfkgG1pSCCp/KgSQ837psbCw1sb+DDsPfjTA0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=qL6Zg95h72q0B5oopUUfBJ8CgboNTmJWToyXrtyw9QhpFAcbqdAJReoxZMsVZhenHByDGeGXA0A1OPLVP4dD2N/04ms0lpzH3z93jnZRlaXJepVfPSFM8DWMpUMTKgLCoCSvYleCoi+AibUaUd0Kax2GR12lUleCDaKO1jVuNIU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=FjAmDuZl; arc=none smtp.client-ip=209.85.221.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="LxpUqBSC"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 611C1C4CEF7
-	for <linux-media@vger.kernel.org>; Wed,  7 Jan 2026 14:13:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1767795211;
-	bh=vPUhQO/bJfTutZapkC7lSFc2q9gKbGxYafUo+Xs/Plc=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=LxpUqBSCaEAFNHV6ZR13Wn3sVba/mylY/cSyRWIVNUjJyQ/RoL2O7Frk4XVnmTaI6
-	 vpd/fm7mnx9aKY8DUWFStsaVx96N3/iN7XssR5fP01+onZCKHcsqc59yZblqX9pgV4
-	 Xex8vwgsTKZ3+SE9L71+KngoiVZDI22HXt12ahm2rPXifUB8KukHkK5H2stkGnlQQz
-	 +FyfSWpuD9PRg78RPTSKUxL8KPaFOEICqu1pGmm7sYCQbyJ/EfmiLFvmft1A4YMDzM
-	 nO4jM4arQQtOSNxk9ykJ3we4r3oSkwD95uoSJNoq8dXTHJb+akI9ZpTQyCGGtUdjrF
-	 7D7vZG0+yHHTQ==
-Received: by mail-yw1-f176.google.com with SMTP id 00721157ae682-790647da8cbso23730947b3.1
-        for <linux-media@vger.kernel.org>; Wed, 07 Jan 2026 06:13:31 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCUVVIqV2tFFdEUCgUQLyC1LyZc+isWdFFzK1CALtbbFu4vRnzhtHXfvpR7cB0Z5yTaUeg0VfvJFAzRk9w==@vger.kernel.org
-X-Gm-Message-State: AOJu0YxmCp6xec+3J0cJGRlFKrwaPmO+dTd+tEqsYaxgCWJ1SfgMLCc/
-	F5XgpVRiB2TYM3952+PggpJBd0jrReiZF5UC9gvO61Nd2uhlqSLyIblOwcN/tgZLe/yyuv6A7Zz
-	mM0vd9cXarxvJylhKlC0CMzTXz7C6b4E=
-X-Google-Smtp-Source: AGHT+IFpGRYBSvGge8PYFsRHSqJMEhcXggZW3h16GPs6+Lt8GMfLw75OX8+1p8hq0kvPo80jSxwj1LTh08lAgBDlaLw=
-X-Received: by 2002:a05:690e:1248:b0:645:581a:df8c with SMTP id
- 956f58d0204a3-64716c4dfb6mr2253264d50.91.1767795210728; Wed, 07 Jan 2026
- 06:13:30 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="FjAmDuZl"
+Received: by mail-wr1-f42.google.com with SMTP id ffacd0b85a97d-42fb4eeb482so1158706f8f.0
+        for <linux-media@vger.kernel.org>; Wed, 07 Jan 2026 06:20:12 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1767795611; x=1768400411; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=/3EuWWmPchcdKXlx3oZPsaTz80UKO5qPXs+yQV6vLYk=;
+        b=FjAmDuZlSZE5kI+yW/BorTqN0MGGTsR0db90eFSlkd18rEgZXF/9Q+IJrjIVOPVbWI
+         goVrwAiwmjuGybZyplrEX4TAMPDG6KXxzORDcJ6p7n8ATSRBgNstvuwO3PhB1O6HYodi
+         oJcaEXRDkKpxcGOVA0src+6a+dzq5YFmcvcj2v1K8uKBNJKms/UQGG3pLB457kCi3Czl
+         rJBAeRPbANvXE27bJjr2XQZm/FGBuArF1iVzZTLk0Fp6yJK0Vm+Aq4ksLwZ8vjFKjN0w
+         bW7RaQ3mi8rrxkeu8+TQ0V+Utgyn29Zq0Pbl2vkTJ3PbT91t9j/8FquOWJC+7EvR+ewM
+         RSHQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1767795611; x=1768400411;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=/3EuWWmPchcdKXlx3oZPsaTz80UKO5qPXs+yQV6vLYk=;
+        b=PwaUKt8najRyPz9cuDzXGXWsW/ON9rDO4neP8ol2YdXG6VLrlZq4I67RcdhqYtAJcI
+         Uu/sJTe2X7OCwmGfpR4lGNhstmb/LnNzI2ODpFOGXuXMG45KYqAwDZQ9Ed7PnB1w/nEi
+         84gdh+QUSw0peZURSromddRBJtTukd6q3e7qWRn5zzO0F2yL27A0hRrk/tae5yXrxY3Y
+         TlXPj1d9gdPvX3mxZ/vmxLyOdNkY0BJaeEbN5ydgmz4dgBKTNruj0rA9lr1XFeBS8vXH
+         CiZBzLGLJYU/woySvXechds2UmuCmiMMVFG93k3ty3czJ2WQ1OsJwhCcu64oEFhMWwJV
+         rv1g==
+X-Forwarded-Encrypted: i=1; AJvYcCXUQnoYl9sxb/Sl5AY15XwGfYaPdWRUZYMyWNE5OZC+f8BLikB8SaxT4eEMImIn77/q1aUCTBFWeGxYgg==@vger.kernel.org
+X-Gm-Message-State: AOJu0YwdEDyavpFJyzMt56uXLy5tVeDsftmjqpCgjpOkXLfRyHoKhqP9
+	KmozyucgQ7IUc8aWbFMApfRdEODIVs7D6daHwF8BojwuKD8OyWMcpFI4ZV95l2mLDCc=
+X-Gm-Gg: AY/fxX6hR23eO8dkby+emEp0Uf+3FKh0uF9znKlPJZG+lB8+uVpQsvqaQKWtSjgV9W2
+	CLnT/Ma40+MaaI5Dta61w9FctC2lNGNv/9cJHF0NTnzYZbKZz72enoptj+n0/HGvRMlRQQSGLHV
+	5D7Cgo3M/e4rLrB1FzJUbz39427fQN9ukgZoiHciRQ/zwockh5+2aIE7i2tzqcYWRTchWYhaKeF
+	LmLNQ0c64ZoVHvIhYUgd1EQzebiVhSgNb3QFtSbWnQmMWS2/rKm47etHv1BPRZSjk4z3Kh+4xah
+	OLbm5YX3x/wm4FI+fYqU9I1FzRx6yUxmj/YaZJNB8IgBn9YOKtVta0TRIxcWNdvU2cYUx1peI9d
+	ZnnbptgsXkBBXdjBlZGNKzlmURbCVepJ9EocputhjMgNl3reDh3VzoV7yg7f6hHio0VMOoKCUUt
+	lLXK9dcNj9LMODWZX/xI/CUkhBavg=
+X-Google-Smtp-Source: AGHT+IHUqb1cXUtZCpRJ8P4UFLSIpAgDZ36o1m7wd/K9meyda/t653aOMHHTvrT9/dtiigGlLK+MGQ==
+X-Received: by 2002:a05:6000:2302:b0:431:316:920a with SMTP id ffacd0b85a97d-432c3628fdemr2605337f8f.8.1767795610407;
+        Wed, 07 Jan 2026 06:20:10 -0800 (PST)
+Received: from localhost ([196.207.164.177])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-432bd5ff319sm10689604f8f.43.2026.01.07.06.20.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 07 Jan 2026 06:20:09 -0800 (PST)
+Date: Wed, 7 Jan 2026 17:20:06 +0300
+From: Dan Carpenter <dan.carpenter@linaro.org>
+To: Karthikey D Kadati <karthikey3608@gmail.com>
+Cc: Hans de Goede <hansg@kernel.org>,
+	Mauro Carvalho Chehab <mchehab@kernel.org>,
+	Sakari Ailus <sakari.ailus@linux.intel.com>,
+	linux-media@vger.kernel.org, linux-staging@lists.linux.dev,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 RESEND v2 1/3] media: atomisp: replace shadow zoom
+ structs with v4l2_rect
+Message-ID: <aV5rloYmYfLMkMKA@stanley.mountain>
+References: <81e2d12c-342b-4b88-88a0-3e24115541aa@kernel.org>
+ <20260107134844.68074-1-karthikey3608@gmail.com>
+ <20260107134844.68074-2-karthikey3608@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20251225103616.3203473-1-wens@kernel.org> <20251225103616.3203473-3-wens@kernel.org>
-In-Reply-To: <20251225103616.3203473-3-wens@kernel.org>
-From: Linus Walleij <linusw@kernel.org>
-Date: Wed, 7 Jan 2026 15:13:19 +0100
-X-Gmail-Original-Message-ID: <CAD++jLku5_fyDXw+uJ8Gj_1nQxjq8egOh60X1ARGC5dmFAcV+g@mail.gmail.com>
-X-Gm-Features: AQt7F2rAHH3lL_5LalTawPfcgjclmbR9cTZKvz98Rqt4039YJlca5QQ3lCXU-dQ
-Message-ID: <CAD++jLku5_fyDXw+uJ8Gj_1nQxjq8egOh60X1ARGC5dmFAcV+g@mail.gmail.com>
-Subject: Re: [PATCH 2/4] dt-bindings: pinctrl: sunxi: Allow pinmux sub-pattern
- with leading numbers
-To: Chen-Yu Tsai <wens@kernel.org>
-Cc: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
-	Conor Dooley <conor+dt@kernel.org>, Jernej Skrabec <jernej@kernel.org>, 
-	Samuel Holland <samuel@sholland.org>, Mauro Carvalho Chehab <mchehab@kernel.org>, devicetree@vger.kernel.org, 
-	linux-sunxi@lists.linux.dev, linux-gpio@vger.kernel.org, 
-	linux-media@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
-	linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260107134844.68074-2-karthikey3608@gmail.com>
 
-On Thu, Dec 25, 2025 at 11:36=E2=80=AFAM Chen-Yu Tsai <wens@kernel.org> wro=
-te:
+On Wed, Jan 07, 2026 at 07:18:42PM +0530, Karthikey D Kadati wrote:
+> Remove custom atomisp_zoom_point and atomisp_zoom_region structs and
+> 
+> usage in favor of standard v4l2_rect within atomisp_dz_config.
+> 
+> This aligns the driver with V4L2 standards and removes unnecessary
+> 
+> custom types.
+> 
+> Also standardizes the internal ia_css_region struct members to match
+> 
+> V4L2 naming conventions (left, top, width, height) to facilitate the
+> 
+> bridge mapping.
+> 
+> Updates atomisp_cmd.c and sh_css_params.c to use the new member names
+> 
+> and ensures safe math using long long casts to prevent overflow during
+> 
+> resolution scaling.
+> 
 
-> The pattern for pinmux node names is typically the peripheral name and
-> instance number, followed by pingroup name if there are multiple options.
->
-> Normally the instance number is directly appended to the peripheral
-> name, like "mmc0" or "i2c2". But if the peripheral name ends with a
-> number, then it becomes confusing.
->
-> On the A20, the PS2 interface controller has two instances. This
-> produces pinmux node names like "ps2-0-pins". Make the sub-pattern
-> "[0-9]-" valid to fit this pattern. Avoid having to confusing "ps20-pins"
-> name.
->
-> Signed-off-by: Chen-Yu Tsai <wens@kernel.org>
+The commit message has extra new lines obviously.
 
-This patch 2/4 applied to the pin control tree.
+> diff --git a/drivers/staging/media/atomisp/pci/atomisp_cmd.c b/drivers/staging/media/atomisp/pci/atomisp_cmd.c
+> index 327836372..4ed6b8aea 100644
+> --- a/drivers/staging/media/atomisp/pci/atomisp_cmd.c
+> +++ b/drivers/staging/media/atomisp/pci/atomisp_cmd.c
+> @@ -1764,15 +1764,13 @@ int atomisp_calculate_real_zoom_region(struct atomisp_sub_device *asd,
+>  		return -EINVAL;
+>  	}
+>  
+> -	if (dz_config->zoom_region.resolution.width
+> -	    == asd->sensor_array_res.width
+> -	    || dz_config->zoom_region.resolution.height
+> -	    == asd->sensor_array_res.height) {
+> +	if (dz_config->zoom_region.width == asd->sensor_array_res.width ||
+> +	    dz_config->zoom_region.height == asd->sensor_array_res.height) {
+>  		/*no need crop region*/
+> -		dz_config->zoom_region.origin.x = 0;
+> -		dz_config->zoom_region.origin.y = 0;
+> -		dz_config->zoom_region.resolution.width = eff_res.width;
+> -		dz_config->zoom_region.resolution.height = eff_res.height;
+> +		dz_config->zoom_region.left = 0;
+> +		dz_config->zoom_region.top = 0;
+> +		dz_config->zoom_region.width = eff_res.width;
+> +		dz_config->zoom_region.height = eff_res.height;
+>  		return 0;
+>  	}
+>  
+> @@ -1783,18 +1781,18 @@ int atomisp_calculate_real_zoom_region(struct atomisp_sub_device *asd,
+>  	 */
+>  
+>  	if (!IS_ISP2401) {
+> -		dz_config->zoom_region.origin.x = dz_config->zoom_region.origin.x
+> -						  * eff_res.width
+> -						  / asd->sensor_array_res.width;
+> -		dz_config->zoom_region.origin.y = dz_config->zoom_region.origin.y
+> -						  * eff_res.height
+> -						  / asd->sensor_array_res.height;
+> -		dz_config->zoom_region.resolution.width = dz_config->zoom_region.resolution.width
+> -							  * eff_res.width
+> -							  / asd->sensor_array_res.width;
+> -		dz_config->zoom_region.resolution.height = dz_config->zoom_region.resolution.height
+> -							  * eff_res.height
+> -							  / asd->sensor_array_res.height;
+> +		dz_config->zoom_region.left =
+> +			(s32)((long long)dz_config->zoom_region.left *
+> +			      eff_res.width / asd->sensor_array_res.width);
+> +		dz_config->zoom_region.top =
+> +			(s32)((long long)dz_config->zoom_region.top *
+> +			      eff_res.height / asd->sensor_array_res.height);
+> +		dz_config->zoom_region.width =
+> +			(u32)((long long)dz_config->zoom_region.width *
+> +			      eff_res.width / asd->sensor_array_res.width);
+> +		dz_config->zoom_region.height =
+> +			(u32)((long long)dz_config->zoom_region.height *
+> +			      eff_res.height / asd->sensor_array_res.height);
 
-Yours,
-Linus Walleij
+
+Why do we need this new casting?  Is it a bugfix?
+
+I don't love the casts to s32 and u32.  Those are unnecessary.  Also
+width and height are s32 so why are we casting to u32?  Same comments
+for the other casts later on.
+
+There are more style changes than strictly necessary to just rename the
+struct members.
+
+regards,
+dan carpenter
+
