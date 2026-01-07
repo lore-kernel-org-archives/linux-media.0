@@ -1,144 +1,108 @@
-Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f51.google.com (mail-wr1-f51.google.com [209.85.221.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A23C231AA8D
-	for <linux-media@vger.kernel.org>; Wed,  7 Jan 2026 14:52:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8411A35A92B
+	for <linux-media@vger.kernel.org>; Wed,  7 Jan 2026 14:56:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767797539; cv=none; b=Ji9FmyYWk94iSr1U8A0NgbIMufrsyq1+BZ7SiK6mG7o5h9Prmqm57Uykz9Cba9z5pjFUQ5ubhcWRR0xZORB9kBpMoI4bfw1DkFhFSdJyhbmnaG+8VuXU9V6o6jU7Dv18oyTpT5BNCX5grWbLwOj/Jp/MAw5/2PHZTxf9QUgLkbM=
+	t=1767797779; cv=none; b=fc9AkzM7oqwsKificAyZm4Ez+/uKYOxx95uyhHpVsBQXR1fV3W1esVAPm98gFN01ovN2PXbHLrJrQujwlF18CIaeZyZNzTIOJWUDBngUtAHA7r/4dd6wUG+rQ/K2QIZ9vwMIVNllKpK48uqvPnjI1KMlJlfdGCcH841XX7OkmIU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767797539; c=relaxed/simple;
-	bh=rEI4N32RTUkp6hm6LhzSfgzxDUsDYJqv7mwhnacev+0=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=jRJke2jYZFWuFXnIQDBo1mTEURHorsdcaakrxAUFxpi7683Nx35gdtbVFx7Rw3bgAtUDsH69OZhmvAi5Yld9S448KRfJB7yl7TrPAdPXyyiHmlh9XZn48mI+EgHKpI0Qz0d0pbSDR5sz2/UTVi0kppOnOHQhI+Gch85KzSZ1Aws=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
-Received: from ptz.office.stw.pengutronix.de ([2a0a:edc0:0:900:1d::77] helo=[127.0.0.1])
-	by metis.whiteo.stw.pengutronix.de with esmtp (Exim 4.92)
-	(envelope-from <s.pueschel@pengutronix.de>)
-	id 1vdUtK-0002O9-IV; Wed, 07 Jan 2026 15:52:06 +0100
-Message-ID: <1f4720ea-fa9c-41b7-9a6c-24abffa4bd77@pengutronix.de>
-Date: Wed, 7 Jan 2026 15:52:04 +0100
+	s=arc-20240116; t=1767797779; c=relaxed/simple;
+	bh=6MeCMaVVMx1KZl/yJ4KYosMuuEBGYNEAE/7dkmKTwdw=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Vj/AXSPAh1j2KKaT3UuaU/j2/nTnkaJ1wIqeeXldbUHq2jqj4yVqqIMe7Ezyj6YwRg29ZkvWH51lCW6pP7V0slhNlk9srKLBVA7WahP69zSFZ0DLPlZImUPI749xTDIyuF3Wut8N7W5hLo1ZVrQCao0I+VBeGRHsujgGKrjYGlE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=OV/11OTo; arc=none smtp.client-ip=209.85.221.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="OV/11OTo"
+Received: by mail-wr1-f51.google.com with SMTP id ffacd0b85a97d-42fbc305914so1480166f8f.0
+        for <linux-media@vger.kernel.org>; Wed, 07 Jan 2026 06:56:17 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1767797776; x=1768402576; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=6LhQhFurZpdgl7/b1kEWXbKN3m0snq1TE0Eb864rsD0=;
+        b=OV/11OToYO9/4O7LEWhasFOtPp6LsFmY9xWTCv0eohXotERyBQqiNPA4GXxVbMtFJp
+         2zTehMIuh8C1CwKKTXZbLtzr3vvsltV2B5MabaesYkbEW5TonevhxW2Xs8bZtklJmY0z
+         R4UQkTD+cHHp/k6zWvQ+m3M0D4IEYvpyf788+rcvr41QStbC8pT3nICVsot/9J9n1guw
+         T3TnC1Y2Cv325qARapPVO3WcIaMVmCocWcOliih+k9ppuEK/SlrgGkygm5BYh1q47UKY
+         RN9plnqgN1KUaLL9hsu5qumC+oGnBxhPkxBb+in3FaMvwZB7OJR8St4G1xcsfbzaWlgc
+         /oRQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1767797776; x=1768402576;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=6LhQhFurZpdgl7/b1kEWXbKN3m0snq1TE0Eb864rsD0=;
+        b=d2K7Sb2LJ05aKHW7C3/3BENKIvRAachagyWn4twBhN2IDiD0auUzCh2mZZAffzDOMP
+         WE8wQWCkBDCEIvV7YhLahIKJCteAq8cl7dVN2HFKUw1mhapQcn2onaVJbSkf9A8lKwhI
+         OcNJN9eKviK6weGIRAGFbMUIEyLDnUiiZYJVw0tZWnzv4XOHEC7ae79K8yoWe5tb6DzJ
+         5zj9X57SedJt14OU4PXDeNLXYcwNuFai1Q+54qu485LJUfCCJEjzdL4RqiElzMbex7OO
+         gvlbcRWQFZP+bx9u3FZzbccUVGv1T8ITYDTEZVR7R2E4zO8DYElN3eahgdULnb8Ufayv
+         IaLg==
+X-Forwarded-Encrypted: i=1; AJvYcCVZ93Arc8kDRb1nPJjtVkKXMEZeNoLwGNln2BCkQ3T7vqfHUSh/YDAD6aL9cXN9SFmkigo/stAstrAvBg==@vger.kernel.org
+X-Gm-Message-State: AOJu0YwxxvCxmjkqF/0mS0oMmJ2gG8Q/23e+QAXEvyNncif6xONRtAOh
+	FCEKOGmjJeIWaS0ZFQH0lKPOYPES/klEerG+q2VQA4HS+FYIZDf02rLMhgsCPaSM5iI=
+X-Gm-Gg: AY/fxX4shU20R+qg/LnFzU9lqK1HoekWCPVyNE64iu22ENhRORLV4AF918OKQ3ayrS4
+	Cq7wWOaChHuJ10GxtDMGfYSQedk5rbrzJlgY9tGtZEjuKLMKJalZhIQvWDNiyES8bdMYpGFVej4
+	3am1vymfg409u6+zwvQO2O0+9RJCHHOm9RENJkWxHBWJGd+X4P5qsBrniumhnvRJgv9T9ExDRRz
+	EJGgXNk1v2gWBfUwJnv7yP1b39SW5wsJPE6kW2acee/oDVPTMN/VN5Gj12c4DrQZOPjHCitrher
+	9bJvfct1DkcR9BcJYItQZiozHOHAZM2x8MOMHqun6QhEFAqUmvZavi9Vkp5bcpQuzUESRZYX71v
+	NTeqfCzJzytnLBHXnBPm4cqzmSo1O1WuIoI6NXRIHDrEvG5Mz3beTgv9BBe183TLks7d2J0COst
+	i8G1eOxEVuXB2unwOf4akaY0T+nbg=
+X-Google-Smtp-Source: AGHT+IGzAiw5qZR+q9p4Fy6uJSg+53+pgybvwLfo0UUZlMsIyM2yRGUDdFyGy0Ml7AxMIPDauhXBXg==
+X-Received: by 2002:a05:6000:2304:b0:430:fdb8:8516 with SMTP id ffacd0b85a97d-432c37983camr3732326f8f.35.1767797775753;
+        Wed, 07 Jan 2026 06:56:15 -0800 (PST)
+Received: from localhost ([196.207.164.177])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-432bd0dadcfsm10817190f8f.3.2026.01.07.06.56.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 07 Jan 2026 06:56:15 -0800 (PST)
+Date: Wed, 7 Jan 2026 17:56:12 +0300
+From: Dan Carpenter <dan.carpenter@linaro.org>
+To: Karthikey D Kadati <karthikey3608@gmail.com>
+Cc: Hans de Goede <hansg@kernel.org>,
+	Mauro Carvalho Chehab <mchehab@kernel.org>,
+	Sakari Ailus <sakari.ailus@linux.intel.com>,
+	linux-media@vger.kernel.org, linux-staging@lists.linux.dev,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 0/3] media: atomisp: refactoring and fixes for V4L2
+ compliance
+Message-ID: <aV50DGDcPPXUXsqU@stanley.mountain>
+References: <20260107144252.74666-1-karthikey3608@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 18/22] media: rockchip: rga: move rga_fmt to rga-hw.h
-To: Nicolas Dufresne <nicolas@ndufresne.ca>,
- Jacob Chen <jacob-chen@iotwrt.com>,
- Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
- Mauro Carvalho Chehab <mchehab@kernel.org>, Heiko Stuebner
- <heiko@sntech.de>, Rob Herring <robh@kernel.org>,
- Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>
-Cc: linux-media@vger.kernel.org, linux-rockchip@lists.infradead.org,
- linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
- devicetree@vger.kernel.org, kernel@pengutronix.de
-References: <20251203-spu-rga3-v2-0-989a67947f71@pengutronix.de>
- <20251203-spu-rga3-v2-18-989a67947f71@pengutronix.de>
- <de09023e7bdb1698c0bcdeb8d625101cbf647595.camel@ndufresne.ca>
-Content-Language: en-US
-From: =?UTF-8?Q?Sven_P=C3=BCschel?= <s.pueschel@pengutronix.de>
-In-Reply-To: <de09023e7bdb1698c0bcdeb8d625101cbf647595.camel@ndufresne.ca>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:900:1d::77
-X-SA-Exim-Mail-From: s.pueschel@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-media@vger.kernel.org
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260107144252.74666-1-karthikey3608@gmail.com>
 
-Hi,
+On Wed, Jan 07, 2026 at 08:12:49PM +0530, Karthikey D Kadati wrote:
+> This patch series addresses maintainer feedback and fixes build errors
+> in the atomisp driver.
+> 
+> Patch 1: Standardizes the 'Bridge' structs significantly by using
+> v4l2_rect instead of custom shadow structs and aligning ia_css_region
+> members with V4L2 conventions.
+> Patch 2: Introduces a helper function for statistics buffer allocation
+> to reduce code duplication and centralize error handling logic.
+> Patch 3: Adds missing error propagation for IRQ enable and XNR
+> configuration to improve robustness.
+> 
+> Changes in v3:
+> - Fix extra new lines in commit messages (Dan Carpenter).
 
-On 12/24/25 4:59 PM, Nicolas Dufresne wrote:
-> Le mercredi 03 décembre 2025 à 16:52 +0100, Sven Püschel a écrit :
->> Move rga_fmt to rga-hw in preparation of the RGA3 addition, as the struct
->> contains many RGA2 specific values. They are used to write the correct
->> register values quickly based on the chosen format. Therefore the
->> pointer to the rga_fmt struct is kept but changed to an opaque void
->> pointer outside of the rga-hw.h.
-[...]
->> diff --git a/drivers/media/platform/rockchip/rga/rga-hw.h b/drivers/media/platform/rockchip/rga/rga-hw.h
->> index fffcab0131225..3bc4b1f5acba2 100644
->> --- a/drivers/media/platform/rockchip/rga/rga-hw.h
->> +++ b/drivers/media/platform/rockchip/rga/rga-hw.h
->> @@ -6,6 +6,8 @@
->>   #ifndef __RGA_HW_H__
->>   #define __RGA_HW_H__
->>   
->> +#include <linux/types.h>
->> +
->>   #define RGA_CMDBUF_SIZE 0x20
->>   
->>   /* Hardware limits */
->> @@ -431,4 +433,14 @@ union rga_pat_con {
->>   	} data;
->>   };
->>   
->> +struct rga_fmt {
->> +	u32 fourcc;
->> +	int depth;
->> +	u8 uv_factor;
->> +	u8 y_div;
->> +	u8 x_div;
->> +	u8 color_swap;
->> +	u8 hw_format;
->> +};
+The new lines are still there.
 
-[...]
+> - Remove unnecessary s32/u32 casts in atomisp_cmd.c, keeping only the
+>   (long long) casts to prevent overflow (Dan Carpenter).
 
->>   
->> -struct rga_fmt {
->> -	u32 fourcc;
->> -	int depth;
->> -	u8 uv_factor;
->> -	u8 y_div;
->> -	u8 x_div;
->> -	u8 color_swap;
->> -	u8 hw_format;
->> -};
-> Ah! here's the removal of the unused variable. Not review friendly, but at last
-> removed.
+If this is a real issue, then shouldn't it be in a commit by itself
+with a Fixes tag?
 
-I've just moved it, so your review comments are still right. x_div/y_div 
-is still used at one place in rga_hw.c, but I'll remove it too in my v3 
-(and have these removals in the other commits to keep this reviewed-by).
+regards,
+dan carpenter
 
-Sincerely
-     Sven
-
->
-> Reviewed-by: Nicolas Dufresne <nicolas.dufresne@collabora.com>
->
->> -
->>   struct rga_frame {
->>   	/* Crop */
->>   	struct v4l2_rect crop;
->>   
->>   	/* Image format */
->> -	struct rga_fmt *fmt;
->> +	void *fmt;
->>   	struct v4l2_pix_format_mplane pix;
->>   };
->>   
->> @@ -145,8 +135,6 @@ static inline void rga_mod(struct rockchip_rga *rga, u32 reg, u32 val, u32 mask)
->>   struct rga_hw {
->>   	const char *card_type;
->>   	bool has_internal_iommu;
->> -	struct rga_fmt *formats;
->> -	u32 num_formats;
->>   	size_t cmdbuf_size;
->>   	u32 min_width, min_height;
->>   	u32 max_width, max_height;
->> @@ -158,6 +146,9 @@ struct rga_hw {
->>   		      struct rga_vb_buffer *src, struct rga_vb_buffer *dst);
->>   	bool (*handle_irq)(struct rockchip_rga *rga);
->>   	void (*get_version)(struct rockchip_rga *rga);
->> +	void *(*adjust_and_map_format)(struct v4l2_pix_format_mplane *format,
->> +				       bool is_output);
->> +	int (*enum_format)(struct v4l2_fmtdesc *f);
->>   };
->>   
->>   static inline bool rga_has_internal_iommu(const struct rockchip_rga *rga)
