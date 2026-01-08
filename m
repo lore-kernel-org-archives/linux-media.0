@@ -1,54 +1,54 @@
 Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6DE5B331A7A
-	for <linux-media@vger.kernel.org>; Thu,  8 Jan 2026 08:17:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2446B3B2AA
+	for <linux-media@vger.kernel.org>; Thu,  8 Jan 2026 08:17:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767860243; cv=none; b=AfCA1DWVtUw9VzfZiQosdimH8FDnIwwevIubT8DtE1KB9500LNm+6YQnRkbahhymgaljFy3qrioH/+HFCFP/TnVotRy5pO6iqYg3djZQn8ocAoOBYvflxLci2tKmvT+GCAlNm02R6bjWThn8GgEWKDbpRdi9fenZNx+sfLkpyL8=
+	t=1767860248; cv=none; b=JR2IrihjPUnfgMXxd1CKil5iNOfypu37zpwDjj4A3zoYOUT79jcMoUf8tT5gN+znBhgNg2EAxWQxrsIj6MQiMKdl6gZ1xIkuQGIn7QOlPu200b+l8i3QJjqX2sOPbNyD4KO4ur1MdatBJ6/Y41XBHeiV9VRZgm5uxHTKNLRgWjM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767860243; c=relaxed/simple;
-	bh=0U+WRwMcIku8TKMGPl19rhckCfREHU4LkFf0GXSAhjo=;
+	s=arc-20240116; t=1767860248; c=relaxed/simple;
+	bh=0KKMlihr1ZxnwthgOBOM+DHZ6Sawp6K7L21rg9DIBvg=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=rgcFfOGnGWJNfVGMnPJ1wYdVSmP8GN/8lf4Jba/8c1mpe0rYYGzFMTDfSZTXFI0MP4pELHdhAWrCuqqielGH40AhRkTgOmnyUKyhlhDc2JG4xPDNmmaDi+ItJlgtBKpfhCcfZeI/UrX+2e4AvMnkMSIPUsoPDsIZgVRocipI5+4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=SQ1bW7us; arc=none smtp.client-ip=198.175.65.15
+	 MIME-Version; b=nJAvMxwBfK/mWgjZSGc5TZqxkmzd++ipAe7qvkixqBDC2jPDrE2T+0yezOeVJEZRhcAxZm9ow5kI3PNZTKVw5uXd45CufoFecHRVhq5sSA78OZCLbekYc2eNzH8MrAaMcyvL5oDixcGEp1IFxJBzX7nSmmp+9zEGgUliAM9CWM0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=QeEuY5Tg; arc=none smtp.client-ip=198.175.65.15
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="SQ1bW7us"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="QeEuY5Tg"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1767860237; x=1799396237;
+  t=1767860245; x=1799396245;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=0U+WRwMcIku8TKMGPl19rhckCfREHU4LkFf0GXSAhjo=;
-  b=SQ1bW7usF3k0AyLc2RiV0pOeKDSnrQXINsYYudgGc9Yie/gA2HKpoq3L
-   MhQ65UJqY2gluAxpg8TMLcM/Vn31ceu1II6SCljUTh8WVo0E5TBFumx9K
-   ZxmGuS+X8XrlIusOxqnB/++YYlgOgT+65JlTfkhL+cj5Vtp0B7U/drVgl
-   uVlgLD3cagrpEYAQXT8FQqt+HY5QCBbsvcsbzbuqUQ0ggNPUWsjexCOx0
-   Vw0VNAdWyUffam07NYJphKKgT/5I1Xn2kPBllmZYspgV6WDIOxiuktDsm
-   IB04RtsbHOP+PGKUWZr40dZtNrwkzBB1W2HJzDtZ2AfEtpZa/IlGqsee7
-   A==;
-X-CSE-ConnectionGUID: 1qTEXCbtR+aBs4+VVDx8OQ==
-X-CSE-MsgGUID: 1qXxZRwwRdyZGH946MfLkg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11664"; a="72869920"
+  bh=0KKMlihr1ZxnwthgOBOM+DHZ6Sawp6K7L21rg9DIBvg=;
+  b=QeEuY5TgX2AOofTELhJaowx8MuU9QkP9fOjN9gVN2yu/11H1aYvpkPAL
+   WykRcGxOLHOY1//mPStz19ps1rjjl2EjF+k1Cr7Y0E3KFCNqoI1t3mkU8
+   QtGi6hfVBJg73bGhMIhVxZ83kIDBLAOhdni2i1aFSls9afqGxM+0C848X
+   3eTuDpMcdEeygBdUooW/BPSR+O7lAEIFUlds5qSawY+JLiRk7OQI25tyV
+   iE6SlrAiUPu90o8zM+lSDbYgxaW+ZcCiaFkplYU5mhWNQxH9W3faXU1Xj
+   jaiBXDyFvU8/xKW3p/YjfAF1DckrZMRQYm3ddJMZ7m7zT3P9zj7WJpaOQ
+   w==;
+X-CSE-ConnectionGUID: F+cUN0szQxS90J4n+Rga/w==
+X-CSE-MsgGUID: BNToj91UR3qgLYZmwd9DlQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11664"; a="72869931"
 X-IronPort-AV: E=Sophos;i="6.21,210,1763452800"; 
-   d="scan'208";a="72869920"
+   d="scan'208";a="72869931"
 Received: from orviesa002.jf.intel.com ([10.64.159.142])
-  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jan 2026 00:17:02 -0800
-X-CSE-ConnectionGUID: H+8jLUrEQIuBFO9aS3v1Xw==
-X-CSE-MsgGUID: 5Mt5IimNTTCcXML0O8dqUw==
+  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jan 2026 00:17:06 -0800
+X-CSE-ConnectionGUID: eDqRyMucTc6RWU1LjogmUQ==
+X-CSE-MsgGUID: Wv5wwIVrTkmBr1BFuaD/nw==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.21,210,1763452800"; 
-   d="scan'208";a="233842950"
+   d="scan'208";a="233842974"
 Received: from egrumbac-mobl6.ger.corp.intel.com (HELO kekkonen.fi.intel.com) ([10.245.245.211])
-  by orviesa002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jan 2026 00:17:01 -0800
+  by orviesa002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jan 2026 00:17:05 -0800
 Received: from punajuuri.localdomain (unknown [192.168.240.130])
-	by kekkonen.fi.intel.com (Postfix) with ESMTP id 63674121D7B;
+	by kekkonen.fi.intel.com (Postfix) with ESMTP id 77C64121E52;
 	Thu, 08 Jan 2026 10:17:13 +0200 (EET)
 Received: from sailus by punajuuri.localdomain with local (Exim 4.98.2)
 	(envelope-from <sakari.ailus@linux.intel.com>)
-	id 1vdlCi-00000002HS7-0IPL;
+	id 1vdlCi-00000002HSe-0nPh;
 	Thu, 08 Jan 2026 10:17:12 +0200
 Organization: Intel Finland Oy - BIC 0357606-4 - c/o Alberga Business Park, 6 krs, Bertel Jungin Aukio 5, 02600 Espoo
 From: Sakari Ailus <sakari.ailus@linux.intel.com>
@@ -57,9 +57,9 @@ Cc: bingbu.cao@linux.intel.com,
 	tian.shu.qiu@intel.com,
 	antti.laakso@linux.intel.com,
 	mehdi.djait@linux.intel.com
-Subject: [PATCH v4 01/14] media: ipu6: Ensure stream_mutex is acquired when dealing with node list
-Date: Thu,  8 Jan 2026 10:16:58 +0200
-Message-ID: <20260108081712.543704-2-sakari.ailus@linux.intel.com>
+Subject: [PATCH v4 08/14] media: ipu6: Always close firmware stream
+Date: Thu,  8 Jan 2026 10:17:05 +0200
+Message-ID: <20260108081712.543704-9-sakari.ailus@linux.intel.com>
 X-Mailer: git-send-email 2.47.3
 In-Reply-To: <20260108081712.543704-1-sakari.ailus@linux.intel.com>
 References: <20260108081712.543704-1-sakari.ailus@linux.intel.com>
@@ -71,64 +71,34 @@ List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-The ipu6 isys driver maintains the list of video buffer queues related to
-a stream (in ipu6 context streams on the same CSI-2 virtual channel) and
-this list is modified through VIDIOC_STREAMON and VIDIOC_STREAMOFF IOCTLs.
-Ensure the common mutex is acquired when accessing the linked list, i.e.
-the isys device context's stream_mutex.
+Close the firmware stream even when disabling a stream on an upstream
+sub-device fails. This allows the firmware to release resources related to
+a stream that is stopped in any case.
 
-Add a lockdep assert to ipu6_isys_get_buffer_list() and switch to guard()
-while at it as the error handling becomes more simple this way.
-
+Suggested-by: Bingbu Cao <bingbu.cao@linux.intel.com>
 Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
 ---
- drivers/media/pci/intel/ipu6/ipu6-isys-queue.c | 8 +++++---
- 1 file changed, 5 insertions(+), 3 deletions(-)
+ drivers/media/pci/intel/ipu6/ipu6-isys-video.c | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/media/pci/intel/ipu6/ipu6-isys-queue.c b/drivers/media/pci/intel/ipu6/ipu6-isys-queue.c
-index aa2cf7287477..8f05987cdb4e 100644
---- a/drivers/media/pci/intel/ipu6/ipu6-isys-queue.c
-+++ b/drivers/media/pci/intel/ipu6/ipu6-isys-queue.c
-@@ -3,6 +3,7 @@
-  * Copyright (C) 2013--2024 Intel Corporation
-  */
- #include <linux/atomic.h>
-+#include <linux/cleanup.h>
- #include <linux/bug.h>
- #include <linux/device.h>
- #include <linux/list.h>
-@@ -201,6 +202,8 @@ static int buffer_list_get(struct ipu6_isys_stream *stream,
- 	unsigned long flags;
- 	unsigned long buf_flag = IPU6_ISYS_BUFFER_LIST_FL_INCOMING;
- 
-+	lockdep_assert_held(&stream->mutex);
+diff --git a/drivers/media/pci/intel/ipu6/ipu6-isys-video.c b/drivers/media/pci/intel/ipu6/ipu6-isys-video.c
+index 919b77107cef..54d861aca008 100644
+--- a/drivers/media/pci/intel/ipu6/ipu6-isys-video.c
++++ b/drivers/media/pci/intel/ipu6/ipu6-isys-video.c
+@@ -1036,11 +1036,10 @@ int ipu6_isys_video_set_streaming(struct ipu6_isys_video *av, int state,
+ 			sd->name, r_pad->index, stream_mask);
+ 		ret = v4l2_subdev_disable_streams(sd, r_pad->index,
+ 						  stream_mask);
+-		if (ret) {
++		if (ret)
+ 			dev_err(dev, "stream off %s failed with %d\n", sd->name,
+ 				ret);
+-			return ret;
+-		}
 +
- 	bl->nbufs = 0;
- 	INIT_LIST_HEAD(&bl->head);
- 
-@@ -294,9 +297,8 @@ static int ipu6_isys_stream_start(struct ipu6_isys_video *av,
- 	struct ipu6_isys_buffer_list __bl;
- 	int ret;
- 
--	mutex_lock(&stream->isys->stream_mutex);
-+	guard(mutex)(&stream->isys->stream_mutex);
- 	ret = ipu6_isys_video_set_streaming(av, 1, bl);
--	mutex_unlock(&stream->isys->stream_mutex);
- 	if (ret)
- 		goto out_requeue;
- 
-@@ -637,10 +639,10 @@ static void stop_streaming(struct vb2_queue *q)
- 	mutex_lock(&av->isys->stream_mutex);
- 	if (stream->nr_streaming == stream->nr_queues && stream->streaming)
- 		ipu6_isys_video_set_streaming(av, 0, NULL);
-+	list_del(&aq->node);
- 	mutex_unlock(&av->isys->stream_mutex);
- 
- 	stream->nr_streaming--;
--	list_del(&aq->node);
- 	stream->streaming = 0;
- 	mutex_unlock(&stream->mutex);
- 
+ 		close_streaming_firmware(av);
+ 	} else {
+ 		ret = start_stream_firmware(av, bl);
 -- 
 2.47.3
 
