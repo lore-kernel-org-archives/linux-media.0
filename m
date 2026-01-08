@@ -1,58 +1,57 @@
 Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 68A03362141
-	for <linux-media@vger.kernel.org>; Thu,  8 Jan 2026 08:28:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 245C92F9984
+	for <linux-media@vger.kernel.org>; Thu,  8 Jan 2026 08:29:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767860942; cv=none; b=ZJQHLxgv2zdCzbwmSJc/ClqsEcKHWTogMJ7mwTWrL2hZA7RqWuRlxWj7QZ9g0/YvC/th1FcGvhRqT9B3leqCBZoiqwqldGnneAGUWtWXl+EYmw4qRBi9Bl0bdZswCuXVRInMNqdv1hc+khtAqg9iKeMDLSwjrGeJ2KeScxIEMno=
+	t=1767860969; cv=none; b=IfOKCRCpk1XTdYNKpTP5rfBum4FdI1tgsnJZ+j6XV34ujp9ARyTpmPrG/l9Rm2YaqNJ6aFFx9T5h7d1D9ecNrDI059hC4s9q2WAL+DDdiEL6vX/JHano0s/loPSNvgQzdKOzBstcz3pPJ4xIge9EJniFXvYpyDlknpC+3JSIyhQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767860942; c=relaxed/simple;
-	bh=YUbVUI2fP5tgKgXu0/4nJJv+FstVimGJS+j8j6qWOj0=;
+	s=arc-20240116; t=1767860969; c=relaxed/simple;
+	bh=xdGlVBp4uUpHeYToBRzrYIdctr2LhJ3xZWhNdR33+Fc=;
 	h=Subject:To:Cc:References:From:Message-ID:Date:MIME-Version:
-	 In-Reply-To:Content-Type; b=keAj7L8MVN2PPMO37go+pYRYdPrCpb/BAEkPslt2p7/I/+PY5pZUKkaPCR6rSYaDGI2GnX8YCobzWHbfU4ufe/sQJ+raV7TZeTvBTNg1kigTM8xNWPdDA/hglvK2PwPSomoCcbKHSdIKrHGhsnZTxXyn/bfsJaxKgxaqHG7iCRg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=XxGsfjTB; arc=none smtp.client-ip=192.198.163.7
+	 In-Reply-To:Content-Type; b=Esi64Bo4wrnPu41oemrLwuxNKccaL3/T7TQO3cZG4t4BGNZygARW2j+FPBDhLrJMOLmnQ1hJo9iTnk/XFhFTfRjwzieeUQ6Hqjajdersului4Io/QWnadnwxR2et25u/g0AqjEgdjWy8hgk2N+wgd7z585TtubEDqbBWaTtUEkY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Fz/51mIb; arc=none smtp.client-ip=192.198.163.7
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="XxGsfjTB"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Fz/51mIb"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1767860935; x=1799396935;
+  t=1767860963; x=1799396963;
   h=subject:to:cc:references:from:message-id:date:
    mime-version:in-reply-to:content-transfer-encoding;
-  bh=YUbVUI2fP5tgKgXu0/4nJJv+FstVimGJS+j8j6qWOj0=;
-  b=XxGsfjTBIf2GD7+YHoVh4v07X+5qtUFGdQSLBHbnIQM0R9PdwLghtcYD
-   4N76o5tfBQKoqw31ShK9uAib1Z/wWMbiLnnmhoOYPptrMG38kM7tPbC2X
-   gNNQGCN69wUdA0DgQAgVKci1w/bMuji7Gl851r8JvlbrFkLhXMe5AOCWf
-   Ay0xwJ4K06fpEmI2ioQJzB0oCPRP8Wg/ZK2dCG+qVT0AX1r+Bl7gcJmAl
-   ekzWd35Iw4x0Y4XmMXFxoYmWsp8HWL3FoB/IjRcvSqDX9EH4MXQpoHkgr
-   ACW2dA5KxJfeEsFBrUIzJUh2D6AEhyeTWFqJlM9DSAxMDKxIigJCjaSXU
-   A==;
-X-CSE-ConnectionGUID: 7M+MlWyPQ0GXijaRcTExGQ==
-X-CSE-MsgGUID: leYlZ8wYTYSCezFEEHD6yw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11664"; a="94702068"
+  bh=xdGlVBp4uUpHeYToBRzrYIdctr2LhJ3xZWhNdR33+Fc=;
+  b=Fz/51mIb/Pq+TrRmrI9wm8/ojLhLsjx0N/BccrJ5YBxVKDAcQAQVK0Fx
+   RdgoAB0WDtoCXoKL4i9sW57lvOUSnsYbMhBo2Pcex2ZKQbptKI+pAgbks
+   jXFXL65E62L/Z+CiymU/s8eFOCI9G7urbdTHNrpCRppMguH27E5bhP/2C
+   G516Drfc3PJeIW8hzYPcWXxX7aydbdfkeN9Yqjz7h9jz823gXt+cdQVGI
+   uOP2GuzpxGsSluKEENW0FG2bOmB0kXTFfAQbCNNbKFRzfFTf+IWSwc0oM
+   qLmzGPqflh/KV0Ln043lXWTKGTu1a0JbxL1/G+zHVfbFZYL2JOfysJRKc
+   w==;
+X-CSE-ConnectionGUID: B4s1OL6mQ6y8OI3QvxqNzw==
+X-CSE-MsgGUID: 1CH94gkoT22Yo4Um4aVT7A==
+X-IronPort-AV: E=McAfee;i="6800,10657,11664"; a="94702073"
 X-IronPort-AV: E=Sophos;i="6.21,210,1763452800"; 
-   d="scan'208";a="94702068"
+   d="scan'208";a="94702073"
 Received: from fmviesa004.fm.intel.com ([10.60.135.144])
-  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jan 2026 00:28:52 -0800
-X-CSE-ConnectionGUID: AV1cv4UtRdaD9lEg1WRbkA==
-X-CSE-MsgGUID: tC826ivRSLSj9anTrEssBg==
+  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jan 2026 00:29:14 -0800
+X-CSE-ConnectionGUID: zbDeTkLPTX+Y0hvB8eXosA==
+X-CSE-MsgGUID: GoYKLRS8TXWkGKSD+NUu8A==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.21,210,1763452800"; 
-   d="scan'208";a="207984680"
+   d="scan'208";a="207984693"
 Received: from ipu5-build.bj.intel.com (HELO [10.238.153.130]) ([10.238.153.130])
-  by fmviesa004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jan 2026 00:28:50 -0800
-Subject: Re: [PATCH v4 07/14] media: ipu6: Close firmware streams on streaming
- enable failure
+  by fmviesa004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jan 2026 00:29:12 -0800
+Subject: Re: [PATCH v4 08/14] media: ipu6: Always close firmware stream
 To: Sakari Ailus <sakari.ailus@linux.intel.com>, linux-media@vger.kernel.org
 Cc: tian.shu.qiu@intel.com, antti.laakso@linux.intel.com,
  mehdi.djait@linux.intel.com
 References: <20260108081712.543704-1-sakari.ailus@linux.intel.com>
- <20260108081712.543704-8-sakari.ailus@linux.intel.com>
+ <20260108081712.543704-9-sakari.ailus@linux.intel.com>
 From: Bingbu Cao <bingbu.cao@linux.intel.com>
-Message-ID: <68f570e1-7cb8-5ce2-3c28-c1bea1196027@linux.intel.com>
-Date: Thu, 8 Jan 2026 16:18:43 +0800
+Message-ID: <5e7d0d86-eb39-2dfa-47f7-4f3724a539b3@linux.intel.com>
+Date: Thu, 8 Jan 2026 16:19:05 +0800
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.10.0
 Precedence: bulk
@@ -61,35 +60,45 @@ List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-In-Reply-To: <20260108081712.543704-8-sakari.ailus@linux.intel.com>
+In-Reply-To: <20260108081712.543704-9-sakari.ailus@linux.intel.com>
 Content-Type: text/plain; charset=windows-1252
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
 
+Sakari,
 
+Thanks for the patch.
 Reviewed-by: Bingbu Cao <bingbu.cao@intel.com>
 
 On 1/8/26 4:17 PM, Sakari Ailus wrote:
-> When enabling streaming fails, the stream is stopped in firmware but not
-> closed. Do this to release resources on firmware side.
+> Close the firmware stream even when disabling a stream on an upstream
+> sub-device fails. This allows the firmware to release resources related to
+> a stream that is stopped in any case.
 > 
+> Suggested-by: Bingbu Cao <bingbu.cao@linux.intel.com>
 > Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
 > ---
->  drivers/media/pci/intel/ipu6/ipu6-isys-video.c | 1 +
->  1 file changed, 1 insertion(+)
+>  drivers/media/pci/intel/ipu6/ipu6-isys-video.c | 5 ++---
+>  1 file changed, 2 insertions(+), 3 deletions(-)
 > 
 > diff --git a/drivers/media/pci/intel/ipu6/ipu6-isys-video.c b/drivers/media/pci/intel/ipu6/ipu6-isys-video.c
-> index dec8f5ffcfa5..919b77107cef 100644
+> index 919b77107cef..54d861aca008 100644
 > --- a/drivers/media/pci/intel/ipu6/ipu6-isys-video.c
 > +++ b/drivers/media/pci/intel/ipu6/ipu6-isys-video.c
-> @@ -1066,6 +1066,7 @@ int ipu6_isys_video_set_streaming(struct ipu6_isys_video *av, int state,
->  
->  out_media_entity_stop_streaming_firmware:
->  	stop_streaming_firmware(av);
-> +	close_streaming_firmware(av);
->  
->  	return ret;
->  }
+> @@ -1036,11 +1036,10 @@ int ipu6_isys_video_set_streaming(struct ipu6_isys_video *av, int state,
+>  			sd->name, r_pad->index, stream_mask);
+>  		ret = v4l2_subdev_disable_streams(sd, r_pad->index,
+>  						  stream_mask);
+> -		if (ret) {
+> +		if (ret)
+>  			dev_err(dev, "stream off %s failed with %d\n", sd->name,
+>  				ret);
+> -			return ret;
+> -		}
+> +
+>  		close_streaming_firmware(av);
+>  	} else {
+>  		ret = start_stream_firmware(av, bl);
 > 
 
 -- 
