@@ -1,162 +1,161 @@
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 077F937418F
-	for <linux-media@vger.kernel.org>; Thu,  8 Jan 2026 14:47:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DEFC026CE1E
+	for <linux-media@vger.kernel.org>; Thu,  8 Jan 2026 15:08:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767883629; cv=none; b=qvV0bY350yWwhdr3yb8pNS17tizAqPe/4Dw8eYKj2BGwo+Ej5jc4XkC/cdbhKRT0cClA6gy9sPFW1j517V9qLvtMDpJm84xNs9fmjkbcIlv3b/koR+Bk/AwmBT7UJs3ZNjUZN3SekVHCsRs0oW5PDus0ZD79vRPagtRIJQwpaRw=
+	t=1767884894; cv=none; b=WqDWEhdtvqn91D3R+YSFYVq+ZIvsNDy+/OVJQLSCNeQ2lsNGhVxR9ICKCeLo4mMM8mXPWqH7v3es3SlXE1LwjN00EWZMlh9oDuLQcKWo3U4SUoHTOldnGYWUc7d+Y96KSrqC+wi4CCKyr/xqHbrpsqTbKbHxdaKyZKe/5W5y954=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767883629; c=relaxed/simple;
-	bh=2BZ7KVIaNwSuN//KdC4ICE74rFqcPFo97PQhKY1HK8s=;
-	h=Message-ID:Date:MIME-Version:From:Subject:To:Cc:References:
-	 In-Reply-To:Content-Type; b=UHVyglpF6VqvGs95pXbon0fo3ST4z/sozZAs8JRdPUz/pn18AfPDwSlkJjrE8ifbwpWQZPdcqJvlF/agRM3kUHiHWVYi+BaLt1lTkZ7pC1iBWA1gEbQBmEHI/5AaZjmqurh6huq3EU6/KSrgbzBdtnNzPm16Su7DnJC55giPzqw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=LQW+zTpY; dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b=MSFPdlTp; arc=none smtp.client-ip=205.220.168.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
+	s=arc-20240116; t=1767884894; c=relaxed/simple;
+	bh=39Z9S4WdE/PvsD7g4HhaCFW2OPS03zLo06BGT58/Sdg=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=pQsj42CrToFt0UgOwOtsAGjqzaWK/BkM/tI5jFgXgFfBZaTmMIrhSC3DT9UTgNX4TyqshH/b2P+QRXYYVzpEHf+v2SY/+GXWSojb1X4Q54dctIgMuiR/Gh0GMjkvGc/gHUD4lI3DpWBKTLfeg9oHHNQIkLaHwIiCjMfc8tdW6qU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=G4s2YCTw; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="LQW+zTpY";
-	dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b="MSFPdlTp"
-Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 6088w9Po1570556
-	for <linux-media@vger.kernel.org>; Thu, 8 Jan 2026 14:47:04 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	yQx1zHprubxK6pbdiaiiehW9y7JQyLOrnHLwGSB3tXk=; b=LQW+zTpYKLN1KhYj
-	oXv8QrNbScWWvIc2MFyRMg2/CgqC9ZQTYYpyJFoaR4ZqHQHayejv5Fmn6E544cgv
-	rqQLekHGGdUdLUABBVrU8sFc7nr3LUoG2WwqMq3IRM1ejzAumWu6LBnxJrUoo1/e
-	D/4oJsuQvD/GDT+EVuZYTnsdjHBa34kJwS5W5aNX565g0fVY86fxNRVqaxp5pJYe
-	OCk4SOJlMJCDScNydwyi6UxZqMHZtMxvF9aIOcOZiIajBgUCYmLC43s5swu6ufI0
-	m0Olk69ltNWQOScfPPEjQi2v++Kt/137q4ZqfZZWJjJJNLLpd1Opd1P6j3muhcqS
-	PaQ7Jg==
-Received: from mail-qk1-f197.google.com (mail-qk1-f197.google.com [209.85.222.197])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4bj9hqs1c5-1
-	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
-	for <linux-media@vger.kernel.org>; Thu, 08 Jan 2026 14:47:04 +0000 (GMT)
-Received: by mail-qk1-f197.google.com with SMTP id af79cd13be357-8b8738fb141so588431285a.0
-        for <linux-media@vger.kernel.org>; Thu, 08 Jan 2026 06:47:04 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=oss.qualcomm.com; s=google; t=1767883623; x=1768488423; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:content-language:references
-         :cc:to:subject:from:user-agent:mime-version:date:message-id:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=yQx1zHprubxK6pbdiaiiehW9y7JQyLOrnHLwGSB3tXk=;
-        b=MSFPdlTpDiPRPyb0hABSX3q/+Cu7IOB0DPPbyzMPk4i6knS06QoYnPRLTDi0+htQ/U
-         7ANEj6wH95eGfHFBBaMBZ9HcDQV0qagHHivRgAhIABjaPgHhGxBYVIGzkRS10CZkAVW7
-         n0VlKzL/wgt6qT/JaplazPzCorclEAdZ1I1GauD7efl18rSCqjgWWLsClUGnrgqpXn6p
-         VLK+0/BUZhM+BEv4cqhnScFRVttnUZu0ra0gGDED9cruih6cGuY/pks7RcI4MJisSL+J
-         C/D75/S4ZP30u/2Z8tK31cEis0sC8OUtkEqBE0Agu7PYK7WEaOvSIXQ1QwT8An3ekmI1
-         nT8g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1767883623; x=1768488423;
-        h=content-transfer-encoding:in-reply-to:content-language:references
-         :cc:to:subject:from:user-agent:mime-version:date:message-id:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=yQx1zHprubxK6pbdiaiiehW9y7JQyLOrnHLwGSB3tXk=;
-        b=OZgEEqdi/anKO9zDuBSDghGMZ+0N8eRNQwEyDukFdBKIMDbmOF0znVe19WOGG8YO/o
-         /5tFpoKrme/6r/8cUU/mLYTaEBQq6tMtv3GcFDZv0WvFshQoVtv5oZVJtsWqa91NV9+U
-         8OTm+1YhHV59YeyfneAXQzK1bv2sww3yk7g5pZepAPC7d1SQ9+iCXeGYEe8mMhAGWqAM
-         frITeBDSEORyb+PYyVfJOm5luQSQmzkR76o5wZASfLtjD9JRlUpne3HL09V2rzhwhZ0w
-         lf0A5GxDJW6XSFzz0jIekbpI9INLoq/QBItkpXy2jtQQ7k0jcvdtWBwQIoyx9KZG7JFx
-         D6UQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXQhUTeF0zwq9IVvVORDEQAf6uVcTvAGcvrj4eStbpUINrNO1Sp2PNneDSYuBATBvcD32EtEHfDLb/05g==@vger.kernel.org
-X-Gm-Message-State: AOJu0YzOFxTXdkhnr+MLn/ACOTemEeKyKdytihDdbdzdp3JUOmwGqchx
-	rC/+S4EukxJuQBLq5iDqkYmISrKAvBllzYXIdOViOWlLzhh/ouECWZMDn0clppf6GhaSlGebIw9
-	STqRLi+hhq0rNrsVI1DHbd+nZ34N+W7Yex/jWM/ZWdVfhTmlNvvaA3dF+YG571go5IQ==
-X-Gm-Gg: AY/fxX6ZHa+ZSoTmTS4Jr/ULOxCh6hSozoF7Dm/OZ6Y0tTIy2Y+F7vTVeMesqrr//uY
-	SI3iFbuWXJuWAeT+4oMytS6xwXOxtiFvfapscFlzHvbvspV7svsI+kujTs7FUoxtWnev5bsPJaN
-	0MBYPclIMUrep8Z+Nyb2b7rrJUeKcLWKL3S2zUcg3gjEqLJTPWE/dXu7vloXZFDDni2S41MH278
-	894ZDi4Pdl89uVtkFoiWw2xToFRChaB3Rt3MBjuqeBMWgFR3uthJVdoPXHZNC3cAuSVltszBVIX
-	nEDBYY+qrZAEvPXQe/MX7K4VdzONZefbrXtSdQ7X9p5/1a0R58acwpDh2bqllFxfe7ZX9Lo3Emb
-	24fZjwJ06E8GaVNInw9YhyZ8tr6LijIxRYblNpgK46DkG+5TFlcNj4DrmJ91WixSUZ/0xR0JIub
-	4ngldov2vUiJWqLBAcItT8Z7nnNCP5YJuiAYaL3NTO/egbXIMFoS8TOxdt4Ao4PwB6ooyegTZdN
-	2gQ
-X-Received: by 2002:a05:620a:4105:b0:828:faae:b444 with SMTP id af79cd13be357-8c37f51e9b5mr1170491685a.20.1767883623404;
-        Thu, 08 Jan 2026 06:47:03 -0800 (PST)
-X-Google-Smtp-Source: AGHT+IHF++IUjoZu07u3DNCo2b54I2vRi6XkQ2W4vI79GVNQhT0wdIcy7qCBj2EwhVVIzuBdxK5jSg==
-X-Received: by 2002:a05:620a:4105:b0:828:faae:b444 with SMTP id af79cd13be357-8c37f51e9b5mr1170486985a.20.1767883622782;
-        Thu, 08 Jan 2026 06:47:02 -0800 (PST)
-Received: from ?IPV6:2001:1c00:c32:7800:5bfa:a036:83f0:f9ec? (2001-1c00-0c32-7800-5bfa-a036-83f0-f9ec.cable.dynamic.v6.ziggo.nl. [2001:1c00:c32:7800:5bfa:a036:83f0:f9ec])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-b84591b6240sm284329566b.10.2026.01.08.06.47.01
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 08 Jan 2026 06:47:02 -0800 (PST)
-Message-ID: <4f3c4058-4b62-421d-8515-69a6aa852196@oss.qualcomm.com>
-Date: Thu, 8 Jan 2026 15:47:01 +0100
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="G4s2YCTw"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 86EF3C4AF09
+	for <linux-media@vger.kernel.org>; Thu,  8 Jan 2026 15:08:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1767884893;
+	bh=39Z9S4WdE/PvsD7g4HhaCFW2OPS03zLo06BGT58/Sdg=;
+	h=References:In-Reply-To:Reply-To:From:Date:Subject:To:Cc:From;
+	b=G4s2YCTwalIIEOa5+zNpraynj/0tm4IP0B4nWh1B8yEFVsk2q/4Nwsv9udsyPMb/V
+	 c2DO2apYh/CjwSMjCs/GFKynWKqfctOOJP6KTPot1qppd7LbMrXROq0hxcvzwvQYug
+	 gbDa6i9pWATYUX1E67v6srC0L0rFGdb0qk2RXH+dPDqmYfqT2ULqYl2m7iJb8TvW22
+	 0Iv4ktk6Y54LOfGHWKdahqYrTTBH9vq6aJnCj8p4vWkSJl+TSizIs5myGfq2YeVxMD
+	 qU871L9PFs1zSFfmyBQZGNRSvkUNcOwVXUaUaOQ9oAi7VSMKLK5wPCr1O6DH+MZ5QT
+	 kdU2zU/LkS7rw==
+Received: by mail-ot1-f44.google.com with SMTP id 46e09a7af769-7c76f65feb5so2557969a34.0
+        for <linux-media@vger.kernel.org>; Thu, 08 Jan 2026 07:08:13 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCWf9UMEPUAgvDYm+Uap0LSXDwFofz+lY4cFlZG4HShM5G63c7dSwDG8dtmP1TXeP1K4/orfJvc78bQLzQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0YwQ5JDFCqhriWiH+cx5wdqHz0mhvJgBWXYDxwnmmuG/uUGZ0vEK
+	U1yARvfP0WNsc4ZyG3vtupFxvUpI7w1JxNN1Yhz0mJtjQBIKCrlnx9A6V2q1kM+3n4JnMI1bxMo
+	B/MrVumnz3jCOUp4zXxg1PgrOLC0O9wo=
+X-Google-Smtp-Source: AGHT+IH/gnEZYqIaFUUN6qjbp6n1QUe5qlNXozvSo/LvWHOByHxaNwk2S8ODoFI4rDHWqv0owwBmLR26/u3UOEkO0ho=
+X-Received: by 2002:a05:6820:6181:b0:65f:5d31:2965 with SMTP id
+ 006d021491bc7-65f5d313701mr1029748eaf.47.1767884892592; Thu, 08 Jan 2026
+ 07:08:12 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-From: johannes.goede@oss.qualcomm.com
-Subject: Re: [PATCH] media: i2c: ov01a10: Fix digital gain range
-To: Mehdi Djait <mehdi.djait@linux.intel.com>, sakari.ailus@linux.intel.com
-Cc: bingbu.cao@intel.com, linux-media@vger.kernel.org
-References: <20260108135738.175304-1-mehdi.djait@linux.intel.com>
-Content-Language: en-US, nl
-In-Reply-To: <20260108135738.175304-1-mehdi.djait@linux.intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Authority-Analysis: v=2.4 cv=GN8F0+NK c=1 sm=1 tr=0 ts=695fc368 cx=c_pps
- a=50t2pK5VMbmlHzFWWp8p/g==:117 a=xqWC_Br6kY4A:10 a=IkcTkHD0fZMA:10
- a=vUbySO9Y5rIA:10 a=s4-Qcg_JpJYA:10 a=VkNPw1HP01LnGYTKEx00:22
- a=QyXUC8HyAAAA:8 a=EUspDBNiAAAA:8 a=9BBqhoCBsg4kyb4jw0YA:9 a=QEXdDO2ut3YA:10
- a=IoWCM6iH3mJn3m4BftBB:22
-X-Proofpoint-GUID: eG41mTNZIo2s58MXPn7PZB8NxmvAr694
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMTA4MDEwNiBTYWx0ZWRfX89S9dCmWHdC2
- ablUnQU5q1Uod+jYvrKDdzHOLfPN0F/0D4mM4UCHNydVpX+yP2l9p6DNV0/QPB/l680B0On52O7
- Z9XYu9c+4mA2uNXB36CZ2dMv4HUybYxZ1OHI9BijXnEsZX0uWKW8EQiRmrtZUAxLJpUABmppNuO
- Xqm11uZYw5PipEsz5CSrXZQMA3ac14+OjxqrkkiGy0Hv9lVnLYHMoJzUbpvFOXCf4Z1Ha8PX8NL
- HDA7Y4xEJ+OyHK0YnQJ2CdusFi7bsPW2Gnn80JBSKbe4od/PXZmLkOI/3pDMPVCr453WDXt/1/+
- JxjD1/CcApHgI/2N9J9Q+2QJnGp2SZLqKLSwWOfb9+mGAYOEcWmFIKVoht9LpzkvW9ZpGXPD+fp
- g3Lnu25ntykZN7B3hHgpp92W7tT1MA09BJapvr03KUeu9jGTFPEiajkB6eHYXG+m7h+h96FMHaA
- vBjV5SaRejHSY9XWXEw==
-X-Proofpoint-ORIG-GUID: eG41mTNZIo2s58MXPn7PZB8NxmvAr694
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.9,FMLib:17.12.100.49
- definitions=2026-01-08_03,2026-01-07_03,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- adultscore=0 priorityscore=1501 clxscore=1015 phishscore=0 lowpriorityscore=0
- bulkscore=0 spamscore=0 malwarescore=0 impostorscore=0 suspectscore=0
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.22.0-2512120000 definitions=main-2601080106
+References: <20251225103616.3203473-1-wens@kernel.org> <20251225103616.3203473-5-wens@kernel.org>
+ <13929653.uLZWGnKmhe@jernej-laptop>
+In-Reply-To: <13929653.uLZWGnKmhe@jernej-laptop>
+Reply-To: wens@kernel.org
+From: Chen-Yu Tsai <wens@kernel.org>
+Date: Thu, 8 Jan 2026 23:07:52 +0800
+X-Gmail-Original-Message-ID: <CAGb2v65LzhdXfX16HTgGbC7OYkuX=vqCzB65=BqD4i1SiCQeRw@mail.gmail.com>
+X-Gm-Features: AQt7F2r3aAZUypwXBa9lAFiH8eexcqiOW8WUO-M-nGoH39uZtjTr8DirPSqIr98
+Message-ID: <CAGb2v65LzhdXfX16HTgGbC7OYkuX=vqCzB65=BqD4i1SiCQeRw@mail.gmail.com>
+Subject: Re: [PATCH 4/4] ARM: dts: allwinner: Replace status "failed" with "fail"
+To: =?UTF-8?Q?Jernej_=C5=A0krabec?= <jernej.skrabec@gmail.com>
+Cc: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+	Conor Dooley <conor+dt@kernel.org>, Jernej Skrabec <jernej@kernel.org>, 
+	Samuel Holland <samuel@sholland.org>, Linus Walleij <linusw@kernel.org>, 
+	Mauro Carvalho Chehab <mchehab@kernel.org>, devicetree@vger.kernel.org, 
+	linux-sunxi@lists.linux.dev, linux-gpio@vger.kernel.org, 
+	linux-media@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+	linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi,
+On Fri, Dec 26, 2025 at 2:49=E2=80=AFAM Jernej =C5=A0krabec <jernej.skrabec=
+@gmail.com> wrote:
+>
+> Dne =C4=8Detrtek, 25. december 2025 ob 11:36:15 Srednjeevropski standardn=
+i =C4=8Das je Chen-Yu Tsai napisal(a):
+> > The device tree bindings specify using "fail", not "failed".
+> >
+> > Fix up all the ones that are wrong.
+>
+> While patch indeed fixes the issue, I wonder if "fail" is proper value?
+> According to specs, it means that device needs repair. What about just
+> keep "disabled"?
 
-On 8-Jan-26 14:57, Mehdi Djait wrote:
-> Digital gain wraps-around at the maximum of 16838 / 0x3fff.
-> Fix the maximum digital gain by setting it to 0x3fff.
-> 
-> Signed-off-by: Mehdi Djait <mehdi.djait@linux.intel.com>
+"disabled" isn't right either, as that means its disconnected or not used.
+These are definitely connected.
 
-Thanks, patch looks good to me:
+On the other hand we could fix these and describe the supplies for the
+external as supplies for the pin banks? But I doubt anyone has these
+devices around for testing.
 
-Reviewed-by: Hans de Goede <johannes.goede@oss.qualcomm.com>
+ChenYu
 
-Regards,
-
-Hans
-
-
-
-
-> ---
->  drivers/media/i2c/ov01a10.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/media/i2c/ov01a10.c b/drivers/media/i2c/ov01a10.c
-> index a35648f29932..fb4212ae3fbb 100644
-> --- a/drivers/media/i2c/ov01a10.c
-> +++ b/drivers/media/i2c/ov01a10.c
-> @@ -63,7 +63,7 @@
->  #define OV01A10_REG_DIGITAL_GAIN_GR	CCI_REG24(0x3513)
->  #define OV01A10_REG_DIGITAL_GAIN_R	CCI_REG24(0x3516)
->  #define OV01A10_DGTL_GAIN_MIN		0
-> -#define OV01A10_DGTL_GAIN_MAX		0x3ffff
-> +#define OV01A10_DGTL_GAIN_MAX		0x3fff
->  #define OV01A10_DGTL_GAIN_STEP		1
->  #define OV01A10_DGTL_GAIN_DEFAULT	1024
->  
-
+> Best regards,
+> Jernej
+>
+> >
+> > Signed-off-by: Chen-Yu Tsai <wens@kernel.org>
+> > ---
+> >  arch/arm/boot/dts/allwinner/sun4i-a10-dserve-dsrv9703c.dts | 2 +-
+> >  arch/arm/boot/dts/allwinner/sun4i-a10-pov-protab2-ips9.dts | 2 +-
+> >  arch/arm/boot/dts/allwinner/sun6i-a31-hummingbird.dts      | 2 +-
+> >  arch/arm/boot/dts/allwinner/sun6i-a31s-primo81.dts         | 2 +-
+> >  4 files changed, 4 insertions(+), 4 deletions(-)
+> >
+> > diff --git a/arch/arm/boot/dts/allwinner/sun4i-a10-dserve-dsrv9703c.dts=
+ b/arch/arm/boot/dts/allwinner/sun4i-a10-dserve-dsrv9703c.dts
+> > index 63e77c05bfda..f2413ba6a858 100644
+> > --- a/arch/arm/boot/dts/allwinner/sun4i-a10-dserve-dsrv9703c.dts
+> > +++ b/arch/arm/boot/dts/allwinner/sun4i-a10-dserve-dsrv9703c.dts
+> > @@ -112,7 +112,7 @@ axp209: pmic@34 {
+> >
+> >  &i2c1 {
+> >       /* pull-ups and devices require AXP209 LDO3 */
+> > -     status =3D "failed";
+> > +     status =3D "fail";
+> >  };
+> >
+> >  &i2c2 {
+> > diff --git a/arch/arm/boot/dts/allwinner/sun4i-a10-pov-protab2-ips9.dts=
+ b/arch/arm/boot/dts/allwinner/sun4i-a10-pov-protab2-ips9.dts
+> > index c32596947647..e0c7099015da 100644
+> > --- a/arch/arm/boot/dts/allwinner/sun4i-a10-pov-protab2-ips9.dts
+> > +++ b/arch/arm/boot/dts/allwinner/sun4i-a10-pov-protab2-ips9.dts
+> > @@ -96,7 +96,7 @@ axp209: pmic@34 {
+> >
+> >  &i2c1 {
+> >       /* pull-ups and devices require AXP209 LDO3 */
+> > -     status =3D "failed";
+> > +     status =3D "fail";
+> >  };
+> >
+> >  &i2c2 {
+> > diff --git a/arch/arm/boot/dts/allwinner/sun6i-a31-hummingbird.dts b/ar=
+ch/arm/boot/dts/allwinner/sun6i-a31-hummingbird.dts
+> > index 5bce7a32651e..5dfd36e3a49d 100644
+> > --- a/arch/arm/boot/dts/allwinner/sun6i-a31-hummingbird.dts
+> > +++ b/arch/arm/boot/dts/allwinner/sun6i-a31-hummingbird.dts
+> > @@ -170,7 +170,7 @@ hdmi_out_con: endpoint {
+> >
+> >  &i2c0 {
+> >       /* pull-ups and devices require AXP221 DLDO3 */
+> > -     status =3D "failed";
+> > +     status =3D "fail";
+> >  };
+> >
+> >  &i2c1 {
+> > diff --git a/arch/arm/boot/dts/allwinner/sun6i-a31s-primo81.dts b/arch/=
+arm/boot/dts/allwinner/sun6i-a31s-primo81.dts
+> > index b32b70ada7fd..fefd887fbc39 100644
+> > --- a/arch/arm/boot/dts/allwinner/sun6i-a31s-primo81.dts
+> > +++ b/arch/arm/boot/dts/allwinner/sun6i-a31s-primo81.dts
+> > @@ -90,7 +90,7 @@ hdmi_out_con: endpoint {
+> >
+> >  &i2c0 {
+> >       /* pull-ups and device VDDIO use AXP221 DLDO3 */
+> > -     status =3D "failed";
+> > +     status =3D "fail";
+> >  };
+> >
+> >  &i2c1 {
+> >
+>
+>
+>
+>
+>
