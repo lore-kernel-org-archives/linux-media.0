@@ -1,117 +1,130 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
+Received: from bali.collaboradmins.com (bali.collaboradmins.com [148.251.105.195])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 413DE345CBF;
-	Thu,  8 Jan 2026 08:49:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0E09D3ED123;
+	Thu,  8 Jan 2026 09:37:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.251.105.195
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767862198; cv=none; b=HFhYSh9FU/v0WYB5a+2sVmFE7pKBBc+Hz+yK7lplYKhsjwgwK9P+5YVHIi92Cq2e7BGjSffdh/4+7mPXGTAcTcR3ihHy1UPPg34RHZS9c5uMWVlo0FbssYF1Sqp8NKcj/vyb63JX7xeLU3SkY6P33euVQUS/OF945E+4DRKxvos=
+	t=1767865070; cv=none; b=a5lj5zHNCPBhxHYu2YmaymJPCKvmfojLnFx9HuWpxDuryB2QxvsIFEH8LXtCCuXHfpSkyJn8nf0ZK9UY6dpzU6q/U4RfHWmirnUHcqlNzv36UV0gBQq0fzN7Wjhv+5uoHVaeWyGfE2KtI2kOA7uYPi4FK5/8SfTVf2acoVn54tQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767862198; c=relaxed/simple;
-	bh=CcP4M2fIfl+Zsp6RV9ovc01tuBG8/9NSa6NmSQfTg1k=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=tKWiT7aaC7ajXQTm2UlDo1+vuoZkeg8QD0qCTAU+q4J+8kBBCDSnR1cBJae/TQWMlRpjR8HQNHTT+Y3F3kv+xLleGDjNEI/2eDIOYdpIPVmNPll6BCryBv6SwK0gC53cCWClOkf1scdf5rUDlhGOwBI9NqdzsflZGKHkodZ8GQE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=kvo4+A9E; arc=none smtp.client-ip=192.198.163.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1767865070; c=relaxed/simple;
+	bh=+QUCh+BiJaBruD2vdyKisViWbUs5fQdsky3TtckYH1s=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=tswlra3LzMjZDHOv9qJuRpcISWW+6rdRL+EJFHNRTpdBQZNcVllmOEJXzdZN1LNBJUvaQh63xQOkhx2/dM/G2YCawotUhsbK8T8x9g8JBBOIXLY06Fzvx82cuSPdZpUxByHKXbLtuuXQ/a6bperJFu0duuUQll9pNyVFqpgfzLA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=Fy6ON4kU; arc=none smtp.client-ip=148.251.105.195
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="kvo4+A9E"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1767862192; x=1799398192;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=CcP4M2fIfl+Zsp6RV9ovc01tuBG8/9NSa6NmSQfTg1k=;
-  b=kvo4+A9EGzPc6PoOfEuCcIVni2UF8A9alZSsKz9AUIqGJpArG+orCPs4
-   XjZ+LJwTo/PuwzelQJZxc3ConlhLsdad+IVEAf7cVoGU1D0qES5XlG5Pp
-   y5CZtswWTvvSI0su9pOdbnITyRRh8N5fz9yb0WCEM5FGs7GbMVOyC1D+I
-   FgBlJub73kdmAnKQvn1mlWyAv0AEOu6LbTGz8qtXwMItWIkR7+mUpw0YX
-   Xh7+9YWROd4Zofl0cmDG/LwgRoynaFVd4UPefHE+gvXChucwxvnrj876B
-   9ABvbsKYh8DTdTK3SvmtPNUN60izWtieTdCtSE54JUIOqZaa/tEWuuRbT
-   g==;
-X-CSE-ConnectionGUID: lTXgdfn8ThCFZPV0vHzb1A==
-X-CSE-MsgGUID: 46B3koi9QhatX/fhy9/pSQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11664"; a="94703795"
-X-IronPort-AV: E=Sophos;i="6.21,210,1763452800"; 
-   d="scan'208";a="94703795"
-Received: from orviesa008.jf.intel.com ([10.64.159.148])
-  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jan 2026 00:49:44 -0800
-X-CSE-ConnectionGUID: 6esznvGJRZmfIhuOnwI7nw==
-X-CSE-MsgGUID: ehJ8enqqToaAnlafOQd48Q==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.21,210,1763452800"; 
-   d="scan'208";a="203208075"
-Received: from black.igk.intel.com ([10.91.253.5])
-  by orviesa008.jf.intel.com with ESMTP; 08 Jan 2026 00:49:40 -0800
-Received: by black.igk.intel.com (Postfix, from userid 1003)
-	id 072FB98; Thu, 08 Jan 2026 09:49:39 +0100 (CET)
-Date: Thu, 8 Jan 2026 09:49:39 +0100
-From: Andy Shevchenko <andriy.shevchenko@intel.com>
-To: "Luck, Tony" <tony.luck@intel.com>
-Cc: Dan Carpenter <dan.carpenter@linaro.org>,
-	Al Viro <viro@zeniv.linux.org.uk>,
-	Daniel Gomez <da.gomez@kernel.org>,
-	Sami Tolvanen <samitolvanen@google.com>,
-	Chris Li <sparse@chrisli.org>, Eric Biggers <ebiggers@kernel.org>,
-	Kees Cook <kees@kernel.org>, Luis Chamberlain <mcgrof@kernel.org>,
-	Rusty Russell <rusty@rustcorp.com.au>,
-	Petr Pavlu <petr.pavlu@suse.com>,
-	"linux-modules@vger.kernel.org" <linux-modules@vger.kernel.org>,
-	Malcolm Priestley <tvboxspy@gmail.com>,
-	Mauro Carvalho Chehab <mchehab@kernel.org>,
-	Hans Verkuil <hverkuil@kernel.org>,
-	Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= <u.kleine-koenig@pengutronix.de>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-	"linux-media@vger.kernel.org" <linux-media@vger.kernel.org>,
-	"linux-hardening@vger.kernel.org" <linux-hardening@vger.kernel.org>
-Subject: Re: [PATCH 3/3] module: Add compile-time check for embedded NUL
- characters
-Message-ID: <aV9vo7_turBr84bs@black.igk.intel.com>
-References: <SJ1PR11MB6083C6D97484ED4E4710268EFCA3A@SJ1PR11MB6083.namprd11.prod.outlook.com>
- <aThSGiKwJRYOB6kx@agluck-desk3>
- <aThqcq0iGge1pQCr@agluck-desk3>
- <20251210010020.GA2522829@google.com>
- <aTn0WdVv-S_EpQmS@agluck-desk3>
- <aTqAxfiVCR2ch4I5@stanley.mountain>
- <CABCJKufWw4VQA_k6Deuf5Bn6401cbYv_St8VV_0-LAau6F0nTw@mail.gmail.com>
- <083ebd92-4b3f-47f8-bf0f-395a604b5f05@kernel.org>
- <aUVI9smf2t7PvDF6@stanley.mountain>
- <aUV7kyjxlijuy5sC@agluck-desk3>
+	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="Fy6ON4kU"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+	s=mail; t=1767865056;
+	bh=+QUCh+BiJaBruD2vdyKisViWbUs5fQdsky3TtckYH1s=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=Fy6ON4kUwZ7sOCvN0m9+ZwtFwRLoUBghzLMyZb0KTCNefUJkRsK7HOn8Xf3WgbnAY
+	 C6FFfzKThnYDfrm4/5X8yMkPsqch0SBLOJFWEv02DmIfTFcAH5R5ay6keNlJtRjsM2
+	 q3Tb87mS6hBwW3rsM1IlSMDVJK8jRb0BQt6PgkScPQP7DUIPN5x2kSGstiJmWxz/bU
+	 zFXXp3CBjoAIeke4xIvKlGVAFsAImrQCygWhaOp2Q/fJkx78c5UnxErlkKgC/Itlu8
+	 NIo58fwbwhOxxjRh7jpPlt3PDVxK05cPDj4Z4eqwnT+8f2mACjYBSDlGvrLtpzc9s2
+	 kttCq8N/OwYfg==
+Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: kholk11)
+	by bali.collaboradmins.com (Postfix) with ESMTPSA id C4B4A17E11FB;
+	Thu,  8 Jan 2026 10:37:35 +0100 (CET)
+Message-ID: <e6c2c86d-71bd-453c-847c-1eff2be88be7@collabora.com>
+Date: Thu, 8 Jan 2026 10:37:35 +0100
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <aUV7kyjxlijuy5sC@agluck-desk3>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 0/9] Add GCE support for MT8196 (series 1/4)
+To: Jason-JH Lin <jason-jh.lin@mediatek.com>,
+ Jassi Brar <jassisinghbrar@gmail.com>,
+ Chun-Kuang Hu <chunkuang.hu@kernel.org>,
+ Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc: Matthias Brugger <matthias.bgg@gmail.com>,
+ Nicolas Dufresne <nicolas@ndufresne.ca>, Nancy Lin <nancy.lin@mediatek.com>,
+ Singo Chang <singo.chang@mediatek.com>,
+ Paul-PL Chen <paul-pl.chen@mediatek.com>, Moudy Ho <moudy.ho@mediatek.com>,
+ Xiandong Wang <xiandong.wang@mediatek.com>,
+ Sirius Wang <sirius.wang@mediatek.com>, Fei Shao <fshao@chromium.org>,
+ Chen-yu Tsai <wenst@chromium.org>,
+ Project_Global_Chrome_Upstream_Group@mediatek.com,
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+ dri-devel@lists.freedesktop.org, linux-mediatek@lists.infradead.org,
+ linux-arm-kernel@lists.infradead.org, linux-media@vger.kernel.org,
+ Jason-jh Lin <jason-jh.lin@mediatek.corp-partner.google.com>,
+ Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
+ Conor Dooley <conor+dt@kernel.org>
+References: <20251031155838.1650833-1-jason-jh.lin@mediatek.com>
+From: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+Content-Language: en-US
+In-Reply-To: <20251031155838.1650833-1-jason-jh.lin@mediatek.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Fri, Dec 19, 2025 at 08:21:39AM -0800, Luck, Tony wrote:
-> On Fri, Dec 19, 2025 at 03:45:42PM +0300, Dan Carpenter wrote:
-> > On Fri, Dec 12, 2025 at 02:30:48AM +0900, Daniel Gomez wrote:
-> > > Maybe the flag fix just needs to be applied to the evaluation? Other op
-> > > structs do the same. But Dan's patch did not implement evaluate. E.g.:
-> > > 
-> > > static struct symbol_op constant_p_op = {
-> > > 	.evaluate = evaluate_to_int_const_expr,
-> > > 	.expand = expand_constant_p
-> > > };
-> > 
-> > I was waiting for you to send this as a patch.  I can do it if you
-> > need me to.
+Il 31/10/25 16:56, Jason-JH Lin ha scritto:
+> From: Jason-jh Lin <jason-jh.lin@mediatek.corp-partner.google.com>
 > 
-> Al Viro thought this was wrong. His alternative patch is here:
+> This series adds initial support for the MediaTek MT8196 GCE in the CMDQ
+> driver, including related API changes for new hardware requirements.
 > 
-> https://git.kernel.org/pub/scm/linux/kernel/git/viro/sparse.git/commit/?id=2634e39bf02697a18fece057208150362c985992
+> Series application order:
+>    1. [Fixes] Refine DMA address handling for the command buffer
+>    - https://lore.kernel.org/all/20251022171847.379470-1-jason-jh.lin@mediatek.com/
+>    2. [Series 1/4] Add GCE support for MT8196 and update CMDQ APIs (this series)
+>    3. [Series 2/4] Migrate subsystems to new CMDQ APIs
+>    4. [Series 3/4] Remove shift_pa from CMDQ jump functions
+>    5. [Series 4/4] Remove deprecated CMDQ APIs
+> 
+> Please apply this series after the DMA address handling Fixes patch[1],
+> and before the following series.
+> 
 
-Sparse still is PITA as of today, can we get some fix (Al's or alternative)
-ASAP to be applied and sparse tagged as 0.6.5 so the distros will pack the
-new version, please?
+Jassi, since this is touching both mailbox and soc/mediatek, can we avoid to create
+immutable branches to pick this entire thing?
 
--- 
-With Best Regards,
-Andy Shevchenko
+If you wish, I'm fine with you picking the soc/mediatek commits as well as the
+mailbox ones, or I can pick the mailbox ones instead if you're okay with that.
+
+Whole series is, of course...
+
+Acked-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+
+Cheers,
+Angelo
+
+> ---
+> 
+> Jason-JH Lin (9):
+>    arm64: dts: mediatek: Add GCE header for MT8196
+>    mailbox: mtk-cmdq: Add cmdq private data to cmdq_pkt for generating
+>      instruction
+>    mailbox: mtk-cmdq: Add GCE hardware virtualization configuration
+>    mailbox: mtk-cmdq: Add mminfra_offset configuration for DRAM
+>      transaction
+>    mailbox: mtk-cmdq: Add driver data to support for MT8196
+>    soc: mediatek: mtk-cmdq: Add cmdq_get_mbox_priv() in cmdq_pkt_create()
+>    soc: mediatek: mtk-cmdq: Add pa_base parsing for hardware without
+>      subsys ID support
+>    soc: mediatek: mtk-cmdq: Extend cmdq_pkt_write API for SoCs without
+>      subsys ID
+>    soc: mediatek: mtk-cmdq: Add mminfra_offset adjustment for DRAM
+>      addresses
+> 
+>   arch/arm64/boot/dts/mediatek/mt8196-gce.h | 612 ++++++++++++++++++++++
+>   drivers/mailbox/mtk-cmdq-mailbox.c        |  74 ++-
+>   drivers/soc/mediatek/mtk-cmdq-helper.c    |  77 ++-
+>   include/linux/mailbox/mtk-cmdq-mailbox.h  |  19 +
+>   include/linux/soc/mediatek/mtk-cmdq.h     |  93 ++++
+>   5 files changed, 869 insertions(+), 6 deletions(-)
+>   create mode 100644 arch/arm64/boot/dts/mediatek/mt8196-gce.h
+> 
+
 
 
