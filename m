@@ -1,130 +1,114 @@
-Received: from bali.collaboradmins.com (bali.collaboradmins.com [148.251.105.195])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f44.google.com (mail-pj1-f44.google.com [209.85.216.44])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0E09D3ED123;
-	Thu,  8 Jan 2026 09:37:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.251.105.195
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2968F3C26F8
+	for <linux-media@vger.kernel.org>; Thu,  8 Jan 2026 09:40:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767865070; cv=none; b=a5lj5zHNCPBhxHYu2YmaymJPCKvmfojLnFx9HuWpxDuryB2QxvsIFEH8LXtCCuXHfpSkyJn8nf0ZK9UY6dpzU6q/U4RfHWmirnUHcqlNzv36UV0gBQq0fzN7Wjhv+5uoHVaeWyGfE2KtI2kOA7uYPi4FK5/8SfTVf2acoVn54tQ=
+	t=1767865255; cv=none; b=iXTPlPngUefeiOtlYWuJFzisMR5QuN7qMyMBQy2enQE9tkNci83UDpyFQv1YN0eA3HeCtQA3x0Xg64oMaXbIk05pE2DF9XlQDT6S3URW1y4+a57LAKQnRfxaQiAaWoTUdkgDrHzVgPyiFRaFk3ozSVBM+P58i6c2JHmNzng53Nc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767865070; c=relaxed/simple;
-	bh=+QUCh+BiJaBruD2vdyKisViWbUs5fQdsky3TtckYH1s=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=tswlra3LzMjZDHOv9qJuRpcISWW+6rdRL+EJFHNRTpdBQZNcVllmOEJXzdZN1LNBJUvaQh63xQOkhx2/dM/G2YCawotUhsbK8T8x9g8JBBOIXLY06Fzvx82cuSPdZpUxByHKXbLtuuXQ/a6bperJFu0duuUQll9pNyVFqpgfzLA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=Fy6ON4kU; arc=none smtp.client-ip=148.251.105.195
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
+	s=arc-20240116; t=1767865255; c=relaxed/simple;
+	bh=HyxZki6nNfkVhrly9fkFjvuP1iEjFH9IVkZjZbAirVY=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=pD1AuGObAkr0pho1Qul43KwKsoDCcC/75YbzvvgnLFRyYxRAHv0MLA1RheUtdnnx4cqV70/ysGi7wcvgjFJ1BqvsGpxN4IsO4GTWjGn9ReaGUvf8b7wtj6TvHYNQCLkZXAAbBKuzLv3/WogkrHcUwocrZEqr2nqm46IizR5W5qM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=MqWxwzDk; arc=none smtp.client-ip=209.85.216.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="Fy6ON4kU"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1767865056;
-	bh=+QUCh+BiJaBruD2vdyKisViWbUs5fQdsky3TtckYH1s=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=Fy6ON4kUwZ7sOCvN0m9+ZwtFwRLoUBghzLMyZb0KTCNefUJkRsK7HOn8Xf3WgbnAY
-	 C6FFfzKThnYDfrm4/5X8yMkPsqch0SBLOJFWEv02DmIfTFcAH5R5ay6keNlJtRjsM2
-	 q3Tb87mS6hBwW3rsM1IlSMDVJK8jRb0BQt6PgkScPQP7DUIPN5x2kSGstiJmWxz/bU
-	 zFXXp3CBjoAIeke4xIvKlGVAFsAImrQCygWhaOp2Q/fJkx78c5UnxErlkKgC/Itlu8
-	 NIo58fwbwhOxxjRh7jpPlt3PDVxK05cPDj4Z4eqwnT+8f2mACjYBSDlGvrLtpzc9s2
-	 kttCq8N/OwYfg==
-Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: kholk11)
-	by bali.collaboradmins.com (Postfix) with ESMTPSA id C4B4A17E11FB;
-	Thu,  8 Jan 2026 10:37:35 +0100 (CET)
-Message-ID: <e6c2c86d-71bd-453c-847c-1eff2be88be7@collabora.com>
-Date: Thu, 8 Jan 2026 10:37:35 +0100
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="MqWxwzDk"
+Received: by mail-pj1-f44.google.com with SMTP id 98e67ed59e1d1-34b75fba315so2069798a91.3
+        for <linux-media@vger.kernel.org>; Thu, 08 Jan 2026 01:40:46 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1767865243; x=1768470043; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=s5Sclxc2Sofk/X67T0fLHkI5fsomZW08NQuzmRvsgLw=;
+        b=MqWxwzDkSv0gqZ/lM2VBzOX8YGObJ1CuD+l0p/+g8LZz82eVJ226Jsmy48U3a1cnau
+         DULFbbY3RizJjDTZuu3eXWJEU3y0RxNegqkYRLTxLNA0EgrQOq6M/N+crkkxXPlzFSk9
+         l8igR4IVppJvVIAquoYveFw2yJqruEib9ERX0M4DvqPLNKAJ7qAMFz5Uz7mJPAFclXWh
+         minM/RlFGzTPoWyFJhPr0YfWMWfDs5qAGxCvfnYiMcwyiXW9lNhaKQSsBqJ0BxegZRso
+         npAaCpxpWZN3AUHlFx+jsYfnnGIM2/50zJNW/qFP7zOr0suNOPIy9yzNasuOAAHyaMVq
+         HFcQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1767865243; x=1768470043;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=s5Sclxc2Sofk/X67T0fLHkI5fsomZW08NQuzmRvsgLw=;
+        b=wfUrvCzOS+JnSBQDrD70/uTr9NsBmtTx5xQAIAy8/AWQm8A4y60i1ampVfzbe4UwQM
+         EkGrVIDbvpchfsZ3J5onBgsPDn2Hv5HF6GGQzoaYQ+UchoBD7L/OEuIKJ+QkOuMlQE9D
+         TAFxRRRvWIvOhmBCWx5oEMu9pIJ9OyGvg+OndttCT4j3Yyjrq/wf6rdWyYy1eHl1s4uY
+         +jc0I9kFDDXvpLqcxQ2R35JB3afQpu8xckP9Z6bBqiBAjlx+t3TGzNjGH4eE02Mn091d
+         DqbmzjTl0ysvYWDuCRXw6rxsNC/XdaG7nlu4lsm6ugaR1RZYejOWyfjs97UmhkLQlgXd
+         f4LA==
+X-Gm-Message-State: AOJu0Yz4884gUE2KkIxdKXwLlPWNmAToBrFOdw9g6EKSmTEeyUHkTL3i
+	XzQ3TInxqA9c7qsZhOkegE9W8wAx38pFqi6v9SSXKxfLpugINIw73CE=
+X-Gm-Gg: AY/fxX66V2n4m0V1L2y9QP7yrisQBrF45hZiUFWiGhzDctjcyjpZFCpkWuoLCDtJWWV
+	KZ1yYc5vTydbHgr0H/L6PTh+EkZG5vyRYa3yE7NfySTd5sU3CqT5oowUCJsWhyR50SlUGMpC3Rb
+	aAb5yt7ndFpbjG5xaAvrmf0zVLQiSX6eegLstSCRHPHsiR1lpLTLyX9voLIZRBipDToEFamfC7d
+	yi79eyBk5oCMlsdNuzQEDv38oHsMUeHzm906D6qluwth02NIxR3va8tqsfcYHqTvb4h9wAyumy2
+	vBSLjcpHqjpiPC74N+04Q5kfRhJ6xbNmopdEp9jlDWiuWvvOUHJNXzve6a5ZWKFTqI7ZtNDnxHg
+	HQuEwk2us39SRj3QVUltMOMpq3UuhTzHNB5TGCH8vBNX9R+6TKRhSaNS2tlgtKXGjdks3BvMMP+
+	thNWULlq7/4d4+fKWi43EIjH/loDcBitMURCC2Kfy3cHMSc4HPImjdcvbNKCWjvGBIhIWhWr5sT
+	SATF5O3
+X-Google-Smtp-Source: AGHT+IGA0UEhRwr63Gu5xiKlrZZ3FbUDz3z1/JjxeBG/PvE4VB4E4W7wD6q3MMuPkLYc91Kof5SjHw==
+X-Received: by 2002:a17:90b:2c84:b0:32e:389b:8762 with SMTP id 98e67ed59e1d1-34f68adb8a1mr4850271a91.0.1767865243137;
+        Thu, 08 Jan 2026 01:40:43 -0800 (PST)
+Received: from DESKTOP-BKIPFGN (ec2-54-169-177-146.ap-southeast-1.compute.amazonaws.com. [54.169.177.146])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-34f5fa93ee7sm7333918a91.7.2026.01.08.01.40.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 08 Jan 2026 01:40:42 -0800 (PST)
+From: Kery Qi <qikeyu2017@gmail.com>
+To: mchehab@kernel.org
+Cc: linux-media@vger.kernel.org,
+	Kery Qi <qikeyu2017@gmail.com>
+Subject: [PATCH] media: ttusb-budget: validate DiSEqC msg_len before memcpy (CVE-2014-8884 style)
+Date: Thu,  8 Jan 2026 17:40:33 +0800
+Message-ID: <20260108094033.1650-1-qikeyu2017@gmail.com>
+X-Mailer: git-send-email 2.50.1.windows.1
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 0/9] Add GCE support for MT8196 (series 1/4)
-To: Jason-JH Lin <jason-jh.lin@mediatek.com>,
- Jassi Brar <jassisinghbrar@gmail.com>,
- Chun-Kuang Hu <chunkuang.hu@kernel.org>,
- Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc: Matthias Brugger <matthias.bgg@gmail.com>,
- Nicolas Dufresne <nicolas@ndufresne.ca>, Nancy Lin <nancy.lin@mediatek.com>,
- Singo Chang <singo.chang@mediatek.com>,
- Paul-PL Chen <paul-pl.chen@mediatek.com>, Moudy Ho <moudy.ho@mediatek.com>,
- Xiandong Wang <xiandong.wang@mediatek.com>,
- Sirius Wang <sirius.wang@mediatek.com>, Fei Shao <fshao@chromium.org>,
- Chen-yu Tsai <wenst@chromium.org>,
- Project_Global_Chrome_Upstream_Group@mediatek.com,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
- dri-devel@lists.freedesktop.org, linux-mediatek@lists.infradead.org,
- linux-arm-kernel@lists.infradead.org, linux-media@vger.kernel.org,
- Jason-jh Lin <jason-jh.lin@mediatek.corp-partner.google.com>,
- Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
- Conor Dooley <conor+dt@kernel.org>
-References: <20251031155838.1650833-1-jason-jh.lin@mediatek.com>
-From: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-Content-Language: en-US
-In-Reply-To: <20251031155838.1650833-1-jason-jh.lin@mediatek.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-Il 31/10/25 16:56, Jason-JH Lin ha scritto:
-> From: Jason-jh Lin <jason-jh.lin@mediatek.corp-partner.google.com>
-> 
-> This series adds initial support for the MediaTek MT8196 GCE in the CMDQ
-> driver, including related API changes for new hardware requirements.
-> 
-> Series application order:
->    1. [Fixes] Refine DMA address handling for the command buffer
->    - https://lore.kernel.org/all/20251022171847.379470-1-jason-jh.lin@mediatek.com/
->    2. [Series 1/4] Add GCE support for MT8196 and update CMDQ APIs (this series)
->    3. [Series 2/4] Migrate subsystems to new CMDQ APIs
->    4. [Series 3/4] Remove shift_pa from CMDQ jump functions
->    5. [Series 4/4] Remove deprecated CMDQ APIs
-> 
-> Please apply this series after the DMA address handling Fixes patch[1],
-> and before the following series.
-> 
+ttusb_send_diseqc() builds a fixed 12-byte stack buffer and copies
+cmd->msg into it using cmd->msg_len without any bounds check. A crafted
+(or buggy) msg_len can make memcpy() write past the end of the stack
+buffer.
 
-Jassi, since this is touching both mailbox and soc/mediatek, can we avoid to create
-immutable branches to pick this entire thing?
+If this code path is reachable, a local user can trigger the issue via
+the DVB frontend DiSEqC master command ioctl by supplying an oversized
+msg_len.
 
-If you wish, I'm fine with you picking the soc/mediatek commits as well as the
-mailbox ones, or I can pick the mailbox ones instead if you're okay with that.
+Fix by rejecting cmd->msg_len values that do not fit into the remaining
+space of the local buffer before calling memcpy(), mirroring the
+defensive check used in the CVE-2014-8884 fix.
 
-Whole series is, of course...
+Although this appears to be dead/unreachable code today, keep it
+hardened to avoid future regressions.
 
-Acked-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+Signed-off-by: Kery Qi <qikeyu2017@gmail.com>
+---
+ drivers/media/usb/ttusb-budget/dvb-ttusb-budget.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-Cheers,
-Angelo
-
-> ---
-> 
-> Jason-JH Lin (9):
->    arm64: dts: mediatek: Add GCE header for MT8196
->    mailbox: mtk-cmdq: Add cmdq private data to cmdq_pkt for generating
->      instruction
->    mailbox: mtk-cmdq: Add GCE hardware virtualization configuration
->    mailbox: mtk-cmdq: Add mminfra_offset configuration for DRAM
->      transaction
->    mailbox: mtk-cmdq: Add driver data to support for MT8196
->    soc: mediatek: mtk-cmdq: Add cmdq_get_mbox_priv() in cmdq_pkt_create()
->    soc: mediatek: mtk-cmdq: Add pa_base parsing for hardware without
->      subsys ID support
->    soc: mediatek: mtk-cmdq: Extend cmdq_pkt_write API for SoCs without
->      subsys ID
->    soc: mediatek: mtk-cmdq: Add mminfra_offset adjustment for DRAM
->      addresses
-> 
->   arch/arm64/boot/dts/mediatek/mt8196-gce.h | 612 ++++++++++++++++++++++
->   drivers/mailbox/mtk-cmdq-mailbox.c        |  74 ++-
->   drivers/soc/mediatek/mtk-cmdq-helper.c    |  77 ++-
->   include/linux/mailbox/mtk-cmdq-mailbox.h  |  19 +
->   include/linux/soc/mediatek/mtk-cmdq.h     |  93 ++++
->   5 files changed, 869 insertions(+), 6 deletions(-)
->   create mode 100644 arch/arm64/boot/dts/mediatek/mt8196-gce.h
-> 
-
-
+diff --git a/drivers/media/usb/ttusb-budget/dvb-ttusb-budget.c b/drivers/media/usb/ttusb-budget/dvb-ttusb-budget.c
+index 9e016b71aa91..946c763281cf 100644
+--- a/drivers/media/usb/ttusb-budget/dvb-ttusb-budget.c
++++ b/drivers/media/usb/ttusb-budget/dvb-ttusb-budget.c
+@@ -456,7 +456,9 @@ static int ttusb_send_diseqc(struct dvb_frontend* fe,
+ 	b[4] = 0xFF;		/* send diseqc master, not burst */
+ 	b[5] = cmd->msg_len;
+ 
+-	memcpy(b + 5, cmd->msg, cmd->msg_len);
++	if (cmd->msg_len > sizeof(b) - 6)
++		return -EINVAL;
++	memcpy(b + 6, cmd->msg, cmd->msg_len);
+ 
+ 	/* Diseqc */
+ 	if ((err = ttusb_cmd(ttusb, b, 4 + b[3], 0))) {
+-- 
+2.34.1
 
