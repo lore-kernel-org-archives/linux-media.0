@@ -1,57 +1,57 @@
 Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C3B3835FF66
-	for <linux-media@vger.kernel.org>; Thu,  8 Jan 2026 08:27:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 869C6331A5B
+	for <linux-media@vger.kernel.org>; Thu,  8 Jan 2026 08:27:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.20
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767860846; cv=none; b=BgGz6/b4CmsYlU5EzwdRAtkO4Pxyn4Gysog2e7tnp1SgK429A4HqMICTCPqxEXBp53P9LPzA1zKe3wMb2EGEqoLjW3DgQKjmI9E8n7Eo0oP7KtpeRZa8+nnyD6pWGxin6Us/Nd3gY/F9dDXXxNWo2w+uGiG8ZfItQrsLgNRPYqU=
+	t=1767860857; cv=none; b=UL/Y8kKm+C9BGfsMAh/5dcFVPut5MKh3DZIleC4Q27pgRf4xBFgJD1dMaDtpwQlDvOyNctvjYUQldNQr3EDce8ZDuXBBeXYzqn5gn+Hxc5BL4wK4bDpZTXZ0A7WlCpvGqy2cKAezuLzlzOgty9MXpeW6bX+I+BXgXWPd7ImH3yg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767860846; c=relaxed/simple;
-	bh=/rzu+QNVQvhTGlxfod/pZXW4EMrEwB2uMPSI1e+2fhI=;
+	s=arc-20240116; t=1767860857; c=relaxed/simple;
+	bh=VWBpGhwSayufKSEWIGxweG/DLsCs1ChBdDw40W45Xr4=;
 	h=Subject:To:Cc:References:From:Message-ID:Date:MIME-Version:
-	 In-Reply-To:Content-Type; b=VKu1ncq1VLF1MX4Mgqrw4Supdpygo+7Qbe3sxm/DJr5RSDoT1n3I01g3pkoLlt8KMLA2cDVW1IXsNQFShBYm4osc5nA0UN08yaLFcE0k4JJA6lWZF5mIyKz81rlsIetTQ5CuRBuombfv6pTLB+jXJQJyiVZi9IU+QOwzHvDklBQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=NABW+x8m; arc=none smtp.client-ip=198.175.65.20
+	 In-Reply-To:Content-Type; b=upXGwbqPD/OrJ9BUMehNa6Mfag4hAtOPhwWJjU7SPVmUO49AA9Q5AtI/upQcnympoFY70vjoqHVBcForncblrsDFs8DJW0vCY0u6/Nxz/+02jv2FEK0Hjq9QzDqEPPKQpS8KQLH3IpfunFnhfHKcIgN+N6JrgbomnRCVaCZOTxI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Xba0RVsC; arc=none smtp.client-ip=198.175.65.20
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="NABW+x8m"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Xba0RVsC"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1767860841; x=1799396841;
+  t=1767860848; x=1799396848;
   h=subject:to:cc:references:from:message-id:date:
    mime-version:in-reply-to:content-transfer-encoding;
-  bh=/rzu+QNVQvhTGlxfod/pZXW4EMrEwB2uMPSI1e+2fhI=;
-  b=NABW+x8m2A9oWE//XxQapsLrVoeuVhlX81wLHeAvBwVdZjiAqW8d+Q23
-   aftjgHgKl09Cuxu/vsl5PYKWSAlWR/RD0fGsAKXcJFv69mS+7cDA0yIkm
-   eMjCqR8eUXxenmUh84IRsfbinp/ocGcE4bylW8znRWxHapjSTptUWu1D3
-   nN7mw7s+7kcDuUh7asVUYAmQWTmYDHzaE3LlBeaMU0aIv67xAcBAR7wZE
-   pDXSZfMLjWP4WhjgRhQca16aumudUaBsGJ56TIXVUxVrYMnx8PkD1FXFq
-   rMf2Njn8MHfp0sPd6EqocPd2k3/qJC+aR9y3kgEVsyXJp93cOJbt2o3LH
-   g==;
-X-CSE-ConnectionGUID: jv5bYoJxS72Ety6aS3X5Cw==
-X-CSE-MsgGUID: AgJj/QwQREWYTDcVZvvhpg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11664"; a="68968981"
+  bh=VWBpGhwSayufKSEWIGxweG/DLsCs1ChBdDw40W45Xr4=;
+  b=Xba0RVsCihsgkQ83wFrUmKMFmEvTbCEukOZBR3iCQcZqN/uR334sgRQq
+   tk0tPHb6jjnCA7LSneS/lB4fDuXVog/oiNvWjBtb/6h89itodx1+WlGOF
+   epn5MHp6/tq96eaYa1c/V4gVa+4A4Z+458756FpuOXg/X/K0VHJi4P75g
+   1pf09DbZxnmepKfJN6pfhimMLUWtz/R3oAMMdvwGqO+ZX/psAgFi/RG9G
+   1ouSuyKZM0dOAJROkzysUVA5s07g3p8uJAN5UxI+YUgN+Ln2GNW8dBeSr
+   lQ8P6s3X7jZcLBMS6ZQjCsDSdobFMENOZBwh/iT7QwUG1jN+UXaMv5alS
+   Q==;
+X-CSE-ConnectionGUID: zd3cx4s7SGeePkgmKfWERA==
+X-CSE-MsgGUID: fZ4GqtRZRVGuxJ+4QHvRVQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11664"; a="68968999"
 X-IronPort-AV: E=Sophos;i="6.21,210,1763452800"; 
-   d="scan'208";a="68968981"
+   d="scan'208";a="68968999"
 Received: from fmviesa001.fm.intel.com ([10.60.135.141])
-  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jan 2026 00:27:13 -0800
-X-CSE-ConnectionGUID: DzM7kKSSQPeqYcZrfJ5PcQ==
-X-CSE-MsgGUID: 5jigGOKvS4yIdsPekduTMA==
+  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jan 2026 00:27:26 -0800
+X-CSE-ConnectionGUID: BR4+hHV+S8q1OMJho8tzaw==
+X-CSE-MsgGUID: fbDJsECMSwqGLYatyRQ7uQ==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.21,210,1763452800"; 
-   d="scan'208";a="234295211"
+   d="scan'208";a="234295233"
 Received: from ipu5-build.bj.intel.com (HELO [10.238.153.130]) ([10.238.153.130])
-  by smtpauth.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jan 2026 00:27:12 -0800
-Subject: Re: [PATCH v4 03/14] media: ipu6: Remove redundant driver data checks
+  by smtpauth.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jan 2026 00:27:25 -0800
+Subject: Re: [PATCH v4 04/14] media: ipu6: Make symbols static
 To: Sakari Ailus <sakari.ailus@linux.intel.com>, linux-media@vger.kernel.org
 Cc: tian.shu.qiu@intel.com, antti.laakso@linux.intel.com,
  mehdi.djait@linux.intel.com
 References: <20260108081712.543704-1-sakari.ailus@linux.intel.com>
- <20260108081712.543704-4-sakari.ailus@linux.intel.com>
+ <20260108081712.543704-5-sakari.ailus@linux.intel.com>
 From: Bingbu Cao <bingbu.cao@linux.intel.com>
-Message-ID: <ac11978f-50c6-6458-5dfc-d180e6594fbf@linux.intel.com>
-Date: Thu, 8 Jan 2026 16:17:05 +0800
+Message-ID: <cf7d68bb-64de-62fd-6b37-b0b3173ee303@linux.intel.com>
+Date: Thu, 8 Jan 2026 16:17:18 +0800
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.10.0
 Precedence: bulk
@@ -60,57 +60,59 @@ List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-In-Reply-To: <20260108081712.543704-4-sakari.ailus@linux.intel.com>
+In-Reply-To: <20260108081712.543704-5-sakari.ailus@linux.intel.com>
 Content-Type: text/plain; charset=windows-1252
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
 
-Sakari,
-
-Thanks for the patch.
-
 Reviewed-by: Bingbu Cao <bingbu.cao@intel.com>
 
 On 1/8/26 4:17 PM, Sakari Ailus wrote:
-> Both runtime PM resume and suspend callbacks check whether the driver's
-> data is set for the device. This is done in probe(); drop the redundant
-> checks.
+> Make isys_setup_hw and isys_isr static as they're only used in a single
+> file.
 > 
 > Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
 > Reviewed-by: Bingbu Cao <bingbu.cao@intel.com>
 > ---
->  drivers/media/pci/intel/ipu6/ipu6-isys.c | 9 +--------
->  1 file changed, 1 insertion(+), 8 deletions(-)
+>  drivers/media/pci/intel/ipu6/ipu6-isys.c | 4 ++--
+>  drivers/media/pci/intel/ipu6/ipu6-isys.h | 2 --
+>  2 files changed, 2 insertions(+), 4 deletions(-)
 > 
 > diff --git a/drivers/media/pci/intel/ipu6/ipu6-isys.c b/drivers/media/pci/intel/ipu6/ipu6-isys.c
-> index 226bfae21c16..ef01dcb635fa 100644
+> index ef01dcb635fa..5a8becff65ae 100644
 > --- a/drivers/media/pci/intel/ipu6/ipu6-isys.c
 > +++ b/drivers/media/pci/intel/ipu6/ipu6-isys.c
-> @@ -857,9 +857,6 @@ static int isys_runtime_pm_resume(struct device *dev)
->  	unsigned long flags;
->  	int ret;
+> @@ -269,7 +269,7 @@ static int isys_register_video_devices(struct ipu6_isys *isys)
+>  	return ret;
+>  }
 >  
-> -	if (!isys)
-> -		return 0;
-> -
->  	ret = ipu6_mmu_hw_init(adev->mmu);
->  	if (ret)
->  		return ret;
-> @@ -884,13 +881,9 @@ static int isys_runtime_pm_resume(struct device *dev)
->  static int isys_runtime_pm_suspend(struct device *dev)
+> -void isys_setup_hw(struct ipu6_isys *isys)
+> +static void isys_setup_hw(struct ipu6_isys *isys)
 >  {
->  	struct ipu6_bus_device *adev = to_ipu6_bus_device(dev);
-> -	struct ipu6_isys *isys;
-> +	struct ipu6_isys *isys = dev_get_drvdata(dev);
->  	unsigned long flags;
+>  	void __iomem *base = isys->pdata->base;
+>  	const u8 *thd = isys->pdata->ipdata->hw_variant.cdc_fifo_threshold;
+> @@ -341,7 +341,7 @@ static void ipu6_isys_csi2_isr(struct ipu6_isys_csi2 *csi2)
+>  	}
+>  }
 >  
-> -	isys = dev_get_drvdata(dev);
-> -	if (!isys)
-> -		return 0;
-> -
->  	spin_lock_irqsave(&isys->power_lock, flags);
->  	isys->power = 0;
->  	spin_unlock_irqrestore(&isys->power_lock, flags);
+> -irqreturn_t isys_isr(struct ipu6_bus_device *adev)
+> +static irqreturn_t isys_isr(struct ipu6_bus_device *adev)
+>  {
+>  	struct ipu6_isys *isys = ipu6_bus_get_drvdata(adev);
+>  	void __iomem *base = isys->pdata->base;
+> diff --git a/drivers/media/pci/intel/ipu6/ipu6-isys.h b/drivers/media/pci/intel/ipu6/ipu6-isys.h
+> index 0e2c8b71edfc..7fb8cb820912 100644
+> --- a/drivers/media/pci/intel/ipu6/ipu6-isys.h
+> +++ b/drivers/media/pci/intel/ipu6/ipu6-isys.h
+> @@ -181,8 +181,6 @@ void ipu6_cleanup_fw_msg_bufs(struct ipu6_isys *isys);
+>  
+>  extern const struct v4l2_ioctl_ops ipu6_isys_ioctl_ops;
+>  
+> -void isys_setup_hw(struct ipu6_isys *isys);
+> -irqreturn_t isys_isr(struct ipu6_bus_device *adev);
+>  void update_watermark_setting(struct ipu6_isys *isys);
+>  
+>  int ipu6_isys_mcd_phy_set_power(struct ipu6_isys *isys,
 > 
 
 -- 
