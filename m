@@ -1,254 +1,208 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EED92314B93
-	for <linux-media@vger.kernel.org>; Thu,  8 Jan 2026 08:32:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.20
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 398D4344034
+	for <linux-media@vger.kernel.org>; Thu,  8 Jan 2026 08:38:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767861143; cv=none; b=rM3yjBmX5V70fkvq08Jz/eMPytoZzGU64q7Babt/U3QNC+h+5O2MbhWV3Qwdrv0yidhknDjJoxgU5oVEdYBl8aYGrdP3zS6+JUXa3d6qPKIq/9hcsrLXP2RKE5YCsRpTwIz+WW5ECEcSRAK+h6lz7vdH8Rds6olvLgTo1lnutTY=
+	t=1767861511; cv=none; b=bQzhsd5isaAwEYrkq/TEzN4LdrfzMwWUta96VkRAT1AW706Zq9RruXfZ8v7hDTENeGDJa3UxV9XY48cKhJTHeu9NLzL2GnzLsQ+zaMChdQr6uEHcX4m0QX0gpY+byJVtuRbNDIrIY4lPaigA1rktiAEp5vzlQbNI4Aq/ZzILVJE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767861143; c=relaxed/simple;
-	bh=YDBAlDkKk7Tj8b0XQcfHgfeggiQHDFyxpIdOJWwg7RE=;
-	h=Subject:To:Cc:References:From:Message-ID:Date:MIME-Version:
-	 In-Reply-To:Content-Type; b=ZTyqklPigxC0uvoR1PDv3iZ1MKglWO0lgy852lE1wse9ZkY0jRKpbQbQM1zIf4wTn3oZAfGnRYhL7Wdbk8YKDvUSTkbl0QhkEizflT0RyfAhzIiuc2E3pxOCkM6605IulYm1ntfPCPVn/y1eQyi7Rr4QwlGql8x5AUPmmHlCIGs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=PYEvjE3a; arc=none smtp.client-ip=198.175.65.20
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
+	s=arc-20240116; t=1767861511; c=relaxed/simple;
+	bh=dnxiXQYK80rSiXRNHY/VGckOGY1aglKhHVXjrY71uj4=;
+	h=Message-ID:Date:MIME-Version:From:Subject:To:Cc:References:
+	 In-Reply-To:Content-Type; b=ME/U1MMjohNQjblJYjdmP/dUYbYIuTQef7P37w9W8tk9/1IwLTYx43viPkZmkhVl46k0PBp4ndc6uYDnYCsiAJ4z1UrVC7J/dbA2rLemwXzMzuPObLk3fPKe4u5iylKb3DKxGdwZ6PWb4dv74spXXoSs+he/OqXt9U5EdxpwCl4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=muJlowqL; dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b=E1zvan0o; arc=none smtp.client-ip=205.220.168.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="PYEvjE3a"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1767861137; x=1799397137;
-  h=subject:to:cc:references:from:message-id:date:
-   mime-version:in-reply-to:content-transfer-encoding;
-  bh=YDBAlDkKk7Tj8b0XQcfHgfeggiQHDFyxpIdOJWwg7RE=;
-  b=PYEvjE3aIBMLuqPJDQBUze5mTLZV8qbWkY96Y9KVfkQr/8eGwMJCTAi2
-   I5hNVNi/YdxOQ3W213tMHKw6zz+858Fy3Q5J2SEJmNDSpRDTrQoinWPRZ
-   7USFyIcYnf06R+PfbQQZ9Nrj290jFCQpFmOZ+DcbjGYEGjRw2aEstrEAs
-   JYGesX1pTJGY4Fc84xJlhomGaIqBD2TIS0ptHJaAVwMoIs2Kl62Aw41Wp
-   S6h+mATtbi3paG3FRzkBvymYSIJ7sKuDvrTG7RC0OQdDRzloQLGOfv/1b
-   XN7T+cdFdeVqUOtmkIhEJ66c4ZTYIpyV80Gtex5Q5cbczu8D4BZrO/KPt
-   Q==;
-X-CSE-ConnectionGUID: NCTvKsXXTRqEYr4NYQvSpw==
-X-CSE-MsgGUID: pVGWwgWqS4ybh9SNZOjTjA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11664"; a="68969473"
-X-IronPort-AV: E=Sophos;i="6.21,210,1763452800"; 
-   d="scan'208";a="68969473"
-Received: from fmviesa006.fm.intel.com ([10.60.135.146])
-  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jan 2026 00:32:10 -0800
-X-CSE-ConnectionGUID: wdRSptyyQ+uT7E3g2qjLaQ==
-X-CSE-MsgGUID: 6TfKEDt4TMC3pfvG5Ipw+g==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.21,210,1763452800"; 
-   d="scan'208";a="203052970"
-Received: from ipu5-build.bj.intel.com (HELO [10.238.153.130]) ([10.238.153.130])
-  by fmviesa006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jan 2026 00:32:08 -0800
-Subject: Re: [PATCH v4 13/14] media: ipu6: Drop custom functions to obtain sd
- state information
-To: Sakari Ailus <sakari.ailus@linux.intel.com>, linux-media@vger.kernel.org
-Cc: tian.shu.qiu@intel.com, antti.laakso@linux.intel.com,
- mehdi.djait@linux.intel.com
-References: <20260108081712.543704-1-sakari.ailus@linux.intel.com>
- <20260108081712.543704-14-sakari.ailus@linux.intel.com>
-From: Bingbu Cao <bingbu.cao@linux.intel.com>
-Message-ID: <10f1de80-42a1-48cd-a5df-acd8807b3df6@linux.intel.com>
-Date: Thu, 8 Jan 2026 16:22:02 +0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="muJlowqL";
+	dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b="E1zvan0o"
+Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 6084ZeED2453891
+	for <linux-media@vger.kernel.org>; Thu, 8 Jan 2026 08:38:19 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
+	cc:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
+	W2QAqBe4+df3ACm1vz0AjqspTh3AnoBx6LJBN1OW9aA=; b=muJlowqLr2D2Uq0e
+	uDLhom7zbbM1Bq1fUSXJARL0tYzzpZJdYFGc0qDp1tjkpZDM1IxuFlyqfFYnXUNi
+	hhayzUrGVXBPGbN5HCLHYj6yKVNaqUt8wmX+vm6R04B9exfCz2Hh8CTMPtLMbNoW
+	swCiTwz+rlZWgFh4ssfH7OsmRp6pM2OcvcCwVl1UUAkhWHi6y0eXYrLSd5dY3Rgc
+	O9BL8XP9KBQl1SFfAzVntqA2k8VbMnXIYje0lSSvy1cLZXaKmEyNzuBi2pf54iwd
+	WX03pWZaBOQvu8IujDdHKiJRsuFETQS6gaC7xxMJd/KXuOArlxtIwZaK5+BaVAww
+	nSSj5g==
+Received: from mail-qk1-f198.google.com (mail-qk1-f198.google.com [209.85.222.198])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4bhmnbm043-1
+	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
+	for <linux-media@vger.kernel.org>; Thu, 08 Jan 2026 08:38:19 +0000 (GMT)
+Received: by mail-qk1-f198.google.com with SMTP id af79cd13be357-8b24a25cff5so910235485a.2
+        for <linux-media@vger.kernel.org>; Thu, 08 Jan 2026 00:38:19 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=oss.qualcomm.com; s=google; t=1767861498; x=1768466298; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:content-language:references
+         :cc:to:subject:from:user-agent:mime-version:date:message-id:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=W2QAqBe4+df3ACm1vz0AjqspTh3AnoBx6LJBN1OW9aA=;
+        b=E1zvan0oyR8DRxHXwbzSLJXvyetZmsHfWSQCdybYyvH7TFpvz+OO+fIIfC88UECIEG
+         p9Ik40+/myoPDwozPf9V+MYFBnj45fl7Fi31T9xunTV2j9HpY7BJPkfvC+Ya8S675CC2
+         xnwwOlLHWfFgFDTgJ5pzAxH8TySCCXDXq+GhWhxMTyJFlJHcAyV0AH5wwFHz0dDnYcFF
+         vITwzClNvawA8g18+pZhU1ZL8MhySpmkoXaxEqEqyilD3BjSWMmDxp7VqFvGQaIaQepX
+         uxclUp/ExWf7vDhezBr+cz6J385jdVq5BCnpbYs6BA/Zem7Rs8pkDPOJbTlIUHRLs3Bj
+         GcNg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1767861498; x=1768466298;
+        h=content-transfer-encoding:in-reply-to:content-language:references
+         :cc:to:subject:from:user-agent:mime-version:date:message-id:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=W2QAqBe4+df3ACm1vz0AjqspTh3AnoBx6LJBN1OW9aA=;
+        b=F15RhkDQcT0nyyU33+8ZcFcIsDl1gFgDRJVI3c3ruFPIo5Jpd2IqE/5rLGpnX3Ao0m
+         CMGEBBm/K1JmkCx/31tOEW18peNCnApHHZcdHoLiYuFNag7G6VmjzvwCFkTu4Z2crYYv
+         xtel+BaXEbu2hY4CHZmbu+c+AordD+u5oq+YK5GKEMdU1+gshu0lHw9xxZ765hzBTwvI
+         DaK3O/X9FuVr91pCMC8FHzlm7e0uqIoToRXyjjncURQHesWuYz91TeMaCb4zQYCXutrJ
+         +MsNazVB0poD08kf3kqqF+aFcN+/uXU89ICg4GzWyH61kvLvCmLFXSSobDYDGsUw2kXF
+         zK4A==
+X-Forwarded-Encrypted: i=1; AJvYcCVaaVK6UVzSXeoF0CixMgF8st5a0+cXr7mM/mh21jrk/1mGkaPf9f0TkEupxRmMuCO/UVJA69ai8VdePQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0YzG69Uj4dbTbdff9vEJNLxPsCNt2gMS4a/U8iNoLTPORN8o4cUH
+	QGcoNcvyAOE2juOQw+TREY2nMmF454HLhc3QpwKJfniRWafd9oSxgYj7tXa2Dqm+/ww2tLOEEIm
+	ZxFKi/AcBgq6nM5Mkq4NBrekN6T24tuANJH1JxQT7Heup5GkcbGuZN7jzaAImzThFMg==
+X-Gm-Gg: AY/fxX7CP9r+2kr8/62Lm3rxsEWdReNfjI+vFynFDA8QHvdAhCoUnTQBrzrUkDZGsx0
+	OYR1H0MbqLF+0LpIB0YI81JcCdQJnJ6OuR9I4Uze/g/91qvysfazlt39grjJzxrdjhT3LWbpO0G
+	zkByqoEP7MWvyMCVz6gRmh/D04nDyQI1Nbw2LbBrXUexOS9ZAyXmcSIq81e9vS9JlgtE/9pWijx
+	OQxzUt8cHGkmBkBX35s3R5CELhGnxh953BMJOKQiJL4G2S/uk6mYQbujVd52l63b3G6RtYe2AD7
+	wO/mGcskXvwjUwxnwER2U7bdU9kbphzS/aP2lwmV7Sz9wDTifhxtAmbtckhQrA9drro2ENp76pc
+	UOWTevVyY5F+yw+ZYq9uTCDXDtyqeB5we9dU5V5chgYsMN69PGjXYWUMf50j2aJY7dpPBEip7qz
+	iRnTt4Mysi6KhBIgIt732sajx3otK7wJRvWmmS0v1eK0BeOCguvrRf1mmpmiJJFSPh0aXCqpjPn
+	JrO
+X-Received: by 2002:a05:620a:1a13:b0:8b2:da84:7810 with SMTP id af79cd13be357-8c3893eb539mr681308685a.45.1767861498452;
+        Thu, 08 Jan 2026 00:38:18 -0800 (PST)
+X-Google-Smtp-Source: AGHT+IFUNx8Wpqvm/m8SkAAORxgp3y2mSrLPAiDvqPTKidErTtjL1Oa9i8NOTlt39F66vk9wrhfc7g==
+X-Received: by 2002:a05:620a:1a13:b0:8b2:da84:7810 with SMTP id af79cd13be357-8c3893eb539mr681306885a.45.1767861497998;
+        Thu, 08 Jan 2026 00:38:17 -0800 (PST)
+Received: from ?IPV6:2001:1c00:c32:7800:5bfa:a036:83f0:f9ec? (2001-1c00-0c32-7800-5bfa-a036-83f0-f9ec.cable.dynamic.v6.ziggo.nl. [2001:1c00:c32:7800:5bfa:a036:83f0:f9ec])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-b84591b6240sm202995366b.10.2026.01.08.00.38.17
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 08 Jan 2026 00:38:17 -0800 (PST)
+Message-ID: <4f42d0e4-6595-4838-bfc2-e690eb9e046f@oss.qualcomm.com>
+Date: Thu, 8 Jan 2026 09:38:16 +0100
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-In-Reply-To: <20260108081712.543704-14-sakari.ailus@linux.intel.com>
-Content-Type: text/plain; charset=windows-1252
-Content-Language: en-US
+User-Agent: Mozilla Thunderbird
+From: Hans de Goede <johannes.goede@oss.qualcomm.com>
+Subject: Re: [PATCH v2 2/5] media: ov02c10: Adjust x-win/y-win when changing
+ flipping to preserve bayer-pattern
+To: Sakari Ailus <sakari.ailus@linux.intel.com>
+Cc: Hans Verkuil <hverkuil@kernel.org>, Bryan O'Donoghue <bod@kernel.org>,
+        Heimir Thor Sverrisson <heimir.sverrisson@gmail.com>,
+        Sebastian Reichel <sre@kernel.org>, linux-media@vger.kernel.org,
+        stable@vger.kernel.org
+References: <20251210112436.167212-1-johannes.goede@oss.qualcomm.com>
+ <20251210112436.167212-3-johannes.goede@oss.qualcomm.com>
+ <aV5IH7PIFnySHhYC@kekkonen.localdomain>
+ <082db370-e6cb-45fd-aaf9-bcd9f80dc242@oss.qualcomm.com>
+ <aV7R30bSVxXRxCok@kekkonen.localdomain>
+Content-Language: en-US, nl
+In-Reply-To: <aV7R30bSVxXRxCok@kekkonen.localdomain>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMTA4MDA1OCBTYWx0ZWRfX8ajdgBCFHVVv
+ gOdZuFX4qWTJPUYbd8lpiV2JV2qKnm6Dcvc9v/J2TX2qHmFTYDBAmJd5JEu4nJQixn2M7qSjGON
+ 3VmJfenB/bEZqX5dMTMImlgwHVEpETs2jVd5P92dNnEVsp3DS+lxx6zF4z4lJmmITnj2ZjIRbed
+ eh+b5MYuvI5nfbHP8zFzyRZ5xabqu84NFxfkHARxorvSOedfED6U9gp2i0NXPWdB3TLAIf1kXGu
+ DEDcSZOC6LmLjM815koIoofqN3zZobC4lmWX2uYDeEbFwx+3DyNsqdReV3apfTkpPP/AK9hQrZq
+ u5FiZvbNxW+lqgPT3f7DTds4iUTYz6nC+vWG5E/x28v+43QPRbfFYBvlYMO3Dq2yaxCjpKf84EB
+ MjfLVY2cb2BXU47uliZx/FJPI8N4HrTrfN1kww0m7J6wo6uvAZmoBA9n3/bdG38Glort5kjpopA
+ xmxcaDBqmxMPIhpMibw==
+X-Proofpoint-GUID: DbT1XpWMFlyx2mQ5JM2D0V_UvRktW-MH
+X-Authority-Analysis: v=2.4 cv=eIkeTXp1 c=1 sm=1 tr=0 ts=695f6cfb cx=c_pps
+ a=qKBjSQ1v91RyAK45QCPf5w==:117 a=xqWC_Br6kY4A:10 a=IkcTkHD0fZMA:10
+ a=vUbySO9Y5rIA:10 a=s4-Qcg_JpJYA:10 a=VkNPw1HP01LnGYTKEx00:22
+ a=0plRyFmWAAAA:8 a=j7Eb9WoC1qn-KjlAcRMA:9 a=QEXdDO2ut3YA:10
+ a=NFOGd7dJGGMPyQGDc5-O:22 a=4tO_KGIOfzmgBqjB6OKc:22
+X-Proofpoint-ORIG-GUID: DbT1XpWMFlyx2mQ5JM2D0V_UvRktW-MH
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.9,FMLib:17.12.100.49
+ definitions=2026-01-08_01,2026-01-07_03,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ priorityscore=1501 clxscore=1015 malwarescore=0 suspectscore=0 phishscore=0
+ impostorscore=0 lowpriorityscore=0 bulkscore=0 adultscore=0 spamscore=0
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.22.0-2512120000 definitions=main-2601080058
 
-Sakari,
+Hi,
 
-Thanks for the patch.
-Reviewed-by: Bingbu Cao <bingbu.cao@intel.com>
-
-On 1/8/26 4:17 PM, Sakari Ailus wrote:
-> Drop the custom functions that are used to obtain information from the
-> sub-device state.
+On 7-Jan-26 22:36, Sakari Ailus wrote:
+> Hi Hans,
 > 
-> Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
-> ---
->  .../media/pci/intel/ipu6/ipu6-isys-queue.c    | 17 ++++++---
->  .../media/pci/intel/ipu6/ipu6-isys-subdev.c   | 36 -------------------
->  .../media/pci/intel/ipu6/ipu6-isys-subdev.h   |  4 ---
->  .../media/pci/intel/ipu6/ipu6-isys-video.c    | 33 +++++++----------
->  4 files changed, 24 insertions(+), 66 deletions(-)
+> On Wed, Jan 07, 2026 at 02:45:18PM +0100, Hans de Goede wrote:
+>> Hi Sakari,
+>>
+>> On 7-Jan-26 12:48, Sakari Ailus wrote:
+>>> Hi Hans,
+>>>
+>>> On Wed, Dec 10, 2025 at 12:24:33PM +0100, Hans de Goede wrote:
+>>>> The ov02c10 is capable of having its (crop) window shifted around with 1
+>>>> pixel precision while streaming.
+>>>>
+>>>> This allows changing the x/y window coordinates when changing flipping to
+>>>> preserve the bayer-pattern.
+>>>
+>>> Ideally we'd use the crop selection to configure this, but given these
+>>> sensors (and drivers) are generally what they are, I guess this is probably
+>>> a reasonable way to go.
+>>
+>> Even in sensor drivers where we allow setting the crop selection
+>> to get arbritrary modes, we always round the coordinates to a multiple
+>> of 2, to avoid changing the bayer-pattern seen by userspace when
+>> userspace changes the crop. See e.g. ov2680_set_selection().
+>>
+>> And then when doing flipping we might add 1 to either the x and/or y
+>> coordinate to the userspace provided crop x, y before sending it to
+>> the sensor to make flipping not change the bayer order, see e.g.
+>> ov01a10_set_hflip() after the v2 series you've here:
+>>
+>> https://git.retiisi.eu/?p=~sailus/linux.git;a=shortlog;h=refs/heads/ov01a10
+>>
+>> which does (simplified):
+>>
+>>         offset = crop->left;
+>>         if (hflip)
+>>                 offset++;
+>>
+>>         cci_write(ov01a10->regmap, OV01A10_REG_X_WIN, offset, &ret);
+>>
+>> IOW we are trying to not make userspace be able to affect the bayer-pattern
+>> through setting the crop-selection and/or flip.
+>>
+>> So I'm not sure what you mean with "Ideally we'd use the crop selection"
+>> because we are actively trying to avoid to have the crop-selection change
+>> the bayer order ?
+>>
+>> Generally speaking I think we should avoid any settings change the bayer-order
+>> whenever possible.
 > 
-> diff --git a/drivers/media/pci/intel/ipu6/ipu6-isys-queue.c b/drivers/media/pci/intel/ipu6/ipu6-isys-queue.c
-> index 651ddab9ef14..c862de31af9c 100644
-> --- a/drivers/media/pci/intel/ipu6/ipu6-isys-queue.c
-> +++ b/drivers/media/pci/intel/ipu6/ipu6-isys-queue.c
-> @@ -420,7 +420,7 @@ static void buf_queue(struct vb2_buffer *vb)
->  
->  static int ipu6_isys_link_fmt_validate(struct ipu6_isys_queue *aq)
->  {
-> -	struct v4l2_mbus_framefmt format;
-> +	struct v4l2_mbus_framefmt format, *__format;
->  	struct ipu6_isys_video *av = ipu6_isys_queue_to_video(aq);
->  	struct device *dev = &av->isys->adev->auxdev.dev;
->  	struct media_pad *remote_pad =
-> @@ -435,13 +435,20 @@ static int ipu6_isys_link_fmt_validate(struct ipu6_isys_queue *aq)
->  	sd = media_entity_to_v4l2_subdev(remote_pad->entity);
->  	r_stream = ipu6_isys_get_src_stream_by_src_pad(sd, remote_pad->index);
->  
-> -	ret = ipu6_isys_get_stream_pad_fmt(sd, remote_pad->index, r_stream,
-> -					   &format);
-> +	struct v4l2_subdev_state *state =
-> +		v4l2_subdev_lock_and_get_active_state(sd);
->  
-> -	if (ret) {
-> +	__format = v4l2_subdev_state_get_format(state, remote_pad->index,
-> +						r_stream);
-> +	if (__format)
-> +		format = *__format;
-> +
-> +	v4l2_subdev_unlock_state(state);
-> +
-> +	if (!__format) {
->  		dev_dbg(dev, "failed to get %s: pad %d, stream:%d format\n",
->  			sd->entity.name, remote_pad->index, r_stream);
-> -		return ret;
-> +		return -EPIPE;
->  	}
->  
->  	if (format.width != ipu6_isys_get_frame_width(av) ||
-> diff --git a/drivers/media/pci/intel/ipu6/ipu6-isys-subdev.c b/drivers/media/pci/intel/ipu6/ipu6-isys-subdev.c
-> index 869e7d4ba572..dbd6f76a066d 100644
-> --- a/drivers/media/pci/intel/ipu6/ipu6-isys-subdev.c
-> +++ b/drivers/media/pci/intel/ipu6/ipu6-isys-subdev.c
-> @@ -265,42 +265,6 @@ static int subdev_set_routing(struct v4l2_subdev *sd,
->  	return v4l2_subdev_set_routing_with_fmt(sd, state, routing, &format);
->  }
->  
-> -int ipu6_isys_get_stream_pad_fmt(struct v4l2_subdev *sd, u32 pad, u32 stream,
-> -				 struct v4l2_mbus_framefmt *format)
-> -{
-> -	struct v4l2_mbus_framefmt *fmt;
-> -	struct v4l2_subdev_state *state;
-> -
-> -	if (!sd || !format)
-> -		return -EINVAL;
-> -
-> -	state = v4l2_subdev_lock_and_get_active_state(sd);
-> -	fmt = v4l2_subdev_state_get_format(state, pad, stream);
-> -	if (fmt)
-> -		*format = *fmt;
-> -	v4l2_subdev_unlock_state(state);
-> -
-> -	return fmt ? 0 : -EINVAL;
-> -}
-> -
-> -int ipu6_isys_get_stream_pad_crop(struct v4l2_subdev *sd, u32 pad, u32 stream,
-> -				  struct v4l2_rect *crop)
-> -{
-> -	struct v4l2_subdev_state *state;
-> -	struct v4l2_rect *rect;
-> -
-> -	if (!sd || !crop)
-> -		return -EINVAL;
-> -
-> -	state = v4l2_subdev_lock_and_get_active_state(sd);
-> -	rect = v4l2_subdev_state_get_crop(state, pad, stream);
-> -	if (rect)
-> -		*crop = *rect;
-> -	v4l2_subdev_unlock_state(state);
-> -
-> -	return rect ? 0 : -EINVAL;
-> -}
-> -
->  u32 ipu6_isys_get_src_stream_by_src_pad(struct v4l2_subdev *sd, u32 pad)
->  {
->  	struct v4l2_subdev_state *state;
-> diff --git a/drivers/media/pci/intel/ipu6/ipu6-isys-subdev.h b/drivers/media/pci/intel/ipu6/ipu6-isys-subdev.h
-> index 268dfa01e903..35069099c364 100644
-> --- a/drivers/media/pci/intel/ipu6/ipu6-isys-subdev.h
-> +++ b/drivers/media/pci/intel/ipu6/ipu6-isys-subdev.h
-> @@ -38,10 +38,6 @@ int ipu6_isys_subdev_enum_mbus_code(struct v4l2_subdev *sd,
->  				    struct v4l2_subdev_mbus_code_enum
->  				    *code);
->  u32 ipu6_isys_get_src_stream_by_src_pad(struct v4l2_subdev *sd, u32 pad);
-> -int ipu6_isys_get_stream_pad_fmt(struct v4l2_subdev *sd, u32 pad, u32 stream,
-> -				 struct v4l2_mbus_framefmt *format);
-> -int ipu6_isys_get_stream_pad_crop(struct v4l2_subdev *sd, u32 pad, u32 stream,
-> -				  struct v4l2_rect *crop);
->  int ipu6_isys_subdev_set_routing(struct v4l2_subdev *sd,
->  				 struct v4l2_subdev_state *state,
->  				 enum v4l2_subdev_format_whence which,
-> diff --git a/drivers/media/pci/intel/ipu6/ipu6-isys-video.c b/drivers/media/pci/intel/ipu6/ipu6-isys-video.c
-> index b035c7342a91..e9dab8a709ef 100644
-> --- a/drivers/media/pci/intel/ipu6/ipu6-isys-video.c
-> +++ b/drivers/media/pci/intel/ipu6/ipu6-isys-video.c
-> @@ -455,6 +455,7 @@ static int ipu6_isys_fw_pin_cfg(struct ipu6_isys_video *av,
->  {
->  	struct media_pad *src_pad = media_pad_remote_pad_first(&av->pad);
->  	struct v4l2_subdev *sd = media_entity_to_v4l2_subdev(src_pad->entity);
-> +	struct v4l2_subdev_state *state = v4l2_subdev_get_locked_active_state(sd);
->  	struct ipu6_fw_isys_input_pin_info_abi *input_pin;
->  	struct ipu6_fw_isys_output_pin_info_abi *output_pin;
->  	struct ipu6_isys_stream *stream = av->stream;
-> @@ -464,26 +465,13 @@ static int ipu6_isys_fw_pin_cfg(struct ipu6_isys_video *av,
->  		ipu6_isys_get_isys_format(ipu6_isys_get_format(av), 0);
->  	struct v4l2_rect v4l2_crop;
->  	struct ipu6_isys *isys = av->isys;
-> -	struct device *dev = &isys->adev->auxdev.dev;
->  	int input_pins = cfg->nof_input_pins++;
->  	int output_pins;
->  	u32 src_stream;
-> -	int ret;
->  
->  	src_stream = ipu6_isys_get_src_stream_by_src_pad(sd, src_pad->index);
-> -	ret = ipu6_isys_get_stream_pad_fmt(sd, src_pad->index, src_stream,
-> -					   &fmt);
-> -	if (ret < 0) {
-> -		dev_err(dev, "can't get stream format (%d)\n", ret);
-> -		return ret;
-> -	}
-> -
-> -	ret = ipu6_isys_get_stream_pad_crop(sd, src_pad->index, src_stream,
-> -					    &v4l2_crop);
-> -	if (ret < 0) {
-> -		dev_err(dev, "can't get stream crop (%d)\n", ret);
-> -		return ret;
-> -	}
-> +	fmt = *v4l2_subdev_state_get_format(state, src_pad->index, src_stream);
-> +	v4l2_crop = *v4l2_subdev_state_get_crop(state, src_pad->index, src_stream);
->  
->  	input_pin = &cfg->input_pins[input_pins];
->  	input_pin->input_res.width = fmt.width;
-> @@ -784,13 +772,16 @@ void ipu6_isys_configure_stream_watermark(struct ipu6_isys_video *av,
->  	csi2 = ipu6_isys_subdev_to_csi2(av->stream->asd);
->  	link_freq = ipu6_isys_csi2_get_link_freq(csi2);
->  	if (link_freq > 0) {
-> +		struct v4l2_subdev_state *state =
-> +			v4l2_subdev_lock_and_get_active_state(&csi2->asd.sd);
-> +
->  		lanes = csi2->nlanes;
-> -		ret = ipu6_isys_get_stream_pad_fmt(&csi2->asd.sd, 0,
-> -						   av->source_stream, &format);
-> -		if (!ret) {
-> -			bpp = ipu6_isys_mbus_code_to_bpp(format.code);
-> -			pixel_rate = mul_u64_u32_div(link_freq, lanes * 2, bpp);
-> -		}
-> +		format = *v4l2_subdev_state_get_format(state, 0,
-> +						       av->source_stream);
-> +		bpp = ipu6_isys_mbus_code_to_bpp(format.code);
-> +		pixel_rate = mul_u64_u32_div(link_freq, lanes * 2, bpp);
-> +
-> +		v4l2_subdev_unlock_state(state);
->  	}
->  
->  	av->watermark.pixel_rate = pixel_rate;
+> That's up to the userspace. The UAPI allows to do either so why should the
+> driver decide?
 > 
+> As noted, in this case providing that flexibility probably causes more
+> hassle than any benefits, so I guess this is fine.
 
--- 
-Best regards,
-Bingbu Cao
+If we allow setting the crop selection with a 1 pixel precision drivers
+need some equivalent of V4L2_CTRL_FLAG_MODIFY_LAYOUT for userspace, so IMHO
+the UAPI does not allow this at the moment.
+
+Also drivers would get extra complicated by needing to figure out which
+bayer order to report as being active based on the crop selection.
+
+I really so no use-case where we need the single precision crop selection.
+
+So when you say "in this case providing that flexibility probably causes more
+hassle than any benefits" I believe that statement applies more general then
+just in this case.
+
+Regards,
+
+Hans
+
