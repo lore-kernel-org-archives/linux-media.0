@@ -1,152 +1,237 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.21])
+Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 39E38359713
-	for <linux-media@vger.kernel.org>; Fri,  9 Jan 2026 12:17:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.21
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CCF82359713
+	for <linux-media@vger.kernel.org>; Fri,  9 Jan 2026 12:18:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767961071; cv=none; b=UK4OVvl0u+QdDcMOTI5Iy1ka8OR/vrwEWH9gE9PjY0FMme+YXyOHpg6Ga2pbTqn4bhXpTCcpC7wKv5SQxd/CZrEZDmdlQcrd8MVu22SYi/OmDdMquZ1RixwgbQYumYhn3WMqh9+3nxPGrm/eSlf8ATZGrsoZK92Rz1cwbY5glsc=
+	t=1767961139; cv=none; b=irNjfOYiu4F6HgOVBPQfdOfJ1JHorRniVxZ+bSTj0VR6IH2nHbzJhA9Afc0M8RAWoIjsY8LaXFMqQtCpw/B7SA9aa98EeTzI0wbVQNgKQAuBOaQ4T1A/BjNn77s9eVX6UNIj9DYfRmx9tYtIDnk4+l93wWLIwPrVaDcQ86Fy2kI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767961071; c=relaxed/simple;
-	bh=X8kXsU2i9RTKCFlCHL6kq4U0O5ef3kU8r57TSnnKZXE=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=sXsRQDDbBEWK+QKoouh8/5/Ny2wEpQBEKVqFq9cWRITrlvTD7AUGvqKg08R6vDG0x2XnN6k7n9HDoMVIojDd4/jQtqszmeoAx8AFxGf5oVZ74cStkmZWJj1/SzQ9OBek67yXKuglDCcK7FyTh6Ie0S/nsWCs3Oilgod1IEa+r9Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=PAXv2hKR; arc=none smtp.client-ip=198.175.65.21
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="PAXv2hKR"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1767961071; x=1799497071;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=X8kXsU2i9RTKCFlCHL6kq4U0O5ef3kU8r57TSnnKZXE=;
-  b=PAXv2hKRDMejvCf+nkpOdwS2SRV3c+UyLPTCSsJm93geLpdQYMxHjzCY
-   t+BfBdbO1pRF7nOCdjX+BWF06aTQqHIrY9hngRBFuA1EuXZLz/MdcCfmE
-   SVkgX9R9wMHv/5C5h21uqnJlmqLOyLmDac5OW0IlkeJuWqlWpdLicmlhh
-   PomM+Xs3UORI2DUYt27/QdxFn7q79gDaefuz5exAvTQWFA+vCYOcHnHcU
-   yp1eNqZonHOB9nUp4FrKPpWjvw0bvSDEUvyke5AzD/Z15f4heB+O4Wcj8
-   sqEdITRCgtyOzH7vqpTkM0HfioDCdmTHLbzKRZmND5nnYZGMqRHxnrrVt
-   A==;
-X-CSE-ConnectionGUID: dzixAW4DS3WVKPcdBjz2nA==
-X-CSE-MsgGUID: 5LIT80/SRJW9MauCpGTHAA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11665"; a="69274821"
-X-IronPort-AV: E=Sophos;i="6.21,212,1763452800"; 
-   d="scan'208";a="69274821"
-Received: from fmviesa008.fm.intel.com ([10.60.135.148])
-  by orvoesa113.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jan 2026 04:17:49 -0800
-X-CSE-ConnectionGUID: 70Q03UhBQOCynmB49lXCTA==
-X-CSE-MsgGUID: YhVHcSYvSLC2twjHB0ItzQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.21,212,1763452800"; 
-   d="scan'208";a="203739545"
-Received: from vverma7-desk1.amr.corp.intel.com (HELO kekkonen.fi.intel.com) ([10.124.223.84])
-  by fmviesa008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jan 2026 04:17:47 -0800
-Received: from punajuuri.localdomain (unknown [192.168.240.130])
-	by kekkonen.fi.intel.com (Postfix) with ESMTP id B5C55120D05;
-	Fri, 09 Jan 2026 14:17:59 +0200 (EET)
-Received: from sailus by punajuuri.localdomain with local (Exim 4.98.2)
-	(envelope-from <sakari.ailus@linux.intel.com>)
-	id 1veBRG-00000002Soy-1jjz;
-	Fri, 09 Jan 2026 14:17:58 +0200
-Organization: Intel Finland Oy - BIC 0357606-4 - c/o Alberga Business Park, 6 krs, Bertel Jungin Aukio 5, 02600 Espoo
-From: Sakari Ailus <sakari.ailus@linux.intel.com>
-To: linux-media@vger.kernel.org
-Cc: David Heidelberg <david@ixit.cz>
-Subject: [PATCH 1/2] media: ccs: Clean up ccs_get_hwcfg() a little
-Date: Fri,  9 Jan 2026 14:17:57 +0200
-Message-ID: <20260109121758.587434-1-sakari.ailus@linux.intel.com>
-X-Mailer: git-send-email 2.47.3
+	s=arc-20240116; t=1767961139; c=relaxed/simple;
+	bh=/tiERx8rE15fRtVW1yTKJ5qhoiHNDMU5y0D9UOigCSI=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=W+r3WYEGCAhrAqGyNlRzDf4DiI840X87kWAVkFM3PiAxVgMbSWwynLRdvMBONz7BgZeMS3hZDauKGUX4O6USnpP+p6594Ra3LkqUN/VQlt+Del7VEawYlb7vlKIbqWJw9YeM9SJF9QrpOmhsbkid5ANIH1AddZiPEEBt38o13A8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
+Received: from ptz.office.stw.pengutronix.de ([2a0a:edc0:0:900:1d::77] helo=[127.0.0.1])
+	by metis.whiteo.stw.pengutronix.de with esmtp (Exim 4.92)
+	(envelope-from <s.pueschel@pengutronix.de>)
+	id 1veBRz-0000SF-A4; Fri, 09 Jan 2026 13:18:43 +0100
+Message-ID: <03fd04f7-629c-48cd-b498-0a1ebb67690d@pengutronix.de>
+Date: Fri, 9 Jan 2026 13:18:40 +0100
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 11/22] media: rockchip: rga: check scaling factor
+To: Nicolas Dufresne <nicolas@ndufresne.ca>,
+ Jacob Chen <jacob-chen@iotwrt.com>,
+ Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
+ Mauro Carvalho Chehab <mchehab@kernel.org>, Heiko Stuebner
+ <heiko@sntech.de>, Rob Herring <robh@kernel.org>,
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>
+Cc: linux-media@vger.kernel.org, linux-rockchip@lists.infradead.org,
+ linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+ devicetree@vger.kernel.org, kernel@pengutronix.de
+References: <20251203-spu-rga3-v2-0-989a67947f71@pengutronix.de>
+ <20251203-spu-rga3-v2-11-989a67947f71@pengutronix.de>
+ <02ac025c0ecf17354377c7f2c2fc83b40a3a41e1.camel@ndufresne.ca>
+Content-Language: en-US
+From: =?UTF-8?Q?Sven_P=C3=BCschel?= <s.pueschel@pengutronix.de>
+In-Reply-To: <02ac025c0ecf17354377c7f2c2fc83b40a3a41e1.camel@ndufresne.ca>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:900:1d::77
+X-SA-Exim-Mail-From: s.pueschel@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-media@vger.kernel.org
 
-Fix coding style issues and do other small cleanups in ccs_get_hwcfg().
+On 12/24/25 4:39 PM, Nicolas Dufresne wrote:
 
-Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
----
- drivers/media/i2c/ccs/ccs-core.c | 33 +++++++++++++-------------------
- 1 file changed, 13 insertions(+), 20 deletions(-)
+> Le mercredi 03 décembre 2025 à 16:52 +0100, Sven Püschel a écrit :
+>> Check the scaling factor to avoid potential problems. This is relevant
+>> for the upcoming RGA3 support, as it can hang when the scaling factor
+>> is exceeded.
+>>
+>> There are two relevant scenarios that have to be considered to protect
+>> against invalid scaling values:
+>>
+>> When the output or capture is already streaming, setting the format on
+>> the other side should consider the max scaling factor and clamp it
+>> accordingly. This is only done in the streaming case, as it otherwise
+>> may unintentionally clamp the value when the application sets the first
+>> format (due to a default format on the other side).
+>>
+>> When the format is set on both sides first, then the format won't be
+>> corrected by above means. Therefore the second streamon call has to
+>> check the scaling factor and fail otherwise.
+> In codec specifications, we resolve this issue by resetting the capture format
+> every-time the output format is set. But without specification for color
+> transforms, its impossible to say if this is right or wrong, and I don't expect
+> perfect interroperability between drivers until someone make the effort to
+> specify this type of hardware.
+>
+> What you describe is fine of course, but its a bit off nature of the way format
+> is normally being fixed by the driver to stay valid.
 
-diff --git a/drivers/media/i2c/ccs/ccs-core.c b/drivers/media/i2c/ccs/ccs-core.c
-index d7038f5b3689..4508a561428a 100644
---- a/drivers/media/i2c/ccs/ccs-core.c
-+++ b/drivers/media/i2c/ccs/ccs-core.c
-@@ -3145,11 +3145,9 @@ static const struct v4l2_subdev_internal_ops ccs_internal_src_ops = {
- 
- static int ccs_get_hwconfig(struct ccs_sensor *sensor, struct device *dev)
- {
--	struct ccs_hwconfig *hwcfg = &sensor->hwcfg;
- 	struct v4l2_fwnode_endpoint bus_cfg = { .bus_type = V4L2_MBUS_UNKNOWN };
--	struct fwnode_handle *ep;
--	struct fwnode_handle *fwnode = dev_fwnode(dev);
--	unsigned int i;
-+	struct fwnode_handle *fwnode = dev_fwnode(dev), *ep;
-+	struct ccs_hwconfig *hwcfg = &sensor->hwcfg;
- 	int rval;
- 
- 	ep = fwnode_graph_get_endpoint_by_id(fwnode, 0, 0,
-@@ -3176,9 +3174,9 @@ static int ccs_get_hwconfig(struct ccs_sensor *sensor, struct device *dev)
- 		break;
- 	case V4L2_MBUS_CSI1:
- 	case V4L2_MBUS_CCP2:
--		hwcfg->csi_signalling_mode = (bus_cfg.bus.mipi_csi1.strobe) ?
--		SMIAPP_CSI_SIGNALLING_MODE_CCP2_DATA_STROBE :
--		SMIAPP_CSI_SIGNALLING_MODE_CCP2_DATA_CLOCK;
-+		hwcfg->csi_signalling_mode = bus_cfg.bus.mipi_csi1.strobe ?
-+			SMIAPP_CSI_SIGNALLING_MODE_CCP2_DATA_STROBE :
-+			SMIAPP_CSI_SIGNALLING_MODE_CCP2_DATA_CLOCK;
- 		hwcfg->lanes = 1;
- 		break;
- 	default:
-@@ -3187,11 +3185,7 @@ static int ccs_get_hwconfig(struct ccs_sensor *sensor, struct device *dev)
- 		goto out_err;
- 	}
- 
--	rval = fwnode_property_read_u32(dev_fwnode(dev), "clock-frequency",
--					&hwcfg->ext_clk);
--
--	dev_dbg(dev, "clk %u, mode %u\n", hwcfg->ext_clk,
--		hwcfg->csi_signalling_mode);
-+	dev_dbg(dev, "signalling mode: %u\n", hwcfg->csi_signalling_mode);
- 
- 	if (!bus_cfg.nr_of_link_frequencies) {
- 		dev_warn(dev, "no link frequencies defined\n");
-@@ -3199,23 +3193,22 @@ static int ccs_get_hwconfig(struct ccs_sensor *sensor, struct device *dev)
- 		goto out_err;
- 	}
- 
--	hwcfg->op_sys_clock = devm_kcalloc(
--		dev, bus_cfg.nr_of_link_frequencies + 1 /* guardian */,
--		sizeof(*hwcfg->op_sys_clock), GFP_KERNEL);
-+	hwcfg->op_sys_clock =
-+		devm_kcalloc(dev,
-+			     bus_cfg.nr_of_link_frequencies + 1 /* guardian */,
-+			     sizeof(*hwcfg->op_sys_clock), GFP_KERNEL);
- 	if (!hwcfg->op_sys_clock) {
- 		rval = -ENOMEM;
- 		goto out_err;
- 	}
- 
--	for (i = 0; i < bus_cfg.nr_of_link_frequencies; i++) {
-+	for (unsigned int i = 0; i < bus_cfg.nr_of_link_frequencies; i++) {
- 		hwcfg->op_sys_clock[i] = bus_cfg.link_frequencies[i];
- 		dev_dbg(dev, "freq %u: %lld\n", i, hwcfg->op_sys_clock[i]);
- 	}
- 
--	v4l2_fwnode_endpoint_free(&bus_cfg);
--	fwnode_handle_put(ep);
--
--	return 0;
-+	fwnode_property_read_u32(dev_fwnode(dev), "clock-frequency",
-+				 &hwcfg->ext_clk);
- 
- out_err:
- 	v4l2_fwnode_endpoint_free(&bus_cfg);
--- 
-2.47.3
+thanks for the info. Given the missing spec, I'd keep it at the current 
+unusual implementation unless I'd need to adjust it for the try_fmt 
+state issue.
 
+>> Signed-off-by: Sven Püschel <s.pueschel@pengutronix.de>
+>> ---
+>>   drivers/media/platform/rockchip/rga/rga-hw.c |  1 +
+>>   drivers/media/platform/rockchip/rga/rga-hw.h |  1 +
+>>   drivers/media/platform/rockchip/rga/rga.c    | 60 +++++++++++++++++++++++++---
+>>   drivers/media/platform/rockchip/rga/rga.h    |  1 +
+>>   4 files changed, 58 insertions(+), 5 deletions(-)
+>>
+>> diff --git a/drivers/media/platform/rockchip/rga/rga-hw.c b/drivers/media/platform/rockchip/rga/rga-hw.c
+>> index 8cdfe089fd636..2ed4f22a999d5 100644
+>> --- a/drivers/media/platform/rockchip/rga/rga-hw.c
+>> +++ b/drivers/media/platform/rockchip/rga/rga-hw.c
+>> @@ -624,6 +624,7 @@ const struct rga_hw rga2_hw = {
+>>   	.max_width = MAX_WIDTH,
+>>   	.min_height = MIN_HEIGHT,
+>>   	.max_height = MAX_HEIGHT,
+>> +	.max_scaling_factor = MAX_SCALING_FACTOR,
+>>   	.stride_alignment = 4,
+>>   
+>>   	.setup_cmdbuf = rga_hw_setup_cmdbuf,
+>> diff --git a/drivers/media/platform/rockchip/rga/rga-hw.h b/drivers/media/platform/rockchip/rga/rga-hw.h
+>> index f4752aa823051..fffcab0131225 100644
+>> --- a/drivers/media/platform/rockchip/rga/rga-hw.h
+>> +++ b/drivers/media/platform/rockchip/rga/rga-hw.h
+>> @@ -14,6 +14,7 @@
+>>   
+>>   #define MIN_WIDTH 34
+>>   #define MIN_HEIGHT 34
+>> +#define MAX_SCALING_FACTOR 16
+>>   
+>>   #define RGA_TIMEOUT 500
+>>   
+>> diff --git a/drivers/media/platform/rockchip/rga/rga.c b/drivers/media/platform/rockchip/rga/rga.c
+>> index f02ae02de26ca..46dc94db6f85e 100644
+>> --- a/drivers/media/platform/rockchip/rga/rga.c
+>> +++ b/drivers/media/platform/rockchip/rga/rga.c
+>> @@ -346,18 +346,47 @@ static int vidioc_g_fmt(struct file *file, void *priv, struct v4l2_format *f)
+>>   static int vidioc_try_fmt(struct file *file, void *priv, struct v4l2_format *f)
+>>   {
+>>   	struct v4l2_pix_format_mplane *pix_fmt = &f->fmt.pix_mp;
+>> -	struct rockchip_rga *rga = video_drvdata(file);
+>> +	struct rga_ctx *ctx = file_to_rga_ctx(file);
+>> +	struct rockchip_rga *rga = ctx->rga;
+>>   	const struct rga_hw *hw = rga->hw;
+>>   	struct rga_fmt *fmt;
+>> +	u32 min_width = hw->min_width;
+>> +	u32 max_width = hw->max_width;
+>> +	u32 min_height = hw->min_height;
+>> +	u32 max_height = hw->max_height;
+>>   
+>>   	fmt = rga_fmt_find(rga, pix_fmt->pixelformat);
+>>   	if (!fmt)
+>>   		fmt = &hw->formats[0];
+>>   
+>> -	pix_fmt->width = clamp(pix_fmt->width,
+>> -			       hw->min_width, hw->max_width);
+>> -	pix_fmt->height = clamp(pix_fmt->height,
+>> -				hw->min_height, hw->max_height);
+>> +	if (V4L2_TYPE_IS_OUTPUT(f->type) &&
+>> +	    v4l2_m2m_get_dst_vq(ctx->fh.m2m_ctx)->streaming) {
+> What if userspace wanted to get the buffer size computed, so it can allocate
+> externally before it calls streamoff ? Hans did mention recently that try
+> function should only be state aware if specified.
+
+My plan is to move the try logic into a separate helper function with an 
+additional boolean parameter depending on which I do the state aware 
+adjustments. And then call this helper with false for try_fmt and true 
+for set_fmt.
+
+Or is this also problematic as it violates the contract that try_fmt is 
+equivalent to set_fmt?
+
+>
+> I'd like other reviewers feedback on what should be done here, of course writing
+> a spec would be ideal.
+>
+> Nicolas
+>
+>> +		min_width =
+>> +			MAX(min_width, DIV_ROUND_UP(ctx->out.pix.width,
+>> +						    hw->max_scaling_factor));
+>> +		max_width = MIN(max_width,
+>> +				ctx->out.pix.width * hw->max_scaling_factor);
+>> +		min_height =
+>> +			MAX(min_height, DIV_ROUND_UP(ctx->out.pix.height,
+>> +						     hw->max_scaling_factor));
+>> +		max_height = MIN(max_height,
+>> +				 ctx->out.pix.height * hw->max_scaling_factor);
+>> +	} else if (V4L2_TYPE_IS_CAPTURE(f->type) &&
+>> +		   v4l2_m2m_get_src_vq(ctx->fh.m2m_ctx)->streaming) {
+>> +		min_width =
+>> +			MAX(min_width, DIV_ROUND_UP(ctx->in.pix.width,
+>> +						    hw->max_scaling_factor));
+>> +		max_width = MIN(max_width,
+>> +				ctx->in.pix.width * hw->max_scaling_factor);
+>> +		min_height =
+>> +			MAX(min_height, DIV_ROUND_UP(ctx->in.pix.height,
+>> +						     hw->max_scaling_factor));
+>> +		max_height = MIN(max_height,
+>> +				 ctx->in.pix.height * hw->max_scaling_factor);
+>> +	}
+>> +
+>> +	pix_fmt->width = clamp(pix_fmt->width, min_width, max_width);
+>> +	pix_fmt->height = clamp(pix_fmt->height, min_height, max_height);
+>>   
+>>   	v4l2_fill_pixfmt_mp_aligned(pix_fmt, pix_fmt->pixelformat,
+>>   				    pix_fmt->width, pix_fmt->height, hw->stride_alignment);
+>> @@ -523,12 +552,33 @@ static int vidioc_s_selection(struct file *file, void *priv,
+>>   	return ret;
+>>   }
+>>   
+>> +static bool check_scaling(const struct rga_hw *hw, u32 src_size, u32 dst_size)
+>> +{
+>> +	if (src_size < dst_size)
+>> +		return src_size * hw->max_scaling_factor >= dst_size;
+>> +	else
+>> +		return dst_size * hw->max_scaling_factor >= src_size;
+>> +}
+>> +
+>>   static int vidioc_streamon(struct file *file, void *priv,
+>>   			   enum v4l2_buf_type type)
+>>   {
+>>   	struct rga_ctx *ctx = file_to_rga_ctx(file);
+>>   	const struct rga_hw *hw = ctx->rga->hw;
+>>   
+>> +	if ((V4L2_TYPE_IS_OUTPUT(type) &&
+>> +	     v4l2_m2m_get_dst_vq(ctx->fh.m2m_ctx)->streaming) ||
+>> +	    (V4L2_TYPE_IS_CAPTURE(type) &&
+>> +	     v4l2_m2m_get_src_vq(ctx->fh.m2m_ctx)->streaming)) {
+>> +		/*
+>> +		 * As the other side is already streaming,
+>> +		 * check that the max scaling factor isn't exceeded.
+>> +		 */
+>> +		if (!check_scaling(hw, ctx->in.pix.width, ctx->out.pix.width) ||
+>> +		    !check_scaling(hw, ctx->in.pix.height, ctx->out.pix.height))
+>> +			return -EINVAL;
+>> +	}
+>> +
+>>   	hw->setup_cmdbuf(ctx);
+>>   
+>>   	return v4l2_m2m_streamon(file, ctx->fh.m2m_ctx, type);
+>> diff --git a/drivers/media/platform/rockchip/rga/rga.h b/drivers/media/platform/rockchip/rga/rga.h
+>> index 93162b118d069..d02d5730b4e3b 100644
+>> --- a/drivers/media/platform/rockchip/rga/rga.h
+>> +++ b/drivers/media/platform/rockchip/rga/rga.h
+>> @@ -152,6 +152,7 @@ struct rga_hw {
+>>   	size_t cmdbuf_size;
+>>   	u32 min_width, min_height;
+>>   	u32 max_width, max_height;
+>> +	u8 max_scaling_factor;
+>>   	u8 stride_alignment;
+>>   
+>>   	void (*setup_cmdbuf)(struct rga_ctx *ctx);
