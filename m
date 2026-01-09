@@ -1,38 +1,38 @@
 Received: from bali.collaboradmins.com (bali.collaboradmins.com [148.251.105.195])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 49783365A18;
-	Fri,  9 Jan 2026 16:16:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0B3E936404A;
+	Fri,  9 Jan 2026 16:16:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.251.105.195
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767975380; cv=none; b=VkoMcHjtlc0HTxUivLvXksyKRt09tAX0AK3OcISfv8ia6GQdn3KKWqu+5S47yWky/Yqf7sTquBNowmoR0OWpd3C3O0vOfMsmS1LHNMJaRwcWOokuSK+iI7Dz7hvRQrI0VG6EDF9vBXKdjATaLtT5vCji4aZiKt7A0gQ1DVHI3yM=
+	t=1767975385; cv=none; b=mWN3beV8/MxAt0DaH1WUBA4w37oM28FefpGXmCYY/KztBYCemZXAQjlcxDvAAhTv6TK5TT+PD0KWrOBkqQAg79GNic6jwnPrH+OHnXm2tCGV1pJ8J1UecwuiKhrXas0ShuMxkQmx/Clu3np6K38R9MukQumXgrfFDTI1S9ARaUA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767975380; c=relaxed/simple;
-	bh=gmpTefIfPlF4I8DgMdzcgz2ylhV7PMm7hs/HGAhZC44=;
+	s=arc-20240116; t=1767975385; c=relaxed/simple;
+	bh=2cfBe2HMjZ1TVCyq7yRqYr5Xf8tgJn9wnLlQqFOVpSk=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=kaOYOSoK7ofZWTU+siWgL+xkcx6H1ucre9v5q+U8Xcn+WwooiRyUzoAVoBs0pH6gUlPR2+C2SgAVC196au1mo33ZJDifP8SRzLxQhnbqr1XzDWzcSAzmsYpkYurqx7I5DcCtc4HZEdngdZodALGyDI0k+ZaN0butOxBYJ1/Byi4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=FqOEhDdV; arc=none smtp.client-ip=148.251.105.195
+	 MIME-Version; b=I6s2g0vqJf3WwCdL+nsISwNAZDlDiPr7K9JAIgaeEo4S+qwdjIOHdF8z/FVy/xkQBTvQpw5IRyPDLhhTOdPwuzFezLw4uHSokGiSR34pLn8lDpwX4KyX+nML4GsDvtfnQpR9A0Y/yqdPd5IMnHtrMA1ONPWC6hkw7zzpim4t6l8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=DUzfcDnG; arc=none smtp.client-ip=148.251.105.195
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="FqOEhDdV"
+	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="DUzfcDnG"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1767975376;
-	bh=gmpTefIfPlF4I8DgMdzcgz2ylhV7PMm7hs/HGAhZC44=;
+	s=mail; t=1767975382;
+	bh=2cfBe2HMjZ1TVCyq7yRqYr5Xf8tgJn9wnLlQqFOVpSk=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=FqOEhDdVbn+Y68rgKs4Q2Su4nyJGrWAFlAP6P/oxitD1agrRF/RS+wlyPpvr3BaNa
-	 x/BSRQvjcQNz0kPm2UIMGlTn44AANy0KG1EK9HOxcM/JAcubhhOHo0PZSZfYz9fXwm
-	 7cWtQ92vY5dS1q85m6JOEIR+q7rHuCGsee0FT2z6hWpg7bh7o2YX82KzA4lhXHAEM/
-	 BnSMeZa2FlesrFwymhEVhotL9QK6lWI3bPcL/mJt1EwPkNf8B+JA9G26pOVtaC5OhA
-	 jmG8ZFuVjrZSmAnv+adA4uAzTNsl5q/ocG9K5WVzhpBveagUP+H72s037eNm5Oc/fR
-	 A1XfrKQYVE9ag==
+	b=DUzfcDnG7flTDX5MHJ0SaSz0mj816vvHeKbsvK40vO39QvDjXQBeG0Guk6fY5K5Yu
+	 06G1t1Mgx8jV+68vYajhe3DNwhcWVoZIbCLMkJerPfyQ0D5okczqZINBWLi/zvxb9V
+	 vH0jS7hAaphyOMk2pnkU6X1mF0LLPpK45r5XCttRHswIYJWdkdqQiVVsu5n8/n7IEt
+	 5K+JeE+MVe2iStyAzvbTTUoXYQXn9tfhfM/wX53jiXz0w7UbrpH21XHofpkog1ivqD
+	 ukhAqvB3OP/08/Bxw3ZFvXaj9y9UtkSqzLAb4zJezijZQqk1cXTiWV7QmjKRD7uNLD
+	 24jyoB9y5C5Gg==
 Received: from trenzalore (modemcable014.2-22-96.mc.videotron.ca [96.22.2.14])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
 	(Authenticated sender: detlev)
-	by bali.collaboradmins.com (Postfix) with ESMTPSA id F3B3F17E3856;
-	Fri,  9 Jan 2026 17:16:13 +0100 (CET)
+	by bali.collaboradmins.com (Postfix) with ESMTPSA id F245617E385E;
+	Fri,  9 Jan 2026 17:16:19 +0100 (CET)
 From: Detlev Casanova <detlev.casanova@collabora.com>
 To: linux-kernel@vger.kernel.org
 Cc: Mauro Carvalho Chehab <mchehab@kernel.org>,
@@ -54,9 +54,9 @@ Cc: Mauro Carvalho Chehab <mchehab@kernel.org>,
 	Nicolas Dufresne <nicolas.dufresne@collabora.com>,
 	Jonas Karlman <jonas@kwiboo.se>,
 	Diederik de Haas <didi.debian@cknow.org>
-Subject: [PATCH v8 11/17] media: rkvdec: Support per-variant interrupt handler
-Date: Fri,  9 Jan 2026 11:15:27 -0500
-Message-ID: <20260109161538.1294449-12-detlev.casanova@collabora.com>
+Subject: [PATCH v8 13/17] media: rkvdec: Disable multicore support
+Date: Fri,  9 Jan 2026 11:15:29 -0500
+Message-ID: <20260109161538.1294449-14-detlev.casanova@collabora.com>
 X-Mailer: git-send-email 2.52.0
 In-Reply-To: <20260109161538.1294449-1-detlev.casanova@collabora.com>
 References: <20260109161538.1294449-1-detlev.casanova@collabora.com>
@@ -68,105 +68,87 @@ List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Prepare for supporting different variants with different interrupt
-managers.
+Similarly to what is done in Hantro, avoid exposing equal video codecs to
+userspace. Equal video codecs allow scheduling work between the cores.
+For that kernel support is required, which does not yet exist.
+Until that is implemented, avoid exposing each core separately to
+userspace so that multicore can be added in the future without breaking
+userspace ABI.
 
-To support other variants specific function type later, introduce the
-rkvdec_variant_ops struct.
+This currently applies only to RK3588 which has 2 equal VDPU381 decoders,
+but will be applied for all SoC supported by rkvdec that has multiple DTS
+nodes with the same compatible.
 
-Tested-by: Diederik de Haas <didi.debian@cknow.org>  # Rock 5B
 Signed-off-by: Detlev Casanova <detlev.casanova@collabora.com>
 ---
- .../media/platform/rockchip/rkvdec/rkvdec.c   | 21 ++++++++++++++++---
- .../media/platform/rockchip/rkvdec/rkvdec.h   |  5 +++++
- 2 files changed, 23 insertions(+), 3 deletions(-)
+ .../media/platform/rockchip/rkvdec/rkvdec.c   | 47 +++++++++++++++++++
+ 1 file changed, 47 insertions(+)
 
 diff --git a/drivers/media/platform/rockchip/rkvdec/rkvdec.c b/drivers/media/platform/rockchip/rkvdec/rkvdec.c
-index ff6a09e45462..174536ebdcc7 100644
+index ce96a0470d4d..af2eced90026 100644
 --- a/drivers/media/platform/rockchip/rkvdec/rkvdec.c
 +++ b/drivers/media/platform/rockchip/rkvdec/rkvdec.c
-@@ -1222,10 +1222,9 @@ static void rkvdec_iommu_restore(struct rkvdec_dev *rkvdec)
+@@ -1269,6 +1269,49 @@ static void rkvdec_watchdog_func(struct work_struct *work)
  	}
  }
  
--static irqreturn_t rkvdec_irq_handler(int irq, void *priv)
-+static irqreturn_t rk3399_irq_handler(struct rkvdec_ctx *ctx)
- {
--	struct rkvdec_dev *rkvdec = priv;
--	struct rkvdec_ctx *ctx = v4l2_m2m_get_curr_priv(rkvdec->m2m_dev);
-+	struct rkvdec_dev *rkvdec = ctx->dev;
- 	enum vb2_buffer_state state;
- 	u32 status;
- 
-@@ -1246,6 +1245,15 @@ static irqreturn_t rkvdec_irq_handler(int irq, void *priv)
- 	return IRQ_HANDLED;
- }
- 
-+static irqreturn_t rkvdec_irq_handler(int irq, void *priv)
++/*
++ * Some SoCs, like RK3588 have multiple identical VDPU cores, but the
++ * kernel is currently missing support for multi-core handling. Exposing
++ * separate devices for each core to userspace is bad, since that does
++ * not allow scheduling tasks properly (and creates ABI). With this workaround
++ * the driver will only probe for the first core and early exit for the other
++ * cores. Once the driver gains multi-core support, the same technique
++ * for detecting the first core can be used to cluster all cores together.
++ */
++static int rkvdec_disable_multicore(struct rkvdec_dev *rkvdec)
 +{
-+	struct rkvdec_dev *rkvdec = priv;
-+	struct rkvdec_ctx *ctx = v4l2_m2m_get_curr_priv(rkvdec->m2m_dev);
-+	const struct rkvdec_variant *variant = rkvdec->variant;
++	struct device_node *node = NULL;
++	const char *compatible;
++	bool is_first_core;
++	int ret;
 +
-+	return variant->ops->irq_handler(ctx);
++	/* Intentionally ignores the fallback strings */
++	ret = of_property_read_string(rkvdec->dev->of_node, "compatible", &compatible);
++	if (ret)
++		return ret;
++
++	/* The first compatible and available node found is considered the main core */
++	do {
++		node = of_find_compatible_node(node, NULL, compatible);
++		if (of_device_is_available(node))
++			break;
++	} while (node);
++
++	if (!node)
++		return -EINVAL;
++
++	is_first_core = (rkvdec->dev->of_node == node);
++
++	of_node_put(node);
++
++	if (!is_first_core) {
++		dev_info(rkvdec->dev, "missing multi-core support, ignoring this instance\n");
++		return -ENODEV;
++	}
++
++	return 0;
 +}
 +
- static void rkvdec_watchdog_func(struct work_struct *work)
- {
- 	struct rkvdec_dev *rkvdec;
-@@ -1261,16 +1269,22 @@ static void rkvdec_watchdog_func(struct work_struct *work)
- 	}
- }
+ static const struct rkvdec_variant_ops rk3399_variant_ops = {
+ 	.irq_handler = rk3399_irq_handler,
+ };
+@@ -1332,6 +1375,10 @@ static int rkvdec_probe(struct platform_device *pdev)
+ 	mutex_init(&rkvdec->vdev_lock);
+ 	INIT_DELAYED_WORK(&rkvdec->watchdog_work, rkvdec_watchdog_func);
  
-+static const struct rkvdec_variant_ops rk3399_variant_ops = {
-+	.irq_handler = rk3399_irq_handler,
-+};
++	ret = rkvdec_disable_multicore(rkvdec);
++	if (ret)
++		return ret;
 +
- static const struct rkvdec_variant rk3288_rkvdec_variant = {
- 	.num_regs = 68,
- 	.coded_fmts = rk3288_coded_fmts,
- 	.num_coded_fmts = ARRAY_SIZE(rk3288_coded_fmts),
-+	.ops = &rk3399_variant_ops,
- };
- 
- static const struct rkvdec_variant rk3328_rkvdec_variant = {
- 	.num_regs = 109,
- 	.coded_fmts = rkvdec_coded_fmts,
- 	.num_coded_fmts = ARRAY_SIZE(rkvdec_coded_fmts),
-+	.ops = &rk3399_variant_ops,
- 	.quirks = RKVDEC_QUIRK_DISABLE_QOS,
- };
- 
-@@ -1278,6 +1292,7 @@ static const struct rkvdec_variant rk3399_rkvdec_variant = {
- 	.num_regs = 78,
- 	.coded_fmts = rkvdec_coded_fmts,
- 	.num_coded_fmts = ARRAY_SIZE(rkvdec_coded_fmts),
-+	.ops = &rk3399_variant_ops,
- };
- 
- static const struct of_device_id of_rkvdec_match[] = {
-diff --git a/drivers/media/platform/rockchip/rkvdec/rkvdec.h b/drivers/media/platform/rockchip/rkvdec/rkvdec.h
-index 751f39afe7e2..faabedd2b9d8 100644
---- a/drivers/media/platform/rockchip/rkvdec/rkvdec.h
-+++ b/drivers/media/platform/rockchip/rkvdec/rkvdec.h
-@@ -67,12 +67,17 @@ vb2_to_rkvdec_decoded_buf(struct vb2_buffer *buf)
- 			    base.vb.vb2_buf);
- }
- 
-+struct rkvdec_variant_ops {
-+	irqreturn_t (*irq_handler)(struct rkvdec_ctx *ctx);
-+};
-+
- struct rkvdec_variant {
- 	unsigned int num_regs;
- 	const struct rkvdec_coded_fmt_desc *coded_fmts;
- 	size_t num_coded_fmts;
- 	const struct rcb_size_info *rcb_sizes;
- 	size_t num_rcb_sizes;
-+	const struct rkvdec_variant_ops *ops;
- 	unsigned int quirks;
- };
- 
+ 	ret = devm_clk_bulk_get_all_enabled(&pdev->dev, &rkvdec->clocks);
+ 	if (ret < 0)
+ 		return ret;
 -- 
 2.52.0
 
