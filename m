@@ -1,172 +1,283 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f44.google.com (mail-wr1-f44.google.com [209.85.221.44])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1A6CA336EC7;
-	Sun, 11 Jan 2026 10:37:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8D4B335950
+	for <linux-media@vger.kernel.org>; Sun, 11 Jan 2026 13:30:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768127856; cv=none; b=n5D8wutvXIqUjoGF/Vgitag+Xe2BhrCthJidJP9CVf55mx0YWuDq+YWUNAiIHLpvz6l4Jl1KdumwOnSDFuRxQ3lws02skb8P+hmYb61Xf+6VJp3lTZVqJNcW/Txve8bmUR9YAdyydirnvSdWwCQv//i/eKG1rMA80k4fdAP+680=
+	t=1768138255; cv=none; b=eetb0T8Wk71HYN91YIMu3gceCf4ZnO9iI4FWMLjobpCvrwpfFYRhm2MN2vHyoX5WyQih2c2Bc7g+KcMH6H+lU9EnQa1laQiiQmNxDPOlgvV/NONhzV59x4jQIiizY8wfRtRVY3C3qcQoh/ea44R6fKvsw7emE6Mowx4d9wooqKg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768127856; c=relaxed/simple;
-	bh=vKVJahwFDp2BgaIk7FWtQz247pzEh1oOdaEn5cwav6g=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=dgpBJwWe4hdmCnkt7KOWw6qhs8jZpM29k6bu6JNNUjOoShpDsB1DwW4bLiZL63hl2Rz4ZsEHKVGV/B4cuR4FKww+zzDltpEF7wJtAaSnFfGwtfaXso+zSeweiYr993PzHuavOEGAQWi/rxuRbe5s6BSCBsGnDp8+UPksxunWS7g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=eYaAAEaP; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1768138255; c=relaxed/simple;
+	bh=DMPe2Otko5cydpSAzt1lYpSomvDNflW9xK/ETiX6TlI=;
+	h=Content-Type:Mime-Version:Subject:From:In-Reply-To:Date:Cc:
+	 Message-Id:References:To; b=dH/5/3oHZgckJ/s71v/UH9ylBCh3jNuAI4FJoIa3qIEIqb7BofnGj9izrNBHBrB+3N3VE2DLSz/QB8cSC3a3fgW9rlbTXOKLxxVxYsM7O3PyIbthZ/DDW4Vq/RIWEDG5fhVoBE6XtBIdiqpzDZvaSFb5W7sqIxweWOJlSXYePQU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ZpR0UXRB; arc=none smtp.client-ip=209.85.221.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="eYaAAEaP"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 581CCC19423;
-	Sun, 11 Jan 2026 10:37:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1768127855;
-	bh=vKVJahwFDp2BgaIk7FWtQz247pzEh1oOdaEn5cwav6g=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=eYaAAEaPsCa1kqPN5BEZNCK+/0r801KkCRoagdgFGgTu/MPFWYrWFsb6P8kJdHfdv
-	 OWnIq4rhH6DvN/5hmUU8DxZS4aTKYm9KUiEKE5vtDEQz4A9xH+wJkCLVoqOUWr/Lx1
-	 fM5k3prC+f3spxNqGYmpqPWELXaF/TNm7MtAY9SHlWijhuUcWm4+RMKQVjgXEW78U+
-	 3aCbkQDz2qFSLte+JLouW22VDt/ZxquxvaJuwTKrsN4A50UTg023gMO1GgBO7+UvYB
-	 7S3BVmDmmmDvr7n5VN3BgaptpNjylBWo3U1qPBcdNDO1p/L4eDJjJvnjPidlgCEWfc
-	 Z0xUNukhUxIIA==
-From: Leon Romanovsky <leon@kernel.org>
-To: Jason Gunthorpe <jgg@ziepe.ca>,
-	Leon Romanovsky <leon@kernel.org>,
-	Sumit Semwal <sumit.semwal@linaro.org>,
-	=?utf-8?q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
-	Alex Williamson <alex@shazbot.org>,
-	Kevin Tian <kevin.tian@intel.com>,
-	Joerg Roedel <joro@8bytes.org>,
-	Will Deacon <will@kernel.org>,
-	Robin Murphy <robin.murphy@arm.com>
-Cc: linux-rdma@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-media@vger.kernel.org,
-	dri-devel@lists.freedesktop.org,
-	linaro-mm-sig@lists.linaro.org,
-	kvm@vger.kernel.org,
-	iommu@lists.linux.dev
-Subject: [PATCH 2/4] vfio: Use dma-buf revoke semantics
-Date: Sun, 11 Jan 2026 12:37:09 +0200
-Message-ID: <20260111-dmabuf-revoke-v1-2-fb4bcc8c259b@nvidia.com>
-X-Mailer: git-send-email 2.52.0
-In-Reply-To: <20260111-dmabuf-revoke-v1-0-fb4bcc8c259b@nvidia.com>
-References: <20260111-dmabuf-revoke-v1-0-fb4bcc8c259b@nvidia.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ZpR0UXRB"
+Received: by mail-wr1-f44.google.com with SMTP id ffacd0b85a97d-43284ed32a0so2812214f8f.3
+        for <linux-media@vger.kernel.org>; Sun, 11 Jan 2026 05:30:53 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1768138252; x=1768743052; darn=vger.kernel.org;
+        h=to:references:message-id:content-transfer-encoding:cc:date
+         :in-reply-to:from:subject:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ckBPY9BcGf6vo2tq6j7tWFYJrA0tQ0sNu7QHFsHPJ+Y=;
+        b=ZpR0UXRB/xzd0FBqRFHInVmTbh/mbwshqGOu3dlZxLUyR8q2MnzyPI6zl1GNZkeN6J
+         8pMSpZy83z5vSIM243dAE/ORm+DkAB4TT7gjUn0TZ8g9VgJ57G8XYQRBvPPKK/m7JZ6F
+         XDH6v/RoT+9D2UbaBKAfcQ+m0VZO9GdEBnj2QoCLyp8ovQRX6nKH0UwZISqrjfFhwGCd
+         Afc+uLv8U33Ms9yriorHKHiH9kTRvgV+o6tj/M93eoGesceda/+8B9WH0Zr3IW2di820
+         DMM5oXVHhzmjWTETmIx1OwGcTJ1gVioMJlm77oHyvrpdU5sjvuUDScLkbujFGcjeVFgv
+         ayuA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1768138252; x=1768743052;
+        h=to:references:message-id:content-transfer-encoding:cc:date
+         :in-reply-to:from:subject:mime-version:x-gm-gg:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=ckBPY9BcGf6vo2tq6j7tWFYJrA0tQ0sNu7QHFsHPJ+Y=;
+        b=JAjW2ptYXKHk0k/5WTvwxhKXBxi5KqeNm8fgSsVycHj3zxGHL7O/aKv1jWMga9/36m
+         vv4JxWr9nSd10Bts3uMNA2RhK/OvIJUiyNfMYRC2GILCk1YKCl6t5IVfo7hiWCEBJTWZ
+         FQwZMujcSrvQ1qnVpREOvOiJNxkT+ppsoHf0NFnUI2F6g5Wa0InmgoqY3i8rg776p3wr
+         KtUOL5o2kKsfrbKFt71C96Qws1yksWrw+/dmgHg0qYw2tNFvpa8gnphrnt0hcE+43xkL
+         ChyBD5k6PAwr5vqnsv+U3NkDin1UbWEoa/4E4NL3T6LqSo4bGRDnrgr0jxy3UNaJVgna
+         gx1w==
+X-Forwarded-Encrypted: i=1; AJvYcCWO5FVjT97PXuQI+OxkfUWsvgluuqdbGnL49bxNKIHybRpsx1izHhPfaJdJA5iwzH/OVYFLyH7jRGrvYg==@vger.kernel.org
+X-Gm-Message-State: AOJu0YzCBcSwU27g4VryhIIPhVvps1sumLocCidGWYAGZ1691LqXmbDQ
+	DuepBk3bYYUv1oQVLX08L4Lk1Of3+4CLyMM3MgDUjSPIpispzI5kDnrk
+X-Gm-Gg: AY/fxX76KttduCf6aLD9JvkpSU6hGR8ifqTObb1/PxEsALpl1U94LCHa66zKt6Ke4ZB
+	b0MV1ztyumo/wQud5dej9UkLReLlKIXxM12/2jicF5RHyTqlBCyq7R3raGuRXa3WMAC+1WcL9a5
+	MccIb/O0nK1NfTks2W7ocG7iD1zTZLHf66pRN8s9IDogBrez1YZ9peFtin8sbFFFh9rSFwk7PqZ
+	XxOFEJgsubE1xN+I3fOOhKgYEGscKwxPKJd8dcSL1ymWVyKTYM15KjV/i6VBe/oRGnUnIBa166v
+	Am69laJ5q/BoH6p+PqZ0GKnR/RvvFMUBv1RKM+DYW9cBWd4aUi9f0eqXUbHEBc4FFzI7b4dr9FM
+	q944O4USoshOKMFtnDuvuxCN7XI5IzZq4rJ1e2A2jG/J94/D2eUfqWvIgyBIZRfUaasYh4reDLE
+	ce1g2dCA2uRMLcUqy4EFF8uaYY2uTR6TkRGPaO0coSDYADHSqUGpz3JZ6uYdvLc/a9T30fgu1hu
+	5QbXMoKMA==
+X-Google-Smtp-Source: AGHT+IFe9wWxjVQpeDITMzmRPx8fkixrUGFpGMFziE84e6O7knxtRUc2L2nWcJa5eYoiJK5xomAUhw==
+X-Received: by 2002:a05:6000:401e:b0:431:488:b9b4 with SMTP id ffacd0b85a97d-432c36328d0mr15749317f8f.17.1768138251654;
+        Sun, 11 Jan 2026 05:30:51 -0800 (PST)
+Received: from smtpclient.apple (static.253.36.98.91.clients.your-server.de. [91.98.36.253])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-432bd5feaf8sm33320121f8f.39.2026.01.11.05.30.47
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Sun, 11 Jan 2026 05:30:51 -0800 (PST)
+Content-Type: text/plain;
+	charset=utf-8
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-X-Mailer: b4 0.15-dev-a6db3
-Content-Transfer-Encoding: 8bit
+Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3826.700.81.1.3\))
+Subject: Re: [PATCH v3 2/3] media: rkvdec: Add support for the VDPU346 variant
+From: Christian Hewitt <christianshewitt@gmail.com>
+In-Reply-To: <DFL5TY0QQNMN.1RS04UM9D1V8S@cknow-tech.com>
+Date: Sun, 11 Jan 2026 17:30:35 +0400
+Cc: Detlev Casanova <detlev.casanova@collabora.com>,
+ =?utf-8?Q?Olivier_Cr=C3=AAte?= <olivier.crete@collabora.com>,
+ Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
+ Mauro Carvalho Chehab <mchehab@kernel.org>,
+ Rob Herring <robh@kernel.org>,
+ Krzysztof Kozlowski <krzk+dt@kernel.org>,
+ Conor Dooley <conor+dt@kernel.org>,
+ Heiko Stuebner <heiko@sntech.de>,
+ Dmitry Osipenko <dmitry.osipenko@collabora.com>,
+ Thomas Gleixner <tglx@linutronix.de>,
+ Dragan Simic <dsimic@manjaro.org>,
+ Chukun Pan <amadeus@jmu.edu.cn>,
+ linux-media@vger.kernel.org,
+ linux-rockchip@lists.infradead.org,
+ devicetree@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org,
+ linux-kernel@vger.kernel.org,
+ Nicolas Dufresne <nicolas.dufresne@collabora.com>,
+ Dang Huynh <dang.huynh@mainlining.org>
+Content-Transfer-Encoding: quoted-printable
+Message-Id: <E21F5FD9-AEBA-490F-A9DF-8E9BEF161763@gmail.com>
+References: <20260110053727.2295260-1-christianshewitt@gmail.com>
+ <20260110053727.2295260-3-christianshewitt@gmail.com>
+ <DFL5TY0QQNMN.1RS04UM9D1V8S@cknow-tech.com>
+To: Diederik de Haas <diederik@cknow-tech.com>
+X-Mailer: Apple Mail (2.3826.700.81.1.3)
 
-From: Leon Romanovsky <leonro@nvidia.com>
+> On 10 Jan 2026, at 11:35=E2=80=AFpm, Diederik de Haas =
+<diederik@cknow-tech.com> wrote:
+>=20
+> Hi Christian,
+>=20
+> On Sat Jan 10, 2026 at 6:37 AM CET, Christian Hewitt wrote:
+>> VDPU346 is similar to VDPU381 but with a single core and limited
+>> to 4K60 media. It is also limited to H264 L5.1 and omits AV1 and
+>> AVS2 capabilities. VDPU346 is used with RK3566 and RK3568.
+>>=20
+>> Signed-off-by: Christian Hewitt <christianshewitt@gmail.com>
+>> Reviewed-by: Nicolas Dufresne <nicolas.dufresne@collabora.com>
+>> Tested-by: Dang Huynh <dang.huynh@mainlining.org> # Pinetab2
+>> ---
+>> .../media/platform/rockchip/rkvdec/rkvdec.c   | 103 =
+++++++++++++++++++
+>> 1 file changed, 103 insertions(+)
+>>=20
+>> diff --git a/drivers/media/platform/rockchip/rkvdec/rkvdec.c =
+b/drivers/media/platform/rockchip/rkvdec/rkvdec.c
+>> index a5cf6f3240f8..6e49b129d11f 100644
+>> --- a/drivers/media/platform/rockchip/rkvdec/rkvdec.c
+>> +++ b/drivers/media/platform/rockchip/rkvdec/rkvdec.c
+>> @@ -236,6 +236,62 @@ static const struct rkvdec_ctrls =
+rkvdec_hevc_ctrls =3D {
+>> .num_ctrls =3D ARRAY_SIZE(rkvdec_hevc_ctrl_descs),
+>> };
+>>=20
+>> +static const struct rkvdec_ctrl_desc vdpu346_hevc_ctrl_descs[] =3D {
+>> + {
+>> + .cfg.id =3D V4L2_CID_STATELESS_HEVC_DECODE_PARAMS,
+>> + },
+>> + {
+>> + .cfg.id =3D V4L2_CID_STATELESS_HEVC_SPS,
+>> + .cfg.ops =3D &rkvdec_ctrl_ops,
+>> + },
+>> + {
+>> + .cfg.id =3D V4L2_CID_STATELESS_HEVC_PPS,
+>> + },
+>> + {
+>> + .cfg.id =3D V4L2_CID_STATELESS_HEVC_SCALING_MATRIX,
+>> + },
+>> + {
+>> + .cfg.id =3D V4L2_CID_STATELESS_HEVC_DECODE_MODE,
+>> + .cfg.min =3D V4L2_STATELESS_HEVC_DECODE_MODE_FRAME_BASED,
+>> + .cfg.max =3D V4L2_STATELESS_HEVC_DECODE_MODE_FRAME_BASED,
+>> + .cfg.def =3D V4L2_STATELESS_HEVC_DECODE_MODE_FRAME_BASED,
+>> + },
+>> + {
+>> + .cfg.id =3D V4L2_CID_STATELESS_HEVC_START_CODE,
+>> + .cfg.min =3D V4L2_STATELESS_HEVC_START_CODE_ANNEX_B,
+>> + .cfg.def =3D V4L2_STATELESS_HEVC_START_CODE_ANNEX_B,
+>> + .cfg.max =3D V4L2_STATELESS_HEVC_START_CODE_ANNEX_B,
+>> + },
+>> + {
+>> + .cfg.id =3D V4L2_CID_MPEG_VIDEO_HEVC_PROFILE,
+>> + .cfg.min =3D V4L2_MPEG_VIDEO_HEVC_PROFILE_MAIN,
+>> + .cfg.max =3D V4L2_MPEG_VIDEO_HEVC_PROFILE_MAIN_10,
+>> + .cfg.menu_skip_mask =3D
+>> + BIT(V4L2_MPEG_VIDEO_HEVC_PROFILE_MAIN_STILL_PICTURE),
+>> + .cfg.def =3D V4L2_MPEG_VIDEO_HEVC_PROFILE_MAIN,
+>> + },
+>> + {
+>> + .cfg.id =3D V4L2_CID_MPEG_VIDEO_HEVC_LEVEL,
+>> + .cfg.min =3D V4L2_MPEG_VIDEO_HEVC_LEVEL_1,
+>> + .cfg.max =3D V4L2_MPEG_VIDEO_HEVC_LEVEL_5_1,
+>> + },
+>> + {
+>> + .cfg.id =3D V4L2_CID_STATELESS_HEVC_EXT_SPS_ST_RPS,
+>> + .cfg.ops =3D &rkvdec_ctrl_ops,
+>> + .cfg.dims =3D { 65 },
+>> + },
+>> + {
+>> + .cfg.id =3D V4L2_CID_STATELESS_HEVC_EXT_SPS_LT_RPS,
+>> + .cfg.ops =3D &rkvdec_ctrl_ops,
+>> + .cfg.dims =3D { 65 },
+>> + },
+>> +};
+>> +
+>> +static const struct rkvdec_ctrls vdpu346_hevc_ctrls =3D {
+>> + .ctrls =3D vdpu346_hevc_ctrl_descs,
+>> + .num_ctrls =3D ARRAY_SIZE(vdpu346_hevc_ctrl_descs),
+>> +};
+>> +
+>> static const struct rkvdec_ctrl_desc vdpu38x_hevc_ctrl_descs[] =3D {
+>> {
+>> .cfg.id =3D V4L2_CID_STATELESS_HEVC_DECODE_PARAMS,
+>> @@ -463,6 +519,41 @@ static const struct rkvdec_coded_fmt_desc =
+rk3288_coded_fmts[] =3D {
+>> }
+>> };
+>>=20
+>> +static const struct rkvdec_coded_fmt_desc vdpu346_coded_fmts[] =3D {
+>> + {
+>> + .fourcc =3D V4L2_PIX_FMT_HEVC_SLICE,
+>> + .frmsize =3D {
+>> + .min_width =3D 64,
+>> + .max_width =3D 4096,
+>> + .step_width =3D 64,
+>> + .min_height =3D 64,
+>> + .max_height =3D 2304,
+>> + .step_height =3D 16,
+>> + },
+>> + .ctrls =3D &vdpu346_hevc_ctrls,
+>> + .ops =3D &rkvdec_vdpu381_hevc_fmt_ops,
+>> + .num_decoded_fmts =3D ARRAY_SIZE(rkvdec_hevc_decoded_fmts),
+>> + .decoded_fmts =3D rkvdec_hevc_decoded_fmts,
+>> + .subsystem_flags =3D VB2_V4L2_FL_SUPPORTS_M2M_HOLD_CAPTURE_BUF,
+>> + },
+>> + {
+>> + .fourcc =3D V4L2_PIX_FMT_H264_SLICE,
+>> + .frmsize =3D {
+>> + .min_width =3D 64,
+>> + .max_width =3D  4096,
+>> + .step_width =3D 64,
+>> + .min_height =3D 64,
+>> + .max_height =3D  2304,
+>> + .step_height =3D 16,
+>> + },
+>> + .ctrls =3D &rkvdec_h264_ctrls,
+>> + .ops =3D &rkvdec_vdpu381_h264_fmt_ops,
+>> + .num_decoded_fmts =3D ARRAY_SIZE(rkvdec_h264_decoded_fmts),
+>> + .decoded_fmts =3D rkvdec_h264_decoded_fmts,
+>> + .subsystem_flags =3D VB2_V4L2_FL_SUPPORTS_M2M_HOLD_CAPTURE_BUF,
+>> + },
+>> +};
+>> +
+>> static const struct rkvdec_coded_fmt_desc vdpu381_coded_fmts[] =3D {
+>> {
+>> .fourcc =3D V4L2_PIX_FMT_HEVC_SLICE,
+>> @@ -1657,6 +1748,14 @@ static const struct rkvdec_variant_ops =
+vdpu381_variant_ops =3D {
+>> .flatten_matrices =3D transpose_and_flatten_matrices,
+>> };
+>>=20
+>> +static const struct rkvdec_variant vdpu346_variant =3D {
+>> + .coded_fmts =3D vdpu346_coded_fmts,
+>> + .num_coded_fmts =3D ARRAY_SIZE(vdpu346_coded_fmts),
+>> + .rcb_sizes =3D vdpu381_rcb_sizes,
+>=20
+> AFAICT this is not correct, the rcb_sizes are different for vdpu346 vs
+> vdpu381. While for vdpu381 the sizes are the same across codecs, they
+> vary for vdpu346. And vdpu346 does not have 'STRMD Row', 'Transd Row'
+> and 'Transd col'.
+>=20
+> For RK3588/vdpu381 it is defined in RK3588 TRM V1.0 Part1 in
+> paragraph 5.4.4.3 in 'Table 5-13 Row or Col buffer size required' on
+> page 381.
+>=20
+> For RK3568/vdpu346 is is defines in RK3568 TRM V1.1 Part2 in
+> paragraph 10.4.8 in 'Table 10-9 Row or Col buffer size required' on =
+page
+> 474 and 475.
 
-Remove open-code variant of revoked semantics and reuse existing
-dma_buf_move_notify() and newly introduced dma_buf_mark_valid()
-primitives.
+This is what I=E2=80=99m hinting/referring to in the cover-letter. How
+to correctly handle the differences in code is currently beyond
+my n00b level comprehension of c and coding skills. I=E2=80=99ll need to
+ask the audience for some assistance and coaching :)
 
-Signed-off-by: Leon Romanovsky <leonro@nvidia.com>
----
- drivers/vfio/pci/vfio_pci_dmabuf.c | 27 ++++++---------------------
- 1 file changed, 6 insertions(+), 21 deletions(-)
+Christian
 
-diff --git a/drivers/vfio/pci/vfio_pci_dmabuf.c b/drivers/vfio/pci/vfio_pci_dmabuf.c
-index d4d0f7d08c53..d953bd4cd118 100644
---- a/drivers/vfio/pci/vfio_pci_dmabuf.c
-+++ b/drivers/vfio/pci/vfio_pci_dmabuf.c
-@@ -17,20 +17,14 @@ struct vfio_pci_dma_buf {
- 	struct dma_buf_phys_vec *phys_vec;
- 	struct p2pdma_provider *provider;
- 	u32 nr_ranges;
--	u8 revoked : 1;
- };
- 
- static int vfio_pci_dma_buf_attach(struct dma_buf *dmabuf,
- 				   struct dma_buf_attachment *attachment)
- {
--	struct vfio_pci_dma_buf *priv = dmabuf->priv;
--
- 	if (!attachment->peer2peer)
- 		return -EOPNOTSUPP;
- 
--	if (priv->revoked)
--		return -ENODEV;
--
- 	return 0;
- }
- 
-@@ -42,9 +36,6 @@ vfio_pci_dma_buf_map(struct dma_buf_attachment *attachment,
- 
- 	dma_resv_assert_held(priv->dmabuf->resv);
- 
--	if (priv->revoked)
--		return ERR_PTR(-ENODEV);
--
- 	return dma_buf_phys_vec_to_sgt(attachment, priv->provider,
- 				       priv->phys_vec, priv->nr_ranges,
- 				       priv->size, dir);
-@@ -90,8 +81,6 @@ static const struct dma_buf_ops vfio_pci_dmabuf_ops = {
-  *
-  * If this function succeeds the following are true:
-  *  - There is one physical range and it is pointing to MMIO
-- *  - When move_notify is called it means revoke, not move, vfio_dma_buf_map
-- *    will fail if it is currently revoked
-  */
- int vfio_pci_dma_buf_iommufd_map(struct dma_buf_attachment *attachment,
- 				 struct dma_buf_phys_vec *phys)
-@@ -104,9 +93,6 @@ int vfio_pci_dma_buf_iommufd_map(struct dma_buf_attachment *attachment,
- 		return -EOPNOTSUPP;
- 
- 	priv = attachment->dmabuf->priv;
--	if (priv->revoked)
--		return -ENODEV;
--
- 	/* More than one range to iommufd will require proper DMABUF support */
- 	if (priv->nr_ranges != 1)
- 		return -EOPNOTSUPP;
-@@ -268,6 +254,7 @@ int vfio_pci_core_feature_dma_buf(struct vfio_pci_core_device *vdev, u32 flags,
- 	exp_info.size = priv->size;
- 	exp_info.flags = get_dma_buf.open_flags;
- 	exp_info.priv = priv;
-+	exp_info.revoke_semantics = true;
- 
- 	priv->dmabuf = dma_buf_export(&exp_info);
- 	if (IS_ERR(priv->dmabuf)) {
-@@ -279,7 +266,6 @@ int vfio_pci_core_feature_dma_buf(struct vfio_pci_core_device *vdev, u32 flags,
- 	INIT_LIST_HEAD(&priv->dmabufs_elm);
- 	down_write(&vdev->memory_lock);
- 	dma_resv_lock(priv->dmabuf->resv, NULL);
--	priv->revoked = !__vfio_pci_memory_enabled(vdev);
- 	list_add_tail(&priv->dmabufs_elm, &vdev->dmabufs);
- 	dma_resv_unlock(priv->dmabuf->resv);
- 	up_write(&vdev->memory_lock);
-@@ -317,12 +303,12 @@ void vfio_pci_dma_buf_move(struct vfio_pci_core_device *vdev, bool revoked)
- 		if (!get_file_active(&priv->dmabuf->file))
- 			continue;
- 
--		if (priv->revoked != revoked) {
--			dma_resv_lock(priv->dmabuf->resv, NULL);
--			priv->revoked = revoked;
-+		dma_resv_lock(priv->dmabuf->resv, NULL);
-+		if (revoked)
- 			dma_buf_move_notify(priv->dmabuf);
--			dma_resv_unlock(priv->dmabuf->resv);
--		}
-+		else
-+			dma_buf_mark_valid(priv->dmabuf);
-+		dma_resv_unlock(priv->dmabuf->resv);
- 		fput(priv->dmabuf->file);
- 	}
- }
-@@ -340,7 +326,6 @@ void vfio_pci_dma_buf_cleanup(struct vfio_pci_core_device *vdev)
- 		dma_resv_lock(priv->dmabuf->resv, NULL);
- 		list_del_init(&priv->dmabufs_elm);
- 		priv->vdev = NULL;
--		priv->revoked = true;
- 		dma_buf_move_notify(priv->dmabuf);
- 		dma_resv_unlock(priv->dmabuf->resv);
- 		vfio_device_put_registration(&vdev->vdev);
+>> + .num_rcb_sizes =3D ARRAY_SIZE(vdpu381_rcb_sizes),
+>> + .ops =3D &vdpu381_variant_ops,
+>> +};
+>> +
+>> static const struct rkvdec_variant vdpu381_variant =3D {
+>> .coded_fmts =3D vdpu381_coded_fmts,
+>> .num_coded_fmts =3D ARRAY_SIZE(vdpu381_coded_fmts),
+>> @@ -1705,6 +1804,10 @@ static const struct of_device_id =
+of_rkvdec_match[] =3D {
+>> .compatible =3D "rockchip,rk3399-vdec",
+>> .data =3D &rk3399_rkvdec_variant,
+>> },
+>> + {
+>> + .compatible =3D "rockchip,rk3568-vdec",
+>> + .data =3D &vdpu346_variant,
+>> + },
+>> {
+>> .compatible =3D "rockchip,rk3588-vdec",
+>> .data =3D &vdpu381_variant,
 
--- 
-2.52.0
 
