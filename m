@@ -1,37 +1,37 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 90F1934E74D;
-	Mon, 12 Jan 2026 10:54:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B0D6A352C25;
+	Mon, 12 Jan 2026 10:57:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768215242; cv=none; b=qszK6WgE516ZT2Q4tLOxEEqPonVZBoRsf773uvcfCR6OWZzuALjdwm7pPUZRRIjNIczV9tLL1Bal5bbh2lugwro1ii/TQAEXIe/HzAkhGXyHO2j7/d9r//uqhlz+3vkiLBO6XnthDpnIt+O2OK+iH8BEPDynDhbr1IGmTGEfYYc=
+	t=1768215464; cv=none; b=B3FQju3eaU2NaNyxK6N/mAgV6ThTophPdNiNISdC4mRd4//i3VBnFd+UVntRV8wWconzHZc6E/6xAD391LWLXwnCi39Pg6W23MqooBOa+f450SN6Kzi/iS2iilkgBkP84rclX3ZPS7qCVK1pHdGbwvsLUgRHR7VxY5w6A2wryiU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768215242; c=relaxed/simple;
-	bh=czuK7P5EN3lXjvLcJJRFeoNx1IqcVLbOGutwCra56Hk=;
+	s=arc-20240116; t=1768215464; c=relaxed/simple;
+	bh=9qFRfNolEN7PkXZsv9ifkDjQj5bnd+QZdn+ckTexWf8=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Mh+kDAhKht7p40xBr26UXdWV6L4QlJgZuNsNmSxlniHZcP461ZTim+M6mnnA3txGiwqKGekpBZAoHACchUOwx2bmvvnJWuhR9R1vNJ47+OacNu9IydKVvZSrDJRlJjpAavYGYljHiBl5jJe1GWE+SqOFjtjYx7mLxfkoJWR2Uus=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=uvKlntva; arc=none smtp.client-ip=10.30.226.201
+	 Content-Type:Content-Disposition:In-Reply-To; b=DIVeD0lVPew1MxJy2vYdrm4mvkJLeqaS1PqaZM9IuCfi9kjyD/BMufeIOpBgCy5LfpGfG3fth4Ok1N70YTQN4SQnpmMau+7oJS0kwFTcyogT1mZLdW8srPgivislrX2DxWqrUnGaPbs8wyDUnS7iEGa827ujOvBCKZAITO/eKdQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=Eyqgo3tr; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="uvKlntva"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F0CBEC16AAE;
-	Mon, 12 Jan 2026 10:54:01 +0000 (UTC)
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="Eyqgo3tr"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B8E17C19421;
+	Mon, 12 Jan 2026 10:57:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1768215242;
-	bh=czuK7P5EN3lXjvLcJJRFeoNx1IqcVLbOGutwCra56Hk=;
+	s=korg; t=1768215464;
+	bh=9qFRfNolEN7PkXZsv9ifkDjQj5bnd+QZdn+ckTexWf8=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=uvKlntvaRprEfOJeDIVjzitJwGidmgTKmL/Hc+p6xJ/hBNEB9VZaOD2sZ5QO7amAb
-	 EP9mEutKheyHB1be4lkZZ2K9KV0OiDVprgnbK3RaeqwUKUar8zCYM/0kWozj4pEAYO
-	 GjJu6cMWC7h/JNUoCNLKEh8I5JCabBO4iA2XfAr4=
-Date: Mon, 12 Jan 2026 11:49:35 +0100
+	b=Eyqgo3try9I3hC4TUXjHIqXfwJm8NO8TEDO5RQVjLy0Op30ABpKUdBNAIzOyr+gMP
+	 jr8d1je1r0ygmPluUgrTTlQujmIP9OPHafvopeCjA3x8g+nAyrxks42XnNbmZcRpO5
+	 vouAv77hzd8VbQkHlzwhS07Ov3lq3EXX4j6c+UiY=
+Date: Mon, 12 Jan 2026 11:57:41 +0100
 From: Greg KH <gregkh@linuxfoundation.org>
 To: Karthikey Kadati <karthikey3608@gmail.com>
 Cc: andy@kernel.org, hansg@kernel.org, mchehab@kernel.org,
 	sakari.ailus@linux.intel.com, linux-media@vger.kernel.org,
 	linux-staging@lists.linux.dev
-Subject: Re: [PATCH v2 1/2] staging: atomisp: Remove input_system typedefs
-Message-ID: <2026011233-scandal-nuttiness-f199@gregkh>
-References: <20260112103848.22980-1-karthikey3608@gmail.com>
+Subject: Re: [PATCH v3 1/2] staging: atomisp: Remove input_system typedefs
+Message-ID: <2026011225-greeting-unmarked-17a8@gregkh>
+References: <20260112104405.24377-1-karthikey3608@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
@@ -40,9 +40,9 @@ List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20260112103848.22980-1-karthikey3608@gmail.com>
+In-Reply-To: <20260112104405.24377-1-karthikey3608@gmail.com>
 
-On Mon, Jan 12, 2026 at 04:08:47PM +0530, Karthikey Kadati wrote:
+On Mon, Jan 12, 2026 at 04:14:04PM +0530, Karthikey Kadati wrote:
 > Remove input_system_channel_t and input_system_input_port_t typedefs.
 > 
 > Replace usages with struct input_system_channel and
@@ -296,6 +296,7 @@ On Mon, Jan 12, 2026 at 04:08:47PM +0530, Karthikey Kadati wrote:
 > 
 > 
 
+
 Hi,
 
 This is the friendly patch-bot of Greg Kroah-Hartman.  You have sent him
@@ -314,6 +315,7 @@ as indicated below:
   Please read the section entitled "The canonical patch format" in the
   kernel file, Documentation/process/submitting-patches.rst for what
   needs to be done here to properly describe this.
+
 
 If you wish to discuss this problem further, or you have questions about
 how to resolve this issue, please feel free to respond to this email and
