@@ -1,331 +1,152 @@
-Received: from mail-pg1-f179.google.com (mail-pg1-f179.google.com [209.85.215.179])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.10])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9FE8430F815
-	for <linux-media@vger.kernel.org>; Mon, 12 Jan 2026 10:44:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 27DE834DCE2
+	for <linux-media@vger.kernel.org>; Mon, 12 Jan 2026 10:53:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768214667; cv=none; b=S1R0yCejLz+o04slE0F5KZ/COMQc6E1WpxkUlqeeVsbf68ayymIvgbJjNLs64R1DSBKNzn1SQQB2JRYVzhaSMX9qykP5Sx1AQybO/XgPV642RwydRtwbfAAPIu04MruGshYPAKdGQ5Mn6ONNxi0M+MzB8USJYIX2WojGsE1RCMY=
+	t=1768215194; cv=none; b=qYFBjel4IhTkeU4mxQCKf4/4U8fhEMWyWmJhB2wXGEV0Zr57gkIXeE7ytnkHl86uUiMnuu9ZfLTyF68np1wrEVwO7VC1zOH9KMNhqU/txBPUFkf5TEKnhZU7IY1tX7cHPlg7qCIgOXpmauUxRlFzigQN/aSBw4JOJmmvNUx+cdI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768214667; c=relaxed/simple;
-	bh=IadvI/igjuonzkmDbp264AdDOGgg6XR+qsM1nE39ReM=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=iH0jRNUizZUVWt7wMRAeFNLhY5OIlvpLXGXev2L2WG9qJ/mrJq8g+9oDersEVGOgGRrOROjDZcZXMAVM6eqcGCvCLgQMLNm1jjMDomXR9H13MMe4OJmnu/6n8yTr+nSt+1wTYXcFx8G1JcIO3ZBXGXVwxn09a9j52JgtJ/5XpRo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=aCKDdajk; arc=none smtp.client-ip=209.85.215.179
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1768215194; c=relaxed/simple;
+	bh=kcCLF8haeZnlyS5+6ms21wsAf7Gfj6MMoJrY4svq7U8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=AKOGhImwVP9+LehIEhVsp0gdY2My7Ki4RG+6ignqjgZH5h4p/GDrpMkWhfFeT/WjzP7OV6+DLIqdi1bkiQChg8VxH3KK6+55+XFZMs4MVxdwoI8s3gg8+gohHFp24jV30vXZLGt+hNfLusgbQplQhjIk0V1DR+r/g4ECM2kXSU4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=TOvu2V8v; arc=none smtp.client-ip=192.198.163.10
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="aCKDdajk"
-Received: by mail-pg1-f179.google.com with SMTP id 41be03b00d2f7-c3e921afad1so2636171a12.1
-        for <linux-media@vger.kernel.org>; Mon, 12 Jan 2026 02:44:25 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1768214665; x=1768819465; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=8dxF1px319gzp5LleV4H2jlboyE8vZmrw4Yc7He9t+8=;
-        b=aCKDdajkLb4qli/a3QpDgWyrCKHFa3lRUlW09ZPDmM3aPWIqS1V4+GZgEb9a0l2PEh
-         6F0CBfJUyOju9KrLWC8AeGw0JSGh6sLd++mpWNmqeAvxaJR0DrZd4TieOd6KPWrZiq8A
-         Lij7GldPl2ixfDsn2D+v0BFLy5hZUSY33aEPyZ613N+uyE/cNV1o6uvUJV7yjSugr5bW
-         TCS+ApOTsuLUoXDEhBRKPmxCYQXNNVW8ytHZZ53V6YtCYz+BC3FuyONzRrqPgPPT2DNC
-         Z+MUyPVJRw1uAuWhXZfqyvjrBJJOoTREl5hqKLQ4XTxXQA2TygZeHb7/HFEAgz8G6QKW
-         dXOg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1768214665; x=1768819465;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=8dxF1px319gzp5LleV4H2jlboyE8vZmrw4Yc7He9t+8=;
-        b=B4AuF4gJTKlg7AVET3wcW5SeSktR6AHPe5cGqqdaWZKLCbjs2c+grAGs6K9cRIGOqX
-         0X4S9bfVllhVcTvwxHK5hI9hVcFqgv+2UkRLTgYPySk/t7FbMnfI0n0Fqpslw35xIGlZ
-         dYK4Bw2d8DA1sPNQ9Vao+pro+7MMV36hjb63bJwd+M2I0P51pAYxnSN62qUsTWCOT3ta
-         l3LmkmLr+W2peW0LiqlmMk3juugEUH8hTGfUP+QhmHvSLmjhhH80uKYaNg8RpEHLOUjG
-         esu7T83Hu3zvqEClF0+6x5x4JDVlXW5ixFrsmGECTLYwAIF1NnDYGwwscAiQQthEOfRX
-         0kvA==
-X-Forwarded-Encrypted: i=1; AJvYcCX9mo192AAvGBxQLSdxOGkm068CwR6pvakYIjgNEgoyZwQKw9lox0mZslwnUYIyk7YzEqTgPPeNxTLvaA==@vger.kernel.org
-X-Gm-Message-State: AOJu0YzUwrUQ/D1mz8MwfPvhN1LcxWXamT9h29EmC4BeBoQqrQUFue6b
-	AeEYJmtpiPbim7U3mXiJOjBaZ0bmWntY5rzxJmM/MUV3jurJxEP5k4ns
-X-Gm-Gg: AY/fxX4r+GCbAPIwOMH7FeAThOhWjwohDScB6p39K4sMAyF7gsWQMuvYfpJDXT0ydzH
-	7foyRDx7SwX+udxPc61YV+TjmqqyRANK7zsK+Nf2aeHRyNmreZBsxKHBBvQhzmpbtQ3fOFca3AT
-	rQ8elaJ6u/thCcvM7tVv6ZGBHSbpQ8hDQxWrM0qQwFm+krq8vEuUID7fhclqNhnhtrZHgqCsuFc
-	cS2Z/hkRVaMLq/mzdIFUnvatjciGcuQNqrmG6sNth3xV3dNNMhBM1Au7kDGtMnhs9CCrFQd9kEa
-	6S2qNvUJnNerW+qd3X5vHsEr1hEGfuSkogC26S1n/B0+zMDs9yg8DizDDgIPR3rCYQ9gOpvMeEw
-	a9MAPu2wkCw58b7V08xvJOFupKUhsjeJGbuUpKNEvkfyooyz35V/JGLtL9yn5i5EqJR8lrMyaGq
-	duvw32mXm+GP/avEjYx42j2oDSKSkq1A==
-X-Google-Smtp-Source: AGHT+IGbMtluEeXTEQ6gAE/purEoD1pLMY0OEle1E31dbnMt7CqDOyV8U90eNZ2s6CLzii1abXLNmA==
-X-Received: by 2002:a17:90b:3c09:b0:34c:2db6:57f1 with SMTP id 98e67ed59e1d1-34f68c28425mr14140271a91.30.1768214664868;
-        Mon, 12 Jan 2026 02:44:24 -0800 (PST)
-Received: from localhost.localdomain ([103.215.237.209])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-34f6b9a1881sm5471916a91.13.2026.01.12.02.44.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 12 Jan 2026 02:44:24 -0800 (PST)
-From: Karthikey Kadati <karthikey3608@gmail.com>
-To: andy@kernel.org,
-	hansg@kernel.org,
-	mchehab@kernel.org,
-	gregkh@linuxfoundation.org
-Cc: sakari.ailus@linux.intel.com,
-	linux-media@vger.kernel.org,
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="TOvu2V8v"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1768215193; x=1799751193;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=kcCLF8haeZnlyS5+6ms21wsAf7Gfj6MMoJrY4svq7U8=;
+  b=TOvu2V8vT4tcxJ13ALrFLKj8ee7kWS4/TfRfDkLFqNZw7cay3DSJM7Rp
+   k+P6P2CaMe26ngS3ESoVeLXP1nSlVjCzbPwpHNNNvE7jHYXlQrmlA50Ma
+   KhhHETmzXVH8p28JWv94EygZJr2DWrZk3Gu5Jwix6cSbirwnl9syIlkfJ
+   AFyIrMOB8d6rPzhC3yKjAOrjmQr2Nf6DgpLZ/hcO4ujKjjS/Wt68hmjep
+   3xGyBZ3Bq/7f1U9LvFDjNQKEIEN0HZPZHZCW4eAvuunebONjkDYQbpB7P
+   O0tYBm2QVC54pTeaJKtDoeMescwEKH12WY2TE22mvhWYByHlN9lo5Qq6+
+   Q==;
+X-CSE-ConnectionGUID: TOxgcSobT4u4GOhGjqdlHA==
+X-CSE-MsgGUID: iOQpaMcRSxajcHcIVtfWvw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11668"; a="80853317"
+X-IronPort-AV: E=Sophos;i="6.21,219,1763452800"; 
+   d="scan'208";a="80853317"
+Received: from fmviesa005.fm.intel.com ([10.60.135.145])
+  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jan 2026 02:53:12 -0800
+X-CSE-ConnectionGUID: 8YIzBCZvRIOPHeU/C1akSg==
+X-CSE-MsgGUID: eTG0y8dnS9WGAMevo8CG9g==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.21,219,1763452800"; 
+   d="scan'208";a="208540647"
+Received: from zzombora-mobl1 (HELO kekkonen.fi.intel.com) ([10.245.245.52])
+  by fmviesa005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jan 2026 02:53:10 -0800
+Received: from kekkonen.localdomain (localhost [IPv6:::1])
+	by kekkonen.fi.intel.com (Postfix) with SMTP id 820AF121E83;
+	Mon, 12 Jan 2026 12:53:08 +0200 (EET)
+Date: Mon, 12 Jan 2026 12:53:08 +0200
+Organization: Intel Finland Oy - BIC 0357606-4 - c/o Alberga Business Park, 6 krs, Bertel Jungin Aukio 5, 02600 Espoo
+From: Sakari Ailus <sakari.ailus@linux.intel.com>
+To: Karthikey Kadati <karthikey3608@gmail.com>
+Cc: hansg@kernel.org, mchehab@kernel.org, gregkh@linuxfoundation.org,
+	andy@kernel.org, linux-media@vger.kernel.org,
 	linux-staging@lists.linux.dev,
-	Karthikey Kadati <karthikey3608@gmail.com>
-Subject: [PATCH v3 1/2] staging: atomisp: Remove input_system typedefs
-Date: Mon, 12 Jan 2026 16:14:04 +0530
-Message-ID: <20260112104405.24377-1-karthikey3608@gmail.com>
-X-Mailer: git-send-email 2.43.0
+	Unix Antigravity <unix.antigravity@test.com>
+Subject: Re: [PATCH 4/4] staging: atomisp: Replace ia_css_region with
+ v4l2_rect
+Message-ID: <aWTSlHaTiYejXoag@kekkonen.localdomain>
+References: <20260112102518.19926-1-karthikey3608@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260112102518.19926-1-karthikey3608@gmail.com>
 
-Remove input_system_channel_t and input_system_input_port_t typedefs.
+Hi Karthikey,
 
-Replace usages with struct input_system_channel and
+Thanks for the patches.
 
-struct input_system_input_port respectively.
+On Mon, Jan 12, 2026 at 03:55:18PM +0530, Karthikey Kadati wrote:
+> Replace custom struct ia_css_region with standard struct v4l2_rect
+> 
+> to align with V4L2 API.
 
-Signed-off-by: Karthikey Kadati <karthikey3608@gmail.com>
----
- .../atomisp/pci/isp2401_input_system_global.h | 12 ++--
- .../pci/runtime/isys/src/virtual_isys.c       | 56 +++++++++----------
- drivers/staging/media/atomisp/pci/sh_css.c    |  4 +-
- 3 files changed, 35 insertions(+), 37 deletions(-)
+You seem to systematically have an extra newline between the lines of text
+in the commit messages. Please fix that.
 
-diff --git a/drivers/staging/media/atomisp/pci/isp2401_input_system_global.h b/drivers/staging/media/atomisp/pci/isp2401_input_system_global.h
-index 4aadeb133..bce8aa999 100644
---- a/drivers/staging/media/atomisp/pci/isp2401_input_system_global.h
-+++ b/drivers/staging/media/atomisp/pci/isp2401_input_system_global.h
-@@ -34,8 +34,7 @@ typedef enum {
- 	N_INPUT_SYSTEM_SOURCE_TYPE
- } input_system_source_type_t;
- 
--typedef struct input_system_channel_s input_system_channel_t;
--struct input_system_channel_s {
-+struct input_system_channel {
- 	stream2mmio_ID_t	stream2mmio_id;
- 	stream2mmio_sid_ID_t	stream2mmio_sid_id;
- 
-@@ -55,8 +54,7 @@ struct input_system_channel_cfg_s {
- 	isys2401_dma_port_cfg_t	dma_dest_port_cfg;
- };
- 
--typedef struct input_system_input_port_s input_system_input_port_t;
--struct input_system_input_port_s {
-+struct input_system_input_port {
- 	input_system_source_type_t	source_type;
- 
- 	struct {
-@@ -141,9 +139,9 @@ struct virtual_input_system_stream_s {
- 								Must be unique within one CSI RX
- 								and lower than SH_CSS_MAX_ISYS_CHANNEL_NODES */
- 	u8 enable_metadata;
--	input_system_input_port_t	input_port;
--	input_system_channel_t		channel;
--	input_system_channel_t		md_channel; /* metadata channel */
-+	struct input_system_input_port	input_port;
-+	struct input_system_channel		channel;
-+	struct input_system_channel		md_channel; /* metadata channel */
- 	u8 online;
- 	s8 linked_isys_stream_id;
- 	u8 valid;
-diff --git a/drivers/staging/media/atomisp/pci/runtime/isys/src/virtual_isys.c b/drivers/staging/media/atomisp/pci/runtime/isys/src/virtual_isys.c
-index e6c11d5f7..291b2fb33 100644
---- a/drivers/staging/media/atomisp/pci/runtime/isys/src/virtual_isys.c
-+++ b/drivers/staging/media/atomisp/pci/runtime/isys/src/virtual_isys.c
-@@ -26,28 +26,28 @@
- static bool create_input_system_channel(
-     isp2401_input_system_cfg_t	*cfg,
-     bool			metadata,
--    input_system_channel_t	*channel);
-+    struct input_system_channel	*channel);
- 
- static void destroy_input_system_channel(
--    input_system_channel_t	*channel);
-+    struct input_system_channel	*channel);
- 
- static bool create_input_system_input_port(
-     isp2401_input_system_cfg_t		*cfg,
--    input_system_input_port_t	*input_port);
-+    struct input_system_input_port	*input_port);
- 
- static void destroy_input_system_input_port(
--    input_system_input_port_t	*input_port);
-+    struct input_system_input_port	*input_port);
- 
- static bool calculate_input_system_channel_cfg(
--    input_system_channel_t		*channel,
--    input_system_input_port_t	*input_port,
-+    struct input_system_channel		*channel,
-+    struct input_system_input_port	*input_port,
-     isp2401_input_system_cfg_t		*isys_cfg,
-     input_system_channel_cfg_t	*channel_cfg,
-     bool metadata);
- 
- static bool calculate_input_system_input_port_cfg(
--    input_system_channel_t		*channel,
--    input_system_input_port_t	*input_port,
-+    struct input_system_channel		*channel,
-+    struct input_system_input_port	*input_port,
-     isp2401_input_system_cfg_t		*isys_cfg,
-     input_system_input_port_cfg_t	*input_port_cfg);
- 
-@@ -89,8 +89,8 @@ static void release_be_lut_entry(
-     csi_rx_backend_lut_entry_t	*entry);
- 
- static bool calculate_prbs_cfg(
--    input_system_channel_t		*channel,
--    input_system_input_port_t	*input_port,
-+    struct input_system_channel		*channel,
-+    struct input_system_input_port	*input_port,
-     isp2401_input_system_cfg_t		*isys_cfg,
-     pixelgen_prbs_cfg_t		*cfg);
- 
-@@ -99,7 +99,7 @@ static bool calculate_fe_cfg(
-     csi_rx_frontend_cfg_t		*cfg);
- 
- static bool calculate_be_cfg(
--    const input_system_input_port_t	*input_port,
-+    const struct input_system_input_port	*input_port,
-     const isp2401_input_system_cfg_t	*isys_cfg,
-     bool				metadata,
-     csi_rx_backend_cfg_t		*cfg);
-@@ -110,13 +110,13 @@ static bool calculate_stream2mmio_cfg(
-     stream2mmio_cfg_t		*cfg);
- 
- static bool calculate_ibuf_ctrl_cfg(
--    const input_system_channel_t	*channel,
--    const input_system_input_port_t	*input_port,
-+    const struct input_system_channel	*channel,
-+    const struct input_system_input_port	*input_port,
-     const isp2401_input_system_cfg_t	*isys_cfg,
-     ibuf_ctrl_cfg_t			*cfg);
- 
- static bool calculate_isys2401_dma_cfg(
--    const input_system_channel_t	*channel,
-+    const struct input_system_channel	*channel,
-     const isp2401_input_system_cfg_t	*isys_cfg,
-     isys2401_dma_cfg_t		*cfg);
- 
-@@ -263,7 +263,7 @@ ia_css_isys_error_t ia_css_isys_stream_calculate_cfg(
- static bool create_input_system_channel(
-     isp2401_input_system_cfg_t	*cfg,
-     bool			metadata,
--    input_system_channel_t	*me)
-+    struct input_system_channel	*me)
- {
- 	bool rc = true;
- 
-@@ -324,7 +324,7 @@ static bool create_input_system_channel(
- }
- 
- static void destroy_input_system_channel(
--    input_system_channel_t	*me)
-+    struct input_system_channel	*me)
- {
- 	release_sid(me->stream2mmio_id,
- 		    &me->stream2mmio_sid_id);
-@@ -336,7 +336,7 @@ static void destroy_input_system_channel(
- 
- static bool create_input_system_input_port(
-     isp2401_input_system_cfg_t		*cfg,
--    input_system_input_port_t	*me)
-+    struct input_system_input_port	*me)
- {
- 	csi_mipi_packet_type_t packet_type;
- 	bool rc = true;
-@@ -410,7 +410,7 @@ static bool create_input_system_input_port(
- }
- 
- static void destroy_input_system_input_port(
--    input_system_input_port_t	*me)
-+    struct input_system_input_port	*me)
- {
- 	if (me->source_type == INPUT_SYSTEM_SOURCE_TYPE_SENSOR) {
- 		release_be_lut_entry(
-@@ -429,8 +429,8 @@ static void destroy_input_system_input_port(
- }
- 
- static bool calculate_input_system_channel_cfg(
--    input_system_channel_t		*channel,
--    input_system_input_port_t	*input_port,
-+    struct input_system_channel		*channel,
-+    struct input_system_input_port	*input_port,
-     isp2401_input_system_cfg_t		*isys_cfg,
-     input_system_channel_cfg_t	*channel_cfg,
-     bool metadata)
-@@ -480,8 +480,8 @@ static bool calculate_input_system_channel_cfg(
- }
- 
- static bool calculate_input_system_input_port_cfg(
--    input_system_channel_t		*channel,
--    input_system_input_port_t	*input_port,
-+    struct input_system_channel		*channel,
-+    struct input_system_input_port	*input_port,
-     isp2401_input_system_cfg_t		*isys_cfg,
-     input_system_input_port_cfg_t	*input_port_cfg)
- {
-@@ -613,8 +613,8 @@ static void release_be_lut_entry(
- }
- 
- static bool calculate_prbs_cfg(
--    input_system_channel_t		*channel,
--    input_system_input_port_t	*input_port,
-+    struct input_system_channel		*channel,
-+    struct input_system_input_port	*input_port,
-     isp2401_input_system_cfg_t		*isys_cfg,
-     pixelgen_prbs_cfg_t		*cfg)
- {
-@@ -632,7 +632,7 @@ static bool calculate_fe_cfg(
- }
- 
- static bool calculate_be_cfg(
--    const input_system_input_port_t	*input_port,
-+    const struct input_system_input_port	*input_port,
-     const isp2401_input_system_cfg_t	*isys_cfg,
-     bool				metadata,
-     csi_rx_backend_cfg_t		*cfg)
-@@ -677,8 +677,8 @@ static bool calculate_stream2mmio_cfg(
- }
- 
- static bool calculate_ibuf_ctrl_cfg(
--    const input_system_channel_t	*channel,
--    const input_system_input_port_t	*input_port,
-+    const struct input_system_channel	*channel,
-+    const struct input_system_input_port	*input_port,
-     const isp2401_input_system_cfg_t	*isys_cfg,
-     ibuf_ctrl_cfg_t			*cfg)
- {
-@@ -759,7 +759,7 @@ static bool calculate_ibuf_ctrl_cfg(
- }
- 
- static bool calculate_isys2401_dma_cfg(
--    const input_system_channel_t	*channel,
-+    const struct input_system_channel	*channel,
-     const isp2401_input_system_cfg_t	*isys_cfg,
-     isys2401_dma_cfg_t		*cfg)
- {
-diff --git a/drivers/staging/media/atomisp/pci/sh_css.c b/drivers/staging/media/atomisp/pci/sh_css.c
-index 73bd87f43..ec4d15ffe 100644
---- a/drivers/staging/media/atomisp/pci/sh_css.c
-+++ b/drivers/staging/media/atomisp/pci/sh_css.c
-@@ -665,7 +665,7 @@ static bool sh_css_translate_stream_cfg_to_input_system_input_port_id(
- 	return rc;
- }
- 
--static bool sh_css_translate_stream_cfg_to_input_system_input_port_type(
-+static bool sh_css_translate_stream_cfg_to_struct input_system_input_portype(
-     struct ia_css_stream_config *stream_cfg,
-     ia_css_isys_descr_t	*isys_stream_descr)
- {
-@@ -852,7 +852,7 @@ static bool sh_css_translate_stream_cfg_to_isys_stream_descr(
- 			    "sh_css_translate_stream_cfg_to_isys_stream_descr() enter:\n");
- 	rc  = sh_css_translate_stream_cfg_to_input_system_input_port_id(stream_cfg,
- 		isys_stream_descr);
--	rc &= sh_css_translate_stream_cfg_to_input_system_input_port_type(stream_cfg,
-+	rc &= sh_css_translate_stream_cfg_to_struct input_system_input_portype(stream_cfg,
- 		isys_stream_descr);
- 	rc &= sh_css_translate_stream_cfg_to_input_system_input_port_attr(stream_cfg,
- 		isys_stream_descr, isys_stream_idx);
+Please try to send patches in consistent sets to the relevant recipients
+and avoid sending new versions before people have time to comment on the
+previous ones. Also please think before sending whether there's still
+something to fix and detail what changes there were from the previous
+version (below the '---' line).
+
+> 
+> Signed-off-by: Unix Antigravity <unix.antigravity@test.com>
+
+I guess this is possible but it looks like bogus Sob: line.
+
+Who wrote the patch, should there be Co-developed-by: tag?
+
+> Signed-off-by: Karthikey Kadati <karthikey3608@gmail.com>
+> ---
+>  drivers/staging/media/atomisp/pci/ia_css_types.h | 15 +++++++--------
+>  1 file changed, 7 insertions(+), 8 deletions(-)
+> 
+> diff --git a/drivers/staging/media/atomisp/pci/ia_css_types.h b/drivers/staging/media/atomisp/pci/ia_css_types.h
+> index 5c21a5415..7cfb355c8 100644
+> --- a/drivers/staging/media/atomisp/pci/ia_css_types.h
+> +++ b/drivers/staging/media/atomisp/pci/ia_css_types.h
+> @@ -18,6 +18,7 @@
+>  #include <type_support.h>
+>  
+>  #include "ia_css_frac.h"
+> +#include <linux/videodev2.h>
+>  
+>  #include "isp/kernels/aa/aa_2/ia_css_aa2_types.h"
+>  #include "isp/kernels/anr/anr_1.0/ia_css_anr_types.h"
+> @@ -430,12 +431,10 @@ struct ia_css_point {
+>  /**
+>   * This specifies the region
+>   */
+> -struct ia_css_region {
+> -	s32 left; /** Starting point coordinates for the region */
+> -	s32 top;
+> -	s32 width; /** Region resolution */
+> -	s32 height;
+> -};
+> +/**
+> + * This specifies the region
+> + */
+> +/* struct v4l2_rect has been replaced by struct v4l2_rect */
+>  
+>  /**
+>   * Digital zoom:
+> @@ -444,7 +443,7 @@ struct ia_css_region {
+>   * Set the digital zoom factor, this is a logarithmic scale. The actual zoom
+>   * factor will be 64/x.
+>   * Setting dx or dy to 0 disables digital zoom for that direction.
+> - * New API change for Digital zoom:(added struct ia_css_region zoom_region)
+> + * New API change for Digital zoom:(added struct v4l2_rect zoom_region)
+>   * zoom_region specifies the origin of the zoom region and width and
+>   * height of that region.
+>   * origin : This is the coordinate (x,y) within the effective input resolution
+> @@ -457,7 +456,7 @@ struct ia_css_region {
+>  struct ia_css_dz_config {
+>  	u32 dx; /** Horizontal zoom factor */
+>  	u32 dy; /** Vertical zoom factor */
+> -	struct ia_css_region zoom_region; /** region for zoom */
+> +	struct v4l2_rect zoom_region; /** region for zoom */
+>  };
+>  
+>  /* The still capture mode, this can be RAW (simply copy sensor input to DDR),
+
 -- 
-2.43.0
+Regards,
 
+Sakari Ailus
