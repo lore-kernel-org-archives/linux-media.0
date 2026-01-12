@@ -1,38 +1,39 @@
 Received: from lx20.hoststar.hosting (lx20.hoststar.hosting [168.119.41.54])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 343DA2DCBF8;
-	Mon, 12 Jan 2026 14:59:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7F0A82B2D7;
+	Mon, 12 Jan 2026 15:02:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=168.119.41.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768229980; cv=none; b=NPDsWig2S0mIE0BTueWwoCOSSBb3ufJjDHvkNDRbTpsBHjBTyaW+kdXKIjDf6pN4558xiEMlJyxiERfMjvRXX0Yt71oU2z24SmZ3b7UHYK0G6HLT6zwYkcAEjXwSTR93RdxKmQ4eHP++Kd0d4q6MqAMFwitOLq08n+BOkWlJUI8=
+	t=1768230134; cv=none; b=nm6cm3K3Ap8jKQywQvkYEvkM9iElUeTRXglaAUzrU9pxk57RUnIbNQYwd75EjZFOdpc+Az8mvOLK+F/rGprl4185a7RC6WAXoaOY0VeTrjRkBa3IfTAP2UJpLvNzrDBxw/IdM9j1crJ9uC9etkWXlflIDEYax+ue/FRBQAMZpfo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768229980; c=relaxed/simple;
-	bh=DoySZJb+/dX4tX+SckY2cfiJpr62a6BkVboaZ+y3eVU=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=Qe6o0cJaP54rq3yMEXCwyxcP1d55E0HgVCo7OBSyFyDuHtEddpBxh1pV4gg9A5YhuN4/k8MQa516nAKpCtRCpM8ulJ9EZeueq6Un5FjQEyQdEUCGYW6wXsVcjhzVBgdV0MREZiWyYuishQIdXxjDPbpcF28NetUGIKQ041SpJi4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=emfend.at; spf=pass smtp.mailfrom=emfend.at; dkim=pass (1024-bit key) header.d=emfend.at header.i=@emfend.at header.b=MnoLR01i; arc=none smtp.client-ip=168.119.41.54
+	s=arc-20240116; t=1768230134; c=relaxed/simple;
+	bh=H3X5N4DnsH+6YzXb7jjDSU6C/sHmyKejG9Shj1yjZ+8=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=qyIOoM35O/xAOLQuPuTiPVZKdK1VwdmPVJoJHMl8D/29GUCfX8Ft+wJtV1JKaWRcGxZsWbRJa9qvcVN8WPDt0y9A+s5c6EVLpHFWhotaWwCCMCPZNDE0mWjCwXI3aUw9qRaREwbPVcXBt4ZK7L/aUUVAzmDUC+BBnkAYCsPJq9g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=emfend.at; spf=pass smtp.mailfrom=emfend.at; dkim=pass (1024-bit key) header.d=emfend.at header.i=@emfend.at header.b=nkPOBIKP; arc=none smtp.client-ip=168.119.41.54
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=emfend.at
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=emfend.at
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=emfend.at header.i=@emfend.at header.b="MnoLR01i"
+	dkim=pass (1024-bit key) header.d=emfend.at header.i=@emfend.at header.b="nkPOBIKP"
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=emfend.at;
-	 s=mail; h=Cc:To:Message-Id:Content-Transfer-Encoding:Content-Type:
-	MIME-Version:Subject:Date:From:Sender:Reply-To:Content-ID:Content-Description
-	:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:
-	In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+	 s=mail; h=Cc:To:In-Reply-To:References:Message-Id:Content-Transfer-Encoding:
+	Content-Type:MIME-Version:Subject:Date:From:Sender:Reply-To:Content-ID:
+	Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+	:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
 	List-Post:List-Owner:List-Archive;
-	bh=KS6J46kYK+sVTlFskCuxSfFQijC3eqAgPVExn/P68gI=; b=MnoLR01it5M9C9HGwBUEaYaJMq
-	gM5Pq04K8dCUtwU4Go00sCah94kJKOD7OABAtxneRb1A3pRAsJ7NAjA83TXkKUts8mnyTXeSXMTJZ
-	oY/stoK4nBhxF1+fu/FquEBd2Gv/UsY7lNc8QBgf7nMU+V0eZxpo/00RU4QcqEm1nEwo=;
-Received: from 194-208-208-245.tele.net ([194.208.208.245]:52270 helo=[127.0.1.1])
+	bh=BoXpEo7mK7dxc0Tjn/NcUGwM0/Or9gxssINHV38jcmA=; b=nkPOBIKPYVYuH8ztYmqD5Hbe3v
+	WoX9bfosQYvff5IDwq5ISKgHlgvFtLI6KlaGuq/Xz5MYeRbKSfYxyCQJwfQ1fDiJhgzWxqGsEkCLR
+	8pgi8thloZRJ+vg7R47c0iqLB263yAfYkWiG8FZ3oKJIy+wXVbvePnfvESOTbEO64SFI=;
+Received: from 194-208-208-245.tele.net ([194.208.208.245]:58069 helo=[127.0.1.1])
 	by lx20.hoststar.hosting with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
 	(Exim 4.93)
 	(envelope-from <matthias.fend@emfend.at>)
-	id 1vfJOH-009DZw-0c; Mon, 12 Jan 2026 15:59:33 +0100
+	id 1vfJEd-0097Ka-VC; Mon, 12 Jan 2026 15:49:36 +0100
 From: Matthias Fend <matthias.fend@emfend.at>
-Date: Mon, 12 Jan 2026 15:59:28 +0100
-Subject: [PATCH v2] media: i2c: imx283: add support for non-continuous MIPI
- clock mode
+Date: Mon, 12 Jan 2026 15:49:32 +0100
+Subject: [PATCH v7 1/2] media: dt-bindings: i2c: add Himax HM1246 image
+ sensor
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
@@ -41,102 +42,225 @@ List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20260112-imx283-ext-v2-1-9349e3268b4b@emfend.at>
-X-B4-Tracking: v=1; b=H4sIAE8MZWkC/03MQQrCMBCF4auUWRtJRpKmrnoP6SKaqZ1FU0lCq
- JTe3VgQXP4P3rdBosiU4NpsEKlw4iXUwFMDj8mFJwn2tQElaoXKCJ5XtBdBaxa6M9YZbf2dDNT
- DK9LI64HdhtoTp7zE92EX9V1/TPvPFCWk6KRxrcFRd+h7mkcK/uwyDPu+fwCRhoVFpAAAAA==
-X-Change-ID: 20251216-imx283-ext-5968a658dbe6
-To: Kieran Bingham <kieran.bingham@ideasonboard.com>, 
- Umang Jain <uajain@igalia.com>, Mauro Carvalho Chehab <mchehab@kernel.org>, 
+Message-Id: <20260112-hm1246-v7-1-fee8587f2808@emfend.at>
+References: <20260112-hm1246-v7-0-fee8587f2808@emfend.at>
+In-Reply-To: <20260112-hm1246-v7-0-fee8587f2808@emfend.at>
+To: Mauro Carvalho Chehab <mchehab@kernel.org>, 
  Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
- Conor Dooley <conor+dt@kernel.org>, 
- Sakari Ailus <sakari.ailus@linux.intel.com>
+ Conor Dooley <conor+dt@kernel.org>, Hans Verkuil <hverkuil@kernel.org>, 
+ Sakari Ailus <sakari.ailus@linux.intel.com>, 
+ Hans de Goede <hansg@kernel.org>, Ricardo Ribalda <ribalda@chromium.org>, 
+ =?utf-8?q?Andr=C3=A9_Apitzsch?= <git@apitzsch.eu>, 
+ Tarang Raval <tarang.raval@siliconsignals.io>, 
+ Andy Shevchenko <andriy.shevchenko@linux.intel.com>, 
+ Benjamin Mugnier <benjamin.mugnier@foss.st.com>, 
+ Sylvain Petinot <sylvain.petinot@foss.st.com>, 
+ Dongcheng Yan <dongcheng.yan@intel.com>, 
+ Bryan O'Donoghue <bryan.odonoghue@linaro.org>, 
+ Alan Stern <stern@rowland.harvard.edu>, 
+ Jingjing Xiong <jingjing.xiong@intel.com>, 
+ Heimir Thor Sverrisson <heimir.sverrisson@gmail.com>, 
+ Mehdi Djait <mehdi.djait@linux.intel.com>, 
+ Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>, 
+ Laurent Pinchart <laurent.pinchart@ideasonboard.com>, 
+ Hardevsinh Palaniya <hardevsinh.palaniya@siliconsignals.io>, 
+ Svyatoslav Ryhel <clamor95@gmail.com>
 Cc: linux-media@vger.kernel.org, devicetree@vger.kernel.org, 
- linux-kernel@vger.kernel.org, bsp-development.geo@leica-geosystems.com, 
- Matthias Fend <matthias.fend@emfend.at>
+ linux-kernel@vger.kernel.org, Hao Yao <hao.yao@intel.com>, 
+ Himanshu Bhavani <himanshu.bhavani@siliconsignals.io>, 
+ Matthias Fend <matthias.fend@emfend.at>, 
+ bsp-development.geo@leica-geosystems.com
 X-Mailer: b4 0.14.2
-X-Spam-Score: 
-X-Spam-Bar: 
-X-Spam-Report: 
+X-Spam-Score: -1.0
+X-Spam-Bar: -
+X-Spam-Report: Spam detection software, running on the system "lx20.hoststar.hosting",
+ has NOT identified this incoming email as spam.  The original
+ message has been attached to this so you can view it or label
+ similar future email.  If you have any questions, see
+ the administrator of that system for details.
+ 
+ Content preview:  Hello, this series adds support for the Himax HM1246 image
+    sensor. The Himax HM1246-AWD is a 1/3.7-Inch CMOS image sensor SoC with an
+    active array size of 1296 x 976. Currently, only the native RAW mode is s
+    [...] 
+ 
+ Content analysis details:   (-1.0 points, 5.0 required)
+ 
+  pts rule name              description
+ ---- ---------------------- --------------------------------------------------
+  0.0 URIBL_BLOCKED          ADMINISTRATOR NOTICE: The query to URIBL was
+                             blocked.  See
+                             http://wiki.apache.org/spamassassin/DnsBlocklists#dnsbl-block
+                              for more information.
+                             [URIs: himax.com.tw]
+  0.0 URIBL_DBL_BLOCKED_OPENDNS ADMINISTRATOR NOTICE: The query to
+                             dbl.spamhaus.org was blocked due to usage
+                             of an open resolver. See
+                             https://www.spamhaus.org/returnc/pub/
+                             [URIs: himax.com.tw]
+  0.0 URIBL_ZEN_BLOCKED_OPENDNS ADMINISTRATOR NOTICE: The query to
+                             zen.spamhaus.org was blocked due to usage
+                             of an open resolver. See
+                             https://www.spamhaus.org/returnc/pub/
+                             [URIs: himax.com.tw]
+ -1.0 ALL_TRUSTED            Passed through trusted hosts only via SMTP
+  0.0 TVD_RCVD_IP            Message was received from an IP address
+  0.0 KAM_DMARC_STATUS       Test Rule for DKIM or SPF Failure with Strict
+                             Alignment (older systems)
+  0.0 Local_hs_NotFromHoststar Sender is NOT hoststar.(ch|at|com)
+  0.0 Local_hs_NotToHoststar Recipient is NOT hoststar.(ch|at|com)
 
-Add support for selecting between continuous and non-continuous MIPI clock
-mode.
+Add YAML device tree binding for Himax HM1246 image sensor.
 
-Previously, the CSI-2 non-continuous clock endpoint flag was ignored and
-the sensor was always configured for non-continuous clock mode. For
-existing device tree nodes that do not have this property enabled, this
-update will therefore change the actual clock mode.
-
-Reviewed-by: Kieran Bingham <kieran.bingham@ideasonboard.com>
+Reviewed-by: Rob Herring (Arm) <robh@kernel.org>
 Signed-off-by: Matthias Fend <matthias.fend@emfend.at>
 ---
-Add support for selecting the MIPI clock mode (continuous, non-continuous).
----
-Changes in v2:
-- Drop '[PATCH 1/3] media: dt-bindings: imx283: add clock-noncontinuous' (Krzysztof)
-- Drop '[PATCH 3/3] media: i2c: imx283: implement {g,s}_register' (Dave)
-- Link to v1: https://lore.kernel.org/r/20251217-imx283-ext-v1-0-906a762f592d@emfend.at
----
- drivers/media/i2c/imx283.c | 12 ++++++++++++
- 1 file changed, 12 insertions(+)
+ .../bindings/media/i2c/himax,hm1246.yaml           | 117 +++++++++++++++++++++
+ MAINTAINERS                                        |   7 ++
+ 2 files changed, 124 insertions(+)
 
-diff --git a/drivers/media/i2c/imx283.c b/drivers/media/i2c/imx283.c
-index 8ab63ad8f385f6e2a2d7432feff0af09a5356dc4..7a6ab2941ea985401b21d60163b58e980cf31ddc 100644
---- a/drivers/media/i2c/imx283.c
-+++ b/drivers/media/i2c/imx283.c
-@@ -149,6 +149,9 @@
- #define IMX283_REG_PLSTMG02		CCI_REG8(0x36aa)
- #define   IMX283_PLSTMG02_VAL		0x00
- 
-+#define IMX283_REG_MIPI_CLK		CCI_REG8(0x3a43)
-+#define   IMX283_MIPI_CLK_NONCONTINUOUS	BIT(0)
+diff --git a/Documentation/devicetree/bindings/media/i2c/himax,hm1246.yaml b/Documentation/devicetree/bindings/media/i2c/himax,hm1246.yaml
+new file mode 100644
+index 0000000000000000000000000000000000000000..deecc1105105a67e81d1ddb7f31324baa8188f88
+--- /dev/null
++++ b/Documentation/devicetree/bindings/media/i2c/himax,hm1246.yaml
+@@ -0,0 +1,117 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++# Copyright 2025 Matthias Fend <matthias.fend@emfend.at>
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/media/i2c/himax,hm1246.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
 +
- #define IMX283_REG_EBD_X_OUT_SIZE	CCI_REG16_LE(0x3a54)
- 
- /* Test pattern generator */
-@@ -565,6 +568,7 @@ struct imx283 {
- 	struct v4l2_ctrl *hblank;
- 	struct v4l2_ctrl *vflip;
- 
-+	bool mipi_clk_noncontinuous;
- 	unsigned long link_freq_bitmap;
- 
- 	u16 hmax;
-@@ -988,6 +992,7 @@ static int imx283_set_pad_format(struct v4l2_subdev *sd,
- static int imx283_standby_cancel(struct imx283 *imx283)
- {
- 	unsigned int link_freq_idx;
-+	u8 mipi_clk;
- 	int ret = 0;
- 
- 	cci_write(imx283->cci, IMX283_REG_STANDBY,
-@@ -1007,6 +1012,10 @@ static int imx283_standby_cancel(struct imx283 *imx283)
- 	/* Enable PLL */
- 	cci_write(imx283->cci, IMX283_REG_STBPL, IMX283_STBPL_NORMAL, &ret);
- 
-+	/* Configure MIPI clock mode */
-+	mipi_clk = imx283->mipi_clk_noncontinuous ? IMX283_MIPI_CLK_NONCONTINUOUS : 0;
-+	cci_write(imx283->cci, IMX283_REG_MIPI_CLK, mipi_clk, &ret);
++title: Himax HM1246-AWD 1/3.7-Inch megapixel SoC image sensor
 +
- 	/* Configure the MIPI link speed */
- 	link_freq_idx = __ffs(imx283->link_freq_bitmap);
- 	cci_multi_reg_write(imx283->cci, link_freq_reglist[link_freq_idx].regs,
-@@ -1426,6 +1435,9 @@ static int imx283_parse_endpoint(struct imx283 *imx283)
- 		goto done_endpoint_free;
- 	}
- 
-+	imx283->mipi_clk_noncontinuous =
-+		bus_cfg.bus.mipi_csi2.flags & V4L2_MBUS_CSI2_NONCONTINUOUS_CLOCK;
++maintainers:
++  - Matthias Fend <matthias.fend@emfend.at>
 +
- 	ret = v4l2_link_freq_to_bitmap(imx283->dev, bus_cfg.link_frequencies,
- 				       bus_cfg.nr_of_link_frequencies,
- 				       link_frequencies, ARRAY_SIZE(link_frequencies),
++description:
++  The Himax HM1246-AWD is a 1/3.7-Inch CMOS image sensor SoC with an active
++  array size of 1296 x 976. It is programmable through an I2C interface and
++  connected via parallel bus.
++
++allOf:
++  - $ref: /schemas/media/video-interface-devices.yaml#
++
++properties:
++  compatible:
++    const: himax,hm1246
++
++  reg:
++    maxItems: 1
++
++  clocks:
++    description: Input reference clock (6 - 27 MHz)
++    maxItems: 1
++
++  reset-gpios:
++    description: Active low XSHUTDOWN pin
++    maxItems: 1
++
++  avdd-supply:
++    description: Power for analog circuit (3.0 - 3.6 V)
++
++  iovdd-supply:
++    description: Power for I/O circuit (1.7 - 3.6 V)
++
++  dvdd-supply:
++    description: Power for digital circuit (1.5 / 1.8 V)
++
++  port:
++    $ref: /schemas/graph.yaml#/$defs/port-base
++    additionalProperties: false
++    description: Parallel video output port
++
++    properties:
++      endpoint:
++        $ref: /schemas/media/video-interfaces.yaml#
++        unevaluatedProperties: false
++
++        properties:
++          hsync-active:
++            default: 1
++
++          vsync-active:
++            default: 1
++
++          pclk-sample:
++            default: 0
++
++        required:
++          - link-frequencies
++
++    required:
++      - endpoint
++
++required:
++  - compatible
++  - reg
++  - clocks
++  - avdd-supply
++  - iovdd-supply
++  - dvdd-supply
++  - port
++
++unevaluatedProperties: false
++
++examples:
++  - |
++    #include <dt-bindings/gpio/gpio.h>
++    #include <dt-bindings/media/video-interfaces.h>
++
++    i2c {
++        #address-cells = <1>;
++        #size-cells = <0>;
++
++        sensor@24 {
++            compatible =  "himax,hm1246";
++            reg = <0x24>;
++
++            clocks = <&hm1246_clk>;
++
++            reset-gpios = <&gpio0 0 GPIO_ACTIVE_LOW>;
++
++            avdd-supply = <&hm1246_avdd>;
++            iovdd-supply = <&hm1246_iovdd>;
++            dvdd-supply = <&hm1246_dvdd>;
++
++            orientation = <2>;
++            rotation = <0>;
++
++            port {
++                endpoint {
++                    remote-endpoint = <&isp_par_in>;
++                    bus-width = <10>;
++                    hsync-active = <1>; /* active high */
++                    vsync-active = <1>; /* active high */
++                    pclk-sample = <1>; /* sample on rising edge */
++                    link-frequencies = /bits/ 64 <42200000>;
++                };
++            };
++        };
++    };
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 752ccaea38b0ee74282e06f233463eba122fa92c..c09de45c5260b70af8a524721d4a999a1efa415d 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -11290,6 +11290,13 @@ L:	linux-kernel@vger.kernel.org
+ S:	Maintained
+ F:	drivers/misc/hisi_hikey_usb.c
+ 
++HIMAX HM1246 SENSOR DRIVER
++M:	Matthias Fend <matthias.fend@emfend.at>
++L:	linux-media@vger.kernel.org
++S:	Maintained
++T:	git git://linuxtv.org/media_tree.git
++F:	Documentation/devicetree/bindings/media/i2c/himax,hm1246.yaml
++
+ HIMAX HX83112B TOUCHSCREEN SUPPORT
+ M:	Job Noorman <job@noorman.info>
+ L:	linux-input@vger.kernel.org
 
----
-base-commit: 3aa9296a23ec41a8424e9a2346eea59fb6cb7d8c
-change-id: 20251216-imx283-ext-5968a658dbe6
-
-Best regards,
 -- 
-Matthias Fend <matthias.fend@emfend.at>
+2.34.1
 
