@@ -1,1489 +1,198 @@
-Received: from lx20.hoststar.hosting (lx20.hoststar.hosting [168.119.41.54])
+Received: from AM0PR02CU008.outbound.protection.outlook.com (mail-westeuropeazon11013041.outbound.protection.outlook.com [52.101.72.41])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5EA372DFF3F;
-	Mon, 12 Jan 2026 15:02:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=168.119.41.54
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768230148; cv=none; b=jAGsEAw81WjDmXif/ADZ2l/X2EJ82XK4RCV0nqFTL2Qt0yCMSwD9vfWHJJwYBh/rneLPfvsvlFAxoMLjXUR3fxkw7f+2iWAwyRP3nR6kMzz2+/l1jeEcTZB6G/nc1HGceMm7OaIhRPIFHV2/6WZ7Jnt0/kr28is6pMwJvAVbcT4=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768230148; c=relaxed/simple;
-	bh=JKSHjm5QntPuVkzVFiODmRREkWYwRofGZLoubGkFq0g=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=sUlzfWjsNTLhSPhd3wiDV1Rl3ROYUfXP/QCLiN36A7HgXUvsOzmdzN/j66PGX9i6qH/XqTrdQihqZUz2U5B1OeVKZN7vn8QkWEvte1ElcNreGNOIy4SD3r24XndYwcSvqrlkaiXAKWsw+1h/LIDn/c6u1c8UR44/YnZtXTeYqKc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=emfend.at; spf=pass smtp.mailfrom=emfend.at; dkim=pass (1024-bit key) header.d=emfend.at header.i=@emfend.at header.b=C60J5iVr; arc=none smtp.client-ip=168.119.41.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=emfend.at
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=emfend.at
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9FEF51F3B87;
+	Mon, 12 Jan 2026 15:06:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.72.41
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1768230376; cv=fail; b=f6/THHEPokpVouTSGHNnJgalJ0Rhx8knI48c7O/VLofK250xHFuRglM9cia4Oyzzb1DDlytoysHhTKwJyBf5UWBOc/t0MoNZyq0BkAg7THeChZJ05+o7z66w0fVBVPkx45PkD9MoW8RCuGPMiLr1er+e6maFBL0HyTTdXdPYQvY=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1768230376; c=relaxed/simple;
+	bh=OxRwIfscHbUgDXzxlrjUuvaeSoG61rRGrTW2q0JLBLw=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
+	 Content-Disposition:In-Reply-To:MIME-Version; b=OkC0iW6EydTm2LUc9o7bvxXsFnXwyEH5kE7z/A1oAjar5DVrmNvPBkpdiO5mw7hpa0B40HHuvvE4uwcvF6mWcn0LUN9F04S4Hk8daXHdKGE4z058aHpwOW6x/I5zARrvAv1sQQeJEu9/Hfnrt0OklZzlodo5WzvzAawFUnSJCF0=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com; spf=pass smtp.mailfrom=nxp.com; dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b=FE7F6OAZ; arc=fail smtp.client-ip=52.101.72.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nxp.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=emfend.at header.i=@emfend.at header.b="C60J5iVr"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=emfend.at;
-	 s=mail; h=Cc:To:In-Reply-To:References:Message-Id:Content-Transfer-Encoding:
-	Content-Type:MIME-Version:Subject:Date:From:Sender:Reply-To:Content-ID:
-	Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-	:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
-	List-Post:List-Owner:List-Archive;
-	bh=qCIfc/Ho6taTmqfNPZA0WuYi/DID+PMOxDKSIjXnnB0=; b=C60J5iVrFTEkXH6T1OzcNr6hTX
-	0yLpYzbTjD/nlAwAn+nxLYmCxuuZ/sXlcLpcu2Gt9+v+ZbYEKuTTDxl8jLeEQ5h5L6UxXqr9sR5Ox
-	Zs1mi/NM32kCPIvz4vG+0T2sqpnbLdrODpGZc98i9ZcE5VQOLMtuZMdN0HiK6v7y0vec=;
-Received: from 194-208-208-245.tele.net ([194.208.208.245]:58069 helo=[127.0.1.1])
-	by lx20.hoststar.hosting with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.93)
-	(envelope-from <matthias.fend@emfend.at>)
-	id 1vfJEf-0097Ka-5d; Mon, 12 Jan 2026 15:49:40 +0100
-From: Matthias Fend <matthias.fend@emfend.at>
-Date: Mon, 12 Jan 2026 15:49:33 +0100
-Subject: [PATCH v7 2/2] media: i2c: add Himax HM1246 image sensor driver
+	dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b="FE7F6OAZ"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=JVXuF8MwrSw9ucjHHnqLA3Gs6IhPWfwJKmS+3LRz+Xgzy1+l1as1zWHM9IsNWbktETnFTgrlS6EIz8Y3sNbXHIQ7W2Uzbe42VQK+oVg9L2NKvj22uw7OkTsPx5hZS+cftzcdI6GzOASl+4jPFrv76drwUP2Z3zGYr8vrpTj22ZmYoEfxEEqQwqWWshtevuNQX243YyDjj9JYXa+cZJvGL1ul95NZqbSIMgfpo8iU5ceKAEZzFGBJEqk2W6zqxuWs7gNUsoRL5mRIv5oxIq3QqH822WVqU2FnzyKu/N3wyTVmtOs/m9knUBdMMrw1sKtAyrXP6mdIjfTx54mR3ix51g==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=d7q12iX3lDIgjjipwKDsmu555brbBRYZH7PVCvIH/3Q=;
+ b=xVGnyIW1AwFM6icMqC62bqsqlXSrxUsOQo17mvd42W5uEI0DroopSCvcLtUe7jIa92H+1dry9Y6DKaTE5XL0CLGaNOqVhd4zi38IVOQhK+gVNqSwJW4Yau+EQf97qmqiNnm8mzfJPm6jkZU0Mby3SQ5K6k9xtQTvk3YW/ww5xzb5tmi+vTzLihZh1B6JsOI+nCgxagxUdMqcUnsTjLASyBe3SiTwEElPc9J3RTXIjqNCUu+NIDLoMG4Y5T5t1t+/VEucdj1BGBbdv+dflMTVs8M3q0a+vpJbcSUFY5BOrrv5cKo2kMUXmyApdchJ7J5ESZckSQtASlehnz9R4JWjvQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=d7q12iX3lDIgjjipwKDsmu555brbBRYZH7PVCvIH/3Q=;
+ b=FE7F6OAZ5khMA6W2CU6TfqD4GzzWDnwZ0MBx1KWLHIfhPTXYob9xJ7ex8hCeQcvvP5XLiwevKckBwJ/onWA+aKRRbS1CBAW+rQgfPTQbdcY97aITyscRKxfy28+kYcjz0olghk8Xf1vGQc5jG5YC7iS3smmBFhA3NRyo96b6BiGaAOmsclX8Dvu36ST68grcFhiuOPKaRNIFSXbZaUEuWyp447RLb8VoThtmgyGaJNfYABAg+kRx8ku9N0n4oQCgYlEUt0hR8vof+BhL3Xae11FIfxLRUK4H1j17PQsftXSLN8hDCq3/uF7A9J92BeS25YzRA3JiWImm9zcHbwbAYw==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+Received: from DU2PR04MB8951.eurprd04.prod.outlook.com (2603:10a6:10:2e2::22)
+ by GVXPR04MB10247.eurprd04.prod.outlook.com (2603:10a6:150:1c2::19) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9499.7; Mon, 12 Jan
+ 2026 15:06:09 +0000
+Received: from DU2PR04MB8951.eurprd04.prod.outlook.com
+ ([fe80::753c:468d:266:196]) by DU2PR04MB8951.eurprd04.prod.outlook.com
+ ([fe80::753c:468d:266:196%4]) with mapi id 15.20.9478.004; Mon, 12 Jan 2026
+ 15:06:09 +0000
+Date: Mon, 12 Jan 2026 10:06:02 -0500
+From: Frank Li <Frank.li@nxp.com>
+To: Philipp Zabel <p.zabel@pengutronix.de>,
+	Mauro Carvalho Chehab <mchehab@kernel.org>,
+	Shawn Guo <shawnguo@kernel.org>,
+	Sascha Hauer <s.hauer@pengutronix.de>,
+	Pengutronix Kernel Team <kernel@pengutronix.de>,
+	Fabio Estevam <festevam@gmail.com>,
+	Rui Miguel Silva <rmfrfs@gmail.com>,
+	Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+	Martin Kepplinger-Novakovic <martink@posteo.de>,
+	Purism Kernel Team <kernel@puri.sm>
+Cc: linux-media@vger.kernel.org, imx@lists.linux.dev,
+	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 0/5] media: platform: nxp: Trivial cleanup pathces
+Message-ID: <aWUN2qRgpXXALAJg@lizhi-Precision-Tower-5810>
+References: <20251215-cam_cleanup-v3-0-a61995068f38@nxp.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20251215-cam_cleanup-v3-0-a61995068f38@nxp.com>
+X-ClientProxiedBy: PH0PR07CA0063.namprd07.prod.outlook.com
+ (2603:10b6:510:f::8) To DU2PR04MB8951.eurprd04.prod.outlook.com
+ (2603:10a6:10:2e2::22)
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20260112-hm1246-v7-2-fee8587f2808@emfend.at>
-References: <20260112-hm1246-v7-0-fee8587f2808@emfend.at>
-In-Reply-To: <20260112-hm1246-v7-0-fee8587f2808@emfend.at>
-To: Mauro Carvalho Chehab <mchehab@kernel.org>, 
- Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
- Conor Dooley <conor+dt@kernel.org>, Hans Verkuil <hverkuil@kernel.org>, 
- Sakari Ailus <sakari.ailus@linux.intel.com>, 
- Hans de Goede <hansg@kernel.org>, Ricardo Ribalda <ribalda@chromium.org>, 
- =?utf-8?q?Andr=C3=A9_Apitzsch?= <git@apitzsch.eu>, 
- Tarang Raval <tarang.raval@siliconsignals.io>, 
- Andy Shevchenko <andriy.shevchenko@linux.intel.com>, 
- Benjamin Mugnier <benjamin.mugnier@foss.st.com>, 
- Sylvain Petinot <sylvain.petinot@foss.st.com>, 
- Dongcheng Yan <dongcheng.yan@intel.com>, 
- Bryan O'Donoghue <bryan.odonoghue@linaro.org>, 
- Alan Stern <stern@rowland.harvard.edu>, 
- Jingjing Xiong <jingjing.xiong@intel.com>, 
- Heimir Thor Sverrisson <heimir.sverrisson@gmail.com>, 
- Mehdi Djait <mehdi.djait@linux.intel.com>, 
- Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>, 
- Laurent Pinchart <laurent.pinchart@ideasonboard.com>, 
- Hardevsinh Palaniya <hardevsinh.palaniya@siliconsignals.io>, 
- Svyatoslav Ryhel <clamor95@gmail.com>
-Cc: linux-media@vger.kernel.org, devicetree@vger.kernel.org, 
- linux-kernel@vger.kernel.org, Hao Yao <hao.yao@intel.com>, 
- Himanshu Bhavani <himanshu.bhavani@siliconsignals.io>, 
- Matthias Fend <matthias.fend@emfend.at>, 
- bsp-development.geo@leica-geosystems.com
-X-Mailer: b4 0.14.2
-X-Spam-Score: -0.7
-X-Spam-Bar: /
-X-Spam-Report: Spam detection software, running on the system "lx20.hoststar.hosting",
- has NOT identified this incoming email as spam.  The original
- message has been attached to this so you can view it or label
- similar future email.  If you have any questions, see
- the administrator of that system for details.
- 
- Content preview:  Add YAML device tree binding for Himax HM1246 image sensor.
-    Reviewed-by: Rob Herring (Arm) <robh@kernel.org> Signed-off-by: Matthias
-   Fend <matthias.fend@emfend.at> --- .../bindings/media/i2c/himax,hm1246.yaml
-    | 117 +++++++++++++++++++++ MAINTAINERS | 7 ++ 2 fi [...] 
- 
- Content analysis details:   (-0.7 points, 5.0 required)
- 
-  pts rule name              description
- ---- ---------------------- --------------------------------------------------
-  0.0 URIBL_BLOCKED          ADMINISTRATOR NOTICE: The query to URIBL was
-                             blocked.  See
-                             http://wiki.apache.org/spamassassin/DnsBlocklists#dnsbl-block
-                              for more information.
-                             [URIs: linuxtv.org]
-  0.0 URIBL_DBL_BLOCKED_OPENDNS ADMINISTRATOR NOTICE: The query to
-                             dbl.spamhaus.org was blocked due to usage
-                             of an open resolver. See
-                             https://www.spamhaus.org/returnc/pub/
-                             [URIs: linuxtv.org]
-  0.0 URIBL_ZEN_BLOCKED_OPENDNS ADMINISTRATOR NOTICE: The query to
-                             zen.spamhaus.org was blocked due to usage
-                             of an open resolver. See
-                             https://www.spamhaus.org/returnc/pub/
-                             [URIs: linuxtv.org]
- -1.0 ALL_TRUSTED            Passed through trusted hosts only via SMTP
-  0.0 TVD_RCVD_IP            Message was received from an IP address
-  0.1 POISEN_SPAM_PILL_3     BODY: random spam to be learned in bayes
-  0.1 POISEN_SPAM_PILL_1     RAW: random spam to be learned in bayes
-  0.1 POISEN_SPAM_PILL       Meta: its spam
-  0.0 KAM_DMARC_STATUS       Test Rule for DKIM or SPF Failure with Strict
-                             Alignment (older systems)
-  0.0 Local_hs_NotFromHoststar Sender is NOT hoststar.(ch|at|com)
-  0.0 Local_hs_NotToHoststar Recipient is NOT hoststar.(ch|at|com)
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DU2PR04MB8951:EE_|GVXPR04MB10247:EE_
+X-MS-Office365-Filtering-Correlation-Id: 210ca5f0-d4d2-453a-f550-08de51ec1e41
+X-LD-Processed: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635,ExtAddr
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+ BCL:0;ARA:13230040|366016|19092799006|7416014|52116014|1800799024|376014|921020|38350700014;
+X-Microsoft-Antispam-Message-Info:
+ =?us-ascii?Q?TlWJlJJpa9Q5GF2f7r80OagEG1YmqUj+Z8yNx9HvkLSa3kCWxNYy45kAaMV5?=
+ =?us-ascii?Q?Vq9ZnUp7aOh/RhjIlzO6EXOdIpfc63yqnlThmQQchwCTmiZLwKr9mOerIGns?=
+ =?us-ascii?Q?UQctBad/H7scOdtq+c71a0TOucreIFUsWcHTkuCvwPfqOdQucNC8QdC+RQpX?=
+ =?us-ascii?Q?9IwRcWbcJjcMPxskeuGS9RNjYRDLt5aacy8lf2E9V0/u+EuKXTyN9UXPzxdv?=
+ =?us-ascii?Q?oyKJmXTVeILlxlPTbm2bydSj5j4mw+f1+ug/+KYOmJfkxVrOe43B0CyL5xyK?=
+ =?us-ascii?Q?P/BIJlCO14v9SNNZpQcNgzpyqsPCN/dLg0EQvR6c8vFcOKDmLkphWwf8HFWF?=
+ =?us-ascii?Q?9roSVlHDZK72PiU8XU6KaNs+Aez04NkSh4yo2ba2W2Iw7OBTsnucOx+pdAAK?=
+ =?us-ascii?Q?2cWA5BmA2A4m2bagK60bkkVUBUr5Aat3GiOZMXRBSEIekRhpoK1XX4SKkklu?=
+ =?us-ascii?Q?xqouzoitoR3n6ZIJxq9iSggL5UM2m3NvkJqEKuf3wIYDse8SEvd49MSqS0cX?=
+ =?us-ascii?Q?0FfCTY+lHhkCqJQO75vkFb4y0b2Cj9hZfJQCXU01vQCsEvMuhIwfjq/QmNFT?=
+ =?us-ascii?Q?LnTtJ0Rgt4xephDiJwjcxxSLhwZZ7OovPA+pecTuw70jN0R2qX8dyalBZkoO?=
+ =?us-ascii?Q?82GFRwzcRa9fExH7f4HDvnmtmcAInuJkzApPFvnNgzueprDI8+Maaes4vozl?=
+ =?us-ascii?Q?PayDmXz95aMWNIpM1tlpdiosnjg+RFmrLmd51bg6pETHLL5I/+2sfK7gwuNY?=
+ =?us-ascii?Q?zugyMrF0RvlRp9JcF+PRzHhF4qs+QuEG7D8uuvXomssFG1RxchAvDREfY1/h?=
+ =?us-ascii?Q?loCqEHrtHLSCzyNjfWxjQT7O67uLO1VtGED7QTSIujeGdP+XR9WyJpslV4S7?=
+ =?us-ascii?Q?Xr5XyKIZ5CHUychFFOSiP3msfCxFcXOxkEfzWGJmwNu14FxnfOoYdgeKCIJF?=
+ =?us-ascii?Q?8AfTjjXh9dVZ0fMJ4ggQ+YkGiZdfXrzrQzj2orzLbOw9KDAt9oMQpxy1Bb4B?=
+ =?us-ascii?Q?50Bmz0Pjih4p6OuWkQTYNJhjZ4TPcbsf2cqw7KPMzynW0N0ihhO2doxuNcK2?=
+ =?us-ascii?Q?J7hJCjVAlbMiMJ45fxl0GIpHmgOlvfXx2j5Ze0lnzWRgfaN8CGPVOTCX0OXb?=
+ =?us-ascii?Q?Rpchm7BM3XDzhpkqLcEG8VrMVGfceglydkNkn97das1Vd94f8QQp9uQluxzU?=
+ =?us-ascii?Q?fW7QR8EpjBejk/NCA9qpaiTCVSW7DmDHdzWZMwewuNNQ3oBZH5Caeg6zTzp6?=
+ =?us-ascii?Q?Z5p3Biz9BF0PynH/51yW+hROdPc/q7gLiv0KqRQrJczJ3DN1cDA1eS8GrM+h?=
+ =?us-ascii?Q?NifZ2oNFtAaySIqe6QGayd8LQLSdnZtCjCZ9beNpujIfPemEtdKu4z4Sn7LX?=
+ =?us-ascii?Q?cwgHNZBwvIeo/DeVlhewYRnc0lzN1azQ0dkTjLI7tzQ2G3e5t463OqgWl2RZ?=
+ =?us-ascii?Q?/TbWEtTz7TpTKgpfMRI5LPNOE8bOtt2sTpnW/LblOmBIcwJ7T+9VHi8wVM2g?=
+ =?us-ascii?Q?wX4EHKtSIHnzh3HTcsLppZPpkxtNLFcQO91PmprAUHKDEp8RxGf4OjwQTdFZ?=
+ =?us-ascii?Q?da3OYV2dIswSOILzW6Q=3D?=
+X-Forefront-Antispam-Report:
+ CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU2PR04MB8951.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(19092799006)(7416014)(52116014)(1800799024)(376014)(921020)(38350700014);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+ =?us-ascii?Q?6S/bs9mKjJWf6ytHJindxPf5UeAn1myYiPpTCbYxcHjUPRJbkDmn8exDStTk?=
+ =?us-ascii?Q?tbEgIX/fzsS5VN3AWSIBvq6R63n/TxhPD1Zt/L7sQQcqYWdZVNJPspH6hfDW?=
+ =?us-ascii?Q?IY7tah7Q6XyG5kVdONuv0g0HBKS2Hd+5FVmA7ifSG93G+LMVjSof/KwHHioU?=
+ =?us-ascii?Q?H3WzdDSiEUzPSt7hpjC2W+qbe602/eNUa4XG0fs6D5nEhtmG9a4Ay2T8Aqiv?=
+ =?us-ascii?Q?aSHXrmV1y5G9KevQ7FFkAsBUv214oeHi5LpqoO1qZ3ThAvRnMkPQNTu2syFh?=
+ =?us-ascii?Q?MysrxUJ+ln3UDtUxnptGPDvlWYu9oT5C5tTSivAIUwFgvixkxEHOPt20hKG1?=
+ =?us-ascii?Q?bIs/w0xUMyvdYNGsJSJdP8arC0afzWcun8Rd/ItuIcKYYECLigMFmehm6fdV?=
+ =?us-ascii?Q?1bGA8ocwOzulpnxuJyEfLaody7/KVrEjROGcTmJnm+fQoCGfrtZxcbLvIalP?=
+ =?us-ascii?Q?c8i2WTNHJuuaAqn66PX65N+04OhTSf3f5mERCQjh8PE8FPMeG8NZfP67czZ6?=
+ =?us-ascii?Q?WUy/tCuekftxeROiW4/NYF2RBYOwDGvoOhi1Yk9J2wm1SgNxjPc6WPIVUi2V?=
+ =?us-ascii?Q?HeBdU2HvhsDt5/tjhtgY6IF6hwHapu/LseZ0RdEuHDcvrjFJoHV9fQC6z44d?=
+ =?us-ascii?Q?ahl+cNJOrzdv8jp5Kfbqmn96gRC7RLHh7kbSx5wRqUgXK1pGifqnoB0CgS30?=
+ =?us-ascii?Q?oOqdB0eL1LmFAyKgduhLDGl+kVQgN3B2m+JsckmkuWvH2kxr4GYYEUSwUOt6?=
+ =?us-ascii?Q?gt+77qLTl8u+vYfQag3mfxKs5RIEuNgeE1yAUdn8Q+pGXZ9CoNIO5xaGfWWI?=
+ =?us-ascii?Q?HAZ0KVituN7U69XqzzfrfMpWHvMyWdaYYBMrW9OF10GYwD3QqA3fmIyrD41V?=
+ =?us-ascii?Q?Fd1nQ1E1kblBFBLWTcHJr3qWqadlWdkk+HtePL8t3VSfMedv2RNBvaiPy5cI?=
+ =?us-ascii?Q?OFnVocYL1w4FCIGN2JSCXl4a61fYy3gYmTyFg1vxfv88LyRwshlf4rx+wawM?=
+ =?us-ascii?Q?V8Hgec8Or63z1GlTAey1R+7jTVYkivbrp4sezF/woKt/iOfc668vvkd4Wv2X?=
+ =?us-ascii?Q?1T4PQA8zlGg9nKsd+KIgxl6w/dQHwkKPocxDmb+8O4iOu0f04Ijg0UIcm0Mz?=
+ =?us-ascii?Q?fO4GXV2ZWGtTenYWHrbC55g6Qsuv9vWt+M/L6wGhnPhganAQwRanZtFecJt8?=
+ =?us-ascii?Q?CYViv2OeK/LQhKDJ3Dkq5d+wKQBpDA5rQjcAxD+Vrlt+k479IVfEhzHJCTSd?=
+ =?us-ascii?Q?2qn0GwOJlqjjZIkLvlHSZFscLw60yGQILzKQBMd1vTPLVthjwgOyB46LAQVs?=
+ =?us-ascii?Q?Vk1PlG38gfF8q+U0B8RfgOK8XbvSvimbrcWNoWXRp7j6gKkTMYCnp1pdEHBY?=
+ =?us-ascii?Q?/ansWWS4FLsvlJAUYlSaY6+HgcN/ncf3UZ79cq9UDR/ChmQuzkVHbq6Ijynx?=
+ =?us-ascii?Q?bsRf1q1LxMzqeTjIHxhxyKDsw582jpSvau89X45SuywGt347UPkMQuVWXjJa?=
+ =?us-ascii?Q?nD/c5luClbTecWYxlG2ZM8QgjaMSayPti7WTIxH+S2fJigqyRDTptMNbhoaf?=
+ =?us-ascii?Q?pw40e0c6Nk53VLtT+kZjHZFdStNLmQQSbEcomJp8gKrjVgb/iOcIpACVOFok?=
+ =?us-ascii?Q?ggFKcaNIQzx+0h/R4fFInOcPenIxxUyEg4disDWbyrsnRdvpk25cNaff+edz?=
+ =?us-ascii?Q?1xr00RjpCT0kBEwihAkXZEnuHuL+jVPFDRiAgw+EL48WqKrq?=
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 210ca5f0-d4d2-453a-f550-08de51ec1e41
+X-MS-Exchange-CrossTenant-AuthSource: DU2PR04MB8951.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Jan 2026 15:06:09.6300
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: NPhMN0W0VW/SIRkzdhciF9lHani2pfS+a9slBwjk+YyKFlyHuS/AqL9F9sUczB0ihLVqhi5WbY++IEDRXHNB2Q==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: GVXPR04MB10247
 
-Add a V4L2 sub-device driver for Himax HM1246 image sensor.
+On Mon, Dec 15, 2025 at 05:49:51PM -0500, Frank Li wrote:
+> Some trivial patch to reduce goto at probe functions.
+>
+> Signed-off-by: Frank Li <Frank.Li@nxp.com>
+> ---
 
-The Himax HM1246-AWD is a 1/3.7-Inch CMOS image sensor SoC with an active
-array size of 1296 x 976. It is programmable through an I2C interface and
-connected via parallel bus.
+Laurent Pinchart and Philipp Zabel:
 
-The sensor has an internal ISP with a complete image processing pipeline
-including control loops. However, this driver uses the sensor in raw mode
-and the entire ISP is bypassed.
+	Happy new year. Any comments about this trivial changes?
 
-Signed-off-by: Matthias Fend <matthias.fend@emfend.at>
----
- MAINTAINERS                |    1 +
- drivers/media/i2c/Kconfig  |   10 +
- drivers/media/i2c/Makefile |    1 +
- drivers/media/i2c/hm1246.c | 1302 ++++++++++++++++++++++++++++++++++++++++++++
- 4 files changed, 1314 insertions(+)
+Frank
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index c09de45c5260b70af8a524721d4a999a1efa415d..a68f318fcbbe7f96408c26db156119815920b967 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -11296,6 +11296,7 @@ L:	linux-media@vger.kernel.org
- S:	Maintained
- T:	git git://linuxtv.org/media_tree.git
- F:	Documentation/devicetree/bindings/media/i2c/himax,hm1246.yaml
-+F:	drivers/media/i2c/hm1246.c
- 
- HIMAX HX83112B TOUCHSCREEN SUPPORT
- M:	Job Noorman <job@noorman.info>
-diff --git a/drivers/media/i2c/Kconfig b/drivers/media/i2c/Kconfig
-index 6dcae0aa98ee4411a4a66ea50f7354a6305099c7..b995f382aae7beddef9cf05f696314589363f0c7 100644
---- a/drivers/media/i2c/Kconfig
-+++ b/drivers/media/i2c/Kconfig
-@@ -137,6 +137,16 @@ config VIDEO_HI847
-           To compile this driver as a module, choose M here: the
-           module will be called hi847.
- 
-+config VIDEO_HM1246
-+	tristate "Himax HM1246 sensor support"
-+	select V4L2_CCI_I2C
-+	help
-+	  This is a Video4Linux2 sensor driver for the Himax
-+	  HM1246 camera.
-+
-+	  To compile this driver as a module, choose M here: the
-+	  module will be called hm1246.
-+
- config VIDEO_IMX111
- 	tristate "Sony IMX111 sensor support"
- 	select V4L2_CCI_I2C
-diff --git a/drivers/media/i2c/Makefile b/drivers/media/i2c/Makefile
-index a3a6396df3c4525c894238c9c4724684cf1f464c..44e2e01bd6b1d853debcae57c8889c16a40b7a2b 100644
---- a/drivers/media/i2c/Makefile
-+++ b/drivers/media/i2c/Makefile
-@@ -45,6 +45,7 @@ obj-$(CONFIG_VIDEO_GC2145) += gc2145.o
- obj-$(CONFIG_VIDEO_HI556) += hi556.o
- obj-$(CONFIG_VIDEO_HI846) += hi846.o
- obj-$(CONFIG_VIDEO_HI847) += hi847.o
-+obj-$(CONFIG_VIDEO_HM1246) += hm1246.o
- obj-$(CONFIG_VIDEO_I2C) += video-i2c.o
- obj-$(CONFIG_VIDEO_IMX111) += imx111.o
- obj-$(CONFIG_VIDEO_IMX208) += imx208.o
-diff --git a/drivers/media/i2c/hm1246.c b/drivers/media/i2c/hm1246.c
-new file mode 100644
-index 0000000000000000000000000000000000000000..d368b9219f6b531ecf6d8785dd147063c5b76624
---- /dev/null
-+++ b/drivers/media/i2c/hm1246.c
-@@ -0,0 +1,1302 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Driver for Himax HM1246 image sensor
-+ *
-+ * Copyright 2025 Matthias Fend <matthias.fend@emfend.at>
-+ */
-+
-+#include <linux/array_size.h>
-+#include <linux/bitops.h>
-+#include <linux/clk.h>
-+#include <linux/delay.h>
-+#include <linux/device.h>
-+#include <linux/err.h>
-+#include <linux/gpio/consumer.h>
-+#include <linux/i2c.h>
-+#include <linux/limits.h>
-+#include <linux/math.h>
-+#include <linux/math64.h>
-+#include <linux/module.h>
-+#include <linux/pm_runtime.h>
-+#include <linux/property.h>
-+#include <linux/regulator/consumer.h>
-+#include <linux/types.h>
-+#include <linux/units.h>
-+#include <media/media-entity.h>
-+#include <media/v4l2-async.h>
-+#include <media/v4l2-cci.h>
-+#include <media/v4l2-common.h>
-+#include <media/v4l2-ctrls.h>
-+#include <media/v4l2-fwnode.h>
-+#include <media/v4l2-subdev.h>
-+
-+/* Status registers */
-+#define HM1246_MODEL_ID_REG		 CCI_REG16(0x0000)
-+
-+/* General setup registers */
-+#define HM1246_MODE_SELECT_REG		 CCI_REG8(0x0100)
-+#define HM1246_MODE_SELECT_STANDBY	 0x00
-+#define HM1246_MODE_SELECT_STREAM	 0x01
-+#define HM1246_MODE_SELECT_STOP		 0x02
-+#define HM1246_IMAGE_ORIENTATION_REG	 CCI_REG8(0x0101)
-+#define HM1246_IMAGE_ORIENTATION_VFLIP	 BIT(1)
-+#define HM1246_IMAGE_ORIENTATION_HFLIP	 BIT(0)
-+#define HM1246_CMU_UPDATE_REG		 CCI_REG8(0x0104)
-+
-+/* Output setup registers */
-+#define HM1246_COARSE_INTG_REG		 CCI_REG16(0x0202)
-+#define HM1246_ANALOG_GLOBAL_GAIN_REG	 CCI_REG8(0x0205)
-+
-+/* Clock setup registers */
-+#define HM1246_PLL1CFG_REG		 CCI_REG8(0x0303)
-+#define HM1246_PLL1CFG_MULTIPLIER(x)	 (((x) & 0xff) << 0)
-+#define HM1246_PLL2CFG_REG		 CCI_REG8(0x0305)
-+#define HM1246_PLL2CFG_PRE_DIV(x)	 (((x) & 0x1f) << 1)
-+#define HM1246_PLL2CFG_MULTIPLIER(x)	 (((x) & 0x01) << 0)
-+#define HM1246_PLL3CFG_REG		 CCI_REG8(0x0307)
-+#define HM1246_PLL3CFG_POST_DIV(x)	 (((x) & 0x3) << 6)
-+#define HM1246_PLL3CFG_SYSCLK_DIV(x)	 (((x) & 0x3) << 4)
-+#define HM1246_PLL3CFG_PCLK_DIV(x)	 (((x) & 0x7) << 0)
-+
-+/* Frame timing registers */
-+#define HM1246_FRAME_LENGTH_LINES_REG	 CCI_REG16(0x0340)
-+#define HM1246_LINE_LENGTH_PCK_REG	 CCI_REG16(0x0342)
-+
-+/* Image size registers */
-+#define HM1246_X_ADDR_START_REG		 CCI_REG16(0x0344)
-+#define HM1246_Y_ADDR_START_REG		 CCI_REG16(0x0346)
-+#define HM1246_X_ADDR_END_REG		 CCI_REG16(0x0348)
-+#define HM1246_Y_ADDR_END_REG		 CCI_REG16(0x034a)
-+#define HM1246_X_LA_START_REG		 CCI_REG16(0x0351)
-+#define HM1246_X_LA_END_REG		 CCI_REG16(0x0353)
-+#define HM1246_Y_LA_START_REG		 CCI_REG16(0x0355)
-+#define HM1246_Y_LA_END_REG		 CCI_REG16(0x0357)
-+
-+/* Test pattern registers */
-+#define HM1246_TEST_PATTERN_MODE_REG	 CCI_REG8(0x0601)
-+#define HM1246_TEST_PATTERN_MODE_MODE(x) (((x) & 0xf) << 4)
-+#define HM1246_TEST_PATTERN_MODE_ENABLE	 BIT(0)
-+#define HM1246_TEST_DATA_BLUE_REG	 CCI_REG16(0x0602)
-+#define HM1246_TEST_DATA_GB_REG		 CCI_REG16(0x0604)
-+#define HM1246_TEST_DATA_RED_REG	 CCI_REG16(0x0606)
-+#define HM1246_TEST_DATA_GR_REG		 CCI_REG16(0x0608)
-+
-+/* SBC registers */
-+#define HM1246_SBC_BOOT_REF2_REG	 CCI_REG8(0x2001)
-+#define HM1246_SBC_BOOT_REF2_PLL_LOCK	 BIT(4)
-+#define HM1246_SBC_CTRL_REG		 CCI_REG8(0x2003)
-+#define HM1246_SBC_CTRL_PLL_EN		 BIT(0)
-+
-+/* System registers */
-+#define HM1246_OUTPUT_PRT_CTRL_REG	 CCI_REG8(0x2f02)
-+#define HM1246_POLARITY_CTRL_REG	 CCI_REG8(0x2f20)
-+#define HM1246_POLARITY_CTRL_HSYNC	 BIT(7)
-+#define HM1246_POLARITY_CTRL_VSYNC	 BIT(6)
-+#define HM1246_PCLK_CTRL_REG		 CCI_REG8(0x2f24)
-+#define HM1246_PCLK_CTRL_POL		 BIT(3)
-+
-+/* Digital window control & parameter registers */
-+#define HM1246_DWIN_XOFFSET_REG		 CCI_REG16(0xd5e4)
-+#define HM1246_DWIN_XSIZE_REG		 CCI_REG16(0xd5e6)
-+#define HM1246_DWIN_YOFFSET_REG		 CCI_REG16(0xd5e8)
-+#define HM1246_DWIN_YSIZE_REG		 CCI_REG16(0xd5ea)
-+
-+#define HM1246_MODEL_ID			 0x1245
-+
-+#define HM1246_NATIVE_WIDTH		 1296
-+#define HM1246_NATIVE_HEIGHT		 976
-+
-+#define HM1246_VTS_MAX			 65535
-+
-+#define HM1246_COARSE_INTG_MARGIN	 2
-+#define HM1246_COARSE_INTG_MIN		 4
-+#define HM1246_COARSE_INTG_STEP		 1
-+
-+#define HM1246_ANALOG_GLOBAL_GAIN_MIN	 0x00
-+#define HM1246_ANALOG_GLOBAL_GAIN_MAX	 0xe8
-+#define HM1246_ANALOG_GLOBAL_GAIN_STEP	 1
-+
-+#define HM1246_XCLK_MIN			 (6 * HZ_PER_MHZ)
-+#define HM1246_XCLK_MAX			 (27 * HZ_PER_MHZ)
-+
-+#define HM1246_PCLK_MIN			 (8 * HZ_PER_MHZ)
-+#define HM1246_PCLK_MAX			 (96 * HZ_PER_MHZ)
-+
-+#define HM1246_PLL_VCO_MIN		 (360 * HZ_PER_MHZ)
-+#define HM1246_PLL_VCO_MAX		 (680 * HZ_PER_MHZ)
-+
-+#define HM1246_PLL_INCLK_MIN		 (1000 * HZ_PER_KHZ)
-+#define HM1246_PLL_INCLK_MAX		 (2500 * HZ_PER_KHZ)
-+
-+#define HM1246_PLL_MULTI_L_MIN		 1
-+#define HM1246_PLL_MULTI_L_MAX		 256
-+
-+#define HM1246_PLL_MULTI_H_MIN		 2
-+#define HM1246_PLL_MULTI_H_MAX		 3
-+
-+#define HM1246_PLL_MULTI_MIN \
-+	(HM1246_PLL_MULTI_H_MIN * HM1246_PLL_MULTI_L_MIN)
-+#define HM1246_PLL_MULTI_MAX \
-+	(HM1246_PLL_MULTI_H_MAX * HM1246_PLL_MULTI_L_MAX)
-+
-+static const char *const hm1246_test_pattern_menu[] = {
-+	"Disabled",
-+	"Checkboard",
-+	"Ramp",
-+	"Moving ones",
-+	"Blending color bars",
-+	"Color bars",
-+	"Solid white",
-+	"Solid black",
-+	"Solid red",
-+	"Solid green",
-+	"Solid blue",
-+};
-+
-+static const char *const hm1246_supply_names[] = {
-+	"avdd",
-+	"iovdd",
-+	"dvdd",
-+};
-+
-+struct hm1246 {
-+	struct device *dev;
-+	struct v4l2_subdev sd;
-+	struct media_pad pad;
-+
-+	struct regulator_bulk_data supplies[ARRAY_SIZE(hm1246_supply_names)];
-+	struct clk *xclk;
-+	unsigned long xclk_freq;
-+	struct gpio_desc *reset_gpio;
-+	unsigned int mbus_flags;
-+	s64 link_frequency;
-+
-+	struct v4l2_ctrl_handler ctrls;
-+	struct v4l2_ctrl *pixel_rate_ctrl;
-+	struct v4l2_ctrl *link_freq_ctrl;
-+	struct v4l2_ctrl *exposure_ctrl;
-+	struct v4l2_ctrl *vblank_ctrl;
-+	struct v4l2_ctrl *hblank_ctrl;
-+	struct v4l2_ctrl *hflip_ctrl;
-+	struct v4l2_ctrl *vflip_ctrl;
-+
-+	struct regmap *regmap;
-+
-+	bool identified;
-+};
-+
-+static const struct cci_reg_sequence mode_1296x976_raw[] = {
-+	{ HM1246_X_LA_START_REG, 60 },
-+	{ HM1246_X_LA_END_REG, 1355 },
-+	{ HM1246_Y_LA_START_REG, 0 },
-+	{ HM1246_Y_LA_END_REG, 975 },
-+	{ HM1246_OUTPUT_PRT_CTRL_REG, 0x20 },
-+	{ CCI_REG8(0x300a), 0x01 },
-+	{ CCI_REG8(0x300b), 0x00 },
-+	{ CCI_REG8(0x50f5), 0x01 },
-+	{ CCI_REG8(0x50dd), 0x00 },
-+	{ CCI_REG8(0x50a1), 0x02 },
-+	{ CCI_REG8(0x50aa), 0x1c },
-+	{ CCI_REG8(0x50ac), 0xdd },
-+	{ CCI_REG8(0x50ad), 0x08 },
-+	{ CCI_REG8(0x50ab), 0x04 },
-+	{ CCI_REG8(0x50a0), 0x40 },
-+	{ CCI_REG8(0x50a2), 0x12 },
-+	{ CCI_REG8(0x50ae), 0x30 },
-+	{ CCI_REG8(0x50b3), 0x04 },
-+	{ CCI_REG8(0x5204), 0x40 },
-+	{ CCI_REG8(0x5208), 0x55 },
-+	{ CCI_REG8(0x520b), 0x05 },
-+	{ CCI_REG8(0x520d), 0x40 },
-+	{ CCI_REG8(0x5214), 0x18 },
-+	{ CCI_REG8(0x5215), 0x0f },
-+	{ CCI_REG8(0x5217), 0x01 },
-+	{ CCI_REG8(0x5218), 0x07 },
-+	{ CCI_REG8(0x5219), 0x01 },
-+	{ CCI_REG8(0x521a), 0x50 },
-+	{ CCI_REG8(0x521b), 0x24 },
-+	{ CCI_REG8(0x5232), 0x01 },
-+	{ CCI_REG8(0x5220), 0x11 },
-+	{ CCI_REG8(0x5227), 0x01 },
-+	{ CCI_REG8(0x5106), 0xc1 },
-+	{ CCI_REG8(0x5115), 0xc0 },
-+	{ CCI_REG8(0x5116), 0xc1 },
-+	{ CCI_REG8(0x5138), 0x40 },
-+	{ CCI_REG8(0x5139), 0x60 },
-+	{ CCI_REG8(0x513a), 0x80 },
-+	{ CCI_REG8(0x513b), 0xa0 },
-+	{ CCI_REG8(0x513c), 0xa1 },
-+	{ CCI_REG8(0x513d), 0xa2 },
-+	{ CCI_REG8(0x513e), 0xa3 },
-+	{ CCI_REG8(0x5140), 0x40 },
-+	{ CCI_REG8(0x5141), 0x60 },
-+	{ CCI_REG8(0x5142), 0x80 },
-+	{ CCI_REG8(0x5143), 0x81 },
-+	{ CCI_REG8(0x5144), 0x82 },
-+	{ CCI_REG8(0x5145), 0x83 },
-+	{ CCI_REG8(0x5146), 0x93 },
-+	{ CCI_REG8(0x51c1), 0xc3 },
-+	{ CCI_REG8(0x51c5), 0xc3 },
-+	{ CCI_REG8(0x51c9), 0xc3 },
-+	{ CCI_REG8(0x51cd), 0xc2 },
-+	{ CCI_REG8(0x51d1), 0xc1 },
-+	{ CCI_REG8(0x51d5), 0xc1 },
-+	{ CCI_REG8(0x51d9), 0x81 },
-+	{ CCI_REG8(0x51dd), 0x81 },
-+	{ CCI_REG8(0x51c2), 0x49 },
-+	{ CCI_REG8(0x51c6), 0x49 },
-+	{ CCI_REG8(0x51ca), 0x49 },
-+	{ CCI_REG8(0x51ce), 0x49 },
-+	{ CCI_REG8(0x51d2), 0x49 },
-+	{ CCI_REG8(0x51d6), 0x59 },
-+	{ CCI_REG8(0x51da), 0x59 },
-+	{ CCI_REG8(0x51de), 0x59 },
-+	{ CCI_REG8(0x51c3), 0x20 },
-+	{ CCI_REG8(0x51c7), 0x38 },
-+	{ CCI_REG8(0x51cb), 0x21 },
-+	{ CCI_REG8(0x51cf), 0x11 },
-+	{ CCI_REG8(0x51d3), 0x11 },
-+	{ CCI_REG8(0x51d7), 0x13 },
-+	{ CCI_REG8(0x51db), 0x13 },
-+	{ CCI_REG8(0x51df), 0x13 },
-+	{ CCI_REG8(0x51e0), 0x03 },
-+	{ CCI_REG8(0x51e2), 0x03 },
-+	{ CCI_REG8(0x51f0), 0x42 },
-+	{ CCI_REG8(0x51f1), 0x40 },
-+	{ CCI_REG8(0x51f2), 0x4a },
-+	{ CCI_REG8(0x51f3), 0x48 },
-+	{ CCI_REG8(0x5015), 0x73 },
-+	{ CCI_REG8(0x504a), 0x04 },
-+	{ CCI_REG8(0x5044), 0x07 },
-+	{ CCI_REG8(0x5040), 0x03 },
-+	{ CCI_REG8(0x5135), 0xc4 },
-+	{ CCI_REG8(0x5136), 0xc5 },
-+	{ CCI_REG8(0x5166), 0xc4 },
-+	{ CCI_REG8(0x5196), 0xc4 },
-+	{ CCI_REG8(0x51c0), 0x10 },
-+	{ CCI_REG8(0x51c4), 0x10 },
-+	{ CCI_REG8(0x51c8), 0xa0 },
-+	{ CCI_REG8(0x51cc), 0xa0 },
-+	{ CCI_REG8(0x51d0), 0xa1 },
-+	{ CCI_REG8(0x51d4), 0xa5 },
-+	{ CCI_REG8(0x51d8), 0xa5 },
-+	{ CCI_REG8(0x51dc), 0xa5 },
-+	{ CCI_REG8(0x5200), 0xe4 },
-+	{ CCI_REG8(0x5209), 0x04 },
-+	{ CCI_REG8(0x301b), 0x01 },
-+	{ CCI_REG8(0x3130), 0x01 },
-+	{ CCI_REG8(0x5013), 0x07 },
-+	{ CCI_REG8(0x5016), 0x01 },
-+	{ CCI_REG8(0x501d), 0x50 },
-+	{ CCI_REG8(0x0350), 0xfe },
-+	{ CCI_REG8(0x2f03), 0x15 },
-+	{ CCI_REG8(0xd380), 0x00 },
-+	{ CCI_REG8(0x3047), 0x7f },
-+	{ CCI_REG8(0x304d), 0x34 },
-+	{ CCI_REG8(0x3041), 0x4b },
-+	{ CCI_REG8(0x3042), 0x2d },
-+	{ CCI_REG8(0x3056), 0x64 },
-+	{ CCI_REG8(0x3059), 0x1e },
-+	{ CCI_REG8(0x305e), 0x10 },
-+	{ CCI_REG8(0x305f), 0x10 },
-+	{ CCI_REG8(0x306d), 0x10 },
-+	{ CCI_REG8(0x306e), 0x0c },
-+	{ CCI_REG8(0x3064), 0x50 },
-+	{ CCI_REG8(0x3067), 0x78 },
-+	{ CCI_REG8(0x3068), 0x4b },
-+	{ CCI_REG8(0x306a), 0x78 },
-+	{ CCI_REG8(0x306b), 0x4b },
-+	{ CCI_REG8(0xd442), 0x3d },
-+	{ CCI_REG8(0xd443), 0x06 },
-+	{ CCI_REG8(0xd440), 0x63 },
-+	{ CCI_REG8(0xd446), 0xb0 },
-+	{ CCI_REG8(0xd447), 0x60 },
-+	{ CCI_REG8(0xd448), 0x48 },
-+	{ CCI_REG8(0xd449), 0x30 },
-+	{ CCI_REG8(0xd44a), 0x18 },
-+	{ CCI_REG8(0xd360), 0x03 },
-+	{ CCI_REG8(0x30ac), 0x10 },
-+	{ CCI_REG8(0x30ad), 0x10 },
-+	{ CCI_REG8(0x30ae), 0x10 },
-+	{ CCI_REG8(0x3040), 0x0b },
-+	{ CCI_REG8(0x2002), 0x00 },
-+	{ CCI_REG8(0x2000), 0x08 },
-+};
-+
-+struct hm1246_reg_list {
-+	u32 num_of_regs;
-+	const struct cci_reg_sequence *regs;
-+};
-+
-+struct hm1246_mode {
-+	u32 codes[4];
-+	u32 clocks_per_pixel;
-+	u32 top;
-+	u32 left;
-+	u32 width;
-+	u32 height;
-+	u32 hts;
-+	u32 vts_min;
-+	const struct hm1246_reg_list reg_list;
-+};
-+
-+#define FLIP_FORMAT_INDEX(v, h) ((v ? 2 : 0) | (h ? 1 : 0))
-+
-+/* Get the format code of the mode considering current flip setting. */
-+static u32 hm1246_get_format_code(struct hm1246 *hm1246,
-+				  const struct hm1246_mode *hm1246_mode)
-+{
-+	return hm1246_mode->codes[FLIP_FORMAT_INDEX(hm1246->vflip_ctrl->val,
-+						    hm1246->hflip_ctrl->val)];
-+}
-+
-+static const struct hm1246_mode hm1246_modes[] = {
-+	{
-+		.codes = {
-+			[FLIP_FORMAT_INDEX(0, 0)] = MEDIA_BUS_FMT_SBGGR10_1X10,
-+			[FLIP_FORMAT_INDEX(0, 1)] = MEDIA_BUS_FMT_SGBRG10_1X10,
-+			[FLIP_FORMAT_INDEX(1, 0)] = MEDIA_BUS_FMT_SGRBG10_1X10,
-+			[FLIP_FORMAT_INDEX(1, 1)] = MEDIA_BUS_FMT_SRGGB10_1X10,
-+		},
-+		.clocks_per_pixel = 1,
-+		.top = 0,
-+		.left = 0,
-+		.width = 1296,
-+		.height = 976,
-+		.hts = 1420,
-+		.vts_min = 990,
-+		.reg_list = {
-+			.num_of_regs = ARRAY_SIZE(mode_1296x976_raw),
-+			.regs = mode_1296x976_raw,
-+		},
-+	},
-+};
-+
-+static inline struct hm1246 *to_hm1246(struct v4l2_subdev *sd)
-+{
-+	return container_of_const(sd, struct hm1246, sd);
-+}
-+
-+static const struct hm1246_mode *
-+hm1246_find_mode_by_mbus_code(struct hm1246 *hm1246, u32 code)
-+{
-+	for (unsigned int i = 0; i < ARRAY_SIZE(hm1246_modes); i++) {
-+		if (code == hm1246_get_format_code(hm1246, &hm1246_modes[i]))
-+			return &hm1246_modes[i];
-+	}
-+
-+	return ERR_PTR(-EINVAL);
-+}
-+
-+static int hm1246_power_on(struct device *dev)
-+{
-+	struct v4l2_subdev *sd = dev_get_drvdata(dev);
-+	struct hm1246 *hm1246 = to_hm1246(sd);
-+	int ret;
-+
-+	ret = regulator_bulk_enable(ARRAY_SIZE(hm1246_supply_names),
-+				    hm1246->supplies);
-+	if (ret) {
-+		dev_err(hm1246->dev, "failed to enable regulators\n");
-+		return ret;
-+	}
-+
-+	ret = clk_prepare_enable(hm1246->xclk);
-+	if (ret) {
-+		regulator_bulk_disable(ARRAY_SIZE(hm1246_supply_names),
-+				       hm1246->supplies);
-+		dev_err(hm1246->dev, "failed to enable clock\n");
-+		return ret;
-+	}
-+
-+	gpiod_set_value_cansleep(hm1246->reset_gpio, 0);
-+
-+	/*
-+	 * XSHUTDOWN to crystal clock oscillation (tcrystal):  650us (typical)
-+	 * Sample bootstrap pin (tsample):                    2000us (maximum)
-+	 * Built in self test (tbist):                        3000us (maximum)
-+	 */
-+	fsleep(6 * USEC_PER_MSEC);
-+
-+	return 0;
-+}
-+
-+static int hm1246_power_off(struct device *dev)
-+{
-+	struct v4l2_subdev *sd = dev_get_drvdata(dev);
-+	struct hm1246 *hm1246 = to_hm1246(sd);
-+
-+	gpiod_set_value_cansleep(hm1246->reset_gpio, 1);
-+
-+	clk_disable_unprepare(hm1246->xclk);
-+
-+	regulator_bulk_disable(ARRAY_SIZE(hm1246_supply_names),
-+			       hm1246->supplies);
-+
-+	return 0;
-+}
-+
-+static int hm1246_enum_mbus_code(struct v4l2_subdev *sd,
-+				 struct v4l2_subdev_state *sd_state,
-+				 struct v4l2_subdev_mbus_code_enum *code)
-+{
-+	struct hm1246 *hm1246 = to_hm1246(sd);
-+
-+	if (code->index >= ARRAY_SIZE(hm1246_modes))
-+		return -EINVAL;
-+
-+	code->code = hm1246_get_format_code(hm1246, &hm1246_modes[code->index]);
-+
-+	return 0;
-+}
-+
-+static int hm1246_enum_frame_size(struct v4l2_subdev *subdev,
-+				  struct v4l2_subdev_state *sd_state,
-+				  struct v4l2_subdev_frame_size_enum *fse)
-+{
-+	struct hm1246 *hm1246 = to_hm1246(subdev);
-+	const struct hm1246_mode *mode;
-+
-+	if (fse->index > 0)
-+		return -EINVAL;
-+
-+	mode = hm1246_find_mode_by_mbus_code(hm1246, fse->code);
-+	if (IS_ERR(mode))
-+		return PTR_ERR(mode);
-+
-+	fse->min_width = mode->width;
-+	fse->max_width = mode->width;
-+	fse->min_height = mode->height;
-+	fse->max_height = mode->height;
-+
-+	return 0;
-+}
-+
-+static void hm1246_update_pad_format(struct hm1246 *hm1246,
-+				     const struct hm1246_mode *hm1246_mode,
-+				     struct v4l2_mbus_framefmt *fmt)
-+{
-+	fmt->width = hm1246_mode->width;
-+	fmt->height = hm1246_mode->height;
-+	fmt->code = hm1246_get_format_code(hm1246, hm1246_mode);
-+	fmt->field = V4L2_FIELD_NONE;
-+	fmt->colorspace = V4L2_COLORSPACE_RAW;
-+	fmt->ycbcr_enc = V4L2_MAP_YCBCR_ENC_DEFAULT(fmt->colorspace);
-+	fmt->quantization = V4L2_QUANTIZATION_FULL_RANGE;
-+	fmt->xfer_func = V4L2_XFER_FUNC_NONE;
-+}
-+
-+static int hm1246_set_format(struct v4l2_subdev *sd,
-+			     struct v4l2_subdev_state *state,
-+			     struct v4l2_subdev_format *fmt)
-+{
-+	struct hm1246 *hm1246 = to_hm1246(sd);
-+	struct v4l2_mbus_framefmt *mbus_fmt;
-+	struct v4l2_rect *crop;
-+	const struct hm1246_mode *mode;
-+
-+	mode = hm1246_find_mode_by_mbus_code(hm1246, fmt->format.code);
-+	if (IS_ERR(mode))
-+		mode = &hm1246_modes[0];
-+
-+	crop = v4l2_subdev_state_get_crop(state, 0);
-+	crop->top = mode->top;
-+	crop->left = mode->left;
-+	crop->width = mode->width;
-+	crop->height = mode->height;
-+
-+	hm1246_update_pad_format(hm1246, mode, &fmt->format);
-+	mbus_fmt = v4l2_subdev_state_get_format(state, 0);
-+	*mbus_fmt = fmt->format;
-+
-+	return 0;
-+}
-+
-+static int hm1246_get_selection(struct v4l2_subdev *sd,
-+				struct v4l2_subdev_state *state,
-+				struct v4l2_subdev_selection *sel)
-+{
-+	const struct v4l2_mbus_framefmt *format;
-+	const struct hm1246_mode *mode;
-+
-+	format = v4l2_subdev_state_get_format(state, 0);
-+	mode = v4l2_find_nearest_size(hm1246_modes, ARRAY_SIZE(hm1246_modes),
-+				      width, height, format->width,
-+				      format->height);
-+
-+	switch (sel->target) {
-+	case V4L2_SEL_TGT_CROP:
-+		sel->r = *v4l2_subdev_state_get_crop(state, 0);
-+		return 0;
-+
-+	case V4L2_SEL_TGT_NATIVE_SIZE:
-+		sel->r.top = 0;
-+		sel->r.left = 0;
-+		sel->r.width = HM1246_NATIVE_WIDTH;
-+		sel->r.height = HM1246_NATIVE_HEIGHT;
-+		return 0;
-+
-+	case V4L2_SEL_TGT_CROP_DEFAULT:
-+	case V4L2_SEL_TGT_CROP_BOUNDS:
-+		sel->r.top = mode->top;
-+		sel->r.left = mode->left;
-+		sel->r.width = mode->width;
-+		sel->r.height = mode->height;
-+		return 0;
-+	}
-+
-+	return -EINVAL;
-+}
-+
-+static int hm1246_init_state(struct v4l2_subdev *sd,
-+			     struct v4l2_subdev_state *state)
-+{
-+	struct hm1246 *hm1246 = to_hm1246(sd);
-+	struct v4l2_subdev_format fmt = {
-+		.which = V4L2_SUBDEV_FORMAT_TRY,
-+		.pad = 0,
-+		.format = {
-+			.code = hm1246_get_format_code(hm1246,
-+						       &hm1246_modes[0]),
-+			.width = hm1246_modes[0].width,
-+			.height = hm1246_modes[0].height,
-+		},
-+	};
-+
-+	hm1246_set_format(sd, state, &fmt);
-+
-+	return 0;
-+}
-+
-+static int hm1246_calc_pll(u32 xclk, u32 link_freq, u32 clocks_per_pixel,
-+			   u8 *pll1, u8 *pll2, u8 *pll3)
-+{
-+	const u8 pclk_div_table[] = { 4, 5, 6, 7, 8, 12, 14, 16 };
-+	const u8 sysclk_div_table[] = { 1, 2, 3, 4 };
-+	const u8 post_div_table[] = { 1, 2, 4, 8 };
-+	const int sysclk_pclk_ratio = 3; /* Recommended value */
-+	u32 pclk, vco_out;
-+	int pclk_div_index, sysclk_div_index, post_div_index;
-+	bool sysclk_pclk_ratio_found = false;
-+
-+	if (link_freq < HM1246_PCLK_MIN || link_freq > HM1246_PCLK_MAX)
-+		return -EINVAL;
-+
-+	/*
-+	 * In raw mode (1 pixel per clock) the pixel clock is internally
-+	 * divided by two.
-+	 */
-+	pclk = 2 * link_freq / clocks_per_pixel;
-+
-+	/* Find suitable PCLK and SYSCLK dividers. */
-+	for (pclk_div_index = 0; pclk_div_index < ARRAY_SIZE(pclk_div_table);
-+	     pclk_div_index++) {
-+		for (sysclk_div_index = 0;
-+		     sysclk_div_index < ARRAY_SIZE(sysclk_div_table);
-+		     sysclk_div_index++) {
-+			if (sysclk_div_table[sysclk_div_index] *
-+				    sysclk_pclk_ratio ==
-+			    pclk_div_table[pclk_div_index]) {
-+				sysclk_pclk_ratio_found = true;
-+				break;
-+			}
-+		}
-+		if (sysclk_pclk_ratio_found)
-+			break;
-+	}
-+
-+	if (!sysclk_pclk_ratio_found)
-+		return -EINVAL;
-+
-+	/* Determine an appropriate post divider. */
-+	for (post_div_index = 0; post_div_index < ARRAY_SIZE(post_div_table);
-+	     post_div_index++) {
-+		vco_out = pclk * pclk_div_table[pclk_div_index] *
-+			  post_div_table[post_div_index];
-+
-+		if (vco_out >= HM1246_PLL_VCO_MIN &&
-+		    vco_out <= HM1246_PLL_VCO_MAX)
-+			break;
-+	}
-+	if (post_div_index >= ARRAY_SIZE(post_div_table))
-+		return -EINVAL;
-+
-+	/* Find pre-divider and multiplier values. */
-+	for (u32 div = DIV_ROUND_UP(xclk, HM1246_PLL_INCLK_MAX);
-+	     div <= xclk / HM1246_PLL_INCLK_MIN; div++) {
-+		u32 multi, multi_h, multi_l, vco;
-+
-+		multi = DIV_ROUND_CLOSEST_ULL((u64)vco_out * div, xclk);
-+		if (multi < HM1246_PLL_MULTI_MIN ||
-+		    multi > HM1246_PLL_MULTI_MAX)
-+			continue;
-+
-+		multi_h = multi / (HM1246_PLL_MULTI_H_MIN *
-+				   HM1246_PLL_MULTI_L_MAX) +
-+			  2;
-+		multi_l = multi / multi_h;
-+		vco = div_u64((u64)xclk * multi_h * multi_l, div);
-+
-+		if (vco != vco_out)
-+			continue;
-+
-+		if (pll1 && pll2 && pll3) {
-+			*pll1 = HM1246_PLL1CFG_MULTIPLIER(multi_l - 1);
-+			*pll2 = HM1246_PLL2CFG_PRE_DIV(div - 1) |
-+				HM1246_PLL2CFG_MULTIPLIER(multi_h - 2);
-+			*pll3 = HM1246_PLL3CFG_POST_DIV(post_div_index) |
-+				HM1246_PLL3CFG_SYSCLK_DIV(sysclk_div_index) |
-+				HM1246_PLL3CFG_PCLK_DIV(pclk_div_index);
-+		}
-+
-+		return 0;
-+	}
-+
-+	return -EINVAL;
-+}
-+
-+static int hm1246_cci_write_pll(struct hm1246 *hm1246, u8 pll1, u8 pll2,
-+				u8 pll3)
-+{
-+	const struct cci_reg_sequence pll_regs[] = {
-+		{ HM1246_PLL1CFG_REG, pll1 },
-+		{ HM1246_PLL2CFG_REG, pll2 },
-+		{ HM1246_PLL3CFG_REG, pll3 },
-+		{ HM1246_SBC_CTRL_REG, HM1246_SBC_CTRL_PLL_EN },
-+	};
-+
-+	return cci_multi_reg_write(hm1246->regmap, pll_regs,
-+				   ARRAY_SIZE(pll_regs), NULL);
-+}
-+
-+static int hm1246_pll_check_locked(struct hm1246 *hm1246)
-+{
-+	u64 boot_ref2;
-+	int ret;
-+
-+	ret = cci_read(hm1246->regmap, HM1246_SBC_BOOT_REF2_REG, &boot_ref2,
-+		       NULL);
-+	if (ret)
-+		return ret;
-+
-+	return (boot_ref2 & HM1246_SBC_BOOT_REF2_PLL_LOCK) ? 0 : -EIO;
-+}
-+
-+static int hm1246_setup_pll(struct hm1246 *hm1246,
-+			    const struct hm1246_mode *mode)
-+{
-+	u8 pll1, pll2, pll3;
-+	int ret;
-+
-+	ret = hm1246_calc_pll(hm1246->xclk_freq, hm1246->link_frequency,
-+			      mode->clocks_per_pixel, &pll1, &pll2, &pll3);
-+	if (ret)
-+		return ret;
-+
-+	ret = hm1246_cci_write_pll(hm1246, pll1, pll2, pll3);
-+	if (ret)
-+		return ret;
-+
-+	/* PLL lock time (tpll): 100us (typical) */
-+	fsleep(200);
-+
-+	return hm1246_pll_check_locked(hm1246);
-+}
-+
-+static int hm1246_cci_write_test_pattern(struct hm1246 *hm1246, u8 mode, u16 r,
-+					 u16 g, u16 b)
-+{
-+	const struct cci_reg_sequence tpg_enable_regs[] = {
-+		{ HM1246_TEST_DATA_RED_REG, r },
-+		{ HM1246_TEST_DATA_GR_REG, g },
-+		{ HM1246_TEST_DATA_GB_REG, g },
-+		{ HM1246_TEST_DATA_BLUE_REG, b },
-+		{ HM1246_TEST_PATTERN_MODE_REG, mode },
-+	};
-+
-+	return cci_multi_reg_write(hm1246->regmap, tpg_enable_regs,
-+				   ARRAY_SIZE(tpg_enable_regs), NULL);
-+}
-+
-+static int hm1246_test_pattern(struct hm1246 *hm1246, u32 index)
-+{
-+	const u16 RGBMIN = 0, RGBMAX = 0x3ff;
-+	const struct tp {
-+		int pattern;
-+		u16 r, g, b;
-+	} tps[] = {
-+		/* Disabled */
-+		[0] = { .pattern = 0, .r = RGBMIN, .g = RGBMIN, .b = RGBMIN },
-+		/* Checkboard pattern */
-+		[1] = { .pattern = 0, .r = RGBMIN, .g = RGBMIN, .b = RGBMIN },
-+		/* Ramp */
-+		[2] = { .pattern = 1, .r = RGBMIN, .g = RGBMIN, .b = RGBMIN },
-+		/* Moving ones */
-+		[3] = { .pattern = 2, .r = RGBMIN, .g = RGBMIN, .b = RGBMIN },
-+		/* Blending color bars */
-+		[4] = { .pattern = 3, .r = RGBMIN, .g = RGBMIN, .b = RGBMIN },
-+		/* Color bars */
-+		[5] = { .pattern = 4, .r = RGBMIN, .g = RGBMIN, .b = RGBMIN },
-+		/* Solid white */
-+		[6] = { .pattern = 15, .r = RGBMAX, .g = RGBMAX, .b = RGBMAX },
-+		/* Solid black */
-+		[7] = { .pattern = 15, .r = RGBMIN, .g = RGBMIN, .b = RGBMIN },
-+		/* Solid red */
-+		[8] = { .pattern = 15, .r = RGBMAX, .g = RGBMIN, .b = RGBMIN },
-+		/* Solid green */
-+		[9] = { .pattern = 15, .r = RGBMIN, .g = RGBMAX, .b = RGBMIN },
-+		/* Solid blue */
-+		[10] = { .pattern = 15, .r = RGBMIN, .g = RGBMIN, .b = RGBMAX },
-+	};
-+	u8 mode;
-+
-+	if (index >= ARRAY_SIZE(tps))
-+		return -EINVAL;
-+
-+	mode = HM1246_TEST_PATTERN_MODE_MODE(tps[index].pattern);
-+	if (index)
-+		mode |= HM1246_TEST_PATTERN_MODE_ENABLE;
-+
-+	return hm1246_cci_write_test_pattern(hm1246, mode, tps[index].r,
-+					     tps[index].g, tps[index].b);
-+}
-+
-+static int hm1246_set_ctrl(struct v4l2_ctrl *ctrl)
-+{
-+	struct hm1246 *hm1246 =
-+		container_of_const(ctrl->handler, struct hm1246, ctrls);
-+	struct v4l2_subdev_state *state;
-+	const struct v4l2_mbus_framefmt *format;
-+	u32 val;
-+	bool needs_cmu_update = true;
-+	int ret = 0;
-+
-+	state = v4l2_subdev_get_locked_active_state(&hm1246->sd);
-+	format = v4l2_subdev_state_get_format(state, 0);
-+
-+	if (ctrl->id == V4L2_CID_VBLANK) {
-+		s64 exposure_max;
-+
-+		exposure_max =
-+			format->height + ctrl->val - HM1246_COARSE_INTG_MARGIN;
-+		ret = __v4l2_ctrl_modify_range(hm1246->exposure_ctrl,
-+					       hm1246->exposure_ctrl->minimum,
-+					       exposure_max,
-+					       hm1246->exposure_ctrl->step,
-+					       exposure_max);
-+
-+		if (ret) {
-+			dev_err(hm1246->dev, "exposure ctrl range update failed\n");
-+			return ret;
-+		}
-+	}
-+
-+	if (!pm_runtime_get_if_active(hm1246->dev))
-+		return 0;
-+
-+	switch (ctrl->id) {
-+	case V4L2_CID_EXPOSURE:
-+		cci_write(hm1246->regmap, HM1246_COARSE_INTG_REG, ctrl->val,
-+			  &ret);
-+		break;
-+
-+	case V4L2_CID_ANALOGUE_GAIN:
-+		cci_write(hm1246->regmap, HM1246_ANALOG_GLOBAL_GAIN_REG,
-+			  ctrl->val, &ret);
-+		break;
-+
-+	case V4L2_CID_VBLANK:
-+		val = format->height + ctrl->val;
-+		cci_write(hm1246->regmap, HM1246_FRAME_LENGTH_LINES_REG, val,
-+			  &ret);
-+		break;
-+
-+	case V4L2_CID_HFLIP:
-+	case V4L2_CID_VFLIP:
-+		val = 0;
-+		if (hm1246->hflip_ctrl->val)
-+			val |= HM1246_IMAGE_ORIENTATION_HFLIP;
-+		if (hm1246->vflip_ctrl->val)
-+			val |= HM1246_IMAGE_ORIENTATION_VFLIP;
-+
-+		cci_write(hm1246->regmap, HM1246_IMAGE_ORIENTATION_REG, val,
-+			  &ret);
-+		break;
-+
-+	case V4L2_CID_TEST_PATTERN:
-+		ret = hm1246_test_pattern(hm1246, ctrl->val);
-+		needs_cmu_update = false;
-+		break;
-+
-+	default:
-+		ret = -EINVAL;
-+		needs_cmu_update = false;
-+		break;
-+	}
-+
-+	if (needs_cmu_update)
-+		cci_write(hm1246->regmap, HM1246_CMU_UPDATE_REG, 0, &ret);
-+
-+	pm_runtime_put(hm1246->dev);
-+
-+	return ret;
-+}
-+
-+static const struct v4l2_ctrl_ops hm1246_ctrl_ops = {
-+	.s_ctrl = hm1246_set_ctrl,
-+};
-+
-+static int hm1246_identify_module(struct hm1246 *hm1246)
-+{
-+	u64 model_id;
-+	int ret;
-+
-+	if (hm1246->identified)
-+		return 0;
-+
-+	ret = cci_read(hm1246->regmap, HM1246_MODEL_ID_REG, &model_id, NULL);
-+	if (ret)
-+		return ret;
-+
-+	if (model_id != HM1246_MODEL_ID) {
-+		dev_err(hm1246->dev, "model id mismatch: 0x%llx!=0x%x\n",
-+			model_id, HM1246_MODEL_ID);
-+		return -ENXIO;
-+	}
-+
-+	hm1246->identified = true;
-+
-+	return 0;
-+}
-+
-+static int hm1246_setup_moderegs(struct hm1246 *hm1246,
-+				 const struct hm1246_mode *mode)
-+{
-+	const struct hm1246_reg_list *reg_list = &mode->reg_list;
-+	const struct cci_reg_sequence modeaw[] = {
-+		{ HM1246_X_ADDR_START_REG, mode->left },
-+		{ HM1246_Y_ADDR_START_REG, mode->top },
-+		{ HM1246_X_ADDR_END_REG, mode->width - 1 },
-+		{ HM1246_Y_ADDR_END_REG, mode->height - 1 },
-+		{ HM1246_DWIN_XOFFSET_REG, mode->left },
-+		{ HM1246_DWIN_YOFFSET_REG, mode->top },
-+		{ HM1246_DWIN_XSIZE_REG, mode->width },
-+		{ HM1246_DWIN_YSIZE_REG, mode->height },
-+		{ HM1246_LINE_LENGTH_PCK_REG, mode->hts },
-+	};
-+	int ret = 0;
-+
-+	cci_multi_reg_write(hm1246->regmap, modeaw, ARRAY_SIZE(modeaw), &ret);
-+	cci_multi_reg_write(hm1246->regmap, reg_list->regs,
-+			    reg_list->num_of_regs, &ret);
-+
-+	return ret;
-+}
-+
-+static int hm1246_setup_bus(struct hm1246 *hm1246)
-+{
-+	u64 polarity_ctrl = 0, pclk_ctrl = 0;
-+	int ret = 0;
-+
-+	if (hm1246->mbus_flags & V4L2_MBUS_HSYNC_ACTIVE_LOW)
-+		polarity_ctrl |= HM1246_POLARITY_CTRL_HSYNC;
-+
-+	if (hm1246->mbus_flags & V4L2_MBUS_VSYNC_ACTIVE_LOW)
-+		polarity_ctrl |= HM1246_POLARITY_CTRL_VSYNC;
-+
-+	cci_write(hm1246->regmap, HM1246_POLARITY_CTRL_REG, polarity_ctrl,
-+		  &ret);
-+
-+	/*
-+	 * If the clock output polarity flag PCLK_CTRL[3] is set (high), the
-+	 * data lines change state on the falling edge of PCLK and should
-+	 * therefore be sampled on the rising edge.
-+	 * This is different than described in the data sheet.
-+	 */
-+	if (hm1246->mbus_flags & V4L2_MBUS_PCLK_SAMPLE_RISING)
-+		pclk_ctrl |= HM1246_PCLK_CTRL_POL;
-+
-+	cci_write(hm1246->regmap, HM1246_PCLK_CTRL_REG, pclk_ctrl, &ret);
-+
-+	return ret;
-+}
-+
-+static int hm1246_enable_streams(struct v4l2_subdev *sd,
-+				 struct v4l2_subdev_state *state, u32 pad,
-+				 u64 streams_mask)
-+{
-+	struct hm1246 *hm1246 = to_hm1246(sd);
-+	const struct v4l2_mbus_framefmt *format;
-+	const struct hm1246_mode *mode;
-+	int ret;
-+
-+	format = v4l2_subdev_state_get_format(state, 0);
-+	mode = v4l2_find_nearest_size(hm1246_modes, ARRAY_SIZE(hm1246_modes),
-+				      width, height, format->width,
-+				      format->height);
-+
-+	ret = pm_runtime_resume_and_get(hm1246->dev);
-+	if (ret)
-+		return ret;
-+
-+	ret = hm1246_identify_module(hm1246);
-+	if (ret)
-+		goto err_rpm_put;
-+
-+	ret = hm1246_setup_pll(hm1246, mode);
-+	if (ret) {
-+		dev_err(hm1246->dev, "failed to setup PLL\n");
-+		goto err_rpm_put;
-+	}
-+
-+	ret = hm1246_setup_moderegs(hm1246, mode);
-+	if (ret)
-+		goto err_rpm_put;
-+
-+	ret = hm1246_setup_bus(hm1246);
-+	if (ret)
-+		goto err_rpm_put;
-+
-+	ret = __v4l2_ctrl_handler_setup(&hm1246->ctrls);
-+	if (ret) {
-+		dev_err(hm1246->dev, "failed to setup v4l2 controls\n");
-+		goto err_rpm_put;
-+	}
-+
-+	ret = cci_write(hm1246->regmap, HM1246_MODE_SELECT_REG,
-+			HM1246_MODE_SELECT_STREAM, NULL);
-+	if (ret)
-+		goto err_rpm_put;
-+
-+	/*
-+	 * Since mirroring may change the actual pixel format, it must not be
-+	 * changed during streaming.
-+	 */
-+	__v4l2_ctrl_grab(hm1246->vflip_ctrl, true);
-+	__v4l2_ctrl_grab(hm1246->hflip_ctrl, true);
-+
-+	return 0;
-+
-+err_rpm_put:
-+	pm_runtime_put_autosuspend(hm1246->dev);
-+
-+	return ret;
-+}
-+
-+static int hm1246_disable_streams(struct v4l2_subdev *sd,
-+				  struct v4l2_subdev_state *state, u32 pad,
-+				  u64 streams_mask)
-+{
-+	struct hm1246 *hm1246 = to_hm1246(sd);
-+	int ret;
-+
-+	ret = cci_write(hm1246->regmap, HM1246_MODE_SELECT_REG,
-+			HM1246_MODE_SELECT_STANDBY, NULL);
-+
-+	__v4l2_ctrl_grab(hm1246->vflip_ctrl, false);
-+	__v4l2_ctrl_grab(hm1246->hflip_ctrl, false);
-+
-+	pm_runtime_put_autosuspend(hm1246->dev);
-+
-+	return ret;
-+}
-+
-+static const struct v4l2_subdev_video_ops hm1246_video_ops = {
-+	.s_stream = v4l2_subdev_s_stream_helper,
-+};
-+
-+static const struct v4l2_subdev_pad_ops hm1246_subdev_pad_ops = {
-+	.enum_mbus_code = hm1246_enum_mbus_code,
-+	.enum_frame_size = hm1246_enum_frame_size,
-+	.get_fmt = v4l2_subdev_get_fmt,
-+	.set_fmt = hm1246_set_format,
-+	.get_selection = hm1246_get_selection,
-+	.enable_streams = hm1246_enable_streams,
-+	.disable_streams = hm1246_disable_streams,
-+};
-+
-+static const struct v4l2_subdev_ops hm1246_subdev_ops = {
-+	.video = &hm1246_video_ops,
-+	.pad = &hm1246_subdev_pad_ops,
-+};
-+
-+static const struct v4l2_subdev_internal_ops hm1246_internal_ops = {
-+	.init_state = hm1246_init_state,
-+};
-+
-+static int hm1246_get_regulators(struct device *dev, struct hm1246 *hm1246)
-+{
-+	unsigned int i;
-+
-+	for (i = 0; i < ARRAY_SIZE(hm1246_supply_names); i++)
-+		hm1246->supplies[i].supply = hm1246_supply_names[i];
-+
-+	return devm_regulator_bulk_get(dev, ARRAY_SIZE(hm1246_supply_names),
-+				       hm1246->supplies);
-+}
-+
-+static int hm1246_parse_fwnode(struct hm1246 *hm1246)
-+{
-+	struct fwnode_handle *endpoint;
-+	struct v4l2_fwnode_endpoint bus_cfg = {
-+		.bus_type = V4L2_MBUS_PARALLEL,
-+	};
-+	int ret;
-+
-+	endpoint = fwnode_graph_get_endpoint_by_id(dev_fwnode(hm1246->dev),
-+						   0, 0,
-+						   FWNODE_GRAPH_ENDPOINT_NEXT);
-+	if (!endpoint)
-+		return dev_err_probe(hm1246->dev, -EINVAL,
-+				     "missing endpoint node\n");
-+
-+	ret = v4l2_fwnode_endpoint_alloc_parse(endpoint, &bus_cfg);
-+	fwnode_handle_put(endpoint);
-+	if (ret)
-+		return dev_err_probe(hm1246->dev, ret,
-+				     "parsing endpoint node failed\n");
-+
-+	hm1246->mbus_flags = bus_cfg.bus.parallel.flags;
-+
-+	if (bus_cfg.nr_of_link_frequencies == 1)
-+		hm1246->link_frequency = bus_cfg.link_frequencies[0];
-+
-+	v4l2_fwnode_endpoint_free(&bus_cfg);
-+
-+	if (!hm1246->link_frequency)
-+		return dev_err_probe(hm1246->dev, -EINVAL,
-+				     "one link frequency expected\n");
-+
-+	return 0;
-+}
-+
-+static int hm1246_init_controls(struct hm1246 *hm1246)
-+{
-+	const struct hm1246_mode *mode = &hm1246_modes[0];
-+	struct v4l2_fwnode_device_properties props;
-+	struct v4l2_ctrl_handler *ctrl_hdlr = &hm1246->ctrls;
-+	s64 pixel_rate, exposure_max, vblank_min, hblank;
-+	int ret;
-+
-+	ret = v4l2_fwnode_device_parse(hm1246->dev, &props);
-+	if (ret)
-+		return ret;
-+
-+	v4l2_ctrl_handler_init(ctrl_hdlr, 11);
-+
-+	hm1246->hflip_ctrl = v4l2_ctrl_new_std(ctrl_hdlr, &hm1246_ctrl_ops,
-+					       V4L2_CID_HFLIP, 0, 1, 1, 0);
-+	if (hm1246->hflip_ctrl)
-+		hm1246->hflip_ctrl->flags |= V4L2_CTRL_FLAG_MODIFY_LAYOUT;
-+
-+	hm1246->vflip_ctrl = v4l2_ctrl_new_std(ctrl_hdlr, &hm1246_ctrl_ops,
-+					       V4L2_CID_VFLIP, 0, 1, 1, 0);
-+	if (hm1246->vflip_ctrl)
-+		hm1246->vflip_ctrl->flags |= V4L2_CTRL_FLAG_MODIFY_LAYOUT;
-+
-+	v4l2_ctrl_cluster(2, &hm1246->hflip_ctrl);
-+
-+	hm1246->link_freq_ctrl =
-+		v4l2_ctrl_new_int_menu(ctrl_hdlr, &hm1246_ctrl_ops,
-+				       V4L2_CID_LINK_FREQ,
-+				       0, 0,
-+				       &hm1246->link_frequency);
-+	if (hm1246->link_freq_ctrl)
-+		hm1246->link_freq_ctrl->flags |= V4L2_CTRL_FLAG_READ_ONLY;
-+
-+	pixel_rate = div_u64(hm1246->link_frequency, mode->clocks_per_pixel);
-+	hm1246->pixel_rate_ctrl = v4l2_ctrl_new_std(ctrl_hdlr, &hm1246_ctrl_ops,
-+						    V4L2_CID_PIXEL_RATE,
-+						    pixel_rate, pixel_rate, 1,
-+						    pixel_rate);
-+
-+	vblank_min = mode->vts_min - mode->height;
-+	hm1246->vblank_ctrl = v4l2_ctrl_new_std(ctrl_hdlr, &hm1246_ctrl_ops,
-+						V4L2_CID_VBLANK, vblank_min,
-+						HM1246_VTS_MAX - mode->height,
-+						1, vblank_min);
-+
-+	hblank = mode->hts - mode->width;
-+	hm1246->hblank_ctrl = v4l2_ctrl_new_std(ctrl_hdlr, &hm1246_ctrl_ops,
-+						V4L2_CID_HBLANK, hblank, hblank,
-+						1, hblank);
-+	if (hm1246->hblank_ctrl)
-+		hm1246->hblank_ctrl->flags |= V4L2_CTRL_FLAG_READ_ONLY;
-+
-+	v4l2_ctrl_new_std(ctrl_hdlr, &hm1246_ctrl_ops, V4L2_CID_ANALOGUE_GAIN,
-+			  HM1246_ANALOG_GLOBAL_GAIN_MIN,
-+			  HM1246_ANALOG_GLOBAL_GAIN_MAX,
-+			  HM1246_ANALOG_GLOBAL_GAIN_STEP,
-+			  HM1246_ANALOG_GLOBAL_GAIN_MIN);
-+
-+	exposure_max = mode->vts_min - HM1246_COARSE_INTG_MARGIN;
-+	hm1246->exposure_ctrl = v4l2_ctrl_new_std(ctrl_hdlr, &hm1246_ctrl_ops,
-+						  V4L2_CID_EXPOSURE,
-+						  HM1246_COARSE_INTG_MIN,
-+						  exposure_max,
-+						  HM1246_COARSE_INTG_STEP,
-+						  exposure_max);
-+
-+	v4l2_ctrl_new_std_menu_items(ctrl_hdlr, &hm1246_ctrl_ops,
-+				     V4L2_CID_TEST_PATTERN,
-+				     ARRAY_SIZE(hm1246_test_pattern_menu) - 1,
-+				     0, 0, hm1246_test_pattern_menu);
-+
-+	v4l2_ctrl_new_fwnode_properties(ctrl_hdlr, &hm1246_ctrl_ops, &props);
-+
-+	if (ctrl_hdlr->error) {
-+		v4l2_ctrl_handler_free(ctrl_hdlr);
-+		return ctrl_hdlr->error;
-+	}
-+
-+	hm1246->sd.ctrl_handler = ctrl_hdlr;
-+
-+	return 0;
-+}
-+
-+static int hm1246_probe(struct i2c_client *client)
-+{
-+	struct hm1246 *hm1246;
-+	int ret;
-+
-+	hm1246 = devm_kzalloc(&client->dev, sizeof(*hm1246), GFP_KERNEL);
-+	if (!hm1246)
-+		return -ENOMEM;
-+
-+	hm1246->dev = &client->dev;
-+
-+	ret = hm1246_parse_fwnode(hm1246);
-+	if (ret)
-+		return ret;
-+
-+	hm1246->regmap = devm_cci_regmap_init_i2c(client, 16);
-+	if (IS_ERR(hm1246->regmap))
-+		return dev_err_probe(hm1246->dev, PTR_ERR(hm1246->regmap),
-+				     "failed to init CCI\n");
-+
-+	hm1246->xclk = devm_v4l2_sensor_clk_get(hm1246->dev, NULL);
-+	if (IS_ERR(hm1246->xclk))
-+		return dev_err_probe(hm1246->dev, PTR_ERR(hm1246->xclk),
-+				     "failed to get xclk\n");
-+
-+	hm1246->xclk_freq = clk_get_rate(hm1246->xclk);
-+	if (hm1246->xclk_freq < HM1246_XCLK_MIN ||
-+	    hm1246->xclk_freq > HM1246_XCLK_MAX)
-+		return dev_err_probe(hm1246->dev, -EINVAL,
-+				     "xclk frequency out of range: %luHz\n",
-+				     hm1246->xclk_freq);
-+
-+	for (unsigned int i = 0; i < ARRAY_SIZE(hm1246_modes); i++) {
-+		ret = hm1246_calc_pll(hm1246->xclk_freq, hm1246->link_frequency,
-+				      hm1246_modes[i].clocks_per_pixel,
-+				      NULL, NULL, NULL);
-+		if (ret)
-+			return dev_err_probe(hm1246->dev, ret,
-+					     "no PLL setup for %lld Hz\n",
-+					     hm1246->link_frequency);
-+	}
-+
-+	ret = hm1246_get_regulators(hm1246->dev, hm1246);
-+	if (ret)
-+		return dev_err_probe(hm1246->dev, ret,
-+				     "failed to get regulators\n");
-+
-+	hm1246->reset_gpio =
-+		devm_gpiod_get_optional(hm1246->dev, "reset", GPIOD_OUT_HIGH);
-+	if (IS_ERR(hm1246->reset_gpio))
-+		return dev_err_probe(hm1246->dev, PTR_ERR(hm1246->reset_gpio),
-+				     "failed to get reset GPIO\n");
-+
-+	v4l2_i2c_subdev_init(&hm1246->sd, client, &hm1246_subdev_ops);
-+	hm1246->sd.internal_ops = &hm1246_internal_ops;
-+
-+	ret = hm1246_init_controls(hm1246);
-+	if (ret)
-+		return dev_err_probe(hm1246->dev, ret,
-+				     "failed to init controls\n");
-+
-+	hm1246->sd.flags |= V4L2_SUBDEV_FL_HAS_DEVNODE;
-+	hm1246->pad.flags = MEDIA_PAD_FL_SOURCE;
-+	hm1246->sd.entity.function = MEDIA_ENT_F_CAM_SENSOR;
-+
-+	ret = media_entity_pads_init(&hm1246->sd.entity, 1, &hm1246->pad);
-+	if (ret) {
-+		dev_err_probe(hm1246->dev, ret, "failed to init media pads\n");
-+		goto err_v4l2_ctrl_handler_free;
-+	}
-+
-+	hm1246->sd.state_lock = hm1246->ctrls.lock;
-+	ret = v4l2_subdev_init_finalize(&hm1246->sd);
-+	if (ret) {
-+		dev_err_probe(hm1246->dev, ret, "failed to init v4l2 subdev\n");
-+		goto err_media_entity_cleanup;
-+	}
-+
-+	pm_runtime_enable(hm1246->dev);
-+	pm_runtime_set_autosuspend_delay(hm1246->dev, 1000);
-+	pm_runtime_use_autosuspend(hm1246->dev);
-+	pm_runtime_idle(hm1246->dev);
-+
-+	ret = v4l2_async_register_subdev_sensor(&hm1246->sd);
-+	if (ret) {
-+		dev_err_probe(hm1246->dev, ret,
-+			      "failed to register v4l2 subdev\n");
-+		goto err_subdev_cleanup;
-+	}
-+
-+	return 0;
-+
-+err_subdev_cleanup:
-+	v4l2_subdev_cleanup(&hm1246->sd);
-+	pm_runtime_disable(hm1246->dev);
-+	pm_runtime_set_suspended(hm1246->dev);
-+
-+err_media_entity_cleanup:
-+	media_entity_cleanup(&hm1246->sd.entity);
-+
-+err_v4l2_ctrl_handler_free:
-+	v4l2_ctrl_handler_free(&hm1246->ctrls);
-+
-+	return ret;
-+}
-+
-+static void hm1246_remove(struct i2c_client *client)
-+{
-+	struct v4l2_subdev *sd = i2c_get_clientdata(client);
-+	struct hm1246 *hm1246 = to_hm1246(sd);
-+
-+	v4l2_async_unregister_subdev(&hm1246->sd);
-+	v4l2_subdev_cleanup(sd);
-+	media_entity_cleanup(&hm1246->sd.entity);
-+	v4l2_ctrl_handler_free(&hm1246->ctrls);
-+
-+	pm_runtime_disable(&client->dev);
-+	if (!pm_runtime_status_suspended(&client->dev)) {
-+		hm1246_power_off(hm1246->dev);
-+		pm_runtime_set_suspended(&client->dev);
-+	}
-+}
-+
-+static const struct of_device_id hm1246_of_match[] = {
-+	{ .compatible = "himax,hm1246" },
-+	{}
-+};
-+MODULE_DEVICE_TABLE(of, hm1246_of_match);
-+
-+static DEFINE_RUNTIME_DEV_PM_OPS(hm1246_pm_ops,
-+				 hm1246_power_off, hm1246_power_on, NULL);
-+
-+static struct i2c_driver hm1246_i2c_driver = {
-+	.driver = {
-+		.of_match_table = hm1246_of_match,
-+		.pm = pm_ptr(&hm1246_pm_ops),
-+		.name = "hm1246",
-+	},
-+	.probe = hm1246_probe,
-+	.remove = hm1246_remove,
-+};
-+module_i2c_driver(hm1246_i2c_driver);
-+
-+MODULE_DESCRIPTION("Himax HM1246 camera driver");
-+MODULE_AUTHOR("Matthias Fend <matthias.fend@emfend.at>");
-+MODULE_LICENSE("GPL");
-
--- 
-2.34.1
-
+> Changes in v3:
+> - rebase to v6.19-rc1
+> - avoid use __free() == NULL according to cleanup.h
+> - Link to v2: https://lore.kernel.org/r/20251119-cam_cleanup-v2-0-df732cc83ff1@nxp.com
+>
+> Changes in v2:
+> - add new patch media: nxp: Add dev_err_probe() to all error paths in *async_register() helpers
+> - detail change see each patch's change log.
+> - Link to v1: https://lore.kernel.org/r/20251117-cam_cleanup-v1-0-6cd42872db79@nxp.com
+>
+> ---
+> Frank Li (5):
+>       media: nxp: use devm_mutex_init() simple code
+>       media: nxp: use dev_err_probe() to simplify code
+>       media: nxp: imx8-isi: use devm_pm_runtime_enable() to simplify code
+>       media: nxp: use cleanup  __free(fwnode_handle) simplify code
+>       media: nxp: Add dev_err_probe() to all error paths in *async_register() helpers
+>
+>  drivers/media/platform/nxp/imx-mipi-csis.c         | 54 ++++++-------
+>  drivers/media/platform/nxp/imx-pxp.c               |  5 +-
+>  drivers/media/platform/nxp/imx7-media-csi.c        | 14 ++--
+>  .../media/platform/nxp/imx8-isi/imx8-isi-core.c    | 16 ++--
+>  drivers/media/platform/nxp/imx8mq-mipi-csi2.c      | 88 ++++++++++------------
+>  drivers/media/platform/nxp/mx2_emmaprp.c           |  7 +-
+>  6 files changed, 83 insertions(+), 101 deletions(-)
+> ---
+> base-commit: 8f0b4cce4481fb22653697cced8d0d04027cb1e8
+> change-id: 20250807-cam_cleanup-b6d90ba9dac3
+>
+> Best regards,
+> --
+> Frank Li <Frank.Li@nxp.com>
+>
