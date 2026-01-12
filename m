@@ -1,148 +1,179 @@
-Received: from mail-gw02.astralinux.ru (mail-gw02.astralinux.ru [93.188.205.243])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CB8D6357729;
-	Mon, 12 Jan 2026 12:15:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=93.188.205.243
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8931B2C21F3;
+	Mon, 12 Jan 2026 12:20:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768220106; cv=none; b=WtqlilAbXR8HikzkrqxSIqzy7apAOhtLL3CFMS7VTOHbe3tdUowc4H+ZzKTiHKi7KZam0LeCM5zy90R+PjnuLPgTpd/0dnLmijxEFoSyeiQ5IfuPaVr/xEcFC+IzrUnN7JTwH8ma2rlqk3abgxH27TGHYTXiTz/a2Ya1F4O8FL4=
+	t=1768220402; cv=none; b=DfDQFN0rrTo8HwD2+WwOHtKI+KamQp/DShjRLe/a0k9K9P7fwNg7tknpLwTgGFl94UUUT2ZGGxyqJmcoR3ZhWVjKw4v73Ur4WqNDs9oNPISiIQtJTczF7An+dGPVkjP56Zd0n2U+jPMdr3sj1Rxw7DY24V0gikIUUEiZWeYdKC4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768220106; c=relaxed/simple;
-	bh=TrxqcYqosusx3z/UbaVA6l6OPDcl2cGqeX7pIJvYw6o=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=Pdo9Tza9BubCTTmcH2E6JRtUO0KNglgW1RV3SRRsXJr1w5AFQ0FdkgltDSGT5aRvxV1Q9HHgN/T7t/qSsVBTE3SSQMTNhRfJDqsfJrU8VbAxVgL6Vo1Th88pcJZZf9ABVNFffSXaD/HRdrGhtmjIs+k9sL4+7doFD1F305qBYSY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=astralinux.ru; spf=pass smtp.mailfrom=astralinux.ru; dkim=pass (2048-bit key) header.d=astralinux.ru header.i=@astralinux.ru header.b=BDHMHnJ8; arc=none smtp.client-ip=93.188.205.243
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=astralinux.ru
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=astralinux.ru
+	s=arc-20240116; t=1768220402; c=relaxed/simple;
+	bh=+Nliq3Hq9k4ThIYArW3/W+oRJeWgrnz/ZUwpOJtv0cM=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=K+688+kJTHQ4HLSVF02wSH16ASWCT6732uP2dJVY9/JJZJV0HdLex233haeowDxr5N3qMXQz5pXw1/sqO2fU3X0YkyhT4tPVEi/bXLV1k8R8nyRan59TwBT/nWtNLLI23sxvA80wwe967TxkX5fTxPqBQi36YscFOyAUjVJvBEE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=iL2K02pv; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=astralinux.ru header.i=@astralinux.ru header.b="BDHMHnJ8"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=astralinux.ru;
-	s=mail; t=1768219726;
-	bh=TrxqcYqosusx3z/UbaVA6l6OPDcl2cGqeX7pIJvYw6o=;
-	h=From:To:Cc:Subject:Date:From;
-	b=BDHMHnJ85E79i3rbaZw1HVEUxkO8KB5KTyVBObpeHQ9o8UXKroU3+EKgxVc/OnZtJ
-	 Kbqy+elP/BhlLrFoeM+zFmPWUKB5Y81TjjRPpwXZ9b+6Souqa6pnp+PzZ1d+738mKt
-	 t7vC8n7x+EupRjB9JBkYySUJGpb3YNEiutW1f+lWDt2W6E4u5KUwPr4JLUhX1pVm9v
-	 smU82hnQMcx5OfRwU6GKAq8Q3TrVJK3hXDEHfTzoX8jPrph7m9ICllGkFTeEojCe0N
-	 tRu4rmdnqmMY6iQ88SOYLvu0e20GgdHQWt7aYzJ0p9ClqaHEH0QIp37MSHlY4muOA6
-	 nhHiqNkmb+cMQ==
-Received: from gca-msk-a-srv-ksmg01.astralinux.ru (localhost [127.0.0.1])
-	by mail-gw02.astralinux.ru (Postfix) with ESMTP id 60C301F4E5;
-	Mon, 12 Jan 2026 15:08:46 +0300 (MSK)
-Received: from new-mail.astralinux.ru (unknown [10.205.207.10])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mail-gw02.astralinux.ru (Postfix) with ESMTPS;
-	Mon, 12 Jan 2026 15:08:44 +0300 (MSK)
-Received: from rbta-msk-lt-169874.astralinux.ru.astracloud.ru (unknown [10.198.25.116])
-	by new-mail.astralinux.ru (Postfix) with ESMTPA id 4dqWNn4Q25zSgqV;
-	Mon, 12 Jan 2026 15:08:09 +0300 (MSK)
-From: Mikhail Dmitrichenko <mdmitrichenko@astralinux.ru>
-To: Hans de Goede <hansg@kernel.org>
-Cc: Mikhail Dmitrichenko <mdmitrichenko@astralinux.ru>,
-	Mauro Carvalho Chehab <mchehab@kernel.org>,
-	Sakari Ailus <sakari.ailus@linux.intel.com>,
-	Andy Shevchenko <andy@kernel.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	"Peter Zijlstra (Intel)" <peterz@infradead.org>,
-	Thomas Andreatta <thomas.andreatta2000@gmail.com>,
-	Josh Poimboeuf <jpoimboe@kernel.org>,
-	Ingo Molnar <mingo@kernel.org>,
-	Alan Cox <alan@linux.intel.com>,
-	linux-media@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-staging@lists.linux.dev,
-	lvc-project@linuxtesting.org
-Subject: [PATCH v2] media: staging: atomisp: remove unnecessary NULL checks in sensor drivers
-Date: Mon, 12 Jan 2026 15:07:49 +0300
-Message-Id: <20260112120749.90664-1-mdmitrichenko@astralinux.ru>
-X-Mailer: git-send-email 2.39.2
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="iL2K02pv"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 233D1C16AAE;
+	Mon, 12 Jan 2026 12:20:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1768220402;
+	bh=+Nliq3Hq9k4ThIYArW3/W+oRJeWgrnz/ZUwpOJtv0cM=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=iL2K02pvk6E1DsvDlqWboBCtpQHXaKUBrL1wltPlg05hlgRoVPE9d6yCnJgpfHU3K
+	 5wnwkxG9AmFATvFjjgHmhJmW/kYdcxNn5zEl7CCQGsXozborPGix1NS3B6tfKluFUp
+	 4+jaQq6nlsWR88DToo/mPKJ87brhQnhnntP/R+nXtW3dhiXFicBW1f3BpAsty+mLjZ
+	 99FE2FBFc/kRsz2G+ht2VEMhhnQ2twEqyml4iPXDcjXNFCp0ahYY66D1dhde+2mS0q
+	 8Y77nf0bPjNjJG2JcBS0x7Evxif8Ub6tPWPTIo5nqywmPi5aJOLKCeAsDSKhiNLd77
+	 0aouxLftPfDUw==
+Date: Mon, 12 Jan 2026 14:19:56 +0200
+From: Leon Romanovsky <leon@kernel.org>
+To: Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>
+Cc: Jason Gunthorpe <jgg@ziepe.ca>, Sumit Semwal <sumit.semwal@linaro.org>,
+	Alex Williamson <alex@shazbot.org>,
+	Kevin Tian <kevin.tian@intel.com>, Joerg Roedel <joro@8bytes.org>,
+	Will Deacon <will@kernel.org>, Robin Murphy <robin.murphy@arm.com>,
+	linux-rdma@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
+	linaro-mm-sig@lists.linaro.org, kvm@vger.kernel.org,
+	iommu@lists.linux.dev
+Subject: Re: [PATCH 0/4] dma-buf: add revoke mechanism to invalidate shared
+ buffers
+Message-ID: <20260112121956.GE14378@unreal>
+References: <20260111-dmabuf-revoke-v1-0-fb4bcc8c259b@nvidia.com>
+ <eed9fd4c-ca36-4f6a-af10-56d6e0997d8c@amd.com>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-KSMG-AntiPhishing: NotDetected
-X-KSMG-AntiSpam-Auth: dkim=none
-X-KSMG-AntiSpam-Envelope-From: mdmitrichenko@astralinux.ru
-X-KSMG-AntiSpam-Info: LuaCore: 86 0.3.86 47cb2a3d3f5c7e795bff2d0998e8c196722872ab, {Tracking_from_domain_doesnt_match_to}, astralinux.ru:7.1.1;127.0.0.199:7.1.2;d41d8cd98f00b204e9800998ecf8427e.com:7.1.1;new-mail.astralinux.ru:7.1.1, FromAlignment: s
-X-KSMG-AntiSpam-Interceptor-Info: scan successful
-X-KSMG-AntiSpam-Lua-Profiles: 199427 [Jan 12 2026]
-X-KSMG-AntiSpam-Method: none
-X-KSMG-AntiSpam-Rate: 0
-X-KSMG-AntiSpam-Status: not_detected
-X-KSMG-AntiSpam-Version: 6.1.1.20
-X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 2.1.0.7854, bases: 2026/01/12 07:47:00 #28107568
-X-KSMG-AntiVirus-Status: NotDetected, skipped
-X-KSMG-LinksScanning: NotDetected
-X-KSMG-Message-Action: skipped
-X-KSMG-Rule-ID: 1
+In-Reply-To: <eed9fd4c-ca36-4f6a-af10-56d6e0997d8c@amd.com>
 
-There are unnecessary NULL checks for v4l2_subdev_format::format
-pointer in ov2722 and gc2235 sensor driver format operations.
-The fmt pointer is derived from &format->format where format
-is a pointer to an embedded struct v4l2_mbus_framefmt inside
-struct v4l2_subdev_format, therefore fmt cannot be NULL.
+On Mon, Jan 12, 2026 at 11:04:38AM +0100, Christian König wrote:
+> On 1/11/26 11:37, Leon Romanovsky wrote:
+> > This series implements a dma-buf “revoke” mechanism: to allow a dma-buf
+> > exporter to explicitly invalidate (“kill”) a shared buffer after it has
+> > been distributed to importers, so that further CPU and device access is
+> > prevented and importers reliably observe failure.
+> 
+> We already have that. This is what the move_notify is all about.
+> 
+> > Today, dma-buf effectively provides “if you have the fd, you can keep using
+> > the memory indefinitely.” That assumption breaks down when an exporter must
+> > reclaim, reset, evict, or otherwise retire backing memory after it has been
+> > shared. Concrete cases include GPU reset and recovery where old allocations
+> > become unsafe to access, memory eviction/overcommit where backing storage
+> > must be withdrawn, and security or isolation situations where continued access
+> > must be prevented. While drivers can sometimes approximate this with
+> > exporter-specific fencing and policy, there is no core dma-buf state transition
+> > that communicates “this buffer is no longer valid; fail access” across all
+> > access paths.
+> 
+> It's not correct that there is no DMA-buf handling for this use case.
+> 
+> > The change in this series is to introduce a core “revoked” state on the dma-buf
+> > object and a corresponding exporter-triggered revoke operation. Once a dma-buf
+> > is revoked, new access paths are blocked so that attempts to DMA-map, vmap, or
+> > mmap the buffer fail in a consistent way.
+> > 
+> > In addition, the series aims to invalidate existing access as much as the kernel
+> > allows: device mappings are torn down where possible so devices and IOMMUs cannot
+> > continue DMA.
+> > 
+> > The semantics are intentionally simple: revoke is a one-way, permanent transition
+> > for the lifetime of that dma-buf instance.
+> > 
+> > From a compatibility perspective, users that never invoke revoke are unaffected,
+> > and exporters that adopt it gain a core-supported enforcement mechanism rather
+> > than relying on ad hoc driver behavior. The intent is to keep the interface
+> > minimal and avoid imposing policy; the series provides the mechanism to terminate
+> > access, with policy remaining in the exporter and higher-level components.
+> 
+> As far as I can see that patch set is completely superfluous.
+> 
+> The move_notify mechanism has been implemented exactly to cover this use case and is in use for a couple of years now.
+> 
+> What exactly is missing?
 
-Remove unnecessary NULL checks for v4l2_subdev_format::format
-pointer to avoid unnecessary computations and make code
-clearer.
+From what I can tell, the missing piece is what happens after .move_notify()
+is called. According to the documentation, the exporter remains valid, and
+the importer is expected to recreate all mappings.
 
-Found by Linux Verification Center (linuxtesting.org) with SVACE.
+include/linux/dma-buf.h:
+  471          * Mappings stay valid and are not directly affected by this callback.
+  472          * But the DMA-buf can now be in a different physical location, so all
+  473          * mappings should be destroyed and re-created as soon as possible.
+  474          *
+  475          * New mappings can be created after this callback returns, and will
+  476          * point to the new location of the DMA-buf.
 
-Signed-off-by: Mikhail Dmitrichenko <mdmitrichenko@astralinux.ru>
----
- drivers/staging/media/atomisp/i2c/atomisp-gc2235.c | 5 -----
- drivers/staging/media/atomisp/i2c/atomisp-ov2722.c | 4 ----
- 2 files changed, 9 deletions(-)
+Call to dma_buf_move_notify() does not prevent new attachments to that
+exporter, while "revoke" does. In the current code, the importer is not aware
+that the exporter no longer exists and will continue calling
+dma_buf_map_attachment().
 
-diff --git a/drivers/staging/media/atomisp/i2c/atomisp-gc2235.c b/drivers/staging/media/atomisp/i2c/atomisp-gc2235.c
-index 6050637a0def..98d43b93a3ba 100644
---- a/drivers/staging/media/atomisp/i2c/atomisp-gc2235.c
-+++ b/drivers/staging/media/atomisp/i2c/atomisp-gc2235.c
-@@ -535,8 +535,6 @@ static int gc2235_set_fmt(struct v4l2_subdev *sd,
- 		return -EINVAL;
- 	if (format->pad)
- 		return -EINVAL;
--	if (!fmt)
--		return -EINVAL;
- 
- 	mutex_lock(&dev->input_lock);
- 	res = v4l2_find_nearest_size(gc2235_res_preview,
-@@ -577,9 +575,6 @@ static int gc2235_get_fmt(struct v4l2_subdev *sd,
- 	if (format->pad)
- 		return -EINVAL;
- 
--	if (!fmt)
--		return -EINVAL;
--
- 	fmt->width = dev->res->width;
- 	fmt->height = dev->res->height;
- 	fmt->code = MEDIA_BUS_FMT_SGRBG10_1X10;
-diff --git a/drivers/staging/media/atomisp/i2c/atomisp-ov2722.c b/drivers/staging/media/atomisp/i2c/atomisp-ov2722.c
-index a4519babf37d..aaf30f072ad5 100644
---- a/drivers/staging/media/atomisp/i2c/atomisp-ov2722.c
-+++ b/drivers/staging/media/atomisp/i2c/atomisp-ov2722.c
-@@ -635,8 +635,6 @@ static int ov2722_set_fmt(struct v4l2_subdev *sd,
- 
- 	if (format->pad)
- 		return -EINVAL;
--	if (!fmt)
--		return -EINVAL;
- 	ov2722_info = v4l2_get_subdev_hostdata(sd);
- 	if (!ov2722_info)
- 		return -EINVAL;
-@@ -705,8 +703,6 @@ static int ov2722_get_fmt(struct v4l2_subdev *sd,
- 
- 	if (format->pad)
- 		return -EINVAL;
--	if (!fmt)
--		return -EINVAL;
- 
- 	fmt->width = dev->res->width;
- 	fmt->height = dev->res->height;
--- 
-2.39.2
+In summary, the current implementation allows a single .attach() check but
+permits multiple .map_dma_buf() calls. With "revoke", we gain the ability to
+block any subsequent .map_dma_buf() operations.
 
+Main use case is VFIO as exporter and IOMMUFD as importer.
+
+Thanks
+
+> 
+> Regards,
+> Christian.
+> 
+> > 
+> > BTW, see this megathread [1] for additional context.  
+> > Ironically, it was posted exactly one year ago.
+> > 
+> > [1] https://lore.kernel.org/all/20250107142719.179636-2-yilun.xu@linux.intel.com/
+> > 
+> > Thanks
+> > 
+> > Cc: linux-rdma@vger.kernel.org
+> > Cc: linux-kernel@vger.kernel.org
+> > Cc: linux-media@vger.kernel.org
+> > Cc: dri-devel@lists.freedesktop.org
+> > Cc: linaro-mm-sig@lists.linaro.org
+> > Cc: kvm@vger.kernel.org
+> > Cc: iommu@lists.linux.dev
+> > To: Jason Gunthorpe <jgg@ziepe.ca>
+> > To: Leon Romanovsky <leon@kernel.org>
+> > To: Sumit Semwal <sumit.semwal@linaro.org>
+> > To: Christian König <christian.koenig@amd.com>
+> > To: Alex Williamson <alex@shazbot.org>
+> > To: Kevin Tian <kevin.tian@intel.com>
+> > To: Joerg Roedel <joro@8bytes.org>
+> > To: Will Deacon <will@kernel.org>
+> > To: Robin Murphy <robin.murphy@arm.com>
+> > 
+> > Signed-off-by: Leon Romanovsky <leonro@nvidia.com>
+> > ---
+> > Leon Romanovsky (4):
+> >       dma-buf: Introduce revoke semantics
+> >       vfio: Use dma-buf revoke semantics
+> >       iommufd: Require DMABUF revoke semantics
+> >       iommufd/selftest: Reuse dma-buf revoke semantics
+> > 
+> >  drivers/dma-buf/dma-buf.c          | 36 ++++++++++++++++++++++++++++++++----
+> >  drivers/iommu/iommufd/pages.c      |  2 +-
+> >  drivers/iommu/iommufd/selftest.c   | 12 ++++--------
+> >  drivers/vfio/pci/vfio_pci_dmabuf.c | 27 ++++++---------------------
+> >  include/linux/dma-buf.h            | 31 +++++++++++++++++++++++++++++++
+> >  5 files changed, 74 insertions(+), 34 deletions(-)
+> > ---
+> > base-commit: 9ace4753a5202b02191d54e9fdf7f9e3d02b85eb
+> > change-id: 20251221-dmabuf-revoke-b90ef16e4236
+> > 
+> > Best regards,
+> > --  
+> > Leon Romanovsky <leonro@nvidia.com>
+> > 
+> 
+> 
