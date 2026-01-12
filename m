@@ -1,54 +1,54 @@
 Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 407D7212554
-	for <linux-media@vger.kernel.org>; Mon, 12 Jan 2026 09:59:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 012CB27AC4D
+	for <linux-media@vger.kernel.org>; Mon, 12 Jan 2026 10:00:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.20
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768212001; cv=none; b=PLWSFi24n5SXwGfIsiav5XcLnobuhDA60WFdIrR/UTZr07fMyq3MyDuG/zlGYnXLvKUmNd/xyRCfNI61FNww/fbN5udc7cfRZ2RimLDbOGx+0t3GIjEtm5SwGOgYAWn1OKJLo9/EKEZF1nSnymR6uhSFV1WavmBwIfEpNcTmNCY=
+	t=1768212002; cv=none; b=uD716iagjD4f4b7jgax58F5h5A8hmdLf6SVeP22c7ub/jdWCMAZ9FLMY/md5yLrhI+wFQ9tOYiZSsoijP9gSTW9wZTwl30RqycS9Tl++jH5wHwQ7QIl9H/3jZyjy8IWsV4ue+wOwAjF0nSRm10lRNbYRGfTUX2hD3oFke20CWUs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768212001; c=relaxed/simple;
-	bh=bBspNutdJ9LoGK7vFGMLMc3UnyAOPAvhaUbYi7cYcpk=;
+	s=arc-20240116; t=1768212002; c=relaxed/simple;
+	bh=TpKxImRdV7OLUG6HBa3ZuyNvfLobnLgYQyv8QpjevPE=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=mmuqt0IcN6YF20Eu94qqOMxJqkPqf4FkObVRmQTrQ6yJDU42WEWxeTM33458c7IQ4QTl+rz6k5IzdktgQaohQ9BHRM+38Nn+HGwGkMosXxXV3MnQslNc8TM5RqtmaOK5Pm/JHttg7nbbjTusYHY2pZFERB1eqTOg0V9mUKE44lk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=EDp2D6RX; arc=none smtp.client-ip=198.175.65.20
+	 MIME-Version; b=fDjCZBxeZWRIKHxTNI9eD5emM2fY6O/QveCLlMttZRtlY0Bd6aQqooFyWQHf6g+JoOcbmJvLVF2g1ionLWWL0c0vRnC2Vpt+D5gfEA/xhOXiklZQZNnX1O/NRmEd3ilypp9vy9fc/O/akP0xwnAPwWkOUB1GuYX/rrGDrAMlxCk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=akUPhICL; arc=none smtp.client-ip=198.175.65.20
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="EDp2D6RX"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="akUPhICL"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1768211999; x=1799747999;
+  t=1768212001; x=1799748001;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=bBspNutdJ9LoGK7vFGMLMc3UnyAOPAvhaUbYi7cYcpk=;
-  b=EDp2D6RXVkTR8NOQ4ojJKSv6LwrAbqqbTkQBaM6rOtPmL3naLVbwJzJv
-   dhwg2Ba8UiLzaYLky02zYtlulYlWYfF2Ynvjvu55/AQNYMolvGvhgJ638
-   1i8PrUpuvm3PoZxNJMxO6k2AdBFcvQ3VcMDQGsl+P1d/8k0xWCKQc9AO5
-   TUQBoSzmBvqkkS2+Jnyr1r5JN7y4sSLNxCDSFpDjJvtC9uMrrgtkFUc6S
-   Hj/gtxmK5MSd/IBK31x/Hx5TSUhwPHu/th+bXXJRFaqpfLA7O+ncMekYO
-   s6Ew6vOK4hC+u3gS+sk4w7qlqSu6FLsu+gZVeeJWzFynxnyO8B8FybMKi
-   Q==;
-X-CSE-ConnectionGUID: bwv5pyS8SOKi2r7mncatDQ==
-X-CSE-MsgGUID: AfA6TrIZSrK3hJrxvTw80A==
-X-IronPort-AV: E=McAfee;i="6800,10657,11668"; a="69218781"
+  bh=TpKxImRdV7OLUG6HBa3ZuyNvfLobnLgYQyv8QpjevPE=;
+  b=akUPhICLuMaHx036eR8QRzLrB31XTLjNptxIQw1Y5oQoJ6ugNMIuk/N7
+   vTZ/t2VkEpHOQ55UOzQaxrpd7fwTrbx31i7Jzy6UyJV/zTtxMUgcbL23c
+   wk6pYJtA5uORocJSkYfDHSlH+eoASnq7qm473r/uwtEOqsQrBC77jq9jV
+   bh6bv4xsQnTGXFD+BDUd8VuD8TwcwpWIJVVyZI2gjskXgwHRmX61FOKeU
+   eU3PRMDfPI1pQatvCIjPyR8VDWGE/TBkwRa7f1NrhH3isAXba3Zs3gsVE
+   +8anOk32GNRrY3jWLsmrUyu0lX/qmrFdcvCQ+g9H0xjo4+wrQojOdXVfA
+   g==;
+X-CSE-ConnectionGUID: L9e18eN+R8iTCwsm7Wfsiw==
+X-CSE-MsgGUID: rFEdjo2DT+WBO3n9815i0A==
+X-IronPort-AV: E=McAfee;i="6800,10657,11668"; a="69218787"
 X-IronPort-AV: E=Sophos;i="6.21,219,1763452800"; 
-   d="scan'208";a="69218781"
+   d="scan'208";a="69218787"
 Received: from orviesa002.jf.intel.com ([10.64.159.142])
-  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jan 2026 01:59:54 -0800
-X-CSE-ConnectionGUID: 5RERRVEkSTCiu2xI4CUgCg==
-X-CSE-MsgGUID: knVEBkp9Tv2yp9fWTCuYoA==
+  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jan 2026 01:59:57 -0800
+X-CSE-ConnectionGUID: /dADp6qvQr6sBpDBFr9N9A==
+X-CSE-MsgGUID: URYwvsk2QVyrvSDmjqbM5g==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.21,219,1763452800"; 
-   d="scan'208";a="234743095"
+   d="scan'208";a="234743129"
 Received: from zzombora-mobl1 (HELO kekkonen.fi.intel.com) ([10.245.245.52])
-  by orviesa002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jan 2026 01:59:53 -0800
+  by orviesa002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jan 2026 01:59:56 -0800
 Received: from punajuuri.localdomain (unknown [192.168.240.130])
-	by kekkonen.fi.intel.com (Postfix) with ESMTP id 26547121F38;
+	by kekkonen.fi.intel.com (Postfix) with ESMTP id 324AD121F80;
 	Mon, 12 Jan 2026 11:59:50 +0200 (EET)
 Received: from sailus by punajuuri.localdomain with local (Exim 4.98.2)
 	(envelope-from <sakari.ailus@linux.intel.com>)
-	id 1vfEiE-0000000011E-02p4;
+	id 1vfEiE-0000000011W-0HXS;
 	Mon, 12 Jan 2026 11:59:50 +0200
 Organization: Intel Finland Oy - BIC 0357606-4 - c/o Alberga Business Park, 6 krs, Bertel Jungin Aukio 5, 02600 Espoo
 From: Sakari Ailus <sakari.ailus@linux.intel.com>
@@ -56,9 +56,9 @@ To: linux-media@vger.kernel.org
 Cc: Bingbu Cao <bingbu.cao@intel.com>,
 	Hans de Goede <hansg@kernel.org>,
 	mehdi.djait@intel.com
-Subject: [PATCH v2 03/23] media: i2c: ov01a10: Fix analogue gain range
-Date: Mon, 12 Jan 2026 11:59:29 +0200
-Message-ID: <20260112095949.3851-4-sakari.ailus@linux.intel.com>
+Subject: [PATCH v2 07/23] media: i2c: ov01a10: Change default vblank value to a vblank resulting in 30 fps
+Date: Mon, 12 Jan 2026 11:59:33 +0200
+Message-ID: <20260112095949.3851-8-sakari.ailus@linux.intel.com>
 X-Mailer: git-send-email 2.47.3
 In-Reply-To: <20260112095949.3851-1-sakari.ailus@linux.intel.com>
 References: <20260112095949.3851-1-sakari.ailus@linux.intel.com>
@@ -72,39 +72,42 @@ Content-Transfer-Encoding: 8bit
 
 From: Hans de Goede <hansg@kernel.org>
 
-A analogue maximum gain of 0xffff / 65525 seems unlikely and testing
-indeed shows that the gain control wraps-around at 16383, so set the
-maximum gain to 0x3fff / 16383.
+The ov01a10 is quite a small sensor, which does not capture a lot of
+light, increase the default vblank so that the sensor runs at 30 fps
+by default, doubling the default exposure.
 
-The minimum gain of 0x100 is correct. Setting bits 8-11 to 0x0 results
-in the same gain values as setting these bits to 0x1, with bits 0-7
-still increasing the gain when going from 0x000 - 0x0ff in the exact
-same range as when going from 0x100 - 0x1ff.
-
-Fixes: 0827b58dabff ("media: i2c: add ov01a10 image sensor driver")
-Cc: stable@vger.kernel.org
 Signed-off-by: Hans de Goede <hansg@kernel.org>
 Tested-by: Mehdi Djait <mehdi.djait@linux.intel.com> # Dell XPS 9315
 Reviewed-by: Mehdi Djait <mehdi.djait@linux.intel.com>
-[Sakari Ailus: mention analogue gain and update the limit from 4096.]
 Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
 ---
- drivers/media/i2c/ov01a10.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/media/i2c/ov01a10.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
 diff --git a/drivers/media/i2c/ov01a10.c b/drivers/media/i2c/ov01a10.c
-index 0b1a1ecfffd0..834ca46acb75 100644
+index 3ad516e4d369..4f04bb8688b8 100644
 --- a/drivers/media/i2c/ov01a10.c
 +++ b/drivers/media/i2c/ov01a10.c
-@@ -48,7 +48,7 @@
- /* analog gain controls */
- #define OV01A10_REG_ANALOG_GAIN		0x3508
- #define OV01A10_ANAL_GAIN_MIN		0x100
--#define OV01A10_ANAL_GAIN_MAX		0xffff
-+#define OV01A10_ANAL_GAIN_MAX		0x3fff
- #define OV01A10_ANAL_GAIN_STEP		1
+@@ -34,7 +34,7 @@
  
- /* digital gain controls */
+ /* vertical and horizontal timings */
+ #define OV01A10_REG_VTS			0x380e
+-#define OV01A10_VTS_DEF			0x0380
++#define OV01A10_VTS_DEF			0x0700
+ #define OV01A10_VTS_MIN			0x0380
+ #define OV01A10_VTS_MAX			0xffff
+ #define OV01A10_HTS_DEF			1488
+@@ -191,8 +191,8 @@ static const struct ov01a10_reg sensor_1280x800_setting[] = {
+ 	{0x380b, 0x20},
+ 	{0x380c, 0x02},
+ 	{0x380d, 0xe8},
+-	{0x380e, 0x03},
+-	{0x380f, 0x80},
++	{0x380e, 0x07},
++	{0x380f, 0x00},
+ 	{0x3810, 0x00},
+ 	{0x3811, 0x09},
+ 	{0x3812, 0x00},
 -- 
 2.47.3
 
