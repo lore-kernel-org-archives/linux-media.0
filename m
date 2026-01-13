@@ -1,39 +1,35 @@
-Received: from lx20.hoststar.hosting (lx20.hoststar.hosting [168.119.41.54])
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B7F843815ED;
-	Tue, 13 Jan 2026 09:07:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=168.119.41.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 27A563815FE
+	for <linux-media@vger.kernel.org>; Tue, 13 Jan 2026 09:07:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.167.242.64
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768295263; cv=none; b=M4AC4TDmKsegW8cePPNwhU0v04crVxPkHtdV0nV2B+tA/kjmMGbbcW9zSPIbewFiwFOW68gwEhgBsIIG/uPyq51/hTj+KvOqhguwdkixu3dsB6Qi4lts/GhkVgTW65k/FhkPfJwF6LTIZ7xBv0gCQIrPNoLc/5NWSDkiO2erV0U=
+	t=1768295266; cv=none; b=Rbspnm6hADUq5BgRopjJfefA5+L0Z6XPuPFz0TwZc7Bs7l5+LEujJ+PC7zBnv663LacN9E2j92jAILanYy4rMtYrDqcSO9EQoRsQ1oCnKYqFsa5CeNY2vaxbKBRphP5I1/uWlX+6XTePN6613rCkce4Oixono8g4fHaZkvfZ3Ww=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768295263; c=relaxed/simple;
-	bh=G6q3oW0M0f9O0UYmp/stndFAtUliqjtgd4/oHmFw0tw=;
+	s=arc-20240116; t=1768295266; c=relaxed/simple;
+	bh=yhc2p8mv6ev7MJOu6/5Z04VanMMnTHyoknUD8DPOCKE=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=sb7JAXvTWu5iwbbhXhLGGSeH+vpSB3BaebEUzz8mc759LTVvRk6QHE5zbJtIewipC8w2x1ZF838rJDV+/Grtsr57LVZNNhEXxOFKGwIO5rIZzA3RFUmlZ59pGgJ2hENDxM8yLWDd85GuH6UwP91xYXZtDEM3tIhB+ifRTF65Q04=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=emfend.at; spf=pass smtp.mailfrom=emfend.at; dkim=pass (1024-bit key) header.d=emfend.at header.i=@emfend.at header.b=kvQ255SX; arc=none smtp.client-ip=168.119.41.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=emfend.at
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=emfend.at
+	 In-Reply-To:To:Cc; b=M4c+E/8O84drKKBXSoQt/hGoCFcsu27v7tSwv6UxlCwuFnRITFUDMlY02yy7tYMH3/deunK4GqY978YxasDWmwI9p1denSwc4MXg7rUV/pn4qSx8DxdLR6qNcY50ktCbTO5d4TNnDdUIyp6QNkim/SpwrhufYJF0K2WlvoJstk0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ideasonboard.com; spf=pass smtp.mailfrom=ideasonboard.com; dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b=krfmXr4f; arc=none smtp.client-ip=213.167.242.64
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ideasonboard.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ideasonboard.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=emfend.at header.i=@emfend.at header.b="kvQ255SX"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=emfend.at;
-	 s=mail; h=Cc:To:In-Reply-To:References:Message-Id:Content-Transfer-Encoding:
-	Content-Type:MIME-Version:Subject:Date:From:Sender:Reply-To:Content-ID:
-	Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-	:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
-	List-Post:List-Owner:List-Archive;
-	bh=+cBP+KYVq9B93eiPbaeYCk9i2Tvn6B/QrLXXxQSF3/0=; b=kvQ255SX8ptCTeGpog91NyqHfS
-	UYVzETswPhU+jYG6YbSsLelckoWxCajxZ0mGcnve170kSh7BCu0PUTBZAo0MLmysJW8sspsFG5F9K
-	A8w6kjm57QuTcVou4p6yHP9WDwBMMWO9lrnlMU+hq/e0OMu4FVkEgFzV5AmeWH5l1V+Q=;
-Received: from 194-208-208-245.tele.net ([194.208.208.245]:61445 helo=[127.0.1.1])
-	by lx20.hoststar.hosting with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.93)
-	(envelope-from <matthias.fend@emfend.at>)
-	id 1vfaNA-00AdRl-5W; Tue, 13 Jan 2026 10:07:32 +0100
-From: Matthias Fend <matthias.fend@emfend.at>
-Date: Tue, 13 Jan 2026 10:07:26 +0100
-Subject: [PATCH v8 1/2] media: dt-bindings: i2c: add Himax HM1246 image
- sensor
+	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="krfmXr4f"
+Received: from mail.ideasonboard.com (unknown [IPv6:2401:4900:1c68:a473:c554:ed1f:46ad:1ead])
+	by perceval.ideasonboard.com (Postfix) with ESMTPSA id 8EE7C2E0;
+	Tue, 13 Jan 2026 10:07:16 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+	s=mail; t=1768295237;
+	bh=yhc2p8mv6ev7MJOu6/5Z04VanMMnTHyoknUD8DPOCKE=;
+	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
+	b=krfmXr4fP9RsUIFXQ5/mTeHXKYcmVBzPxHj2/gsJRbwW0CDhNGi2YTfT0o0D/90Qf
+	 DWRtqEqHM+R3WTP11NXfULH6geN5F0Cxi3Bmd/+3OGSC+QR8ykYLtSxULCGyd22LQY
+	 Cu+7KaQtrPWhxl20D+/X0eaU02IajbMe8UAUJ/+c=
+From: Jai Luthra <jai.luthra@ideasonboard.com>
+Date: Tue, 13 Jan 2026 14:35:22 +0530
+Subject: [PATCH 02/10] platform/raspberrypi: vchiq-mmal: Support ISP
+ parameters and stats
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
@@ -42,227 +38,169 @@ List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20260113-hm1246-v8-1-ea93947b192e@emfend.at>
-References: <20260113-hm1246-v8-0-ea93947b192e@emfend.at>
-In-Reply-To: <20260113-hm1246-v8-0-ea93947b192e@emfend.at>
-To: Mauro Carvalho Chehab <mchehab@kernel.org>, 
- Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
- Conor Dooley <conor+dt@kernel.org>, Hans Verkuil <hverkuil@kernel.org>, 
- Sakari Ailus <sakari.ailus@linux.intel.com>, 
- Hans de Goede <hansg@kernel.org>, Ricardo Ribalda <ribalda@chromium.org>, 
- =?utf-8?q?Andr=C3=A9_Apitzsch?= <git@apitzsch.eu>, 
- Tarang Raval <tarang.raval@siliconsignals.io>, 
- Andy Shevchenko <andriy.shevchenko@linux.intel.com>, 
- Benjamin Mugnier <benjamin.mugnier@foss.st.com>, 
- Sylvain Petinot <sylvain.petinot@foss.st.com>, 
- Dongcheng Yan <dongcheng.yan@intel.com>, 
- Bryan O'Donoghue <bryan.odonoghue@linaro.org>, 
- Alan Stern <stern@rowland.harvard.edu>, 
- Jingjing Xiong <jingjing.xiong@intel.com>, 
- Heimir Thor Sverrisson <heimir.sverrisson@gmail.com>, 
- Mehdi Djait <mehdi.djait@linux.intel.com>, 
- Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>, 
- Laurent Pinchart <laurent.pinchart@ideasonboard.com>, 
- Hardevsinh Palaniya <hardevsinh.palaniya@siliconsignals.io>, 
- Svyatoslav Ryhel <clamor95@gmail.com>
-Cc: linux-media@vger.kernel.org, devicetree@vger.kernel.org, 
- linux-kernel@vger.kernel.org, Hao Yao <hao.yao@intel.com>, 
- Himanshu Bhavani <himanshu.bhavani@siliconsignals.io>, 
- Matthias Fend <matthias.fend@emfend.at>, 
- bsp-development.geo@leica-geosystems.com
+Message-Id: <20260113-b4-vchiq-isp-v1-2-ea0b300bffc8@ideasonboard.com>
+References: <20260113-b4-vchiq-isp-v1-0-ea0b300bffc8@ideasonboard.com>
+In-Reply-To: <20260113-b4-vchiq-isp-v1-0-ea0b300bffc8@ideasonboard.com>
+To: Florian Fainelli <florian.fainelli@broadcom.com>, 
+ Tomasz Figa <tfiga@chromium.org>, 
+ Marek Szyprowski <m.szyprowski@samsung.com>, 
+ Mauro Carvalho Chehab <mchehab@kernel.org>, 
+ Raspberry Pi Kernel Maintenance <kernel-list@raspberrypi.com>
+Cc: Laurent Pinchart <laurent.pinchart@ideasonboard.com>, 
+ Kieran Bingham <kieran.bingham@ideasonboard.com>, 
+ Dave Stevenson <dave.stevenson@raspberrypi.com>, 
+ Naushir Patuck <naush@raspberrypi.com>, Stefan Wahren <wahrenst@gmx.net>, 
+ linux-rpi-kernel@lists.infradead.org, linux-arm-kernel@lists.infradead.org, 
+ linux-media@vger.kernel.org, Jai Luthra <jai.luthra@ideasonboard.com>
 X-Mailer: b4 0.14.2
-X-Spam-Score: -1.0
-X-Spam-Bar: -
-X-Spam-Report: Spam detection software, running on the system "lx20.hoststar.hosting",
- has NOT identified this incoming email as spam.  The original
- message has been attached to this so you can view it or label
- similar future email.  If you have any questions, see
- the administrator of that system for details.
- 
- Content preview:  Hello, this series adds support for the Himax HM1246 image
-    sensor. The Himax HM1246-AWD is a 1/3.7-Inch CMOS image sensor SoC with an
-    active array size of 1296 x 976. Currently, only the native RAW mode is s
-    [...] 
- 
- Content analysis details:   (-1.0 points, 5.0 required)
- 
-  pts rule name              description
- ---- ---------------------- --------------------------------------------------
-  0.0 URIBL_BLOCKED          ADMINISTRATOR NOTICE: The query to URIBL was
-                             blocked.  See
-                             http://wiki.apache.org/spamassassin/DnsBlocklists#dnsbl-block
-                              for more information.
-                             [URIs: himax.com.tw]
-  0.0 URIBL_DBL_BLOCKED_OPENDNS ADMINISTRATOR NOTICE: The query to
-                             dbl.spamhaus.org was blocked due to usage
-                             of an open resolver. See
-                             https://www.spamhaus.org/returnc/pub/
-                             [URIs: himax.com.tw]
-  0.0 URIBL_ZEN_BLOCKED_OPENDNS ADMINISTRATOR NOTICE: The query to
-                             zen.spamhaus.org was blocked due to usage
-                             of an open resolver. See
-                             https://www.spamhaus.org/returnc/pub/
-                             [URIs: himax.com.tw]
- -1.0 ALL_TRUSTED            Passed through trusted hosts only via SMTP
-  0.0 TVD_RCVD_IP            Message was received from an IP address
-  0.0 KAM_DMARC_STATUS       Test Rule for DKIM or SPF Failure with Strict
-                             Alignment (older systems)
-  0.0 Local_hs_NotFromHoststar Sender is NOT hoststar.(ch|at|com)
-  0.0 Local_hs_NotToHoststar Recipient is NOT hoststar.(ch|at|com)
+X-Developer-Signature: v=1; a=openpgp-sha256; l=4938;
+ i=jai.luthra@ideasonboard.com; h=from:subject:message-id;
+ bh=yhc2p8mv6ev7MJOu6/5Z04VanMMnTHyoknUD8DPOCKE=;
+ b=owEBbQKS/ZANAwAKAUPekfkkmnFFAcsmYgBpZgtE2m1yON+5mGDfmSptZJi1Ey4bJ2xdPqLJF
+ dPHhcU68yiJAjMEAAEKAB0WIQRN4NgY5dV16NRar8VD3pH5JJpxRQUCaWYLRAAKCRBD3pH5JJpx
+ RcoLEAC78P4sk4mCCBgvlUmGxEpVjyniQfPvfDFH+FDeJ2GzCwXdxAI6nTp5UXiNGk9HCKqB0IH
+ hTo4gm2WJlDnO6t5wGX8JHiWRV2pXEDyTMoY2WS0pkkIKG53wiYUzBoeza5zIRaXnHw8+YUUTCC
+ D2BuJgQuJPWSnTVUTpT/aJQf7o2L0oySJB61dBRPW/d6cqtuCsMvyFeGr7sn3OfpLLaM869flHK
+ n2yAPaCewX8hHuo9zz/ULI9nv2DMHd2dOdPIUlIRWc5ecPvpHFde8YJ0EU16BeQv1n0+yxefmO3
+ yHm0zkqCa5x97CXUyPvfR8ujdAvu8L+yocXJsD1dG6zQVTS62sYJNYSYbweXD0m3t8F9ywrGV0I
+ fBAa8fJ9466CR+BYuQcq4n9AYx67LAzXt6eupyD2Qyfl4m7ubgqnvwwBF0Xij0uFpKFNoICANeW
+ /khg7A3FvRkpMdxPIKlteMH1zrj7Ld74iBLVt0U1caD+3QFpFR8Iva+R95A+k7DdOf8/0eihZ6u
+ QoCvX9kywp+Fopojv1bBde6+eXkyCuW+8Tn/vTyLBTPXGJ6hX5SGUlPhsxPMFrR+HRjOc5hIsFi
+ ZUmFOn3sOaGZpqK1NdZ+e8rnzGLP3oFZzZnC9oPRt/UG5w69JFHYuULp5B3AfPS5eycn10cBls2
+ AIqFzxETZlVWKDA==
+X-Developer-Key: i=jai.luthra@ideasonboard.com; a=openpgp;
+ fpr=4DE0D818E5D575E8D45AAFC543DE91F9249A7145
 
-Add YAML device tree binding for Himax HM1246 image sensor.
+The ISP used on BCM2835 and derivative platforms is behind the VCHIQ
+bus, where some parameters and statistics are accessed through the MMAL
+layer.
 
-Reviewed-by: Rob Herring (Arm) <robh@kernel.org>
-Signed-off-by: Matthias Fend <matthias.fend@emfend.at>
+So add the relevant structures, macros and enum values.
+
+Signed-off-by: Jai Luthra <jai.luthra@ideasonboard.com>
 ---
- .../bindings/media/i2c/himax,hm1246.yaml           | 120 +++++++++++++++++++++
- MAINTAINERS                                        |   6 ++
- 2 files changed, 126 insertions(+)
+ include/linux/raspberrypi/mmal-encodings.h  |  4 ++
+ include/linux/raspberrypi/mmal-parameters.h | 86 +++++++++++++++++++++++++++++
+ 2 files changed, 90 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/media/i2c/himax,hm1246.yaml b/Documentation/devicetree/bindings/media/i2c/himax,hm1246.yaml
-new file mode 100644
-index 0000000000000000000000000000000000000000..a65488fcc643fd1e2b9435224813f35f2b4397c6
---- /dev/null
-+++ b/Documentation/devicetree/bindings/media/i2c/himax,hm1246.yaml
-@@ -0,0 +1,120 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+# Copyright 2025 Matthias Fend <matthias.fend@emfend.at>
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/media/i2c/himax,hm1246.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Himax HM1246-AWD 1/3.7-Inch megapixel SoC image sensor
-+
-+maintainers:
-+  - Matthias Fend <matthias.fend@emfend.at>
-+
-+description:
-+  The Himax HM1246-AWD is a 1/3.7-Inch CMOS image sensor SoC with an active
-+  array size of 1296 x 976. It is programmable through an I2C interface and
-+  connected via parallel bus.
-+
-+allOf:
-+  - $ref: /schemas/media/video-interface-devices.yaml#
-+
-+properties:
-+  compatible:
-+    const: himax,hm1246
-+
-+  reg:
-+    maxItems: 1
-+
-+  clocks:
-+    description: Input reference clock (6 - 27 MHz)
-+    maxItems: 1
-+
-+  reset-gpios:
-+    description: Active low XSHUTDOWN pin
-+    maxItems: 1
-+
-+  avdd-supply:
-+    description: Power for analog circuit (3.0 - 3.6 V)
-+
-+  iovdd-supply:
-+    description: Power for I/O circuit (1.7 - 3.6 V)
-+
-+  dvdd-supply:
-+    description: Power for digital circuit (1.5 / 1.8 V)
-+
-+  port:
-+    $ref: /schemas/graph.yaml#/$defs/port-base
-+    additionalProperties: false
-+    description: Parallel video output port
-+
-+    properties:
-+      endpoint:
-+        $ref: /schemas/media/video-interfaces.yaml#
-+        unevaluatedProperties: false
-+
-+        properties:
-+          bus-width:
-+            default: 10
-+
-+          hsync-active:
-+            default: 1
-+
-+          vsync-active:
-+            default: 1
-+
-+          pclk-sample:
-+            default: 0
-+
-+        required:
-+          - link-frequencies
-+
-+    required:
-+      - endpoint
-+
-+required:
-+  - compatible
-+  - reg
-+  - clocks
-+  - avdd-supply
-+  - iovdd-supply
-+  - dvdd-supply
-+  - port
-+
-+unevaluatedProperties: false
-+
-+examples:
-+  - |
-+    #include <dt-bindings/gpio/gpio.h>
-+    #include <dt-bindings/media/video-interfaces.h>
-+
-+    i2c {
-+        #address-cells = <1>;
-+        #size-cells = <0>;
-+
-+        sensor@24 {
-+            compatible =  "himax,hm1246";
-+            reg = <0x24>;
-+
-+            clocks = <&hm1246_clk>;
-+
-+            reset-gpios = <&gpio0 0 GPIO_ACTIVE_LOW>;
-+
-+            avdd-supply = <&hm1246_avdd>;
-+            iovdd-supply = <&hm1246_iovdd>;
-+            dvdd-supply = <&hm1246_dvdd>;
-+
-+            orientation = <2>;
-+            rotation = <0>;
-+
-+            port {
-+                endpoint {
-+                    remote-endpoint = <&isp_par_in>;
-+                    bus-width = <10>;
-+                    hsync-active = <1>; /* active high */
-+                    vsync-active = <1>; /* active high */
-+                    pclk-sample = <1>; /* sample on rising edge */
-+                    link-frequencies = /bits/ 64 <42200000>;
-+                };
-+            };
-+        };
-+    };
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 752ccaea38b0ee74282e06f233463eba122fa92c..2ea776c417dd0ca3231713a827b421778c92d543 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -11290,6 +11290,12 @@ L:	linux-kernel@vger.kernel.org
- S:	Maintained
- F:	drivers/misc/hisi_hikey_usb.c
+diff --git a/include/linux/raspberrypi/mmal-encodings.h b/include/linux/raspberrypi/mmal-encodings.h
+index e15ae7b24f73fd055806e2e88e5eec0e1b8bfe9d..eadf2e9814082c861a93ae8119e8ecb27a2fb331 100644
+--- a/include/linux/raspberrypi/mmal-encodings.h
++++ b/include/linux/raspberrypi/mmal-encodings.h
+@@ -73,6 +73,10 @@
+  */
+ #define MMAL_ENCODING_EGL_IMAGE        MMAL_FOURCC('E', 'G', 'L', 'I')
  
-+HIMAX HM1246 SENSOR DRIVER
-+M:	Matthias Fend <matthias.fend@emfend.at>
-+L:	linux-media@vger.kernel.org
-+S:	Maintained
-+F:	Documentation/devicetree/bindings/media/i2c/himax,hm1246.yaml
++/** ISP image statistics format
++ */
++#define MMAL_ENCODING_BRCM_STATS       MMAL_FOURCC('S', 'T', 'A', 'T')
 +
- HIMAX HX83112B TOUCHSCREEN SUPPORT
- M:	Job Noorman <job@noorman.info>
- L:	linux-input@vger.kernel.org
+ /* }@ */
+ 
+ /** \name Pre-defined audio encodings */
+diff --git a/include/linux/raspberrypi/mmal-parameters.h b/include/linux/raspberrypi/mmal-parameters.h
+index a0cdd28101f2dd67fd6b64ce1c95c0cbbfe15fc4..6ae5a7a1932c44a73bd482ae72e1191868871ea9 100644
+--- a/include/linux/raspberrypi/mmal-parameters.h
++++ b/include/linux/raspberrypi/mmal-parameters.h
+@@ -223,6 +223,64 @@ enum mmal_parameter_camera_type {
+ 	MMAL_PARAMETER_SHUTTER_SPEED,
+ 		/**< Takes a @ref MMAL_PARAMETER_AWB_GAINS_T */
+ 	MMAL_PARAMETER_CUSTOM_AWB_GAINS,
++		/**< Takes a @ref MMAL_PARAMETER_CAMERA_SETTINGS_T */
++	MMAL_PARAMETER_CAMERA_SETTINGS,
++		/**< Takes a @ref MMAL_PARAMETER_PRIVACY_INDICATOR_T */
++	MMAL_PARAMETER_PRIVACY_INDICATOR,
++		/**< Takes a @ref MMAL_PARAMETER_BOOLEAN_T */
++	MMAL_PARAMETER_VIDEO_DENOISE,
++		/**< Takes a @ref MMAL_PARAMETER_BOOLEAN_T */
++	MMAL_PARAMETER_STILLS_DENOISE,
++		/**< Takes a @ref MMAL_PARAMETER_CAMERA_ANNOTATE_T */
++	MMAL_PARAMETER_ANNOTATE,
++		/**< Takes a @ref MMAL_PARAMETER_STEREOSCOPIC_MODE_T */
++	MMAL_PARAMETER_STEREOSCOPIC_MODE,
++		/**< Takes a @ref MMAL_PARAMETER_CAMERA_INTERFACE_T */
++	MMAL_PARAMETER_CAMERA_INTERFACE,
++		/**< Takes a @ref MMAL_PARAMETER_CAMERA_CLOCKING_MODE_T */
++	MMAL_PARAMETER_CAMERA_CLOCKING_MODE,
++		/**< Takes a @ref MMAL_PARAMETER_CAMERA_RX_CONFIG_T */
++	MMAL_PARAMETER_CAMERA_RX_CONFIG,
++		/**< Takes a @ref MMAL_PARAMETER_CAMERA_RX_TIMING_T */
++	MMAL_PARAMETER_CAMERA_RX_TIMING,
++		/**< Takes a @ref MMAL_PARAMETER_UINT32_T */
++	MMAL_PARAMETER_DPF_CONFIG,
++
++	/* 0x50 */
++		/**< Takes a @ref MMAL_PARAMETER_UINT32_T */
++	MMAL_PARAMETER_JPEG_RESTART_INTERVAL,
++		/**< Takes a @ref MMAL_PARAMETER_UINT32_T */
++	MMAL_PARAMETER_CAMERA_ISP_BLOCK_OVERRIDE,
++		/**< Takes a @ref MMAL_PARAMETER_LENS_SHADING_T */
++	MMAL_PARAMETER_LENS_SHADING_OVERRIDE,
++		/**< Takes a @ref MMAL_PARAMETER_UINT32_T */
++	MMAL_PARAMETER_BLACK_LEVEL,
++		/**< Takes a @ref MMAL_PARAMETER_RESIZE_T */
++	MMAL_PARAMETER_RESIZE_PARAMS,
++		/**< Takes a @ref MMAL_PARAMETER_CROP_T */
++	MMAL_PARAMETER_CROP,
++		/**< Takes a @ref MMAL_PARAMETER_INT32_T */
++	MMAL_PARAMETER_OUTPUT_SHIFT,
++		/**< Takes a @ref MMAL_PARAMETER_INT32_T */
++	MMAL_PARAMETER_CCM_SHIFT,
++		/**< Takes a @ref MMAL_PARAMETER_CUSTOM_CCM_T */
++	MMAL_PARAMETER_CUSTOM_CCM,
++		/**< Takes a @ref MMAL_PARAMETER_RATIONAL_T */
++	MMAL_PARAMETER_ANALOG_GAIN,
++		/**< Takes a @ref MMAL_PARAMETER_RATIONAL_T */
++	MMAL_PARAMETER_DIGITAL_GAIN,
++		/**< Takes a @ref MMAL_PARAMETER_DENOISE_T */
++	MMAL_PARAMETER_DENOISE,
++		/**< Takes a @ref MMAL_PARAMETER_SHARPEN_T */
++	MMAL_PARAMETER_SHARPEN,
++		/**< Takes a @ref MMAL_PARAMETER_GEQ_T */
++	MMAL_PARAMETER_GEQ,
++		/**< Tales a @ref MMAP_PARAMETER_DPC_T */
++	MMAL_PARAMETER_DPC,
++		/**< Tales a @ref MMAP_PARAMETER_GAMMA_T */
++	MMAL_PARAMETER_GAMMA,
++		/**< Takes a @ref MMAL_PARAMETER_CDN_T */
++	MMAL_PARAMETER_CDN,
+ };
+ 
+ enum mmal_parameter_camera_config_timestamp_mode {
+@@ -749,4 +807,32 @@ struct mmal_parameter_camera_info {
+ 				flashes[MMAL_PARAMETER_CAMERA_INFO_MAX_FLASHES];
+ };
+ 
++enum mmal_parameter_ls_gain_format_type {
++	MMAL_PARAMETER_LS_GAIN_FORMAT_TYPE_U0P8_1 = 0,
++	MMAL_PARAMETER_LS_GAIN_FORMAT_TYPE_U1P7_0 = 1,
++	MMAL_PARAMETER_LS_GAIN_FORMAT_TYPE_U1P7_1 = 2,
++	MMAL_PARAMETER_LS_GAIN_FORMAT_TYPE_U2P6_0 = 3,
++	MMAL_PARAMETER_LS_GAIN_FORMAT_TYPE_U2P6_1 = 4,
++	MMAL_PARAMETER_LS_GAIN_FORMAT_TYPE_U3P5_0 = 5,
++	MMAL_PARAMETER_LS_GAIN_FORMAT_TYPE_U3P5_1 = 6,
++	MMAL_PARAMETER_LS_GAIN_FORMAT_TYPE_U4P10  = 7,
++	MMAL_PARAMETER_LS_GAIN_FORMAT_TYPE_DUMMY  = 0x7FFFFFFF
++};
++
++struct mmal_parameter_lens_shading_v2 {
++	u32 enabled;
++	u32 grid_cell_size;
++	u32 grid_width;
++	u32 grid_stride;
++	u32 grid_height;
++	u32 mem_handle_table;
++	u32 ref_transform;
++	u32 corner_sampled;
++	enum mmal_parameter_ls_gain_format_type gain_format;
++};
++
++struct mmal_parameter_crop {
++	struct vchiq_mmal_rect rect;
++};
++
+ #endif
 
 -- 
-2.34.1
+2.52.0
 
