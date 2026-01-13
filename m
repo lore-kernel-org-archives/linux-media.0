@@ -1,155 +1,203 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DBC35369213;
-	Tue, 13 Jan 2026 09:19:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D8CCE387589;
+	Tue, 13 Jan 2026 09:29:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768295972; cv=none; b=Y9ZSzphLNTLIVfXaWKwbIFHK/O6pSFV5rpTCBiXTbfameLkI9aZ3aymB0nV5Ksg+AQazaUASewJmjv0CJ5NadnnB+6GQhWQeY07KXgGXYubua0onI2nD5I0ZRpE3OY+auYkRGcBiE5uA/5A+DoDXlhEhDHHmNGbf6dt6Cu3gT40=
+	t=1768296551; cv=none; b=HcYbP37zhVIMFtEbcVL8oY+0oYCreRbfaqJT5Bl7d62RsecczLC/jcLgwA//LioLU/cm769K5A9ZgCbzOD+YM9LaQhcgc0RtrZu1sdSKu4TwgabM8fU+StwyDySoK0/zVJ8Zaykzn94TcwJC7FKgHpMGZUy3cTbkxGioh9u2eC8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768295972; c=relaxed/simple;
-	bh=pMp/vP+6V6CNi+Sf5/eXNH8L5FL9MmyBessBv3fX9cc=;
-	h=Message-ID:Date:MIME-Version:From:Subject:To:Cc:References:
-	 In-Reply-To:Content-Type; b=pfpY3b4UUPLYQeAm0GKzm86R7iD71qT5jvgJH/d+GLF3pEU7jiqUJ6r9MzSTAGAQv2+7I2Iy4UWEBCIqc3tD5hPKsfZkv/V7Zk6cRfn9QwykkshGMTs80UfJPCdBOoYPskkQQlyl0YciU23yhDHH1QL2Bqgkvfpn5Vu+pyC+GUU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jsWhm9Dm; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1768296551; c=relaxed/simple;
+	bh=kQMGQJt3EWSe0u3U839AQ9IRNSi4mm7LKDLeTyueEOY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=eOB8aWLtaVxsWlLn4FHzs+cB1OE2lTXk7+SZ0VMGVXiPjLnER2PsXr18cM8PzBAI07mfN0jfzcplwTbpq92kCTckSwonldE27MDAxHLOc5kXzOAiu6PT1t6V/4EliMwAtSSsWb7Qo0zgtr8ZMAwB5PCPMlQte4doLZUY13yKNoY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=htDAx1B5; arc=none smtp.client-ip=192.198.163.9
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jsWhm9Dm"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7CEC6C116C6;
-	Tue, 13 Jan 2026 09:19:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1768295969;
-	bh=pMp/vP+6V6CNi+Sf5/eXNH8L5FL9MmyBessBv3fX9cc=;
-	h=Date:From:Subject:To:Cc:References:In-Reply-To:From;
-	b=jsWhm9DmJyHuxMjWm1c98DoMzIEce03ZWxKflnlWpdEKNrup2MBJ5RStk6QXFT0zl
-	 uIvcuQHhcdsndorBJ7t6YqGkHg5Ex75N8CyMljEHNA2BCxdTC4fUetEfog+qFYgojw
-	 ekhL+RHQ2H/oqFinbRBmCRMBrzMj0ExA9s4vHBMUGK9lq5iclKHrRrvNkBxiJVj2Gi
-	 EPy3ZRjt+cg7xs9eSSH1EGzQLzbsGEQKRlhSv3tewOuo7gaXU5hSA70XoU/4f/14e1
-	 dlZV+0bIKEFpAdZMA9U0pBwdNWm/7PGzJHunjCmWF/oZ8Dy+7iQBTqJmpeYfYiIdKl
-	 zVvil8oVut7YA==
-Message-ID: <e9098813-3b5a-47a1-b1a8-192040093541@kernel.org>
-Date: Tue, 13 Jan 2026 10:19:25 +0100
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="htDAx1B5"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1768296549; x=1799832549;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=kQMGQJt3EWSe0u3U839AQ9IRNSi4mm7LKDLeTyueEOY=;
+  b=htDAx1B5PrcKx7Tuin+u2kn1nPmbp2PLHhPxne2Z2Fpx6HxQc0rcyqdH
+   VSxAkbY8vbBve0OeRMJ2lrfAW4AUQdlqLyb1WLZJJ5CcJ05sFxMhCvgMc
+   xyJC/wLIR4m4B1PeJG5iQ4UC1NbdV8E/PIBFRPLJkQ0zbxRkFFbuUbo9U
+   0PwLl6FyW6rD4t3jXu6+r1Jwi/qqTktuXsfm5DwCEU0enB6814/k8jKIZ
+   ZD4RskskK0sslOSiGBa/g8hLm5CatZn1v75doJbFrAlSbBQTzRMWxoUpp
+   Qw0q9o7viUbnQaJck1c4TtVvar6s1MGSc8pi5+qfCjkI0nBEkTA485E2q
+   g==;
+X-CSE-ConnectionGUID: PdF+/WN8QReZ/cd6n1RSKA==
+X-CSE-MsgGUID: fZIsDEU/QraplTJJojL+5A==
+X-IronPort-AV: E=McAfee;i="6800,10657,11669"; a="80298205"
+X-IronPort-AV: E=Sophos;i="6.21,222,1763452800"; 
+   d="scan'208";a="80298205"
+Received: from orviesa008.jf.intel.com ([10.64.159.148])
+  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jan 2026 01:29:05 -0800
+X-CSE-ConnectionGUID: xGYGW6cpT7m2vKG8s5vKcw==
+X-CSE-MsgGUID: HwnBLT8/S1CG/FeRRl7THg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.21,222,1763452800"; 
+   d="scan'208";a="204419013"
+Received: from dhhellew-desk2.ger.corp.intel.com (HELO localhost) ([10.245.245.177])
+  by orviesa008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jan 2026 01:28:59 -0800
+Date: Tue, 13 Jan 2026 11:28:56 +0200
+From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To: Matthias Fend <matthias.fend@emfend.at>
+Cc: Mauro Carvalho Chehab <mchehab@kernel.org>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Hans Verkuil <hverkuil@kernel.org>,
+	Sakari Ailus <sakari.ailus@linux.intel.com>,
+	Hans de Goede <hansg@kernel.org>,
+	Ricardo Ribalda <ribalda@chromium.org>,
+	=?iso-8859-1?Q?Andr=E9?= Apitzsch <git@apitzsch.eu>,
+	Tarang Raval <tarang.raval@siliconsignals.io>,
+	Benjamin Mugnier <benjamin.mugnier@foss.st.com>,
+	Sylvain Petinot <sylvain.petinot@foss.st.com>,
+	Dongcheng Yan <dongcheng.yan@intel.com>,
+	Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
+	Alan Stern <stern@rowland.harvard.edu>,
+	Jingjing Xiong <jingjing.xiong@intel.com>,
+	Heimir Thor Sverrisson <heimir.sverrisson@gmail.com>,
+	Mehdi Djait <mehdi.djait@linux.intel.com>,
+	Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>,
+	Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+	Hardevsinh Palaniya <hardevsinh.palaniya@siliconsignals.io>,
+	Svyatoslav Ryhel <clamor95@gmail.com>, linux-media@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+	Hao Yao <hao.yao@intel.com>,
+	Himanshu Bhavani <himanshu.bhavani@siliconsignals.io>,
+	bsp-development.geo@leica-geosystems.com
+Subject: Re: [PATCH v7 2/2] media: i2c: add Himax HM1246 image sensor driver
+Message-ID: <aWYQWAQnnFW0Kf9z@smile.fi.intel.com>
+References: <20260112-hm1246-v7-0-fee8587f2808@emfend.at>
+ <20260112-hm1246-v7-2-fee8587f2808@emfend.at>
+ <aWVFE-Y5HRi_XZRE@smile.fi.intel.com>
+ <f2e77bb5-957e-4751-8304-d9fb94927417@emfend.at>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-From: Hans Verkuil <hverkuil+cisco@kernel.org>
-Subject: Re: [GIT PULL] Linux Media vimc update for 6.20-rc1
-To: Shuah Khan <skhan@linuxfoundation.org>,
- Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc: Kieran Bingham <kieran.bingham@ideasonboard.com>,
- Hans Verkuil <hverkuil@xs4all.nl>, linux-kernel@vger.kernel.org,
- linux-media@vger.kernel.org, Pavan Bobba <opensource206@gmail.com>,
- shuah <shuah@kernel.org>
-References: <5e808887-c849-4ccd-8fbf-77d12e3d8730@linuxfoundation.org>
-Content-Language: en-US, nl
-In-Reply-To: <5e808887-c849-4ccd-8fbf-77d12e3d8730@linuxfoundation.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <f2e77bb5-957e-4751-8304-d9fb94927417@emfend.at>
+Organization: Intel Finland Oy - BIC 0357606-4 - c/o Alberga Business Park, 6
+ krs, Bertel Jungin Aukio 5, 02600 Espoo
 
-Hi Shuah, Pavan,
+On Tue, Jan 13, 2026 at 10:06:36AM +0100, Matthias Fend wrote:
+> Hi Andy,
+> Am 12.01.2026 um 20:01 schrieb Andy Shevchenko:
+> > On Mon, Jan 12, 2026 at 03:49:33PM +0100, Matthias Fend wrote:
 
-On 08/01/2026 22:42, Shuah Khan wrote:
-> Hi Mauro,
-> 
-> Please pull the vimc next update for Linux 6.20-rc1.
-> 
-> Adds
->      RGB/YUV input entity implementation
->      support for V4L2_FIELD_ALTERNATE in vimc-sensor
->      support for multiple RGB formats in vimc-debayer
->      support custom bytesperline values in vimc-capture
->      document RGB/YUV input entity
-> 
-> diff is attached.
+...
 
-Unfortunately these vimc changes cause regressions in the vimc test-media test.
+> > > +struct hm1246_mode {
+> > > +	u32 codes[4];
+> > > +	u32 clocks_per_pixel;
+> > 
+> > > +	u32 top;
+> > > +	u32 left;
+> > > +	u32 width;
+> > > +	u32 height;
+> > 
+> > Why not use struct v4l2_rect?
+> 
+> Valid question. I would save something in six places, but add something in
+> about 27 others. Because of this ratio, I opted for the current way.
 
-This test is run in our CI to catch regressions, so it must always pass.
+It's more about standardization. Can you provide an example of the place where
+you need to add something?
 
-The test is in the v4l-utils git repository (https://git.linuxtv.org/v4l-utils.git/)
-in the contrib/test directory. It's run as: 'sudo ./test-media vimc'.
+> > > +	u32 hts;
+> > > +	u32 vts_min;
+> > > +	const struct hm1246_reg_list reg_list;
+> > > +};
 
-It could be that these changes require changes in the vimc test itself.
-In that case I need a patch for test-media fixing this. However, looking
-at the failures I think that at least some of the issues are caused by these
-patches.
+...
 
-Since this series adds a new entity, I think that test-media needs to be patched
-anyway with a new test that tests this new entity as well.
+> > > +static int hm1246_get_selection(struct v4l2_subdev *sd,
+> > > +				struct v4l2_subdev_state *state,
+> > > +				struct v4l2_subdev_selection *sel)
+> > > +{
+> > > +	const struct v4l2_mbus_framefmt *format;
+> > > +	const struct hm1246_mode *mode;
+> > > +
+> > > +	format = v4l2_subdev_state_get_format(state, 0);
+> > > +	mode = v4l2_find_nearest_size(hm1246_modes, ARRAY_SIZE(hm1246_modes),
+> > > +				      width, height, format->width,
+> > > +				      format->height);
+> > > +
+> > > +	switch (sel->target) {
+> > > +	case V4L2_SEL_TGT_CROP:
+> > > +		sel->r = *v4l2_subdev_state_get_crop(state, 0);
+> > > +		return 0;
+> > > +
+> > > +	case V4L2_SEL_TGT_NATIVE_SIZE:
+> > > +		sel->r.top = 0;
+> > > +		sel->r.left = 0;
+> > > +		sel->r.width = HM1246_NATIVE_WIDTH;
+> > > +		sel->r.height = HM1246_NATIVE_HEIGHT;
+> > > +		return 0;
+> > > +
+> > > +	case V4L2_SEL_TGT_CROP_DEFAULT:
+> > > +	case V4L2_SEL_TGT_CROP_BOUNDS:
+> > 
+> > > +		sel->r.top = mode->top;
+> > > +		sel->r.left = mode->left;
+> > > +		sel->r.width = mode->width;
+> > > +		sel->r.height = mode->height;
+> > 
+> > Seems in the same way here.
+> > 
+> > > +		return 0;
+> > > +	}
+> > 
+> > > +	return -EINVAL;
+> > 
+> > Why not making it a default case?
+> 
+> I prefer it when the return statement is at the end of the function. Do you
+> see a problem here?
 
-Running the test-media vimc test results in:
+For the matter of fact I do see a problem here. But it's not how code works
+right now, it's about maintenance. The disrupted returns like this may lead
+to subtle mistakes when the code gets changed (grows) and more cases added
+including ones that might want to share something as a success path.
 
-Summary:
+> > > +}
 
-Total for vimc device /dev/media4: 8, Succeeded: 8, Failed: 0, Warnings: 0
-Total for vimc device /dev/video13: 60, Succeeded: 49, Failed: 11, Warnings: 0
-Total for vimc device /dev/video14: 60, Succeeded: 60, Failed: 0, Warnings: 0
-Total for vimc device /dev/video15: 60, Succeeded: 49, Failed: 11, Warnings: 0
-Total for vimc device /dev/v4l-subdev0: 54, Succeeded: 54, Failed: 0, Warnings: 0
-Total for vimc device /dev/v4l-subdev1: 54, Succeeded: 54, Failed: 0, Warnings: 0
-Total for vimc device /dev/v4l-subdev2: 61, Succeeded: 59, Failed: 2, Warnings: 0
-Total for vimc device /dev/v4l-subdev3: 61, Succeeded: 59, Failed: 2, Warnings: 0
-Total for vimc device /dev/v4l-subdev4: 54, Succeeded: 52, Failed: 2, Warnings: 0
-Total for vimc device /dev/v4l-subdev5: 61, Succeeded: 61, Failed: 0, Warnings: 0
-Total for vimc device /dev/v4l-subdev6: 47, Succeeded: 47, Failed: 0, Warnings: 0
-Total for vimc device /dev/v4l-subdev7: 47, Succeeded: 47, Failed: 0, Warnings: 0
-Grand Total for vimc device /dev/media4: 627, Succeeded: 599, Failed: 28, Warnings: 0
+...
 
-So I'm dropping this PR.
+> > > +	hm1246->reset_gpio =
+> > > +		devm_gpiod_get_optional(hm1246->dev, "reset", GPIOD_OUT_HIGH);
+> > > +	if (IS_ERR(hm1246->reset_gpio))
+> > > +		return dev_err_probe(hm1246->dev, PTR_ERR(hm1246->reset_gpio),
+> > > +				     "failed to get reset GPIO\n");
+> > 
+> > Can it be GPIO reset driver used instead? (Note, it's made agnostic now.)
+> 
+> That would probably be possible, but I currently don't see any advantage for
+> I2C image sensors. If I understand correctly, you would first have to define
+> a reset controller that could then be used in the sensor – instead of simply
+> specifying the GPIO directly.
 
-Regards,
+Again, standardization.
 
-	Hans
+> The advantage of being able to share the reset line with other components
+> probably doesn't make sense for these sensors in most cases. That's perhaps
+> also the reason why it hasn't been used before.
+> 
+> Maybe the media maintainers have an opinion on this?
 
-> 
-> thanks,
-> -- Shuah
-> 
-> ----------------------------------------------------------------
-> 
-> The following changes since commit 8f0b4cce4481fb22653697cced8d0d04027cb1e8:
-> 
->    Linux 6.19-rc1 (2025-12-14 16:05:07 +1200)
-> 
-> are available in the Git repository at:
-> 
->    git://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux tags/linux-vimc-6.20-rc1
-> 
-> for you to fetch changes up to c3a017646b770b76f0f08c96aa74fbc4404ef674:
-> 
->    docs: media: vimc: document RGB/YUV input entity (2025-12-15 12:43:25 -0700)
-> 
-> ----------------------------------------------------------------
-> linux-vimc-6.20-rc1
-> 
-> Adds
->      RGB/YUV input entity implementation
->      support for V4L2_FIELD_ALTERNATE in vimc-sensor
->      support for multiple RGB formats in vimc-debayer
->      support custom bytesperline values in vimc-capture
->      document RGB/YUV input entity
-> 
-> ----------------------------------------------------------------
-> Pavan Bobba (5):
->        media: vimc: add RGB/YUV input entity implementation
->        media: vimc: add support for V4L2_FIELD_ALTERNATE in vimc-sensor
->        media: vimc: debayer: add support for multiple RGB formats
->        media: vimc: capture: support custom bytesperline values
->        docs: media: vimc: document RGB/YUV input entity
-> 
->   Documentation/admin-guide/media/vimc.rst       |  39 +++--
->   drivers/media/test-drivers/vimc/Makefile       |   3 +-
->   drivers/media/test-drivers/vimc/vimc-capture.c |  15 +-
->   drivers/media/test-drivers/vimc/vimc-common.h  |   1 +
->   drivers/media/test-drivers/vimc/vimc-core.c    |   3 +-
->   drivers/media/test-drivers/vimc/vimc-debayer.c | 113 ++++++++++---
->   drivers/media/test-drivers/vimc/vimc-input.c   | 210 +++++++++++++++++++++++++
->   drivers/media/test-drivers/vimc/vimc-sensor.c  |   9 +-
->   8 files changed, 352 insertions(+), 41 deletions(-)
->   create mode 100644 drivers/media/test-drivers/vimc/vimc-input.c
-> 
-> ----------------------------------------------------------------
+-- 
+With Best Regards,
+Andy Shevchenko
+
 
