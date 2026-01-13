@@ -1,88 +1,316 @@
-Received: from out203-205-221-190.mail.qq.com (out203-205-221-190.mail.qq.com [203.205.221.190])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 24FCA2EA48F
-	for <linux-media@vger.kernel.org>; Tue, 13 Jan 2026 09:34:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.205.221.190
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2445730F949
+	for <linux-media@vger.kernel.org>; Tue, 13 Jan 2026 09:49:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768296858; cv=none; b=IoTdf0vbcPTB8/vKRkhPu1nk7xvGcrLD3t0JR3mY9JZso46fKtl3XamXLcUC8qUpTWWu2iMl7stR6XYAyr2tukWjkeKB28H04KQkI1u1MfRJ/0ka1So39mXwMhGk5z35+Aj3VaEZzidjgGUCuXmPUEmylMMMnEewqjULKPSr+pw=
+	t=1768297752; cv=none; b=f7aFX+HhwHfNxUGNNT7EfIqhh5GYsfXaGnGmgLrtgynXS5h/xV97wXARDYecrPxjQJ3+toKTaz2Kt3izS6gC8HubZrNw9MF+iAx9YDpEqmszsUJXUSCnq1aOU4mCap19CEOobIKQY7na0YKpgFLTsSAhpcApXjnnuvTvTr+BNbU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768296858; c=relaxed/simple;
-	bh=k7LSUBeA9DlvOYaRqTZCmvGAyT2AzCvymJOUa4lgACY=;
-	h=Message-ID:From:To:Cc:Subject:Date:MIME-Version; b=pXrFJv6tdzs4bWhof3uOkmAE30Jd4glb0x89pYK1Kh4SwdnXfqcKaafmg2DKdKmCpz2QWe2gEDcDvywOSf0KkBdI00g00aEATKr9edYySRqObGxZjIPNzZioohNq2iHBoOow8McMOS/VvhSBlQTthkN89J4kJ5o8RWfa3F0owfQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=qq.com; spf=pass smtp.mailfrom=qq.com; dkim=pass (1024-bit key) header.d=qq.com header.i=@qq.com header.b=UIqnpgs3; arc=none smtp.client-ip=203.205.221.190
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=qq.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=qq.com
+	s=arc-20240116; t=1768297752; c=relaxed/simple;
+	bh=t16MOwJVwntgctqGxi54hMcivJFqU7nlXY3p4laGqhA=;
+	h=Message-ID:Date:MIME-Version:From:Subject:To:References:
+	 In-Reply-To:Content-Type; b=GSr5n7uYYNmkXtNhtYMsrbQm4K1vRNUFkkWlXWLzdS6b0AjFCQNphyhBcM1G9aANlaopACj6jda4Ch8A/1QLIStwNFzckG9JE/vRQb9ltjwL0nIWix2tyTCq22wujcCPt1Lfvxc0j6ys/qSKfY7H5EMba6DY32DjhkEdBYMpJ70=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=sYQZfyi9; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=qq.com header.i=@qq.com header.b="UIqnpgs3"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qq.com; s=s201512;
-	t=1768296847; bh=YjYddL/2pKHYBNAKBVaIyzdnVwUZghzUWLF1Z/Yb/Jo=;
-	h=From:To:Cc:Subject:Date;
-	b=UIqnpgs3K4/3lN13m55c/PFqWwmUsDJog8WwbNqBAEB5w4etwB8pjlTCgbdfWWkpw
-	 gEw/EGn41yzXjMB/42Z9giMzJzRkutFDnyYr38CY0IPfp3YGnAMqQNclOHHt4cju61
-	 2wtpekmOGBCaombHC5ITxzUTCdCG3NqQC+Y8yAM0=
-Received: from kfuzz ([202.120.234.33])
-	by newxmesmtplogicsvrsza56-0.qq.com (NewEsmtp) with SMTP
-	id 6673D4E3; Tue, 13 Jan 2026 17:25:39 +0800
-X-QQ-mid: xmsmtpt1768296339t3f4mveaq
-Message-ID: <tencent_7DEC784AAFE550A8BA532E65E60491E1D705@qq.com>
-X-QQ-XMAILINFO: NmhoXJR/eu5xN2f88XAyGAy8CqNO44QsoRbUBkkwBzOGpGaLENEum7D8s29Sy0
-	 NXQVXI0wccjGKvpsL/McQm1rBv6jN+/gPPGaBqQMHPeoBdNZxS+eo7u8sbYnxw27yIJX3vXZtFnV
-	 UBSY7YA1t0JJ/A5CI4mYktHBHt+/NG67wYc96Ob0j3dzJqm6yA5qeaMKDJf/G7dMKBCmYXKDp1Yw
-	 Uchqt64lIMkG4+7bg9dCRePdTTiZz1KCOiSjrRCQnRChXeGDRDJygsm7KlMi5vGu2mRlzVbwckOq
-	 9MNr7LScpQs4pirwKaBuy0396BCU18nMaUPibJ82L8AAiHoy0x4+Z+FoHJITYz/BBgbCoakoTGXD
-	 tBe0+7mJlSlF4TAUkBz2i9Q1Nn/jaJHf0SYAOAbfnPzwsLGsvFafQXu2WNbPB8lg7v+Nf9IzonSg
-	 1Meb1XZq2mNlBhVKkOCOUqmCrR4+PZNEYJSmqKIvS5NeK9FesNLYoXT4m8PJiTURNGkRd0b3DBSs
-	 7laxol8LgWi7Yn+W6hTGmG4C30jBYKNv2BwPORmrW2ddVrNRWrnJl32kWx15nNNgAbhxU66+kGyx
-	 vj+1p2Y7/rE+vdk4Rf0IdQ29Lpa7lpPr3BTuFmqYNig41tScVB5aGzDxMlI9pamB+i8LtNagMrxG
-	 S/uOv1TNY0yZvboiKmWjtAWb2Xpd3RO5rEOwDiO0JlRoywJlmpqbP28N81W3T3i2bU1ONlTVXtR5
-	 h3p+pbt3b2wlvKwiORS458D2LkhPaddnaOa+Uc0cymPTrXAZLARPP7uCWPLXOTlYSzfojOYSrfEq
-	 o5z7PSQQ84o3LXAQaTCNl5HqNYTa9Y+5FQJ+PKyfc9DginzCHzrm6DDzel3hyZu1nUcq2EGqJ+8y
-	 4+Fx8JBF1GscMIfld6za6lDJP+hPRHJKYbd/XOx6DcwqaDsVeXhyMITajCbO8Mw4Jbjr5U+Lxedi
-	 FQotS0gqRtGzbBWx4d+sApGIyrIEF3gjEm2sk8TIwJL+PjmiPEAfrCi/4ImvClMzJZD1MUc/bc/m
-	 D84bWecbgDwJ6xtNtt1kuNTkH4LRU=
-X-QQ-XMRINFO: Mp0Kj//9VHAxzExpfF+O8yhSrljjwrznVg==
-From: q1ming <1643771613@qq.com>
-To: klimov.linux@gmail.com
-Cc: mchehab@kernel.org,
-	linux-media@vger.kernel.org,
-	q1ming <1643771613@qq.com>
-Subject: [PATCH] media: radio-mr800: fix memory leak on error path
-Date: Tue, 13 Jan 2026 09:25:37 +0000
-X-OQ-MSGID: <20260113092537.60520-1-1643771613@qq.com>
-X-Mailer: git-send-email 2.50.1
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="sYQZfyi9"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 317EFC116C6;
+	Tue, 13 Jan 2026 09:49:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1768297751;
+	bh=t16MOwJVwntgctqGxi54hMcivJFqU7nlXY3p4laGqhA=;
+	h=Date:From:Subject:To:References:In-Reply-To:From;
+	b=sYQZfyi9QoDRgqWUI8SuFBkjgvTolfpKYXZx/rfxbUfsDffUfV+f9wndLBDAgK0wF
+	 1W52Qkgs/lOA/B4dbaDOf/MQXh8qoicxkaOVWq9SNqr6p3cOHN2/WnB0QXjXz43MTb
+	 YD0YikfypJl/iSzNfKthRBSin2ygV1Q0520UOZK1AaT74gxXhYV8yQ1Apv+N1UDoUp
+	 zbZFt77uhXyLUbg6f9XFGkxYpXrn+AsKNg/jqbabwgIQZhFpqNXCMRC4CM5DhtEH3T
+	 yb8z+ipAKbZrYlW0JR7znkT15eACpK8+hbdvHV+U/NZfs7ycA68xQom5SGfG6gB+uZ
+	 GlSCiDwWJ8Epg==
+Message-ID: <dceb8477-c4f6-45ff-8f79-2491a992e905@kernel.org>
+Date: Tue, 13 Jan 2026 10:49:09 +0100
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+From: Hans Verkuil <hverkuil+cisco@kernel.org>
+Subject: Re: [PATCH] v4l2-tracer: unique_ptr conversions
+To: Rosen Penev <rosenp@gmail.com>, linux-media@vger.kernel.org
+References: <20251123210231.11605-1-rosenp@gmail.com>
+Content-Language: en-US, nl
+In-Reply-To: <20251123210231.11605-1-rosenp@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Fix a memory leak in usb_amradio_probe() where the v4l2 control
-handler is not properly cleaned up if control registration fails.
+Hi Rosen,
 
-The error handling jumps to err_ctrl instead of err_vdev, skipping
-the cleanup of the v4l2 control handler and leaking memory.
+Thank you for this patch, but it fails to apply.
 
-Signed-off-by: qym <1643771613@qq.com>
----
- drivers/media/radio/radio-mr800.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+The problem is this change:
 
-diff --git a/drivers/media/radio/radio-mr800.c b/drivers/media/radio/radio-mr800.c
-index cb0437b4c331..530765c7cef6 100644
---- a/drivers/media/radio/radio-mr800.c
-+++ b/drivers/media/radio/radio-mr800.c
-@@ -529,7 +529,7 @@ static int usb_amradio_probe(struct usb_interface *intf,
- 	if (radio->hdl.error) {
- 		retval = radio->hdl.error;
- 		dev_err(&intf->dev, "couldn't register control\n");
--		goto err_ctrl;
-+		goto err_vdev;
- 	}
- 	mutex_init(&radio->lock);
- 
--- 
-2.50.1
+> -struct v4l2_streamparm *retrace_v4l2_streamparm(json_object *parent_obj, const std::string& key_name = "")
+> +std::unique_ptr<v4l2_streamparm> retrace_v4l2_streamparm(json_object *parent_obj, const std::string& key_name = "")
+
+Currently retrace_v4l2_streamparm doesn't have 'const' for key_name.
+
+I suspect that there is a patch missing that needs to go in before this one.
+
+Regards,
+
+	Hans
+
+On 23/11/2025 22:02, Rosen Penev wrote:
+> No need to manually free.
+> 
+> Signed-off-by: Rosen Penev <rosenp@gmail.com>
+> ---
+>  utils/v4l2-tracer/retrace.cpp | 84 +++++++++++++----------------------
+>  1 file changed, 32 insertions(+), 52 deletions(-)
+> 
+> diff --git a/utils/v4l2-tracer/retrace.cpp b/utils/v4l2-tracer/retrace.cpp
+> index d65ecd3d..8419b2ce 100644
+> --- a/utils/v4l2-tracer/retrace.cpp
+> +++ b/utils/v4l2-tracer/retrace.cpp
+> @@ -5,6 +5,8 @@
+>  
+>  #include "retrace.h"
+>  
+> +#include <memory>
+> +
+>  extern struct retrace_context ctx_retrace;
+>  
+>  void retrace_mmap(json_object *mmap_obj, bool is_mmap64)
+> @@ -226,9 +228,9 @@ struct v4l2_plane *retrace_v4l2_plane(json_object *plane_obj, __u32 memory)
+>  	return ptr;
+>  }
+>  
+> -struct v4l2_buffer *retrace_v4l2_buffer(json_object *ioctl_args)
+> +std::unique_ptr<v4l2_buffer> retrace_v4l2_buffer(json_object *ioctl_args)
+>  {
+> -	struct v4l2_buffer *buf = (struct v4l2_buffer *) calloc(1, sizeof(struct v4l2_buffer));
+> +	std::unique_ptr<v4l2_buffer> buf(new v4l2_buffer{});
+>  
+>  	json_object *buf_obj;
+>  	json_object_object_get_ex(ioctl_args, "v4l2_buffer", &buf_obj);
+> @@ -311,9 +313,9 @@ struct v4l2_buffer *retrace_v4l2_buffer(json_object *ioctl_args)
+>  
+>  void retrace_vidioc_querybuf(int fd_retrace, json_object *ioctl_args)
+>  {
+> -	struct v4l2_buffer *buf = retrace_v4l2_buffer(ioctl_args);
+> +	auto buf = retrace_v4l2_buffer(ioctl_args);
+>  
+> -	ioctl(fd_retrace, VIDIOC_QUERYBUF, buf);
+> +	ioctl(fd_retrace, VIDIOC_QUERYBUF, buf.get());
+>  
+>  	if (buf->memory == V4L2_MEMORY_MMAP) {
+>  		__u32 offset = 0;
+> @@ -342,15 +344,13 @@ void retrace_vidioc_querybuf(int fd_retrace, json_object *ioctl_args)
+>  		debug_line_info();
+>  		print_context();
+>  	}
+> -
+> -	free(buf);
+>  }
+>  
+>  void retrace_vidioc_qbuf(int fd_retrace, json_object *ioctl_args)
+>  {
+> -	struct v4l2_buffer *ptr = retrace_v4l2_buffer(ioctl_args);
+> +	auto ptr = retrace_v4l2_buffer(ioctl_args);
+>  
+> -	ioctl(fd_retrace, VIDIOC_QBUF, ptr);
+> +	ioctl(fd_retrace, VIDIOC_QBUF, ptr.get());
+>  
+>  	if (ptr->type == V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE ||
+>  	    ptr->type == V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE) {
+> @@ -367,13 +367,11 @@ void retrace_vidioc_qbuf(int fd_retrace, json_object *ioctl_args)
+>  		debug_line_info();
+>  		print_context();
+>  	}
+> -
+> -	free(ptr);
+>  }
+>  
+>  void retrace_vidioc_dqbuf(int fd_retrace, json_object *ioctl_args)
+>  {
+> -	struct v4l2_buffer *buf = retrace_v4l2_buffer(ioctl_args);
+> +	auto buf = retrace_v4l2_buffer(ioctl_args);
+>  
+>  	const int poll_timeout_ms = 5000;
+>  	struct pollfd *pfds = (struct pollfd *) calloc(1, sizeof(struct pollfd));
+> @@ -393,7 +391,7 @@ void retrace_vidioc_dqbuf(int fd_retrace, json_object *ioctl_args)
+>  		exit(EXIT_FAILURE);
+>  	}
+>  
+> -	ioctl(fd_retrace, VIDIOC_DQBUF, buf);
+> +	ioctl(fd_retrace, VIDIOC_DQBUF, buf.get());
+>  
+>  	if (is_verbose() || (errno != 0)) {
+>  		fprintf(stderr, "%s, index: %d, fd: %d, ",
+> @@ -407,15 +405,13 @@ void retrace_vidioc_dqbuf(int fd_retrace, json_object *ioctl_args)
+>  	if (buf->type == V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE ||
+>  	    buf->type == V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE)
+>  			free(buf->m.planes);
+> -
+> -	free(buf);
+>  }
+>  
+>  void retrace_vidioc_prepare_buf(int fd_retrace, json_object *ioctl_args)
+>  {
+> -	struct v4l2_buffer *buf = retrace_v4l2_buffer(ioctl_args);
+> +	auto buf = retrace_v4l2_buffer(ioctl_args);
+>  
+> -	ioctl(fd_retrace, VIDIOC_PREPARE_BUF, buf);
+> +	ioctl(fd_retrace, VIDIOC_PREPARE_BUF, buf.get());
+>  
+>  	if (is_verbose() || (errno != 0)) {
+>  		fprintf(stderr, "%s, index: %d, fd: %d, ",
+> @@ -429,8 +425,6 @@ void retrace_vidioc_prepare_buf(int fd_retrace, json_object *ioctl_args)
+>  	if (buf->type == V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE ||
+>  	    buf->type == V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE)
+>  			free(buf->m.planes);
+> -
+> -	free(buf);
+>  }
+>  
+>  void retrace_vidioc_create_bufs(int fd_retrace, json_object *ioctl_args)
+> @@ -541,9 +535,9 @@ void retrace_vidioc_s_fmt(int fd_retrace, json_object *ioctl_args)
+>  	free(ptr);
+>  }
+>  
+> -struct v4l2_streamparm *retrace_v4l2_streamparm(json_object *parent_obj, const std::string& key_name = "")
+> +std::unique_ptr<v4l2_streamparm> retrace_v4l2_streamparm(json_object *parent_obj, const std::string& key_name = "")
+>  {
+> -	struct v4l2_streamparm *ptr = (struct v4l2_streamparm *) calloc(1, sizeof(v4l2_streamparm));
+> +	std::unique_ptr<v4l2_streamparm> ptr(new v4l2_streamparm{});
+>  
+>  	json_object *v4l2_streamparm_obj;
+>  	json_object_object_get_ex(parent_obj, "v4l2_streamparm", &v4l2_streamparm_obj);
+> @@ -563,24 +557,20 @@ struct v4l2_streamparm *retrace_v4l2_streamparm(json_object *parent_obj, const s
+>  
+>  void retrace_vidioc_g_parm (int fd_retrace, json_object *ioctl_args)
+>  {
+> -	struct v4l2_streamparm *ptr = retrace_v4l2_streamparm(ioctl_args);
+> -	ioctl(fd_retrace, VIDIOC_G_PARM, ptr);
+> +	auto ptr = retrace_v4l2_streamparm(ioctl_args);
+> +	ioctl(fd_retrace, VIDIOC_G_PARM, ptr.get());
+>  
+>  	if (is_verbose() || (errno != 0))
+>  		perror("VIDIOC_G_PARM");
+> -
+> -	free(ptr);
+>  }
+>  
+>  void retrace_vidioc_s_parm (int fd_retrace, json_object *ioctl_args)
+>  {
+> -	struct v4l2_streamparm *ptr = retrace_v4l2_streamparm(ioctl_args);
+> -	ioctl(fd_retrace, VIDIOC_S_PARM, ptr);
+> +	auto ptr = retrace_v4l2_streamparm(ioctl_args);
+> +	ioctl(fd_retrace, VIDIOC_S_PARM, ptr.get());
+>  
+>  	if (is_verbose() || (errno != 0))
+>  		perror("VIDIOC_S_PARM");
+> -
+> -	free(ptr);
+>  }
+>  
+>  void retrace_vidioc_queryctrl(int fd_retrace, json_object *ioctl_args)
+> @@ -897,9 +887,9 @@ struct v4l2_ext_control *retrace_v4l2_ext_control(json_object *parent_obj, int c
+>  	return p;
+>  }
+>  
+> -struct v4l2_ext_controls *retrace_v4l2_ext_controls(json_object *parent_obj)
+> +std::unique_ptr<v4l2_ext_controls> retrace_v4l2_ext_controls(json_object *parent_obj)
+>  {
+> -	struct v4l2_ext_controls *ptr = (struct v4l2_ext_controls *) calloc(1, sizeof(v4l2_ext_controls));
+> +	std::unique_ptr<v4l2_ext_controls> ptr(new v4l2_ext_controls{});
+>  
+>  	json_object *v4l2_ext_controls_obj;
+>  	json_object_object_get_ex(parent_obj, "v4l2_ext_controls", &v4l2_ext_controls_obj);
+> @@ -948,10 +938,8 @@ struct v4l2_ext_controls *retrace_v4l2_ext_controls(json_object *parent_obj)
+>  
+>  void retrace_vidioc_try_ext_ctrls(int fd_retrace, json_object *ioctl_args)
+>  {
+> -	struct v4l2_ext_controls *ptr = retrace_v4l2_ext_controls(ioctl_args);
+> -	ioctl(fd_retrace, VIDIOC_TRY_EXT_CTRLS, ptr);
+> -
+> -	free(ptr);
+> +	auto ptr = retrace_v4l2_ext_controls(ioctl_args);
+> +	ioctl(fd_retrace, VIDIOC_TRY_EXT_CTRLS, ptr.get());
+>  
+>  	if (is_verbose() || (errno != 0))
+>  		perror("VIDIOC_TRY_EXT_CTRLS");
+> @@ -959,10 +947,8 @@ void retrace_vidioc_try_ext_ctrls(int fd_retrace, json_object *ioctl_args)
+>  
+>  void retrace_vidioc_g_ext_ctrls(int fd_retrace, json_object *ioctl_args)
+>  {
+> -	struct v4l2_ext_controls *ptr = retrace_v4l2_ext_controls(ioctl_args);
+> -	ioctl(fd_retrace, VIDIOC_G_EXT_CTRLS, ptr);
+> -
+> -	free(ptr);
+> +	auto ptr = retrace_v4l2_ext_controls(ioctl_args);
+> +	ioctl(fd_retrace, VIDIOC_G_EXT_CTRLS, ptr.get());
+>  
+>  	if (is_verbose() || (errno != 0))
+>  		perror("VIDIOC_G_EXT_CTRLS");
+> @@ -970,10 +956,8 @@ void retrace_vidioc_g_ext_ctrls(int fd_retrace, json_object *ioctl_args)
+>  
+>  void retrace_vidioc_s_ext_ctrls(int fd_retrace, json_object *ioctl_args)
+>  {
+> -	struct v4l2_ext_controls *ptr = retrace_v4l2_ext_controls(ioctl_args);
+> -	ioctl(fd_retrace, VIDIOC_S_EXT_CTRLS, ptr);
+> -
+> -	free(ptr);
+> +	auto ptr = retrace_v4l2_ext_controls(ioctl_args);
+> +	ioctl(fd_retrace, VIDIOC_S_EXT_CTRLS, ptr.get());
+>  
+>  	if (is_verbose() || (errno != 0)) {
+>  		perror("VIDIOC_S_EXT_CTRLS");
+> @@ -1056,9 +1040,9 @@ void retrace_vidioc_s_selection(int fd_retrace, json_object *ioctl_args)
+>  	free(ptr);
+>  }
+>  
+> -struct v4l2_decoder_cmd *retrace_v4l2_decoder_cmd(json_object *parent_obj)
+> +std::unique_ptr<v4l2_decoder_cmd> retrace_v4l2_decoder_cmd(json_object *parent_obj)
+>  {
+> -	struct v4l2_decoder_cmd *ptr = (struct v4l2_decoder_cmd *) calloc(1, sizeof(v4l2_decoder_cmd));
+> +	std::unique_ptr<v4l2_decoder_cmd> ptr(new v4l2_decoder_cmd{});
+>  
+>  	json_object *v4l2_decoder_cmd_obj;
+>  	json_object_object_get_ex(parent_obj, "v4l2_decoder_cmd", &v4l2_decoder_cmd_obj);
+> @@ -1121,14 +1105,12 @@ struct v4l2_decoder_cmd *retrace_v4l2_decoder_cmd(json_object *parent_obj)
+>  
+>  void retrace_vidioc_try_decoder_cmd(int fd_retrace, json_object *ioctl_args)
+>  {
+> -	struct v4l2_decoder_cmd *ptr = retrace_v4l2_decoder_cmd(ioctl_args);
+> +	auto ptr = retrace_v4l2_decoder_cmd(ioctl_args);
+>  
+> -	ioctl(fd_retrace, VIDIOC_TRY_DECODER_CMD, ptr);
+> +	ioctl(fd_retrace, VIDIOC_TRY_DECODER_CMD, ptr.get());
+>  
+>  	if (is_verbose() || (errno != 0))
+>  		perror("VIDIOC_TRY_DECODER_CMD");
+> -
+> -	free (ptr);
+>  }
+>  
+>  void retrace_vidioc_dqevent(int fd_retrace)
+> @@ -1188,14 +1170,12 @@ void retrace_vidioc_unsubscribe(int fd_retrace, json_object *ioctl_args)
+>  
+>  void retrace_vidioc_decoder_cmd(int fd_retrace, json_object *ioctl_args)
+>  {
+> -	struct v4l2_decoder_cmd *ptr = retrace_v4l2_decoder_cmd(ioctl_args);
+> +	auto ptr = retrace_v4l2_decoder_cmd(ioctl_args);
+>  
+> -	ioctl(fd_retrace, VIDIOC_DECODER_CMD, ptr);
+> +	ioctl(fd_retrace, VIDIOC_DECODER_CMD, ptr.get());
+>  
+>  	if (is_verbose() || (errno != 0))
+>  		perror("VIDIOC_DECODER_CMD");
+> -
+> -	free (ptr);
+>  }
+>  
+>  void retrace_vidioc_query_ext_ctrl(int fd_retrace, json_object *ioctl_args)
 
