@@ -1,397 +1,228 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 93C923128AE
-	for <linux-media@vger.kernel.org>; Tue, 13 Jan 2026 08:59:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 554332FF646
+	for <linux-media@vger.kernel.org>; Tue, 13 Jan 2026 09:03:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768294777; cv=none; b=F74GCXtJ7JSQ7dJjRAMU2rMfrE8MY4JmKHZytgsuG4hORC3CCAFASu/TWlB1sC61TFsNBplKfuEzkVFsqf8QSf+yHLZNDbWEAMhBEf1kyak+D/eTWF9gr/krYLYxc5XC04D3COqB0c8EbmRu6rM6JXHR8jVkQdmR5YTLwKU2ko4=
+	t=1768295017; cv=none; b=GgyhM1QlQ0UGgglkPMvjTNqf8wszOI2jNFt0UfFECOPdqlYSoMFKi9pZIunUvwwQQntiwuJiKRKlWKo/jKRweWkoFEEb5z4d0YwzW0f4RL8q394OwutGKdJD+WvLm7vrwlVIMCRopBJ2Dc/c1chVmAoX7cPBofonjk6TNmNXmwE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768294777; c=relaxed/simple;
-	bh=Zz5nMzp+otfpPzh5M+G3nY6jL++vkNgdjOfWZIdHpiI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ljLdCh5691e8GNyTBF2QO2PCj87n7CI9MSobqQ8oWLJaq2VekBQ1VUoiLiyuWyr5bJiz61860E5zmEt9ymbYq1dv0Jzpu3uVn1rre3x/q6hwTKBd78B+iqgL9cRiPVOlhGvyoD2hj2sMGqIveMdXK9UQ6f+S2fdISrPnorV0bRY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=COTgcnoa; arc=none smtp.client-ip=198.175.65.11
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
+	s=arc-20240116; t=1768295017; c=relaxed/simple;
+	bh=CCrBPfDUHXCLF+sAKdTxaOUPPDGpDxTX/YaIVUXDBP0=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=Apzl0AR0/i2JtkEP1o41d1DaFtKBCQlWEu9OKAlAPsDQigZSaEWGdPdbK71TmwL036husEjVn0MTnm1eTGT9fG13qiSxElr1Qjvn9kEeNJkCB4j5lS/kp28HK61fZoSS8yo59RM900GUDfJii6idc0DPdRiTkg6mJ3LzAH3sQOk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=VhlVsbkl; dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b=KgqBz76j; arc=none smtp.client-ip=205.220.180.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="COTgcnoa"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1768294776; x=1799830776;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=Zz5nMzp+otfpPzh5M+G3nY6jL++vkNgdjOfWZIdHpiI=;
-  b=COTgcnoaHotjQrNaAObUjRSZDs5Omv3zxzVtW3mmS3Bu3sL5WlsfMfuJ
-   7uB8+YnAGocpAwh2PigojZpySZRR8e+KkGX6x+FQgoF3rsBxcE5LOo7td
-   +KVfyAh/pPJgDtuczX+Uf8bwArGiGaLW1UPGm+hcEJhRyH890GezwlFQU
-   Gj1f6iugEnoINE6meemt848BU9FXRYwZvvX0PEj0BzVE6hDouKOG6+OvD
-   iZ7aPHRzHIpOsj8mI6eOVURdo2a051Ef9IrfWsNaXfQTphJuNCfubP+rE
-   MZ5S6ce8vLrVzvsR2hCTj6ArykpvxExf8o3kjwExMN0ff0noK4+GPWuXq
-   w==;
-X-CSE-ConnectionGUID: 2hfYwqU8TsO5ujKxH0Ngfg==
-X-CSE-MsgGUID: ESzJ3g9WTsiX5L+p3ZtBZA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11669"; a="79872144"
-X-IronPort-AV: E=Sophos;i="6.21,222,1763452800"; 
-   d="scan'208";a="79872144"
-Received: from orviesa009.jf.intel.com ([10.64.159.149])
-  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jan 2026 00:59:35 -0800
-X-CSE-ConnectionGUID: YjYxRjxPTjCegyXWeE9Rmw==
-X-CSE-MsgGUID: ApI3h6eyQzC9Em0+AnVJHw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.21,222,1763452800"; 
-   d="scan'208";a="204138853"
-Received: from abityuts-desk.ger.corp.intel.com (HELO kekkonen.fi.intel.com) ([10.245.245.182])
-  by orviesa009-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jan 2026 00:59:28 -0800
-Received: from kekkonen.localdomain (localhost [IPv6:::1])
-	by kekkonen.fi.intel.com (Postfix) with SMTP id 3829911FC37;
-	Tue, 13 Jan 2026 10:59:26 +0200 (EET)
-Date: Tue, 13 Jan 2026 10:59:26 +0200
-Organization: Intel Finland Oy - BIC 0357606-4 - c/o Alberga Business Park, 6 krs, Bertel Jungin Aukio 5, 02600 Espoo
-From: Sakari Ailus <sakari.ailus@linux.intel.com>
-To: Jacopo Mondi <jacopo.mondi@ideasonboard.com>
-Cc: linux-media@vger.kernel.org, hans@jjverkuil.nl,
-	laurent.pinchart@ideasonboard.com,
-	Prabhakar <prabhakar.csengg@gmail.com>, Kate Hsuan <hpa@redhat.com>,
-	Alexander Shiyan <eagle.alexander923@gmail.com>,
-	Dave Stevenson <dave.stevenson@raspberrypi.com>,
-	Tommaso Merciai <tomm.merciai@gmail.com>,
-	Umang Jain <umang.jain@ideasonboard.com>,
-	Benjamin Mugnier <benjamin.mugnier@foss.st.com>,
-	Sylvain Petinot <sylvain.petinot@foss.st.com>,
-	Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-	Julien Massot <julien.massot@collabora.com>,
-	Naushir Patuck <naush@raspberrypi.com>,
-	"Yan, Dongcheng" <dongcheng.yan@intel.com>,
-	"Cao, Bingbu" <bingbu.cao@intel.com>,
-	"Qiu, Tian Shu" <tian.shu.qiu@intel.com>,
-	"Wang, Hongju" <hongju.wang@intel.com>,
-	Stefan Klug <stefan.klug@ideasonboard.com>,
-	Mirela Rabulea <mirela.rabulea@nxp.com>,
-	=?iso-8859-1?Q?Andr=E9?= Apitzsch <git@apitzsch.eu>,
-	Heimir Thor Sverrisson <heimir.sverrisson@gmail.com>,
-	Kieran Bingham <kieran.bingham@ideasonboard.com>,
-	Stanislaw Gruszka <stanislaw.gruszka@linux.intel.com>,
-	Mehdi Djait <mehdi.djait@linux.intel.com>,
-	Ricardo Ribalda Delgado <ribalda@kernel.org>,
-	Hans de Goede <hdegoede@redhat.com>,
-	Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
-Subject: Re: [PATCH v10 15/64] media: uapi: Add generic CSI-2 raw pixelformats
-Message-ID: <aWYJbtzyefhLxqeB@kekkonen.localdomain>
-References: <20250619115836.1946016-1-sakari.ailus@linux.intel.com>
- <20250619115836.1946016-16-sakari.ailus@linux.intel.com>
- <2e757wqhu6rfi2c2utpdhw7qfxjdyk2pu62m6pyv2a3ppm4r3a@zyaresvmgd4c>
+	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="VhlVsbkl";
+	dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b="KgqBz76j"
+Received: from pps.filterd (m0279869.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 60D7nNmO3299965
+	for <linux-media@vger.kernel.org>; Tue, 13 Jan 2026 09:03:35 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
+	cc:content-transfer-encoding:content-type:date:from:message-id
+	:mime-version:subject:to; s=qcppdkim1; bh=cXuRG8HdAcGJj40Bzvm3fE
+	n/FAs+C8rYmBIErtB+Ask=; b=VhlVsbklC3V1o8k6IgeF+ujpl5QDrP4P0fQFcV
+	x5wn/CmPdC34pnd98kXKuPiLxYwcKtSKBdY9NTykBs0faSNk/JpSkXgI5+jOalQO
+	7LLrbGpBybOFNeJeA7ierXSDWJPKZ1aMi1lHJO/95HZr+kuhGH888JrEcGlhUDek
+	+WM5cgpbRuu5DiYhExL0B9jDxy+A8kBd7EBOmTKD3uAMlhQKV3Uc/CwLVnGGTTmg
+	Z5WVv67P3HSXnYLfoil5l3YLTDJivi3+XeTZYtklTYTX5rSzCUHy7ds86sNHh3OK
+	426vBD+if86Difz3rLcC6Tn7ff5VnoE5DSuKinm1ElvkvEKQ==
+Received: from mail-qt1-f200.google.com (mail-qt1-f200.google.com [209.85.160.200])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4bn6jma3sw-1
+	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
+	for <linux-media@vger.kernel.org>; Tue, 13 Jan 2026 09:03:35 +0000 (GMT)
+Received: by mail-qt1-f200.google.com with SMTP id d75a77b69052e-4f1b39d7ed2so159445311cf.2
+        for <linux-media@vger.kernel.org>; Tue, 13 Jan 2026 01:03:35 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=oss.qualcomm.com; s=google; t=1768295013; x=1768899813; darn=vger.kernel.org;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=cXuRG8HdAcGJj40Bzvm3fEn/FAs+C8rYmBIErtB+Ask=;
+        b=KgqBz76jypeNyX6ggiEqVlCgig7mrCsIwIDUWMzAfmwQlXYAAfzSIiRXFt3asarcm1
+         6HoeVhzvj7xjhPdfo8fAWU7c2I6K6NFB92VKOJUBHnQijIfFyi0ALDScF93COcg7Cjt5
+         VmZtgiD24ey+VlC7C+R7YrHl3PhwedkCglX4+UhtBllIsMB12Ms2/RCHeCRqnXe1b2Y6
+         7k4lNaRAA92mtb9afUPOBgS2v16hfVkNRkFkkIlOwlnGQNzZnTJshp641WjdmMHtPaE+
+         ui+3VdjOxZh7r9TQClfb6Gg8QxlOcSxjojnFi1kftaycRKA6FuL00/Xeho8NHD3cwJHn
+         K00A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1768295013; x=1768899813;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=cXuRG8HdAcGJj40Bzvm3fEn/FAs+C8rYmBIErtB+Ask=;
+        b=b1RVtYzpCas9SqJiMKiXVQy8Pz8eHZ+1CDBbbLxAIXRDb4GH36MuyehfYF5BVnbbKe
+         9jVw0H5XouV8rbNsNzZX9xBmPnI97srBjX3FhPjXS922EQwYFkIvBQVu6Vd8YMh+39a7
+         yJzinPRoekD5FL2PGWjiI2SL44Dv9A1WqBq/9rrj7LWUzW4CqByUtoouGXQRP0iYQ5MR
+         6F9bM4EuOVCA9p1wScfjy+tmYRMP0KDLN/+gUOeZrMMRW+vl7Uo9paDLNltYqC2rPTrY
+         /nLbTr96jSKPObx0W+ixXWudFLepVtVDPoTCXW/WpYgFbV2zNvxpHiIviIv+8tZV7Nyw
+         QvVQ==
+X-Forwarded-Encrypted: i=1; AJvYcCWFXjzZbYUCnS87BDj331ISFXRSmHXxmZx44Ur98fyb3ESNJDxBIUGbkj8p11uKAFJkjtRqjCpCBz1GMw==@vger.kernel.org
+X-Gm-Message-State: AOJu0YxSWzxTYB0ZRR8RHOyXgzDzNEd6/7Ak1+LPJrnjzvYcGTj2Jxq7
+	Rl8mKHlDsf0yHak8VCukTMJvcJk2XAi9y/Ky7K3aWFs50V2CM2GdTeJc7x2E0Ik7XJndnhUpLib
+	5arc3kJtOzeZ5k/ke4mdHlWy8cQ4KA33ehHvlkRLjRYb9oaTn7MRrJ/Ml4b0XZ8HOmw==
+X-Gm-Gg: AY/fxX6SS0ySpvq1SjPSvq2+oDTf8l75V0TBrhOW2ikbEI62EPw6U13+nvRQOYmJQE1
+	N3ZTVKkT243I2sBkGLE/lf06L91g1qFqkAEF97V0JIS2N3m6IW12xdf2j3J9GP/rdY/pzIgPXTE
+	kVWSLpKmhNqmMzYZmmZ1xPrKuDxGcxRj9ip3ZgvF2DZ1RPUW23WdpEwiaYmSg7glObk0bI3eBOu
+	DEd3xiaZKLZ1Z2oYpTqimPf6OUeEa8JZ2nL5tefHyJrwYRluZqeCBBruqAqVXACrbyxGfKRAMrU
+	lmHEdQI9/4G7grMLWgaTvDvVWczGlCDwRvPsGoO87q7stqCu0mD0H5aHkeC9YH6mjOiYQZv4oz0
+	ZMNsWdNzhoY587WVgBTxzdJj4wY2RqM2h0DjBwFdhOTNmv6rcUyrmotpUl6wyxBQfJpWj3xMa53
+	0H
+X-Received: by 2002:ac8:7dc8:0:b0:4f1:e284:d42a with SMTP id d75a77b69052e-4ffb49e6a63mr269174171cf.43.1768295013421;
+        Tue, 13 Jan 2026 01:03:33 -0800 (PST)
+X-Google-Smtp-Source: AGHT+IEOeHMzJUmr6BiFWhpv0+C6YitdnE91LicHOFZU9OazCjsnxlnjcFa9txQZlVC7PFNEtI5PYg==
+X-Received: by 2002:ac8:7dc8:0:b0:4f1:e284:d42a with SMTP id d75a77b69052e-4ffb49e6a63mr269173811cf.43.1768295012934;
+        Tue, 13 Jan 2026 01:03:32 -0800 (PST)
+Received: from WENMLIU-LAB01.ap.qualcomm.com (Global_NAT1_IAD_FW.qualcomm.com. [129.46.232.65])
+        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-890770ce298sm154352586d6.8.2026.01.13.01.03.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 13 Jan 2026 01:03:32 -0800 (PST)
+From: Wenmeng Liu <wenmeng.liu@oss.qualcomm.com>
+Subject: [PATCH v8 0/3] media: qcom: camss: Add camss TPG support for
+ multiple targets
+Date: Tue, 13 Jan 2026 17:03:25 +0800
+Message-Id: <20260113-camss_tpg-v8-0-fa2cb186a018@oss.qualcomm.com>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <2e757wqhu6rfi2c2utpdhw7qfxjdyk2pu62m6pyv2a3ppm4r3a@zyaresvmgd4c>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAF0KZmkC/23P0QqDIBQG4FcZXs9ITbNd7T3GGGpWwsrSko3o3
+ Wc12Aa7OfAfDh//mYHXzmgPTocZOB2MN7aLgR8PQDWiqzU0ZcwAp5gijBlUovX+NvY1lJgIUnA
+ pGRUg3vdOV+axWZdrzI3xo3XPjQ5o3e4KQtmXEhhMIeElKYtKakKKs/U+GSZxV7ZtkzjAioX8A
+ /zWCHkElJKUsJxkPKV/gGWv5/QwxQ/Hd8dleQH5I3Gr/wAAAA==
+X-Change-ID: 20251226-camss_tpg-b23a398bb65a
+To: Robert Foss <rfoss@kernel.org>, Todor Tomov <todor.too@gmail.com>,
+        Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
+        Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc: linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org,
+        Wenmeng Liu <wenmeng.liu@oss.qualcomm.com>
+X-Mailer: b4 0.14.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1768295009; l=3885;
+ i=wenmeng.liu@oss.qualcomm.com; s=20250925; h=from:subject:message-id;
+ bh=CCrBPfDUHXCLF+sAKdTxaOUPPDGpDxTX/YaIVUXDBP0=;
+ b=C9WgBLYSzGKYlzXRqPhwYWEFVyNcUgfgB+78jhqWDx3+HZoHu73kCtXgD9q7XGm+56NSod/lL
+ HO5aRKHuwuHCBK3yr9JD9mh99ZWGX4h0PcYSL3xkNpy1rOd6f/Qkd5w
+X-Developer-Key: i=wenmeng.liu@oss.qualcomm.com; a=ed25519;
+ pk=fQJjf9C3jGDjE1zj2kO3NQLTbQEaZObVcXAzx5WLPX0=
+X-Proofpoint-GUID: RXWuNL71p86_Qn_SG3X-vXIKIPBYUnc1
+X-Authority-Analysis: v=2.4 cv=SK1PlevH c=1 sm=1 tr=0 ts=69660a67 cx=c_pps
+ a=JbAStetqSzwMeJznSMzCyw==:117 a=C3Dk8TwHQYyIj7nOf9RCJw==:17
+ a=IkcTkHD0fZMA:10 a=vUbySO9Y5rIA:10 a=s4-Qcg_JpJYA:10
+ a=VkNPw1HP01LnGYTKEx00:22 a=VwQbUJbxAAAA:8 a=EUspDBNiAAAA:8 a=COk6AnOGAAAA:8
+ a=GpE7naLpSaSh0VXB7mUA:9 a=QEXdDO2ut3YA:10 a=uxP6HrT_eTzRwkO_Te1X:22
+ a=TjNXssC_j7lpFel5tvFf:22
+X-Proofpoint-ORIG-GUID: RXWuNL71p86_Qn_SG3X-vXIKIPBYUnc1
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMTEzMDA3NCBTYWx0ZWRfX6+tPDMEJjwZQ
+ mI5lOiItf+ZhbYh1InyNolYDEiElzlzdYEK1mREh1yz+iiKqthDWUbVBwBzqwP1etk+XvvceJVu
+ oyKZtDrijChgjghOge00fQrU/fmDeCJ8uj94VDVBakIATGnVTWk8J8Qwi9mC/u/ggaGXM9A4TMZ
+ itCfOlzgWvlDi1BB8MyX7GmhP+NS48p/WWPeHvLCapSYzRRLBRrEZ+cjwrFIMKAPyk5jVSSVnEY
+ c6n4xTjM+6uBY1aKD9n+kNnkJv8mqI0Swgqxvj+8oTHKDj7L0Z24kn75Ez+vwqJ++DwMmTii5Wg
+ PawDYjKx2VrWsCUXHoPR6XpM6jpdEOBf2dyeQOQBbrQI7buWbn9nejgUHqpjfJBv3lMX3K87RqB
+ /2LbXllF5zvN/pD3YBcaTVufz164y3lONSAMKSErwdDoZVQUQpK0aRV3sLfzVdvShgnEzbXKexx
+ x2Cd1QI6bTYwlXLtD8g==
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.9,FMLib:17.12.100.49
+ definitions=2026-01-13_01,2026-01-09_02,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ phishscore=0 spamscore=0 impostorscore=0 priorityscore=1501
+ lowpriorityscore=0 suspectscore=0 clxscore=1015 adultscore=0 bulkscore=0
+ malwarescore=0 classifier=typeunknown authscore=0 authtc= authcc=
+ route=outbound adjust=0 reason=mlx scancount=1 engine=8.22.0-2512120000
+ definitions=main-2601130074
 
-Hi Jacopo,
+This series adds driver changes to bring up the TPG interfaces
+in LeMans, Monaco, Hamoa.
 
-On Fri, Jun 20, 2025 at 01:50:31PM +0200, Jacopo Mondi wrote:
-> Hi Sakari
-> 
-> On Thu, Jun 19, 2025 at 02:57:47PM +0300, Sakari Ailus wrote:
-> > Add generic raw pixelformats for bit depths 8, 10, 12, 14, 16, 20, 24 and
-> > 28. These formats are CSI-2 packed, apart from the 8-, 16- and 24-bit
-> > formats.
-> >
-> > Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
-> > ---
-> >  .../media/v4l/pixfmt-raw-generic.rst          | 398 ++++++++++++++++++
-> >  .../userspace-api/media/v4l/pixfmt.rst        |   1 +
-> >  include/uapi/linux/videodev2.h                |  10 +
-> >  3 files changed, 409 insertions(+)
-> >  create mode 100644 Documentation/userspace-api/media/v4l/pixfmt-raw-generic.rst
-> >
-> > diff --git a/Documentation/userspace-api/media/v4l/pixfmt-raw-generic.rst b/Documentation/userspace-api/media/v4l/pixfmt-raw-generic.rst
-> > new file mode 100644
-> > index 000000000000..8561233f5262
-> > --- /dev/null
-> > +++ b/Documentation/userspace-api/media/v4l/pixfmt-raw-generic.rst
-> > @@ -0,0 +1,398 @@
-> > +.. SPDX-License-Identifier: GPL-2.0 OR GFDL-1.1-no-invariants-or-later
-> > +
-> > +************************************************************************************************************************************************************************************************************************************************************************************
-> > +V4L2_PIX_FMT_RAW_8 ('RAW8'), V4L2_PIX_FMT_RAW_CSI2_10 ('RACA'), V4L2_PIX_FMT_RAW_CSI2_12 ('RACC'), V4L2_PIX_FMT_RAW_CSI2_14 ('RACE'), V4L2_PIX_FMT_RAW_16 ('RAWG'), V4L2_PIX_FMT_RAW_CSI2_20 ('RACK'), V4L2_PIX_FMT_RAW_24 ('RAWO'), V4L2_PIX_FMT_RAW_CSI2_28 ('RACS')
-> > +************************************************************************************************************************************************************************************************************************************************************************************
-> > +
-> 
-> Shouldn't this file be referenced in
-> Documentation/userspace-api/media/v4l/pixfmt.rst
-> ?
+We have tested this on LeMans EVK board and qcs8300-ride board and
+Hamoa EVK board with 'Test Pattern Generator'.
+Unlike CSID TPG, this TPG can be seen as a combination of CSIPHY
+and sensor.
 
-Fixed since. :-)
+Tested with following commands:
+- media-ctl --reset
+- media-ctl -V '"msm_tpg0":0[fmt:SRGGB10/4608x2592 field:none]'
+- media-ctl -V '"msm_csid0":0[fmt:SRGGB10/4608x2592 field:none]'
+- media-ctl -V '"msm_vfe0_rdi0":0[fmt:SRGGB10/4608x2592 field:none]'
+- media-ctl -l '"msm_tpg0":1->"msm_csid0":0[1]'
+- media-ctl -l '"msm_csid0":1->"msm_vfe0_rdi0":0[1]'
+- v4l2-ctl -d /dev/v4l-subdev1 -c test_pattern=9
+- yavta -B capture-mplane -n 5 -f SRGGB10P -s 4608x2592 /dev/video2
+  --capture=7
 
-> 
-> > +
-> > +Generic line-based image data formats
-> > +
-> > +
-> > +Description
-> > +===========
-> > +
-> > +These generic raw image data formats define the memory layout of the data
-> > +without defining the order of the pixels in the format or even the CFA (Colour
-> 
-> I would rather use the
-> 
-> "without defining the order of the color components"
+Changes in v8:
+- Fix error bit operation. -- Bryan
+- Add tpg link check for tpg enable/disable in csid node stream on.
+- Link to v7: https://lore.kernel.org/r/20251226-camss_tpg-v7-0-ccb536734805@oss.qualcomm.com
 
-I'll use:
+Changes in V7:
+- Add TPG support for Hamoa
+- Add differentiation of register bitfields based on hardware version number.
+- Fix the null pointer issue when TPG clock is 0.
+- Correct the clock dependency for TPG.
+- Link to V6: https://lore.kernel.org/all/20251114-camss_tpg-v6-0-38d3d9fbe339@oss.qualcomm.com/
 
-These generic raw image data formats define the memory layout of the data
-without defining the order of the colour components or even the colour
-components themselves.
+Changes in V6:
+- Addressed comments from Bryan and Konrad.
+- Add exception handling for the streamon format.
+- Link to V5: https://lore.kernel.org/all/20251017-camss_tpg-v5-0-cafe3ad42163@oss.qualcomm.com/
 
-> 
-> Whatever you like the most, I would however not mention CFA, even I
-> understand the internal image pad represents the sensor's pixel array.
-> 
-> > +Filter Array) itself. These formats may only be used with a Media Controller
-> > +pipeline where the more specific format is reported by an :ref:`internal sink
-> > +pad <MEDIA-PAD-FL-INTERNAL>` of the source sub-device. See also :ref:`source
-> > +routes <subdev-routing>`.
-> 
-> I'm surprised, I thought we were going to express the bayer pattern
-> ordering using a control, like we're now doing for the
-> metadata-specific format. Not bothered by this, just wondering if I
-> missed anything from our previous discussions and from the media
-> summit conclusions:
+Changes in V5:
+- Modify the commit message and change the chip names to LeMans and Monaco.
+- Add the header file to resolve the compilation error.
+- Remove the definition where tpg_num is 0.
+- Link to v4: https://lore.kernel.org/all/20250925-camss_tpg-v4-0-d2eb099902c8@oss.qualcomm.com/
 
-There were a few steps back and forth but I think controls are what we'll
-use indeed.
+Changes in V4:
+- Rebase changes
+- Use GENMASK to define bit fields and avoid using tabs. Use FIELD_PREP and FIELD_GET uniformly to access bit fields.
+- Link to V3: https://lore.kernel.org/all/20250822-camss_tpg-v3-0-c7833a5f10d0@quicinc.com/
 
-> 
-> [ANN] Media Summit 2025 Report
->  <21769183-ca57-4f8f-818a-6a1ad089298d@jjverkuil.nl>
-> 
-> > +
-> > +.. _v4l2-pix-fmt-raw-8:
-> > +
-> > +V4L2_PIX_FMT_RAW_8
-> > +------------------
-> > +
-> > +The V4L2_PIX_FMT_GENERIC_8 format is a plain 8-bit raw pixel data format. This
-> > +format is used on CSI-2 for 8 bits per :term:`Data Unit`.
-> > +
-> > +**Byte Order Of V4L2_PIX_FMT_RAW_8.**
-> > +Each cell is one byte. "P" denotes a pixel.
-> > +
-> > +.. tabularcolumns:: |p{2.4cm}|p{1.2cm}|p{1.2cm}|p{1.2cm}|p{1.2cm}|
-> > +
-> > +.. flat-table:: Sample 4x2 Image Frame
-> > +    :header-rows:  0
-> > +    :stub-columns: 0
-> > +    :widths: 12 8 8 8 8
-> > +
-> > +    * - start + 0:
-> > +      - P\ :sub:`00`
-> > +      - P\ :sub:`10`
-> > +      - P\ :sub:`20`
-> > +      - P\ :sub:`30`
-> > +    * - start + 4:
-> > +      - P\ :sub:`01`
-> > +      - P\ :sub:`11`
-> > +      - P\ :sub:`21`
-> > +      - P\ :sub:`31`
-> > +
-> > +.. _v4l2-pix-fmt-raw-csi2-10:
-> > +
-> > +V4L2_PIX_FMT_RAW_CSI2_10
-> > +------------------------
-> > +
-> > +V4L2_PIX_FMT_RAW_CSI2_10 contains 10-bit packed image data, with four bytes
-> > +containing the top 8 bits of the pixels followed by lowest 2 bits of the pixels
-> > +packed into one byte. This format is typically used by CSI-2 receivers with
-> > +a source that transmits MEDIA_BUS_FMT_RAW_10 and the CSI-2 receiver writes the
-> > +received data to memory as-is.
-> > +
-> > +The packing of the data follows the MIPI CSI-2 specification.
-> > +
-> > +This format is little endian.
-> > +
-> > +**Byte Order Of V4L2_PIX_FMT_RAW_CSI2_10.**
-> > +Each cell is one byte. "P" denotes a pixel.
-> > +
-> > +.. tabularcolumns:: |p{2.4cm}|p{1.2cm}|p{1.2cm}|p{1.2cm}|p{1.2cm}|p{1.8cm}|
-> > +
-> > +.. flat-table:: Sample 4x2 Image Frame
-> > +    :header-rows:  0
-> > +    :stub-columns: 0
-> > +    :widths: 12 8 8 8 8 8
-> > +
-> > +    * - start + 0:
-> > +      - P\ :sub:`00 bits 9--2`
-> > +      - P\ :sub:`10 bits 9--2`
-> > +      - P\ :sub:`20 bits 9--2`
-> > +      - P\ :sub:`30 bits 9--2`
-> > +      - P\ :sub:`00 bits 1--0` (bits 1--0)
-> > +        P\ :sub:`10 bits 1--0` (bits 3--2)
-> > +        P\ :sub:`20 bits 1--0` (bits 5--4)
-> > +        P\ :sub:`30 bits 1--0` (bits 7--6)
-> > +    * - start + 5:
-> > +      - P\ :sub:`01 bits 9--2`
-> > +      - P\ :sub:`11 bits 9--2`
-> > +      - P\ :sub:`21 bits 9--2`
-> > +      - P\ :sub:`31 bits 9--2`
-> > +      - P\ :sub:`01 bits 1--0` (bits 1--0)
-> > +        P\ :sub:`11 bits 1--0` (bits 3--2)
-> > +        P\ :sub:`21 bits 1--0` (bits 5--4)
-> > +        P\ :sub:`31 bits 1--0` (bits 7--6)
-> > +
-> > +.. _v4l2-pix-fmt-raw-csi2-12:
-> > +
-> > +V4L2_PIX_FMT_RAW_CSI2_12
-> > +------------------------
-> > +
-> > +V4L2_PIX_FMT_RAW_CSI2_12 contains 12-bit packed image data, with two bytes
-> > +containing the top 8 bits of the pixels followed by lowest 4 bits of the pixels
-> > +packed into 1 byte. This format is typically used by CSI-2 receivers with
-> > +a source that transmits MEDIA_BUS_FMT_RAW_12 and the CSI-2 receiver writes the
-> > +received data to memory as-is.
-> > +
-> > +The packing of the data follows the MIPI CSI-2 specification.
-> > +
-> > +This format is little endian.
-> > +
-> > +**Byte Order Of V4L2_PIX_FMT_RAW_CSI2_12.**
-> > +Each cell is one byte. "P" denotes a pixel.
-> > +
-> > +.. tabularcolumns:: |p{2.4cm}|p{1.2cm}|p{1.2cm}|p{1.8cm}|p{1.2cm}|p{1.2cm}|p{1.8cm}|
-> > +
-> > +.. flat-table:: Sample 4x2 Image Frame
-> > +    :header-rows:  0
-> > +    :stub-columns: 0
-> > +    :widths: 12 8 8 8 8 8 8
-> > +
-> > +    * - start + 0:
-> > +      - P\ :sub:`00 bits 11--4`
-> > +      - P\ :sub:`10 bits 11--4`
-> > +      - P\ :sub:`00 bits 3--0` (bits 3--0)
-> > +        P\ :sub:`10 bits 3--0` (bits 7--4)
-> > +      - P\ :sub:`20 bits 11--4`
-> > +      - P\ :sub:`30 bits 11--4`
-> > +      - P\ :sub:`20 bits 3--0` (bits 3--0)
-> > +        P\ :sub:`30 bits 3--0` (bits 7--4)
-> > +    * - start + 6:
-> > +      - P\ :sub:`01 bits 11--4`
-> > +      - P\ :sub:`11 bits 11--4`
-> > +      - P\ :sub:`01 bits 3--0` (bits 3--0)
-> > +        P\ :sub:`11 bits 3--0` (bits 7--4)
-> > +      - P\ :sub:`21 bits 11--4`
-> > +      - P\ :sub:`31 bits 11--4`
-> > +      - P\ :sub:`21 bits 3--0` (bits 3--0)
-> > +        P\ :sub:`31 bits 3--0` (bits 7--4)
-> > +
-> > +.. _v4l2-pix-fmt-raw-csi2-14:
-> > +
-> > +V4L2_PIX_FMT_RAW_CSI2_14
-> > +------------------------
-> > +
-> > +V4L2_PIX_FMT_RAW_CSI2_14 contains 14-bit packed image data, with four bytes
-> > +containing the top 8 bits of the pixels followed by lowest 6 bits of the pixels
-> > +packed into three bytes. This format is typically used by CSI-2 receivers with a
-> > +source that transmits MEDIA_BUS_FMT_RAW_14 and the CSI-2 receiver writes the
-> > +received data to memory as-is.
-> > +
-> > +The packing of the data follows the MIPI CSI-2 specification.
-> > +
-> > +This format is little endian.
-> > +
-> > +**Byte Order Of V4L2_PIX_FMT_RAW_CSI2_14.**
-> > +Each cell is one byte. "P" denotes a pixel.
-> > +
-> > +.. tabularcolumns:: |p{2.4cm}|p{1.2cm}|p{1.2cm}|p{1.2cm}|p{1.2cm}|p{1.8cm}|p{1.8cm}|p{1.8cm}|
-> > +
-> > +.. flat-table:: Sample 4x2 Image Frame
-> > +    :header-rows:  0
-> > +    :stub-columns: 0
-> > +    :widths: 12 8 8 8 8 8 8 8
-> > +
-> > +    * - start + 0:
-> > +      - P\ :sub:`00 bits 13--6`
-> > +      - P\ :sub:`10 bits 13--6`
-> > +      - P\ :sub:`20 bits 13--6`
-> > +      - P\ :sub:`30 bits 13--6`
-> > +      - P\ :sub:`10 bits 1--0` (bits 7--6)
-> > +        P\ :sub:`00 bits 5--0` (bits 5--0)
-> > +      - P\ :sub:`20 bits 3--0` (bits 7--4)
-> > +        P\ :sub:`10 bits 5--2` (bits 3--0)
-> > +      - P\ :sub:`30 bits 5--0` (bits 7--2)
-> > +        P\ :sub:`20 bits 5--4` (bits 1--0)
-> > +    * - start + 7:
-> > +      - P\ :sub:`01 bits 13--6`
-> > +      - P\ :sub:`11 bits 13--6`
-> > +      - P\ :sub:`21 bits 13--6`
-> > +      - P\ :sub:`31 bits 13--6`
-> > +      - P\ :sub:`11 bits 1--0` (bits 7--6)
-> > +        P\ :sub:`01 bits 5--0` (bits 5--0)
-> > +      - P\ :sub:`21 bits 3--0` (bits 7--4)
-> > +        P\ :sub:`11 bits 5--2` (bits 3--0)
-> > +      - P\ :sub:`31 bits 5--0` (bits 7--2)
-> > +        P\ :sub:`21 bits 5--4` (bits 1--0)
-> > +
-> > +.. _v4l2-pix-fmt-raw-16:
-> > +
-> > +V4L2_PIX_FMT_RAW_16
-> > +-------------------
-> > +
-> > +V4L2_PIX_FMT_RAW_16 contains 16-bit image data, with each two consecutive
-> > +bytes forming a pixel value. This format is typically used by CSI-2 receivers
-> > +with a source that transmits MEDIA_BUS_FMT_RAW_16 and the CSI-2 receiver writes
-> > +the received data to memory as-is.
-> > +
-> > +The packing of the data follows the MIPI CSI-2 specification.
-> > +
-> > +This format is little endian.
-> > +
-> > +**Byte Order Of V4L2_PIX_FMT_RAW_16.**
-> > +Each cell is one byte. "P" denotes a pixel.
-> > +
-> > +.. tabularcolumns:: |p{2.4cm}|p{1.2cm}|p{1.2cm}|p{1.2cm}|p{1.2cm}|p{1.2cm}|p{1.2cm}|p{1.2cm}|p{1.2cm}|
-> > +
-> > +.. flat-table:: Sample 4x2 Image Frame
-> > +    :header-rows:  0
-> > +    :stub-columns: 0
-> > +    :widths: 12 8 8 8 8 8 8 8 8
-> > +
-> > +    * - start + 0:
-> > +      - P\ :sub:`00 bits 15--8`
-> > +      - P\ :sub:`00 bits 7--0`
-> > +      - P\ :sub:`10 bits 15--8`
-> > +      - P\ :sub:`10 bits 7--0`
-> > +      - P\ :sub:`20 bits 15--8`
-> > +      - P\ :sub:`20 bits 7--0`
-> > +      - P\ :sub:`30 bits 15--8`
-> > +      - P\ :sub:`30 bits 7--0`
-> > +    * - start + 8:
-> > +      - P\ :sub:`01 bits 15--8`
-> > +      - P\ :sub:`01 bits 7--0`
-> > +      - P\ :sub:`11 bits 15--8`
-> > +      - P\ :sub:`11 bits 7--0`
-> > +      - P\ :sub:`21 bits 15--8`
-> > +      - P\ :sub:`21 bits 7--0`
-> > +      - P\ :sub:`31 bits 15--8`
-> > +      - P\ :sub:`31 bits 7--0`
-> > +
-> > +.. _v4l2-pix-fmt-raw-csi2-20:
-> > +
-> > +V4L2_PIX_FMT_RAW_CSI2_20
-> > +------------------------
-> 
-> I can't validate the following format match the csi2 spec as they're
-> not there in the version I have access to :)
-> 
-> They seem however correct to me!
-> Reviewed-by: Jacopo Mondi <jacopo.mondi@ideasonboard.com>
+Changes in V3:
+- Change the payload mode string
+- Change the method for setting the TPG clock rate
+- Remove the TPG IRQ
+- Format correction
+- Remove unused variables
+- Merge functions and eliminate redundancy
+- Modify the register write method
+- Change TPG matching method to use grp_id
+- Encapsulate magic numbers as macros
+- Link to V2: https://lore.kernel.org/all/20250717-lemans_tpg-v2-0-a2538659349c@quicinc.com/
 
-Thank you!
+Changes in V2:
+- rebase tpg changes based on new versions of sa8775p and qcs8300 camss patches
+- Link to V1: https://lore.kernel.org/all/20250211-sa8775p_tpg-v1-0-3f76c5f8431f@quicinc.com/
 
+---
+Wenmeng Liu (3):
+      media: qcom: camss: Add common TPG support
+      media: qcom: camss: Add link support for TPG
+      media: qcom: camss: tpg: Add TPG support for multiple targets
+
+ drivers/media/platform/qcom/camss/Makefile         |   2 +
+ drivers/media/platform/qcom/camss/camss-csid-680.c |  14 +
+ .../media/platform/qcom/camss/camss-csid-gen3.c    |  14 +
+ drivers/media/platform/qcom/camss/camss-csid.c     |  45 +-
+ drivers/media/platform/qcom/camss/camss-csid.h     |   1 +
+ drivers/media/platform/qcom/camss/camss-csiphy.c   |   1 +
+ drivers/media/platform/qcom/camss/camss-csiphy.h   |   2 +
+ drivers/media/platform/qcom/camss/camss-tpg-gen1.c | 257 ++++++++
+ drivers/media/platform/qcom/camss/camss-tpg.c      | 710 +++++++++++++++++++++
+ drivers/media/platform/qcom/camss/camss-tpg.h      | 127 ++++
+ drivers/media/platform/qcom/camss/camss.c          | 183 ++++++
+ drivers/media/platform/qcom/camss/camss.h          |   5 +
+ 12 files changed, 1347 insertions(+), 14 deletions(-)
+---
+base-commit: f417b7ffcbef7d76b0d8860518f50dae0e7e5eda
+change-id: 20251226-camss_tpg-b23a398bb65a
+
+Best regards,
 -- 
-Sakari Ailus
+Wenmeng <wenmeng.liu@oss.qualcomm.com>
+
