@@ -1,53 +1,52 @@
-Received: from mail-ed1-f49.google.com (mail-ed1-f49.google.com [209.85.208.49])
+Received: from mail-ed1-f50.google.com (mail-ed1-f50.google.com [209.85.208.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AAD5437F740
-	for <linux-media@vger.kernel.org>; Wed, 14 Jan 2026 08:47:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 53E5937F740
+	for <linux-media@vger.kernel.org>; Wed, 14 Jan 2026 08:47:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768380440; cv=none; b=If0ZXfi072+diJnDm+OMBr27219PcyitTnT+yDdHwU+bdCPw2iAo+iXSDJ9264byPoeYXvl9P68qfRUm4kPoEYAEj7S6d622VT3YVvIbMQ7Q7M13H4X5AGy9uUDWQQDvyn2k43QyHaoyjUQX8dF7z31flptyIsIiAQU80csnKjc=
+	t=1768380451; cv=none; b=Si42A3DU/GS2geHDE0MIMvujZ+ubeWUfsTKHDmC2E9qJgRzsUiNRQX/qeVfw+FmPkinRENYikf5kqy7DjIaRutlC0Nb0nV73qMPuSt9+pGHqmk7nDDePJW9kTKobJcGDnsc2k3a6Aw4xB7gQO4g+VgT0R8hG+ytbM1/R9ESZfkA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768380440; c=relaxed/simple;
-	bh=J+ezMdLeKDw2KdHjb7fx+7OSZNe9loJWenNTh9oNP1A=;
-	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=Mo9xunSbZTHeY7fwOtp2KCM/x2m9QPkNHRL7hWAofwFytCXK9mXiWTBwznM9fKymA8AOCvG3pvsIQMbPEgsXQ1NZNgeS7ewAFzb0chMvEvmXxzxK8RrTCOYmKjFHuKWrO3kb5FbY/6fg3djrzXjZbjlf+JPTfGAiOjnqHQGYSb8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tomeuvizoso.net; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.208.49
+	s=arc-20240116; t=1768380451; c=relaxed/simple;
+	bh=S790a5X3uzkW8n3YiCxdxC5d6m+cBugOxTOqMxpwGQQ=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=H3+oUVmVYyarKayZ83UU8jvZcG95eWhJXidNCMZ60IQ71XBbuihpVuEUo9psNcVD0/LBWNY32y7bFj9aNeBaaPLAGKOMoUi+PdxTeTPKejO4TptpZS3VCPI8NyZUXb/wl1NBAkfcjo+lWKyL1a77ls0ARokIGeus7EKEX2ZMQmo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tomeuvizoso.net; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.208.50
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tomeuvizoso.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ed1-f49.google.com with SMTP id 4fb4d7f45d1cf-64d1ef53cf3so12310905a12.0
-        for <linux-media@vger.kernel.org>; Wed, 14 Jan 2026 00:47:15 -0800 (PST)
+Received: by mail-ed1-f50.google.com with SMTP id 4fb4d7f45d1cf-64b9b0b4d5dso17832579a12.1
+        for <linux-media@vger.kernel.org>; Wed, 14 Jan 2026 00:47:27 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1768380433; x=1768985233;
-        h=cc:to:content-transfer-encoding:mime-version:message-id:date
-         :subject:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=BM8f7jH0taMvYnkaVr76MNplqROK/eiMRxPqXZYuq2Y=;
-        b=xT+a57sdcpqBh5w53aQWVw5Wcv1KfJs1yzMWT/1KbWb4EkwagN7CZrKThQ+c3goR0e
-         8/D4YFMKjmvmyDthDOk3w46QytjsZOrXzK3n0G3B8hwIxb94elq3bimWvG2Mdxi2B+cv
-         oPEVguToxG1eQMbyX50iAWM/kv4xNGm+hMtQdARqD6+1RcU9SL+e81BXXrxsy2wdss11
-         SCw/tOUh0YBxB+CdCmwawCN3d9Qp9QtyVlCPEhEJ/Fk08bTfQbsm5VQv7ZIqNbkL+eii
-         SlQYEWrVcYXxEKh9+HVBoEQ4e4lD+0DbHUATkfV84aRe7xhjqZuB/kDA+rEnJsFCL378
-         uzGA==
-X-Forwarded-Encrypted: i=1; AJvYcCXBB+hDg3h2LjZd74opjLa1LHmbZw7XlZzeYtuqjQA/YPj8XZpVDVEHBqvI3CBDoBaAGD1JEL3quhlpzQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0YwnDHhawf0XE7FPYucRfTEzGYxwbPMtZliKIhoFDitTF/bi7E+w
-	ihIA8PsU1D4dkHPwVFu4EOEGC5uye8l+lW2tz0c3/95a2UPj1+1JUrUC
-X-Gm-Gg: AY/fxX5YVMUDU+LP8JdtYzWzRpEkBiJgb4bxA7wZKVim1I2MUtcCOxagbHcYQCMPsrU
-	1Q/lF9EBIMiWIWe57+bBcJMXLQ5H3JaiwZIWJbVgr5Khq0BLG2Xy5Ul5qiRvSCZCkT0uCyHvP5N
-	tOjSuynANFx7FDfrK5iObAquakEkuL5PpLZkxs8l/KZoBS9tGESIJX8Of5fTdc/1OuxiP4QQz0r
-	NvW2dcem58XhHsT2jRY0FFbwzr08I/G+uM5QHiwnD6oVyF5VFzsaizs75DiitGGhpZs01Iyd6Ia
-	rysrEE/IRGM5Mtq4AIlDt8u4+ayyqHtP6IrUE2OzSMUdnSGqCc9oJwR/g/5i8temR3epLzQ2pYN
-	n/w9A9d42WJfwfJwT4CcwklKtURWWYvvDTTZZWwoC0Z/0zAdC2v9wPF1BUpmSqEQFpUZjHGusS1
-	KnxKMw1Cj1xJt5KOpMVX+pVDhUoNNJ/WUMNneVwxwIWww7UQ==
-X-Received: by 2002:a17:907:2da0:b0:b83:972c:77fe with SMTP id a640c23a62f3a-b876770a4famr96020166b.2.1768380432976;
-        Wed, 14 Jan 2026 00:47:12 -0800 (PST)
+        d=1e100.net; s=20230601; t=1768380445; x=1768985245;
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :mime-version:subject:date:from:x-gm-gg:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=MFgbGKta1WWetg8kikPQgA/0YVVbzxRzodQq2Gmv8S8=;
+        b=rbl9HOn1y+GeLBhG0XPYOXudXdbYSXJIvoaHfsn5RxRh6PevPA1m6qXSwBj9yapoEy
+         odQPr5DnicR+QjFrNnAd4sqOagXHSZFUY+PNe1PgWoa8uM/XpAIhU54TtEVrCxhx6oi6
+         cm2cy4fTbhpCm/FN6o7/IEWPXjTeONC7hKbPr+a/72oMEHP7l08+bLDmVwM8JupKJDuN
+         2hoDrPDGoSLe0/NPD0mFKbPpz7ftXaFcpXoHDn9IHMnzFg3v7Y/n1+S6NXQ1Jgb8dVxE
+         XO7uh9o1newMTzk1apVH6L7iAJGXLeb/PZ3jfNIcyTJc3vqGzre09BSywkWtzQYxnD/N
+         Ec/w==
+X-Forwarded-Encrypted: i=1; AJvYcCVL54gYRRRj8/3ot47YmfY+EuZrG2oFVgG0JjewKGSqeq8gZlp9d1dCVAmVp+iJkGbuRmLY9cbpywBPjQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0Ywu3KMv4MSShamxkqevNkh8HppxT5cQa9o+xZcx+kdPXLgohK9x
+	1YCenjATSfQ17VFM5ZH6birCiJWHwndUBphPF8B4UVB5C3Z41ut0phkU
+X-Gm-Gg: AY/fxX7e4I+oirNoPvojCGKeFiFgdIjxX1HB+Rp0OSTHTcsnskITAHJwI1nAkp4eSuk
+	bcylrmx5NdEH5wrGVp3PXkrbntknwU7KNTI/KaM/T4VQvy14rnhlThQ/pniaHacdnSMF2+n8fY8
+	n6FMeO/EABUeaFJT0XwOnRunv5uLFpBl0nsS7jkIpCzH3mBm/SS2O0T+kPAbXUsBqu4gLQ/JbAu
+	RekVHJydhkRkyVVIBHOCCEQYRyfUqhh266Jj45THW7G8ZQ9CFISqxR0oNQbUqQs/AW4DaucqF4R
+	eQl3qRdULPMFJva+67qqgA6wQ6++5OMc/8inmQCHdpgxk5KMtjSchmagKtdtfYZkDRv7gdnX981
+	LokO1IhezGHem/JsDw+6s8e2YYXvm3gLaFSs4YKGvjTBPIPNCT6xlP9cvsT1xmQRaqEJsqO6Erd
+	kkKDP8UYrSBgoXLH9bvD1dIUuaorvOGz4mLqmXFe+sGt5CYFLpNDL10Y0b
+X-Received: by 2002:a05:6402:790:b0:640:e75a:f95d with SMTP id 4fb4d7f45d1cf-653ec12583bmr1081734a12.15.1768380445470;
+        Wed, 14 Jan 2026 00:47:25 -0800 (PST)
 Received: from [10.42.0.1] (cst-prg-36-231.cust.vodafone.cz. [46.135.36.231])
-        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-6507bf6d5d4sm22379136a12.32.2026.01.14.00.47.10
+        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-6507bf6d5d4sm22379136a12.32.2026.01.14.00.47.22
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 14 Jan 2026 00:47:12 -0800 (PST)
+        Wed, 14 Jan 2026 00:47:25 -0800 (PST)
 From: Tomeu Vizoso <tomeu@tomeuvizoso.net>
-Subject: [PATCH v2 0/5] New DRM accel driver for Texas Instruments' C7x
- DSPs
-Date: Wed, 14 Jan 2026 09:46:47 +0100
-Message-Id: <20260114-thames-v2-0-e94a6636e050@tomeuvizoso.net>
+Date: Wed, 14 Jan 2026 09:46:52 +0100
+Subject: [PATCH v2 5/5] accel/thames: Add IOCTL for memory synchronization
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
@@ -56,10 +55,9 @@ List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-B4-Tracking: v=1; b=H4sIAPdXZ2kC/2WMQQ7CIBBFr9LMWgwDxgZX3sN0QcoosygYoERtu
- LvYrcv3/8vbIFNiynAZNkhUOXMMHdRhgNnb8CDBrjMoqc4SUYvi7UJZaH1CNVrlDDro8jPRnV9
- 76DZ19pxLTO+9W/G3/iUqCimM0Ub2w+hxvpa40Fr5E3M8Biowtda+r3H/yaIAAAA=
-X-Change-ID: 20260113-thames-334127a2d91d
+Message-Id: <20260114-thames-v2-5-e94a6636e050@tomeuvizoso.net>
+References: <20260114-thames-v2-0-e94a6636e050@tomeuvizoso.net>
+In-Reply-To: <20260114-thames-v2-0-e94a6636e050@tomeuvizoso.net>
 To: Nishanth Menon <nm@ti.com>, "Andrew F. Davis" <afd@ti.com>, 
  Randolph Sapp <rs@ti.com>, Jonathan Humphreys <j-humphreys@ti.com>, 
  Andrei Aldea <a-aldea@ti.com>, Chirag Shilwant <c-shilwant@ti.com>, 
@@ -78,70 +76,171 @@ Cc: linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
  linaro-mm-sig@lists.linaro.org, Tomeu Vizoso <tomeu@tomeuvizoso.net>
 X-Mailer: b4 0.14.2
 
-This series adds a new DRM/Accel driver that supports the C7x DSPs
-inside some Texas Instruments SoCs such as the J722S. These can be used
-as accelerators for various workloads, including machine learning
-inference.
+The DSP cores have their own access to the memory bus, and it isn't
+cache coherent with the CPUs.
 
-This driver controls the power state of the hardware via remoteproc and
-communicates with the firmware running on the DSP via rpmsg_virtio.  The
-kernel driver itself allocates buffers, manages contexts, and submits
-jobs to the DSP firmware. Buffers are mapped by the DSP itself using its
-MMU, providing memory isolation among different clients.
+Add IOCTLs so userspace can mark when the caches need to be flushed, and
+also when a writer job needs to be waited for before the buffer can be
+accessed from the CPU.
 
-The source code for the firmware running on the DSP is available at:
-https://gitlab.freedesktop.org/tomeu/thames_firmware/.
+Initially based on the same IOCTLs from the Etnaviv driver.
 
-Everything else is done in userspace, as a Gallium driver (also called
-thames) that is part of the Mesa3D project: https://docs.mesa3d.org/teflon.html
-
-If there is more than one core that advertises the same rpmsg_virtio
-service name, the driver will load balance jobs between them with
-drm-gpu-scheduler.
-
-Userspace portion of the driver: https://gitlab.freedesktop.org/mesa/mesa/-/merge_requests/39298
+v2:
+- Add thames_accel.h UAPI header (Robert Nelson).
 
 Signed-off-by: Tomeu Vizoso <tomeu@tomeuvizoso.net>
 ---
-Changes in v2:
-- Add thames_accel.h UAPI header (Robert Nelson).
-- Link to v1: https://lore.kernel.org/r/20260113-thames-v1-0-99390026937c@tomeuvizoso.net
+ drivers/accel/thames/thames_drv.c |  2 ++
+ drivers/accel/thames/thames_gem.c | 52 +++++++++++++++++++++++++++++++++++++++
+ drivers/accel/thames/thames_gem.h |  4 +++
+ include/uapi/drm/thames_accel.h   | 31 +++++++++++++++++++++++
+ 4 files changed, 89 insertions(+)
 
----
-Tomeu Vizoso (5):
-      arm64: dts: ti: k3-j722s-ti-ipc-firmware: Add memory pool for DSP i/o buffers
-      accel/thames: Add driver for the C7x DSPs in TI SoCs
-      accel/thames: Add IOCTLs for BO creation and mapping
-      accel/thames: Add IOCTL for job submission
-      accel/thames: Add IOCTL for memory synchronization
+diff --git a/drivers/accel/thames/thames_drv.c b/drivers/accel/thames/thames_drv.c
+index 1ff01428e6c80765cb741ae45c67971b7b0f28c8..6993d503139d3aaef830cdf5cfcf38476c5f9d99 100644
+--- a/drivers/accel/thames/thames_drv.c
++++ b/drivers/accel/thames/thames_drv.c
+@@ -76,6 +76,8 @@ static const struct drm_ioctl_desc thames_drm_driver_ioctls[] = {
+ 	THAMES_IOCTL(BO_CREATE, bo_create),
+ 	THAMES_IOCTL(BO_MMAP_OFFSET, bo_mmap_offset),
+ 	THAMES_IOCTL(SUBMIT, submit),
++	THAMES_IOCTL(BO_PREP, bo_prep),
++	THAMES_IOCTL(BO_FINI, bo_fini),
+ };
+ 
+ DEFINE_DRM_ACCEL_FOPS(thames_accel_driver_fops);
+diff --git a/drivers/accel/thames/thames_gem.c b/drivers/accel/thames/thames_gem.c
+index 5a01ddaeb2448117d400a79e53d2c6123ecb5390..4ded8fab0f3ff6f75a1446c5661fdbc68f1f2ac7 100644
+--- a/drivers/accel/thames/thames_gem.c
++++ b/drivers/accel/thames/thames_gem.c
+@@ -351,3 +351,55 @@ int thames_ioctl_bo_mmap_offset(struct drm_device *ddev, void *data, struct drm_
+ 
+ 	return 0;
+ }
++
++int thames_ioctl_bo_prep(struct drm_device *ddev, void *data, struct drm_file *file)
++{
++	struct drm_thames_bo_prep *args = data;
++	struct drm_gem_object *gem_obj;
++	struct drm_gem_shmem_object *shmem_obj;
++	unsigned long timeout = drm_timeout_abs_to_jiffies(args->timeout_ns);
++	long ret = 0;
++
++	if (args->reserved != 0)
++		return -EINVAL;
++
++	gem_obj = drm_gem_object_lookup(file, args->handle);
++	if (!gem_obj)
++		return -ENOENT;
++
++	ret = dma_resv_wait_timeout(gem_obj->resv, DMA_RESV_USAGE_WRITE, true, timeout);
++	if (!ret)
++		ret = timeout ? -ETIMEDOUT : -EBUSY;
++
++	shmem_obj = &to_thames_bo(gem_obj)->base;
++
++	dma_sync_sgtable_for_cpu(ddev->dev, shmem_obj->sgt, DMA_FROM_DEVICE);
++
++	drm_gem_object_put(gem_obj);
++
++	return ret;
++}
++
++int thames_ioctl_bo_fini(struct drm_device *ddev, void *data, struct drm_file *file)
++{
++	struct drm_thames_bo_fini *args = data;
++	struct drm_gem_shmem_object *shmem_obj;
++	struct thames_gem_object *thames_obj;
++	struct drm_gem_object *gem_obj;
++
++	if (args->reserved != 0)
++		return -EINVAL;
++
++	gem_obj = drm_gem_object_lookup(file, args->handle);
++	if (!gem_obj)
++		return -ENOENT;
++
++	thames_obj = to_thames_bo(gem_obj);
++	shmem_obj = &thames_obj->base;
++
++	dma_sync_sgtable_for_device(ddev->dev, shmem_obj->sgt, DMA_TO_DEVICE);
++
++	drm_gem_object_put(gem_obj);
++
++	return 0;
++}
+diff --git a/drivers/accel/thames/thames_gem.h b/drivers/accel/thames/thames_gem.h
+index 785843c40a89a9e84ab634aad77e9ec46111693e..e5a8278e98c578c2903cf23aea1bf887be0389e8 100644
+--- a/drivers/accel/thames/thames_gem.h
++++ b/drivers/accel/thames/thames_gem.h
+@@ -29,6 +29,10 @@ int thames_ioctl_bo_create(struct drm_device *ddev, void *data, struct drm_file
+ 
+ int thames_ioctl_bo_mmap_offset(struct drm_device *ddev, void *data, struct drm_file *file);
+ 
++int thames_ioctl_bo_prep(struct drm_device *ddev, void *data, struct drm_file *file);
++
++int thames_ioctl_bo_fini(struct drm_device *ddev, void *data, struct drm_file *file);
++
+ int thames_context_create(struct thames_file_priv *priv);
+ 
+ void thames_context_destroy(struct thames_file_priv *priv);
+diff --git a/include/uapi/drm/thames_accel.h b/include/uapi/drm/thames_accel.h
+index 5b35e50826ed95bfcc3709bef33416d2b6d11c70..07477087211c14721298ff52a1f3d253a6e65d58 100644
+--- a/include/uapi/drm/thames_accel.h
++++ b/include/uapi/drm/thames_accel.h
+@@ -31,6 +31,12 @@ enum drm_thames_ioctl_id {
+ 
+ 	/** @DRM_THAMES_SUBMIT: Submit a job and BOs to run. */
+ 	DRM_THAMES_SUBMIT,
++
++	/** @DRM_THAMES_BO_PREP: Prepare a BO for CPU access after DSP writes. */
++	DRM_THAMES_BO_PREP,
++
++	/** @DRM_THAMES_BO_FINI: Finish CPU access and prepare BO for DSP access. */
++	DRM_THAMES_BO_FINI,
+ };
+ 
+ /**
+@@ -127,6 +133,27 @@ struct drm_thames_submit {
+ 	__u32 pad;
+ };
+ 
++/**
++ * struct drm_thames_bo_prep - ioctl argument for preparing a BO for CPU access.
++ *
++ * This invalidates CPU caches and waits for pending DSP operations to complete.
++ */
++struct drm_thames_bo_prep {
++	__u32 handle;
++	__u32 reserved;
++	__s64 timeout_ns;	/* absolute */
++};
++
++/**
++ * struct drm_thames_bo_fini - ioctl argument for finishing CPU access to a BO.
++ *
++ * This flushes CPU caches to make CPU writes visible to the DSP.
++ */
++struct drm_thames_bo_fini {
++	__u32 handle;
++	__u32 reserved;
++};
++
+ /**
+  * DRM_IOCTL_THAMES() - Build a thames IOCTL number
+  * @__access: Access type. Must be R, W or RW.
+@@ -149,6 +176,10 @@ enum {
+ 		DRM_IOCTL_THAMES(WR, BO_MMAP_OFFSET, bo_mmap_offset),
+ 	DRM_IOCTL_THAMES_SUBMIT =
+ 		DRM_IOCTL_THAMES(WR, SUBMIT, submit),
++	DRM_IOCTL_THAMES_BO_PREP =
++		DRM_IOCTL_THAMES(WR, BO_PREP, bo_prep),
++	DRM_IOCTL_THAMES_BO_FINI =
++		DRM_IOCTL_THAMES(WR, BO_FINI, bo_fini),
+ };
+ 
+ #if defined(__cplusplus)
 
- Documentation/accel/thames/index.rst               |  28 ++
- MAINTAINERS                                        |   9 +
- .../boot/dts/ti/k3-j722s-ti-ipc-firmware.dtsi      |  11 +-
- drivers/accel/Kconfig                              |   1 +
- drivers/accel/Makefile                             |   3 +-
- drivers/accel/thames/Kconfig                       |  26 ++
- drivers/accel/thames/Makefile                      |  11 +
- drivers/accel/thames/thames_core.c                 | 161 +++++++
- drivers/accel/thames/thames_core.h                 |  53 +++
- drivers/accel/thames/thames_device.c               |  93 +++++
- drivers/accel/thames/thames_device.h               |  46 ++
- drivers/accel/thames/thames_drv.c                  | 180 ++++++++
- drivers/accel/thames/thames_drv.h                  |  21 +
- drivers/accel/thames/thames_gem.c                  | 405 ++++++++++++++++++
- drivers/accel/thames/thames_gem.h                  |  45 ++
- drivers/accel/thames/thames_ipc.h                  | 204 +++++++++
- drivers/accel/thames/thames_job.c                  | 463 +++++++++++++++++++++
- drivers/accel/thames/thames_job.h                  |  51 +++
- drivers/accel/thames/thames_rpmsg.c                | 276 ++++++++++++
- drivers/accel/thames/thames_rpmsg.h                |  27 ++
- include/uapi/drm/thames_accel.h                    | 189 +++++++++
- 21 files changed, 2300 insertions(+), 3 deletions(-)
----
-base-commit: 27927a79b3c6aebd18f38507a8160294243763dc
-change-id: 20260113-thames-334127a2d91d
-
-Best regards,
 -- 
-Tomeu Vizoso <tomeu@tomeuvizoso.net>
+2.52.0
 
