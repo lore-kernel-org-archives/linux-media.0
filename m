@@ -1,956 +1,1196 @@
-Received: from bali.collaboradmins.com (bali.collaboradmins.com [148.251.105.195])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f51.google.com (mail-ed1-f51.google.com [209.85.208.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2F14238F953;
-	Wed, 14 Jan 2026 10:09:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.251.105.195
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1F89B354AE0
+	for <linux-media@vger.kernel.org>; Wed, 14 Jan 2026 10:30:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768385375; cv=none; b=Ni9yJsrgnR5LhqZ0HS2J8AiVz+ifBPD02yJRzo9au6tQsEsmISzDDU1V+tkCw3aNoClwBisrQopfeqtXu6hu9LMYSaRXNFq6+/k3ra4bJZr8t3ytsGEAsbYoCrbQ6BhYbd6X2k2Ul6PTUtainw7jFiRjUlIXP3rJjLNIzTStXs4=
+	t=1768386615; cv=none; b=kjJgW1P3cbEA6GPFSE8F/aQ4bM2dfmrrB8HEaLt9qI22eSnUlJkHuuRxVn8EfSBbyAbQS8RSusRD9Ub1q2/vwuRqamYhn1jMwOAr7tyopMkxuDwJnFv6FnGp27iSl84HKSM2LehxnFo4I+qjNp7maHyrb+59TYNtFaist6C6y3I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768385375; c=relaxed/simple;
-	bh=q8bBGOVFNxbfmbQYIOpZ8IWsN166UHGLnE/htVF8GY8=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=SpFO4NBfGqfNdUFP07TDjMiWgoVuesUdEH1MLLI3TksErWrVNbsMcZZQlR/jVtaV8qnDIO5ulEElwaIwm2gYkPf/nMV0ZDz08+0hnmIOr9c+Ic4iBkeht7azsyyo2xF/mJnljh6zKaor34/zT3bPZFJ+DA5Pfq7X3CpEzkmjpDQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=LNw9pVhF; arc=none smtp.client-ip=148.251.105.195
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="LNw9pVhF"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1768385369;
-	bh=q8bBGOVFNxbfmbQYIOpZ8IWsN166UHGLnE/htVF8GY8=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=LNw9pVhFxlnlVDdFU6LRdTMNgSUemoz/YeUdCz0oJ32+vEP0GCx4aGxferrCR2I6z
-	 4brMS+EmIZfm5ITGa8tVJFzaNJFNM8uR2yqSTbN7DlW0h+T5ivk3gBJ6qFboMfEdD1
-	 abpSZ/C/NLszR1Xtbhl5getzy/TQoTbwBu+TwGN30Phxcgo1TU3slc827/tQ/PW6LH
-	 fz7nLNWIuR1Tzq7JbL50ts82XEbjCFgeUrWxvieY3QW1wmmTvuZAKiwXJDWl1KlLBB
-	 ypI2UOKx3/Rj/7f7XuHXW1iv2YBgPq1E20U1a/BqMIDkO+mCr7+7ZgDWCRW5IyoRQb
-	 8KX0a/c9yKduQ==
-Received: from benjamin-XPS-13-9310.. (unknown [IPv6:2a01:e0a:120:3210:1dad:60e8:7174:bd20])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: benjamin.gaignard)
-	by bali.collaboradmins.com (Postfix) with ESMTPSA id 31DF017E150E;
-	Wed, 14 Jan 2026 11:09:29 +0100 (CET)
-From: Benjamin Gaignard <benjamin.gaignard@collabora.com>
-To: joro@8bytes.org,
-	will@kernel.org,
-	robin.murphy@arm.com,
-	robh@kernel.org,
-	krzk+dt@kernel.org,
-	conor+dt@kernel.org,
-	heiko@sntech.de,
-	nicolas.dufresne@collabora.com,
-	p.zabel@pengutronix.de,
-	mchehab@kernel.org
-Cc: iommu@lists.linux.dev,
-	devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-rockchip@lists.infradead.org,
-	linux-media@vger.kernel.org,
-	kernel@collabora.com,
-	Benjamin Gaignard <benjamin.gaignard@collabora.com>
-Subject: [PATCH v12 3/6] iommu: Add verisilicon IOMMU driver
-Date: Wed, 14 Jan 2026 11:09:15 +0100
-Message-ID: <20260114100922.149187-4-benjamin.gaignard@collabora.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20260114100922.149187-1-benjamin.gaignard@collabora.com>
-References: <20260114100922.149187-1-benjamin.gaignard@collabora.com>
+	s=arc-20240116; t=1768386615; c=relaxed/simple;
+	bh=ARqCQv3wEbCgZq48lQ8M3Wi7MHgfqSHye/tSUjJUxtA=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=Md6RnZD5g7RiEcdqByJogKVLdq7qopwX11joXxflO08BvmailwTck8iZkcw729kuw+1m/oK6AN37at34MgN6Av0lFezKe5eT33amh6J/pPFsNXBSwDeASKLb1BpxOgAw311svz2ZdCn1LBcwWypsHilfptqW9t9Df45I/EqRMTU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tomeuvizoso.net; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.208.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tomeuvizoso.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ed1-f51.google.com with SMTP id 4fb4d7f45d1cf-64b83949fdaso13743722a12.2
+        for <linux-media@vger.kernel.org>; Wed, 14 Jan 2026 02:30:11 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1768386610; x=1768991410;
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :mime-version:subject:date:from:x-gm-gg:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=p15e32WbNaL2KGaBjlfT55qZ8Pa+6Ph5Zi1/eLI5a5E=;
+        b=gMeinkn7SsfkWeB+B61g0vQ4eG9CU3zdQ2EDV73zqTJ+eNMhN7HmMHXDU6ZeXLanMn
+         mjuL8A/nF/CrFEXfbBb3lWSVN5Tw/KzJnQHM69DCXRSkoVU8byU4az5KeNc7mMITU2dx
+         QJxxNKefcfte3QYn1YpBAW3lkZxHNV/sovLHHW2GdZn1LClxOwuLgeHutFo9lPZL+T1J
+         9mSt1XKAhGdwJlN083d8rkdHYfpwbilQN56pkprGLds+HgKhw8e9snzz2YFplv8wCEBf
+         39RfEzQQPAhs++YvGgn+Oz3HN/ct2pkZA9sTLD15o/6zgUe+0jgZQz7QTO7diDd8VJET
+         AD/Q==
+X-Forwarded-Encrypted: i=1; AJvYcCXGjfWHIdOPcG+2775lFRnZ5g7dMKc7/dexHqxlFwAzIwcq8Y/8OTLNPtQ91OvmuudcdxpG3GzRHoLPgw==@vger.kernel.org
+X-Gm-Message-State: AOJu0YydXI/nJhbqakdodQ7/spxev5FIk35mi/9GV6PKjFlJszr+LW66
+	rIXbkXSssd6P3TLBHhWtnvoTXj8FJi/ZibgkrHut4cLaGS+jjt7AVZ/69hm1Zw==
+X-Gm-Gg: AY/fxX7XYX9/GklDiQtpolI5BDzV6gP0GBQ0FpZ9y56JRD9OMr+lWiqKHJCWaF6GwyJ
+	udYNZmeyXzYSUOmgN3kJunWsK0uHrgVf8ok/2PmQWHIzr0BqMn8cXt7ZUTxoOV8fUaEuu7ub2Or
+	JrEqmvmS4kG6aMKfCT8TCkHTwVshfMaGzbBORbU5moEMyoHGGre2JNiTTfiluSuoxMgGLoH+dHh
+	wcfJZ2SpEStKnUsMoE8ycqImg0aaJJhNz6eCrlDuR5+co8SIaYSXjyJmpRUr2nLBJZPR573gVwh
+	6Fa2ABbPQjbemSfQRBbj3Qajq5IzrOnTo/r/44zX6JnkN+hrR2yb8BWDb7EFZHHjJ0E/u5b9E8S
+	JX9QcGWEnwXUl9OKgjljIQvZOm4XtQGCESZogZK4lA5sWYRv0/6t5ExGJrtl4vQLzwLM2u8lfkR
+	6XQ/OiK3pScJ3CESHqLlyb5hRZHiuqj/TUUujGYtITW7caNg==
+X-Received: by 2002:a05:6402:13c3:b0:64d:e1c:4c0a with SMTP id 4fb4d7f45d1cf-653ebf703famr1606697a12.0.1768380438100;
+        Wed, 14 Jan 2026 00:47:18 -0800 (PST)
+Received: from [10.42.0.1] (cst-prg-36-231.cust.vodafone.cz. [46.135.36.231])
+        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-6507bf6d5d4sm22379136a12.32.2026.01.14.00.47.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 14 Jan 2026 00:47:17 -0800 (PST)
+From: Tomeu Vizoso <tomeu@tomeuvizoso.net>
+Date: Wed, 14 Jan 2026 09:46:49 +0100
+Subject: [PATCH v2 2/5] accel/thames: Add driver for the C7x DSPs in TI
+ SoCs
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20260114-thames-v2-2-e94a6636e050@tomeuvizoso.net>
+References: <20260114-thames-v2-0-e94a6636e050@tomeuvizoso.net>
+In-Reply-To: <20260114-thames-v2-0-e94a6636e050@tomeuvizoso.net>
+To: Nishanth Menon <nm@ti.com>, "Andrew F. Davis" <afd@ti.com>, 
+ Randolph Sapp <rs@ti.com>, Jonathan Humphreys <j-humphreys@ti.com>, 
+ Andrei Aldea <a-aldea@ti.com>, Chirag Shilwant <c-shilwant@ti.com>, 
+ Vignesh Raghavendra <vigneshr@ti.com>, Tero Kristo <kristo@kernel.org>, 
+ Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+ Conor Dooley <conor+dt@kernel.org>, Oded Gabbay <ogabbay@kernel.org>, 
+ Jonathan Corbet <corbet@lwn.net>, Sumit Semwal <sumit.semwal@linaro.org>, 
+ =?utf-8?q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>, 
+ Robert Nelson <robertcnelson@gmail.com>, David Airlie <airlied@gmail.com>, 
+ Simona Vetter <simona@ffwll.ch>, 
+ Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, 
+ Maxime Ripard <mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>
+Cc: linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org, 
+ linux-doc@vger.kernel.org, linux-media@vger.kernel.org, 
+ linaro-mm-sig@lists.linaro.org, Tomeu Vizoso <tomeu@tomeuvizoso.net>
+X-Mailer: b4 0.14.2
 
-The Verisilicon IOMMU hardware block can be found in combination
-with Verisilicon hardware video codecs (encoders or decoders) on
-different SoCs.
-Enable it will allow us to use non contiguous memory allocators
-for Verisilicon video codecs.
-If both decoder and this iommu driver are compiled has modules
-there is undefined symboles issues so this iommu driver could
-only be compiled has built-in.
+Some SoCs from Texas Instruments contain DSPs that can be used for
+general compute tasks.
 
-Signed-off-by: Benjamin Gaignard <benjamin.gaignard@collabora.com>
+This driver provides a drm/accel UABI to userspace for submitting jobs
+to the DSP cores and managing the input, output and intermediate memory.
+
+Signed-off-by: Tomeu Vizoso <tomeu@tomeuvizoso.net>
 ---
-changes in version 12:
-- Remove useless vsi_iommu_flush_tlb_all()
-- Merge MAINTAINERS changes in the patch introducing VSI iommu driver
+ Documentation/accel/thames/index.rst |  28 +++++
+ MAINTAINERS                          |   9 ++
+ drivers/accel/Kconfig                |   1 +
+ drivers/accel/Makefile               |   3 +-
+ drivers/accel/thames/Kconfig         |  26 +++++
+ drivers/accel/thames/Makefile        |   9 ++
+ drivers/accel/thames/thames_core.c   | 155 ++++++++++++++++++++++++++
+ drivers/accel/thames/thames_core.h   |  53 +++++++++
+ drivers/accel/thames/thames_device.c |  93 ++++++++++++++++
+ drivers/accel/thames/thames_device.h |  46 ++++++++
+ drivers/accel/thames/thames_drv.c    | 155 ++++++++++++++++++++++++++
+ drivers/accel/thames/thames_drv.h    |  21 ++++
+ drivers/accel/thames/thames_ipc.h    | 204 +++++++++++++++++++++++++++++++++++
+ drivers/accel/thames/thames_rpmsg.c  | 155 ++++++++++++++++++++++++++
+ drivers/accel/thames/thames_rpmsg.h  |  27 +++++
+ 15 files changed, 984 insertions(+), 1 deletion(-)
 
- MAINTAINERS               |   8 +
- drivers/iommu/Kconfig     |  11 +
- drivers/iommu/Makefile    |   1 +
- drivers/iommu/vsi-iommu.c | 778 ++++++++++++++++++++++++++++++++++++++
- include/linux/vsi-iommu.h |  21 +
- 5 files changed, 819 insertions(+)
- create mode 100644 drivers/iommu/vsi-iommu.c
- create mode 100644 include/linux/vsi-iommu.h
-
+diff --git a/Documentation/accel/thames/index.rst b/Documentation/accel/thames/index.rst
+new file mode 100644
+index 0000000000000000000000000000000000000000..ca8391031f226f7ef1dc210a356c86acbe126c6f
+--- /dev/null
++++ b/Documentation/accel/thames/index.rst
+@@ -0,0 +1,28 @@
++.. SPDX-License-Identifier: GPL-2.0-only
++
++============================================================
++ accel/thames Driver for the C7x DSPs from Texas Instruments
++============================================================
++
++The accel/thames driver supports the C7x DSPs inside some Texas Instruments SoCs
++such as the J722S. These can be used as accelerators for various workloads,
++including machine learning inference.
++
++This driver controls the power state of the hardware via :doc:`remoteproc </staging/remoteproc>`
++and communicates with the firmware running on the DSP via :doc:`rpmsg_virtio </staging/rpmsg_virtio>`.
++The kernel driver itself allocates buffers, manages contexts, and submits jobs
++to the DSP firmware. Buffers are mapped by the DSP itself using its MMU,
++providing memory isolation among different clients.
++
++The source code for the firmware running on the DSP is available at:
++https://gitlab.freedesktop.org/tomeu/thames_firmware/.
++
++Everything else is done in userspace, as a Gallium driver (also called thames)
++that is part of the Mesa3D project: https://docs.mesa3d.org/teflon.html
++
++If there is more than one core that advertises the same rpmsg_virtio service
++name, the driver will load balance jobs between them with drm-gpu-scheduler.
++
++Hardware currently supported:
++
++* J722S
 diff --git a/MAINTAINERS b/MAINTAINERS
-index 0d044a58cbfe..d1d07f8de394 100644
+index dc731d37c8feeff25613c59fe9c929927dadaa7e..a3fc809c797269d0792dfe5202cc1b49f6ff57e9 100644
 --- a/MAINTAINERS
 +++ b/MAINTAINERS
-@@ -27320,6 +27320,14 @@ F:	drivers/media/v4l2-core/v4l2-isp.c
- F:	include/media/v4l2-isp.h
- F:	include/uapi/linux/media/v4l2-isp.h
+@@ -7731,6 +7731,15 @@ F:	Documentation/devicetree/bindings/npu/rockchip,rk3588-rknn-core.yaml
+ F:	drivers/accel/rocket/
+ F:	include/uapi/drm/rocket_accel.h
  
-+VERISILICON IOMMU DRIVER
-+M:	Benjamin Gaignard <benjamin.gaignard@collabora.com>
-+L:	iommu@lists.linux.dev
-+S:	Maintained
-+F:	Documentation/devicetree/bindings/iommu/verisilicon,iommu.yaml
-+F:	drivers/iommu/vsi-iommu.c
-+F:	include/linux/vsi-iommu.h
++DRM ACCEL DRIVER FOR TI C7x DSPS
++M:	Tomeu Vizoso <tomeu@tomeuvizoso.net>
++L:	dri-devel@lists.freedesktop.org
++S:	Supported
++T:	git https://gitlab.freedesktop.org/drm/misc/kernel.git
++F:	Documentation/accel/thames/
++F:	drivers/accel/thames/
++F:	include/uapi/drm/thames_accel.h
 +
- VF610 NAND DRIVER
- M:	Stefan Agner <stefan@agner.ch>
- L:	linux-mtd@lists.infradead.org
-diff --git a/drivers/iommu/Kconfig b/drivers/iommu/Kconfig
-index 99095645134f..cfa712d2d035 100644
---- a/drivers/iommu/Kconfig
-+++ b/drivers/iommu/Kconfig
-@@ -384,6 +384,17 @@ config SPRD_IOMMU
+ DRM COMPUTE ACCELERATORS DRIVERS AND FRAMEWORK
+ M:	Oded Gabbay <ogabbay@kernel.org>
+ L:	dri-devel@lists.freedesktop.org
+diff --git a/drivers/accel/Kconfig b/drivers/accel/Kconfig
+index bdf48ccafcf21b2fd685ec963e39e256196e6e17..cb49c71cd4e4a4220624f7041a75ba950a1a2ee1 100644
+--- a/drivers/accel/Kconfig
++++ b/drivers/accel/Kconfig
+@@ -30,5 +30,6 @@ source "drivers/accel/habanalabs/Kconfig"
+ source "drivers/accel/ivpu/Kconfig"
+ source "drivers/accel/qaic/Kconfig"
+ source "drivers/accel/rocket/Kconfig"
++source "drivers/accel/thames/Kconfig"
  
- 	  Say Y here if you want to use the multimedia devices listed above.
- 
-+config VSI_IOMMU
-+	bool "Verisilicon IOMMU Support"
-+	depends on (ARCH_ROCKCHIP && ARM64) || COMPILE_TEST
-+	select IOMMU_API
-+	help
-+	  Support for IOMMUs used by Verisilicon sub-systems like video
-+	  decoders or encoder hardware blocks.
-+
-+	  Say Y here if you want to use this IOMMU in front of these
-+	  hardware blocks.
-+
- endif # IOMMU_SUPPORT
- 
- source "drivers/iommu/generic_pt/Kconfig"
-diff --git a/drivers/iommu/Makefile b/drivers/iommu/Makefile
-index 8e8843316c4b..f4043350d023 100644
---- a/drivers/iommu/Makefile
-+++ b/drivers/iommu/Makefile
-@@ -36,3 +36,4 @@ obj-$(CONFIG_IOMMU_SVA) += iommu-sva.o
- obj-$(CONFIG_IOMMU_IOPF) += io-pgfault.o
- obj-$(CONFIG_SPRD_IOMMU) += sprd-iommu.o
- obj-$(CONFIG_APPLE_DART) += apple-dart.o
-+obj-$(CONFIG_VSI_IOMMU) += vsi-iommu.o
-diff --git a/drivers/iommu/vsi-iommu.c b/drivers/iommu/vsi-iommu.c
+ endif
+diff --git a/drivers/accel/Makefile b/drivers/accel/Makefile
+index 1d3a7251b950f39e2ae600a2fc07a3ef7e41831e..8472989cbe22746f1e7292d2401fa0f7424a6c15 100644
+--- a/drivers/accel/Makefile
++++ b/drivers/accel/Makefile
+@@ -5,4 +5,5 @@ obj-$(CONFIG_DRM_ACCEL_ARM_ETHOSU)	+= ethosu/
+ obj-$(CONFIG_DRM_ACCEL_HABANALABS)	+= habanalabs/
+ obj-$(CONFIG_DRM_ACCEL_IVPU)		+= ivpu/
+ obj-$(CONFIG_DRM_ACCEL_QAIC)		+= qaic/
+-obj-$(CONFIG_DRM_ACCEL_ROCKET)		+= rocket/
+\ No newline at end of file
++obj-$(CONFIG_DRM_ACCEL_ROCKET)		+= rocket/
++obj-$(CONFIG_DRM_ACCEL_THAMES)		+= thames/
+\ No newline at end of file
+diff --git a/drivers/accel/thames/Kconfig b/drivers/accel/thames/Kconfig
 new file mode 100644
-index 000000000000..aeb407047b95
+index 0000000000000000000000000000000000000000..50e0b6ac2a16a942ba8463333991f5b0161b99ac
 --- /dev/null
-+++ b/drivers/iommu/vsi-iommu.c
-@@ -0,0 +1,778 @@
++++ b/drivers/accel/thames/Kconfig
+@@ -0,0 +1,26 @@
++# SPDX-License-Identifier: GPL-2.0-only
++
++config DRM_ACCEL_THAMES
++	tristate "Thames (support for TI C7x DSP accelerators)"
++	depends on DRM_ACCEL
++	depends on TI_K3_R5_REMOTEPROC || COMPILE_TEST
++	depends on RPMSG
++	depends on MMU
++	select DRM_SCHED
++	select DRM_GEM_SHMEM_HELPER
++	help
++	  Choose this option if you have a Texas Instruments SoC that contains
++	  C7x DSP cores that can be used as compute accelerators. This includes
++	  SoCs such as the AM62A, J721E, J721S2, and J784S4.
++
++	  The C7x DSP cores can be used for general-purpose compute acceleration
++	  and are exposed through the DRM accel subsystem.
++
++	  The interface exposed to userspace is described in
++	  include/uapi/drm/thames_accel.h and is used by the Thames userspace
++	  driver in Mesa3D.
++
++	  If unsure, say N.
++
++	  To compile this driver as a module, choose M here: the
++	  module will be called thames.
+diff --git a/drivers/accel/thames/Makefile b/drivers/accel/thames/Makefile
+new file mode 100644
+index 0000000000000000000000000000000000000000..7ccd8204f0f5ea800f30e84b319f355be948109d
+--- /dev/null
++++ b/drivers/accel/thames/Makefile
+@@ -0,0 +1,9 @@
++# SPDX-License-Identifier: GPL-2.0-only
++
++obj-$(CONFIG_DRM_ACCEL_THAMES) := thames.o
++
++thames-y := \
++	thames_core.o \
++	thames_device.o \
++	thames_drv.o \
++	thames_rpmsg.o
+diff --git a/drivers/accel/thames/thames_core.c b/drivers/accel/thames/thames_core.c
+new file mode 100644
+index 0000000000000000000000000000000000000000..92af1d68063116bcfa28a33960cbe829029fc1bf
+--- /dev/null
++++ b/drivers/accel/thames/thames_core.c
+@@ -0,0 +1,155 @@
 +// SPDX-License-Identifier: GPL-2.0-only
-+/* Copyright (C) 2025 Collabora Ltd.
-+ *
-+ * IOMMU API for Verisilicon
-+ *
-+ * Module Authors:	Yandong Lin <yandong.lin@rock-chips.com>
-+ *			Simon Xue <xxm@rock-chips.com>
-+ *			Benjamin Gaignard <benjamin.gaignard@collabora.com>
-+ */
++/* Copyright 2026 Texas Instruments Incorporated - https://www.ti.com/ */
 +
-+#include <linux/clk.h>
-+#include <linux/compiler.h>
-+#include <linux/delay.h>
-+#include <linux/device.h>
-+#include <linux/dma-mapping.h>
-+#include <linux/errno.h>
-+#include <linux/init.h>
-+#include <linux/interrupt.h>
-+#include <linux/io.h>
-+#include <linux/iommu.h>
-+#include <linux/list.h>
-+#include <linux/mm.h>
-+#include <linux/module.h>
++#include "linux/remoteproc.h"
++#include <linux/dev_printk.h>
++#include <linux/err.h>
 +#include <linux/of.h>
-+#include <linux/of_iommu.h>
-+#include <linux/of_platform.h>
++#include <linux/of_address.h>
 +#include <linux/platform_device.h>
-+#include <linux/pm_runtime.h>
-+#include <linux/slab.h>
-+#include <linux/spinlock.h>
-+#include <linux/vsi-iommu.h>
++#include <linux/completion.h>
++#include <linux/jiffies.h>
++#include <linux/rpmsg.h>
 +
-+#include "iommu-pages.h"
++#include "thames_core.h"
++#include "thames_device.h"
++#include "thames_rpmsg.h"
 +
-+struct vsi_iommu {
-+	struct device *dev;
-+	void __iomem *regs;
-+	struct clk_bulk_data *clocks;
-+	int num_clocks;
-+	struct iommu_device iommu;
-+	struct list_head node; /* entry in vsi_iommu_domain.iommus */
-+	struct iommu_domain *domain; /* domain to which iommu is attached */
-+	spinlock_t lock; /* lock to protect vsi_iommu fields */
-+	int irq;
-+};
++/* Shift to convert bytes to megabytes (divide by 1048576) */
++#define THAMES_BYTES_TO_MB_SHIFT 20
 +
-+struct vsi_iommu_domain {
-+	struct list_head iommus;
-+	struct device *dev;
-+	u32 *dt;
-+	dma_addr_t dt_dma;
-+	struct iommu_domain domain;
-+	u64 *pta;
-+	dma_addr_t pta_dma;
-+	spinlock_t lock; /* lock to protect vsi_iommu_domain fields */
-+};
-+
-+static struct iommu_domain vsi_identity_domain;
-+
-+#define NUM_DT_ENTRIES	1024
-+#define NUM_PT_ENTRIES	1024
-+#define PT_SIZE		(NUM_PT_ENTRIES * sizeof(u32))
-+
-+#define SPAGE_SIZE	BIT(12)
-+
-+/* vsi iommu regs address */
-+#define VSI_MMU_CONFIG1_BASE			0x1ac
-+#define VSI_MMU_AHB_EXCEPTION_BASE		0x380
-+#define VSI_MMU_AHB_CONTROL_BASE		0x388
-+#define VSI_MMU_AHB_TLB_ARRAY_BASE_L_BASE	0x38C
-+
-+/* MMU register offsets */
-+#define VSI_MMU_FLUSH_BASE		0x184
-+#define VSI_MMU_BIT_FLUSH		BIT(4)
-+
-+#define VSI_MMU_PAGE_FAULT_ADDR		0x380
-+#define VSI_MMU_STATUS_BASE		0x384	/* IRQ status */
-+
-+#define VSI_MMU_BIT_ENABLE		BIT(0)
-+
-+#define VSI_MMU_OUT_OF_BOUND		BIT(28)
-+/* Irq mask */
-+#define VSI_MMU_IRQ_MASK		0x7
-+
-+#define VSI_DTE_PT_ADDRESS_MASK		0xffffffc0
-+#define VSI_DTE_PT_VALID		BIT(0)
-+
-+#define VSI_PAGE_DESC_LO_MASK		0xfffff000
-+#define VSI_PAGE_DESC_HI_MASK		GENMASK_ULL(39, 32)
-+#define VSI_PAGE_DESC_HI_SHIFT		(32 - 4)
-+
-+static inline phys_addr_t vsi_dte_pt_address(u32 dte)
++int thames_core_get_iova_range(struct rpmsg_device *rpdev, u64 *iova_start, u64 *iova_size)
 +{
-+	return (phys_addr_t)dte & VSI_DTE_PT_ADDRESS_MASK;
-+}
-+
-+static inline u32 vsi_mk_dte(u32 dte)
-+{
-+	return (phys_addr_t)dte | VSI_DTE_PT_VALID;
-+}
-+
-+#define VSI_PTE_PAGE_WRITABLE		BIT(2)
-+#define VSI_PTE_PAGE_VALID		BIT(0)
-+
-+static inline phys_addr_t vsi_pte_page_address(u64 pte)
-+{
-+	return ((pte << VSI_PAGE_DESC_HI_SHIFT) & VSI_PAGE_DESC_HI_MASK) |
-+	       (pte & VSI_PAGE_DESC_LO_MASK);
-+}
-+
-+static u32 vsi_mk_pte(phys_addr_t page, int prot)
-+{
-+	u32 flags = 0;
-+
-+	flags |= (prot & IOMMU_WRITE) ? VSI_PTE_PAGE_WRITABLE : 0;
-+
-+	page = (page & VSI_PAGE_DESC_LO_MASK) |
-+	       ((page & VSI_PAGE_DESC_HI_MASK) >> VSI_PAGE_DESC_HI_SHIFT);
-+
-+	return page | flags | VSI_PTE_PAGE_VALID;
-+}
-+
-+#define VSI_DTE_PT_VALID	BIT(0)
-+
-+static inline bool vsi_dte_is_pt_valid(u32 dte)
-+{
-+	return dte & VSI_DTE_PT_VALID;
-+}
-+
-+static inline bool vsi_pte_is_page_valid(u32 pte)
-+{
-+	return pte & VSI_PTE_PAGE_VALID;
-+}
-+
-+static u32 vsi_mk_pte_invalid(u32 pte)
-+{
-+	return pte & ~VSI_PTE_PAGE_VALID;
-+}
-+
-+#define VSI_MASTER_TLB_MASK	GENMASK_ULL(31, 10)
-+/* mode 0 : 4k */
-+#define VSI_PTA_4K_MODE	0
-+
-+static u64 vsi_mk_pta(dma_addr_t dt_dma)
-+{
-+	u64 val = (dt_dma & VSI_MASTER_TLB_MASK) | VSI_PTA_4K_MODE;
-+
-+	return val;
-+}
-+
-+static struct vsi_iommu_domain *to_vsi_domain(struct iommu_domain *dom)
-+{
-+	return container_of(dom, struct vsi_iommu_domain, domain);
-+}
-+
-+static inline void vsi_table_flush(struct vsi_iommu_domain *vsi_domain, dma_addr_t dma,
-+				   unsigned int count)
-+{
-+	size_t size = count * sizeof(u32); /* count of u32 entry */
-+
-+	dma_sync_single_for_device(vsi_domain->dev, dma, size, DMA_TO_DEVICE);
-+}
-+
-+#define VSI_IOVA_DTE_MASK	0xffc00000
-+#define VSI_IOVA_DTE_SHIFT	22
-+#define VSI_IOVA_PTE_MASK	0x003ff000
-+#define VSI_IOVA_PTE_SHIFT	12
-+#define VSI_IOVA_PAGE_MASK	0x00000fff
-+#define VSI_IOVA_PAGE_SHIFT	0
-+
-+static u32 vsi_iova_dte_index(u32 iova)
-+{
-+	return (iova & VSI_IOVA_DTE_MASK) >> VSI_IOVA_DTE_SHIFT;
-+}
-+
-+static u32 vsi_iova_pte_index(u32 iova)
-+{
-+	return (iova & VSI_IOVA_PTE_MASK) >> VSI_IOVA_PTE_SHIFT;
-+}
-+
-+static u32 vsi_iova_page_offset(u32 iova)
-+{
-+	return (iova & VSI_IOVA_PAGE_MASK) >> VSI_IOVA_PAGE_SHIFT;
-+}
-+
-+static irqreturn_t vsi_iommu_irq(int irq, void *dev_id)
-+{
-+	struct vsi_iommu *iommu = dev_id;
-+	unsigned long flags;
-+	dma_addr_t iova;
-+	u32 status;
-+
-+	if (pm_runtime_resume_and_get(iommu->dev) < 0)
-+		return IRQ_NONE;
-+
-+	spin_lock_irqsave(&iommu->lock, flags);
-+
-+	status = readl(iommu->regs + VSI_MMU_STATUS_BASE);
-+	if (status & VSI_MMU_IRQ_MASK) {
-+		dev_err(iommu->dev, "unexpected int_status=%08x\n", status);
-+		iova = readl(iommu->regs + VSI_MMU_PAGE_FAULT_ADDR);
-+		report_iommu_fault(iommu->domain, iommu->dev, iova, status);
-+	}
-+	writel(0, iommu->regs + VSI_MMU_STATUS_BASE);
-+
-+	spin_unlock_irqrestore(&iommu->lock, flags);
-+	pm_runtime_put_autosuspend(iommu->dev);
-+
-+	return IRQ_HANDLED;
-+}
-+
-+static struct vsi_iommu *vsi_iommu_get_from_dev(struct device *dev)
-+{
-+	struct iommu_fwspec *fwspec = dev_iommu_fwspec_get(dev);
-+	struct device *iommu_dev = bus_find_device_by_fwnode(&platform_bus_type,
-+							     fwspec->iommu_fwnode);
-+
-+	put_device(iommu_dev);
-+
-+	return iommu_dev ? dev_get_drvdata(iommu_dev) : NULL;
-+}
-+
-+static struct iommu_domain *vsi_iommu_domain_alloc_paging(struct device *dev)
-+{
-+	struct vsi_iommu *iommu = dev_iommu_priv_get(dev);
-+	struct vsi_iommu_domain *vsi_domain;
-+
-+	vsi_domain = kzalloc(sizeof(*vsi_domain), GFP_KERNEL);
-+	if (!vsi_domain)
-+		return NULL;
-+
-+	vsi_domain->dev = iommu->dev;
-+	spin_lock_init(&vsi_domain->lock);
-+
-+	/*
-+	 * iommu use a 2 level pagetable.
-+	 * Each level1 (dt) and level2 (pt) table has 1024 4-byte entries.
-+	 * Allocate one 4 KiB page for each table.
-+	 */
-+	vsi_domain->dt = iommu_alloc_pages_sz(GFP_KERNEL | GFP_DMA32,
-+					      SPAGE_SIZE);
-+	if (!vsi_domain->dt)
-+		goto err_free_domain;
-+
-+	vsi_domain->dt_dma = dma_map_single(vsi_domain->dev, vsi_domain->dt,
-+					    SPAGE_SIZE, DMA_TO_DEVICE);
-+	if (dma_mapping_error(vsi_domain->dev, vsi_domain->dt_dma)) {
-+		dev_err(dev, "DMA map error for DT\n");
-+		goto err_free_dt;
-+	}
-+
-+	vsi_domain->pta = iommu_alloc_pages_sz(GFP_KERNEL | GFP_DMA32,
-+					       SPAGE_SIZE);
-+	if (!vsi_domain->pta)
-+		goto err_unmap_dt;
-+
-+	vsi_domain->pta[0] = vsi_mk_pta(vsi_domain->dt_dma);
-+	vsi_domain->pta_dma = dma_map_single(vsi_domain->dev, vsi_domain->pta,
-+					     SPAGE_SIZE, DMA_TO_DEVICE);
-+	if (dma_mapping_error(vsi_domain->dev, vsi_domain->pta_dma)) {
-+		dev_err(dev, "DMA map error for PTA\n");
-+		goto err_free_pta;
-+	}
-+
-+	INIT_LIST_HEAD(&vsi_domain->iommus);
-+
-+	vsi_domain->domain.geometry.aperture_start = 0;
-+	vsi_domain->domain.geometry.aperture_end   = DMA_BIT_MASK(32);
-+	vsi_domain->domain.geometry.force_aperture = true;
-+	vsi_domain->domain.pgsize_bitmap	   = SZ_4K;
-+
-+	return &vsi_domain->domain;
-+
-+err_free_pta:
-+	iommu_free_pages(vsi_domain->pta);
-+err_unmap_dt:
-+	dma_unmap_single(vsi_domain->dev, vsi_domain->dt_dma,
-+			 SPAGE_SIZE, DMA_TO_DEVICE);
-+err_free_dt:
-+	iommu_free_pages(vsi_domain->dt);
-+err_free_domain:
-+	kfree(vsi_domain);
-+
-+	return NULL;
-+}
-+
-+static phys_addr_t vsi_iommu_iova_to_phys(struct iommu_domain *domain,
-+					  dma_addr_t iova)
-+{
-+	struct vsi_iommu_domain *vsi_domain = to_vsi_domain(domain);
-+	phys_addr_t pt_phys, phys = 0;
-+	unsigned long flags;
-+	u32 dte, pte;
-+	u32 *page_table;
-+
-+	spin_lock_irqsave(&vsi_domain->lock, flags);
-+	dte = vsi_domain->dt[vsi_iova_dte_index(iova)];
-+	if (!vsi_dte_is_pt_valid(dte))
-+		goto unlock;
-+
-+	pt_phys = vsi_dte_pt_address(dte);
-+	page_table = (u32 *)phys_to_virt(pt_phys);
-+	pte = page_table[vsi_iova_pte_index(iova)];
-+	if (!vsi_pte_is_page_valid(pte))
-+		goto unlock;
-+
-+	phys = vsi_pte_page_address(pte) + vsi_iova_page_offset(iova);
-+
-+unlock:
-+	spin_unlock_irqrestore(&vsi_domain->lock, flags);
-+	return phys;
-+}
-+
-+static size_t vsi_iommu_unmap_iova(struct vsi_iommu_domain *vsi_domain,
-+				   u32 *pte_addr, dma_addr_t pte_dma,
-+				   size_t size)
-+{
-+	unsigned int pte_count;
-+	unsigned int pte_total = size / SPAGE_SIZE;
-+
-+	for (pte_count = 0;
-+	     pte_count < pte_total && pte_count < NUM_PT_ENTRIES; pte_count++) {
-+		u32 pte = pte_addr[pte_count];
-+
-+		if (!vsi_pte_is_page_valid(pte))
-+			break;
-+
-+		pte_addr[pte_count] = vsi_mk_pte_invalid(pte);
-+	}
-+
-+	vsi_table_flush(vsi_domain, pte_dma, pte_total);
-+
-+	return pte_count * SPAGE_SIZE;
-+}
-+
-+static int vsi_iommu_map_iova(struct vsi_iommu_domain *vsi_domain, u32 *pte_addr,
-+			      dma_addr_t pte_dma, dma_addr_t iova,
-+			      phys_addr_t paddr, size_t size, int prot)
-+{
-+	unsigned int pte_count;
-+	unsigned int pte_total = size / SPAGE_SIZE;
-+
-+	for (pte_count = 0;
-+	     pte_count < pte_total && pte_count < NUM_PT_ENTRIES; pte_count++) {
-+		u32 pte = pte_addr[pte_count];
-+
-+		if (vsi_pte_is_page_valid(pte))
-+			return (pte_count - 1) * SPAGE_SIZE;
-+
-+		pte_addr[pte_count] = vsi_mk_pte(paddr, prot);
-+
-+		paddr += SPAGE_SIZE;
-+	}
-+
-+	vsi_table_flush(vsi_domain, pte_dma, pte_total);
-+
-+	return 0;
-+}
-+
-+static size_t vsi_iommu_unmap(struct iommu_domain *domain, unsigned long _iova,
-+			      size_t size, size_t count, struct iommu_iotlb_gather *gather)
-+{
-+	struct vsi_iommu_domain *vsi_domain = to_vsi_domain(domain);
-+	dma_addr_t pte_dma, iova = (dma_addr_t)_iova;
-+	unsigned long flags;
-+	phys_addr_t pt_phys;
-+	u32 dte;
-+	u32 *pte_addr;
-+	size_t unmap_size = 0;
-+
-+	spin_lock_irqsave(&vsi_domain->lock, flags);
-+
-+	dte = vsi_domain->dt[vsi_iova_dte_index(iova)];
-+	/* Just return 0 if iova is unmapped */
-+	if (!vsi_dte_is_pt_valid(dte))
-+		goto unlock;
-+
-+	pt_phys = vsi_dte_pt_address(dte);
-+	pte_addr = (u32 *)phys_to_virt(pt_phys) + vsi_iova_pte_index(iova);
-+	pte_dma = pt_phys + vsi_iova_pte_index(iova) * sizeof(u32);
-+	unmap_size = vsi_iommu_unmap_iova(vsi_domain, pte_addr, pte_dma, size);
-+
-+unlock:
-+	spin_unlock_irqrestore(&vsi_domain->lock, flags);
-+
-+	return unmap_size;
-+}
-+
-+static u32 *vsi_dte_get_page_table(struct vsi_iommu_domain *vsi_domain,
-+				   dma_addr_t iova, gfp_t gfp)
-+{
-+	u32 *page_table, *dte_addr;
-+	u32 dte_index, dte;
-+	phys_addr_t pt_phys;
-+	dma_addr_t pt_dma;
-+	gfp_t flags;
-+
-+	dte_index = vsi_iova_dte_index(iova);
-+	dte_addr = &vsi_domain->dt[dte_index];
-+	dte = *dte_addr;
-+	if (vsi_dte_is_pt_valid(dte))
-+		goto done;
-+
-+	/* Do not allow to sleep while allocating the buffer */
-+	flags = (gfp & ~GFP_KERNEL) | GFP_ATOMIC | GFP_DMA32;
-+	page_table = iommu_alloc_pages_sz(flags, PAGE_SIZE);
-+	if (!page_table)
-+		return ERR_PTR(-ENOMEM);
-+
-+	pt_dma = dma_map_single(vsi_domain->dev, page_table, PAGE_SIZE, DMA_TO_DEVICE);
-+	if (dma_mapping_error(vsi_domain->dev, pt_dma)) {
-+		dev_err(vsi_domain->dev, "DMA mapping error while allocating page table\n");
-+		iommu_free_pages(page_table);
-+		return ERR_PTR(-ENOMEM);
-+	}
-+
-+	dte = vsi_mk_dte(pt_dma);
-+	*dte_addr = dte;
-+
-+	vsi_table_flush(vsi_domain,
-+			vsi_domain->dt_dma + dte_index * sizeof(u32), 1);
-+done:
-+	pt_phys = vsi_dte_pt_address(dte);
-+	return (u32 *)phys_to_virt(pt_phys);
-+}
-+
-+static int vsi_iommu_map(struct iommu_domain *domain, unsigned long _iova,
-+			 phys_addr_t paddr, size_t size, size_t count,
-+			 int prot, gfp_t gfp, size_t *mapped)
-+{
-+	struct vsi_iommu_domain *vsi_domain = to_vsi_domain(domain);
-+	dma_addr_t pte_dma, iova = (dma_addr_t)_iova;
-+	u32 *page_table, *pte_addr;
-+	u32 dte, pte_index;
-+	unsigned long flags;
-+	int ret;
-+
-+	spin_lock_irqsave(&vsi_domain->lock, flags);
-+
-+	page_table = vsi_dte_get_page_table(vsi_domain, iova, gfp);
-+	if (IS_ERR(page_table)) {
-+		spin_unlock_irqrestore(&vsi_domain->lock, flags);
-+		return PTR_ERR(page_table);
-+	}
-+
-+	dte = vsi_domain->dt[vsi_iova_dte_index(iova)];
-+	pte_index = vsi_iova_pte_index(iova);
-+	pte_addr = &page_table[pte_index];
-+	pte_dma = vsi_dte_pt_address(dte) + pte_index * sizeof(u32);
-+	ret = vsi_iommu_map_iova(vsi_domain, pte_addr, pte_dma, iova,
-+				 paddr, size, prot);
-+	if (!ret)
-+		*mapped = size;
-+	spin_unlock_irqrestore(&vsi_domain->lock, flags);
-+
-+	return ret;
-+}
-+
-+static void vsi_iommu_disable(struct vsi_iommu *iommu)
-+{
-+	writel(0, iommu->regs + VSI_MMU_AHB_CONTROL_BASE);
-+}
-+
-+static int vsi_iommu_identity_attach(struct iommu_domain *domain,
-+				     struct device *dev, struct iommu_domain *old)
-+{
-+	struct vsi_iommu *iommu = dev_iommu_priv_get(dev);
-+	unsigned long flags;
-+	int ret;
-+
-+	ret = pm_runtime_resume_and_get(iommu->dev);
-+	if (ret < 0)
-+		return ret;
-+
-+	spin_lock_irqsave(&iommu->lock, flags);
-+	if (iommu->domain == domain)
-+		goto unlock;
-+
-+	vsi_iommu_disable(iommu);
-+	list_del_init(&iommu->node);
-+
-+	iommu->domain = domain;
-+
-+unlock:
-+	spin_unlock_irqrestore(&iommu->lock, flags);
-+	pm_runtime_put_autosuspend(iommu->dev);
-+	return 0;
-+}
-+
-+static const struct iommu_domain_ops vsi_identity_ops = {
-+	.attach_dev = vsi_iommu_identity_attach,
-+};
-+
-+static struct iommu_domain vsi_identity_domain = {
-+	.type = IOMMU_DOMAIN_IDENTITY,
-+	.ops = &vsi_identity_ops,
-+};
-+
-+static void vsi_iommu_enable(struct vsi_iommu *iommu, struct iommu_domain *domain)
-+{
-+	struct vsi_iommu_domain *vsi_domain = to_vsi_domain(domain);
-+
-+	if (domain == &vsi_identity_domain)
-+		return;
-+
-+	writel(vsi_domain->pta_dma, iommu->regs + VSI_MMU_AHB_TLB_ARRAY_BASE_L_BASE);
-+	writel(VSI_MMU_OUT_OF_BOUND, iommu->regs + VSI_MMU_CONFIG1_BASE);
-+	writel(VSI_MMU_BIT_ENABLE, iommu->regs + VSI_MMU_AHB_EXCEPTION_BASE);
-+	writel(VSI_MMU_BIT_ENABLE, iommu->regs + VSI_MMU_AHB_CONTROL_BASE);
-+}
-+
-+void vsi_iommu_restore_ctx(struct iommu_domain *domain)
-+{
-+	struct vsi_iommu_domain *vsi_domain = to_vsi_domain(domain);
-+	struct list_head *pos;
-+	unsigned long flags;
-+
-+	spin_lock_irqsave(&vsi_domain->lock, flags);
-+
-+	list_for_each(pos, &vsi_domain->iommus) {
-+		struct vsi_iommu *iommu;
-+
-+		iommu = list_entry(pos, struct vsi_iommu, node);
-+		if (!iommu)
-+			continue;
-+
-+		spin_lock(&iommu->lock);
-+
-+		writel(VSI_MMU_BIT_FLUSH, iommu->regs + VSI_MMU_FLUSH_BASE);
-+		writel(0, iommu->regs + VSI_MMU_FLUSH_BASE);
-+
-+		spin_unlock(&iommu->lock);
-+	}
-+
-+	spin_unlock_irqrestore(&vsi_domain->lock, flags);
-+}
-+EXPORT_SYMBOL_GPL(vsi_iommu_restore_ctx);
-+
-+static int vsi_iommu_attach_device(struct iommu_domain *domain,
-+				   struct device *dev, struct iommu_domain *old)
-+{
-+	struct vsi_iommu *iommu = dev_iommu_priv_get(dev);
-+	struct vsi_iommu_domain *vsi_domain = to_vsi_domain(domain);
-+	unsigned long flags, flags2;
-+	int ret = 0;
-+
-+	ret = pm_runtime_resume_and_get(iommu->dev);
-+	if (ret < 0)
-+		return ret;
-+
-+	spin_lock_irqsave(&vsi_domain->lock, flags);
-+	spin_lock_irqsave(&iommu->lock, flags2);
-+
-+	vsi_iommu_enable(iommu, domain);
-+	writel(VSI_MMU_BIT_FLUSH, iommu->regs + VSI_MMU_FLUSH_BASE);
-+	writel(0, iommu->regs + VSI_MMU_FLUSH_BASE);
-+
-+	list_del_init(&iommu->node);
-+	list_add_tail(&iommu->node, &vsi_domain->iommus);
-+
-+	iommu->domain = domain;
-+
-+	spin_unlock_irqrestore(&iommu->lock, flags2);
-+	spin_unlock_irqrestore(&vsi_domain->lock, flags);
-+	pm_runtime_put_autosuspend(iommu->dev);
-+	return ret;
-+}
-+
-+static void vsi_iommu_domain_free(struct iommu_domain *domain)
-+{
-+	struct vsi_iommu_domain *vsi_domain = to_vsi_domain(domain);
-+	unsigned long flags;
-+	int i;
-+
-+	spin_lock_irqsave(&vsi_domain->lock, flags);
-+
-+	WARN_ON(!list_empty(&vsi_domain->iommus));
-+
-+	for (i = 0; i < NUM_DT_ENTRIES; i++) {
-+		u32 dte = vsi_domain->dt[i];
-+
-+		if (vsi_dte_is_pt_valid(dte)) {
-+			phys_addr_t pt_phys = vsi_dte_pt_address(dte);
-+			u32 *page_table = phys_to_virt(pt_phys);
-+
-+			dma_unmap_single(vsi_domain->dev, pt_phys,
-+					 SPAGE_SIZE, DMA_TO_DEVICE);
-+			iommu_free_pages(page_table);
-+		}
-+	}
-+
-+	dma_unmap_single(vsi_domain->dev, vsi_domain->dt_dma,
-+			 SPAGE_SIZE, DMA_TO_DEVICE);
-+	iommu_free_pages(vsi_domain->dt);
-+
-+	dma_unmap_single(vsi_domain->dev, vsi_domain->pta_dma,
-+			 SPAGE_SIZE, DMA_TO_DEVICE);
-+	iommu_free_pages(vsi_domain->pta);
-+
-+	spin_unlock_irqrestore(&vsi_domain->lock, flags);
-+
-+	kfree(vsi_domain);
-+}
-+
-+static struct iommu_device *vsi_iommu_probe_device(struct device *dev)
-+{
-+	struct vsi_iommu *iommu = vsi_iommu_get_from_dev(dev);
-+	struct device_link *link;
-+
-+	link = device_link_add(dev, iommu->dev,
-+			       DL_FLAG_STATELESS | DL_FLAG_PM_RUNTIME);
-+	if (!link)
-+		dev_err(dev, "Unable to link %s\n", dev_name(iommu->dev));
-+
-+	dev_iommu_priv_set(dev, iommu);
-+	return &iommu->iommu;
-+}
-+
-+static void vsi_iommu_release_device(struct device *dev)
-+{
-+	struct vsi_iommu *iommu = dev_iommu_priv_get(dev);
-+
-+	device_link_remove(dev, iommu->dev);
-+}
-+
-+static int vsi_iommu_of_xlate(struct device *dev, const struct of_phandle_args *args)
-+{
-+	return iommu_fwspec_add_ids(dev, args->args, 1);
-+}
-+
-+static const struct iommu_ops vsi_iommu_ops = {
-+	.identity_domain = &vsi_identity_domain,
-+	.release_domain = &vsi_identity_domain,
-+	.domain_alloc_paging = vsi_iommu_domain_alloc_paging,
-+	.of_xlate = vsi_iommu_of_xlate,
-+	.probe_device = vsi_iommu_probe_device,
-+	.release_device = vsi_iommu_release_device,
-+	.device_group = generic_single_device_group,
-+	.owner = THIS_MODULE,
-+	.default_domain_ops = &(const struct iommu_domain_ops) {
-+		.attach_dev		= vsi_iommu_attach_device,
-+		.map_pages		= vsi_iommu_map,
-+		.unmap_pages		= vsi_iommu_unmap,
-+		.iova_to_phys		= vsi_iommu_iova_to_phys,
-+		.free			= vsi_iommu_domain_free,
-+	}
-+};
-+
-+static const struct of_device_id vsi_iommu_dt_ids[] = {
-+	{
-+		.compatible = "verisilicon,iommu-1.2",
-+	},
-+	{ /* sentinel */ }
-+};
-+MODULE_DEVICE_TABLE(of, vsi_iommu_dt_ids);
-+
-+static int vsi_iommu_probe(struct platform_device *pdev)
-+{
-+	struct device *dev = &pdev->dev;
-+	struct vsi_iommu *iommu;
++	struct rproc *rproc;
++	struct device_node *of_node;
++	struct device_node *mem_node;
++	struct resource mem_res;
 +	int err;
 +
-+	iommu = devm_kzalloc(dev, sizeof(*iommu), GFP_KERNEL);
-+	if (!iommu)
-+		return -ENOMEM;
++	if (!iova_start || !iova_size)
++		return -EINVAL;
 +
-+	iommu->dev = dev;
-+	spin_lock_init(&iommu->lock);
-+	INIT_LIST_HEAD(&iommu->node);
++	rproc = rproc_get_by_child(&rpdev->dev);
++	if (!rproc) {
++		dev_err(&rpdev->dev, "Failed to get rproc device\n");
++		return -ENODEV;
++	}
 +
-+	iommu->regs = devm_platform_ioremap_resource(pdev, 0);
-+	if (IS_ERR(iommu->regs))
-+		return -ENOMEM;
++	of_node = rproc->dev.parent->of_node;
++	put_device(&rproc->dev);
 +
-+	iommu->num_clocks = devm_clk_bulk_get_all(dev, &iommu->clocks);
-+	if  (iommu->num_clocks < 0)
-+		return iommu->num_clocks;
++	if (!of_node) {
++		dev_err(&rpdev->dev, "No device tree node found on rproc parent\n");
++		return -ENODEV;
++	}
 +
-+	err = clk_bulk_prepare(iommu->num_clocks, iommu->clocks);
++	/*
++	 * Read the IOVA pool range from the device tree node.
++	 * The third memory-region (index 2) defines the virtual address range.
++	 * The first two regions are typically:
++	 *   [0] = DMA memory region for remoteproc (physically contiguous)
++	 *   [1] = Code/data memory region for remoteproc (physically contiguous)
++	 *   [2] = Virtual address pool for BO mappings (firmware-managed MMU)
++	 */
++	mem_node = of_parse_phandle(of_node, "memory-region", 2);
++	if (!mem_node) {
++		dev_err(&rpdev->dev, "Missing third memory-region (DSP VA pool) in device tree\n");
++		return -EINVAL;
++	}
++
++	err = of_address_to_resource(mem_node, 0, &mem_res);
++	of_node_put(mem_node);
++	if (err) {
++		dev_err(&rpdev->dev, "Failed to get DSP VA pool range from memory-region[2]: %d\n",
++			err);
++		return err;
++	}
++
++	*iova_start = mem_res.start;
++	*iova_size = resource_size(&mem_res);
++
++	if (!*iova_size) {
++		dev_err(&rpdev->dev, "Invalid DSP VA pool size: 0\n");
++		return -EINVAL;
++	}
++
++	return 0;
++}
++
++static int thames_core_validate_iova_range(struct thames_core *core)
++{
++	struct thames_device *tdev = core->tdev;
++	u64 iova_start, iova_size;
++	int err;
++
++	err = thames_core_get_iova_range(core->rpdev, &iova_start, &iova_size);
 +	if (err)
 +		return err;
 +
-+	iommu->irq = platform_get_irq(pdev, 0);
-+	if (iommu->irq < 0)
-+		return iommu->irq;
-+
-+	err = devm_request_irq(iommu->dev, iommu->irq, vsi_iommu_irq,
-+			       IRQF_SHARED, dev_name(dev), iommu);
-+	if (err)
-+		goto err_unprepare_clocks;
-+
-+	dma_set_mask_and_coherent(dev, DMA_BIT_MASK(32));
-+	platform_set_drvdata(pdev, iommu);
-+
-+	pm_runtime_set_autosuspend_delay(dev, 100);
-+	pm_runtime_use_autosuspend(dev);
-+	pm_runtime_enable(dev);
-+
-+	err = iommu_device_sysfs_add(&iommu->iommu, dev, NULL, dev_name(dev));
-+	if (err)
-+		goto err_runtime_disable;
-+
-+	err = iommu_device_register(&iommu->iommu, &vsi_iommu_ops, dev);
-+	if (err)
-+		goto err_remove_sysfs;
-+
-+	return 0;
-+
-+err_remove_sysfs:
-+	iommu_device_sysfs_remove(&iommu->iommu);
-+err_runtime_disable:
-+	pm_runtime_disable(dev);
-+err_unprepare_clocks:
-+	clk_bulk_unprepare(iommu->num_clocks, iommu->clocks);
-+	return err;
-+}
-+
-+static void vsi_iommu_shutdown(struct platform_device *pdev)
-+{
-+	struct vsi_iommu *iommu = platform_get_drvdata(pdev);
-+
-+	disable_irq(iommu->irq);
-+	pm_runtime_force_suspend(&pdev->dev);
-+}
-+
-+static int __maybe_unused vsi_iommu_suspend(struct device *dev)
-+{
-+	struct vsi_iommu *iommu = dev_get_drvdata(dev);
-+
-+	vsi_iommu_disable(iommu);
-+
-+	clk_bulk_disable(iommu->num_clocks, iommu->clocks);
-+
-+	return 0;
-+}
-+
-+static int __maybe_unused vsi_iommu_resume(struct device *dev)
-+{
-+	struct vsi_iommu *iommu = dev_get_drvdata(dev);
-+	unsigned long flags, flags2;
-+	int ret;
-+
-+	ret = clk_bulk_enable(iommu->num_clocks, iommu->clocks);
-+	if (ret)
-+		return ret;
-+
-+	if (iommu->domain) {
-+		struct vsi_iommu_domain *vsi_domain = to_vsi_domain(iommu->domain);
-+
-+		spin_lock_irqsave(&vsi_domain->lock, flags);
-+		spin_lock_irqsave(&iommu->lock, flags2);
-+		vsi_iommu_enable(iommu, iommu->domain);
-+		spin_unlock_irqrestore(&iommu->lock, flags2);
-+		spin_unlock_irqrestore(&vsi_domain->lock, flags);
++	if (iova_start != tdev->iova_start || iova_size != tdev->iova_size) {
++		dev_err(core->dev,
++			"Core %d IOVA range mismatch! Expected 0x%llx-0x%llx, got 0x%llx-0x%llx\n",
++			core->index, tdev->iova_start, tdev->iova_start + tdev->iova_size - 1,
++			iova_start, iova_start + iova_size - 1);
++		dev_err(core->dev,
++			"All cores must have the same memory-region[2] (IOVA pool) in device tree\n");
++		return -EINVAL;
 +	}
 +
 +	return 0;
 +}
 +
-+static DEFINE_RUNTIME_DEV_PM_OPS(vsi_iommu_pm_ops,
-+				 vsi_iommu_suspend, vsi_iommu_resume,
-+				 NULL);
++int thames_core_init(struct thames_core *core)
++{
++	int err = 0;
 +
-+static struct platform_driver rockchip_vsi_iommu_driver = {
-+	.probe = vsi_iommu_probe,
-+	.shutdown = vsi_iommu_shutdown,
-+	.driver = {
-+		   .name = "vsi_iommu",
-+		   .of_match_table = vsi_iommu_dt_ids,
-+		   .pm = pm_sleep_ptr(&vsi_iommu_pm_ops),
-+		   .suppress_bind_attrs = true,
-+	},
++	err = thames_core_validate_iova_range(core);
++	if (err)
++		return err;
++
++	err = thames_rpmsg_init(core);
++	if (err)
++		return err;
++
++	err = thames_rpmsg_ping_test(core);
++	if (err)
++		return err;
++
++	return 0;
++}
++
++void thames_core_fini(struct thames_core *core)
++{
++	thames_rpmsg_fini(core);
++}
++
++void thames_core_reset(struct thames_core *core)
++{
++	struct rpmsg_device *rpdev = core->rpdev;
++	struct rproc *rproc;
++	int ret;
++
++	dev_warn(core->dev, "Resetting DSP core %d", core->index);
++
++	if (!atomic_read(&core->reset.pending))
++		dev_warn(core->dev, "Reset called without reset.pending set\n");
++
++	rproc = rproc_get_by_child(&rpdev->dev);
++	if (!rproc) {
++		dev_err(core->dev, "Failed to get rproc for reset\n");
++		return;
++	}
++
++	ret = rproc_shutdown(rproc);
++	if (ret) {
++		dev_err(&rproc->dev, "Failed to shut down DSP: %d\n", ret);
++		goto put_rproc;
++	}
++
++	ret = rproc_boot(rproc);
++	if (ret)
++		dev_err(&rproc->dev, "Failed to boot DSP: %d\n", ret);
++
++put_rproc:
++	put_device(&rproc->dev);
++}
+diff --git a/drivers/accel/thames/thames_core.h b/drivers/accel/thames/thames_core.h
+new file mode 100644
+index 0000000000000000000000000000000000000000..72c3d3d6c575f56cc1d8731d1c9dc958486dbf7f
+--- /dev/null
++++ b/drivers/accel/thames/thames_core.h
+@@ -0,0 +1,53 @@
++/* SPDX-License-Identifier: GPL-2.0-only */
++/* Copyright 2026 Texas Instruments Incorporated - https://www.ti.com/ */
++
++#ifndef __THAMES_CORE_H__
++#define __THAMES_CORE_H__
++
++#include <linux/rpmsg.h>
++#include <drm/gpu_scheduler.h>
++#include <linux/mutex_types.h>
++#include <linux/completion.h>
++
++struct thames_msg_buffer_op;
++
++struct thames_core {
++	struct rpmsg_device *rpdev;
++	struct device *dev;
++	struct thames_device *tdev;
++	unsigned int index;
++
++	/* RPMSG communication context */
++	struct {
++		struct rpmsg_endpoint *endpoint;
++
++		struct {
++			u32 sequence;
++			u32 expected_data;
++			bool success;
++			struct completion completion;
++		} ping_test;
++	} rpmsg_ctx;
++
++	struct mutex job_lock;
++	struct thames_job *in_flight_job;
++
++	spinlock_t fence_lock;
++
++	struct {
++		struct workqueue_struct *wq;
++		struct work_struct work;
++		atomic_t pending;
++	} reset;
++
++	struct drm_gpu_scheduler sched;
++	u64 fence_context;
++	u64 emit_seqno;
 +};
-+module_platform_driver(rockchip_vsi_iommu_driver);
++
++int thames_core_init(struct thames_core *core);
++void thames_core_fini(struct thames_core *core);
++void thames_core_reset(struct thames_core *core);
++int thames_core_get_iova_range(struct rpmsg_device *rpdev, u64 *iova_start, u64 *iova_size);
++
++#endif
+diff --git a/drivers/accel/thames/thames_device.c b/drivers/accel/thames/thames_device.c
+new file mode 100644
+index 0000000000000000000000000000000000000000..2b2aa32b07ee361ea388ab5ec781a13ff4359e5f
+--- /dev/null
++++ b/drivers/accel/thames/thames_device.c
+@@ -0,0 +1,93 @@
++// SPDX-License-Identifier: GPL-2.0-only
++/* Copyright 2026 Texas Instruments Incorporated - https://www.ti.com/ */
++
++#include <drm/drm_drv.h>
++#include <linux/array_size.h>
++#include <linux/clk.h>
++#include <linux/dma-mapping.h>
++#include <linux/idr.h>
++#include <linux/platform_device.h>
++
++#include "thames_device.h"
++
++/* Shift to convert bytes to megabytes (divide by 1048576) */
++#define THAMES_BYTES_TO_MB_SHIFT 20
++
++struct thames_device *thames_device_init(struct platform_device *pdev,
++
++					 const struct drm_driver *thames_drm_driver, u64 iova_start,
++					 u64 iova_size)
++{
++	struct device *dev = &pdev->dev;
++	struct thames_device *tdev;
++	struct drm_device *ddev;
++	int err;
++
++	tdev = devm_drm_dev_alloc(dev, thames_drm_driver, struct thames_device, ddev);
++	if (IS_ERR(tdev))
++		return tdev;
++
++	tdev->num_cores = 0;
++	ddev = &tdev->ddev;
++	dev_set_drvdata(dev, tdev);
++
++	dma_set_max_seg_size(dev, UINT_MAX);
++
++	err = dma_set_mask_and_coherent(dev, DMA_BIT_MASK(40));
++	if (err)
++		return ERR_PTR(err);
++
++	err = devm_mutex_init(dev, &tdev->sched_lock);
++	if (err)
++		return ERR_PTR(-ENOMEM);
++
++	ida_init(&tdev->bo_ida);
++	ida_init(&tdev->ctx_ida);
++	ida_init(&tdev->job_ida);
++	ida_init(&tdev->ipc_seq_ida);
++
++	/*
++	 * Initialize shared virtual address space for all DSP cores.
++	 *
++	 * IMPORTANT: This driver does NOT use Linux IOMMU. The TI C7x DSP cores
++	 * have their own MMUs that are managed entirely by the DSP firmware.
++	 * The VA space is shared across all cores - userspace receives VAs that
++	 * work on all cores. Each core's firmware programs its own MMU to map
++	 * the same VA to the same PA.
++	 *
++	 * The Linux driver's role is only to:
++	 * 1. Allocate non-overlapping virtual addresses from a safe range
++	 * 2. Provide physical addresses to each DSP firmware via IPC
++	 * 3. Let each firmware program its own MMU to map VA -> PA
++	 */
++	if (!iova_size) {
++		dev_err(dev, "Invalid DSP VA pool size: 0\n");
++		return ERR_PTR(-EINVAL);
++	}
++
++	tdev->iova_start = iova_start;
++	tdev->iova_size = iova_size;
++
++	drm_mm_init(&tdev->mm, iova_start, iova_size);
++	err = devm_mutex_init(dev, &tdev->mm_lock);
++	if (err)
++		return ERR_PTR(-ENOMEM);
++
++	err = drm_dev_register(ddev, 0);
++	if (err)
++		return ERR_PTR(err);
++
++	return tdev;
++}
++
++void thames_device_fini(struct thames_device *tdev)
++{
++	WARN_ON(tdev->num_cores > 0);
++
++	ida_destroy(&tdev->bo_ida);
++	ida_destroy(&tdev->ctx_ida);
++	ida_destroy(&tdev->job_ida);
++	ida_destroy(&tdev->ipc_seq_ida);
++	drm_mm_takedown(&tdev->mm);
++	drm_dev_unregister(&tdev->ddev);
++}
+diff --git a/drivers/accel/thames/thames_device.h b/drivers/accel/thames/thames_device.h
+new file mode 100644
+index 0000000000000000000000000000000000000000..c7d8e521d4323122134e8c8e8d256d957c89ae5f
+--- /dev/null
++++ b/drivers/accel/thames/thames_device.h
+@@ -0,0 +1,46 @@
++/* SPDX-License-Identifier: GPL-2.0-only */
++/* Copyright 2026 Texas Instruments Incorporated - https://www.ti.com/ */
++
++#ifndef __THAMES_DEVICE_H__
++#define __THAMES_DEVICE_H__
++
++#include <drm/drm_device.h>
++#include <drm/drm_mm.h>
++#include <linux/clk.h>
++#include <linux/container_of.h>
++#include <linux/idr.h>
++#include <linux/platform_device.h>
++
++#include "thames_core.h"
++
++#define MAX_CORES 8
++
++struct thames_device {
++	struct drm_device ddev;
++
++	struct mutex sched_lock;
++
++	struct thames_core cores[MAX_CORES];
++	unsigned int num_cores;
++
++	struct ida bo_ida;
++	struct ida ctx_ida;
++	struct ida job_ida;
++	struct ida ipc_seq_ida;
++
++	struct drm_mm mm;
++	struct mutex mm_lock;
++
++	u64 iova_start;
++	u64 iova_size;
++};
++
++struct thames_device *thames_device_init(struct platform_device *pdev,
++					 const struct drm_driver *thames_drm_driver, u64 iova_start,
++					 u64 iova_size);
++void thames_device_fini(struct thames_device *rdev);
++
++#define to_thames_device(drm_dev) \
++	((struct thames_device *)(container_of((drm_dev), struct thames_device, ddev)))
++
++#endif /* __THAMES_DEVICE_H__ */
+diff --git a/drivers/accel/thames/thames_drv.c b/drivers/accel/thames/thames_drv.c
+new file mode 100644
+index 0000000000000000000000000000000000000000..473498dd6f0135f346b0986a2a17fc4411417f52
+--- /dev/null
++++ b/drivers/accel/thames/thames_drv.c
+@@ -0,0 +1,155 @@
++// SPDX-License-Identifier: GPL-2.0-only
++/* Copyright 2026 Texas Instruments Incorporated - https://www.ti.com/ */
++
++#include <drm/drm_accel.h>
++#include <drm/drm_drv.h>
++#include <drm/drm_gem.h>
++#include <drm/drm_ioctl.h>
++#include <linux/err.h>
++#include <linux/platform_device.h>
++#include <linux/remoteproc.h>
++#include <linux/rpmsg.h>
++
++#include "thames_drv.h"
++#include "thames_core.h"
++#include "thames_ipc.h"
++
++static struct platform_device *drm_dev;
++static struct thames_device *tdev;
++
++static int thames_open(struct drm_device *dev, struct drm_file *file)
++{
++	struct thames_device *tdev = to_thames_device(dev);
++	struct thames_file_priv *thames_priv;
++	int ret;
++
++	if (!try_module_get(THIS_MODULE))
++		return -EINVAL;
++
++	thames_priv = kzalloc(sizeof(*thames_priv), GFP_KERNEL);
++	if (!thames_priv) {
++		ret = -ENOMEM;
++		goto err_put_mod;
++	}
++
++	thames_priv->tdev = tdev;
++
++	file->driver_priv = thames_priv;
++
++	return 0;
++
++err_put_mod:
++	module_put(THIS_MODULE);
++	return ret;
++}
++
++static void thames_postclose(struct drm_device *dev, struct drm_file *file)
++{
++	struct thames_file_priv *thames_priv = file->driver_priv;
++
++	kfree(thames_priv);
++	module_put(THIS_MODULE);
++}
++
++static const struct drm_ioctl_desc thames_drm_driver_ioctls[] = {
++#define THAMES_IOCTL(n, func) DRM_IOCTL_DEF_DRV(THAMES_##n, thames_ioctl_##func, 0)
++
++};
++
++DEFINE_DRM_ACCEL_FOPS(thames_accel_driver_fops);
++
++static const struct drm_driver thames_drm_driver = {
++	.driver_features = DRIVER_COMPUTE_ACCEL | DRIVER_GEM,
++	.open = thames_open,
++	.postclose = thames_postclose,
++	.ioctls = thames_drm_driver_ioctls,
++	.num_ioctls = ARRAY_SIZE(thames_drm_driver_ioctls),
++	.fops = &thames_accel_driver_fops,
++	.name = "thames",
++	.desc = "thames DRM",
++};
++
++static int thames_probe(struct rpmsg_device *rpdev)
++{
++	u64 iova_start, iova_size;
++	unsigned int core;
++	int err;
++
++	if (!tdev) {
++		err = thames_core_get_iova_range(rpdev, &iova_start, &iova_size);
++		if (err)
++			return err;
++
++		tdev = thames_device_init(drm_dev, &thames_drm_driver, iova_start, iova_size);
++		if (IS_ERR(tdev)) {
++			dev_err(&rpdev->dev, "failed to initialize thames device\n");
++			return PTR_ERR(tdev);
++		}
++	}
++
++	core = tdev->num_cores;
++
++	tdev->cores[core].tdev = tdev;
++	tdev->cores[core].rpdev = rpdev;
++	tdev->cores[core].dev = &rpdev->dev;
++	tdev->cores[core].index = core;
++
++	tdev->num_cores++;
++
++	return thames_core_init(&tdev->cores[core]);
++}
++
++static void thames_remove(struct rpmsg_device *rpdev)
++{
++	unsigned int core;
++
++	for (core = 0; core < tdev->num_cores; core++) {
++		if (tdev->cores[core].rpdev == rpdev) {
++			thames_core_fini(&tdev->cores[core]);
++			tdev->num_cores--;
++			break;
++		}
++	}
++
++	if (!tdev->num_cores) {
++		thames_device_fini(tdev);
++		tdev = NULL;
++	}
++}
++
++static const struct rpmsg_device_id thames_rpmsg_id_table[] = { { .name = THAMES_SERVICE_NAME },
++								{} };
++
++static struct rpmsg_driver thames_rpmsg_driver = {
++	.drv = {
++		.name = "thames",
++		.owner = THIS_MODULE,
++	},
++	.id_table = thames_rpmsg_id_table,
++	.probe = thames_probe,
++	.remove = thames_remove,
++};
++
++static int __init thames_register(void)
++{
++	drm_dev = platform_device_register_simple("thames", -1, NULL, 0);
++	if (IS_ERR(drm_dev))
++		return PTR_ERR(drm_dev);
++
++	return register_rpmsg_driver(&thames_rpmsg_driver);
++}
++
++static void __exit thames_unregister(void)
++{
++	unregister_rpmsg_driver(&thames_rpmsg_driver);
++
++	platform_device_unregister(drm_dev);
++}
++
++module_init(thames_register);
++module_exit(thames_unregister);
 +
 +MODULE_LICENSE("GPL");
-+MODULE_AUTHOR("Benjamin Gaignard <benjamin.gaignard@collabora.com>");
-+MODULE_DESCRIPTION("Verisilicon IOMMU driver");
-diff --git a/include/linux/vsi-iommu.h b/include/linux/vsi-iommu.h
++MODULE_DESCRIPTION("DRM driver for Texas Instrument's C7x accelerator cores");
++MODULE_AUTHOR("Tomeu Vizoso");
++MODULE_ALIAS("rpmsg:" THAMES_SERVICE_NAME);
+diff --git a/drivers/accel/thames/thames_drv.h b/drivers/accel/thames/thames_drv.h
 new file mode 100644
-index 000000000000..81a80f9219f4
+index 0000000000000000000000000000000000000000..e03203eab8b88686ca91c10b45e55df1ea3d2e77
 --- /dev/null
-+++ b/include/linux/vsi-iommu.h
++++ b/drivers/accel/thames/thames_drv.h
 @@ -0,0 +1,21 @@
 +/* SPDX-License-Identifier: GPL-2.0-only */
++/* Copyright 2026 Texas Instruments Incorporated - https://www.ti.com/ */
++
++#ifndef __THAMES_DRV_H__
++#define __THAMES_DRV_H__
++
++#include <drm/drm_mm.h>
++#include <drm/gpu_scheduler.h>
++
++#include "thames_device.h"
++
++struct thames_file_priv {
++	struct thames_device *tdev;
++
++	struct drm_sched_entity sched_entity;
++
++	u32 context_id;
++	bool context_valid;
++};
++
++#endif
+diff --git a/drivers/accel/thames/thames_ipc.h b/drivers/accel/thames/thames_ipc.h
+new file mode 100644
+index 0000000000000000000000000000000000000000..60297b4bc2ffd990315cb735a96a23429d390f43
+--- /dev/null
++++ b/drivers/accel/thames/thames_ipc.h
+@@ -0,0 +1,204 @@
++/* SPDX-License-Identifier: GPL-2.0-only */
 +/*
-+ * verisilicon iommu: simple virtual address space management
++ * Copyright 2026 Texas Instruments Incorporated - https://www.ti.com/
 + *
-+ * Copyright (c) 2025, Collabora
-+ *
-+ * Written by Benjamin Gaignard <benjamin.gaignard@collabora.com>
++ * This header defines the RPMSG message structures exchanged between
++ * the Linux kernel (host) and the C7x DSP (remote) firmware for the
++ * Thames DRM/accel driver.
 + */
 +
-+#ifndef _VSI_IOMMU_H_
-+#define _VSI_IOMMU_H_
++#ifndef _THAMES_IPC_H
++#define _THAMES_IPC_H
 +
-+struct iommu_domain;
-+
-+#if IS_ENABLED(CONFIG_VSI_IOMMU)
-+void vsi_iommu_restore_ctx(struct iommu_domain *domain);
++#ifdef __KERNEL__
++#include <linux/types.h>
 +#else
-+static inline void vsi_iommu_restore_ctx(struct iommu_domain *domain) {}
++#include <stdint.h>
++typedef uint8_t __u8;
++typedef uint16_t __u16;
++typedef uint32_t __u32;
++typedef uint64_t __u64;
 +#endif
 +
++#define THAMES_SERVICE_NAME "thames-service"
++
++/**
++ * @THAMES_MSG_TYPE: Simplified message type enumeration
++ */
++enum thames_msg_type {
++	/* --- Host (Kernel) -> Remote (DSP) --- */
++	THAMES_MSG_PING = 0x100, /* Ping message to test communication */
++	THAMES_MSG_CONTEXT_OP, /* Create/destroy context */
++	THAMES_MSG_BO_OP, /* Map/unmap buffer objects */
++	THAMES_MSG_SUBMIT_JOB, /* Submit job for execution */
++
++	/* --- Remote (DSP) -> Host (Kernel) --- */
++	THAMES_MSG_PING_RESPONSE = 0x200,
++	THAMES_MSG_CONTEXT_OP_RESPONSE,
++	THAMES_MSG_BO_OP_RESPONSE,
++	THAMES_MSG_SUBMIT_JOB_RESPONSE,
++};
++
++/**
++ * @THAMES_CONTEXT_OP: Context operation types
++ */
++enum thames_context_op {
++	THAMES_CONTEXT_CREATE = 0,
++	THAMES_CONTEXT_DESTROY,
++};
++
++/**
++ * @THAMES_BO_OP: Buffer Object operation types
++ */
++enum thames_bo_op {
++	THAMES_BO_MAP = 0,
++	THAMES_BO_UNMAP,
++};
++
++/**
++ * @THAMES_RESP_STATUS: Response status codes
++ */
++enum thames_resp_status {
++	THAMES_RESP_SUCCESS = 0,
++	THAMES_RESP_ERR_GENERIC = 1,
++	THAMES_RESP_ERR_NOMEM = 2,
++	THAMES_RESP_ERR_INVAL = 3,
++	THAMES_RESP_ERR_NO_CTX = 4,
++	THAMES_RESP_ERR_MMU = 5,
++	THAMES_RESP_ERR_JOB_TIMEOUT = 6,
++};
++
++/**
++ * struct thames_msg_hdr - Common header for all RPMSG messages
++ * @type: Message type from enum thames_msg_type
++ * @seq:  Sequence number for request/response matching
++ * @len:  Total message length including header
++ */
++struct thames_msg_hdr {
++	__u32 type;
++	__u32 seq;
++	__u32 len;
++	__u32 reserved;
++};
++
++/*
++ * ===================================================================
++ * Host (Kernel) -> Remote (DSP) Messages
++ * ===================================================================
++ */
++
++/**
++ * struct thames_msg_ping - Ping message to test communication
++ * @hdr:        Common message header
++ * @ping_data:  Optional ping data (timestamp, sequence, etc.)
++ */
++struct thames_msg_ping {
++	struct thames_msg_hdr hdr;
++	__u32 ping_data;
++};
++
++/**
++ * struct thames_msg_context_op - Context create/destroy operations
++ * @hdr:           Common message header
++ * @op:            Operation type (CREATE/DESTROY)
++ * @context_id:    Context ID
++ */
++struct thames_msg_context_op {
++	struct thames_msg_hdr hdr;
++	uint32_t op; /* enum thames_context_op */
++	uint32_t context_id;
++};
++
++/**
++ * struct thames_msg_bo_op - Buffer Object map/unmap operations
++ * @hdr:        Common message header
++ * @op:         Operation type (MAP/UNMAP)
++ * @context_id: Context ID that this BO belongs to
++ * @bo_id:      Buffer Object ID for tracking
++ * @vaddr:      Virtual address where BO should be mapped on DSP
++ * @paddr:      Physical address of the BO
++ * @size:       Size of the BO in bytes
++ */
++struct thames_msg_bo_op {
++	struct thames_msg_hdr hdr;
++	uint32_t op; /* enum thames_bo_op */
++	uint32_t context_id;
++	uint32_t bo_id;
++	uint64_t vaddr;
++	uint64_t paddr;
++	uint64_t size;
++};
++
++/**
++ * struct thames_msg_submit_job - Submit job for execution
++ * @hdr:         Common message header
++ * @context_id:  Context to run job in
++ * @job_id:      Host-generated job tracking ID
++ * @kernel_iova: IOVA of kernel code BO (first byte = first instruction)
++ * @kernel_size: Size of kernel code in bytes
++ * @args_iova:   IOVA of arguments BO (array of uint64_t values)
++ * @args_size:   Size of arguments BO in bytes
++ */
++struct thames_msg_submit_job {
++	struct thames_msg_hdr hdr;
++	uint32_t context_id;
++	uint32_t job_id;
++	uint64_t kernel_iova;
++	uint64_t kernel_size;
++	uint64_t args_iova;
++	uint64_t args_size;
++};
++
++/*
++ * ===================================================================
++ * Remote (DSP) -> Host (Kernel) Messages
++ * ===================================================================
++ */
++
++/**
++ * struct thames_msg_response - Generic response to commands
++ * @hdr:    Common message header (seq matches request)
++ * @status: Status code from enum thames_resp_status
++ * @data:   Optional response data (context-dependent)
++ */
++struct thames_msg_response {
++	struct thames_msg_hdr hdr;
++	uint32_t status;
++	uint32_t data;
++};
++
++/*
++ * ===================================================================
++ * Buffer Size Calculations
++ * ===================================================================
++ */
++
++/* Calculate the maximum message size by finding the largest structure */
++#define THAMES_MSG_SIZE_PING sizeof(struct thames_msg_ping)
++#define THAMES_MSG_SIZE_CONTEXT_OP sizeof(struct thames_msg_context_op)
++#define THAMES_MSG_SIZE_BO_OP sizeof(struct thames_msg_bo_op)
++#define THAMES_MSG_SIZE_SUBMIT_JOB sizeof(struct thames_msg_submit_job)
++#define THAMES_MSG_SIZE_RESPONSE sizeof(struct thames_msg_response)
++
++/* Helper macros to find maximum of multiple values */
++#define THAMES_MAX2(a, b) ((a) > (b) ? (a) : (b))
++#define THAMES_MAX3(a, b, c) THAMES_MAX2(THAMES_MAX2(a, b), c)
++#define THAMES_MAX5(a, b, c, d, e) THAMES_MAX2(THAMES_MAX3(a, b, c), THAMES_MAX2(d, e))
++
++/* Maximum size of any Thames IPC message */
++#define THAMES_IPC_MAX_MSG_SIZE                                                              \
++	THAMES_MAX5(THAMES_MSG_SIZE_PING, THAMES_MSG_SIZE_CONTEXT_OP, THAMES_MSG_SIZE_BO_OP, \
++		    THAMES_MSG_SIZE_SUBMIT_JOB, THAMES_MSG_SIZE_RESPONSE)
++
++/* RPMSG buffer size - should accommodate largest message + some padding */
++#define THAMES_RPMSG_BUFFER_SIZE ((THAMES_IPC_MAX_MSG_SIZE + 15) & ~15) /* 16-byte aligned */
++
++/* Compile-time size checks - use BUILD_BUG_ON in kernel code */
++#ifdef __KERNEL__
++#define THAMES_ASSERT_MSG_SIZE(msg_type) BUILD_BUG_ON(sizeof(struct msg_type) > 64)
++#else
++#define THAMES_ASSERT_MSG_SIZE(msg_type) \
++	_Static_assert(sizeof(struct msg_type) <= 64, #msg_type " too large")
 +#endif
++
++#endif /* _THAMES_IPC_H */
+diff --git a/drivers/accel/thames/thames_rpmsg.c b/drivers/accel/thames/thames_rpmsg.c
+new file mode 100644
+index 0000000000000000000000000000000000000000..ebc34f49353e5e7959734da8e8a935573c130e79
+--- /dev/null
++++ b/drivers/accel/thames/thames_rpmsg.c
+@@ -0,0 +1,155 @@
++// SPDX-License-Identifier: GPL-2.0-only
++/* Copyright 2026 Texas Instruments Incorporated - https://www.ti.com/ */
++
++#include <linux/dev_printk.h>
++#include <linux/err.h>
++#include <linux/completion.h>
++#include <linux/jiffies.h>
++#include <linux/rpmsg.h>
++
++#include "thames_rpmsg.h"
++#include "thames_core.h"
++#include "thames_device.h"
++#include "thames_ipc.h"
++
++#define THAMES_PING_TEST_PATTERN 0xDEADBEEF
++#define THAMES_PING_TIMEOUT_MS 5000
++
++static int thames_rpmsg_callback(struct rpmsg_device *rpdev, void *data, int len, void *priv,
++				 u32 src)
++{
++	struct thames_msg_hdr *hdr = (struct thames_msg_hdr *)data;
++	struct thames_core *core = priv;
++
++	dev_dbg(&rpdev->dev, "Received response on core %d with length %d\n", core->index, len);
++
++	if (len < sizeof(struct thames_msg_hdr)) {
++		dev_err(&rpdev->dev, "Received message too short: %d bytes", len);
++		return -EINVAL;
++	}
++
++	switch (hdr->type) {
++	case THAMES_MSG_PING_RESPONSE: {
++		struct thames_msg_response *response = (struct thames_msg_response *)data;
++
++		dev_dbg(&rpdev->dev,
++			"Received PING response: status=%u, data=0x%x, expected_data=0x%x, seq=%u, expected_seq=%u\n",
++			response->status, response->data, core->rpmsg_ctx.ping_test.expected_data,
++			hdr->seq, core->rpmsg_ctx.ping_test.sequence);
++
++		if (hdr->seq != core->rpmsg_ctx.ping_test.sequence) {
++			dev_err(&rpdev->dev,
++				"PING response sequence mismatch: got %u, expected %u\n", hdr->seq,
++				core->rpmsg_ctx.ping_test.sequence);
++			ida_free(&core->tdev->ipc_seq_ida, hdr->seq);
++			return -EINVAL;
++		}
++
++		if (response->data != core->rpmsg_ctx.ping_test.expected_data) {
++			dev_err(&rpdev->dev,
++				"PING response data mismatch: got 0x%x, expected 0x%x\n",
++				response->data, core->rpmsg_ctx.ping_test.expected_data);
++			core->rpmsg_ctx.ping_test.success = false;
++			complete(&core->rpmsg_ctx.ping_test.completion);
++			ida_free(&core->tdev->ipc_seq_ida, hdr->seq);
++			return -EINVAL;
++		}
++
++		core->rpmsg_ctx.ping_test.success = (response->status == THAMES_RESP_SUCCESS);
++		complete(&core->rpmsg_ctx.ping_test.completion);
++
++		ida_free(&core->tdev->ipc_seq_ida, hdr->seq);
++
++		break;
++	}
++
++	default:
++		dev_warn(&rpdev->dev, "Unknown message type: %u\n", hdr->type);
++		break;
++	}
++
++	return 0;
++}
++
++static int thames_rpmsg_send_raw(struct thames_core *core, const void *data, size_t len)
++{
++	if (!core->rpmsg_ctx.endpoint) {
++		dev_err(core->dev, "RPMSG endpoint not available");
++		return -ENODEV;
++	}
++
++	return rpmsg_send(core->rpmsg_ctx.endpoint, (void *)data, len);
++}
++
++int thames_rpmsg_init(struct thames_core *core)
++{
++	struct rpmsg_device *rpdev = core->rpdev;
++	struct rpmsg_channel_info chinfo = {};
++
++	strscpy(chinfo.name, rpdev->id.name, sizeof(chinfo.name));
++	chinfo.src = RPMSG_ADDR_ANY; /* Let rpmsg assign an address */
++	chinfo.dst = RPMSG_ADDR_ANY;
++
++	core->rpmsg_ctx.endpoint = rpmsg_create_ept(rpdev, thames_rpmsg_callback, core, chinfo);
++	if (!core->rpmsg_ctx.endpoint) {
++		dev_err(core->dev, "Failed to create RPMSG endpoint for core %d", core->index);
++		return -ENODEV;
++	}
++
++	return 0;
++}
++
++void thames_rpmsg_fini(struct thames_core *core)
++{
++	if (core->rpmsg_ctx.endpoint) {
++		rpmsg_destroy_ept(core->rpmsg_ctx.endpoint);
++		core->rpmsg_ctx.endpoint = NULL;
++	}
++}
++
++int thames_rpmsg_send_ping(struct thames_core *core, u32 ping_data, u32 *sequence)
++{
++	struct thames_msg_ping ping_msg = {};
++
++	ping_msg.hdr.type = THAMES_MSG_PING;
++	ping_msg.hdr.seq = ida_alloc(&core->tdev->ipc_seq_ida, GFP_KERNEL);
++	ping_msg.hdr.len = sizeof(ping_msg);
++	ping_msg.hdr.reserved = 0;
++	ping_msg.ping_data = ping_data;
++
++	*sequence = ping_msg.hdr.seq;
++
++	return thames_rpmsg_send_raw(core, &ping_msg, sizeof(ping_msg));
++}
++
++int thames_rpmsg_ping_test(struct thames_core *core)
++{
++	const u32 test_data = THAMES_PING_TEST_PATTERN;
++	int ret;
++	unsigned long timeout;
++
++	core->rpmsg_ctx.ping_test.expected_data = test_data;
++	core->rpmsg_ctx.ping_test.success = false;
++	init_completion(&core->rpmsg_ctx.ping_test.completion);
++
++	ret = thames_rpmsg_send_ping(core, test_data, &core->rpmsg_ctx.ping_test.sequence);
++	if (ret) {
++		dev_err(core->dev, "Failed to send PING message to core %d: %d", core->index, ret);
++		return ret;
++	}
++
++	timeout = msecs_to_jiffies(THAMES_PING_TIMEOUT_MS);
++	ret = wait_for_completion_timeout(&core->rpmsg_ctx.ping_test.completion, timeout);
++	if (ret == 0) {
++		dev_err(core->dev, "PING test timed out - DSP core %d not responding", core->index);
++		return -ETIMEDOUT;
++	}
++
++	if (!core->rpmsg_ctx.ping_test.success) {
++		dev_err(core->dev, "PING test failed - incorrect PONG response from DSP core %d",
++			core->index);
++		return -EIO;
++	}
++
++	return 0;
++}
+diff --git a/drivers/accel/thames/thames_rpmsg.h b/drivers/accel/thames/thames_rpmsg.h
+new file mode 100644
+index 0000000000000000000000000000000000000000..6d5195453b8d3eac2c333b7ac03e469b2744fb78
+--- /dev/null
++++ b/drivers/accel/thames/thames_rpmsg.h
+@@ -0,0 +1,27 @@
++/* SPDX-License-Identifier: GPL-2.0-only */
++/* Copyright 2026 Texas Instruments Incorporated - https://www.ti.com/ */
++
++#ifndef __THAMES_RPMSG_H__
++#define __THAMES_RPMSG_H__
++
++#include <linux/completion.h>
++#include <linux/rpmsg.h>
++
++struct thames_core;
++
++int thames_rpmsg_init(struct thames_core *core);
++void thames_rpmsg_fini(struct thames_core *core);
++
++int thames_rpmsg_send_ping(struct thames_core *core, u32 ping_data, u32 *sequence);
++int thames_rpmsg_send_create_context(struct thames_core *core, u32 context_id);
++int thames_rpmsg_send_destroy_context(struct thames_core *core, u32 context_id);
++int thames_rpmsg_send_map_bo(struct thames_core *core, u32 context_id, u32 bo_id, u64 vaddr,
++			     u64 paddr, u64 size);
++int thames_rpmsg_send_unmap_bo(struct thames_core *core, u32 context_id, u32 bo_id);
++int thames_rpmsg_send_submit_job(struct thames_core *core, u32 context_id, u32 job_id,
++				 u64 kernel_iova, u64 kernel_size, u64 args_iova, u64 args_size,
++				 u32 *sequence);
++
++int thames_rpmsg_ping_test(struct thames_core *core);
++
++#endif /* __THAMES_RPMSG_H__ */
+
 -- 
-2.43.0
+2.52.0
 
