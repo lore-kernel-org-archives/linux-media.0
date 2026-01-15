@@ -1,104 +1,257 @@
-Received: from mail-ej1-f41.google.com (mail-ej1-f41.google.com [209.85.218.41])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1E0233B8BB1
-	for <linux-media@vger.kernel.org>; Thu, 15 Jan 2026 16:41:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3C05F2D7D30;
+	Thu, 15 Jan 2026 18:26:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768495276; cv=none; b=kn7ZaNfdpLL5TghfBJexnP+e5ixIxfkxFDkN314QBhEH2uG3aM4IVZKC8hT6hqhAjju/AdJTtFNmKv/1rfVOJeeIzUTgK8RU0Js1WhnL+yUPqn1kLR6ZKv0/gNKZT1aVYsHa+aQhpuoX5Fm0W0KQRwkQHWy0OaTiqk7RJw+8B4Q=
+	t=1768501577; cv=none; b=DlXHps9MLnoJ/TDvzvw3e/rdwemplt7GOwfM4OTO5ep92LFqrPkUU/zOdBc/ZVcClv7RR+kAdNqVt13yMrXSkVswQBGvmOsrFFW7DlLf36ngOUAkoxH7izXOEAC4LLW06v3sfdhsvl8/mr0zKBB88rMy2uDKJXFGu+X5+L/XMJM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768495276; c=relaxed/simple;
-	bh=+4PWdSBg60IK47JG9Drbm1wnM0TZv702uNZZZfQzlR8=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=O6JmVD1MXiGsLS5DqWefJU0LsttPnw6LCLVjJUkVdKXNTXthcWgvJfm4hoOcN2cQh924c6NRVEfzLj1Wc5QP0UztuuE1TGv7yZ7LLDy/SodbCwle31tfFTq3GF9S6dYWoyY75tS48RYQZuCcJymemWpSjO7uPBJgx9s85Syicxg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=XjTeWfju; arc=none smtp.client-ip=209.85.218.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1768501577; c=relaxed/simple;
+	bh=0aoMxZYUJjVl2CKjgL/PIl3zUQkNfKK1M3nJW2OMsqg=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=QpOH7uzQW8+QVP7hxBZPwGuwVm8hieYleT7hPb0qpDLBmEXCNmudcMkuZYoQpfwBvHHFQCCDolJTxH+cPQ+OYnJncR81cmeZ5mCShqNJKy1Yf+sHa/dTaY7duSYOil3dpm3Ie+5zj76woMfOfLRTKCZlUTq+ZanLRyYbPtN9uL4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=JZzYhs2q; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="XjTeWfju"
-Received: by mail-ej1-f41.google.com with SMTP id a640c23a62f3a-b79f8f7ea43so272639266b.2
-        for <linux-media@vger.kernel.org>; Thu, 15 Jan 2026 08:41:14 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1768495273; x=1769100073; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=/JU/8ioXQOx55JlcUUUaOWyXEMvHCOB13Q3XcCjMtog=;
-        b=XjTeWfjuVzaUlxN0L6VtfVarhQFyMnd53OOLGqbQRX/S8E0q4JvpHRoX8Q1Vpd4Q+3
-         O/OnVwk6xZcWd4wPrTSbWEh9s+CwzSxrKxEEQuBbscCnyfOlqt5tHCLGXubGSsYeXF1g
-         ZM5RxfAz+cQrZVhU9MidVHd81FAxW+KqBMDhJPwdIdn9iRp7Z06GX8hfA3M4z0FmKpz0
-         27o7UltRh52rMP4oOGK0A1FrrBEtCOi53xPZEFiTimZPuewCHaFlImY+FoWLgx5da46U
-         BnOUgKKzEO774+xhJE+EK5h+KF3j8W3umo/z9YFoh77s8xL8xlcYk4zWQh0avz0SOZfw
-         +hrg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1768495273; x=1769100073;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=/JU/8ioXQOx55JlcUUUaOWyXEMvHCOB13Q3XcCjMtog=;
-        b=Rbpg/DZd3X8th53NL3oRvnS3fkkx0miykYz2AV161kYNhBUYJTBvwsX8rqWcGg05cP
-         NjHDOvwaS6kBr3ysvXeHLJeRx9m98LmDdlYph4KGrlrGqN3HH4zOOinZuPFJ1NObHDBd
-         /SAgXSl/mYgt7e01id5zdlOpt3fHc7XfFBu3qiZoAgO/ugbrl9UTRVYUIHX2bPc9jwVg
-         DSKePqtnWbRgLZDE8nzZ+JmcT8L5DH0G8f0bzhFrCGZO0Mftb8jOJikii60Y4GPvU09B
-         XJgYPkyy6qMj/zKRxvKNwPY2cbpZi6hHWHVWmsAkegomTZ0LwAerElRNP+F4X9gF1X08
-         i+Cg==
-X-Forwarded-Encrypted: i=1; AJvYcCVvLAWYiLIRHgj1rpyA9HIz/cpUGGg/SacVV1uv74mNNznc/z6Yw6YRGS3J7rVwK1xNoxnfV71DsqTtRA==@vger.kernel.org
-X-Gm-Message-State: AOJu0YzIDb9LIaUvGaRP36oFCosLzFFE/Z8Fxu05yX0oksnIKZRMajzU
-	r0BeAViBBFE31yfZPaATbfr6o0GamKVa41c7DmIvTDY2FYs19kxN/kTEkUTQ6ISp+R/SpxYhkfj
-	iBFN15SRpLfQ7SW8PZJtfLRhuXA/KZBs=
-X-Gm-Gg: AY/fxX4NHggDNcdmKobs6Qq9nfkdMoXjjNz50vS1brvUidMBw9/YAb+5XvntnMRHTqT
-	r5TTttOlhb0LLZlBg2UKGi8j0vcCuSKhLDJlWxcPe6VNbryh5B48xv5bQDYRuwDfY2/tLd+pcRu
-	tLj2eeoDFuqfhPe01CIQNRljPmfYM7kPPDVjxsWo9sslCpqesT9uejYnzW5er4HxwTU6iEcDBd9
-	3PmhzUIF2h8aSLX7pVDgtw0OiMJNyY7Yk3pMFsxuDfEdmmIK/j2Wq0buQt9FevPSLcTgTNa275q
-	WqqMWdZa4BY29IZJ50WzqP9ylqF+ddEuexgxzBp+2av9vtp8M4NtZRhSoC15CYb2HxItsY8=
-X-Received: by 2002:a17:907:6d1d:b0:b87:2abc:4a32 with SMTP id
- a640c23a62f3a-b8792ddb989mr21591466b.18.1768495273050; Thu, 15 Jan 2026
- 08:41:13 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="JZzYhs2q"
+Received: by smtp.kernel.org (Postfix) with ESMTPS id DB60BC16AAE;
+	Thu, 15 Jan 2026 18:26:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1768501576;
+	bh=0aoMxZYUJjVl2CKjgL/PIl3zUQkNfKK1M3nJW2OMsqg=;
+	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To:From;
+	b=JZzYhs2q9Ph2sWm/6KhwB4XY+ur5Dvhks3L9jY5RELzUCHTiL6ZopUF51/kWOE7z3
+	 zQW7HelW1pcaAJSn25YqjEdeGeO1uE2RISSgpVSRzIXnRg8M21A+DlmC6eQqN6vgTg
+	 gxXBg/IpmKwbboRkdR0YXad3jscWVs4VkwbJrnJ8gxglnfkwq1qFbt0dUxKXm1bKj0
+	 t1obv8ESlbiSPkq8xuZSlmCSDER9q+jp/d2IriDcCTbwcHApQ0kOANK4+obZEgQt9J
+	 G6KQARXrhUiW0yd3bgQ+blCjAuCuRzM1iQtCQIiHhnGi5evk+IiS1nxM2EpRlNLaTY
+	 DAqDvdLXu66eA==
+Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CD48BD4660B;
+	Thu, 15 Jan 2026 18:26:16 +0000 (UTC)
+From: Michael Riesch via B4 Relay <devnull+michael.riesch.collabora.com@kernel.org>
+Date: Thu, 15 Jan 2026 19:26:07 +0100
+Subject: [PATCH v4 1/3] media: dt-bindings: add rockchip mipi csi-2
+ receiver
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <aWjiwto4BQS8Uudz@smile.fi.intel.com> <9980e019-d95a-4618-887c-2126e38cba73@gmail.com>
-In-Reply-To: <9980e019-d95a-4618-887c-2126e38cba73@gmail.com>
-From: Andy Shevchenko <andy.shevchenko@gmail.com>
-Date: Thu, 15 Jan 2026 18:40:36 +0200
-X-Gm-Features: AZwV_QgH_P1lsy51S6XSbgBuUjhJnYU6hcNQlnwXZPC1uHXxEMDopLUuvkCLPxc
-Message-ID: <CAHp75Vc4DSk=-tf2oFJyd16GSSdWO1NELsCPe26BKVKUuq_Byw@mail.gmail.com>
-Subject: Re: [PATCH v3] staging: media: atomisp: Fix typos and formatting in headers
-To: Hamdan Khan <hamdankhan212@gmail.com>
-Cc: andriy.shevchenko@intel.com, andy@kernel.org, dave.hansen@linux.intel.com, 
-	gregkh@linuxfoundation.org, hansg@kernel.org, linux-kernel@vger.kernel.org, 
-	linux-media@vger.kernel.org, linux-staging@lists.linux.dev, 
-	mchehab@kernel.org, sakari.ailus@linux.intel.com, tony.luck@intel.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20251114-rockchip-mipi-receiver-v4-1-a9c86fecd052@collabora.com>
+References: <20251114-rockchip-mipi-receiver-v4-0-a9c86fecd052@collabora.com>
+In-Reply-To: <20251114-rockchip-mipi-receiver-v4-0-a9c86fecd052@collabora.com>
+To: Michael Riesch <michael.riesch@collabora.com>, 
+ Chaoyi Chen <chaoyi.chen@rock-chips.com>, 
+ Kever Yang <kever.yang@rock-chips.com>, Frank Li <Frank.li@nxp.com>, 
+ Mehdi Djait <mehdi.djait@linux.intel.com>, 
+ Bryan O'Donoghue <bryan.odonoghue@linaro.org>, 
+ Laurent Pinchart <laurent.pinchart@ideasonboard.com>, 
+ Hans Verkuil <hverkuil@kernel.org>, 
+ Mauro Carvalho Chehab <mchehab@kernel.org>, Rob Herring <robh@kernel.org>, 
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+ Conor Dooley <conor+dt@kernel.org>, Heiko Stuebner <heiko@sntech.de>, 
+ Philipp Zabel <p.zabel@pengutronix.de>, 
+ Sebastian Reichel <sebastian.reichel@collabora.com>, 
+ Nicolas Dufresne <nicolas.dufresne@collabora.com>, 
+ Collabora Kernel Team <kernel@collabora.com>, 
+ Sakari Ailus <sakari.ailus@linux.intel.com>
+Cc: linux-media@vger.kernel.org, devicetree@vger.kernel.org, 
+ linux-arm-kernel@lists.infradead.org, linux-rockchip@lists.infradead.org, 
+ linux-kernel@vger.kernel.org, Michael Riesch <michael.riesch@collabora.com>
+X-Mailer: b4 0.12.0
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1768501575; l=5087;
+ i=michael.riesch@collabora.com; s=20250410; h=from:subject:message-id;
+ bh=wmdltrQo1WcBf2SoyAzHJ7pw6SXPjdp25GEfcZq2Ur8=;
+ b=e2NH8bH/H/geblFyQHm36Awpzb2HykgrUx+PNBmWjxKswiaPpsfhhQUCN+WaMLXXAqGRasVf3
+ CwL5gAhgrDLBKdYizIoo9GLoEBfKW5tQ/r+QbeXxLByCPTOl+MHwSSw
+X-Developer-Key: i=michael.riesch@collabora.com; a=ed25519;
+ pk=+MWX1fffLFZtTPG/I6XdYm/+OSvpRE8D9evQaWbiN04=
+X-Endpoint-Received: by B4 Relay for michael.riesch@collabora.com/20250410
+ with auth_id=371
+X-Original-From: Michael Riesch <michael.riesch@collabora.com>
+Reply-To: michael.riesch@collabora.com
 
-On Thu, Jan 15, 2026 at 6:32=E2=80=AFPM Hamdan Khan <hamdankhan212@gmail.co=
-m> wrote:
->
-> > Have you tried to run kernel-doc script against this file? I believe
-> > it will be a difference between before and after.
->
-> I just ran the kernel-doc script for both the previous and updated
-> comments. The script doesn't detect kernel-doc for either of them,
-> comments even with /** because they're missing the struct
-> definition in the comment like:
->
-> /**
->  * struct atomisp_dvs2_coef_types - Brief description
->  * @odd_real:  Real part of the odd coefficients
->  * @odd_imag:  Imaginary part of the odd coefficients
->  * ... so on
->  */
->
-> Though, these can be converted to be kernel-doc compliant if you
-> prefer it.
+From: Michael Riesch <michael.riesch@collabora.com>
 
-In this case it's not needed. Please, clarify in the commit message
-that even if some comments look like kernel-doc, they are not.
+Add documentation for the Rockchip MIPI CSI-2 Receiver.
 
---=20
-With Best Regards,
-Andy Shevchenko
+Signed-off-by: Michael Riesch <michael.riesch@wolfvision.net>
+Signed-off-by: Michael Riesch <michael.riesch@collabora.com>
+---
+ .../bindings/media/rockchip,rk3568-mipi-csi2.yaml  | 141 +++++++++++++++++++++
+ MAINTAINERS                                        |   6 +
+ 2 files changed, 147 insertions(+)
+
+diff --git a/Documentation/devicetree/bindings/media/rockchip,rk3568-mipi-csi2.yaml b/Documentation/devicetree/bindings/media/rockchip,rk3568-mipi-csi2.yaml
+new file mode 100644
+index 000000000000..2c2bd87582eb
+--- /dev/null
++++ b/Documentation/devicetree/bindings/media/rockchip,rk3568-mipi-csi2.yaml
+@@ -0,0 +1,141 @@
++# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/media/rockchip,rk3568-mipi-csi2.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Rockchip MIPI CSI-2 Receiver
++
++maintainers:
++  - Michael Riesch <michael.riesch@collabora.com>
++
++description:
++  The Rockchip MIPI CSI-2 Receiver is a CSI-2 bridge with one input port and
++  one output port. It receives the data with the help of an external MIPI PHY
++  (C-PHY or D-PHY) and passes it to the Rockchip Video Capture (VICAP) block.
++
++properties:
++  compatible:
++    enum:
++      - rockchip,rk3568-mipi-csi2
++
++  reg:
++    maxItems: 1
++
++  interrupts:
++    items:
++      - description: Interrupt that signals changes in CSI2HOST_ERR1.
++      - description: Interrupt that signals changes in CSI2HOST_ERR2.
++
++  interrupt-names:
++    items:
++      - const: err1
++      - const: err2
++
++  clocks:
++    maxItems: 1
++
++  phys:
++    maxItems: 1
++    description: MIPI C-PHY or D-PHY.
++
++  ports:
++    $ref: /schemas/graph.yaml#/properties/ports
++
++    properties:
++      port@0:
++        $ref: /schemas/graph.yaml#/$defs/port-base
++        unevaluatedProperties: false
++        description: Input port node. Connect to e.g., a MIPI CSI-2 image sensor.
++
++        properties:
++          endpoint:
++            $ref: video-interfaces.yaml#
++            unevaluatedProperties: false
++
++            properties:
++              bus-type:
++                enum:
++                  - 1 # MEDIA_BUS_TYPE_CSI2_CPHY
++                  - 4 # MEDIA_BUS_TYPE_CSI2_DPHY
++
++              data-lanes:
++                minItems: 1
++                maxItems: 4
++
++            required:
++              - bus-type
++              - data-lanes
++
++      port@1:
++        $ref: /schemas/graph.yaml#/properties/port
++        description: Output port connected to a Rockchip VICAP port.
++
++    required:
++      - port@0
++      - port@1
++
++  power-domains:
++    maxItems: 1
++
++  resets:
++    maxItems: 1
++
++required:
++  - compatible
++  - reg
++  - clocks
++  - phys
++  - ports
++  - power-domains
++  - resets
++
++additionalProperties: false
++
++examples:
++  - |
++    #include <dt-bindings/clock/rk3568-cru.h>
++    #include <dt-bindings/interrupt-controller/arm-gic.h>
++    #include <dt-bindings/media/video-interfaces.h>
++    #include <dt-bindings/power/rk3568-power.h>
++
++    soc {
++        interrupt-parent = <&gic>;
++        #address-cells = <2>;
++        #size-cells = <2>;
++
++        csi: csi@fdfb0000 {
++            compatible = "rockchip,rk3568-mipi-csi2";
++            reg = <0x0 0xfdfb0000 0x0 0x10000>;
++            interrupts = <GIC_SPI 8 IRQ_TYPE_LEVEL_HIGH>,
++                         <GIC_SPI 9 IRQ_TYPE_LEVEL_HIGH>;
++            interrupt-names = "err1", "err2";
++            clocks = <&cru PCLK_CSI2HOST1>;
++            phys = <&csi_dphy>;
++            power-domains = <&power RK3568_PD_VI>;
++            resets = <&cru SRST_P_CSI2HOST1>;
++
++            ports {
++                #address-cells = <1>;
++                #size-cells = <0>;
++
++                csi_in: port@0 {
++                    reg = <0>;
++
++                    csi_input: endpoint {
++                        bus-type = <MEDIA_BUS_TYPE_CSI2_DPHY>;
++                        data-lanes = <1 2 3 4>;
++                        remote-endpoint = <&imx415_output>;
++                    };
++                };
++
++                csi_out: port@1 {
++                    reg = <1>;
++
++                    csi_output: endpoint {
++                        remote-endpoint = <&vicap_mipi_input>;
++                    };
++                };
++            };
++        };
++    };
+diff --git a/MAINTAINERS b/MAINTAINERS
+index fc68ee0c68c0..965132e0933a 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -25364,6 +25364,12 @@ S:	Maintained
+ F:	drivers/i2c/busses/i2c-designware-amdisp.c
+ F:	include/linux/soc/amd/isp4_misc.h
+ 
++SYNOPSYS DESIGNWARE MIPI CSI-2 RECEIVER DRIVER
++M:	Michael Riesch <michael.riesch@collabora.com>
++L:	linux-media@vger.kernel.org
++S:	Maintained
++F:	Documentation/devicetree/bindings/media/rockchip,rk3568-mipi-csi2.yaml
++
+ SYNOPSYS DESIGNWARE MMC/SD/SDIO DRIVER
+ M:	Jaehoon Chung <jh80.chung@samsung.com>
+ M:	Shawn Lin <shawn.lin@rock-chips.com>
+
+-- 
+2.39.5
+
+
