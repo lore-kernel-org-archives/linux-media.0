@@ -1,54 +1,54 @@
 Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0F7C439A805
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9094B399A6D
 	for <linux-media@vger.kernel.org>; Thu, 15 Jan 2026 12:46:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768481185; cv=none; b=uvvb1SVm/eiNXIXhWhdFwRWLjGXcXiplXpVZMgpCyVjrmveIaKdC2tDPm521w/QzSRdNNGaxhECx8s+Ov8afJwj60zkk747Y12XlaBhMNMmtPh6NQoB+gqP0rYVbph4MeJ7DiwSpDP8Ts6Cag5C3LxHJjwRdF7NWOzjTqtiMJtA=
+	t=1768481185; cv=none; b=lAAEInk89k1E31WnIRCkEQz+gUG6gxptC5Mf7GdmB0MtkbJ/Kiycd9fmp9XpaM46OpGr9EwWTZ2o2rl/7Wl6YBM4fPe3IZgQ8REN8DiHbtk4vO14C5CgfoquMw0su5IRYRmtjuRgobPzVof4oGVv4fYwuLUCxsFZMwKdDj0BsfI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1768481185; c=relaxed/simple;
-	bh=niHIkNizw61ZsG2UECrabItqv38qEGz+yGpjn2lQVMs=;
+	bh=4NeG1jc8zV6d5wBCnybarcBsyZS3EYxMPafjOADbSzw=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=FgPwd+Mor9dqVTs6lDL/mWMIIsu2zMBHxO3+vMkBZompZLTxmxLHT0foVvXEJwgzj6LOzQAV0NndREdjTHtOfyfIUylXsqlHwoYog3N3b60RwF6IQMyZJWNr9X1k7SHWJFaE1bqivh6GypI8+cCbYWEIXH68YmAHvZjh6BlK2Fg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=XolrkT++; arc=none smtp.client-ip=192.198.163.11
+	 MIME-Version; b=pFVceW16ITVNMAqCKzbDVCJZaJBHfmRMzFok+I5UpkrCXXurKBhrzVx91LkyE3C/JefxGDXA2NQxItWyZvV2eoSdOg1zPGYDVMnulY/sOh6uNMxNZ68OvABES1s7xrkcWLWbrSjxppuAMYtQ+j9HS69gSiZP568gO0+nzJxlETE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=WPXajjFC; arc=none smtp.client-ip=192.198.163.11
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="XolrkT++"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="WPXajjFC"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
   t=1768481182; x=1800017182;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=niHIkNizw61ZsG2UECrabItqv38qEGz+yGpjn2lQVMs=;
-  b=XolrkT++JbZ3ScwLRlJwIxHCgrijO6UMMTN7iQtfgUPJqK/Hf4i3x2UR
-   86B6u90FMI+h2BumJpHmGwGP9cziojKal3z8fd+jDGYx2raz4hPKC2uhT
-   c5uWuVtzADBduMIUGiB7WYQ+b/0HQlKoGbGGo636tbt4ZnuZABbe9slqN
-   bB3NJU22uDa69g4HycFp9xTMvy0fx6xvjW2/icJp6SzP/CFNadmy64dCg
-   qj+TPXRdLqfj3VVZypt9JyOs2xhzAtqSTxBf7eh5qZaP6ug0CRuS8SkWx
-   ImRqQjA1MqUYPp10o2q8n7urDkaSDo1MFWqkTD3gJb4DBIc0OETD7LiFf
-   Q==;
-X-CSE-ConnectionGUID: jTlrf49YSduvs4jc3txSaA==
-X-CSE-MsgGUID: crFW/k3MTBaY/ICGTBe2EA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11671"; a="80428309"
+  bh=4NeG1jc8zV6d5wBCnybarcBsyZS3EYxMPafjOADbSzw=;
+  b=WPXajjFCunIXgQlLZMN7jIonB43bM4ZHONd4+kxzI1zL7a0GLO9jzZoL
+   vM375i8ULOUwuJ7odwlCtAgEsxHReHu5A1WkhW+yuFFgGliRPXE8XM1o0
+   COR22XMKnYfPYICIVhrpOiMyarn4aGL8SX58SqHJI8vZHW4V8L5UNFVJa
+   e2fhO8fJg9myZMSmyUSJSCf5KNB49KdpZj0bmOyqTVJ6UzyqmUy93Bfai
+   YDlnn2F62kc+I9/zUQrFrUYbN/0B62VdF2MCLbQJO2o2e2xIX5+IvQkdr
+   Xp28C/XMAdoPAe2rFDcOvZVrkwwBHWIjx3kYuJw2xDN8lsEOy+6/aoVYx
+   w==;
+X-CSE-ConnectionGUID: jsCbwJoaRgmIYOt2J+mEUg==
+X-CSE-MsgGUID: q9ukEaeKQ0CHMBzCjIMkjw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11671"; a="80428306"
 X-IronPort-AV: E=Sophos;i="6.21,228,1763452800"; 
-   d="scan'208";a="80428309"
+   d="scan'208";a="80428306"
 Received: from orviesa007.jf.intel.com ([10.64.159.147])
-  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jan 2026 04:46:18 -0800
-X-CSE-ConnectionGUID: 6A8D1QRJRba2A2h7rnBG5g==
-X-CSE-MsgGUID: WY1xhjx/RHq+1dSGu1u8nA==
+  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jan 2026 04:46:17 -0800
+X-CSE-ConnectionGUID: /C4NOt5TSxW5Cqk7k4gugg==
+X-CSE-MsgGUID: 3TVLAor7QyaAemTk69rvrA==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.21,228,1763452800"; 
-   d="scan'208";a="204980448"
+   d="scan'208";a="204980446"
 Received: from abityuts-desk.ger.corp.intel.com (HELO kekkonen.fi.intel.com) ([10.245.244.213])
   by orviesa007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jan 2026 04:46:15 -0800
 Received: from punajuuri.localdomain (unknown [192.168.240.130])
-	by kekkonen.fi.intel.com (Postfix) with ESMTP id EE9C3121D85;
+	by kekkonen.fi.intel.com (Postfix) with ESMTP id EAE79121D80;
 	Thu, 15 Jan 2026 14:46:12 +0200 (EET)
 Received: from sailus by punajuuri.localdomain with local (Exim 4.98.2)
 	(envelope-from <sakari.ailus@linux.intel.com>)
-	id 1vgMjs-00000000UMG-3SOZ;
+	id 1vgMjs-00000000UM8-3K2d;
 	Thu, 15 Jan 2026 14:46:12 +0200
 Organization: Intel Finland Oy - BIC 0357606-4 - c/o Alberga Business Park, 6 krs, Bertel Jungin Aukio 5, 02600 Espoo
 From: Sakari Ailus <sakari.ailus@linux.intel.com>
@@ -56,9 +56,9 @@ To: linux-media@vger.kernel.org
 Cc: Dave Stevenson <dave.stevenson@raspberrypi.com>,
 	laurent.pinchart@ideasonboard.com,
 	jai.luthra@ideasonboard.com
-Subject: [PATCH 3/7] media: ccs: Compute binning configuration from sub-device state
-Date: Thu, 15 Jan 2026 14:46:08 +0200
-Message-ID: <20260115124612.116663-4-sakari.ailus@linux.intel.com>
+Subject: [PATCH 1/7] media: ccs: Remove ccs_get_crop_compose helper
+Date: Thu, 15 Jan 2026 14:46:06 +0200
+Message-ID: <20260115124612.116663-2-sakari.ailus@linux.intel.com>
 X-Mailer: git-send-email 2.47.3
 In-Reply-To: <20260115124612.116663-1-sakari.ailus@linux.intel.com>
 References: <20260115124612.116663-1-sakari.ailus@linux.intel.com>
@@ -70,148 +70,339 @@ List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Calculate binning configuration from sub-device state so the state related
-configuration can be removed from the driver's device context struct.
+As it's now easier to obtain the necessary information on crop and compose
+rectangles after moving to sub-device state, remove the
+ccs_get_crop_compose helper.
+
+Also remove the comp arguments of the compose goodness calculators and
+make related local variables and function arguments const where
+applicable.
 
 Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
 Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 ---
- drivers/media/i2c/ccs/ccs-core.c | 56 +++++++++++++++++++-------------
- drivers/media/i2c/ccs/ccs.h      |  3 --
- 2 files changed, 33 insertions(+), 26 deletions(-)
+ drivers/media/i2c/ccs/ccs-core.c | 161 ++++++++++++++-----------------
+ 1 file changed, 71 insertions(+), 90 deletions(-)
 
 diff --git a/drivers/media/i2c/ccs/ccs-core.c b/drivers/media/i2c/ccs/ccs-core.c
-index b02bd2700f14..63d590da3c34 100644
+index 4ec8ed5811f7..471e22e6678b 100644
 --- a/drivers/media/i2c/ccs/ccs-core.c
 +++ b/drivers/media/i2c/ccs/ccs-core.c
-@@ -511,13 +511,36 @@ static int ccs_pll_try(struct ccs_sensor *sensor, struct ccs_pll *pll)
- 	return ccs_pll_calculate(&client->dev, &lim, pll);
+@@ -2091,24 +2091,6 @@ static int ccs_get_format(struct v4l2_subdev *subdev,
+ 	return rval;
  }
  
-+static void
-+ccs_get_binning(struct ccs_sensor *sensor, u8 *binning_mode, u8 *binh, u8 *binv)
-+{
-+	struct v4l2_subdev_state *state =
-+		v4l2_subdev_get_locked_active_state(&sensor->binner->sd);
-+	const struct v4l2_rect *sink_crop =
-+		v4l2_subdev_state_get_crop(state, CCS_PAD_SINK,
-+					   CCS_STREAM_PIXEL);
-+	const struct v4l2_rect *sink_comp =
-+		v4l2_subdev_state_get_compose(state, CCS_PAD_SINK,
-+					      CCS_STREAM_PIXEL);
-+
-+	if (binning_mode)
-+		*binning_mode =	sink_crop->width == sink_comp->width &&
-+				sink_crop->height == sink_comp->height ? 0 : 1;
-+
-+	*binh = sink_crop->width / sink_comp->width;
-+	*binv = sink_crop->height / sink_comp->height;
-+}
-+
- static int ccs_pll_update(struct ccs_sensor *sensor)
- {
- 	struct ccs_pll *pll = &sensor->pll;
-+	u8 binh, binv;
- 	int rval;
- 
--	pll->binning_horizontal = sensor->binning_horizontal;
--	pll->binning_vertical = sensor->binning_vertical;
-+	ccs_get_binning(sensor, NULL, &binh, &binv);
-+
-+	pll->binning_horizontal = binh;
-+	pll->binning_vertical = binv;
- 	pll->link_freq =
- 		sensor->link_freq->qmenu_int[sensor->link_freq->val];
- 	pll->scale_m = sensor->scale_m;
-@@ -1239,8 +1262,11 @@ static void ccs_update_blanking(struct ccs_sensor *sensor,
- 	struct v4l2_ctrl *hblank = sensor->hblank;
- 	u16 min_fll, max_fll, min_llp, max_llp, min_lbp;
- 	int min, max;
-+	u8 binh, binv;
-+
-+	ccs_get_binning(sensor, NULL, &binh, &binv);
- 
--	if (sensor->binning_vertical > 1 || sensor->binning_horizontal > 1) {
-+	if (binv > 1 || binh > 1) {
- 		min_fll = CCS_LIM(sensor, MIN_FRAME_LENGTH_LINES_BIN);
- 		max_fll = CCS_LIM(sensor, MAX_FRAME_LENGTH_LINES_BIN);
- 		min_llp = CCS_LIM(sensor, MIN_LINE_LENGTH_PCK_BIN);
-@@ -1808,7 +1834,7 @@ static int ccs_enable_streams(struct v4l2_subdev *subdev,
- 		v4l2_subdev_state_get_crop(src_state, CCS_PAD_SRC,
- 					   CCS_STREAM_PIXEL);
- 	struct i2c_client *client = v4l2_get_subdevdata(&sensor->src->sd);
--	unsigned int binning_mode;
-+	u8 binning_mode, binh, binv;
- 	int rval;
- 
- 	if (pad != CCS_PAD_SRC)
-@@ -1830,19 +1856,12 @@ static int ccs_enable_streams(struct v4l2_subdev *subdev,
- 		goto err_pm_put;
- 
- 	/* Binning configuration */
--	if (sensor->binning_horizontal == 1 &&
--	    sensor->binning_vertical == 1) {
--		binning_mode = 0;
--	} else {
--		u8 binning_type =
--			(sensor->binning_horizontal << 4)
--			| sensor->binning_vertical;
-+	ccs_get_binning(sensor,	&binning_mode, &binh, &binv);
- 
--		rval = ccs_write(sensor, BINNING_TYPE, binning_type);
-+	if (binning_mode) {
-+		rval = ccs_write(sensor, BINNING_TYPE, (binh << 4) | binv);
- 		if (rval < 0)
- 			goto err_pm_put;
+-static void ccs_get_crop_compose(struct v4l2_subdev *subdev,
+-				 struct v4l2_subdev_state *sd_state,
+-				 struct v4l2_rect **crops,
+-				 struct v4l2_rect **comps)
+-{
+-	struct ccs_subdev *ssd = to_ccs_subdev(subdev);
+-	unsigned int i;
 -
--		binning_mode = 1;
- 	}
- 	rval = ccs_write(sensor, BINNING_MODE, binning_mode);
- 	if (rval < 0)
-@@ -2123,9 +2142,6 @@ static void ccs_propagate(struct v4l2_subdev *subdev,
+-	if (crops)
+-		for (i = 0; i < subdev->entity.num_pads; i++)
+-			crops[i] =
+-				v4l2_subdev_state_get_crop(sd_state, i,
+-							   CCS_STREAM_PIXEL);
+-	if (comps)
+-		*comps = v4l2_subdev_state_get_compose(sd_state, ssd->sink_pad,
+-						       CCS_STREAM_PIXEL);
+-}
+-
+ /* Changes require propagation only on sink pad. */
+ static void ccs_propagate(struct v4l2_subdev *subdev,
+ 			  struct v4l2_subdev_state *sd_state, int which,
+@@ -2116,15 +2098,17 @@ static void ccs_propagate(struct v4l2_subdev *subdev,
+ {
+ 	struct ccs_sensor *sensor = to_ccs_sensor(subdev);
+ 	struct ccs_subdev *ssd = to_ccs_subdev(subdev);
+-	struct v4l2_rect *comp, *crops[CCS_PADS];
++	struct v4l2_rect *comp, *crop;
+ 	struct v4l2_mbus_framefmt *fmt;
+ 
+-	ccs_get_crop_compose(subdev, sd_state, crops, &comp);
+-
++	comp = v4l2_subdev_state_get_compose(sd_state, ssd->sink_pad,
++					     CCS_STREAM_PIXEL);
+ 	switch (target) {
+ 	case V4L2_SEL_TGT_CROP:
+-		comp->width = crops[CCS_PAD_SINK]->width;
+-		comp->height = crops[CCS_PAD_SINK]->height;
++		crop = v4l2_subdev_state_get_crop(sd_state, CCS_PAD_SINK,
++						  CCS_STREAM_PIXEL);
++		comp->width = crop->width;
++		comp->height = crop->height;
+ 		if (which == V4L2_SUBDEV_FORMAT_ACTIVE) {
+ 			if (ssd == sensor->scaler) {
  				sensor->scale_m = CCS_LIM(sensor, SCALER_N_MIN);
- 				sensor->scaling_mode =
- 					CCS_SCALING_MODE_NO_SCALING;
--			} else if (ssd == sensor->binner) {
--				sensor->binning_horizontal = 1;
--				sensor->binning_vertical = 1;
- 			}
+@@ -2138,13 +2122,15 @@ static void ccs_propagate(struct v4l2_subdev *subdev,
  		}
  		fallthrough;
-@@ -2311,10 +2327,6 @@ static void ccs_set_compose_binner(struct v4l2_subdev *subdev,
- 			best = this;
+ 	case V4L2_SEL_TGT_COMPOSE:
+-		*crops[CCS_PAD_SRC] = *comp;
++		crop = v4l2_subdev_state_get_crop(sd_state, CCS_PAD_SRC,
++						  CCS_STREAM_PIXEL);
++		*crop = *comp;
+ 		fmt = v4l2_subdev_state_get_format(sd_state, CCS_PAD_SRC,
+ 						   CCS_STREAM_PIXEL);
+ 		fmt->width = comp->width;
+ 		fmt->height = comp->height;
+ 		if (which == V4L2_SUBDEV_FORMAT_ACTIVE && ssd == sensor->src)
+-			sensor->src_src = *crops[CCS_PAD_SRC];
++			sensor->src_src = *crop;
+ 		break;
+ 	default:
+ 		WARN_ON_ONCE(1);
+@@ -2210,7 +2196,7 @@ static int ccs_set_format(struct v4l2_subdev *subdev,
+ {
+ 	struct ccs_sensor *sensor = to_ccs_sensor(subdev);
+ 	struct ccs_subdev *ssd = to_ccs_subdev(subdev);
+-	struct v4l2_rect *crops[CCS_PADS];
++	struct v4l2_rect *crop;
+ 
+ 	mutex_lock(&sensor->mutex);
+ 
+@@ -2239,12 +2225,13 @@ static int ccs_set_format(struct v4l2_subdev *subdev,
+ 		      CCS_LIM(sensor, MIN_Y_OUTPUT_SIZE),
+ 		      CCS_LIM(sensor, MAX_Y_OUTPUT_SIZE));
+ 
+-	ccs_get_crop_compose(subdev, sd_state, crops, NULL);
++	crop = v4l2_subdev_state_get_crop(sd_state, ssd->sink_pad,
++					  CCS_STREAM_PIXEL);
+ 
+-	crops[ssd->sink_pad]->left = 0;
+-	crops[ssd->sink_pad]->top = 0;
+-	crops[ssd->sink_pad]->width = fmt->format.width;
+-	crops[ssd->sink_pad]->height = fmt->format.height;
++	crop->left = 0;
++	crop->top = 0;
++	crop->width = fmt->format.width;
++	crop->height = fmt->format.height;
+ 	ccs_propagate(subdev, sd_state, fmt->which, V4L2_SEL_TGT_CROP);
+ 
+ 	mutex_unlock(&sensor->mutex);
+@@ -2299,26 +2286,23 @@ static int scaling_goodness(struct v4l2_subdev *subdev, int w, int ask_w,
+ static void ccs_set_compose_binner(struct v4l2_subdev *subdev,
+ 				   struct v4l2_subdev_state *sd_state,
+ 				   struct v4l2_subdev_selection *sel,
+-				   struct v4l2_rect **crops,
+-				   struct v4l2_rect *comp)
++				   const struct v4l2_rect *sink_crop)
+ {
+ 	struct ccs_sensor *sensor = to_ccs_sensor(subdev);
+ 	unsigned int i;
+ 	unsigned int binh = 1, binv = 1;
+-	int best = scaling_goodness(
+-		subdev,
+-		crops[CCS_PAD_SINK]->width, sel->r.width,
+-		crops[CCS_PAD_SINK]->height, sel->r.height, sel->flags);
++	int best = scaling_goodness(subdev, sink_crop->width, sel->r.width,
++				    sink_crop->height, sel->r.height,
++				    sel->flags);
+ 
+ 	for (i = 0; i < sensor->nbinning_subtypes; i++) {
+-		int this = scaling_goodness(
+-			subdev,
+-			crops[CCS_PAD_SINK]->width
+-			/ sensor->binning_subtypes[i].horizontal,
+-			sel->r.width,
+-			crops[CCS_PAD_SINK]->height
+-			/ sensor->binning_subtypes[i].vertical,
+-			sel->r.height, sel->flags);
++		int this = scaling_goodness(subdev,
++					    sink_crop->width
++					    / sensor->binning_subtypes[i].horizontal,
++					    sel->r.width,
++					    sink_crop->height
++					    / sensor->binning_subtypes[i].vertical,
++					    sel->r.height, sel->flags);
+ 
+ 		if (this > best) {
+ 			binh = sensor->binning_subtypes[i].horizontal;
+@@ -2331,8 +2315,8 @@ static void ccs_set_compose_binner(struct v4l2_subdev *subdev,
+ 		sensor->binning_horizontal = binh;
+ 	}
+ 
+-	sel->r.width = (crops[CCS_PAD_SINK]->width / binh) & ~1;
+-	sel->r.height = (crops[CCS_PAD_SINK]->height / binv) & ~1;
++	sel->r.width = (sink_crop->width / binh) & ~1;
++	sel->r.height = (sink_crop->height / binv) & ~1;
+ }
+ 
+ /*
+@@ -2347,8 +2331,7 @@ static void ccs_set_compose_binner(struct v4l2_subdev *subdev,
+ static void ccs_set_compose_scaler(struct v4l2_subdev *subdev,
+ 				   struct v4l2_subdev_state *sd_state,
+ 				   struct v4l2_subdev_selection *sel,
+-				   struct v4l2_rect **crops,
+-				   struct v4l2_rect *comp)
++				   const struct v4l2_rect *sink_crop)
+ {
+ 	struct i2c_client *client = v4l2_get_subdevdata(subdev);
+ 	struct ccs_sensor *sensor = to_ccs_sensor(subdev);
+@@ -2360,16 +2343,12 @@ static void ccs_set_compose_scaler(struct v4l2_subdev *subdev,
+ 	unsigned int i;
+ 	int best = INT_MIN;
+ 
+-	sel->r.width = min_t(unsigned int, sel->r.width,
+-			     crops[CCS_PAD_SINK]->width);
+-	sel->r.height = min_t(unsigned int, sel->r.height,
+-			      crops[CCS_PAD_SINK]->height);
++	sel->r.width = min_t(unsigned int, sel->r.width, sink_crop->width);
++	sel->r.height = min_t(unsigned int, sel->r.height, sink_crop->height);
+ 
+-	a = crops[CCS_PAD_SINK]->width
+-		* CCS_LIM(sensor, SCALER_N_MIN) / sel->r.width;
+-	b = crops[CCS_PAD_SINK]->height
+-		* CCS_LIM(sensor, SCALER_N_MIN) / sel->r.height;
+-	max_m = crops[CCS_PAD_SINK]->width
++	a = sink_crop->width * CCS_LIM(sensor, SCALER_N_MIN) / sel->r.width;
++	b = sink_crop->height * CCS_LIM(sensor, SCALER_N_MIN) / sel->r.height;
++	max_m = sink_crop->width
+ 		* CCS_LIM(sensor, SCALER_N_MIN)
+ 		/ (CCS_LIM(sensor, MIN_X_OUTPUT_SIZE) ?: 1);
+ 
+@@ -2401,14 +2380,12 @@ static void ccs_set_compose_scaler(struct v4l2_subdev *subdev,
+ 	}
+ 
+ 	for (i = 0; i < ntry; i++) {
+-		int this = scaling_goodness(
+-			subdev,
+-			crops[CCS_PAD_SINK]->width
+-			/ try[i] * CCS_LIM(sensor, SCALER_N_MIN),
+-			sel->r.width,
+-			crops[CCS_PAD_SINK]->height,
+-			sel->r.height,
+-			sel->flags);
++		int this = scaling_goodness(subdev,
++					    sink_crop->width
++					    / try[i]
++					    * CCS_LIM(sensor, SCALER_N_MIN),
++					    sel->r.width, sink_crop->height,
++					    sel->r.height, sel->flags);
+ 
+ 		dev_dbg(&client->dev, "trying factor %u (%u)\n", try[i], i);
+ 
+@@ -2423,12 +2400,10 @@ static void ccs_set_compose_scaler(struct v4l2_subdev *subdev,
+ 			continue;
+ 
+ 		this = scaling_goodness(
+-			subdev, crops[CCS_PAD_SINK]->width
+-			/ try[i]
++			subdev, sink_crop->width / try[i]
+ 			* CCS_LIM(sensor, SCALER_N_MIN),
+ 			sel->r.width,
+-			crops[CCS_PAD_SINK]->height
+-			/ try[i]
++			sink_crop->height / try[i]
+ 			* CCS_LIM(sensor, SCALER_N_MIN),
+ 			sel->r.height,
+ 			sel->flags);
+@@ -2440,18 +2415,13 @@ static void ccs_set_compose_scaler(struct v4l2_subdev *subdev,
  		}
  	}
--	if (sel->which == V4L2_SUBDEV_FORMAT_ACTIVE) {
--		sensor->binning_vertical = binv;
--		sensor->binning_horizontal = binh;
--	}
  
- 	sel->r.width = (sink_crop->width / binh) & ~1;
- 	sel->r.height = (sink_crop->height / binv) & ~1;
-@@ -3403,8 +3415,6 @@ static int ccs_probe(struct i2c_client *client)
- 				sensor->binning_subtypes[i].vertical);
- 		}
- 	}
--	sensor->binning_horizontal = 1;
--	sensor->binning_vertical = 1;
+-	sel->r.width =
+-		(crops[CCS_PAD_SINK]->width
+-		 / scale_m
+-		 * CCS_LIM(sensor, SCALER_N_MIN)) & ~1;
++	sel->r.width = (sink_crop->width / scale_m
++			* CCS_LIM(sensor, SCALER_N_MIN)) & ~1;
+ 	if (mode == SMIAPP_SCALING_MODE_BOTH)
+-		sel->r.height =
+-			(crops[CCS_PAD_SINK]->height
+-			 / scale_m
+-			 * CCS_LIM(sensor, SCALER_N_MIN))
+-			& ~1;
++		sel->r.height = (sink_crop->height / scale_m
++				 * CCS_LIM(sensor, SCALER_N_MIN)) & ~1;
+ 	else
+-		sel->r.height = crops[CCS_PAD_SINK]->height;
++		sel->r.height = sink_crop->height;
  
- 	if (device_create_file(&client->dev, &dev_attr_ident) != 0) {
- 		dev_err(&client->dev, "sysfs ident entry creation failed\n");
-diff --git a/drivers/media/i2c/ccs/ccs.h b/drivers/media/i2c/ccs/ccs.h
-index e885063c89f0..62a4900686f8 100644
---- a/drivers/media/i2c/ccs/ccs.h
-+++ b/drivers/media/i2c/ccs/ccs.h
-@@ -229,9 +229,6 @@ struct ccs_sensor {
- 	int default_pixel_order;
- 	struct ccs_data_container sdata, mdata;
+ 	if (sel->which == V4L2_SUBDEV_FORMAT_ACTIVE) {
+ 		sensor->scale_m = scale_m;
+@@ -2465,17 +2435,21 @@ static int ccs_set_compose(struct v4l2_subdev *subdev,
+ {
+ 	struct ccs_sensor *sensor = to_ccs_sensor(subdev);
+ 	struct ccs_subdev *ssd = to_ccs_subdev(subdev);
+-	struct v4l2_rect *comp, *crops[CCS_PADS];
++	const struct v4l2_rect *sink_crop;
++	struct v4l2_rect *comp;
  
--	u8 binning_horizontal;
--	u8 binning_vertical;
--
- 	u8 scale_m;
- 	u8 scaling_mode;
+-	ccs_get_crop_compose(subdev, sd_state, crops, &comp);
++	sink_crop = v4l2_subdev_state_get_crop(sd_state, CCS_PAD_SINK,
++					       CCS_STREAM_PIXEL);
++	comp = v4l2_subdev_state_get_compose(sd_state, ssd->sink_pad,
++					     CCS_STREAM_PIXEL);
  
+ 	sel->r.top = 0;
+ 	sel->r.left = 0;
+ 
+ 	if (ssd == sensor->binner)
+-		ccs_set_compose_binner(subdev, sd_state, sel, crops, comp);
++		ccs_set_compose_binner(subdev, sd_state, sel, sink_crop);
+ 	else
+-		ccs_set_compose_scaler(subdev, sd_state, sel, crops, comp);
++		ccs_set_compose_scaler(subdev, sd_state, sel, sink_crop);
+ 
+ 	*comp = sel->r;
+ 	ccs_propagate(subdev, sd_state, sel->which, V4L2_SEL_TGT_COMPOSE);
+@@ -2530,9 +2504,13 @@ static int ccs_set_crop(struct v4l2_subdev *subdev,
+ {
+ 	struct ccs_sensor *sensor = to_ccs_sensor(subdev);
+ 	struct ccs_subdev *ssd = to_ccs_subdev(subdev);
+-	struct v4l2_rect src_size = { 0 }, *crops[CCS_PADS], *comp;
++	struct v4l2_rect src_size = { 0 }, *crop;
++	const struct v4l2_rect *comp;
+ 
+-	ccs_get_crop_compose(subdev, sd_state, crops, &comp);
++	crop = v4l2_subdev_state_get_crop(sd_state, sel->pad,
++					  CCS_STREAM_PIXEL);
++	comp = v4l2_subdev_state_get_compose(sd_state, ssd->sink_pad,
++					     CCS_STREAM_PIXEL);
+ 
+ 	if (sel->pad == ssd->sink_pad) {
+ 		struct v4l2_mbus_framefmt *mfmt =
+@@ -2555,7 +2533,7 @@ static int ccs_set_crop(struct v4l2_subdev *subdev,
+ 	sel->r.left = min_t(int, sel->r.left, src_size.width - sel->r.width);
+ 	sel->r.top = min_t(int, sel->r.top, src_size.height - sel->r.height);
+ 
+-	*crops[sel->pad] = sel->r;
++	*crop = sel->r;
+ 
+ 	if (ssd != sensor->pixel_array && sel->pad == CCS_PAD_SINK)
+ 		ccs_propagate(subdev, sd_state, sel->which, V4L2_SEL_TGT_CROP);
+@@ -2580,14 +2558,17 @@ static int ccs_get_selection(struct v4l2_subdev *subdev,
+ {
+ 	struct ccs_sensor *sensor = to_ccs_sensor(subdev);
+ 	struct ccs_subdev *ssd = to_ccs_subdev(subdev);
+-	struct v4l2_rect *comp, *crops[CCS_PADS];
++	const struct v4l2_rect *crop, *comp;
+ 	int ret;
+ 
+ 	ret = ccs_sel_supported(subdev, sel);
+ 	if (ret)
+ 		return ret;
+ 
+-	ccs_get_crop_compose(subdev, sd_state, crops, &comp);
++	crop = v4l2_subdev_state_get_crop(sd_state, sel->pad,
++					  CCS_STREAM_PIXEL);
++	comp = v4l2_subdev_state_get_compose(sd_state, ssd->sink_pad,
++					     CCS_STREAM_PIXEL);
+ 
+ 	switch (sel->target) {
+ 	case V4L2_SEL_TGT_CROP_BOUNDS:
+@@ -2607,7 +2588,7 @@ static int ccs_get_selection(struct v4l2_subdev *subdev,
+ 		break;
+ 	case V4L2_SEL_TGT_CROP:
+ 	case V4L2_SEL_TGT_COMPOSE_BOUNDS:
+-		sel->r = *crops[sel->pad];
++		sel->r = *crop;
+ 		break;
+ 	case V4L2_SEL_TGT_COMPOSE:
+ 		sel->r = *comp;
 -- 
 2.47.3
 
