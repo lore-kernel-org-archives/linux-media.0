@@ -1,295 +1,142 @@
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 90A1939A80F;
-	Thu, 15 Jan 2026 12:46:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.167.242.64
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E100239900F
+	for <linux-media@vger.kernel.org>; Thu, 15 Jan 2026 12:46:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768481185; cv=none; b=mpH83j+bgFt/VWKdrtbAkyPnrVJ1EDd0eCPrTDFNfK6lAz3pRN+6wh2hV08LMRBa+o2+PO4ExVG92Bu4SQ3ZQq9OKzqmoMGISZ+MpLo77IQyInea8+Db8lYclZiCr8X1FS/WekBKIkZcssZQvX0qiQ8Dw4+i60YHrJisraTIYt0=
+	t=1768481186; cv=none; b=p0IZb1NMZ7AXFB8Kyx/TG2YZTaYchEmBS5FRNv0JL0gT+Z78MXhbUUvd75weuaTAyzkxSCV+AbqQIgH2Lki5lDm+OEGVSXwQcU7oWRgfpnRwGBiKdwJB7pnMpKuHQOG4c/XWZsHrAZNqZZLPozCztCFGnMISeecIGkDuW1ykK7g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768481185; c=relaxed/simple;
-	bh=6fIe+CKhVPb9zKkl6TpSxLoTVrXdIhXwOHagdDYSr1M=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=V9alNm0PR1tvZOcfeDCAkP9TsuNYrSZaeyNfAgVzsBvo5RQerr8Vq66Kx9bApVPtKStkOi5SyD8xtXTn5oSQ3VyLa+KShMF6JANQnblEf/ubR5ENRTp0ZoUrsEKx8RIovl2nIoLkhXqgwKyN/oSU9+OB/QSiVX1n4Bx5Ucza9UY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ideasonboard.com; spf=pass smtp.mailfrom=ideasonboard.com; dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b=ZRiSZ10N; arc=none smtp.client-ip=213.167.242.64
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ideasonboard.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ideasonboard.com
+	s=arc-20240116; t=1768481186; c=relaxed/simple;
+	bh=k0D1PJ1/Qxkx5IJBO8v/M3eFInUXN8d9UUnE7yhJqBI=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=M0IbtgXqqvXx7zG9Y6UyNzh7ZgbNjMNHIbC+JAR31fNS2/phMqpmLwt3hsm3t2BGTDID2PSIH3o1o5GxaSmHLoaaqi2mtPmzakiHO9MLYtrWdKhiyWvqzXSg6mI7UvfONzZ89qUGHYLn0A0bMCmDo5UpjI5De+0nfwmToJQ/Xyk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=I0olpLwN; arc=none smtp.client-ip=192.198.163.11
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="ZRiSZ10N"
-Received: from [192.168.88.20] (91-158-153-178.elisa-laajakaista.fi [91.158.153.178])
-	by perceval.ideasonboard.com (Postfix) with ESMTPSA id 9E45C24A;
-	Thu, 15 Jan 2026 13:45:50 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-	s=mail; t=1768481152;
-	bh=6fIe+CKhVPb9zKkl6TpSxLoTVrXdIhXwOHagdDYSr1M=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=ZRiSZ10NeJn0LmSacdWT1ax9Z23BxT8vgG+e8/sQzoWbzgwngpH/l8by0ir01jBP0
-	 EdgVSKqMIHeyiOSGDrNZrdfB3sdQL38X1yQegHepXsiKuRSBnC+6OyrY725g1vqaMT
-	 +6Ub87uEHt0Pny+6Zx3iamZjH3F4wIfBWgg73yxo=
-Message-ID: <57b147bc-cdce-4033-8320-ce41b501519c@ideasonboard.com>
-Date: Thu, 15 Jan 2026 14:46:14 +0200
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="I0olpLwN"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1768481184; x=1800017184;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=k0D1PJ1/Qxkx5IJBO8v/M3eFInUXN8d9UUnE7yhJqBI=;
+  b=I0olpLwNSt0bLIVPVNIp9BRztt2u7wiMgNc3BnXugsubF4k1XvfLNocP
+   HyM+tT+Lc2864KatNdG6KLD3LDAb6eXPBIVKEJ0WfPNuh+lC/zzY9mMmc
+   db52VG3HgMmUgEP9OSM4q1n0aAa0TPjrXU4VJJSHo5T/de0YPlHbCbMrb
+   bOGKq/tR6U556cqchLaw8zvLZVGbCmSSgTsVQjYJRiz0wjxG4b3zVTe5s
+   JU+fpB8yuaggANDOn76K05s3Ld3TbQCMqwYMw5yeVrN2PLclewMo+gPJF
+   Uxk4ZBLTcOZuEgvXt3fbQNQ2hvYegykIbkqAeHotsJ6XP6Bx+4zltb4Ww
+   Q==;
+X-CSE-ConnectionGUID: osySfm8GQJKdNHVKVKhE+g==
+X-CSE-MsgGUID: kKGYApCtSE2VbYY/ScY46A==
+X-IronPort-AV: E=McAfee;i="6800,10657,11671"; a="80428317"
+X-IronPort-AV: E=Sophos;i="6.21,228,1763452800"; 
+   d="scan'208";a="80428317"
+Received: from orviesa007.jf.intel.com ([10.64.159.147])
+  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jan 2026 04:46:20 -0800
+X-CSE-ConnectionGUID: jhhZHfLFTKW8yo+N6WKpgg==
+X-CSE-MsgGUID: N3TYkNxCR/qX1xBULHwteA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.21,228,1763452800"; 
+   d="scan'208";a="204980459"
+Received: from abityuts-desk.ger.corp.intel.com (HELO kekkonen.fi.intel.com) ([10.245.244.213])
+  by orviesa007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jan 2026 04:46:18 -0800
+Received: from punajuuri.localdomain (unknown [192.168.240.130])
+	by kekkonen.fi.intel.com (Postfix) with ESMTP id 01BE1121D87;
+	Thu, 15 Jan 2026 14:46:13 +0200 (EET)
+Received: from sailus by punajuuri.localdomain with local (Exim 4.98.2)
+	(envelope-from <sakari.ailus@linux.intel.com>)
+	id 1vgMjs-00000000UMO-3aYP;
+	Thu, 15 Jan 2026 14:46:12 +0200
+Organization: Intel Finland Oy - BIC 0357606-4 - c/o Alberga Business Park, 6 krs, Bertel Jungin Aukio 5, 02600 Espoo
+From: Sakari Ailus <sakari.ailus@linux.intel.com>
+To: linux-media@vger.kernel.org
+Cc: Dave Stevenson <dave.stevenson@raspberrypi.com>,
+	laurent.pinchart@ideasonboard.com,
+	jai.luthra@ideasonboard.com
+Subject: [PATCH 5/7] media: ccs: Remove which parameter from ccs_propagate
+Date: Thu, 15 Jan 2026 14:46:10 +0200
+Message-ID: <20260115124612.116663-6-sakari.ailus@linux.intel.com>
+X-Mailer: git-send-email 2.47.3
+In-Reply-To: <20260115124612.116663-1-sakari.ailus@linux.intel.com>
+References: <20260115124612.116663-1-sakari.ailus@linux.intel.com>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v9 18/19] media: ti: j721e-csi2rx: Support runtime suspend
-To: Rishikesh Donadkar <r-donadkar@ti.com>
-Cc: y-abhilashchandra@ti.com, devarsht@ti.com, s-jain1@ti.com,
- vigneshr@ti.com, mchehab@kernel.org, robh@kernel.org, krzk+dt@kernel.org,
- p.zabel@pengutronix.de, conor+dt@kernel.org, sakari.ailus@linux.intel.com,
- hverkuil-cisco@xs4all.nl, jai.luthra@ideasonboard.com,
- changhuang.liang@starfivetech.com, jack.zhu@starfivetech.com,
- sjoerd@collabora.com, dan.carpenter@linaro.org, hverkuil+cisco@kernel.org,
- linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
- devicetree@vger.kernel.org, jai.luthra@linux.dev,
- laurent.pinchart@ideasonboard.com, mripard@kernel.org
-References: <20251230083220.2405247-1-r-donadkar@ti.com>
- <20251230083220.2405247-19-r-donadkar@ti.com>
-From: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
-Content-Language: en-US
-Autocrypt: addr=tomi.valkeinen@ideasonboard.com; keydata=
- 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
-In-Reply-To: <20251230083220.2405247-19-r-donadkar@ti.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-Hi,
+ccs_propagate() no longer stores information in the driver's context
+struct. The which parameter can thus be removed.
 
-On 30/12/2025 10:32, Rishikesh Donadkar wrote:
-> From: Jai Luthra <jai.luthra@ideasonboard.com>
-> 
-> Add support for runtime power-management to enable powering off the
-> shared power domain between Cadence CSI2RX and TI CSI2RX wrapper when
-> the device(s) are not in use.
-> 
-> When powering off the IP, the PSI-L endpoint loses the paired DMA
-> channels. Thus we have to release the DMA channels at runtime suspend
-> and request them again at resume.
-> 
-> Tested-by: Rishikesh Donadkar <r-donadkar@ti.com>
-> Reviewed-by: Rishikesh Donadkar <r-donadkar@ti.com>
-> Signed-off-by: Jai Luthra <jai.luthra@ideasonboard.com>
-> Co-developed-by: Rishikesh Donadkar <r-donadkar@ti.com>
-> Signed-off-by: Rishikesh Donadkar <r-donadkar@ti.com>
-> ---
->  drivers/media/platform/ti/Kconfig             |  1 +
->  .../platform/ti/j721e-csi2rx/j721e-csi2rx.c   | 59 +++++++++++++++----
->  2 files changed, 50 insertions(+), 10 deletions(-)
+Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
+Reviewed-by: Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>
+---
+ drivers/media/i2c/ccs/ccs-core.c | 12 +++++-------
+ 1 file changed, 5 insertions(+), 7 deletions(-)
 
-Should pixel interface reset belong to the runtime suspend/resume
-functions? (Not a suggestion, just a question =).
-
-Reviewed-by: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
-
- Tomi
-
-> diff --git a/drivers/media/platform/ti/Kconfig b/drivers/media/platform/ti/Kconfig
-> index 3bc4aa35887e6..a808063e24779 100644
-> --- a/drivers/media/platform/ti/Kconfig
-> +++ b/drivers/media/platform/ti/Kconfig
-> @@ -70,6 +70,7 @@ config VIDEO_TI_J721E_CSI2RX
->  	depends on VIDEO_CADENCE_CSI2RX
->  	depends on PHY_CADENCE_DPHY_RX || COMPILE_TEST
->  	depends on ARCH_K3 || COMPILE_TEST
-> +	depends on PM
->  	select VIDEOBUF2_DMA_CONTIG
->  	select V4L2_FWNODE
->  	help
-> diff --git a/drivers/media/platform/ti/j721e-csi2rx/j721e-csi2rx.c b/drivers/media/platform/ti/j721e-csi2rx/j721e-csi2rx.c
-> index 3922bd67e78da..72da58738e16e 100644
-> --- a/drivers/media/platform/ti/j721e-csi2rx/j721e-csi2rx.c
-> +++ b/drivers/media/platform/ti/j721e-csi2rx/j721e-csi2rx.c
-> @@ -13,6 +13,7 @@
->  #include <linux/module.h>
->  #include <linux/of_platform.h>
->  #include <linux/platform_device.h>
-> +#include <linux/pm_runtime.h>
->  #include <linux/property.h>
->  
->  #include <media/cadence/cdns-csi2rx.h>
-> @@ -964,12 +965,16 @@ static int ti_csi2rx_start_streaming(struct vb2_queue *vq, unsigned int count)
->  	unsigned long flags;
->  	int ret = 0;
->  
-> +	ret = pm_runtime_resume_and_get(csi->dev);
-> +	if (ret)
-> +		return ret;
-> +
->  	spin_lock_irqsave(&dma->lock, flags);
->  	if (list_empty(&dma->queue))
->  		ret = -EIO;
->  	spin_unlock_irqrestore(&dma->lock, flags);
->  	if (ret)
-> -		return ret;
-> +		goto err;
->  
->  	ret = video_device_pipeline_start(&ctx->vdev, &csi->pipe);
->  	if (ret)
-> @@ -991,6 +996,8 @@ static int ti_csi2rx_start_streaming(struct vb2_queue *vq, unsigned int count)
->  	writel(0, csi->shim + SHIM_DMACNTX(ctx->idx));
->  err:
->  	ti_csi2rx_cleanup_buffers(ctx, VB2_BUF_STATE_QUEUED);
-> +	pm_runtime_put(csi->dev);
-> +
->  	return ret;
->  }
->  
-> @@ -1022,6 +1029,7 @@ static void ti_csi2rx_stop_streaming(struct vb2_queue *vq)
->  
->  	ti_csi2rx_stop_dma(ctx);
->  	ti_csi2rx_cleanup_buffers(ctx, VB2_BUF_STATE_ERROR);
-> +	pm_runtime_put(csi->dev);
->  }
->  
->  static const struct vb2_ops csi_vb2_qops = {
-> @@ -1263,7 +1271,6 @@ static void ti_csi2rx_cleanup_notifier(struct ti_csi2rx_dev *csi)
->  
->  static void ti_csi2rx_cleanup_ctx(struct ti_csi2rx_ctx *ctx)
->  {
-> -	dma_release_channel(ctx->dma.chan);
->  	vb2_queue_release(&ctx->vidq);
->  
->  	video_unregister_device(&ctx->vdev);
-> @@ -1283,7 +1290,7 @@ static int ti_csi2rx_init_vb2q(struct ti_csi2rx_ctx *ctx)
->  	q->ops = &csi_vb2_qops;
->  	q->mem_ops = &vb2_dma_contig_memops;
->  	q->timestamp_flags = V4L2_BUF_FLAG_TIMESTAMP_MONOTONIC;
-> -	q->dev = dmaengine_get_dma_device(ctx->dma.chan);
-> +	q->dev = ctx->csi->dev;
->  	q->lock = &ctx->mutex;
->  	q->min_queued_buffers = 1;
->  	q->allow_cache_hints = 1;
-> @@ -1497,21 +1504,46 @@ static int ti_csi2rx_init_ctx(struct ti_csi2rx_ctx *ctx)
->  	spin_lock_init(&ctx->dma.lock);
->  	ctx->dma.state = TI_CSI2RX_DMA_STOPPED;
->  
-> -	ret = ti_csi2rx_init_dma(ctx);
-> +	ret = ti_csi2rx_init_vb2q(ctx);
->  	if (ret)
->  		return ret;
->  
-> -	ret = ti_csi2rx_init_vb2q(ctx);
-> -	if (ret)
-> -		goto cleanup_dma;
-> +	return 0;
-> +}
-> +
-> +static int ti_csi2rx_runtime_suspend(struct device *dev)
-> +{
-> +	struct ti_csi2rx_dev *csi = dev_get_drvdata(dev);
-> +	int i;
-> +
-> +	if (csi->enable_count != 0)
-> +		return -EBUSY;
-> +
-> +	for (i = 0; i < csi->num_ctx; i++)
-> +		dma_release_channel(csi->ctx[i].dma.chan);
->  
->  	return 0;
-> +}
->  
-> -cleanup_dma:
-> -	dma_release_channel(ctx->dma.chan);
-> -	return ret;
-> +static int ti_csi2rx_runtime_resume(struct device *dev)
-> +{
-> +	struct ti_csi2rx_dev *csi = dev_get_drvdata(dev);
-> +	unsigned int ret, i;
-> +
-> +	for (i = 0; i < csi->num_ctx; i++) {
-> +		ret = ti_csi2rx_init_dma(&csi->ctx[i]);
-> +		if (ret)
-> +			return ret;
-> +	}
-> +
-> +	return 0;
->  }
->  
-> +static const struct dev_pm_ops ti_csi2rx_pm_ops = {
-> +	RUNTIME_PM_OPS(ti_csi2rx_runtime_suspend, ti_csi2rx_runtime_resume,
-> +		       NULL)
-> +};
-> +
->  static int ti_csi2rx_probe(struct platform_device *pdev)
->  {
->  	struct device_node *np = pdev->dev.of_node;
-> @@ -1569,6 +1601,8 @@ static int ti_csi2rx_probe(struct platform_device *pdev)
->  			goto err_ctx;
->  	}
->  
-> +	pm_runtime_enable(csi->dev);
-> +
->  	ret = ti_csi2rx_notifier_register(csi);
->  	if (ret)
->  		goto err_ctx;
-> @@ -1601,6 +1635,9 @@ static void ti_csi2rx_remove(struct platform_device *pdev)
->  	struct ti_csi2rx_dev *csi = platform_get_drvdata(pdev);
->  	unsigned int i;
->  
-> +	if (!pm_runtime_status_suspended(&pdev->dev))
-> +		pm_runtime_set_suspended(&pdev->dev);
-> +
->  	for (i = 0; i < csi->num_ctx; i++)
->  		ti_csi2rx_cleanup_ctx(&csi->ctx[i]);
->  
-> @@ -1609,6 +1646,7 @@ static void ti_csi2rx_remove(struct platform_device *pdev)
->  	mutex_destroy(&csi->mutex);
->  	dma_free_coherent(csi->dev, csi->drain.len, csi->drain.vaddr,
->  			  csi->drain.paddr);
-> +	pm_runtime_disable(&pdev->dev);
->  }
->  
->  static const struct of_device_id ti_csi2rx_of_match[] = {
-> @@ -1623,6 +1661,7 @@ static struct platform_driver ti_csi2rx_pdrv = {
->  	.driver = {
->  		.name = TI_CSI2RX_MODULE_NAME,
->  		.of_match_table = ti_csi2rx_of_match,
-> +		.pm		= &ti_csi2rx_pm_ops,
->  	},
->  };
->  
+diff --git a/drivers/media/i2c/ccs/ccs-core.c b/drivers/media/i2c/ccs/ccs-core.c
+index e60a8aff5454..a3f04b87cf7c 100644
+--- a/drivers/media/i2c/ccs/ccs-core.c
++++ b/drivers/media/i2c/ccs/ccs-core.c
+@@ -2157,8 +2157,7 @@ static int ccs_get_format(struct v4l2_subdev *subdev,
+ 
+ /* Changes require propagation only on sink pad. */
+ static void ccs_propagate(struct v4l2_subdev *subdev,
+-			  struct v4l2_subdev_state *sd_state, int which,
+-			  int target)
++			  struct v4l2_subdev_state *sd_state, int target)
+ {
+ 	struct ccs_subdev *ssd = to_ccs_subdev(subdev);
+ 	struct v4l2_rect *comp, *crop;
+@@ -2279,7 +2278,7 @@ static int ccs_set_format(struct v4l2_subdev *subdev,
+ 	crop->top = 0;
+ 	crop->width = fmt->format.width;
+ 	crop->height = fmt->format.height;
+-	ccs_propagate(subdev, sd_state, fmt->which, V4L2_SEL_TGT_CROP);
++	ccs_propagate(subdev, sd_state, V4L2_SEL_TGT_CROP);
+ 
+ 	return 0;
+ }
+@@ -2488,7 +2487,7 @@ static int ccs_set_compose(struct v4l2_subdev *subdev,
+ 		ccs_set_compose_scaler(subdev, sd_state, sel, sink_crop);
+ 
+ 	*comp = sel->r;
+-	ccs_propagate(subdev, sd_state, sel->which, V4L2_SEL_TGT_COMPOSE);
++	ccs_propagate(subdev, sd_state, V4L2_SEL_TGT_COMPOSE);
+ 
+ 	if (sel->which == V4L2_SUBDEV_FORMAT_ACTIVE)
+ 		return ccs_pll_blanking_update(sensor);
+@@ -2572,7 +2571,7 @@ static int ccs_set_crop(struct v4l2_subdev *subdev,
+ 	*crop = sel->r;
+ 
+ 	if (ssd != sensor->pixel_array && sel->pad == CCS_PAD_SINK)
+-		ccs_propagate(subdev, sd_state, sel->which, V4L2_SEL_TGT_CROP);
++		ccs_propagate(subdev, sd_state, V4L2_SEL_TGT_CROP);
+ 
+ 	return 0;
+ }
+@@ -3078,7 +3077,6 @@ static int ccs_init_state(struct v4l2_subdev *sd,
+ 		v4l2_subdev_state_get_format(sd_state, pad);
+ 	struct v4l2_rect *crop =
+ 		v4l2_subdev_state_get_crop(sd_state, pad);
+-	bool is_active = !sd->active_state || sd->active_state == sd_state;
+ 
+ 	mutex_lock(&sensor->mutex);
+ 
+@@ -3097,7 +3095,7 @@ static int ccs_init_state(struct v4l2_subdev *sd,
+ 		sensor->csi_format->code : sensor->internal_csi_format->code;
+ 	fmt->field = V4L2_FIELD_NONE;
+ 
+-	ccs_propagate(sd, sd_state, is_active, V4L2_SEL_TGT_CROP);
++	ccs_propagate(sd, sd_state, V4L2_SEL_TGT_CROP);
+ 
+ 	mutex_unlock(&sensor->mutex);
+ 
+-- 
+2.47.3
 
