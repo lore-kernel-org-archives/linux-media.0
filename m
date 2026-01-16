@@ -1,21 +1,20 @@
 Received: from mx.gpxsee.org (mx.gpxsee.org [37.205.14.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 18C0823909F;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 18AD7238C07;
 	Fri, 16 Jan 2026 13:02:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=37.205.14.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768568565; cv=none; b=Kf4icnzzleIGVy1K8FPTM/KSSdINpErja/EhNmZyDufYmVjPNwRv21K9OTMu7ust7ldLh3gInniwkhKTtbNFWtdoNiK/W8+4zZOMCqqly3pR3iYzPwpERv4n+F4ghoszoK++XBAoU8G9B4Z2loKORTOwJkbn0JRS45HRoX07ubY=
+	t=1768568566; cv=none; b=Lb1XkMCC8F0HLX619umwJpWRm/cMJotS95PNbw70TXjjZAbkZrqTkRowQkU7RCbPplkfWoqn4/9jXyDirZdq7THnYtiCX6rLfU+kkkgXsZ4dKjk2grRsKwJ0NiXd2fMCokKK0fypY4uXP/J7w8Q2Tbnx1edeIr8zHJtxClaz6nw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768568565; c=relaxed/simple;
-	bh=jBXyuL0bcI2OsiSX1Kdp+SG1qpoO1B++OCIxsNmjdE8=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=mUS52px7MmIPOh4Lg/sNSam3f0QSa0f/WRA07pENNNjTEYNh6h7euOxMNFtsTsFaXWcdRI5PLxVAA+kAjaYRWlmkmBWUxZIgKnhqKWMYWYr0A8Bi6zZe0xCJDErk/9WFC+DkZ6ryu8Oe4hMco1jBbwZopSgy6B2ZkY5qXW5/W64=
+	s=arc-20240116; t=1768568566; c=relaxed/simple;
+	bh=EfHuqVf1XPh8q6hBbrjc7QjZ6vKNraTeevWRKg7i//0=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=kU6RIjVNTlBj6pXjPwCbKRuwpFfFwrpmGUEuefkDTV99HlKil57Dgk5KKX/SpEyMi1TUf8L/dLGk9HbkkGpSKMTzhAMXZdzNjvHPBIHFvfztmajYYYPgHeXn6+vr/eUoybvoQzO1pZLmYrPCCGUhGlQNN0DSoIwq+JIk0rR7IT4=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=gpxsee.org; spf=pass smtp.mailfrom=gpxsee.org; arc=none smtp.client-ip=37.205.14.76
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=gpxsee.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gpxsee.org
 Received: from localhost (unknown [62.77.71.229])
-	by mx.gpxsee.org (Postfix) with ESMTPSA id BDF087BE0A;
+	by mx.gpxsee.org (Postfix) with ESMTPSA id ABCAA789FF;
 	Fri, 16 Jan 2026 13:56:12 +0100 (CET)
 From: tumic@gpxsee.org
 To: Mauro Carvalho Chehab <mchehab@kernel.org>,
@@ -23,12 +22,10 @@ To: Mauro Carvalho Chehab <mchehab@kernel.org>,
 Cc: linux-media@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	=?UTF-8?q?Martin=20T=C5=AFma?= <martin.tuma@digiteqautomotive.com>
-Subject: [PATCH RESEND v3 3/3] Documentation: admin-guide: media: mgb4: Add GMSL1 & GMSL3-coax modules info
-Date: Fri, 16 Jan 2026 13:55:55 +0100
-Message-ID: <20260116125555.5287-4-tumic@gpxsee.org>
+Subject: [PATCH RESEND v3 0/3] media: pci: mgb4: Add support for GMSL1 and GMSL-coax modules
+Date: Fri, 16 Jan 2026 13:55:52 +0100
+Message-ID: <20260116125555.5287-1-tumic@gpxsee.org>
 X-Mailer: git-send-email 2.52.0
-In-Reply-To: <20260116125555.5287-1-tumic@gpxsee.org>
-References: <20260116125555.5287-1-tumic@gpxsee.org>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
@@ -40,42 +37,39 @@ Content-Transfer-Encoding: 8bit
 
 From: Martin Tůma <martin.tuma@digiteqautomotive.com>
 
-Add the mgb4 GMSL1 and GMSL3-coax modules info.
+This patches add support for two new mgb4 card modules - GMSL1 and
+GMSL3-coax. The GMSL3-coax module is a variant of the already supported
+GMSL3 module with a coaxial interface instead of a twisted-pair interface.
+The GMSL1 module is completely new and requires a separate FW type as well.
 
-Signed-off-by: Martin Tůma <martin.tuma@digiteqautomotive.com>
----
- Documentation/admin-guide/media/mgb4.rst | 11 +++++++----
- 1 file changed, 7 insertions(+), 4 deletions(-)
+Changes from v2 to v3:
+* fixed oldi_lane_width_show() returning empty string with GMSL1 modules
+* unified the default GMSL3c deserializer I2C setup with the chip wiring
+  (the GMSL3c modules have a different HW setup than the twisted-pair
+  modules).
 
-diff --git a/Documentation/admin-guide/media/mgb4.rst b/Documentation/admin-guide/media/mgb4.rst
-index 5ac69b833a7a..0a8a56e837f7 100644
---- a/Documentation/admin-guide/media/mgb4.rst
-+++ b/Documentation/admin-guide/media/mgb4.rst
-@@ -31,9 +31,11 @@ Global (PCI card) parameters
- 
-     | 0 - No module present
-     | 1 - FPDL3
--    | 2 - GMSL (one serializer, two daisy chained deserializers)
--    | 3 - GMSL (one serializer, two deserializers)
--    | 4 - GMSL (two deserializers with two daisy chain outputs)
-+    | 2 - GMSL3 (one serializer, two daisy chained deserializers)
-+    | 3 - GMSL3 (one serializer, two deserializers)
-+    | 4 - GMSL3 (two deserializers with two daisy chain outputs)
-+    | 6 - GMSL1
-+    | 8 - GMSL3 coax
- 
- **module_version** (R):
-     Module version number. Zero in case of a missing module.
-@@ -42,7 +44,8 @@ Global (PCI card) parameters
-     Firmware type.
- 
-     | 1 - FPDL3
--    | 2 - GMSL
-+    | 2 - GMSL3
-+    | 3 - GMSL1
- 
- **fw_version** (R):
-     Firmware version number.
+Changes from v1 to v2:
+* Properly use NULL instead of 0.
+* Fixed missing "media" prefix in patch #2.
+
+Martin Tůma (3):
+  media: pci: mgb4: Add support for GMSL1 modules
+  media: pci: mgb4: Add support for GMSL3 coaxial modules
+  Documentation: admin-guide: media: mgb4: Add GMSL1 & GMSL3-coax
+    modules info
+
+ Documentation/admin-guide/media/mgb4.rst | 11 ++-
+ drivers/media/pci/mgb4/mgb4_core.c       | 22 +++++-
+ drivers/media/pci/mgb4/mgb4_core.h       | 16 ++--
+ drivers/media/pci/mgb4/mgb4_sysfs.h      |  6 +-
+ drivers/media/pci/mgb4/mgb4_sysfs_in.c   | 49 ++++++++++---
+ drivers/media/pci/mgb4/mgb4_sysfs_out.c  | 38 ++++++++--
+ drivers/media/pci/mgb4/mgb4_vin.c        | 93 +++++++++++++++++-------
+ drivers/media/pci/mgb4/mgb4_vout.c       | 64 +++++++++++-----
+ 8 files changed, 221 insertions(+), 78 deletions(-)
+
+
+base-commit: 1a31cb2782104969e48c7ce7e4fc06e403fcb5cf
 -- 
 2.52.0
 
