@@ -1,180 +1,98 @@
-Received: from lahtoruutu.iki.fi (lahtoruutu.iki.fi [185.185.170.37])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2EC211F1932
-	for <linux-media@vger.kernel.org>; Fri, 16 Jan 2026 12:50:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=185.185.170.37
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768567807; cv=pass; b=jFdhJjn0i28MrsmOzgkKkQhzK+wqDnJuktGdhLM+L0fwLPbQbK6V54ARBPU2vvGILq2RRYUMc30ojNQgTkr5gJo1+N/FFcpp8gg4zI5ph7byWiN9cXHF9UkBKjpeDh2eO/mS2h1cfV95EuYQ3FY/GSBHHelUSBfPoJLlATQv/8U=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768567807; c=relaxed/simple;
-	bh=ahc+DDZkxiJuuRf96VB9fh+Caa1rgbRKwXqq5bEbT9I=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=XuAiOCNYS6XwNfvvL7+LBDnHRwX4NuHmC37ieZhhzp3ad//9SIB4aN8ccLuHgGfB1iOo4yo6P2yfRADsbzlPQJuGVMmIyghKWmhnV0eD2YvtZBEkcEP7Bd1h3mKO3i6xRNe4csk5ldv84fIqoSe+F+UQ8Xe8KK0VXGZN6o7/cYA=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=iki.fi; spf=pass smtp.mailfrom=iki.fi; dkim=pass (2048-bit key) header.d=iki.fi header.i=@iki.fi header.b=SLZPIGIG; arc=pass smtp.client-ip=185.185.170.37
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=iki.fi
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iki.fi
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 76225221F39;
+	Fri, 16 Jan 2026 12:58:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1768568326; cv=none; b=QeNlZMQPK3RHq2fH4UUFpe0EJC0/FNk+hW6UXPUNS2KKsSeUrWFKj9clnW4vc00H0rIQJu87iua7ubsGkdLYuGo8FbcWEj6u2yG9tnROt6G4ssZdtbbnq06k/M6JUkYjoRzCKCn+Z9d9bqbXshBH1Vo5t/XLs3OggaGd/xojcH4=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1768568326; c=relaxed/simple;
+	bh=cbNcEyT28INXVnED1KRjcBiYiJXlAbqna6yHQQ8z4cM=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=iRWaiuiy9tXLSbbQAl86xkX/YJ71ClQK+Kp7IJqV1OX/071x+rs6duxR5EPclMQSLwVSb0U2445T8tV4sPFic4mZ/jQGZRt/ui7r6dbycrRLzEqfFS9RWYyRbFr4INwkjP8Bx0wc9hahVSHfGtnCNLBmF4+64rFevQIBBEGUfTA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=H7JSTMfZ; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=iki.fi header.i=@iki.fi header.b="SLZPIGIG"
-Received: from hillosipuli.retiisi.eu (91-158-51-183.elisa-laajakaista.fi [91.158.51.183])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange x25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: sailus)
-	by lahtoruutu.iki.fi (Postfix) with ESMTPSA id 4dt073429fz49Q5q;
-	Fri, 16 Jan 2026 14:49:51 +0200 (EET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi; s=lahtoruutu;
-	t=1768567791;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type;
-	bh=mfCXbi2fa6jAUAPnnWKuVER45/+piVAJ4Tp/SkNCA1M=;
-	b=SLZPIGIGTYGIp6iUO5v+7kStWquOTelaCd3wxkadhhcmOsfSziUecHfBxr+WfCuOt+9j1n
-	SnHy+co/wBJbv4vU9HoNjly/TdLDzwm7mIuVYBIL75ONtuGHgp19Xqqy4FqxZHOA5m0Fzo
-	b12TigJBgn93SXBG864q/pu3Wvc3u6iRJDATiGnROdSYradAiCceQUa82Up4IgrtfcO65d
-	M9mQF+CPuG6zDIbtpJiG4xiB2Lzvn19KnEeX2FEXc8VFq/JsQP58CIG9HTCL7jVPXa8e3x
-	YTpbKxMVwqJ0H0DWHwasrwnSE+RcZXb2Jpxf+/VSd85SZfRyuaNH8LoKQvzFQQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi;
-	s=lahtoruutu; t=1768567791;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type;
-	bh=mfCXbi2fa6jAUAPnnWKuVER45/+piVAJ4Tp/SkNCA1M=;
-	b=CcDmYlMh2GpY6j9Y4QcQEiIoEqcznG4vUsP8mLQarT0PMEHec1TAJcI33ivbCN+hI1SZot
-	OpvWwSJ06Pcuz7VtysXx24GxxsMLUYRGrEpuO5NzXRCyWPU72QCvXJCu3c3wz1UhG3W4Ab
-	IDJVrArYmCFCnnIMSsYEd6u3qqqhI8u4LjSWkKnVK95qw1JLQGtxAkFGVq3qdj2LSjF6mU
-	zmx007DNAEIpeOOj+39Cf2N7sEh/Px4kjD7fZesXZuDJnV6dzkbHy9WIEidAnyKQiwW2YB
-	VGth2xTA8cB+XeyAkviU+lSF/OACEGTLS4RDvtNeh4vh+4HtqTMIoVJHfZmnew==
-ARC-Seal: i=1; a=rsa-sha256; d=iki.fi; s=lahtoruutu; cv=none; t=1768567791;
-	b=BNo3gWfJdnztwmn+PU+A2OynrFzecQi7yDVX6C59SJ4Gn/kFR7CieRL+y0GkmFEs5rtisQ
-	xN4pLXXGVN+KQKstiicDGl7UmadDY2hnJYffdlNNYJHRrsI4zdqqj2ZJzRYy1GiDSdsj7Z
-	Z7xVXxjTUCJj/y31j6n9r6c+5D0SaRME43WXiyMq2Le/BHzPCk598sdi7cJS07IfesIbXa
-	MWqNcqyEJcvsj/UIDdA8N9M+72vaDgKheRBREZA2ZJOZA8evWcJhGeQp0zhUje4pjfaez2
-	gDhQI/evvSvKKd+bTu0w61kA18iG0MpSjwmToZ/fCdRCXpgpjFW0tMioC41XgA==
-ARC-Authentication-Results: i=1;
-	ORIGINATING;
-	auth=pass smtp.auth=sailus smtp.mailfrom=sakari.ailus@iki.fi
-Received: from valkosipuli.retiisi.eu (valkosipuli.local [192.168.4.2])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange secp256r1 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by hillosipuli.retiisi.eu (Postfix) with ESMTPS id CD528634C50;
-	Fri, 16 Jan 2026 14:49:50 +0200 (EET)
-Date: Fri, 16 Jan 2026 14:49:50 +0200
-From: Sakari Ailus <sakari.ailus@iki.fi>
-To: linux-media@vger.kernel.org
-Cc: hans@jjverkuil.nl
-Subject: [GIT PULL FOR 6.20] More V4L2 cleanups and other improvements
-Message-ID: <aWoz7g2ZTuy9srQ_@valkosipuli.retiisi.eu>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="H7JSTMfZ"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C6B5AC116C6;
+	Fri, 16 Jan 2026 12:58:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1768568326;
+	bh=cbNcEyT28INXVnED1KRjcBiYiJXlAbqna6yHQQ8z4cM=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=H7JSTMfZZR/csPl0OSjTTKJVdPVZ27279R16b+PzlyOgw3mYwlg6adOdi5Wsm9s5I
+	 kb0FlR6SHa9RnwEoXBG7GUQcGrk8c/UFE04r/IHdWjAXmmxJtLH64oo5Unol51/6Qu
+	 XTVPntKiHh0/BcEI28wR/f0O7RJv9alE8zga+BivF1qSUFICa9gb0mw5LrASKtnU0k
+	 aN3Zvay/+sZ+0pNwXhX86QsnukLDE7tjjM2jaD4/NN39aqvClg2fv57VeiDXKc94sa
+	 E89wIwtqUYFUGts6FTkQW3QIpZkiIGXlMdn2OVo3fkrPOvvFMzy9v64ZoLSEWt2xrQ
+	 Psrg2Hd6H8VxA==
+Message-ID: <e759c977-be91-4f2e-bb40-df61b5cf70ba@kernel.org>
+Date: Fri, 16 Jan 2026 12:58:39 +0000
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v4 6/6] media: iris: Introduce vpu ops for vpu4 with
+ necessary hooks
+To: Vikash Garodia <vikash.garodia@oss.qualcomm.com>,
+ Krzysztof Kozlowski <krzk@kernel.org>,
+ Dikshita Agarwal <dikshita.agarwal@oss.qualcomm.com>
+Cc: Abhinav Kumar <abhinav.kumar@linux.dev>, Rob Herring <robh@kernel.org>,
+ Conor Dooley <conor+dt@kernel.org>,
+ Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>,
+ Krzysztof Kozlowski <krzk+dt@kernel.org>,
+ Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>,
+ linux-arm-msm@vger.kernel.org, linux-media@vger.kernel.org,
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+ Vishnu Reddy <busanna.reddy@oss.qualcomm.com>,
+ Mauro Carvalho Chehab <mchehab@kernel.org>,
+ Philipp Zabel <p.zabel@pengutronix.de>
+References: <20251210-knp_video-v4-0-8d11d840358a@oss.qualcomm.com>
+ <20251210-knp_video-v4-6-8d11d840358a@oss.qualcomm.com>
+ <54b29b03-4166-60d9-d553-d0e655749da4@oss.qualcomm.com>
+ <98481299-4db3-41f3-a974-d9d0075d92e0@kernel.org>
+ <PbKsFxhNUWIU_gtZcnLC5O0DxRc782rkITu5doVCWVlIBgtl7o4U31bjFhmbp828q-BbriQ8n4CfCq7_UJTnxw==@protonmail.internalid>
+ <035e9f34-f28f-47fd-ac36-6277171b0e28@oss.qualcomm.com>
+From: Bryan O'Donoghue <bod@kernel.org>
+Content-Language: en-US
+In-Reply-To: <035e9f34-f28f-47fd-ac36-6277171b0e28@oss.qualcomm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-Hi Hans, Mauro,
+On 16/01/2026 11:27, Vikash Garodia wrote:
+>> Thank you for reviewing this code. I would like to point that it took
+>> one month for Qualcomm to review this Qualcomm patch and in the same
+>> time Vikash is sending emails (more than one!) that Bryan does not
+>> review that fast as expected.
+> Firstly, the ask to Bryan have been to pull patches (not stressed on
+> review part), infact, even fixes are waiting for merge window while they
+> can easily go into RCs. This part of the process need some improvement.
+> 
+> I have also appreciated him when he pulled long series for initial codec
+> enablement, i think you missed those part.
+> 
+>> I do not find it acceptable approach to harass community reviewers that
+>> way. Even if you do it internally, not on the lists.
 
-Please pull.
+lol
 
+>> I think this review timeline is final argument for Vikash to stop
+>> pushing such narratives and complains, because your review is expected
+>> to be BEFORE the maintainer upper in the upstream flow.
+> My understanding is that, if maintainer raise patches, then its more of
+> reviews from community and having RB tag from any of community member or
+> no open comments implies the series is good to go.
+> 
+> This series is lying there for a month without any open comment, there
+> is nothing pending here to pull them.
 
-The following changes since commit dc6c52205bdaddf1dc259497a958402b35c01fe2:
+2/6 patches in this series were marked in patchwork as having no RB so 
+they weren't pulled.
 
-  media: ipu6: Always call video_device_pipeline_alloc_start() (2026-01-13 12:47:56 +0100)
+That's the whole story here.
 
-are available in the Git repository at:
-
-  git://linuxtv.org/sailus/media_tree.git tags/for-6.20-5.1-signed
-
-for you to fetch changes up to f31283b29e5f1c39e183c6ca694cd9540e1db0dc:
-
-  media: i2c: os05b10: Few minor improvements (2026-01-16 14:25:45 +0200)
-
-----------------------------------------------------------------
-More V4L2 patches for 6.20:
-- os05b10, imx219, ov01a10, ccs and ov5647 cleanups and improvements
-- ccs: C-PHY PLL fix
-- New controls for flash duration and support for them in ov9282 driver
-- Support for new formats and fixes for dcmipp driver
-- Maintainers and e-mail address changes
-
-----------------------------------------------------------------
-Alain Volmat (7):
-      media: stm32: dcmipp: avoid naming clock if only one is needed
-      media: stm32: dcmipp: bytecap: clear all interrupts upon stream stop
-      media: stm32: dcmipp: byteproc: disable compose for all bayers
-      media: stm32: dcmipp: Add RGB888 format support overall
-      media: stm32: dcmipp: add Y10-Y12-Y14 in all subdevs
-      media: stm32: dcmipp: byteproc: only allow compose with 8/16bit fmts
-      media: stm32: dcmipp: bytecap: remove useless cmier variable
-
-David Heidelberg (1):
-      media: ccs: Accommodate C-PHY into the calculation
-
-Frank Li (1):
-      MAINTAINERS: Promote Frank Li as i.MX7/8 media maintainer
-
-Himanshu Bhavani (1):
-      media: i2c: os05b10: Few minor improvements
-
-Krzysztof Kozlowski (1):
-      media: i2c: Add note to prevent buggy code re-use
-
-Laurent Pinchart (1):
-      media: i2c: imx219: Inline imx219_update_pad_format() in its caller
-
-Mehdi Djait (1):
-      media: i2c: ov01a10: Fix digital gain range
-
-Richard Leitner (8):
-      media: v4l: ctrls: add a control for flash/strobe duration
-      media: v4l: ctrls: add a control for enabling strobe output
-      Documentation: uAPI: media: add V4L2_CID_FLASH_{DURATION,STROBE_OE}
-      media: i2c: ov9282: add output enable register definitions
-      media: i2c: ov9282: add strobe output enable v4l2 control
-      media: i2c: ov9282: add strobe_duration v4l2 control
-      media: i2c: ov9282: implement try_ctrl for strobe_duration
-      media: i2c: ov9282: dynamic flash_duration maximum
-
-Sakari Ailus (11):
-      media: ccs: Clean up ccs_get_hwcfg() a little
-      media: ccs: Use devm_v4l2_sensor_clk_get()
-      media: ipu6: Update e-mail addresses
-      media: ov01a10: Fix indentation
-      media: ccs: Remove ccs_get_crop_compose helper
-      media: ccs: Rely on sub-device state locking
-      media: ccs: Switch to guard and scoped_guard
-      media: ccs: Compute binning configuration from sub-device state
-      media: ccs: Compute scaling configuration from sub-device state
-      media: ccs: Remove which parameter from ccs_propagate
-      media: ccs: Make supported mbus code bitmask a u64
-
-Xiaolei Wang (3):
-      media: i2c: ov5647: Convert to CCI register access helpers
-      media: i2c: ov5647: Switch to using the sub-device state lock
-      media: i2c: ov5647: switch to {enable,disable}_streams
-
- .../userspace-api/media/v4l/ext-ctrls-flash.rst    |  42 ++
- MAINTAINERS                                        |   4 +-
- drivers/media/i2c/Kconfig                          |   1 +
- drivers/media/i2c/adv7604.c                        |   8 +-
- drivers/media/i2c/ccs/ccs-core.c                   | 564 ++++++++++-----------
- drivers/media/i2c/ccs/ccs.h                        |  11 +-
- drivers/media/i2c/et8ek8/et8ek8_driver.c           |   4 +
- drivers/media/i2c/imx219.c                         |  29 +-
- drivers/media/i2c/os05b10.c                        |  19 +-
- drivers/media/i2c/ov01a10.c                        |   4 +-
- drivers/media/i2c/ov5647.c                         | 503 ++++++------------
- drivers/media/i2c/ov9282.c                         | 173 ++++++-
- drivers/media/pci/intel/ipu6/ipu6-isys.c           |   2 +-
- drivers/media/pci/intel/ipu6/ipu6.c                |   2 +-
- .../st/stm32/stm32-dcmipp/dcmipp-bytecap.c         |  24 +-
- .../st/stm32/stm32-dcmipp/dcmipp-byteproc.c        |  24 +-
- .../platform/st/stm32/stm32-dcmipp/dcmipp-core.c   |   7 +-
- .../platform/st/stm32/stm32-dcmipp/dcmipp-input.c  |  10 +
- drivers/media/v4l2-core/v4l2-ctrls-defs.c          |   3 +
- include/uapi/linux/v4l2-controls.h                 |   2 +
- 20 files changed, 734 insertions(+), 702 deletions(-)
-
--- 
-Sakari Ailus
+---
+bod
