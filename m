@@ -1,286 +1,189 @@
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
+Received: from out-177.mta0.migadu.com (out-177.mta0.migadu.com [91.218.175.177])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F37AA34F47C;
-	Fri, 16 Jan 2026 07:07:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.167.242.64
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4529734FF7D
+	for <linux-media@vger.kernel.org>; Fri, 16 Jan 2026 07:08:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768547258; cv=none; b=ihnalvu0ZS8MkU05f+AbMk9iJ8ZU+2THIQ91bqKA0p4CGDGq90DWLaxeTcdH+zj6d5lFFVYFqgK5bQP0baQ8+tFzIGc392pkFBRv0oQJnRGQPL+Wf8GLeaqoAZItTjSyJR8DU7OGs7KkMB9QPeyGxgqo7vdMC9Qi+FJA8fET74I=
+	t=1768547300; cv=none; b=ZEli8gVr/4odnUsfUC78UwID9rbYwbH/+OnGKePPRigV2nbn3wMU5ZuJVqkJxAcqASjYnrNB0l9ENTRI5gDi4mqDi6EAUVBP8m7W+uDkguylby/ZO4YG1FUaw/ZKRGW5PPsjZ6UQnzfqloqdn75ShjwPCW84i8llachTdrFTrv8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768547258; c=relaxed/simple;
-	bh=WSemT60HS/833PD/J7h1I0a2h/1auGvt1uPtHCAASvQ=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=sHPClqV4cTM7tebNVzVAA7AS0WCpGWe0OrWenBRoWHDhB5NoRVPRp7t1fCGQrkomgd5TGCLuXId5FdKXV56spQMf38Zfbw6X8+NhOyWqdoGjPOH5LmdKaQE5/koCCrrxfBN/dp3OWotPN8HFeWu8gkq4Yh9WiuijX4yza6qtj6k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ideasonboard.com; spf=pass smtp.mailfrom=ideasonboard.com; dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b=pV+aXBft; arc=none smtp.client-ip=213.167.242.64
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ideasonboard.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ideasonboard.com
+	s=arc-20240116; t=1768547300; c=relaxed/simple;
+	bh=2qbze2vG4GkljdlYia7bGU4A6StztMWJlZ+y3rJr8CU=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=NriDuo60LvPWFSBWSqgKtYibNqzdgB9s8Db7CkWtWY60RNpC1D1kwGOiUyRQtQbqZdhKdqOHcSxEerYSgPG9m6mDT83aObR6lokmcYAZKRxyIlJQenlozJzxTHk2bQfC4LlXjoepoQ+0EQ/cGRt2o7RpcByFV4B25G2LRdOLjEk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=ePD5Vn6h; arc=none smtp.client-ip=91.218.175.177
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="pV+aXBft"
-Received: from mail.ideasonboard.com (unknown [IPv6:2401:4900:1c31:76ee:df3c:dc54:9316:8c06])
-	by perceval.ideasonboard.com (Postfix) with ESMTPSA id 8524B594;
-	Fri, 16 Jan 2026 08:06:54 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-	s=mail; t=1768547214;
-	bh=WSemT60HS/833PD/J7h1I0a2h/1auGvt1uPtHCAASvQ=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=pV+aXBft6mFAS/nQ3U/PIXRUMAHj8iuDKlNBYWfQ/YytfHV/9iQ6+fAf+VcwxpkqV
-	 DELqKa0kqCE7KdEJLQu5cGeBvZURG5LXaKfuXHAmae22wRa7a/liJ+XL3zDFU2xhcX
-	 go0BSD9+flKimOr6jYg7n5OLat8p5E3Jc9mc3rLY=
-From: Jai Luthra <jai.luthra@ideasonboard.com>
-Date: Fri, 16 Jan 2026 12:36:58 +0530
-Subject: [PATCH v2 1/2] media: dt-bindings: Drop starfive,jh7110-camss from
- staging
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="ePD5Vn6h"
+Date: Fri, 16 Jan 2026 08:08:13 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1768547296;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=lX8Quj5zLIwlBRCtydms5VODe9H7C/DISErb8QOSaWs=;
+	b=ePD5Vn6hxhqRLbPfaTMwFetHnEhOOX+IYE+T3Z1W59nUPUFU9tbpHJWsKbM7OhC/9kUWJI
+	yDMXG1VKTbtd8Mlkk27siqfAgPR7vTfbUVfWbnTfDD1XoG0DIDGHgl3Yfpp0ixXEOdSkAd
+	ISEiEkrLDygWQYZ0Z8tVfBcseMqP0fY=
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Richard Leitner <richard.leitner@linux.dev>
+To: Sakari Ailus <sakari.ailus@linux.intel.com>, 
+	Dave Stevenson <dave.stevenson@raspberrypi.com>, Mauro Carvalho Chehab <mchehab@kernel.org>, 
+	Lee Jones <lee@kernel.org>, Pavel Machek <pavel@kernel.org>, 
+	Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Cc: linux-media@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-leds@vger.kernel.org, Hans Verkuil <hverkuil@kernel.org>
+Subject: Re: [PATCH v10 0/8] Add strobe duration and strobe output enable
+ v4l2 ctrl
+Message-ID: <w43pelg4dzxxswklhnlpmql5snvyjfvvc2hzl4ihvjkklvg2ei@6veozvnjc7pw>
+References: <20251209-ov9282-flash-strobe-v10-0-0117cab82e2d@linux.dev>
+ <h4ecxwe27hzelohvwhhosvdz5b6ybi25yopicatp54prrkaaai@sir4kskvxza5>
+ <lwib4og3xnpmqrvmkenp5m6qywuzwmzilpdh74ugx2jfbm2s2o@zyvplzxtkepo>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20260116-drop-starfive-camss-v2-1-34df57025921@ideasonboard.com>
-References: <20260116-drop-starfive-camss-v2-0-34df57025921@ideasonboard.com>
-In-Reply-To: <20260116-drop-starfive-camss-v2-0-34df57025921@ideasonboard.com>
-To: Mauro Carvalho Chehab <mchehab@kernel.org>, 
- Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
- Conor Dooley <conor+dt@kernel.org>, 
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
- Philipp Zabel <p.zabel@pengutronix.de>
-Cc: Changhuang Liang <changhuang.liang@starfivetech.com>, 
- Laurent Pinchart <laurent.pinchart@ideasonboard.com>, 
- Rishikesh Donadkar <r-donadkar@ti.com>, 
- Sakari Ailus <sakari.ailus@linux.intel.com>, linux-media@vger.kernel.org, 
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
- linux-staging@lists.linux.dev, Jai Luthra <jai.luthra@ideasonboard.com>
-X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=6014;
- i=jai.luthra@ideasonboard.com; h=from:subject:message-id;
- bh=WSemT60HS/833PD/J7h1I0a2h/1auGvt1uPtHCAASvQ=;
- b=owEBbAKT/ZANAwAKAUPekfkkmnFFAcsmYgBpaeOeqPTvP9pZkE9ioWwPH7MLV1eA7s2RxBUiK
- w7Oi7sEUp+JAjIEAAEKAB0WIQRN4NgY5dV16NRar8VD3pH5JJpxRQUCaWnjngAKCRBD3pH5JJpx
- RQUGD/jHcTgdj/bkVOAfgXFGCrJao8kJd0c4D2eCdwQPZap8WjqChe5zhlUYNsIoFCEqywBeggA
- aGcyO6wN+/lU3UZzXgkcPCxk/SB1L/XdF4TsmbYOvX/wmKabvopz91o6mJZqOYyT5995ST8mNmW
- q48HZBDhGgUSn66ZuF9MWnNE5VDiGKMHKeLK+pReUyRzKjERrrofGKl9wi1jRVNUhyNW+XYbQo7
- LPp0pTZuaao+o0wr6z/qCUvjJ1fV0hWjcGkEiVcZkCpM3xknljCO28lRGzHoV0Srd2L8gjUGAT7
- 5ZjKMftYj6ImxOnSQSomrRDPZ7HgSvdfRrKlGVi6s+4fRKzUmj2dCtwvu+ls42rwvII89+N7FX4
- uMryRHR8RhegwW6YFqfAwGbw2NULZz++pUDmcZ31uGuvdmo4w8SlmmmBZsBWWendf4QadKiMusf
- L5uTd/IgTcPVB1Ju3Tthj7f+GkGEzPaNPmK3/APGkUulh/9jmOqRJ6a+d04tfpBmeGlJanRSsQf
- ROviSqFQ5UyZ3icYPF0me4H9tAf06cE8drvwvu4lDDxamoO37jXoEWK3wAQcPQHEVRkLuCJsD2Q
- knIVJfohyRQt75NxW9/5XDX0a43LmVK7NZyHSOjyxet3Jc3Vbf+f/zgla32/RnE0qQIUdHO4X3r
- HQuEnpsm3S0nL
-X-Developer-Key: i=jai.luthra@ideasonboard.com; a=openpgp;
- fpr=4DE0D818E5D575E8D45AAFC543DE91F9249A7145
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <lwib4og3xnpmqrvmkenp5m6qywuzwmzilpdh74ugx2jfbm2s2o@zyvplzxtkepo>
+X-Migadu-Flow: FLOW_OUT
 
-The starfive-camss driver is no longer being worked upon for destaging,
-and will be dropped in a subsequent commit, so drop the DT bindings.
+Hi Sakari, Hi Laurent,
 
-Link: https://lore.kernel.org/all/ZQ0PR01MB13024A92926C415C187D2C18F29F2@ZQ0PR01MB1302.CHNPR01.prod.partner.outlook.cn/
-Acked-by: Changhuang Liang <changhuang.liang@starfivetech.com>
-Signed-off-by: Jai Luthra <jai.luthra@ideasonboard.com>
----
- .../bindings/media/starfive,jh7110-camss.yaml      | 180 ---------------------
- MAINTAINERS                                        |   1 -
- 2 files changed, 181 deletions(-)
+first of all, happy new year 2026 to all of you.
+I hope you had a good start to the new year?
 
-diff --git a/Documentation/devicetree/bindings/media/starfive,jh7110-camss.yaml b/Documentation/devicetree/bindings/media/starfive,jh7110-camss.yaml
-deleted file mode 100644
-index c66586d90fa2b4199da758d9dd4ae470e24fda91..0000000000000000000000000000000000000000
---- a/Documentation/devicetree/bindings/media/starfive,jh7110-camss.yaml
-+++ /dev/null
-@@ -1,180 +0,0 @@
--# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
--%YAML 1.2
-----
--$id: http://devicetree.org/schemas/media/starfive,jh7110-camss.yaml#
--$schema: http://devicetree.org/meta-schemas/core.yaml#
--
--title: Starfive SoC CAMSS ISP
--
--maintainers:
--  - Jack Zhu <jack.zhu@starfivetech.com>
--  - Changhuang Liang <changhuang.liang@starfivetech.com>
--
--description:
--  The Starfive CAMSS ISP is a Camera interface for Starfive JH7110 SoC. It
--  consists of a VIN controller (Video In Controller, a top-level control unit)
--  and an ISP.
--
--properties:
--  compatible:
--    const: starfive,jh7110-camss
--
--  reg:
--    maxItems: 2
--
--  reg-names:
--    items:
--      - const: syscon
--      - const: isp
--
--  clocks:
--    maxItems: 7
--
--  clock-names:
--    items:
--      - const: apb_func
--      - const: wrapper_clk_c
--      - const: dvp_inv
--      - const: axiwr
--      - const: mipi_rx0_pxl
--      - const: ispcore_2x
--      - const: isp_axi
--
--  resets:
--    maxItems: 6
--
--  reset-names:
--    items:
--      - const: wrapper_p
--      - const: wrapper_c
--      - const: axird
--      - const: axiwr
--      - const: isp_top_n
--      - const: isp_top_axi
--
--  power-domains:
--    items:
--      - description: JH7110 ISP Power Domain Switch Controller.
--
--  interrupts:
--    maxItems: 4
--
--  ports:
--    $ref: /schemas/graph.yaml#/properties/ports
--
--    properties:
--      port@0:
--        $ref: /schemas/graph.yaml#/$defs/port-base
--        unevaluatedProperties: false
--        description: Input port for receiving DVP data.
--
--        properties:
--          endpoint:
--            $ref: video-interfaces.yaml#
--            unevaluatedProperties: false
--
--            properties:
--              bus-type:
--                enum: [5, 6]
--
--              bus-width:
--                enum: [8, 10, 12]
--
--              data-shift:
--                enum: [0, 2]
--                default: 0
--
--              hsync-active:
--                enum: [0, 1]
--                default: 1
--
--              vsync-active:
--                enum: [0, 1]
--                default: 1
--
--            required:
--              - bus-type
--              - bus-width
--
--      port@1:
--        $ref: /schemas/graph.yaml#/properties/port
--        description: Input port for receiving CSI data.
--
--    required:
--      - port@0
--      - port@1
--
--required:
--  - compatible
--  - reg
--  - reg-names
--  - clocks
--  - clock-names
--  - resets
--  - reset-names
--  - power-domains
--  - interrupts
--  - ports
--
--additionalProperties: false
--
--examples:
--  - |
--    isp@19840000 {
--        compatible = "starfive,jh7110-camss";
--        reg = <0x19840000 0x10000>,
--              <0x19870000 0x30000>;
--        reg-names = "syscon", "isp";
--        clocks = <&ispcrg 0>,
--                 <&ispcrg 13>,
--                 <&ispcrg 2>,
--                 <&ispcrg 12>,
--                 <&ispcrg 1>,
--                 <&syscrg 51>,
--                 <&syscrg 52>;
--        clock-names = "apb_func",
--                      "wrapper_clk_c",
--                      "dvp_inv",
--                      "axiwr",
--                      "mipi_rx0_pxl",
--                      "ispcore_2x",
--                      "isp_axi";
--        resets = <&ispcrg 0>,
--                 <&ispcrg 1>,
--                 <&ispcrg 10>,
--                 <&ispcrg 11>,
--                 <&syscrg 41>,
--                 <&syscrg 42>;
--        reset-names = "wrapper_p",
--                      "wrapper_c",
--                      "axird",
--                      "axiwr",
--                      "isp_top_n",
--                      "isp_top_axi";
--        power-domains = <&pwrc 5>;
--        interrupts = <92>, <87>, <88>, <90>;
--
--        ports {
--            #address-cells = <1>;
--            #size-cells = <0>;
--            port@0 {
--                reg = <0>;
--                vin_from_sc2235: endpoint {
--                    remote-endpoint = <&sc2235_to_vin>;
--                    bus-type = <5>;
--                    bus-width = <8>;
--                    data-shift = <2>;
--                    hsync-active = <1>;
--                    vsync-active = <0>;
--                    pclk-sample = <1>;
--                };
--            };
--
--            port@1 {
--                reg = <1>;
--                vin_from_csi2rx: endpoint {
--                    remote-endpoint = <&csi2rx_to_vin>;
--                };
--            };
--        };
--    };
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 5b11839cba9de1e9e43f63787578edd8c429ca39..5e19700e9152b103c194003b4421e6bc26022608 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -24853,7 +24853,6 @@ M:	Changhuang Liang <changhuang.liang@starfivetech.com>
- L:	linux-media@vger.kernel.org
- S:	Maintained
- F:	Documentation/admin-guide/media/starfive_camss.rst
--F:	Documentation/devicetree/bindings/media/starfive,jh7110-camss.yaml
- F:	drivers/staging/media/starfive/camss
- 
- STARFIVE CRYPTO DRIVER
+Regarding this series: Perhaps you've made it your New Year's resolution
+to give it another round of review? ;-) Would be great to get some more
+feedback (or Reviewed-By's).
 
--- 
-2.52.0
+regards;rl
 
+On Tue, Dec 30, 2025 at 11:09:02AM +0100, Richard Leitner wrote:
+> Hi again,
+> 
+> just wanted to mention that I'll be doing a short (10 min) talk on this
+> topic at FOSDEM 2026 in the Embedded, Mobile and Automotive devroom on
+> sunday: https://fosdem.org/2026/schedule/event/A7P7XE-v4l2-flash-control/
+> 
+> Would be great if I could get some more - maybe final ;) - review on
+> this series before FOSDEM. Thanks!
+> 
+> regards;rl
+> 
+> On Thu, Dec 18, 2025 at 08:22:53AM +0100, Richard Leitner wrote:
+> > Hi everybody,
+> > 
+> > just a friendly ping before the holiday season kicks in :-)
+> > 
+> > regards;rl
+> > 
+> > On Tue, Dec 09, 2025 at 11:44:35PM +0100, Richard Leitner wrote:
+> > > This series adds two new v4l2 controls:
+> > > - V4L2_CID_FLASH_DURATION: "Strobe duration": This control enables
+> > >   setting a desired flash/strobe length/duration in µs.
+> > > - V4L2_CID_FLASH_STROBE_OE: "Strobe output enable": This
+> > >   control enables the hardware strobe output signal of a v4l2 device.
+> > > 
+> > > As a first user of these new controls add basic flash/strobe support
+> > > for ov9282 sensors using their "hardware strobe output". The duration
+> > > calculation is only interpolated from various measurements, as no
+> > > documentation was found.
+> > > 
+> > > Further flash/strobe-related controls as well as a migration to v4l2-cci
+> > > helpers for ov9282 will likely be implemented in future series.
+> > > 
+> > > All register addresses/values are based on the OV9281 datasheet v1.53
+> > > (january 2019). This series was tested using an ov9281 VisionComponents
+> > > camera module.
+> > > 
+> > > Signed-off-by: Richard Leitner <richard.leitner@linux.dev>
+> > > ---
+> > > Changes in v10:
+> > > - Avoid bitwise or on error codes in ov9282_set_ctrl_flash_duration() (Thanks Sakari)
+> > > - Link to v9: https://patch.msgid.link/20251120-ov9282-flash-strobe-v9-0-6c9e3a4301d7@linux.dev
+> > > 
+> > > Changes in v9:
+> > > - Avoid needless multiplication/division in ov9282.c (Thanks Sakari)
+> > > - Avoid possible u32 overflow in ov9282.c (Thanks Sakari)
+> > > - Link to v8: https://patch.msgid.link/20251104-ov9282-flash-strobe-v8-0-b91dfef1c65a@linux.dev
+> > > 
+> > > Changes in v8:
+> > > - Minor styling changes across the set
+> > > - Add missing error handling for ov9282 strobe_frame_span writing
+> > > - Rename V4L2_CID_FLASH_HW_STROBE_SIGNAL to V4L2_CID_FLASH_STROBE_OE
+> > > - Drop 02/10: FLASH_DURATION handling in v4l2-flash
+> > > - Drop 08/10: strobe_source in ov9282
+> > > - Link to v7: https://lore.kernel.org/r/20250901-ov9282-flash-strobe-v7-0-d58d5a694afc@linux.dev
+> > > 
+> > > Changes in v7:
+> > > - Improved v4l2 uAPI documentation (thanks Sakari)
+> > > - Link to v6: https://lore.kernel.org/r/20250716-ov9282-flash-strobe-v6-0-934f12aeff33@linux.dev
+> > > 
+> > > Changes in v6:
+> > > - Fix "Alignment should match open parenthesis" by Media-CI bot in v4l2-flash-led-class.c
+> > > - Fix "format string contains non-ascii character (µ)" by Media-CI bot in ov9282.c
+> > > - Introduce new V4L2_CID_FLASH_HW_STROBE_SIGNAL control (as suggested by Sakari)
+> > > - Implement V4L2_CID_FLASH_HW_STROBE_SIGNAL instead of
+> > >   V4L2_CID_FLASH_LED_MODE in ov9282.c (as suggested by Sakari)
+> > > - Drop "media: v4l2-flash: fix flash_timeout comment" as this was
+> > >   applied (thanks Lee)
+> > > - Link to v5: https://lore.kernel.org/r/20250617-ov9282-flash-strobe-v5-0-9762da74d065@linux.dev
+> > > 
+> > > Changes in v5:
+> > > - Improve try_ctrl for flash_duration by using DIV_ROUND_UP() and abs() (thanks Sakari)
+> > > - Drop "leds: flash: Add support for flash/strobe duration" as this was applied upstream
+> > > - Add "media: i2c: ov9282: dynamic flash_duration maximum" (thanks Sakari)
+> > > - Link to v4: https://lore.kernel.org/r/20250507-ov9282-flash-strobe-v4-0-72b299c1b7c9@linux.dev
+> > > 
+> > > Changes in v4:
+> > > - Fix FLASH_DURATION implementation in v4l2-flash-led-class.c by adding a
+> > >   missing brace and enum entry (thanks Sakari)
+> > > - Fix format of multiline comment in ov9282.c (thanks Sakari)
+> > > - Add missing NULL check in ov9282.c (thanks Sakari)
+> > > - Adapt nr_of_controls_hint for v4l2 handler in ov9282.c (thanks Sakari)
+> > > - Add patch for implementing try_ctrl for strobe_duration (thanks Sakari)
+> > > - Link to v3: https://lore.kernel.org/r/20250429-ov9282-flash-strobe-v3-0-2105ce179952@linux.dev
+> > > 
+> > > Changes in v3:
+> > > - create separate patch for leds driver changes (thanks Lee)
+> > > - Link to v2: https://lore.kernel.org/r/20250314-ov9282-flash-strobe-v2-0-14d7a281342d@linux.dev
+> > > 
+> > > Changes in v2:
+> > > - remove not needed controls in struct ov9282 (thanks Dave)
+> > > - Fix commit message of 3/3 regarding framerate get/set (thanks Dave)
+> > > - Add V4L2_CID_FLASH_STROBE_SOURCE impementation to ov9282
+> > > - Add new V4L2_CID_FLASH_DURATION control (as suggested by Laurent)
+> > > - Use FLASH_DURATION instead of FLASH_TIMEOUT for ov9282
+> > > - Link to v1: https://lore.kernel.org/r/20250303-ov9282-flash-strobe-v1-0-0fd57a1564ba@linux.dev
+> > > 
+> > > ---
+> > > Richard Leitner (8):
+> > >       media: v4l: ctrls: add a control for flash/strobe duration
+> > >       media: v4l: ctrls: add a control for enabling strobe output
+> > >       Documentation: uAPI: media: add V4L2_CID_FLASH_{DURATION,STROBE_OE}
+> > >       media: i2c: ov9282: add output enable register definitions
+> > >       media: i2c: ov9282: add strobe output enable v4l2 control
+> > >       media: i2c: ov9282: add strobe_duration v4l2 control
+> > >       media: i2c: ov9282: implement try_ctrl for strobe_duration
+> > >       media: i2c: ov9282: dynamic flash_duration maximum
+> > > 
+> > >  .../userspace-api/media/v4l/ext-ctrls-flash.rst    |  42 +++++
+> > >  drivers/media/i2c/ov9282.c                         | 174 ++++++++++++++++++++-
+> > >  drivers/media/v4l2-core/v4l2-ctrls-defs.c          |   3 +
+> > >  include/uapi/linux/v4l2-controls.h                 |   2 +
+> > >  4 files changed, 215 insertions(+), 6 deletions(-)
+> > > ---
+> > > base-commit: 2f112b1c25da9f5346c2261ed35c5b1e0b906471
+> > > change-id: 20250303-ov9282-flash-strobe-ac6bd00c9de6
+> > > 
+> > > Best regards,
+> > > --  
+> > > Richard Leitner <richard.leitner@linux.dev>
+> > > 
+> > > 
