@@ -1,639 +1,155 @@
-Received: from mx.gpxsee.org (mx.gpxsee.org [37.205.14.76])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 18C6C23A58F;
-	Fri, 16 Jan 2026 13:02:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=37.205.14.76
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 91613219301;
+	Fri, 16 Jan 2026 13:04:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768568566; cv=none; b=AjDLBFBH+c2orIIIixP1Io3V9Nzyh1nPz/kPd9CBYSbaOelEPJEDsFIvKrbmz3u6aoIquGh9KPAJMQhdc6YzUC218xqgaa1M6eTQEaSNtPDLgSi9AnpSFW84j8pxQUu5lpNRmAs26mVvLkwRemAubxujjgIRr4qhImbzFw5ZZEI=
+	t=1768568678; cv=none; b=nWLjv8HnS+VgWKTMIAaEJeDYfYvXbx32HmMHKQ3aultN8xKcCQt3oY8nljc73UDYGzgEfXOSTE+bc7CdjKEiwUFO7blQprGVWWFRpNc42XIojf8tQ6hoUrmrA7xLn2rb++AijoWFkutixFXCY/PkJiCB17j0EYw1zMXqxaty2vI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768568566; c=relaxed/simple;
-	bh=35JRd7jgZowBL+LdlHvREivKbS0NF4B2zvBjXmQvU3Q=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=pcOgt3HSTiYYA6zh3VpTm+sQk+cTu2V2kcJWjH71Ud9QP1spfBG07FfXPDVx5Y9841E/QSILE8e/bK1CeP72hbMFCyBt6GDjPB2xUPa5oR8RMxey0zZuPSYH07PDPwze4QlDbtE/UfDFsDVeffy0vDdR+xsRI6pMw4fiEOSUCbo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=gpxsee.org; spf=pass smtp.mailfrom=gpxsee.org; arc=none smtp.client-ip=37.205.14.76
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=gpxsee.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gpxsee.org
-Received: from localhost (unknown [62.77.71.229])
-	by mx.gpxsee.org (Postfix) with ESMTPSA id B24497BE09;
-	Fri, 16 Jan 2026 13:56:12 +0100 (CET)
-From: tumic@gpxsee.org
-To: Mauro Carvalho Chehab <mchehab@kernel.org>,
-	Hans Verkuil <hverkuil@xs4all.nl>
-Cc: linux-media@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	=?UTF-8?q?Martin=20T=C5=AFma?= <martin.tuma@digiteqautomotive.com>
-Subject: [PATCH RESEND v3 1/3] media: pci: mgb4: Add support for GMSL1 modules
-Date: Fri, 16 Jan 2026 13:55:53 +0100
-Message-ID: <20260116125555.5287-2-tumic@gpxsee.org>
-X-Mailer: git-send-email 2.52.0
-In-Reply-To: <20260116125555.5287-1-tumic@gpxsee.org>
-References: <20260116125555.5287-1-tumic@gpxsee.org>
+	s=arc-20240116; t=1768568678; c=relaxed/simple;
+	bh=s2u8m8fuVkjMI3E13P6pDYyB9Q5oNtLOKw3ocBqevlc=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=U2/KKRI1378G6WULAlgLetY7GschpKoyMjXso+HOtk1nh7uA8tUaYa6KeCOPJlfdUW2SNcZr5G9EygIiGHkUNH0F8+oeio8VGbscL0dcncbLjelXHSv8aDv8Y3gbiSR7ozJoRduJne6nLURRnfzP/SVcft5v9F8U8mZdffsU2Z0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=NfZ8UOrc; arc=none smtp.client-ip=10.30.226.201
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NfZ8UOrc"
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 4F50DC19421;
+	Fri, 16 Jan 2026 13:04:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1768568678;
+	bh=s2u8m8fuVkjMI3E13P6pDYyB9Q5oNtLOKw3ocBqevlc=;
+	h=From:Subject:Date:To:Cc:Reply-To:From;
+	b=NfZ8UOrcoQMjryn6xeXIyXn8rksoIiGG0wzJtWtI2orPUvskYsDaOsbNsI24L3hhr
+	 Qhkqh+To59sU4DJy+V4dW3OU+J6Ho1amAcFd1YBSJ77v8IAZId/ZYAbH1+zXF9r5pE
+	 uYG+O2xaYkBMeYMlcZvLsNV5tCWiPPHhx2dIUPUaiY5c5mhbQqZz7QlCc2l9Fda6rm
+	 0MNLLSxcabSZuwwwBb5L5p/2tWdQZtQRL3kEAiJBhncXjnsoz69A9jeF2in6++TkmL
+	 LRSYg7G/2kGVAafcbuMZGF43mkOvNF//VDe1CNrPUzwwHweMFWnlDrSm7ehz3+RLng
+	 Jx+oCncl1WUZQ==
+Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 43603D4A5E8;
+	Fri, 16 Jan 2026 13:04:38 +0000 (UTC)
+From: Michael Riesch via B4 Relay <devnull+michael.riesch.collabora.com@kernel.org>
+Subject: [PATCH v5 0/3] media: rockchip: add driver for the rockchip mipi
+ csi-2 receiver
+Date: Fri, 16 Jan 2026 14:02:45 +0100
+Message-Id: <20251114-rockchip-mipi-receiver-v5-0-45aa117f190a@collabora.com>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAPU2amkC/43Qz2rDMAwG8FcpPs/D/9IkPe09yg62LC9iaRzs1
+ WyUvPvUHkdhOX4C/T6hm6hYCKs4HW6iYKNKeeHQvRwETH75QEmRszDKdFprJ0uGT5holRdaSRY
+ EpIZFquCTcQ5GGFDwcvAVZSh+gYnXl+s883AtmOj70XZ+5zxR/crl51He9H36b0/TUsmorRqOO
+ GgV4xvkefYhF/8K+SLubDP7KMMUhjE4a/s+gXtG2X2UZUrzRdb7Ptmxe0a5fZRjyvMbjwkhqs7
+ 8pbZt+wXdkrLstgEAAA==
+To: Michael Riesch <michael.riesch@collabora.com>, 
+ Chaoyi Chen <chaoyi.chen@rock-chips.com>, 
+ Kever Yang <kever.yang@rock-chips.com>, Frank Li <Frank.li@nxp.com>, 
+ Mehdi Djait <mehdi.djait@linux.intel.com>, 
+ Bryan O'Donoghue <bryan.odonoghue@linaro.org>, 
+ Laurent Pinchart <laurent.pinchart@ideasonboard.com>, 
+ Hans Verkuil <hverkuil@kernel.org>, 
+ Mauro Carvalho Chehab <mchehab@kernel.org>, Rob Herring <robh@kernel.org>, 
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+ Conor Dooley <conor+dt@kernel.org>, Heiko Stuebner <heiko@sntech.de>, 
+ Philipp Zabel <p.zabel@pengutronix.de>, 
+ Sebastian Reichel <sebastian.reichel@collabora.com>, 
+ Nicolas Dufresne <nicolas.dufresne@collabora.com>, 
+ Collabora Kernel Team <kernel@collabora.com>, 
+ Sakari Ailus <sakari.ailus@linux.intel.com>
+Cc: linux-media@vger.kernel.org, devicetree@vger.kernel.org, 
+ linux-arm-kernel@lists.infradead.org, linux-rockchip@lists.infradead.org, 
+ linux-kernel@vger.kernel.org, 
+ Krzysztof Kozlowski <krzysztof.kozlowski@oss.qualcomm.com>, 
+ Michael Riesch <michael.riesch@collabora.com>
+X-Mailer: b4 0.12.0
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1768568676; l=3068;
+ i=michael.riesch@collabora.com; s=20250410; h=from:subject:message-id;
+ bh=s2u8m8fuVkjMI3E13P6pDYyB9Q5oNtLOKw3ocBqevlc=;
+ b=Qob6j5XB8O1JAgrJjNnzezkslqHY1BeUYjMVSnGwA+hcJVIGV9nGSj5c09h0yHdjgC1xGDKyw
+ L+cmpk6ubMjBPRg9/aKoUqjNsvOMcWSWufl0mhImhm2EM+SvEfjD+rg
+X-Developer-Key: i=michael.riesch@collabora.com; a=ed25519;
+ pk=+MWX1fffLFZtTPG/I6XdYm/+OSvpRE8D9evQaWbiN04=
+X-Endpoint-Received: by B4 Relay for michael.riesch@collabora.com/20250410
+ with auth_id=371
+X-Original-From: Michael Riesch <michael.riesch@collabora.com>
+Reply-To: michael.riesch@collabora.com
 
-From: Martin Tůma <martin.tuma@digiteqautomotive.com>
+Habidere,
 
-Add support for GMSL1 modules. GMSL1 modules have 2 inputs, 2 outputs and
-require a separate FW (id #3).
+This series adds support for the Rockchip MIPI CSI-2 Receiver that is
+integrated into recent Rockchip SoCs, such as the RK3568 and the RK3588.
 
-Signed-off-by: Martin Tůma <martin.tuma@digiteqautomotive.com>
+According to Rockchip, this core is NOT the Synopsys MIPI CSI-2 Host, but
+it features a compatible register layout (thanks Chaoyi for the
+clarification).
+
+As pointed out by Frank, we should thus rename the driver and place it
+under drivers/media/platform/synopsys to facilitate re-use of this code
+for similar IP cores.
+
+As has been discussed in [0], it would be beneficial to add support 
+for the split mode (a feature of the Rockchip CSI-2 DPHY) before
+integrating the MIPI CSI-2 Receiver into the respective SoC device tree
+includes. However, we can readily add the DT binding and the driver
+as I am positive they will not need to be changed significantly when this
+feature is introduced.
+
+This constitutes a small step towards mainline video capture and camera
+support on the Rockchip RK3588.
+
+Looking forward to your comments!
+
+Signed-off-by: Michael Riesch <michael.riesch@collabora.com>
+
+[0] https://lore.kernel.org/r/20240220-rk3568-vicap-v14-0-b38b6da0fc80@collabora.com
+
 ---
- drivers/media/pci/mgb4/mgb4_core.c      | 22 ++++++--
- drivers/media/pci/mgb4/mgb4_core.h      |  9 ++--
- drivers/media/pci/mgb4/mgb4_sysfs.h     |  6 ++-
- drivers/media/pci/mgb4/mgb4_sysfs_in.c  | 49 +++++++++++++----
- drivers/media/pci/mgb4/mgb4_sysfs_out.c | 38 ++++++++++---
- drivers/media/pci/mgb4/mgb4_vin.c       | 72 ++++++++++++++++---------
- drivers/media/pci/mgb4/mgb4_vout.c      | 64 +++++++++++++++-------
- 7 files changed, 189 insertions(+), 71 deletions(-)
+Changes in v5:
+- fixed indentation in struct platform_driver ... (Sakari)
+- fixed return value in case v4l2_get_link_freq returns 0 (Sakari)
+- switched from pm_runtime_put_sync() to pm_runtime_put() (Sakari)
+- Link to v4: https://lore.kernel.org/r/20251114-rockchip-mipi-receiver-v4-0-a9c86fecd052@collabora.com
 
-diff --git a/drivers/media/pci/mgb4/mgb4_core.c b/drivers/media/pci/mgb4/mgb4_core.c
-index 3ce6b717ca32..a7cb8dc50b53 100644
---- a/drivers/media/pci/mgb4/mgb4_core.c
-+++ b/drivers/media/pci/mgb4/mgb4_core.c
-@@ -381,6 +381,18 @@ static int get_serial_number(struct mgb4_dev *mgbdev)
- 	return 0;
- }
- 
-+static const char *module_type_str(struct mgb4_dev *mgbdev)
-+{
-+	if (MGB4_IS_FPDL3(mgbdev))
-+		return "FPDL3";
-+	else if (MGB4_IS_GMSL3(mgbdev))
-+		return "GMSL3";
-+	else if (MGB4_IS_GMSL1(mgbdev))
-+		return "GMSL1";
-+	else
-+		return "UNKNOWN";
-+}
-+
- static int get_module_version(struct mgb4_dev *mgbdev)
- {
- 	struct device *dev = &mgbdev->pdev->dev;
-@@ -402,19 +414,21 @@ static int get_module_version(struct mgb4_dev *mgbdev)
- 	}
- 
- 	mgbdev->module_version = ~((u32)version) & 0xff;
--	if (!(MGB4_IS_FPDL3(mgbdev) || MGB4_IS_GMSL(mgbdev))) {
-+	if (!(MGB4_IS_FPDL3(mgbdev) ||
-+	      MGB4_IS_GMSL3(mgbdev) ||
-+	      MGB4_IS_GMSL1(mgbdev))) {
- 		dev_err(dev, "unknown module type\n");
- 		return -EINVAL;
- 	}
- 	fw_version = mgb4_read_reg(&mgbdev->video, 0xC4) >> 24;
- 	if ((MGB4_IS_FPDL3(mgbdev) && fw_version != 1) ||
--	    (MGB4_IS_GMSL(mgbdev) && fw_version != 2)) {
-+	    (MGB4_IS_GMSL3(mgbdev) && fw_version != 2) ||
-+	    (MGB4_IS_GMSL1(mgbdev) && fw_version != 3)) {
- 		dev_err(dev, "module/firmware type mismatch\n");
- 		return -EINVAL;
- 	}
- 
--	dev_info(dev, "%s module detected\n",
--		 MGB4_IS_FPDL3(mgbdev) ? "FPDL3" : "GMSL");
-+	dev_info(dev, "%s module detected\n", module_type_str(mgbdev));
- 
- 	return 0;
- }
-diff --git a/drivers/media/pci/mgb4/mgb4_core.h b/drivers/media/pci/mgb4/mgb4_core.h
-index cc24068400a2..06ef8bb44089 100644
---- a/drivers/media/pci/mgb4/mgb4_core.h
-+++ b/drivers/media/pci/mgb4/mgb4_core.h
-@@ -18,14 +18,17 @@
- #define MGB4_VIN_DEVICES  2
- #define MGB4_VOUT_DEVICES 2
- 
--#define MGB4_IS_GMSL(mgbdev) \
-+#define MGB4_IS_GMSL1(mgbdev) \
-+	(((mgbdev)->module_version >> 4) == 6)
-+#define MGB4_IS_GMSL3(mgbdev) \
- 	((((mgbdev)->module_version >> 4) >= 2) && \
- 	 (((mgbdev)->module_version >> 4) <= 4))
- #define MGB4_IS_FPDL3(mgbdev) \
- 	(((mgbdev)->module_version >> 4) == 1)
- #define MGB4_HAS_VOUT(mgbdev) \
--	((((mgbdev)->module_version >> 4) >= 1) && \
--	 (((mgbdev)->module_version >> 4) <= 3))
-+	(((((mgbdev)->module_version >> 4) >= 1) && \
-+	  (((mgbdev)->module_version >> 4) <= 3)) || \
-+	 ((((mgbdev)->module_version >> 4) == 6)))
- 
- struct mgb4_dma_channel {
- 	struct dma_chan *chan;
-diff --git a/drivers/media/pci/mgb4/mgb4_sysfs.h b/drivers/media/pci/mgb4/mgb4_sysfs.h
-index 017d82c0624e..fa7fd232c2c2 100644
---- a/drivers/media/pci/mgb4/mgb4_sysfs.h
-+++ b/drivers/media/pci/mgb4/mgb4_sysfs.h
-@@ -11,8 +11,10 @@
- 
- extern struct attribute *mgb4_pci_attrs[];
- extern struct attribute *mgb4_fpdl3_in_attrs[];
--extern struct attribute *mgb4_gmsl_in_attrs[];
-+extern struct attribute *mgb4_gmsl3_in_attrs[];
-+extern struct attribute *mgb4_gmsl1_in_attrs[];
- extern struct attribute *mgb4_fpdl3_out_attrs[];
--extern struct attribute *mgb4_gmsl_out_attrs[];
-+extern struct attribute *mgb4_gmsl3_out_attrs[];
-+extern struct attribute *mgb4_gmsl1_out_attrs[];
- 
- #endif
-diff --git a/drivers/media/pci/mgb4/mgb4_sysfs_in.c b/drivers/media/pci/mgb4/mgb4_sysfs_in.c
-index 9626fa59e3d3..4cd4addcd0a5 100644
---- a/drivers/media/pci/mgb4/mgb4_sysfs_in.c
-+++ b/drivers/media/pci/mgb4/mgb4_sysfs_in.c
-@@ -36,10 +36,13 @@ static ssize_t oldi_lane_width_show(struct device *dev,
- 	u32 config;
- 	int ret;
- 
--	i2c_reg = MGB4_IS_GMSL(mgbdev) ? 0x1CE : 0x49;
--	i2c_mask = MGB4_IS_GMSL(mgbdev) ? 0x0E : 0x03;
--	i2c_single_val = MGB4_IS_GMSL(mgbdev) ? 0x00 : 0x02;
--	i2c_dual_val = MGB4_IS_GMSL(mgbdev) ? 0x0E : 0x00;
-+	if (MGB4_IS_GMSL1(mgbdev))
-+		return sprintf(buf, "0\n");
-+
-+	i2c_reg = MGB4_IS_GMSL3(mgbdev) ? 0x1CE : 0x49;
-+	i2c_mask = MGB4_IS_GMSL3(mgbdev) ? 0x0E : 0x03;
-+	i2c_single_val = MGB4_IS_GMSL3(mgbdev) ? 0x00 : 0x02;
-+	i2c_dual_val = MGB4_IS_GMSL3(mgbdev) ? 0x0E : 0x00;
- 
- 	mutex_lock(&mgbdev->i2c_lock);
- 	ret = mgb4_i2c_read_byte(&vindev->deser, i2c_reg);
-@@ -79,21 +82,24 @@ static ssize_t oldi_lane_width_store(struct device *dev,
- 	if (ret)
- 		return ret;
- 
-+	if (MGB4_IS_GMSL1(mgbdev))
-+		return val ? -EINVAL : count;
-+
- 	switch (val) {
- 	case 0: /* single */
- 		fpga_data = 0;
--		i2c_data = MGB4_IS_GMSL(mgbdev) ? 0x00 : 0x02;
-+		i2c_data = MGB4_IS_GMSL3(mgbdev) ? 0x00 : 0x02;
- 		break;
- 	case 1: /* dual */
- 		fpga_data = 1U << 9;
--		i2c_data = MGB4_IS_GMSL(mgbdev) ? 0x0E : 0x00;
-+		i2c_data = MGB4_IS_GMSL3(mgbdev) ? 0x0E : 0x00;
- 		break;
- 	default:
- 		return -EINVAL;
- 	}
- 
--	i2c_reg = MGB4_IS_GMSL(mgbdev) ? 0x1CE : 0x49;
--	i2c_mask = MGB4_IS_GMSL(mgbdev) ? 0x0E : 0x03;
-+	i2c_reg = MGB4_IS_GMSL3(mgbdev) ? 0x1CE : 0x49;
-+	i2c_mask = MGB4_IS_GMSL3(mgbdev) ? 0x0E : 0x03;
- 
- 	mutex_lock(&mgbdev->i2c_lock);
- 	ret = mgb4_i2c_mask_byte(&vindev->deser, i2c_reg, i2c_mask, i2c_data);
-@@ -102,7 +108,7 @@ static ssize_t oldi_lane_width_store(struct device *dev,
- 		return -EIO;
- 	mgb4_mask_reg(&mgbdev->video, vindev->config->regs.config, 1U << 9,
- 		      fpga_data);
--	if (MGB4_IS_GMSL(mgbdev)) {
-+	if (MGB4_IS_GMSL3(mgbdev)) {
- 		/* reset input link */
- 		mutex_lock(&mgbdev->i2c_lock);
- 		ret = mgb4_i2c_mask_byte(&vindev->deser, 0x10, 1U << 5, 1U << 5);
-@@ -745,7 +751,7 @@ struct attribute *mgb4_fpdl3_in_attrs[] = {
- 	NULL
- };
- 
--struct attribute *mgb4_gmsl_in_attrs[] = {
-+struct attribute *mgb4_gmsl3_in_attrs[] = {
- 	&dev_attr_input_id.attr,
- 	&dev_attr_link_status.attr,
- 	&dev_attr_stream_status.attr,
-@@ -770,3 +776,26 @@ struct attribute *mgb4_gmsl_in_attrs[] = {
- 	&dev_attr_gmsl_fec.attr,
- 	NULL
- };
-+
-+struct attribute *mgb4_gmsl1_in_attrs[] = {
-+	&dev_attr_input_id.attr,
-+	&dev_attr_link_status.attr,
-+	&dev_attr_stream_status.attr,
-+	&dev_attr_video_width.attr,
-+	&dev_attr_video_height.attr,
-+	&dev_attr_hsync_status.attr,
-+	&dev_attr_vsync_status.attr,
-+	&dev_attr_oldi_lane_width.attr,
-+	&dev_attr_color_mapping.attr,
-+	&dev_attr_hsync_gap_length.attr,
-+	&dev_attr_vsync_gap_length.attr,
-+	&dev_attr_pclk_frequency.attr,
-+	&dev_attr_hsync_width.attr,
-+	&dev_attr_vsync_width.attr,
-+	&dev_attr_hback_porch.attr,
-+	&dev_attr_hfront_porch.attr,
-+	&dev_attr_vback_porch.attr,
-+	&dev_attr_vfront_porch.attr,
-+	&dev_attr_frequency_range.attr,
-+	NULL
-+};
-diff --git a/drivers/media/pci/mgb4/mgb4_sysfs_out.c b/drivers/media/pci/mgb4/mgb4_sysfs_out.c
-index 573aa61c69d4..5769f3ca6c2f 100644
---- a/drivers/media/pci/mgb4/mgb4_sysfs_out.c
-+++ b/drivers/media/pci/mgb4/mgb4_sysfs_out.c
-@@ -665,6 +665,7 @@ static ssize_t pclk_frequency_store(struct device *dev,
- {
- 	struct video_device *vdev = to_video_device(dev);
- 	struct mgb4_vout_dev *voutdev = video_get_drvdata(vdev);
-+	struct mgb4_dev *mgbdev = voutdev->mgbdev;
- 	unsigned long val;
- 	int ret;
- 	unsigned int dp;
-@@ -679,14 +680,16 @@ static ssize_t pclk_frequency_store(struct device *dev,
- 		return -EBUSY;
- 	}
- 
--	dp = (val > 50000) ? 1 : 0;
-+	dp = (MGB4_IS_FPDL3(mgbdev) && val > 50000) ? 1 : 0;
- 	voutdev->freq = mgb4_cmt_set_vout_freq(voutdev, val >> dp) << dp;
--
--	mgb4_mask_reg(&voutdev->mgbdev->video, voutdev->config->regs.config,
--		      0x10, dp << 4);
--	mutex_lock(&voutdev->mgbdev->i2c_lock);
--	ret = mgb4_i2c_mask_byte(&voutdev->ser, 0x4F, 1 << 6, ((~dp) & 1) << 6);
--	mutex_unlock(&voutdev->mgbdev->i2c_lock);
-+	mgb4_mask_reg(&mgbdev->video, voutdev->config->regs.config, 0x10,
-+		      dp << 4);
-+	if (MGB4_IS_FPDL3(mgbdev)) {
-+		mutex_lock(&mgbdev->i2c_lock);
-+		ret = mgb4_i2c_mask_byte(&voutdev->ser, 0x4F, 1 << 6,
-+					 ((~dp) & 1) << 6);
-+		mutex_unlock(&mgbdev->i2c_lock);
-+	}
- 
- 	mutex_unlock(voutdev->vdev.lock);
- 
-@@ -731,7 +734,7 @@ struct attribute *mgb4_fpdl3_out_attrs[] = {
- 	NULL
- };
- 
--struct attribute *mgb4_gmsl_out_attrs[] = {
-+struct attribute *mgb4_gmsl3_out_attrs[] = {
- 	&dev_attr_output_id.attr,
- 	&dev_attr_video_source.attr,
- 	&dev_attr_display_width.attr,
-@@ -739,3 +742,22 @@ struct attribute *mgb4_gmsl_out_attrs[] = {
- 	&dev_attr_frame_rate.attr,
- 	NULL
- };
-+
-+struct attribute *mgb4_gmsl1_out_attrs[] = {
-+	&dev_attr_output_id.attr,
-+	&dev_attr_video_source.attr,
-+	&dev_attr_display_width.attr,
-+	&dev_attr_display_height.attr,
-+	&dev_attr_frame_rate.attr,
-+	&dev_attr_hsync_polarity.attr,
-+	&dev_attr_vsync_polarity.attr,
-+	&dev_attr_de_polarity.attr,
-+	&dev_attr_pclk_frequency.attr,
-+	&dev_attr_hsync_width.attr,
-+	&dev_attr_vsync_width.attr,
-+	&dev_attr_hback_porch.attr,
-+	&dev_attr_hfront_porch.attr,
-+	&dev_attr_vback_porch.attr,
-+	&dev_attr_vfront_porch.attr,
-+	NULL
-+};
-diff --git a/drivers/media/pci/mgb4/mgb4_vin.c b/drivers/media/pci/mgb4/mgb4_vin.c
-index 4b38076486ff..be55491b52b2 100644
---- a/drivers/media/pci/mgb4/mgb4_vin.c
-+++ b/drivers/media/pci/mgb4/mgb4_vin.c
-@@ -32,7 +32,8 @@
- #include "mgb4_vin.h"
- 
- ATTRIBUTE_GROUPS(mgb4_fpdl3_in);
--ATTRIBUTE_GROUPS(mgb4_gmsl_in);
-+ATTRIBUTE_GROUPS(mgb4_gmsl3_in);
-+ATTRIBUTE_GROUPS(mgb4_gmsl1_in);
- 
- static const struct mgb4_vin_config vin_cfg[] = {
- 	{0, 0, 0, 6, {0x10, 0x00, 0x04, 0x08, 0x1C, 0x14, 0x18, 0x20, 0x24, 0x28, 0xE8}},
-@@ -44,23 +45,31 @@ static const struct i2c_board_info fpdl3_deser_info[] = {
- 	{I2C_BOARD_INFO("deserializer2", 0x36)},
- };
- 
--static const struct i2c_board_info gmsl_deser_info[] = {
-+static const struct i2c_board_info gmsl3_deser_info[] = {
- 	{I2C_BOARD_INFO("deserializer1", 0x4C)},
- 	{I2C_BOARD_INFO("deserializer2", 0x2A)},
- };
- 
-+static const struct i2c_board_info gmsl1_deser_info[] = {
-+	{I2C_BOARD_INFO("deserializer1", 0x2C)},
-+	{I2C_BOARD_INFO("deserializer2", 0x6C)},
-+};
-+
- static const struct mgb4_i2c_kv fpdl3_i2c[] = {
- 	{0x06, 0xFF, 0x04}, {0x07, 0xFF, 0x01}, {0x45, 0xFF, 0xE8},
- 	{0x49, 0xFF, 0x00}, {0x34, 0xFF, 0x00}, {0x23, 0xFF, 0x00}
- };
- 
--static const struct mgb4_i2c_kv gmsl_i2c[] = {
-+static const struct mgb4_i2c_kv gmsl3_i2c[] = {
- 	{0x01, 0x03, 0x03}, {0x300, 0x0C, 0x0C}, {0x03, 0xC0, 0xC0},
- 	{0x1CE, 0x0E, 0x0E}, {0x11, 0x05, 0x00}, {0x05, 0xC0, 0x40},
- 	{0x307, 0x0F, 0x00}, {0xA0, 0x03, 0x00}, {0x3E0, 0x07, 0x07},
- 	{0x308, 0x01, 0x01}, {0x10, 0x20, 0x20}, {0x300, 0x40, 0x40}
- };
- 
-+static const struct mgb4_i2c_kv gmsl1_i2c[] = {
-+};
-+
- static const struct v4l2_dv_timings_cap video_timings_cap = {
- 	.type = V4L2_DV_BT_656_1120,
- 	.bt = {
-@@ -796,22 +805,29 @@ static irqreturn_t err_handler(int irq, void *ctx)
- 
- static int deser_init(struct mgb4_vin_dev *vindev, int id)
- {
--	int rv, addr_size;
--	size_t values_count;
--	const struct mgb4_i2c_kv *values;
--	const struct i2c_board_info *info;
-+	int rv, addr_size = 0;
-+	size_t count = 0;
-+	const struct mgb4_i2c_kv *values = NULL;
-+	const struct i2c_board_info *info = NULL;
- 	struct device *dev = &vindev->mgbdev->pdev->dev;
- 
--	if (MGB4_IS_GMSL(vindev->mgbdev)) {
--		info = &gmsl_deser_info[id];
-+	if (MGB4_IS_GMSL3(vindev->mgbdev)) {
-+		info = &gmsl3_deser_info[id];
- 		addr_size = 16;
--		values = gmsl_i2c;
--		values_count = ARRAY_SIZE(gmsl_i2c);
--	} else {
-+		values = gmsl3_i2c;
-+		count = ARRAY_SIZE(gmsl3_i2c);
-+	} else if (MGB4_IS_FPDL3(vindev->mgbdev)) {
- 		info = &fpdl3_deser_info[id];
- 		addr_size = 8;
- 		values = fpdl3_i2c;
--		values_count = ARRAY_SIZE(fpdl3_i2c);
-+		count = ARRAY_SIZE(fpdl3_i2c);
-+	} else if (MGB4_IS_GMSL1(vindev->mgbdev)) {
-+		info = &gmsl1_deser_info[id];
-+		addr_size = 8;
-+		values = gmsl1_i2c;
-+		count = ARRAY_SIZE(gmsl1_i2c);
-+	} else {
-+		return -EINVAL;
- 	}
- 
- 	rv = mgb4_i2c_init(&vindev->deser, vindev->mgbdev->i2c_adap, info,
-@@ -820,7 +836,7 @@ static int deser_init(struct mgb4_vin_dev *vindev, int id)
- 		dev_err(dev, "failed to create deserializer\n");
- 		return rv;
- 	}
--	rv = mgb4_i2c_configure(&vindev->deser, values, values_count);
-+	rv = mgb4_i2c_configure(&vindev->deser, values, count);
- 	if (rv < 0) {
- 		dev_err(dev, "failed to configure deserializer\n");
- 		goto err_i2c_dev;
-@@ -838,11 +854,12 @@ static void fpga_init(struct mgb4_vin_dev *vindev)
- {
- 	struct mgb4_regs *video = &vindev->mgbdev->video;
- 	const struct mgb4_vin_regs *regs = &vindev->config->regs;
-+	int dp = MGB4_IS_GMSL1(vindev->mgbdev) ? 0 : 1;
- 
- 	mgb4_write_reg(video, regs->config, 0x00000001);
- 	mgb4_write_reg(video, regs->sync, 0x03E80002);
- 	mgb4_write_reg(video, regs->padding, 0x00000000);
--	mgb4_write_reg(video, regs->config, 1U << 9);
-+	mgb4_write_reg(video, regs->config, dp << 9);
- }
- 
- static void create_debugfs(struct mgb4_vin_dev *vindev)
-@@ -890,10 +907,21 @@ static void create_debugfs(struct mgb4_vin_dev *vindev)
- #endif
- }
- 
-+static const struct attribute_group **module_groups(struct mgb4_dev *mgbdev)
-+{
-+	if (MGB4_IS_FPDL3(mgbdev))
-+		return mgb4_fpdl3_in_groups;
-+	else if (MGB4_IS_GMSL3(mgbdev))
-+		return mgb4_gmsl3_in_groups;
-+	else if (MGB4_IS_GMSL1(mgbdev))
-+		return mgb4_gmsl1_in_groups;
-+	else
-+		return NULL;
-+}
-+
- struct mgb4_vin_dev *mgb4_vin_create(struct mgb4_dev *mgbdev, int id)
- {
- 	int rv;
--	const struct attribute_group **groups;
- 	struct mgb4_vin_dev *vindev;
- 	struct pci_dev *pdev = mgbdev->pdev;
- 	struct device *dev = &pdev->dev;
-@@ -914,14 +942,13 @@ struct mgb4_vin_dev *mgb4_vin_create(struct mgb4_dev *mgbdev, int id)
- 	INIT_WORK(&vindev->dma_work, dma_transfer);
- 	INIT_WORK(&vindev->err_work, signal_change);
- 
--	/* IRQ callback */
-+	/* IRQ callbacks */
- 	vin_irq = xdma_get_user_irq(mgbdev->xdev, vindev->config->vin_irq);
- 	rv = request_irq(vin_irq, vin_handler, 0, "mgb4-vin", vindev);
- 	if (rv) {
- 		dev_err(dev, "failed to register vin irq handler\n");
- 		goto err_alloc;
- 	}
--	/* Error IRQ callback */
- 	err_irq = xdma_get_user_irq(mgbdev->xdev, vindev->config->err_irq);
- 	rv = request_irq(err_irq, err_handler, 0, "mgb4-err", vindev);
- 	if (rv) {
-@@ -986,9 +1013,7 @@ struct mgb4_vin_dev *mgb4_vin_create(struct mgb4_dev *mgbdev, int id)
- 	}
- 
- 	/* Module sysfs attributes */
--	groups = MGB4_IS_GMSL(mgbdev)
--	  ? mgb4_gmsl_in_groups : mgb4_fpdl3_in_groups;
--	rv = device_add_groups(&vindev->vdev.dev, groups);
-+	rv = device_add_groups(&vindev->vdev.dev, module_groups(mgbdev));
- 	if (rv) {
- 		dev_err(dev, "failed to create sysfs attributes\n");
- 		goto err_video_dev;
-@@ -1014,7 +1039,6 @@ struct mgb4_vin_dev *mgb4_vin_create(struct mgb4_dev *mgbdev, int id)
- 
- void mgb4_vin_free(struct mgb4_vin_dev *vindev)
- {
--	const struct attribute_group **groups;
- 	int vin_irq = xdma_get_user_irq(vindev->mgbdev->xdev,
- 					vindev->config->vin_irq);
- 	int err_irq = xdma_get_user_irq(vindev->mgbdev->xdev,
-@@ -1025,9 +1049,7 @@ void mgb4_vin_free(struct mgb4_vin_dev *vindev)
- 	free_irq(vin_irq, vindev);
- 	free_irq(err_irq, vindev);
- 
--	groups = MGB4_IS_GMSL(vindev->mgbdev)
--	  ? mgb4_gmsl_in_groups : mgb4_fpdl3_in_groups;
--	device_remove_groups(&vindev->vdev.dev, groups);
-+	device_remove_groups(&vindev->vdev.dev, module_groups(vindev->mgbdev));
- 
- 	mgb4_i2c_free(&vindev->deser);
- 	video_unregister_device(&vindev->vdev);
-diff --git a/drivers/media/pci/mgb4/mgb4_vout.c b/drivers/media/pci/mgb4/mgb4_vout.c
-index fd93fbbaf755..44e9565d4d06 100644
---- a/drivers/media/pci/mgb4/mgb4_vout.c
-+++ b/drivers/media/pci/mgb4/mgb4_vout.c
-@@ -25,7 +25,8 @@
- #include "mgb4_vout.h"
- 
- ATTRIBUTE_GROUPS(mgb4_fpdl3_out);
--ATTRIBUTE_GROUPS(mgb4_gmsl_out);
-+ATTRIBUTE_GROUPS(mgb4_gmsl3_out);
-+ATTRIBUTE_GROUPS(mgb4_gmsl1_out);
- 
- static const struct mgb4_vout_config vout_cfg[] = {
- 	{0, 0, 8, {0x78, 0x60, 0x64, 0x68, 0x74, 0x6C, 0x70, 0x7C, 0xE0}},
-@@ -37,10 +38,18 @@ static const struct i2c_board_info fpdl3_ser_info[] = {
- 	{I2C_BOARD_INFO("serializer2", 0x16)},
- };
- 
-+static const struct i2c_board_info gmsl1_ser_info[] = {
-+	{I2C_BOARD_INFO("serializer1", 0x24)},
-+	{I2C_BOARD_INFO("serializer2", 0x22)},
-+};
-+
- static const struct mgb4_i2c_kv fpdl3_i2c[] = {
- 	{0x05, 0xFF, 0x04}, {0x06, 0xFF, 0x01}, {0xC2, 0xFF, 0x80}
- };
- 
-+static const struct mgb4_i2c_kv gmsl1_i2c[] = {
-+};
-+
- static const struct v4l2_dv_timings_cap video_timings_cap = {
- 	.type = V4L2_DV_BT_656_1120,
- 	.bt = {
-@@ -634,12 +643,24 @@ static irqreturn_t handler(int irq, void *ctx)
- 
- static int ser_init(struct mgb4_vout_dev *voutdev, int id)
- {
--	int rv;
--	const struct i2c_board_info *info = &fpdl3_ser_info[id];
- 	struct mgb4_i2c_client *ser = &voutdev->ser;
- 	struct device *dev = &voutdev->mgbdev->pdev->dev;
-+	const struct i2c_board_info *info = NULL;
-+	const struct mgb4_i2c_kv *values = NULL;
-+	size_t count = 0;
-+	int rv;
-+
-+	if (MGB4_IS_FPDL3(voutdev->mgbdev)) {
-+		info = &fpdl3_ser_info[id];
-+		values = fpdl3_i2c;
-+		count = ARRAY_SIZE(fpdl3_i2c);
-+	} else if (MGB4_IS_GMSL1(voutdev->mgbdev)) {
-+		info = &gmsl1_ser_info[id];
-+		values = gmsl1_i2c;
-+		count = ARRAY_SIZE(gmsl1_i2c);
-+	}
- 
--	if (MGB4_IS_GMSL(voutdev->mgbdev))
-+	if (!info)
- 		return 0;
- 
- 	rv = mgb4_i2c_init(ser, voutdev->mgbdev->i2c_adap, info, 8);
-@@ -647,7 +668,7 @@ static int ser_init(struct mgb4_vout_dev *voutdev, int id)
- 		dev_err(dev, "failed to create serializer\n");
- 		return rv;
- 	}
--	rv = mgb4_i2c_configure(ser, fpdl3_i2c, ARRAY_SIZE(fpdl3_i2c));
-+	rv = mgb4_i2c_configure(ser, values, count);
- 	if (rv < 0) {
- 		dev_err(dev, "failed to configure serializer\n");
- 		goto err_i2c_dev;
-@@ -665,18 +686,19 @@ static void fpga_init(struct mgb4_vout_dev *voutdev)
- {
- 	struct mgb4_regs *video = &voutdev->mgbdev->video;
- 	const struct mgb4_vout_regs *regs = &voutdev->config->regs;
-+	int dp = MGB4_IS_GMSL1(voutdev->mgbdev) ? 0 : 1;
-+	u32 source = (voutdev->config->id + MGB4_VIN_DEVICES) << 2;
- 
--	mgb4_write_reg(video, regs->config, 0x00000011);
-+	mgb4_write_reg(video, regs->config, 0x00000001);
- 	mgb4_write_reg(video, regs->resolution, (1280 << 16) | 640);
- 	mgb4_write_reg(video, regs->hsync, 0x00283232);
- 	mgb4_write_reg(video, regs->vsync, 0x40141F1E);
- 	mgb4_write_reg(video, regs->frame_limit, MGB4_HW_FREQ / 60);
- 	mgb4_write_reg(video, regs->padding, 0x00000000);
- 
--	voutdev->freq = mgb4_cmt_set_vout_freq(voutdev, 61150 >> 1) << 1;
-+	voutdev->freq = mgb4_cmt_set_vout_freq(voutdev, 61150 >> dp) << dp;
- 
--	mgb4_write_reg(video, regs->config,
--		       (voutdev->config->id + MGB4_VIN_DEVICES) << 2 | 1 << 4);
-+	mgb4_write_reg(video, regs->config, source | dp << 4);
- }
- 
- static void create_debugfs(struct mgb4_vout_dev *voutdev)
-@@ -720,10 +742,21 @@ static void create_debugfs(struct mgb4_vout_dev *voutdev)
- #endif
- }
- 
-+static const struct attribute_group **module_groups(struct mgb4_dev *mgbdev)
-+{
-+	if (MGB4_IS_FPDL3(mgbdev))
-+		return mgb4_fpdl3_out_groups;
-+	else if (MGB4_IS_GMSL3(mgbdev))
-+		return mgb4_gmsl3_out_groups;
-+	else if (MGB4_IS_GMSL1(mgbdev))
-+		return mgb4_gmsl1_out_groups;
-+	else
-+		return NULL;
-+}
-+
- struct mgb4_vout_dev *mgb4_vout_create(struct mgb4_dev *mgbdev, int id)
- {
- 	int rv, irq;
--	const struct attribute_group **groups;
- 	struct mgb4_vout_dev *voutdev;
- 	struct pci_dev *pdev = mgbdev->pdev;
- 	struct device *dev = &pdev->dev;
-@@ -804,9 +837,7 @@ struct mgb4_vout_dev *mgb4_vout_create(struct mgb4_dev *mgbdev, int id)
- 	}
- 
- 	/* Module sysfs attributes */
--	groups = MGB4_IS_GMSL(mgbdev)
--	  ? mgb4_gmsl_out_groups : mgb4_fpdl3_out_groups;
--	rv = device_add_groups(&voutdev->vdev.dev, groups);
-+	rv = device_add_groups(&voutdev->vdev.dev, module_groups(mgbdev));
- 	if (rv) {
- 		dev_err(dev, "failed to create sysfs attributes\n");
- 		goto err_video_dev;
-@@ -830,15 +861,10 @@ struct mgb4_vout_dev *mgb4_vout_create(struct mgb4_dev *mgbdev, int id)
- 
- void mgb4_vout_free(struct mgb4_vout_dev *voutdev)
- {
--	const struct attribute_group **groups;
- 	int irq = xdma_get_user_irq(voutdev->mgbdev->xdev, voutdev->config->irq);
- 
- 	free_irq(irq, voutdev);
--
--	groups = MGB4_IS_GMSL(voutdev->mgbdev)
--	  ? mgb4_gmsl_out_groups : mgb4_fpdl3_out_groups;
--	device_remove_groups(&voutdev->vdev.dev, groups);
--
-+	device_remove_groups(&voutdev->vdev.dev, module_groups(voutdev->mgbdev));
- 	mgb4_i2c_free(&voutdev->ser);
- 	video_unregister_device(&voutdev->vdev);
- 	v4l2_device_unregister(&voutdev->v4l2dev);
+Changes in v4:
+- moved driver to drivers/media/platform/synopsys and renamed it (Frank)
+- addresse review comments by Sakari
+- Link to v3: https://lore.kernel.org/r/20251114-rockchip-mipi-receiver-v3-0-16e83aa7f395@collabora.com
+
+Changes in v3:
+- rebased onto v6.19/recent media-committers/next
+- Link to v2: https://lore.kernel.org/r/20251114-rockchip-mipi-receiver-v2-0-eb9b43377fc4@collabora.com
+
+Changes in v2:
+- dropped one R-b by Bryan, as there were two of them on the same patch
+  (Krzysztof)
+- Link to v1: https://lore.kernel.org/r/20251114-rockchip-mipi-receiver-v1-0-d13086e810dd@collabora.com
+
+---
+Michael Riesch (3):
+      media: dt-bindings: add rockchip mipi csi-2 receiver
+      media: synopsys: add driver for the designware mipi csi-2 receiver
+      arm64: defconfig: enable designware mipi csi-2 receiver
+
+ .../bindings/media/rockchip,rk3568-mipi-csi2.yaml  | 141 ++++
+ MAINTAINERS                                        |   7 +
+ arch/arm64/configs/defconfig                       |   1 +
+ drivers/media/platform/synopsys/Kconfig            |   1 +
+ drivers/media/platform/synopsys/Makefile           |   1 +
+ .../media/platform/synopsys/dw-mipi-csi2/Kconfig   |  17 +
+ .../media/platform/synopsys/dw-mipi-csi2/Makefile  |   2 +
+ .../platform/synopsys/dw-mipi-csi2/dw-mipi-csi2.c  | 735 +++++++++++++++++++++
+ 8 files changed, 905 insertions(+)
+---
+base-commit: dc6c52205bdaddf1dc259497a958402b35c01fe2
+change-id: 20251114-rockchip-mipi-receiver-0baf244c9c8e
+
+Best regards,
 -- 
-2.52.0
+Michael Riesch <michael.riesch@collabora.com>
+
 
