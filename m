@@ -1,238 +1,249 @@
-Received: from mail-lj1-f174.google.com (mail-lj1-f174.google.com [209.85.208.174])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 58BD430FC04
-	for <linux-media@vger.kernel.org>; Sat, 17 Jan 2026 12:07:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D8221139579;
+	Sat, 17 Jan 2026 15:36:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768651628; cv=none; b=k7NSXNzaSnDImOkNL4aZ/PdFqlrDyjP8+kMD2AoJxp7f9f4KlG7VvNA/5/4l8gyO10ygecsY6bWJTbvy8zuVKlaRYmQiSKMLSbCmg7KJzTCKq8TyAz/sueUCHr8DykY0t5voUG/uIotDh0JvV0K76bwUxBVJNivqkC2OTV7Es6E=
+	t=1768664181; cv=none; b=eR/6fJiR7aNjJbZ7lkcDDzd02J8P9IZVc4pe1XM6tMVhDtDpXTRIJqkbloi09qQRQ0Nm57LXihFKSHau10gsbYyqVxLgAwOc50Foctxh5oigU/GQczUk2EFbDVJMiyhEEjJpfzq2Icai9Wv5VWDsMSFEiIFb14lPiP3dFw9em9s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768651628; c=relaxed/simple;
-	bh=kFZnTHhF810bQp9nNoOgW5Uyv5Nf05hbdnxEqBknzYA=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=ChEemdWHB3pKIEADzXIdZUFmu9tCupGOyRo5aYWyp/uWduXuSmsL9B5WGV3+ISR/Ao67tL3bTuLcvNz6A8NbgGEtBVXFoUDsi9bBu3vt+wdeH289DqBt2q8BuuTluiZf36lvF94q2XkUS9sNphQ6Gd+UeQGPowbAfK43zOnq/SM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=k+2fa3ZE; arc=none smtp.client-ip=209.85.208.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+	s=arc-20240116; t=1768664181; c=relaxed/simple;
+	bh=0hCEg3mKHxeJ0lIQKGfIPrJ4/x6ERCjO0bYXHeEA3o8=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=BDB34HnWla1XN7Qs/VaFv4PNX8W7BT6Lvx5bu2O2PBD2eFfPRA16yvhE/T5WcXx4LRuxX1DWH1R+Ol97NVNU6g6eaSuYiTCoax6OiyjQ/lxBiZyL74CnRVkAjCCnFt9elP+b87orZa60Ui4KaOGritCWmQ6fdpsHzduFGfq+egE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=QUK+tRQR; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="k+2fa3ZE"
-Received: by mail-lj1-f174.google.com with SMTP id 38308e7fff4ca-382fa1044f1so3024361fa.0
-        for <linux-media@vger.kernel.org>; Sat, 17 Jan 2026 04:07:06 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1768651624; x=1769256424; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
-         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=A7ci2Vvjz2qESH5bzyRXoL8+ViHAPbN5MrVtZdVAlwk=;
-        b=k+2fa3ZEael0cGHqNnZ4PLxrvqyK54hKAq/6V78jf1P7u/6SF5fve65aXsGW2+J79P
-         NdRihjfBbjk+mq//QrITQqjF86FeqcF0iavZHZhLYtX5k0FGV1s+8OMv1eqAj7PwcCc5
-         vOpsMDdmwAj2Cu8jdonqnrmm7yxWZze9FZmbKSs8GqGcck5suwfmTCki64BO6gjvEVYV
-         +8JJs1VIR0v05vL/+rJaXqGfAdxXGXKXLvUqfsonOBGq3RTE/b62A8D49+U2LRlrg4Dx
-         xYONFBMpFCV2M3ppARl/g884FlAjWwLK1EPsAbJnJPMmQYT+mx9LWzgLpQdGv93SGTmq
-         uS2g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1768651624; x=1769256424;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
-         :user-agent:mime-version:date:message-id:x-gm-gg:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=A7ci2Vvjz2qESH5bzyRXoL8+ViHAPbN5MrVtZdVAlwk=;
-        b=C3JzJCC4O7bRUlRxrFEvnF0IqeLBdOVEMJa9W1ihb2JX+ZXp+i2oQC4quoseOQ9sIe
-         U8yI12BvN4S+A+h2ibrIjhvbqXKlbnSsI/jAUjzSiJYZIwv7VO5bwrfeng2UDFXriKQ6
-         cTGLmSzfNJML4YuvSb0q1xv8uO2WM/8TBZtSrEGHzsyMohALzDnOEXLwOzmcU5tClHi8
-         4hS54Z6pZVYv2ciCdszR3AWTsCKDcTLCasNH+XMZl/PMqaAlwPpJP9GAsP+TPD1mEE/K
-         4MjK/0ihTN61CzxBEhUo1iA8XhLAColiLsyXQbraUm4ZsuRqU4uTDcXcg2w1nePo62wb
-         keBA==
-X-Forwarded-Encrypted: i=1; AJvYcCXXv9EW6ZzKWvFN16X1KPM1FhoMLsjJ5f7PIsbt/nYq4eQe9oQp7DI8YmVQx+x6pj1PLE/B5teGxhLIeg==@vger.kernel.org
-X-Gm-Message-State: AOJu0YyOmmd1KY7V67ChSLItfCQ72AVRFLisRXXCnTgc7TDbXE4I8tvp
-	pln2Vp3Y/XqLW8A5J20emozedDreG3tB9Xo6TnDjx8L2KVlYFB7LgCV4zGQn4nwznF0=
-X-Gm-Gg: AY/fxX7YTUXQmg1iE0RxfN0vwWTC7n8TSoZQdm7xXVhQioDPan0P7Fbb7FxjSN34FrE
-	6OVvx3vc4yxcopL9IRzY/FgVoraaeLP81MYES04M8WE+kNrYm41c546M9/d4ZoNa2KzUldgF41m
-	CRWZ5HiduEBeaK3g5uZG6X0nUoBqfIEotKjNAbxxWdVskn3znpyGIENS2Dx1b6u6QFQW0CEn40d
-	PFdsDR80r9a7Ue2rFjxH1Q06w7Pi0fdqt+oWhUAZI12AxtgY226JuxV5BSePo5bCTopUK9ZJgN+
-	ShCNuNt/MZv5zKNrxshN88o9onVS7HuggIryi2ZqSHZDMPHcxeS6QyWRbha45pdz4ry80+2FyuV
-	HUpWuhpc9rUWjakPz2I3u7+Uoe+d058Cue0dF4o8kjt3uODJOPt4dgXpW8dUiZypETz1NgbdI6G
-	pJhJrycbqW65fpZ/MmPcTwmjo+d2st6msDek2hD+BKfj8rStZOvqKV3QuhnnZ+oR9+OQ==
-X-Received: by 2002:a05:6512:3515:b0:59a:10c1:8f27 with SMTP id 2adb3069b0e04-59baef10857mr1106330e87.6.1768651624379;
-        Sat, 17 Jan 2026 04:07:04 -0800 (PST)
-Received: from [192.168.1.100] (91-159-24-186.elisa-laajakaista.fi. [91.159.24.186])
-        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-59baf34dd67sm1577385e87.29.2026.01.17.04.07.03
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 17 Jan 2026 04:07:03 -0800 (PST)
-Message-ID: <893b39a0-3479-454c-b6a1-33144d075afa@linaro.org>
-Date: Sat, 17 Jan 2026 14:07:02 +0200
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="QUK+tRQR"
+Received: by smtp.kernel.org (Postfix) with ESMTPS id AC46AC19421;
+	Sat, 17 Jan 2026 15:36:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1768664181;
+	bh=0hCEg3mKHxeJ0lIQKGfIPrJ4/x6ERCjO0bYXHeEA3o8=;
+	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To:From;
+	b=QUK+tRQRqpIkWRqCJwqvYFY63dSGiyw7ul4NDpqnE60FPYqQznJhLtkQjaYyQIpQk
+	 xLT5R2nynlmZMINpepmsv+9SxzJ6SoQGp0LdthhJq81h4ypEoLC3XMNLEK/YBErPNM
+	 t/QJjcHLXk/mNHWthS+Xj3x/MAB1v5t+i97eaRih3PVcWLuunRIp0IVH4/zoYoGj50
+	 ZvSMD6oSjvXlVDu/YexGMUs38F/v4t67+lFn9qvFoUKvpyOXR2Yc6Zhv2NfVj9Sxt/
+	 HQR4i2ouNXGMe8o0shbRRE6i8uRXuSOiQGXDOI/4K0Fgr3n6bjQMRkveV8zy+O6OIV
+	 Qd2ezEwmiJwsg==
+Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9E380C98316;
+	Sat, 17 Jan 2026 15:36:21 +0000 (UTC)
+From: David Heidelberg via B4 Relay <devnull+david.ixit.cz@kernel.org>
+Date: Sat, 17 Jan 2026 16:36:17 +0100
+Subject: [PATCH v3 2/8] media: qcom: camss: csiphy-3ph: Use odd bits for
+ configuring C-PHY lanes
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v7 5/5] arm64: dts: qcom: sdm670-google-sargo: add imx355
- front camera
-To: Richard Acayan <mailingradian@gmail.com>,
- Mauro Carvalho Chehab <mchehab@kernel.org>, Rob Herring <robh@kernel.org>,
- Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
- <conor+dt@kernel.org>, Bjorn Andersson <andersson@kernel.org>,
- Konrad Dybcio <konradybcio@kernel.org>,
- Sakari Ailus <sakari.ailus@linux.intel.com>,
- Tianshu Qiu <tian.shu.qiu@intel.com>, linux-media@vger.kernel.org,
- devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org
-Cc: Robert Mader <robert.mader@collabora.com>,
- Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
- David Heidelberg <david@ixit.cz>, phone-devel@vger.kernel.org
-References: <20260117040657.27043-1-mailingradian@gmail.com>
- <20260117040657.27043-6-mailingradian@gmail.com>
-From: Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>
-In-Reply-To: <20260117040657.27043-6-mailingradian@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
+Message-Id: <20260117-qcom-cphy-v3-2-8ce76a06f7db@ixit.cz>
+References: <20260117-qcom-cphy-v3-0-8ce76a06f7db@ixit.cz>
+In-Reply-To: <20260117-qcom-cphy-v3-0-8ce76a06f7db@ixit.cz>
+To: Robert Foss <rfoss@kernel.org>, Todor Tomov <todor.too@gmail.com>, 
+ Bryan O'Donoghue <bryan.odonoghue@linaro.org>, 
+ Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>, 
+ Mauro Carvalho Chehab <mchehab@kernel.org>, 
+ Luca Weiss <luca.weiss@fairphone.com>, Petr Hodina <phodina@protonmail.com>, 
+ Casey Connolly <casey.connolly@linaro.org>, "Dr. Git" <drgitx@gmail.com>
+Cc: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>, 
+ Joel Selvaraj <foss@joelselvaraj.com>, Kieran Bingham <kbingham@kernel.org>, 
+ Sakari Ailus <sakari.ailus@linux.intel.com>, linux-media@vger.kernel.org, 
+ linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ phone-devel@vger.kernel.org, David Heidelberg <david@ixit.cz>
+X-Mailer: b4 0.14.3
+X-Developer-Signature: v=1; a=openpgp-sha256; l=6047; i=david@ixit.cz;
+ h=from:subject:message-id;
+ bh=Py+ahC8+QgtZhaEyxSnmQ4ggve0to/vdi/NPYJPgPjU=;
+ b=owEBbQKS/ZANAwAIAWACP8TTSSByAcsmYgBpa6xzkeqxPfoPvfQNSlRy35pNpn6GzYk/l+1Iw
+ rpbFRRNniiJAjMEAAEIAB0WIQTXegnP7twrvVOnBHRgAj/E00kgcgUCaWuscwAKCRBgAj/E00kg
+ cguFD/9Jscq5HuwYUTFSnYxmXsRZmR2JgZmSUmdtOgoHmYLjWqPJ1NiNczdHUsEGQSQpKlYdQ8A
+ khqUAPktuwV7lH81wGsijrLCsucFats1lslH2AURPJS4e3kuMMtwgKPZDCsyA+X+BWO/yqrxp6P
+ eppzY0mRbO/75BeRJKDcwwgzwftRpauP3vivVU1/YpUxu6npWMm+JOpWSnznOPH54gAc73J176A
+ ZUDcMfAUJ1UoH7dmgaoySnzaeIHo52Gr1tWKT8SDcbRyPP4KYYDNY6Z+R98O70FGd+Fy13f/gw3
+ lca6QgpuEsMwpCgXTI1RFrDuWSUB22NqUpgpqQV9nqKuBZRFYNhZFjgxiV26ZHX6G5K6/5h9DmG
+ e8vRnSJ7B3UuVmwtVUczJE5WmiysrZFkJXF/7hyNqVtGcwb5DJYPUtJCZd6mLrDkMBb4yN4lxSc
+ 1ZoHdwWG6nCm7mcAnTWaQaTupE6VfsSdIL2g/DsexMFkn3cN/Yqv9B23g5n82CIkndfEM3V9XLR
+ ZFyRLPT4vrHHHNDPQ6qmbka45o+LRm0fAgruWUwnwvAlKZGhzmg3z4Q40a2YH7OH/LY+1boCjMY
+ XbqEESdyzeYKalU9dVRQ6Flqjq8sLlFKpiY1/aVK69LBtEdRP9mssWOZCfztbt+Lh1Y9Www+JyI
+ oVj2LVSh2g3b9LA==
+X-Developer-Key: i=david@ixit.cz; a=openpgp;
+ fpr=D77A09CFEEDC2BBD53A7047460023FC4D3492072
+X-Endpoint-Received: by B4 Relay for david@ixit.cz/default with auth_id=355
+X-Original-From: David Heidelberg <david@ixit.cz>
+Reply-To: david@ixit.cz
 
-On 1/17/26 06:06, Richard Acayan wrote:
-> The Sony IMX355 is the front camera on the Pixel 3a, mounted in portrait
-> mode. It is connected to CSIPHY1 and CCI I2C1, and uses MCLK2. Add
-> support for it.
-> 
-> Co-developed-by: Robert Mader <robert.mader@collabora.com>
-> Signed-off-by: Robert Mader <robert.mader@collabora.com>
-> Signed-off-by: Richard Acayan <mailingradian@gmail.com>
-> Reviewed-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-> ---
->   .../boot/dts/qcom/sdm670-google-sargo.dts     | 95 +++++++++++++++++++
->   1 file changed, 95 insertions(+)
-> 
-> diff --git a/arch/arm64/boot/dts/qcom/sdm670-google-sargo.dts b/arch/arm64/boot/dts/qcom/sdm670-google-sargo.dts
-> index ed55646ca419..e925cba0381f 100644
-> --- a/arch/arm64/boot/dts/qcom/sdm670-google-sargo.dts
-> +++ b/arch/arm64/boot/dts/qcom/sdm670-google-sargo.dts
-> @@ -172,6 +172,34 @@ vreg_s2b_1p05: vreg-s2b-regulator {
->   		regulator-min-microvolt = <1050000>;
->   		regulator-max-microvolt = <1050000>;
->   	};
-> +
-> +	cam_front_ldo: cam-front-ldo-regulator {
-> +		compatible = "regulator-fixed";
-> +		regulator-name = "cam_front_ldo";
-> +		regulator-min-microvolt = <1352000>;
-> +		regulator-max-microvolt = <1352000>;
-> +		regulator-enable-ramp-delay = <135>;
-> +
-> +		gpios = <&pm660l_gpios 4 GPIO_ACTIVE_HIGH>;
-> +		enable-active-high;
-> +
-> +		pinctrl-0 = <&cam_front_ldo_pin>;
-> +		pinctrl-names = "default";
-> +	};
-> +
-> +	cam_vio_ldo: cam-vio-ldo-regulator {
-> +		compatible = "regulator-fixed";
-> +		regulator-name = "cam_vio_ldo";
-> +		regulator-min-microvolt = <1800000>;
-> +		regulator-max-microvolt = <1800000>;
-> +		regulator-enable-ramp-delay = <233>;
-> +
-> +		gpios = <&pm660_gpios 13 GPIO_ACTIVE_HIGH>;
-> +		enable-active-high;
-> +
-> +		pinctrl-0 = <&cam_vio_pin>;
-> +		pinctrl-names = "default";
-> +	};
->   };
->   
->   &apps_rsc {
-> @@ -392,6 +420,59 @@ vreg_bob: bob {
->   	};
->   };
->   
-> +&camss {
-> +	vdda-phy-supply = <&vreg_l1a_1p225>;
-> +	vdda-pll-supply = <&vreg_s6a_0p87>;
-> +
-> +	status = "okay";
-> +};
-> +
-> +&camss_port1 {
-> +	camss_endpoint1: endpoint {
-> +		data-lanes = <0 1 2 3>;
-> +		remote-endpoint = <&cam_front_endpoint>;
-> +	};
-> +};
+From: David Heidelberg <david@ixit.cz>
 
-Looks acceptable.
+So far, only D-PHY mode was supported, which uses even bits when enabling
+or masking lanes. For C-PHY configuration, the hardware instead requires
+using the odd bits.
 
-> +
-> +&cci {
-> +	pinctrl-0 = <&cci1_default>;
-> +	pinctrl-1 = <&cci1_sleep>;
-> +	pinctrl-names = "default", "sleep";
-> +
-> +	status = "okay";
-> +};
-> +
-> +&cci_i2c1 {
-> +	camera@1a {
-> +		compatible = "sony,imx355";
-> +		reg = <0x1a>;
-> +
-> +		clocks = <&camcc CAM_CC_MCLK2_CLK>;
-> +
-> +		assigned-clocks = <&camcc CAM_CC_MCLK2_CLK>;
-> +		assigned-clock-rates = <19200000>;
-> +
-> +		reset-gpios = <&tlmm 9 GPIO_ACTIVE_LOW>;
-> +
-> +		avdd-supply = <&cam_front_ldo>;
-> +		dvdd-supply = <&cam_front_ldo>;
-> +		dovdd-supply = <&cam_vio_ldo>;
-> +
-> +		pinctrl-0 = <&cam_mclk2_default>;
-> +		pinctrl-names = "default";
-> +
-> +		rotation = <270>;
-> +		orientation = <0>;
-> +
-> +		port {
-> +			cam_front_endpoint: endpoint {
-> +				link-frequencies = /bits/ 64 <360000000>;
-> +				remote-endpoint = <&camss_endpoint1>;
-> +			};
-> +		};
-> +	};
-> +};
-> +
->   &gcc {
->   	protected-clocks = <GCC_QSPI_CORE_CLK>,
->   			   <GCC_QSPI_CORE_CLK_SRC>,
-> @@ -490,6 +571,14 @@ &pm660_charger {
->   	status = "okay";
->   };
->   
-> +&pm660_gpios {
-> +	cam_vio_pin: cam-vio-state {
-> +		pins = "gpio13";
-> +		function = "normal";
-> +		power-source = <0>;
-> +	};
-> +};
-> +
->   &pm660_rradc {
->   	status = "okay";
->   };
-> @@ -508,6 +597,12 @@ led-0 {
->   };
->   
->   &pm660l_gpios {
-> +	cam_front_ldo_pin: cam-front-state {
-> +		pins = "gpio4";
-> +		function = "normal";
-> +		power-source = <0>;
-> +	};
-> +
->   	vol_up_pin: vol-up-state {
->   		pins = "gpio7";
->   		function = "normal";
+Since there can be unrecognized configuration allow returning failure.
 
-Reviewed-by: Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>
+Signed-off-by: David Heidelberg <david@ixit.cz>
+---
+ .../platform/qcom/camss/camss-csiphy-2ph-1-0.c     |  8 ++--
+ .../platform/qcom/camss/camss-csiphy-3ph-1-0.c     | 49 +++++++++++++++++-----
+ drivers/media/platform/qcom/camss/camss-csiphy.c   |  4 +-
+ drivers/media/platform/qcom/camss/camss-csiphy.h   |  6 +--
+ 4 files changed, 47 insertions(+), 20 deletions(-)
+
+diff --git a/drivers/media/platform/qcom/camss/camss-csiphy-2ph-1-0.c b/drivers/media/platform/qcom/camss/camss-csiphy-2ph-1-0.c
+index 9d67e7fa6366a..bb4b91f69616b 100644
+--- a/drivers/media/platform/qcom/camss/camss-csiphy-2ph-1-0.c
++++ b/drivers/media/platform/qcom/camss/camss-csiphy-2ph-1-0.c
+@@ -94,9 +94,9 @@ static u8 csiphy_settle_cnt_calc(s64 link_freq, u32 timer_clk_rate)
+ 	return settle_cnt;
+ }
+ 
+-static void csiphy_lanes_enable(struct csiphy_device *csiphy,
+-				struct csiphy_config *cfg,
+-				s64 link_freq, u8 lane_mask)
++static int csiphy_lanes_enable(struct csiphy_device *csiphy,
++			       struct csiphy_config *cfg,
++			       s64 link_freq, u8 lane_mask)
+ {
+ 	struct csiphy_lanes_cfg *c = &cfg->csi2->lane_cfg;
+ 	u8 settle_cnt;
+@@ -132,6 +132,8 @@ static void csiphy_lanes_enable(struct csiphy_device *csiphy,
+ 		writel_relaxed(0x3f, csiphy->base +
+ 			       CAMSS_CSI_PHY_INTERRUPT_CLEARn(l));
+ 	}
++
++	return 0;
+ }
+ 
+ static void csiphy_lanes_disable(struct csiphy_device *csiphy,
+diff --git a/drivers/media/platform/qcom/camss/camss-csiphy-3ph-1-0.c b/drivers/media/platform/qcom/camss/camss-csiphy-3ph-1-0.c
+index 4154832745525..f3a8625511e1e 100644
+--- a/drivers/media/platform/qcom/camss/camss-csiphy-3ph-1-0.c
++++ b/drivers/media/platform/qcom/camss/camss-csiphy-3ph-1-0.c
+@@ -14,6 +14,7 @@
+ #include <linux/delay.h>
+ #include <linux/interrupt.h>
+ #include <linux/io.h>
++#include <linux/media-bus-format.h>
+ 
+ #define CSIPHY_3PH_LNn_CFG1(n)			(0x000 + 0x100 * (n))
+ #define CSIPHY_3PH_LNn_CFG1_SWI_REC_DLY_PRG	(BIT(7) | BIT(6))
+@@ -993,13 +994,22 @@ static void csiphy_gen2_config_lanes(struct csiphy_device *csiphy,
+ 
+ static u8 csiphy_get_lane_mask(struct csiphy_lanes_cfg *lane_cfg)
+ {
+-	u8 lane_mask;
+-	int i;
++	u8 lane_mask = 0;
+ 
+-	lane_mask = CSIPHY_3PH_CMN_CSI_COMMON_CTRL5_CLK_ENABLE;
++	switch (lane_cfg->phy_cfg) {
++	case V4L2_MBUS_CSI2_CPHY:
++		for (int i = 0; i < lane_cfg->num_data; i++)
++			lane_mask |= (1 << lane_cfg->data[i].pos) + 1;
++		break;
++	case V4L2_MBUS_CSI2_DPHY:
++		lane_mask = CSIPHY_3PH_CMN_CSI_COMMON_CTRL5_CLK_ENABLE;
+ 
+-	for (i = 0; i < lane_cfg->num_data; i++)
+-		lane_mask |= 1 << lane_cfg->data[i].pos;
++		for (int i = 0; i < lane_cfg->num_data; i++)
++			lane_mask |= 1 << lane_cfg->data[i].pos;
++		break;
++	default:
++		break;
++	}
+ 
+ 	return lane_mask;
+ }
+@@ -1027,10 +1037,11 @@ static bool csiphy_is_gen2(u32 version)
+ 	return ret;
+ }
+ 
+-static void csiphy_lanes_enable(struct csiphy_device *csiphy,
+-				struct csiphy_config *cfg,
+-				s64 link_freq, u8 lane_mask)
++static int csiphy_lanes_enable(struct csiphy_device *csiphy,
++			       struct csiphy_config *cfg,
++			       s64 link_freq, u8 lane_mask)
+ {
++	struct device *dev = csiphy->camss->dev;
+ 	struct csiphy_lanes_cfg *c = &cfg->csi2->lane_cfg;
+ 	struct csiphy_device_regs *regs = csiphy->regs;
+ 	u8 settle_cnt;
+@@ -1039,9 +1050,23 @@ static void csiphy_lanes_enable(struct csiphy_device *csiphy,
+ 
+ 	settle_cnt = csiphy_settle_cnt_calc(link_freq, csiphy->timer_clk_rate);
+ 
+-	val = CSIPHY_3PH_CMN_CSI_COMMON_CTRL5_CLK_ENABLE;
+-	for (i = 0; i < c->num_data; i++)
+-		val |= BIT(c->data[i].pos * 2);
++	val = 0;
++
++	switch (c->phy_cfg) {
++	case V4L2_MBUS_CSI2_CPHY:
++		for (i = 0; i < c->num_data; i++)
++			val |= BIT((c->data[i].pos * 2) + 1);
++		break;
++	case V4L2_MBUS_CSI2_DPHY:
++		val = CSIPHY_3PH_CMN_CSI_COMMON_CTRL5_CLK_ENABLE;
++
++		for (i = 0; i < c->num_data; i++)
++			val |= BIT(c->data[i].pos * 2);
++		break;
++	default:
++		dev_err(dev, "Unsupported bus type %d\n", c->phy_cfg);
++		return -EINVAL;
++	}
+ 
+ 	writel_relaxed(val, csiphy->base +
+ 		       CSIPHY_3PH_CMN_CSI_COMMON_CTRLn(regs->offset, 5));
+@@ -1068,6 +1093,8 @@ static void csiphy_lanes_enable(struct csiphy_device *csiphy,
+ 		writel_relaxed(0, csiphy->base +
+ 			       CSIPHY_3PH_CMN_CSI_COMMON_CTRLn(regs->offset, i));
+ 	}
++
++	return 0;
+ }
+ 
+ static void csiphy_lanes_disable(struct csiphy_device *csiphy,
+diff --git a/drivers/media/platform/qcom/camss/camss-csiphy.c b/drivers/media/platform/qcom/camss/camss-csiphy.c
+index 62623393f4144..08dd238e52799 100644
+--- a/drivers/media/platform/qcom/camss/camss-csiphy.c
++++ b/drivers/media/platform/qcom/camss/camss-csiphy.c
+@@ -295,9 +295,7 @@ static int csiphy_stream_on(struct csiphy_device *csiphy)
+ 		wmb();
+ 	}
+ 
+-	csiphy->res->hw_ops->lanes_enable(csiphy, cfg, link_freq, lane_mask);
+-
+-	return 0;
++	return csiphy->res->hw_ops->lanes_enable(csiphy, cfg, link_freq, lane_mask);
+ }
+ 
+ /*
+diff --git a/drivers/media/platform/qcom/camss/camss-csiphy.h b/drivers/media/platform/qcom/camss/camss-csiphy.h
+index d198171700e73..21cf2ce931c1d 100644
+--- a/drivers/media/platform/qcom/camss/camss-csiphy.h
++++ b/drivers/media/platform/qcom/camss/camss-csiphy.h
+@@ -73,9 +73,9 @@ struct csiphy_hw_ops {
+ 	void (*hw_version_read)(struct csiphy_device *csiphy,
+ 				struct device *dev);
+ 	void (*reset)(struct csiphy_device *csiphy);
+-	void (*lanes_enable)(struct csiphy_device *csiphy,
+-			     struct csiphy_config *cfg,
+-			     s64 link_freq, u8 lane_mask);
++	int (*lanes_enable)(struct csiphy_device *csiphy,
++			    struct csiphy_config *cfg,
++			    s64 link_freq, u8 lane_mask);
+ 	void (*lanes_disable)(struct csiphy_device *csiphy,
+ 			      struct csiphy_config *cfg);
+ 	irqreturn_t (*isr)(int irq, void *dev);
 
 -- 
-Best wishes,
-Vladimir
+2.51.0
+
+
