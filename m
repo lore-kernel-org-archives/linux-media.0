@@ -1,894 +1,272 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D840730C601;
-	Mon, 19 Jan 2026 10:43:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E09853559F9;
+	Mon, 19 Jan 2026 10:53:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768819417; cv=none; b=iIQd/2t9gVXVuIm11WF+PM3Um6B84PsB0iPJP5JKBToO0i+hQReiMVcHth7mx8UgdwzBy6XANx4u4LW/EXaFhQuhENQkZi6JW/yJCZlqQMBizg12ysPz0gdmsr9UOB+SchL0A3KLtZ88wv0doQQ0vvfvAdQDLMz6f3HEgBcRalU=
+	t=1768819997; cv=none; b=i8yaU4iWvh8XTrznHmPPiICPJ6910PyPMvzeetYdDgc45MtK+7gC2UIjFCvBhlWcKPULqWyxxwq8ZF8OR+Ner271TV6QgZKfhq4I8j8lq5QB+GidxWHpBCPkhI/Y79d8k1iZ1z3qztXDxNk4baqEPsESI3FKAWgF6Yuxs5pq8Wk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768819417; c=relaxed/simple;
-	bh=WQonZOJ5nPo7RV9ldxH5zMrJc9mTRLHuBK1HkqZ5xM8=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=rsJQ7dcZ59sKJmHokKKIFFs4vTFP6cYvwffn26EDDIcGx8613MZmpwwBBvWDsbIFO/CC5lNvdTB7etEKYcKFQsGny/UVsXWAU3HUla+vPfkrNFeDC50Jiv6tKoNRM77iokUMXvQPG4NiaiZ8ykRfIjNl9OMncjxdKXLZeWcFP8c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Y+V5e/Zu; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1768819997; c=relaxed/simple;
+	bh=1q27yzMVmLBdhU4D/EWhJZCqgMjxahH/mYESJWghn8I=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=i8i0n+tuiWEkXMpUW4bv49h8NmP0FjNhMoqEfRuSyzeA5+belopAfQTDLCXW9VRqzQAlcbFiU5XK4cJdZOSRpwnePscanI8eMI3mmmdL4YwM6X2qPro4SnkDjps1+Jz50HNDjeOXCiLxKgE3paExfnUU9MvvS+5b4I1UY/HyyTw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=OpdkTsQs; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Y+V5e/Zu"
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 9CB4AC19425;
-	Mon, 19 Jan 2026 10:43:37 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="OpdkTsQs"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C06F1C19422;
+	Mon, 19 Jan 2026 10:53:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1768819417;
-	bh=WQonZOJ5nPo7RV9ldxH5zMrJc9mTRLHuBK1HkqZ5xM8=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To:From;
-	b=Y+V5e/ZuHsMrof7R2yWrqqsOYdM/Ccy20o5JifVqItRf1uSPQUfPtYj0A4TOQtQWt
-	 6HjAg381ttYJjuQ+NIA11EDruqOFK70aGZ8q/1C52ibRy1+nZwxzowyaNFESpzBV7l
-	 vAaaKRzrY6IMZZgsmrnCWrYaqojECnXROY8H3S37OAhUMmlNdgalg6O3jcin+n75Jj
-	 tXVsIayiBzqTozOGX+q+AgSQoLf6awT+7HUkNim5Bc7qs3rnFBRFQ6mDJ7/4NbpRfG
-	 eeWgGdLmHK+ct3fILqaK2j4fJICEBTvrpFFbXgbImyrLgJd+xRz6Z8WY0jPUZPiCIG
-	 6ctnUNusX/a/w==
-Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8A53ECCF2DB;
-	Mon, 19 Jan 2026 10:43:37 +0000 (UTC)
-From: Michael Riesch via B4 Relay <devnull+michael.riesch.collabora.com@kernel.org>
-Date: Mon, 19 Jan 2026 11:43:36 +0100
-Subject: [PATCH v7 2/3] media: synopsys: add driver for the designware mipi
- csi-2 receiver
+	s=k20201202; t=1768819996;
+	bh=1q27yzMVmLBdhU4D/EWhJZCqgMjxahH/mYESJWghn8I=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=OpdkTsQsAByKSZOuH5DOP1PFuu7t9GqCW2+xZDZ4wPjOB+LfhqU7I4kx0h1PA0bVc
+	 sQvjJt+cbJxzgGXazSGQxw2vNNz8u6+MDRTkjAl+F8eDoa90tjt3DxdRlTHpFH+4zO
+	 ZhXJddMFtauS+Vg79rL4DHBp9AMLJlHZruQvY18G1yiREFBVPlLHGmr7NvBXAnUd73
+	 0vUmDNy0Mp6GiPsvlWsUc2E3oXtx+u42qwjhNDIoRwpVDZ9O0Rmx9/vH5xWi+bI7+z
+	 g9p6a9Mxgo7Dy5L8zJD5xKf0dNxrUJMFJDSMRzhdhw02wJpTluutGC5JS1BwSXoJXC
+	 PHUVE3zE5n0vg==
+Date: Mon, 19 Jan 2026 12:53:12 +0200
+From: Leon Romanovsky <leon@kernel.org>
+To: Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>
+Cc: Thomas =?iso-8859-1?Q?Hellstr=F6m?= <thomas.hellstrom@linux.intel.com>,
+	Sumit Semwal <sumit.semwal@linaro.org>,
+	Alex Deucher <alexander.deucher@amd.com>,
+	David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
+	Gerd Hoffmann <kraxel@redhat.com>,
+	Dmitry Osipenko <dmitry.osipenko@collabora.com>,
+	Gurchetan Singh <gurchetansingh@chromium.org>,
+	Chia-I Wu <olvaffe@gmail.com>,
+	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+	Maxime Ripard <mripard@kernel.org>,
+	Thomas Zimmermann <tzimmermann@suse.de>,
+	Lucas De Marchi <lucas.demarchi@intel.com>,
+	Rodrigo Vivi <rodrigo.vivi@intel.com>,
+	Jason Gunthorpe <jgg@ziepe.ca>, Kevin Tian <kevin.tian@intel.com>,
+	Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
+	Robin Murphy <robin.murphy@arm.com>,
+	Alex Williamson <alex@shazbot.org>, linux-media@vger.kernel.org,
+	dri-devel@lists.freedesktop.org, linaro-mm-sig@lists.linaro.org,
+	linux-kernel@vger.kernel.org, amd-gfx@lists.freedesktop.org,
+	virtualization@lists.linux.dev, intel-xe@lists.freedesktop.org,
+	linux-rdma@vger.kernel.org, iommu@lists.linux.dev,
+	kvm@vger.kernel.org
+Subject: Re: [PATCH v2 0/4] dma-buf: document revoke mechanism to invalidate
+ shared buffers
+Message-ID: <20260119105312.GJ13201@unreal>
+References: <20260118-dmabuf-revoke-v2-0-a03bb27c0875@nvidia.com>
+ <f115c91bbc9c6087d8b32917b9e24e3363a91f33.camel@linux.intel.com>
+ <20260119075229.GE13201@unreal>
+ <9112a605d2ee382e83b84b50c052dd9e4a79a364.camel@linux.intel.com>
+ <78035892-758d-4104-9dd5-aed9a045d481@amd.com>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20251114-rockchip-mipi-receiver-v7-2-42ff419f9b51@collabora.com>
-References: <20251114-rockchip-mipi-receiver-v7-0-42ff419f9b51@collabora.com>
-In-Reply-To: <20251114-rockchip-mipi-receiver-v7-0-42ff419f9b51@collabora.com>
-To: Michael Riesch <michael.riesch@collabora.com>, 
- Chaoyi Chen <chaoyi.chen@rock-chips.com>, 
- Kever Yang <kever.yang@rock-chips.com>, Frank Li <Frank.li@nxp.com>, 
- Mehdi Djait <mehdi.djait@linux.intel.com>, 
- Bryan O'Donoghue <bryan.odonoghue@linaro.org>, 
- Laurent Pinchart <laurent.pinchart@ideasonboard.com>, 
- Hans Verkuil <hverkuil@kernel.org>, 
- Mauro Carvalho Chehab <mchehab@kernel.org>, Rob Herring <robh@kernel.org>, 
- Krzysztof Kozlowski <krzk+dt@kernel.org>, 
- Conor Dooley <conor+dt@kernel.org>, Heiko Stuebner <heiko@sntech.de>, 
- Philipp Zabel <p.zabel@pengutronix.de>, 
- Sebastian Reichel <sebastian.reichel@collabora.com>, 
- Nicolas Dufresne <nicolas.dufresne@collabora.com>, 
- Collabora Kernel Team <kernel@collabora.com>, 
- Sakari Ailus <sakari.ailus@linux.intel.com>
-Cc: linux-media@vger.kernel.org, devicetree@vger.kernel.org, 
- linux-arm-kernel@lists.infradead.org, linux-rockchip@lists.infradead.org, 
- linux-kernel@vger.kernel.org, Michael Riesch <michael.riesch@collabora.com>
-X-Mailer: b4 0.12.0
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1768819415; l=22991;
- i=michael.riesch@collabora.com; s=20250410; h=from:subject:message-id;
- bh=3yCmy0NzELUP5Gjou24Su1sLh99ZlxQMI14UPr5aAjI=;
- b=Dtdl8ZyUfnijPlLJ7lQffeOgKsA23lnJOGmAJlahy1hLE1pvETCQS9zJiYjplCIPfqFOcD8Ku
- QYj6OFBaEHGCkRzo5E0KLRgeq532F7pJTooMl8RTRoTDMcWOoVP0JH8
-X-Developer-Key: i=michael.riesch@collabora.com; a=ed25519;
- pk=+MWX1fffLFZtTPG/I6XdYm/+OSvpRE8D9evQaWbiN04=
-X-Endpoint-Received: by B4 Relay for michael.riesch@collabora.com/20250410
- with auth_id=371
-X-Original-From: Michael Riesch <michael.riesch@collabora.com>
-Reply-To: michael.riesch@collabora.com
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <78035892-758d-4104-9dd5-aed9a045d481@amd.com>
 
-From: Michael Riesch <michael.riesch@collabora.com>
+On Mon, Jan 19, 2026 at 11:20:46AM +0100, Christian König wrote:
+> On 1/19/26 10:27, Thomas Hellström wrote:
+> > On Mon, 2026-01-19 at 09:52 +0200, Leon Romanovsky wrote:
+> >> On Sun, Jan 18, 2026 at 03:16:25PM +0100, Thomas Hellström wrote:
+> >>> Hi, Leon,
+> >>>
+> >>> On Sun, 2026-01-18 at 14:08 +0200, Leon Romanovsky wrote:
+> >>>> Changelog:
+> >>>> v2:
+> >>>>  * Changed series to document the revoke semantics instead of
+> >>>>    implementing it.
+> >>>> v1:
+> >>>> https://patch.msgid.link/20260111-dmabuf-revoke-v1-0-fb4bcc8c259b@nvidia.com
+> >>>>
+> >>>> -----------------------------------------------------------------
+> >>>> ----
+> >>>> ----
+> >>>> This series documents a dma-buf “revoke” mechanism: to allow a
+> >>>> dma-
+> >>>> buf
+> >>>> exporter to explicitly invalidate (“kill”) a shared buffer after
+> >>>> it
+> >>>> has
+> >>>> been distributed to importers, so that further CPU and device
+> >>>> access
+> >>>> is
+> >>>> prevented and importers reliably observe failure.
+> >>>>
+> >>>> The change in this series is to properly document and use
+> >>>> existing
+> >>>> core
+> >>>> “revoked” state on the dma-buf object and a corresponding
+> >>>> exporter-
+> >>>> triggered
+> >>>> revoke operation. Once a dma-buf is revoked, new access paths are
+> >>>> blocked so
+> >>>> that attempts to DMA-map, vmap, or mmap the buffer fail in a
+> >>>> consistent way.
+> >>>
+> >>> This sounds like it does not match how many GPU-drivers use the
+> >>> move_notify() callback.
+> >>
+> >> No change for them.
+> >>
+> >>>
+> >>> move_notify() would typically invalidate any device maps and any
+> >>> asynchronous part of that invalidation would be complete when the
+> >>> dma-
+> >>> buf's reservation object becomes idle WRT DMA_RESV_USAGE_BOOKKEEP
+> >>> fences.
+> >>
+> >> This part has not changed and remains the same for the revocation
+> >> flow as well.
+> >>
+> >>>
+> >>> However, the importer could, after obtaining the resv lock, obtain
+> >>> a
+> >>> new map using dma_buf_map_attachment(), and I'd assume the CPU maps
+> >>> work in the same way, I.E. move_notify() does not *permanently*
+> >>> revoke
+> >>> importer access.
+> >>
+> >> This part diverges by design and is documented to match revoke
+> >> semantics.  
+> 
+> Please don't document that. This is specific exporter behavior and doesn't belong into DMA-buf at all.
+> 
+> >> It defines what must occur after the exporter requests that the
+> >> buffer be  
+> >> "killed". An importer that follows revoke semantics will not attempt
+> >> to call  
+> >> dma_buf_map_attachment(), and the exporter will block any remapping
+> >> attempts  
+> >> regardless. See the priv->revoked flag in the VFIO exporter.
+> 
+> I have to clearly reject that.
+> 
+> It's the job of the exporter to reject such calls with an appropriate error and not the importer to not make them.
 
-The Synopsys DesignWare MIPI CSI-2 Receiver is a CSI-2 bridge with
-one input port and one output port. It receives the data with the
-help of an external MIPI PHY (C-PHY or D-PHY) and passes it to e.g.,
-the Rockchip Video Capture (VICAP) block on recent Rockchip SoCs.
+Current code behaves as expected: the exporter rejects mapping attempts after
+.invalidate_mapping is called, and handles the logic internally.
 
-Add a V4L2 subdevice driver for this unit.
+However, it is not clear what exactly you are proposing. In v1 — which you
+objected to — I suggested negotiating revoke support along with the logic for
+rejecting mappings in the dma-buf core. In this version, you object to placing
+the rejection logic in the exporter.
 
-Signed-off-by: Michael Riesch <michael.riesch@wolfvision.net>
-Reviewed-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-Reviewed-by: Mehdi Djait <mehdi.djait@linux.intel.com>
-Signed-off-by: Michael Riesch <michael.riesch@collabora.com>
----
- MAINTAINERS                                        |   1 +
- drivers/media/platform/synopsys/Kconfig            |   1 +
- drivers/media/platform/synopsys/Makefile           |   1 +
- .../media/platform/synopsys/dw-mipi-csi2/Kconfig   |  17 +
- .../media/platform/synopsys/dw-mipi-csi2/Makefile  |   2 +
- .../synopsys/dw-mipi-csi2/dw-mipi-csi2rx.c         | 724 +++++++++++++++++++++
- 6 files changed, 746 insertions(+)
-
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 1d1589feaf95..87216b7b292a 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -25369,6 +25369,7 @@ M:	Michael Riesch <michael.riesch@collabora.com>
- L:	linux-media@vger.kernel.org
- S:	Maintained
- F:	Documentation/devicetree/bindings/media/rockchip,rk3568-mipi-csi2.yaml
-+F:	drivers/media/platform/synopsys/dw-mipi-csi2/
- 
- SYNOPSYS DESIGNWARE MMC/SD/SDIO DRIVER
- M:	Jaehoon Chung <jh80.chung@samsung.com>
-diff --git a/drivers/media/platform/synopsys/Kconfig b/drivers/media/platform/synopsys/Kconfig
-index 4fd521f78425..7dbe5cbdd2cf 100644
---- a/drivers/media/platform/synopsys/Kconfig
-+++ b/drivers/media/platform/synopsys/Kconfig
-@@ -1,3 +1,4 @@
- # SPDX-License-Identifier: GPL-2.0-only
- 
-+source "drivers/media/platform/synopsys/dw-mipi-csi2/Kconfig"
- source "drivers/media/platform/synopsys/hdmirx/Kconfig"
-diff --git a/drivers/media/platform/synopsys/Makefile b/drivers/media/platform/synopsys/Makefile
-index 3b12c574dd67..30951176b029 100644
---- a/drivers/media/platform/synopsys/Makefile
-+++ b/drivers/media/platform/synopsys/Makefile
-@@ -1,2 +1,3 @@
- # SPDX-License-Identifier: GPL-2.0-only
-+obj-y += dw-mipi-csi2/
- obj-y += hdmirx/
-diff --git a/drivers/media/platform/synopsys/dw-mipi-csi2/Kconfig b/drivers/media/platform/synopsys/dw-mipi-csi2/Kconfig
-new file mode 100644
-index 000000000000..fd555fb8faf7
---- /dev/null
-+++ b/drivers/media/platform/synopsys/dw-mipi-csi2/Kconfig
-@@ -0,0 +1,17 @@
-+config VIDEO_DW_MIPI_CSI2RX
-+	tristate "Synopsys DesignWare MIPI CSI-2 Receiver"
-+	depends on VIDEO_DEV
-+	depends on V4L_PLATFORM_DRIVERS
-+	depends on PM && COMMON_CLK
-+	select MEDIA_CONTROLLER
-+	select V4L2_FWNODE
-+	select VIDEO_V4L2_SUBDEV_API
-+	help
-+	  The Synopsys DesignWare MIPI CSI-2 Receiver is a CSI-2 bridge with
-+	  one input port and one output port. It receives the data with the
-+	  help of an external MIPI PHY (C-PHY or D-PHY) and passes it to e.g.,
-+	  the Rockchip Video Capture (VICAP) block on recent Rockchip SoCs.
-+	  This is a driver for this unit.
-+
-+	  To compile this driver as a module, choose M here: the module
-+	  will be called dw-mipi-csi2rx.
-diff --git a/drivers/media/platform/synopsys/dw-mipi-csi2/Makefile b/drivers/media/platform/synopsys/dw-mipi-csi2/Makefile
-new file mode 100644
-index 000000000000..6fad8dfc5ca0
---- /dev/null
-+++ b/drivers/media/platform/synopsys/dw-mipi-csi2/Makefile
-@@ -0,0 +1,2 @@
-+# SPDX-License-Identifier: GPL-2.0
-+obj-$(CONFIG_VIDEO_DW_MIPI_CSI2RX) += dw-mipi-csi2rx.o
-diff --git a/drivers/media/platform/synopsys/dw-mipi-csi2/dw-mipi-csi2rx.c b/drivers/media/platform/synopsys/dw-mipi-csi2/dw-mipi-csi2rx.c
-new file mode 100644
-index 000000000000..b665863f9f42
---- /dev/null
-+++ b/drivers/media/platform/synopsys/dw-mipi-csi2/dw-mipi-csi2rx.c
-@@ -0,0 +1,724 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Synopsys DesignWare MIPI CSI-2 Receiver Driver
-+ *
-+ * Copyright (C) 2019 Rockchip Electronics Co., Ltd.
-+ * Copyright (C) 2025 Michael Riesch <michael.riesch@wolfvision.net>
-+ * Copyright (C) 2026 Collabora, Ltd.
-+ */
-+
-+#include <linux/clk.h>
-+#include <linux/delay.h>
-+#include <linux/io.h>
-+#include <linux/module.h>
-+#include <linux/of.h>
-+#include <linux/phy/phy.h>
-+#include <linux/platform_device.h>
-+#include <linux/pm_runtime.h>
-+#include <linux/property.h>
-+#include <linux/reset.h>
-+
-+#include <media/mipi-csi2.h>
-+#include <media/v4l2-ctrls.h>
-+#include <media/v4l2-fwnode.h>
-+#include <media/v4l2-mc.h>
-+#include <media/v4l2-subdev.h>
-+
-+#define DW_MIPI_CSI2RX_N_LANES		0x04
-+#define DW_MIPI_CSI2RX_RESETN		0x10
-+#define DW_MIPI_CSI2RX_PHY_STATE	0x14
-+#define DW_MIPI_CSI2RX_ERR1		0x20
-+#define DW_MIPI_CSI2RX_ERR2		0x24
-+#define DW_MIPI_CSI2RX_MSK1		0x28
-+#define DW_MIPI_CSI2RX_MSK2		0x2c
-+#define DW_MIPI_CSI2RX_CONTROL		0x40
-+
-+#define SW_CPHY_EN(x)		((x) << 0)
-+#define SW_DSI_EN(x)		((x) << 4)
-+#define SW_DATATYPE_FS(x)	((x) << 8)
-+#define SW_DATATYPE_FE(x)	((x) << 14)
-+#define SW_DATATYPE_LS(x)	((x) << 20)
-+#define SW_DATATYPE_LE(x)	((x) << 26)
-+
-+#define DW_MIPI_CSI2RX_CLKS_MAX	1
-+
-+enum {
-+	DW_MIPI_CSI2RX_PAD_SINK,
-+	DW_MIPI_CSI2RX_PAD_SRC,
-+	DW_MIPI_CSI2RX_PAD_MAX,
-+};
-+
-+struct dw_mipi_csi2rx_format {
-+	u32 code;
-+	u8 depth;
-+	u8 csi_dt;
-+};
-+
-+struct dw_mipi_csi2rx_device {
-+	struct device *dev;
-+
-+	void __iomem *base_addr;
-+	struct clk_bulk_data *clks;
-+	unsigned int clks_num;
-+	struct phy *phy;
-+	struct reset_control *reset;
-+
-+	const struct dw_mipi_csi2rx_format *formats;
-+	unsigned int formats_num;
-+
-+	struct media_pad pads[DW_MIPI_CSI2RX_PAD_MAX];
-+	struct v4l2_async_notifier notifier;
-+	struct v4l2_subdev sd;
-+
-+	enum v4l2_mbus_type bus_type;
-+	u32 lanes_num;
-+};
-+
-+static const struct v4l2_mbus_framefmt default_format = {
-+	.width = 3840,
-+	.height = 2160,
-+	.code = MEDIA_BUS_FMT_SRGGB10_1X10,
-+	.field = V4L2_FIELD_NONE,
-+	.colorspace = V4L2_COLORSPACE_RAW,
-+	.ycbcr_enc = V4L2_YCBCR_ENC_601,
-+	.quantization = V4L2_QUANTIZATION_FULL_RANGE,
-+	.xfer_func = V4L2_XFER_FUNC_NONE,
-+};
-+
-+static const struct dw_mipi_csi2rx_format formats[] = {
-+	/* YUV formats */
-+	{
-+		.code = MEDIA_BUS_FMT_YUYV8_1X16,
-+		.depth = 16,
-+		.csi_dt = MIPI_CSI2_DT_YUV422_8B,
-+	},
-+	{
-+		.code = MEDIA_BUS_FMT_UYVY8_1X16,
-+		.depth = 16,
-+		.csi_dt = MIPI_CSI2_DT_YUV422_8B,
-+	},
-+	{
-+		.code = MEDIA_BUS_FMT_YVYU8_1X16,
-+		.depth = 16,
-+		.csi_dt = MIPI_CSI2_DT_YUV422_8B,
-+	},
-+	{
-+		.code = MEDIA_BUS_FMT_VYUY8_1X16,
-+		.depth = 16,
-+		.csi_dt = MIPI_CSI2_DT_YUV422_8B,
-+	},
-+	/* RGB formats */
-+	{
-+		.code = MEDIA_BUS_FMT_RGB888_1X24,
-+		.depth = 24,
-+		.csi_dt = MIPI_CSI2_DT_RGB888,
-+	},
-+	{
-+		.code = MEDIA_BUS_FMT_BGR888_1X24,
-+		.depth = 24,
-+		.csi_dt = MIPI_CSI2_DT_RGB888,
-+	},
-+	/* Bayer formats */
-+	{
-+		.code = MEDIA_BUS_FMT_SBGGR8_1X8,
-+		.depth = 8,
-+		.csi_dt = MIPI_CSI2_DT_RAW8,
-+	},
-+	{
-+		.code = MEDIA_BUS_FMT_SGBRG8_1X8,
-+		.depth = 8,
-+		.csi_dt = MIPI_CSI2_DT_RAW8,
-+	},
-+	{
-+		.code = MEDIA_BUS_FMT_SGRBG8_1X8,
-+		.depth = 8,
-+		.csi_dt = MIPI_CSI2_DT_RAW8,
-+	},
-+	{
-+		.code = MEDIA_BUS_FMT_SRGGB8_1X8,
-+		.depth = 8,
-+		.csi_dt = MIPI_CSI2_DT_RAW8,
-+	},
-+	{
-+		.code = MEDIA_BUS_FMT_SBGGR10_1X10,
-+		.depth = 10,
-+		.csi_dt = MIPI_CSI2_DT_RAW10,
-+	},
-+	{
-+		.code = MEDIA_BUS_FMT_SGBRG10_1X10,
-+		.depth = 10,
-+		.csi_dt = MIPI_CSI2_DT_RAW10,
-+	},
-+	{
-+		.code = MEDIA_BUS_FMT_SGRBG10_1X10,
-+		.depth = 10,
-+		.csi_dt = MIPI_CSI2_DT_RAW10,
-+	},
-+	{
-+		.code = MEDIA_BUS_FMT_SRGGB10_1X10,
-+		.depth = 10,
-+		.csi_dt = MIPI_CSI2_DT_RAW10,
-+	},
-+	{
-+		.code = MEDIA_BUS_FMT_SBGGR12_1X12,
-+		.depth = 12,
-+		.csi_dt = MIPI_CSI2_DT_RAW12,
-+	},
-+	{
-+		.code = MEDIA_BUS_FMT_SGBRG12_1X12,
-+		.depth = 12,
-+		.csi_dt = MIPI_CSI2_DT_RAW12,
-+	},
-+	{
-+		.code = MEDIA_BUS_FMT_SGRBG12_1X12,
-+		.depth = 12,
-+		.csi_dt = MIPI_CSI2_DT_RAW12,
-+	},
-+	{
-+		.code = MEDIA_BUS_FMT_SRGGB12_1X12,
-+		.depth = 12,
-+		.csi_dt = MIPI_CSI2_DT_RAW12,
-+	},
-+};
-+
-+static inline struct dw_mipi_csi2rx_device *to_csi2(struct v4l2_subdev *sd)
-+{
-+	return container_of(sd, struct dw_mipi_csi2rx_device, sd);
-+}
-+
-+static inline void dw_mipi_csi2rx_write(struct dw_mipi_csi2rx_device *csi2,
-+					unsigned int addr, u32 val)
-+{
-+	writel(val, csi2->base_addr + addr);
-+}
-+
-+static inline u32 dw_mipi_csi2rx_read(struct dw_mipi_csi2rx_device *csi2,
-+				      unsigned int addr)
-+{
-+	return readl(csi2->base_addr + addr);
-+}
-+
-+static const struct dw_mipi_csi2rx_format *
-+dw_mipi_csi2rx_find_format(struct dw_mipi_csi2rx_device *csi2, u32 mbus_code)
-+{
-+	WARN_ON(csi2->formats_num == 0);
-+
-+	for (unsigned int i = 0; i < csi2->formats_num; i++) {
-+		const struct dw_mipi_csi2rx_format *format = &csi2->formats[i];
-+
-+		if (format->code == mbus_code)
-+			return format;
-+	}
-+
-+	return NULL;
-+}
-+
-+static int dw_mipi_csi2rx_start(struct dw_mipi_csi2rx_device *csi2)
-+{
-+	struct media_pad *source_pad;
-+	union phy_configure_opts opts;
-+	u32 lanes = csi2->lanes_num;
-+	u32 control = 0;
-+	s64 link_freq;
-+	int ret;
-+
-+	if (lanes < 1 || lanes > 4)
-+		return -EINVAL;
-+
-+	source_pad = media_pad_remote_pad_unique(
-+		&csi2->pads[DW_MIPI_CSI2RX_PAD_SINK]);
-+	if (IS_ERR(source_pad))
-+		return PTR_ERR(source_pad);
-+
-+	/* set mult and div to 0, thus completely rely on V4L2_CID_LINK_FREQ */
-+	link_freq = v4l2_get_link_freq(source_pad, 0, 0);
-+	if (link_freq < 0)
-+		return link_freq;
-+
-+	switch (csi2->bus_type) {
-+	case V4L2_MBUS_CSI2_DPHY:
-+		struct phy_configure_opts_mipi_dphy *cfg = &opts.mipi_dphy;
-+
-+		ret = phy_mipi_dphy_get_default_config_for_hsclk(link_freq * 2,
-+								 lanes, cfg);
-+		if (ret)
-+			return ret;
-+
-+		ret = phy_set_mode(csi2->phy, PHY_MODE_MIPI_DPHY);
-+		if (ret)
-+			return ret;
-+
-+		ret = phy_configure(csi2->phy, &opts);
-+		if (ret)
-+			return ret;
-+
-+		control |= SW_CPHY_EN(0);
-+		break;
-+
-+	case V4L2_MBUS_CSI2_CPHY:
-+		/* TODO: implement CPHY configuration */
-+		return -EOPNOTSUPP;
-+	default:
-+		return -EINVAL;
-+	}
-+
-+	control |= SW_DATATYPE_FS(0x00) | SW_DATATYPE_FE(0x01) |
-+		   SW_DATATYPE_LS(0x02) | SW_DATATYPE_LE(0x03);
-+
-+	dw_mipi_csi2rx_write(csi2, DW_MIPI_CSI2RX_N_LANES, lanes - 1);
-+	dw_mipi_csi2rx_write(csi2, DW_MIPI_CSI2RX_CONTROL, control);
-+	dw_mipi_csi2rx_write(csi2, DW_MIPI_CSI2RX_RESETN, 1);
-+
-+	return phy_power_on(csi2->phy);
-+}
-+
-+static void dw_mipi_csi2rx_stop(struct dw_mipi_csi2rx_device *csi2)
-+{
-+	phy_power_off(csi2->phy);
-+
-+	dw_mipi_csi2rx_write(csi2, DW_MIPI_CSI2RX_RESETN, 0);
-+	dw_mipi_csi2rx_write(csi2, DW_MIPI_CSI2RX_MSK1, ~0);
-+	dw_mipi_csi2rx_write(csi2, DW_MIPI_CSI2RX_MSK2, ~0);
-+}
-+
-+static const struct media_entity_operations dw_mipi_csi2rx_media_ops = {
-+	.link_validate = v4l2_subdev_link_validate,
-+};
-+
-+static int
-+dw_mipi_csi2rx_enum_mbus_code(struct v4l2_subdev *sd,
-+			      struct v4l2_subdev_state *sd_state,
-+			      struct v4l2_subdev_mbus_code_enum *code)
-+{
-+	struct dw_mipi_csi2rx_device *csi2 = to_csi2(sd);
-+
-+	switch (code->pad) {
-+	case DW_MIPI_CSI2RX_PAD_SRC:
-+		const struct v4l2_mbus_framefmt *sink_fmt;
-+
-+		if (code->index)
-+			return -EINVAL;
-+
-+		sink_fmt = v4l2_subdev_state_get_format(
-+			sd_state, DW_MIPI_CSI2RX_PAD_SINK);
-+		code->code = sink_fmt->code;
-+
-+		return 0;
-+	case DW_MIPI_CSI2RX_PAD_SINK:
-+		if (code->index > csi2->formats_num)
-+			return -EINVAL;
-+
-+		code->code = csi2->formats[code->index].code;
-+		return 0;
-+	default:
-+		return -EINVAL;
-+	}
-+}
-+
-+static int dw_mipi_csi2rx_set_fmt(struct v4l2_subdev *sd,
-+				  struct v4l2_subdev_state *state,
-+				  struct v4l2_subdev_format *format)
-+{
-+	struct dw_mipi_csi2rx_device *csi2 = to_csi2(sd);
-+	const struct dw_mipi_csi2rx_format *fmt;
-+	struct v4l2_mbus_framefmt *sink, *src;
-+
-+	/* the format on the source pad always matches the sink pad */
-+	if (format->pad == DW_MIPI_CSI2RX_PAD_SRC)
-+		return v4l2_subdev_get_fmt(sd, state, format);
-+
-+	sink = v4l2_subdev_state_get_format(state, format->pad, format->stream);
-+	if (!sink)
-+		return -EINVAL;
-+
-+	fmt = dw_mipi_csi2rx_find_format(csi2, format->format.code);
-+	if (!fmt)
-+		format->format = default_format;
-+
-+	*sink = format->format;
-+
-+	/* propagate the format to the source pad */
-+	src = v4l2_subdev_state_get_opposite_stream_format(state, format->pad,
-+							   format->stream);
-+	if (!src)
-+		return -EINVAL;
-+
-+	*src = *sink;
-+
-+	return 0;
-+}
-+
-+static int dw_mipi_csi2rx_set_routing(struct v4l2_subdev *sd,
-+				      struct v4l2_subdev_state *state,
-+				      enum v4l2_subdev_format_whence which,
-+				      struct v4l2_subdev_krouting *routing)
-+{
-+	int ret;
-+
-+	ret = v4l2_subdev_routing_validate(sd, routing,
-+					   V4L2_SUBDEV_ROUTING_ONLY_1_TO_1);
-+	if (ret)
-+		return ret;
-+
-+	return v4l2_subdev_set_routing_with_fmt(sd, state, routing,
-+						&default_format);
-+}
-+
-+static int dw_mipi_csi2rx_enable_streams(struct v4l2_subdev *sd,
-+					 struct v4l2_subdev_state *state,
-+					 u32 pad, u64 streams_mask)
-+{
-+	struct dw_mipi_csi2rx_device *csi2 = to_csi2(sd);
-+	struct v4l2_subdev *remote_sd;
-+	struct media_pad *sink_pad, *remote_pad;
-+	struct device *dev = csi2->dev;
-+	u64 mask;
-+	int ret;
-+
-+	sink_pad = &sd->entity.pads[DW_MIPI_CSI2RX_PAD_SINK];
-+	remote_pad = media_pad_remote_pad_first(sink_pad);
-+	remote_sd = media_entity_to_v4l2_subdev(remote_pad->entity);
-+
-+	mask = v4l2_subdev_state_xlate_streams(state, DW_MIPI_CSI2RX_PAD_SINK,
-+					       DW_MIPI_CSI2RX_PAD_SRC,
-+					       &streams_mask);
-+
-+	ret = pm_runtime_resume_and_get(dev);
-+	if (ret)
-+		goto err;
-+
-+	ret = dw_mipi_csi2rx_start(csi2);
-+	if (ret) {
-+		dev_err(dev, "failed to enable CSI hardware\n");
-+		goto err_pm_runtime_put;
-+	}
-+
-+	ret = v4l2_subdev_enable_streams(remote_sd, remote_pad->index, mask);
-+	if (ret)
-+		goto err_csi_stop;
-+
-+	return 0;
-+
-+err_csi_stop:
-+	dw_mipi_csi2rx_stop(csi2);
-+err_pm_runtime_put:
-+	pm_runtime_put(dev);
-+err:
-+	return ret;
-+}
-+
-+static int dw_mipi_csi2rx_disable_streams(struct v4l2_subdev *sd,
-+					  struct v4l2_subdev_state *state,
-+					  u32 pad, u64 streams_mask)
-+{
-+	struct dw_mipi_csi2rx_device *csi2 = to_csi2(sd);
-+	struct v4l2_subdev *remote_sd;
-+	struct media_pad *sink_pad, *remote_pad;
-+	struct device *dev = csi2->dev;
-+	u64 mask;
-+	int ret;
-+
-+	sink_pad = &sd->entity.pads[DW_MIPI_CSI2RX_PAD_SINK];
-+	remote_pad = media_pad_remote_pad_first(sink_pad);
-+	remote_sd = media_entity_to_v4l2_subdev(remote_pad->entity);
-+
-+	mask = v4l2_subdev_state_xlate_streams(state, DW_MIPI_CSI2RX_PAD_SINK,
-+					       DW_MIPI_CSI2RX_PAD_SRC,
-+					       &streams_mask);
-+
-+	ret = v4l2_subdev_disable_streams(remote_sd, remote_pad->index, mask);
-+
-+	dw_mipi_csi2rx_stop(csi2);
-+
-+	pm_runtime_put(dev);
-+
-+	return ret;
-+}
-+
-+static const struct v4l2_subdev_pad_ops dw_mipi_csi2rx_pad_ops = {
-+	.enum_mbus_code = dw_mipi_csi2rx_enum_mbus_code,
-+	.get_fmt = v4l2_subdev_get_fmt,
-+	.set_fmt = dw_mipi_csi2rx_set_fmt,
-+	.set_routing = dw_mipi_csi2rx_set_routing,
-+	.enable_streams = dw_mipi_csi2rx_enable_streams,
-+	.disable_streams = dw_mipi_csi2rx_disable_streams,
-+};
-+
-+static const struct v4l2_subdev_ops dw_mipi_csi2rx_ops = {
-+	.pad = &dw_mipi_csi2rx_pad_ops,
-+};
-+
-+static int dw_mipi_csi2rx_init_state(struct v4l2_subdev *sd,
-+				     struct v4l2_subdev_state *state)
-+{
-+	struct v4l2_subdev_route routes[] = {
-+		{
-+			.sink_pad = DW_MIPI_CSI2RX_PAD_SINK,
-+			.sink_stream = 0,
-+			.source_pad = DW_MIPI_CSI2RX_PAD_SRC,
-+			.source_stream = 0,
-+			.flags = V4L2_SUBDEV_ROUTE_FL_ACTIVE,
-+		},
-+	};
-+	struct v4l2_subdev_krouting routing = {
-+		.len_routes = ARRAY_SIZE(routes),
-+		.num_routes = ARRAY_SIZE(routes),
-+		.routes = routes,
-+	};
-+
-+	return v4l2_subdev_set_routing_with_fmt(sd, state, &routing,
-+						&default_format);
-+}
-+
-+static const struct v4l2_subdev_internal_ops dw_mipi_csi2rx_internal_ops = {
-+	.init_state = dw_mipi_csi2rx_init_state,
-+};
-+
-+static int dw_mipi_csi2rx_notifier_bound(struct v4l2_async_notifier *notifier,
-+					 struct v4l2_subdev *sd,
-+					 struct v4l2_async_connection *asd)
-+{
-+	struct dw_mipi_csi2rx_device *csi2 =
-+		container_of(notifier, struct dw_mipi_csi2rx_device, notifier);
-+	struct media_pad *sink_pad = &csi2->pads[DW_MIPI_CSI2RX_PAD_SINK];
-+	int ret;
-+
-+	ret = v4l2_create_fwnode_links_to_pad(sd, sink_pad,
-+					      MEDIA_LNK_FL_ENABLED);
-+	if (ret) {
-+		dev_err(csi2->dev, "failed to link source pad of %s\n",
-+			sd->name);
-+		return ret;
-+	}
-+
-+	return 0;
-+}
-+
-+static const struct v4l2_async_notifier_operations dw_mipi_csi2rx_notifier_ops = {
-+	.bound = dw_mipi_csi2rx_notifier_bound,
-+};
-+
-+static int dw_mipi_csi2rx_register_notifier(struct dw_mipi_csi2rx_device *csi2)
-+{
-+	struct fwnode_handle *ep __free(fwnode_handle) = NULL;
-+	struct v4l2_async_notifier *ntf = &csi2->notifier;
-+	struct v4l2_async_connection *asd;
-+	struct v4l2_fwnode_endpoint vep;
-+	struct v4l2_subdev *sd = &csi2->sd;
-+	struct device *dev = csi2->dev;
-+	int ret;
-+
-+	ep = fwnode_graph_get_endpoint_by_id(dev_fwnode(dev), 0, 0, 0);
-+	if (!ep)
-+		return dev_err_probe(dev, -ENODEV, "failed to get endpoint\n");
-+
-+	vep.bus_type = V4L2_MBUS_UNKNOWN;
-+	ret = v4l2_fwnode_endpoint_parse(ep, &vep);
-+	if (ret)
-+		return dev_err_probe(dev, ret, "failed to parse endpoint\n");
-+
-+	if (vep.bus_type != V4L2_MBUS_CSI2_DPHY &&
-+	    vep.bus_type != V4L2_MBUS_CSI2_CPHY)
-+		return dev_err_probe(dev, -EINVAL,
-+				     "invalid bus type of endpoint\n");
-+
-+	csi2->bus_type = vep.bus_type;
-+	csi2->lanes_num = vep.bus.mipi_csi2.num_data_lanes;
-+
-+	v4l2_async_subdev_nf_init(ntf, sd);
-+	ntf->ops = &dw_mipi_csi2rx_notifier_ops;
-+
-+	asd = v4l2_async_nf_add_fwnode_remote(ntf, ep,
-+					      struct v4l2_async_connection);
-+	if (IS_ERR(asd)) {
-+		ret = PTR_ERR(asd);
-+		goto err_nf_cleanup;
-+	}
-+
-+	ret = v4l2_async_nf_register(ntf);
-+	if (ret) {
-+		ret = dev_err_probe(dev, ret, "failed to register notifier\n");
-+		goto err_nf_cleanup;
-+	}
-+
-+	return 0;
-+
-+err_nf_cleanup:
-+	v4l2_async_nf_cleanup(ntf);
-+
-+	return ret;
-+}
-+
-+static int dw_mipi_csi2rx_register(struct dw_mipi_csi2rx_device *csi2)
-+{
-+	struct media_pad *pads = csi2->pads;
-+	struct v4l2_subdev *sd = &csi2->sd;
-+	int ret;
-+
-+	ret = dw_mipi_csi2rx_register_notifier(csi2);
-+	if (ret)
-+		goto err;
-+
-+	v4l2_subdev_init(sd, &dw_mipi_csi2rx_ops);
-+	sd->dev = csi2->dev;
-+	sd->entity.ops = &dw_mipi_csi2rx_media_ops;
-+	sd->entity.function = MEDIA_ENT_F_VID_IF_BRIDGE;
-+	sd->flags |= V4L2_SUBDEV_FL_HAS_DEVNODE | V4L2_SUBDEV_FL_STREAMS;
-+	sd->internal_ops = &dw_mipi_csi2rx_internal_ops;
-+	snprintf(sd->name, sizeof(sd->name), "dw-mipi-csi2rx %s",
-+		 dev_name(csi2->dev));
-+
-+	pads[DW_MIPI_CSI2RX_PAD_SINK].flags = MEDIA_PAD_FL_SINK |
-+					      MEDIA_PAD_FL_MUST_CONNECT;
-+	pads[DW_MIPI_CSI2RX_PAD_SRC].flags = MEDIA_PAD_FL_SOURCE;
-+	ret = media_entity_pads_init(&sd->entity, DW_MIPI_CSI2RX_PAD_MAX, pads);
-+	if (ret)
-+		goto err_notifier_unregister;
-+
-+	ret = v4l2_subdev_init_finalize(sd);
-+	if (ret)
-+		goto err_entity_cleanup;
-+
-+	ret = v4l2_async_register_subdev(sd);
-+	if (ret) {
-+		dev_err(sd->dev, "failed to register CSI-2 subdev\n");
-+		goto err_subdev_cleanup;
-+	}
-+
-+	return 0;
-+
-+err_subdev_cleanup:
-+	v4l2_subdev_cleanup(sd);
-+err_entity_cleanup:
-+	media_entity_cleanup(&sd->entity);
-+err_notifier_unregister:
-+	v4l2_async_nf_unregister(&csi2->notifier);
-+	v4l2_async_nf_cleanup(&csi2->notifier);
-+err:
-+	return ret;
-+}
-+
-+static void dw_mipi_csi2rx_unregister(struct dw_mipi_csi2rx_device *csi2)
-+{
-+	struct v4l2_subdev *sd = &csi2->sd;
-+
-+	v4l2_async_unregister_subdev(sd);
-+	v4l2_subdev_cleanup(sd);
-+	media_entity_cleanup(&sd->entity);
-+	v4l2_async_nf_unregister(&csi2->notifier);
-+	v4l2_async_nf_cleanup(&csi2->notifier);
-+}
-+
-+static const struct of_device_id dw_mipi_csi2rx_of_match[] = {
-+	{
-+		.compatible = "rockchip,rk3568-mipi-csi2",
-+	},
-+	{}
-+};
-+MODULE_DEVICE_TABLE(of, dw_mipi_csi2rx_of_match);
-+
-+static int dw_mipi_csi2rx_probe(struct platform_device *pdev)
-+{
-+	struct device *dev = &pdev->dev;
-+	struct dw_mipi_csi2rx_device *csi2;
-+	int ret;
-+
-+	csi2 = devm_kzalloc(dev, sizeof(*csi2), GFP_KERNEL);
-+	if (!csi2)
-+		return -ENOMEM;
-+	csi2->dev = dev;
-+	dev_set_drvdata(dev, csi2);
-+
-+	csi2->base_addr = devm_platform_ioremap_resource(pdev, 0);
-+	if (IS_ERR(csi2->base_addr))
-+		return PTR_ERR(csi2->base_addr);
-+
-+	ret = devm_clk_bulk_get_all(dev, &csi2->clks);
-+	if (ret != DW_MIPI_CSI2RX_CLKS_MAX)
-+		return dev_err_probe(dev, -ENODEV, "failed to get clocks\n");
-+	csi2->clks_num = ret;
-+
-+	csi2->phy = devm_phy_get(dev, NULL);
-+	if (IS_ERR(csi2->phy))
-+		return dev_err_probe(dev, PTR_ERR(csi2->phy),
-+				     "failed to get MIPI CSI-2 PHY\n");
-+
-+	csi2->reset = devm_reset_control_get_exclusive(dev, NULL);
-+	if (IS_ERR(csi2->reset))
-+		return dev_err_probe(dev, PTR_ERR(csi2->reset),
-+				     "failed to get reset\n");
-+
-+	csi2->formats = formats;
-+	csi2->formats_num = ARRAY_SIZE(formats);
-+
-+	devm_pm_runtime_enable(dev);
-+
-+	ret = phy_init(csi2->phy);
-+	if (ret)
-+		return dev_err_probe(dev, ret,
-+				     "failed to initialize MIPI CSI-2 PHY\n");
-+
-+	ret = dw_mipi_csi2rx_register(csi2);
-+	if (ret)
-+		goto err_phy_exit;
-+
-+	return 0;
-+
-+err_phy_exit:
-+	phy_exit(csi2->phy);
-+
-+	return ret;
-+}
-+
-+static void dw_mipi_csi2rx_remove(struct platform_device *pdev)
-+{
-+	struct dw_mipi_csi2rx_device *csi2 = platform_get_drvdata(pdev);
-+
-+	dw_mipi_csi2rx_unregister(csi2);
-+	phy_exit(csi2->phy);
-+}
-+
-+static int dw_mipi_csi2rx_runtime_suspend(struct device *dev)
-+{
-+	struct dw_mipi_csi2rx_device *csi2 = dev_get_drvdata(dev);
-+
-+	clk_bulk_disable_unprepare(csi2->clks_num, csi2->clks);
-+
-+	return 0;
-+}
-+
-+static int dw_mipi_csi2rx_runtime_resume(struct device *dev)
-+{
-+	struct dw_mipi_csi2rx_device *csi2 = dev_get_drvdata(dev);
-+	int ret;
-+
-+	reset_control_assert(csi2->reset);
-+	udelay(5);
-+	reset_control_deassert(csi2->reset);
-+
-+	ret = clk_bulk_prepare_enable(csi2->clks_num, csi2->clks);
-+	if (ret) {
-+		dev_err(dev, "failed to enable clocks\n");
-+		return ret;
-+	}
-+
-+	return 0;
-+}
-+
-+static DEFINE_RUNTIME_DEV_PM_OPS(dw_mipi_csi2rx_pm_ops,
-+				 dw_mipi_csi2rx_runtime_suspend,
-+				 dw_mipi_csi2rx_runtime_resume, NULL);
-+
-+static struct platform_driver dw_mipi_csi2rx_drv = {
-+	.driver = {
-+		.name = "dw-mipi-csi2rx",
-+		.of_match_table = dw_mipi_csi2rx_of_match,
-+		.pm = &dw_mipi_csi2rx_pm_ops,
-+	},
-+	.probe = dw_mipi_csi2rx_probe,
-+	.remove = dw_mipi_csi2rx_remove,
-+};
-+module_platform_driver(dw_mipi_csi2rx_drv);
-+
-+MODULE_DESCRIPTION("Synopsys DesignWare MIPI CSI-2 Receiver platform driver");
-+MODULE_LICENSE("GPL");
-
--- 
-2.39.5
-
-
+> 
+> >> In addition, in this email thread, Christian explains that revoke
+> >> semantics already exists, with the combination of dma_buf_pin and
+> >> dma_buf_move_notify, just not documented:
+> >> https://lore.kernel.org/all/f7f1856a-44fa-44af-b496-eb1267a05d11@amd.com/
+> > 
+> > 
+> > Hmm,
+> > 
+> > Considering 
+> > 
+> > https://elixir.bootlin.com/linux/v6.19-rc5/source/drivers/infiniband/core/umem_dmabuf.c#L192
+> 
+> Yes, that case is well known.
+> 
+> > this sounds like it's not just undocumented but also in some cases
+> > unimplemented. The xe driver for one doesn't expect move_notify() to be
+> > called on pinned buffers,
+> 
+> And that is what we need to change. See move_notify can happen on pinned buffers currently as well.
+> 
+> For example in the case of PCI hot unplug. After pinning we just don't call it for memory management needs any more.
+> 
+> We just haven't documented that properly.
+> 
+> > so if that is indeed going to be part of the
+> > dma-buf protocol,  wouldn't support for that need to be advertised by
+> > the importer?
+> 
+> That's what this patch set here should do, yes.
+> 
+> Regards,
+> Christian.
+> 
+> > 
+> > Thanks,
+> > Thomas
+> > 
+> >>
+> >> Thanks
+> >>
+> >>>
+> >>> /Thomas
+> >>>
+> >>>
+> >>>>
+> >>>> Thanks
+> >>>>
+> >>>> Cc: linux-media@vger.kernel.org
+> >>>> Cc: dri-devel@lists.freedesktop.org
+> >>>> Cc: linaro-mm-sig@lists.linaro.org
+> >>>> Cc: linux-kernel@vger.kernel.org
+> >>>> Cc: amd-gfx@lists.freedesktop.org
+> >>>> Cc: virtualization@lists.linux.dev
+> >>>> Cc: intel-xe@lists.freedesktop.org
+> >>>> Cc: linux-rdma@vger.kernel.org
+> >>>> Cc: iommu@lists.linux.dev
+> >>>> Cc: kvm@vger.kernel.org
+> >>>> To: Sumit Semwal <sumit.semwal@linaro.org>
+> >>>> To: Christian König <christian.koenig@amd.com>
+> >>>> To: Alex Deucher <alexander.deucher@amd.com>
+> >>>> To: David Airlie <airlied@gmail.com>
+> >>>> To: Simona Vetter <simona@ffwll.ch>
+> >>>> To: Gerd Hoffmann <kraxel@redhat.com>
+> >>>> To: Dmitry Osipenko <dmitry.osipenko@collabora.com>
+> >>>> To: Gurchetan Singh <gurchetansingh@chromium.org>
+> >>>> To: Chia-I Wu <olvaffe@gmail.com>
+> >>>> To: Maarten Lankhorst <maarten.lankhorst@linux.intel.com>
+> >>>> To: Maxime Ripard <mripard@kernel.org>
+> >>>> To: Thomas Zimmermann <tzimmermann@suse.de>
+> >>>> To: Lucas De Marchi <lucas.demarchi@intel.com>
+> >>>> To: Thomas Hellström <thomas.hellstrom@linux.intel.com>
+> >>>> To: Rodrigo Vivi <rodrigo.vivi@intel.com>
+> >>>> To: Jason Gunthorpe <jgg@ziepe.ca>
+> >>>> To: Leon Romanovsky <leon@kernel.org>
+> >>>> To: Kevin Tian <kevin.tian@intel.com>
+> >>>> To: Joerg Roedel <joro@8bytes.org>
+> >>>> To: Will Deacon <will@kernel.org>
+> >>>> To: Robin Murphy <robin.murphy@arm.com>
+> >>>> To: Alex Williamson <alex@shazbot.org>
+> >>>>
+> >>>> ---
+> >>>> Leon Romanovsky (4):
+> >>>>       dma-buf: Rename .move_notify() callback to a clearer
+> >>>> identifier
+> >>>>       dma-buf: Document revoke semantics
+> >>>>       iommufd: Require DMABUF revoke semantics
+> >>>>       vfio: Add pinned interface to perform revoke semantics
+> >>>>
+> >>>>  drivers/dma-buf/dma-buf.c                   |  6 +++---
+> >>>>  drivers/gpu/drm/amd/amdgpu/amdgpu_dma_buf.c |  4 ++--
+> >>>>  drivers/gpu/drm/virtio/virtgpu_prime.c      |  2 +-
+> >>>>  drivers/gpu/drm/xe/tests/xe_dma_buf.c       |  6 +++---
+> >>>>  drivers/gpu/drm/xe/xe_dma_buf.c             |  2 +-
+> >>>>  drivers/infiniband/core/umem_dmabuf.c       |  4 ++--
+> >>>>  drivers/infiniband/hw/mlx5/mr.c             |  2 +-
+> >>>>  drivers/iommu/iommufd/pages.c               | 11 +++++++++--
+> >>>>  drivers/vfio/pci/vfio_pci_dmabuf.c          | 16
+> >>>> ++++++++++++++++
+> >>>>  include/linux/dma-buf.h                     | 25
+> >>>> ++++++++++++++++++++++---
+> >>>>  10 files changed, 60 insertions(+), 18 deletions(-)
+> >>>> ---
+> >>>> base-commit: 9ace4753a5202b02191d54e9fdf7f9e3d02b85eb
+> >>>> change-id: 20251221-dmabuf-revoke-b90ef16e4236
+> >>>>
+> >>>> Best regards,
+> >>>> --  
+> >>>> Leon Romanovsky <leonro@nvidia.com>
+> >>>>
+> >>>
+> > 
+> 
