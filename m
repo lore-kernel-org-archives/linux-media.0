@@ -1,70 +1,74 @@
-Received: from mail-pg1-f169.google.com (mail-pg1-f169.google.com [209.85.215.169])
+Received: from mail-dy1-f181.google.com (mail-dy1-f181.google.com [74.125.82.181])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6BB2C3D7D69
-	for <linux-media@vger.kernel.org>; Tue, 20 Jan 2026 10:14:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1F18F36165A
+	for <linux-media@vger.kernel.org>; Tue, 20 Jan 2026 10:41:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768904051; cv=none; b=FvQPoKzgaxcGB72vU9IR2Eyh4d0Iuo3I14l8F77exA9YenkNjMxOYWv4gQMfsnvx0snPdBcXAbXvjbQdoFiCMti46VhfOJ/mcA+HAV2/Uhq/1/mNS7b6mZsn+Qzxzrmx//jjZyyYKTmB3g6ObTV/GIMtCwoUPmAjYQHOGszC/Qw=
+	t=1768905710; cv=none; b=llqpVSqfcck/22dV7S+WyOCv8be8XftLZupEsmi8ilgIbBpAlUtNZ98EjAX4MwPyPfQBFMvfVegs+4R6yTGViWFk8V5MQtDYyysnR71/hgWr/xg1PW7NaRtXwnSITfzzWnI39qgBqG28K8Nqz4KHCoqJf6PL7OikBMikOM6hFIs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768904051; c=relaxed/simple;
-	bh=MLeTGea78p/gKIOMnGu1WCYXIf3fYUvz4GZektTC/FI=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=Br3jZlSLexwlll8/bcY7biZhsFxVOWJ2cO58aeyRDrtTvuvjG/vwBdyHorPhXZwOtc7softTzGfTFPrkPIjGv0kRYGU+gz2xQgsCJ+JhzJITD6H/wjj15HjyQX8t4Tqtg+hdZGHpkybfkAL3+o3oVCMGux0y5MSrs4T/SCdD3YU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=facsDr0s; arc=none smtp.client-ip=209.85.215.169
+	s=arc-20240116; t=1768905710; c=relaxed/simple;
+	bh=Ohb12pnkwdIT0Jne9UD+YNvgkmu2s71UxSfrE5BWiRs=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=UFBGW/QrKvbU6NLkmHTnhvIV7KPrPLYG5WWLIFweggoHT4/lWo37/0lEdl0HHUTsvIHBkgCrK8cCiwFJCBSwT423Y6yqWxXNO0RSf+O4O1FwnuiMiDyhRfKBTA7GPOeA0bmfncF391VZBkbwt6PI0utv6JZ0Xcnu32Rzd14V3QE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=S3lM8UTA; arc=none smtp.client-ip=74.125.82.181
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="facsDr0s"
-Received: by mail-pg1-f169.google.com with SMTP id 41be03b00d2f7-c2dd0c24e5cso1947117a12.3
-        for <linux-media@vger.kernel.org>; Tue, 20 Jan 2026 02:14:08 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="S3lM8UTA"
+Received: by mail-dy1-f181.google.com with SMTP id 5a478bee46e88-2b453b17e41so3232664eec.1
+        for <linux-media@vger.kernel.org>; Tue, 20 Jan 2026 02:41:48 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1768904048; x=1769508848; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1768905708; x=1769510508; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=ZvQIp5FHmBGUfNaNcfCnUEax+SPEcLHmvLhl4j/A+/w=;
-        b=facsDr0s1HzZYTayxR3G8ORx1DwMUWhlISMn/AJDZIfERlWNKiKpM9fLXFpHPkdsl4
-         n8T75MnNpBfH7cP8SMUATjA5SGX/cLPQZHP2fqVvyUlXt//pB8PqIFL8OI+flM3pCsy7
-         usCR65PgkKhBtWuy+fpgPx6hs5tS+g+aknW8ZBvG4lrRTox4bg5mKJ+4QyZh40trMZhH
-         pCTTmFB+zCKknnK0G17zezXctrQ7fVousRpR47f3UmRv/dQC+80y83txXRZyuOZqalqz
-         Cp9spLhC/W3Cmh4onSVy0aifb9ntZsfNt2fKvHUz1HmdGnOJcwbghYaSNv3B0mmgF3hW
-         ApTw==
+        bh=fV/jHAHpW8XRaZZ0Qo+rv9A5isuApYKvNLSlJGZZqHI=;
+        b=S3lM8UTAhiG+Fabdt5BFQhczEsxaAFfcpUZ2wIVXmw/QuHHMdYtpd0lrn1bzVIvpAl
+         yVn4WiQagiDVcDGYioIbhfHAvjfIiasLDDm3jW+mN5xVn7/lS6kfDUZMpSo+HcM2UCip
+         OJJDxDzSBUSHJK+PAHQVXGmcaJz/Ttp2DvNbSx0Hp8yEmAr+UFZhiBVQUfyhIKF02dH1
+         SZdQ6V+gJ+So3tZzRE9wReWX3zhjkoOW4dxQd20crlzfEDBFhG+S2SYRa/8eL7yIZwWw
+         OBQaRIdHth7AtVwZrm+ASKUiI89vI8pBwF3lM1HwItQdTPRMvboeYpPbzC9WvnDK5qcI
+         XJSg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1768904048; x=1769508848;
+        d=1e100.net; s=20230601; t=1768905708; x=1769510508;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=ZvQIp5FHmBGUfNaNcfCnUEax+SPEcLHmvLhl4j/A+/w=;
-        b=xBDJqWSsj8JOOgDQy/vK0WJUlMM72X4UXPGQKA9/lWF34luy3X4vGgshy/spoFFmBX
-         NCBSHkpYk0YFjPugC9pTxI9f/ata/PRYP2T4LRK7H2ALvLBVfujDqb6rVVz3K6juX76D
-         v4dC/TciUGt80oDP6Hpr7tD/f0D5SM1MzIDt/CEL7x0Crx84KT6jH3Vhh7fANvXKrn2C
-         mX0xS9O9Nq/U0gbfhxwNIwod9jmGaq8IGyp2SqmUANeP70Llt07VThOaUM5m9G7yXs73
-         g4lYACBXW3vmkcQpiEpqPszvJoLQJ5Ap5tW702W3p4RiX133m1+KSWesnG5CapA6sVxO
-         m6pQ==
-X-Gm-Message-State: AOJu0YyWNZs8zFvSb1Cw54dAy4tWx9Qj+Xpmss3UDwq58XbfKCcqiewj
-	Q9gprM+Cr0R/cr3YGLeMWf+dUXkNfkhYeZUakSwJcTCGqP7n3Z/TJiBQv5Otew==
-X-Gm-Gg: AZuq6aLL55YKiwTzcQRbs5JiXKSR8wOuNGiY/HYwFWhhr3ftJXT7hf3n7Ax69D6eOpa
-	UfhlXwoRQazzAeKrgoMJXFHYfeIvGY/k+B8WllC8dqLq/3EOGGyiJIf9OKqEIi0pq2iYddXFf32
-	tPhwXRwVNbW2D1gudjjMC4GEd7rCIMmo7sK987s6iuZ76TpJaE0ufBaoTBpI0z1yswTdwqivGTF
-	EajG+nysKNeC/pcRi/H9PWjk1elZNRULS2hh5l7Lf+mF97wk0gIER3SUbPIUDO1OpWHK7mSeCOr
-	iyug5isi+VhG9j3hisaGjMnFH8G57pgEsZYEU/kDNMiXr8AgGhSGMn2s74figrRj1nH3B7fOUlz
-	g3gTA6fdk6zFIFlB/s4uQGME27HlwKbaqhJjtoQS4hwu0832ueR+VPPBj8BHTNIVMlI91qQh7NB
-	WCMh9zMr6w+pP/mTuNeiQ=
-X-Received: by 2002:a17:90b:1e0b:b0:34c:f5b5:c1b6 with SMTP id 98e67ed59e1d1-35272f028a0mr13600296a91.12.1768904047607;
-        Tue, 20 Jan 2026 02:14:07 -0800 (PST)
-Received: from localhost.localdomain ([58.29.79.238])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-352c403b7e4sm1641035a91.6.2026.01.20.02.14.05
+        bh=fV/jHAHpW8XRaZZ0Qo+rv9A5isuApYKvNLSlJGZZqHI=;
+        b=aIOpTLQQNC/BRZ6vnsPF5KErha4sYNxj9nSXaeXp3lIKaXxwVVALG/54+cd/5OVnrc
+         nuVJm27+WyM7S8iRJGR2DJ1VZbgOjpT9S3gR85jsqWIdjrTOUIKtjaOzWrAG3qjydEpe
+         aBpDN7mSd/FFwVULtul7A7Q6b514nxgZttKyPnrffmxQaJN3RcOo/zPABefM7q2MVKV8
+         yGB14GA4IDBmQAn7Yi7a8+dU+RnkJTcdZZOm0LOOUyzgNHWpC4I980Is4gpBbFZcQDMV
+         ltaSXhYO+6LP68N/9e1N9TkeR0MUvXJGs8lBb2oMdCuwnj9mVRlsEYqDUjZkCbh8tQGu
+         y7bA==
+X-Forwarded-Encrypted: i=1; AJvYcCW3nPVcWVJMyg/T8PEtFgspMxEU7+yLK48omJNmhU1MldTrrZXz3J8TwOFvlRIWveqjK3JshWKFhfjomw==@vger.kernel.org
+X-Gm-Message-State: AOJu0YwMjxAMFA5D3R0XUVchKYPtVO/+Tm+MVCWW3KqLn+vcnmaaZ123
+	KR1xfbVVcdVDRqbJsXSjl1wQHa8qU60zYk53zXyiUakJKiBLmExZY76L
+X-Gm-Gg: AZuq6aKaStCLRLiq07J5i8SZu6JuWdpFq/U/62zqlFzZBhIFhXlqAqiv3Rm+rJVHk1N
+	CF/wSjo66YvFHHD280L6fBq3F21NFwCvbUYHPadT3V8vOWzPKjAyXJJMw1L+M0aevoMVPC3MswL
+	44MmKLuq9GVzCgxDqCQ4lSslnJjO66yzJIQLjOqTQl1msetbD8peCWpe+izaPcF6qdacrvl3aUR
+	YspR3uW8SJGmLCRTu+l6n7TD1OvsQ/MCE4TjYzH1EJOyqMCsdd3UFdqNqg27gX2JhhPPFpzRiUN
+	jxjFxrt5yinaY0jFI46xifwvAGZae7NweBorKBePlv92VlDxi6yvvXNW6U+uWbdK7yZDWyvjNOJ
+	H3fbeF0LKnThA3p8tnq0TJa/MY3T7viUWHxTlfm2pzSzDJzgghtIF9EYL2KgLRZ1eIWvezJyz/r
+	9CzgEd+pF/lWCk66FYALt0PPsNkaxCmsqE+QsaNm2VhbbgFDNJSr15CSnyXauFxu0geAEptevZq
+	jHwVd2dXsughkxbgRC/ghD8SywgJjrxOxIxCy0a9uHZxQTt9Zq+qxfLOg==
+X-Received: by 2002:a05:7301:9e43:b0:2ae:56ef:c85d with SMTP id 5a478bee46e88-2b6b34b2b47mr9729558eec.9.1768905707610;
+        Tue, 20 Jan 2026 02:41:47 -0800 (PST)
+Received: from 2045L.localdomain (70.sub-75-229-220.myvzw.com. [75.229.220.70])
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-2b6b36564ffsm16521853eec.28.2026.01.20.02.41.44
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 20 Jan 2026 02:14:07 -0800 (PST)
-From: Lee Yongjun <jun85566@gmail.com>
+        Tue, 20 Jan 2026 02:41:47 -0800 (PST)
+From: Gui-Dong Han <hanguidong02@gmail.com>
 To: mchehab@kernel.org
-Cc: linux-media@vger.kernel.org,
+Cc: hverkuil+cisco@kernel.org,
+	linux-media@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
-	hverkuil+cisco@kernel.org,
-	Lee Yongjun <jun85566@gmail.com>
-Subject: [PATCH] media: dvb-frontends: drx39xyj: Remove unused variable in drx39xxj_set_frontend
-Date: Tue, 20 Jan 2026 19:13:39 +0900
-Message-Id: <20260120101339.5651-1-jun85566@gmail.com>
-X-Mailer: git-send-email 2.34.1
+	baijiaju1990@gmail.com,
+	Gui-Dong Han <hanguidong02@gmail.com>,
+	stable@vger.kernel.org
+Subject: [PATCH] media: dvb_demux: fix potential TOCTOU race conditions
+Date: Tue, 20 Jan 2026 18:41:28 +0800
+Message-ID: <20260120104129.105079-1-hanguidong02@gmail.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
@@ -73,34 +77,75 @@ List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-The variable 'i' in drx39xxj_set_frontend() is declared within a
-DJH_DEBUG ifdef block but is never used.
+The dvb_demux functions handle frontend connectivity without holding
+dvbdemux->mutex during checks, leading to TOCTOU race conditions. In
+dvbdmx_write(), a concurrent dvbdmx_disconnect_frontend() can set
+demux->frontend to NULL after the check, causing a potential NULL pointer
+dereference. In dvbdmx_connect_frontend(), a concurrent connection could
+set the frontend between the check and the lock. This allows the second
+caller to overwrite the existing frontend, leading to resource leaks.
+The dvb_demux module should use its own mutex to ensure thread safety
+for these internal state checks.
 
-Detected by Cppcheck static analysis:
-drivers/media/dvb-frontends/drx39xyj/drxj.c:12068:6: style: Unused variable: i [unusedVariable]
+Fix this by extending the lock scope. Move the frontend state checks
+inside the dvbdemux->mutex critical section to ensure the state remains
+stable during the operation.
 
-Remove the unused variable and the surrounding ifdef block to clean up
-the code.
+This possible bug was found by our experimental static analysis tool,
+which analyzes lock usage to detect TOCTOU issues.
 
-Signed-off-by: Lee Yongjun <jun85566@gmail.com>
+Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
+Cc: stable@vger.kernel.org
+Signed-off-by: Gui-Dong Han <hanguidong02@gmail.com>
 ---
- drivers/media/dvb-frontends/drx39xyj/drxj.c | 3 ---
- 1 file changed, 3 deletions(-)
+ drivers/media/dvb-core/dvb_demux.c | 21 +++++++++++++--------
+ 1 file changed, 13 insertions(+), 8 deletions(-)
 
-diff --git a/drivers/media/dvb-frontends/drx39xyj/drxj.c b/drivers/media/dvb-frontends/drx39xyj/drxj.c
-index 428b31e60874..071561d5561c 100644
---- a/drivers/media/dvb-frontends/drx39xyj/drxj.c
-+++ b/drivers/media/dvb-frontends/drx39xyj/drxj.c
-@@ -12064,9 +12064,6 @@ static int drx39xxj_read_ucblocks(struct dvb_frontend *fe, u32 *ucb)
+diff --git a/drivers/media/dvb-core/dvb_demux.c b/drivers/media/dvb-core/dvb_demux.c
+index 290fc7961647..e9e833285f0f 100644
+--- a/drivers/media/dvb-core/dvb_demux.c
++++ b/drivers/media/dvb-core/dvb_demux.c
+@@ -1147,15 +1147,18 @@ static int dvbdmx_write(struct dmx_demux *demux, const char __user *buf, size_t
+ 	struct dvb_demux *dvbdemux = (struct dvb_demux *)demux;
+ 	void *p;
  
- static int drx39xxj_set_frontend(struct dvb_frontend *fe)
+-	if ((!demux->frontend) || (demux->frontend->source != DMX_MEMORY_FE))
++	if (mutex_lock_interruptible(&dvbdemux->mutex))
++		return -ERESTARTSYS;
++
++	if ((!demux->frontend) || (demux->frontend->source != DMX_MEMORY_FE)) {
++		mutex_unlock(&dvbdemux->mutex);
+ 		return -EINVAL;
++	}
+ 
+ 	p = memdup_user(buf, count);
+-	if (IS_ERR(p))
++	if (IS_ERR(p)) {
++		mutex_unlock(&dvbdemux->mutex);
+ 		return PTR_ERR(p);
+-	if (mutex_lock_interruptible(&dvbdemux->mutex)) {
+-		kfree(p);
+-		return -ERESTARTSYS;
+ 	}
+ 	dvb_dmx_swfilter(dvbdemux, p, count);
+ 	kfree(p);
+@@ -1208,11 +1211,13 @@ static int dvbdmx_connect_frontend(struct dmx_demux *demux,
  {
--#ifdef DJH_DEBUG
--	int i;
--#endif
- 	struct dtv_frontend_properties *p = &fe->dtv_property_cache;
- 	struct drx39xxj_state *state = fe->demodulator_priv;
- 	struct drx_demod_instance *demod = state->demod;
+ 	struct dvb_demux *dvbdemux = (struct dvb_demux *)demux;
+ 
+-	if (demux->frontend)
+-		return -EINVAL;
+-
+ 	mutex_lock(&dvbdemux->mutex);
+ 
++	if (demux->frontend) {
++		mutex_unlock(&dvbdemux->mutex);
++		return -EINVAL;
++	}
++
+ 	demux->frontend = frontend;
+ 	mutex_unlock(&dvbdemux->mutex);
+ 	return 0;
 -- 
-2.34.1
+2.43.0
 
