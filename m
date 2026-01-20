@@ -1,40 +1,65 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3607E3D4107;
-	Tue, 20 Jan 2026 13:23:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 12E7842E01A;
+	Tue, 20 Jan 2026 13:34:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768915429; cv=none; b=fh84afIQ47WMp8HoCfjNN8YSOO3BwYmS9aelg74CSIq/eO1oIpDcCkVaLvnVoTnS9SBk3r+gIXhTZdWycnrhrYJhlN0Qb9LrCTa4keDJb7n5qRnsFFzFpruLenzPykNcaLLQPOXefqb0JN6OWkXpiTydbF3uZq07ar4iL2aTKM4=
+	t=1768916044; cv=none; b=pNi/R5QC6HpBG/eadw11+UbzQDKRAQHN8cz3ccXPurhM9T5o7HqQIzxmZku8rw5anoJ0n4gARV7i/gRw8rO7ehZS2okSzE8BkKCuxSqhNibVe9/pqImafiUjQ3RMTMFHY4blpBBEagrOv4D8bX91cKV2QsfN+6TZf/Ot4lx6Ie8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768915429; c=relaxed/simple;
-	bh=nlZ6xX2lr/u9upPVXdqofa4HpJJKRV53xTtFzmbr5jU=;
+	s=arc-20240116; t=1768916044; c=relaxed/simple;
+	bh=oLJ2iu9KlHT5QrDdejkQxW6aJLgiN+DqMd8h51OdTRU=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Rxvu7BzMuxw6OP21SWjXg5Fzy5lPJRqRmskQZ2K8gTqyEY2k8OqyS5AoaXoBHPTli/dhad1anVr/G9H1n6bfce72iUSI6v0aF8xK3D+UlbutDzaG+57Tskl0zjdro1utA+xMPpIhPTkRwdcA8/ryO7qG92XWd/30OJa6c/RentI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=Wo2hYQ9I; arc=none smtp.client-ip=10.30.226.201
+	 Content-Type:Content-Disposition:In-Reply-To; b=kPYLmd6BBFuH7rrM74o8RIyL90PSdttM3jGJLc9oXhJNNejkrNfEw+9ajbxbVCwOvoxBq9h4n5jboDrWWzuPuTVSuzWO0OTgm3ubc+FS5nOtMLbT0Y+6RxKnKB5sGA30mR1Tu/wMlvr2Ax6utJuhVNA4ukINgHWGMPwBHYkxg7E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=JpEG1sP9; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="Wo2hYQ9I"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B6F70C19422;
-	Tue, 20 Jan 2026 13:23:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1768915429;
-	bh=nlZ6xX2lr/u9upPVXdqofa4HpJJKRV53xTtFzmbr5jU=;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="JpEG1sP9"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CC30AC16AAE;
+	Tue, 20 Jan 2026 13:34:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1768916043;
+	bh=oLJ2iu9KlHT5QrDdejkQxW6aJLgiN+DqMd8h51OdTRU=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=Wo2hYQ9IkHX1d+nd3G7D/deN3G1JuLr/litsrdGAxUwLcAZErZIK/0ZexZ7juSARS
-	 0CfAZShjpS3+OvCZVedd9D1V74pNHJFpvKSrDGUxW/Tn7wEsPdIPbrfyf/QdpH2UjW
-	 uKQt2qG8jqNgzFKuM/NaWnwS+03UFhnN5g51W0Rw=
-Date: Tue, 20 Jan 2026 14:20:37 +0100
-From: Greg KH <gregkh@linuxfoundation.org>
-To: Markus Elfring <Markus.Elfring@web.de>
-Cc: Gui-Dong Han <hanguidong02@gmail.com>, linux-media@vger.kernel.org,
-	stable@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
-	Jia-Ju Bai <baijiaju1990@gmail.com>,
-	Hans Verkuil <hverkuil+cisco@kernel.org>,
-	Mauro Carvalho Chehab <mchehab@kernel.org>
-Subject: Re: [PATCH v2] media: dvb_demux: fix potential TOCTOU race conditions
-Message-ID: <2026012031-frostlike-humming-b221@gregkh>
-References: <20260120121105.8959-1-hanguidong02@gmail.com>
- <88dbfb85-571a-4f65-8879-16972dd87bbd@web.de>
+	b=JpEG1sP9sdoE2iRilDGuE2cq1/H2M6cDuai69Nw+oSU99dcdoZdWBvI1Ukv0pmCi9
+	 TsEw1r+DamQwCel7MoQtDe43k96uNEN2EIGYyUqy+LKVNlFKvNVQdDnF9gRgkw6+oE
+	 Iyr3Ih5rCshWR5ndygaol8Ath9Rlm/yA6Sguxq2x2tSUxefkc1flchRkXEHVN8GCfi
+	 tJskCUcB7JdPmjSewrBWCzbAo1v7780XPg1+FKbkQX6nJPso+uCdLPziwkOu29i/jw
+	 mD8HoF6GofHxxX6dhDDXQOlk4BrG8fNLd2RXpMxN3Qn9LCRK7nBxumFh6AjnzbEM7k
+	 ZfnVnW6TNMaYg==
+Date: Tue, 20 Jan 2026 15:33:57 +0200
+From: Leon Romanovsky <leon@kernel.org>
+To: Jason Gunthorpe <jgg@ziepe.ca>
+Cc: Sumit Semwal <sumit.semwal@linaro.org>,
+	Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
+	Alex Deucher <alexander.deucher@amd.com>,
+	David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
+	Gerd Hoffmann <kraxel@redhat.com>,
+	Dmitry Osipenko <dmitry.osipenko@collabora.com>,
+	Gurchetan Singh <gurchetansingh@chromium.org>,
+	Chia-I Wu <olvaffe@gmail.com>,
+	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+	Maxime Ripard <mripard@kernel.org>,
+	Thomas Zimmermann <tzimmermann@suse.de>,
+	Lucas De Marchi <lucas.demarchi@intel.com>,
+	Thomas =?iso-8859-1?Q?Hellstr=F6m?= <thomas.hellstrom@linux.intel.com>,
+	Rodrigo Vivi <rodrigo.vivi@intel.com>,
+	Kevin Tian <kevin.tian@intel.com>, Joerg Roedel <joro@8bytes.org>,
+	Will Deacon <will@kernel.org>, Robin Murphy <robin.murphy@arm.com>,
+	Alex Williamson <alex@shazbot.org>, linux-media@vger.kernel.org,
+	dri-devel@lists.freedesktop.org, linaro-mm-sig@lists.linaro.org,
+	linux-kernel@vger.kernel.org, amd-gfx@lists.freedesktop.org,
+	virtualization@lists.linux.dev, intel-xe@lists.freedesktop.org,
+	linux-rdma@vger.kernel.org, iommu@lists.linux.dev,
+	kvm@vger.kernel.org
+Subject: Re: [PATCH v2 3/4] iommufd: Require DMABUF revoke semantics
+Message-ID: <20260120133357.GT13201@unreal>
+References: <20260118-dmabuf-revoke-v2-0-a03bb27c0875@nvidia.com>
+ <20260118-dmabuf-revoke-v2-3-a03bb27c0875@nvidia.com>
+ <20260119165951.GI961572@ziepe.ca>
+ <20260119182300.GO13201@unreal>
+ <20260119195444.GL961572@ziepe.ca>
+ <20260120131046.GS13201@unreal>
+ <20260120131530.GN961572@ziepe.ca>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
@@ -44,46 +69,66 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <88dbfb85-571a-4f65-8879-16972dd87bbd@web.de>
+In-Reply-To: <20260120131530.GN961572@ziepe.ca>
 
-On Tue, Jan 20, 2026 at 01:38:33PM +0100, Markus Elfring wrote:
-> …
-> > Fix this by extending the lock scope.
-> …
+On Tue, Jan 20, 2026 at 09:15:30AM -0400, Jason Gunthorpe wrote:
+> On Tue, Jan 20, 2026 at 03:10:46PM +0200, Leon Romanovsky wrote:
+> > On Mon, Jan 19, 2026 at 03:54:44PM -0400, Jason Gunthorpe wrote:
+> > > On Mon, Jan 19, 2026 at 08:23:00PM +0200, Leon Romanovsky wrote:
+> > > > On Mon, Jan 19, 2026 at 12:59:51PM -0400, Jason Gunthorpe wrote:
+> > > > > On Sun, Jan 18, 2026 at 02:08:47PM +0200, Leon Romanovsky wrote:
+> > > > > > From: Leon Romanovsky <leonro@nvidia.com>
+> > > > > > 
+> > > > > > IOMMUFD does not support page fault handling, and after a call to
+> > > > > > .invalidate_mappings() all mappings become invalid. Ensure that
+> > > > > > the IOMMUFD DMABUF importer is bound to a revoke‑aware DMABUF exporter
+> > > > > > (for example, VFIO).
+> > > > > > 
+> > > > > > Signed-off-by: Leon Romanovsky <leonro@nvidia.com>
+> > > > > > ---
+> > > > > >  drivers/iommu/iommufd/pages.c | 9 ++++++++-
+> > > > > >  1 file changed, 8 insertions(+), 1 deletion(-)
+> > > > > > 
+> > > > > > diff --git a/drivers/iommu/iommufd/pages.c b/drivers/iommu/iommufd/pages.c
+> > > > > > index 76f900fa1687..a5eb2bc4ef48 100644
+> > > > > > --- a/drivers/iommu/iommufd/pages.c
+> > > > > > +++ b/drivers/iommu/iommufd/pages.c
+> > > > > > @@ -1501,16 +1501,22 @@ static int iopt_map_dmabuf(struct iommufd_ctx *ictx, struct iopt_pages *pages,
+> > > > > >  		mutex_unlock(&pages->mutex);
+> > > > > >  	}
+> > > > > >  
+> > > > > > -	rc = sym_vfio_pci_dma_buf_iommufd_map(attach, &pages->dmabuf.phys);
+> > > > > > +	rc = dma_buf_pin(attach);
+> > > > > >  	if (rc)
+> > > > > >  		goto err_detach;
+> > > > > >  
+> > > > > > +	rc = sym_vfio_pci_dma_buf_iommufd_map(attach, &pages->dmabuf.phys);
+> > > > > > +	if (rc)
+> > > > > > +		goto err_unpin;
+> > > > > > +
+> > > > > >  	dma_resv_unlock(dmabuf->resv);
+> > > > > >  
+> > > > > >  	/* On success iopt_release_pages() will detach and put the dmabuf. */
+> > > > > >  	pages->dmabuf.attach = attach;
+> > > > > >  	return 0;
+> > > > > 
+> > > > > Don't we need an explicit unpin after unmapping?
+> > > > 
+> > > > Yes, but this patch is going to be dropped in v3 because of this
+> > > > suggestion.
+> > > > https://lore.kernel.org/all/a397ff1e-615f-4873-98a9-940f9c16f85c@amd.com
+> > > 
+> > > That's not right, that suggestion is about changing VFIO. iommufd must
+> > > still act as a pinning importer!
+> > 
+> > There is no change in iommufd, as it invokes dma_buf_dynamic_attach()
+> > with a valid &iopt_dmabuf_attach_revoke_ops. The check determining whether
+> > iommufd can perform a revoke is handled there.
 > 
-> How do you think about to increase the application of scope-based resource management?
-> https://elixir.bootlin.com/linux/v6.19-rc5/source/include/linux/mutex.h#L253
-> 
-> 
-> > This possible bug was found by our experimental static analysis tool,
-> > which analyzes lock usage to detect TOCTOU issues.
-> 
-> * Do you refer to any other source code analysis approach than LR-Miner?
-> 
-> * Will any additional background information become more helpful here?
-> 
-> 
-> Regards,
-> Markus
-> 
+> iommufd is a pining importer. I did not add a call to pin because it
+> only worked with VFIO that would not support it. Now that this series
+> fixes it the pin must be added. Don't drop this patch.
 
-Hi,
+No problem, let's keep it.
 
-This is the semi-friendly patch-bot of Greg Kroah-Hartman.
-
-Markus, you seem to have sent a nonsensical or otherwise pointless
-review comment to a patch submission on a Linux kernel developer mailing
-list.  I strongly suggest that you not do this anymore.  Please do not
-bother developers who are actively working to produce patches and
-features with comments that, in the end, are a waste of time.
-
-Patch submitter, please ignore Markus's suggestion; you do not need to
-follow it at all.  The person/bot/AI that sent it is being ignored by
-almost all Linux kernel maintainers for having a persistent pattern of
-behavior of producing distracting and pointless commentary, and
-inability to adapt to feedback.  Please feel free to also ignore emails
-from them.
-
-thanks,
-
-greg k-h's patch email bot
+Thanks
