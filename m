@@ -1,171 +1,118 @@
-Received: from mail-qk1-f195.google.com (mail-qk1-f195.google.com [209.85.222.195])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 51D7B219A79
-	for <linux-media@vger.kernel.org>; Tue, 20 Jan 2026 13:15:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.195
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 85E8E425CE9
+	for <linux-media@vger.kernel.org>; Tue, 20 Jan 2026 13:23:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768914936; cv=none; b=tyM2PGXCu78Nnz9L91BnzyntU8708T8wj/r4D91YFEvzQaTFlM3I5/xytMWMcg8jTKNlOie+DH6seloYBVug+QbwWc1GQeS3eSCtzn6gHlL+RO6K1KzZkKTy1fqW7AAexO3f+iFMhrm4XqpGVqZpAzwSIg1xM1x6yWFRqWp/Pqw=
+	t=1768915415; cv=none; b=PtZyXM0SIsYd45A67Q72NUIE2sbo4u1TjIvz0y7/jvZQiSZKtf3DzAyoorEflCLy1+2VmMmzV4y2qv/Lt8BGKvErtB+DC4OTZAY1BoB7I8w0qOPKBRwgf+kdFujlXfxMpus5sF2V5SQZDrxjHb3Z1z3e8iihecnl4M83W67blY8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768914936; c=relaxed/simple;
-	bh=xnk/b5HPpyfNnMbI+XkeyZX1b7NurY2cBOv/ZUy0nkM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=fQe21mGTIsg0Mu9qABkapTOU1oPF1+pkHq9SwhR+moVp1JE0qn+pNkM3m354BYoUX15tKc6ytSjjaWUsC5iCY0MqixLolxT7CRRxpB8UAWWc4btN3Wqb/78crOUQBqM4CEH1jVmI9YnQvL/nO3SbccCIS0FLJldsY7OweWndePw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ziepe.ca; spf=pass smtp.mailfrom=ziepe.ca; dkim=pass (2048-bit key) header.d=ziepe.ca header.i=@ziepe.ca header.b=RFlINO8a; arc=none smtp.client-ip=209.85.222.195
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ziepe.ca
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ziepe.ca
+	s=arc-20240116; t=1768915415; c=relaxed/simple;
+	bh=dniG3HZgx9/bXQbDKmnpWfRvvD6BYMyLlOZ19YVT2kU=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=XLh3wTmjwivPNF1xJRnnOrM/pmmoX5vnwlh4zPi9WtwVm+4vWDvx0VRhf5uKgPgRBuci2Hh8yMDAsidbhHd90sGFN8HT7pjYZbV/S7WifXU2y+MgebjHESksPa5/q7RJBm7ppy/eR3ry2tDntdTCiSbU+pn9CWNcc4UjN6oyEiU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Fupmtsmm; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ziepe.ca header.i=@ziepe.ca header.b="RFlINO8a"
-Received: by mail-qk1-f195.google.com with SMTP id af79cd13be357-8c537b9fcbfso545061285a.1
-        for <linux-media@vger.kernel.org>; Tue, 20 Jan 2026 05:15:33 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ziepe.ca; s=google; t=1768914932; x=1769519732; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=Jl2KF0othdvrwDImGzxJcxoX7WKdbBXFC823mMEO8nY=;
-        b=RFlINO8aI/gtHD1iK1qOubIgA1mTdMNPt8iQAYSpLQp2g1TlT+Cx3OQVDA1IGPOeWt
-         f+zeQtvB1AQfxpPyCoN5cF+yC45Y5ePBC+bGWd/kgwNupGi3FD9Q2objOpwPUZbcLs+S
-         05Jmj3mko0PFL8fWfKlSUNIa76h60tdFktwHUKDXgbodeT/MGcHE+HmSnAxf3aQBmmkQ
-         tLsHSd+DhZo9MiBRJe+m1AAhT+I4EtsBqZNhSZEbaBVa2KQf/EW/n95kTnlNj+m8b5i2
-         ABLKaQlyxiol14GRTgukxU3TXS+Zn11QO2BDT67ciWNxc2qt1jrU23q/ouRUUL5EOVeO
-         YMNA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1768914932; x=1769519732;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Jl2KF0othdvrwDImGzxJcxoX7WKdbBXFC823mMEO8nY=;
-        b=cl1c6LWdDr6Nv3DBt7Aei2w9HjlFWrV21ByfIFFwcnq4OryJAtDKWYCzHuKw0L96y3
-         46NHogsWCMYkYnSCFYJ4RCtBACcuCYp5o8vaChINY7K1K+G1/dHhM58EtQ4ac24tAP10
-         q4k36RSBQwgmQ4qXtC6hMPPSPpgxrgGizRa/S6Mr7RBpztwaqnZvdJLKWMn1A5Hg4p/Z
-         YFTNNUzFqbS2mu8Gz45kMCBPyeqC1v3FvsMB79yPUmh3VsnEDp9jlLENPn7lc6qJVML6
-         lkZO6CD302lq5pqAuTtpBlazrh2AqvLfllfFfGyYzTLogfbshK9yZ1YgtmNfEQmO+oRT
-         zPEg==
-X-Forwarded-Encrypted: i=1; AJvYcCX1y5ctz6YUGf+rLoEdK4vai7vEzA93esFjt/qcyZQDlq8Bf5GJodOBn1CdR6RBJlgrCSq6/yDa6myx4A==@vger.kernel.org
-X-Gm-Message-State: AOJu0YzwOW9IGdf9oVvnY+w+nsdFrlWc2KZtjZNhkbYUDyWjOyWpsDL5
-	kqmCrg/z7Wn/PozAaFIrGIVkZoncTQtpLmfumAVzL7PkyQrQIYO5XCNPCN0zs5sCMqA=
-X-Gm-Gg: AY/fxX5lNnEKNzc/a9JsXOJoT34xX73gR6cFfeKCQozXPhOdN5zRka/dGF688dl0L7Z
-	On/NNXVWio8lHlqZcCfV7VKwB0cJoKJkWbRLV8VFoaM/pxOHoGSZ3Na4ssl55gEKr0j7SELOJTE
-	QUFuTabiowfVLxZNg1VJjIn0cNgSX10Gcz1UBN4XWkiOh5mQeoD5hBPu9y65E1e0TbiI4jq2Rsh
-	NAdrcZulLjzgieanjqklrXFTHo6edPDFlemmO3nmoCY2upSXZjFloDuou1/5eovy33q8xVTQbCn
-	/4hggffQBbeprmnblPJquz+fOFcTrjjfRGNi9k7DeWfy7A6FCe3pwGB0w50qJyYUxlP98M3u9PR
-	ATPbEHgUZjbWVUq9HfRpEXfz2YvjX4nEgFEkRM4JusHg73sROvkItCp+bMahU5iWp8cKNN5p2BS
-	5bAqX1h4CJICDbUuTM/bkPz71C9yZOKFFivFuRSBFoCxkUCVajcF9cUmPMs4c0Lx/xcJ0=
-X-Received: by 2002:a05:620a:999:b0:8c6:a68a:bc04 with SMTP id af79cd13be357-8c6a68ac1c8mr1389837085a.7.1768914931884;
-        Tue, 20 Jan 2026 05:15:31 -0800 (PST)
-Received: from ziepe.ca (hlfxns017vw-142-162-112-119.dhcp-dynamic.fibreop.ns.bellaliant.net. [142.162.112.119])
-        by smtp.gmail.com with ESMTPSA id af79cd13be357-8c6a7292cfbsm1017788585a.50.2026.01.20.05.15.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 20 Jan 2026 05:15:31 -0800 (PST)
-Received: from jgg by wakko with local (Exim 4.97)
-	(envelope-from <jgg@ziepe.ca>)
-	id 1viBZy-00000005W6K-36CW;
-	Tue, 20 Jan 2026 09:15:30 -0400
-Date: Tue, 20 Jan 2026 09:15:30 -0400
-From: Jason Gunthorpe <jgg@ziepe.ca>
-To: Leon Romanovsky <leon@kernel.org>
-Cc: Sumit Semwal <sumit.semwal@linaro.org>,
-	Christian =?utf-8?B?S8O2bmln?= <christian.koenig@amd.com>,
-	Alex Deucher <alexander.deucher@amd.com>,
-	David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
-	Gerd Hoffmann <kraxel@redhat.com>,
-	Dmitry Osipenko <dmitry.osipenko@collabora.com>,
-	Gurchetan Singh <gurchetansingh@chromium.org>,
-	Chia-I Wu <olvaffe@gmail.com>,
-	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-	Maxime Ripard <mripard@kernel.org>,
-	Thomas Zimmermann <tzimmermann@suse.de>,
-	Lucas De Marchi <lucas.demarchi@intel.com>,
-	Thomas =?utf-8?Q?Hellstr=C3=B6m?= <thomas.hellstrom@linux.intel.com>,
-	Rodrigo Vivi <rodrigo.vivi@intel.com>,
-	Kevin Tian <kevin.tian@intel.com>, Joerg Roedel <joro@8bytes.org>,
-	Will Deacon <will@kernel.org>, Robin Murphy <robin.murphy@arm.com>,
-	Alex Williamson <alex@shazbot.org>, linux-media@vger.kernel.org,
-	dri-devel@lists.freedesktop.org, linaro-mm-sig@lists.linaro.org,
-	linux-kernel@vger.kernel.org, amd-gfx@lists.freedesktop.org,
-	virtualization@lists.linux.dev, intel-xe@lists.freedesktop.org,
-	linux-rdma@vger.kernel.org, iommu@lists.linux.dev,
-	kvm@vger.kernel.org
-Subject: Re: [PATCH v2 3/4] iommufd: Require DMABUF revoke semantics
-Message-ID: <20260120131530.GN961572@ziepe.ca>
-References: <20260118-dmabuf-revoke-v2-0-a03bb27c0875@nvidia.com>
- <20260118-dmabuf-revoke-v2-3-a03bb27c0875@nvidia.com>
- <20260119165951.GI961572@ziepe.ca>
- <20260119182300.GO13201@unreal>
- <20260119195444.GL961572@ziepe.ca>
- <20260120131046.GS13201@unreal>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Fupmtsmm"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 32938C16AAE;
+	Tue, 20 Jan 2026 13:23:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1768915415;
+	bh=dniG3HZgx9/bXQbDKmnpWfRvvD6BYMyLlOZ19YVT2kU=;
+	h=From:To:Cc:Subject:Date:From;
+	b=Fupmtsmm0YtUJX/zmor0i2QQrdWtAzjPZS9UvaVCsziSeLss1Y0YlZkE/+YhY98oJ
+	 XeiKMX761KVeDiE2x03iMrBbkAPCjNBE4/QvW+aBV5LvQv7jkM8zi+Gw+LeXuy2H9t
+	 pg1WUIKeeW/K+nKmfdchLZsOGJuU3Q9qSCKgFEXCvXNgeg8fBHf5udcgAbRFLEMC5T
+	 t6DdjryobyhAPfQWdBxs+9F7pXFAHVh5Kj92KewMf9MXfyFE6z6w45+bHXCcK+LKFs
+	 LsWDedielzZCTL/tLMytdYbORCWhOagTer7N3L6ZwrSxPcjoLBe4fU63i6dqfNYYvb
+	 6spMQgaiECfTw==
+From: bod@kernel.org
+To: bod@kernel.org,
+	linux-media@vger.kernel.org,
+	hans@jjverkuil.nl
+Cc: bryan.odonoghue@linaro.org
+Subject: [GIT PULL FOR 6.20] Please pull platform-qcom-iris-6.20-improvements
+Date: Tue, 20 Jan 2026 13:23:27 +0000
+Message-ID: <20260120132331.6729-1-bod@kernel.org>
+X-Mailer: git-send-email 2.52.0
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20260120131046.GS13201@unreal>
 
-On Tue, Jan 20, 2026 at 03:10:46PM +0200, Leon Romanovsky wrote:
-> On Mon, Jan 19, 2026 at 03:54:44PM -0400, Jason Gunthorpe wrote:
-> > On Mon, Jan 19, 2026 at 08:23:00PM +0200, Leon Romanovsky wrote:
-> > > On Mon, Jan 19, 2026 at 12:59:51PM -0400, Jason Gunthorpe wrote:
-> > > > On Sun, Jan 18, 2026 at 02:08:47PM +0200, Leon Romanovsky wrote:
-> > > > > From: Leon Romanovsky <leonro@nvidia.com>
-> > > > > 
-> > > > > IOMMUFD does not support page fault handling, and after a call to
-> > > > > .invalidate_mappings() all mappings become invalid. Ensure that
-> > > > > the IOMMUFD DMABUF importer is bound to a revoke‑aware DMABUF exporter
-> > > > > (for example, VFIO).
-> > > > > 
-> > > > > Signed-off-by: Leon Romanovsky <leonro@nvidia.com>
-> > > > > ---
-> > > > >  drivers/iommu/iommufd/pages.c | 9 ++++++++-
-> > > > >  1 file changed, 8 insertions(+), 1 deletion(-)
-> > > > > 
-> > > > > diff --git a/drivers/iommu/iommufd/pages.c b/drivers/iommu/iommufd/pages.c
-> > > > > index 76f900fa1687..a5eb2bc4ef48 100644
-> > > > > --- a/drivers/iommu/iommufd/pages.c
-> > > > > +++ b/drivers/iommu/iommufd/pages.c
-> > > > > @@ -1501,16 +1501,22 @@ static int iopt_map_dmabuf(struct iommufd_ctx *ictx, struct iopt_pages *pages,
-> > > > >  		mutex_unlock(&pages->mutex);
-> > > > >  	}
-> > > > >  
-> > > > > -	rc = sym_vfio_pci_dma_buf_iommufd_map(attach, &pages->dmabuf.phys);
-> > > > > +	rc = dma_buf_pin(attach);
-> > > > >  	if (rc)
-> > > > >  		goto err_detach;
-> > > > >  
-> > > > > +	rc = sym_vfio_pci_dma_buf_iommufd_map(attach, &pages->dmabuf.phys);
-> > > > > +	if (rc)
-> > > > > +		goto err_unpin;
-> > > > > +
-> > > > >  	dma_resv_unlock(dmabuf->resv);
-> > > > >  
-> > > > >  	/* On success iopt_release_pages() will detach and put the dmabuf. */
-> > > > >  	pages->dmabuf.attach = attach;
-> > > > >  	return 0;
-> > > > 
-> > > > Don't we need an explicit unpin after unmapping?
-> > > 
-> > > Yes, but this patch is going to be dropped in v3 because of this
-> > > suggestion.
-> > > https://lore.kernel.org/all/a397ff1e-615f-4873-98a9-940f9c16f85c@amd.com
-> > 
-> > That's not right, that suggestion is about changing VFIO. iommufd must
-> > still act as a pinning importer!
-> 
-> There is no change in iommufd, as it invokes dma_buf_dynamic_attach()
-> with a valid &iopt_dmabuf_attach_revoke_ops. The check determining whether
-> iommufd can perform a revoke is handled there.
+From: Bryan O'Donoghue <bod@kernel.org>
 
-iommufd is a pining importer. I did not add a call to pin because it
-only worked with VFIO that would not support it. Now that this series
-fixes it the pin must be added. Don't drop this patch.
+The following changes since commit 4a2207a3736d0dc78ac2f16325189b307964a2cb:
 
-All the explanations we just gave say this special revoke mode only
-activates if the buffer is pinned by the importer, so iommufd must pin
-it. Otherwise it says it is working in the move mode with faulting
-that it cannot support.
+  media: iris: Prevent output buffer queuing before stream-on completes (2026-01-19 09:50:34 +0000)
 
-Jason
+are available in the Git repository at:
+
+  https://gitlab.freedesktop.org/linux-media/users/bodonoghue.git tags/platform-qcom-iris-6.20-improvements
+
+for you to fetch changes up to 665defe587f4112d8f2e44033c312fb2b2c25d74:
+
+  media: iris: Introduce vpu ops for vpu4 with necessary hooks (2026-01-19 10:06:45 +0000)
+
+----------------------------------------------------------------
+This tag contains a number of new features and improvments
+This tag depends on antecedent tag platform-qcom-iris-6.20-fixes
+
+- Starting of with simple documentation/cocci fix - Ricardo Ribalda
+- Next is a debug string change from Vishnu Reddy
+- A series to support crop/scale/rotation/flipping from Wangao Wang
+- Finally support for VPU4 - Vikash Garodia
+
+----------------------------------------------------------------
+Ricardo Ribalda (1):
+      media: iris: Document difference in size during allocation
+
+Vikash Garodia (6):
+      media: iris: Add support for multiple clock sources
+      media: iris: Add support for multiple TZ content protection(CP) configs
+      media: iris: Introduce buffer size calculations for vpu4
+      media: iris: Move vpu register defines to common header file
+      media: iris: Move vpu35 specific api to common to use for vpu4
+      media: iris: Introduce vpu ops for vpu4 with necessary hooks
+
+Vishnu Reddy (1):
+      media: iris: Change psc properties message to debug level
+
+Wangao Wang (6):
+      media: qcom: iris: Improve format alignment for encoder
+      media: qcom: iris: Improve crop_offset handling for encoder
+      media: qcom: iris: Add scale support for encoder
+      media: qcom: iris: Add rotation support for encoder
+      media: qcom: iris: Add flip support for encoder
+      media: qcom: iris: Add intra refresh support for encoder
+
+ drivers/media/platform/qcom/iris/Makefile          |   1 +
+ drivers/media/platform/qcom/iris/iris_ctrls.c      |  95 +++++
+ drivers/media/platform/qcom/iris/iris_ctrls.h      |   3 +
+ drivers/media/platform/qcom/iris/iris_firmware.c   |  23 +-
+ .../platform/qcom/iris/iris_hfi_gen2_command.c     |  65 +++-
+ .../platform/qcom/iris/iris_hfi_gen2_defines.h     |  19 +
+ .../platform/qcom/iris/iris_hfi_gen2_response.c    |   2 +
+ drivers/media/platform/qcom/iris/iris_instance.h   |   8 +
+ .../platform/qcom/iris/iris_platform_common.h      |  16 +-
+ .../media/platform/qcom/iris/iris_platform_gen1.c  |  25 +-
+ .../media/platform/qcom/iris/iris_platform_gen2.c  |  96 ++++-
+ .../platform/qcom/iris/iris_platform_sc7280.h      |   5 +
+ drivers/media/platform/qcom/iris/iris_power.c      |   2 +-
+ drivers/media/platform/qcom/iris/iris_probe.c      |  20 +-
+ drivers/media/platform/qcom/iris/iris_resources.c  |  16 +-
+ drivers/media/platform/qcom/iris/iris_resources.h  |   1 +
+ drivers/media/platform/qcom/iris/iris_utils.c      |   6 +
+ drivers/media/platform/qcom/iris/iris_utils.h      |   1 +
+ drivers/media/platform/qcom/iris/iris_venc.c       |  33 +-
+ drivers/media/platform/qcom/iris/iris_vpu3x.c      | 199 +---------
+ drivers/media/platform/qcom/iris/iris_vpu4x.c      | 369 +++++++++++++++++++
+ drivers/media/platform/qcom/iris/iris_vpu_buffer.c | 402 +++++++++++++++++++--
+ drivers/media/platform/qcom/iris/iris_vpu_buffer.h |  24 ++
+ drivers/media/platform/qcom/iris/iris_vpu_common.c | 188 +++++++---
+ drivers/media/platform/qcom/iris/iris_vpu_common.h |   5 +
+ .../platform/qcom/iris/iris_vpu_register_defines.h |  61 ++++
+ 26 files changed, 1362 insertions(+), 323 deletions(-)
+ create mode 100644 drivers/media/platform/qcom/iris/iris_vpu4x.c
