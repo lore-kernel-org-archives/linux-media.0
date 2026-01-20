@@ -1,39 +1,74 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f176.google.com (mail-pf1-f176.google.com [209.85.210.176])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A03DF421EE1
-	for <linux-media@vger.kernel.org>; Tue, 20 Jan 2026 11:59:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 12BB342669E
+	for <linux-media@vger.kernel.org>; Tue, 20 Jan 2026 12:11:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768910359; cv=none; b=DrjbZ98L2+M4Pc/EVH5ea0qy/Za8qLEu2bsd9vMQzotFrMSdHeJQppil/z4IcS5HSAi4EMM9WZhB9Aig5ACFav+mHbYjms/qojECRbg4BaluRskyspCat83GcMXQSwEL6gQp6yxS98v+LocZphAOBRsPUGmq3XcWtpR72QlQL+8=
+	t=1768911085; cv=none; b=VF7W8A1JrlDnNiIpzUgT7lYvaEZmIIew9pNrKFtc57WLWJ+ueWcSf4WBAivJeyYsV8jmNjo2WwXMmRe1xY13mxBvhW73XxAbYUf5/O9Evjhaqs2jLjtUkTcnbWmf3RRZW7/oTU41NOmMvajYVjuF1cov3Wnd6SNrjTOJuspcWOs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768910359; c=relaxed/simple;
-	bh=V/v8dWA9uZTiLLeTojV9jz/w4Yclh7wTRFbF/J2X0XQ=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=MIYcdCM2jGtMGc3idn785wsDxORYxWrPzUgveO+xOL7wkUB3kxrV/rdnSYPyMeC3pAgfF9rVLFqQMtuQTlcMq9kcfCkGx/pKoLst2Kxfc4WT1X4k0KKruajHLB8A1JbycQxcGYMCzH243+q7/Ty5Y0NGneKCRPW3qc7GWYUJaFE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=pW/z5N/z; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1768911085; c=relaxed/simple;
+	bh=x1ZFqXPg08O8CIdkeGxwHnmW3vI6NSISVaARNwC7Hyg=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=IEBk1b9pbgm+36AFySGuoWEIAt1cmtoQ4+XKtZZyeY4txKp1H75UMhtaTz8+qKqyHSkwES13QF18tUmreVDgp12yJvcPBuK01deqY4Jn0lYVvfj5jZBsvU3DAHD8UU5XzpNfvLCelB+LLy7zSaeZAfxvPfr+tfq8R6e+XwHm5lg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ZqP8j3ze; arc=none smtp.client-ip=209.85.210.176
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="pW/z5N/z"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F3214C16AAE;
-	Tue, 20 Jan 2026 11:59:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1768910359;
-	bh=V/v8dWA9uZTiLLeTojV9jz/w4Yclh7wTRFbF/J2X0XQ=;
-	h=From:To:Cc:Subject:Date:From;
-	b=pW/z5N/zVNzlYNnmoWJMziND1O2z7pMstNjP3imkF7OAqr4GVQRet8yL0cp+Rdggx
-	 2CruSCWoZFcVqcB/AKsqtmXNT/Fxo9W9OzuElEvnj/7VbGAv1DXDtIb8kQUSsR+Zdw
-	 Yn9VasmoluKR3XMtZM87A8PZI5EjlttUdCegV9KYFUZFGOdg1Sbp1gNPy+GokRFSD3
-	 YoVcqZ3bHFrg4sOkKQFxfOmePcw5hafqI/AeAkVGihwj7dFZCMA+t2rw9j+2Qeqq7Y
-	 /f0CdrZxPDx0bH3GwBxoYz701IpKCNKzFcJM/i9Jk7hOkTkOSq/wcCTplVBrMlilSX
-	 RqFO9Du0VUZ/g==
-From: bod@kernel.org
-To: bod@kernel.org,
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ZqP8j3ze"
+Received: by mail-pf1-f176.google.com with SMTP id d2e1a72fcca58-81db1530173so2471506b3a.1
+        for <linux-media@vger.kernel.org>; Tue, 20 Jan 2026 04:11:23 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1768911083; x=1769515883; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=+M/fFjyuX7BH6FG6ugPKx8MXXjIS/+A8oqVRnCk5TSg=;
+        b=ZqP8j3zeuAmEfLBUtIhLGvIqC8jOaoKyGwx4VFMlvVZzCJkSGGOLAegOrg+7NxwXPH
+         pxpTQ8R15fd+fEaWbUBIF/0m9FgK/FFAl4ZYjgTpCJXRd3HPRTVZ5kuHrt7GFVaI/12s
+         T++WxC9s48Jz+LYI3p87y4B7nl/URW6aSQ7tH130tf4q/meEGgGdalfJl1klSJ8Zlav2
+         iHrkZmBlpk4PocnNHuxhm7GvYlADVecYU2A5x5VTmqgjaWrSjbgfSUd6CPuP89DovQkZ
+         n9RwHIl77hVIguIsvpDRkjBqzLx03lDYv++QHzm+JhP5djmSkL+Vvv4xpFIMwdENIKJ9
+         gXZg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1768911083; x=1769515883;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=+M/fFjyuX7BH6FG6ugPKx8MXXjIS/+A8oqVRnCk5TSg=;
+        b=Gi9Knu1BLtVm2UQo97HsvQNBRtjbq1/hHFCXuHYM4yth3YcAxrIE8d4jtNzyU+ZHIg
+         FmppCa9PSOwrxVbGXmg+TarxgwH4bgmYdk0mOJSaw8OPglx/DApVsMttxuhT5xnOimp9
+         efsjD3KHOqbXpbE7LUgGPtx4ja459ZquQuiqXEJL2K1VdMzGmgAAQAP084I9HhQKQt35
+         52gxba3T5Ov9wOB6fAzSQrPJJ8YF5GrkM6Z9b1Ly9EEyIwqZ3GfF/LHAq0xNUK9IBXP6
+         hwi/g4z2uzW13hRy1+uMlgt8bq/G8A/EWxzuEny0B02A8lDNSVl7kUixl/ec+65yCOF0
+         800Q==
+X-Forwarded-Encrypted: i=1; AJvYcCXXp3kJ47meHsKsxae0xGz+bAaB6jUZOqKaiPNMdeHKs9h6OHrAsvOtmKsBkWWENB0NdKzz/ecaxuMM4w==@vger.kernel.org
+X-Gm-Message-State: AOJu0YxE0ap0uO72hdxnGokTaRJgKt5XZfPdqbgnDVf1jjm9E3tsPSiK
+	6Vr5vVWlBk1PF9VDMmhwGjsRrSayN7mWNYwdaWQnddiLo+HiO0a1tMIe
+X-Gm-Gg: AZuq6aLxAK9QBzvf1OSUGL+qtISGleIx3DcJd3WHcqJcAjeiDeW87WvDBJDCxkQLUAy
+	qSs4aVdwChwLfsysHYi+phulRsnUcVyHx3a+k6Wz5bFWLa4DpzZ7wMG7v9Vz9Uj9kRsTd41vkrH
+	2a7aYZY55Nj/BsLAvfBIu7/fa/f9K9fYC7jbwVqI1eEmEJweJetnTelJ6A4nYHbghCVuRFHWkFU
+	Q6xE8uNc5ZGGOkPZyThfoM4JHp27eKDRJqevltV0X9eCYRy1oUc3NcfvLDE55/mmuq/+/NwMn7d
+	2+6BpMEuc7OiGXglE9ktaZs+jGF1NKhjOHsnXb5qEN1JKphl+eH6jqRtPectCROuLlNy+9n2bMj
+	i6jOMKT+5s8GunXdWNYVqRx6d/I+x4TtSKOR9Qkw5yTrZ8Scqar1C+NsfeqDRRuaOHbaRVEzj0W
+	P/maigdKMdekRlBD550ubK2z7A5SeOpn8JxmX36FbO8Ip6R6RAoXnqs8nZG0m8/OeGSc6GBhNcW
+	e6UTOTlxxPbNlmeYMBPIC9KFcLQ6yXBceb9CwhdvpY1lTYNEf2QVOxhoA==
+X-Received: by 2002:a05:6a00:180e:b0:7fb:e662:5b9 with SMTP id d2e1a72fcca58-81fe880897amr1744566b3a.31.1768911082919;
+        Tue, 20 Jan 2026 04:11:22 -0800 (PST)
+Received: from 2045D.localdomain (70.sub-75-229-220.myvzw.com. [75.229.220.70])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-81fa10bdc65sm12150178b3a.21.2026.01.20.04.11.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 20 Jan 2026 04:11:22 -0800 (PST)
+From: Gui-Dong Han <hanguidong02@gmail.com>
+To: mchehab@kernel.org
+Cc: hverkuil+cisco@kernel.org,
 	linux-media@vger.kernel.org,
-	hans@jjverkuil.nl
-Cc: bryan.odonoghue@linaro.org
-Subject: [GIT PULL FOR 6.20] Please pull platform-qcom-venus-6.20
-Date: Tue, 20 Jan 2026 11:59:11 +0000
-Message-ID: <20260120115914.293208-1-bod@kernel.org>
-X-Mailer: git-send-email 2.52.0
+	linux-kernel@vger.kernel.org,
+	baijiaju1990@gmail.com,
+	Gui-Dong Han <hanguidong02@gmail.com>,
+	stable@vger.kernel.org
+Subject: [PATCH v2] media: dvb_demux: fix potential TOCTOU race conditions
+Date: Tue, 20 Jan 2026 20:11:05 +0800
+Message-ID: <20260120121105.8959-1-hanguidong02@gmail.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
@@ -42,36 +77,79 @@ List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-From: Bryan O'Donoghue <bod@kernel.org>
+The dvb_demux functions handle frontend connectivity without holding
+dvbdemux->mutex during checks, leading to TOCTOU race conditions. In
+dvbdmx_write(), a concurrent dvbdmx_disconnect_frontend() can set
+demux->frontend to NULL after the check, causing a potential NULL pointer
+dereference. In dvbdmx_connect_frontend(), a concurrent connection could
+set the frontend between the check and the lock. This allows the second
+caller to overwrite the existing frontend, leading to resource leaks.
+The dvb_demux module should use its own mutex to ensure thread safety
+for these internal state checks.
 
-The following changes since commit eb4ee870747c3a77a9c3c84d84efb64bd481013a:
+Fix this by extending the lock scope. Move the frontend state checks
+inside the dvbdemux->mutex critical section to ensure the state remains
+stable during the operation.
 
-  Documentation: admin-guide: media: mgb4: Add GMSL1 & GMSL3-coax modules info (2026-01-17 09:08:02 +0100)
+This possible bug was found by our experimental static analysis tool,
+which analyzes lock usage to detect TOCTOU issues.
 
-are available in the Git repository at:
+Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
+Cc: stable@vger.kernel.org
+Signed-off-by: Gui-Dong Han <hanguidong02@gmail.com>
+---
+v2:
+* Remove unnecessary parentheses to fix checkpatch --strict warning, as
+reported by Media CI robot.
+---
+ drivers/media/dvb-core/dvb_demux.c | 21 +++++++++++++--------
+ 1 file changed, 13 insertions(+), 8 deletions(-)
 
-  https://gitlab.freedesktop.org/linux-media/users/bodonoghue.git tags/platform-qcom-venus-6.20
+diff --git a/drivers/media/dvb-core/dvb_demux.c b/drivers/media/dvb-core/dvb_demux.c
+index 7c4d86bfdd6c..38ffbbfef1f5 100644
+--- a/drivers/media/dvb-core/dvb_demux.c
++++ b/drivers/media/dvb-core/dvb_demux.c
+@@ -1141,15 +1141,18 @@ static int dvbdmx_write(struct dmx_demux *demux, const char __user *buf, size_t
+ 	struct dvb_demux *dvbdemux = (struct dvb_demux *)demux;
+ 	void *p;
+ 
+-	if ((!demux->frontend) || (demux->frontend->source != DMX_MEMORY_FE))
++	if (mutex_lock_interruptible(&dvbdemux->mutex))
++		return -ERESTARTSYS;
++
++	if (!demux->frontend || demux->frontend->source != DMX_MEMORY_FE) {
++		mutex_unlock(&dvbdemux->mutex);
+ 		return -EINVAL;
++	}
+ 
+ 	p = memdup_user(buf, count);
+-	if (IS_ERR(p))
++	if (IS_ERR(p)) {
++		mutex_unlock(&dvbdemux->mutex);
+ 		return PTR_ERR(p);
+-	if (mutex_lock_interruptible(&dvbdemux->mutex)) {
+-		kfree(p);
+-		return -ERESTARTSYS;
+ 	}
+ 	dvb_dmx_swfilter(dvbdemux, p, count);
+ 	kfree(p);
+@@ -1202,11 +1205,13 @@ static int dvbdmx_connect_frontend(struct dmx_demux *demux,
+ {
+ 	struct dvb_demux *dvbdemux = (struct dvb_demux *)demux;
+ 
+-	if (demux->frontend)
+-		return -EINVAL;
+-
+ 	mutex_lock(&dvbdemux->mutex);
+ 
++	if (demux->frontend) {
++		mutex_unlock(&dvbdemux->mutex);
++		return -EINVAL;
++	}
++
+ 	demux->frontend = frontend;
+ 	mutex_unlock(&dvbdemux->mutex);
+ 	return 0;
+-- 
+2.43.0
 
-for you to fetch changes up to 2e46a188b4309998014b93961820ddea050fd65d:
-
-  media: venus: assign unique bus_info strings for encoder and decoder (2026-01-20 10:26:55 +0000)
-
-----------------------------------------------------------------
-This tag contains just three patches reflective of the transition to Iris
-
-- Two fixes for EOS handling
-- One string to better inform user-space of encoder v decoder
-
-----------------------------------------------------------------
-Dikshita Agarwal (1):
-      media: venus: vdec: restrict EOS addr quirk to IRIS2 only
-
-Jorge Ramirez-Ortiz (1):
-      media: venus: assign unique bus_info strings for encoder and decoder
-
-Renjiang Han (1):
-      media: venus: vdec: fix error state assignment for zero bytesused
-
- drivers/media/platform/qcom/venus/vdec.c | 20 +++++++++++++++-----
- drivers/media/platform/qcom/venus/venc.c |  6 +++++-
- 2 files changed, 20 insertions(+), 6 deletions(-)
