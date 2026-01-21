@@ -1,111 +1,120 @@
-Received: from lahtoruutu.iki.fi (lahtoruutu.iki.fi [185.185.170.37])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 59CD743CEF2
-	for <linux-media@vger.kernel.org>; Wed, 21 Jan 2026 08:36:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=185.185.170.37
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768984566; cv=pass; b=OdZE/t8S0f7xrP5e9Psdso2ak4iKMozGj9GJ/bzhj9+Z0jnV2UgTcVxfmt4o1Y9LdLmAnhwZyBR22Y5D0mllig8vfjfXzwYnz+gzD1y85OcIB7yAAS17mJTRq49Ys5pBo+otEi3hAI2pT1cNWWpDggO2KN0x9d1uXtGHRI2VbA0=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768984566; c=relaxed/simple;
-	bh=a0bsGQ65fDUppa/U+1CZVwbpFSRnfFUsLG95i1yZH8Q=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=AQE8eF3nUguHGe/ze9ECCEh5pXIYgU0FH+1UeEVpM9v3GNCQb3SPqhtocefqh8MSfQEVNYVO1mUiOSmHJJ16tb5e1nA4Bm9ES3ErKye85nQNJZTPagRNhSLpv+SoWXrkdDC2mIQfPXHhbcGYc2u9GusqTFZOIAZdAZBewUN8bKs=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=iki.fi; spf=pass smtp.mailfrom=iki.fi; dkim=pass (2048-bit key) header.d=iki.fi header.i=@iki.fi header.b=K8bdRLWt; arc=pass smtp.client-ip=185.185.170.37
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=iki.fi
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iki.fi
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5FB3B441045;
+	Wed, 21 Jan 2026 08:41:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1768984910; cv=none; b=ur/4jZ9mvr5jtAwXJX4gLOXPeO5dvV1DbnG1xzBGUc8bgnmGnrNWsyS+gCI7QdLSGsK03PbeJAAYTcz5PjCsyGVelDPfhdEx9SYN1/tVihUnWaHfp7+UNWb6eQ4ppgmhIWIu1POZuqlFzm5xWPiZKSlJJrR8tjAlUD+d3FjD19A=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1768984910; c=relaxed/simple;
+	bh=vX9ez30UqQH8Ea7faskYAe/RcTUI4WeiZy+2L8FsrmA=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=uXjIsOuIyf9AmDrfY9jyKLDuBQdqQwr3BJwlz/Vewj2gHzUBnTAj5iyE5W+7KvizTC+3/xikJ+DxfzubSttPZQVDO06eT2h6j6kQJaaE4OfnnOGnvzV2UCJQ2s2NTGGZP4MK/M17PzI9T60XmHUxDsg3wyoSeTckTgF8kpd03F4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=N/jftV8W; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=iki.fi header.i=@iki.fi header.b="K8bdRLWt"
-Received: from hillosipuli.retiisi.eu (91-158-51-183.elisa-laajakaista.fi [91.158.51.183])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange x25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: sailus)
-	by lahtoruutu.iki.fi (Postfix) with ESMTPSA id 4dwy5n72GNz49PyQ;
-	Wed, 21 Jan 2026 10:29:01 +0200 (EET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi; s=lahtoruutu;
-	t=1768984142;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type;
-	bh=lag1T/1HtJKX1G4oTyuhEM1yhY9zldfsf2D79dS6Q5Y=;
-	b=K8bdRLWts4QgbBgwRYovO9oClpC44F7JhJLcnD4ErFgAW2Q/ZYGlGHq5CPs54d5hj0uvSd
-	QWx14FgyWQ2aXd4s0VNd/kSqawqUErfVY+7zItIc+GbWDDjKIaA6R78pwg/WODUqzsGamy
-	AJ/RKuQszFQKZLgrNFJhy5d0mpxut3tgdXv1PyyvjxFTWTeJS+eMjeXpsr87pKSl+cIGU/
-	IYoER9DANYdB1PE8MkxZp34Wb9oMQ3WJkvXQlbFLKYrZe7iiUqzNfE0pXZkWNWjz4Y3DHn
-	CpTSrZt+NWBZ5FsBRcyaYQXfDo8pcvxQaihcIDLWsorzkaOwfZQtFggtEyNMLg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi;
-	s=lahtoruutu; t=1768984142;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type;
-	bh=lag1T/1HtJKX1G4oTyuhEM1yhY9zldfsf2D79dS6Q5Y=;
-	b=Np21/V4svn2juX9sSM/nmXWoGzZRDkWg4ASt/DB6EK8BcknN8dW0QYi1yCD0Ql4KfZd7EY
-	5SCOn8PCxQKAdT814ZPvi0TrzZozwRgliIr7D8+dSGgbda3nMuH7dz24cu2GVcR5FjVjzJ
-	KFqBg9F0OX8Z0ycIeF4IGMyOzkBf10vlYALJpIEY1uWarflK5+bQJCSO782ASQGlZMVxdG
-	d5uAPccIo6QLmUuaMULGIr9+LL/eq8eYmvk3XzgYAk2hn+CYnFkS7pVPWVBExZrju3e+9+
-	yvvmFYiUYqcWZOfiuq3csHDxXBUE56TkpXs32CbSqRrFI4rgckD/ZZoDRb/ZnA==
-ARC-Seal: i=1; a=rsa-sha256; d=iki.fi; s=lahtoruutu; cv=none; t=1768984142;
-	b=MNgYMjNWN76gWqF6/jjYhphQHr6RNvUg+eDy8R/1MXxzwROH9g65+e6Nux4pZUq+F7ipj7
-	QrvvMM6ah94bXr2rEZK6uyULD1pIaFwS6U9zrLgrqQS+3TARIetBcfYXOVVg0dLPhj4uui
-	CizhhIMAWQghY/Yr7X2Saudch7SmAq/apDzHLQJiosvz0u6Ojx53orD4f5KX83nUQdxFnc
-	1Pem1Bo1D1DJsev3Ji19Z/lTPuKjkKZn/e0hg3z09TyvlD6pcfxvagKqFEHdNn1eoTC4Kx
-	MybqUFU4ovUADzu0bDkR+ezbX/ps/L7eSsw9s9cnDrVbYoW14YfoOyTjs9HWlg==
-ARC-Authentication-Results: i=1;
-	ORIGINATING;
-	auth=pass smtp.auth=sailus smtp.mailfrom=sakari.ailus@iki.fi
-Received: from valkosipuli.retiisi.eu (valkosipuli.local [192.168.4.2])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange secp256r1 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by hillosipuli.retiisi.eu (Postfix) with ESMTPS id 6CE42634C50;
-	Wed, 21 Jan 2026 10:29:01 +0200 (EET)
-Date: Wed, 21 Jan 2026 10:29:01 +0200
-From: Sakari Ailus <sakari.ailus@iki.fi>
-To: linux-media@vger.kernel.org
-Cc: hans@jjverkuil.nl
-Subject: [GIT PULL FOR 6.20] Synopsys CSI-2 receiver driver
-Message-ID: <aXCOTYy9xh6h5DX9@valkosipuli.retiisi.eu>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="N/jftV8W"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C7174C116D0;
+	Wed, 21 Jan 2026 08:41:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1768984909;
+	bh=vX9ez30UqQH8Ea7faskYAe/RcTUI4WeiZy+2L8FsrmA=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=N/jftV8WqKnsm2maFReUTyS1FKZrVxHQAluTkW3EpHJ4ervet/wKOmSASptNsqcn8
+	 YCUzQehY130BGt6cUU9BFs3H9AF/0B02h/cwqe1DJtbIVQn1O0baHcQoVTQ4ECkrKj
+	 2eY60EIQdA2ElUlO9F+1P5ikr5b7v9ZGk6mmC2XusS1ZE2PrwNWovFFzfgQo56DnSf
+	 RBQuuCWVT7WPdSGkQQLmpBx1Aohcb+mdN3pnRJHuhScYqnsOPK8OkZ0n/Q7YnxOFCo
+	 mWv0ZGyr+NyMttlGy80VgLqW+5iigg0WaDm1Zt85kap7Vth+hi3cX+K4uvuAZIXBk1
+	 /elzGAkYMChww==
+Date: Wed, 21 Jan 2026 10:41:43 +0200
+From: Leon Romanovsky <leon@kernel.org>
+To: Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>
+Cc: Sumit Semwal <sumit.semwal@linaro.org>,
+	Alex Deucher <alexander.deucher@amd.com>,
+	David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
+	Gerd Hoffmann <kraxel@redhat.com>,
+	Dmitry Osipenko <dmitry.osipenko@collabora.com>,
+	Gurchetan Singh <gurchetansingh@chromium.org>,
+	Chia-I Wu <olvaffe@gmail.com>,
+	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+	Maxime Ripard <mripard@kernel.org>,
+	Thomas Zimmermann <tzimmermann@suse.de>,
+	Lucas De Marchi <lucas.demarchi@intel.com>,
+	Thomas =?iso-8859-1?Q?Hellstr=F6m?= <thomas.hellstrom@linux.intel.com>,
+	Rodrigo Vivi <rodrigo.vivi@intel.com>,
+	Jason Gunthorpe <jgg@ziepe.ca>, Kevin Tian <kevin.tian@intel.com>,
+	Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
+	Robin Murphy <robin.murphy@arm.com>,
+	Felix Kuehling <Felix.Kuehling@amd.com>,
+	Alex Williamson <alex@shazbot.org>,
+	Ankit Agrawal <ankita@nvidia.com>,
+	Vivek Kasireddy <vivek.kasireddy@intel.com>,
+	linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
+	linaro-mm-sig@lists.linaro.org, linux-kernel@vger.kernel.org,
+	amd-gfx@lists.freedesktop.org, virtualization@lists.linux.dev,
+	intel-xe@lists.freedesktop.org, linux-rdma@vger.kernel.org,
+	iommu@lists.linux.dev, kvm@vger.kernel.org
+Subject: Re: [PATCH v3 1/7] dma-buf: Rename .move_notify() callback to a
+ clearer identifier
+Message-ID: <20260121084143.GW13201@unreal>
+References: <20260120-dmabuf-revoke-v3-0-b7e0b07b8214@nvidia.com>
+ <20260120-dmabuf-revoke-v3-1-b7e0b07b8214@nvidia.com>
+ <59762c7e-f00b-49c6-bfab-ff647d3fe05d@amd.com>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <59762c7e-f00b-49c6-bfab-ff647d3fe05d@amd.com>
 
-Hi Hans, Mauro,
+On Wed, Jan 21, 2026 at 09:33:27AM +0100, Christian König wrote:
+> On 1/20/26 15:07, Leon Romanovsky wrote:
+> > From: Leon Romanovsky <leonro@nvidia.com>
+> > 
+> > Rename the .move_notify() callback to .invalidate_mappings() to make its
+> > purpose explicit and highlight that it is responsible for invalidating
+> > existing mappings.
+> > 
+> > Suggested-by: Christian König <christian.koenig@amd.com>
+> > Reviewed-by: Christian König <christian.koenig@amd.com>
+> > Signed-off-by: Leon Romanovsky <leonro@nvidia.com>
+> > ---
+> >  drivers/dma-buf/dma-buf.c                   | 6 +++---
+> >  drivers/gpu/drm/amd/amdgpu/amdgpu_dma_buf.c | 4 ++--
+> >  drivers/gpu/drm/virtio/virtgpu_prime.c      | 2 +-
+> >  drivers/gpu/drm/xe/tests/xe_dma_buf.c       | 6 +++---
+> >  drivers/gpu/drm/xe/xe_dma_buf.c             | 2 +-
+> >  drivers/infiniband/core/umem_dmabuf.c       | 4 ++--
+> >  drivers/infiniband/hw/mlx5/mr.c             | 2 +-
+> >  drivers/iommu/iommufd/pages.c               | 2 +-
+> >  include/linux/dma-buf.h                     | 6 +++---
+> >  9 files changed, 17 insertions(+), 17 deletions(-)
 
-Please pull.
+<...>
 
+> >  	attach = kzalloc(sizeof(*attach), GFP_KERNEL);
+> > @@ -1055,7 +1055,7 @@ EXPORT_SYMBOL_NS_GPL(dma_buf_pin, "DMA_BUF");
+> >   *
+> >   * This unpins a buffer pinned by dma_buf_pin() and allows the exporter to move
+> >   * any mapping of @attach again and inform the importer through
+> > - * &dma_buf_attach_ops.move_notify.
+> > + * &dma_buf_attach_ops.invalidate_mappings.
+> >   */
+> >  void dma_buf_unpin(struct dma_buf_attachment *attach)
+> >  {
+> > @@ -1262,7 +1262,7 @@ void dma_buf_move_notify(struct dma_buf *dmabuf)
+> 
+> Thinking more about it we can keep the function names as they are in the importers, but renaming renaming this framework function as well would be really nice to have.
 
-The following changes since commit dde659d37036c6edf5eeef81274b43fe12dfad53:
+Let me prepare an additional patch on top of this series. I'd prefer to
+avoid unnecessary resubmissions caused solely by renaming.
 
-  media: iris: Introduce vpu ops for vpu4 with necessary hooks (2026-01-20 16:22:24 +0100)
+Thanks
 
-are available in the Git repository at:
-
-  git://linuxtv.org/sailus/media_tree.git tags/for-6.20-6-signed
-
-for you to fetch changes up to 063befb259f3efeb0119f3853efad3b17d3e3f3d:
-
-  media: synopsys: add driver for the designware mipi csi-2 receiver (2026-01-21 00:59:51 +0200)
-
-----------------------------------------------------------------
-Add Synopsys CSI-2 receiver driver for v6.20
-
-----------------------------------------------------------------
-Michael Riesch (2):
-      media: dt-bindings: add rockchip mipi csi-2 receiver
-      media: synopsys: add driver for the designware mipi csi-2 receiver
-
- .../bindings/media/rockchip,rk3568-mipi-csi2.yaml  | 141 ++++
- MAINTAINERS                                        |   7 +
- drivers/media/platform/synopsys/Kconfig            |  18 +
- drivers/media/platform/synopsys/Makefile           |   2 +
- drivers/media/platform/synopsys/dw-mipi-csi2rx.c   | 722 +++++++++++++++++++++
- 5 files changed, 890 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/media/rockchip,rk3568-mipi-csi2.yaml
- create mode 100644 drivers/media/platform/synopsys/dw-mipi-csi2rx.c
-
--- 
-Sakari Ailus
+> 
+> Regards,
+> Christian.
