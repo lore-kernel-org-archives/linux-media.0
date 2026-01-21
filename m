@@ -1,443 +1,162 @@
-Received: from mailout1.samsung.com (mailout1.samsung.com [203.254.224.24])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 71C7F4611F9
-	for <linux-media@vger.kernel.org>; Wed, 21 Jan 2026 07:41:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.254.224.24
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D1C403D522D;
+	Wed, 21 Jan 2026 07:59:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768981308; cv=none; b=tt5oSjg+Lrxz8vMjDRz7361kRU7jqkaMeAArPIICLVK2jZoBfXyej0+xs1NMVms4ksylej64YJ8ZxQFuhYxfTjyD6E9mSLXo/B5gjME2rwt1ldJ/nvE4tbZT+XBAsoSG0T7DR8m6fGQZJQ4FKPjYVCv3LLUFl+YQz7Fd7lbYPwo=
+	t=1768982375; cv=none; b=nfDDEPWk8OqJnlCDq6cZAfeSqxnbUyJS/p4of2OeG5MLPnUIu+gngIm/ZkW4VUy7wqNSON8H/OZ37iHzuCD5Q7b53kLOn3ZUP85UWQD/+BszYKFL7Jrv+OsR8xmTVTV6FZvKG7t1PTx/yHn3aRRaaXHd+a4exfhR5bcrwsWs65M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768981308; c=relaxed/simple;
-	bh=dl1WZV4KD/vyYKQALAbeHi6Js7oLVNZoGt7pdDHb/Uk=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:In-Reply-To:
-	 Content-Type:References; b=FwhHBsXoRhJM1nmqw9qKs2TXrpKDWsOp5kmTL4eUuFjzOZAFev2JOPxvsi0VUgCATTxPuCkN5zz5lNM9KTKgREIPiFfJz5R9/6NCqnwhbjYKOnapf95kyMs19U/a9bKSzdWykrogDLKFrROm5HzcwU3ZaGo0vR8sGNUjx1OcKNQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com; spf=pass smtp.mailfrom=samsung.com; dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b=Jk/K/kpm; arc=none smtp.client-ip=203.254.224.24
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=samsung.com
+	s=arc-20240116; t=1768982375; c=relaxed/simple;
+	bh=lEy1yZ/ijqL0f8O4r3b/+kmhBy9GW/pNUeqgzBHM/dA=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=naQthyK+orayeVtgZKBRYosB74QZWGSwwlEDiKF4JHjDqnvUx5BzqTrWcfCxFZxZ+ZvlZs9eq2x0wOw+JIt/CkOqkAXxWcVsghqTATF1PsiKPFWEiZOmKZ0lu3TcdNRPyYdxk96WyxfQX8aieYplF8oflBHlIvu9V19tt7ivnpk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dfyuJlQZ; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b="Jk/K/kpm"
-Received: from epcas5p4.samsung.com (unknown [182.195.41.42])
-	by mailout1.samsung.com (KnoxPortal) with ESMTP id 20260121074137epoutp01ee0e645191d8de3bb7936882e80e8468~Mrx4rysgk2489224892epoutp01b
-	for <linux-media@vger.kernel.org>; Wed, 21 Jan 2026 07:41:37 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.samsung.com 20260121074137epoutp01ee0e645191d8de3bb7936882e80e8468~Mrx4rysgk2489224892epoutp01b
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-	s=mail20170921; t=1768981297;
-	bh=cCLSnw+7Sw2d8mXGXmlBWX5LFNtQ5J3qbnlxpAfMklg=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=Jk/K/kpm1DUt4MPqr+7ZSbYYUGx/y7d63dV9JSaX6fDiCNrRMSGqOvbYJyRHg0zPg
-	 t6ZdGvEtdSBU5c2vZ1cM8qc0W/XcEJMnOJ6a/FrPm+USF+VgQsGpOspY/3hGHOYSXN
-	 S/hrCGEGNVaHhxGLLbl8PiRtdsEoQHvDYvbpDJs8=
-Received: from epsnrtp04.localdomain (unknown [182.195.42.156]) by
-	epcas5p1.samsung.com (KnoxPortal) with ESMTPS id
-	20260121074137epcas5p161bfa789c85f6b5a0593e02ce69a4f1b~Mrx4MTvvC0369103691epcas5p1B;
-	Wed, 21 Jan 2026 07:41:37 +0000 (GMT)
-Received: from epcas5p1.samsung.com (unknown [182.195.38.95]) by
-	epsnrtp04.localdomain (Postfix) with ESMTP id 4dwx341r3vz6B9m5; Wed, 21 Jan
-	2026 07:41:36 +0000 (GMT)
-Received: from epsmtip2.samsung.com (unknown [182.195.34.31]) by
-	epcas5p2.samsung.com (KnoxPortal) with ESMTPA id
-	20260121074135epcas5p2eeb621d6acc9b4b73e6d45f5a40c078d~Mrx2oy7q42105521055epcas5p2j;
-	Wed, 21 Jan 2026 07:41:35 +0000 (GMT)
-Received: from green245.gost (unknown [107.99.41.245]) by
-	epsmtip2.samsung.com (KnoxPortal) with ESMTPA id
-	20260121074133epsmtip2bc265584191911a9589cfd40524cbe39~Mrx0nhTOy2434124341epsmtip2t;
-	Wed, 21 Jan 2026 07:41:33 +0000 (GMT)
-Date: Wed, 21 Jan 2026 13:07:24 +0530
-From: Nitesh Shetty <nj.shetty@samsung.com>
-To: Pavel Begunkov <asml.silence@gmail.com>
-Cc: linux-block@vger.kernel.org, io-uring@vger.kernel.org, Keith Busch
-	<kbusch@kernel.org>, Jens Axboe <axboe@kernel.dk>, Christoph Hellwig
-	<hch@lst.de>, Sagi Grimberg <sagi@grimberg.me>, Alexander Viro
-	<viro@zeniv.linux.org.uk>, Christian Brauner <brauner@kernel.org>,
-	linux-kernel@vger.kernel.org, linux-nvme@lists.infradead.org,
-	linux-fsdevel@vger.kernel.org, linux-media@vger.kernel.org,
-	dri-devel@lists.freedesktop.org, linaro-mm-sig@lists.linaro.org
-Subject: Re: [RFC v2 05/11] block: add infra to handle dmabuf tokens
-Message-ID: <20260121073724.dja6wyqyf5apkdcx@green245.gost>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dfyuJlQZ"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E9A6FC116D0;
+	Wed, 21 Jan 2026 07:59:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1768982374;
+	bh=lEy1yZ/ijqL0f8O4r3b/+kmhBy9GW/pNUeqgzBHM/dA=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=dfyuJlQZbT+khgy1UNrCtf//gRr41b5TeKPoiYg80AS6Fc/HmDd3VwtiI+5NSenuw
+	 2Spobvzc4gCbVDeqXVaQQbRwrS6+CHKVy3XbpOJDk9mphG7a3wdXKInoc7n0OfcKWE
+	 8SWHbICqvKTijL1hBIfRy4blDhgnKn5Fu+boDiKbghi+pmOrn0ZdSCoarjSE6+E1nR
+	 24AKgBy+Kh5VI/MLAyjcYTcRF130zk6/0Xf1/w1d4GVohJUI57MraMOfQ3eptReL80
+	 6JZuVHv3OQrm+n2zA8FnYBMhG1FJ8jnjl2gjc7wulNG8aRh7RUGCDXECKS4I2EibU8
+	 Rp2oext3FgQ8w==
+Date: Wed, 21 Jan 2026 09:59:29 +0200
+From: Leon Romanovsky <leon@kernel.org>
+To: Matthew Brost <matthew.brost@intel.com>
+Cc: Sumit Semwal <sumit.semwal@linaro.org>,
+	Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
+	Alex Deucher <alexander.deucher@amd.com>,
+	David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
+	Gerd Hoffmann <kraxel@redhat.com>,
+	Dmitry Osipenko <dmitry.osipenko@collabora.com>,
+	Gurchetan Singh <gurchetansingh@chromium.org>,
+	Chia-I Wu <olvaffe@gmail.com>,
+	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+	Maxime Ripard <mripard@kernel.org>,
+	Thomas Zimmermann <tzimmermann@suse.de>,
+	Lucas De Marchi <lucas.demarchi@intel.com>,
+	Thomas =?iso-8859-1?Q?Hellstr=F6m?= <thomas.hellstrom@linux.intel.com>,
+	Rodrigo Vivi <rodrigo.vivi@intel.com>,
+	Jason Gunthorpe <jgg@ziepe.ca>, Kevin Tian <kevin.tian@intel.com>,
+	Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
+	Robin Murphy <robin.murphy@arm.com>,
+	Felix Kuehling <Felix.Kuehling@amd.com>,
+	Alex Williamson <alex@shazbot.org>,
+	Ankit Agrawal <ankita@nvidia.com>,
+	Vivek Kasireddy <vivek.kasireddy@intel.com>,
+	linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
+	linaro-mm-sig@lists.linaro.org, linux-kernel@vger.kernel.org,
+	amd-gfx@lists.freedesktop.org, virtualization@lists.linux.dev,
+	intel-xe@lists.freedesktop.org, linux-rdma@vger.kernel.org,
+	iommu@lists.linux.dev, kvm@vger.kernel.org
+Subject: Re: [PATCH v3 6/7] vfio: Wait for dma-buf invalidation to complete
+Message-ID: <20260121075929.GU13201@unreal>
+References: <20260120-dmabuf-revoke-v3-0-b7e0b07b8214@nvidia.com>
+ <20260120-dmabuf-revoke-v3-6-b7e0b07b8214@nvidia.com>
+ <aW/pQmOO8komCgOK@lstrano-desk.jf.intel.com>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-In-Reply-To: <51cddd97b31d80ec8842a88b9f3c9881419e8a7b.1763725387.git.asml.silence@gmail.com>
-X-CMS-MailID: 20260121074135epcas5p2eeb621d6acc9b4b73e6d45f5a40c078d
-X-Msg-Generator: CA
-Content-Type: multipart/mixed;
-	boundary="----dZkOkAIazzHoUX-2rQXwJ8woeHD-_lbejx.E5KOGiu3cq0eS=_113bff_"
-CMS-TYPE: 105P
-cpgsPolicy: CPGSC10-542,Y
-X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20260121074135epcas5p2eeb621d6acc9b4b73e6d45f5a40c078d
-References: <cover.1763725387.git.asml.silence@gmail.com>
-	<51cddd97b31d80ec8842a88b9f3c9881419e8a7b.1763725387.git.asml.silence@gmail.com>
-	<CGME20260121074135epcas5p2eeb621d6acc9b4b73e6d45f5a40c078d@epcas5p2.samsung.com>
-
-------dZkOkAIazzHoUX-2rQXwJ8woeHD-_lbejx.E5KOGiu3cq0eS=_113bff_
-Content-Type: text/plain; charset="utf-8"; format="flowed"
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <aW/pQmOO8komCgOK@lstrano-desk.jf.intel.com>
 
-On 23/11/25 10:51PM, Pavel Begunkov wrote:
->Add blk-mq infrastructure to handle dmabuf tokens. There are two main
->objects. The first is struct blk_mq_dma_token, which is an extension of
->struct dma_token and passed in an iterator. The second is struct
->blk_mq_dma_map, which keeps the actual mapping and unlike the token, can
->be ejected (e.g. by move_notify) and recreated.
->
->The token keeps an rcu protected pointer to the mapping, so when it
->resolves a token into a mapping to pass it to a request, it'll do an rcu
->protected lookup and get a percpu reference to the mapping.
->
->If there is no current mapping attached to a token, it'll need to be
->created by calling the driver (e.g. nvme) via a new callback. It
->requires waiting, thefore can't be done for nowait requests and couldn't
->happen deeper in the stack, e.g. during nvme request submission.
->
->The structure split is needed because move_notify can request to
->invalidate the dma mapping at any moment, and we need a way to
->concurrently remove it and wait for the inflight requests using the
->previous mapping to complete.
->
->Signed-off-by: Pavel Begunkov <asml.silence@gmail.com>
->---
-> block/Makefile                   |   1 +
-> block/bdev.c                     |  14 ++
-> block/blk-mq-dma-token.c         | 236 +++++++++++++++++++++++++++++++
-> block/blk-mq.c                   |  20 +++
-> block/fops.c                     |   1 +
-> include/linux/blk-mq-dma-token.h |  60 ++++++++
-> include/linux/blk-mq.h           |  21 +++
-> include/linux/blkdev.h           |   3 +
-> 8 files changed, 356 insertions(+)
-> create mode 100644 block/blk-mq-dma-token.c
-> create mode 100644 include/linux/blk-mq-dma-token.h
->
->diff --git a/block/Makefile b/block/Makefile
->index c65f4da93702..0190e5aa9f00 100644
->--- a/block/Makefile
->+++ b/block/Makefile
->@@ -36,3 +36,4 @@ obj-$(CONFIG_BLK_INLINE_ENCRYPTION)	+= blk-crypto.o blk-crypto-profile.o \
-> 					   blk-crypto-sysfs.o
-> obj-$(CONFIG_BLK_INLINE_ENCRYPTION_FALLBACK)	+= blk-crypto-fallback.o
-> obj-$(CONFIG_BLOCK_HOLDER_DEPRECATED)	+= holder.o
->+obj-$(CONFIG_DMA_SHARED_BUFFER) += blk-mq-dma-token.o
->diff --git a/block/bdev.c b/block/bdev.c
->index 810707cca970..da89d20f33f3 100644
->--- a/block/bdev.c
->+++ b/block/bdev.c
->@@ -28,6 +28,7 @@
-> #include <linux/part_stat.h>
-> #include <linux/uaccess.h>
-> #include <linux/stat.h>
->+#include <linux/blk-mq-dma-token.h>
-> #include "../fs/internal.h"
-> #include "blk.h"
->
->@@ -61,6 +62,19 @@ struct block_device *file_bdev(struct file *bdev_file)
-> }
-> EXPORT_SYMBOL(file_bdev);
->
->+struct dma_token *blkdev_dma_map(struct file *file,
->+				 struct dma_token_params *params)
->+{
->+	struct request_queue *q = bdev_get_queue(file_bdev(file));
->+
->+	if (!(file->f_flags & O_DIRECT))
->+		return ERR_PTR(-EINVAL);
->+	if (!q->mq_ops)
->+		return ERR_PTR(-EINVAL);
->+
->+	return blk_mq_dma_map(q, params);
->+}
->+
-> static void bdev_write_inode(struct block_device *bdev)
-> {
-> 	struct inode *inode = BD_INODE(bdev);
->diff --git a/block/blk-mq-dma-token.c b/block/blk-mq-dma-token.c
->new file mode 100644
->index 000000000000..cd62c4d09422
->--- /dev/null
->+++ b/block/blk-mq-dma-token.c
->@@ -0,0 +1,236 @@
->+#include <linux/blk-mq-dma-token.h>
->+#include <linux/dma-resv.h>
->+
->+struct blk_mq_dma_fence {
->+	struct dma_fence base;
->+	spinlock_t lock;
->+};
->+
->+static const char *blk_mq_fence_drv_name(struct dma_fence *fence)
->+{
->+	return "blk-mq";
->+}
->+
->+const struct dma_fence_ops blk_mq_dma_fence_ops = {
->+	.get_driver_name = blk_mq_fence_drv_name,
->+	.get_timeline_name = blk_mq_fence_drv_name,
->+};
->+
->+static void blk_mq_dma_token_free(struct blk_mq_dma_token *token)
->+{
->+	token->q->mq_ops->clean_dma_token(token->q, token);
->+	dma_buf_put(token->dmabuf);
->+	kfree(token);
->+}
->+
->+static inline void blk_mq_dma_token_put(struct blk_mq_dma_token *token)
->+{
->+	if (refcount_dec_and_test(&token->refs))
->+		blk_mq_dma_token_free(token);
->+}
->+
->+static void blk_mq_dma_mapping_free(struct blk_mq_dma_map *map)
->+{
->+	struct blk_mq_dma_token *token = map->token;
->+
->+	if (map->sgt)
->+		token->q->mq_ops->dma_unmap(token->q, map);
->+
->+	dma_fence_put(&map->fence->base);
->+	percpu_ref_exit(&map->refs);
->+	kfree(map);
->+	blk_mq_dma_token_put(token);
->+}
->+
->+static void blk_mq_dma_map_work_free(struct work_struct *work)
->+{
->+	struct blk_mq_dma_map *map = container_of(work, struct blk_mq_dma_map,
->+						free_work);
->+
->+	dma_fence_signal(&map->fence->base);
->+	blk_mq_dma_mapping_free(map);
->+}
->+
->+static void blk_mq_dma_map_refs_free(struct percpu_ref *ref)
->+{
->+	struct blk_mq_dma_map *map = container_of(ref, struct blk_mq_dma_map, refs);
->+
->+	INIT_WORK(&map->free_work, blk_mq_dma_map_work_free);
->+	queue_work(system_wq, &map->free_work);
->+}
->+
->+static struct blk_mq_dma_map *blk_mq_alloc_dma_mapping(struct blk_mq_dma_token *token)
->+{
->+	struct blk_mq_dma_fence *fence = NULL;
->+	struct blk_mq_dma_map *map;
->+	int ret = -ENOMEM;
->+
->+	map = kzalloc(sizeof(*map), GFP_KERNEL);
->+	if (!map)
->+		return ERR_PTR(-ENOMEM);
->+
->+	fence = kzalloc(sizeof(*fence), GFP_KERNEL);
->+	if (!fence)
->+		goto err;
->+
->+	ret = percpu_ref_init(&map->refs, blk_mq_dma_map_refs_free, 0,
->+			      GFP_KERNEL);
->+	if (ret)
->+		goto err;
->+
->+	dma_fence_init(&fence->base, &blk_mq_dma_fence_ops, &fence->lock,
->+			token->fence_ctx, atomic_inc_return(&token->fence_seq));
->+	spin_lock_init(&fence->lock);
->+	map->fence = fence;
->+	map->token = token;
->+	refcount_inc(&token->refs);
->+	return map;
->+err:
->+	kfree(map);
->+	kfree(fence);
->+	return ERR_PTR(ret);
->+}
->+
->+static inline
->+struct blk_mq_dma_map *blk_mq_get_token_map(struct blk_mq_dma_token *token)
->+{
->+	struct blk_mq_dma_map *map;
->+
->+	guard(rcu)();
->+
->+	map = rcu_dereference(token->map);
->+	if (unlikely(!map || !percpu_ref_tryget_live_rcu(&map->refs)))
->+		return NULL;
->+	return map;
->+}
->+
->+static struct blk_mq_dma_map *
->+blk_mq_create_dma_map(struct blk_mq_dma_token *token)
->+{
->+	struct dma_buf *dmabuf = token->dmabuf;
->+	struct blk_mq_dma_map *map;
->+	long ret;
->+
->+	guard(mutex)(&token->mapping_lock);
->+
->+	map = blk_mq_get_token_map(token);
->+	if (map)
->+		return map;
->+
->+	map = blk_mq_alloc_dma_mapping(token);
->+	if (IS_ERR(map))
->+		return NULL;
->+
->+	dma_resv_lock(dmabuf->resv, NULL);
->+	ret = dma_resv_wait_timeout(dmabuf->resv, DMA_RESV_USAGE_BOOKKEEP,
->+				    true, MAX_SCHEDULE_TIMEOUT);
->+	ret = ret ? ret : -ETIME;
->+	if (ret > 0)
->+		ret = token->q->mq_ops->dma_map(token->q, map);
->+	dma_resv_unlock(dmabuf->resv);
->+
->+	if (ret)
->+		return ERR_PTR(ret);
->+
->+	percpu_ref_get(&map->refs);
->+	rcu_assign_pointer(token->map, map);
->+	return map;
->+}
->+
->+static void blk_mq_dma_map_remove(struct blk_mq_dma_token *token)
->+{
->+	struct dma_buf *dmabuf = token->dmabuf;
->+	struct blk_mq_dma_map *map;
->+	int ret;
->+
->+	dma_resv_assert_held(dmabuf->resv);
->+
->+	ret = dma_resv_reserve_fences(dmabuf->resv, 1);
->+	if (WARN_ON_ONCE(ret))
->+		return;
->+
->+	map = rcu_dereference_protected(token->map,
->+					dma_resv_held(dmabuf->resv));
->+	if (!map)
->+		return;
->+	rcu_assign_pointer(token->map, NULL);
->+
->+	dma_resv_add_fence(dmabuf->resv, &map->fence->base,
->+			   DMA_RESV_USAGE_KERNEL);
->+	percpu_ref_kill(&map->refs);
->+}
->+
->+blk_status_t blk_rq_assign_dma_map(struct request *rq,
->+				   struct blk_mq_dma_token *token)
->+{
->+	struct blk_mq_dma_map *map;
->+
->+	map = blk_mq_get_token_map(token);
->+	if (map)
->+		goto complete;
->+
->+	if (rq->cmd_flags & REQ_NOWAIT)
->+		return BLK_STS_AGAIN;
->+
->+	map = blk_mq_create_dma_map(token);
->+	if (IS_ERR(map))
->+		return BLK_STS_RESOURCE;
->+complete:
->+	rq->dma_map = map;
->+	return BLK_STS_OK;
->+}
->+
->+void blk_mq_dma_map_move_notify(struct blk_mq_dma_token *token)
->+{
->+	blk_mq_dma_map_remove(token);
->+}
->+
->+static void blk_mq_release_dma_mapping(struct dma_token *base_token)
->+{
->+	struct blk_mq_dma_token *token = dma_token_to_blk_mq(base_token);
->+	struct dma_buf *dmabuf = token->dmabuf;
->+
->+	dma_resv_lock(dmabuf->resv, NULL);
->+	blk_mq_dma_map_remove(token);
->+	dma_resv_unlock(dmabuf->resv);
->+
->+	blk_mq_dma_token_put(token);
->+}
->+
->+struct dma_token *blk_mq_dma_map(struct request_queue *q,
->+				  struct dma_token_params *params)
->+{
->+	struct dma_buf *dmabuf = params->dmabuf;
->+	struct blk_mq_dma_token *token;
->+	int ret;
->+
->+	if (!q->mq_ops->dma_map || !q->mq_ops->dma_unmap ||
->+	    !q->mq_ops->init_dma_token || !q->mq_ops->clean_dma_token)
->+		return ERR_PTR(-EINVAL);
->+
->+	token = kzalloc(sizeof(*token), GFP_KERNEL);
->+	if (!token)
->+		return ERR_PTR(-ENOMEM);
->+
->+	get_dma_buf(dmabuf);
->+	token->fence_ctx = dma_fence_context_alloc(1);
->+	token->dmabuf = dmabuf;
->+	token->dir = params->dir;
->+	token->base.release = blk_mq_release_dma_mapping;
->+	token->q = q;
->+	refcount_set(&token->refs, 1);
->+	mutex_init(&token->mapping_lock);
->+
->+	if (!blk_get_queue(q)) {
->+		kfree(token);
->+		return ERR_PTR(-EFAULT);
->+	}
->+
->+	ret = token->q->mq_ops->init_dma_token(token->q, token);
->+	if (ret) {
->+		kfree(token);
->+		blk_put_queue(q);
->+		return ERR_PTR(ret);
->+	}
->+	return &token->base;
->+}
->diff --git a/block/blk-mq.c b/block/blk-mq.c
->index f2650c97a75e..1ff3a7e3191b 100644
->--- a/block/blk-mq.c
->+++ b/block/blk-mq.c
->@@ -29,6 +29,7 @@
-> #include <linux/blk-crypto.h>
-> #include <linux/part_stat.h>
-> #include <linux/sched/isolation.h>
->+#include <linux/blk-mq-dma-token.h>
->
-> #include <trace/events/block.h>
->
->@@ -439,6 +440,7 @@ static struct request *blk_mq_rq_ctx_init(struct blk_mq_alloc_data *data,
-> 	rq->nr_integrity_segments = 0;
-> 	rq->end_io = NULL;
-> 	rq->end_io_data = NULL;
->+	rq->dma_map = NULL;
->
-> 	blk_crypto_rq_set_defaults(rq);
-> 	INIT_LIST_HEAD(&rq->queuelist);
->@@ -794,6 +796,7 @@ static void __blk_mq_free_request(struct request *rq)
-> 	blk_pm_mark_last_busy(rq);
-> 	rq->mq_hctx = NULL;
->
->+	blk_rq_drop_dma_map(rq);
-blk_rq_drop_dma_map(rq), needs to be added in blk_mq_end_request_batch
-as well[1], otherwise I am seeing we leave with increased reference
-count in dma-buf exporter side.
+On Tue, Jan 20, 2026 at 12:44:50PM -0800, Matthew Brost wrote:
+> On Tue, Jan 20, 2026 at 04:07:06PM +0200, Leon Romanovsky wrote:
+> > From: Leon Romanovsky <leonro@nvidia.com>
+> > 
+> > dma-buf invalidation is performed asynchronously by hardware, so VFIO must
+> > wait until all affected objects have been fully invalidated.
+> > 
+> > Fixes: 5d74781ebc86 ("vfio/pci: Add dma-buf export support for MMIO regions")
+> > Signed-off-by: Leon Romanovsky <leonro@nvidia.com>
+> > ---
+> >  drivers/vfio/pci/vfio_pci_dmabuf.c | 5 +++++
+> >  1 file changed, 5 insertions(+)
+> > 
+> > diff --git a/drivers/vfio/pci/vfio_pci_dmabuf.c b/drivers/vfio/pci/vfio_pci_dmabuf.c
+> > index d4d0f7d08c53..33bc6a1909dd 100644
+> > --- a/drivers/vfio/pci/vfio_pci_dmabuf.c
+> > +++ b/drivers/vfio/pci/vfio_pci_dmabuf.c
+> > @@ -321,6 +321,9 @@ void vfio_pci_dma_buf_move(struct vfio_pci_core_device *vdev, bool revoked)
+> >  			dma_resv_lock(priv->dmabuf->resv, NULL);
+> >  			priv->revoked = revoked;
+> >  			dma_buf_move_notify(priv->dmabuf);
+> > +			dma_resv_wait_timeout(priv->dmabuf->resv,
+> > +					      DMA_RESV_USAGE_KERNEL, false,
+> > +					      MAX_SCHEDULE_TIMEOUT);
+> 
+> Should we explicitly call out in the dma_buf_move_notify() /
+> invalidate_mappings kernel-doc that KERNEL slots are the mechanism
+> for communicating asynchronous dma_buf_move_notify /
+> invalidate_mappings events via fences?
+> 
+> Yes, this is probably implied, but it wouldn’t hurt to state this
+> explicitly as part of the cross-driver contract.
+> 
+> Here is what we have now:
+> 
+>  	 * - Dynamic importers should set fences for any access that they can't
+> 	 *   disable immediately from their &dma_buf_attach_ops.invalidate_mappings
+>  	 *   callback.
 
-Thanks,
-Nitesh
+I believe I documented this in patch 4:
+https://lore.kernel.org/all/20260120-dmabuf-revoke-v3-4-b7e0b07b8214@nvidia.com/"
+Is there anything else that should be added?
 
-[1]
---- a/block/blk-mq.c
-+++ b/block/blk-mq.c
-@@ -1214,6 +1214,7 @@ void blk_mq_end_request_batch(struct io_comp_batch *iob)
+  1275 /**
+  1276  * dma_buf_move_notify - notify attachments that DMA-buf is moving
+  1277  *
+  1278  * @dmabuf:     [in]    buffer which is moving
+  1279  *
+  1280  * Informs all attachments that they need to destroy and recreate all their
+  1281  * mappings. If the attachment is dynamic then the dynamic importer is expected
+  1282  * to invalidate any caches it has of the mapping result and perform a new
+  1283  * mapping request before allowing HW to do any further DMA.
+  1284  *
+  1285  * If the attachment is pinned then this informs the pinned importer that
+  1286  * the underlying mapping is no longer available. Pinned importers may take
+  1287  * this is as a permanent revocation so exporters should not trigger it
+  1288  * lightly.
+  1289  *
+  1290  * For legacy pinned importers that cannot support invalidation this is a NOP.
+  1291  * Drivers can call dma_buf_attach_revocable() to determine if the importer
+  1292  * supports this.
+  1293  *
+  1294  * NOTE: The invalidation triggers asynchronous HW operation and the callers
+  1295  * need to wait for this operation to complete by calling
+  1296  * to dma_resv_wait_timeout().
+  1297  */
 
-                  blk_crypto_free_request(rq);
-                  blk_pm_mark_last_busy(rq);
-+               blk_rq_drop_dma_map(rq);
-
-------dZkOkAIazzHoUX-2rQXwJ8woeHD-_lbejx.E5KOGiu3cq0eS=_113bff_
-Content-Type: text/plain; charset="utf-8"
+Thanks
 
 
-------dZkOkAIazzHoUX-2rQXwJ8woeHD-_lbejx.E5KOGiu3cq0eS=_113bff_--
+> 
+> Matt
+> 
+> >  			dma_resv_unlock(priv->dmabuf->resv);
+> >  		}
+> >  		fput(priv->dmabuf->file);
+> > @@ -342,6 +345,8 @@ void vfio_pci_dma_buf_cleanup(struct vfio_pci_core_device *vdev)
+> >  		priv->vdev = NULL;
+> >  		priv->revoked = true;
+> >  		dma_buf_move_notify(priv->dmabuf);
+> > +		dma_resv_wait_timeout(priv->dmabuf->resv, DMA_RESV_USAGE_KERNEL,
+> > +				      false, MAX_SCHEDULE_TIMEOUT);
+> >  		dma_resv_unlock(priv->dmabuf->resv);
+> >  		vfio_device_put_registration(&vdev->vdev);
+> >  		fput(priv->dmabuf->file);
+> > 
+> > -- 
+> > 2.52.0
+> > 
