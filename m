@@ -1,43 +1,47 @@
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
+Received: from master.debian.org (master.debian.org [82.195.75.110])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD2D7367F56
-	for <linux-media@vger.kernel.org>; Thu, 22 Jan 2026 17:54:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.167.242.64
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8078B36CE06;
+	Thu, 22 Jan 2026 18:01:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=82.195.75.110
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769104501; cv=none; b=Bullqbvl5qSukVCAdnwigZoOOMPRPnY0reJqvTw/xDm3t+Ilce4rU3cIAl11u0whZrwCF4rTI81yrc8gDd43HPN+Xm99NEQSXbyytxpXc9VsZJBxFrG6OqXdFLtjiGsoImHIVLR8LlcrjX6VL1zqLbWNwtJ1GSt5EwPuLND5s7E=
+	t=1769104914; cv=none; b=M2ypeBHdxGimanZ0ExWlQiBncW7UaEXAuhV1vAZLKHG/PUwMSGQ/HyGVY8lZnzvfaQD9ndQMMWZWIeFrf6e9XxPo6Fp1/BlzCTufbHZfk0dicuZTvFlCzE72HfesVIjQVGxcVSDRBL9giUoAiG2NL0qjbbGUw4RXwuL3zg92O00=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769104501; c=relaxed/simple;
-	bh=LLDRvj9moWmzYIlfx/9bJlgLlk53ZsEHnEkrs4dHDbs=;
+	s=arc-20240116; t=1769104914; c=relaxed/simple;
+	bh=d8MWN97v/uvNybh70ijB/cHsXFyop85ZOXdJWGGWR64=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=cg0C0Isj+2jmUJbpwPfJLvMoYuKcrkbPosNpEgpLIQW3dqaiRFDYu5bJFhLAEsyo36Du+IEOwWi0O7a7KUJFuRpjpfg362HhfRn2I4YXnk3gYPQ+zuYvBqWA0ZNeb8BKTXGRpQS5jeXbvEbUvCf1Jmt9tTTyEAr7I8/gIks5N9c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ideasonboard.com; spf=pass smtp.mailfrom=ideasonboard.com; dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b=KkCdmLiF; arc=none smtp.client-ip=213.167.242.64
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ideasonboard.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ideasonboard.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=g6aBh4zJhtF9+pdYQ/K7aPY6wGxVqkypR8x3BLE1NtgVsxYAfvdLdWOkf59PB2rkrVEMcaxjXDBk7r2WxUyd6NON0Z8Zd+hns6uz/ziRTrOLZwlhSbXPDB9MVc6biamorU2DrVC5Sz6gnCUFz6SDV7V5fv3L81nLt1gGl8ZJbR0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=debian.org; spf=none smtp.mailfrom=master.debian.org; dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b=sqySYp9i; arc=none smtp.client-ip=82.195.75.110
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=debian.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=master.debian.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="KkCdmLiF"
-Received: from pendragon.ideasonboard.com (2001-14ba-703d-e500--2a1.rev.dnainternet.fi [IPv6:2001:14ba:703d:e500::2a1])
-	by perceval.ideasonboard.com (Postfix) with UTF8SMTPSA id 3999B460;
-	Thu, 22 Jan 2026 18:54:13 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-	s=mail; t=1769104453;
-	bh=LLDRvj9moWmzYIlfx/9bJlgLlk53ZsEHnEkrs4dHDbs=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=KkCdmLiFQ7emGTfDaygirfgQo24nGxcZiqlEIZaTIDzUivvO1qS6Hq1NpEzfCevLG
-	 JoVZnJcpMKHMweMoTGvzDOr067XuUpfqgWbkOiRmKHCI3jr6y6z2X4aHy3s6ViA9Au
-	 ySgqr0nFOGinoDe/hBh1yZ1Sp+aFlE9CP0V1g1A8=
-Date: Thu, 22 Jan 2026 19:54:44 +0200
-From: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To: Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <ukleinek@debian.org>
-Cc: Ricardo Ribalda <ribalda@chromium.org>, 1121718-done@bugs.debian.org,
-	Ralf Jung <post@ralfj.de>, Salvatore Bonaccorso <carnil@debian.org>,
-	linux-media@vger.kernel.org, regressions@lists.linux.dev,
-	Mauro Carvalho Chehab <mchehab@kernel.org>,
-	Hans de Goede <hansg@kernel.org>
+	dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b="sqySYp9i"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=debian.org;
+	s=smtpauto.master; h=In-Reply-To:Content-Type:MIME-Version:References:
+	Message-ID:Subject:Cc:To:From:Date:Reply-To:Content-Transfer-Encoding:
+	Content-ID:Content-Description;
+	bh=d8MWN97v/uvNybh70ijB/cHsXFyop85ZOXdJWGGWR64=; b=sqySYp9i9sGp71ItAgpu1cEMAA
+	wBSTzHb2KfKYjsiRcc7jz3IhJOpFKToatmLMUdUoO9Oj8btAv+7N1EiAw+lWWWld82sEq8FzgrfF6
+	fup5Wws6g45a87F/S4c2uzRIGRCCFEguLIqsERGdyQKFs8kVQtl2w6KgCgUW3dEfqnduvSAQlJW41
+	MUrybt2CGMU20i6gjV+suGGwcV3jon1+8MsdF5XSPTlTnA8/72X3ONCs+s17xxWT7wAWIGkBE1ELl
+	4dCuuKFpgk4G5XD8cI5SPNTJnQSbAO3CkeCWXxBXkoBrWnuPrk6wLCNYO0J1yFSxM01hv9sf3vtoC
+	RPEMwFew==;
+Received: from ukleinek by master.debian.org with local (Exim 4.96)
+	(envelope-from <ukleinek@master.debian.org>)
+	id 1viye3-00GB9n-2T;
+	Thu, 22 Jan 2026 17:38:59 +0000
+Date: Thu, 22 Jan 2026 18:38:56 +0100
+From: Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <ukleinek@debian.org>
+To: Ricardo Ribalda <ribalda@chromium.org>, 1121718-done@bugs.debian.org, 
+	Ralf Jung <post@ralfj.de>
+Cc: Salvatore Bonaccorso <carnil@debian.org>, linux-media@vger.kernel.org, 
+	regressions@lists.linux.dev, Mauro Carvalho Chehab <mchehab@kernel.org>, 
+	Hans de Goede <hansg@kernel.org>, Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 Subject: Re: Bug#1121718: linux-image-6.17.8+deb14-amd64: Logitech C920 HD
  Pro Webcam shows flickering artifacts (sometimes)
-Message-ID: <20260122175444.GB274167@killaraus>
-References: <176458169204.346596.13968096833088921213.reportbug@r-ethtop>
+Message-ID: <aeflgf6qtiqxodjdj7jf3qth6fg47p3wkmiunfpsk7suruhh2s@eud4pqticxxn>
+References: <uboug5ectzm4s32yfgopjbcxq2uhsoc4kluaby7a4b7nzfjave@boco7oocnftr>
+ <176458169204.346596.13968096833088921213.reportbug@r-ethtop>
  <0490a39a-28d9-4925-a162-5e4d498be257@ralfj.de>
  <aVfPmZ8rUm3Vf7pT@eldamar.lan>
  <58a7c628-63dc-48f7-8a46-357ca2d7d500@ralfj.de>
@@ -46,40 +50,60 @@ References: <176458169204.346596.13968096833088921213.reportbug@r-ethtop>
  <CANiDSCuse+=+MrDUFc_Sd1zXvtY9TDrX0GF6bs2_w34b03Djkw@mail.gmail.com>
  <176458169204.346596.13968096833088921213.reportbug@r-ethtop>
  <CANiDSCt8KFH7d6cc4zTpf10F4G=O6vmZiSj5pPC0q+_e90Cjpw@mail.gmail.com>
- <aeflgf6qtiqxodjdj7jf3qth6fg47p3wkmiunfpsk7suruhh2s@eud4pqticxxn>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="bbjbywci6sy4cwzq"
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <aeflgf6qtiqxodjdj7jf3qth6fg47p3wkmiunfpsk7suruhh2s@eud4pqticxxn>
+In-Reply-To: <CANiDSCt8KFH7d6cc4zTpf10F4G=O6vmZiSj5pPC0q+_e90Cjpw@mail.gmail.com>
 
-On Thu, Jan 22, 2026 at 06:38:56PM +0100, Uwe Kleine-König wrote:
-> Hello Ricardo and Ralf,
-> 
-> On Tue, Jan 20, 2026 at 02:46:54PM +0100, Ricardo Ribalda wrote:
-> > Another update
-> > 
-> > Zoom has notified that they plan to land this even earlier. In 6.7.5
-> > 
-> > Ralf, if you could confirm that it works/doesn't when zoom is released
-> > I will be very grateful.
-> 
-> Given that this turned out to not be a bug in the kernel (and not even
-> Debian), I'm closing this bug. Even if the new Zoom release doesn't fix
-> it for you, this is their problem and not one in the kernel where we
-> could help.
-> 
-> I hope this is ok for all affected parties.
 
-We addressed it in the kernel in mainline though, reverting for the time
-being the commit that introduced the issue.
+--bbjbywci6sy4cwzq
+Content-Type: text/plain; protected-headers=v1; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+Subject: Re: Bug#1121718: linux-image-6.17.8+deb14-amd64: Logitech C920 HD
+ Pro Webcam shows flickering artifacts (sometimes)
+MIME-Version: 1.0
 
--- 
-Regards,
+Hello Ricardo and Ralf,
 
-Laurent Pinchart
+On Tue, Jan 20, 2026 at 02:46:54PM +0100, Ricardo Ribalda wrote:
+> Another update
+>=20
+> Zoom has notified that they plan to land this even earlier. In 6.7.5
+>=20
+> Ralf, if you could confirm that it works/doesn't when zoom is released
+> I will be very grateful.
+
+Given that this turned out to not be a bug in the kernel (and not even
+Debian), I'm closing this bug. Even if the new Zoom release doesn't fix
+it for you, this is their problem and not one in the kernel where we
+could help.
+
+I hope this is ok for all affected parties.
+
+Best regards
+Uwe
+
+
+--bbjbywci6sy4cwzq
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEP4GsaTp6HlmJrf7Tj4D7WH0S/k4FAmlyYK0ACgkQj4D7WH0S
+/k4A1Qf/SW2B0F+I/eo1RQZjXIcUACVqBLvahyuzoN0+pz1I/k9oeZlyGMEzY+W9
+1sciy3aeCu5khydmRT3REhtt52Lwif4XjLR8GD6cmx1HGayqkwo9rKk3IOopMveF
+2GsoPJQoJR/ygpMoIFSb1H/uZGrCCpK07rY9+S0belWM83g2wa0/yeEwOkXHi5i8
+o6NkJspV7rX0+XAm6lT6NuHrOcMVUgnOqg4yQYE1kr8dSNcGwi5RrEWvhFOEhfOh
+tkD8MbnUJ3r3aDfyhaBQjCHzoMRQu3kLOT2RqjKqqrZOlvTY8vomr9emhT9S9CpV
+iyjkIoa2ZPot+Fd9SvaLVChb3HYC/Q==
+=IBWS
+-----END PGP SIGNATURE-----
+
+--bbjbywci6sy4cwzq--
