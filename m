@@ -1,96 +1,66 @@
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+Received: from mx.gpxsee.org (mx.gpxsee.org [37.205.14.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BF8CC35B64A;
-	Fri, 23 Jan 2026 11:37:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8E2F548CFC;
+	Fri, 23 Jan 2026 12:15:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=37.205.14.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769168248; cv=none; b=PYU3S8EC8JQlP6O5/J6jvxJ0SrlqHoxW1BspoAiTSa8tW80xtU6X1FW+P0pMbjGKtJRmG9rBTpiNQQNKvknvRsWSoNGWNVU5iAwzdjlxiRWvj8GFmFPV86V0hgqUJ1WHPIjrm75Fnl0s2BSQDDsOlJGrr8n5sGBiD+Nm9p76gm4=
+	t=1769170533; cv=none; b=CLTwy2yc6CAk4G+ptQ5lF4BUfeE3lQt96l5dc3cXDk0y3nzZ8Fvpm9cmMuUoFFZaleuYOPp3sD/6Ju4mpQoJIMFbpWG0N/SOEUnySrSHdqTY9Sn9+LkiWJrfHrTlZlEk7LAIf3HmfGAiV+l0K+fEX6BRSOblvq8VDWW9YTiBCq0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769168248; c=relaxed/simple;
-	bh=yvzDIWWhEANEW4PbM7NkDFVfHEP4kbyT4pI78b1eorY=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=K17B5rC01DJbI5X5gP5jD1Nv9s7jF7VP+pf8VX7vcAM8wARNvX3piYt6qxSSzeMBv+AX7xuCMucxn71wydpjQ4zrWOMgSVVRDwnp6veS4zQ1UM997y+XgBHYzKWs4leuhO2mjRNoG+6IESSub2xfgxVS8O9+9yGSFUU2VJb7g9Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=uNZGBqF2; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=dkAtlJcA; arc=none smtp.client-ip=193.142.43.55
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="uNZGBqF2";
-	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="dkAtlJcA"
-From: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020; t=1769168241;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=j0rNXMOI7j3rGJB/+4/ynkZTe41c0CB08LUfoR/1ch8=;
-	b=uNZGBqF2HBQ4IjF5XXI4RozcvOK0eDbvgtmfG3q71PLU6NCUkKEFNjV8fZeR8a2qh48Yqm
-	Ie1qPqfVpsX4Bzrc5tSyeendqZ+wX/WNbfLfSYYNBBRqGyHlc6ZF4X3NUwz67joHp9fWnw
-	W/1YqLxQfVzOx/VINgiFFmJqa/vJEi296otWYOVvFYI3DxlBnO/S+bOWlAXDvkBMKiuAb9
-	vuTdLx9BNZPVwtaU9PG6DhDeRAJ6UgcGHPdtf2iZOKBMkw0xtMVUAZoNheQdMTiY1fQIOe
-	sUAZc9vBp5+kUeeP79j9jUeGLP0IySpLzlhzdala4dONB5ckgT/SLQgOxx2wkA==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020e; t=1769168241;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=j0rNXMOI7j3rGJB/+4/ynkZTe41c0CB08LUfoR/1ch8=;
-	b=dkAtlJcA7fdbuGNJCEXB5q7Mg1SR+dw/uCacVMHfsWwoydSrUM9TZgaDLaMNF3c4rMzVbJ
-	FMLVSwbz7y0a9zDg==
-To: linux-kernel@vger.kernel.org
-Cc: linux-rt-devel@lists.linux.dev,
-	Thomas Gleixner <tglx@kernel.org>,
-	Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-	Martin Tuma <martin.tuma@digiteqautomotive.com>,
-	Mauro Carvalho Chehab <mchehab@kernel.org>,
-	linux-media@vger.kernel.org
-Subject: [PATCH 21/21] media: pci: mg4b: Use IRQF_NO_THREAD
-Date: Fri, 23 Jan 2026 12:37:07 +0100
-Message-ID: <20260123113708.416727-22-bigeasy@linutronix.de>
-In-Reply-To: <20260123113708.416727-1-bigeasy@linutronix.de>
-References: <20260123113708.416727-1-bigeasy@linutronix.de>
+	s=arc-20240116; t=1769170533; c=relaxed/simple;
+	bh=fosqJpAoVJIXdTyyPlGx0wrUxhTpuA6bSHikge2lsvE=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=YWTzfV2FhWgcGTH0ASXL3PoGllclkRQYE0jwzBz0t1dcs4dAbsTSaeTuua4rz606pSaxe05VpNKYiWygExSvpK9RnoavJnX5k1iLi2GNe9RnAKRNgUFw/ySiMKB6y+M6mz1/bDD9C/WrSZepu6/hjPhO+tttkTFsEfx5YafKH+0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=gpxsee.org; spf=pass smtp.mailfrom=gpxsee.org; arc=none smtp.client-ip=37.205.14.76
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=gpxsee.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gpxsee.org
+Received: from localhost (unknown [62.77.71.229])
+	by mx.gpxsee.org (Postfix) with ESMTPSA id 37F50864BC;
+	Fri, 23 Jan 2026 13:15:19 +0100 (CET)
+From: tumic@gpxsee.org
+To: Mauro Carvalho Chehab <mchehab@kernel.org>,
+	Hans Verkuil <hverkuil@xs4all.nl>
+Cc: linux-media@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	=?UTF-8?q?Martin=20T=C5=AFma?= <martin.tuma@digiteqautomotive.com>
+Subject: [PATCH] media:pci:mgb4: Fixed negative hwmon temperatures processing
+Date: Fri, 23 Jan 2026 13:14:58 +0100
+Message-ID: <20260123121458.3612-1-tumic@gpxsee.org>
+X-Mailer: git-send-email 2.52.0
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-The interrupt handler iio_trigger_generic_data_rdy_poll() will invoke
-other interrupt handler and this supposed to happen from within the
-hardirq.
+From: Martin Tůma <martin.tuma@digiteqautomotive.com>
 
-Use IRQF_NO_THREAD to forbid forced-threading.
+The "magic" temperature formula must be computed using a signed integer for
+negative temperatures to work properly.
 
-Cc: Martin Tuma <martin.tuma@digiteqautomotive.com>
-Cc: Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc: linux-media@vger.kernel.org
-Fixes: 0ab13674a9bd1 ("media: pci: mgb4: Added Digiteq Automotive MGB4 driv=
-er")
-Signed-off-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+Signed-off-by: Martin Tůma <martin.tuma@digiteqautomotive.com>
 ---
- drivers/media/pci/mgb4/mgb4_trigger.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/media/pci/mgb4/mgb4_core.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/media/pci/mgb4/mgb4_trigger.c b/drivers/media/pci/mgb4=
-/mgb4_trigger.c
-index 4f9a35904b418..70cad324df608 100644
---- a/drivers/media/pci/mgb4/mgb4_trigger.c
-+++ b/drivers/media/pci/mgb4/mgb4_trigger.c
-@@ -115,7 +115,7 @@ static int probe_trigger(struct iio_dev *indio_dev, int=
- irq)
- 	if (!st->trig)
- 		return -ENOMEM;
-=20
--	ret =3D request_irq(irq, &iio_trigger_generic_data_rdy_poll, 0,
-+	ret =3D request_irq(irq, &iio_trigger_generic_data_rdy_poll, IRQF_NO_THRE=
-AD,
- 			  "mgb4-trigger", st->trig);
- 	if (ret)
- 		goto error_free_trig;
---=20
-2.51.0
+diff --git a/drivers/media/pci/mgb4/mgb4_core.c b/drivers/media/pci/mgb4/mgb4_core.c
+index a7cb8dc50b53..0fd6c1c95abc 100644
+--- a/drivers/media/pci/mgb4/mgb4_core.c
++++ b/drivers/media/pci/mgb4/mgb4_core.c
+@@ -84,7 +84,8 @@ static int temp_read(struct device *dev, enum hwmon_sensor_types type, u32 attr,
+ 		     int channel, long *val)
+ {
+ 	struct mgb4_dev *mgbdev = dev_get_drvdata(dev);
+-	u32 val10, raw;
++	u32 raw;
++	int val10;
+ 
+ 	if (type != hwmon_temp || attr != hwmon_temp_input)
+ 		return -EOPNOTSUPP;
+
+base-commit: eb4ee870747c3a77a9c3c84d84efb64bd481013a
+-- 
+2.52.0
 
