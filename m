@@ -1,178 +1,112 @@
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BE13F344055
-	for <linux-media@vger.kernel.org>; Fri, 23 Jan 2026 02:30:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A6451353EE8;
+	Fri, 23 Jan 2026 03:17:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=210.61.82.184
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769135449; cv=none; b=I3IvgBD8Jb7r0BtNdCsToxdA0u9xHrdIDK7tM2k2bFB8jz7EubrWh8ApirIy42cDmtrY7JrGjF+H1a3FGEGP3Y/rdWrZJzcDrMRfjn+x675Wx9EPugyI3TNLgslNNA1aowpmO8W8jDDG/DvPqtsth0YV75HLrvLEz73kMrPIvIg=
+	t=1769138265; cv=none; b=han+L+2fd0VIbKafk6H85+YLlm6n7bhlKDZ719I6s9tO7EUwEJBUo0vh17zgxGjXvndiCVOGd8CxLTAtiqMbcbjelnanPqjJyQM+pHTwpTko93YVT5Wr9+iEFtffHPWXTZGKQFNggKSEH6p3sYeYtSN2bfW/NSJ43/oUUfGWk8M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769135449; c=relaxed/simple;
-	bh=TB1IK3oxKC4Pvn5NMkqqLOWwLoygWYshus/E1Z/h6SE=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Azg4cnbQnz1GMEcdVASMjpmaJqQQHndBBsOEqF1SSL4Ol17tpI+df4tl/Km5cUNB+ahbajQaC3iJhbblkETKEe0WuofZwR6sEbTbf8tPmTn4T5QZzd6jvQUtMkKDVeaTwiWzGzGIPl/bSckmhP2Tas0C8l1Oj5ZbnJleHpLRvkA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=NoFjCCue; dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b=kjIW0Q+6; arc=none smtp.client-ip=205.220.168.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
+	s=arc-20240116; t=1769138265; c=relaxed/simple;
+	bh=eioQ+IQPbawBYobUwjpYYJ08u4ByGxm0ZSYlA+DY7CI=;
+	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=SKr+qjCYoerDgOb/heYLaZ9ilTYcQpx1/ZDmP7M8SqKxy7MF132ZN9AhVwegz2BH/duh3Gwed36xCtVtRind72m1d8jRKp3v2rQCUXMEuVWJd0TmKdISDHvQ6vtPyYVQpVw/Stq9Z9+QKAdTi54TBCDyH9gqAdwfdrY6gnZsWjw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mediatek.com; spf=pass smtp.mailfrom=mediatek.com; dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b=FOqAoWXb; arc=none smtp.client-ip=210.61.82.184
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mediatek.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mediatek.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="NoFjCCue";
-	dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b="kjIW0Q+6"
-Received: from pps.filterd (m0279862.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 60MK7deO4008897
-	for <linux-media@vger.kernel.org>; Fri, 23 Jan 2026 02:30:28 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	6aeWGzMxBIh6hKBnzi2b6uZexZzjIgGrfHofmca0u00=; b=NoFjCCueJEZgaVON
-	oTYHY1xKusFZTAAGOfDvHh1T89z90P/vVKRwm2GTje2RPIicO6FGSUsoIMCnlfx5
-	2RcDG+k7xgfdpNu0S5ePAd5svYiLbkI86pytAD2+HRqMzJ3LGhOKexJ0rhJlVx26
-	+EtJMyIvPBjizO1lA9tUvy6rstRp3YhKMPSc4IA94nYfPOAv/h/wayDMUUtO74hl
-	d7mRiYJrRskOFtB1LsItq1Qt5qB+UQcQFjg/jknO6j5MTvq0hJBEj0iykgWJIQV+
-	htRWlDjT/vqQG0q9TjA8RS6vNB3qy9mDqypOOVH5cv/p0t9QtBtpXm1E+qan6+n+
-	uKT6qw==
-Received: from mail-qt1-f198.google.com (mail-qt1-f198.google.com [209.85.160.198] (may be forged))
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4but2cs0wp-1
-	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
-	for <linux-media@vger.kernel.org>; Fri, 23 Jan 2026 02:30:28 +0000 (GMT)
-Received: by mail-qt1-f198.google.com with SMTP id d75a77b69052e-50146430e1dso41072441cf.3
-        for <linux-media@vger.kernel.org>; Thu, 22 Jan 2026 18:30:27 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=oss.qualcomm.com; s=google; t=1769135414; x=1769740214; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=6aeWGzMxBIh6hKBnzi2b6uZexZzjIgGrfHofmca0u00=;
-        b=kjIW0Q+6iIHqSj7jc6XzMpshl1ugnnQtAWeeJUhZEetQNR//snqeSLI5nOTTIEhi1/
-         0qx00kLUDt00aMNJPgLO9QU1MYQRjNu66JDb7SDCr1AdW2hQMcR0Fch0HOX040Url76m
-         /ciX7wb1YxbyD/qc4A/M/flwInlq1k7G1gx+ANVnxFCqN9OQe2mV3GPDTF8udbS3L6Kw
-         6TPSr0dpCj7L99cK04iKdvwBHN375KrHbivXgKihLEqtatUBx/TlAWKAZ3PUqtupt2Pp
-         pT90B/zF5q8jtQh+H5FkTgKhZA6otHmPEyZXXvn4/Kg/PCMM3z5ORaXGSSOSKlKkebd6
-         Qbfw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1769135414; x=1769740214;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=6aeWGzMxBIh6hKBnzi2b6uZexZzjIgGrfHofmca0u00=;
-        b=R7uES5Yrzuu0LyajnfXqK2kGWKwGJnjNDHDuSH2dV9ydDL0CodR621g8vVKaXw3QBA
-         zrqljEXFndPaQ1ExO2M0hPbUTx6q5CsehPzZFm3CdKG+NT2ASmtIB12HnirkrtEYdPLG
-         ci0fQZjOszateoNdeaJ4ZyBpKN0oOcSyBSFgV/u8axT7wNIkzeJx4JSP/7YFEqXXVlkf
-         BU2np8gZfy+TlG0dEZOaL/g5wD6mJNQCnwW+qiDOA2+c+60JFmETFHaqsBmQsMjq32qN
-         5S3uCF7rMeYukVaTYuFhKByw0SG7OQQ0Sowy7JmWCDmY/HboZ0YWa7Qg4a8i4aFFjwUu
-         viQg==
-X-Forwarded-Encrypted: i=1; AJvYcCUBioSjwWnNdIeoLM1i3F8jU3Wp9vHjlwpLfrN6xojvFDTTTAi4V+muAx5ePP4Lknj8o7bYUdLvP+0EOA==@vger.kernel.org
-X-Gm-Message-State: AOJu0YxcrqmbhqvmwP6PEWoGvdXVxFPbeqWg8bgy8JHRATMUo6bEugrM
-	13ua0W7CVAP2t9z0u7nhvWjIqKz0ehXE6CR8iwjM+u2uyrYx++ZHJEkNciEH8RLVJ/HLdCICnY7
-	SRgdZGJWMwmG+/Z0CJm7PFdx19K2LOyr78bPikiydMMdBnedZwuuNQzLYuFxQBIQxuA==
-X-Gm-Gg: AZuq6aIK+phf5EXGXi3iGoIgydC7uYkcWOYXQYH9fhckctCOP6iu8IkN+58zGi/tFa+
-	azPiPzRXhRkpLO5ppPSH3j61F4XQ1dmB6sgLHHBvtgIscjxfgngodaknOvfjoI4Wbq9QfChbTAT
-	dIurNZQmqDx0EdV5FI8Mgkr6YNLm0akn4oQVD+dqbGZr/OuURTrYdmqMltcCz9haMD3u/lv5cmu
-	Kek3+dP6yEH2kCiutp7SnsS+E1q4PVcd62x4bHxfaRDnjLQVTHrLuNbv+8NT+atYOPeW70GRzer
-	PzdzOILAEYjqDP3YuhlRFILrmdEPmXb+p01LoKlew7unczUEGekBuvuvj3bILNCf386tJ+XHgjV
-	3CqZv0+jsURJJkn0qGCtneexh6cdiun7homc//78uyT9ImXe9fdECyl5gWbsVcgoUcEO/LQO+Xg
-	==
-X-Received: by 2002:a05:622a:10f:b0:501:4236:5474 with SMTP id d75a77b69052e-502f77653ebmr23040681cf.28.1769135413662;
-        Thu, 22 Jan 2026 18:30:13 -0800 (PST)
-X-Received: by 2002:a05:622a:10f:b0:501:4236:5474 with SMTP id d75a77b69052e-502f77653ebmr23040251cf.28.1769135413099;
-        Thu, 22 Jan 2026 18:30:13 -0800 (PST)
-Received: from [10.111.171.243] (Global_NAT1_IAD_FW.qualcomm.com. [129.46.232.65])
-        by smtp.gmail.com with ESMTPSA id d75a77b69052e-502f7ed650bsm7054291cf.11.2026.01.22.18.30.05
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 22 Jan 2026 18:30:12 -0800 (PST)
-Message-ID: <e0e6f248-3d82-4b0c-9ee2-4a655b7bbbfd@oss.qualcomm.com>
-Date: Fri, 23 Jan 2026 10:30:02 +0800
+	dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b="FOqAoWXb"
+X-UUID: 0b36897cf80a11f0b7fc4fdb8733b2bc-20260123
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+	h=Content-Type:Content-Transfer-Encoding:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:To:From; bh=pX2bK/usjctgy/lMBiOLpplRrxVVuqV7nGet8ZWE4uk=;
+	b=FOqAoWXb255Vbf//foJJEoJeNrK0WyxmJ1HV4ZtGZ2NA925sq3nzepc4hj5h2SSoFM2VG7WmpjUH7hirQqwzK/GTrjvPtM1wfEvhJku6GDVcvN2TT8q8nL8ElfS0uXuDaP6F1w2OL42/no/QOCOgcJ6JpkfdglTvHYAHOEcFw+k=;
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.3.11,REQID:32edc5ef-e2ab-4e47-817f-144ce646de6f,IP:0,U
+	RL:0,TC:0,Content:0,EDM:-20,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTIO
+	N:release,TS:-20
+X-CID-META: VersionHash:89c9d04,CLOUDID:ff36d7e8-ef90-4382-9c6f-55f2a0689a6b,B
+	ulkID:nil,BulkQuantity:0,Recheck:0,SF:81|82|102|836|888|898,TC:-5,Content:
+	0|15|50,EDM:1,IP:nil,URL:0,File:130,RT:0,Bulk:nil,QS:nil,BEC:-1,COL:0,OSI:
+	0,OSA:0,AV:0,LES:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0,ARC:0
+X-CID-BVR: 2,SSN|SDN
+X-CID-BAS: 2,SSN|SDN,0,_
+X-CID-FACTOR: TF_CID_SPAM_SNR
+X-CID-RHF: D41D8CD98F00B204E9800998ECF8427E
+X-UUID: 0b36897cf80a11f0b7fc4fdb8733b2bc-20260123
+Received: from mtkmbs09n2.mediatek.inc [(172.21.101.94)] by mailgw02.mediatek.com
+	(envelope-from <kyrie.wu@mediatek.com>)
+	(Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+	with ESMTP id 1853135296; Fri, 23 Jan 2026 11:17:26 +0800
+Received: from mtkmbs13n1.mediatek.inc (172.21.101.193) by
+ mtkmbs11n1.mediatek.inc (172.21.101.185) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.2562.29; Fri, 23 Jan 2026 11:17:25 +0800
+Received: from mhfsdcap04.gcn.mediatek.inc (10.17.3.154) by
+ mtkmbs13n1.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
+ 15.2.2562.29 via Frontend Transport; Fri, 23 Jan 2026 11:17:25 +0800
+From: Kyrie Wu <kyrie.wu@mediatek.com>
+To: Hans Verkuil <hverkuil-cisco@xs4all.nl>, Mauro Carvalho Chehab
+	<mchehab@kernel.org>, Rob Herring <robh@kernel.org>, Krzysztof Kozlowski
+	<krzk+dt@kernel.org>, Nicolas Dufresne <nicolas.dufresne@collabora.com>,
+	Conor Dooley <conor+dt@kernel.org>, Matthias Brugger
+	<matthias.bgg@gmail.com>, AngeloGioacchino Del Regno
+	<angelogioacchino.delregno@collabora.com>, Kyrie Wu <kyrie.wu@mediatek.com>,
+	<linux-media@vger.kernel.org>, <devicetree@vger.kernel.org>,
+	<linux-kernel@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
+	<linux-mediatek@lists.infradead.org>
+Subject: [PATCH v12 07/12] media: mediatek: jpeg: fix resolution change event handling in decoder
+Date: Fri, 23 Jan 2026 11:17:08 +0800
+Message-ID: <20260123031713.14621-8-kyrie.wu@mediatek.com>
+X-Mailer: git-send-email 2.46.0
+In-Reply-To: <20260123031713.14621-1-kyrie.wu@mediatek.com>
+References: <20260123031713.14621-1-kyrie.wu@mediatek.com>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v5 5/5] arm64: dts: qcom: talos-evk-camera: Add DT overlay
-To: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>,
-        Loic Poulain <loic.poulain@oss.qualcomm.com>,
-        Andi Shyti <andi.shyti@kernel.org>, Rob Herring <robh@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Conor Dooley
- <conor+dt@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konradybcio@kernel.org>, Robert Foss <rfoss@kernel.org>,
-        Todor Tomov <todor.too@gmail.com>,
-        Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
-        Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>,
-        Shawn Guo <shawnguo@kernel.org>, Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>
-Cc: linux-i2c@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-media@vger.kernel.org, imx@lists.linux.dev,
-        linux-arm-kernel@lists.infradead.org
-References: <20260122-sm6150_evk-v5-0-039b170450a3@oss.qualcomm.com>
- <20260122-sm6150_evk-v5-5-039b170450a3@oss.qualcomm.com>
- <825c3e7c-469a-4d69-b298-18f2edf72ea4@oss.qualcomm.com>
-Content-Language: en-US
-From: Wenmeng Liu <wenmeng.liu@oss.qualcomm.com>
-In-Reply-To: <825c3e7c-469a-4d69-b298-18f2edf72ea4@oss.qualcomm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMTIzMDAxNSBTYWx0ZWRfXzfDjUrJqVV6H
- ntcyeV00T3jHrzXtC9VdUzwFw0kVLPfnho/aaeUTa5a0uVeSRn4ZeAEiWpsSsdvJIJA30F7kQA3
- i8+ZsII6yyiPY1ih8U1JjWtkGefxoh3AaI4BLhe8dsJ9NxUYG7Jhsp46Sc9eh4RcDgC45JwzB/E
- aQ+8gbBTbCFye+PvyAs5VvpUHsY+JhIcldYwakTx6QhK4ByUfL+CvQdWGMG0Q5Ie0Ycvv69N6o7
- xutpn5qaJu+bL8OAef2f9+7xfTm7i8MKW+RynieMSzkFO3+6oUKXKaM4rCasIiBt2Op3RgqZaP3
- PTOjUxjQZou8cLcDEajdaLmF0X2WGQixdfMbbha9JhIU9ur/f1ot++8d4UzXbOHQYQH0Wh1fGAi
- yaC2u1RM54h5eGr5SOamEvQNyumVXygGF+t2+0p379/E4l3EFHKiAI4CrWmonbmOlXO7eS/PIsW
- AIMSFg4jykUQE22vQVQ==
-X-Proofpoint-ORIG-GUID: LPADePM3Kk5SPTLVxNKGTTP1CAcdsX4Y
-X-Proofpoint-GUID: LPADePM3Kk5SPTLVxNKGTTP1CAcdsX4Y
-X-Authority-Analysis: v=2.4 cv=YuYChoYX c=1 sm=1 tr=0 ts=6972dd44 cx=c_pps
- a=mPf7EqFMSY9/WdsSgAYMbA==:117 a=C3Dk8TwHQYyIj7nOf9RCJw==:17
- a=IkcTkHD0fZMA:10 a=vUbySO9Y5rIA:10 a=s4-Qcg_JpJYA:10
- a=VkNPw1HP01LnGYTKEx00:22 a=KKAkSRfTAAAA:8 a=EUspDBNiAAAA:8
- a=yKNFHEXJphivSBQIcCoA:9 a=QEXdDO2ut3YA:10 a=cvBusfyB2V15izCimMoJ:22
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.20,FMLib:17.12.100.49
- definitions=2026-01-22_06,2026-01-22_02,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- bulkscore=0 lowpriorityscore=0 adultscore=0 malwarescore=0 impostorscore=0
- suspectscore=0 clxscore=1015 spamscore=0 priorityscore=1501 phishscore=0
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.22.0-2601150000 definitions=main-2601230015
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-MTK: N
 
-Hi Konrad,
+This patch refines the handling of resolution change events within
+JPEG decoder worker. The `mtk_jpeg_set_queue_data` function is now
+called to set up queue data before signaling a source change through
+`mtk_jpeg_queue_src_chg_event`. By reorganizing these calls, the
+patch ensures that necessary queue information is updated prior to
+transitioning the context state to `MTK_JPEG_SOURCE_CHANGE`.
+A condition is added to exit early if the context is already in the
+`MTK_JPEG_SOURCE_CHANGE` state, preventing redundant operations and
+improving processing efficiency.
 
-On 1/22/2026 9:44 PM, Konrad Dybcio wrote:
-> On 1/22/26 11:48 AM, Wenmeng Liu wrote:
->> Enable IMX577 via CCI on Taloss EVK Core Kit.
->>
->> The Talos EVK board does not include a camera sensor
->> by default, this DTSO has enabled the Arducam 12.3MP
->> IMX577 Mini Camera Module on the CSI-1 interface.
->>
->> Reviewed-by: Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>
->> Signed-off-by: Wenmeng Liu <wenmeng.liu@oss.qualcomm.com>
->> ---
-> 
-> [...]
-> 
->> +&cci_i2c1 {
->> +	#address-cells = <1>;
->> +	#size-cells = <0>;
->> +
->> +	camera@1a {
->> +		compatible = "sony,imx577";
->> +		reg = <0x1a>;
->> +
->> +		reset-gpios = <&tlmm 29 GPIO_ACTIVE_LOW>;
-> 
-> Let's define the pin settings for the reset pin too, otherwise lgtm
+Fixes: dedc21500334 ("media: mtk-jpegdec: add jpeg decode worker interface")
+Signed-off-by: Kyrie Wu <kyrie.wu@mediatek.com>
+---
+ drivers/media/platform/mediatek/jpeg/mtk_jpeg_core.c | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
 
-The reset pin on the Talos EVK board is different from the default. Do 
-you recommend that I define the reset pin's pinctrl in the Talos EVK 
-board's DTS?
-
-Thanks,
-Wenmeng
-
+diff --git a/drivers/media/platform/mediatek/jpeg/mtk_jpeg_core.c b/drivers/media/platform/mediatek/jpeg/mtk_jpeg_core.c
+index f11b4b251f4b..01524b16ebab 100644
+--- a/drivers/media/platform/mediatek/jpeg/mtk_jpeg_core.c
++++ b/drivers/media/platform/mediatek/jpeg/mtk_jpeg_core.c
+@@ -1735,11 +1735,15 @@ static void mtk_jpegdec_worker(struct work_struct *work)
+ 
+ 	if (mtk_jpeg_check_resolution_change(ctx,
+ 					     &jpeg_src_buf->dec_param)) {
+-		mtk_jpeg_queue_src_chg_event(ctx);
++		mtk_jpeg_set_queue_data(ctx, &jpeg_src_buf->dec_param);
+ 		ctx->state = MTK_JPEG_SOURCE_CHANGE;
++		mtk_jpeg_queue_src_chg_event(ctx);
+ 		goto getbuf_fail;
+ 	}
+ 
++	if (ctx->state == MTK_JPEG_SOURCE_CHANGE)
++		goto getbuf_fail;
++
+ 	mtk_jpegdec_set_hw_param(ctx, hw_id, src_buf, dst_buf);
+ 	ret = pm_runtime_resume_and_get(comp_jpeg[hw_id]->dev);
+ 	if (ret < 0) {
+-- 
+2.45.2
 
