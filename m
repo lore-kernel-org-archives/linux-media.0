@@ -1,49 +1,49 @@
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A6451353EE8;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1692334E771;
 	Fri, 23 Jan 2026 03:17:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=210.61.82.184
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=60.244.123.138
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769138265; cv=none; b=han+L+2fd0VIbKafk6H85+YLlm6n7bhlKDZ719I6s9tO7EUwEJBUo0vh17zgxGjXvndiCVOGd8CxLTAtiqMbcbjelnanPqjJyQM+pHTwpTko93YVT5Wr9+iEFtffHPWXTZGKQFNggKSEH6p3sYeYtSN2bfW/NSJ43/oUUfGWk8M=
+	t=1769138268; cv=none; b=stKXz7JpseBYTb6s2Ke9j7J4zROcZ+/5G3y3qYTmjHzo4Pn0i3cUYG0kP2VnAgAXIYPwNI8UKPOOVCZ0kuZkbdj5P38Kl1wRvgkBpHDzUk+N8WwuJTUEgQXkqK6NAB9hnEd1qTVdCWgFbC5hcPKS5Z1VNC1E6RhdZzxo8J42U6E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769138265; c=relaxed/simple;
-	bh=eioQ+IQPbawBYobUwjpYYJ08u4ByGxm0ZSYlA+DY7CI=;
+	s=arc-20240116; t=1769138268; c=relaxed/simple;
+	bh=wD6J8yK4Dh8mTkHpnhqGsikcT28YEdxNZN0zUrllz90=;
 	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=SKr+qjCYoerDgOb/heYLaZ9ilTYcQpx1/ZDmP7M8SqKxy7MF132ZN9AhVwegz2BH/duh3Gwed36xCtVtRind72m1d8jRKp3v2rQCUXMEuVWJd0TmKdISDHvQ6vtPyYVQpVw/Stq9Z9+QKAdTi54TBCDyH9gqAdwfdrY6gnZsWjw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mediatek.com; spf=pass smtp.mailfrom=mediatek.com; dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b=FOqAoWXb; arc=none smtp.client-ip=210.61.82.184
+	 MIME-Version:Content-Type; b=GZpvgch75WsBDXyPfNzmyE82mGaLT4osY1yo0vbw4ZnIacmK4Pm0jTyIV7njYFD0gzecWDpWXCvt4UmJqMjdQRSZsc67vwyc7nHpJNqIQFr1TOg90xjmmpINs5TID3dzxtLefgv4Wn7WPhzZYyUCIkuL5abHASJAiMZ1k56JmyA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mediatek.com; spf=pass smtp.mailfrom=mediatek.com; dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b=KO88kxR9; arc=none smtp.client-ip=60.244.123.138
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mediatek.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mediatek.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b="FOqAoWXb"
-X-UUID: 0b36897cf80a11f0b7fc4fdb8733b2bc-20260123
+	dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b="KO88kxR9"
+X-UUID: 080e57f2f80a11f085319dbc3099e8fb-20260123
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-	h=Content-Type:Content-Transfer-Encoding:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:To:From; bh=pX2bK/usjctgy/lMBiOLpplRrxVVuqV7nGet8ZWE4uk=;
-	b=FOqAoWXb255Vbf//foJJEoJeNrK0WyxmJ1HV4ZtGZ2NA925sq3nzepc4hj5h2SSoFM2VG7WmpjUH7hirQqwzK/GTrjvPtM1wfEvhJku6GDVcvN2TT8q8nL8ElfS0uXuDaP6F1w2OL42/no/QOCOgcJ6JpkfdglTvHYAHOEcFw+k=;
+	h=Content-Type:Content-Transfer-Encoding:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:To:From; bh=anQRm/eFUR7Iw7QNsgtzYjyCFge/OFPlIXy/DZlO384=;
+	b=KO88kxR9UT7+5TJ1TDSEmGYCD2H8YCvz/4pdRkqiFrzV3Lg/tQNORFwnMIek29qa4UTtXL5M4BeFn0oC4KDEUqIXwEPoeUKLk+wRuLtolw0HUuXlnFuVBkjEf9gdZpFjRnn+O0MaaJB69HbMf9hupYoHYa1ssp5K3Xeb1jgp2wc=;
 X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.3.11,REQID:32edc5ef-e2ab-4e47-817f-144ce646de6f,IP:0,U
-	RL:0,TC:0,Content:0,EDM:-20,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTIO
-	N:release,TS:-20
-X-CID-META: VersionHash:89c9d04,CLOUDID:ff36d7e8-ef90-4382-9c6f-55f2a0689a6b,B
+X-CID-O-INFO: VERSION:1.3.11,REQID:f1c9a28c-e617-4e8c-a51f-b24596b641be,IP:0,U
+	RL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
+	release,TS:0
+X-CID-META: VersionHash:89c9d04,CLOUDID:31061e7a-8c8a-4fc4-88c0-3556e7711556,B
 	ulkID:nil,BulkQuantity:0,Recheck:0,SF:81|82|102|836|888|898,TC:-5,Content:
-	0|15|50,EDM:1,IP:nil,URL:0,File:130,RT:0,Bulk:nil,QS:nil,BEC:-1,COL:0,OSI:
-	0,OSA:0,AV:0,LES:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0,ARC:0
+	0|15|50,EDM:-3,IP:nil,URL:0,File:130,RT:0,Bulk:nil,QS:nil,BEC:-1,COL:0,OSI
+	:0,OSA:0,AV:0,LES:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0,ARC:0
 X-CID-BVR: 2,SSN|SDN
 X-CID-BAS: 2,SSN|SDN,0,_
 X-CID-FACTOR: TF_CID_SPAM_SNR
 X-CID-RHF: D41D8CD98F00B204E9800998ECF8427E
-X-UUID: 0b36897cf80a11f0b7fc4fdb8733b2bc-20260123
-Received: from mtkmbs09n2.mediatek.inc [(172.21.101.94)] by mailgw02.mediatek.com
+X-UUID: 080e57f2f80a11f085319dbc3099e8fb-20260123
+Received: from mtkmbs13n2.mediatek.inc [(172.21.101.108)] by mailgw01.mediatek.com
 	(envelope-from <kyrie.wu@mediatek.com>)
 	(Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-	with ESMTP id 1853135296; Fri, 23 Jan 2026 11:17:26 +0800
+	with ESMTP id 713586479; Fri, 23 Jan 2026 11:17:21 +0800
 Received: from mtkmbs13n1.mediatek.inc (172.21.101.193) by
- mtkmbs11n1.mediatek.inc (172.21.101.185) with Microsoft SMTP Server
+ mtkmbs11n2.mediatek.inc (172.21.101.187) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.2562.29; Fri, 23 Jan 2026 11:17:25 +0800
+ 15.2.2562.29; Fri, 23 Jan 2026 11:17:21 +0800
 Received: from mhfsdcap04.gcn.mediatek.inc (10.17.3.154) by
  mtkmbs13n1.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
- 15.2.2562.29 via Frontend Transport; Fri, 23 Jan 2026 11:17:25 +0800
+ 15.2.2562.29 via Frontend Transport; Fri, 23 Jan 2026 11:17:20 +0800
 From: Kyrie Wu <kyrie.wu@mediatek.com>
 To: Hans Verkuil <hverkuil-cisco@xs4all.nl>, Mauro Carvalho Chehab
 	<mchehab@kernel.org>, Rob Herring <robh@kernel.org>, Krzysztof Kozlowski
@@ -54,9 +54,9 @@ To: Hans Verkuil <hverkuil-cisco@xs4all.nl>, Mauro Carvalho Chehab
 	<linux-media@vger.kernel.org>, <devicetree@vger.kernel.org>,
 	<linux-kernel@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
 	<linux-mediatek@lists.infradead.org>
-Subject: [PATCH v12 07/12] media: mediatek: jpeg: fix resolution change event handling in decoder
-Date: Fri, 23 Jan 2026 11:17:08 +0800
-Message-ID: <20260123031713.14621-8-kyrie.wu@mediatek.com>
+Subject: [PATCH v12 02/12] media: mediatek: jpeg: fix jpeg buffer payload size setting
+Date: Fri, 23 Jan 2026 11:17:03 +0800
+Message-ID: <20260123031713.14621-3-kyrie.wu@mediatek.com>
 X-Mailer: git-send-email 2.46.0
 In-Reply-To: <20260123031713.14621-1-kyrie.wu@mediatek.com>
 References: <20260123031713.14621-1-kyrie.wu@mediatek.com>
@@ -70,43 +70,58 @@ Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
 X-MTK: N
 
-This patch refines the handling of resolution change events within
-JPEG decoder worker. The `mtk_jpeg_set_queue_data` function is now
-called to set up queue data before signaling a source change through
-`mtk_jpeg_queue_src_chg_event`. By reorganizing these calls, the
-patch ensures that necessary queue information is updated prior to
-transitioning the context state to `MTK_JPEG_SOURCE_CHANGE`.
-A condition is added to exit early if the context is already in the
-`MTK_JPEG_SOURCE_CHANGE` state, preventing redundant operations and
-improving processing efficiency.
+For multi-core jpegdec, if one core gets resolution change event,
+the payload size, representing the size of Y/C data, needs to change.
+But others are decoding at the same time and it can not be changed
+immediately, which results in the payload size to not match the real
+buffer length.
+The payload size must less than the real buffer length to remove
+the warnning logs.
 
-Fixes: dedc21500334 ("media: mtk-jpegdec: add jpeg decode worker interface")
+Fixes: 0fa49df4222f ("media: mtk-jpegdec: support jpegdec multi-hardware")
 Signed-off-by: Kyrie Wu <kyrie.wu@mediatek.com>
 ---
- drivers/media/platform/mediatek/jpeg/mtk_jpeg_core.c | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
+ .../platform/mediatek/jpeg/mtk_jpeg_core.c    | 19 ++++++++++++++-----
+ 1 file changed, 14 insertions(+), 5 deletions(-)
 
 diff --git a/drivers/media/platform/mediatek/jpeg/mtk_jpeg_core.c b/drivers/media/platform/mediatek/jpeg/mtk_jpeg_core.c
-index f11b4b251f4b..01524b16ebab 100644
+index 030d2a75972a..504b3d40b137 100644
 --- a/drivers/media/platform/mediatek/jpeg/mtk_jpeg_core.c
 +++ b/drivers/media/platform/mediatek/jpeg/mtk_jpeg_core.c
-@@ -1735,11 +1735,15 @@ static void mtk_jpegdec_worker(struct work_struct *work)
+@@ -702,6 +702,7 @@ static int mtk_jpeg_buf_prepare(struct vb2_buffer *vb)
+ 	struct mtk_jpeg_ctx *ctx = vb2_get_drv_priv(vb->vb2_queue);
+ 	struct mtk_jpeg_q_data *q_data = NULL;
+ 	struct v4l2_plane_pix_format plane_fmt = {};
++	size_t max_size;
+ 	int i;
  
- 	if (mtk_jpeg_check_resolution_change(ctx,
- 					     &jpeg_src_buf->dec_param)) {
--		mtk_jpeg_queue_src_chg_event(ctx);
-+		mtk_jpeg_set_queue_data(ctx, &jpeg_src_buf->dec_param);
- 		ctx->state = MTK_JPEG_SOURCE_CHANGE;
-+		mtk_jpeg_queue_src_chg_event(ctx);
- 		goto getbuf_fail;
+ 	q_data = mtk_jpeg_get_q_data(ctx, vb->vb2_queue->type);
+@@ -710,12 +711,20 @@ static int mtk_jpeg_buf_prepare(struct vb2_buffer *vb)
+ 
+ 	for (i = 0; i < q_data->fmt->colplanes; i++) {
+ 		plane_fmt = q_data->pix_mp.plane_fmt[i];
++		max_size = plane_fmt.sizeimage;
++
+ 		if (ctx->enable_exif &&
+-		    q_data->fmt->fourcc == V4L2_PIX_FMT_JPEG)
+-			vb2_set_plane_payload(vb, i, plane_fmt.sizeimage +
+-					      MTK_JPEG_MAX_EXIF_SIZE);
+-		else
+-			vb2_set_plane_payload(vb, i,  plane_fmt.sizeimage);
++			q_data->fmt->fourcc == V4L2_PIX_FMT_JPEG) {
++			max_size += MTK_JPEG_MAX_EXIF_SIZE;
++
++			vb2_set_plane_payload(vb, i,
++					      MIN(vb->planes[i].length,
++						  max_size));
++		} else {
++			vb2_set_plane_payload(vb, i,
++					      MIN(plane_fmt.sizeimage,
++						  vb->planes[i].length));
++		}
  	}
  
-+	if (ctx->state == MTK_JPEG_SOURCE_CHANGE)
-+		goto getbuf_fail;
-+
- 	mtk_jpegdec_set_hw_param(ctx, hw_id, src_buf, dst_buf);
- 	ret = pm_runtime_resume_and_get(comp_jpeg[hw_id]->dev);
- 	if (ret < 0) {
+ 	return 0;
 -- 
 2.45.2
 
