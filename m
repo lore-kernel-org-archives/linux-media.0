@@ -1,82 +1,74 @@
-Received: from mail-vs1-f51.google.com (mail-vs1-f51.google.com [209.85.217.51])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BDE652DC781
-	for <linux-media@vger.kernel.org>; Mon, 26 Jan 2026 21:01:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.217.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DC0162F3C37;
+	Mon, 26 Jan 2026 21:46:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769461274; cv=none; b=MxRZ7P/4agPL1OEhlPs7vxCSnsYDbuo9VWvklY9cEdsf7OJ2GZTHFQFIlsaYQ0UNYAWr8eLtaeUWpG8o5rxFtMGLDFWRZI0G/MnVDHzHCyoAvomHRdmZV3nR6cXE8w/glJbNNaDIMSGWmrIqaSOMAugwbBx1z75V5uhljlvbaI4=
+	t=1769463993; cv=none; b=KcTmtBxUwKIisZGMCmtjevVFApQVfFHXhTvHRa16o2hDUBDj/JtzGi0+tWrOy5/ud5cNJYDQ7V4CD7g8WtbUzvkK/YleagiTEsuKzXMiSZdj8yxKJ39vhjNvb1gv8U8ZYwB4TSZmoGrBHJ9RSJAuUqZ1goESAV2nAM6Mn8SDCuI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769461274; c=relaxed/simple;
-	bh=WqSXMgwN1bj6WlKNWD0giAIg11OWSEsUWJe5KbkBJ/w=;
+	s=arc-20240116; t=1769463993; c=relaxed/simple;
+	bh=OV8z+qAYHSTccbY3IeLbbbgQ0ZTAqemONCIq8pnZmRA=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=JgGfmkquUmomx83L2AsHQBK7oLPCqyAp6dh4uy50Vez1CyL6EnNQDsCSzCT86aUJI77PBLKGoOJqFgzgvyy1BzwLzicECETh0lOGSOMpVW9xTAW6XiEjcbUzMTGnj0qsEdXK3E+g0lluBDyO6WYkC0lUKxoVh7JGVahk8+MoBCE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=QNAkJxHY; arc=none smtp.client-ip=209.85.217.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=FQXUNPvUrUpzCzUgMX07XiS1dGUFT0Y7ZeV1hskFNPJI7ffBXbBdWWcIs5a4BeqmGSeABdDvYfRDHA9YUB3LWuCifq1k2KRFhEpxXR2p/PopMpxYxbQnR2j0crop3A+lTQmblqe8RVUJE2KBNvPan327RQDOybnebEwzMbE6VTI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Jd0y7HNH; arc=none smtp.client-ip=192.198.163.11
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="QNAkJxHY"
-Received: by mail-vs1-f51.google.com with SMTP id ada2fe7eead31-5ed065f1007so3234509137.1
-        for <linux-media@vger.kernel.org>; Mon, 26 Jan 2026 13:01:12 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1769461271; x=1770066071; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=iCW3LI0lwZJMRrEDS+3kqbUxY3kv4Hh4/Y+P85JSc/0=;
-        b=QNAkJxHY0LQWV2iCUItbo3S8AaoViGPD8Og1yXKkYPNM3VZhzN+bm9XAg8kdgtGE4x
-         W8wSeKwGLTG7+csEMIXxaSeYA6uxhGCJvNPScz8qSwNiaaSKN0GlwM6qqPX7PDqDLljP
-         L1mOKfcd/fk68Oe2ddWT7iVaqfmpif+k8Tuf6UwKPmXh9HFqjK46uktpekhm4a7s+QOf
-         boyWVByYj97Rzp2v6710YRMcIlWG+LOsBdBP/asG9uT8/kjp+8NMJezq+37MGy7ndP4p
-         TQZLy9Jz3vRjnEscxX7jo1zod8oO1a7HNAdP3SWSpmt8tgrLZ5DbPBXOLUgWjWWOWOR9
-         Ufgw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1769461271; x=1770066071;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=iCW3LI0lwZJMRrEDS+3kqbUxY3kv4Hh4/Y+P85JSc/0=;
-        b=oPqgSLx3zqy8VkVsDIOHcxLb67DQ+oHlPlZhSvdpbn1nC72oJSjbhx569nS7W6oRKf
-         tYoyCJtYEj1hckyIIz08HfeNvtr/wSaImLNkXO2tlK6yGvsnt0VVB4xtxw3Sy19XlrOv
-         7PJQH+DsMvUeex9ZfsAu7uT931x6rM7Ao+YY7/6sFmkrVcDrcaank7VzHN9boZK4+2KM
-         fRz2gI4lVQWwiBoCjqqb3favbb5Nensw+dMrQGbUL+3cu/ATmSAFNi5Ox2lqE9QVDtvE
-         3LfO/K0VPl2419oa0fNrjKeHcWBfYidLIl3RmiMlkL57XniltWqdpamVEr8NXiX2bmOB
-         CEnQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXJj4RJe/1Qt/c0bS+rPtaGxUB1wIYRgH3ItZiQQrPLszWCwbHg6IvfB75pHSUhAj29NXlv/sJvHvEtqA==@vger.kernel.org
-X-Gm-Message-State: AOJu0YywEv61fMdHOPYncM/A7fr2TaouGvAILEo5JUb3gmVpTsZt3Hse
-	VydEoPj1kA33q94PLoSHN98okeX0cYj1QeGneLoO9j3qBE6cdQbAwXTOxsvBBQ==
-X-Gm-Gg: AZuq6aJZtojmJfV7pquonqBQMvikAl1Uq+uWxxQRjs+lUqBg4E/7XLISVGG1pMyRDxa
-	/Jx2DTD93QC7zBGjjdZAJzYuHOH8hvVCAvYGyoEKRuawGhnQySTxcVHnjtpF2roLWnL3t6gRjUa
-	ikdru0/nQB3XvLt82QhQOLDzpr6tk2WRUOMfjS4FtP2+JY0w3rbaVXekIyGLpERqldV9GnKmmJB
-	h/TVZ9UdIfgh3HBf2TkJc/7xxKp3LLnOs2y54PK+GWEl6ocgj1UzKuV2G9HodhweHk7TGxiJhIC
-	1Fc6/zQXp4Rf2eNUpl6pTVewfK9GoOJ4GhCqTXIISmLQ6I4+lSwt2y/FDCpuMRNIw2WTMIDAXJg
-	1K6NfI0LgkY0xM2SZmlWNrwbWtiITd5icDZGBi9IyQwWTedq7T7T5epP71HLPog5MYJ4zBx4OpD
-	VtmVjMpXW1ZDLuxa19tpn9szP4vW7zCBzTmVq2c5XIAJP7dtK8lmCy
-X-Received: by 2002:a05:7301:1003:b0:2b0:5028:bafd with SMTP id 5a478bee46e88-2b7642198c5mr2076868eec.8.1769454774472;
-        Mon, 26 Jan 2026 11:12:54 -0800 (PST)
-Received: from google.com ([2a00:79e0:2ebe:8:cb35:17f5:7e82:90c4])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-2b749e301f0sm13452476eec.35.2026.01.26.11.12.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 26 Jan 2026 11:12:53 -0800 (PST)
-Date: Mon, 26 Jan 2026 11:12:49 -0800
-From: Dmitry Torokhov <dmitry.torokhov@gmail.com>
-To: Guenter Roeck <linux@roeck-us.net>
-Cc: "Rob Herring (Arm)" <robh@kernel.org>, 
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Mauro Carvalho Chehab <mchehab@kernel.org>, Alim Akhtar <alim.akhtar@samsung.com>, 
-	Karthikeyan Mitran <m.karthikeyan@mobiveil.co.in>, Hou Zhiqiang <Zhiqiang.Hou@nxp.com>, 
-	Lorenzo Pieralisi <lpieralisi@kernel.org>, Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kwilczynski@kernel.org>, 
-	Manivannan Sadhasivam <mani@kernel.org>, Bjorn Helgaas <bhelgaas@google.com>, 
-	Christopher Ruehl <chris.ruehl@gtsys.com.hk>, "Jason A. Donenfeld" <Jason@zx2c4.com>, 
-	Matthias Schiffer <matthias.schiffer@ew.tq-group.com>, Vincent Huang <vincent.huang@tw.synaptics.com>, 
-	Inki Dae <inki.dae@samsung.com>, Seung-Woo Kim <sw0312.kim@samsung.com>, 
-	Frank Li <Frank.Li@nxp.com>, Krzysztof Kozlowski <krzk@kernel.org>, 
-	linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-input@vger.kernel.org, linux-media@vger.kernel.org, 
-	linux-arm-kernel@lists.infradead.org, linux-samsung-soc@vger.kernel.org, linux-pci@vger.kernel.org
-Subject: Re: [PATCH] dt-bindings: Fix emails with spaces or missing brackets
-Message-ID: <m5ckxhpvhtjcc6fzlsz7y5sjxvzlbx6n7vel264hbw47joivi6@iwchebcbyjod>
-References: <20260126164724.2832009-1-robh@kernel.org>
- <9a3d4ae8-b57e-450e-971b-d09fc923eee1@roeck-us.net>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Jd0y7HNH"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1769463992; x=1800999992;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=OV8z+qAYHSTccbY3IeLbbbgQ0ZTAqemONCIq8pnZmRA=;
+  b=Jd0y7HNHEE6AUdVQmLX3Xb/xWZvxAMfgsUj5lY5plWMP6JdCY7J9w7YA
+   LAck2QgRJmlt8IvD9GG4n0KOP8K9qSmNV+i47CtDyntmrXLH2g2KQDJUs
+   jIam3aMnOM2CSS0eaL5CpWahphIxhjxSZB8xsZnDZpJsd77ZkCBTQtfoK
+   QinCr3mghLc59aNrPWl83oocg2/2F4WnxK5g+nDMToPyCuTRMO+nxEcxm
+   woFzzfN/jvJM21Aeu88tlfScEOpBCHuvdw+X0+CX3oM6405tltUng49B7
+   35om0/OzGRUz2F6etH5ZFLF5/7g1AmcPL/OEx47mEXIn0gbCQQxYdWjq1
+   w==;
+X-CSE-ConnectionGUID: FYZTn/TdTUmVkqBKCjwPWw==
+X-CSE-MsgGUID: ko+XWe48Rd+qAC5vat+C+Q==
+X-IronPort-AV: E=McAfee;i="6800,10657,11683"; a="81283392"
+X-IronPort-AV: E=Sophos;i="6.21,256,1763452800"; 
+   d="scan'208";a="81283392"
+Received: from orviesa010.jf.intel.com ([10.64.159.150])
+  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jan 2026 13:46:31 -0800
+X-CSE-ConnectionGUID: 15LPK76wSZ2jmRZCwrzXYw==
+X-CSE-MsgGUID: SN0SLK/8S0iqR85YBc7WYw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.21,256,1763452800"; 
+   d="scan'208";a="207024316"
+Received: from dhhellew-desk2.ger.corp.intel.com (HELO kekkonen.fi.intel.com) ([10.245.245.232])
+  by orviesa010-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jan 2026 13:46:27 -0800
+Received: from kekkonen.localdomain (localhost [IPv6:::1])
+	by kekkonen.fi.intel.com (Postfix) with SMTP id 67D9211FCC8;
+	Mon, 26 Jan 2026 23:46:30 +0200 (EET)
+Date: Mon, 26 Jan 2026 23:46:30 +0200
+Organization: Intel Finland Oy - BIC 0357606-4 - c/o Alberga Business Park, 6 krs, Bertel Jungin Aukio 5, 02600 Espoo
+From: Sakari Ailus <sakari.ailus@linux.intel.com>
+To: Ceclan Dumitru <mitrutzceclan@gmail.com>
+Cc: dumitru.ceclan@analog.com,
+	Tomi Valkeinen <tomi.valkeinen+renesas@ideasonboard.com>,
+	Mauro Carvalho Chehab <mchehab@kernel.org>,
+	Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+	Julien Massot <julien.massot@collabora.com>,
+	Rob Herring <robh@kernel.org>,
+	Niklas =?iso-8859-1?Q?S=F6derlund?= <niklas.soderlund@ragnatech.se>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-gpio@vger.kernel.org,
+	linux-staging@lists.linux.dev,
+	Cosmin Tanislav <demonsingur@gmail.com>
+Subject: Re: [PATCH RESEND v8 17/21] media: i2c: maxim-serdes: add MAX9296A
+ driver
+Message-ID: <aXfgts9DHfWZt3To@kekkonen.localdomain>
+References: <20251208-gmsl2-3_serdes-v8-0-7b8d457e2e04@analog.com>
+ <20251208-gmsl2-3_serdes-v8-17-7b8d457e2e04@analog.com>
+ <aW-EXiiKFLrXQeJG@kekkonen.localdomain>
+ <47ce1e14-5443-4d3e-a2c9-7d5be47012c9@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
@@ -85,78 +77,81 @@ List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <9a3d4ae8-b57e-450e-971b-d09fc923eee1@roeck-us.net>
+In-Reply-To: <47ce1e14-5443-4d3e-a2c9-7d5be47012c9@gmail.com>
 
-On Mon, Jan 26, 2026 at 09:21:15AM -0800, Guenter Roeck wrote:
-> On 1/26/26 08:47, Rob Herring (Arm) wrote:
-> > Fix email addresses with spaces or missing brackets. A pending
-> > dtschema meta-schema change will check for these.
+Hi Dumitru,
+
+On Mon, Jan 26, 2026 at 11:55:47AM +0200, Ceclan Dumitru wrote:
+> 
+> 
+> On 1/20/26 3:34 PM, Sakari Ailus wrote:
+> > Hi Dumitru,
 > > 
-> > Signed-off-by: Rob Herring (Arm) <robh@kernel.org>
-> 
-> For hwmon:
-> 
-> Acked-by: Guenter Roeck <linux@roeck-us.net>
-
-For input:
-
-Acked-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
-
-> 
-> > ---
-> >   Documentation/devicetree/bindings/hwmon/sensirion,shtc1.yaml    | 2 +-
-> >   Documentation/devicetree/bindings/input/syna,rmi4.yaml          | 2 +-
-> >   .../devicetree/bindings/media/samsung,exynos5250-gsc.yaml       | 2 +-
-> >   Documentation/devicetree/bindings/pci/mbvl,gpex40-pcie.yaml     | 2 +-
-> >   4 files changed, 4 insertions(+), 4 deletions(-)
+> > On Mon, Dec 08, 2025 at 04:13:09PM +0200, Dumitru Ceclan via B4 Relay wrote:
+> >> +	*ops = max9296a_common_ops;
+> >> +
+> >> +	ops->versions = priv->info->ops->versions;
+> >> +	ops->modes = priv->info->ops->modes;
+> >> +	ops->needs_single_link_version = priv->info->ops->needs_single_link_version;
+> >> +	ops->needs_unique_stream_id = priv->info->ops->needs_unique_stream_id;
+> >> +	ops->fix_tx_ids = priv->info->ops->fix_tx_ids;
+> >> +	ops->num_phys = priv->info->ops->num_phys;
+> >> +	ops->num_pipes = priv->info->ops->num_pipes;
+> >> +	ops->num_links = priv->info->ops->num_links;
+> >> +	ops->phys_configs = priv->info->ops->phys_configs;
+> >> +	ops->set_pipe_enable = priv->info->ops->set_pipe_enable;
+> >> +	ops->set_pipe_stream_id = priv->info->ops->set_pipe_stream_id;
+> >> +	ops->set_pipe_tunnel_phy = priv->info->ops->set_pipe_tunnel_phy;
+> >> +	ops->set_pipe_tunnel_enable = priv->info->ops->set_pipe_tunnel_enable;
+> >> +	ops->use_atr = priv->info->ops->use_atr;
+> >> +	ops->tpg_mode = priv->info->ops->tpg_mode;
 > > 
-> > diff --git a/Documentation/devicetree/bindings/hwmon/sensirion,shtc1.yaml b/Documentation/devicetree/bindings/hwmon/sensirion,shtc1.yaml
-> > index 3d14d5fc96c5..7b38f2182ffa 100644
-> > --- a/Documentation/devicetree/bindings/hwmon/sensirion,shtc1.yaml
-> > +++ b/Documentation/devicetree/bindings/hwmon/sensirion,shtc1.yaml
-> > @@ -7,7 +7,7 @@ $schema: http://devicetree.org/meta-schemas/core.yaml#
-> >   title: Sensirion SHTC1 Humidity and Temperature Sensor IC
-> >   maintainers:
-> > -  - Christopher Ruehl chris.ruehl@gtsys.com.hk
-> > +  - Christopher Ruehl <chris.ruehl@gtsys.com.hk>
-> >   description: |
-> >     The SHTC1, SHTW1 and SHTC3 are digital humidity and temperature sensors
-> > diff --git a/Documentation/devicetree/bindings/input/syna,rmi4.yaml b/Documentation/devicetree/bindings/input/syna,rmi4.yaml
-> > index f369385ffaf0..8685ef4481f4 100644
-> > --- a/Documentation/devicetree/bindings/input/syna,rmi4.yaml
-> > +++ b/Documentation/devicetree/bindings/input/syna,rmi4.yaml
-> > @@ -8,7 +8,7 @@ title: Synaptics RMI4 compliant devices
-> >   maintainers:
-> >     - Jason A. Donenfeld <Jason@zx2c4.com>
-> > -  - Matthias Schiffer <matthias.schiffer@ew.tq-group.com
-> > +  - Matthias Schiffer <matthias.schiffer@ew.tq-group.com>
-> >     - Vincent Huang <vincent.huang@tw.synaptics.com>
-> >   description: |
-> > diff --git a/Documentation/devicetree/bindings/media/samsung,exynos5250-gsc.yaml b/Documentation/devicetree/bindings/media/samsung,exynos5250-gsc.yaml
-> > index 878397830a4d..9196cf5dac0f 100644
-> > --- a/Documentation/devicetree/bindings/media/samsung,exynos5250-gsc.yaml
-> > +++ b/Documentation/devicetree/bindings/media/samsung,exynos5250-gsc.yaml
-> > @@ -9,7 +9,7 @@ title: Samsung Exynos SoC G-Scaler
-> >   maintainers:
-> >     - Inki Dae <inki.dae@samsung.com>
-> >     - Krzysztof Kozlowski <krzk@kernel.org>
-> > -  - Seung-Woo Kim <sw0312.kim@samsung.com
-> > +  - Seung-Woo Kim <sw0312.kim@samsung.com>
-> >   description:
-> >     G-Scaler is used for scaling and color space conversion on Samsung Exynos
-> > diff --git a/Documentation/devicetree/bindings/pci/mbvl,gpex40-pcie.yaml b/Documentation/devicetree/bindings/pci/mbvl,gpex40-pcie.yaml
-> > index d286b77921e0..8f5d33050348 100644
-> > --- a/Documentation/devicetree/bindings/pci/mbvl,gpex40-pcie.yaml
-> > +++ b/Documentation/devicetree/bindings/pci/mbvl,gpex40-pcie.yaml
-> > @@ -7,7 +7,7 @@ $schema: http://devicetree.org/meta-schemas/core.yaml#
-> >   title: Mobiveil AXI PCIe Host Bridge
-> >   maintainers:
-> > -  - Frank Li <Frank Li@nxp.com>
-> > +  - Frank Li <Frank.Li@nxp.com>
-> >   description:
-> >     Mobiveil's GPEX 4.0 is a PCIe Gen4 host bridge IP. This configurable IP
+> > What's the reason for doing these assignments and a copy of the memory? Why
+> > not to just keep a pointer to the struct memory instead? I think there's
+> > another case of the same.
+> > 
+> Would this be alright:
+> #define MAX9296A_COMMON_OPS					\
+> 
+> 	.num_remaps_per_pipe = 16,				\
+> 
+> 	.tpg_entries = { ... },					\
+> 
+> 	.init = max9296a_init,					\
+> 
+> 	.set_enable = max9296a_set_enable,			\
+> 
+> 
+> static const struct max_des_ops max9296a_ops = {
+> 
+> 	MAX9296A_COMMON_OPS,
+> 
+> 	.versions = BIT(MAX_SERDES_GMSL_2_3GBPS) |
+> 
+> 		    BIT(MAX_SERDES_GMSL_2_6GBPS),
+> 	.modes = BIT(MAX_SERDES_GMSL_PIXEL_MODE),
+> 	/* ... */
+> 
+> 	};
+> 
 
-Thanks.
+Could you use different structs for ops and hardware features?
+
+> 
+> 
+> static int max9296a_probe(struct i2c_client *client)
+> 
+> {
+> 
+> 	/* ... */
+> 
+> 	priv->des.ops = priv->info->ops;
+> 
+> 	/* ... */
+> 
+> }
 
 -- 
-Dmitry
+Regards,
+
+Sakari Ailus
