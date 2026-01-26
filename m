@@ -1,214 +1,132 @@
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f180.google.com (mail-pf1-f180.google.com [209.85.210.180])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 11AC62367D5
-	for <linux-media@vger.kernel.org>; Mon, 26 Jan 2026 02:09:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D0E7E264614
+	for <linux-media@vger.kernel.org>; Mon, 26 Jan 2026 06:15:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769393395; cv=none; b=OK0AnhR5efVnR44LpTlaqs3drJdXluxygmcNzu9M0KvItQnNYCMILT2lCTUTr/p54Ayf37oHx0k2i5X2rcw91LxNXA1Ki3zY4h0foF6IS3BmXd8+KZMXXljOYqo1obLiObl5iPLo+/MmdK0TGDlzwvmsvClaF0XjS3DEDnB8yo0=
+	t=1769408140; cv=none; b=UGPsqg01v8+f80HgtYRymZEKXcLrqN4XH/GQPFUh/W6m3G8UK2syI+/q6Es7DWxywE+cbqr7bHyM8Sui2lK0ToovJqYa7AM2/LV90EAR2f/y1KADM2uR0YjMZBhB0tIidP5dmqlOTd6zl6OYWZDDDpHS2LQF4HG3oTnWcmo+qPs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769393395; c=relaxed/simple;
-	bh=ORuGJu/GYm3ysLTNkCgLVjQpY7Kb/lBszYo0stjQqf0=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=VeSa7LiqvvRQgVajkUdtNdGcKKFiTYOfavSA6115m1NQEVfaeu15lpZBcUqrGQCGhb+Q+VxXU3Cl+YDWdNU7IluP2HaszCxrf/9Nap+Suz/UqEiX+ffXT36yPrUpCjJyqzHh+H3muaKOZh/ROshlq3UFa0mRx8+AhRAg8GMKDlw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=WM3+tfEo; dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b=Fi1JMiDv; arc=none smtp.client-ip=205.220.168.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
+	s=arc-20240116; t=1769408140; c=relaxed/simple;
+	bh=ZIKmF0boRd4aQJJl1kSLxxFnc1ZN3egassPW/w/Ka1E=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=Gs7Mbd89uvts7Ot8UiQWc8hsW/qZg7pfdkU+TiYzQqMPvAKeok9P0q6oM59lWaAHPOBMvHXSS4BxZqUmTmG3xjQAYWaUog6sSJfRTxk80HLzZbJwPhGZOHRYZ45P4hvGaUybBQvQ8Zwx7PxqfUiVaHJ5KlafzVxpt4d+LbjW0Sw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ePz3t3Xp; arc=none smtp.client-ip=209.85.210.180
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="WM3+tfEo";
-	dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b="Fi1JMiDv"
-Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 60PGU20V193629
-	for <linux-media@vger.kernel.org>; Mon, 26 Jan 2026 02:09:47 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	j/zW9gokZY/MJ8KbPgs9FrhMrPwOjvcqW0w4aTXvpFo=; b=WM3+tfEotiwK4gai
-	Yot+Mq7P+ULEMhSUcLTPM+YTk80pTYz4DNf2OIPUapfKnEw5NNNvqcOoGMYhqIUR
-	DqIFzWi/kA/eSF9GxUMbl+gWTzZRk3FAqJUoONDAZ7USxIVJazTMclR/5YGzxzhg
-	5Dcb2t5KuwlCMmKyRROqzCRnmWNDxdruHXZDBsEalO+ILW0EtAy6LMiU4ZEi5dqq
-	mrE3hs2YhCf5qQazzxY9GtqzMrZLVBQr/ku1Inz1CJGnQTp+awcDJcx6fPkEhwhd
-	TlqFPXWFgpJh16uBM5pdTIOpJMrMZqkKjGNiYd5zuLsO0Ry+YEBEJrsHgM54OfRX
-	326gUg==
-Received: from mail-qk1-f199.google.com (mail-qk1-f199.google.com [209.85.222.199])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4bvq9f32u3-1
-	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
-	for <linux-media@vger.kernel.org>; Mon, 26 Jan 2026 02:09:47 +0000 (GMT)
-Received: by mail-qk1-f199.google.com with SMTP id af79cd13be357-8c6cfd52556so1095908385a.0
-        for <linux-media@vger.kernel.org>; Sun, 25 Jan 2026 18:09:47 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ePz3t3Xp"
+Received: by mail-pf1-f180.google.com with SMTP id d2e1a72fcca58-8230c839409so3188246b3a.3
+        for <linux-media@vger.kernel.org>; Sun, 25 Jan 2026 22:15:38 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=oss.qualcomm.com; s=google; t=1769393386; x=1769998186; darn=vger.kernel.org;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=j/zW9gokZY/MJ8KbPgs9FrhMrPwOjvcqW0w4aTXvpFo=;
-        b=Fi1JMiDvXuvuAp1HeVS6M1HKeXcHHUXZAOrGQ7fFel3NZCHQUqykV5VPN2S1lfxr0N
-         1YzR0Oe6ueRPbZikBzTxYR7ZMajYl+caNgI/NwfXKn4Nao6eUudBi2XopG9AC1V4chLi
-         sXvrnwSOOFyvguxDWbjGt4rtEl4ZtZoyPrtQo+t3elCvnlV4Dik5pbrK3RO3YV7JqMN/
-         /5RTFqU6T7wTpU3HU9CdiTO/GE8SXvbJ7h0IMuH5U/C8iQ1ZD5kdIxpuNC9gAjRraoPl
-         7oKTGMvBAqVT9uStcvIE03KDFXkih3gkhHB/9wfMYu7WjB9xQx2d/R43HNCgzAiI8R8c
-         bbYg==
+        d=gmail.com; s=20230601; t=1769408138; x=1770012938; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=yo54aCp4Rf+yeSJL/ASA3fIY6d/5SoKgWC6QPgdGIz4=;
+        b=ePz3t3XpsoCW3unUG4QE7ulZAfDt/gy/CiyqimHC9orXukghWZGZKQL8kZM3EtFHjl
+         GhjAR0ZkAzvPP2nfvXkH8F6QNSn5WzcQDtQSi7PaD5f7LGP3PtjKZn5YkC9jPkIuWYGQ
+         7OXg/L1PADtEEeCBr08YGgiZxbpcLIPRrWqvPKNr/oVRfA3mBU/91DA/UV/8P1biWfTN
+         J0cngKfDDswaRpNrlJpOxnWXR1QRd4u67mKsiGeCfaOVn/2KDfw+m5hA6W+QSuOCrAY1
+         z066K1C5ltGJLPzS10BjLVuSlPUHKvyvk0mb1nz0VhAd5zL7RIW7bmB93O2c/yT0ZfrH
+         H69Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1769393386; x=1769998186;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-gg:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=j/zW9gokZY/MJ8KbPgs9FrhMrPwOjvcqW0w4aTXvpFo=;
-        b=OQ7FtCB87wT9rCt7YRFjlhY7espp/5dnyWXd1JCfN4x0vC4noSTpFiESDtUeSCUC3+
-         +1ZF5NtfNcNysQbGqg8VPSGD1GnwfT/RMUM7ynSRVi7gd5ykfGrqxeMGCYSsNB3VdpX1
-         aIPayOBZg1brfL1ag8ALaaig++1oeo/w2Bker8+FKTVtvbiPMqMjRO/cpclEZYuLbLQZ
-         CBNki24HAcdvQst+4vWpfItIC7NRpIhjwG0JrzG0ednjYrYH7pm2xR1QoDMk6ssNzKqX
-         S6dcG4PE3x/fJ3reONaI0dASfjAMI/P5KfJOdUpuvvdLsXHVfeBpw6qVTxSfvw2GytOG
-         s9Vg==
-X-Gm-Message-State: AOJu0Yzd6Qn7Gv15yOTYgeWT3jHwsmt7yeWRzfPFvGimluH1skKbOdvT
-	IZKBkg3Hpx1xCNNUjXeb6OfPC1FGpgzaJLwSnogJlyv5Y5SK1vS6hYaztu29DmBlxUt3qoAH+G1
-	l5f1Oa+WPSiuU3LXDJQgVKR9sQzyZcMHlASY0vaLNu2u/pJxWYVpvuk2IpvHa2/eohA==
-X-Gm-Gg: AZuq6aJCwVmj0BVf3OsfVTrzcFclVdkRE3KLCmOD66DRxgPSeoUPrbzmhtBSvOp7SAu
-	BeQv6HXt56w+4Mu1u1cKXQSIcc/PEN41hxQGX9Ajri2PDyNvOP8ynegQ0w1oD5iuQSwdrk0oPZ0
-	zFvSlqhjKMhjS2FqxcA+mRbAfPugmDVliaoLDjf1FxMKuvjx5cW4cTZH/FEek9sTdQah5n83Tqp
-	3XgJOXNYMleN4h/FSQypfHz/lQZK9L/J2wZDLnB1bZrmZ973IW4Qxg+TtKQO3FsiOr+uzoxQ8cL
-	PFDjVVJbuQvEMstJbBC3kIyoD0cvlHiAPrV/TeOjMGM9Dy28pzmMlhuT88v+CdcUDv0G5cXarVt
-	TpIL+SvIv42HvkmNC9ierm4tCk+hQVv59h0MbA7ifOqgKVS7Lnj6it6I/SuIB1vluZVLpy1z67l
-	6XuvmD0SzM+g1npp3hTm82uJs=
-X-Received: by 2002:a05:620a:4489:b0:8b2:eefb:c8ab with SMTP id af79cd13be357-8c6f97f1f17mr301984185a.19.1769393386271;
-        Sun, 25 Jan 2026 18:09:46 -0800 (PST)
-X-Received: by 2002:a05:620a:4489:b0:8b2:eefb:c8ab with SMTP id af79cd13be357-8c6f97f1f17mr301982385a.19.1769393385804;
-        Sun, 25 Jan 2026 18:09:45 -0800 (PST)
-Received: from umbar.lan (2001-14ba-a073-af00-264b-feff-fe8b-be8a.rev.dnainternet.fi. [2001:14ba:a073:af00:264b:feff:fe8b:be8a])
-        by smtp.gmail.com with ESMTPSA id 38308e7fff4ca-385d9faed52sm22778201fa.2.2026.01.25.18.09.44
+        d=1e100.net; s=20230601; t=1769408138; x=1770012938;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=yo54aCp4Rf+yeSJL/ASA3fIY6d/5SoKgWC6QPgdGIz4=;
+        b=CaoqJ6STyVl2xkRfI/Koje1anglzuaYMl+vwIaVIhq/hUPGVvVDtJhVCdzq3ErjYNB
+         EuuaR8B3sS9Wgkk2fhliydBbwOaoZRSYIyHXV9XFvyregKwZ4c0Tw5mBoDSm+hBUfX3l
+         ywXWu6v7slZsQePlQA5qDXWODHy+tAYtJIonOnu3IyzY7Dj/1eP3h3pK60R9bPFXhV1z
+         w2up9zr2o5YxBE0p5pESgb5uzicr1N3uYbzcXpW5wlUHtUYajzxaw3B8rZ/HtmEilCOt
+         ICM498+zDgD+pxBSHZZbIjSqZO24jbE+kguVnvR2nMSWegP6MPQ56vi6iqBJX7nnywx/
+         nvew==
+X-Gm-Message-State: AOJu0YyXQstolEeFjT/SwJmcIWQEAcYhozeLiKePXnVTNRGOMFJ2IDwb
+	JG0kyL7uQaNa1xEJDT4Izicw3iJtu/CmJ7SBbbGakP8eirRcoRGW6FBdYW8u4pgH
+X-Gm-Gg: AZuq6aKcfZRR5KgiuyejyoSW9Ww3MisYKmxzOt+bGeHCmGS61LVplgvb9VP6W7CihCf
+	VcpOEqLjmNjE6woE45ib0VMbMg5nAsGQO86IUJfYndIIg7wTzTquM09pFkPUzXjt8waMu7UX2sF
+	0fF/VMmFywcHzpojRRgVH8Q8wXjDdgBT65phhi8sx+PBoCFGIqfWL+IZ+fmiJ8QbFWDbESZhgbP
+	2E7AZYIu3VkCo/xdVzK3zebDVRIZoU3VRmDqNkQBdTQU4s5JyL9hjl9HfyH+tSMC93UudUNlAoX
+	pIl9qliiC60Rvdk1DrFviPowNZR+Pv/gHkO+Dd6a1TjTHT+fkKy5VGe+JSZkMR2LTfUo1iNG1Ys
+	yD+s6wARJD5uixiFvblBJOQBT0TKxJi8MfzzVe79VWw7UANyfj8UA3/ZEdwao/3y2D2P4hazLpK
+	gUpjR6NNUM+xqhZeEMGdhj6HPjzRILb3cX0Ga1
+X-Received: by 2002:a05:6a00:3e11:b0:81f:3f88:89ee with SMTP id d2e1a72fcca58-823411b83c6mr3630070b3a.12.1769408137739;
+        Sun, 25 Jan 2026 22:15:37 -0800 (PST)
+Received: from saikiran-Yoga-Slim-7-14Q8X9 ([2402:e280:3d17:646:9b36:8e2c:6fb6:590b])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-823187716ebsm8543796b3a.66.2026.01.25.22.15.33
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 25 Jan 2026 18:09:44 -0800 (PST)
-From: Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>
-Date: Mon, 26 Jan 2026 04:09:38 +0200
-Subject: [PATCH v2 3/4] media: dt-bindings: qcom-sc7180-venus: move
- video-firmware here
+        Sun, 25 Jan 2026 22:15:37 -0800 (PST)
+From: Saikiran <bjsaikiran@gmail.com>
+To: linux-media@vger.kernel.org
+Cc: linux-arm-msm@vger.kernel.org,
+	bryan.odonoghue@linaro.org,
+	bod@kernel.org,
+	rfoss@kernel.org,
+	todor.too@gmail.com,
+	vladimir.zapolskiy@linaro.org,
+	hansg@kernel.org,
+	sakari.ailus@linux.intel.com,
+	mchehab@kernel.org,
+	Saikiran <bjsaikiran@gmail.com>
+Subject: [PATCH v2 0/1] media: i2c: ov02c10: Keep power on and use reset for power management
+Date: Mon, 26 Jan 2026 11:45:27 +0530
+Message-ID: <20260126061528.63785-1-bjsaikiran@gmail.com>
+X-Mailer: git-send-email 2.51.0
+In-Reply-To: <20260125171745.484806-1-bjsaikiran@gmail.com>
+References: <20260125171745.484806-1-bjsaikiran@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20260126-venus-iris-flip-switch-v2-3-b0ea05e1739a@oss.qualcomm.com>
-References: <20260126-venus-iris-flip-switch-v2-0-b0ea05e1739a@oss.qualcomm.com>
-In-Reply-To: <20260126-venus-iris-flip-switch-v2-0-b0ea05e1739a@oss.qualcomm.com>
-To: Vikash Garodia <vikash.garodia@oss.qualcomm.com>,
-        Dikshita Agarwal <dikshita.agarwal@oss.qualcomm.com>,
-        Abhinav Kumar <abhinav.kumar@linux.dev>,
-        Bryan O'Donoghue <bod@kernel.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        cros-qcom-dts-watchers@chromium.org,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konradybcio@kernel.org>, Rob Herring <robh@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Stanimir Varbanov <stanimir.varbanov@linaro.org>
-Cc: linux-media@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
-X-Mailer: b4 0.14.3
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2059;
- i=dmitry.baryshkov@oss.qualcomm.com; h=from:subject:message-id;
- bh=ORuGJu/GYm3ysLTNkCgLVjQpY7Kb/lBszYo0stjQqf0=;
- b=owEBbQGS/pANAwAKAYs8ij4CKSjVAcsmYgBpdszkpTr/VPHkkuT9HcCfpMxBHxaVhafAYwYFs
- K1tScWkbkWJATMEAAEKAB0WIQRMcISVXLJjVvC4lX+LPIo+Aiko1QUCaXbM5AAKCRCLPIo+Aiko
- 1WSBB/4nUNFRz9f9fzYxkkloaoLvcfg/AJ4Q4pjsvQEWS4vEztUQzw3AD1cMxerJdMJ26VvWB2O
- +ak2D5cQKLMpOdfc3oka/bS3fPqylm2BgyNftcMlbxG9RIHsVRCNYJd6a+zhOvrDQIOSgnWhzUe
- fxdLb1f70R+mmshIgz0DMKoRXKTip9RqCQ2Cvs2vcDXb6EdLa0f6rSToL5hj+P1wAAMpIY6rtgi
- YER20nm9M9C8cwYHSR7Y5Zug6Ajj00KJ631AJD7jFADt+m7bzLS9S1esEKouVkoS63nT+4hJcEF
- pQwLM+lTaVpnS7y8bWK3/QO7hsopPpij1DeGSqHKzmCEJFjj
-X-Developer-Key: i=dmitry.baryshkov@oss.qualcomm.com; a=openpgp;
- fpr=8F88381DD5C873E4AE487DA5199BF1243632046A
-X-Authority-Analysis: v=2.4 cv=YLGSCBGx c=1 sm=1 tr=0 ts=6976cceb cx=c_pps
- a=HLyN3IcIa5EE8TELMZ618Q==:117 a=xqWC_Br6kY4A:10 a=IkcTkHD0fZMA:10
- a=vUbySO9Y5rIA:10 a=s4-Qcg_JpJYA:10 a=VkNPw1HP01LnGYTKEx00:22
- a=EUspDBNiAAAA:8 a=yfaF6CmWL1hJmoVWH6AA:9 a=QEXdDO2ut3YA:10
- a=bTQJ7kPSJx9SKPbeHEYW:22
-X-Proofpoint-GUID: fkVf2BldiDlWJURqkO0qVwhND-9JDvkP
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMTI2MDAxNyBTYWx0ZWRfX+VYu6XK4xacs
- bakAE237L3ep8gZr6VY14QQZspgHq+D8TKvYYf5qAFl6i7yUwOUDC1t7B9Ts59bMQlMqTzrOUwP
- 1iU7kbLX0Pn8/8vINL0/0SISpABCsiC/yp2Y4edPxltfan4H8aWReiRH2hdR/9UvKNeRwCp/yqN
- oJWEmCk4QWlYfYp6/igK9zCyw34+3rKpvOT/68zBl7bZerrTFqJBZztmOwVguZzWMf/cLEluk7A
- wJak/62gZvAGZ1mhd4SFkri6jGYC1eVFSLoMAxX0N4vS3/+6VTI9OgCVlP4J0HP+LJPk/PYGbgN
- W7tXsGcVaiPpNGv8fjByXU7MEbTh18CQc8owk7HBjpw5GzOr64qMCRqDnRjDmQhPjVCj0PZEcU3
- uD/eT3P4eWXeAISzqtL1ZUPmk0IoTtlOjFMIM9S1LME8rjqf8D2BVm6bkqpjnBCP7cBEmMwi+bP
- JQVkQE5e4QWJ7CeYyjw==
-X-Proofpoint-ORIG-GUID: fkVf2BldiDlWJURqkO0qVwhND-9JDvkP
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.20,FMLib:17.12.100.49
- definitions=2026-01-25_06,2026-01-22_02,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- adultscore=0 priorityscore=1501 suspectscore=0 bulkscore=0 lowpriorityscore=0
- clxscore=1015 impostorscore=0 phishscore=0 spamscore=0 malwarescore=0
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.22.0-2601150000 definitions=main-2601260017
+Content-Transfer-Encoding: 8bit
 
-As SC7180 is the only remaining user of the non-TZ / non-PAS setup which
-uses the video-firmware subnode, move its definition from the common
-schema to the SC7180-specific one.
+This patch is a follow-up to the series "[PATCH v2 0/2] Fix OV02C10 camera
+pipeline lock issues" sent yesterday [1]. It addresses the remaining brownout
+stability issue on Snapdragon X Elite platforms.
 
-Future platforms that are going to support non-TZ setup will use
-different semantics and different DT ABI.
+This patch completes the v2 series by replacing the "cool-down" patch
+(Patch 3/3) from my original v1 submission [2].
 
-Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>
----
- .../devicetree/bindings/media/qcom,sc7180-venus.yaml      | 15 +++++++++++++++
- .../devicetree/bindings/media/qcom,venus-common.yaml      | 15 ---------------
- 2 files changed, 15 insertions(+), 15 deletions(-)
+(Note: The separate series "[PATCH 0/2] Fix OV02C10 camera color and
+stability issues" regarding Bayer patterns and remove() race conditions
+remains independent and is currently under review.)
 
-diff --git a/Documentation/devicetree/bindings/media/qcom,sc7180-venus.yaml b/Documentation/devicetree/bindings/media/qcom,sc7180-venus.yaml
-index bfd8b1ad4731..b21bed314848 100644
---- a/Documentation/devicetree/bindings/media/qcom,sc7180-venus.yaml
-+++ b/Documentation/devicetree/bindings/media/qcom,sc7180-venus.yaml
-@@ -91,6 +91,21 @@ properties:
-     deprecated: true
-     additionalProperties: false
- 
-+  video-firmware:
-+    type: object
-+    additionalProperties: false
-+
-+    description: |
-+      Firmware subnode is needed when the platform does not
-+      have TrustZone.
-+
-+    properties:
-+      iommus:
-+        maxItems: 1
-+
-+    required:
-+      - iommus
-+
- required:
-   - compatible
-   - power-domain-names
-diff --git a/Documentation/devicetree/bindings/media/qcom,venus-common.yaml b/Documentation/devicetree/bindings/media/qcom,venus-common.yaml
-index 3153d91f9d18..59a3fde846d2 100644
---- a/Documentation/devicetree/bindings/media/qcom,venus-common.yaml
-+++ b/Documentation/devicetree/bindings/media/qcom,venus-common.yaml
-@@ -47,21 +47,6 @@ properties:
-     minItems: 1
-     maxItems: 4
- 
--  video-firmware:
--    type: object
--    additionalProperties: false
--
--    description: |
--      Firmware subnode is needed when the platform does not
--      have TrustZone.
--
--    properties:
--      iommus:
--        maxItems: 1
--
--    required:
--      - iommus
--
- required:
-   - reg
-   - clocks
+History:
+In v1 [2], I proposed a hard 3-second delay between power cycles to prevent
+brownouts. As discussed with Bryan O'Donoghue, that approach was a workaround
+with a negative user experience. This patch implements the proper fix we
+discussed.
 
--- 
-2.47.3
+Problem:
+The RPMh regulators on X1E80100 platforms lack active discharge, taking
+2+ seconds to passively discharge. Rapid camera cycling (e.g., WebRTC)
+causes brownouts because the sensor is powered on while still holding
+residual charge, locking the internal microcontroller.
 
+Solution:
+Instead of a delay, we now keep regulators and clocks continuously enabled
+after the first power-on. We control sensor state exclusively via:
+1. Hardware GPIO reset
+2. Software reset (OmniVision register 0x0103)
+
+This reduces power cycle latency from ~2300ms to ~70ms (including a new
+50ms stabilization delay) and eliminates brownouts entirely.
+
+Testing:
+- Validated on Lenovo Yoga Slim 7x (Snapdragon X Elite).
+- Performed 100+ rapid open/close cycles with no black frames or lockups.
+
+[1] https://lore.kernel.org/linux-media/20260125171745.484806-1-bjsaikiran@gmail.com/T/#t
+[2] https://lore.kernel.org/linux-media/20260124071751.5885-1-bjsaikiran@gmail.com/T/#t
+
+Saikiran (1):
+  media: i2c: ov02c10: Keep power on and use reset for power management
+
+ drivers/media/i2c/ov02c10.c | 119 +++++++++++++++++++++---------------
+ 1 file changed, 69 insertions(+), 50 deletions(-)
+
+--
+2.51.0
