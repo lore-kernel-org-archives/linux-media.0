@@ -1,109 +1,231 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A57173321DE;
-	Mon, 26 Jan 2026 13:31:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D633C33A6F1
+	for <linux-media@vger.kernel.org>; Mon, 26 Jan 2026 13:38:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769434277; cv=none; b=NwCw+VYOVA9o/1hbonhIpvWphxpDjMuEe+tD+7k/807Td9NDtLEvfnObdz6BIS8Gq7S7XY2zG79sjKqtA/7KGQ42Gs0deoNNPRV8PPHH0t821xuJkdgVKE08P0RrVZrHXHo1I0grGw1aPA5QWpiePOE9YQGpurfQ3aXN0EwUygI=
+	t=1769434728; cv=none; b=sRZvvSZsCRFwpzQVjxyocuy0V4anizsErDDVgXVbvDEKPpx/gTAk6u8q6tsGqG5Dq9XieaIQbZZmDAMCLzAmLN4sbUf/I9FfMdVtYT1M7NMMixLS01uI/ToSwFanv//rehuGOxRiUSjUEooIuyulAMcVge556CNci7O+kb+mHZg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769434277; c=relaxed/simple;
-	bh=2aOW7HVJlk6fN9U9mdJ3suhxWjIdlE+8eYNBG3if8K8=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=GbqLw5/fJPn38ROhgA+kbRTIAvBgVbKB1cLSTJ32jw9+6tJ9suwKF5buJZmJrXg2fE/f9V1WdXlsQ2Yh+sHF9pbYZb659XPHhlpqGDqTecLNDZZ0V5sSZee57iOQJL57WdepJjVCWIM3e40olLkJaL52BXjzYzBl67GKu2wLid0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=pXDqnxO2; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1769434728; c=relaxed/simple;
+	bh=pwjK4+pdWgeLe/K3hHRuwqqM/os1WVoxjKEALfiTNTc=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=RidxFjQTihYAshJ75c1wZxcund2XltO22PZkwCUBN2bQdU3Ps5UJJj2wzABh5stREKmhiVuhJNoG9aU2FxcjHa1ulx8vc07gKBobW2h+1CQM2e6jk2+9Sy5DxRjnZ3iHew349tlgTOMqX1+UkRsgBRGmQPsoqTO7F5iidc96pc0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=BTGbgHR2; dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b=dw1xBCC/; arc=none smtp.client-ip=205.220.168.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="pXDqnxO2"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 43896C16AAE;
-	Mon, 26 Jan 2026 13:31:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1769434277;
-	bh=2aOW7HVJlk6fN9U9mdJ3suhxWjIdlE+8eYNBG3if8K8=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=pXDqnxO2CjDrNzskSpdEdQ7rYgYavFsu8rYzjyXbgIq2DVRVjmUUwOBvB6ghLnalq
-	 rj/ojZrTMS01hBYrpyL1XE5O68KhM211Qf3Uu3i7sDv7mEp9aRsbVsdYMQDaeukqx+
-	 tRmyXdOptRx9M4spwkdRfUWG+mPvRXIimvH81fhahUBA+7pCpECHyFDSeML2qiioXu
-	 6ZpMAVKNG3sqUXQmRDxTCkc+zCFDZPSoopIA9IJWJIOfAcWGyuhN4brsOoqeaqXUXQ
-	 SPMbzVBV5XoSpXdsKJ1S+8b6IhVLolUzTcSYSMkKB0FsDc5oDdEV1wNQybeNuDK70X
-	 eXgM32OLcLRXA==
-Message-ID: <2084a247-053b-41c0-84ef-c56af640aa74@kernel.org>
-Date: Mon, 26 Jan 2026 14:31:13 +0100
+	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="BTGbgHR2";
+	dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b="dw1xBCC/"
+Received: from pps.filterd (m0279864.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 60Q7ulT21861729
+	for <linux-media@vger.kernel.org>; Mon, 26 Jan 2026 13:38:46 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
+	cc:content-type:date:from:in-reply-to:message-id:mime-version
+	:references:subject:to; s=qcppdkim1; bh=YskG73YSaDPdLYLxN7gxrpSE
+	dUjoPZzx6h1RXNJhXkg=; b=BTGbgHR2c7gbWeI6uKP/KPuMP13PAUsT5cpdAu27
+	aTiZUVZVX8dxkgYQCXk8W0rd22yRb+SgIj2x0lIOeSLC91k7+eIg53FH011wJ8PW
+	FT75ffvo4WLGUn7RYv7TcbAGESVC563nUgkDr0pjbfy1Mm9OnBnRMkRE3fOtm89E
+	FZHZzOnh34tAX5lFyADUtVJ5YsNx17lLpiE7wO8Tso+wAbwA3M3HN1OyxNVjHkep
+	Ig0eNKk0ZDh7UkmubwY2/nBXM3yWecBE96K1fksSfByDQZJztn+AsLM49VuHJjYR
+	P+x3YxEY/XWnvHhqbpwakA3uZJmLEFxmkA2uYaE9t1BZnA==
+Received: from mail-qk1-f199.google.com (mail-qk1-f199.google.com [209.85.222.199])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4bvq8dmpj4-1
+	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
+	for <linux-media@vger.kernel.org>; Mon, 26 Jan 2026 13:38:45 +0000 (GMT)
+Received: by mail-qk1-f199.google.com with SMTP id af79cd13be357-8c6a289856eso1412127985a.0
+        for <linux-media@vger.kernel.org>; Mon, 26 Jan 2026 05:38:45 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=oss.qualcomm.com; s=google; t=1769434725; x=1770039525; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=YskG73YSaDPdLYLxN7gxrpSEdUjoPZzx6h1RXNJhXkg=;
+        b=dw1xBCC/0MTEEe88HApc69uhPnNiv0zhA42CXuVHg3ssRhJxevUzUCorSlZjIqdUP0
+         GRXuNNdUIC3ZnP/EQEZOLh90SFkSBczU4mo6xQym81mkR5DJ/onMFwr0dk0EZhIAN7aj
+         /9VpgarBU5tr0c+dwzljzmQWnC14JPf6TB/LLD7w0zrMwCcIF0rhZ+N/KrYupDdWLCKC
+         lafbksMjPvxIVj/bJszJumA+0Tv7tpRNGKE4E1qB3T1WxTHOzNVXffjDZtfpqUag69Iy
+         abGKXT/41j5jUnlFITjzWwgZXuA4KZAksYRBbq7a6M2lCOPZNXk64uj9RizBPjJKGRKF
+         gUYg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1769434725; x=1770039525;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=YskG73YSaDPdLYLxN7gxrpSEdUjoPZzx6h1RXNJhXkg=;
+        b=nIUfqEwwENxQ4Tv83DyOUa5rWwM/Pq6RGmCdTBAEK59AvF7EPqVfqvMb0SZ2A9LiNP
+         6O5DpYUzHhp3R08dlTeHIOv9QCgfpRx7qhkUZmGlGie1jG8X1FYCUrSOU8EymC4ZV7ms
+         RNJnrRkgsHZHKFm8Su9kt+1ZTC++rCgyKahUM29QX1KUNlZtEmXEMZrfpBbPUd4i7FNx
+         28eGlfgn+VWQjc63YCximZc3SblJRfNd9UeaPx+SX6KkGk9uJXmQx2IO6gQpi27HGyyW
+         YVYXlWQ4bMOhTkILj95sNz6Yfb0bzpnoEHU8mDOnRw1w7zOsA4QSVKSdh6l257H94DBz
+         KGcQ==
+X-Forwarded-Encrypted: i=1; AJvYcCW9O6zwu+mNImAtc5GLy77FN00gpwg59ZN74DsEVWmhr9juv2MDGy+1gV8AjZxyXhp4f6bDb39TrmfhjA==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yxl9XI3SgDHc/zm5i4oMy5y1g/hk2h51zP6LZBmgJL6ZIw6X0rG
+	5hUvjeFK7SIdTvA3Q/EmGLhcQiB+QCyzRTJbKRgesP7BVS1oeMSwjp3s5fMn+NZ/8QabK9s2wlx
+	k6VcmegHRUmt8WvqPYV+benGflmQVG07FdYOIWyYxntdL8vC7VZvGQ6x9oI8L3gkm9Q==
+X-Gm-Gg: AZuq6aLDWMN1coqW8dm8iJlR4gtrVKEiwGXJs/3TBPkYTkcJGG1jOyPMfNgov2RzRCx
+	xudZptvSpGXI50TnPCavnriWDLVuS/lUrb3/hjRZnzZ8LbbwjcjtNtUOto0P6b16lrpJBpQKjNb
+	45Zpokw1E7evLTufyddjYAf874VY31tvQgDkwUjdsE0REL2x/AfJAHyDGwLfH8S5nXouBSVFxzG
+	nnI1EaVOYMU+Qxkof4cBwu32iYx7dsN/EJ+EjRwVPnjCvc5Du3xZH5wuPQNbmSG1++66HOHTSb4
+	wtsCxD4pDNtf2829tNuyA1WmberLNfpe+132depkDL4zxZTTpKqzYua9ZSKYzCOBY5Le+9ZhUSd
+	ylwYHYY6zt3hMvTcTZeFJkw37kRkjXliedBSyplpoSiQEFlRSe9LgzAf1LfZPhrfN1Ic8wSsdUc
+	vepSLEk+OS0FFiePHmEAsp9Ow=
+X-Received: by 2002:a05:620a:1aa2:b0:8b2:63ae:6343 with SMTP id af79cd13be357-8c6f987646amr480076885a.28.1769434724708;
+        Mon, 26 Jan 2026 05:38:44 -0800 (PST)
+X-Received: by 2002:a05:620a:1aa2:b0:8b2:63ae:6343 with SMTP id af79cd13be357-8c6f987646amr480073185a.28.1769434724156;
+        Mon, 26 Jan 2026 05:38:44 -0800 (PST)
+Received: from umbar.lan (2001-14ba-a073-af00-264b-feff-fe8b-be8a.rev.dnainternet.fi. [2001:14ba:a073:af00:264b:feff:fe8b:be8a])
+        by smtp.gmail.com with ESMTPSA id 38308e7fff4ca-385da017b5esm27709771fa.19.2026.01.26.05.38.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 26 Jan 2026 05:38:41 -0800 (PST)
+Date: Mon, 26 Jan 2026 15:38:39 +0200
+From: Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>
+To: Vikash Garodia <vikash.garodia@oss.qualcomm.com>
+Cc: Dikshita Agarwal <dikshita.agarwal@oss.qualcomm.com>,
+        Abhinav Kumar <abhinav.kumar@linux.dev>,
+        Bryan O'Donoghue <bod@kernel.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Saravana Kannan <saravanak@kernel.org>, Joerg Roedel <joro@8bytes.org>,
+        Will Deacon <will@kernel.org>, Robin Murphy <robin.murphy@arm.com>,
+        Stefan Schmidt <stefan.schmidt@linaro.org>,
+        Hans Verkuil <hverkuil@kernel.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Vishnu Reddy <busanna.reddy@oss.qualcomm.com>,
+        Hans Verkuil <hverkuil+cisco@kernel.org>,
+        linux-arm-msm@vger.kernel.org, linux-media@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        iommu@lists.linux.dev, Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
+        Charan Teja Kalla <charan.kalla@oss.qualcomm.com>,
+        Vijayanand Jitta <vijayanand.jitta@oss.qualcomm.com>
+Subject: Re: [PATCH 0/7] media: iris: add support for kaanapali platform
+Message-ID: <lpgw6eodclsvfwgvtljfiorvjkpd5vd27yhxs7i3ijfibaqzuk@bak2lwbyh77f>
+References: <20260126-kaanapali-iris-v1-0-e2646246bfc1@oss.qualcomm.com>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 1/1] media: i2c: ov02c10: Keep power on and use reset
- for power management
-To: Saikiran B <bjsaikiran@gmail.com>,
- Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-Cc: Bryan O'Donoghue <bod@kernel.org>, linux-media@vger.kernel.org,
- linux-arm-msm@vger.kernel.org, rfoss@kernel.org, todor.too@gmail.com,
- vladimir.zapolskiy@linaro.org, sakari.ailus@linux.intel.com,
- mchehab@kernel.org, stable@vger.kernel.org
-References: <20260125171745.484806-1-bjsaikiran@gmail.com>
- <20260126061528.63785-1-bjsaikiran@gmail.com>
- <20260126061528.63785-2-bjsaikiran@gmail.com>
- <ef6cf6c5-3b5d-45f2-af67-0567262a4561@linaro.org>
- <CAAFDt1spRkj7kySCa8P=jehQHbYVT2j+nxLira1vwYkiCJ7LDw@mail.gmail.com>
- <b699fcf5-5cb0-41eb-b9de-e5c6e98aefaa@linaro.org>
- <IlpLwcSSsQ89AZYFUkWtRcUkztg6PClgkVOyWG0StiDOUCE93t7KlF9q18JPi3GutJ1OQWj_2igjYq1OD8FLZg==@protonmail.internalid>
- <CAAFDt1tjiEXbuChcY73+NYxPW=rB83P4Bks1TPGsHTTqoSzOuw@mail.gmail.com>
- <ed1421d9-f094-4306-ae6d-e07b3a72f82b@kernel.org>
- <CAAFDt1ukAdXwADuFVoZrs6Ay2fB_sq6LMW5FCnsjqUL7V62mfg@mail.gmail.com>
- <eaf30b60-c0fb-4cf5-bc37-274faa187734@linaro.org>
- <CAAFDt1tgFf5MQcHm3s5DJEDHDtbTfj56_0-=fTz0ekDjSqY3CA@mail.gmail.com>
-From: Hans de Goede <hansg@kernel.org>
-Content-Language: en-US, nl
-In-Reply-To: <CAAFDt1tgFf5MQcHm3s5DJEDHDtbTfj56_0-=fTz0ekDjSqY3CA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260126-kaanapali-iris-v1-0-e2646246bfc1@oss.qualcomm.com>
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMTI2MDExNiBTYWx0ZWRfX9hNHBopjS4JB
+ /W8t/Vgs4vD6h+cj9EHXFB4FGimZatIEewWkv9XNMjtGsse1jmt1u0OaMEgz36VJ633H2X1jF1E
+ 7GM2s7VisYV5HE5qDGkOGiZy/io+Imuwhw/sf3CcpQUDpy+YHC7OYPO6jH/zjO888cCDrNPJwkz
+ J2qNYLeIbIu7VPr+u4a4Jm9H4bK5AkJVZhsAVGpaKVqdmWf9SJdZGBy7SF4sweV+KkxJoWU1jNI
+ 4L1NGatmgneUrcNTVANiEIl6gbmx1ldyNrJoyALp1AAQ0j5kFxu9X6CSBupgRUIHjgeTVPJkbOp
+ Gd6giddsWd+LubOUij8B2nbUial0CToC4RyUKKMFgvWd+b7WN13R4gcGAqKn4pQYdXecyQsFX4n
+ neaODPrDhBNJrKe5sIi00aYfx3jzIXdDBmb1+tPyP0mGDJYpX8eDAgRUMkb3CP6IVfMJcsyR8F0
+ /r72kNl+9iLv5p4V08w==
+X-Authority-Analysis: v=2.4 cv=RIq+3oi+ c=1 sm=1 tr=0 ts=69776e65 cx=c_pps
+ a=HLyN3IcIa5EE8TELMZ618Q==:117 a=xqWC_Br6kY4A:10 a=kj9zAlcOel0A:10
+ a=vUbySO9Y5rIA:10 a=s4-Qcg_JpJYA:10 a=VkNPw1HP01LnGYTKEx00:22
+ a=VwQbUJbxAAAA:8 a=EUspDBNiAAAA:8 a=WVDdUWqqhAlxm7gINyEA:9 a=CjuIK1q_8ugA:10
+ a=bTQJ7kPSJx9SKPbeHEYW:22
+X-Proofpoint-ORIG-GUID: NuJwf0LAXyHvfzTJB4lWfTqbpZbJPhCN
+X-Proofpoint-GUID: NuJwf0LAXyHvfzTJB4lWfTqbpZbJPhCN
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.20,FMLib:17.12.100.49
+ definitions=2026-01-26_03,2026-01-26_01,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ priorityscore=1501 malwarescore=0 adultscore=0 clxscore=1015 phishscore=0
+ impostorscore=0 lowpriorityscore=0 spamscore=0 suspectscore=0 bulkscore=0
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.22.0-2601150000 definitions=main-2601260116
 
-Hi,
+On Mon, Jan 26, 2026 at 05:55:43PM +0530, Vikash Garodia wrote:
+> Qualcomm kaanapali platform have a newer generation of video IP iris4. 
+> The hardware have evolved mostly with respect to higher number of power 
+> domains as well as multiple clock sources.
+> 
+> The series extends support for multiple iommu-map entries for the same 
+> input id. Considering iris as a client driver, it adds the handling for 
+> multiple stream ids from VPU via iommu-map.
+> 
+> This series is depend on the below series:
+> Link: https://lore.kernel.org/all/20260121055400.937856-1-vijayanand.jitta@oss.qualcomm.com/
+> 
+> Following are the compliance and functional validation reports.
 
-On 26-Jan-26 13:48, Saikiran B wrote:
-> I used a 2ms delay for the initial reset assertion.
+Please validate with fluster too. Having a "knowingly good" command line
+is not a validation. It can't be reproduced by anybody else.
 
-I think that what Bryan means is you need a 5ms delay between
-asserting reset/xshutdown and enabling the regulators to make
-sure that the sensor sees the reset signal high before
-the regulators are enabled.
+> gstreamer test:
+> Decoders validated with below commands, codec specific:
+> gst-launch-1.0 multifilesrc location=<input_file.h264> stop-index=0 !
+> parsebin ! v4l2h264dec ! video/x-raw ! videoconvert dither=none !
+> video/x-raw,format=I420 ! filesink location=<output_file.yuv>
 
-Regards,
+Neither of these commands specify, what exactly was validated. They
+specify that you've validated _some_ videos. It's impossible to even
+reproduce your results, because you don't specify which files you've
+used.
 
-Hans
+> 
+> gst-launch-1.0 multifilesrc location=<input_file.hevc> stop-index=0 !
+> parsebin ! v4l2h265dec ! video/x-raw ! videoconvert dither=none !
+> video/x-raw,format=I420 ! filesink location=<output_file.yuv>
+> 
+> gst-launch-1.0 filesrc location=<input_file.webm> stop-index=0 !
+> parsebin ! vp9dec ! video/x-raw ! videoconvert dither=none !
+> video/x-raw,format=I420 ! filesink location=<output_file.yuv>
+> 
+> Encoders validated with below commands:
+> gst-launch-1.0 -v filesrc location=<input_file.yuv> ! rawvideoparse
+> format=nv12 width=<width> height=<height> framerate=30/1 ! v4l2h264enc
+> capture-io-mode=4 output-io-mode=4 ! filesink sync=true
+> location=<output_file.h264>
 
+At least these should use test sinks in order to be reproducible.
 
+> 
+> gst-launch-1.0 -v filesrc location=<input_file.yuv> ! rawvideoparse
+> format=nv12 width=<width> height=<height> framerate=30/1 ! v4l2h265enc
+> capture-io-mode=4 output-io-mode=4 ! filesink sync=true
+> location=<output_file.hevc>
+> 
+> ffmpeg test:
+> Decoders validated with below commands:
+> ffmpeg -vcodec h264_v4l2m2m -i <input_file.h264> -pix_fmt nv12 -vsync 0
+> output_file.yuv -y
+> ffmpeg -vcodec hevc_v4l2m2m -i <input_file.hevc> -pix_fmt nv12 -vsync 0
+> output_file.yuv -y
+> ffmpeg -vcodec vp9_v4l2m2m -i <input_file.webm> -pix_fmt nv12 -vsync 0
+> output_file.yuv -y
+> 
+> v4l2-ctl test
+> Decoders validated with below commands:
+> v4l2-ctl --verbose --set-fmt-video-out=pixelformat=H264
+> --set-fmt-video=pixelformat=NV12 --stream-mmap --stream-out-mmap
+> --stream-from=<input_file.h264> --stream-to=<output_file.yuv>
+> 
+> v4l2-ctl --verbose --set-fmt-video-out=pixelformat=HEVC
+> --set-fmt-video=pixelformat=NV12 --stream-mmap --stream-out-mmap
+> --stream-from=input_file.bit --stream-to=<output_file.yuv>
+> 
+> v4l2-ctl --verbose --set-fmt-video-out=pixelformat=VP90
+> --set-fmt-video=pixelformat=NV12 --stream-mmap --stream-out-mmap
+> --stream-from-hdr=input_file.hdr  --stream-mmap
+> --stream-to=<output_file.yuv>
+> 
+> Encoders validated with below commands:
+> v4l2-ctl --verbose
+> --set-fmt-video-out=width=<width>,height=<height>,pixelformat=NV12
+> --set-selection-output
+> target=crop,top=0,left=0,width=<width>,height=<height>
+> --set-fmt-video=pixelformat=H264 --stream-mmap --stream-out-mmap
+> --stream-from=<input_file.yuv> --stream-to=<output_file.h264> -d
+> /dev/video1
+> v4l2-ctl --verbose
+> --set-fmt-video-out=width=<width>,height=<height>,pixelformat=NV12
+> --set-selection-output
+> target=crop,top=0,left=0,width=<width>,height=<height>
+> --set-fmt-video=pixelformat=HEVC --stream-mmap --stream-out-mmap
+> --stream-from=<input_file.yuv> --stream-to=<output_file.hevc> -d
+> /dev/video1
 
-
-> On Mon, Jan 26, 2026 at 6:11 PM Bryan O'Donoghue
-> <bryan.odonoghue@linaro.org> wrote:
->>
->> On 26/01/2026 12:24, Saikiran B wrote:
->>> Yes, I implemented your suggested sequence in power_on():
->>>
->>> Assert XSHUTDOWN (Reset GPIO = 1)
->>
->> +5 milliseconds
->>
->>> Enable Regulators
->>> Enable Clock
->>> Wait 2ms+
->>> Release XSHUTDOWN (Reset GPIO = 0)
->>>
->>> Even with this sequence, the brownout prevents detection if the
->>> off-time was ~2.3s (I got this 2.3s number by conducting extensive
->>> stress tests on the platform starting from 50ms to 3s. At 2.3s the
->>> success rate was 100%. Anything below 2.3s, the sensor entered a
->>> brownout state atleast once.)
->>>
->>> Thanks & Regards,
->>> Saikiran
->>
->> ?
->>
->> ---
->> bod
-
+-- 
+With best wishes
+Dmitry
