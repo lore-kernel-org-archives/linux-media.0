@@ -1,27 +1,26 @@
 Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6AF8235DD0D
-	for <linux-media@vger.kernel.org>; Tue, 27 Jan 2026 14:40:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 72A7C35E534
+	for <linux-media@vger.kernel.org>; Tue, 27 Jan 2026 14:40:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769524814; cv=none; b=YB3wU+1gLyeyxt90LoxFiANpII1EzwtbGi2XTkfpNJSBteS8wB1SwSEQGG58LxDGR1p/S2E5TtVjinTqm4qGbfwpzDs/C9qVIUp7weSQe5pV3EtHrpZX/+Jj9e8dNcPjlY3RGFopcf7fMbglgbE0F4BsKSvA9ruOFv9HDg6ayJo=
+	t=1769524815; cv=none; b=Nx0DH5ZdoYPL7MQkdNsbyEfd/DNTB9qjGQReuCAvQUDF2YqK/ofFj4gFX2tX9jMl8aoiXbR5ZTL8cbho3aLqsZZTFnzbNKbpPAXdGpcL93bsmpvhM7ZqsUEOUHkOkne0v/zH0ZTr7Kqtv/1WNGrNiYBJQfbVsKOyNpCscw7PzuM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769524814; c=relaxed/simple;
-	bh=x0Yjf61ZNYh29Ukk3STDrpuFjkdsDfhkpobB1j4jhps=;
+	s=arc-20240116; t=1769524815; c=relaxed/simple;
+	bh=nPr/yFMr7sD7yVKE0J0oTZ5E/lqngZX18lzQlxnrkhA=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=VNNHtrcrMqPucUDCIcH47d+q09eq4gcVlGA0N5dqOOdaD8pWpxESQBa1IGmPazY7j+qYSGTQaYquLoCwgdhgP+PdE0dNZw7ipMu+eQkoDkORcQE2Nk/J3cZDgGq+DnBzJm4pFVu0oB34xbzWL8nKSi7Ffzdcn/qnXsQzvXyFMoY=
+	 In-Reply-To:To:Cc; b=e6O7ZHEYOsRf3CnJRG0JACN8HnUeTHsMIwdUhIwFgTDzM2yEh4ouggJVVRxr7cnrHDnahIJ8yj3Q3BN4nMvgeZXC7nUAZrq0/Psa/FEIVohrfK1tovYI5P1wqgnGI6rIHX1/lPcVUfpO+2pNxis+xhDrAqA1Sxv+3cugQnLqMzo=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
 Received: from ptz.office.stw.pengutronix.de ([2a0a:edc0:0:900:1d::77] helo=peter.mobile.pengutronix.de)
 	by metis.whiteo.stw.pengutronix.de with esmtp (Exim 4.92)
 	(envelope-from <s.pueschel@pengutronix.de>)
-	id 1vkkEc-0007YT-OE; Tue, 27 Jan 2026 15:40:02 +0100
+	id 1vkkEg-0007YT-BX; Tue, 27 Jan 2026 15:40:06 +0100
 From: =?utf-8?q?Sven_P=C3=BCschel?= <s.pueschel@pengutronix.de>
-Date: Tue, 27 Jan 2026 15:39:13 +0100
-Subject: [PATCH v3 04/27] media: v4l2-common: add has_alpha to
- v4l2_format_info
+Date: Tue, 27 Jan 2026 15:39:15 +0100
+Subject: [PATCH v3 06/27] media: rockchip: rga: use clk_bulk api
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
@@ -30,7 +29,7 @@ List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Message-Id: <20260127-spu-rga3-v3-4-77b273067beb@pengutronix.de>
+Message-Id: <20260127-spu-rga3-v3-6-77b273067beb@pengutronix.de>
 References: <20260127-spu-rga3-v3-0-77b273067beb@pengutronix.de>
 In-Reply-To: <20260127-spu-rga3-v3-0-77b273067beb@pengutronix.de>
 To: Jacob Chen <jacob-chen@iotwrt.com>, 
@@ -49,110 +48,140 @@ X-SA-Exim-Mail-From: s.pueschel@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
 X-PTX-Original-Recipient: linux-media@vger.kernel.org
 
-Add a has_alpha value to the v4l2_format_info struct to indicate if the
-format contains an alpha component. This information can currently not
-be queried in a generic way, but might be useful for potential drivers
-to properly setup alpha blending to copy or set the alpha value.
-The implementation is based on the drm_format_info implementation.
+Use the clk_bulk API to avoid code duplication for each of the three
+clocks.
 
 Signed-off-by: Sven Püschel <s.pueschel@pengutronix.de>
 ---
- drivers/media/v4l2-core/v4l2-common.c | 32 ++++++++++++++++----------------
- include/media/v4l2-common.h           |  2 ++
- 2 files changed, 18 insertions(+), 16 deletions(-)
+ drivers/media/platform/rockchip/rga/rga.c | 65 ++++---------------------------
+ drivers/media/platform/rockchip/rga/rga.h |  6 +--
+ 2 files changed, 11 insertions(+), 60 deletions(-)
 
-diff --git a/drivers/media/v4l2-core/v4l2-common.c b/drivers/media/v4l2-core/v4l2-common.c
-index 58a4b372cf5be..2b5ccedeb6841 100644
---- a/drivers/media/v4l2-core/v4l2-common.c
-+++ b/drivers/media/v4l2-core/v4l2-common.c
-@@ -248,26 +248,26 @@ const struct v4l2_format_info *v4l2_format_info(u32 format)
- 		/* RGB formats (1 or 2 bytes per pixel) */
- 		{ .format = V4L2_PIX_FMT_RGB332,   .pixel_enc = V4L2_PIXEL_ENC_RGB, .mem_planes = 1, .comp_planes = 1, .bpp = { 1, 0, 0, 0 }, .bpp_div = { 1, 1, 1, 1 }, .hdiv = 1, .vdiv = 1 },
- 		{ .format = V4L2_PIX_FMT_RGB444,   .pixel_enc = V4L2_PIXEL_ENC_RGB, .mem_planes = 1, .comp_planes = 1, .bpp = { 2, 0, 0, 0 }, .bpp_div = { 1, 1, 1, 1 }, .hdiv = 1, .vdiv = 1 },
--		{ .format = V4L2_PIX_FMT_ARGB444,  .pixel_enc = V4L2_PIXEL_ENC_RGB, .mem_planes = 1, .comp_planes = 1, .bpp = { 2, 0, 0, 0 }, .bpp_div = { 1, 1, 1, 1 }, .hdiv = 1, .vdiv = 1 },
-+		{ .format = V4L2_PIX_FMT_ARGB444,  .pixel_enc = V4L2_PIXEL_ENC_RGB, .mem_planes = 1, .comp_planes = 1, .bpp = { 2, 0, 0, 0 }, .bpp_div = { 1, 1, 1, 1 }, .hdiv = 1, .vdiv = 1, .has_alpha = true },
- 		{ .format = V4L2_PIX_FMT_XRGB444,  .pixel_enc = V4L2_PIXEL_ENC_RGB, .mem_planes = 1, .comp_planes = 1, .bpp = { 2, 0, 0, 0 }, .bpp_div = { 1, 1, 1, 1 }, .hdiv = 1, .vdiv = 1 },
--		{ .format = V4L2_PIX_FMT_RGBA444,  .pixel_enc = V4L2_PIXEL_ENC_RGB, .mem_planes = 1, .comp_planes = 1, .bpp = { 2, 0, 0, 0 }, .bpp_div = { 1, 1, 1, 1 }, .hdiv = 1, .vdiv = 1 },
-+		{ .format = V4L2_PIX_FMT_RGBA444,  .pixel_enc = V4L2_PIXEL_ENC_RGB, .mem_planes = 1, .comp_planes = 1, .bpp = { 2, 0, 0, 0 }, .bpp_div = { 1, 1, 1, 1 }, .hdiv = 1, .vdiv = 1, .has_alpha = true },
- 		{ .format = V4L2_PIX_FMT_RGBX444,  .pixel_enc = V4L2_PIXEL_ENC_RGB, .mem_planes = 1, .comp_planes = 1, .bpp = { 2, 0, 0, 0 }, .bpp_div = { 1, 1, 1, 1 }, .hdiv = 1, .vdiv = 1 },
--		{ .format = V4L2_PIX_FMT_ABGR444,  .pixel_enc = V4L2_PIXEL_ENC_RGB, .mem_planes = 1, .comp_planes = 1, .bpp = { 2, 0, 0, 0 }, .bpp_div = { 1, 1, 1, 1 }, .hdiv = 1, .vdiv = 1 },
-+		{ .format = V4L2_PIX_FMT_ABGR444,  .pixel_enc = V4L2_PIXEL_ENC_RGB, .mem_planes = 1, .comp_planes = 1, .bpp = { 2, 0, 0, 0 }, .bpp_div = { 1, 1, 1, 1 }, .hdiv = 1, .vdiv = 1, .has_alpha = true },
- 		{ .format = V4L2_PIX_FMT_XBGR444,  .pixel_enc = V4L2_PIXEL_ENC_RGB, .mem_planes = 1, .comp_planes = 1, .bpp = { 2, 0, 0, 0 }, .bpp_div = { 1, 1, 1, 1 }, .hdiv = 1, .vdiv = 1 },
--		{ .format = V4L2_PIX_FMT_BGRA444,  .pixel_enc = V4L2_PIXEL_ENC_RGB, .mem_planes = 1, .comp_planes = 1, .bpp = { 2, 0, 0, 0 }, .bpp_div = { 1, 1, 1, 1 }, .hdiv = 1, .vdiv = 1 },
-+		{ .format = V4L2_PIX_FMT_BGRA444,  .pixel_enc = V4L2_PIXEL_ENC_RGB, .mem_planes = 1, .comp_planes = 1, .bpp = { 2, 0, 0, 0 }, .bpp_div = { 1, 1, 1, 1 }, .hdiv = 1, .vdiv = 1, .has_alpha = true },
- 		{ .format = V4L2_PIX_FMT_BGRX444,  .pixel_enc = V4L2_PIXEL_ENC_RGB, .mem_planes = 1, .comp_planes = 1, .bpp = { 2, 0, 0, 0 }, .bpp_div = { 1, 1, 1, 1 }, .hdiv = 1, .vdiv = 1 },
- 		{ .format = V4L2_PIX_FMT_RGB555,   .pixel_enc = V4L2_PIXEL_ENC_RGB, .mem_planes = 1, .comp_planes = 1, .bpp = { 2, 0, 0, 0 }, .bpp_div = { 1, 1, 1, 1 }, .hdiv = 1, .vdiv = 1 },
--		{ .format = V4L2_PIX_FMT_ARGB555,  .pixel_enc = V4L2_PIXEL_ENC_RGB, .mem_planes = 1, .comp_planes = 1, .bpp = { 2, 0, 0, 0 }, .bpp_div = { 1, 1, 1, 1 }, .hdiv = 1, .vdiv = 1 },
-+		{ .format = V4L2_PIX_FMT_ARGB555,  .pixel_enc = V4L2_PIXEL_ENC_RGB, .mem_planes = 1, .comp_planes = 1, .bpp = { 2, 0, 0, 0 }, .bpp_div = { 1, 1, 1, 1 }, .hdiv = 1, .vdiv = 1, .has_alpha = true },
- 		{ .format = V4L2_PIX_FMT_XRGB555,  .pixel_enc = V4L2_PIXEL_ENC_RGB, .mem_planes = 1, .comp_planes = 1, .bpp = { 2, 0, 0, 0 }, .bpp_div = { 1, 1, 1, 1 }, .hdiv = 1, .vdiv = 1 },
--		{ .format = V4L2_PIX_FMT_RGBA555,  .pixel_enc = V4L2_PIXEL_ENC_RGB, .mem_planes = 1, .comp_planes = 1, .bpp = { 2, 0, 0, 0 }, .bpp_div = { 1, 1, 1, 1 }, .hdiv = 1, .vdiv = 1 },
-+		{ .format = V4L2_PIX_FMT_RGBA555,  .pixel_enc = V4L2_PIXEL_ENC_RGB, .mem_planes = 1, .comp_planes = 1, .bpp = { 2, 0, 0, 0 }, .bpp_div = { 1, 1, 1, 1 }, .hdiv = 1, .vdiv = 1, .has_alpha = true },
- 		{ .format = V4L2_PIX_FMT_RGBX555,  .pixel_enc = V4L2_PIXEL_ENC_RGB, .mem_planes = 1, .comp_planes = 1, .bpp = { 2, 0, 0, 0 }, .bpp_div = { 1, 1, 1, 1 }, .hdiv = 1, .vdiv = 1 },
--		{ .format = V4L2_PIX_FMT_ABGR555,  .pixel_enc = V4L2_PIXEL_ENC_RGB, .mem_planes = 1, .comp_planes = 1, .bpp = { 2, 0, 0, 0 }, .bpp_div = { 1, 1, 1, 1 }, .hdiv = 1, .vdiv = 1 },
-+		{ .format = V4L2_PIX_FMT_ABGR555,  .pixel_enc = V4L2_PIXEL_ENC_RGB, .mem_planes = 1, .comp_planes = 1, .bpp = { 2, 0, 0, 0 }, .bpp_div = { 1, 1, 1, 1 }, .hdiv = 1, .vdiv = 1, .has_alpha = true },
- 		{ .format = V4L2_PIX_FMT_XBGR555,  .pixel_enc = V4L2_PIXEL_ENC_RGB, .mem_planes = 1, .comp_planes = 1, .bpp = { 2, 0, 0, 0 }, .bpp_div = { 1, 1, 1, 1 }, .hdiv = 1, .vdiv = 1 },
--		{ .format = V4L2_PIX_FMT_BGRA555,  .pixel_enc = V4L2_PIXEL_ENC_RGB, .mem_planes = 1, .comp_planes = 1, .bpp = { 2, 0, 0, 0 }, .bpp_div = { 1, 1, 1, 1 }, .hdiv = 1, .vdiv = 1 },
-+		{ .format = V4L2_PIX_FMT_BGRA555,  .pixel_enc = V4L2_PIXEL_ENC_RGB, .mem_planes = 1, .comp_planes = 1, .bpp = { 2, 0, 0, 0 }, .bpp_div = { 1, 1, 1, 1 }, .hdiv = 1, .vdiv = 1, .has_alpha = true },
- 		{ .format = V4L2_PIX_FMT_BGRX555,  .pixel_enc = V4L2_PIXEL_ENC_RGB, .mem_planes = 1, .comp_planes = 1, .bpp = { 2, 0, 0, 0 }, .bpp_div = { 1, 1, 1, 1 }, .hdiv = 1, .vdiv = 1 },
- 		{ .format = V4L2_PIX_FMT_RGB565,   .pixel_enc = V4L2_PIXEL_ENC_RGB, .mem_planes = 1, .comp_planes = 1, .bpp = { 2, 0, 0, 0 }, .bpp_div = { 1, 1, 1, 1 }, .hdiv = 1, .vdiv = 1 },
- 		{ .format = V4L2_PIX_FMT_RGB555X,  .pixel_enc = V4L2_PIXEL_ENC_RGB, .mem_planes = 1, .comp_planes = 1, .bpp = { 2, 0, 0, 0 }, .bpp_div = { 1, 1, 1, 1 }, .hdiv = 1, .vdiv = 1 },
--		{ .format = V4L2_PIX_FMT_ARGB555X, .pixel_enc = V4L2_PIXEL_ENC_RGB, .mem_planes = 1, .comp_planes = 1, .bpp = { 2, 0, 0, 0 }, .bpp_div = { 1, 1, 1, 1 }, .hdiv = 1, .vdiv = 1 },
-+		{ .format = V4L2_PIX_FMT_ARGB555X, .pixel_enc = V4L2_PIXEL_ENC_RGB, .mem_planes = 1, .comp_planes = 1, .bpp = { 2, 0, 0, 0 }, .bpp_div = { 1, 1, 1, 1 }, .hdiv = 1, .vdiv = 1, .has_alpha = true },
- 		{ .format = V4L2_PIX_FMT_XRGB555X, .pixel_enc = V4L2_PIXEL_ENC_RGB, .mem_planes = 1, .comp_planes = 1, .bpp = { 2, 0, 0, 0 }, .bpp_div = { 1, 1, 1, 1 }, .hdiv = 1, .vdiv = 1 },
- 		{ .format = V4L2_PIX_FMT_RGB565X,  .pixel_enc = V4L2_PIXEL_ENC_RGB, .mem_planes = 1, .comp_planes = 1, .bpp = { 2, 0, 0, 0 }, .bpp_div = { 1, 1, 1, 1 }, .hdiv = 1, .vdiv = 1 },
- 
-@@ -276,24 +276,24 @@ const struct v4l2_format_info *v4l2_format_info(u32 format)
- 		{ .format = V4L2_PIX_FMT_BGR24,       .pixel_enc = V4L2_PIXEL_ENC_RGB, .mem_planes = 1, .comp_planes = 1, .bpp = { 3, 0, 0, 0 }, .bpp_div = { 1, 1, 1, 1 }, .hdiv = 1, .vdiv = 1 },
- 		{ .format = V4L2_PIX_FMT_RGB24,       .pixel_enc = V4L2_PIXEL_ENC_RGB, .mem_planes = 1, .comp_planes = 1, .bpp = { 3, 0, 0, 0 }, .bpp_div = { 1, 1, 1, 1 }, .hdiv = 1, .vdiv = 1 },
- 		{ .format = V4L2_PIX_FMT_BGR32,       .pixel_enc = V4L2_PIXEL_ENC_RGB, .mem_planes = 1, .comp_planes = 1, .bpp = { 4, 0, 0, 0 }, .bpp_div = { 1, 1, 1, 1 }, .hdiv = 1, .vdiv = 1 },
--		{ .format = V4L2_PIX_FMT_ABGR32,      .pixel_enc = V4L2_PIXEL_ENC_RGB, .mem_planes = 1, .comp_planes = 1, .bpp = { 4, 0, 0, 0 }, .bpp_div = { 1, 1, 1, 1 }, .hdiv = 1, .vdiv = 1 },
-+		{ .format = V4L2_PIX_FMT_ABGR32,      .pixel_enc = V4L2_PIXEL_ENC_RGB, .mem_planes = 1, .comp_planes = 1, .bpp = { 4, 0, 0, 0 }, .bpp_div = { 1, 1, 1, 1 }, .hdiv = 1, .vdiv = 1, .has_alpha = true },
- 		{ .format = V4L2_PIX_FMT_XBGR32,      .pixel_enc = V4L2_PIXEL_ENC_RGB, .mem_planes = 1, .comp_planes = 1, .bpp = { 4, 0, 0, 0 }, .bpp_div = { 1, 1, 1, 1 }, .hdiv = 1, .vdiv = 1 },
--		{ .format = V4L2_PIX_FMT_BGRA32,      .pixel_enc = V4L2_PIXEL_ENC_RGB, .mem_planes = 1, .comp_planes = 1, .bpp = { 4, 0, 0, 0 }, .bpp_div = { 1, 1, 1, 1 }, .hdiv = 1, .vdiv = 1 },
-+		{ .format = V4L2_PIX_FMT_BGRA32,      .pixel_enc = V4L2_PIXEL_ENC_RGB, .mem_planes = 1, .comp_planes = 1, .bpp = { 4, 0, 0, 0 }, .bpp_div = { 1, 1, 1, 1 }, .hdiv = 1, .vdiv = 1, .has_alpha = true },
- 		{ .format = V4L2_PIX_FMT_BGRX32,      .pixel_enc = V4L2_PIXEL_ENC_RGB, .mem_planes = 1, .comp_planes = 1, .bpp = { 4, 0, 0, 0 }, .bpp_div = { 1, 1, 1, 1 }, .hdiv = 1, .vdiv = 1 },
- 		{ .format = V4L2_PIX_FMT_RGB32,       .pixel_enc = V4L2_PIXEL_ENC_RGB, .mem_planes = 1, .comp_planes = 1, .bpp = { 4, 0, 0, 0 }, .bpp_div = { 1, 1, 1, 1 }, .hdiv = 1, .vdiv = 1 },
--		{ .format = V4L2_PIX_FMT_RGBA32,      .pixel_enc = V4L2_PIXEL_ENC_RGB, .mem_planes = 1, .comp_planes = 1, .bpp = { 4, 0, 0, 0 }, .bpp_div = { 1, 1, 1, 1 }, .hdiv = 1, .vdiv = 1 },
-+		{ .format = V4L2_PIX_FMT_RGBA32,      .pixel_enc = V4L2_PIXEL_ENC_RGB, .mem_planes = 1, .comp_planes = 1, .bpp = { 4, 0, 0, 0 }, .bpp_div = { 1, 1, 1, 1 }, .hdiv = 1, .vdiv = 1, .has_alpha = true },
- 		{ .format = V4L2_PIX_FMT_RGBX32,      .pixel_enc = V4L2_PIXEL_ENC_RGB, .mem_planes = 1, .comp_planes = 1, .bpp = { 4, 0, 0, 0 }, .bpp_div = { 1, 1, 1, 1 }, .hdiv = 1, .vdiv = 1 },
--		{ .format = V4L2_PIX_FMT_ARGB32,      .pixel_enc = V4L2_PIXEL_ENC_RGB, .mem_planes = 1, .comp_planes = 1, .bpp = { 4, 0, 0, 0 }, .bpp_div = { 1, 1, 1, 1 }, .hdiv = 1, .vdiv = 1 },
-+		{ .format = V4L2_PIX_FMT_ARGB32,      .pixel_enc = V4L2_PIXEL_ENC_RGB, .mem_planes = 1, .comp_planes = 1, .bpp = { 4, 0, 0, 0 }, .bpp_div = { 1, 1, 1, 1 }, .hdiv = 1, .vdiv = 1, .has_alpha = true },
- 		{ .format = V4L2_PIX_FMT_XRGB32,      .pixel_enc = V4L2_PIXEL_ENC_RGB, .mem_planes = 1, .comp_planes = 1, .bpp = { 4, 0, 0, 0 }, .bpp_div = { 1, 1, 1, 1 }, .hdiv = 1, .vdiv = 1 },
- 		{ .format = V4L2_PIX_FMT_RGBX1010102, .pixel_enc = V4L2_PIXEL_ENC_RGB, .mem_planes = 1, .comp_planes = 1, .bpp = { 4, 0, 0, 0 }, .bpp_div = { 1, 1, 1, 1 }, .hdiv = 1, .vdiv = 1 },
--		{ .format = V4L2_PIX_FMT_RGBA1010102, .pixel_enc = V4L2_PIXEL_ENC_RGB, .mem_planes = 1, .comp_planes = 1, .bpp = { 4, 0, 0, 0 }, .bpp_div = { 1, 1, 1, 1 }, .hdiv = 1, .vdiv = 1 },
--		{ .format = V4L2_PIX_FMT_ARGB2101010, .pixel_enc = V4L2_PIXEL_ENC_RGB, .mem_planes = 1, .comp_planes = 1, .bpp = { 4, 0, 0, 0 }, .bpp_div = { 1, 1, 1, 1 }, .hdiv = 1, .vdiv = 1 },
-+		{ .format = V4L2_PIX_FMT_RGBA1010102, .pixel_enc = V4L2_PIXEL_ENC_RGB, .mem_planes = 1, .comp_planes = 1, .bpp = { 4, 0, 0, 0 }, .bpp_div = { 1, 1, 1, 1 }, .hdiv = 1, .vdiv = 1, .has_alpha = true },
-+		{ .format = V4L2_PIX_FMT_ARGB2101010, .pixel_enc = V4L2_PIXEL_ENC_RGB, .mem_planes = 1, .comp_planes = 1, .bpp = { 4, 0, 0, 0 }, .bpp_div = { 1, 1, 1, 1 }, .hdiv = 1, .vdiv = 1, .has_alpha = true },
- 
- 		/* RGB formats (6 or 8 bytes per pixel) */
- 		{ .format = V4L2_PIX_FMT_BGR48_12,  .pixel_enc = V4L2_PIXEL_ENC_RGB, .mem_planes = 1, .comp_planes = 1, .bpp = { 6, 0, 0, 0 }, .bpp_div = { 1, 1, 1, 1 }, .hdiv = 1, .vdiv = 1 },
- 		{ .format = V4L2_PIX_FMT_BGR48,     .pixel_enc = V4L2_PIXEL_ENC_RGB, .mem_planes = 1, .comp_planes = 1, .bpp = { 6, 0, 0, 0 }, .bpp_div = { 1, 1, 1, 1 }, .hdiv = 1, .vdiv = 1 },
- 		{ .format = V4L2_PIX_FMT_RGB48,     .pixel_enc = V4L2_PIXEL_ENC_RGB, .mem_planes = 1, .comp_planes = 1, .bpp = { 6, 0, 0, 0 }, .bpp_div = { 1, 1, 1, 1 }, .hdiv = 1, .vdiv = 1 },
--		{ .format = V4L2_PIX_FMT_ABGR64_12, .pixel_enc = V4L2_PIXEL_ENC_RGB, .mem_planes = 1, .comp_planes = 1, .bpp = { 8, 0, 0, 0 }, .bpp_div = { 1, 1, 1, 1 }, .hdiv = 1, .vdiv = 1 },
-+		{ .format = V4L2_PIX_FMT_ABGR64_12, .pixel_enc = V4L2_PIXEL_ENC_RGB, .mem_planes = 1, .comp_planes = 1, .bpp = { 8, 0, 0, 0 }, .bpp_div = { 1, 1, 1, 1 }, .hdiv = 1, .vdiv = 1, .has_alpha = true },
- 
- 		/* HSV formats */
- 		{ .format = V4L2_PIX_FMT_HSV24, .pixel_enc = V4L2_PIXEL_ENC_RGB, .mem_planes = 1, .comp_planes = 1, .bpp = { 3, 0, 0, 0 }, .bpp_div = { 1, 1, 1, 1 }, .hdiv = 1, .vdiv = 1 },
-diff --git a/include/media/v4l2-common.h b/include/media/v4l2-common.h
-index f8b1faced79c8..401d8506c24b5 100644
---- a/include/media/v4l2-common.h
-+++ b/include/media/v4l2-common.h
-@@ -520,6 +520,7 @@ enum v4l2_pixel_encoding {
-  * @vdiv: Vertical chroma subsampling factor
-  * @block_w: Per-plane macroblock pixel width (optional)
-  * @block_h: Per-plane macroblock pixel height (optional)
-+ * @has_alpha: Does the format embeds an alpha component?
-  */
- struct v4l2_format_info {
- 	u32 format;
-@@ -532,6 +533,7 @@ struct v4l2_format_info {
- 	u8 vdiv;
- 	u8 block_w[4];
- 	u8 block_h[4];
-+	bool has_alpha;
+diff --git a/drivers/media/platform/rockchip/rga/rga.c b/drivers/media/platform/rockchip/rga/rga.c
+index 43f6a8d993811..338c7796490bc 100644
+--- a/drivers/media/platform/rockchip/rga/rga.c
++++ b/drivers/media/platform/rockchip/rga/rga.c
+@@ -698,48 +698,10 @@ static const struct video_device rga_videodev = {
+ 	.device_caps = V4L2_CAP_VIDEO_M2M_MPLANE | V4L2_CAP_STREAMING,
  };
  
- static inline bool v4l2_is_format_rgb(const struct v4l2_format_info *f)
+-static int rga_enable_clocks(struct rockchip_rga *rga)
+-{
+-	int ret;
+-
+-	ret = clk_prepare_enable(rga->sclk);
+-	if (ret) {
+-		dev_err(rga->dev, "Cannot enable rga sclk: %d\n", ret);
+-		return ret;
+-	}
+-
+-	ret = clk_prepare_enable(rga->aclk);
+-	if (ret) {
+-		dev_err(rga->dev, "Cannot enable rga aclk: %d\n", ret);
+-		goto err_disable_sclk;
+-	}
+-
+-	ret = clk_prepare_enable(rga->hclk);
+-	if (ret) {
+-		dev_err(rga->dev, "Cannot enable rga hclk: %d\n", ret);
+-		goto err_disable_aclk;
+-	}
+-
+-	return 0;
+-
+-err_disable_aclk:
+-	clk_disable_unprepare(rga->aclk);
+-err_disable_sclk:
+-	clk_disable_unprepare(rga->sclk);
+-
+-	return ret;
+-}
+-
+-static void rga_disable_clocks(struct rockchip_rga *rga)
+-{
+-	clk_disable_unprepare(rga->sclk);
+-	clk_disable_unprepare(rga->hclk);
+-	clk_disable_unprepare(rga->aclk);
+-}
+-
+ static int rga_parse_dt(struct rockchip_rga *rga)
+ {
+ 	struct reset_control *core_rst, *axi_rst, *ahb_rst;
++	int ret;
+ 
+ 	core_rst = devm_reset_control_get(rga->dev, "core");
+ 	if (IS_ERR(core_rst)) {
+@@ -771,23 +733,12 @@ static int rga_parse_dt(struct rockchip_rga *rga)
+ 	udelay(1);
+ 	reset_control_deassert(ahb_rst);
+ 
+-	rga->sclk = devm_clk_get(rga->dev, "sclk");
+-	if (IS_ERR(rga->sclk)) {
+-		dev_err(rga->dev, "failed to get sclk clock\n");
+-		return PTR_ERR(rga->sclk);
+-	}
+-
+-	rga->aclk = devm_clk_get(rga->dev, "aclk");
+-	if (IS_ERR(rga->aclk)) {
+-		dev_err(rga->dev, "failed to get aclk clock\n");
+-		return PTR_ERR(rga->aclk);
+-	}
+-
+-	rga->hclk = devm_clk_get(rga->dev, "hclk");
+-	if (IS_ERR(rga->hclk)) {
+-		dev_err(rga->dev, "failed to get hclk clock\n");
+-		return PTR_ERR(rga->hclk);
++	ret = devm_clk_bulk_get_all(rga->dev, &rga->clks);
++	if (ret < 0) {
++		dev_err(rga->dev, "failed to get clocks\n");
++		return ret;
+ 	}
++	rga->num_clks = ret;
+ 
+ 	return 0;
+ }
+@@ -935,7 +886,7 @@ static int __maybe_unused rga_runtime_suspend(struct device *dev)
+ {
+ 	struct rockchip_rga *rga = dev_get_drvdata(dev);
+ 
+-	rga_disable_clocks(rga);
++	clk_bulk_disable_unprepare(rga->num_clks, rga->clks);
+ 
+ 	return 0;
+ }
+@@ -944,7 +895,7 @@ static int __maybe_unused rga_runtime_resume(struct device *dev)
+ {
+ 	struct rockchip_rga *rga = dev_get_drvdata(dev);
+ 
+-	return rga_enable_clocks(rga);
++	return clk_bulk_prepare_enable(rga->num_clks, rga->clks);
+ }
+ 
+ static const struct dev_pm_ops rga_pm = {
+diff --git a/drivers/media/platform/rockchip/rga/rga.h b/drivers/media/platform/rockchip/rga/rga.h
+index 72a28b120fabf..2db10acecb405 100644
+--- a/drivers/media/platform/rockchip/rga/rga.h
++++ b/drivers/media/platform/rockchip/rga/rga.h
+@@ -6,6 +6,7 @@
+ #ifndef __RGA_H__
+ #define __RGA_H__
+ 
++#include <linux/clk.h>
+ #include <linux/platform_device.h>
+ #include <media/videobuf2-v4l2.h>
+ #include <media/v4l2-ctrls.h>
+@@ -81,9 +82,8 @@ struct rockchip_rga {
+ 	struct device *dev;
+ 	struct regmap *grf;
+ 	void __iomem *regs;
+-	struct clk *sclk;
+-	struct clk *aclk;
+-	struct clk *hclk;
++	struct clk_bulk_data *clks;
++	int num_clks;
+ 	struct rockchip_rga_version version;
+ 
+ 	/* vfd lock */
 
 -- 
 2.52.0
