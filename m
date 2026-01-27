@@ -1,99 +1,126 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 506FF32ABCF;
-	Tue, 27 Jan 2026 11:11:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7973430E851
+	for <linux-media@vger.kernel.org>; Tue, 27 Jan 2026 11:18:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769512310; cv=none; b=W5yH0J/4o91x3rHhAWKTN5UBrpRy0PM74G1bfa2jWu8oIK76ZticU5jNP+i8C9JXdOE7bbrwVYM6emtQotO4CZdEYe5YDeZBpzcf3uutIqkMtckHf5NC7W8ZR11BdqNIzSx6ITp2oWCBtgEIf83R7RMuxZRvoGBdmVgfiQuISWE=
+	t=1769512720; cv=none; b=c3AszgA2ezw7pCG2GzX1AWFPE66xQNoCJjdudyVS3g+Q7Pwdg3XfMROaNLYdzXeb1NoUALh59pM5x23P+FC8IHbBdCOXhx2uY1WGi3ShY3hzmdMIxwoVbPV1t62zOUqEl7HrUU1LFPpcgvFkaoCamuKfk7+f9zRmPQRqo4butSo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769512310; c=relaxed/simple;
-	bh=NDYsZt5CfVcyvgvSjasOZPmyjud+vNg6Mk4ZZh9jMcY=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=QWVhzTM5t85VdzTgjEMKG5fsgG/Brk5bXnNN4xigGVXR5KEOIeABwMr8g7xV2ebrs8yRkMQUrs2Kn7W8oiCz50R0bZPU3h2Tt6HY8D4FwTRB0UMERuQr6Jcn41HFdB99/tvhfapu8SNDBxoWtnsfrV20achr4owIi2m0qCE1xiA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=rWE4h7DP; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1769512720; c=relaxed/simple;
+	bh=pV2GITVwm06IMK23mcFqnyjWYQKCgjia+kU+gDbU8Do=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=brzr1lv9DxNZIN4YgjA4Jt6a6gFAXk6W88/90H60PeZYX0hz/D7yehW6b0nS4Ac2PUEFbkEhOKJ1zsZp1TPtW2aQJ528C5MUBYRMpXx+S/rYu6CMLR/YLdRTbufSHWLabt0bygycL/HpPW4inoU97DtYVgBUgQAyj9fY5XXD0rU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=aJ3lRmWX; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="rWE4h7DP"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A92D4C116C6;
-	Tue, 27 Jan 2026 11:11:47 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="aJ3lRmWX"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D5CEFC116C6;
+	Tue, 27 Jan 2026 11:18:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1769512309;
-	bh=NDYsZt5CfVcyvgvSjasOZPmyjud+vNg6Mk4ZZh9jMcY=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=rWE4h7DPQWl1lHNE+1wGQJUTAJ9sGYDjxkBK/K5VyimNdjMJsGVhjQF/eAfOVWuhy
-	 i2zKe159J53m6rpaHjGJiKu5oIbmltJi2a87qL3VTg67trQHfZOuSG+Iuyq32jFLkr
-	 1UlsTGVX+ri2LnRZt6KkwO091gEsU2bQLR1F15eKmsTTcMli9LqUI0ukSakQvGVeB0
-	 60M77nc64RKYAv0d9G5iBQUzSQfRTcRWvcE13ixs7WNGpF6C42SuE5lmrcjvjQLslE
-	 8W/4v4DPy6CtDk1MxipP2SWCmKP06DbxEjFlJKHAXuX1l9lGUiYI28NDZhYFm5K/+U
-	 rpWMAxSQGVExQ==
-Message-ID: <cb902c4e-f7b9-4d70-a997-1e84c90ea18b@kernel.org>
-Date: Tue, 27 Jan 2026 11:11:45 +0000
+	s=k20201202; t=1769512720;
+	bh=pV2GITVwm06IMK23mcFqnyjWYQKCgjia+kU+gDbU8Do=;
+	h=From:To:Cc:Subject:Date:From;
+	b=aJ3lRmWXybX6wSXKozLUtZ7TT8ERvC9kyr5eqCp2k5p/tYwt+okUHhGSyP+ZPs/yI
+	 Y0EhAVEqJv+EaUByYnyeqhojFz5GlZJw6M96FzJqcabyUR2cWmXnKrKGiDKn2xwvKD
+	 KIY5BSrPzAl8TXlnGRh7A2XtXEls1lUTJdcxe0sF045mg4m/uPI2ln+yJ8Qx3YKxs3
+	 DQPvcXQCUONgOouTWzEYAusWDe/YsCFNPXwmUBaL2jSG/oeWFI7SnmXntAVPauGKY6
+	 7+y11y5ht4Fw/f/iIYH+Sdo22YhXdpfZLPfM09XXja25NgFPHNiQXHwsfuboKS6NFt
+	 VjTQ10DB6l4fA==
+From: Hans Verkuil <hverkuil+cisco@kernel.org>
+To: linux-media@vger.kernel.org
+Cc: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+	Sakari Ailus <sakari.ailus@linux.intel.com>,
+	Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+	Sean Young <sean@mess.org>,
+	Nicolas Dufresne <nicolas.dufresne@collabora.com>,
+	Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
+	Ricardo Ribalda <ribalda@chromium.org>
+Subject: [PATCHv7 0/3] docs: media: multicommitters model documentation
+Date: Tue, 27 Jan 2026 11:53:24 +0100
+Message-ID: <cover.1769511207.git.hverkuil+cisco@kernel.org>
+X-Mailer: git-send-email 2.51.0
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 3/3] media: i2c: ov02c10: Use runtime PM autosuspend to
- avoid brownouts
-To: Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
- Saikiran B <bjsaikiran@gmail.com>
-Cc: linux-media@vger.kernel.org, linux-arm-msm@vger.kernel.org,
- rfoss@kernel.org, todor.too@gmail.com, vladimir.zapolskiy@linaro.org,
- Hans de Goede <hansg@kernel.org>, sakari.ailus@linux.intel.com,
- mchehab@kernel.org, stable@vger.kernel.org
-References: <20260126173444.10228-1-bjsaikiran@gmail.com>
- <20260126173444.10228-4-bjsaikiran@gmail.com>
- <900cc5dd-c39d-42f6-9531-016f62da81e8@linaro.org>
- <CAAFDt1tsyvtAa84bFK2Hq5yG_F15SUUseBd5Xi-DB8GnUj7+7A@mail.gmail.com>
- <aaab1d32-9375-47d2-8524-e80e076b864e@linaro.org>
- <CAAFDt1vKn5ssoTQZduGKb5eOeN74P=FVk9f01go1d-JS71Zt0A@mail.gmail.com>
- <clmeor0Z59Dd_ymBj-m2zE0orMOFgVsPFXUBpBx39ZehM4t_GrlZV8y8f-lZbH6p9N-W7FLs7PqYhfG6VzwmBw==@protonmail.internalid>
- <571cd869-847f-4697-ace3-503f123e8486@linaro.org>
-From: Bryan O'Donoghue <bod@kernel.org>
-Content-Language: en-US
-In-Reply-To: <571cd869-847f-4697-ace3-503f123e8486@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On 27/01/2026 11:06, Bryan O'Donoghue wrote:
-> So, SPMI is not exported in /sys/kernel/debug/regmap - however
-> 
-> drivers/regulator/qcom-rpmh-regulator.c
-> 
-> Lets add this to probe
-> 
-> unsigned int val, i;
->       u16 bases[] = {0x4000, 0x4300, 0x4600}; // LDO1, LDO4, LDO7
->       const char *names[] = {"LDO1(1.2V)", "LDO4(1.8V)", "LDO7(2.8V)"};
->       struct regmap *p_regmap = dev_get_regmap(dev->parent, NULL);
-> 
->       if (p_regmap) {
->           pr_info("--- OV02C10 PMIC RAIL DUMP START ---\n");
->           for (i = 0; i < 3; i++) {
->               // Check Config (Active Discharge)
->               regmap_read(p_regmap, bases[i] + 0x41, &val);
->               pr_info("!!! %s SEC_CTRL (0x%04x) = 0x%02x (Bit7: Active
-> Discharge)\n",
->                       names[i], bases[i] + 0x41, val);
-> 
->               // Check Status (Is it actually on?)
->               regmap_read(p_regmap, bases[i] + 0x08, &val);
->               pr_info("!!! %s STATUS   (0x%04x) = 0x%02x (Bit7: VREG_OK,
-> Bit0: VREG_ON)\n",
->                       names[i], bases[i] + 0x08, val);
-> 
->               // Check Pull-down config (Secondary check)
->               regmap_read(p_regmap, bases[i] + 0x42, &val);
->               pr_info("!!! %s PD_CTRL   (0x%04x) = 0x%02x\n",
->                       names[i], bases[i] + 0x42, val);
->           }
->           pr_info("--- OV02C10 PMIC RAIL DUMP END ---\n");
->       }
+Here is v7, based on yesterday's meeting.
 
-Obviously only do this for PM8010 for the other RPMh which may not have 
-this offset.
+The main change is what a "Media Maintainer" is. In v6 I considered a
+Media Maintainer to be someone who has patchwork access and has
+responsibility for an area of the media subsystem, deciding when a
+patch is ready to be merged and making PRs.
 
----
-bod
+That was confusing since that name was too generic.
+
+In v7 a "Media Driver Maintainer" is anyone who is listed in MAINTAINERS
+for a media driver. "Media Driver/Core/Subsystem Maintainers" are collectively
+called "Media Maintainers".
+
+I also added the distinction of being granted patchwork access: only Media
+Maintainers with patchwork access can decide when a patch is ready to be
+merged and make PRs. If you are trusted enough to be able to do that, then
+patchwork access is granted since you need that to be able to delegate patches
+and update the patch status.
+
+I'm still not entirely satisfied with this, as I would prefer to have a
+specific name for such maintainers. Saying "Media Maintainers with patchwork
+access" is a mouthful. I can't think of a good name, though.
+
+So the hierarchy is as follows:
+
+- Media Contributor: posts patches
+- Media Driver Maintainer: as above, but also reviews patches and is
+  listed in MAINTAINERS
+- Media Driver Maintainer with patchwork access: decides when patches are
+  ready for mainline, posts PRs, keeps patchwork up to date. Optionally
+  has commit rights.
+- Media Core Maintainer: same as above, but is also responsible for one
+  or more media core frameworks.
+- Media Subsystem Maintainer: as above, but is also responsible for the
+  whole subsystem, processes PRs and has commit rights.
+
+
+
+Patch 1/3 updates maintainer-entry-profile.rst: it introduces the
+three Media maintainer levels (Media Driver Maintainer, Media Core Maintainer
+and Media Subsystem Maintainer) and what the responsibilities are.
+
+Patch 2/3 adds back and updates the list of Media Maintainers that
+disappeared in patch 1/3. Please verify this whether the email
+addresses are the correct ones, and verify that the areas of responsibility
+are correct and that nothing is missing.
+
+Patch 3/3 adds media-committer.rst: that focusses on the additional
+commit rights that can be granted to a Media Maintainer.
+
+It feels much more consistent to me, I'm looking forward to the
+review comments.
+
+I have uploaded the documentation with these patches here:
+
+https://hverkuil.home.xs4all.nl/spec/driver-api/maintainer-entry-profile.html
+https://hverkuil.home.xs4all.nl/spec/driver-api/media-committer.html
+
+Regards,
+
+	Hans
+
+Hans Verkuil (1):
+  docs: media: document Media Maintainers
+
+Mauro Carvalho Chehab (2):
+  docs: media: update maintainer-entry-profile for multi-committers
+  docs: media: document media multi-committers rules and process
+
+ Documentation/driver-api/media/index.rst      |   1 +
+ .../media/maintainer-entry-profile.rst        | 436 +++++++++++++++---
+ .../driver-api/media/media-committer.rst      | 197 ++++++++
+ 3 files changed, 577 insertions(+), 57 deletions(-)
+ create mode 100644 Documentation/driver-api/media/media-committer.rst
+
+-- 
+2.51.0
+
