@@ -1,224 +1,78 @@
-Received: from mail-ej1-f45.google.com (mail-ej1-f45.google.com [209.85.218.45])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 976AD35B62E
-	for <linux-media@vger.kernel.org>; Tue, 27 Jan 2026 13:51:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.218.45
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769521914; cv=pass; b=DnMHHXfQOLHwKkLFo2siKvtHCOUcDTbya4L24FSzbWkVpTFxrS2eNKjjoKl5VwhXct+bq6E6KxIrsLAEqTANm2PgSO4s9fHp2eE/ZqTEEKlcJ0lNXgsjdHVA0l/SH5qAGMFyJR6pznR3ogJroytgv0UAXbCYReV4ipNDOKTpfv0=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769521914; c=relaxed/simple;
-	bh=/inq+L1mLk2RX/zGmX3sYrJ3kDdR2Us7y71FbxyEiV8=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=j9CHNclgxAJF0TiEWuvP0rkRcE0/bjSsSbOKKZZLLab9E1GbfJFQffEkEC08PtAD/1e22KUF6aRvr2hrPW/YTP71HkLfp/klkosVYsyEbcm6mIpqFvgXpyAlDjyMq7t1AOELKYEd0HSVaNnxB+paCHsMwV8l/3lkH7SVc8BH/rE=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=A1bT+EfN; arc=pass smtp.client-ip=209.85.218.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="A1bT+EfN"
-Received: by mail-ej1-f45.google.com with SMTP id a640c23a62f3a-b8710c9cddbso690378966b.2
-        for <linux-media@vger.kernel.org>; Tue, 27 Jan 2026 05:51:52 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1769521911; cv=none;
-        d=google.com; s=arc-20240605;
-        b=YRJkDASSofpfOJlI6lh7zb/+Y+x/3kHJkMsmFJEYo6OxwTiXgFMp9ND49gAQWvwSRh
-         bg3jnYi5tviSi259/wCmhYUSDYOawbRx53/z7yK41ACvEmMIEss+Q4Hd9Pk2b4ZUe7ju
-         dHAVPnX36D7QGevXZAbQAJ0RU0jcdtyre5qGUeNCirD8UhPi1rAAjfa5r54iSWD9yvA5
-         Uzu1yDZw4/MijmuK+bzkXpCHxI9Pk4c+0DY98jY4uzfqwQI6h9MYSQ/mvAcikLRDtkhU
-         Xrq5qPpxQ3eeSm3HolMSryoK6dpLusMHNJTJ2n6UbNEaNhGXYkKrj1KI1X4/Jhhz5XX1
-         VeBA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=RdWgO0paPnqDQTBnvHJc+Nn6gcQL1dHFGI4D7+hFT/4=;
-        fh=1W3lguYFk1II6zQTb3TuQnx+wQe1EeEfimpEiTKz2fk=;
-        b=XLSqeUFd9Q3B7pmeld7/WOQ4Gpfcag3uv7r7KMpQaY3tdr0YWEntY5Geq0gr0GpG64
-         PF4lxhtrnfh7VVjM7RY5VcR/xgq5ndcfH47Svz0B6FJWnkmDvg3cs4ttoykmLr/AgQem
-         JpZXmrbyApVEYRWed0bCmRTZ6onL8XQyDQqpjc7BVc91VKNLL7J+5O/Gu8RDybrfI+Xw
-         p9MLqS0rWNTQw7gmNYVWlrZqlgEg6AGqxM3h+BaHN7+tpqlbqxEDA7G0kmG0eefba8GF
-         SDerZCNYIIwuJOl8lHY0yBNYIJTzpFIMzPFqaUwecKMf6m9sligQboBhG658RJxWGNY0
-         QSVA==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1769521911; x=1770126711; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=RdWgO0paPnqDQTBnvHJc+Nn6gcQL1dHFGI4D7+hFT/4=;
-        b=A1bT+EfNWEXLFR/ICYKD6sQfi7xrxowEnHxT+lLBe2YuAVDDLczr47MFSy4TAZiIVB
-         ii/iLwKD3UcLs2Sq6Dx9msXqddzN9JB4jRTBCgnJbLUK5YxQ6G/2yAHCSoP8fh2DomwO
-         GHuZLQKLpRbD+AyfJXYHD2XOqYvCqyO0/h3xegCq7KpEWubPr4YNRJ3lJPiJT8O31inB
-         QvHsC5lDVAOwFlHBhlw5Aubcrd6KuSWzS3f5zYZ/5uBycGd3BDWfNnvzhN6+J2mKs4t5
-         QxMqFgHLQBmUPNS133Cb9/+Nn92P0+/xwH/Ku3yr/TBlcgqUEVOBSz/uhJPZeq47zbHb
-         2pJw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1769521911; x=1770126711;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=RdWgO0paPnqDQTBnvHJc+Nn6gcQL1dHFGI4D7+hFT/4=;
-        b=rjUTVixTNNqN1xlT9LyTgkuxQuarwsfzcrJE++YkJAs5KNcQwBdpe37O/J51UvpoRT
-         qU7GpJtXt4C2AhODcfGPLvVQuvBHl63a/bXJTzcZa0tgHeg+XBAEKHBuqjDr6GTH7/Jf
-         sm7ksE/KfekAqa5MHOdV5+AQ3EMzvXBvP+YbiP/0eBMr45j1wBEAu0tyHFhjtIBY1qWe
-         70volIB+mJarFc4f5dY3VGcSHxZ39sczmpNhqjn1ZK+7X3z47M+AoIngoJ9XbuHIFSTk
-         5UhuRVYi1hNptTqqWtpWycpBi4UIxr83HeYeZ0Z1+8ubYSLEXFjqVYUvONk392sNB0jz
-         ZQeA==
-X-Forwarded-Encrypted: i=1; AJvYcCUFQUq+bAgVPRfJWCrzff7d6ikB5Nx9YMWb6oLD1mwYpo5nsokcT2d1+ddbUlcPT2A/5moTbkif/ZrieA==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz/v3dGCIRfsjwyR8s9aYo1Q9xu5Ww/df8nGmGHOjsvWZYAiyvO
-	ISzWQkiqVHmB78mDC8zpujtaGQ+/7LVhhidnGnJ7Ras7lE+2gFgrKS6nFWvDNUst8AqBaT6qcpT
-	GgVjFxO+lyBy7bhBP5al9KFTIduDbAf4=
-X-Gm-Gg: AZuq6aKdy4R0RewQB42XU6rWO5x3Ev/uL4LML+FZi3stUh0xSe51oiGXJGkwjCSKkBq
-	+12UrsA/5DrYCF86m57+HIaRjl1fcCDDvm5XGO54o7pE+VlV3hs+6VtpcVITKSJHThG/+GjY7bq
-	uan7QnVv27txRVcfaMwy7X76dlmIFWjdSwOPYw8sQJBqT6Jg6rphSF/Jusa1/yu2ZPdgPiPJkxJ
-	G+k+A0smHPUzSplntUJVPB4u2zommR0FhSlxPu7VCykEfrc+j9cOtnaATjEU8fir4TnbgPCm5kj
-	hdjGlQh8OZ6F4epYQEilG9ZsLBz0eQ==
-X-Received: by 2002:a17:907:8686:b0:b88:5c68:ecf0 with SMTP id
- a640c23a62f3a-b8dab3d2eb2mr139147166b.58.1769521910755; Tue, 27 Jan 2026
- 05:51:50 -0800 (PST)
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DE94529CB52;
+	Tue, 27 Jan 2026 14:20:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1769523619; cv=none; b=gpY69ZnqQ0fJPKBV4aBGjh7dg48zDfpysiz6yOYfHq4/AzWGA9AOi9BvPqYDIRfFZTWkWZ4q63wUjJ7PsYO1NrfERVyVbV+n0bf7lxWb+9TFmoFZpG9acqq57HLfnWdwvAFzSut7LoPojgMwrWQ9B7q6vC9vJ3IESqowih1nuaE=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1769523619; c=relaxed/simple;
+	bh=3dbkaF5OVhRQfnw/0d9n1Gzk+2qa9elwJ9BhiZVnO/8=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=Vy47uylEoJqMDTD/+QfIbwzUJtCjxozNVyxGLkC5K+gczOswtoc4pLJDTjSKhc07AxuADGSLMvYh6av1NQV3aDAvSVxqEw7Dz+69jApbCIlYCGZfVNo81zCGTqgbY54F7dB0T3b1g4EownHYFzC7qrNEoxSNwjxGs7GJsIGVXX4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id C522F1595;
+	Tue, 27 Jan 2026 06:20:10 -0800 (PST)
+Received: from [10.57.51.176] (unknown [10.57.51.176])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 4E1BF3F73F;
+	Tue, 27 Jan 2026 06:20:13 -0800 (PST)
+Message-ID: <78ffd1ce-5408-4bf5-a782-0c4ca14017b1@arm.com>
+Date: Tue, 27 Jan 2026 14:20:09 +0000
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <CANypQFYPhhcRZoZn1h3JQSvtbEg9x9RCDLFcqkfMNxrZWJxnXg@mail.gmail.com>
-In-Reply-To: <CANypQFYPhhcRZoZn1h3JQSvtbEg9x9RCDLFcqkfMNxrZWJxnXg@mail.gmail.com>
-From: Jiaming Zhang <r772577952@gmail.com>
-Date: Tue, 27 Jan 2026 21:51:06 +0800
-X-Gm-Features: AZwV_QjjabzWFxkk9gS2CACYUlJlZ5QqLjQyl6kETc1G8-qUVx50mJysktYtBuE
-Message-ID: <CANypQFZ_oeo7tuBfQuGiyjQWk_fVuXzOn-s0C5bjgjwQ3Ais4Q@mail.gmail.com>
-Subject: Re: [Linux Kernel Bugs] KASAN: slab-use-after-free Write in
- dvb_device_open and 6 other issues in dvb subsystem
-To: mchehab@kernel.org, hverkuil+cisco@kernel.org, tglx@kernel.org
-Cc: mingo@kernel.org, Darshan Rathod <darshanrathod475@gmail.com>, 
-	linux-kernel@vger.kernel.org, linux-media@vger.kernel.org, 
-	syzkaller@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 3/7] of/iommu: add multi-map support
+To: Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>,
+ Vikash Garodia <vikash.garodia@oss.qualcomm.com>
+Cc: Dikshita Agarwal <dikshita.agarwal@oss.qualcomm.com>,
+ Abhinav Kumar <abhinav.kumar@linux.dev>, Bryan O'Donoghue <bod@kernel.org>,
+ Mauro Carvalho Chehab <mchehab@kernel.org>, Rob Herring <robh@kernel.org>,
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
+ <conor+dt@kernel.org>, Saravana Kannan <saravanak@kernel.org>,
+ Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
+ Stefan Schmidt <stefan.schmidt@linaro.org>,
+ Hans Verkuil <hverkuil@kernel.org>, Krzysztof Kozlowski <krzk@kernel.org>,
+ Vishnu Reddy <busanna.reddy@oss.qualcomm.com>,
+ Hans Verkuil <hverkuil+cisco@kernel.org>, linux-arm-msm@vger.kernel.org,
+ linux-media@vger.kernel.org, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org, iommu@lists.linux.dev,
+ Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
+ Charan Teja Kalla <charan.kalla@oss.qualcomm.com>,
+ Vijayanand Jitta <vijayanand.jitta@oss.qualcomm.com>
+References: <20260126-kaanapali-iris-v1-0-e2646246bfc1@oss.qualcomm.com>
+ <20260126-kaanapali-iris-v1-3-e2646246bfc1@oss.qualcomm.com>
+ <hunwsdkmeo6efpv3yt3izkgmarelnubd74dywj3scryxrreq6p@njijwtoyjh46>
+From: Robin Murphy <robin.murphy@arm.com>
+Content-Language: en-GB
+In-Reply-To: <hunwsdkmeo6efpv3yt3izkgmarelnubd74dywj3scryxrreq6p@njijwtoyjh46>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-Dear maintainers,
+On 2026-01-27 11:45 am, Dmitry Baryshkov wrote:
+> On Mon, Jan 26, 2026 at 05:55:46PM +0530, Vikash Garodia wrote:
+>> From: Charan Teja Kalla <charan.kalla@oss.qualcomm.com>
+>>
+>> When multiple mappings are present for an input id, linux matches just
+>> the first one. There is a usecase[1] where all the mappings are to be
+>> maintained in parallel for an iommu-map entry of a same input id.
+> 
+> This contradicts the IOMMU idealogy (at least as far as I understood it
+> fom the maintainers): the device (driver) doesn't control which IOMMUs
+> are getting used. Instead _all_ defined entries should get used. For
+> iommu-map it means that if the map defines several entries for a single
+> function, then all entries should always get mapped.
 
-Jiaming Zhang <r772577952@gmail.com> =E4=BA=8E2026=E5=B9=B41=E6=9C=8815=E6=
-=97=A5=E5=91=A8=E5=9B=9B 17:02=E5=86=99=E9=81=93=EF=BC=9A
->
-> Dear Linux kernel developers and maintainers,
->
-> We are writing to report 7 issues discovered in the dvb subsystem with
-> our generated syzkaller specifications. Below are the details of these
-> issues:
->
-> (1) KASAN: slab-use-after-free Write in dvb_device_open (reproducer: c, s=
-yz)
-> (2) KASAN: slab-use-after-free Read in dvb_frontend_release (reproducer: =
-syz)
-> (3) possible deadlock in dvb_dvr_release (reproducer: c, syz)
-> (4) KASAN: slab-use-after-free Read in dvb_frontend_thread
-> (5) KFENCE: use-after-free read in dvb_frontend_release
-> (6) WARNING: still has locks held in _dmxdev_lock
-> (7) WARNING: bad unlock balance in _dmxdev_unlock
->
-> Here is our analysis:
->
-> ## (1) KASAN: slab-use-after-free Write in dvb_device_open
->
-> The root cause is double put. In dvb_device_open(), the refcount is
-> decreased (via put) when the open operation fails [1]. However, in
-> dvb_frontend_open(), put will also be called in dvb_generic_release()
-> if dvb_frontend_start() failed. Such process can lead to double put
-> and use-after-free.
->
-> [1] https://elixir.bootlin.com/linux/v6.19-rc4/source/drivers/media/dvb-c=
-ore/dvbdev.c#L113
->
-> ## (2) KASAN: slab-use-after-free Read in dvb_frontend_release
->
-> The root cause is that in concurrent scenarios, the kernel attempts to
-> access dvbdev->users after dvbdev has already been freed [2].
->
-> [2] https://elixir.bootlin.com/linux/v6.19-rc4/source/drivers/media/dvb-c=
-ore/dvb_frontend.c#L2916
->
-> ## (3) possible deadlock in dvb_dvr_release
->
-> The root cause is lock imbalance. Call chain is as follows:
->
->     dvb_vb2_dqbuf() ->
->     vb2_core_dqbuf() ->
->     __vb2_get_done_vb() ->
->     __vb2_wait_for_done_vb() ->
->     _dmxdev_lock() (call_void_qop(q, wait_finish, q)) ->
->     mutex_lock()
->
-> ctx->mutex is locked during this process, but if the return value of
-> vb2_core_dqbuf() is not zero, ctx->mutex will not be unlocked [3].
-> When the task exits and calls dvb_dvr_release(), the function attempts
-> to acquire dmxdev->lock, lockdep detects that ctx->mutex is still
-> held, violating the locking order and reporting possible deadlock.
->
-> [3] https://elixir.bootlin.com/linux/v6.19-rc4/source/drivers/media/dvb-c=
-ore/dvb_vb2.c#L415-L419
->
-> A potentail solution is to protect vb2_core_dqbuf() with mutex, e.g.
->
-> ```
-> int dvb_vb2_dqbuf(struct dvb_vb2_ctx *ctx, struct dmx_buffer *b)
-> {
->     unsigned long flags;
->     int ret;
->
-> +   mutex_lock(&ctx->mutex);
->     ret =3D vb2_core_dqbuf(&ctx->vb_q, &b->index, b, ctx->nonblocking);
-> +   mutex_unlock(&ctx->mutex);
->     if (ret) ...
-> }
-> ```
->
-> If this solution is acceptable, we would be happy to submit a patch :)
->
-> ## Other issues
->
-> Unfortunately we do not have reproducers for other issues currently.
-> We have attached kernel console output to help with analysis and offer
-> our preliminary findings:
->
-> (4) KASAN: slab-use-after-free Read in dvb_frontend_thread: in
-> concurrent scenarios, kernel accesses fepriv->wait_queue after dvbdev
-> is freed [4]. Would adding a refcount for dvbdec to fix this?
->
-> (5) KFENCE: use-after-free read in dvb_frontend_release: similar to (2).
->
-> (6) WARNING: still has locks held in _dmxdev_lock: it seems a branch
-> in dvb_dvr_do_ioctl() might be acquiring a lock but failing to release
-> it?
->
-> (7) WARNING: bad unlock balance in _dmxdev_unlock: in call chain like
-> dvb_dvr_do_ioctl() -> dvb_vb2_dqbuf(), kernel misjudge lock state and
-> attempt to unlock an already unlocked lock?
->
-> [4] https://elixir.bootlin.com/linux/v6.19-rc4/source/drivers/media/dvb-c=
-ore/dvb_frontend.c#L682-L685
->
-> You can refer to [5] to reproduce issues using syz programs. We also
-> provide our generated specs to help with running of syz program.
->
-> [5] https://github.com/google/syzkaller/blob/master/docs/reproducing_cras=
-hes.md#using-a-syz-reproducer
->
-> Please let me know if any further information is required.
->
-> Best Regards,
-> Jiaming Zhang
+Indeed there is no concept of "multi-map" - if a single input ID 
+represents more than one thing then that notion of "input ID" is 
+fundamentally wrong. A single *device* may have multiple IDs, as in the 
+case of PCI bridge aliasing, but in that case there are multiple things 
+to map.
 
-I am writing to kindly follow up on issues I reported ~2 weeks ago.
-
-I wanted to check if there has been any chance to review these issues
-or if there are any updates regarding the analysis or potential fixes.
-I understand that you are likely very busy. If you do not have the
-bandwidth to investigate these issues, we are happy to analyze the
-root cause of them and attempt to write patches :)
-
-Please let me know if you would prefer us to proceed with working on patche=
-s.
-
-Best regards,
-Jiaming Zhang
+Thanks,
+Robin.
