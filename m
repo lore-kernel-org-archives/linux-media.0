@@ -1,27 +1,27 @@
 Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5784935FF62
-	for <linux-media@vger.kernel.org>; Tue, 27 Jan 2026 14:40:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4B2C8360757
+	for <linux-media@vger.kernel.org>; Tue, 27 Jan 2026 14:40:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769524820; cv=none; b=EPVaM28wkuQtNModzUjdwKJtkVipto4iKvpyIZjz0ZDNLK8kKF9Etng8NMRTkGnqb+LerPtldU5OrP5NQxVlXlRljx2+fBSNkP1XaiXQ1rEt6e0OQKN9p//uPQeeNP38bnCTzOF8PP31PT/DyKRr+boJsFzxDhy6UcCTm6H5fpw=
+	t=1769524825; cv=none; b=jFMJjf97USbds5SJo8/l7TCGkD2Q//Jp0KD/QoS8Tb2sJDmqiuKb4WjsNbyGW5dEP+gab2mft1iIKCAOe6VkvHHQ2vRHOLa0HrFuEn7kvTtMA68KCTUAMNwnr3pha4lFQ3k+masU8Ij4BkMgmSYID2YLtvLq1vOnfGXVp0o2JW4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769524820; c=relaxed/simple;
-	bh=i76+ZhA7uUnOTpJ826FpHqCzbtSaPcBMDvf50EJMVwg=;
+	s=arc-20240116; t=1769524825; c=relaxed/simple;
+	bh=sQRBR8hqsVnFilBb4IeM1DRR5keXwvKE0i990WgKU4w=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=HPbCyUZ4D2XAvcL0kGKcuMxEc1Ynxf6vWh2oGX+0fOvthXHzNDP573CerL3gBwZGvDFo8fsUp7+wCHOarr8DJ9859NhBoorv5fv6LFM43B5cSVswCMag3a1ZQ+jix4yPvJrLnMUEYJny8OKY+XGXLnH2Cgp1Ty5axyCUne1AIDM=
+	 In-Reply-To:To:Cc; b=FzREQH0EOvFrYSjsr6TYB0aqiEM2wb8NjsH4/c2EXbSYFcXW47MJR7d+NcpQ/JoG1RA5lovh7S9BZ65mxI0ahtN2W0WlRRru6RAFPrhDuzg+L+hGxjoBtpcrCavNT8+8IUzSlrxENrX0XpGOyOKwvqOHWFwgA59aXxXodJYmzoM=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
 Received: from ptz.office.stw.pengutronix.de ([2a0a:edc0:0:900:1d::77] helo=peter.mobile.pengutronix.de)
 	by metis.whiteo.stw.pengutronix.de with esmtp (Exim 4.92)
 	(envelope-from <s.pueschel@pengutronix.de>)
-	id 1vkkEn-0007YT-1K; Tue, 27 Jan 2026 15:40:13 +0100
+	id 1vkkEr-0007YT-E5; Tue, 27 Jan 2026 15:40:17 +0100
 From: =?utf-8?q?Sven_P=C3=BCschel?= <s.pueschel@pengutronix.de>
-Date: Tue, 27 Jan 2026 15:39:18 +0100
-Subject: [PATCH v3 09/27] media: rockchip: rga: announce and sync
- colorimetry
+Date: Tue, 27 Jan 2026 15:39:20 +0100
+Subject: [PATCH v3 11/27] media: rockchip: rga: avoid odd frame sizes for
+ YUV formats
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
@@ -30,7 +30,7 @@ List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Message-Id: <20260127-spu-rga3-v3-9-77b273067beb@pengutronix.de>
+Message-Id: <20260127-spu-rga3-v3-11-77b273067beb@pengutronix.de>
 References: <20260127-spu-rga3-v3-0-77b273067beb@pengutronix.de>
 In-Reply-To: <20260127-spu-rga3-v3-0-77b273067beb@pengutronix.de>
 To: Jacob Chen <jacob-chen@iotwrt.com>, 
@@ -49,81 +49,59 @@ X-SA-Exim-Mail-From: s.pueschel@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
 X-PTX-Original-Recipient: linux-media@vger.kernel.org
 
-Announce the capability to adjust the quantization and ycbcr_enc on the
-capture side and check if the SET_CSC flag is set when the colorimetry
-is changed. Furthermore copy the colorimetry from the output to the
-capture side to fix the currently failing v4l2-compliance tests, which
-expect exactly this behavior.
+Avoid odd frame sizes for YUV formats, as they may cause undefined
+behavior. This is done in preparation for the RGA3, which hangs when the
+output format is set to 129x129 pixel YUV420 SP (NV12).
+
+This requirement is documented explicitly for the RGA3 in  section 5.6.3
+of the RK3588 TRM Part 2. For the RGA2 the RK3588 TRM Part 2
+(section 6.1.2) and RK3568 TRM Part 2 (section 14.2) only mentions the
+x/y offsets and stride aligning requirements. But the vendor driver for
+the RGA2 also contains checks for the width and height to be aligned to
+2 bytes.
 
 Signed-off-by: Sven Püschel <s.pueschel@pengutronix.de>
 ---
- drivers/media/platform/rockchip/rga/rga.c | 37 +++++++++++++++++++++++++++++++
- 1 file changed, 37 insertions(+)
+ drivers/media/platform/rockchip/rga/rga.c | 19 ++++++++++++++-----
+ 1 file changed, 14 insertions(+), 5 deletions(-)
 
 diff --git a/drivers/media/platform/rockchip/rga/rga.c b/drivers/media/platform/rockchip/rga/rga.c
-index 20d1d9cb7625d..cf9d5702598fa 100644
+index 21a3c6cd38dbc..4fa6adb10b7ee 100644
 --- a/drivers/media/platform/rockchip/rga/rga.c
 +++ b/drivers/media/platform/rockchip/rga/rga.c
-@@ -437,6 +437,15 @@ static int vidioc_enum_fmt(struct file *file, void *priv, struct v4l2_fmtdesc *f
- 	fmt = &formats[f->index];
- 	f->pixelformat = fmt->fourcc;
- 
-+	if (f->type != V4L2_BUF_TYPE_VIDEO_CAPTURE &&
-+	    f->type != V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE)
-+		return 0;
-+
-+	/* allow changing the quantization and xfer func for YUV formats */
-+	if (v4l2_is_format_yuv(v4l2_format_info(f->pixelformat)))
-+		f->flags |= V4L2_FMT_FLAG_CSC_QUANTIZATION |
-+			    V4L2_FMT_FLAG_CSC_YCBCR_ENC;
-+
- 	return 0;
- }
- 
-@@ -459,8 +468,25 @@ static int vidioc_g_fmt(struct file *file, void *priv, struct v4l2_format *f)
- static int vidioc_try_fmt(struct file *file, void *priv, struct v4l2_format *f)
- {
- 	struct v4l2_pix_format_mplane *pix_fmt = &f->fmt.pix_mp;
-+	struct rga_ctx *ctx = file_to_rga_ctx(file);
+@@ -337,6 +337,19 @@ static int vidioc_try_fmt(struct file *file, void *priv, struct v4l2_format *f)
+ 	struct rga_ctx *ctx = file_to_rga_ctx(file);
+ 	const struct rga_hw *hw = ctx->rga->hw;
  	struct rga_fmt *fmt;
- 
-+	if (V4L2_TYPE_IS_CAPTURE(f->type)) {
-+		const struct rga_frame *frm;
++	struct v4l2_frmsize_stepwise frmsize = {
++		.min_width = hw->min_width,
++		.max_width = hw->max_width,
++		.min_height = hw->min_height,
++		.max_height = hw->max_height,
++		.step_width = 1,
++		.step_height = 1,
++	};
 +
-+		frm = rga_get_frame(ctx, f->type);
-+		if (IS_ERR(frm))
-+			return PTR_ERR(frm);
-+
-+		if (!(pix_fmt->flags & V4L2_PIX_FMT_FLAG_SET_CSC)) {
-+			pix_fmt->quantization = frm->pix.quantization;
-+			pix_fmt->ycbcr_enc = frm->pix.ycbcr_enc;
-+		}
-+		/* disallow values not announced in vidioc_enum_fmt */
-+		pix_fmt->colorspace = frm->pix.colorspace;
-+		pix_fmt->xfer_func = frm->pix.xfer_func;
++	if (v4l2_is_format_yuv(v4l2_format_info(pix_fmt->pixelformat))) {
++		frmsize.step_width = 2;
++		frmsize.step_height = 2;
 +	}
-+
- 	fmt = rga_fmt_find(pix_fmt->pixelformat);
+ 
+ 	if (V4L2_TYPE_IS_CAPTURE(f->type)) {
+ 		const struct rga_frame *frm;
+@@ -358,11 +371,7 @@ static int vidioc_try_fmt(struct file *file, void *priv, struct v4l2_format *f)
  	if (!fmt)
- 		fmt = &formats[0];
-@@ -506,6 +532,17 @@ static int vidioc_s_fmt(struct file *file, void *priv, struct v4l2_format *f)
- 	frm->fmt = rga_fmt_find(pix_fmt->pixelformat);
- 	frm->stride = pix_fmt->plane_fmt[0].bytesperline;
+ 		fmt = &hw->formats[0];
  
-+	/*
-+	 * Copy colorimetry from output to capture as required by the
-+	 * v4l2-compliance tests
-+	 */
-+	if (V4L2_TYPE_IS_OUTPUT(f->type)) {
-+		ctx->out.pix.colorspace = pix_fmt->colorspace;
-+		ctx->out.pix.ycbcr_enc = pix_fmt->ycbcr_enc;
-+		ctx->out.pix.quantization = pix_fmt->quantization;
-+		ctx->out.pix.xfer_func = pix_fmt->xfer_func;
-+	}
-+
- 	/* Reset crop settings */
- 	frm->crop.left = 0;
- 	frm->crop.top = 0;
+-	pix_fmt->width = clamp(pix_fmt->width,
+-			       hw->min_width, hw->max_width);
+-	pix_fmt->height = clamp(pix_fmt->height,
+-				hw->min_height, hw->max_height);
+-
++	v4l2_apply_frmsize_constraints(&pix_fmt->width, &pix_fmt->height, &frmsize);
+ 	v4l2_fill_pixfmt_mp(pix_fmt, fmt->fourcc, pix_fmt->width, pix_fmt->height);
+ 	pix_fmt->field = V4L2_FIELD_NONE;
+ 
 
 -- 
 2.52.0
