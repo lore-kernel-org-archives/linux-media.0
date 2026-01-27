@@ -1,78 +1,129 @@
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DE94529CB52;
-	Tue, 27 Jan 2026 14:20:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5A63035CB9A
+	for <linux-media@vger.kernel.org>; Tue, 27 Jan 2026 14:40:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769523619; cv=none; b=gpY69ZnqQ0fJPKBV4aBGjh7dg48zDfpysiz6yOYfHq4/AzWGA9AOi9BvPqYDIRfFZTWkWZ4q63wUjJ7PsYO1NrfERVyVbV+n0bf7lxWb+9TFmoFZpG9acqq57HLfnWdwvAFzSut7LoPojgMwrWQ9B7q6vC9vJ3IESqowih1nuaE=
+	t=1769524808; cv=none; b=acuaGiLwvc+WLwFub8zGIFhayuOce4vcDC2m9ZwaiRxjCPAfJ1IzSUAZy3iwOqIG/5ruX8FjEjUtgIYQwAfwgkB5GVle74xp49hjLrH/uVmhLvLyNOW5+Zc6ZohlGzGgFvMZ1w57NF/UF26CvDhn+VR+6Qhbnu9RR/15sqkwQM8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769523619; c=relaxed/simple;
-	bh=3dbkaF5OVhRQfnw/0d9n1Gzk+2qa9elwJ9BhiZVnO/8=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Vy47uylEoJqMDTD/+QfIbwzUJtCjxozNVyxGLkC5K+gczOswtoc4pLJDTjSKhc07AxuADGSLMvYh6av1NQV3aDAvSVxqEw7Dz+69jApbCIlYCGZfVNo81zCGTqgbY54F7dB0T3b1g4EownHYFzC7qrNEoxSNwjxGs7GJsIGVXX4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id C522F1595;
-	Tue, 27 Jan 2026 06:20:10 -0800 (PST)
-Received: from [10.57.51.176] (unknown [10.57.51.176])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 4E1BF3F73F;
-	Tue, 27 Jan 2026 06:20:13 -0800 (PST)
-Message-ID: <78ffd1ce-5408-4bf5-a782-0c4ca14017b1@arm.com>
-Date: Tue, 27 Jan 2026 14:20:09 +0000
+	s=arc-20240116; t=1769524808; c=relaxed/simple;
+	bh=r1EM2vfsDGfqJ4zPMIJDZKpb3Eeh0H1vaHxfyMbNz3E=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=rknO9u6db6VnFSk7Qy8yzO6RnIrMtzUJHVUm/CDhAqGabHl+BP9gwcE5ok4KTXJ44pJCIhtxoYX2S8fVN+o+vv5UHYVUS+5FWVRdyYjOIUjX3zTMC8OQ2XLs+HblphQArrM2THPSTFIpvJfBYABMclNL+AxP97qXfvmV7RS3HTg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
+Received: from ptz.office.stw.pengutronix.de ([2a0a:edc0:0:900:1d::77] helo=peter.mobile.pengutronix.de)
+	by metis.whiteo.stw.pengutronix.de with esmtp (Exim 4.92)
+	(envelope-from <s.pueschel@pengutronix.de>)
+	id 1vkkEY-0007YT-N3; Tue, 27 Jan 2026 15:39:58 +0100
+From: =?utf-8?q?Sven_P=C3=BCschel?= <s.pueschel@pengutronix.de>
+Date: Tue, 27 Jan 2026 15:39:10 +0100
+Subject: [PATCH v3 01/27] media: dt-bindings: media: rockchip-rga: add
+ rockchip,rk3588-rga3
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 3/7] of/iommu: add multi-map support
-To: Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>,
- Vikash Garodia <vikash.garodia@oss.qualcomm.com>
-Cc: Dikshita Agarwal <dikshita.agarwal@oss.qualcomm.com>,
- Abhinav Kumar <abhinav.kumar@linux.dev>, Bryan O'Donoghue <bod@kernel.org>,
- Mauro Carvalho Chehab <mchehab@kernel.org>, Rob Herring <robh@kernel.org>,
- Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
- <conor+dt@kernel.org>, Saravana Kannan <saravanak@kernel.org>,
- Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
- Stefan Schmidt <stefan.schmidt@linaro.org>,
- Hans Verkuil <hverkuil@kernel.org>, Krzysztof Kozlowski <krzk@kernel.org>,
- Vishnu Reddy <busanna.reddy@oss.qualcomm.com>,
- Hans Verkuil <hverkuil+cisco@kernel.org>, linux-arm-msm@vger.kernel.org,
- linux-media@vger.kernel.org, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org, iommu@lists.linux.dev,
- Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
- Charan Teja Kalla <charan.kalla@oss.qualcomm.com>,
- Vijayanand Jitta <vijayanand.jitta@oss.qualcomm.com>
-References: <20260126-kaanapali-iris-v1-0-e2646246bfc1@oss.qualcomm.com>
- <20260126-kaanapali-iris-v1-3-e2646246bfc1@oss.qualcomm.com>
- <hunwsdkmeo6efpv3yt3izkgmarelnubd74dywj3scryxrreq6p@njijwtoyjh46>
-From: Robin Murphy <robin.murphy@arm.com>
-Content-Language: en-GB
-In-Reply-To: <hunwsdkmeo6efpv3yt3izkgmarelnubd74dywj3scryxrreq6p@njijwtoyjh46>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+Message-Id: <20260127-spu-rga3-v3-1-77b273067beb@pengutronix.de>
+References: <20260127-spu-rga3-v3-0-77b273067beb@pengutronix.de>
+In-Reply-To: <20260127-spu-rga3-v3-0-77b273067beb@pengutronix.de>
+To: Jacob Chen <jacob-chen@iotwrt.com>, 
+ Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>, 
+ Mauro Carvalho Chehab <mchehab@kernel.org>, 
+ Heiko Stuebner <heiko@sntech.de>, Rob Herring <robh@kernel.org>, 
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+ Conor Dooley <conor+dt@kernel.org>
+Cc: linux-media@vger.kernel.org, linux-rockchip@lists.infradead.org, 
+ linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, 
+ devicetree@vger.kernel.org, kernel@pengutronix.de, 
+ =?utf-8?q?Sven_P=C3=BCschel?= <s.pueschel@pengutronix.de>
+X-Mailer: b4 0.14.3
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:900:1d::77
+X-SA-Exim-Mail-From: s.pueschel@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-media@vger.kernel.org
 
-On 2026-01-27 11:45 am, Dmitry Baryshkov wrote:
-> On Mon, Jan 26, 2026 at 05:55:46PM +0530, Vikash Garodia wrote:
->> From: Charan Teja Kalla <charan.kalla@oss.qualcomm.com>
->>
->> When multiple mappings are present for an input id, linux matches just
->> the first one. There is a usecase[1] where all the mappings are to be
->> maintained in parallel for an iommu-map entry of a same input id.
-> 
-> This contradicts the IOMMU idealogy (at least as far as I understood it
-> fom the maintainers): the device (driver) doesn't control which IOMMUs
-> are getting used. Instead _all_ defined entries should get used. For
-> iommu-map it means that if the map defines several entries for a single
-> function, then all entries should always get mapped.
+Add a new compatible for the RGA3 (Raster Graphic Acceleration 3)
+peripheral found on the RK3588 SoC. Also specify an iommu property,
+as the RGA3 contains the generic rockchip iommu. The RGA2 also has
+an iommu, but it's specific to the RGA2.
 
-Indeed there is no concept of "multi-map" - if a single input ID 
-represents more than one thing then that notion of "input ID" is 
-fundamentally wrong. A single *device* may have multiple IDs, as in the 
-case of PCI bridge aliasing, but in that case there are multiple things 
-to map.
+The existing binding refers to the RGA2 peripheral. The RK3588
+contains one RGA2 core and two RGA3 cores. Both feature a similar
+functionality of scaling, cropping and rotating of up to two input
+images into one output image. Key differences of the RGA3 are:
 
-Thanks,
-Robin.
+- supports 10bit YUV output formats
+- supports 8x8 tiles and FBCD as inputs and outputs
+- supports BT2020 color space conversion
+- max output resolution of (8192-64)x(8192-64)
+- MMU can map up to 32G DDR RAM
+- fully planar formats (3 planes) are not supported
+- max scale up/down factor of 8 (RGA2 allows up to 16)
+
+Signed-off-by: Sven Püschel <s.pueschel@pengutronix.de>
+---
+ .../devicetree/bindings/media/rockchip-rga.yaml       | 19 ++++++++++++++++++-
+ 1 file changed, 18 insertions(+), 1 deletion(-)
+
+diff --git a/Documentation/devicetree/bindings/media/rockchip-rga.yaml b/Documentation/devicetree/bindings/media/rockchip-rga.yaml
+index ac17cda65191b..7735d8794c719 100644
+--- a/Documentation/devicetree/bindings/media/rockchip-rga.yaml
++++ b/Documentation/devicetree/bindings/media/rockchip-rga.yaml
+@@ -9,7 +9,9 @@ title: Rockchip 2D raster graphic acceleration controller (RGA)
+ description:
+   RGA is a standalone 2D raster graphic acceleration unit. It accelerates 2D
+   graphics operations, such as point/line drawing, image scaling, rotation,
+-  BitBLT, alpha blending and image blur/sharpness.
++  BitBLT, alpha blending and image blur/sharpness. There exist two variants
++  named RGA2 and RGA3 that differ in the supported inputs/output formats,
++  the attached IOMMU and the supported operations on the input.
+ 
+ maintainers:
+   - Jacob Chen <jacob-chen@iotwrt.com>
+@@ -20,6 +22,7 @@ properties:
+     oneOf:
+       - const: rockchip,rk3288-rga
+       - const: rockchip,rk3399-rga
++      - const: rockchip,rk3588-rga3
+       - items:
+           - enum:
+               - rockchip,rk3228-rga
+@@ -45,6 +48,9 @@ properties:
+   power-domains:
+     maxItems: 1
+ 
++  iommus:
++    maxItems: 1
++
+   resets:
+     maxItems: 3
+ 
+@@ -54,6 +60,17 @@ properties:
+       - const: axi
+       - const: ahb
+ 
++allOf:
++- if:
++    properties:
++      compatible:
++        contains:
++          enum:
++            - rockchip,rk3588-rga3
++  then:
++    required:
++      - iommus
++
+ required:
+   - compatible
+   - reg
+
+-- 
+2.52.0
+
