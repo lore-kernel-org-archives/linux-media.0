@@ -1,54 +1,54 @@
 Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 506BE352C47;
-	Fri, 30 Jan 2026 09:24:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 756581F1513;
+	Fri, 30 Jan 2026 09:29:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769765078; cv=none; b=u3RRK1qKI0nAcklrQsigfZJzPFMD6vFH+2h4SEtrSv0Tr5BEGwScFxFKwxQQggxcFuIopXWc70UcdLD5jgEnGy1ZvfL1NoHir3NjvEoMCgf8MbsbOJ62tCTtkr6keTOQPU3BGC367JvE1mp1reWbgHel2Gx1oqlcacQmM3c2fQM=
+	t=1769765348; cv=none; b=dy0QRZLTM+aIGyTC7JVaMelpE491G6hnfo96Sape9u4z+6Kmgyy4K6w2CzGUa4prv+puN/VN8ifintxq0Dwv+2HzFEt6S3OK8O1BQfWm/3sIXWQUt3vRptKnJHJMgiXoOX09ZNEdptg/9a2KmWrkdJmZsBG67OTuaTUktVXowmc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769765078; c=relaxed/simple;
+	s=arc-20240116; t=1769765348; c=relaxed/simple;
 	bh=UftC8e+p4muw5gJimlpCkYYq2o4STFfO1G55HmnmeJw=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=i1xnqQ7i4E5bibuE320pM5UzxX7IokOrApcKYkNxRaNMnC0KANsNSLj0yQZIiANYYFvjM7s/W1HcKEJIHXDQy28ktFEF9fzDIyG2vnJqWbU726FzuqFqT2JdlX0oQt/s8zcYHbgsnK2KE3PUAAYDR5ACanul5I2UF13PcUOyEQI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=KKh/H/S1; arc=none smtp.client-ip=192.198.163.16
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=MuJduL15ncaM7y42Qbi1Wb/BjE9KS9nco8NKHEkmfojp5eSp5vG0di8hTYGUCY4LTNQvGQTgTCiJahApav7KhVUsk9IIk7YH5ZTlT6/cJYi+QALpw3v+i9sYvxUHkhk4hmwk1wUge6r+q5oA5WZKPiGgEw9a0Vcz+M7jVRgmMjc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=nqkT50bP; arc=none smtp.client-ip=192.198.163.16
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="KKh/H/S1"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="nqkT50bP"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1769765076; x=1801301076;
+  t=1769765346; x=1801301346;
   h=from:to:cc:subject:date:message-id:mime-version:
    content-transfer-encoding;
   bh=UftC8e+p4muw5gJimlpCkYYq2o4STFfO1G55HmnmeJw=;
-  b=KKh/H/S17rSnc7v0umB8qPnTnRzx1Tda8Dy/lh0MiWAO4epIrf9cOKTs
-   /Pq9iX7PiYxMczfDU96GxPSZIMTs0Dr6A3G97VDT8Tp0VqpvNialdsmQi
-   9F4dQBP7tU2UbJN11SDhcLRTPQoEaJUeRx//x46ypDJok3l1opgUjBGG0
-   kkV8w4wdAvkjiV+r5NCOg3aAv2nPwcItyyUgOGkt+Y+l6YMPyBQSkU+9j
-   UH0YW9FlSKmA9/SM5JEfDzAj6SY+aTEdfnzmLMi5hyU3Wg5Fm7i//GsHO
-   gV9X/kmI5dbtXQosryuoFGHP8rSzC/sRwV9wXBEh5ff8/Tx70h9fA8wyc
-   Q==;
-X-CSE-ConnectionGUID: qOlk3BuPQzaYeiQzcTtyOw==
-X-CSE-MsgGUID: md10Y+WJQ1mnsLNf6S8Jvg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11686"; a="58593662"
+  b=nqkT50bPJwkMxqWfoWD9y0leZ2myviYDsrYrHZYX4EE2DKw0r6yOlyde
+   UqbpKubXBcP5zouiWqy4RNFaf1PjBuu8q6ObGCD4C7rTNE0TGexuD+AHk
+   3ZCsPXa/o578oTFbH9dRWTwhCPafIHc/uTOgFphIT65g9udBAhJ0FXbV6
+   Ri6NOwb1RsGnU7gz7kw18lW7/J5qPIE0nvc6JC7x5g5Ib/CcWnS763Pz1
+   G7pGX+suQABYCDTS0JNN/eAJRUSA5Kzc/KLzDJmHAt2qa1QwNN4ehriug
+   iR59TOcjzInIPll8ivhPn5bezdxxd+QNN4vg4sJXREo+/ykW0NP0aBhie
+   w==;
+X-CSE-ConnectionGUID: UXqlp9epRkaerdJEPX6eug==
+X-CSE-MsgGUID: exw3rysBSOi5WSkX+J9ONQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11686"; a="58594002"
 X-IronPort-AV: E=Sophos;i="6.21,262,1763452800"; 
-   d="scan'208";a="58593662"
+   d="scan'208";a="58594002"
 Received: from orviesa002.jf.intel.com ([10.64.159.142])
-  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jan 2026 01:24:35 -0800
-X-CSE-ConnectionGUID: U/5YkaWrR9u2SxjneOumYA==
-X-CSE-MsgGUID: XlhalWGKQ46nvZBEk12TNA==
+  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jan 2026 01:29:05 -0800
+X-CSE-ConnectionGUID: miytEF00SbWhlAn2+SJWqA==
+X-CSE-MsgGUID: GXhYzpeiS2Ck7AGWSStgsw==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.21,262,1763452800"; 
-   d="scan'208";a="239534600"
+   d="scan'208";a="239535402"
 Received: from intel-nuc8i7beh.iind.intel.com ([10.223.163.35])
-  by orviesa002.jf.intel.com with ESMTP; 30 Jan 2026 01:24:34 -0800
+  by orviesa002.jf.intel.com with ESMTP; 30 Jan 2026 01:29:05 -0800
 From: Arun T <arun.t@intel.com>
 To: arun.t@intel.com
 Cc: linux-media@vger.kernel.org,
 	linux-kernel@vger.kernel.org
 Subject: [PATCH 1/2] platform/x86: int3472: Add board data for Intel nvl
-Date: Fri, 30 Jan 2026 14:49:53 +0530
-Message-ID: <20260130091953.2333433-1-arun.t@intel.com>
+Date: Fri, 30 Jan 2026 14:54:30 +0530
+Message-ID: <20260130092431.2335363-1-arun.t@intel.com>
 X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
