@@ -1,212 +1,251 @@
-Received: from mail-pf1-f173.google.com (mail-pf1-f173.google.com [209.85.210.173])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from PH7PR06CU001.outbound.protection.outlook.com (mail-westus3azon11010008.outbound.protection.outlook.com [52.101.201.8])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7547A33D4F8
-	for <linux-media@vger.kernel.org>; Sun,  1 Feb 2026 14:24:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.173
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769955868; cv=none; b=nCC0Z1i/J6NYJFmW+Vb1vIyihuKuAwf0Cm2qvt5hSPU1mTVwS4Kst5lMbHPE3eb0NbzyrcRGGPSKCH/rWE9qdpEActoIamwBYWly4nPPt+Kq8N0NsNg0aWPmb8cHKhCekYy3vXtQbck/MTqncb4aJ96iSuBY/kVY3bqSHwIhldU=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769955868; c=relaxed/simple;
-	bh=13AkoiTdNyAz1YeVgxEBNel/QyLHuky5VNXheaXheHg=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=KN7ZPOL8/epgoeecsj4Jye2N+QlsXiZE+IdfvmiqPJnPAzXU6RqVStr8PlBdhA7TNZILuXe9n7qtiaHdTg9Vq476+mtaKLRPyZhnU7PJWvz4UTdT5y2A1c9HBGRP9JZ5LW3hj5RkpW6oUe+fKdzXzSBC1j51+kfEj6eNVi6fJIM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=EePPljYF; arc=none smtp.client-ip=209.85.210.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 906172AD20;
+	Sun,  1 Feb 2026 14:35:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.201.8
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1769956521; cv=fail; b=T6zQu7d7EmBlkwZ5xlh/07Xbn1Ws9t65h3L9fCEgQMWVkkRf2QepVhqwcgQbQ5c/K0unecDx8ayRYOYjeVZvg1httDGyBqPWxII9tzrdvwRmOB7YklxKMPMIRwoTRcp+xfepPTZWF8M8GRLG6sr2xXfx/7+iQUGdaZ4Pszez2ac=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1769956521; c=relaxed/simple;
+	bh=srUSIAvdMxeG22q9w4kuxR0uvne3GxKaarR0y1H7Ios=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-ID:References:
+	 In-Reply-To:To:CC; b=NvEkbcSawitA2bAo3rAajAk3b4kwM3mRbuyTEryXyxp0uZ2JsEDVgb1wj/kpV3bApTjV6nXqlrln96a2s1l8wNuI841z2Au3uVo5zni5j6rK3zBHCwdFLhNy03V2G/gfX3gyOdK4530XBO/Kki/9De6iHahxg33r16GoNviB4Ec=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=RNnt7vkC; arc=fail smtp.client-ip=52.101.201.8
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="EePPljYF"
-Received: by mail-pf1-f173.google.com with SMTP id d2e1a72fcca58-81f5381d168so3473392b3a.2
-        for <linux-media@vger.kernel.org>; Sun, 01 Feb 2026 06:24:27 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1769955867; x=1770560667; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=D+9zUqm+raFHNUIjJ3frlwGtuvelVytXrMAJu8jxiT8=;
-        b=EePPljYFIQl+t71CEy+0nOWxAULenhVBDfYJKuYwEOuBBod+LExlN3LpcMt55wD7JA
-         y7lLTkjsCUT16q92n8Jwb5JYCRVXqEj62MD5vDDRwl1RJjNPncPH5Iauyv0MljkG8u3W
-         JcvSC+yMSMVM+HZoiF9pJMdTl+83GEG8lozaD511qtoWJ1WGoEsnuzHDyDiCGXy6/Hgt
-         fWiPBUTdAVKPnqzMgb/ev8DwCMPQ1msmCm5ffyRHJt3c5uCjqsqpAmbTRiUotJMeWPut
-         qa0XU4RHkCIxTgQLyxgbr5wLsPV3pihu4KjGXcCzx3C1auQHOTaJpseAxMa9OG+rFwrj
-         xY7g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1769955867; x=1770560667;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=D+9zUqm+raFHNUIjJ3frlwGtuvelVytXrMAJu8jxiT8=;
-        b=AaUpC2gF7V73scYoTVkv5vB8nzI5fKm6LlrX/Q4UIi4u9+qpEVoSf7LZbY85apkgnx
-         LsEApJnDjLLzaZDXy0vaBlwqQj+LTnKjXnSHum3GAhzPh1CK1mowJCiFGhmZFrEBFu5N
-         +RuGLQU5BHQLzodQmU1rnTFc6xN4ZBJ9c06buk4TivtA4Q8x6yIe/+QN3inzRlLG/Jkn
-         vPZRdBSnPhlErvJEkfRlqJJSlwCBHfJhTMIfNAtUzYLfJgKNytWjjz6mTv2HpG444mh/
-         TNeF9AXI1e2CgCyDTvZ/5TAbgM7UTXS6W05ub4vddtplibx5O31D89D1nvRE5hO8eSlW
-         MW+g==
-X-Forwarded-Encrypted: i=1; AJvYcCVsaMeEWQp3ZvYdtSqRF12pRzY9tA+CA3VId6mm0FVgGeEzHGFKSLoBKOmvbHXmCxZkKiN7ntl48Bareg==@vger.kernel.org
-X-Gm-Message-State: AOJu0YxGyNUGBpHbfW3/mU1RQgwphAKFdzXuiylgFyBmvMEnauCycLxe
-	8iKV4kueRCPi4cDHbPySbnkSHFtulWD825mM4q337bGIL30Tn09mZ2z8
-X-Gm-Gg: AZuq6aJB9zLPmmTgmy7m3xbRQKFSkdNySHEVmLLjxh46dTLQPaJom6yYdDwjBi6WCyB
-	GfL7WUsrnyTNSaPayW4kmzMmcscLjNIx2mTJJPZHjo4lHPQ/X3Qm3xBGVc4+Ylx3meNftFTgjUc
-	Sb1vBz6Lo8Y3UCCN6Xv+qMEBBn9hU+2ilfzumMo41mv/iOr63SXIcuKGRBIPa875q9qwlpCladJ
-	LOaf0aNj2fOSghiEV60s1lUPdEbVMgmSsGFr+w+Na67Zl6s8YJ50Vf7RHpxYoR4nL8+UfzpTeFD
-	VB8uNJGSnvdlMESfLKaVmnhBfAhLrkCeRRgDtG3nIkR11Yp1gJK/mZsZQnEXzcpbIVZgLMrxKt+
-	j9WdaXqCzc8jHW2jhV9G6N7//+2yL3wCxKK8qL0uZkrglPizLBmnxSe4NpprGbXcVnP9jMMHIGu
-	LyI0MNJ6G6mRBoiA==
-X-Received: by 2002:a05:6a00:94f6:b0:820:2f9b:fe37 with SMTP id d2e1a72fcca58-823ab748f60mr8019230b3a.35.1769955866748;
-        Sun, 01 Feb 2026 06:24:26 -0800 (PST)
-Received: from archlinux ([2402:e280:411b:ec:aa93:b1ec:5a6b:5fce])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-82379b6b277sm16452661b3a.29.2026.02.01.06.24.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 01 Feb 2026 06:24:26 -0800 (PST)
-From: Adarsh Das <adarshdas950@gmail.com>
-To: Andy Shevchenko <andy@kernel.org>,
-	Hans de Goede <hansg@kernel.org>,
-	Mauro Carvalho Chehab <mchehab@kernel.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: Sakari Ailus <sakari.ailus@linux.intel.com>,
-	linux-kernel@vger.kernel.org,
-	linux-media@vger.kernel.org,
-	linux-staging@lists.linux.dev,
-	Adarsh Das <adarshdas950@gmail.com>
-Subject: [PATCH] staging: media: atomisp: remove functions doing ftrace like logging
-Date: Sun,  1 Feb 2026 19:54:15 +0530
-Message-ID: <20260201142415.83595-1-adarshdas950@gmail.com>
-X-Mailer: git-send-email 2.52.0
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="RNnt7vkC"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=vPjYBogiFIH4iqvCnqp9HxZIlmUiyxbwmBZiT/NHrfsfa5PRZo6rgV6YETTRd/RyGs4mPoXJqSznf/OB1PFAK20KQpOSZcCjJogUnGQ0aGwmB/7v7yjLh562Yw7LQucMbFSmPC25Du9PVFaRHBGxv/VtFHlJy95W6TnzT3b7RoqdfA0m3M5vQfVYB0tO4OVkAx72ic4lPbVCHq/+Ed81gLmj603q+HsA8i7ohvqULydtufQgJ4EcL1UiIN9WhjIGEU7Tn7mcYkgbLuo3rhdeERBJPt2LIGsgaVZqbRgWPWp1Xmo6Q9vDJAJVTIM1f1irSWgkqXTn34yKduDbaz4/Mg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=CqQjI1+i7zIp2HLfkd0TeFGaF4Ig+F/CBt8oFBlJzlg=;
+ b=xMNS5f9Yb4FyLxsFHGRm/tllVmzwhAdHiprlJqIiulQuRTvDKkqHj3EHmBVrK0Cd0sEnJNhjJTJV5eSIgUfNBMiw9A72rPTXSU5GlA5GZ7n4kaeGnbl9wil7gRErrSx7M/abINhZ/Hi3oUw1yMNL5OYR2cPWzL5hMeB/bFHNDwAcgBQCI8rvGPcTjj0TyxqJkkiacoOz5vRcD0KxjlDOr5MzULJXd2HftvQgp/YCkAZEeOOcGlvPEvp9U2GSXxnXUkoUAdK4gAJ55gSsDQGRaiBaRnW9c6rFF1TtimZ8VEjPA64yjWf8DaB6jh9sTTlzw6ReEiUTK8yOJOhixpny8w==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 216.228.117.160) smtp.rcpttodomain=ziepe.ca smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
+ dkim=none (message not signed); arc=none (0)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=CqQjI1+i7zIp2HLfkd0TeFGaF4Ig+F/CBt8oFBlJzlg=;
+ b=RNnt7vkCCAn3vqWaCQx5/bcuUewNs0mkwkzqVTgmFsuQ3P0t2ItWsRDWXJctt3N5IhjIP/HzuU1eBGphuFuy//9JOvmP/SeaKr+PQc723eI7uR2j6wcWsNDiNGxEqdN1oJwViMYr3rxWc3BIQL3TqmeSBkrgo4kuwnkjFwAK26eq/I2xETR3Aeqil4dlIc+X7KhYagfpkVkHhj3MV3ZAxnwHBCTD7FilwiKMRzsBCV9fVAGBy6K41DtJuhhdKSS5o2XRWQAXBSZ5hGkOILdV5jC2vhuZD+5x6M4/6F0FZr10tP0wfeROUVMOP6TieRnf6uDiMS42sMvqha2ri99CCg==
+Received: from BN9PR03CA0060.namprd03.prod.outlook.com (2603:10b6:408:fb::35)
+ by PH8PR12MB6916.namprd12.prod.outlook.com (2603:10b6:510:1bd::10) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9564.8; Sun, 1 Feb
+ 2026 14:35:15 +0000
+Received: from BN3PEPF0000B06B.namprd21.prod.outlook.com
+ (2603:10b6:408:fb:cafe::59) by BN9PR03CA0060.outlook.office365.com
+ (2603:10b6:408:fb::35) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.20.9564.15 via Frontend Transport; Sun,
+ 1 Feb 2026 14:35:08 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.160)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 216.228.117.160 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.117.160; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (216.228.117.160) by
+ BN3PEPF0000B06B.mail.protection.outlook.com (10.167.243.70) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.9587.0 via Frontend Transport; Sun, 1 Feb 2026 14:35:15 +0000
+Received: from rnnvmail201.nvidia.com (10.129.68.8) by mail.nvidia.com
+ (10.129.200.66) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.20; Sun, 1 Feb
+ 2026 06:34:59 -0800
+Received: from rnnvmail204.nvidia.com (10.129.68.6) by rnnvmail201.nvidia.com
+ (10.129.68.8) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.20; Sun, 1 Feb
+ 2026 06:34:59 -0800
+Received: from c-237-169-180-181.mtl.labs.mlnx (10.127.8.12) by
+ mail.nvidia.com (10.129.68.6) with Microsoft SMTP Server id 15.2.2562.20 via
+ Frontend Transport; Sun, 1 Feb 2026 06:34:56 -0800
+From: Edward Srouji <edwards@nvidia.com>
+Date: Sun, 1 Feb 2026 16:34:04 +0200
+Subject: [PATCH rdma-next v3 1/3] RDMA/uverbs: Support external FD uobjects
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-ID: <20260201-dmabuf-export-v3-1-da238b614fe3@nvidia.com>
+References: <20260201-dmabuf-export-v3-0-da238b614fe3@nvidia.com>
+In-Reply-To: <20260201-dmabuf-export-v3-0-da238b614fe3@nvidia.com>
+To: Jason Gunthorpe <jgg@ziepe.ca>, Leon Romanovsky <leon@kernel.org>, "Sumit
+ Semwal" <sumit.semwal@linaro.org>, =?utf-8?q?Christian_K=C3=B6nig?=
+	<christian.koenig@amd.com>
+CC: <linux-kernel@vger.kernel.org>, <linux-rdma@vger.kernel.org>,
+	<linux-media@vger.kernel.org>, <dri-devel@lists.freedesktop.org>,
+	<linaro-mm-sig@lists.linaro.org>, Yishai Hadas <yishaih@nvidia.com>, "Edward
+ Srouji" <edwards@nvidia.com>
+X-Mailer: b4 0.14.3
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1769956492; l=2919;
+ i=edwards@nvidia.com; s=20251029; h=from:subject:message-id;
+ bh=sVKb3nq/MHyjSi6RiIWEpVeGvtgdrTgJi+GqWpgSRhE=;
+ b=TDeA41ostJZxvrNONlRI8EKJfPeCBTjtDL71LgGCet1DLymy872nNr6YIFlxb9triQmz6O62h
+ HW/Z7AjTe/ZBiUp8NR5lzWRlWYFpMX3q+RrRKyyu3slZuB7ySthyRuT
+X-Developer-Key: i=edwards@nvidia.com; a=ed25519;
+ pk=VME+d2WbMZT5AY+AolKh2XIdrnXWUwwzz/XLQ3jXgDM=
+X-NV-OnPremToCloud: ExternallySecured
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BN3PEPF0000B06B:EE_|PH8PR12MB6916:EE_
+X-MS-Office365-Filtering-Correlation-Id: 3a9e8f2e-96d6-418b-d7e7-08de619f1d6c
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|82310400026|36860700013|376014|1800799024;
+X-Microsoft-Antispam-Message-Info:
+	=?utf-8?B?LzkwQ3dwS0h2Tm8vNWJ3enhiZFZBYVJjZk5hQkZpL2J3TTJadm5OSGRiSmRx?=
+ =?utf-8?B?eW0zVGlteDN2ZTViNE52dlZQSWxRTjA0QTVOOGM4d0hKTmFJOTE0SzhtTWh6?=
+ =?utf-8?B?RmZJeWovT2RUTEl2RiszenpwbGRWOUN3KzlISXE5U2Q1RXlFOHVIS0ZnU2pH?=
+ =?utf-8?B?OGZ1L3Z4QW1KODErZmorL3AweFd5cDJDVHRnRUs5c3RnaE1jVG1PbTU5NnZQ?=
+ =?utf-8?B?Z09Uck9aYWtRVWtTWml6clBma2MxUzVmNzJjRnJ4Q2NTTTJkR3pmOVQvLzFT?=
+ =?utf-8?B?R085K3FuY2hpWTUyYlNNTzFuNllieHk2ckhER3Nmbmc3YzI4N21JajRUVmFr?=
+ =?utf-8?B?VlgvcHpxNEs4QW1jQllGWmFBTG45dkdqSjZSQmd6ZDNiWXBKcUJ4T2RKdHdk?=
+ =?utf-8?B?ZHRnTVZZSjVOYVQ3ZzJzck5yTGxIUDVIUDJ4VUhXdnprQlFBNkMraklLVW1m?=
+ =?utf-8?B?eE5sazNrTHFIMmJMNHVLQUxSK2VPWkc5WTR1T3RxMVpiektEQ2ZjVU9zZk5J?=
+ =?utf-8?B?eW9Kc1FTOW8zcGc3ZEgrcE1uOXF5YVMzbE92YzBXQ0ZCS2N1cE9NR0paZitY?=
+ =?utf-8?B?M0Y5Z0pVRXhPa3FPU2d1ZzlJQmFZT3hWRnVzTXBRQkRMc1JVOHlaNW1xMEUy?=
+ =?utf-8?B?YUh5a2tGQllzM25TVWk2QjBvWUUwRk8wbWhEOGZNNlBEM0tJbjN4SDlEbjVa?=
+ =?utf-8?B?d2FhcWtJdWNHOFFjQ3l6eFdYdkU3NHJ4bnQ4eTMwSFhRTmF2eTcvb050YUNJ?=
+ =?utf-8?B?MjBlRlpFaHZtSU45TlpqUWY5QTZYdE5XQW1xWlpFTnhxbStLRC82VnRhT01a?=
+ =?utf-8?B?QXhXaFhESjJrRGxXUEh4SGxYNDltd3kxSFllY1h0L0g0eDAxa0hraXIyUkpw?=
+ =?utf-8?B?ZDZEYW1xWkZaK3ZKdjlPNCtLL0VJVkh0Wjd0Zm5zWHAwU3orWWVXSjJYb0pZ?=
+ =?utf-8?B?YjVDaHpqQXJhTFR3UTBIdC9mVTlRWXFERTFjZXllcmFFRlRvTTQvcWxGWXV4?=
+ =?utf-8?B?UGxlNHB5dzFqRUI4dHpQL3N0Qk5xOEZoL3ErYVFZeUNIcmZZbXRGVDVibkpS?=
+ =?utf-8?B?WGp3MXdPUWdmdlJJbjlacWcxb2dBemlJQTBHZVVONi9vbDRXQUVZMDNJQ3dN?=
+ =?utf-8?B?RGlEVGhsQ2QzRjcwWGlkTzB3TjZCMFdBN3dwYUxQT09hR2FzSVRvTTZHSkJv?=
+ =?utf-8?B?aFo3cXZOTG5acW0rWEtrQkxMVytKcFdtWm1qOFpaSDQ1aXhUMmk3M3NHNTBZ?=
+ =?utf-8?B?elp3VzZQQ2xpYTRLVjkxQzBwL1JBK1AvQXJDa2RPalNEaDkwYURKSWFRaVln?=
+ =?utf-8?B?aVkzcHBpQUcrUnlaQ3RCZm5PMVRXVVNFNlcxcG5ROUdIU3lXa2NDcUxQNitG?=
+ =?utf-8?B?cm9MNDMvTko1MnRhWFJQa0FSWFY5V0RJckNMd0FqS2psYTlDMnN5UkRnNUtV?=
+ =?utf-8?B?anRkWWlHWHE0UWw1N3pTRlhEdkIvZ0V2Ty9Sd3hXK2l6UWwrdE1TS1kySk1i?=
+ =?utf-8?B?ejVnM0VYeEdWOFlzVE8ybThDNlhkbWxkcnVmMWhlT2NGbVBwam5LTG9lRFJt?=
+ =?utf-8?B?RFZ5VjFycW95VmJIRTJJMU16K0dlSXJJQlFsMEtaOEpKcEpLbWl3Z2RkY1BP?=
+ =?utf-8?B?VVdpVVNaZWFXbFE3RUNUcHl1alVNeTBLeENBWjJwTEc5MjhydXJMQzVMUUx1?=
+ =?utf-8?B?T2pPSEVpTlU2UVZLeHpuaXRUdHl4SnM5ME5aV25tcnBlR1loTjJBRnpoci9C?=
+ =?utf-8?B?Q1JaZXFhb3lwVk1HejdVRnFWdWVjRWNqanJ6YkdUOS9rN0V3UDFPWDJES1V0?=
+ =?utf-8?B?TG1JYnZsMkUvKzB0VlB6ZURoTlFEMEVLVzhpZXRtSWxTbEhlMmd6VVFQajMx?=
+ =?utf-8?B?NTIvQ29GOXBTd2lOeEQrd1dwc3RqMFNQZzRud0JZNDhxd3JObFpOenQzL1Ew?=
+ =?utf-8?B?WVJMUWVwWGpXeG5mcWJPVXN2M29RWDZUcW1qWEJKamd1UCt0cDI1dTNpS0lt?=
+ =?utf-8?B?eVRKN0owTlFyTmJVUzE1eUdDUG5wc281aGxpWjhSaHBzcEhETFM5ekx1Yjdy?=
+ =?utf-8?B?Z2oxN3A1LzJZZ0IxeUdWTDJlNmxZRy9McExCSHJ1bEJITCtwRHo2UXFnK2RZ?=
+ =?utf-8?B?TFo2czkzMGdmT3VxZXliQW1pVkVEMjJpOVFkcEI4eEgrbm0xd2hqa0lrbTNr?=
+ =?utf-8?B?NFI2ZndkTmtPY1J0ekttd0ZGTTdsNkJhM1JGMXFrSlBGQk9sU3NIWGppMUxo?=
+ =?utf-8?B?Tml2UXRCZVVoWlAxK2FRNXlPbm1nPT0=?=
+X-Forefront-Antispam-Report:
+	CIP:216.228.117.160;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge1.nvidia.com;CAT:NONE;SFS:(13230040)(82310400026)(36860700013)(376014)(1800799024);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	WLc3j7WPSD7ETnpsN5OnfYFgq/SBZ8dBin10YcfTOyAGGAB5yyRhUjwv4cwbIA+poP3AjL0FFz1b1pursY9TVlKr/jAAKpZNcMjyIV6hcy9R61cMWGjpD+SvfncLu27KZneTRCQXQNrr0qOc6UDULMTdrsQYd88SFBHgC3G9E4u+YDZlVZ2zxz1u/1BWZ0J/kKteTKuoP983yMWK/wqb/UX3KzzBHONnMFWDw6CVxHTaWu+anQJAYwwoYullCMVE3kCfOOZ2x7J6OQJZJlqyeTGqGtDEqjL4Y97giD/79sMPsFFZGUxYsL+R//ZSOfk8VEOw7OPdL84h/SRsH2EANyPajbaRS+7xaXbOFLcwF5BFJtRKYz90z7IbbNtXMHY4KWPONil9YoaCSGCCYJB/j0Z86zDVhgXeE7T7yE9QH5v//L99cPV+Vp+lggXuxrKv
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 01 Feb 2026 14:35:15.2597
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 3a9e8f2e-96d6-418b-d7e7-08de619f1d6c
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.160];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	BN3PEPF0000B06B.namprd21.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH8PR12MB6916
 
-Remove ia_css_debug_dtrace() calls which only log function entry.
-ftrace should be used instead.
+From: Yishai Hadas <yishaih@nvidia.com>
 
-Signed-off-by: Adarsh Das <adarshdas950@gmail.com>
+Add support for uobjects that wrap externally allocated file
+descriptors (FDs).
+
+In this mode, the FD number still follows the standard uverbs allocation
+flow, but the file pointer is allocated externally and has its own fops
+and private data.
+
+As a result, alloc_begin_fd_uobject() must handle cases where
+fd_type->fops is NULL, and both alloc_commit_fd_uobject() and
+alloc_abort_fd_uobject() must account for whether filp->private_data
+exists, since it is populated outside the standard uverbs flow.
+
+Signed-off-by: Yishai Hadas <yishaih@nvidia.com>
+Signed-off-by: Edward Srouji <edwards@nvidia.com>
 ---
- .../media/atomisp/pci/ia_css_isp_configs.c    | 26 -------------------
- 1 file changed, 26 deletions(-)
+ drivers/infiniband/core/rdma_core.c | 35 +++++++++++++++++++++--------------
+ 1 file changed, 21 insertions(+), 14 deletions(-)
 
-diff --git a/drivers/staging/media/atomisp/pci/ia_css_isp_configs.c b/drivers/staging/media/atomisp/pci/ia_css_isp_configs.c
-index 38c9c62366d6..1dce9fa926ab 100644
---- a/drivers/staging/media/atomisp/pci/ia_css_isp_configs.c
-+++ b/drivers/staging/media/atomisp/pci/ia_css_isp_configs.c
-@@ -18,8 +18,6 @@ int ia_css_configure_iterator(const struct ia_css_binary *binary,
- 	unsigned int offset = 0;
- 	unsigned int size   = 0;
+diff --git a/drivers/infiniband/core/rdma_core.c b/drivers/infiniband/core/rdma_core.c
+index 18918f463361..b6eda2fb0911 100644
+--- a/drivers/infiniband/core/rdma_core.c
++++ b/drivers/infiniband/core/rdma_core.c
+@@ -465,7 +465,7 @@ alloc_begin_fd_uobject(const struct uverbs_api_object *obj,
  
--	ia_css_debug_dtrace(IA_CSS_DEBUG_TRACE_PRIVATE, "%s:\n", __func__);
--
- 	if (!binary->info->mem_offsets.offsets.config)
- 		return 0;
+ 	fd_type =
+ 		container_of(obj->type_attrs, struct uverbs_obj_fd_type, type);
+-	if (WARN_ON(fd_type->fops->release != &uverbs_uobject_fd_release &&
++	if (WARN_ON(fd_type->fops && fd_type->fops->release != &uverbs_uobject_fd_release &&
+ 		    fd_type->fops->release != &uverbs_async_event_release)) {
+ 		ret = ERR_PTR(-EINVAL);
+ 		goto err_fd;
+@@ -477,14 +477,16 @@ alloc_begin_fd_uobject(const struct uverbs_api_object *obj,
+ 		goto err_fd;
+ 	}
  
-@@ -41,8 +39,6 @@ int ia_css_configure_copy_output(const struct ia_css_binary *binary,
- 	unsigned int offset = 0;
- 	unsigned int size   = 0;
+-	/* Note that uverbs_uobject_fd_release() is called during abort */
+-	filp = anon_inode_getfile(fd_type->name, fd_type->fops, NULL,
+-				  fd_type->flags);
+-	if (IS_ERR(filp)) {
+-		ret = ERR_CAST(filp);
+-		goto err_getfile;
++	if (fd_type->fops) {
++		/* Note that uverbs_uobject_fd_release() is called during abort */
++		filp = anon_inode_getfile(fd_type->name, fd_type->fops, NULL,
++					  fd_type->flags);
++		if (IS_ERR(filp)) {
++			ret = ERR_CAST(filp);
++			goto err_getfile;
++		}
++		uobj->object = filp;
+ 	}
+-	uobj->object = filp;
  
--	ia_css_debug_dtrace(IA_CSS_DEBUG_TRACE_PRIVATE, "%s:\n", __func__);
--
- 	if (!binary->info->mem_offsets.offsets.config)
- 		return 0;
+ 	uobj->id = new_fd;
+ 	return uobj;
+@@ -561,7 +563,9 @@ static void alloc_abort_fd_uobject(struct ib_uobject *uobj)
+ {
+ 	struct file *filp = uobj->object;
  
-@@ -66,8 +62,6 @@ int ia_css_configure_crop(const struct ia_css_binary *binary,
- 	unsigned int offset = 0;
- 	unsigned int size   = 0;
+-	fput(filp);
++	if (filp)
++		fput(filp);
++
+ 	put_unused_fd(uobj->id);
+ }
  
--	ia_css_debug_dtrace(IA_CSS_DEBUG_TRACE_PRIVATE, "%s:\n", __func__);
--
- 	if (!binary->info->mem_offsets.offsets.config)
- 		return 0;
+@@ -628,11 +632,14 @@ static void alloc_commit_fd_uobject(struct ib_uobject *uobj)
+ 	/* This shouldn't be used anymore. Use the file object instead */
+ 	uobj->id = 0;
  
-@@ -89,8 +83,6 @@ int ia_css_configure_fpn(const struct ia_css_binary *binary,
- 	unsigned int offset = 0;
- 	unsigned int size   = 0;
+-	/*
+-	 * NOTE: Once we install the file we loose ownership of our kref on
+-	 * uobj. It will be put by uverbs_uobject_fd_release()
+-	 */
+-	filp->private_data = uobj;
++	if (!filp->private_data) {
++		/*
++		 * NOTE: Once we install the file we loose ownership of our kref on
++		 * uobj. It will be put by uverbs_uobject_fd_release()
++		 */
++		filp->private_data = uobj;
++	}
++
+ 	fd_install(fd, filp);
+ }
  
--	ia_css_debug_dtrace(IA_CSS_DEBUG_TRACE_PRIVATE, "%s:\n", __func__);
--
- 	if (!binary->info->mem_offsets.offsets.config)
- 		return 0;
- 
-@@ -111,8 +103,6 @@ int ia_css_configure_dvs(const struct ia_css_binary *binary,
- 	unsigned int offset = 0;
- 	unsigned int size   = 0;
- 
--	ia_css_debug_dtrace(IA_CSS_DEBUG_TRACE_PRIVATE, "%s:\n", __func__);
--
- 	if (!binary->info->mem_offsets.offsets.config)
- 		return 0;
- 
-@@ -133,8 +123,6 @@ int ia_css_configure_qplane(const struct ia_css_binary *binary,
- 	unsigned int offset = 0;
- 	unsigned int size   = 0;
- 
--	ia_css_debug_dtrace(IA_CSS_DEBUG_TRACE_PRIVATE, "%s:\n", __func__);
--
- 	if (!binary->info->mem_offsets.offsets.config)
- 		return 0;
- 
-@@ -156,8 +144,6 @@ int ia_css_configure_output0(const struct ia_css_binary *binary,
- 	unsigned int offset = 0;
- 	unsigned int size   = 0;
- 
--	ia_css_debug_dtrace(IA_CSS_DEBUG_TRACE_PRIVATE, "%s:\n", __func__);
--
- 	if (!binary->info->mem_offsets.offsets.config)
- 		return 0;
- 
-@@ -179,8 +165,6 @@ int ia_css_configure_output1(const struct ia_css_binary *binary,
- 	unsigned int offset = 0;
- 	unsigned int size   = 0;
- 
--	ia_css_debug_dtrace(IA_CSS_DEBUG_TRACE_PRIVATE, "%s:\n", __func__);
--
- 	if (!binary->info->mem_offsets.offsets.config)
- 		return 0;
- 
-@@ -202,8 +186,6 @@ int ia_css_configure_output(const struct ia_css_binary *binary,
- 	unsigned int offset = 0;
- 	unsigned int size   = 0;
- 
--	ia_css_debug_dtrace(IA_CSS_DEBUG_TRACE_PRIVATE, "%s:\n", __func__);
--
- 	if (!binary->info->mem_offsets.offsets.config)
- 		return 0;
- 
-@@ -225,8 +207,6 @@ int ia_css_configure_raw(const struct ia_css_binary *binary,
- 	unsigned int offset = 0;
- 	unsigned int size   = 0;
- 
--	ia_css_debug_dtrace(IA_CSS_DEBUG_TRACE_PRIVATE, "%s:\n", __func__);
--
- 	if (!binary->info->mem_offsets.offsets.config)
- 		return 0;
- 
-@@ -248,8 +228,6 @@ int ia_css_configure_tnr(const struct ia_css_binary *binary,
- 	unsigned int offset = 0;
- 	unsigned int size   = 0;
- 
--	ia_css_debug_dtrace(IA_CSS_DEBUG_TRACE_PRIVATE, "%s:\n", __func__);
--
- 	if (!binary->info->mem_offsets.offsets.config)
- 		return 0;
- 
-@@ -271,8 +249,6 @@ int ia_css_configure_ref(const struct ia_css_binary *binary,
- 	unsigned int offset = 0;
- 	unsigned int size   = 0;
- 
--	ia_css_debug_dtrace(IA_CSS_DEBUG_TRACE_PRIVATE, "%s:\n", __func__);
--
- 	if (!binary->info->mem_offsets.offsets.config)
- 		return 0;
- 
-@@ -294,8 +270,6 @@ int ia_css_configure_vf(const struct ia_css_binary *binary,
- 	unsigned int offset = 0;
- 	unsigned int size   = 0;
- 
--	ia_css_debug_dtrace(IA_CSS_DEBUG_TRACE_PRIVATE, "%s:\n", __func__);
--
- 	if (!binary->info->mem_offsets.offsets.config)
- 		return 0;
- 
+
 -- 
-2.52.0
+2.47.1
 
