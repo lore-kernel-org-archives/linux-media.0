@@ -1,88 +1,94 @@
-Received: from irl.hu (irl.hu [95.85.9.111])
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 44310361DD4;
-	Mon,  2 Feb 2026 11:41:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.85.9.111
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3CF0835B65F;
+	Mon,  2 Feb 2026 11:43:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.167.242.64
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770032517; cv=none; b=imayyP7dKzl0QAARuPYNxWeOeMI8gzOPxt4zFMn9hq3muSnEpf4NIhtisTcEaV34+IyaqPDybLZcBs0jrd6cNZqYSP2aaLnLofcsTM+KgrrjEeM/Z/Jli30uCx3e87tSrYVCasaKaGvutz5l05Z1P2Db6G8nMz0Rr71DocWbXsw=
+	t=1770032601; cv=none; b=eEqIfDJn2iAZJxWQ8Hn3p8Q0wOsd5qSOTzznzsBJd7Pz9pYLjlfwFRe9oLDKtmeoULsN/cN+lrjM3MK4LybiElvcwYI1sP53XvQa9sQDd3jimZfvN7lPSdTp2RDcputMHoGivCfDFZY1PPLDNVYIV63VoAYmbsN9GCvTugI3nrE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770032517; c=relaxed/simple;
-	bh=OXNveMzXk+8u4+ask+y8kf2gdzy68BKE3FWx8I+55C4=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=H/P0BYscb9NyiZJkQiEdzl4QhNFahK8TU6nG99oM24Qwp8ekDWMawYuqXuFa+ya5sH645185bRU7CwS97wThTxvCjGqhLuu6vM9r96OPNfp25lj4Ez31aHcwcjZsgwHwOiILwvEQF/Tz6u679UsV8PRTyy7IZXzw25pZ8uJ/Iw8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=irl.hu; spf=pass smtp.mailfrom=irl.hu; arc=none smtp.client-ip=95.85.9.111
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=irl.hu
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=irl.hu
-Received: from [192.168.2.4] (51b688e0.dsl.pool.telekom.hu [::ffff:81.182.136.224])
-  (AUTH: CRAM-MD5 soyer@irl.hu, )
-  by irl.hu with ESMTPSA
-  id 00000000000C70AC.0000000069808C4D.003D8AAF; Mon, 02 Feb 2026 12:36:45 +0100
-Message-ID: <0fc43020620f211a7962a819c617056fbb499d86.camel@irl.hu>
+	s=arc-20240116; t=1770032601; c=relaxed/simple;
+	bh=53IqFtmY5k6XcBZAWO6IXfkg/Zh/qfv2Y+ngXI7iML0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=FQV8644KAMEfO5h/sfB1k/ld4GSZpH6bKBAOgFmDUzCDcRw72AQ6Z8lMPAsRYbsmGET3ZRPB7jUf1fXSc2KpU83B0+1V7r7Bsp7b3RdNjieNEJatfUYd9UAheEHtBAm0btokFFPC8SzDxDyM1amMLt3dg2m0pm9d4bvSt9pEhhw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ideasonboard.com; spf=pass smtp.mailfrom=ideasonboard.com; dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b=D+xMuwC6; arc=none smtp.client-ip=213.167.242.64
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ideasonboard.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ideasonboard.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="D+xMuwC6"
+Received: from killaraus.ideasonboard.com (2001-14ba-703d-e500--2a1.rev.dnainternet.fi [IPv6:2001:14ba:703d:e500::2a1])
+	by perceval.ideasonboard.com (Postfix) with UTF8SMTPSA id E8578492;
+	Mon,  2 Feb 2026 12:42:37 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+	s=mail; t=1770032558;
+	bh=53IqFtmY5k6XcBZAWO6IXfkg/Zh/qfv2Y+ngXI7iML0=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=D+xMuwC68fdhryheH0mYSTqUq2R779LLpSrwlgONwfPMADRNVD1+Oa3juu7UBz+2/
+	 5r94tTK1SgtiGuKkwoHQFjqgrQRg2SVftCH7k1DW3qD+d/p4u2MmDHa+384FEmPmx2
+	 +XombrNKVICX0fSwoZ7CYscQ4p/HBf2H+lz9uPFg=
+Date: Mon, 2 Feb 2026 13:43:17 +0200
+From: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To: Jarkko Sakkinen <jarkko@kernel.org>
+Cc: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+	Oleksandr Natalenko <oleksandr@natalenko.name>,
+	linux-media@vger.kernel.org, jani.nikula@linux.intel.com,
+	anisse@astier.eu, Mauro Carvalho Chehab <mchehab@kernel.org>,
+	Hans Verkuil <hverkuil@kernel.org>,
+	Sakari Ailus <sakari.ailus@linux.intel.com>,
+	Jacopo Mondi <jacopo.mondi@ideasonboard.com>,
+	Ricardo Ribalda <ribalda@chromium.org>,
+	open list <linux-kernel@vger.kernel.org>
 Subject: Re: [RFC PATCH] media: Virtual camera driver
-From: Gergo Koteles <soyer@irl.hu>
-To: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-  Oleksandr Natalenko <oleksandr@natalenko.name>
-Cc: Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-  Jarkko Sakkinen <jarkko@kernel.org>, linux-media@vger.kernel.org,
-  jani.nikula@linux.intel.com, anisse@astier.eu,
-  Mauro Carvalho Chehab <mchehab@kernel.org>,
-  Hans Verkuil <hverkuil@kernel.org>,
-  Sakari Ailus <sakari.ailus@linux.intel.com>,
-  Jacopo Mondi <jacopo.mondi@ideasonboard.com>,
-  Ricardo Ribalda <ribalda@chromium.org>,
-  open list <linux-kernel@vger.kernel.org>
-Date: Mon, 02 Feb 2026 12:36:44 +0100
-In-Reply-To: <20260202020214.2243acec@foz.lan>
+Message-ID: <20260202114317.GB4173464@killaraus>
 References: <20260201133342.335680-1-jarkko@kernel.org>
-		<5073898.31r3eYUQgx@natalenko.name>	<20260202001704.2419778a@foz.lan>
-		<13939245.uLZWGnKmhe@natalenko.name> <20260202020214.2243acec@foz.lan>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.58.2 (3.58.2-1.fc43) 
+ <5073898.31r3eYUQgx@natalenko.name>
+ <20260202001704.2419778a@foz.lan>
+ <13939245.uLZWGnKmhe@natalenko.name>
+ <20260202020214.2243acec@foz.lan>
+ <aYBo69zrMnRdWs32@kernel.org>
+ <aYBsBw2j6pkwAssn@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <aYBsBw2j6pkwAssn@kernel.org>
 
-On Mon, 2026-02-02 at 02:02 +0100, Mauro Carvalho Chehab wrote:
-> On Mon, 02 Feb 2026 00:25:37 +0100
-> Oleksandr Natalenko <oleksandr@natalenko.name> wrote:
->=20
-> > Date: Mon, 02 Feb 2026 00:25:37 +0100
-> > From: Oleksandr Natalenko <oleksandr@natalenko.name>
-> > To: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-> > Cc: Laurent Pinchart <laurent.pinchart@ideasonboard.com>, Jarkko Sakkin=
-en <jarkko@kernel.org>, linux-media@vger.kernel.org, jani.nikula@linux.inte=
-l.com, anisse@astier.eu, Mauro Carvalho Chehab <mchehab@kernel.org>, Hans V=
-erkuil <hverkuil@kernel.org>, Sakari Ailus <sakari.ailus@linux.intel.com>, =
-Jacopo Mondi <jacopo.mondi@ideasonboard.com>, Ricardo Ribalda <ribalda@chro=
-mium.org>, open list <linux-kernel@vger.kernel.org>
-> > Message-ID: <13939245.uLZWGnKmhe@natalenko.name>
-> >=20
-> > On pond=C4=9Bl=C3=AD 2. =C3=BAnora 2026 0:17:20, st=C5=99edoevropsk=C3=
-=BD standardn=C3=AD =C4=8Das Mauro Carvalho Chehab wrote:
-> > > No. At the machine with the camera, obs can read from a V4L2 input,
-> > > generate a mpeg TS stream, and listen to a UDP port (for instance).=
-=20
-> > >=20
-> > > At the remote machine, you can just pass the URL to ffmpeg. =20
-> >=20
-> > I can't, I have to feed the stream into Firefox somehow for it to see t=
-he stream as a virtual webcam.
->=20
-> Motioneye could be used on such scenario. It has a proper web
-> interface, allows multiple users to watch, has login control accepts
-> multiple cameras.
->=20
+On Mon, Feb 02, 2026 at 11:19:03AM +0200, Jarkko Sakkinen wrote:
+> On Mon, Feb 02, 2026 at 11:05:52AM +0200, Jarkko Sakkinen wrote:
+> > On Mon, Feb 02, 2026 at 02:02:14AM +0100, Mauro Carvalho Chehab wrote:
+> > > On Mon, 02 Feb 2026 00:25:37 +0100 Oleksandr Natalenko wrote:
+> > > > On pondělí 2. února 2026 0:17:20, středoevropský standardní čas Mauro Carvalho Chehab wrote:
+> > > > > No. At the machine with the camera, obs can read from a V4L2 input,
+> > > > > generate a mpeg TS stream, and listen to a UDP port (for instance). 
+> > > > > 
+> > > > > At the remote machine, you can just pass the URL to ffmpeg.  
+> > > > 
+> > > > I can't, I have to feed the stream into Firefox somehow for it to see the stream as a virtual webcam.
+> > > 
+> > > Motioneye could be used on such scenario. It has a proper web
+> > > interface, allows multiple users to watch, has login control accepts
+> > > multiple cameras.
+> > 
+> > When proposed workarounds move in the area of motion detection systems
+> > it feels like there was a competion who invents the most impractical
+> > solution for a practical real-world problem out in the wild.
 
-WebRTC in browsers isn't that bad. Firefox and Chrome also have
-PipeWire video support.=C2=A0
+I'm also not quite sure how motioneye would be related. Please see my
+reply to Gergo in this mail thread for a proposed solution that is (in
+my opinion) not a workaround.
 
-If I understand correctly, it would be more forward-thinking to develop
-virtual camera support in PipeWire rather than in the kernel.
+> A trivial Google search shows that the scope of the issue, which is
+> also (on emphasis) a security issue, and net effect that is caused
+> of not addressing it properly.
 
-Best Regards,
-Gergo Koteles
+How is it a security issue ?
+
+-- 
+Regards,
+
+Laurent Pinchart
