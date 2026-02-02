@@ -1,255 +1,304 @@
-Received: from bali.collaboradmins.com (bali.collaboradmins.com [148.251.105.195])
+Received: from mx07-00178001.pphosted.com (mx08-00178001.pphosted.com [91.207.212.93])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 369D636A010;
-	Mon,  2 Feb 2026 13:42:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.251.105.195
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770039769; cv=none; b=C7Wes7l2T/e1iFEG0xVpDpKhXa7O5n5mHV/tNNLj7zrcoteOn0ITF3ketdEjqdsUBfSCr5oMvYKcEbAwd9TlXR66gUVUy18wwoh21cfNg9AWwFVPtB+SViJjWNDeEm7llmNqXQPH65RgwyGdXJE8Yv05QcgUX72lGkOBO3ySopM=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770039769; c=relaxed/simple;
-	bh=gcTfsdv162COO0lrMacW+zMoNiUg+aaJ2YIgxYnS0Ak=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=XgR/fzfKm4S8jEObLAsdmjY7mGXPIVDUZN9Z2vr7E6NbSKRUUlTCydLI2fqR9JBNTMt3aYj4ANwzPxYlbVu5bc3ncKi4tx0pbJ10VyaJReFckuaxF/Sey1DCT3JeU7fqbMiL6TnVuasw+a6nL15TQeMYQ3DzZ0Kf1pgxNfsugx4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=Zc/+9uWq; arc=none smtp.client-ip=148.251.105.195
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2F2AB369980;
+	Mon,  2 Feb 2026 13:58:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=91.207.212.93
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1770040694; cv=fail; b=ZHzbjZrMjP5UUEHw4y3CF+SaiadvveOq8NlHg7YO+1yHC2QFsyG7MUzjg8nIAinT9sH593tNw7nrZ9Sw7+WYpBp0Zm8kpQamztGhNCLnEBz0BlBxCOL1lhlB/qnSX8s4v3cNRT6d0J9Nhy6FM1zWkMIcDIaL5eL2lH5A0dPb1tU=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1770040694; c=relaxed/simple;
+	bh=NlB7CizbBk8Pz646SC6Tu9ePNHWKqBZeU04eqR/w5as=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-ID:References:
+	 In-Reply-To:To:CC; b=mMLLjddTK68bcVIQs2Xkv7L9ZDwNqJUjtgaJX7RSSJOx3vK0PrDBuY3rX70Eeuvr+FdF1FvSnWxni/DJqAu0bcn01Jba0TM7jbIlRIDFXPdI63722SvYDTPifS5wogvFNZFhOvmY8G0pebOOFPQz//cEwr6Pwj9sHwdcKrzA9wI=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foss.st.com; spf=pass smtp.mailfrom=foss.st.com; dkim=pass (2048-bit key) header.d=foss.st.com header.i=@foss.st.com header.b=OQHJrMpl; arc=fail smtp.client-ip=91.207.212.93
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foss.st.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=foss.st.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="Zc/+9uWq"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1770039766;
-	bh=gcTfsdv162COO0lrMacW+zMoNiUg+aaJ2YIgxYnS0Ak=;
-	h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-	b=Zc/+9uWqy6PXrqry3Avy/WE37bZfyD/pTm5q9Ynph2a/6aScihGzebs5+5kSDz7+3
-	 05WcpD/Di4+B7njXyzo93kx8snjSlJl53ze2eP21JZZu5aBVn68bc104nk5s4jkuhe
-	 isSWebCLRG40qe6Q6yEREZpZttyoQ+zv46BTFMNzbVqd/AP9ajkihBW2xLg6Z1k1GY
-	 uNB1cjS+IyCGMkLRnuqNtH86f+xXakrDkIfLptaHXPdJ6In/FXeYjsyOj8lOiUOCC4
-	 /v65MMm9hNU3CvoSdLyRnUzjIEzPkYCVk/wLEOwe2JkYXkOhswj/EuQ2eyhvpnCT2o
-	 7thn6xx70mQtg==
-Received: from [IPv6:2606:6d00:15:210e::5ac] (unknown [IPv6:2606:6d00:15:210e::5ac])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: nicolas)
-	by bali.collaboradmins.com (Postfix) with ESMTPSA id 96AA917E0927;
-	Mon,  2 Feb 2026 14:42:44 +0100 (CET)
-Message-ID: <16baade123f563ea92e6117bf78c56e8617daf14.camel@collabora.com>
-Subject: Re: [PATCH 1/2] media: rkvdec: reduce excessive stack usage in
- assemble_hw_pps()
-From: Nicolas Dufresne <nicolas.dufresne@collabora.com>
-To: Arnd Bergmann <arnd@kernel.org>, Detlev Casanova	
- <detlev.casanova@collabora.com>, Ezequiel Garcia
- <ezequiel@vanguardiasur.com.ar>,  Mauro Carvalho Chehab	
- <mchehab@kernel.org>, Heiko Stuebner <heiko@sntech.de>, Nathan Chancellor	
- <nathan@kernel.org>, Hans Verkuil <hverkuil+cisco@kernel.org>
-Cc: Arnd Bergmann <arnd@arndb.de>, Nick Desaulniers	
- <nick.desaulniers+lkml@gmail.com>, Bill Wendling <morbo@google.com>, Justin
- Stitt <justinstitt@google.com>, linux-media@vger.kernel.org, 
-	linux-rockchip@lists.infradead.org, linux-arm-kernel@lists.infradead.org, 
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Date: Mon, 02 Feb 2026 08:42:41 -0500
-In-Reply-To: <20260202094804.1231706-1-arnd@kernel.org>
-References: <20260202094804.1231706-1-arnd@kernel.org>
-Autocrypt: addr=nicolas.dufresne@collabora.com; prefer-encrypt=mutual;
- keydata=mDMEaCN2ixYJKwYBBAHaRw8BAQdAM0EHepTful3JOIzcPv6ekHOenE1u0vDG1gdHFrChD
- /e0J05pY29sYXMgRHVmcmVzbmUgPG5pY29sYXNAbmR1ZnJlc25lLmNhPoicBBMWCgBEAhsDBQsJCA
- cCAiICBhUKCQgLAgQWAgMBAh4HAheABQkJZfd1FiEE7w1SgRXEw8IaBG8S2UGUUSlgcvQFAmibrjo
- CGQEACgkQ2UGUUSlgcvQlQwD/RjpU1SZYcKG6pnfnQ8ivgtTkGDRUJ8gP3fK7+XUjRNIA/iXfhXMN
- abIWxO2oCXKf3TdD7aQ4070KO6zSxIcxgNQFtDFOaWNvbGFzIER1ZnJlc25lIDxuaWNvbGFzLmR1Z
- nJlc25lQGNvbGxhYm9yYS5jb20+iJkEExYKAEECGwMFCwkIBwICIgIGFQoJCAsCBBYCAwECHgcCF4
- AWIQTvDVKBFcTDwhoEbxLZQZRRKWBy9AUCaCyyxgUJCWX3dQAKCRDZQZRRKWBy9ARJAP96pFmLffZ
- smBUpkyVBfFAf+zq6BJt769R0al3kHvUKdgD9G7KAHuioxD2v6SX7idpIazjzx8b8rfzwTWyOQWHC
- AAS0LU5pY29sYXMgRHVmcmVzbmUgPG5pY29sYXMuZHVmcmVzbmVAZ21haWwuY29tPoiZBBMWCgBBF
- iEE7w1SgRXEw8IaBG8S2UGUUSlgcvQFAmibrGYCGwMFCQll93UFCwkIBwICIgIGFQoJCAsCBBYCAw
- ECHgcCF4AACgkQ2UGUUSlgcvRObgD/YnQjfi4+L8f4fI7p1pPMTwRTcaRdy6aqkKEmKsCArzQBAK8
- bRLv9QjuqsE6oQZra/RB4widZPvphs78H0P6NmpIJ
-Organization: Collabora Canada
-Content-Type: multipart/signed; micalg="pgp-sha512";
-	protocol="application/pgp-signature"; boundary="=-7kpS3ryHRVhS3mBqQbB8"
-User-Agent: Evolution 3.58.2 (3.58.2-1.fc43) 
+	dkim=pass (2048-bit key) header.d=foss.st.com header.i=@foss.st.com header.b="OQHJrMpl"
+Received: from pps.filterd (m0046660.ppops.net [127.0.0.1])
+	by mx07-00178001.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 612Dp8fa3367949;
+	Mon, 2 Feb 2026 14:57:48 +0100
+Received: from am0pr02cu008.outbound.protection.outlook.com (mail-westeuropeazon11013045.outbound.protection.outlook.com [52.101.72.45])
+	by mx07-00178001.pphosted.com (PPS) with ESMTPS id 4c1am0wtek-1
+	(version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
+	Mon, 02 Feb 2026 14:57:47 +0100 (CET)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=gWizvc2eFbnurq2Q64MTk1Jj9YjCTJ459SuiyAjCeuRg1rQ/J/KtUbV30GJsh6xOZ4V3C37J+lshJ+ydDqEexnb0vboo8CxtHu8Ah5xCxGPc6SD3TMJApfEF0EkxV+U/Cgo9m2K5j36LMhDwAhbMhfo7FCHLd0Ww+JwMt8/xk844Qgo5JZRJ6k5GGXqQOXiwLTp69xbHRhAoMgyCaV8ER11SZDIYacKO61A62T5z4Vpw+ACe4W+KYp2SmZ1Z1vo6XRC8eT94Va3dAlNqaW4EJDpPf+NOpPYQXnVZaZK1WI8aNzz2ydw1IxxK4LBwQ/gVluWGUgMPyI1S0B1WqZIL/A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=Ke0Z6gN2p1U6z13deHm5Qa2EFMU7inFeggOge+Oly28=;
+ b=roDMqlax/9iMk5INVLWW96w7KYrK7euejPDiKw8fvKF8P4iUhkQTob45V86tbM1NAerVHIP+2MIERrL192uOykQLtw4KQnTADO9JT8eZ+ofw0Adoj9i3uMiTMjrqt3BBffNysFKlRpwEsLzDw7JlEsXgB/ATmknGJBbNVRITGpmAkTf7cXFhG41hTfyp69dEAfjoUdnWpuy6Zv58GKPFFcZJi7SDSv+bBtr4ugajZ6WVBKW1XqjMWG65VWWVPn+wI0DAISc8IvKW+cI1KOK3Hwr59Jhj8u4WJvLc4b1uED2yT6xqxQEhKyfxHmvolfygBK9oe1gcS/FJqyct1WNepw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=fail (sender ip is
+ 164.130.1.60) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=foss.st.com;
+ dmarc=fail (p=none sp=none pct=100) action=none header.from=foss.st.com;
+ dkim=none (message not signed); arc=none (0)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=Ke0Z6gN2p1U6z13deHm5Qa2EFMU7inFeggOge+Oly28=;
+ b=OQHJrMplJ27g77Ghtwz4bEpy/rTcFztF3OheGmkun9UfaMrlPCZwNu2hx4NEd20JHSPZnm77y4rWBbxKwVpHknVj0L8AqQCrLhZU14Y7d9yBouPX9BeGvy2n1UfZBFf/hVFM5VwMTuFgNOkhYd7mRJOmDzcYEAvUyzlWV+ToEYvvsP7OuLgQI/vKoEbwY5/160G6E598baBMMYfrt1wSvF4PLZowMx9xuoHGx35v1ErPwA5s/NLGkhQnKw7fFMHSrCdcnXN7fAFN2OpfsdtSn458ynpmD25vzFEU6Obk4WGs9XcnomZFpLElyMYXOX9Gcz7F6uVVvyycdecU7K0l3A==
+Received: from AS4P251CA0012.EURP251.PROD.OUTLOOK.COM (2603:10a6:20b:5d2::13)
+ by AM9PR10MB4071.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:20b:1f0::14) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9564.16; Mon, 2 Feb
+ 2026 13:57:45 +0000
+Received: from AM2PEPF0001C714.eurprd05.prod.outlook.com
+ (2603:10a6:20b:5d2:cafe::61) by AS4P251CA0012.outlook.office365.com
+ (2603:10a6:20b:5d2::13) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.20.9564.16 via Frontend Transport; Mon,
+ 2 Feb 2026 13:57:45 +0000
+X-MS-Exchange-Authentication-Results: spf=fail (sender IP is 164.130.1.60)
+ smtp.mailfrom=foss.st.com; dkim=none (message not signed)
+ header.d=none;dmarc=fail action=none header.from=foss.st.com;
+Received-SPF: Fail (protection.outlook.com: domain of foss.st.com does not
+ designate 164.130.1.60 as permitted sender) receiver=protection.outlook.com;
+ client-ip=164.130.1.60; helo=smtpO365.st.com;
+Received: from smtpO365.st.com (164.130.1.60) by
+ AM2PEPF0001C714.mail.protection.outlook.com (10.167.16.184) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.9587.10 via Frontend Transport; Mon, 2 Feb 2026 13:57:45 +0000
+Received: from STKDAG1NODE2.st.com (10.75.128.133) by smtpO365.st.com
+ (10.250.44.72) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.29; Mon, 2 Feb
+ 2026 14:59:23 +0100
+Received: from localhost (10.252.7.227) by STKDAG1NODE2.st.com (10.75.128.133)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.29; Mon, 2 Feb
+ 2026 14:57:44 +0100
+From: Alain Volmat <alain.volmat@foss.st.com>
+Date: Mon, 2 Feb 2026 14:57:29 +0100
+Subject: [PATCH 04/13] media: stm32: dcmipp: move common structures in
+ dcmipp-common.h
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-
-
---=-7kpS3ryHRVhS3mBqQbB8
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-
-Hi Arnd,
-
-Le lundi 02 f=C3=A9vrier 2026 =C3=A0 10:47 +0100, Arnd Bergmann a =C3=A9cri=
-t=C2=A0:
-> From: Arnd Bergmann <arnd@arndb.de>
->=20
-> The rkvdec_pps had a large set of bitfields, all of which
-> as misaligned. This causes clang-21 and likely other versions to
-> produce absolutely awful object code and a warning about very
-> large stack usage, on targets without unaligned access:
->=20
-> drivers/media/platform/rockchip/rkvdec/rkvdec-vp9.c:966:12: error: stack =
-frame size (1472) exceeds limit (1280) in 'rkvdec_vp9_start' [-Werror,-Wfra=
-me-larger-than]
-
-We had already addressed and validated that on clang-21, which indicates me=
- that
-we likely are missing an architecture (or a config) in our CI. Can you docu=
-ment
-which architecture, configuration and flags was affected so we can add it o=
-n our
-side ?
-
-Our media pipeline before sending to Linus and the clang builds trace are i=
-n the
-following link, in case it matters.
-
-https://gitlab.freedesktop.org/linux-media/media-committers/-/pipelines/158=
-8731
-https://gitlab.freedesktop.org/linux-media/media-committers/-/jobs/91604655
-
->=20
-> Part of the problem here is how all the bitfield accesses are
-> inlined into a function that already has large structures on
-> the stack.
-
-Another observation is that you had to enable ASAN to make it miss-behave o=
-n for
-loop unrolling (with complex bitfield writes).  All I've obtained by visiti=
-ng
-the Link: is that its armv7-a architecture.
-
->=20
-> Mark set_field_order_cnt() as noinline_for_stack, and split out
-> the following accesses in assemble_hw_pps() into another noinline
-> function, both of which now using around 800 bytes of stack in the
-> same configuration.
->=20
-> There is clearly still something wrong with clang here, but
-> splitting it into multiple functions reduces the risk of stack
-> overflow.
-
-We've tried really hard to avoid this noninline_for_stack just because comp=
-ilers
-are buggy. I'll have a look again in case I find some ideas, but meanwhile,=
- with
-failing architecture in the commit message:
-
-Reviewed-by: Nicolas Dufresne <nicolas.dufresne@collabora.com>
-
->=20
-> Fixes: fde24907570d ("media: rkvdec: Add H264 support for the VDPU383 var=
-iant")
-> Link: https://godbolt.org/z/acP1eKeq9
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
-> ---
-> =C2=A0.../rockchip/rkvdec/rkvdec-vdpu383-h264.c=C2=A0=C2=A0=C2=A0=C2=A0 |=
- 50 ++++++++++---------
-> =C2=A01 file changed, 27 insertions(+), 23 deletions(-)
->=20
-> diff --git a/drivers/media/platform/rockchip/rkvdec/rkvdec-vdpu383-h264.c=
- b/drivers/media/platform/rockchip/rkvdec/rkvdec-vdpu383-h264.c
-> index 6ab3167addc8..ef69f2a36478 100644
-> --- a/drivers/media/platform/rockchip/rkvdec/rkvdec-vdpu383-h264.c
-> +++ b/drivers/media/platform/rockchip/rkvdec/rkvdec-vdpu383-h264.c
-> @@ -130,7 +130,7 @@ struct rkvdec_h264_ctx {
-> =C2=A0	struct vdpu383_regs_h26x regs;
-> =C2=A0};
-> =C2=A0
-> -static void set_field_order_cnt(struct rkvdec_pps *pps, const struct v4l=
-2_h264_dpb_entry *dpb)
-> +static noinline_for_stack void set_field_order_cnt(struct rkvdec_pps *pp=
-s, const struct v4l2_h264_dpb_entry *dpb)
-> =C2=A0{
-> =C2=A0	pps->top_field_order_cnt0 =3D dpb[0].top_field_order_cnt;
-> =C2=A0	pps->bot_field_order_cnt0 =3D dpb[0].bottom_field_order_cnt;
-> @@ -166,6 +166,31 @@ static void set_field_order_cnt(struct rkvdec_pps *p=
-ps, const struct v4l2_h264_d
-> =C2=A0	pps->bot_field_order_cnt15 =3D dpb[15].bottom_field_order_cnt;
-> =C2=A0}
-> =C2=A0
-> +static noinline_for_stack void set_dec_params(struct rkvdec_pps *pps, co=
-nst struct v4l2_ctrl_h264_decode_params *dec_params)
-> +{
-> +	const struct v4l2_h264_dpb_entry *dpb =3D dec_params->dpb;
-> +
-> +	for (int i =3D 0; i < ARRAY_SIZE(dec_params->dpb); i++) {
-> +		if (dpb[i].flags & V4L2_H264_DPB_ENTRY_FLAG_LONG_TERM)
-> +			pps->is_longterm |=3D (1 << i);
-> +		pps->ref_field_flags |=3D
-> +		 (!!(dpb[i].flags & V4L2_H264_DPB_ENTRY_FLAG_FIELD)) << i;
-> +		pps->ref_colmv_use_flag |=3D
-> +		 (!!(dpb[i].flags & V4L2_H264_DPB_ENTRY_FLAG_ACTIVE)) << i;
-> +		pps->ref_topfield_used |=3D
-> +		 (!!(dpb[i].fields & V4L2_H264_TOP_FIELD_REF)) << i;
-> +		pps->ref_botfield_used |=3D
-> +			(!!(dpb[i].fields & V4L2_H264_BOTTOM_FIELD_REF)) << i;
-> +	}
-> +	pps->pic_field_flag =3D
-> +		!!(dec_params->flags & V4L2_H264_DECODE_PARAM_FLAG_FIELD_PIC);
-> +	pps->pic_associated_flag =3D
-> +		!!(dec_params->flags & V4L2_H264_DECODE_PARAM_FLAG_BOTTOM_FIELD);
-> +
-> +	pps->cur_top_field =3D dec_params->top_field_order_cnt;
-> +	pps->cur_bot_field =3D dec_params->bottom_field_order_cnt;
-> +}
-> +
-> =C2=A0static void assemble_hw_pps(struct rkvdec_ctx *ctx,
-> =C2=A0			=C2=A0=C2=A0=C2=A0 struct rkvdec_h264_run *run)
-> =C2=A0{
-> @@ -177,7 +202,6 @@ static void assemble_hw_pps(struct rkvdec_ctx *ctx,
-> =C2=A0	struct rkvdec_h264_priv_tbl *priv_tbl =3D h264_ctx->priv_tbl.cpu;
-> =C2=A0	struct rkvdec_sps_pps *hw_ps;
-> =C2=A0	u32 pic_width, pic_height;
-> -	u32 i;
-> =C2=A0
-> =C2=A0	/*
-> =C2=A0	 * HW read the SPS/PPS information from PPS packet index by PPS id=
-.
-> @@ -261,28 +285,8 @@ static void assemble_hw_pps(struct rkvdec_ctx *ctx,
-> =C2=A0		!!(pps->flags & V4L2_H264_PPS_FLAG_SCALING_MATRIX_PRESENT);
-> =C2=A0
-> =C2=A0	set_field_order_cnt(&hw_ps->pps, dpb);
-> +	set_dec_params(&hw_ps->pps, dec_params);
-> =C2=A0
-> -	for (i =3D 0; i < ARRAY_SIZE(dec_params->dpb); i++) {
-> -		if (dpb[i].flags & V4L2_H264_DPB_ENTRY_FLAG_LONG_TERM)
-> -			hw_ps->pps.is_longterm |=3D (1 << i);
-> -
-> -		hw_ps->pps.ref_field_flags |=3D
-> -			(!!(dpb[i].flags & V4L2_H264_DPB_ENTRY_FLAG_FIELD)) << i;
-> -		hw_ps->pps.ref_colmv_use_flag |=3D
-> -			(!!(dpb[i].flags & V4L2_H264_DPB_ENTRY_FLAG_ACTIVE)) << i;
-> -		hw_ps->pps.ref_topfield_used |=3D
-> -			(!!(dpb[i].fields & V4L2_H264_TOP_FIELD_REF)) << i;
-> -		hw_ps->pps.ref_botfield_used |=3D
-> -			(!!(dpb[i].fields & V4L2_H264_BOTTOM_FIELD_REF)) << i;
-> -	}
-> -
-> -	hw_ps->pps.pic_field_flag =3D
-> -		!!(dec_params->flags & V4L2_H264_DECODE_PARAM_FLAG_FIELD_PIC);
-> -	hw_ps->pps.pic_associated_flag =3D
-> -		!!(dec_params->flags & V4L2_H264_DECODE_PARAM_FLAG_BOTTOM_FIELD);
-> -
-> -	hw_ps->pps.cur_top_field =3D dec_params->top_field_order_cnt;
-> -	hw_ps->pps.cur_bot_field =3D dec_params->bottom_field_order_cnt;
-> =C2=A0}
-> =C2=A0
-> =C2=A0static void rkvdec_write_regs(struct rkvdec_ctx *ctx)
-
---=-7kpS3ryHRVhS3mBqQbB8
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-Description: This is a digitally signed message part
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
+Message-ID: <20260202-stm32-dcmipp-pixel-pipes-support-v1-4-8d8d51f5e014@foss.st.com>
+References: <20260202-stm32-dcmipp-pixel-pipes-support-v1-0-8d8d51f5e014@foss.st.com>
+In-Reply-To: <20260202-stm32-dcmipp-pixel-pipes-support-v1-0-8d8d51f5e014@foss.st.com>
+To: Hugues Fruchet <hugues.fruchet@foss.st.com>,
+        Mauro Carvalho Chehab
+	<mchehab@kernel.org>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        "Alexandre
+ Torgue" <alexandre.torgue@foss.st.com>,
+        Rob Herring <robh@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Conor Dooley <conor+dt@kernel.org>
+CC: <linux-media@vger.kernel.org>, <linux-stm32@st-md-mailman.stormreply.com>,
+        <linux-arm-kernel@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, Alain Volmat <alain.volmat@foss.st.com>
+X-Mailer: b4 0.14.3
+X-ClientProxiedBy: STKCAS1NODE1.st.com (10.75.128.134) To STKDAG1NODE2.st.com
+ (10.75.128.133)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: AM2PEPF0001C714:EE_|AM9PR10MB4071:EE_
+X-MS-Office365-Filtering-Correlation-Id: cf4e87ee-ab7c-4b75-ee51-08de62630a96
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|7416014|376014|82310400026|36860700013|1800799024;
+X-Microsoft-Antispam-Message-Info:
+	=?utf-8?B?SXByTURzUmhqOFU1ZzViaGkrTGVLeldJUkNQTHduN2ZKdVVQSktqb2ZkN0R5?=
+ =?utf-8?B?WHZRQWI3ZWI1WlYySDBxeEdJb1N2ZlJDU1ZFV0RlZytRTHRKaFJwcmxHcWNP?=
+ =?utf-8?B?enVCR1ZieTY0M0taUnU2SDduNFhZNXdlVGluWitqMHFWaWoyNXJCb2hQVmxq?=
+ =?utf-8?B?c1Vpa1dMcW94SUVXd3UwS3hBajZuWHZjV2pzUXpSOEdRaG1QMmUvSGxZUzh1?=
+ =?utf-8?B?ejY0MEpDSFpxcC94SGNKTElubGU2WjM5QWFwMlBaZG83QzdtT2tyaERxa2pJ?=
+ =?utf-8?B?MTVadndSdC9DazA3NExWZ0FDcDFZNGN2enJVVmViTnRPVk9hbHBnOHFseDFv?=
+ =?utf-8?B?d3BhZ29iL0xsVjlqVCtDWnBoTlZVa1g4MHE0TDQzV0Z4dmUwYkdQbkZMa01W?=
+ =?utf-8?B?MnNYN1JqNnB4V1RVemFWMW9KZi93TytndldmVVp3elZHWnczbW1FQ0pBRFFZ?=
+ =?utf-8?B?MEVzOFFId3RUS3ZpMkN0L2UvQXhVUFpzUWQzOVFjaUFBeEhUSVk2dVlkYUZy?=
+ =?utf-8?B?ZHhsbUxVOGpGWnNaZzczRCtUWFdnSm1nd0d2Q2dIZDNCQ2QycFRjOW8zMS8r?=
+ =?utf-8?B?cXNsTHJhNXBRbDNZLzNvWnBieG1CakI2QVBrN0NWWVYxMVVrRDFHRko1V3NE?=
+ =?utf-8?B?RHRzWUZxdWFkblZGdzVNalNHQmlIT3EyYkNNOWpEUEJXU3NVS1BPZkRmcVVs?=
+ =?utf-8?B?U2lkYmowUnpqMThMeitpRHUzTDh5c2tsUWc5L2VudmdBb0xZK1NHZnZuZEZF?=
+ =?utf-8?B?UFlSRzU0VHlpK0k5d3lmSEw5VE0zK0N6dy9QMlEwTnlvK205N1ZORWFiSjF6?=
+ =?utf-8?B?alJpTG5NVkxVQ1JLUWVXVHNvaTErZWQ2Q3ZESkJPbHZhOVBGL2gzQ3hkaEVr?=
+ =?utf-8?B?c3BqcjBIRExpZFNINFBhcUlUenJJd0Jxb1BmSzEvTHFFeWMwOFRvZnFjdVla?=
+ =?utf-8?B?bUFENTJwdVlLZFpoWFhGajUvdEtvaU9NaEg0SjZacy9lR29EYzMyUkRPa0NF?=
+ =?utf-8?B?MGxNcUNvcjN1bjhqekNDQ1NWNjdFL2w0ajVaVGtmaWxWdG1acitLelpKQUUx?=
+ =?utf-8?B?OXpCT0ZBYlJaVTRQeHBpdE5zSUpHajBtNHdEYW9NdjdpczhwNHovVzVEMDJI?=
+ =?utf-8?B?amZaOGUzTGFXakZLQ2pYSGw1OFdUVlpwRXMycUlIejZiSnNldHlWVGZkbmln?=
+ =?utf-8?B?ZVJla083M2lFek5HazJCYnJDOGV2MS9pQmUvV01UY1FLYzJGRVRNUFI0UnV6?=
+ =?utf-8?B?U2J5alRhbXVDMEJocXJuaWVWQlp5ekI5dkc3b0tHVWttMi93ZGxtWUtNNlVM?=
+ =?utf-8?B?UFplVkdMMlBPSHM0RjltS1ZZYjljQ2RQZGNvWDN1djZaWE9YWVRzbUlHd0ow?=
+ =?utf-8?B?OGU3UFNBRFIxczM1bjZiU2t5aDNaNTkwOHpsalN6UjVQamZHZk5RWlJrU0x0?=
+ =?utf-8?B?WVZRTXl5WCtQTCtxWENTNzRQdzNzOXZBTkFqUGtFQzEwcDJZMjJkY1hNZjNu?=
+ =?utf-8?B?RldmeTZyRS94S2I4azFueExTSW50dHQrUUo2bGx6R1V2SlR2TDRhb2dQdmtI?=
+ =?utf-8?B?Nm5wYjA3ZnZpVDE0aklYbzB5RjdVSzZtdVBXbnhPbnQ3UnExVWVZbjlwMXNM?=
+ =?utf-8?B?RkVUMDU1eGRXd2ZpelhXMXVobDV3RkVSUUFUbmEzREk1TDEwZ1lyNkc0WDli?=
+ =?utf-8?B?R0M3UDhCMDhlbmQ1aHp3WmtOUWkxdWlIUGxTdEdZdzJ5V0JGa0dIclY2NitP?=
+ =?utf-8?B?MFQxbFNZNGJqem5ZRFlzdGE0YyszbVNOd3dJWHZCNmRXUzliRHA2clp2Nzh2?=
+ =?utf-8?B?T3JWZ3ArbUtPSCt3Vy9rbDBoNnVTSUs2OFg3UlpwV2lGaW9td250aEZPR1VN?=
+ =?utf-8?B?VXM2Tmd2c01yNFFoZmVKbklNSEhNMDVYU0M2RFFCMEZEaFBEQ1R4aERmY21l?=
+ =?utf-8?B?L0VVazdUT3NjUTIwOC9wMkdPa3lPWEJSWlNjOFNvUmFROC9nV2xCRm95Z3Rz?=
+ =?utf-8?B?WFRZcVFpZFNramkxRHlmY05NakhOdE9TaUEvQWR2OEt6bjk1cGc2VTVnRUJL?=
+ =?utf-8?B?ZW1NbTJhOWJUd1dGRDFQOHFNYkp4SDBUc3lXK1VEVGZxNFNDTzliSE5taUlK?=
+ =?utf-8?B?cEttMEZSWlhqVGQ1eWRHcjhNcysyakU3N0J6Y3JXWHFqcDcxOW5telJYZ2Zh?=
+ =?utf-8?B?dnpKd0hlQjV0eUpVcVZnbHcwVjJLMk54b09lRFBubFFGdDN2V3haK05kSW8r?=
+ =?utf-8?B?OUZvaWplYkJBWkloU1dzVE1iaklnPT0=?=
+X-Forefront-Antispam-Report:
+	CIP:164.130.1.60;CTRY:IT;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:smtpO365.st.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(7416014)(376014)(82310400026)(36860700013)(1800799024);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	ckDowT84P7hnKqoFOoaVOXWck65V+avOjjEz1Mrm8mzYrFzY74WeZFFai1GdRU/EppE4dICOs0OvO5hki5iGGl1VRG0AK+PUAzEvkzoQczGqCBGUuZfTKNtE44n2FCwDtOwiR43zCBPn4SQ3GpP8cou1LpMeSIvPypjdDL+t2NLne8c6Pim9IMbNHLJ4jKGG4n3ktAVWvL8LwQe4IInucAWp0CUqPKmZXnkL2X0qNitPZHYQ4C0UQF6iphYZkHPOXrcg88tHI1ijvu7pM7LFSz224i217DneBf1FKMd9T3kB9zXn/+3XWG44Z3CnTRxM9x1hBXYstZ6n9zx2oCeAsBYGoxBpLMKaPvGqTz4QDb/kT/UsylzYzSxBGB3rNE5HdzHZSqznCxwJBEG7jXhaFvtoYjLF+Efe0iDG77og6jinJpamw5JVS51vA3KXp90V
+X-OriginatorOrg: foss.st.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 Feb 2026 13:57:45.1248
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: cf4e87ee-ab7c-4b75-ee51-08de62630a96
+X-MS-Exchange-CrossTenant-Id: 75e027c9-20d5-47d5-b82f-77d7cd041e8f
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=75e027c9-20d5-47d5-b82f-77d7cd041e8f;Ip=[164.130.1.60];Helo=[smtpO365.st.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	AM2PEPF0001C714.eurprd05.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM9PR10MB4071
+X-Authority-Analysis: v=2.4 cv=CKsnnBrD c=1 sm=1 tr=0 ts=6980ad5b cx=c_pps
+ a=sM9fEVjtJ5bIWaSlPGK/hA==:117 a=uCuRqK4WZKO1kjFMGfU4lQ==:17
+ a=6eWqkTHjU83fiwn7nKZWdM+Sl24=:19 a=Xa52oM6mtQYA:10 a=IkcTkHD0fZMA:10
+ a=HzLeVaNsDn8A:10 a=s63m1ICgrNkA:10 a=KrXZwBdWH7kA:10
+ a=VkNPw1HP01LnGYTKEx00:22 a=8b9GpE9nAAAA:8 a=6iphbjCEzYFCPznVI78A:9
+ a=QEXdDO2ut3YA:10 a=T3LWEMljR5ZiDmsYVIUa:22
+X-Proofpoint-GUID: GV5Xw5IjtDcKAu7ZKefyliLnPHBbRe3V
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMjAyMDEwOSBTYWx0ZWRfX3zeMhgfXqwbf
+ QGG2LBNfvPJnvMZmSvub2eR/ajX/zQuk+SuvVjhIp8xcTwZ2GkgcE9CSocQjNoBBIBOk4L5/B6t
+ sQ6R3oRYO4Nm5+YxKPpWhZgeKMPfnzNNGMyBGHrOPFB4oJzi9kh5sQ8X9X39uOS/5kWk0IZlGnA
+ V41ewo4h2RF44LzFKOY68Go0P33nmYGfk8wCyjX8sjZU+jySMtJkYs+31fxxQpaiOq+hEdC2Alf
+ Rxbg5njshtkHYS7KOQ7Cn8hEgPLE0rvZo9UqS44xhnJPlJTIaB2fIzE8oxFvO+o+fwP8tniqvk7
+ dwK3xeI1HSpr3DvKBedi98pZmJYwJFMn7ks+3cbVju1VK0FwUtnq49EVh22UXJDUO+gBtLZCpOJ
+ bgb3XSaT5lLyNWRVRBbu4xvQN+T9bNfJB976jcx7jXUMToR+bXilvzcvza7f271cYqyl3kPNkR5
+ XqI+bMbGz7JvA+RuWAw==
+X-Proofpoint-ORIG-GUID: GV5Xw5IjtDcKAu7ZKefyliLnPHBbRe3V
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.51,FMLib:17.12.100.49
+ definitions=2026-02-02_04,2026-01-30_04,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 malwarescore=0
+ suspectscore=0 spamscore=0 lowpriorityscore=0 phishscore=0 adultscore=0
+ clxscore=1015 priorityscore=1501 bulkscore=0 impostorscore=0
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.22.0-2601150000 definitions=main-2602020109
 
------BEGIN PGP SIGNATURE-----
+Move the structure dcmipp_pipeline_config into dcmipp-common.h
+so that all subdeves can have access to the information of
+capabilities.
 
-iHUEABYKAB0WIQTvDVKBFcTDwhoEbxLZQZRRKWBy9AUCaYCp0gAKCRDZQZRRKWBy
-9PKZAQDW2WJYqk6PvFuUHWBQTPBTqefBGs5IqpO8QwVWcBdQRwD/YxyoF4mjJmnc
-OGxL3bcdMp/Ib+/bvccOgrHz6b08vAE=
-=qu3H
------END PGP SIGNATURE-----
+Signed-off-by: Alain Volmat <alain.volmat@foss.st.com>
+---
+ .../platform/st/stm32/stm32-dcmipp/dcmipp-common.h | 37 ++++++++++++++++++++++
+ .../platform/st/stm32/stm32-dcmipp/dcmipp-core.c   | 37 ----------------------
+ 2 files changed, 37 insertions(+), 37 deletions(-)
 
---=-7kpS3ryHRVhS3mBqQbB8--
+diff --git a/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-common.h b/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-common.h
+index 3c3996472e03..9e7b2434200a 100644
+--- a/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-common.h
++++ b/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-common.h
+@@ -83,6 +83,43 @@ struct dcmipp_device {
+ 	struct v4l2_async_notifier	notifier;
+ };
+ 
++#define DCMIPP_ENT_LINK(src, srcpad, sink, sinkpad, link_flags) {	\
++	.src_ent = src,						\
++	.src_pad = srcpad,					\
++	.sink_ent = sink,					\
++	.sink_pad = sinkpad,					\
++	.flags = link_flags,					\
++}
++
++/* Structure which describes individual configuration for each entity */
++struct dcmipp_ent_config {
++	const char *name;
++	struct dcmipp_ent_device *(*init)
++		(const char *entity_name,
++		 struct dcmipp_device *dcmipp);
++	void (*release)(struct dcmipp_ent_device *ved);
++};
++
++/* Structure which describes links between entities */
++struct dcmipp_ent_link {
++	unsigned int src_ent;
++	u16 src_pad;
++	unsigned int sink_ent;
++	u16 sink_pad;
++	u32 flags;
++};
++
++/* Structure which describes the whole topology */
++struct dcmipp_pipeline_config {
++	const struct dcmipp_ent_config *ents;
++	size_t num_ents;
++	const struct dcmipp_ent_link *links;
++	size_t num_links;
++	u32 hw_revision;
++	bool has_csi2;
++	bool needs_mclk;
++};
++
+ /**
+  * struct dcmipp_ent_device - core struct that represents a node in the topology
+  *
+diff --git a/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-core.c b/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-core.c
+index b06a4931ae95..3a0a4df410d8 100644
+--- a/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-core.c
++++ b/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-core.c
+@@ -25,14 +25,6 @@
+ 
+ #define DCMIPP_MDEV_MODEL_NAME "DCMIPP MDEV"
+ 
+-#define DCMIPP_ENT_LINK(src, srcpad, sink, sinkpad, link_flags) {	\
+-	.src_ent = src,						\
+-	.src_pad = srcpad,					\
+-	.sink_ent = sink,					\
+-	.sink_pad = sinkpad,					\
+-	.flags = link_flags,					\
+-}
+-
+ #define DCMIPP_CMSR2	0x3f8
+ 
+ static inline struct dcmipp_device *
+@@ -41,35 +33,6 @@ notifier_to_dcmipp(struct v4l2_async_notifier *n)
+ 	return container_of(n, struct dcmipp_device, notifier);
+ }
+ 
+-/* Structure which describes individual configuration for each entity */
+-struct dcmipp_ent_config {
+-	const char *name;
+-	struct dcmipp_ent_device *(*init)
+-		(const char *entity_name,
+-		 struct dcmipp_device *dcmipp);
+-	void (*release)(struct dcmipp_ent_device *ved);
+-};
+-
+-/* Structure which describes links between entities */
+-struct dcmipp_ent_link {
+-	unsigned int src_ent;
+-	u16 src_pad;
+-	unsigned int sink_ent;
+-	u16 sink_pad;
+-	u32 flags;
+-};
+-
+-/* Structure which describes the whole topology */
+-struct dcmipp_pipeline_config {
+-	const struct dcmipp_ent_config *ents;
+-	size_t num_ents;
+-	const struct dcmipp_ent_link *links;
+-	size_t num_links;
+-	u32 hw_revision;
+-	bool has_csi2;
+-	bool needs_mclk;
+-};
+-
+ /* --------------------------------------------------------------------------
+  * Topology Configuration
+  */
+
+-- 
+2.34.1
+
