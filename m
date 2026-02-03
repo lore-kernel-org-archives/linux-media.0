@@ -1,216 +1,107 @@
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
+Received: from mail-m49198.qiye.163.com (mail-m49198.qiye.163.com [45.254.49.198])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0DF1131A564;
-	Tue,  3 Feb 2026 16:15:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.167.242.64
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EE2923D3300;
+	Tue,  3 Feb 2026 16:21:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.254.49.198
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770135352; cv=none; b=anwRWB7UmeLGMihIbCv7Dy5xI+WbjwluxPxcFLnmqBKLxA83nQmCbn+CgazU1m92RlbYZqJOmnjY8vpU21yqRbriTq95AOKxAcdrT+HnWdlxxocOGZDYe4YYDl0ZfGaX5h9DpYvgxEFMcGU5QuiBwpC08g5PB71hz71rRCOfTgk=
+	t=1770135715; cv=none; b=anz1WDac29Q9dK/gO7IblXtjXdyoqyNVGWWXe38FGb1YvLcz8scXBqpI+Uxqo9+i20OjtvFbIu1P9SE/XA3KF2M67ptZn/s5SPMkeuRUFYbhRZHrKLSuyDWlTmqThDkUBL8CdJS/Jh96P62KYcx7w8xz/aYa2cUuOGYeE2BV1xE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770135352; c=relaxed/simple;
-	bh=DkKX1srFlOf/cA3V3LOS4z6CTtQcX81Fl8DmOWPMReg=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=GH18C0Jir8H9s4mYtfZdSqkFGJX9p4RDIgJjhcRaGsZcADMihb3Fm78szw8oYddfC/kUB8QgSiQQDTrqal+7VolU6HljQ5GWS7Iv8iLXfZjr6BOGX1n4UUQq0xeyPDYLePe3DPnOkuhwaGKXy6QcOIJ5xdWz5rtvh+NxzeTt+uw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ideasonboard.com; spf=pass smtp.mailfrom=ideasonboard.com; dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b=u2Wk5TNQ; arc=none smtp.client-ip=213.167.242.64
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ideasonboard.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ideasonboard.com
+	s=arc-20240116; t=1770135715; c=relaxed/simple;
+	bh=rViw38hzsFzwfp5AkYCV+UOVkhK0MIHotHybYBycIpM=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=a2ZJf6ZdN3uhx4ZAutXg7D7OaUepqet5Cq8XNf9NIZL5RNPbUmiF032Fy9FFjxePwBPDo8BwYoEluRZ6QmZ6Uw6yx+Gig2e3fChGtMe77JuxcX7q8yF9jT9MjYNXe3DcRHKtgOvFC8jAb9kf+IZBahaQvpL+7bQhC/pLAYhpJWU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=seu.edu.cn; spf=pass smtp.mailfrom=seu.edu.cn; dkim=pass (1024-bit key) header.d=seu.edu.cn header.i=@seu.edu.cn header.b=ib3nm4tT; arc=none smtp.client-ip=45.254.49.198
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=seu.edu.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=seu.edu.cn
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="u2Wk5TNQ"
-Received: from ideasonboard.com (net-93-65-100-155.cust.vodafonedsl.it [93.65.100.155])
-	by perceval.ideasonboard.com (Postfix) with ESMTPSA id 52E611C6;
-	Tue,  3 Feb 2026 17:15:06 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-	s=mail; t=1770135306;
-	bh=DkKX1srFlOf/cA3V3LOS4z6CTtQcX81Fl8DmOWPMReg=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=u2Wk5TNQujT72+Gbb4httoVy8nu6JSH8XZZHPIWk/X7mfhjsAYkAvTowvj4hNud9f
-	 vtxLLhHk3p4Oz1E3HCKsFGTItxsUBDAtA4AIHnHZrO9JsMmoLznWaDNt6UGsDAqU2y
-	 NjmEQj0scbxihkgKsJRckEVvk0CU/WE9LHjEGWOs=
-Date: Tue, 3 Feb 2026 17:15:44 +0100
-From: Jacopo Mondi <jacopo.mondi@ideasonboard.com>
-To: Antoine Bouyer <antoine.bouyer@nxp.com>
-Cc: julien.vuillaumier@nxp.com, alexi.birlinger@nxp.com, 
-	daniel.baluta@nxp.com, peng.fan@nxp.com, frank.li@nxp.com, 
-	jacopo.mondi@ideasonboard.com, laurent.pinchart@ideasonboard.com, mchehab@kernel.org, 
-	robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org, shawnguo@kernel.org, 
-	s.hauer@pengutronix.de, kernel@pengutronix.de, festevam@gmail.com, 
-	linux-kernel@vger.kernel.org, linux-media@vger.kernel.org, devicetree@vger.kernel.org, 
-	linux-arm-kernel@lists.infradead.org
-Subject: Re: [RFC v1 01/11] media: uapi: v4l2-isp: Add v4l2 ISP extensible
- statistics definitions
-Message-ID: <aYIb8ZIZDfCJZEZ9@zed>
-References: <20260123080938.3367348-1-antoine.bouyer@nxp.com>
- <20260123080938.3367348-2-antoine.bouyer@nxp.com>
+	dkim=pass (1024-bit key) header.d=seu.edu.cn header.i=@seu.edu.cn header.b="ib3nm4tT"
+Received: from LAPTOP-N070L597.localdomain (unknown [222.191.246.242])
+	by smtp.qiye.163.com (Hmail) with ESMTP id 32fb5e6d1;
+	Wed, 4 Feb 2026 00:21:41 +0800 (GMT+08:00)
+From: Zilin Guan <zilin@seu.edu.cn>
+To: andriy.shevchenko@intel.com
+Cc: andy.shevchenko@gmail.com,
+	andy@kernel.org,
+	gregkh@linuxfoundation.org,
+	hansg@kernel.org,
+	hverkuil@kernel.org,
+	jianhao.xu@seu.edu.cn,
+	linux-kernel@vger.kernel.org,
+	linux-media@vger.kernel.org,
+	linux-staging@lists.linux.dev,
+	mchehab@kernel.org,
+	sakari.ailus@linux.intel.com,
+	zilin@seu.edu.cn
+Subject: Re: [PATCH v3] media: atomisp: Fix memory leak in atomisp_fixed_pattern_table()
+Date: Tue,  3 Feb 2026 16:21:40 +0000
+Message-Id: <20260203162140.3891753-1-zilin@seu.edu.cn>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <aYIPg22Z-GDOy1fG@smile.fi.intel.com>
+References: <aYIPg22Z-GDOy1fG@smile.fi.intel.com>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20260123080938.3367348-2-antoine.bouyer@nxp.com>
+Content-Transfer-Encoding: 8bit
+X-HM-Tid: 0a9c244f467103a1kunme69920582c4f55
+X-HM-MType: 10
+X-HM-Spam-Status: e1kfGhgUHx5ZQUpXWQgPGg8OCBgUHx5ZQUlOS1dZFg8aDwILHllBWSg2Ly
+	tZV1koWUFITzdXWS1ZQUlXWQ8JGhUIEh9ZQVlCTUNJVhpLGRlCT0tPH0lKSlYeHw5VEwETFhoSFy
+	QUDg9ZV1kYEgtZQVlJSUlVSkJKVUlPTVVJT0lZV1kWGg8SFR0UWUFZT0tIVUpLSUhOQ0NVSktLVU
+	tZBg++
+DKIM-Signature: a=rsa-sha256;
+	b=ib3nm4tTJZm5YYCwvQw0aC7p5ARSH5NKoM7ow8PvfQmpnYlV7YpGKjRU9H4TVpeJSo7wAZIrYhvSHQq3lDJ38t65o21/UZVhFw7gRyYXvRfsRZO+kWntIvhH0yUGb+yyc8ptmkWtWZsfxRZSt2h1+ZaO5bgxzYfWLTxHLazbVss=; s=default; c=relaxed/relaxed; d=seu.edu.cn; v=1;
+	bh=8KEZcYErh+xZg9qg77kJUS1/v839M5oAG507BjX2Sg0=;
+	h=date:mime-version:subject:message-id:from;
 
-Hi Antoine
-  thanks a lot for extendable stats
+On Tue, Feb 03, 2026 at 05:08:51PM +0200, Andy Shevchenko wrote:
+> On Tue, Feb 03, 2026 at 01:56:59PM +0000, Zilin Guan wrote:
+> > atomisp_v4l2_framebuffer_to_css_frame() allocates memory for
+> > temporary variable raw_black_frame, which must be released via
+> > ia_css_frame_free() before the function returns. However, if
+> > sh_css_set_black_frame() fails, the function returns immediately without
+> > performing this cleanup, leading to a memory leak.
+> > 
+> > Fix this by assigning the return value of sh_css_set_black_frame() to
+> > ret. This ensures that the error code is propagated while allowing the
+> > execution to fall through to the ia_css_frame_free() cleanup call.
+> > 
+> > The bug was originally detected on v6.13-rc1 using an experimental
+> > static analysis tool we are developing, and we have verified that the
+> > issue persists in the latest mainline kernel. The tool is based on the
+> > LLVM framework and is specifically designed to detect memory management
+> > issues. It is currently under active development and not yet publicly
+> > available.
+> > 
+> > We performed build testing on x86_64 with allyesconfig. Since triggering
+> > this error path in atomisp requires specific Intel Atom ISP hardware and
+> > firmware, we were unable to perform runtime testing and instead verified
+> > the fix according to the code logic.
+> 
+> > Fixes: 85b606e02ad7 ("media: atomisp: get rid of a bunch of other wrappers")
+> > Suggested-by: Andy Shevchenko <andy.shevchenko@gmail.com>
+> 
+> I haven't suggested this patch. I only provided a hint on a better
+> implementation, so there are no grounds to have this tag to be here.
+> 
+> Replace that with
+> 
+> Reviewed-by: Andy Shevchenko <andriy.shevchenko@intel.com>
+> as current version LGTM.
+> 
+> -- 
+> With Best Regards,
+> Andy Shevchenko
 
-On Fri, Jan 23, 2026 at 09:09:28AM +0100, Antoine Bouyer wrote:
-> Extend the v4l2-isp extensible format introduced for isp parameters buffer
-> to the statistics buffer as well.
->
-> Like for ISP configuration purpose, that will help supporting various ISP
-> hardware versions reporting different statistics data with less impact on
-> userspace.
->
-> The `v4l2_isp_stats_buffer` reuses the `v4l2_isp_params_buffer` container
-> definitions, with similar header, versions and flags. V0 and V1 versions
+Hi Andy,
 
-Why do you need two flags ?
+Thank you for the review and clarification.
 
-Params had to introduce two because we had two drivers already
-mainlined using the pre-v4l2-isp version of extensible params which
-had defined their version identifier as 1 and 0 and we didn't want to
-break existing userspace using those identifiers. So we had to accept
-both V0 and V1 as "first version of the v4l2-isp extensible parameters
-format".
+I apologize for the misunderstanding regarding the Suggested-by tag. 
+I will remove it and apply your Reviewed-by tag in the next version.
 
-For stats we don't have users, so I guess we can start with V1 == 0 ?
-
-> are provided to match with params versions. On the other side, ENABLE and
-> DISABLE flags are not really meaningfull for statistics purpose. So VALID
-> and INVALID flags are introduced. Purpose is to force ISP driver to
-> validate a statistics buffer, before it is consumed by userspace.
-
-Interesting. What do you mean with "validate a statistics buffer" ?
-And if a driver has to do validation, why would it send upstream a
-non-validated buffer ?
-
->
-> Signed-off-by: Antoine Bouyer <antoine.bouyer@nxp.com>
-> ---
->  include/uapi/linux/media/v4l2-isp.h | 85 +++++++++++++++++++++++++++++
->  1 file changed, 85 insertions(+)
->
-> diff --git a/include/uapi/linux/media/v4l2-isp.h b/include/uapi/linux/media/v4l2-isp.h
-> index 779168f9058e..ed1279b86694 100644
-> --- a/include/uapi/linux/media/v4l2-isp.h
-> +++ b/include/uapi/linux/media/v4l2-isp.h
-> @@ -99,4 +99,89 @@ struct v4l2_isp_params_buffer {
->  	__u8 data[] __counted_by(data_size);
->  };
->
-> +/**
-> + * enum v4l2_isp_stats_version - V4L2 ISP statistics versioning
-> + *
-> + * @V4L2_ISP_STATS_VERSION_V0: First version of the V4L2 ISP statistics format
-> + *			       (for compatibility)
-> + * @V4L2_ISP_STATS_VERSION_V1: First version of the V4L2 ISP statistics format
-> + *
-> + * V0 and V1 are identical, and comply with V4l2 ISP parameters versions. So
-> + * both V0 and V1 refers to the first version of the V4L2 ISP statistics
-> + * format.
-> + *
-> + * Future revisions of the V4L2 ISP statistics format should start from the
-> + * value of 2.
-> + */
-> +enum v4l2_isp_stats_version {
-> +	V4L2_ISP_STATS_VERSION_V0 = 0,
-> +	V4L2_ISP_STATS_VERSION_V1,
-
-As suggested I would make V1 == 0
-
-> +};
-> +
-> +#define V4L2_ISP_PARAMS_FL_BLOCK_VALID		(1U << 0)
-> +#define V4L2_ISP_PARAMS_FL_BLOCK_INVALID	(1U << 1)
-> +
-> +/*
-> + * Reserve the first 8 bits for V4L2_ISP_STATS_FL_* flag.
-> + *
-> + * Driver-specific flags should be defined as:
-> + * #define DRIVER_SPECIFIC_FLAG0     ((1U << V4L2_ISP_STATS_FL_DRIVER_FLAGS(0))
-> + * #define DRIVER_SPECIFIC_FLAG1     ((1U << V4L2_ISP_STATS_FL_DRIVER_FLAGS(1))
-> + */
-> +#define V4L2_ISP_STATS_FL_DRIVER_FLAGS(n)       ((n) + 8)
-
-Currently we have no users of V4L2_ISP_PARAMS_FL_DRIVER_FLAGS so we
-could even consider making it a V4L2_ISP_FL_DRIVER_FLAGS
-
-Or do you think it is worth creating a new symbol ?
-
-> +
-> +/**
-> + * struct v4l2_isp_stats_block_header - V4L2 extensible statistics block header
-> + * @type: The statistics block type (driver-specific)
-> + * @flags: A bitmask of block flags (driver-specific)
-> + * @size: Size (in bytes) of the statistics block, including this header
-> + *
-> + * This structure represents the common part of all the ISP statistics blocks.
-> + * Each statistics block shall embed an instance of this structure type as its
-> + * first member, followed by the block-specific statistics data.
-> + *
-> + * The @type field is an ISP driver-specific value that identifies the block
-> + * type. The @size field specifies the size of the parameters block.
-> + *
-> + * The @flags field is a bitmask of per-block flags V4L2_STATS_ISP_FL_* and
-> + * driver-specific flags specified by the driver header.
-> + */
-> +struct v4l2_isp_stats_block_header {
-> +	__u16 type;
-> +	__u16 flags;
-> +	__u32 size;
-> +} __attribute__((aligned(8)));
-> +
-
-This is currently identical to v4l2_isp_params_block_header.
-
-Can we create a single header for both stats and params and provide a
-
-#define v4l2_isp_params_block_header v4l2_isp_block_header
-
-for maintaining compatibility with existing users ?
-
-Or do you expect stats and params to eventually need different headers ?
-
-> +/**
-> + * struct v4l2_isp_stats_buffer - V4L2 extensible statistics data
-> + * @version: The statistics buffer version (driver-specific)
-> + * @data_size: The statistics data effective size, excluding this header
-> + * @data: The statistics data
-> + *
-> + * This structure contains the statistics information of the ISP hardware,
-> + * serialized for userspace into a data buffer. Each statistics block is
-> + * represented by a block-specific structure which contains a
-> + * :c:type:`v4l2_isp_stats_block_header` entry as first member. Driver
-> + * populates the @data buffer with statistics information of the ISP blocks it
-> + * intends to share to userspace. As a consequence, the data buffer effective
-> + * size changes according to the number of ISP blocks that driver intends to
-> + * provide and is set by the driver in the @data_size field.
-> + *
-> + * The statistics buffer is versioned by the @version field to allow modifying
-> + * and extending its definition. Driver shall populate the @version field to
-> + * inform the userpsace about the version it intends to use. The userspace will
-> + * parse and handle the @data buffer according to the data layout specific to
-> + * the indicated version.
-> + *
-> + * For each ISP block that driver wants to report, a block-specific structure
-> + * is appended to the @data buffer, one after the other without gaps in
-> + * between. Driver shall populate the @data_size field with the effective
-> + * size, in bytes, of the @data buffer.
-> + */
-> +struct v4l2_isp_stats_buffer {
-> +	__u32 version;
-> +	__u32 data_size;
-> +	__u8 data[] __counted_by(data_size);
-> +};
-> +
-
-Same question. Should we introduce a struct v4l2_isp_buffer ?
-
-Thanks!
-
->  #endif /* _UAPI_V4L2_ISP_H_ */
-> --
-> 2.52.0
->
->
+Best regards,
+Zilin Guan
