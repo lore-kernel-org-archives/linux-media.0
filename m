@@ -1,137 +1,114 @@
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
+Received: from mail-m49198.qiye.163.com (mail-m49198.qiye.163.com [45.254.49.198])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B354922B594;
-	Tue,  3 Feb 2026 16:58:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.167.242.64
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 55E4930DEB2;
+	Tue,  3 Feb 2026 17:07:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.254.49.198
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770137913; cv=none; b=FyvQKEctDGP1If/RzUPlO709hOq1EGOB/sNT6NeUBet9D1+kLXajrQh3UfmmP9hJSjmaKlOb4Lv4R+hYID5KGej4F9vg8Pdrg4hiwSxweq82eUYeoQQvTn3q57TIXZtexFl6ppxJQHigjovdzY+vowlWA6W5jVRgqN6Faquajgw=
+	t=1770138431; cv=none; b=akcO862vt4PTeN/IAq5DnzFsdbRWt9Yh8SngAo3wJzmZOsp/cKFDMPDOqW0B0a9E1ZcmuAZR8ofOAtIe0bbmpC2bwRdCdLWzYkjyMOZXWUm5qH2yYwgRErOdycakTxcjRWEBRsm4ceU9rR4U/2nzdy3UOK0kaZH2t29KbazwAJI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770137913; c=relaxed/simple;
-	bh=NSYPUPZWXDLuCtO39t5GyykpA1ZOhaUNZcwUuf6zVQs=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=X7vhvVhsNNMoD7UtkqVSgO4Cpn8MaU/FVyr7jEg77eOr+taS0J+ayG6OcwZbl/vsqN5MBMgf09Ku61CtbPzflkQBprOAv3u4A47BkqeX4UKakpvuoapW4vsvZxYlznuHmcmepGtExyHLKYrql/hIA1KX2HQAezwp8Y3FX+6MKQI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ideasonboard.com; spf=pass smtp.mailfrom=ideasonboard.com; dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b=n237boGu; arc=none smtp.client-ip=213.167.242.64
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ideasonboard.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ideasonboard.com
+	s=arc-20240116; t=1770138431; c=relaxed/simple;
+	bh=zBRGRrO3T2I/F2KJX0Sqq8SEcA9okuQA8wWpaaR4kAI=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=ex2pRdNxAFJb4uL+0hZ04r9w6M8muJKa6wm0MDyiojbLeMg9MrhZPWjUC9puIJkI4kD5xQadqLqfclt/1d9iUMMmHWNjxPj2dnl3othMmRoCHJ8P5NHnQX2ir9ZvaGKlT50dnFZ1huLmTepdM4a6WFkmPFH3RqwnVovbjABmFHc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=seu.edu.cn; spf=pass smtp.mailfrom=seu.edu.cn; dkim=pass (1024-bit key) header.d=seu.edu.cn header.i=@seu.edu.cn header.b=ByxnLfvN; arc=none smtp.client-ip=45.254.49.198
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=seu.edu.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=seu.edu.cn
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="n237boGu"
-Received: from ideasonboard.com (net-93-65-100-155.cust.vodafonedsl.it [93.65.100.155])
-	by perceval.ideasonboard.com (Postfix) with ESMTPSA id 65D381C6;
-	Tue,  3 Feb 2026 17:57:47 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-	s=mail; t=1770137867;
-	bh=NSYPUPZWXDLuCtO39t5GyykpA1ZOhaUNZcwUuf6zVQs=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=n237boGuSEMhCNzRCGdQjcQHn/aGtDAHdOd5l+/pvjqzaosOeZgIUItXQJ6Ro/Zom
-	 VP0XrFPNMMrLpIhZpU6E3REhd427vqfHPhwA7NwJ+LPE21LKmpR2KCV90zLWqk8Q6j
-	 Vdbibs49jVEfAKte33Yynrx79VudptUKR61QrMEQ=
-Date: Tue, 3 Feb 2026 17:58:25 +0100
-From: Jacopo Mondi <jacopo.mondi@ideasonboard.com>
-To: Antoine Bouyer <antoine.bouyer@nxp.com>
-Cc: julien.vuillaumier@nxp.com, alexi.birlinger@nxp.com, 
-	daniel.baluta@nxp.com, peng.fan@nxp.com, frank.li@nxp.com, 
-	jacopo.mondi@ideasonboard.com, laurent.pinchart@ideasonboard.com, mchehab@kernel.org, 
-	robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org, shawnguo@kernel.org, 
-	s.hauer@pengutronix.de, kernel@pengutronix.de, festevam@gmail.com, 
-	linux-kernel@vger.kernel.org, linux-media@vger.kernel.org, devicetree@vger.kernel.org, 
-	linux-arm-kernel@lists.infradead.org
-Subject: Re: [RFC v1 03/11] media: Documentation: uapi: Update V4L2 ISP for
- extensible stats
-Message-ID: <aYIguNosvsnnraZO@zed>
-References: <20260123080938.3367348-1-antoine.bouyer@nxp.com>
- <20260123080938.3367348-4-antoine.bouyer@nxp.com>
+	dkim=pass (1024-bit key) header.d=seu.edu.cn header.i=@seu.edu.cn header.b="ByxnLfvN"
+Received: from LAPTOP-N070L597.localdomain (unknown [58.241.16.34])
+	by smtp.qiye.163.com (Hmail) with ESMTP id 32fb5e820;
+	Wed, 4 Feb 2026 00:31:40 +0800 (GMT+08:00)
+From: Zilin Guan <zilin@seu.edu.cn>
+To: andriy.shevchenko@intel.com
+Cc: andy@kernel.org,
+	gregkh@linuxfoundation.org,
+	hansg@kernel.org,
+	hverkuil@kernel.org,
+	jianhao.xu@seu.edu.cn,
+	linux-kernel@vger.kernel.org,
+	linux-media@vger.kernel.org,
+	linux-staging@lists.linux.dev,
+	mchehab@kernel.org,
+	sakari.ailus@linux.intel.com,
+	zilin@seu.edu.cn
+Subject: [PATCH v4] media: atomisp: Fix memory leak in atomisp_fixed_pattern_table()
+Date: Tue,  3 Feb 2026 16:31:34 +0000
+Message-Id: <20260203163134.3901110-1-zilin@seu.edu.cn>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20260123080938.3367348-4-antoine.bouyer@nxp.com>
+Content-Transfer-Encoding: 8bit
+X-HM-Tid: 0a9c24586ce103a1kunmb7f083c22c5556
+X-HM-MType: 10
+X-HM-Spam-Status: e1kfGhgUHx5ZQUpXWQgPGg8OCBgUHx5ZQUlOS1dZFg8aDwILHllBWSg2Ly
+	tZV1koWUFITzdXWS1ZQUlXWQ8JGhUIEh9ZQVlDQkJJVh9NS0weTh1DSB1LHlYeHw5VEwETFhoSFy
+	QUDg9ZV1kYEgtZQVlOQ1VJT0pVSk1VSE9ZV1kWGg8SFR0UWUFZT0tIVUpLSUhOQ0NVSktLVUtZBg
+	++
+DKIM-Signature: a=rsa-sha256;
+	b=ByxnLfvNI3NbKZmfIhiIj6P195a2XrWov38b4OlFTNoqZCTvM1PMowaXjXK/05EV383gT1tgH6TR5wFKcLgm7nOZbEMKdru8iplU3t6Q38xTE5qMVS4pxL9heVDhtI+/qxAUKcNtID/kFEwhVIzYvSXmyWAoq3buI1PMhor7GiA=; s=default; c=relaxed/relaxed; d=seu.edu.cn; v=1;
+	bh=fPzX7PAfqJp1evvjuzQQrpv7z6dB4W4LXypQWW8ZW9k=;
+	h=date:mime-version:subject:message-id:from;
 
-Hi Antoine
+atomisp_v4l2_framebuffer_to_css_frame() allocates memory for
+temporary variable raw_black_frame, which must be released via
+ia_css_frame_free() before the function returns. However, if
+sh_css_set_black_frame() fails, the function returns immediately without
+performing this cleanup, leading to a memory leak.
 
-On Fri, Jan 23, 2026 at 09:09:30AM +0100, Antoine Bouyer wrote:
-> Add driver documentation for V4L2 ISP generic statistics format, mainly
-> copied from the generic parameters one.
->
-> Signed-off-by: Antoine Bouyer <antoine.bouyer@nxp.com>
-> ---
->  .../userspace-api/media/v4l/v4l2-isp.rst      | 42 +++++++++++++++++--
->  1 file changed, 39 insertions(+), 3 deletions(-)
->
-> diff --git a/Documentation/userspace-api/media/v4l/v4l2-isp.rst b/Documentation/userspace-api/media/v4l/v4l2-isp.rst
-> index facf6dba1ca7..9024c6998b2c 100644
-> --- a/Documentation/userspace-api/media/v4l/v4l2-isp.rst
-> +++ b/Documentation/userspace-api/media/v4l/v4l2-isp.rst
-> @@ -32,8 +32,8 @@ types.
->  Userspace applications are responsible for correctly populating each block's
->  header fields (type, flags and size) and the block-specific parameters.
->
-> -ISP block enabling, disabling and configuration
-> ------------------------------------------------
-> +ISP parameters block enabling, disabling and configuration
-> +----------------------------------------------------------
->
->  When userspace wants to configure and enable an ISP block it shall fully
->  populate the block configuration and set the V4L2_ISP_PARAMS_FL_BLOCK_ENABLE
-> @@ -59,7 +59,43 @@ definition without invalidating the existing ones.
->  ISP statistics
->  ==============
->
-> -Support for generic statistics format is not yet implemented in Video4Linux2.
-> +The generic ISP statistics format is similar to the generic ISP configuration
-> +parameters format. It is realized by defineing a C structure that contains a
-> +header, followed by binary buffer where the ISP driver copies a variable number
-> +of ISP statistics block.
-> +
-> +The :c:type:`v4l2_isp_stats_buffer` structure defines the buffer header which
-> +is followed by a binary buffer of ISP statistics data. ISP driver shall
-> +correctly populate the buffer header with the generic statistics format version
-> +and with the size (in bytes) of the binary data buffer where it will store the
-> +ISP statistics data.
-> +
-> +Each *ISP statistics block* is preceded by a header implemented by the
-> +:c:type:`v4l2_isp_stats_block_header` structure, followed by the statistics
-> +data for that specific block, defined by the ISP driver specific data types.
-> +
-> +Driver is responsible for correctly populating each block's header fields
-> +(type, flags and size) and the block-specific statistics data.
-> +
-> +ISP statistics block configuration
-> +----------------------------------
-> +
-> +When ISP driver wants to share statistics from an ISP block, it shall fully
-> +populate the block statistics and set the V4L2_ISP_STATS_FL_BLOCK_VALID
-> +bit in the block header's `flags` field.
-> +
-> +When ISP driver wants userspace to ignore statistics from an ISP block, it can
+Fix this by assigning the return value of sh_css_set_black_frame() to
+ret. This ensures that the error code is propagated while allowing the
+execution to fall through to the ia_css_frame_free() cleanup call.
 
-What would be the use case here ?
+The bug was originally detected on v6.13-rc1 using an experimental
+static analysis tool we are developing, and we have verified that the
+issue persists in the latest mainline kernel. The tool is based on the
+LLVM framework and is specifically designed to detect memory management
+issues. It is currently under active development and not yet publicly
+available.
 
-I checked a few datasheet and drivers and I haven't found any "failed
-to read stats" bits, and even if that would be a thing, isn't it easier to
-simply overwrite the header of the failed stat block instead of
-marking it invalid ?
+We performed build testing on x86_64 with allyesconfig. Since triggering
+this error path in atomisp requires specific Intel Atom ISP hardware and
+firmware, we were unable to perform runtime testing and instead verified
+the fix according to the code logic.
 
+Fixes: 85b606e02ad7 ("media: atomisp: get rid of a bunch of other wrappers")
+Signed-off-by: Zilin Guan <zilin@seu.edu.cn>
+Reviewed-by: Andy Shevchenko <andriy.shevchenko@intel.com>
+---
+Changes in v4:
+- Replace Suggested-by with Reviewed-by.
 
-> +simply omit the full block, or set the V4L2_ISP_STATS_FL_BLOCK_INVALID bit in
-> +the block headers's `flags` field. Then driver can omit the additional data
-> +after header, and set block header's `size` to the header structure's size only
-> +in such case.
-> +
-> +Setting both the V4L2_ISP_STATS_FL_BLOCK_VALID and
-> +V4L2_ISP_STATS_FL_BLOCK_INVALID  bits in the flags field is not allowed and
-> +userspace shall not handle it.
-> +
-> +Extension to the statistics format can be implemented by adding new blocks
-> +definition without invalidating the existing ones.
->
->  V4L2 ISP uAPI data types
->  ========================
-> --
-> 2.52.0
->
->
+Changes in v3:
+- Assign the result of sh_css_set_black_frame() to ret instead of
+  hardcoding -ENOMEM.
+
+Changes in v2:
+- Add detailed explanation about the tool and verification method.
+
+ drivers/staging/media/atomisp/pci/atomisp_cmd.c | 6 ++----
+ 1 file changed, 2 insertions(+), 4 deletions(-)
+
+diff --git a/drivers/staging/media/atomisp/pci/atomisp_cmd.c b/drivers/staging/media/atomisp/pci/atomisp_cmd.c
+index 3a4eb4f6d3be..ae9c4dc8a44b 100644
+--- a/drivers/staging/media/atomisp/pci/atomisp_cmd.c
++++ b/drivers/staging/media/atomisp/pci/atomisp_cmd.c
+@@ -3367,10 +3367,8 @@ int atomisp_fixed_pattern_table(struct atomisp_sub_device *asd,
+ 	if (ret)
+ 		return ret;
+ 
+-	if (sh_css_set_black_frame(asd->stream_env[ATOMISP_INPUT_STREAM_GENERAL].stream,
+-				   raw_black_frame) != 0)
+-		return -ENOMEM;
+-
++	ret = sh_css_set_black_frame(asd->stream_env[ATOMISP_INPUT_STREAM_GENERAL].stream,
++				     raw_black_frame);
+ 	ia_css_frame_free(raw_black_frame);
+ 	return ret;
+ }
+-- 
+2.34.1
+
