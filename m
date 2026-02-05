@@ -1,33 +1,33 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 69D183314A4;
-	Thu,  5 Feb 2026 09:43:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BCCD635C1AF;
+	Thu,  5 Feb 2026 09:44:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770284628; cv=none; b=nHngCl4ZOAOLoTnHqQ9gUxWBRVtLaeKNUGCiDtnGeEXwpOSPCoGtRuWGpsYUrPKRnwqix1PQn2YkGJpC8SezxuJiEOjBvhrMDnVaDoz6EmmdzViNVa4hWTMDVhowHXzwSXcBefdSthtGA04tNsBl8NgGfaU0JtiBjbFZagVaGMs=
+	t=1770284666; cv=none; b=CiXQART3uoEREr14zvCyKu5ygeLUOVFUFoqancZtq0gR9nMtMvbOaBmB81wxSsCIwIx5I1YU+l7N/tfB8+10CeTyNMLZ2N0r2JH32e8An9gXcONGhddM37jm+0NnOmnnP/gcIDlv0631AeNVrCUC7DKO9jizDMyIzsXdtnKG09E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770284628; c=relaxed/simple;
-	bh=uQGtFCVodM+qj957WiUKgjPfqbvKBBmck8J7LniPHbI=;
+	s=arc-20240116; t=1770284666; c=relaxed/simple;
+	bh=OxvbvoybIarJZt2H9G/2UIGNHfT/4PA1SsoVK1F3DEI=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=QY99RlVu7JYLylIosWdc9oea3kv7gBIjmbBGGbS0v5nLfcvjRw1qfaqvfXBpsnRzG5Ceb7OxJrYA7+upo9EGXRehH/xbsgZtTrcChk9FbHt5RHTTiMa9CC8puhP5aBUPWyrpxDm9hdH97Nyqawo8px9IcF1/idpvz1DDyvyRAuQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YC67vd/S; arc=none smtp.client-ip=10.30.226.201
+	 In-Reply-To:Content-Type; b=PZ+N7g8pyP7c/a4kAjJ5Bk9XNB+n/V8BSt3d6a2PbmFTt9lwtWP5ZtyUDzBP5pvg24zDJdAVs3v9ucZzElytsUYysp2l3dqV7dbPy2iRTocJI+LVz71tJwQgXbGj5B0RLWz5aqOMl9AzEpzBm0AxWwC+6e7ujPIkYXRPMSQDeMs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=GxIhqP4S; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YC67vd/S"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 05EB2C4CEF7;
-	Thu,  5 Feb 2026 09:43:43 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GxIhqP4S"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 08137C4CEF7;
+	Thu,  5 Feb 2026 09:44:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1770284628;
-	bh=uQGtFCVodM+qj957WiUKgjPfqbvKBBmck8J7LniPHbI=;
+	s=k20201202; t=1770284666;
+	bh=OxvbvoybIarJZt2H9G/2UIGNHfT/4PA1SsoVK1F3DEI=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=YC67vd/SovZyaE4C0Du6Px57mUl4iDxjrY/9MawIZcpMikkDzXTDN7A2ZRnCucaFs
-	 rjukgLWfU6I8OcGER96wWuZO9Pv0ZdDwv5tqPZyQi0uZgJ88Cu9/CZa3LXZkIVbTyF
-	 02HFU7d4Jw+XKhslXmaAe3mJngxyOvSwGCLn9MRpQ/uVTsFA540fqPw7cgKCZwq5tc
-	 ONBn/sgr1bMQeJCDQcuYbDWhLeJi31gMOWvbO7xoX/BpRkrUL2Vfxz54lAdWv2oJDX
-	 f3dQfF9cs3DYafTtz5rlnbQ+r/Hkh5/12JhD+KPTj0UrOYgEc+ivgu5t1azaB2JeZh
-	 ZTRVIXPISD9iQ==
-Message-ID: <f6d4c62f-cf7f-44ef-86f8-ca496e7c8a7b@kernel.org>
-Date: Thu, 5 Feb 2026 10:43:42 +0100
+	b=GxIhqP4SHw4Ca8hSPIv2JSglYt/HKvtty6Vugo3bOPELEBG5yz6OyUdDv1zsy3jX8
+	 B6lcS+USlgT+d/fXctVUBZYyWBQvdvYHgSKiDCMXz6tJsx/+gdXMxjrtAkbcuLvCOF
+	 ihLtVMg2R7kb+EBEzEffPJSt6vGxsqWHMGyTPlGsN71M7+vTNDfiVimvOVM64luA+G
+	 7tfUEPWYbRAFaQnUR28aAdbtq6SVGEZ2ULFF7FelAw4S3kCL7jdmLTzdo7bWSKgWBA
+	 Nx4yjavkna+Lb1a6YUwlL8EVw9LYEvFWBRjm6tUZ+kEQ9BRf/Be2Q0ei0EGplJbRUc
+	 ok+FDH/lEMuXQ==
+Message-ID: <5bfeb05a-dc10-4d66-a395-38537cf2953e@kernel.org>
+Date: Thu, 5 Feb 2026 10:44:19 +0100
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
@@ -35,7 +35,8 @@ List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [RFC v1 05/11] dt-bindings: media: Add nxp neoisp support
+Subject: Re: [RFC v1 11/11] arm64: dts: freescale: imx95: Add NXP neoisp
+ device tree node
 To: Antoine Bouyer <antoine.bouyer@nxp.com>, julien.vuillaumier@nxp.com,
  alexi.birlinger@nxp.com, daniel.baluta@nxp.com, peng.fan@nxp.com,
  frank.li@nxp.com, jacopo.mondi@ideasonboard.com,
@@ -45,7 +46,7 @@ To: Antoine Bouyer <antoine.bouyer@nxp.com>, julien.vuillaumier@nxp.com,
 Cc: linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
  devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org
 References: <20260123080938.3367348-1-antoine.bouyer@nxp.com>
- <20260123080938.3367348-6-antoine.bouyer@nxp.com>
+ <20260123080938.3367348-12-antoine.bouyer@nxp.com>
 From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
@@ -91,81 +92,48 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  jWt87ecuHlpL3uuQ0ZZNWqHgZoQLXoqC2ZV5KrtKWb/jyiFX/sxSrodALf0zf+tfHv0FZWT2
  zHjUqd0t4njD/UOsuIMOQn4Ig0SdivYPfZukb5cdasKJukG1NOpbW7yRNivaCnfZz6dTawXw
  XRIV/KDsHQiyVxKvN73bThKhONkcX2LWuD928tAR6XMM2G5ovxLe09vuOzzfTWQDsm++9UKF a/A=
-In-Reply-To: <20260123080938.3367348-6-antoine.bouyer@nxp.com>
+In-Reply-To: <20260123080938.3367348-12-antoine.bouyer@nxp.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
 On 23/01/2026 09:09, Antoine Bouyer wrote:
-> Add dt-bindings for NXP neoisp module.
-
-What is a neoisp module?
-
-
+> Add neoisp device tree node to imx95.dtsi and enable it by default in
+> 19x19 evk board.
 > 
 > Signed-off-by: Antoine Bouyer <antoine.bouyer@nxp.com>
 > ---
->  .../devicetree/bindings/media/nxp,neoisp.yaml | 65 +++++++++++++++++++
->  1 file changed, 65 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/media/nxp,neoisp.yaml
+>  arch/arm64/boot/dts/freescale/imx95-19x19-evk.dts |  4 ++++
+>  arch/arm64/boot/dts/freescale/imx95.dtsi          | 11 +++++++++++
+>  2 files changed, 15 insertions(+)
 > 
-> diff --git a/Documentation/devicetree/bindings/media/nxp,neoisp.yaml b/Documentation/devicetree/bindings/media/nxp,neoisp.yaml
-> new file mode 100644
-> index 000000000000..4dc9fa5a03b7
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/media/nxp,neoisp.yaml
-> @@ -0,0 +1,65 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/media/nxp,neoisp.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> diff --git a/arch/arm64/boot/dts/freescale/imx95-19x19-evk.dts b/arch/arm64/boot/dts/freescale/imx95-19x19-evk.dts
+> index aaa0da55a22b..9fbf22a57dba 100644
+> --- a/arch/arm64/boot/dts/freescale/imx95-19x19-evk.dts
+> +++ b/arch/arm64/boot/dts/freescale/imx95-19x19-evk.dts
+> @@ -511,6 +511,10 @@ &mu7 {
+>  	status = "okay";
+>  };
+>  
+> +&neoisp0 {
+> +	status = "okay";
+> +};
 > +
-> +title: NXP NEOISP Image Signal Processing Pipeline
-> +
-> +maintainers:
-> +  - Antoine Bouyer <antoine.bouyer@nxp.com>
-> +
-> +description:
-> +  The NXP NEOISP performs a set of image processing tasks on the RAW camera
-> +  stream and provides RGB or YUV enhanced image.
-> +
-> +properties:
-> +  compatible:
-> +    enum:
-> +      - nxp,neoisp
+>  &netcmix_blk_ctrl {
+>  	status = "okay";
+>  };
+> diff --git a/arch/arm64/boot/dts/freescale/imx95.dtsi b/arch/arm64/boot/dts/freescale/imx95.dtsi
+> index e45014d50abe..03c7f3de6e9c 100644
+> --- a/arch/arm64/boot/dts/freescale/imx95.dtsi
+> +++ b/arch/arm64/boot/dts/freescale/imx95.dtsi
+> @@ -1765,6 +1765,17 @@ smmu: iommu@490d0000 {
+>  			};
+>  		};
+>  
+> +		neoisp0: isp@4ae00000 {
+> +			compatible = "nxp,imx95-b0-neoisp";
 
-Please read writing bindings document.
+And where are all other compatibles? Why did you define four compatibles
+in the binding?
 
-> +      - nxp,imx95-a0-neoisp
-> +      - nxp,imx95-a1-neoisp
-> +      - nxp,imx95-b0-neoisp
-
-Nothing explains me why one SoC has three neoisp. You have entire commit
-msg to explain weird things.
-
-> +
-> +  reg:
-> +    items:
-> +      - description: The configuration registers
-> +      - description: ISP local memories
-> +
-> +  interrupts:
-> +    maxItems: 1
-> +
-> +  clocks:
-> +    minItems: 1
-
-maxItems. There is no such syntax like you wrote. Look at other code in
-case of doubts.
-
-
-> +
-> +  clock-names:
-> +    items:
-> +      - const: camcm0
-> +
-> +  power-domains:
-> +    maxItems: 1
-> +
 Best regards,
 Krzysztof
