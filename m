@@ -1,54 +1,54 @@
 Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4C09B3D668B
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7A0F23D6697
 	for <linux-media@vger.kernel.org>; Fri,  6 Feb 2026 13:13:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770383625; cv=none; b=SEKXn8fOFJsbYJJTg/X57jUsJtIcY2wghRywYTjkKbjbTx+UX+hSgw0uVpeRSTBqV/smZE3tkDMbf0Kb+N/s/PGTgPbH/Fw43OcvMlTT1cWu5mQGoa0h0JqL9RPfJ6i3ujpn6G/g+UIorNuOjMhWsVV4ZlfgPngGoYXfvmo7pHA=
+	t=1770383625; cv=none; b=RUO2V82FyW7kTqywC/xyZ7HR633M3hK+5ue6RYFQyvtxoXOMyBjEzb6TsDPAC2uLoodei9nzj7ZD9rlPzkt6DGGf873S0zZYKCKgiqw61WeWU9RWPeNWi9z7aBJjvryyOdwRG0bKPOJxyfc6mG1P57Q1s+Lcniz/qgDEgeBTY2k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1770383625; c=relaxed/simple;
-	bh=D2Y0Wyl7Zmidn5S05hOMSpy6zWgZ26n1xgPifjSYBvw=;
+	bh=2upWEUvJa/LO4gyFi2gWj0Y2xExSO/u/ZehXHayO3TI=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=KVNmC0LLOtzt5gMXZZozObQ+0gYDZOKqjZ13i+28QGUNVQgQana4VIJrNDpHQi2aOjIJI9k7kj53+H6nCodjO1WnE0cC35TrSlCndEqHU/yyO8Q/5VFOcj8/Gt5cvsgMod4DOS0Xe9OEe+Lp9zlKmrdwMgEoA/m16XSMVBaJIyg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=dKlFnfpe; arc=none smtp.client-ip=198.175.65.14
+	 MIME-Version; b=SQC5uBIaCLyuI1GM1wnto7QkV0CMlws6e2gzYjHktJA/AncerYsVBinADaGysxb8KyXbarOozDbKThY8EqebH07Pm2z01P8DfknC1vDMHJ0AtDHeFSwdecvJo7hxPvAOCqrFZTlOWgLqxsERqG9i8EOd5+xWYnrXajt1wJz2T1I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=BqZMEb1S; arc=none smtp.client-ip=198.175.65.14
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="dKlFnfpe"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="BqZMEb1S"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
   t=1770383625; x=1801919625;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=D2Y0Wyl7Zmidn5S05hOMSpy6zWgZ26n1xgPifjSYBvw=;
-  b=dKlFnfperA3PDkXhZGKxhf4XhQ9dbZ3icpVyZA3kkE+VKMa2rzgK+HSI
-   Nh7PGn7/BWiF44Qlxf9UVAztOdcaE+AhStmO7SnAq717jwnez72eZaph6
-   S7pcsZA+vBqrNqrhR0i3dLEPUxPHAHuaTzzzJ2KKj1jlqEal7jJoiwhVn
-   bgc9OdK435a0iakVi/7n6ucf5cee/c9TjBkoZhyWCm7rfcSBkdAxokE6R
-   UUts1p7KWgNbx9CEpfXWJytIzns5FAHMuNVW58uyeSUQDxabZsNZlTNTB
-   6Sra7z2JJH/ZygPoSpo/k/YE/qxJKWTtceCSifGJxoEhyWiHdao3JOjt/
-   Q==;
-X-CSE-ConnectionGUID: vZXzUhksTqmLNQT2eNye5Q==
-X-CSE-MsgGUID: eOdtbb9aS5+z999Bl1EXpA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11693"; a="75441235"
+  bh=2upWEUvJa/LO4gyFi2gWj0Y2xExSO/u/ZehXHayO3TI=;
+  b=BqZMEb1STIpmzNIgnKMMTgCFXMPWGnF5i8vUORpR+fETOWQrYtOCiyRN
+   Y9Xxa8pQeycj/FbqLIx/Fkn2vuNPLzH4G9yRZ80RfcC/1yLDlXsBYiMdl
+   nxSqb9alarK6pP6xSdEV4dSIvWcly2lzoflPrG4fP20vmEzF7U8p66DJp
+   NKxgRBGolW7uQhAJMHh3s24jXAnZjragG3k99TWmH0yh/23sHlV7MzsDl
+   EngWxDfxw21zDdF1byY7X4vhRNvXMiwsoN6DkzKrYOHbZtKQEA9EDt1Mu
+   YbdIVPWETZB8sTglxhbDU6oVC9c9y3Jz+2V64JAsxk0y2ESAuC+OZweoC
+   w==;
+X-CSE-ConnectionGUID: DaOxFMeyTcOZ/9+N9UnmAg==
+X-CSE-MsgGUID: RY3roaZrRuqYLjtt2wtPtw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11693"; a="75441223"
 X-IronPort-AV: E=Sophos;i="6.21,276,1763452800"; 
-   d="scan'208";a="75441235"
+   d="scan'208";a="75441223"
 Received: from orviesa004.jf.intel.com ([10.64.159.144])
   by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Feb 2026 05:13:44 -0800
-X-CSE-ConnectionGUID: WXxM/iBlSTugl0zRmvowpg==
-X-CSE-MsgGUID: hGu3PSWmQjKHznndJfCs3w==
+X-CSE-ConnectionGUID: dpLEmA2bTIGCsEr/NqcB8w==
+X-CSE-MsgGUID: AUDS9EAJRhORVmAckHvuTg==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.21,276,1763452800"; 
-   d="scan'208";a="215391300"
+   d="scan'208";a="215391297"
 Received: from vpanait-mobl.ger.corp.intel.com (HELO kekkonen.fi.intel.com) ([10.245.244.219])
   by orviesa004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Feb 2026 05:13:38 -0800
 Received: from punajuuri.localdomain (unknown [192.168.240.130])
-	by kekkonen.fi.intel.com (Postfix) with ESMTP id 7647F121E8F;
+	by kekkonen.fi.intel.com (Postfix) with ESMTP id 8575E121EA2;
 	Fri, 06 Feb 2026 15:13:40 +0200 (EET)
 Received: from sailus by punajuuri.localdomain with local (Exim 4.98.2)
 	(envelope-from <sakari.ailus@linux.intel.com>)
-	id 1voLeL-00000005TsS-1NlE;
+	id 1voLeL-00000005Tse-1cR7;
 	Fri, 06 Feb 2026 15:13:29 +0200
 Organization: Intel Finland Oy - BIC 0357606-4 - c/o Alberga Business Park, 6 krs, Bertel Jungin Aukio 5, 02600 Espoo
 From: Sakari Ailus <sakari.ailus@linux.intel.com>
@@ -81,9 +81,9 @@ Cc: hans@jjverkuil.nl,
 	David Plowman <david.plowman@raspberrypi.com>,
 	"Yu, Ong Hock" <ong.hock.yu@intel.com>,
 	"Ng, Khai Wen" <khai.wen.ng@intel.com>
-Subject: [PATCH 07/13] media: mc: Add MEDIA_LNK_FL_VALIDATE_LATE
-Date: Fri,  6 Feb 2026 15:13:24 +0200
-Message-ID: <20260206131329.1306429-8-sakari.ailus@linux.intel.com>
+Subject: [PATCH 10/13] media: v4l2-subdev: Move subdev client capabilities into a new struct
+Date: Fri,  6 Feb 2026 15:13:27 +0200
+Message-ID: <20260206131329.1306429-11-sakari.ailus@linux.intel.com>
 X-Mailer: git-send-email 2.47.3
 In-Reply-To: <20260206131329.1306429-1-sakari.ailus@linux.intel.com>
 References: <20260206131329.1306429-1-sakari.ailus@linux.intel.com>
@@ -95,178 +95,97 @@ List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Add MEDIA_LNK_FL_VALIDATE_LATE flag to support late validation of links.
-This is serving the use case where video devices are configured and
-started streaming indepenently of each other but this sequence may be run
-in series, in such a way that a video device in a pipeline starts
-streaming before another one is configured.
-
-Before this flag, drivers have resorted to implementing the link
-validation separately for the video nodes as part of streaming start
-sequence.
-
-media_pipeline_start() shall be called on each leaf entity connected to
-the graph with a link where MEDIA_LNK_FL_VALIDATE_LATE is set before
-uphardware operation.
+Add struct v4l2_subdev_client_info to hold sub-device client capability
+bits that used to be stored in the client_caps field of struct
+v4l2_subdev_fh. The intent is to enable passing this struct to sub-device
+pad operation callbacks for capability information. The main reason why
+this is a new struct instead of a u64 field is that modifying the callback
+arguments requires touching almost every sub-device driver and that is
+desirable to avoid in the future, should more than the client capability bits
+need to be known to the callbacks.
 
 Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
 ---
- .../media/mediactl/media-ioc-setup-link.rst   |  4 ++
- .../media/mediactl/media-types.rst            |  5 ++
- drivers/media/mc/mc-entity.c                  | 58 ++++++++++++++++++-
- include/uapi/linux/media.h                    |  1 +
- 4 files changed, 66 insertions(+), 2 deletions(-)
+ drivers/media/v4l2-core/v4l2-subdev.c |  8 ++++----
+ include/media/v4l2-subdev.h           | 12 ++++++++++--
+ 2 files changed, 14 insertions(+), 6 deletions(-)
 
-diff --git a/Documentation/userspace-api/media/mediactl/media-ioc-setup-link.rst b/Documentation/userspace-api/media/mediactl/media-ioc-setup-link.rst
-index 23208300cb61..7a9a43c71cde 100644
---- a/Documentation/userspace-api/media/mediactl/media-ioc-setup-link.rst
-+++ b/Documentation/userspace-api/media/mediactl/media-ioc-setup-link.rst
-@@ -49,6 +49,10 @@ Only links marked with the ``DYNAMIC`` link flag can be enabled/disabled
- while streaming media data. Attempting to enable or disable a streaming
- non-dynamic link will return an ``EBUSY`` error code.
+diff --git a/drivers/media/v4l2-core/v4l2-subdev.c b/drivers/media/v4l2-core/v4l2-subdev.c
+index 8a433d074587..79fb4643182a 100644
+--- a/drivers/media/v4l2-core/v4l2-subdev.c
++++ b/drivers/media/v4l2-core/v4l2-subdev.c
+@@ -611,7 +611,7 @@ subdev_ioctl_get_state(struct v4l2_subdev *sd, struct v4l2_subdev_fh *subdev_fh,
+ 	case VIDIOC_SUBDEV_S_FRAME_INTERVAL: {
+ 		struct v4l2_subdev_frame_interval *fi = arg;
  
-+The ``VALIDATE_LATE`` flag is used to signal that the validation of the link may
-+be delayed until actual hardware operation even if the rest of the pipeline
-+would be validated at an earlier point of time.
-+
- If the specified link can't be found the driver returns with an ``EINVAL``
- error code.
+-		if (!(subdev_fh->client_caps &
++		if (!(subdev_fh->ci.client_caps &
+ 		      V4L2_SUBDEV_CLIENT_CAP_INTERVAL_USES_WHICH))
+ 			fi->which = V4L2_SUBDEV_FORMAT_ACTIVE;
  
-diff --git a/Documentation/userspace-api/media/mediactl/media-types.rst b/Documentation/userspace-api/media/mediactl/media-types.rst
-index 6332e8395263..d6a690655a01 100644
---- a/Documentation/userspace-api/media/mediactl/media-types.rst
-+++ b/Documentation/userspace-api/media/mediactl/media-types.rst
-@@ -391,6 +391,7 @@ must be set for every pad.
- .. _MEDIA-LNK-FL-ENABLED:
- .. _MEDIA-LNK-FL-IMMUTABLE:
- .. _MEDIA-LNK-FL-DYNAMIC:
-+.. _MEDIA-LNK-FL-VALIDATE-LATE:
- .. _MEDIA-LNK-FL-LINK-TYPE:
+@@ -651,7 +651,7 @@ static long subdev_do_ioctl(struct file *file, unsigned int cmd, void *arg,
+ 	struct v4l2_subdev_fh *subdev_fh = to_v4l2_subdev_fh(vfh);
+ 	bool ro_subdev = test_bit(V4L2_FL_SUBDEV_RO_DEVNODE, &vdev->flags);
+ 	bool streams_subdev = sd->flags & V4L2_SUBDEV_FL_STREAMS;
+-	bool client_supports_streams = subdev_fh->client_caps &
++	bool client_supports_streams = subdev_fh->ci.client_caps &
+ 				       V4L2_SUBDEV_CLIENT_CAP_STREAMS;
+ 	int rval;
  
- .. flat-table:: Media link flags
-@@ -410,6 +411,10 @@ must be set for every pad.
-        -  The link enabled state can be modified during streaming. This flag
- 	  is set by drivers and is read-only for applications.
+@@ -1124,7 +1124,7 @@ static long subdev_do_ioctl(struct file *file, unsigned int cmd, void *arg,
+ 	case VIDIOC_SUBDEV_G_CLIENT_CAP: {
+ 		struct v4l2_subdev_client_capability *client_cap = arg;
  
-+    *  -  ``MEDIA_LNK_FL_VALIDATE_LATE``
-+       -  The validation of the link may be delayed up to until the start of
-+	  hardware operation.
-+
-     *  -  ``MEDIA_LNK_FL_LINK_TYPE``
-        -  This is a bitmask that defines the type of the link. The following
- 	  link types are currently supported:
-diff --git a/drivers/media/mc/mc-entity.c b/drivers/media/mc/mc-entity.c
-index ef959e9bb313..b29b519237d6 100644
---- a/drivers/media/mc/mc-entity.c
-+++ b/drivers/media/mc/mc-entity.c
-@@ -772,7 +772,7 @@ static int
- __media_pipeline_validate_one(struct media_pad *origin,
- 			      struct media_pipeline *pipe,
- 			      struct media_pad *pad, struct media_link *link,
--			      bool *has_enabled_link)
-+			      bool *has_enabled_link, bool skip_validation)
- {
- 	struct media_device *mdev = origin->graph_obj.mdev;
- 	struct media_entity *entity = pad->entity;
-@@ -782,6 +782,9 @@ __media_pipeline_validate_one(struct media_pad *origin,
- 	if (link->flags & MEDIA_LNK_FL_ENABLED && has_enabled_link)
- 		*has_enabled_link = true;
+-		client_cap->capabilities = subdev_fh->client_caps;
++		client_cap->capabilities = subdev_fh->ci.client_caps;
  
-+	if (skip_validation)
-+		return 0;
-+
- 	/*
- 	 * Validate the link if it's enabled and has the
- 	 * current pad as its sink.
-@@ -833,7 +836,24 @@ __must_check int __media_pipeline_start(struct media_pad *origin,
- 	 * valid, so just increase the start count.
- 	 */
- 	if (pipe->start_count) {
-+		struct media_link *link;
-+
-+		link = __media_entity_next_link(origin->entity, NULL,
-+						MEDIA_LNK_FL_DATA_LINK);
-+		if (link && link->flags & MEDIA_LNK_FL_VALIDATE_LATE) {
-+			dev_dbg(mdev->dev,
-+				"Validating pad '%s':%u late\n",
-+				origin->entity->name, origin->index);
-+
-+			ret = __media_pipeline_validate_one(link->sink, pipe,
-+							    link->sink, link,
-+							    NULL, false);
-+			if (ret)
-+				return ret;
-+		}
-+
- 		pipe->start_count++;
-+
  		return 0;
  	}
+@@ -1144,7 +1144,7 @@ static long subdev_do_ioctl(struct file *file, unsigned int cmd, void *arg,
+ 		client_cap->capabilities &= (V4L2_SUBDEV_CLIENT_CAP_STREAMS |
+ 					     V4L2_SUBDEV_CLIENT_CAP_INTERVAL_USES_WHICH);
  
-@@ -881,9 +901,16 @@ __must_check int __media_pipeline_start(struct media_pad *origin,
- 			if (link->sink != pad && link->source != pad)
- 				continue;
+-		subdev_fh->client_caps = client_cap->capabilities;
++		subdev_fh->ci.client_caps = client_cap->capabilities;
  
-+			/* Skip late-validated links not connected to origin. */
-+			bool skip_validation =
-+				link->flags & MEDIA_LNK_FL_VALIDATE_LATE &&
-+				(link->sink == origin ||
-+				 link->source == origin);
-+
- 			ret = __media_pipeline_validate_one(origin, pipe,
- 							    origin, link,
--							    &has_enabled_link);
-+							    &has_enabled_link,
-+							    skip_validation);
- 			if (ret)
- 				goto error;
- 		}
-@@ -1163,6 +1190,33 @@ media_create_pad_link(struct media_entity *source, u16 source_pad,
- 	if (WARN_ON(!(sink->pads[sink_pad].flags & MEDIA_PAD_FL_SINK)))
- 		return -EINVAL;
+ 		return 0;
+ 	}
+diff --git a/include/media/v4l2-subdev.h b/include/media/v4l2-subdev.h
+index de2684b15b96..c9fe99ea7841 100644
+--- a/include/media/v4l2-subdev.h
++++ b/include/media/v4l2-subdev.h
+@@ -734,6 +734,14 @@ struct v4l2_subdev_state {
+ 	struct v4l2_subdev_stream_configs stream_configs;
+ };
  
-+	/*
-+	 * With the late validate flag, either source or sink shall have exactly
-+	 * one pad and no links before this one. Similarly, no links may be
-+	 * added to entities with a single pad and an existing late-validated
-+	 * link.
-+	 */
-+	if (flags & MEDIA_LNK_FL_VALIDATE_LATE) {
-+		if (!(source->num_pads == 1 && !source->num_links) &&
-+		    !(sink->num_pads == 1 && !sink->num_links))
-+			return -EINVAL;
-+	} else {
-+		struct media_entity *entities[] = { source, sink };
++/**
++ * struct v4l2_subdev_client_info - Sub-device client information
++ * @client_caps: bitmask of ``V4L2_SUBDEV_CLIENT_CAP_*``
++ */
++struct v4l2_subdev_client_info {
++	u64 client_caps;
++};
 +
-+		for (unsigned int i = 0; i < ARRAY_SIZE(entities); i++) {
-+			if (entities[i]->num_pads != 1)
-+				continue;
-+
-+			struct media_link *__link =
-+				__media_entity_next_link(entities[i], NULL,
-+							 MEDIA_LNK_FL_DATA_LINK);
-+
-+			if (__link &&
-+			    __link->flags & MEDIA_LNK_FL_VALIDATE_LATE)
-+				return -EINVAL;
-+		}
-+	}
-+
- 	link = media_add_link(&source->links);
- 	if (link == NULL)
- 		return -ENOMEM;
-diff --git a/include/uapi/linux/media.h b/include/uapi/linux/media.h
-index 1c80b1d6bbaf..c96e2118ea99 100644
---- a/include/uapi/linux/media.h
-+++ b/include/uapi/linux/media.h
-@@ -219,6 +219,7 @@ struct media_pad_desc {
- #define MEDIA_LNK_FL_ENABLED			(1U << 0)
- #define MEDIA_LNK_FL_IMMUTABLE			(1U << 1)
- #define MEDIA_LNK_FL_DYNAMIC			(1U << 2)
-+#define MEDIA_LNK_FL_VALIDATE_LATE		(1U << 3)
+ /**
+  * struct v4l2_subdev_pad_ops - v4l2-subdev pad level operations
+  *
+@@ -1129,14 +1137,14 @@ struct v4l2_subdev {
+  * @vfh: pointer to &struct v4l2_fh
+  * @state: pointer to &struct v4l2_subdev_state
+  * @owner: module pointer to the owner of this file handle
+- * @client_caps: bitmask of ``V4L2_SUBDEV_CLIENT_CAP_*``
++ * @ci: sub-device client info related to this file handle
+  */
+ struct v4l2_subdev_fh {
+ 	struct v4l2_fh vfh;
+ 	struct module *owner;
+ #if defined(CONFIG_VIDEO_V4L2_SUBDEV_API)
+ 	struct v4l2_subdev_state *state;
+-	u64 client_caps;
++	struct v4l2_subdev_client_info ci;
+ #endif
+ };
  
- #define MEDIA_LNK_FL_LINK_TYPE			(0xf << 28)
- #  define MEDIA_LNK_FL_DATA_LINK		(0U << 28)
 -- 
 2.47.3
 
