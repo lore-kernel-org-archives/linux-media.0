@@ -1,54 +1,54 @@
 Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B8B83D649D
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AEBBE3D7D73
 	for <linux-media@vger.kernel.org>; Fri,  6 Feb 2026 13:13:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770383625; cv=none; b=WkpoZ9nMhxrnbPFQGts6ScUtmpU6+E/pS5Z2jPNX8ArqlJ0fgn4Cx6AW/Zh4rMXATCipILPW/JPMZ2u3/jNFu+FNb//4PQJ+tr5vBPs+/RgJQOJOrMmNZIT0x1o3SCryPtKbHLdig82+lkPrPQWE7dIuDVIrOBsXApuNu4IpUxA=
+	t=1770383625; cv=none; b=aHin0W0dkQ7r1uaKJoinNcs/dAx2kpAKeXTisGK5ePThNNJOLRBR1cwjm2gxcolVdKNJSw0u+B95VOJZxiED62NIa7M91zbfJLGfh4SlEMEm7aICQldnidxCBs28VRyRA+hq03w44wUO50dWeLHaPABYMC7ZSGtCJHEtuuVDSG0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1770383625; c=relaxed/simple;
-	bh=sl3pIcd/Woe35+gcwLxFbutcD7NkqaAbjWxBx8yYfFE=;
+	bh=kQM/gZXkdLQkqzqbGgSDI6BKLPHZfSYPNyuJcC/rPBM=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=WUIn2H7Wd3tjYCcL+91PkFIrf4FNHllSwpSZ7W55f//spS0UoPo1ulGP0W3hRigeYhe17X+E08+DaPksbvSR9FucxupIOKCshFDLM+t/lZKywavlCnU8Fqyd99aceir+ucnI8HPUb70jC/Fa00zhQjcS5Gr83hpYCfzZmtEElMg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ZTht1xxN; arc=none smtp.client-ip=198.175.65.14
+	 MIME-Version; b=QuwXXJOzHLDwHHtL2oI2kbY9fHy4sarfAlrLDFvS2poSg8BdO8vdNEbTA556rmYc/4V0RvjegzQ4nKtrjyFpqdnJXGFIP1KjTeoona+2agdtzjZvlrQtncsoGCPVBnhn98xt5zzDeqCurnQBQqXCuWuvfkwi8xs3cGd8XzU5qDw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=eW3UGreu; arc=none smtp.client-ip=198.175.65.14
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ZTht1xxN"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="eW3UGreu"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1770383625; x=1801919625;
+  t=1770383626; x=1801919626;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=sl3pIcd/Woe35+gcwLxFbutcD7NkqaAbjWxBx8yYfFE=;
-  b=ZTht1xxNTVsUkIiOhS6ARP6+Nl20mZNr/FIZyvQ1ObLaKryuiohaSX+G
-   Lv5MTkM+Depfn6uNWFeg5PItfzIod90DcQClFM91VmHodkEHoWW4AXK1S
-   mz7nLD5Au867BWGANF3wd817a6gFyuMWGMlgm+UPv05KR1cdX7wDcJK2K
-   AJA2zQmcX5unHNVCdmczJJ3PuMQCj9PrkyiwiRMxUr2iHwPfy8Q0CE0fJ
-   fA7/iqnNF5VDDFtzL4AfLiPYTiCovQOLz9xNBHPJxQSmG+f7Msiypp9hb
-   9r4MAShwzbolRTYRX3pTgO2S87qO8KstJt0tN0676hKZ9SOoYgCwF19as
-   w==;
-X-CSE-ConnectionGUID: 9Ts8FAMERBKsZol9JYMZRQ==
-X-CSE-MsgGUID: RGmTl0nGSFK/7Tob1T1nfw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11693"; a="75441243"
+  bh=kQM/gZXkdLQkqzqbGgSDI6BKLPHZfSYPNyuJcC/rPBM=;
+  b=eW3UGreuO0dbciBvhhUwsdaA34ykntTWKbbebuP1yS/S//uMgUuWvAae
+   faP2faaS6PYqoU7EkMLICwwGSlIEVjbAV/mdtjjpzDXram97e9GFffa58
+   lCzCPBl+wtbOw0SAWFJqNxoQK41TTelFZXo87UyXkjq7maW+PBwmCbTnu
+   cudXeSKVcZ0WUC8CzesCm2Lx8iYvyE97f+aFPCyrfz0T/+6yNl3bWUDql
+   LIzhpfk9dm65Le0+3RIjV1Bv9FBNpR5Jokg2uPGdTa+2ED0MZuQu7shwV
+   H5z7F9NcUntyeCDCaODICkaJgDCLh6MsOvzDvqZ/vHMtyh8YBYAvtwDlq
+   Q==;
+X-CSE-ConnectionGUID: P4qIdleLRB25NES+loTl9Q==
+X-CSE-MsgGUID: k6ZpE4cxQWaPztPej2LnHA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11693"; a="75441254"
 X-IronPort-AV: E=Sophos;i="6.21,276,1763452800"; 
-   d="scan'208";a="75441243"
+   d="scan'208";a="75441254"
 Received: from orviesa004.jf.intel.com ([10.64.159.144])
   by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Feb 2026 05:13:44 -0800
-X-CSE-ConnectionGUID: a81vXBtGTha3wwWvLu9u1Q==
-X-CSE-MsgGUID: Ooj5oBunSSevqTnZrYF1IA==
+X-CSE-ConnectionGUID: vtH5Ya+iR/OGj78S2JWBZw==
+X-CSE-MsgGUID: JAEh2DKeQW+MuCpCqvOcaQ==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.21,276,1763452800"; 
-   d="scan'208";a="215391303"
+   d="scan'208";a="215391305"
 Received: from vpanait-mobl.ger.corp.intel.com (HELO kekkonen.fi.intel.com) ([10.245.244.219])
   by orviesa004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Feb 2026 05:13:38 -0800
 Received: from punajuuri.localdomain (unknown [192.168.240.130])
-	by kekkonen.fi.intel.com (Postfix) with ESMTP id 8910F121EB4;
+	by kekkonen.fi.intel.com (Postfix) with ESMTP id 73618121E22;
 	Fri, 06 Feb 2026 15:13:40 +0200 (EET)
 Received: from sailus by punajuuri.localdomain with local (Exim 4.98.2)
 	(envelope-from <sakari.ailus@linux.intel.com>)
-	id 1voLeL-00000005Tsi-1gYt;
+	id 1voLeL-00000005TsO-1I0c;
 	Fri, 06 Feb 2026 15:13:29 +0200
 Organization: Intel Finland Oy - BIC 0357606-4 - c/o Alberga Business Park, 6 krs, Bertel Jungin Aukio 5, 02600 Espoo
 From: Sakari Ailus <sakari.ailus@linux.intel.com>
@@ -81,9 +81,9 @@ Cc: hans@jjverkuil.nl,
 	David Plowman <david.plowman@raspberrypi.com>,
 	"Yu, Ong Hock" <ong.hock.yu@intel.com>,
 	"Ng, Khai Wen" <khai.wen.ng@intel.com>
-Subject: [PATCH 11/13] media: v4l2-subdev: Add struct v4l2_subdev_client_info pointer to pad ops
-Date: Fri,  6 Feb 2026 15:13:28 +0200
-Message-ID: <20260206131329.1306429-12-sakari.ailus@linux.intel.com>
+Subject: [PATCH 06/13] media: mc: Separate single link validation into a new function
+Date: Fri,  6 Feb 2026 15:13:23 +0200
+Message-ID: <20260206131329.1306429-7-sakari.ailus@linux.intel.com>
 X-Mailer: git-send-email 2.47.3
 In-Reply-To: <20260206131329.1306429-1-sakari.ailus@linux.intel.com>
 References: <20260206131329.1306429-1-sakari.ailus@linux.intel.com>
@@ -95,236 +95,114 @@ List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Add a pointer to const struct v4l2_subdev_client_info to the get_fmt,
-set_fmt, get_selection and set_selection sub-device pad ops. The client
-info struct will soon be used to differentiate UAPI based on client
-capabilities.
+Add a new function __media_pipeline_validate_one() to validate a single
+link in a pipeline. This will soon be used for performing validation in
+multiple phases.
 
 Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
 ---
- drivers/media/v4l2-core/v4l2-subdev.c | 63 ++++++++++++++++++---------
- include/media/v4l2-subdev.h           |  9 +++-
- 2 files changed, 51 insertions(+), 21 deletions(-)
+ drivers/media/mc/mc-entity.c | 80 +++++++++++++++++++++---------------
+ 1 file changed, 47 insertions(+), 33 deletions(-)
 
-diff --git a/drivers/media/v4l2-core/v4l2-subdev.c b/drivers/media/v4l2-core/v4l2-subdev.c
-index 79fb4643182a..76ab70a99e86 100644
---- a/drivers/media/v4l2-core/v4l2-subdev.c
-+++ b/drivers/media/v4l2-core/v4l2-subdev.c
-@@ -245,19 +245,21 @@ static inline int check_format(struct v4l2_subdev *sd,
+diff --git a/drivers/media/mc/mc-entity.c b/drivers/media/mc/mc-entity.c
+index 9519a537bfa2..ef959e9bb313 100644
+--- a/drivers/media/mc/mc-entity.c
++++ b/drivers/media/mc/mc-entity.c
+@@ -768,6 +768,49 @@ static int media_pipeline_populate(struct media_pipeline *pipe,
+ 	return ret;
  }
  
- static int call_get_fmt(struct v4l2_subdev *sd,
-+			const struct v4l2_subdev_client_info *ci,
- 			struct v4l2_subdev_state *state,
- 			struct v4l2_subdev_format *format)
- {
- 	return check_format(sd, state, format) ? :
--	       sd->ops->pad->get_fmt(sd, state, format);
-+		sd->ops->pad->get_fmt(sd, ci, state, format);
- }
- 
- static int call_set_fmt(struct v4l2_subdev *sd,
-+			const struct v4l2_subdev_client_info *ci,
- 			struct v4l2_subdev_state *state,
- 			struct v4l2_subdev_format *format)
- {
- 	return check_format(sd, state, format) ? :
--	       sd->ops->pad->set_fmt(sd, state, format);
-+		sd->ops->pad->set_fmt(sd, ci, state, format);
- }
- 
- static int call_enum_mbus_code(struct v4l2_subdev *sd,
-@@ -308,19 +310,21 @@ static inline int check_selection(struct v4l2_subdev *sd,
- }
- 
- static int call_get_selection(struct v4l2_subdev *sd,
-+			      const struct v4l2_subdev_client_info *ci,
- 			      struct v4l2_subdev_state *state,
- 			      struct v4l2_subdev_selection *sel)
- {
- 	return check_selection(sd, state, sel) ? :
--	       sd->ops->pad->get_selection(sd, state, sel);
-+		sd->ops->pad->get_selection(sd, ci, state, sel);
- }
- 
- static int call_set_selection(struct v4l2_subdev *sd,
-+			      const struct v4l2_subdev_client_info *ci,
- 			      struct v4l2_subdev_state *state,
- 			      struct v4l2_subdev_selection *sel)
- {
- 	return check_selection(sd, state, sel) ? :
--	       sd->ops->pad->set_selection(sd, state, sel);
-+		sd->ops->pad->set_selection(sd, ci, state, sel);
- }
- 
- static inline int check_frame_interval(struct v4l2_subdev *sd,
-@@ -523,6 +527,21 @@ static int call_s_stream(struct v4l2_subdev *sd, int enable)
- 			v4l2_subdev_unlock_state(state);                   \
- 		return ret;                                                \
- 	}
-+#define DEFINE_STATE_WRAPPER_CI(f, arg_type)                               \
-+	static int call_##f##_state(struct v4l2_subdev *sd,		   \
-+				    const struct v4l2_subdev_client_info *ci, \
-+				    struct v4l2_subdev_state *_state,      \
-+				    arg_type *arg) \
-+	{                                                                  \
-+		struct v4l2_subdev_state *state = _state;                  \
-+		int ret;                                                   \
-+		if (!_state)                                               \
-+			state = v4l2_subdev_lock_and_get_active_state(sd); \
-+		ret = call_##f(sd, ci, state, arg);			   \
-+		if (!_state && state)                                      \
-+			v4l2_subdev_unlock_state(state);                   \
-+		return ret;                                                \
++static int
++__media_pipeline_validate_one(struct media_pad *origin,
++			      struct media_pipeline *pipe,
++			      struct media_pad *pad, struct media_link *link,
++			      bool *has_enabled_link)
++{
++	struct media_device *mdev = origin->graph_obj.mdev;
++	struct media_entity *entity = pad->entity;
++	int ret;
++
++	/* Record if the pad has links and enabled links. */
++	if (link->flags & MEDIA_LNK_FL_ENABLED && has_enabled_link)
++		*has_enabled_link = true;
++
++	/*
++	 * Validate the link if it's enabled and has the
++	 * current pad as its sink.
++	 */
++	if (!(link->flags & MEDIA_LNK_FL_ENABLED))
++		return 0;
++
++	if (link->sink != pad)
++		return 0;
++
++	if (!entity->ops || !entity->ops->link_validate)
++		return 0;
++
++	ret = entity->ops->link_validate(link);
++	if (ret) {
++		dev_dbg(mdev->dev,
++			"Link '%s':%u -> '%s':%u failed validation: %d\n",
++			link->source->entity->name, link->source->index,
++			link->sink->entity->name, link->sink->index, ret);
++		return ret;
 +	}
- 
- #else /* CONFIG_MEDIA_CONTROLLER */
- 
-@@ -536,13 +555,13 @@ static int call_s_stream(struct v4l2_subdev *sd, int enable)
- 
- #endif /* CONFIG_MEDIA_CONTROLLER */
- 
--DEFINE_STATE_WRAPPER(get_fmt, struct v4l2_subdev_format);
--DEFINE_STATE_WRAPPER(set_fmt, struct v4l2_subdev_format);
-+DEFINE_STATE_WRAPPER_CI(get_fmt, struct v4l2_subdev_format);
-+DEFINE_STATE_WRAPPER_CI(set_fmt, struct v4l2_subdev_format);
- DEFINE_STATE_WRAPPER(enum_mbus_code, struct v4l2_subdev_mbus_code_enum);
- DEFINE_STATE_WRAPPER(enum_frame_size, struct v4l2_subdev_frame_size_enum);
- DEFINE_STATE_WRAPPER(enum_frame_interval, struct v4l2_subdev_frame_interval_enum);
--DEFINE_STATE_WRAPPER(get_selection, struct v4l2_subdev_selection);
--DEFINE_STATE_WRAPPER(set_selection, struct v4l2_subdev_selection);
-+DEFINE_STATE_WRAPPER_CI(get_selection, struct v4l2_subdev_selection);
-+DEFINE_STATE_WRAPPER_CI(set_selection, struct v4l2_subdev_selection);
- 
- static const struct v4l2_subdev_pad_ops v4l2_subdev_call_pad_wrappers = {
- 	.get_fmt		= call_get_fmt_state,
-@@ -804,7 +823,8 @@ static long subdev_do_ioctl(struct file *file, unsigned int cmd, void *arg,
- 
- 		memset(format->reserved, 0, sizeof(format->reserved));
- 		memset(format->format.reserved, 0, sizeof(format->format.reserved));
--		return v4l2_subdev_call(sd, pad, get_fmt, state, format);
-+		return v4l2_subdev_call(sd, pad, get_fmt, &subdev_fh->ci, state,
-+					format);
- 	}
- 
- 	case VIDIOC_SUBDEV_S_FMT: {
-@@ -818,7 +838,8 @@ static long subdev_do_ioctl(struct file *file, unsigned int cmd, void *arg,
- 
- 		memset(format->reserved, 0, sizeof(format->reserved));
- 		memset(format->format.reserved, 0, sizeof(format->format.reserved));
--		return v4l2_subdev_call(sd, pad, set_fmt, state, format);
-+		return v4l2_subdev_call(sd, pad, set_fmt, &subdev_fh->ci, state,
-+					format);
- 	}
- 
- 	case VIDIOC_SUBDEV_G_CROP: {
-@@ -835,8 +856,8 @@ static long subdev_do_ioctl(struct file *file, unsigned int cmd, void *arg,
- 		sel.stream = crop->stream;
- 		sel.target = V4L2_SEL_TGT_CROP;
- 
--		rval = v4l2_subdev_call(
--			sd, pad, get_selection, state, &sel);
-+		rval = v4l2_subdev_call(sd, pad, get_selection, &subdev_fh->ci,
-+					state, &sel);
- 
- 		crop->rect = sel.r;
- 
-@@ -861,8 +882,8 @@ static long subdev_do_ioctl(struct file *file, unsigned int cmd, void *arg,
- 		sel.target = V4L2_SEL_TGT_CROP;
- 		sel.r = crop->rect;
- 
--		rval = v4l2_subdev_call(
--			sd, pad, set_selection, state, &sel);
-+		rval = v4l2_subdev_call(sd, pad, set_selection, &subdev_fh->ci,
-+					state, &sel);
- 
- 		crop->rect = sel.r;
- 
-@@ -932,8 +953,8 @@ static long subdev_do_ioctl(struct file *file, unsigned int cmd, void *arg,
- 			sel->stream = 0;
- 
- 		memset(sel->reserved, 0, sizeof(sel->reserved));
--		return v4l2_subdev_call(
--			sd, pad, get_selection, state, sel);
-+		return v4l2_subdev_call(sd, pad, get_selection, &subdev_fh->ci,
-+					state, sel);
- 	}
- 
- 	case VIDIOC_SUBDEV_S_SELECTION: {
-@@ -946,8 +967,8 @@ static long subdev_do_ioctl(struct file *file, unsigned int cmd, void *arg,
- 			sel->stream = 0;
- 
- 		memset(sel->reserved, 0, sizeof(sel->reserved));
--		return v4l2_subdev_call(
--			sd, pad, set_selection, state, sel);
-+		return v4l2_subdev_call(sd, pad, set_selection, &subdev_fh->ci,
-+					state, sel);
- 	}
- 
- 	case VIDIOC_G_EDID: {
-@@ -1348,7 +1369,7 @@ v4l2_subdev_link_validate_get_format(struct media_pad *pad, u32 stream,
- 	else
- 		state = v4l2_subdev_lock_and_get_active_state(sd);
- 
--	ret = v4l2_subdev_call(sd, pad, get_fmt, state, fmt);
-+	ret = v4l2_subdev_call(sd, pad, get_fmt, NULL, state, fmt);
- 
- 	if (!states_locked && state)
- 		v4l2_subdev_unlock_state(state);
-@@ -1931,7 +1952,9 @@ v4l2_subdev_init_stream_configs(struct v4l2_subdev_stream_configs *stream_config
- 	return 0;
- }
- 
--int v4l2_subdev_get_fmt(struct v4l2_subdev *sd, struct v4l2_subdev_state *state,
-+int v4l2_subdev_get_fmt(struct v4l2_subdev *sd,
-+			const struct v4l2_subdev_client_info *ci,
-+			struct v4l2_subdev_state *state,
- 			struct v4l2_subdev_format *format)
++
++	dev_dbg(mdev->dev, "Link '%s':%u -> '%s':%u is valid\n",
++		link->source->entity->name, link->source->index,
++		link->sink->entity->name, link->sink->index);
++
++	return 0;
++}
++
+ __must_check int __media_pipeline_start(struct media_pad *origin,
+ 					struct media_pipeline *pipe)
  {
- 	struct v4l2_mbus_framefmt *fmt;
-diff --git a/include/media/v4l2-subdev.h b/include/media/v4l2-subdev.h
-index c9fe99ea7841..20cf0560c7f9 100644
---- a/include/media/v4l2-subdev.h
-+++ b/include/media/v4l2-subdev.h
-@@ -850,15 +850,19 @@ struct v4l2_subdev_pad_ops {
- 				   struct v4l2_subdev_state *state,
- 				   struct v4l2_subdev_frame_interval_enum *fie);
- 	int (*get_fmt)(struct v4l2_subdev *sd,
-+		       const struct v4l2_subdev_client_info *ci,
- 		       struct v4l2_subdev_state *state,
- 		       struct v4l2_subdev_format *format);
- 	int (*set_fmt)(struct v4l2_subdev *sd,
-+		       const struct v4l2_subdev_client_info *ci,
- 		       struct v4l2_subdev_state *state,
- 		       struct v4l2_subdev_format *format);
- 	int (*get_selection)(struct v4l2_subdev *sd,
-+			     const struct v4l2_subdev_client_info *ci,
- 			     struct v4l2_subdev_state *state,
- 			     struct v4l2_subdev_selection *sel);
- 	int (*set_selection)(struct v4l2_subdev *sd,
-+			     const struct v4l2_subdev_client_info *ci,
- 			     struct v4l2_subdev_state *state,
- 			     struct v4l2_subdev_selection *sel);
- 	int (*get_frame_interval)(struct v4l2_subdev *sd,
-@@ -1461,6 +1465,7 @@ __v4l2_subdev_state_get_interval(struct v4l2_subdev_state *state,
-  * @sd: subdevice
-  * @state: subdevice state
-  * @format: pointer to &struct v4l2_subdev_format
-+ * @ci: pointer to sub-device client information, including client capabilities
-  *
-  * Fill @format->format field based on the information in the @format struct.
-  *
-@@ -1470,7 +1475,9 @@ __v4l2_subdev_state_get_interval(struct v4l2_subdev_state *state,
-  *
-  * Returns 0 on success, error value otherwise.
-  */
--int v4l2_subdev_get_fmt(struct v4l2_subdev *sd, struct v4l2_subdev_state *state,
-+int v4l2_subdev_get_fmt(struct v4l2_subdev *sd,
-+			const struct v4l2_subdev_client_info *ci,
-+			struct v4l2_subdev_state *state,
- 			struct v4l2_subdev_format *format);
+@@ -838,40 +881,11 @@ __must_check int __media_pipeline_start(struct media_pad *origin,
+ 			if (link->sink != pad && link->source != pad)
+ 				continue;
  
- /**
+-			/* Record if the pad has links and enabled links. */
+-			if (link->flags & MEDIA_LNK_FL_ENABLED)
+-				has_enabled_link = true;
+-
+-			/*
+-			 * Validate the link if it's enabled and has the
+-			 * current pad as its sink.
+-			 */
+-			if (!(link->flags & MEDIA_LNK_FL_ENABLED))
+-				continue;
+-
+-			if (link->sink != pad)
+-				continue;
+-
+-			if (!entity->ops || !entity->ops->link_validate)
+-				continue;
+-
+-			ret = entity->ops->link_validate(link);
+-			if (ret) {
+-				dev_dbg(mdev->dev,
+-					"Link '%s':%u -> '%s':%u failed validation: %d\n",
+-					link->source->entity->name,
+-					link->source->index,
+-					link->sink->entity->name,
+-					link->sink->index, ret);
++			ret = __media_pipeline_validate_one(origin, pipe,
++							    origin, link,
++							    &has_enabled_link);
++			if (ret)
+ 				goto error;
+-			}
+-
+-			dev_dbg(mdev->dev,
+-				"Link '%s':%u -> '%s':%u is valid\n",
+-				link->source->entity->name,
+-				link->source->index,
+-				link->sink->entity->name,
+-				link->sink->index);
+ 		}
+ 
+ 		/*
 -- 
 2.47.3
 
