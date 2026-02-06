@@ -1,54 +1,54 @@
 Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0D49A32D0D4
-	for <linux-media@vger.kernel.org>; Fri,  6 Feb 2026 13:13:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D4AD236E460
+	for <linux-media@vger.kernel.org>; Fri,  6 Feb 2026 13:13:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770383617; cv=none; b=i1CkaTxqrfajozvNIoE+8E0nQTuK7/X/fWeEjEdQhpCIDYNyYFO4S29/uh+eh6+V6i/NH5ilUjPDMNRSkTT9KncGHBOLeQATalMU4iybapLUsSYnIejmJF+QLd5WZkHpQtjq4bWhoM6cXBQLP+OPdfyjJhDILUxuMyBStBeWNG0=
+	t=1770383618; cv=none; b=MNVIhqSIP6JCY/mM/Tj3HwXoAFSnKx2zT6CU/vHamOQQPQvRQDAmX5Tu6sPYRLf5LFMh2j6HLvbSvXoPBkubqJJw/3PX0dyXj02TdjodgTcRdYpOvuGBgH3sxD/+lo3g9pIGzDI+rWC4UgF9zQkqqdQKkkU1BMVr2BTdMYxt/wk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770383617; c=relaxed/simple;
-	bh=o5cCOFuvTO15y/C13IyG4UU4VQKNcku4BAmJLHOBeC8=;
+	s=arc-20240116; t=1770383618; c=relaxed/simple;
+	bh=ySYfTqmyUjUx0qaZCJ4q/Gjd81iDecFTl1mQgu0nnPI=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=OWfNyEQ5dQI5dKelPNp2HBj+cxj5EbAU88Ny8lzvgrljYTdzJrOWHnuNVdVUbbkRKdTSiyHPtIj3q8bXa0Fe9jF9uHpgH5BEfEhWDuq6FnB0vAdkz15ETrozD0OIa34IWHmFtPIRdvZCg6EfcFymoZQ4PlWpPuBzSYkeUArXUS0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=iPPrbQeX; arc=none smtp.client-ip=198.175.65.14
+	 MIME-Version; b=JTev5OuDdz3xdoCreDQnZzcfymvNxGGfZOTuhaqD6S6g+o3U/7lkEimqzUl9JvIAZHV3vdb523C7gaGkR/VW3RzbqY1d+xJsYfqDMSJyLQLumg1aAEBmCD6KrIly4Ww7OH3wl+gLEsWNOxuNwIufx8OMofXabvXUZBB5sO3wg2k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=HsULiiDD; arc=none smtp.client-ip=198.175.65.14
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="iPPrbQeX"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="HsULiiDD"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1770383617; x=1801919617;
+  t=1770383618; x=1801919618;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=o5cCOFuvTO15y/C13IyG4UU4VQKNcku4BAmJLHOBeC8=;
-  b=iPPrbQeXQFzPbCoYSJldnOE/OReuAzLpUlfon90o0zn6MKH492U+hunT
-   GhuGeWVKdJJyw84hesI2UysHw21lsnLk9ZvqZmjYtF9o6oND6xwQv4VQu
-   gaHYrKfOJiVr8e12Sk9xmwlNFM1WfOSqgs9Sv90Bnu88vHJeQIusnEwt3
-   2eWBNJnpsJIf7H2ag81koU1Qcjis6aivk+u6LnAuyjIpwU5di7Blfhxeq
-   3zJKfzF3TzqGEnsx2VRuwOLbhqwBEkLoFeoJyaJQeB2pAUtyWXNt1fUnQ
-   OWx+defjirabyfPjFUx2IwBGoNB7bTUsgl4NtT9gToj22F/1h1i8kvvm3
-   A==;
-X-CSE-ConnectionGUID: ss+g5DCyQhGUFv9nDUqQbg==
-X-CSE-MsgGUID: Yehjr35jTiaL1anOG6740A==
-X-IronPort-AV: E=McAfee;i="6800,10657,11693"; a="75441122"
+  bh=ySYfTqmyUjUx0qaZCJ4q/Gjd81iDecFTl1mQgu0nnPI=;
+  b=HsULiiDDuocTVmgNMeNoD3/c29zWmCC/almuhl9oteUThbN0AH1GX+tS
+   MBow4nl5pXpDTkCMIYIOHdFaZRQfM0PeIJ9y46UfjKzkghwlgOut969Vq
+   Xih8U+gRGZySwXadyFWVcN00zGQsGSPbOuKmZz2kllPIeJB1ethnGCtfs
+   rX/xISHKbek3Q/MkyJPlr+VurjQ9BTfMjPT0N8nt82K78PoxKT2nme99J
+   3DK5RaMTbIkKicBvv4RI8HploGxbDdu5OCaX3zJdEBKprOeqDkPy0mEIu
+   pOPJhVKx3RjOCTsu9+2PgOFL81vxzVxTFrlzfzeOyJSi9txy2pBkSOoYI
+   Q==;
+X-CSE-ConnectionGUID: XHtyZnrkRwmBd/tDllGqnQ==
+X-CSE-MsgGUID: TPPf99HCS/y8v85cAMghnA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11693"; a="75441131"
 X-IronPort-AV: E=Sophos;i="6.21,276,1763452800"; 
-   d="scan'208";a="75441122"
+   d="scan'208";a="75441131"
 Received: from orviesa004.jf.intel.com ([10.64.159.144])
   by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Feb 2026 05:13:35 -0800
-X-CSE-ConnectionGUID: fd1i+TNhTMazSv4XGlqKCg==
-X-CSE-MsgGUID: j4Gm56EZTXGeE3uYw8l7wg==
+X-CSE-ConnectionGUID: CvA545fMQvSSWX49QVsKlw==
+X-CSE-MsgGUID: 3hIhaMziRxeSn47VQGbeVw==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.21,276,1763452800"; 
-   d="scan'208";a="215391199"
+   d="scan'208";a="215391203"
 Received: from vpanait-mobl.ger.corp.intel.com (HELO kekkonen.fi.intel.com) ([10.245.244.219])
   by orviesa004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Feb 2026 05:13:30 -0800
 Received: from punajuuri.localdomain (unknown [192.168.240.130])
-	by kekkonen.fi.intel.com (Postfix) with ESMTP id 6AA54121DA8;
+	by kekkonen.fi.intel.com (Postfix) with ESMTP id 660EB121D87;
 	Fri, 06 Feb 2026 15:13:40 +0200 (EET)
 Received: from sailus by punajuuri.localdomain with local (Exim 4.98.2)
 	(envelope-from <sakari.ailus@linux.intel.com>)
-	id 1voLeL-00000005TsG-18D1;
+	id 1voLeL-00000005TsC-10Wr;
 	Fri, 06 Feb 2026 15:13:29 +0200
 Organization: Intel Finland Oy - BIC 0357606-4 - c/o Alberga Business Park, 6 krs, Bertel Jungin Aukio 5, 02600 Espoo
 From: Sakari Ailus <sakari.ailus@linux.intel.com>
@@ -81,9 +81,9 @@ Cc: hans@jjverkuil.nl,
 	David Plowman <david.plowman@raspberrypi.com>,
 	"Yu, Ong Hock" <ong.hock.yu@intel.com>,
 	"Ng, Khai Wen" <khai.wen.ng@intel.com>
-Subject: [PATCH 04/13] media: Documentation: Improve pixel rate calculation documentation
-Date: Fri,  6 Feb 2026 15:13:21 +0200
-Message-ID: <20260206131329.1306429-5-sakari.ailus@linux.intel.com>
+Subject: [PATCH 03/13] media: Documentation: Improve LINK_FREQ documentation
+Date: Fri,  6 Feb 2026 15:13:20 +0200
+Message-ID: <20260206131329.1306429-4-sakari.ailus@linux.intel.com>
 X-Mailer: git-send-email 2.47.3
 In-Reply-To: <20260206131329.1306429-1-sakari.ailus@linux.intel.com>
 References: <20260206131329.1306429-1-sakari.ailus@linux.intel.com>
@@ -95,31 +95,43 @@ List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Improve documentation on calculating the pixel rate, by adding references
-to relevant functions and mentioning V4L2 fwnode endpoint instead of OF
-endpoint.
+Add a reference to the LINK_FREQ control and precise the meaning of the
+control as for C-PHY the matter is less obvious.
 
 Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
 ---
- Documentation/driver-api/media/tx-rx.rst | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
+ Documentation/driver-api/media/tx-rx.rst                      | 3 ++-
+ .../userspace-api/media/v4l/ext-ctrls-image-process.rst       | 4 +++-
+ 2 files changed, 5 insertions(+), 2 deletions(-)
 
 diff --git a/Documentation/driver-api/media/tx-rx.rst b/Documentation/driver-api/media/tx-rx.rst
-index 7df2407817b3..9b231fa0216a 100644
+index 22e1b13ecde9..7df2407817b3 100644
 --- a/Documentation/driver-api/media/tx-rx.rst
 +++ b/Documentation/driver-api/media/tx-rx.rst
-@@ -104,7 +104,11 @@ where
-    * - k
-      - 16 for D-PHY and 7 for C-PHY.
+@@ -93,7 +93,8 @@ where
+    * - variable or constant
+      - description
+    * - link_freq
+-     - The value of the ``V4L2_CID_LINK_FREQ`` integer64 menu item.
++     - The value of the :ref:`V4L2_CID_LINK_FREQ <v4l2-cid-link-freq>` integer64
++       menu item.
+    * - nr_of_lanes
+      - Number of data lanes used on the CSI-2 link.
+    * - 2
+diff --git a/Documentation/userspace-api/media/v4l/ext-ctrls-image-process.rst b/Documentation/userspace-api/media/v4l/ext-ctrls-image-process.rst
+index 6d516f041ca2..ee88933256dd 100644
+--- a/Documentation/userspace-api/media/v4l/ext-ctrls-image-process.rst
++++ b/Documentation/userspace-api/media/v4l/ext-ctrls-image-process.rst
+@@ -24,7 +24,9 @@ Image Process Control IDs
+ .. _v4l2-cid-link-freq:
  
--Information on whether D-PHY or C-PHY is used, and the value of ``nr_of_lanes``, can be obtained from the OF endpoint configuration.
-+Information on whether D-PHY or C-PHY is used as well as the value of
-+``nr_of_lanes`` can be obtained from the V4L2 endpoint configuration; see
-+:c:func:`v4l2_fwnode_endpoint_alloc_parse()`,
-+:c:func:`v4l2_fwnode_endpoint_parse()` and
-+:c:func:`v4l2_get_active_data_lanes()`.
+ ``V4L2_CID_LINK_FREQ (integer menu)``
+-    The frequency of the data bus (e.g. parallel or CSI-2).
++    The fundamental frequency of the operating symbol rate (serial interfaces
++    such as CSI-2) or the sampling rate (parallel interfaces such as DVP or
++    Bt.565) of the data interface.
  
- .. note::
+ .. _v4l2-cid-pixel-rate:
  
 -- 
 2.47.3
