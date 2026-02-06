@@ -1,208 +1,122 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f48.google.com (mail-wm1-f48.google.com [209.85.128.48])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AEBBE3D7D73
-	for <linux-media@vger.kernel.org>; Fri,  6 Feb 2026 13:13:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AA42A3A0B2F
+	for <linux-media@vger.kernel.org>; Fri,  6 Feb 2026 13:39:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770383625; cv=none; b=aHin0W0dkQ7r1uaKJoinNcs/dAx2kpAKeXTisGK5ePThNNJOLRBR1cwjm2gxcolVdKNJSw0u+B95VOJZxiED62NIa7M91zbfJLGfh4SlEMEm7aICQldnidxCBs28VRyRA+hq03w44wUO50dWeLHaPABYMC7ZSGtCJHEtuuVDSG0=
+	t=1770385147; cv=none; b=hWAYRFB7fPxXZ2xRATDEBd1VaD1CZj0uJozGrdKlYzjwNNFIXDS3w2K3MaOLMbdotsHKvVod750xWs9B8k6MuCtcJKGw1Jd5o++sPuRO/4Ld7H+j3AtX3iYPjwPCQlWBZr2dv2kHTqWMDbBvScJiYKtkLZ1ghETT2xf7rldENVU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770383625; c=relaxed/simple;
-	bh=kQM/gZXkdLQkqzqbGgSDI6BKLPHZfSYPNyuJcC/rPBM=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=QuwXXJOzHLDwHHtL2oI2kbY9fHy4sarfAlrLDFvS2poSg8BdO8vdNEbTA556rmYc/4V0RvjegzQ4nKtrjyFpqdnJXGFIP1KjTeoona+2agdtzjZvlrQtncsoGCPVBnhn98xt5zzDeqCurnQBQqXCuWuvfkwi8xs3cGd8XzU5qDw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=eW3UGreu; arc=none smtp.client-ip=198.175.65.14
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
+	s=arc-20240116; t=1770385147; c=relaxed/simple;
+	bh=nJf+oEcEmXaOW9KZFmSY2SPCRRKJ69mMGa0q9XzdjBc=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition:In-Reply-To; b=uk4YzXUmQ/A6MOYqCQR3eJql/umHlVS0tPRpiPLBxGUyH4F14EDcJGkmwV8WIkCRwUMjw9gO6p0R4NyUPTVphUvx8W9r0Cchl/uw64yT5CErbYM9Jmud7v1PvLNd1kcdvLDOagu3wNaX6+D5VPD5QiCDPc7YFu3G4UyfMpF93fw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=oMg6a6Ic; arc=none smtp.client-ip=209.85.128.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="eW3UGreu"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1770383626; x=1801919626;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=kQM/gZXkdLQkqzqbGgSDI6BKLPHZfSYPNyuJcC/rPBM=;
-  b=eW3UGreuO0dbciBvhhUwsdaA34ykntTWKbbebuP1yS/S//uMgUuWvAae
-   faP2faaS6PYqoU7EkMLICwwGSlIEVjbAV/mdtjjpzDXram97e9GFffa58
-   lCzCPBl+wtbOw0SAWFJqNxoQK41TTelFZXo87UyXkjq7maW+PBwmCbTnu
-   cudXeSKVcZ0WUC8CzesCm2Lx8iYvyE97f+aFPCyrfz0T/+6yNl3bWUDql
-   LIzhpfk9dm65Le0+3RIjV1Bv9FBNpR5Jokg2uPGdTa+2ED0MZuQu7shwV
-   H5z7F9NcUntyeCDCaODICkaJgDCLh6MsOvzDvqZ/vHMtyh8YBYAvtwDlq
-   Q==;
-X-CSE-ConnectionGUID: P4qIdleLRB25NES+loTl9Q==
-X-CSE-MsgGUID: k6ZpE4cxQWaPztPej2LnHA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11693"; a="75441254"
-X-IronPort-AV: E=Sophos;i="6.21,276,1763452800"; 
-   d="scan'208";a="75441254"
-Received: from orviesa004.jf.intel.com ([10.64.159.144])
-  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Feb 2026 05:13:44 -0800
-X-CSE-ConnectionGUID: vtH5Ya+iR/OGj78S2JWBZw==
-X-CSE-MsgGUID: JAEh2DKeQW+MuCpCqvOcaQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.21,276,1763452800"; 
-   d="scan'208";a="215391305"
-Received: from vpanait-mobl.ger.corp.intel.com (HELO kekkonen.fi.intel.com) ([10.245.244.219])
-  by orviesa004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Feb 2026 05:13:38 -0800
-Received: from punajuuri.localdomain (unknown [192.168.240.130])
-	by kekkonen.fi.intel.com (Postfix) with ESMTP id 73618121E22;
-	Fri, 06 Feb 2026 15:13:40 +0200 (EET)
-Received: from sailus by punajuuri.localdomain with local (Exim 4.98.2)
-	(envelope-from <sakari.ailus@linux.intel.com>)
-	id 1voLeL-00000005TsO-1I0c;
-	Fri, 06 Feb 2026 15:13:29 +0200
-Organization: Intel Finland Oy - BIC 0357606-4 - c/o Alberga Business Park, 6 krs, Bertel Jungin Aukio 5, 02600 Espoo
-From: Sakari Ailus <sakari.ailus@linux.intel.com>
-To: linux-media@vger.kernel.org
-Cc: hans@jjverkuil.nl,
-	laurent.pinchart@ideasonboard.com,
-	Prabhakar <prabhakar.csengg@gmail.com>,
-	Kate Hsuan <hpa@redhat.com>,
-	Alexander Shiyan <eagle.alexander923@gmail.com>,
-	Dave Stevenson <dave.stevenson@raspberrypi.com>,
-	Tommaso Merciai <tomm.merciai@gmail.com>,
-	Benjamin Mugnier <benjamin.mugnier@foss.st.com>,
-	Sylvain Petinot <sylvain.petinot@foss.st.com>,
-	Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-	Julien Massot <julien.massot@collabora.com>,
-	Naushir Patuck <naush@raspberrypi.com>,
-	"Yan, Dongcheng" <dongcheng.yan@intel.com>,
-	"Cao, Bingbu" <bingbu.cao@intel.com>,
-	"Qiu, Tian Shu" <tian.shu.qiu@intel.com>,
-	Stefan Klug <stefan.klug@ideasonboard.com>,
-	Mirela Rabulea <mirela.rabulea@nxp.com>,
-	=?UTF-8?q?Andr=C3=A9=20Apitzsch?= <git@apitzsch.eu>,
-	Heimir Thor Sverrisson <heimir.sverrisson@gmail.com>,
-	Kieran Bingham <kieran.bingham@ideasonboard.com>,
-	Mehdi Djait <mehdi.djait@linux.intel.com>,
-	Ricardo Ribalda Delgado <ribalda@kernel.org>,
-	Hans de Goede <hansg@kernel.org>,
-	Jacopo Mondi <jacopo.mondi@ideasonboard.com>,
-	Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>,
-	David Plowman <david.plowman@raspberrypi.com>,
-	"Yu, Ong Hock" <ong.hock.yu@intel.com>,
-	"Ng, Khai Wen" <khai.wen.ng@intel.com>
-Subject: [PATCH 06/13] media: mc: Separate single link validation into a new function
-Date: Fri,  6 Feb 2026 15:13:23 +0200
-Message-ID: <20260206131329.1306429-7-sakari.ailus@linux.intel.com>
-X-Mailer: git-send-email 2.47.3
-In-Reply-To: <20260206131329.1306429-1-sakari.ailus@linux.intel.com>
-References: <20260206131329.1306429-1-sakari.ailus@linux.intel.com>
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="oMg6a6Ic"
+Received: by mail-wm1-f48.google.com with SMTP id 5b1f17b1804b1-47ff94b46afso21838385e9.1
+        for <linux-media@vger.kernel.org>; Fri, 06 Feb 2026 05:39:06 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1770385145; x=1770989945; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:message-id:subject:cc
+         :to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=SByblG/xWpvmp/nxolcVgq0FDfurU60ZeneSuFWn46c=;
+        b=oMg6a6IcoyYb0CeIaYZiJp3Fyou1H4YLsQnaFTowASc7CUKsMX8CCMySCiysEYPurP
+         2CibxuNYYvojUHbV2t3Ifs1Fl1zHOw2TrbT3pZ+PDIIOs3btjBybgoBAE/8NthOx8mvk
+         zS1/6S2+0OZnh3ITUQLls4E9nXWNL3ICNYScttFzeUNCVYMGv8s+vJ+gXDD5V9/46/Lj
+         Rg7dQbOCDfLpD3QlGZYqp9VktXWqkI0Ppl5RSuXMDcNkdvPeKhsez6Wc7rits74SyEHE
+         xNpmYMWTGPpdGT1Nkgm2AtFMDREQGD+gJkYqIMVOlWW11QuL9MnVo1GGY7tszOOngOEk
+         oFnQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1770385145; x=1770989945;
+        h=in-reply-to:content-disposition:mime-version:message-id:subject:cc
+         :to:from:date:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=SByblG/xWpvmp/nxolcVgq0FDfurU60ZeneSuFWn46c=;
+        b=lGjfJOWkHUdsTnxN1eFgyEDKFGsEV4nYH9Td8tQH3TRUxGu91418imSEQV2dmu02mK
+         9I7tk8MUAJW3nFqx0r5VxQ/RIR7NdcU7H0gUp0Lx5mr/sHrfP/Qb8w2bj+s2yjJXtvUi
+         OFjowUjGLjw7c4r/7ujW91IbtD8FBIerK5iDCzV0thPp9nDTtjXuxaktMR6M8BCZCP6O
+         GHVRJOG5bbH0kF2bnZ2BOOC1qvr3XxgLcUI5mF7bzgL7OuHYzywEsTqB9mY/AnWDSjuY
+         /CbwTiUsFCjyQMYpFoeuG3BmjQDVq66X3adci1GY4ZG6zg8zwfPWByULM7FYV3xWExdL
+         j0NQ==
+X-Gm-Message-State: AOJu0YxiO8D0KPOxZ/AlZ5Et9tDmtSxlwdEnewgsgtPacldHKdppj3li
+	iuN9OE5vBdFAI+mofJItF1oNFN82LLHZ8OvL6El2BFJKCH663UXTof5caM6zufKf4r8=
+X-Gm-Gg: AZuq6aKfMUGM3yuftPEEMkhBn45wL5jZ/WtPuwMG2UU1lWXkqZW8DwFBtrjdzDQPYfL
+	c2h5BtZ3LCsU6lToFhsNWPva/PyvLAINP7JqtaTBRavSNvCAG8d6d0OP8RNTs64qPYUp98C07Ly
+	HfOH3Q0KZ1T6ti2o3ikpftwumRN9fTASBQtbFWt+MDDsIKEQu7K6ZEyYq5lcgtP5APGpTgI8n4n
+	LVr7UYo/9M1w5h+fOofo6s3SXwoAXl0aWLUgwJmO5JehLb66dI8f2Nmd91kAMEwN0I4367DmFX9
+	h62AOcJmQ6a2UhqtxiQTxLnW24A0cGJru+/e6Nn5ieGqFEcDbcpcmQrO7g1ity637j3y24k0Wkg
+	UNr2fc5f3Clt1VMughv4wg4t7THvACQfP4r4XGA0bizGHwdJiMKEb0YlVg6t6gzb4d6J74Qz0WG
+	nMZEfzXMq1dvzJYdrd
+X-Received: by 2002:a05:600c:492f:b0:47d:7004:f488 with SMTP id 5b1f17b1804b1-48317917840mr57197425e9.10.1770385144973;
+        Fri, 06 Feb 2026 05:39:04 -0800 (PST)
+Received: from localhost ([196.207.164.177])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-483206cc543sm52806025e9.4.2026.02.06.05.39.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 06 Feb 2026 05:39:04 -0800 (PST)
+Date: Fri, 6 Feb 2026 16:39:01 +0300
+From: Dan Carpenter <dan.carpenter@linaro.org>
+To: Michael Riesch <michael.riesch@collabora.com>
+Cc: linux-media@vger.kernel.org,
+	linux-kernel <linux-kernel@vger.kernel.org>
+Subject: [bug report] media: synopsys: add driver for the designware mipi
+ csi-2 receiver
+Message-ID: <aYXu9Sf4aEl8c3ym@stanley.mountain>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <caa37f28-a2e8-4e0a-a9ce-a365ce805e4b@stanley.mountain>
 
-Add a new function __media_pipeline_validate_one() to validate a single
-link in a pipeline. This will soon be used for performing validation in
-multiple phases.
+[ Smatch checking is paused while we raise funding.  #SadFace
+  https://lore.kernel.org/all/aTaiGSbWZ9DJaGo7@stanley.mountain/ -dan ]
 
-Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
----
- drivers/media/mc/mc-entity.c | 80 +++++++++++++++++++++---------------
- 1 file changed, 47 insertions(+), 33 deletions(-)
+Hello Michael Riesch,
 
-diff --git a/drivers/media/mc/mc-entity.c b/drivers/media/mc/mc-entity.c
-index 9519a537bfa2..ef959e9bb313 100644
---- a/drivers/media/mc/mc-entity.c
-+++ b/drivers/media/mc/mc-entity.c
-@@ -768,6 +768,49 @@ static int media_pipeline_populate(struct media_pipeline *pipe,
- 	return ret;
- }
- 
-+static int
-+__media_pipeline_validate_one(struct media_pad *origin,
-+			      struct media_pipeline *pipe,
-+			      struct media_pad *pad, struct media_link *link,
-+			      bool *has_enabled_link)
-+{
-+	struct media_device *mdev = origin->graph_obj.mdev;
-+	struct media_entity *entity = pad->entity;
-+	int ret;
-+
-+	/* Record if the pad has links and enabled links. */
-+	if (link->flags & MEDIA_LNK_FL_ENABLED && has_enabled_link)
-+		*has_enabled_link = true;
-+
-+	/*
-+	 * Validate the link if it's enabled and has the
-+	 * current pad as its sink.
-+	 */
-+	if (!(link->flags & MEDIA_LNK_FL_ENABLED))
-+		return 0;
-+
-+	if (link->sink != pad)
-+		return 0;
-+
-+	if (!entity->ops || !entity->ops->link_validate)
-+		return 0;
-+
-+	ret = entity->ops->link_validate(link);
-+	if (ret) {
-+		dev_dbg(mdev->dev,
-+			"Link '%s':%u -> '%s':%u failed validation: %d\n",
-+			link->source->entity->name, link->source->index,
-+			link->sink->entity->name, link->sink->index, ret);
-+		return ret;
-+	}
-+
-+	dev_dbg(mdev->dev, "Link '%s':%u -> '%s':%u is valid\n",
-+		link->source->entity->name, link->source->index,
-+		link->sink->entity->name, link->sink->index);
-+
-+	return 0;
-+}
-+
- __must_check int __media_pipeline_start(struct media_pad *origin,
- 					struct media_pipeline *pipe)
- {
-@@ -838,40 +881,11 @@ __must_check int __media_pipeline_start(struct media_pad *origin,
- 			if (link->sink != pad && link->source != pad)
- 				continue;
- 
--			/* Record if the pad has links and enabled links. */
--			if (link->flags & MEDIA_LNK_FL_ENABLED)
--				has_enabled_link = true;
--
--			/*
--			 * Validate the link if it's enabled and has the
--			 * current pad as its sink.
--			 */
--			if (!(link->flags & MEDIA_LNK_FL_ENABLED))
--				continue;
--
--			if (link->sink != pad)
--				continue;
--
--			if (!entity->ops || !entity->ops->link_validate)
--				continue;
--
--			ret = entity->ops->link_validate(link);
--			if (ret) {
--				dev_dbg(mdev->dev,
--					"Link '%s':%u -> '%s':%u failed validation: %d\n",
--					link->source->entity->name,
--					link->source->index,
--					link->sink->entity->name,
--					link->sink->index, ret);
-+			ret = __media_pipeline_validate_one(origin, pipe,
-+							    origin, link,
-+							    &has_enabled_link);
-+			if (ret)
- 				goto error;
--			}
--
--			dev_dbg(mdev->dev,
--				"Link '%s':%u -> '%s':%u is valid\n",
--				link->source->entity->name,
--				link->source->index,
--				link->sink->entity->name,
--				link->sink->index);
- 		}
- 
- 		/*
--- 
-2.47.3
+Commit 355a11004066 ("media: synopsys: add driver for the designware
+mipi csi-2 receiver") from Jan 20, 2026 (linux-next), leads to the
+following Smatch static checker warning:
 
+	drivers/media/platform/synopsys/dw-mipi-csi2rx.c:307 dw_mipi_csi2rx_enum_mbus_code()
+	warn: array off by one? 'csi2->formats[code->index]'
+
+drivers/media/platform/synopsys/dw-mipi-csi2rx.c
+    286 static int
+    287 dw_mipi_csi2rx_enum_mbus_code(struct v4l2_subdev *sd,
+    288                               struct v4l2_subdev_state *sd_state,
+    289                               struct v4l2_subdev_mbus_code_enum *code)
+    290 {
+    291         struct dw_mipi_csi2rx_device *csi2 = to_csi2(sd);
+    292 
+    293         switch (code->pad) {
+    294         case DW_MIPI_CSI2RX_PAD_SRC:
+    295                 if (code->index)
+    296                         return -EINVAL;
+    297 
+    298                 code->code =
+    299                         v4l2_subdev_state_get_format(sd_state,
+    300                                                      DW_MIPI_CSI2RX_PAD_SINK)->code;
+    301 
+    302                 return 0;
+    303         case DW_MIPI_CSI2RX_PAD_SINK:
+    304                 if (code->index > csi2->formats_num)
+
+This should be >=.
+
+    305                         return -EINVAL;
+    306 
+--> 307                 code->code = csi2->formats[code->index].code;
+    308                 return 0;
+    309         default:
+    310                 return -EINVAL;
+    311         }
+    312 }
+
+regards,
+dan carpenter
