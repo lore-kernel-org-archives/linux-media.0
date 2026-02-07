@@ -1,57 +1,60 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CA4803101CD
-	for <linux-media@vger.kernel.org>; Fri,  6 Feb 2026 21:38:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5B1571DDC1D
+	for <linux-media@vger.kernel.org>; Sat,  7 Feb 2026 00:24:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770413902; cv=none; b=oYpRB9NtF2bJY4dvwzHlYgtYnMnMP7YG+RcxTusrsGe07tiuHX8keez4X4ZT+vJ4ZxRYcCBz9uir0nZiVoYe7z7OFSmRdDJ2bs+CYk78v57L9KK9bZQpJsiVA9Ky1PErpqGN/p+gTn0NVVIHLSCocKPXy0m4USpt8nKsm+xkD0U=
+	t=1770423867; cv=none; b=RkCeOT3th5ycahU6Idbxynpiww6fNVHZwP7t2PiTCdJvEjlnJgtxAgpQ06PExX9BQ4DtqTf9yqTK0g98PiZYfqktfwR9JFxxZu9QM6trI3351PpiCBkyKbTIwCCo6jfa3C1cOgMS/zFrj51LLKn+Pj3WS7RYQyCJLbBciWMQ8R4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770413902; c=relaxed/simple;
-	bh=Mow5AyywwMqa9njwaQfYLujpJaXuqgUJ6z1QFmPPrnM=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=EOYaCjQtY0icCauF2+YXWPyGVC0g3o03PWdqsxpCsw8+Gbab1MqYcmtJRXAKnSMSCnorVAo5nGzsLntvyJfoewIOsicFkXL5EAjWwytAZxUXMFX+b4d0D4MmUU1s5Gb9qHAbhQSA04ih3SK4+AH6MJMokXEfbN9fWsTGN4ZMZig=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=QyNwumIz; arc=none smtp.client-ip=198.175.65.12
+	s=arc-20240116; t=1770423867; c=relaxed/simple;
+	bh=8iajhs/wxRSmEgg9+nl9643u3zxchGO1AYxf+OscVUQ=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=M+5e15L+iW8FlhOf3iqQbtf31qI1YJfZxnk3AwSlGw7IQA2ctD9GZgzI1hgtoRhPFyg6K2Ly9bva8jw8LW7M/mM1CzxGP25eeJmTnEs7VuOIz9drai14TFMB4iIU5N7ubzVp4UHr+jCig7brIaWZ7OgD0ddr7kraJ27D2r2FpfE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=GIyhgGjY; arc=none smtp.client-ip=192.198.163.16
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="QyNwumIz"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="GIyhgGjY"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1770413902; x=1801949902;
+  t=1770423866; x=1801959866;
   h=date:from:to:cc:subject:message-id;
-  bh=Mow5AyywwMqa9njwaQfYLujpJaXuqgUJ6z1QFmPPrnM=;
-  b=QyNwumIzOl1vLXnMefLwI7tCG84Ae/F2bts0JEHbrEt2yXf8oA7c1Jmg
-   t1+obc2JuEKJfhjTb0XgU3osr2a0b6e45n3pxGRnUb5pF8kTk/5uMTBXy
-   llNFqjhXxAaEHUDUT/sqK+1U6dBrhDbpIIMDE+vA6oqDFIQ7IE8Huz6FH
-   hvE641G7YsDTbatII29YAWxluqzw2AvGJH/zkjiVk89qezwXtOtdEgPdL
-   BKpo52lv9ddc/SpOY5Lmyic+muhrf7OyWzEYbXXrZMBkyKKZogfMwoh12
-   xJZibw2qSnha8uTmSjW7sLdWU62kXtZiabJ8aAw8p4fAPWarlkld0e9g3
-   A==;
-X-CSE-ConnectionGUID: FNiri1CsTb+G4gSlwBf+hQ==
-X-CSE-MsgGUID: F7YD4InqRNm1BEHHg5NxtA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11693"; a="83070740"
+  bh=8iajhs/wxRSmEgg9+nl9643u3zxchGO1AYxf+OscVUQ=;
+  b=GIyhgGjYJ1g0XN6PFzsWLIRdfqHDDF5OBy8W7lmkf0fxF2MkbQbcNIsH
+   XXvDREqvJCEilDScnep2Xa50pwlNHYvBBiun2xxjkv9jihjbjCO8jzCRA
+   z7R1OUwZfwo4KLoQKktDNzU/hoydDJq+RmjK0uhiwnLBnsayXMRptoSFP
+   POJ3lXcAlQ8aswQf8U7i7XLoBDMPDs+QnvIjI9w7us1ExxbEDr3aNlMBa
+   ziMakPlSGZujSuxSEqkxwss2B5Q4DKTJnbekeb6oa4/+o+WKeFdTH/hrb
+   D5LD64oDd3EcdxuL9Klk5utM0jB+ArW7EL8F4b5eSm6Dz6IOa8XNLH1z/
+   Q==;
+X-CSE-ConnectionGUID: glS0FaoORxG4QofNGmhECw==
+X-CSE-MsgGUID: S8ATR2MKTdu2POxIp/B1Fg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11693"; a="59203181"
 X-IronPort-AV: E=Sophos;i="6.21,277,1763452800"; 
-   d="scan'208";a="83070740"
-Received: from fmviesa003.fm.intel.com ([10.60.135.143])
-  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Feb 2026 13:38:20 -0800
-X-CSE-ConnectionGUID: eItm6pkeQ2K0ZqFmtQ0uPA==
-X-CSE-MsgGUID: denRIxe1SIqiBy4KOqTDYg==
+   d="scan'208";a="59203181"
+Received: from orviesa009.jf.intel.com ([10.64.159.149])
+  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Feb 2026 16:24:25 -0800
+X-CSE-ConnectionGUID: i5CzfvN6Qt+3tT1Axe8noQ==
+X-CSE-MsgGUID: 2326Ko59Qv+fJ0MKufWzOw==
 X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.21,277,1763452800"; 
+   d="scan'208";a="210809568"
 Received: from lkp-server01.sh.intel.com (HELO 765f4a05e27f) ([10.239.97.150])
-  by fmviesa003.fm.intel.com with ESMTP; 06 Feb 2026 13:38:18 -0800
+  by orviesa009.jf.intel.com with ESMTP; 06 Feb 2026 16:24:24 -0800
 Received: from kbuild by 765f4a05e27f with local (Exim 4.98.2)
 	(envelope-from <lkp@intel.com>)
-	id 1voTWq-00000000lBU-2Dtm;
-	Fri, 06 Feb 2026 21:38:16 +0000
-Date: Sat, 07 Feb 2026 05:37:31 +0800
+	id 1voW7Z-00000000lHo-2286;
+	Sat, 07 Feb 2026 00:24:21 +0000
+Date: Sat, 07 Feb 2026 08:23:59 +0800
 From: kernel test robot <lkp@intel.com>
 To: Sakari Ailus <sakari.ailus@linux.intel.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
- linux-media@vger.kernel.org
+Cc: oe-kbuild-all@lists.linux.dev, linux-media@vger.kernel.org
 Subject: [sailus-media-tree:metadata-pre 13/13]
  drivers/media/platform/renesas/vsp1/vsp1_entity.c:161:5: error: conflicting
- types for 'vsp1_subdev_get_pad_format'
-Message-ID: <202602070533.3Ybd45b6-lkp@intel.com>
+ types for 'vsp1_subdev_get_pad_format'; have 'int(struct v4l2_subdev *, const
+ struct v4l2_subdev_client_info *, struct v4l2_subdev_state *, struct
+ v4l2_subdev_format *)'
+Message-ID: <202602070821.c9SviwgN-lkp@intel.com>
 User-Agent: s-nail v14.9.25
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
@@ -62,27 +65,27 @@ List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 tree:   git://linuxtv.org/sailus/media_tree.git metadata-pre
 head:   1b58854744d17413b2855b20178e63a1c82d58f5
 commit: 1b58854744d17413b2855b20178e63a1c82d58f5 [13/13] media: v4l: Add struct v4l2_subdev_client_info argument to pad ops
-config: s390-allmodconfig (https://download.01.org/0day-ci/archive/20260207/202602070533.3Ybd45b6-lkp@intel.com/config)
-compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260207/202602070533.3Ybd45b6-lkp@intel.com/reproduce)
+config: sh-allyesconfig (https://download.01.org/0day-ci/archive/20260207/202602070821.c9SviwgN-lkp@intel.com/config)
+compiler: sh4-linux-gcc (GCC) 15.2.0
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260207/202602070821.c9SviwgN-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202602070533.3Ybd45b6-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202602070821.c9SviwgN-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
->> drivers/media/platform/renesas/vsp1/vsp1_entity.c:161:5: error: conflicting types for 'vsp1_subdev_get_pad_format'
+>> drivers/media/platform/renesas/vsp1/vsp1_entity.c:161:5: error: conflicting types for 'vsp1_subdev_get_pad_format'; have 'int(struct v4l2_subdev *, const struct v4l2_subdev_client_info *, struct v4l2_subdev_state *, struct v4l2_subdev_format *)'
      161 | int vsp1_subdev_get_pad_format(struct v4l2_subdev *subdev,
-         |     ^
-   drivers/media/platform/renesas/vsp1/vsp1_entity.h:178:5: note: previous declaration is here
+         |     ^~~~~~~~~~~~~~~~~~~~~~~~~~
+   In file included from drivers/media/platform/renesas/vsp1/vsp1_entity.c:19:
+   drivers/media/platform/renesas/vsp1/vsp1_entity.h:178:5: note: previous declaration of 'vsp1_subdev_get_pad_format' with type 'int(struct v4l2_subdev *, struct v4l2_subdev_state *, struct v4l2_subdev_format *)'
      178 | int vsp1_subdev_get_pad_format(struct v4l2_subdev *subdev,
-         |     ^
-   1 error generated.
+         |     ^~~~~~~~~~~~~~~~~~~~~~~~~~
 
 
-vim +/vsp1_subdev_get_pad_format +161 drivers/media/platform/renesas/vsp1/vsp1_entity.c
+vim +161 drivers/media/platform/renesas/vsp1/vsp1_entity.c
 
 e790c3cb8d904c drivers/media/platform/vsp1/vsp1_entity.c         Laurent Pinchart 2015-11-15  151  
 3f557220cc29d1 drivers/media/platform/vsp1/vsp1_entity.c         Laurent Pinchart 2016-02-24  152  /*
