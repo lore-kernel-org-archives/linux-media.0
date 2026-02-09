@@ -1,259 +1,406 @@
-Received: from OS0P286CU011.outbound.protection.outlook.com (mail-japanwestazon11010010.outbound.protection.outlook.com [52.101.228.10])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f43.google.com (mail-wr1-f43.google.com [209.85.221.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 71A7E3803C7;
-	Mon,  9 Feb 2026 15:38:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.228.10
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770651498; cv=fail; b=dtAGRZQrOrOpDd6RXegVT4pEf65UMcI5BzWpkJE0Q0W0phznkrk10Hpq48OUAI4N8gK77hA3YtdsKOxqTy5ZH2NpLiNZKAphMuJwZQM1B45061un5iB7b9fHzWgILtot1etb/HDMIlog3BHvXTg8flfy2x3FaF5CJYZStqVC8+w=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2BC963803D6
+	for <linux-media@vger.kernel.org>; Mon,  9 Feb 2026 15:38:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.43
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1770651498; cv=none; b=OARlX8gjfEWtL7PWT51UyzpgNCjHsXUZ/sKB87+lYQnl45y7al1FDVric7EdBxEC3+LJfZXOcR0HXmTP9NGT+5mzZxpmjwQA8c210ZXoxmPta9ZBa8KeXv/Xllcb1fzyqGmLNFoW9xqSH+sZOZ09tXFTqcAiXdQJr36jW7354yM=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1770651498; c=relaxed/simple;
-	bh=dXL7NAvfe/O3ktcZq5sxdD2ROauBlDTcEtvptTYULJU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
-	 Content-Disposition:In-Reply-To:MIME-Version; b=b5+3NcaLCS9qCXDa235n37NjYjLgqRyueU1Ybg0S3q5xWBJN0VIgb1dr0OJWaLIahjlCeRBR7LZz0uo3nKMjBhBwbU0rZRBx3YMEw8oq+JjKraJRO0vkHsV2g75bXgTFLFeXjs2hBpl1VwzXKfGtMt0CLCia3mkAyL8YnKehxE4=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=bp.renesas.com; spf=pass smtp.mailfrom=bp.renesas.com; dkim=pass (1024-bit key) header.d=bp.renesas.com header.i=@bp.renesas.com header.b=iViBW58p; arc=fail smtp.client-ip=52.101.228.10
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=bp.renesas.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bp.renesas.com
+	bh=iGVSUlByZ9R+Hf3KbnSMbzHFW1HHMLu5Fivqmkrt5c8=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=ffB7f0gdS2u1B0lHP9E2skQ0t0aFa2jlFlQG/3c0XShZ1DM/DYeACJqnRUmTM0BSQpdN7TsdbYpBpT0SHi8hNw3JpGZ/9/JOfyF0tAQra2StynrM6PUcyWMm4p6LpJY8N02WMlxtnplN83kfAoA0zFBdFo45aEluM+f4Q1vJFb8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=resnulli.us; spf=none smtp.mailfrom=resnulli.us; dkim=pass (2048-bit key) header.d=resnulli-us.20230601.gappssmtp.com header.i=@resnulli-us.20230601.gappssmtp.com header.b=HhReiw0s; arc=none smtp.client-ip=209.85.221.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=resnulli.us
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=resnulli.us
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=bp.renesas.com header.i=@bp.renesas.com header.b="iViBW58p"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=MTHeuxowInSNPVZzbVHM0X9NdYIGbLXotOLgBUOT9WnojvQSd2NIWASeR2SrPAZEHMhcThYCqGlrphfvLvBsI3QM57f2rGzJyjkfmEr/hZSLe7BDcAjHsoBCHdEiBoz59tBMg4pOJ1tQ2brs9HWy87RD/RwDe1KOanu3ehoIoEnL3/m8/3ljyFQ3J54uJGDUE6xzQxNJCzydZLZmlZleTxAC0/4IvXw2XUeuT1WMljCL0/31ZdvXANuTp3hO+pA7Y5T3RtXNJ69zjjUr4SA7C9mnV3tMtRmpO59vnh2ZvhLTeb2Az6+pyRa6HsaKKasiKNTCe0Psz18j0l+Egi4Xpg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=cVhYhKAuUbSQe9vBPJAxmsxW8zO0r/2yRXsqvXnwEYY=;
- b=klAJ7CUvFOE0J5fa4ZTAwNFjFNJosT3oxbRxiOFNSlCjhUffOlYqeWZxJAdcyCSVQGa6zbM7k05DV7fe9STFTIog51cYc77Zj3kW89vHNwK9+SS8gmWNzv0rRGsJJboWoIivLwpQzP+8EkWKiM4teV9i+czh4u919uhx61lebkBv6iVw3Ni62y+08vPeYSf6Kg9HDhXQlPj0czoGQlhr/uvXakx4uLwagS5Vws9aD0/bZpGOYk2y0sdWcKb0Tl8OlkjvJuTAPzsxbXqTbX+VNVhAOnDtfNTPenAHwCfxDXkrytfvTcYc9z7852A871SXQgRDshPIJedLDf0kEWMyTw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=bp.renesas.com; dmarc=pass action=none
- header.from=bp.renesas.com; dkim=pass header.d=bp.renesas.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bp.renesas.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=cVhYhKAuUbSQe9vBPJAxmsxW8zO0r/2yRXsqvXnwEYY=;
- b=iViBW58pwWyCixUgG1VycpZ0Xx1jUM+sYnh8V2VZzvXQXmzwrwbU1/Gf6owGfdUr1er3IZgNyjOpcFeD81njxC1GX+kE2gLTDyvTEYfTBa8kgQkh3e+E9EWc0rMkV4O62tu3Qu+tE6yyBaCgsWnywdc2u7RJ1anydzscZutDjfE=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=bp.renesas.com;
-Received: from TYCPR01MB11947.jpnprd01.prod.outlook.com (2603:1096:400:3e1::6)
- by TY4PR01MB15890.jpnprd01.prod.outlook.com (2603:1096:405:2af::9) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9587.18; Mon, 9 Feb
- 2026 15:38:13 +0000
-Received: from TYCPR01MB11947.jpnprd01.prod.outlook.com
- ([fe80::33f1:f7cd:46be:e4d8]) by TYCPR01MB11947.jpnprd01.prod.outlook.com
- ([fe80::33f1:f7cd:46be:e4d8%5]) with mapi id 15.20.9587.017; Mon, 9 Feb 2026
- 15:38:13 +0000
-Date: Mon, 9 Feb 2026 16:37:57 +0100
-From: Tommaso Merciai <tommaso.merciai.xr@bp.renesas.com>
-To: Jacopo Mondi <jacopo.mondi@ideasonboard.com>
-Cc: tomm.merciai@gmail.com, linux-renesas-soc@vger.kernel.org,
-	biju.das.jz@bp.renesas.com,
-	Mauro Carvalho Chehab <mchehab@kernel.org>,
-	Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
-	Hans Verkuil <hverkuil@kernel.org>,
-	Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-	Daniel Scally <dan.scally+renesas@ideasonboard.com>,
-	linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-	stable@vger.kernel.org
-Subject: Re: [PATCH 1/3] media: rzg2l-cru: Skip ICnMC configuration when
- ICnSVC is used
-Message-ID: <aYn_Vf1H1m1z44p2@tom-desktop>
-References: <cover.1767114395.git.tommaso.merciai.xr@bp.renesas.com>
- <b9aeabb34829b8e97559610a3d00ef67399a300c.1767114395.git.tommaso.merciai.xr@bp.renesas.com>
- <aYnnRWR-5xOPSHOh@zed>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <aYnnRWR-5xOPSHOh@zed>
-X-ClientProxiedBy: FR4P281CA0166.DEUP281.PROD.OUTLOOK.COM
- (2603:10a6:d10:b7::17) To TYCPR01MB11947.jpnprd01.prod.outlook.com
- (2603:1096:400:3e1::6)
+	dkim=pass (2048-bit key) header.d=resnulli-us.20230601.gappssmtp.com header.i=@resnulli-us.20230601.gappssmtp.com header.b="HhReiw0s"
+Received: by mail-wr1-f43.google.com with SMTP id ffacd0b85a97d-4362507f0bcso2763068f8f.0
+        for <linux-media@vger.kernel.org>; Mon, 09 Feb 2026 07:38:18 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=resnulli-us.20230601.gappssmtp.com; s=20230601; t=1770651496; x=1771256296; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=/ee6Qt6P3kb+iUDKJmukIBp9eLArciL7f3fEMhhpVWQ=;
+        b=HhReiw0staX5p5r/PzWw+T6Gx80rejRFl+HWo3LfAc7l1wYIBVtTu48JkvnlONCWip
+         J2AuEN28cfW87lKQ6j/bUQ8OK5deTKJIDn5tr+T2bhJEGSU7tOeeJyNUiiLs3Y+N3QzV
+         qya2EDOx72SlRq0ITwTa8shWl0qYotoMRljzPeTxm3LzqICUTZC+g1B3BR8lweMAN9jR
+         5UFuQ7oqqecqDhPN36K9KRkVl0KlnEpC4BZdMjjGthqS4cDFqMpZOGh+7CTs2uYYYrFs
+         fBuxdujw3WWfk1CLz+jLQNhT3ROSbhQgUfuVec4+kyqf+rMx9EalWWPbwji9ju0yQPcT
+         MZwQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1770651496; x=1771256296;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=/ee6Qt6P3kb+iUDKJmukIBp9eLArciL7f3fEMhhpVWQ=;
+        b=QxfTSNyLI14TJEP1rwsH4LGWA+sp8PjaecGKy1u7CxYibrQJA7Ts9TL2BkzAkd0ceR
+         RBWGS7tYHiZ1LX46OvSvssSnDxR0V95aclPrCxzlIMdRGNQ3C5cPzXsK/S4V1Hic4cSP
+         fUfvpVcfh/9Up5+8EHzeVivA9+IskGMapIc6smbGSLgNiyuoUB4U/2U3bfg2iH259mjF
+         p314M0EDtEm1bn49fLqYjjdNLZHU6k+Cr6ulsmIw7+P0CRwQ1g+JgbclQzy5RpUZIU7J
+         /49J+FtCZEPFp5DZ8wfB+hQZqQdSk+j6W7ZeropmMxvyH0OMukNUAvyWbbj12/mvhVPQ
+         Qydw==
+X-Forwarded-Encrypted: i=1; AJvYcCXDtDSwcAzxEs3trpr6g879pG5Kc9q8iN/Wv6916x8t7qP9SeGaiviQoZQhDrc0jIUa8PQIDY9TdP+8/w==@vger.kernel.org
+X-Gm-Message-State: AOJu0YzfMRnZ640PPRbuCp51EqyIuUiNJPyOBbpPCFydtcUEvEsykcwL
+	QAWVFHowzmcqjk94xtnTud3W1XGR3bGFIpgYHVgkhIIybaTtQL6627grrAVGPwz9TFk=
+X-Gm-Gg: AZuq6aJgMytNQrWtguEVPJZZfI82/l8HzfiKIySmz12mbxC0BzHxbqZ4jCgkI27Co3H
+	FGRDj73hVLUUj8lu+hbPjlGHXl8ft/sAC7HbNsVwjHc/4AIvlD5cTt2EbJ05sSrszREQeFit8+q
+	fCKYeposdnsEHfBYWEYKuPGohXLgP+IEKVsxbtIfH3hwLupJTiDp03fcA8Y0pWZuQ1ve3gUvnPG
+	+KMwxvlBOOITVs08WO2vzbjppyolmV5u263WY6cQns5/sYJ2RO4YCZVrg7DQhg9veGd8Psv5Q8N
+	+r+JDJ4AQhhQXqDTV7IbXEUP8LSgnipb6OH4KwkkiUF3XD/80HW08KdJZ1i2gJjK5OAwhcNkoeP
+	qDc3Q3t2MmytvkabdzJlyR1XkI010wKeDdMQHU4Ib/dqMsT39DKNiWbaxhh4NhQicjqTBz1mnbR
+	fCsWpJcivrEgcS
+X-Received: by 2002:a05:6000:2c09:b0:436:42fb:153c with SMTP id ffacd0b85a97d-43642fb1705mr11442711f8f.30.1770651496419;
+        Mon, 09 Feb 2026 07:38:16 -0800 (PST)
+Received: from localhost ([85.163.81.98])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-4362972fa4csm26172323f8f.26.2026.02.09.07.38.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 09 Feb 2026 07:38:15 -0800 (PST)
+From: Jiri Pirko <jiri@resnulli.us>
+To: dri-devel@lists.freedesktop.org,
+	linaro-mm-sig@lists.linaro.org,
+	iommu@lists.linux.dev,
+	linux-media@vger.kernel.org
+Cc: sumit.semwal@linaro.org,
+	benjamin.gaignard@collabora.com,
+	Brian.Starkey@arm.com,
+	jstultz@google.com,
+	tjmercier@google.com,
+	christian.koenig@amd.com,
+	m.szyprowski@samsung.com,
+	robin.murphy@arm.com,
+	jgg@ziepe.ca,
+	leon@kernel.org,
+	sean.anderson@linux.dev,
+	ptesarik@suse.com,
+	catalin.marinas@arm.com,
+	aneesh.kumar@kernel.org,
+	suzuki.poulose@arm.com,
+	steven.price@arm.com,
+	thomas.lendacky@amd.com,
+	john.allen@amd.com,
+	ashish.kalra@amd.com,
+	suravee.suthikulpanit@amd.com,
+	linux-coco@lists.linux.dev
+Subject: [PATCH 5/5] dma-buf: heaps: system: add an option to allocate explicitly decrypted memory
+Date: Mon,  9 Feb 2026 16:38:09 +0100
+Message-ID: <20260209153809.250835-6-jiri@resnulli.us>
+X-Mailer: git-send-email 2.51.1
+In-Reply-To: <20260209153809.250835-1-jiri@resnulli.us>
+References: <20260209153809.250835-1-jiri@resnulli.us>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: TYCPR01MB11947:EE_|TY4PR01MB15890:EE_
-X-MS-Office365-Filtering-Correlation-Id: c6fc9856-8343-4b41-13b3-08de67f13c25
-X-LD-Processed: 53d82571-da19-47e4-9cb4-625a166a4a2a,ExtAddr
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|52116014|376014|7416014|366016|1800799024|38350700014;
-X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?rDSVr58yzg3Q+hMTHASoFePgAiEVTWyJsuSFdBCVjd9Cg/KcrLOaMB/xNC2Y?=
- =?us-ascii?Q?0347wawC87VXAs31fTvjChOKc2Pt0ZEXbl3HKbjbF36iMRvTb6bXQvk/Vi/H?=
- =?us-ascii?Q?95eSteB+OLmXh4Pd0KQithtHr1RPj7YiaM1IBYtrQCI8HDk2FVXXw5OFBoMl?=
- =?us-ascii?Q?KAGsTbAWsOPd9SgeeSfhGfksV9gV7rnwMj5AAYQeRlxlklZSdDohVTrNC6ZI?=
- =?us-ascii?Q?qBy6yO8YJYzFEgzD/F03y16YjVecV9s4d7+3cSxmdcb0bZhprAOlFZdlrHuj?=
- =?us-ascii?Q?U2MEbzGN9TvW4p5dpDl2uTTjdbmvt57pGxpZ/vcguHn516maLWeYdyPugjdL?=
- =?us-ascii?Q?gBrKgx38UedwH3mdS/dDHqlX1uxbuAcIm0ZWcoM0d8/LtOUEGdR2WfQjLsD4?=
- =?us-ascii?Q?3Fdkb3C9GU+oXC9BxUplLO6SH5aAhVX57DbbsHVOvFbbHACInVGIxowvJNO0?=
- =?us-ascii?Q?xnxcKdLja7p7Bn2YGwNQ2b39ztyA22S6l27pHX834uhj2d8BMOJ32ZNoA+r8?=
- =?us-ascii?Q?FnBk7iOfZoB/7vuOpMU5UmhhNcsqdFl+TtbgTz2WEIqN9iuB68xAH/+zU9bO?=
- =?us-ascii?Q?5jbzkEQBFxlcc/JFdOZt+RWX++bFdrA0gNQUCygRg+rqpXPMZSsfXqPzQ8y+?=
- =?us-ascii?Q?sbgMKrsDD49VuyTCRMZMAli4RknPh5Q0YJ3Ndtwt0mRSzxb3upa7s47wVyMv?=
- =?us-ascii?Q?jZdwYvB80SvOkGrWvSGZWd9yCEsO76OexUm26Emf0yhqmlQcvBdZGoCzbJ3g?=
- =?us-ascii?Q?veEDailjP2P3k4VCPgeKjBsEeMMfGGByfVzBB7hCBakdKJU3vkYwUhQPFt/1?=
- =?us-ascii?Q?uKmSZ4Uwklu3x4mtlqNGlnaJFr1Qk5w+21b7uPr1no17nDatnwgZatdIHWFV?=
- =?us-ascii?Q?VVUT73NfBeVr6XMS5DA1fuvkEh/vC2nMcMZINpQNEa4nnLktlufNU3rDXXVn?=
- =?us-ascii?Q?bEJY9is4mSGn86LVNp7F5nkvnHlns91Mk6PeUZM+i14VZpcMp37fT7SNJro+?=
- =?us-ascii?Q?S91s3eVDQ26iMoP/lTJPNB9LwCfyF0x3aSW5eygIj8BcuYFLuyQKBa4fLxzp?=
- =?us-ascii?Q?R/yvypMTPhFUcxFzQxVWzK4A5/yDMnFhGKvccnt2bUy9p1SAAAppwNXarfa6?=
- =?us-ascii?Q?pXIzFP4QFe5rMqdjws3UIHBHYAzy6TIPq2Jev/H0l3CUB5nXdvha9Legfv5W?=
- =?us-ascii?Q?xL71k0A5a71U6585jvW7nqGWae2qaQ5asxw2MtnHnuyDl1gdoTGXOJO+KyCc?=
- =?us-ascii?Q?Sk51dIF6jJa4bZpNs1oELwgu1ptUfax4YMj8S21S6snhbP5WwmYixZVSiSsH?=
- =?us-ascii?Q?0Ezox3i4YfN5weVvLsjOr24+3NXszJwagm2MZJj+9O2XI3iiKhAJ9DLGW0wP?=
- =?us-ascii?Q?NY//E8EPR2knb/OHQVLZVIF3iIWWYvPBoaodm6Xvebp8WENHgePkos8z/u0n?=
- =?us-ascii?Q?rRPVuXDra7ZyWDlDP2NzRZeahxKbOKTJUm8XRgmtXq/BGlM4ldXlLWAg7AIi?=
- =?us-ascii?Q?wR6kGfMqu2yCDWF1kOdVAo2nd3N4n4Qofq/81NzNa7/vi8RrMQyLDjMlFtDP?=
- =?us-ascii?Q?cbFH1y1fM0x6lHtf518lNslKRnSpf3FZ8F46+DEC/n3zRHBdSfmEwVgGETfu?=
- =?us-ascii?Q?/haiPmTCEArDddOlwgUD3H4=3D?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:TYCPR01MB11947.jpnprd01.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(52116014)(376014)(7416014)(366016)(1800799024)(38350700014);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?04VJnSusgwDmVI3VTYTIpwwMuF7Sd/84Bnq7bUqEXTnpJoxQk91D+RqLwAva?=
- =?us-ascii?Q?4QqN+Jvv1WcKApreOSPX0ElP2671Cxark35ukwXqKpAABET53a+77NvBPsAe?=
- =?us-ascii?Q?1owf+mIve7M+Kq+1G3cYmEuaZjZOlc14agtdOZuiHUX6aJjrvfh86ltZITgT?=
- =?us-ascii?Q?v31pxol6oEaH7u7CbtHXBnxkuDLK3w9JdvG+w1oQc+pI7PEkvgsjDz3KJukP?=
- =?us-ascii?Q?xGggIYed8bTrPUIZln9tP6qSDPvc+C80ZEaqMN/Be4F9Yj039kubgUMwkfH/?=
- =?us-ascii?Q?i325Npf0D59pyJK4Ln0XNsfAtdGrdZc9M/kATSyzfDO0FVbwY9u00kZJmDlb?=
- =?us-ascii?Q?VKIx6mKxF5tW20GC9xGUSH0rL+QLS6Pk7+PIa3pp7w2ErX7MJa81SQENSZo5?=
- =?us-ascii?Q?a8UZZuZCO2huaroL8cY6RzBFpOHVh7u7S74UrGBhLnrReDimHfAItSmKgnBs?=
- =?us-ascii?Q?fEJKV19wO5a4Q82/rqi3aUMan/hNPqBwe56p4mnCK6a6pJJJGlhhnYlR8VZ1?=
- =?us-ascii?Q?WvTd+Ln/CXjsBeYPE5TUtA96NurpVqI3dAtqwJuEa8uL/QUvowwN8zPOgJhy?=
- =?us-ascii?Q?BD1JTZOaCJCxfO9UwzuAbxqwKSbRSa73WSLwej3Bp1QY1K4mOYavvtrK2Jk+?=
- =?us-ascii?Q?x317NVy41Omk4faWG4/moh1JHSvy4rIlVlg9Fm5dI9kTMLtT1UOLXXyJJKSh?=
- =?us-ascii?Q?5yik4DukitVbbRphR70VTtKwSdP0mwhLyZb9ItnSw50e2YZLIdyK7gpWT/Tx?=
- =?us-ascii?Q?gGiIuZNgAF72Epi4oMi2Sn+2FBiLzN6rSTsNIPNQmQkBxdID/V5yk3jvW+Jt?=
- =?us-ascii?Q?Pi6+nG9V8f4YBnX+phwM9YxwGGSZI1mh/ZsSEoTuO50oETxV0caf/s4cUxev?=
- =?us-ascii?Q?6vTbCxtuC0fptXt/ZLn4vuoqS4542yX10BYA/lklTuny0brxZhb9saY4z7X4?=
- =?us-ascii?Q?4SjbU8m9rrTEKBxEPH3fggxNyV6ivCVrY/Lk1Fe8P0vWzQOdV3QgqepLjSNW?=
- =?us-ascii?Q?Vm6CmJEHLinKf4QD2sCQq1a0TiB5tIcmebWvgQLz426w0UExWs2MXp8V/KBn?=
- =?us-ascii?Q?bPg3xKKIhzJo2abnP+Y6vtzeHQREnpicxlk5398PZ3Ms6VytDoPbupnXRis9?=
- =?us-ascii?Q?QvsK6HBjsxRceE1P+W9lZDuwAf6GzLFNv+5mxn2F7Up/oPSkARlCLHicpDCo?=
- =?us-ascii?Q?FwobWLJMTbb8TwrwHIxpe5GWNPw2Ufp/7tbKUDo9y3vqjbB9nGxnd6oqCvzM?=
- =?us-ascii?Q?fFSbfIxhYfI8Hukpm6cxUIONd7/udL3FemoZ/co+ySFGtMRmp/0qMDr0Qvri?=
- =?us-ascii?Q?11EgcZcy8fq3LDWVROAkYw81pqBNyR+OzvZA92CXgq7FqeZv9cCi0PZfZ2Rf?=
- =?us-ascii?Q?LTwDbyyURjBJBjL9XDaRS2ZeGe/yYXerl9hBx96HRrLIJY/qyn4ThidUnwUD?=
- =?us-ascii?Q?FML/yDv/oaJXqKagzQ8dx4uFGV1rNkyLxNzp3u2/HYjVidymoqpFIWzvLq2q?=
- =?us-ascii?Q?qVOv+4B+2Mgum+v86DBbqvirRdAX2GCFvc4+qA3tTomNTkJ7wueq4aEVI4Dr?=
- =?us-ascii?Q?pP2/6AcjII+b9kVYLbd/D7X3F+Tdo7WhdupzBauYhZiYzAicV/LXXmFLHGqY?=
- =?us-ascii?Q?XWcLczLZ2zh5JYjX+3025lQEUpAP9M8Mn6Fk2Hg/XyrTbkt+2gNztmQsrUub?=
- =?us-ascii?Q?XmI6apV3Ns6nl4dTQyjTK7CXDe07O4HQvV70Hpxqhm5MBgsO6xMy6OJ+svEn?=
- =?us-ascii?Q?uytIa20Jf6dW6ywFfsKRGs8D9yntPG41ym3/mi7sR50KimW2fpCv?=
-X-OriginatorOrg: bp.renesas.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: c6fc9856-8343-4b41-13b3-08de67f13c25
-X-MS-Exchange-CrossTenant-AuthSource: TYCPR01MB11947.jpnprd01.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Feb 2026 15:38:13.0949
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 53d82571-da19-47e4-9cb4-625a166a4a2a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: P/4tRmdZ1BYAOVcsqZ/95mLzCTpqrC//rZwlGqmsFSzPsZXeuHMJ/VVPNiqE2QNFV1NPArHjHDAVOTyEJyHF7xaAR0+x4v5ms9D6kwXvdzg6E1RGr0tdKMbKb+YREIkB
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: TY4PR01MB15890
+Content-Transfer-Encoding: 8bit
 
-Hi Jacopo,
-Thanks for your review!
+From: Jiri Pirko <jiri@nvidia.com>
 
-On Mon, Feb 09, 2026 at 03:21:59PM +0100, Jacopo Mondi wrote:
-> Hi Tommaso
-> 
-> On Tue, Dec 30, 2025 at 06:09:15PM +0100, Tommaso Merciai wrote:
-> > When the CRU is configured to use ICnSVC for virtual channel mapping,
-> > as on the RZ/{G3E, V2H/P} SoC, the ICnMC register must not be
-> > programmed.
-> 
-> I see a difference indeed between the [G3E, V2H/P] and the G2L version
-> of the IP in the presence of the VCSEL[1:0] field in register ICnMC.
-> 
-> On [G3E, V2H/P] the selection of which virtual channel to accept
-> doesn't go through VCSEL[1:0] in ICnMC but a dedicated register ICnSVC
-> is provided for that purpose. So far so good.
-> 
-> >
-> > Return early after setting up ICnSVC to avoid overriding the ICnMC
-> > register, which is not applicable in this mode.
-> >
-> > This prevents unintended register programming when ICnSVC is enabled.
-> >
-> > Fixes: 3c5ca0a48bb0 ("media: rzg2l-cru: Drop function pointer to configure CSI")
-> > Cc: stable@vger.kernel.org
-> > Signed-off-by: Tommaso Merciai <tommaso.merciai.xr@bp.renesas.com>
-> > ---
-> >  drivers/media/platform/renesas/rzg2l-cru/rzg2l-video.c | 2 ++
-> >  1 file changed, 2 insertions(+)
-> >
-> > diff --git a/drivers/media/platform/renesas/rzg2l-cru/rzg2l-video.c b/drivers/media/platform/renesas/rzg2l-cru/rzg2l-video.c
-> > index 162e2ace6931..480e9b5dbcfe 100644
-> > --- a/drivers/media/platform/renesas/rzg2l-cru/rzg2l-video.c
-> > +++ b/drivers/media/platform/renesas/rzg2l-cru/rzg2l-video.c
-> > @@ -268,6 +268,8 @@ static void rzg2l_cru_csi2_setup(struct rzg2l_cru_dev *cru,
-> >  		rzg2l_cru_write(cru, ICnSVCNUM, csi_vc);
-> >  		rzg2l_cru_write(cru, ICnSVC, ICnSVC_SVC0(0) | ICnSVC_SVC1(1) |
-> >  				ICnSVC_SVC2(2) | ICnSVC_SVC3(3));
-> > +
-> > +		return;
-> >  	}
-> >
-> >  	icnmc |= rzg2l_cru_read(cru, info->image_conv) & ~ICnMC_INF_MASK;
-> 
-> However, the rest of the rzg2l_cru_csi2_setup() doesn't only program
-> the virtual channel filtering through ICnMC (which should be skept for
-> G3E, V2H/P) but also programs DT filtering in INF[5:0] of register
-> ICnIPMC_C0 which seems to be available on G3E and V2H/P as well.
-> 
-> Section "9.2.4.3.6 VC/Data Type Selector (for Image Processing)" of
-> the chip manual (V2H/P) prescribes:
-> 
-> Only one data type can be handled by each SVC and the data types are
-> selected in the ICnIPMC_C0 to 3.INF[5:0] registers.
+Add a new DMA_HEAP_FLAG_DECRYPTED heap flag to allow userspace to
+allocate decrypted (shared) memory from the dma-buf system heap for
+confidential computing (CoCo) VMs.
 
-You are correct, thanks.
-I miss that part.
+On CoCo VMs, guest memory is encrypted by default. The hardware uses an
+encryption bit in page table entries (C-bit on AMD SEV, "shared" bit on
+Intel TDX) to control whether a given memory access is encrypted or
+decrypted. The kernel's direct map is set up with encryption enabled,
+so pages returned by alloc_pages() are encrypted in the direct map
+by default. To make this memory usable for devices that do not support
+DMA to encrypted memory (no TDISP support), it has to be explicitly
+decrypted. A couple of things are needed to properly handle
+decrypted memory for the dma-buf use case:
 
-Maybe we can go for:
+- set_memory_decrypted() on the direct map after allocation:
+  Besides clearing the encryption bit in the direct map PTEs, this
+  also notifies the hypervisor about the page state change. On free,
+  the inverse set_memory_encrypted() must be called before returning
+  pages to the allocator. If re-encryption fails, pages
+  are intentionally leaked to prevent decrypted memory from being
+  reused as private.
 
-static void rzg2l_cru_csi2_setup(struct rzg2l_cru_dev *cru,
-				 const struct rzg2l_cru_ip_format *ip_fmt,
-				 u8 csi_vc)
-{
-	const struct rzg2l_cru_info *info = cru->info;
-	u32 icnmc = ICnMC_INF(ip_fmt->datatype);
+- pgprot_decrypted() for userspace and kernel virtual mappings:
+  Any new mapping of the decrypted pages, be it to userspace via
+  mmap or to kernel vmalloc space via vmap, creates PTEs independent
+  of the direct map. These must also have the encryption bit cleared,
+  otherwise accesses through them would see encrypted (garbage) data.
 
-	if (cru->info->regs[ICnSVC]) {
-		rzg2l_cru_write(cru, ICnSVCNUM, csi_vc);
-		rzg2l_cru_write(cru, ICnSVC, ICnSVC_SVC0(0) | ICnSVC_SVC1(1) |
-				ICnSVC_SVC2(2) | ICnSVC_SVC3(3));
-	} else {
-		/* Set virtual channel CSI2 */
-		icnmc |= ICnMC_VCSEL(csi_vc);
-	}
+- DMA_ATTR_CC_DECRYPTED for DMA mapping:
+  Since the pages are already decrypted, the DMA API needs to be
+  informed via DMA_ATTR_CC_DECRYPTED so it can map them correctly
+  as unencrypted for device access.
 
-	icnmc |= rzg2l_cru_read(cru, info->image_conv) & ~ICnMC_INF_MASK;
-	rzg2l_cru_write(cru, info->image_conv, icnmc);
-}
+On non-CoCo VMs the flag is rejected with -EOPNOTSUPP to prevent
+misuse by userspace that does not understand the security implications
+of explicitly decrypted memory.
 
-?
+Signed-off-by: Jiri Pirko <jiri@nvidia.com>
+---
+ drivers/dma-buf/heaps/system_heap.c | 87 +++++++++++++++++++++++++++--
+ include/linux/dma-heap.h            |  1 +
+ include/uapi/linux/dma-heap.h       | 12 +++-
+ 3 files changed, 94 insertions(+), 6 deletions(-)
 
-> 
-> And this patch makes the driver skips that part.
-> Has this patch been tested ? It breaks my V2H/P setup:
-> 
->  rzg2l-cru 16010000.cru1: Invalid MB address 0x0 (out of range)
+diff --git a/drivers/dma-buf/heaps/system_heap.c b/drivers/dma-buf/heaps/system_heap.c
+index 124dca56e4d8..0f80ecb660ec 100644
+--- a/drivers/dma-buf/heaps/system_heap.c
++++ b/drivers/dma-buf/heaps/system_heap.c
+@@ -10,6 +10,7 @@
+  *	Andrew F. Davis <afd@ti.com>
+  */
+ 
++#include <linux/cc_platform.h>
+ #include <linux/dma-buf.h>
+ #include <linux/dma-mapping.h>
+ #include <linux/dma-heap.h>
+@@ -17,7 +18,9 @@
+ #include <linux/highmem.h>
+ #include <linux/mm.h>
+ #include <linux/module.h>
++#include <linux/pgtable.h>
+ #include <linux/scatterlist.h>
++#include <linux/set_memory.h>
+ #include <linux/slab.h>
+ #include <linux/vmalloc.h>
+ 
+@@ -29,6 +32,7 @@ struct system_heap_buffer {
+ 	struct sg_table sg_table;
+ 	int vmap_cnt;
+ 	void *vaddr;
++	bool decrypted;
+ };
+ 
+ struct dma_heap_attachment {
+@@ -36,6 +40,7 @@ struct dma_heap_attachment {
+ 	struct sg_table table;
+ 	struct list_head list;
+ 	bool mapped;
++	bool decrypted;
+ };
+ 
+ #define LOW_ORDER_GFP (GFP_HIGHUSER | __GFP_ZERO)
+@@ -52,6 +57,34 @@ static gfp_t order_flags[] = {HIGH_ORDER_GFP, HIGH_ORDER_GFP, LOW_ORDER_GFP};
+ static const unsigned int orders[] = {8, 4, 0};
+ #define NUM_ORDERS ARRAY_SIZE(orders)
+ 
++static int system_heap_set_page_decrypted(struct page *page)
++{
++	unsigned long addr = (unsigned long)page_address(page);
++	unsigned int nr_pages = 1 << compound_order(page);
++	int ret;
++
++	ret = set_memory_decrypted(addr, nr_pages);
++	if (ret)
++		pr_warn_ratelimited("dma-buf system heap: failed to decrypt page at %p\n",
++				    page_address(page));
++
++	return ret;
++}
++
++static int system_heap_set_page_encrypted(struct page *page)
++{
++	unsigned long addr = (unsigned long)page_address(page);
++	unsigned int nr_pages = 1 << compound_order(page);
++	int ret;
++
++	ret = set_memory_encrypted(addr, nr_pages);
++	if (ret)
++		pr_warn_ratelimited("dma-buf system heap: failed to re-encrypt page at %p, leaking memory\n",
++				    page_address(page));
++
++	return ret;
++}
++
+ static int dup_sg_table(struct sg_table *from, struct sg_table *to)
+ {
+ 	struct scatterlist *sg, *new_sg;
+@@ -90,6 +123,7 @@ static int system_heap_attach(struct dma_buf *dmabuf,
+ 	a->dev = attachment->dev;
+ 	INIT_LIST_HEAD(&a->list);
+ 	a->mapped = false;
++	a->decrypted = buffer->decrypted;
+ 
+ 	attachment->priv = a;
+ 
+@@ -119,9 +153,11 @@ static struct sg_table *system_heap_map_dma_buf(struct dma_buf_attachment *attac
+ {
+ 	struct dma_heap_attachment *a = attachment->priv;
+ 	struct sg_table *table = &a->table;
++	unsigned long attrs;
+ 	int ret;
+ 
+-	ret = dma_map_sgtable(attachment->dev, table, direction, 0);
++	attrs = a->decrypted ? DMA_ATTR_CC_DECRYPTED : 0;
++	ret = dma_map_sgtable(attachment->dev, table, direction, attrs);
+ 	if (ret)
+ 		return ERR_PTR(ret);
+ 
+@@ -188,8 +224,13 @@ static int system_heap_mmap(struct dma_buf *dmabuf, struct vm_area_struct *vma)
+ 	unsigned long addr = vma->vm_start;
+ 	unsigned long pgoff = vma->vm_pgoff;
+ 	struct scatterlist *sg;
++	pgprot_t prot;
+ 	int i, ret;
+ 
++	prot = vma->vm_page_prot;
++	if (buffer->decrypted)
++		prot = pgprot_decrypted(prot);
++
+ 	for_each_sgtable_sg(table, sg, i) {
+ 		unsigned long n = sg->length >> PAGE_SHIFT;
+ 
+@@ -206,8 +247,7 @@ static int system_heap_mmap(struct dma_buf *dmabuf, struct vm_area_struct *vma)
+ 		if (addr + size > vma->vm_end)
+ 			size = vma->vm_end - addr;
+ 
+-		ret = remap_pfn_range(vma, addr, page_to_pfn(page),
+-				size, vma->vm_page_prot);
++		ret = remap_pfn_range(vma, addr, page_to_pfn(page), size, prot);
+ 		if (ret)
+ 			return ret;
+ 
+@@ -225,6 +265,7 @@ static void *system_heap_do_vmap(struct system_heap_buffer *buffer)
+ 	struct page **pages = vmalloc(sizeof(struct page *) * npages);
+ 	struct page **tmp = pages;
+ 	struct sg_page_iter piter;
++	pgprot_t prot;
+ 	void *vaddr;
+ 
+ 	if (!pages)
+@@ -235,7 +276,10 @@ static void *system_heap_do_vmap(struct system_heap_buffer *buffer)
+ 		*tmp++ = sg_page_iter_page(&piter);
+ 	}
+ 
+-	vaddr = vmap(pages, npages, VM_MAP, PAGE_KERNEL);
++	prot = PAGE_KERNEL;
++	if (buffer->decrypted)
++		prot = pgprot_decrypted(prot);
++	vaddr = vmap(pages, npages, VM_MAP, prot);
+ 	vfree(pages);
+ 
+ 	if (!vaddr)
+@@ -296,6 +340,14 @@ static void system_heap_dma_buf_release(struct dma_buf *dmabuf)
+ 	for_each_sgtable_sg(table, sg, i) {
+ 		struct page *page = sg_page(sg);
+ 
++		/*
++		 * Intentionally leak pages that cannot be re-encrypted
++		 * to prevent decrypted memory from being reused.
++		 */
++		if (buffer->decrypted &&
++		    system_heap_set_page_encrypted(page))
++			continue;
++
+ 		__free_pages(page, compound_order(page));
+ 	}
+ 	sg_free_table(table);
+@@ -344,6 +396,7 @@ static struct dma_buf *system_heap_allocate(struct dma_heap *heap,
+ 	DEFINE_DMA_BUF_EXPORT_INFO(exp_info);
+ 	unsigned long size_remaining = len;
+ 	unsigned int max_order = orders[0];
++	bool decrypted = heap_flags & DMA_HEAP_FLAG_DECRYPTED;
+ 	struct dma_buf *dmabuf;
+ 	struct sg_table *table;
+ 	struct scatterlist *sg;
+@@ -351,6 +404,15 @@ static struct dma_buf *system_heap_allocate(struct dma_heap *heap,
+ 	struct page *page, *tmp_page;
+ 	int i, ret = -ENOMEM;
+ 
++	if (decrypted) {
++		if (!cc_platform_has(CC_ATTR_MEM_ENCRYPT))
++			return ERR_PTR(-EOPNOTSUPP);
++#ifdef CONFIG_HIGHMEM
++		/* Sanity check, should not happen. */
++		return ERR_PTR(-EINVAL);
++#endif
++	}
++
+ 	buffer = kzalloc(sizeof(*buffer), GFP_KERNEL);
+ 	if (!buffer)
+ 		return ERR_PTR(-ENOMEM);
+@@ -359,6 +421,7 @@ static struct dma_buf *system_heap_allocate(struct dma_heap *heap,
+ 	mutex_init(&buffer->lock);
+ 	buffer->heap = heap;
+ 	buffer->len = len;
++	buffer->decrypted = decrypted;
+ 
+ 	INIT_LIST_HEAD(&pages);
+ 	i = 0;
+@@ -393,6 +456,14 @@ static struct dma_buf *system_heap_allocate(struct dma_heap *heap,
+ 		list_del(&page->lru);
+ 	}
+ 
++	if (decrypted) {
++		for_each_sgtable_sg(table, sg, i) {
++			ret = system_heap_set_page_decrypted(sg_page(sg));
++			if (ret)
++				goto free_pages;
++		}
++	}
++
+ 	/* create the dmabuf */
+ 	exp_info.exp_name = dma_heap_get_name(heap);
+ 	exp_info.ops = &system_heap_buf_ops;
+@@ -410,6 +481,13 @@ static struct dma_buf *system_heap_allocate(struct dma_heap *heap,
+ 	for_each_sgtable_sg(table, sg, i) {
+ 		struct page *p = sg_page(sg);
+ 
++		/*
++		 * Intentionally leak pages that cannot be re-encrypted
++		 * to prevent decrypted memory from being reused.
++		 */
++		if (buffer->decrypted &&
++		    system_heap_set_page_encrypted(p))
++			continue;
+ 		__free_pages(p, compound_order(p));
+ 	}
+ 	sg_free_table(table);
+@@ -430,6 +508,7 @@ static int __init system_heap_create(void)
+ 	struct dma_heap_export_info exp_info = {
+ 		.name = "system",
+ 		.ops = &system_heap_ops,
++		.valid_heap_flags = DMA_HEAP_FLAG_DECRYPTED,
+ 	};
+ 	struct dma_heap *sys_heap;
+ 
+diff --git a/include/linux/dma-heap.h b/include/linux/dma-heap.h
+index 7cfb531a9281..295a7eaa19ca 100644
+--- a/include/linux/dma-heap.h
++++ b/include/linux/dma-heap.h
+@@ -10,6 +10,7 @@
+ #define _DMA_HEAPS_H
+ 
+ #include <linux/types.h>
++#include <uapi/linux/dma-heap.h>
+ 
+ struct dma_heap;
+ 
+diff --git a/include/uapi/linux/dma-heap.h b/include/uapi/linux/dma-heap.h
+index a4cf716a49fa..6552c88e52f6 100644
+--- a/include/uapi/linux/dma-heap.h
++++ b/include/uapi/linux/dma-heap.h
+@@ -18,8 +18,16 @@
+ /* Valid FD_FLAGS are O_CLOEXEC, O_RDONLY, O_WRONLY, O_RDWR */
+ #define DMA_HEAP_VALID_FD_FLAGS (O_CLOEXEC | O_ACCMODE)
+ 
+-/* Currently no heap flags */
+-#define DMA_HEAP_VALID_HEAP_FLAGS (0ULL)
++/**
++ * DMA_HEAP_FLAG_DECRYPTED - Allocate decrypted (shared) memory
++ *
++ * For confidential computing guests (AMD SEV, Intel TDX), this flag
++ * requests that the allocated memory be marked as decrypted (shared
++ * with the host).
++ */
++#define DMA_HEAP_FLAG_DECRYPTED		(1ULL << 0)
++
++#define DMA_HEAP_VALID_HEAP_FLAGS (DMA_HEAP_FLAG_DECRYPTED)
+ 
+ /**
+  * struct dma_heap_allocation_data - metadata passed from userspace for
+-- 
+2.51.1
 
-I've not seeing that on RZ/G3E.
-Thanks for sharing.
-
-
-Kind Regards,
-Tommaso
-
-> 
-> 
-> > --
-> > 2.43.0
-> >
-> >
