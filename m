@@ -1,54 +1,54 @@
 Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D02E5354AD4
-	for <linux-media@vger.kernel.org>; Wed, 11 Feb 2026 09:09:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0E331350D7E
+	for <linux-media@vger.kernel.org>; Wed, 11 Feb 2026 09:09:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770800976; cv=none; b=JFnIvNMl72KTZ0lJBqr5ZWnZBCSgy3U2FiMrvCDSip9XNHrqalhDGnI7uLQ9kDZL0DupMypzcaC9ga//pROn/gvvDKJoqAMIxsRUtcWTupivMqzL804kjxEHI5fZVi0r8Wae0tYx7fD8vui7mxQevyK5T858VrNLiyroXFZP/N8=
+	t=1770800977; cv=none; b=KQeT+nHgUy6uwDmoMHb90mR3ix3PeILYim+bkL73/jql7lVn5hxu/ExOBGq2Wl8jzjVg5AuhQSnpWkl3a0jSVzfR3Aw93UcfVOgiyvpJIDMqaL2/g963jLI18bAFWD2/lUWjR0CT9ojaMxFJHrZnhl5TcF7zfsIGwcwXsnPhOv4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770800976; c=relaxed/simple;
-	bh=B85jHD4wx7Kvu+IP+/42lW/E6wWsYYRigfJ4suOVatw=;
+	s=arc-20240116; t=1770800977; c=relaxed/simple;
+	bh=OlTLK0CqCzBB4WeAVR7jvxv1ulQBxGgpjsvrv0hIQjY=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=VgPiLPfu0+C8VdU6esJoZsSaaVQLHDzO4YYj0DauNyqzAJ9oAYWL/Z1s6XQGo9cbVrtgql0fYzMsqayqdfGXHSHDXaB1Is+CPK4HOIF/y0t38QIJ+yEaJEHirSPPdCXoht9JPwmcZKZb8AULMtsbos1lNZ3SuZNKGvNggZdG+IY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=fT2aQbkD; arc=none smtp.client-ip=192.198.163.14
+	 MIME-Version; b=I1Yphcx55Lkgr+z/8Gw0tPCcAjykPXD3RCinrFvh3m7Iwgive7vJbMhQ5d7BaZl3Blx9D1H0Gt60RpOZf93oy8+8YKmcOnLhe9yCyHHG/pVWcfN374hHHvxBKfPr1pE6QRqUBOsnNsw4iM/WXeoC5UbmmTIUTMxNJbXB832lNso=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=XeyHSKl3; arc=none smtp.client-ip=192.198.163.14
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="fT2aQbkD"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="XeyHSKl3"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1770800975; x=1802336975;
+  t=1770800976; x=1802336976;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=B85jHD4wx7Kvu+IP+/42lW/E6wWsYYRigfJ4suOVatw=;
-  b=fT2aQbkDQT0tmOvdZZkWYn4k9nLzYptmQKvkGfldJZN2gYOmoqqnU0Fa
-   YCsJxCghbq45pIJqv71nWMjjmYvjQVcxpLlP7ohR41u5g7w6ry7TZQb7i
-   8eTCBuIXAsdMOzMw2jsblZCxHP1vrn4iSusUAv+q9tBMqloLcwyCrTEnI
-   mhvIoWc29LrBQjwQ8EbdO2J9wVq4MKb6lRBpvJOTceTA3zFSRyj9Fc0bE
-   3CmJ5UWUR+yyfBKcnIWiQ5323sWXHCWxVDa1lYCm/6rwKQDjdQgraBhHS
-   gKn2Lk54hEqtC3VIysyQM9c6EoWIWfpG3IE+WgBbNkqyANwG6Q/FkRtuZ
-   Q==;
-X-CSE-ConnectionGUID: K2Mc1kSjSceBHMreWNq/XA==
-X-CSE-MsgGUID: mHiRgjEdQXCwUXEykL7keQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11697"; a="72019032"
+  bh=OlTLK0CqCzBB4WeAVR7jvxv1ulQBxGgpjsvrv0hIQjY=;
+  b=XeyHSKl3NCt/SfF70jmaifuitou1vciS4qSeU+n2RsOXbNNxSrBhA2PW
+   WOXPw7PF6F3BMCX9IOzIXie7U3kEw/COofPRVu9hbC1I12LyvjrotENgD
+   jwmPyhgx7/ZG5KYLpNGTZLY4g1b75SU4d1ZF6Zn0vmfMGwwjLcy5K6SMC
+   Qm+7vSGxkeDxqoFBVC8q68WZIVXA4Oq/N7zpVdiRgScJd0a+GY16Rk/uN
+   put/dUqlHnTRH6+RpL7T4v4BevwHdBeabuRW+02b1DOrTyfMQgc7hMl/k
+   u5W5lZ0taFXAkk8ZxAanykZC/BhEIMaxJ9Ku4tz5nmCVVM4SvOo6+iW9R
+   w==;
+X-CSE-ConnectionGUID: OuOgynpXTw234iEVuRU5kw==
+X-CSE-MsgGUID: cvd8k+ASQQaTVq+QP/r9kQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11697"; a="72019041"
 X-IronPort-AV: E=Sophos;i="6.21,283,1763452800"; 
-   d="scan'208";a="72019032"
+   d="scan'208";a="72019041"
 Received: from orviesa008.jf.intel.com ([10.64.159.148])
   by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Feb 2026 01:09:32 -0800
-X-CSE-ConnectionGUID: DR5hW469QbSI2m13HIe5Xw==
-X-CSE-MsgGUID: h4SE5X3VRVmF9xXRiyDr5w==
+X-CSE-ConnectionGUID: N/RJ/kZdTn2S37SSV3qkBA==
+X-CSE-MsgGUID: gUu1ki2wSD+jeNSLeHcZzw==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.21,283,1763452800"; 
-   d="scan'208";a="212222863"
+   d="scan'208";a="212222861"
 Received: from pgcooper-mobl3.ger.corp.intel.com (HELO kekkonen.fi.intel.com) ([10.245.244.208])
   by orviesa008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Feb 2026 01:09:24 -0800
 Received: from punajuuri.localdomain (unknown [192.168.240.130])
-	by kekkonen.fi.intel.com (Postfix) with ESMTP id D3082121D6E;
+	by kekkonen.fi.intel.com (Postfix) with ESMTP id B594B121D4A;
 	Wed, 11 Feb 2026 11:09:31 +0200 (EET)
 Received: from sailus by punajuuri.localdomain with local (Exim 4.98.2)
 	(envelope-from <sakari.ailus@linux.intel.com>)
-	id 1vq6Do-00000007laW-2uVf;
+	id 1vq6Do-00000007la4-2RCe;
 	Wed, 11 Feb 2026 11:09:20 +0200
 Organization: Intel Finland Oy - BIC 0357606-4 - c/o Alberga Business Park, 6 krs, Bertel Jungin Aukio 5, 02600 Espoo
 From: Sakari Ailus <sakari.ailus@linux.intel.com>
@@ -81,9 +81,9 @@ Cc: hans@jjverkuil.nl,
 	David Plowman <david.plowman@raspberrypi.com>,
 	"Yu, Ong Hock" <ong.hock.yu@intel.com>,
 	"Ng, Khai Wen" <khai.wen.ng@intel.com>
-Subject: [PATCH v2 12/14] media: v4l2-subdev: Add v4l2_subdev_call_ci_active_state
-Date: Wed, 11 Feb 2026 11:09:18 +0200
-Message-ID: <20260211090920.1851141-13-sakari.ailus@linux.intel.com>
+Subject: [PATCH v2 05/14] media: v4l2-subdev: Refactor returning routes
+Date: Wed, 11 Feb 2026 11:09:11 +0200
+Message-ID: <20260211090920.1851141-6-sakari.ailus@linux.intel.com>
 X-Mailer: git-send-email 2.47.3
 In-Reply-To: <20260211090920.1851141-1-sakari.ailus@linux.intel.com>
 References: <20260211090920.1851141-1-sakari.ailus@linux.intel.com>
@@ -95,81 +95,94 @@ List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Add v4l2_subdev_call_ci_active_state(), to call sub-device pad ops that
-take struct v4l2_subdev_client_info pointer as an argument.
+Refactor returning the routes by adding a new function that essentially
+does a memcopy and sets the number of the number of the routes in the
+routing table.
 
 Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
 ---
- include/media/v4l2-subdev.h | 49 ++++++++++++++++++++++++++++---------
- 1 file changed, 38 insertions(+), 11 deletions(-)
+ drivers/media/v4l2-core/v4l2-subdev.c | 40 +++++++++++++++------------
+ 1 file changed, 22 insertions(+), 18 deletions(-)
 
-diff --git a/include/media/v4l2-subdev.h b/include/media/v4l2-subdev.h
-index 20cf0560c7f9..b22b05534447 100644
---- a/include/media/v4l2-subdev.h
-+++ b/include/media/v4l2-subdev.h
-@@ -1912,6 +1912,22 @@ extern const struct v4l2_subdev_ops v4l2_subdev_call_wrappers;
- 		__result;						\
- 	})
+diff --git a/drivers/media/v4l2-core/v4l2-subdev.c b/drivers/media/v4l2-core/v4l2-subdev.c
+index b2105c34478e..8a433d074587 100644
+--- a/drivers/media/v4l2-core/v4l2-subdev.c
++++ b/drivers/media/v4l2-core/v4l2-subdev.c
+@@ -629,6 +629,19 @@ subdev_ioctl_get_state(struct v4l2_subdev *sd, struct v4l2_subdev_fh *subdev_fh,
+ 			     v4l2_subdev_get_unlocked_active_state(sd);
+ }
  
-+#define v4l2_subdev_call_waive_fourth(first, second, third, fourth, rest...) \
-+	v4l2_subdev_call(first, second, third, ##rest)
++static void subdev_copy_fix_routes(struct v4l2_subdev_routing *routing,
++				   const struct v4l2_subdev_route *src,
++				   u32 copy_routes, u32 num_routes)
++{
++	struct v4l2_subdev_route *routes =
++		(struct v4l2_subdev_route *)(uintptr_t)routing->routes;
 +
-+#define __v4l2_subdev_call_state_active(call, sd, o, f, args...) \
-+	({								\
-+		int __result;						\
-+		struct v4l2_subdev_state *state;			\
-+		state = v4l2_subdev_get_unlocked_active_state(sd);	\
-+		if (state)						\
-+			v4l2_subdev_lock_state(state);			\
-+		__result = call(sd, o, f, NULL, state, ##args);		\
-+		if (state)						\
-+			v4l2_subdev_unlock_state(state);		\
-+		__result;						\
-+	})
++	for (u32 i = 0; i < copy_routes; i++)
++		routes[i] = src[i];
 +
- /**
-  * v4l2_subdev_call_state_active - call an operation of a v4l2_subdev which
-  *				   takes state as a parameter, passing the
-@@ -1930,17 +1946,28 @@ extern const struct v4l2_subdev_ops v4l2_subdev_call_wrappers;
-  * active state, lock it before calling the op and unlock it after the call.
-  */
- #define v4l2_subdev_call_state_active(sd, o, f, args...)		\
--	({								\
--		int __result;						\
--		struct v4l2_subdev_state *state;			\
--		state = v4l2_subdev_get_unlocked_active_state(sd);	\
--		if (state)						\
--			v4l2_subdev_lock_state(state);			\
--		__result = v4l2_subdev_call(sd, o, f, state, ##args);	\
--		if (state)						\
--			v4l2_subdev_unlock_state(state);		\
--		__result;						\
--	})
-+	__v4l2_subdev_call_state_active(v4l2_subdev_call_waive_fourth,	\
-+					sd, o, f, ##args)
++	routing->num_routes = num_routes;
++}
 +
-+/**
-+ * v4l2_subdev_call_ci_state_active - call an operation of a v4l2_subdev which
-+ *				      takes state as a parameter, passing the
-+ *				      subdev its active state.
-+ *
-+ * @sd: pointer to the &struct v4l2_subdev
-+ * @o: name of the element at &struct v4l2_subdev_ops that contains @f.
-+ *     Each element there groups a set of callbacks functions.
-+ * @f: callback function to be called.
-+ *     The callback functions are defined in groups, according to
-+ *     each element at &struct v4l2_subdev_ops.
-+ * @args: arguments for @f.
-+ *
-+ * This macro is just as v4l2_subdev_call_state_active(), with the exception
-+ * that it passes NULL as the client info to sub-device ops that need it
-+ * (currently pad ops get_fmt, set_fmt, get_selection and set_selection).
-+ */
-+#define v4l2_subdev_call_ci_state_active(sd, o, f, args...)		\
-+	__v4l2_subdev_call_state_active(v4l2_subdev_call, sd, o, f, ##args)
+ static long subdev_do_ioctl(struct file *file, unsigned int cmd, void *arg,
+ 			    struct v4l2_subdev_state *state)
+ {
+@@ -1000,7 +1013,6 @@ static long subdev_do_ioctl(struct file *file, unsigned int cmd, void *arg,
  
- /**
-  * v4l2_subdev_call_state_try - call an operation of a v4l2_subdev which
+ 	case VIDIOC_SUBDEV_G_ROUTING: {
+ 		struct v4l2_subdev_routing *routing = arg;
+-		struct v4l2_subdev_krouting *krouting;
+ 
+ 		if (!v4l2_subdev_enable_streams_api)
+ 			return -ENOIOCTLCMD;
+@@ -1013,13 +1025,9 @@ static long subdev_do_ioctl(struct file *file, unsigned int cmd, void *arg,
+ 
+ 		memset(routing->reserved, 0, sizeof(routing->reserved));
+ 
+-		krouting = &state->routing;
+-
+-		memcpy((struct v4l2_subdev_route *)(uintptr_t)routing->routes,
+-		       krouting->routes,
+-		       min(krouting->num_routes, routing->len_routes) *
+-		       sizeof(*krouting->routes));
+-		routing->num_routes = krouting->num_routes;
++		subdev_copy_fix_routes(routing, state->routing.routes,
++				       routing->len_routes,
++				       state->routing.num_routes);
+ 
+ 		return 0;
+ 	}
+@@ -1090,11 +1098,9 @@ static long subdev_do_ioctl(struct file *file, unsigned int cmd, void *arg,
+ 		 * the routing table.
+ 		 */
+ 		if (!v4l2_subdev_has_op(sd, pad, set_routing)) {
+-			memcpy((struct v4l2_subdev_route *)(uintptr_t)routing->routes,
+-			       state->routing.routes,
+-			       min(state->routing.num_routes, routing->len_routes) *
+-			       sizeof(*state->routing.routes));
+-			routing->num_routes = state->routing.num_routes;
++			subdev_copy_fix_routes(routing, state->routing.routes,
++					       routing->len_routes,
++					       state->routing.num_routes);
+ 
+ 			return 0;
+ 		}
+@@ -1108,11 +1114,9 @@ static long subdev_do_ioctl(struct file *file, unsigned int cmd, void *arg,
+ 		if (rval < 0)
+ 			return rval;
+ 
+-		memcpy((struct v4l2_subdev_route *)(uintptr_t)routing->routes,
+-		       state->routing.routes,
+-		       min(state->routing.num_routes, routing->len_routes) *
+-		       sizeof(*state->routing.routes));
+-		routing->num_routes = state->routing.num_routes;
++		subdev_copy_fix_routes(routing, state->routing.routes,
++				       routing->len_routes,
++				       state->routing.num_routes);
+ 
+ 		return 0;
+ 	}
 -- 
 2.47.3
 
