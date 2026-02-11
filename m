@@ -1,54 +1,54 @@
 Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0E331350D7E
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 96E6A27EFFA
 	for <linux-media@vger.kernel.org>; Wed, 11 Feb 2026 09:09:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770800977; cv=none; b=KQeT+nHgUy6uwDmoMHb90mR3ix3PeILYim+bkL73/jql7lVn5hxu/ExOBGq2Wl8jzjVg5AuhQSnpWkl3a0jSVzfR3Aw93UcfVOgiyvpJIDMqaL2/g963jLI18bAFWD2/lUWjR0CT9ojaMxFJHrZnhl5TcF7zfsIGwcwXsnPhOv4=
+	t=1770800977; cv=none; b=aUiGmN+GqlxyMf5WEbEjc494yASz3osJ+npufVVR6yncq2LoHYkGPrmWdJUaMaML0GfUO/7bzJ5LKOXWQnmNQnFYco+5Mc1RIYY9Tx2kR++00e6LuwcvkSFcWwq+ZN3cUYkBnwshZvlNCgZkTcuTuWWt5sfCtpg4GJqJiCfymoc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1770800977; c=relaxed/simple;
-	bh=OlTLK0CqCzBB4WeAVR7jvxv1ulQBxGgpjsvrv0hIQjY=;
+	bh=ieZdqCrbgXt8Q0D0lLKrHvXYJK6iDWCK0+sWmU0Ehpg=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=I1Yphcx55Lkgr+z/8Gw0tPCcAjykPXD3RCinrFvh3m7Iwgive7vJbMhQ5d7BaZl3Blx9D1H0Gt60RpOZf93oy8+8YKmcOnLhe9yCyHHG/pVWcfN374hHHvxBKfPr1pE6QRqUBOsnNsw4iM/WXeoC5UbmmTIUTMxNJbXB832lNso=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=XeyHSKl3; arc=none smtp.client-ip=192.198.163.14
+	 MIME-Version; b=T0CH8B/eYnssJdKe/pqGJftYeOcHYvvqjLX8xrB0pQlKDEgLd30i2J93ujifsb7zr95HcOIDZRC1iMARRZy8LV04jnOCK6B5mUEeDCJJLLrzdBhqf/GEu4jSbts+g9i5bB+TRc1+7DvfTULQWj+ngH9YXhN5EtlzZlfnnen3d7w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=KIlmv1bO; arc=none smtp.client-ip=192.198.163.14
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="XeyHSKl3"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="KIlmv1bO"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
   t=1770800976; x=1802336976;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=OlTLK0CqCzBB4WeAVR7jvxv1ulQBxGgpjsvrv0hIQjY=;
-  b=XeyHSKl3NCt/SfF70jmaifuitou1vciS4qSeU+n2RsOXbNNxSrBhA2PW
-   WOXPw7PF6F3BMCX9IOzIXie7U3kEw/COofPRVu9hbC1I12LyvjrotENgD
-   jwmPyhgx7/ZG5KYLpNGTZLY4g1b75SU4d1ZF6Zn0vmfMGwwjLcy5K6SMC
-   Qm+7vSGxkeDxqoFBVC8q68WZIVXA4Oq/N7zpVdiRgScJd0a+GY16Rk/uN
-   put/dUqlHnTRH6+RpL7T4v4BevwHdBeabuRW+02b1DOrTyfMQgc7hMl/k
-   u5W5lZ0taFXAkk8ZxAanykZC/BhEIMaxJ9Ku4tz5nmCVVM4SvOo6+iW9R
-   w==;
-X-CSE-ConnectionGUID: OuOgynpXTw234iEVuRU5kw==
-X-CSE-MsgGUID: cvd8k+ASQQaTVq+QP/r9kQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11697"; a="72019041"
+  bh=ieZdqCrbgXt8Q0D0lLKrHvXYJK6iDWCK0+sWmU0Ehpg=;
+  b=KIlmv1bOjQn6hDlEbES6CCIXSXGpjqUb5ZG6kbl5jCKKX+aOLI9iyw/9
+   nRuVTBmNk2cLfOjK/1+M2p5gkm0IAIwLRoj79D1TJGGVlxBWYw2YyBcjW
+   rBbI+x/hV0AygAYfYLbogkcmRdluE7CTc3k6T9nL70fPYmI5YQ3tQwejK
+   1EsPZsdxymo/oDN1jeB6emNOd/YM14Of9qPSIlTv+yArlWJss4II6bVGR
+   IEH6c5L8k4ZcgMMhbfNoyfLtwBqy6ZyyKqkvYvSMrGTFL4mLtyPXDfDIO
+   uMcjORCeRi3BKrZkvtGPAgQIb1ZaLcjfd0VEliA5XewJtgqX7f/3c5u8l
+   g==;
+X-CSE-ConnectionGUID: KDUMx9qhQwCk4rItG2BPFQ==
+X-CSE-MsgGUID: IhXwbgqLRgGa9Q+sL/M8yA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11697"; a="72019048"
 X-IronPort-AV: E=Sophos;i="6.21,283,1763452800"; 
-   d="scan'208";a="72019041"
+   d="scan'208";a="72019048"
 Received: from orviesa008.jf.intel.com ([10.64.159.148])
-  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Feb 2026 01:09:32 -0800
-X-CSE-ConnectionGUID: N/RJ/kZdTn2S37SSV3qkBA==
-X-CSE-MsgGUID: gUu1ki2wSD+jeNSLeHcZzw==
+  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Feb 2026 01:09:33 -0800
+X-CSE-ConnectionGUID: zM+ZwkDlQ/CnCGCyvl+xZQ==
+X-CSE-MsgGUID: ag9zpxeGT/qIfUjeDvZ6pg==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.21,283,1763452800"; 
-   d="scan'208";a="212222861"
+   d="scan'208";a="212222860"
 Received: from pgcooper-mobl3.ger.corp.intel.com (HELO kekkonen.fi.intel.com) ([10.245.244.208])
   by orviesa008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Feb 2026 01:09:24 -0800
 Received: from punajuuri.localdomain (unknown [192.168.240.130])
-	by kekkonen.fi.intel.com (Postfix) with ESMTP id B594B121D4A;
+	by kekkonen.fi.intel.com (Postfix) with ESMTP id D4DFE121DA3;
 	Wed, 11 Feb 2026 11:09:31 +0200 (EET)
 Received: from sailus by punajuuri.localdomain with local (Exim 4.98.2)
 	(envelope-from <sakari.ailus@linux.intel.com>)
-	id 1vq6Do-00000007la4-2RCe;
+	id 1vq6Do-00000007laa-2zFR;
 	Wed, 11 Feb 2026 11:09:20 +0200
 Organization: Intel Finland Oy - BIC 0357606-4 - c/o Alberga Business Park, 6 krs, Bertel Jungin Aukio 5, 02600 Espoo
 From: Sakari Ailus <sakari.ailus@linux.intel.com>
@@ -81,9 +81,9 @@ Cc: hans@jjverkuil.nl,
 	David Plowman <david.plowman@raspberrypi.com>,
 	"Yu, Ong Hock" <ong.hock.yu@intel.com>,
 	"Ng, Khai Wen" <khai.wen.ng@intel.com>
-Subject: [PATCH v2 05/14] media: v4l2-subdev: Refactor returning routes
-Date: Wed, 11 Feb 2026 11:09:11 +0200
-Message-ID: <20260211090920.1851141-6-sakari.ailus@linux.intel.com>
+Subject: [PATCH v2 13/14] media: v4l2-subdev: Perform client info changes to i2c drivers
+Date: Wed, 11 Feb 2026 11:09:19 +0200
+Message-ID: <20260211090920.1851141-14-sakari.ailus@linux.intel.com>
 X-Mailer: git-send-email 2.47.3
 In-Reply-To: <20260211090920.1851141-1-sakari.ailus@linux.intel.com>
 References: <20260211090920.1851141-1-sakari.ailus@linux.intel.com>
@@ -95,94 +95,54 @@ List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Refactor returning the routes by adding a new function that essentially
-does a memcopy and sets the number of the number of the routes in the
-routing table.
+Perform client info argument related changes to two i2c drivers (s5k5baf
+and tc358743). These changes are not done by Coccinelle scripts in the
+following patch and will be squashed to the previous patch eventually.
 
 Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
 ---
- drivers/media/v4l2-core/v4l2-subdev.c | 40 +++++++++++++++------------
- 1 file changed, 22 insertions(+), 18 deletions(-)
+ drivers/media/i2c/s5k5baf.c                     | 1 +
+ drivers/media/i2c/tc358743.c                    | 2 +-
+ drivers/media/pci/intel/ipu6/ipu6-isys-subdev.h | 1 +
+ 3 files changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/media/v4l2-core/v4l2-subdev.c b/drivers/media/v4l2-core/v4l2-subdev.c
-index b2105c34478e..8a433d074587 100644
---- a/drivers/media/v4l2-core/v4l2-subdev.c
-+++ b/drivers/media/v4l2-core/v4l2-subdev.c
-@@ -629,6 +629,19 @@ subdev_ioctl_get_state(struct v4l2_subdev *sd, struct v4l2_subdev_fh *subdev_fh,
- 			     v4l2_subdev_get_unlocked_active_state(sd);
+diff --git a/drivers/media/i2c/s5k5baf.c b/drivers/media/i2c/s5k5baf.c
+index d1d00eca8708..a580b7e63302 100644
+--- a/drivers/media/i2c/s5k5baf.c
++++ b/drivers/media/i2c/s5k5baf.c
+@@ -1463,6 +1463,7 @@ static bool s5k5baf_cmp_rect(const struct v4l2_rect *r1,
  }
  
-+static void subdev_copy_fix_routes(struct v4l2_subdev_routing *routing,
-+				   const struct v4l2_subdev_route *src,
-+				   u32 copy_routes, u32 num_routes)
-+{
-+	struct v4l2_subdev_route *routes =
-+		(struct v4l2_subdev_route *)(uintptr_t)routing->routes;
-+
-+	for (u32 i = 0; i < copy_routes; i++)
-+		routes[i] = src[i];
-+
-+	routing->num_routes = num_routes;
-+}
-+
- static long subdev_do_ioctl(struct file *file, unsigned int cmd, void *arg,
- 			    struct v4l2_subdev_state *state)
+ static int s5k5baf_set_selection(struct v4l2_subdev *sd,
++				 const struct v4l2_subdev_client_info *ci,
+ 				 struct v4l2_subdev_state *sd_state,
+ 				 struct v4l2_subdev_selection *sel)
  {
-@@ -1000,7 +1013,6 @@ static long subdev_do_ioctl(struct file *file, unsigned int cmd, void *arg,
+diff --git a/drivers/media/i2c/tc358743.c b/drivers/media/i2c/tc358743.c
+index a0ca19359c43..59f509aa1939 100644
+--- a/drivers/media/i2c/tc358743.c
++++ b/drivers/media/i2c/tc358743.c
+@@ -1822,7 +1822,7 @@ static int tc358743_set_fmt(struct v4l2_subdev *sd,
+ 	struct tc358743_state *state = to_state(sd);
  
- 	case VIDIOC_SUBDEV_G_ROUTING: {
- 		struct v4l2_subdev_routing *routing = arg;
--		struct v4l2_subdev_krouting *krouting;
+ 	u32 code = format->format.code; /* is overwritten by get_fmt */
+-	int ret = tc358743_get_fmt(sd, sd_state, format);
++	int ret = tc358743_get_fmt(sd, ci, sd_state, format);
  
- 		if (!v4l2_subdev_enable_streams_api)
- 			return -ENOIOCTLCMD;
-@@ -1013,13 +1025,9 @@ static long subdev_do_ioctl(struct file *file, unsigned int cmd, void *arg,
+ 	if (code == MEDIA_BUS_FMT_RGB888_1X24 ||
+ 	    code == MEDIA_BUS_FMT_UYVY8_1X16)
+diff --git a/drivers/media/pci/intel/ipu6/ipu6-isys-subdev.h b/drivers/media/pci/intel/ipu6/ipu6-isys-subdev.h
+index 35069099c364..d4f76d513dc6 100644
+--- a/drivers/media/pci/intel/ipu6/ipu6-isys-subdev.h
++++ b/drivers/media/pci/intel/ipu6/ipu6-isys-subdev.h
+@@ -31,6 +31,7 @@ bool ipu6_isys_is_bayer_format(u32 code);
+ u32 ipu6_isys_convert_bayer_order(u32 code, int x, int y);
  
- 		memset(routing->reserved, 0, sizeof(routing->reserved));
- 
--		krouting = &state->routing;
--
--		memcpy((struct v4l2_subdev_route *)(uintptr_t)routing->routes,
--		       krouting->routes,
--		       min(krouting->num_routes, routing->len_routes) *
--		       sizeof(*krouting->routes));
--		routing->num_routes = krouting->num_routes;
-+		subdev_copy_fix_routes(routing, state->routing.routes,
-+				       routing->len_routes,
-+				       state->routing.num_routes);
- 
- 		return 0;
- 	}
-@@ -1090,11 +1098,9 @@ static long subdev_do_ioctl(struct file *file, unsigned int cmd, void *arg,
- 		 * the routing table.
- 		 */
- 		if (!v4l2_subdev_has_op(sd, pad, set_routing)) {
--			memcpy((struct v4l2_subdev_route *)(uintptr_t)routing->routes,
--			       state->routing.routes,
--			       min(state->routing.num_routes, routing->len_routes) *
--			       sizeof(*state->routing.routes));
--			routing->num_routes = state->routing.num_routes;
-+			subdev_copy_fix_routes(routing, state->routing.routes,
-+					       routing->len_routes,
-+					       state->routing.num_routes);
- 
- 			return 0;
- 		}
-@@ -1108,11 +1114,9 @@ static long subdev_do_ioctl(struct file *file, unsigned int cmd, void *arg,
- 		if (rval < 0)
- 			return rval;
- 
--		memcpy((struct v4l2_subdev_route *)(uintptr_t)routing->routes,
--		       state->routing.routes,
--		       min(state->routing.num_routes, routing->len_routes) *
--		       sizeof(*state->routing.routes));
--		routing->num_routes = state->routing.num_routes;
-+		subdev_copy_fix_routes(routing, state->routing.routes,
-+				       routing->len_routes,
-+				       state->routing.num_routes);
- 
- 		return 0;
- 	}
+ int ipu6_isys_subdev_set_fmt(struct v4l2_subdev *sd,
++			     const struct v4l2_subdev_client_info *ci,
+ 			     struct v4l2_subdev_state *state,
+ 			     struct v4l2_subdev_format *fmt);
+ int ipu6_isys_subdev_enum_mbus_code(struct v4l2_subdev *sd,
 -- 
 2.47.3
 
