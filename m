@@ -1,101 +1,91 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 64702315D43
-	for <linux-media@vger.kernel.org>; Wed, 11 Feb 2026 08:59:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6DF953375A7
+	for <linux-media@vger.kernel.org>; Wed, 11 Feb 2026 09:05:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770800371; cv=none; b=uxyeyhIdTNZSZop3YwFkzuqxVVVYnlVKqDvH4ZDLwu8eyKLkjjJTqCYBFVZz837Bc4VnRM5B6IEjK6yz1g19FIHEP6B92RyRfK0KclvrK7t4EqaqlKo/LjHu3UwA4WJkb3T+aNFikdHeLnHH1V2ZUg9MWGcuqFpt5qg+Ml7aUq0=
+	t=1770800744; cv=none; b=RtEunbe6H9gfAo5rxU9gB4l8BZjLqDYmu5kKzVK9HwaXURD6Xn604EY4jXEYLvnFZlvozHZpWvK7Siox/cmRFU3ZvAX+QDnTPkzTVgvRfWA8YSthjnyh528VSHMujRE135+NARRVW59DzCSOvrbMc0x5huWsf9FTOzA3RQJaFY0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770800371; c=relaxed/simple;
-	bh=DfFVq71FEOUGBeTctt3BnYnzZLVcjBzQqGE8eGSnI28=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=MUn0WAWQhWABNl9s7VsY/NsiDLxUMfuKTxWoFZk0AuwnRDWbvvnhHT2CoVLD/t6YR5Y4WSKpuL/es6E0UTBXEXmPYYE5PKIuIAA+DH7w9ugTP1EKuBSVb6xIisjJ9CDN6Kk9VXQB7D8/RNVYhVOQrf+Qq3sx4s8V3QXSMj7veck=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=INM27KAH; arc=none smtp.client-ip=192.198.163.14
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1770800744; c=relaxed/simple;
+	bh=nV3PV9ukLwoxAVDSFzjk0rJnISxqdaE9DidsO8Y4HWk=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=GZv4LHyvB9WjMvDpOdeaNkik0TQgNZO2SbbFcXm28cPuQ0zmLXT3iGEsnEuMLKBXqwcPZu2f3AuejDorKeBwcBNkb1jm4dD5JuNr/otpWv0eq9CqpKFfy/N+crIouhLtF7zHF6IOLejIHAmrERRsrjJeIhoAM/T1pEkIzBiUl44=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jPEY0jo5; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="INM27KAH"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1770800371; x=1802336371;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=DfFVq71FEOUGBeTctt3BnYnzZLVcjBzQqGE8eGSnI28=;
-  b=INM27KAHd/j7Ly8PGOJ2Yj1W76kwpDM7CpECysTSEVYKU/cdxNKDory3
-   x89wdo1BqRpjFYu7nOGxfO8Mn1V6X5FDkbBMZPyPx0s5DcQxyCqUaRXsr
-   YTawREDx1mFs58/lcqgNR0ViteK0o28hvoyTSZMe4wDE4yLyVHMtHc68V
-   +g5jC3/6FMBcDDyTs7mECu5SNmWPmLvW1MmHLKBClQdgZGIFV8QlRIZEY
-   jpmIpIVPULs25v8B+45X2zzzFGHj5eif1HtqraL35zeUqSHtXN9Tr4BU/
-   a36Qqlj5YwohwruF/40X8EDuOKKtjUwkFgOEHweM1sFwJFl61+oDLLEjR
-   A==;
-X-CSE-ConnectionGUID: ezhh0RljQDGGru1UhX2dkg==
-X-CSE-MsgGUID: z/qu2ZTVRSC/klrrPhy6lQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11697"; a="72016838"
-X-IronPort-AV: E=Sophos;i="6.21,283,1763452800"; 
-   d="scan'208";a="72016838"
-Received: from orviesa006.jf.intel.com ([10.64.159.146])
-  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Feb 2026 00:59:27 -0800
-X-CSE-ConnectionGUID: p+yfe89HQbKKM0vM4S1wbw==
-X-CSE-MsgGUID: WiSaUrb3Q6CNZk76afPCpw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.21,283,1763452800"; 
-   d="scan'208";a="211297044"
-Received: from egrumbac-mobl6.ger.corp.intel.com (HELO localhost) ([10.245.244.220])
-  by orviesa006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Feb 2026 00:59:24 -0800
-Date: Wed, 11 Feb 2026 10:59:22 +0200
-From: Andy Shevchenko <andriy.shevchenko@intel.com>
-To: Sakari Ailus <sakari.ailus@linux.intel.com>
-Cc: Dan Carpenter <dan.carpenter@linaro.org>, soufianeda@tutanota.com,
-	linux-staging@lists.linux.dev, Andy Shevchenko <andy@kernel.org>,
-	linux-media@vger.kernel.org, Greg KH <gregkh@linuxfoundation.org>
-Subject: Re: [PATCH] staging: atomisp: fix heap buffer overflow in
- framebuffer conversion
-Message-ID: <aYxE6iMhwwqiLZpD@smile.fi.intel.com>
-References: <20260210-atomisp-fix-v1-1-024429cbff31@tutanota.com>
- <aYt-vrc7h7CJOmSu@stanley.mountain>
- <aYw5q_gsHOmKAIhK@kekkonen.localdomain>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jPEY0jo5"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 933B2C4CEF7;
+	Wed, 11 Feb 2026 09:05:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1770800744;
+	bh=nV3PV9ukLwoxAVDSFzjk0rJnISxqdaE9DidsO8Y4HWk=;
+	h=From:To:Cc:Subject:Date:From;
+	b=jPEY0jo51YChIdbM4Dk12jTUF/LYrqUgqcDMK3D8ZkD1M9Y8PbiFkVzqna1SevPgf
+	 9yKuGWobknJ9mhTlZe74S80fSxLR0IKhDfgx5MA3udEndexrFnjUrRCFaWq/5q0LFJ
+	 7UPHwMrC+2yq5K0HhpBSROPNscRbPqopvFdVcAm/074DBmXFbT2nL5U984HNX45jiZ
+	 +XF8L9eXxMKZrjJBvpu6CPiszr/+UJUoPRu2WonAHpBNTM1fnS6TKiC6Bg7crDkEfF
+	 s/6T1goMgvE9DlXC2cbOsSWks7eVB4SeI3WgCzOcY+Ioih3DEhEkmrBQqzblyf5Drm
+	 TSPQIcL34tCYA==
+From: Hans Verkuil <hverkuil+cisco@kernel.org>
+To: linux-media@vger.kernel.org
+Cc: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+	Sakari Ailus <sakari.ailus@linux.intel.com>,
+	Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+	Sean Young <sean@mess.org>,
+	Nicolas Dufresne <nicolas.dufresne@collabora.com>,
+	Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
+	Ricardo Ribalda <ribalda@chromium.org>
+Subject: [PATCHv9 0/3] docs: media: multicommitters model documentation
+Date: Wed, 11 Feb 2026 09:58:37 +0100
+Message-ID: <cover.1770800320.git.hverkuil+cisco@kernel.org>
+X-Mailer: git-send-email 2.51.0
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <aYw5q_gsHOmKAIhK@kekkonen.localdomain>
-Organization: Intel Finland Oy - BIC 0357606-4 - c/o Alberga Business Park, 6
- krs, Bertel Jungin Aukio 5, 02600 Espoo
+Content-Transfer-Encoding: 8bit
 
-On Wed, Feb 11, 2026 at 10:11:23AM +0200, Sakari Ailus wrote:
-> On Tue, Feb 10, 2026 at 09:53:50PM +0300, Dan Carpenter wrote:
+The main changes since v8 are:
 
-...
+- Typo/grammar fixes from Mauro
+- Added additional maintainer areas for Laurent and Sakari (patch 2/3)
+- Additional links to git development trees
 
-> Beyond that, even I have to admit I have little idea what this
-> IOCTL is supposed to be doing. Possibly feed in a raw frame for processing?
-> But that's not supposed to be implemented like this... The TODO file
-> contains an entry that says "Remove/disable private IOCTLs" -- we should
-> move to use parameter buffers instead.
-> 
-> I'm not sure anyone depends on these IOCTLs at the moment, but definitely
-> some obviously are associated with some risk.
-> 
-> The world looked different when this code was written.
-> 
-> I'd disable all private IOCTLs in the driver, with the possible exception
-> of ATOMISP_IOC_S_ISP_PARM, which is close to the parameter buffer approach
-> already.
+Patch 1/3 updates maintainer-entry-profile.rst: it introduces the
+three Media maintainer levels (Media Driver Maintainer, Media Core Maintainer
+and Media Subsystem Maintainer) and what the responsibilities are.
 
-I agree with a caveat (see below).
+Patch 2/3 adds back and updates the list of Media Maintainers that
+disappeared in patch 1/3. Please verify this whether the email
+addresses are the correct ones, and verify that the areas of responsibility
+are correct and that nothing is missing.
 
-> Also cc LMML, Greg and Andy.
+Patch 3/3 adds media-committers.rst: that focusses on the additional
+commit rights that can be granted to a Media Maintainer.
 
-Perhaps also ask Hans or other people from libcamera? What does that use when
-it comes to AtomISP?
+I have uploaded the documentation with these patches here:
+
+https://hverkuil.home.xs4all.nl/spec/driver-api/maintainer-entry-profile.html
+https://hverkuil.home.xs4all.nl/spec/driver-api/media-committers.html
+
+Regards,
+
+	Hans
+
+Hans Verkuil (1):
+  docs: media: document Media Maintainers
+
+Mauro Carvalho Chehab (2):
+  docs: media: update maintainer-entry-profile for multi-committers
+  docs: media: document media multi-committers rules and process
+
+ Documentation/driver-api/media/index.rst      |   1 +
+ .../media/maintainer-entry-profile.rst        | 461 +++++++++++++++---
+ .../driver-api/media/media-committers.rst     | 201 ++++++++
+ 3 files changed, 601 insertions(+), 62 deletions(-)
+ create mode 100644 Documentation/driver-api/media/media-committers.rst
 
 -- 
-With Best Regards,
-Andy Shevchenko
-
+2.51.0
 
