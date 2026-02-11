@@ -1,128 +1,75 @@
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A9BE43502BA;
-	Wed, 11 Feb 2026 05:42:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=60.244.123.138
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 425FF1E8329;
+	Wed, 11 Feb 2026 06:33:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770788571; cv=none; b=cOhdNutoBuKybdqgbDxwDLnZ/cwYq3Rsl71S5NOYEtjMXtthHX2Ku3cA7/AFB8w/KWnLu7oxF1tX9P11qzvZs9XBzCiHC3wHLuYT6Co6JvErsB6f5BwxrHH2O4LHYYcVSLD96k4PyS8m6SUxiCIl8R8c2ZmqHPVSvfVu73U2X60=
+	t=1770791618; cv=none; b=ahyoRfGDX1IWAUkOSlQEl2Slp1HlSSRKJ/4MDMRia/8qyYwVMu8p3O9wnj50Vn0284jEKv1Dfl6+1EPVReaOnQjgTUr8tiz2GecUSw1xHb9xm6tL4/33eb4hB2ggTyFKg8YKo8w0H/Tu0S+WmFLgnb9JRPTUublvLeCL8hpGWso=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770788571; c=relaxed/simple;
-	bh=wPVwI7oPzjnFrvM3kqJWRaFD2aX3ySYtIML7w/wakPY=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=qHMSjx0A4cM8Sb8CUG4tsudSXEGRQPpcxgV9Bzwj3Go2vK7wQtBqkcgCXfcpzOR40ECdIMGs/mJjn6vMyiedHJqQUfof3xRcfTZnTmmtoq6SCNCR/ayaixv3mHkLyy7jbnlD5Ig1pZyhtoMbsOhW5xHhtmIKxT9GVgr91cctOm0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mediatek.com; spf=pass smtp.mailfrom=mediatek.com; dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b=jMJmdusI; arc=none smtp.client-ip=60.244.123.138
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mediatek.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mediatek.com
+	s=arc-20240116; t=1770791618; c=relaxed/simple;
+	bh=XddYwKWvWxeFWm2+5c3Jwb+Tiu5ZT9PPFTcLqhLE0PQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=LbpLX7xv51YD72ktkYm3l+9pb2ZrbM901QAr6i8q6PkWccTcEyLdb5x2nTcELlG5S1TBC1eQ05xB2SUNYy88ZU5saXObK73TGZHcJENCur2uUlcWVXzNYjNdklIgra5Ir9wEYYocLg68Trof+3q5UOjoaVqAknDv2iXWwxkHrZQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=bhKSoC6G; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b="jMJmdusI"
-X-UUID: 77f42946070c11f185319dbc3099e8fb-20260211
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-	h=Content-Type:Content-Transfer-Encoding:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=68sSOZnSUXmqiHf+pECQ9+W2kaqKQgCqtFWFG7AgXOE=;
-	b=jMJmdusIsxWZKcQgAFSEOZPl+v6KisW34PjyqOauO82Oc6onpeYYiuKVaLhAC04xip+bTy0G3CarLha9z5d0jxMK2Uh3/lQxRsXSkE1SZNKr9930vrkCKWNBv/fU38JrsC4vv9ta+zCz5YJH0Fy8fYXwjNkrIoOBND6MIBwhVwg=;
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.3.11,REQID:e0a53a1f-d5dd-4053-a514-fe8210c6904b,IP:0,U
-	RL:0,TC:0,Content:-5,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION
-	:release,TS:-5
-X-CID-META: VersionHash:89c9d04,CLOUDID:fa50d47a-8c8a-4fc4-88c0-3556e7711556,B
-	ulkID:nil,BulkQuantity:0,Recheck:0,SF:81|82|102|836|888|898,TC:-5,Content:
-	0|15|50,EDM:-3,IP:nil,URL:0,File:130,RT:0,Bulk:nil,QS:nil,BEC:-1,COL:0,OSI
-	:0,OSA:0,AV:0,LES:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0,ARC:0
-X-CID-BVR: 2,SSN|SDN
-X-CID-BAS: 2,SSN|SDN,0,_
-X-CID-FACTOR: TF_CID_SPAM_SNR
-X-CID-RHF: D41D8CD98F00B204E9800998ECF8427E
-X-UUID: 77f42946070c11f185319dbc3099e8fb-20260211
-Received: from mtkmbs10n2.mediatek.inc [(172.21.101.183)] by mailgw01.mediatek.com
-	(envelope-from <yunfei.dong@mediatek.com>)
-	(Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-	with ESMTP id 317260869; Wed, 11 Feb 2026 13:42:35 +0800
-Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
- MTKMBS09N2.mediatek.inc (172.21.101.94) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.2562.29; Wed, 11 Feb 2026 13:42:34 +0800
-Received: from mhfsdcap04.gcn.mediatek.inc (10.17.3.154) by
- mtkmbs11n2.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
- 15.2.2562.29 via Frontend Transport; Wed, 11 Feb 2026 13:42:33 +0800
-From: Yunfei Dong <yunfei.dong@mediatek.com>
-To: =?UTF-8?q?N=C3=ADcolas=20F=20=2E=20R=20=2E=20A=20=2E=20Prado?=
-	<nfraprado@collabora.com>, Sebastian Fricke <sebastian.fricke@collabora.com>,
-	Nicolas Dufresne <nicolas.dufresne@collabora.com>, Hans Verkuil
-	<hverkuil-cisco@xs4all.nl>, AngeloGioacchino Del Regno
-	<angelogioacchino.delregno@collabora.com>, Benjamin Gaignard
-	<benjamin.gaignard@collabora.com>, Nathan Hebert <nhebert@chromium.org>,
-	Daniel Almeida <daniel.almeida@collabora.com>
-CC: Hsin-Yi Wang <hsinyi@chromium.org>, Fritz Koenig <frkoenig@chromium.org>,
-	Daniel Vetter <daniel@ffwll.ch>, Steve Cho <stevecho@chromium.org>, Yunfei
- Dong <yunfei.dong@mediatek.com>, <linux-media@vger.kernel.org>,
-	<devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-	<linux-arm-kernel@lists.infradead.org>, <linux-mediatek@lists.infradead.org>,
-	<Project_Global_Chrome_Upstream_Group@mediatek.com>
-Subject: [PATCH v3 13/14] media: mediatek: decoder: fill av1 buffer size with picinfo
-Date: Wed, 11 Feb 2026 13:41:40 +0800
-Message-ID: <20260211054149.27249-14-yunfei.dong@mediatek.com>
-X-Mailer: git-send-email 2.46.0
-In-Reply-To: <20260211054149.27249-1-yunfei.dong@mediatek.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="bhKSoC6G"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 53300C4CEF7;
+	Wed, 11 Feb 2026 06:33:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1770791617;
+	bh=XddYwKWvWxeFWm2+5c3Jwb+Tiu5ZT9PPFTcLqhLE0PQ=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=bhKSoC6G5WlZEUdcANoPXq2fz5kud/Cq6WxKGkb6dZE+EWaCSnTF+L5Qh60jNPILd
+	 k1HmeQj+di5yBVQQUlU5xiMeZDd9IOfF1GMVqSRl+6Am9t0edOy1bQyvyEPzNIzeMA
+	 qS0KfxWDGuyo/FhHUXoF7cuXoejU++AnfpaJ2yPrJlquaRHKcOiDKMhNhG1FSzYIis
+	 H7saib3OPyTwvo63AxAVqsL9X/o4+BASr54BUbUh2c1UqQK8GkyrtNhv5HyoI+TdXr
+	 q98cGxMgP9KDN2yg9UZbRWrXzCpVQ2FHxwfpOkRb52ZK+NS6R6eFZF8u56JYAVytCP
+	 yzErVmb+5egtQ==
+Date: Wed, 11 Feb 2026 07:33:35 +0100
+From: Krzysztof Kozlowski <krzk@kernel.org>
+To: Yunfei Dong <yunfei.dong@mediatek.com>
+Cc: =?utf-8?B?TsOtY29sYXMgRiAuIFIgLiBBIC4=?= Prado <nfraprado@collabora.com>, 
+	Sebastian Fricke <sebastian.fricke@collabora.com>, Nicolas Dufresne <nicolas.dufresne@collabora.com>, 
+	Hans Verkuil <hverkuil-cisco@xs4all.nl>, 
+	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>, Benjamin Gaignard <benjamin.gaignard@collabora.com>, 
+	Nathan Hebert <nhebert@chromium.org>, Daniel Almeida <daniel.almeida@collabora.com>, 
+	Hsin-Yi Wang <hsinyi@chromium.org>, Fritz Koenig <frkoenig@chromium.org>, 
+	Daniel Vetter <daniel@ffwll.ch>, Steve Cho <stevecho@chromium.org>, linux-media@vger.kernel.org, 
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-arm-kernel@lists.infradead.org, linux-mediatek@lists.infradead.org, 
+	Project_Global_Chrome_Upstream_Group@mediatek.com
+Subject: Re: [PATCH v3 01/14] dt-bindings: media: mediatek: vcodec: add
+ decoder dt-bindings for mt8196
+Message-ID: <20260211-premium-heavy-puma-bb8e7a@quoll>
 References: <20260211054149.27249-1-yunfei.dong@mediatek.com>
+ <20260211054149.27249-2-yunfei.dong@mediatek.com>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-MTK: N
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20260211054149.27249-2-yunfei.dong@mediatek.com>
 
-The buffer size of y and c plane has been calculated in vcp/scp,
-can fill each frame buffer size with picinfo directly.
+On Wed, Feb 11, 2026 at 01:41:28PM +0800, Yunfei Dong wrote:
+> Add decoder document in dt-bindings yaml file for mt8196 platform.
 
-Signed-off-by: Yunfei Dong <yunfei.dong@mediatek.com>
-Reviewed-by: Nicolas Dufresne <nicolas.dufresne@collabora.com>
----
- .../vcodec/decoder/vdec/vdec_av1_req_lat_if.c      | 14 ++++++++------
- 1 file changed, 8 insertions(+), 6 deletions(-)
+Getting to bingo, two out of three redundant terms how to call DT
+bindings. Drop YAML.
 
-diff --git a/drivers/media/platform/mediatek/vcodec/decoder/vdec/vdec_av1_req_lat_if.c b/drivers/media/platform/mediatek/vcodec/decoder/vdec/vdec_av1_req_lat_if.c
-index fd5574ad86ac..d613decae8f8 100644
---- a/drivers/media/platform/mediatek/vcodec/decoder/vdec/vdec_av1_req_lat_if.c
-+++ b/drivers/media/platform/mediatek/vcodec/decoder/vdec/vdec_av1_req_lat_if.c
-@@ -1811,18 +1811,19 @@ static int vdec_av1_slice_setup_core_buffer(struct vdec_av1_slice_instance *inst
- {
- 	struct vb2_buffer *vb;
- 	struct vb2_queue *vq;
--	int w, h, plane, size;
-+	int plane;
- 	int i;
- 
- 	plane = instance->ctx->q_data[MTK_Q_DATA_DST].fmt->num_planes;
--	w = vsi->frame.uh.upscaled_width;
--	h = vsi->frame.uh.frame_height;
--	size = ALIGN(w, VCODEC_DEC_ALIGNED_64) * ALIGN(h, VCODEC_DEC_ALIGNED_64);
- 
- 	/* frame buffer */
- 	vsi->fb.y.dma_addr = fb->base_y.dma_addr;
-+
-+	vsi->fb.y.size = instance->ctx->picinfo.fb_sz[0];
-+	vsi->fb.c.size = instance->ctx->picinfo.fb_sz[1];
-+
- 	if (plane == 1)
--		vsi->fb.c.dma_addr = fb->base_y.dma_addr + size;
-+		vsi->fb.c.dma_addr = fb->base_y.dma_addr + vsi->fb.y.size;
- 	else
- 		vsi->fb.c.dma_addr = fb->base_c.dma_addr;
- 
-@@ -1845,8 +1846,9 @@ static int vdec_av1_slice_setup_core_buffer(struct vdec_av1_slice_instance *inst
- 		}
- 
- 		vref->y.dma_addr = vb2_dma_contig_plane_dma_addr(vb, 0);
-+		vref->y.size = vsi->fb.y.size;
- 		if (plane == 1)
--			vref->c.dma_addr = vref->y.dma_addr + size;
-+			vref->c.dma_addr = vref->y.dma_addr + vsi->fb.y.size;
- 		else
- 			vref->c.dma_addr = vb2_dma_contig_plane_dma_addr(vb, 1);
- 	}
--- 
-2.45.2
+A nit, subject: drop second/last, redundant "dt-bindings". The
+"dt-bindings" prefix is already stating that these are dt-bindings.
+See also:
+https://elixir.bootlin.com/linux/v6.17-rc3/source/Documentation/devicetree/bindings/submitting-patches.rst#L18
+
+Write concise messages. "DT bindings schema yaml text file in kernel" is
+not concise.
+
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@oss.qualcomm.com>
+
+Best regards,
+Krzysztof
 
