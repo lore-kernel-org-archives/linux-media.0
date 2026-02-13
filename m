@@ -1,33 +1,33 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 43E09286D7E;
-	Fri, 13 Feb 2026 07:33:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B9532FDC25;
+	Fri, 13 Feb 2026 07:36:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770967989; cv=none; b=JnzQ+S7zx2Ir0jK/JqXpUVg46sFgQChwoJEp9uk9oEbb63VajzI0NDZCvCBFcfD+gFqOSbwYgXhUX2oxi1/s6RA3rbynGlIGxnLnX9U2owJ88nolvP3pHHtUTaVZOmqqPX0yPfikgxQ7Cz3VLf23cKUHpNdbMq+ZVbsUb/zfYvY=
+	t=1770968161; cv=none; b=YrGCu4fQNcfgwwLdFK8kmTVZ1UDJCwaB3gJTQ6hwsFFl7Z1IFZO18b67Nhjt5l62/Gc75Nx31ktt0hkYRbvzfLS7wEa5EZzmIhzAj5vMkWkPTB4JvsZSV8cfEnN1galKZIfFfCagps/zRYyWN7tYA/DbvVvHJFG+Q8TcKi2lp/E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770967989; c=relaxed/simple;
-	bh=siIazgaFNVp4xVXr//i59eVLTynu0yrQq7vbq7Q2myU=;
+	s=arc-20240116; t=1770968161; c=relaxed/simple;
+	bh=Zq8v0KZPL087RU5yis7BcIyIT899IFqdEXsWVpFwUkY=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=swcQVmqhrmdPCGhyHOhzaiyGNY6kzhT7pKHMuFN/KEzfj0NH6sjjTDiPZxFnHgmtJqJaAswodtzaSpddtb2paj+lziwuK0nIB3GKJdoJIjz7G6UHkznKsMwc1ugc0wJ6zakn4SWCFjMO90lJANb+fpq0lpu0HU5E4viwd3QREUU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ZZwls2Wi; arc=none smtp.client-ip=10.30.226.201
+	 In-Reply-To:Content-Type; b=Tt3kwvSEfcOCHmMGDJsDDCICLf8wMdZX5O+UgLHTb/B3itTpyQuvgl1c4o7soS4Gx5Aw5XVFTallZcib/vgfjpWnpqRoVfr2ZY8xKOPt2Dd0NSeJlPtlmKWMaLdybmwkZzKYFgLVpkYy+RXemtoC6wrOZ686bf+HaRJT4rTf3bw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Hbon/kZ/; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ZZwls2Wi"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BD06CC116C6;
-	Fri, 13 Feb 2026 07:33:05 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Hbon/kZ/"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 45FA7C116C6;
+	Fri, 13 Feb 2026 07:35:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1770967988;
-	bh=siIazgaFNVp4xVXr//i59eVLTynu0yrQq7vbq7Q2myU=;
+	s=k20201202; t=1770968161;
+	bh=Zq8v0KZPL087RU5yis7BcIyIT899IFqdEXsWVpFwUkY=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=ZZwls2Wim7UUzP9c9QRFee5N6Y7sc5uz+mOBqz4VjBpy2V8U3023tsVyAOfk485q1
-	 ERKbptcP7jm0u8VlXJCrKRbVBdS3GRVkLTUnR0dhu5TuyL/wZFvwZYjdmy33Hn1sTm
-	 QATSI0qlqSIAquO9TGWzCYgePlh2CEnj1RvZX/gwOGi8KqBaJsIt3o2kJu0QsHhVik
-	 dGeNLc2Owe45iYOoqIknA9Kqm++IYUva8ucv7i2DSU3YZI3konF/PBZkVBJmIJdtiZ
-	 E8HqhG+C/eV3puvokwiiLT/Ln5bXE201fJ28QYLRsfnROKlTGKl7SHLVnKWEmOl817
-	 8lZD4ewvW+hvA==
-Message-ID: <795e507a-b0b7-40a5-8a75-25b464ba6b37@kernel.org>
-Date: Fri, 13 Feb 2026 08:33:03 +0100
+	b=Hbon/kZ/qGkmYPGGPlRHIud30xx4WWwpf713XViIpd2ZedDywIsBKFWfGW5nk+mLr
+	 5vVP5MiuDKGlR7CiwTRjASi/aqaNMm3oZvhslSSuAP869evEWTCcr3pxkUg2N0FAwk
+	 aq/0xTIxTINLpU8abDmpVNqyeb4ZyBgKl3v62pZsxhGvzg02T/H7mL/PDdez/AOO9T
+	 Y4ZKsB8cHMBUsC+5EdXWhbkGhm4/ZsR5t6hoxguIaUKIJfb0sZ4JQkZ4gpFhA6VBK/
+	 lAzZrdn2tKUdchYRfntU1mmLkN/bIkoLeD0/r/I6zAj7wMBHFYSqRSafuH8sy3T+Tp
+	 fUUmf/VIQaILQ==
+Message-ID: <d96c689d-a5a3-453d-a1ab-56dc1bf01635@kernel.org>
+Date: Fri, 13 Feb 2026 08:35:56 +0100
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
@@ -35,8 +35,8 @@ List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH RFC v4 4/4] arm64: defconfig: Enable VDEC driver for
- Amlogic SoCs
+Subject: Re: [PATCH RFC v4 1/4] media: dt-bindings: Add Amlogic V4L2 video
+ decoder
 To: zhentao.guo@amlogic.com, Mauro Carvalho Chehab <mchehab@kernel.org>,
  Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
  Conor Dooley <conor+dt@kernel.org>,
@@ -47,7 +47,7 @@ Cc: linux-media@vger.kernel.org, devicetree@vger.kernel.org,
  linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
  linux-amlogic@lists.infradead.org
 References: <20260213-b4-s4-vdec-upstream-v4-0-c7112d00d662@amlogic.com>
- <20260213-b4-s4-vdec-upstream-v4-4-c7112d00d662@amlogic.com>
+ <20260213-b4-s4-vdec-upstream-v4-1-c7112d00d662@amlogic.com>
 From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
@@ -93,16 +93,107 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  jWt87ecuHlpL3uuQ0ZZNWqHgZoQLXoqC2ZV5KrtKWb/jyiFX/sxSrodALf0zf+tfHv0FZWT2
  zHjUqd0t4njD/UOsuIMOQn4Ig0SdivYPfZukb5cdasKJukG1NOpbW7yRNivaCnfZz6dTawXw
  XRIV/KDsHQiyVxKvN73bThKhONkcX2LWuD928tAR6XMM2G5ovxLe09vuOzzfTWQDsm++9UKF a/A=
-In-Reply-To: <20260213-b4-s4-vdec-upstream-v4-4-c7112d00d662@amlogic.com>
+In-Reply-To: <20260213-b4-s4-vdec-upstream-v4-1-c7112d00d662@amlogic.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
 On 13/02/2026 06:12, Zhentao Guo via B4 Relay wrote:
 > From: Zhentao Guo <zhentao.guo@amlogic.com>
 > 
-> Enable the driver for Amlogic's stateless decoder.
+> Describe the initial support for the V4L2 stateless video decoder
+> driver used with the Amlogic S4 (S805X2) platform.
+> 
+> Signed-off-by: Zhentao Guo <zhentao.guo@amlogic.com>
+> ---
+>  .../bindings/media/amlogic,s4-vcodec-dec.yaml      | 96 ++++++++++++++++++++++
+>  1 file changed, 96 insertions(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/media/amlogic,s4-vcodec-dec.yaml b/Documentation/devicetree/bindings/media/amlogic,s4-vcodec-dec.yaml
+> new file mode 100644
+> index 000000000000..88780514d06c
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/media/amlogic,s4-vcodec-dec.yaml
+> @@ -0,0 +1,96 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +# Copyright (C) 2025 Amlogic, Inc. All rights reserved
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/media/amlogic,s4-vcodec-dec.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Amlogic Video Decode Accelerator
+> +
+> +maintainers:
+> +  - Zhentao Guo <zhentao.guo@amlogic.com>
+> +
+> +description:
+> +  The Video Decoder Accelerator present on Amlogic SOCs.
+> +  It supports stateless h264 decoding.
+> +
+> +properties:
+> +  compatible:
+> +    const: amlogic,s4-vcodec-dec
 
-Why? Read other commits how this is supposed to look like.
+Why do you repeat "dec" twice? codec means decoder, so what is the last
+"dec" about?
+
+> +
+> +  reg:
+> +    maxItems: 2
+> +
+> +  reg-names:
+> +    items:
+> +      - const: dos
+> +      - const: dmc
+> +
+> +  interrupts:
+> +    maxItems: 3
+> +
+> +  clocks:
+> +    maxItems: 3
+> +
+> +  clock-names:
+> +    items:
+> +      - const: vdec
+> +      - const: clk_vdec_mux
+> +      - const: clk_hevcf_mux
+
+Name them based on their role/name in this device. Why this device would
+care that it receives a mux? Not a div? or not a gate?
+
+> +
+> +  power-domains:
+> +    maxItems: 2
+> +
+> +  power-domain-names:
+> +    items:
+> +      - const: vdec
+> +      - const: hevc
+> +
+> +  resets:
+> +    maxItems: 1
+> +
+> +  amlogic,canvas:
+> +    description: should point to a canvas provider node
+
+Why? What for?
+
+What is canvas provider?
+
+
+> +    $ref: /schemas/types.yaml#/definitions/phandle
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - reg-names
+> +  - interrupts
+> +  - clocks
+> +  - clock-names
+> +  - power-domains
+> +  - power-domain-names
+> +
+
 
 
 Best regards,
