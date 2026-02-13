@@ -1,227 +1,102 @@
-Received: from mail-wm1-f45.google.com (mail-wm1-f45.google.com [209.85.128.45])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 43AA332AAB6
-	for <linux-media@vger.kernel.org>; Fri, 13 Feb 2026 13:46:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7D29122A7E9;
+	Fri, 13 Feb 2026 14:02:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.167.242.64
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770990391; cv=none; b=Nu8ICQquJL/PfhcBP7nK4WFICbAuadI2Oz8TskIf6LB8fY2p4N3Odmu0uoUJwmtPDH5gA4PTP6zkQtcmj3QiOU4OZoS63/J3icX70KRCtNrNpldQnsPSlmGxnOSakAAMtbnhi6ldMrVGgE+XZqidXcCD/ngjwJ3XE9D9bmSkj08=
+	t=1770991329; cv=none; b=o40/rP2Z/c1uwX6oAez2vwdn++ox6kY4e5IvAK1hG/c5sAlP+dpYocKCLX3IBdnraUp1OkCkpFgztwSIH17sbZojQET57wTUqO3yTG/y/sZo1JvtbCVl/Q+x0lqzk9q217b/teCPG12V6PamVsNfYwCKlUxl/SMQSWANN696XGk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770990391; c=relaxed/simple;
-	bh=7uzhT1Hdpq2Zj/z3tC0kx0DO7eu7YJpM8NOGHA2+aEU=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=tv9uS196/A7HfGqdqHWu+JguCKfEUdifw/I8t9EbYNz3Yk8BuvdNT+FRiwTaNA7k7oKlG+P1Q5Bg/ZL7LtT8Hn6wYRdeNU4qHPgRdfXpC8m1ShjEQlpCZwZHH4rjhHlp/oSJpDCj+cV2asRUZlaQrUdGUtBO5IkbRcoCZNrJHNQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=b8Ks7bQv; arc=none smtp.client-ip=209.85.128.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+	s=arc-20240116; t=1770991329; c=relaxed/simple;
+	bh=eGDt+QUEP8jNkwnTJw5v7lLHwdQU7KiuyW9rW8rRK9w=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=jBV+oIhZ5fET38VtiQldGV19lXGWVZ3j/C+maULUxmq+Nc3x/XxRwtxnQjY+4F0b+/LmuxJKI7WNLxpjTsMJly0pYBJhvdnVe34GbUxQSDHTnE1cnIuscCx/OykKOyhL+jX9eNhA/xqvC+LUT6SYd0+GlKWGiCzRQADHrVy3E60=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ideasonboard.com; spf=pass smtp.mailfrom=ideasonboard.com; dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b=ia08d3UI; arc=none smtp.client-ip=213.167.242.64
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ideasonboard.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ideasonboard.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="b8Ks7bQv"
-Received: by mail-wm1-f45.google.com with SMTP id 5b1f17b1804b1-4836f363ad2so11192145e9.1
-        for <linux-media@vger.kernel.org>; Fri, 13 Feb 2026 05:46:29 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1770990388; x=1771595188; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=4B97dcFXXQx/22amrzajNB5xqYOGdgqYpxZ5xW5NAyU=;
-        b=b8Ks7bQvyUkk2F2wlPNJKzjRKifHGmZFZYQ3Cf2KK455nlodcZ5T5TXTDIgM2+9usS
-         ds7HW2p0a6k1S54MzhCAvMUh64t1EpOP+xyYm3Saz5pjm+vsEotoLemSLcch6DU4aPWR
-         Y+PCmtCq5eedV7tSaTn3CkR20z3i0o6C0SvCdd48vBQDiekbOrwY4teDX81p/45flYuj
-         2q3RSIW5xbZbA6tHYeML/47+5MUToYRYy5YuWGJvyywjnojw4/xcUWEUJL5y9x0+EgSg
-         SfZGg+PcjPMtrbMV1R+EpqmE0WaVUsczU4roNNRPrenSfPILfkVW6T/FtRQPnVSN6Cov
-         /2uA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1770990388; x=1771595188;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=4B97dcFXXQx/22amrzajNB5xqYOGdgqYpxZ5xW5NAyU=;
-        b=ZDVIRjJv30cCbEsdx9U8uro20e2XzFjZRIDCJdoosTOKRU8P7DPVTZeS0imQAnRhmd
-         vOACkhqC4vVC1qavephGp3RuZ20gr2mhtI6LwScdjVQtbTbbkstp0jxU0JHWh2HVPnky
-         3LcEMvKl+gSxg61ukQMrRteFN8UGJzipCipplXt4u43AHHeoWwk/uf8H8RKePWhlz3/O
-         ZuNmU4CVNV6XAZuu5Yi0/flgQBssJzAmg8jVYh8vbkPlnwK+OyWpUYGbGxBEm05Ttp6D
-         uco//blYhtst+5WQ13tJ67AdkU1NdX00x3nfzUBgI7EGqO2ljUyfnEoI1EiTyomCnka+
-         o1xg==
-X-Gm-Message-State: AOJu0YwrcZJFueJDEQYTHIyXniSP7tcAGXHa+CBE+96xHENjp1MQj8eT
-	hpTO1cx4tuOUONb9P9n6l72J7yQbwuJV0jWHTsFAEWVz22hdGGJ4o7tRIri/NPOG6nI=
-X-Gm-Gg: AZuq6aK+Ey/J87jxc1HOMrA1V2og0BxoysQhR0B8Qqf7JQdQ+b56sEWa6SPUwDMCG8V
-	WauGmB1XCm6/xzXXG/bNoDYSz0Ib1JqJX1bEam9Ie7/b302PUNJ5REdR8pnmPnaQHBIZr2VqQJJ
-	aXEDuQEm4k1idxRsoFG0FB26cA00iQRMnqfo+Urlg3Zc2c5O3e5mV583hu5aMAgPH01ShMPQRe9
-	QTztgINpEFE6Pyz60JeflpYUMEwbyJpt8+XjEgcdv3vfpjdss0ZqSCZcqrq5W5WZ6KHihrEAB5Y
-	PrRYvmYuycnuQCCL59FLib3Cd2NG0NEm7BZR7VT7PVfZtNvFu57/yh9VPH5kL6RZDbDaHz90Qb/
-	9jIgC75roAnunRxplVhg/O6zh1mA+i6t88ccaoD292RMoL8Z059/KZ4sxHh476kleGMSYAm4pvN
-	zDg09KrdzoUnHuJod29NVbPejTA41PQppTrpClVsXt
-X-Received: by 2002:a05:600c:314f:b0:483:6fe1:c057 with SMTP id 5b1f17b1804b1-48373a3f3bcmr26871935e9.21.1770990387410;
-        Fri, 13 Feb 2026 05:46:27 -0800 (PST)
-Received: from zovi.suse.cz (nat2.prg.suse.com. [195.250.132.146])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-48371a2998fsm17198625e9.17.2026.02.13.05.46.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 13 Feb 2026 05:46:27 -0800 (PST)
-From: Petr Pavlu <petr.pavlu@suse.com>
-To: Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc: linux-media@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Petr Pavlu <petr.pavlu@suse.com>
-Subject: [PATCH 2/2] media: dvbdev: Simplify error paths in dvb_register_device()
-Date: Fri, 13 Feb 2026 14:44:16 +0100
-Message-ID: <20260213134551.1294954-3-petr.pavlu@suse.com>
-X-Mailer: git-send-email 2.52.0
-In-Reply-To: <20260213134551.1294954-1-petr.pavlu@suse.com>
-References: <20260213134551.1294954-1-petr.pavlu@suse.com>
+	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="ia08d3UI"
+Received: from ping.linuxembedded.co.uk (cpc89244-aztw30-2-0-cust6594.18-1.cable.virginm.net [86.31.185.195])
+	by perceval.ideasonboard.com (Postfix) with ESMTPSA id 48BD1CF5;
+	Fri, 13 Feb 2026 15:01:17 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+	s=mail; t=1770991277;
+	bh=eGDt+QUEP8jNkwnTJw5v7lLHwdQU7KiuyW9rW8rRK9w=;
+	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
+	b=ia08d3UIriE4hYdb2pdX/lZHbIK4Ez4DR6ViF5/DJAloJuAZgfY/tSgiMJyA6l5zW
+	 Jur2ixrRB4Vv9k7z4TSLaZ5wrfOSJeAm5OsioB7969W7jHBV0sdI1JJ9wll6XaMCPq
+	 vtXNMkm2+dZI1c8ZBKTMCKH2UOKIjw9EE0Gb7rCs=
+From: Kieran Bingham <kieran.bingham@ideasonboard.com>
+Date: Fri, 13 Feb 2026 14:01:40 +0000
+Subject: [PATCH v2 01/25] media: i2c: imx283: Report correct
+ V4L2_SEL_TGT_CROP
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20260213-mainline-imx283-v2-v2-1-be40a3770ebf@ideasonboard.com>
+References: <20260213-mainline-imx283-v2-v2-0-be40a3770ebf@ideasonboard.com>
+In-Reply-To: <20260213-mainline-imx283-v2-v2-0-be40a3770ebf@ideasonboard.com>
+To: Umang Jain <uajain@igalia.com>, 
+ Sakari Ailus <sakari.ailus@linux.intel.com>, 
+ Mauro Carvalho Chehab <mchehab@kernel.org>, 
+ Hans Verkuil <hverkuil@kernel.org>
+Cc: Jai Luthra <jai.luthra@ideasonboard.com>, linux-media@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, 
+ Kieran Bingham <kieran.bingham@ideasonboard.com>, 
+ Stefan Klug <stefan.klug@ideasonboard.com>, stable@vger.kernel.org
+X-Mailer: b4 0.14.3
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1770991324; l=1325;
+ i=kieran.bingham@ideasonboard.com; s=20260207; h=from:subject:message-id;
+ bh=BBivussIvk9YcKcloCC2V2eItBbXaeuB2KOGJapG5tY=;
+ b=axDFgGxuFDNwToutEE2Vf2IR9/QkpNEM4JYDiSzDExFULz8eu7v4jwkp0GiPP1qi5T679QDxa
+ ZcNs/4MaTxeAvy/1snaKPs0IXCUnq+p9QxW7Zm2W2gwC8Abkptm++cc
+X-Developer-Key: i=kieran.bingham@ideasonboard.com; a=ed25519;
+ pk=FVXKN7YuwHc6UtbRUeTMAmranfsQomA+vnilfglWdaY=
 
-The error paths in dvb_register_device() each handle necessary cleanup
-operations individually. Since the function performs a number of
-operations, this leads to duplicated and lengthy code.
+From: Stefan Klug <stefan.klug@ideasonboard.com>
 
-Unify the cleanup process under error labels.
+The target crop rectangle is initialized with the crop of the default
+sensor mode. This is incorrect when a different sensor mode gets
+selected. Fix that by updating the crop rectangle when changing the
+sensor mode.
 
-Signed-off-by: Petr Pavlu <petr.pavlu@suse.com>
+Cc: stable@vger.kernel.org # v6.10-rc1-70-gccb4eb4496fa
+Fixes: ccb4eb4496fa ("media: i2c: Add imx283 camera sensor driver")
+Reviewed-by: Kieran Bingham <kieran.bingham@ideasonboard.com>
+Tested-by: Kieran Bingham <kieran.bingham@ideasonboard.com>
+Signed-off-by: Stefan Klug <stefan.klug@ideasonboard.com>
 ---
- drivers/media/dvb-core/dvbdev.c | 79 +++++++++++++--------------------
- 1 file changed, 31 insertions(+), 48 deletions(-)
+ drivers/media/i2c/imx283.c | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/drivers/media/dvb-core/dvbdev.c b/drivers/media/dvb-core/dvbdev.c
-index c067bbeb9461..94591f8a7afa 100644
---- a/drivers/media/dvb-core/dvbdev.c
-+++ b/drivers/media/dvb-core/dvbdev.c
-@@ -466,16 +466,15 @@ int dvb_register_device(struct dvb_adapter *adap, struct dvb_device **pdvbdev,
+diff --git a/drivers/media/i2c/imx283.c b/drivers/media/i2c/imx283.c
+index 8ab63ad8f385..e5c04d259625 100644
+--- a/drivers/media/i2c/imx283.c
++++ b/drivers/media/i2c/imx283.c
+@@ -956,6 +956,7 @@ static int imx283_set_pad_format(struct v4l2_subdev *sd,
+ 				 struct v4l2_subdev_state *sd_state,
+ 				 struct v4l2_subdev_format *fmt)
+ {
++	struct v4l2_rect *crop;
+ 	struct v4l2_mbus_framefmt *format;
+ 	const struct imx283_mode *mode;
+ 	struct imx283 *imx283 = to_imx283(sd);
+@@ -982,6 +983,9 @@ static int imx283_set_pad_format(struct v4l2_subdev *sd,
  
- 	id = dvbdev_get_free_id(adap, type);
- 	if (id < 0) {
--		mutex_unlock(&dvbdev_register_lock);
--		*pdvbdev = NULL;
- 		pr_err("%s: couldn't find free device id\n", __func__);
--		return -ENFILE;
-+		ret = -ENFILE;
-+		goto error_set_pdvbdev;
- 	}
+ 	*format = fmt->format;
  
- 	*pdvbdev = dvbdev = kzalloc(sizeof(*dvbdev), GFP_KERNEL);
- 	if (!dvbdev) {
--		mutex_unlock(&dvbdev_register_lock);
--		return -ENOMEM;
-+		ret = -ENOMEM;
-+		goto error_unlock;
- 	}
- 
- 	/*
-@@ -494,19 +493,15 @@ int dvb_register_device(struct dvb_adapter *adap, struct dvb_device **pdvbdev,
- 	if (!dvbdevfops) {
- 		dvbdevfops = kmemdup(template->fops, sizeof(*dvbdevfops), GFP_KERNEL);
- 		if (!dvbdevfops) {
--			kfree(dvbdev);
--			*pdvbdev = NULL;
--			mutex_unlock(&dvbdev_register_lock);
--			return -ENOMEM;
-+			ret = -ENOMEM;
-+			goto error_free_dvbdev;
- 		}
- 
- 		new_node = kzalloc(sizeof(*new_node), GFP_KERNEL);
- 		if (!new_node) {
- 			kfree(dvbdevfops);
--			kfree(dvbdev);
--			*pdvbdev = NULL;
--			mutex_unlock(&dvbdev_register_lock);
--			return -ENOMEM;
-+			ret = -ENOMEM;
-+			goto error_free_dvbdev;
- 		}
- 
- 		new_node->fops = dvbdevfops;
-@@ -534,17 +529,8 @@ int dvb_register_device(struct dvb_adapter *adap, struct dvb_device **pdvbdev,
- 	minor = nums2minor(adap->num, type, id);
- #endif
- 	if (minor >= MAX_DVB_MINORS) {
--		if (new_node) {
--			list_del(&new_node->list_head);
--			kfree(dvbdevfops);
--			kfree(new_node);
--		}
--		list_del(&dvbdev->list_head);
--		kfree(dvbdev);
--		*pdvbdev = NULL;
--		up_write(&minor_rwsem);
--		mutex_unlock(&dvbdev_register_lock);
--		return -EINVAL;
-+		ret = -EINVAL;
-+		goto error_dvbdev_cleanup;
- 	}
- 
- 	dvbdev->minor = minor;
-@@ -553,18 +539,7 @@ int dvb_register_device(struct dvb_adapter *adap, struct dvb_device **pdvbdev,
- 	if (ret) {
- 		pr_err("%s: dvb_register_media_device failed to create the mediagraph\n",
- 		       __func__);
--		if (new_node) {
--			list_del(&new_node->list_head);
--			kfree(dvbdevfops);
--			kfree(new_node);
--		}
--		dvb_media_device_free(dvbdev);
--		list_del(&dvbdev->list_head);
--		kfree(dvbdev);
--		*pdvbdev = NULL;
--		up_write(&minor_rwsem);
--		mutex_unlock(&dvbdev_register_lock);
--		return ret;
-+		goto error_free_media;
- 	}
- 
- 	clsdev = device_create(dvb_class, adap->device,
-@@ -573,18 +548,8 @@ int dvb_register_device(struct dvb_adapter *adap, struct dvb_device **pdvbdev,
- 	if (IS_ERR(clsdev)) {
- 		pr_err("%s: failed to create device dvb%d.%s%d (%pe)\n",
- 		       __func__, adap->num, dnames[type], id, clsdev);
--		if (new_node) {
--			list_del(&new_node->list_head);
--			kfree(dvbdevfops);
--			kfree(new_node);
--		}
--		dvb_media_device_free(dvbdev);
--		list_del(&dvbdev->list_head);
--		kfree(dvbdev);
--		*pdvbdev = NULL;
--		up_write(&minor_rwsem);
--		mutex_unlock(&dvbdev_register_lock);
--		return PTR_ERR(clsdev);
-+		ret = PTR_ERR(clsdev);
-+		goto error_free_media;
- 	}
- 
- 	dvb_minors[minor] = dvb_device_get(dvbdev);
-@@ -595,6 +560,24 @@ int dvb_register_device(struct dvb_adapter *adap, struct dvb_device **pdvbdev,
- 
- 	mutex_unlock(&dvbdev_register_lock);
- 	return 0;
++	crop = v4l2_subdev_state_get_crop(sd_state, IMAGE_PAD);
++	*crop = mode->crop;
 +
-+error_free_media:
-+	dvb_media_device_free(dvbdev);
-+error_dvbdev_cleanup:
-+	if (new_node) {
-+		list_del(&new_node->list_head);
-+		kfree(dvbdevfops);
-+		kfree(new_node);
-+	}
-+	list_del(&dvbdev->list_head);
-+	up_write(&minor_rwsem);
-+error_free_dvbdev:
-+	kfree(dvbdev);
-+error_set_pdvbdev:
-+	*pdvbdev = NULL;
-+error_unlock:
-+	mutex_unlock(&dvbdev_register_lock);
-+	return ret;
+ 	return 0;
  }
- EXPORT_SYMBOL(dvb_register_device);
  
+
 -- 
 2.52.0
 
